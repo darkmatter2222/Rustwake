@@ -9,11 +9,13 @@ shows one measured line (`Working 62% · waiting for input 38% · output waiting
 sometimes naming the supplier machine as the limiter. The store panel carries the yard-level
 version (storage %, power %, busiest link, machines waiting).
 
-Current commit and remote sync status: the previous pushed head is `be57a5b`; this pass
-adds the bottleneck assistant commit on top and pushes with `git push origin HEAD:main`,
-then re-reads `origin/main` to confirm. CI state is still unread in this environment
-(BL-06: `gh` unauthenticated, unauthenticated API 404s for the private repo), so CI is
-reported as pending and the three local checks are this pass's gate.
+Current commit and remote sync status: `70c360f` ("Resolve one selection-aware yard step so
+the card and dock always match") is the pushed `origin/main` head, verified by
+`git log --oneline origin/main -3` after a fast-forward push from `be57a5b` (which
+`git fetch` confirmed was still the remote head immediately before pushing). The measured-
+counters commit `f7d120a` is its parent. CI state: still unread in this environment
+(BL-06: `gh` unauthenticated, the unauthenticated API 404s for the private repository), so
+CI is reported as pending rather than green; the three local checks are this pass's gate.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
