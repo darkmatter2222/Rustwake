@@ -6,45 +6,58 @@ Command: `npx tsx scripts/probe-supply.mjs`. Runtime: Node v22.18.0. Each floor 
 
 | Floor | Machines | Total batches | Credits | Research nodes | Store at end | Aggregate link busy % |
 | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 4 | 670 | 0 | 0 | scrap=242 nonferrous=437 steel=221 | 12.0 |
-| 5 | 5 | 1152 | 0 | 0 | scrap=18 nonferrous=5 ferrous=5 steel=215 copper=5 polymer=71 wire=581 | 11.2 |
-| 10 | 7 | 1196 | 0 | 0 | scrap=16 nonferrous=10 ferrous=10 steel=20 copper=10 polymer=66 wire=542 plates=225 circuits=1 | 16.6 |
-| 20 | 8 | 1137 | 0 | 0 | scrap=41 nonferrous=20 ferrous=20 steel=20 wire=493 polymer=62 plates=243 circuits=1 | 13.8 |
+| 0 | 8 | 1075 | 0 | 3 | scrap=148 ferrous=104 nonferrous=91 wire=275 plates=210 data=72 | 9.9 |
+| 5 | 8 | 1056 | 0 | 3 | scrap=152 nonferrous=94 ferrous=108 steel=5 copper=5 polymer=5 wire=270 plates=204 circuits=5 data=52 | 9.8 |
+| 10 | 8 | 1018 | 0 | 3 | scrap=182 nonferrous=93 ferrous=107 steel=10 copper=10 polymer=10 wire=259 plates=193 circuits=16 data=20 | 9.3 |
+| 20 | 8 | 1103 | 0 | 3 | scrap=95 nonferrous=20 ferrous=99 steel=20 wire=428 polymer=20 plates=168 circuits=8 data=42 | 12.5 |
 
 ## Floor 0
 
-After 798 ticks, 6 links:
+After 798 ticks, 5 links:
 
 | Link | From | To | Filter | Cap | In flight | Busy % |
 | --- | --- | --- | --- | --- | --- | --- |
 | 1 | store0 | machine1 | scrap | 24 | 2 | 16.1 |
-| 2 | machine1 | store0 | ferrous | 24 | 1 | 7.1 |
+| 2 | machine1 | store0 | ferrous | 24 | 0 | 6.1 |
 | 3 | machine1 | store0 | nonferrous | 24 | 1 | 13.5 |
-| 4 | machine1 | machine2 | ferrous | 24 | 0 | 12.5 |
+| 4 | machine1 | machine2 | ferrous | 24 | 1 | 13.8 |
 | 5 | machine2 | store0 | steel | 24 | 0 | 4.2 |
-| 6 | store0 | machine2 | ferrous | 24 | 0 | 2.2 |
 
-After 18298 ticks, 8 links and 4 machines:
+After 18298 ticks, 18 links and 8 machines:
 
 | Link | From | To | Filter | Cap | In flight | Busy % |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | store0 | machine1 | scrap | 24 | 0 | 12.6 |
-| 2 | machine1 | store0 | ferrous | 24 | 1 | 41.5 |
-| 3 | machine1 | store0 | nonferrous | 24 | 0 | 8.5 |
-| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.8 |
-| 5 | machine2 | store0 | steel | 24 | 0 | 20.9 |
-| 6 | store0 | machine2 | ferrous | 24 | 0 | 3.9 |
-| 7 | machine3 | store0 | polymer | 24 | 0 | 0 |
-| 8 | machine4 | store0 | wire | 24 | 0 | 0 |
+| 1 | store0 | machine1 | scrap | 24 | 0 | 12.2 |
+| 2 | machine1 | store0 | ferrous | 24 | 1 | 37.8 |
+| 3 | machine1 | store0 | nonferrous | 24 | 0 | 9 |
+| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.7 |
+| 5 | machine2 | store0 | steel | 24 | 1 | 19 |
+| 6 | machine3 | store0 | polymer | 24 | 0 | 3.2 |
+| 7 | machine4 | machine3 | residue | 24 | 24 | 34.1 |
+| 8 | store0 | machine4 | nonferrous | 24 | 0 | 8.9 |
+| 9 | machine4 | store0 | copper | 24 | 0 | 3.8 |
+| 10 | store0 | machine5 | copper | 24 | 0 | 3.9 |
+| 11 | machine5 | store0 | wire | 24 | 0 | 4.6 |
+| 12 | store0 | machine6 | steel | 24 | 0 | 4.3 |
+| 13 | machine6 | store0 | plates | 24 | 3 | 18 |
+| 14 | store0 | machine7 | wire | 24 | 0 | 1.7 |
+| 15 | store0 | machine7 | polymer | 24 | 0 | 1.7 |
+| 16 | machine7 | store0 | circuits | 24 | 0 | 3.6 |
+| 17 | store0 | machine8 | circuits | 24 | 0 | 1.5 |
+| 18 | machine8 | store0 | data | 24 | 0 | 2.5 |
 
 | Machine | Blueprint | Level | Busy % | Batches | Status | Input buffer | Tray |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | sorter | 1 | 99.9 | 449 | running | 4 | 0 |
-| 2 | furnace | 1 | 49.9 | 221 | running | 0 | 0 |
-| 3 | polymerRecycler | 1 | 0 | 0 | starved | 0 | 0 |
-| 4 | wireMill | 1 | 0 | 0 | starved | 0 | 0 |
+| 1 | sorter | 1 | 99.9 | 431 | running | 10 | 0 |
+| 2 | furnace | 1 | 34.1 | 143 | starved | 1 | 0 |
+| 3 | polymerRecycler | 1 | 17.5 | 48 | starved | 22 | 0 |
+| 4 | copperSeparator | 1 | 51.1 | 159 | outputFull | 10 | 1 |
+| 5 | wireMill | 1 | 34.2 | 127 | starved | 0 | 0 |
+| 6 | platePress | 1 | 25.3 | 71 | starved | 0 | 0 |
+| 7 | circuitAssembler | 1 | 29.5 | 48 | starved | 10 | 0 |
+| 8 | signalLab | 1 | 56.4 | 48 | starved | 0 | 0 |
 
-Aggregate link utilisation 12.0 %; dead links: machine3>store0:polymer, machine4>store0:wire.
+Aggregate link utilisation 9.9 %; dead links: none.
 
 ## Floor 5
 
@@ -58,34 +71,41 @@ After 798 ticks, 5 links:
 | 4 | machine1 | machine2 | ferrous | 24 | 0 | 12.6 |
 | 5 | machine2 | store0 | steel | 24 | 0 | 4.3 |
 
-After 18298 ticks, 14 links and 5 machines:
+After 18298 ticks, 18 links and 8 machines:
 
 | Link | From | To | Filter | Cap | In flight | Busy % |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | store0 | machine1 | scrap | 24 | 2 | 12.5 |
-| 2 | machine1 | store0 | ferrous | 24 | 0 | 3.6 |
-| 3 | machine1 | store0 | nonferrous | 24 | 0 | 3.6 |
-| 4 | machine1 | machine2 | ferrous | 24 | 0 | 9.3 |
-| 5 | machine2 | store0 | steel | 24 | 1 | 32.9 |
-| 6 | store0 | machine2 | ferrous | 24 | 0 | 3.3 |
-| 7 | machine3 | store0 | polymer | 24 | 0 | 12.1 |
-| 8 | machine4 | machine3 | residue | 24 | 0 | 6.4 |
-| 9 | machine1 | machine4 | nonferrous | 24 | 0 | 9.8 |
-| 10 | machine4 | store0 | copper | 24 | 0 | 1.7 |
-| 11 | store0 | machine4 | nonferrous | 24 | 0 | 2.9 |
-| 12 | machine4 | machine5 | copper | 24 | 0 | 4.9 |
-| 13 | machine5 | store0 | wire | 24 | 24 | 52.2 |
-| 14 | store0 | machine5 | copper | 24 | 0 | 1.6 |
+| 1 | store0 | machine1 | scrap | 24 | 0 | 12.1 |
+| 2 | machine1 | store0 | ferrous | 24 | 2 | 38.7 |
+| 3 | machine1 | store0 | nonferrous | 24 | 0 | 8.3 |
+| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.7 |
+| 5 | machine2 | store0 | steel | 24 | 1 | 19.6 |
+| 6 | machine3 | store0 | polymer | 24 | 0 | 2.8 |
+| 7 | machine4 | machine3 | residue | 24 | 24 | 33.5 |
+| 8 | store0 | machine4 | nonferrous | 24 | 0 | 8.9 |
+| 9 | machine4 | store0 | copper | 24 | 0 | 3.8 |
+| 10 | store0 | machine5 | copper | 24 | 0 | 3.7 |
+| 11 | machine5 | store0 | wire | 24 | 0 | 3.8 |
+| 12 | store0 | machine6 | steel | 24 | 0 | 4.2 |
+| 13 | machine6 | store0 | plates | 24 | 0 | 17.4 |
+| 14 | store0 | machine7 | wire | 24 | 0 | 1.5 |
+| 15 | store0 | machine7 | polymer | 24 | 0 | 1.4 |
+| 16 | machine7 | store0 | circuits | 24 | 0 | 3 |
+| 17 | store0 | machine8 | circuits | 24 | 0 | 1.3 |
+| 18 | machine8 | store0 | data | 24 | 0 | 3.4 |
 
 | Machine | Blueprint | Level | Busy % | Batches | Status | Input buffer | Tray |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | sorter | 1 | 99.6 | 448 | running | 2 | 0 |
-| 2 | furnace | 1 | 48.7 | 216 | starved | 1 | 0 |
-| 3 | polymerRecycler | 1 | 24.6 | 71 | starved | 2 | 0 |
-| 4 | copperSeparator | 1 | 63.8 | 215 | running | 0 | 0 |
-| 5 | wireMill | 1 | 49.7 | 202 | outputFull | 8 | 1 |
+| 1 | sorter | 1 | 99.5 | 435 | running | 10 | 0 |
+| 2 | furnace | 1 | 33.7 | 143 | starved | 1 | 0 |
+| 3 | polymerRecycler | 1 | 17.4 | 48 | starved | 22 | 0 |
+| 4 | copperSeparator | 1 | 49.8 | 159 | outputFull | 10 | 1 |
+| 5 | wireMill | 1 | 31.8 | 122 | starved | 0 | 0 |
+| 6 | platePress | 1 | 24 | 68 | starved | 1 | 0 |
+| 7 | circuitAssembler | 1 | 25.2 | 43 | starved | 10 | 0 |
+| 8 | signalLab | 1 | 43.5 | 38 | starved | 0 | 0 |
 
-Aggregate link utilisation 11.2 %; dead links: none.
+Aggregate link utilisation 9.8 %; dead links: none.
 
 ## Floor 10
 
@@ -99,44 +119,41 @@ After 798 ticks, 5 links:
 | 4 | machine1 | machine2 | ferrous | 24 | 0 | 12.8 |
 | 5 | machine2 | store0 | steel | 24 | 0 | 2.8 |
 
-After 18298 ticks, 22 links and 7 machines:
+After 18298 ticks, 18 links and 8 machines:
 
 | Link | From | To | Filter | Cap | In flight | Busy % |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | store0 | machine1 | scrap | 24 | 0 | 12.2 |
-| 2 | machine1 | store0 | ferrous | 24 | 0 | 3.7 |
-| 3 | machine1 | store0 | nonferrous | 24 | 0 | 3.7 |
-| 4 | machine1 | machine2 | ferrous | 24 | 0 | 9 |
-| 5 | machine2 | store0 | steel | 24 | 0 | 4.5 |
-| 6 | store0 | machine2 | ferrous | 24 | 0 | 2.8 |
-| 7 | machine3 | store0 | polymer | 24 | 0 | 11.6 |
-| 8 | machine4 | machine3 | residue | 24 | 0 | 6.1 |
-| 9 | machine1 | machine4 | nonferrous | 24 | 0 | 9.4 |
-| 10 | machine4 | store0 | copper | 24 | 0 | 1.7 |
-| 11 | store0 | machine4 | nonferrous | 24 | 0 | 2.9 |
-| 12 | machine4 | machine5 | copper | 24 | 0 | 4.6 |
-| 13 | machine5 | store0 | wire | 24 | 24 | 48 |
-| 14 | store0 | machine5 | copper | 24 | 0 | 1.5 |
-| 15 | machine2 | machine6 | steel | 24 | 0 | 4.3 |
-| 16 | machine6 | store0 | plates | 24 | 24 | 48.1 |
-| 17 | store0 | machine6 | steel | 24 | 0 | 1.3 |
-| 18 | machine5 | machine7 | wire | 24 | 1 | 97.7 |
-| 19 | machine3 | machine7 | polymer | 24 | 0 | 0 |
-| 20 | machine7 | store0 | circuits | 24 | 0 | 0 |
-| 21 | store0 | machine7 | wire | 24 | 0 | 0 |
-| 22 | store0 | machine7 | polymer | 24 | 2 | 92 |
+| 1 | store0 | machine1 | scrap | 24 | 0 | 12 |
+| 2 | machine1 | store0 | ferrous | 24 | 1 | 37.3 |
+| 3 | machine1 | store0 | nonferrous | 24 | 0 | 8.3 |
+| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.7 |
+| 5 | machine2 | store0 | steel | 24 | 0 | 18.6 |
+| 6 | machine3 | store0 | polymer | 24 | 0 | 2.9 |
+| 7 | machine4 | machine3 | residue | 24 | 24 | 31.8 |
+| 8 | store0 | machine4 | nonferrous | 24 | 0 | 9.1 |
+| 9 | machine4 | store0 | copper | 24 | 0 | 3.7 |
+| 10 | store0 | machine5 | copper | 24 | 0 | 3.5 |
+| 11 | machine5 | store0 | wire | 24 | 0 | 3.8 |
+| 12 | store0 | machine6 | steel | 24 | 0 | 4.1 |
+| 13 | machine6 | store0 | plates | 24 | 2 | 16.5 |
+| 14 | store0 | machine7 | wire | 24 | 0 | 1.3 |
+| 15 | store0 | machine7 | polymer | 24 | 0 | 1.3 |
+| 16 | machine7 | store0 | circuits | 24 | 0 | 0.5 |
+| 17 | machine7 | machine8 | circuits | 24 | 0 | 0.8 |
+| 18 | machine8 | store0 | data | 24 | 0 | 3.9 |
 
 | Machine | Blueprint | Level | Busy % | Batches | Status | Input buffer | Tray |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | sorter | 1 | 98 | 439 | running | 4 | 0 |
-| 2 | furnace | 1 | 45.3 | 200 | starved | 1 | 0 |
-| 3 | polymerRecycler | 1 | 24.1 | 69 | starved | 1 | 0 |
-| 4 | copperSeparator | 1 | 61.8 | 208 | running | 0 | 0 |
-| 5 | wireMill | 1 | 48 | 195 | running | 2 | 0 |
-| 6 | platePress | 1 | 27 | 84 | outputFull | 12 | 3 |
-| 7 | circuitAssembler | 1 | 0.6 | 1 | starved | 16 | 0 |
+| 1 | sorter | 1 | 97.6 | 431 | running | 10 | 0 |
+| 2 | furnace | 1 | 32.9 | 141 | running | 0 | 0 |
+| 3 | polymerRecycler | 1 | 16.9 | 48 | starved | 22 | 0 |
+| 4 | copperSeparator | 1 | 48.4 | 158 | outputFull | 10 | 1 |
+| 5 | wireMill | 1 | 29 | 115 | starved | 0 | 0 |
+| 6 | platePress | 1 | 22.2 | 65 | starved | 1 | 0 |
+| 7 | circuitAssembler | 1 | 21.5 | 38 | starved | 10 | 0 |
+| 8 | signalLab | 1 | 24.5 | 22 | starved | 0 | 0 |
 
-Aggregate link utilisation 16.6 %; dead links: machine3>machine7:polymer, machine7>store0:circuits, store0>machine7:wire.
+Aggregate link utilisation 9.3 %; dead links: none.
 
 ## Floor 20
 
@@ -150,44 +167,38 @@ After 798 ticks, 5 links:
 | 4 | machine1 | machine2 | ferrous | 24 | 0 | 15 |
 | 5 | machine2 | store0 | steel | 24 | 0 | 0 |
 
-After 18298 ticks, 23 links and 8 machines:
+After 18298 ticks, 17 links and 8 machines:
 
 | Link | From | To | Filter | Cap | In flight | Busy % |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | store0 | machine1 | scrap | 24 | 0 | 11.9 |
-| 2 | machine1 | store0 | ferrous | 24 | 0 | 3.7 |
-| 3 | machine1 | store0 | nonferrous | 24 | 0 | 3.7 |
-| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.7 |
-| 5 | machine2 | store0 | steel | 24 | 0 | 1.4 |
-| 6 | machine3 | store0 | polymer | 24 | 0 | 9.7 |
-| 7 | store0 | machine2 | ferrous | 24 | 0 | 2.2 |
-| 8 | machine4 | store0 | wire | 24 | 24 | 43.1 |
-| 9 | machine5 | machine3 | residue | 24 | 0 | 6 |
-| 10 | machine5 | machine4 | copper | 24 | 0 | 6.8 |
-| 11 | machine1 | machine5 | nonferrous | 24 | 0 | 9.2 |
-| 12 | store0 | machine5 | nonferrous | 24 | 0 | 2.7 |
-| 13 | machine2 | machine6 | steel | 24 | 1 | 4.2 |
-| 14 | machine6 | store0 | plates | 24 | 0 | 38.1 |
-| 15 | store0 | machine6 | steel | 24 | 0 | 0.9 |
-| 16 | machine4 | machine7 | wire | 24 | 1 | 95.9 |
-| 17 | machine3 | machine7 | polymer | 24 | 0 | 0 |
-| 18 | machine7 | store0 | circuits | 24 | 0 | 0 |
-| 19 | store0 | machine7 | wire | 24 | 0 | 0 |
-| 20 | store0 | machine7 | polymer | 24 | 2 | 70 |
-| 21 | machine7 | machine8 | circuits | 24 | 0 | 0 |
-| 22 | machine8 | store0 | data | 24 | 0 | 0 |
-| 23 | store0 | machine8 | circuits | 24 | 0 | 0 |
+| 1 | store0 | machine1 | scrap | 24 | 0 | 11.4 |
+| 2 | machine1 | store0 | ferrous | 24 | 1 | 37.6 |
+| 3 | machine1 | store0 | nonferrous | 24 | 0 | 7.8 |
+| 4 | machine1 | machine2 | ferrous | 24 | 0 | 8.3 |
+| 5 | machine2 | store0 | steel | 24 | 0 | 26.8 |
+| 6 | machine3 | store0 | polymer | 24 | 0 | 8.3 |
+| 7 | machine4 | store0 | wire | 24 | 24 | 41.5 |
+| 8 | machine5 | machine3 | residue | 24 | 0 | 5.6 |
+| 9 | machine5 | machine4 | copper | 24 | 0 | 6.6 |
+| 10 | store0 | machine5 | nonferrous | 24 | 0 | 9.6 |
+| 11 | store0 | machine6 | steel | 24 | 1 | 3.8 |
+| 12 | machine6 | store0 | plates | 24 | 0 | 28.4 |
+| 13 | store0 | machine7 | wire | 24 | 2 | 1.4 |
+| 14 | store0 | machine7 | polymer | 24 | 0 | 1.4 |
+| 15 | machine7 | store0 | circuits | 24 | 0 | 0.3 |
+| 16 | machine7 | machine8 | circuits | 24 | 0 | 1.2 |
+| 17 | machine8 | store0 | data | 24 | 0 | 12.6 |
 
 | Machine | Blueprint | Level | Busy % | Batches | Status | Input buffer | Tray |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | sorter | 1 | 95.8 | 429 | running | 4 | 0 |
-| 2 | furnace | 1 | 42 | 184 | starved | 1 | 0 |
-| 3 | polymerRecycler | 1 | 22.7 | 65 | running | 7 | 0 |
-| 4 | wireMill | 1 | 42.4 | 179 | outputFull | 12 | 1 |
-| 5 | copperSeparator | 1 | 59.7 | 198 | running | 0 | 0 |
-| 6 | platePress | 1 | 25.9 | 81 | starved | 1 | 0 |
-| 7 | circuitAssembler | 1 | 0.5 | 1 | starved | 16 | 0 |
-| 8 | signalLab | 1 | 0 | 0 | starved | 0 | 0 |
+| 1 | sorter | 1 | 95.4 | 409 | powerLimited | 10 | 0 |
+| 2 | furnace | 1 | 33.7 | 134 | powerLimited | 0 | 0 |
+| 3 | polymerRecycler | 1 | 22.2 | 62 | starved | 0 | 0 |
+| 4 | wireMill | 1 | 46 | 182 | powerLimited | 3 | 0 |
+| 5 | copperSeparator | 1 | 59.9 | 186 | powerLimited | 3 | 0 |
+| 6 | platePress | 1 | 21.5 | 56 | starved | 1 | 0 |
+| 7 | circuitAssembler | 1 | 25 | 41 | powerLimited | 8 | 0 |
+| 8 | signalLab | 1 | 37.9 | 33 | starved | 0 | 0 |
 
-Aggregate link utilisation 13.8 %; dead links: machine3>machine7:polymer, machine7>store0:circuits, store0>machine7:wire, machine7>machine8:circuits, machine8>store0:data, store0>machine8:circuits.
+Aggregate link utilisation 12.5 %; dead links: none.
 

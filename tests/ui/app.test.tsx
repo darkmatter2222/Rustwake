@@ -173,9 +173,12 @@ describe("first-feel shell", () => {
       primary.run();
       actions.push("ran");
     });
-    // Both the input link and the outgoing link are created by one action.
+    // Both the input link and the outgoing link are created by one action, on
+    // the selected machine: the store feeds the furnace and the furnace ships
+    // its steel back to the store (B-23 keys a plan on this machine's end).
     expect(state.routes.length).toBe(2);
-    expect(state.machines[0].outRoute).not.toBeNull();
+    expect(state.machines[1].inRoutes.length).toBe(1);
+    expect(state.machines[1].outRoute).not.toBeNull();
   });
 
   it("explains a blocked action with one local toast and no charge", () => {

@@ -356,3 +356,42 @@ Format: date · problem · options · choice · reason · reversibility.
   much longer two-batch window ships, or the 1-minute measured rate window (B-17)
   shows a machine below 80 % busy while the store still holds that input.
 
+## D-28 - 2026-11-03 - One link per material, chosen by the endpoint this machine owns
+
+- Problem: the audit in B-22 found three of 22 links at 0 % busy, all pairs that
+  already had a link for the same material - `store>machine7:wire` beside
+  `machine5>machine7:wire`, `machine3>machine7:polymer` beside
+  `store>machine7:polymer`. Spec 10.1 forbids a link that carries nothing.
+- Cause: `hasInputLink` matched the *source* id as well as the destination and the
+  filter, so a link that already carried the material from another source did not
+  count, and the next `connect` tap added a parallel path.
+- Choice: key a plan on the endpoint this machine owns - inputs on
+  `(destination machine, material)`, outputs on `(source machine, material)` - and
+  pick the source by who can actually deliver: the store when it holds at least one
+  batch (its pull is window-sized, two ready batches in one tap), otherwise the
+  producing machine, otherwise nothing.
+- Considered: (a) keep both links and let the router spread cargo, measured at
+  1 196 batches with 3 idle links and no research reached; (b) producer-first,
+  926 batches, 1 node, 0 idle links; (c) store-first as shipped, 1 018 batches,
+  3 nodes, 0 idle links, 18 links total. All from the same 30-minute driver.
+- Reason: (c) is the only variant with no idle link that also reaches the signal lab
+  and buys research inside the window, and it converts further down the chain: the
+  circuit assembler went from 1 batch to 38 and the store ended with `data 20`. The
+  lower batch total is two extra low-volume stages sharing one scrap supply, not a
+  slower factory; the 12 h catch-up case improved 59.3 ms → 42.2 ms because a
+  settled yard walks 18 links per tick instead of 22.
+- Supersedes: the floor-sweep table in D-27 (measured on the duplicate-link
+  topology). The shipped reserve floor is unchanged: after this change floors
+  {0, 5, 10, 20} all finish at 8 machines and 3 nodes with 1 075 / 1 056 / 1 018 /
+  1 103 batches, so 10 stays for the sellable-surplus reason and the floor is no
+  longer a limiting knob.
+- Evidence: `tests/simulation/autoconnect.test.ts` (4 cases: producer link below one
+  batch, store link at a full batch, idempotent second call, one link per output
+  material), the restated `tests/simulation/supply-window.test.ts` (0 idle links at
+  every floor), and `docs/evidence/2026-11-03-supply-window.md`.
+- Reversible: yes; one function and two predicates in `autoconnect.ts`, no saved
+  shape change, so no schema bump.
+- Reconsider when: a machine needs the same material from two sources at once (a
+  filtered or weighted link), which is the point to store per-source demand on the
+  route instead of one filter per link.
+

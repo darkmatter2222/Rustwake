@@ -10,23 +10,38 @@ export interface ConnectionPlan {
 /**
  * Deterministic connection suggestion for one machine (spec 10.1, 10.5).
  *
- * Input: the store when it already holds a required resource, otherwise the
- * unique machine whose recipe outputs it. Output: the store.
- * Ambiguity returns the shorter plan rather than guessing.
+ * Input: the store when it already holds at least one batch of the material,
+ * otherwise the producing machine. Output: the consuming machine when one
+ * exists, otherwise the store. One link per material per direction, keyed on
+ * this machine's end only. Ambiguity returns the shorter plan rather than
+ * guessing.
  */
-export function planConnections(state: SimState, machineId: number): ConnectionPlan[] {
+export function planConnections(
+  state: SimState,
+  machineId: number,
+): ConnectionPlan[] {
   const machine = state.machines.find((m) => m.id === machineId);
   if (!machine) return [];
   const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
   const plans: ConnectionPlan[] = [];
 
+  // One link per material in each direction. An existing link already carries
+  // the material whatever its other endpoint, so the yard never pays for a
+  // parallel second path that both routers then leave idle (spec 10.1, B-23).
   for (const input of recipe.inputs) {
-    const producer = findProducer(state, machineId, input.resource);
-    if (producer !== null && !hasInputLink(state, machineId, producer, input.resource)) {
-      plans.push({ from: producer, to: machineId, filter: input.resource });
+    if (hasInputLink(state, machineId, input.resource)) continue;
+    // The store pull is window-sized - two ready batches in one tap - so a
+    // stocked store keeps an input fuller than a drip-fed producer link. The
+    // producer is used while the store still holds less than one batch.
+    const stocked = state.store[input.resource] ?? 0;
+    if (stocked >= input.qty) {
+      plans.push({ from: 0, to: machineId, filter: input.resource });
       continue;
     }
-    if ((state.store[input.resource] ?? 0) > 0 && !hasInputLink(state, machineId, 0, input.resource)) {
+    const producer = findProducer(state, machineId, input.resource);
+    if (producer !== null) {
+      plans.push({ from: producer, to: machineId, filter: input.resource });
+    } else if (stocked > 0) {
       plans.push({ from: 0, to: machineId, filter: input.resource });
     }
   }
@@ -41,38 +56,46 @@ export function planConnections(state: SimState, machineId: number): ConnectionP
   return dedupe(plans);
 }
 
-/** A link into this machine from one source already carries the material. */
+/** The material already reaches this machine over some link, from any source. */
 function hasInputLink(
   state: SimState,
   machineId: number,
-  fromId: number,
-  resource: ResourceId
+  resource: ResourceId,
 ): boolean {
   return state.routes.some(
     (route) =>
       route.to.kind === "machine" &&
       route.to.id === machineId &&
-      route.from.id === fromId &&
-      (route.filter === resource || route.filter === null)
+      (route.filter === resource || route.filter === null),
   );
 }
 
-/** A link from this machine already carries the material (exact or any). */
-function hasOutputLink(state: SimState, machineId: number, resource: ResourceId): boolean {
+/** This machine already ships the material over some link, to any destination. */
+function hasOutputLink(
+  state: SimState,
+  machineId: number,
+  resource: ResourceId,
+): boolean {
   return state.routes.some(
     (route) =>
       route.from.kind === "machine" &&
       route.from.id === machineId &&
-      (route.filter === resource || route.filter === null)
+      (route.filter === resource || route.filter === null),
   );
 }
 
-function findProducer(state: SimState, exceptId: number, resource: ResourceId): number | null {
+function findProducer(
+  state: SimState,
+  exceptId: number,
+  resource: ResourceId,
+): number | null {
   let found: number | null = null;
   for (const candidate of state.machines) {
     if (candidate.id === exceptId) continue;
     const recipe = RECIPES[BLUEPRINTS[candidate.blueprint].recipeId];
-    if (recipe.outputs.some((item) => item.resource === resource && item.qty > 0)) {
+    if (
+      recipe.outputs.some((item) => item.resource === resource && item.qty > 0)
+    ) {
       if (found !== null) return found; // ambiguous: keep the first stable id
       found = candidate.id;
     }
@@ -83,7 +106,7 @@ function findProducer(state: SimState, exceptId: number, resource: ResourceId): 
 function findConsumer(
   state: SimState,
   exceptId: number,
-  resource: ResourceId
+  resource: ResourceId,
 ): number | null {
   let found: number | null = null;
   for (const candidate of state.machines) {

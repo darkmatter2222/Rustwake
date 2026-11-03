@@ -52,19 +52,16 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 
 ## BL-07 Research-panel visual gate
 
-- Blocked: no photograph of the research panel yet, so B-05's visual acceptance stays open
-  while its behaviour is covered by tests.
-- Evidence: after B-19 the scripted capture session ends with `research: {}` and no `data`;
-  the headless 30-minute driver reaches the circuit assembler at batch ×1 and does not buy the
-  signal lab, so the dock target (which needs `data > 0`) never unlocks inside the window.
-  The floor sweep confirms it: every floor of `npx tsx scripts/probe-supply.mjs` ends with
-  `research=0`, because the ladder spends its credits on the seven earlier blueprints before
-  `signalLab` becomes affordable.
-- Unblock: give the capture session a third click phase long enough to build the signal lab
-  (50 scrap + 12 ferrous), or seed a second capture context with an engine-produced save whose
-  `store.data` is already positive.
-- Meanwhile: `tests/ui/app.test.tsx` asserts the panel's exact strings and the one-purchase
-  ledger change; the gallery records the gap instead of reusing an older image.
+- Status: resolved with B-20 (2026-11-03). `docs/screenshots/latest-research.png` shows the panel
+  open on a mature yard, and the gallery row names its provenance.
+- Evidence: `scripts/probe-supply.mjs` now writes `docs/evidence/yard-mature.json` (the floor-10
+  state encoded with the app's own `encodeSave`), and `scripts/capture.mjs` installs it into the
+  desktop context with `addInitScript` before first paint. That yard has `data 20`, so the research
+  dock target unlocks and the panel prints `Data 20` plus the three known effect lines.
+- Remaining gap: the 60-tap mobile session still stops before `data > 0`, so the phone-viewport
+  research image is tracked as B-25 rather than claimed here.
+- Meanwhile: `tests/ui/app.test.tsx` still asserts the panel's exact strings and the one-purchase
+  ledger change, so the behaviour is covered even where an image is not.
 
 ## BL-06 CI result read-back
 

@@ -8,6 +8,7 @@ const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
 const FIRST_SNAPSHOT = 50; // 500 ticks in, the first useful ratio
 const FLOORS = [0, 5, 10, 20];
 const TARGET = "docs/evidence/2026-11-03-supply-window.md";
+const SEED = "docs/evidence/yard-mature.json";
 
 /** One reserve floor: boot the tutorial yard, then run the ladder for 30 minutes. */
 async function singleRun(floor) {
@@ -69,8 +70,14 @@ async function singleRun(floor) {
   state.tutorial = 9; // the tutorial is complete, so every blueprint is known
 
   let early = null;
+  /** Round at which each machine appeared, and the first research purchase. */
+  const milestones = { built: [], firstResearchRound: null };
   for (let round = 0; round < ROUNDS; round += 1) {
     const step = nextYardStep(state);
+    if (step && step.kind === "build") milestones.built.push(`${step.blueprint}@${round + 1}`);
+    if (step && step.kind === "research" && milestones.firstResearchRound === null) {
+      milestones.firstResearchRound = round + 1;
+    }
     if (step) {
       switch (step.kind) {
         case "connect":
@@ -128,6 +135,8 @@ async function singleRun(floor) {
       .join(" "),
     early,
     late: snapshot(state),
+    milestones,
+    state,
   };
 }
 
@@ -231,10 +240,18 @@ const runs = [];
 for (const floor of FLOORS) runs.push(await singleRun(floor));
 mkdirSync("docs/evidence", { recursive: true });
 writeFileSync(TARGET, assemble(runs), "utf8");
+// A mature yard written exactly as the app stores it, so the capture session can
+// photograph the research dock without replaying 30 simulated minutes (BL-07).
+const { encodeSave, DEFAULT_SETTINGS } = await import("../src/game/persistence/save");
+const mature = runs.find((run) => run.floor === 10) ?? runs[0];
+writeFileSync(SEED, encodeSave(mature.state, Date.now(), DEFAULT_SETTINGS), "utf8");
 for (const run of runs) {
   console.log(
     `floor=${run.floor} machines=${run.machines} batches=${run.totals} credits=${run.credits}` +
-      ` research=${run.research} aggregate=${aggregate(run)}% store ${run.store}`,
+      ` research=${run.research} aggregate=${aggregate(run)}% store ${run.store}` +
+      ` | lastBuild=${run.milestones.built.at(-1) ?? "-"} firstResearch=${
+        run.milestones.firstResearchRound ?? "-"
+      }`,
   );
 }
-console.log(`wrote ${TARGET}`);
+console.log(`wrote ${TARGET} and ${SEED}`);

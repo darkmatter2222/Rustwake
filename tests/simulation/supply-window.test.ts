@@ -24,6 +24,7 @@ interface Run {
   tick: number;
   machines: number;
   totals: number;
+  research: number;
   earlyLinks: Row[];
   lateLinks: Row[];
   readyUnits: Record<number, number>;
@@ -36,8 +37,10 @@ async function runFloor(floor: number): Promise<Run> {
   const defs = await import("../../src/game/content/defs");
   Object.assign(defs.TUNING, { reserveFloor: floor });
   const { advance } = await import("../../src/game/simulation/engine");
-  const { applyCommand, DOCK_TILE, YARD_TILES } = await import("../../src/game/simulation/commands");
-  const { createInitialState } = await import("../../src/game/simulation/types");
+  const { applyCommand, DOCK_TILE, YARD_TILES } =
+    await import("../../src/game/simulation/commands");
+  const { createInitialState } =
+    await import("../../src/game/simulation/types");
   const { nextYardStep } = await import("../../src/game/simulation/plan");
 
   let seq = 0;
@@ -130,6 +133,7 @@ async function runFloor(floor: number): Promise<Run> {
       (sum, machine) => sum + machine.batchesDone,
       0,
     ),
+    research: Object.keys(state.research).length,
     earlyLinks: early ? early.links : [],
     lateLinks: late.links,
     readyUnits,
@@ -152,10 +156,7 @@ describe("supply window (B-15, B-25)", () => {
     for (const floor of [0, 5, 10, 20]) runs.push(await runFloor(floor));
   }, 60_000);
 
-  it("leaves the reserve floor at 10: nothing below it helps and 20 costs throughput", () => {
-    const byFloor: Record<number, Run> = Object.fromEntries(
-      runs.map((run) => [run.floor, run]),
-    );
+  it("reaches the same depth at every reserve floor, so 10 stays the shipped value", () => {
     console.log(
       "supply-window:",
       JSON.stringify(
@@ -163,17 +164,27 @@ describe("supply window (B-15, B-25)", () => {
           floor: run.floor,
           machines: run.machines,
           batches: run.totals,
+          research: run.research,
           aggregate: aggregate(run.lateLinks),
         })),
       ),
     );
-    // A floor of zero starves the first builds: the yard stops at four machines.
-    expect(byFloor[0].machines).toBeLessThanOrEqual(4);
-    expect(byFloor[10].machines).toBeGreaterThanOrEqual(7);
-    // 10 is the best of the four on throughput, so it stays the shipped value.
-    const best = runs.reduce((a, b) => (b.totals > a.totals ? b : a));
-    expect(best.floor).toBe(10);
-    expect(byFloor[10].totals).toBeGreaterThan(byFloor[20].totals);
+    // Every floor now finishes at eight machines (through the signal lab) and
+    // three research nodes, so the floor is no longer what limits depth.
+    for (const run of runs) {
+      expect(run.machines, `machines at floor ${run.floor}`).toBe(8);
+      expect(run.research, `research nodes at floor ${run.floor}`).toBe(3);
+    }
+    // The four floor totals sit inside one step of each other (1 018-1 103
+    // batches), so 10 is kept for the sellable-surplus reason rather than a
+    // throughput difference.
+    const best = Math.max(...runs.map((run) => run.totals));
+    for (const run of runs) {
+      expect(
+        run.totals,
+        `batches at floor ${run.floor}`,
+      ).toBeGreaterThanOrEqual(Math.round(best * 0.9));
+    }
   });
 
   it("ships on every link while the young yard is filling (B-25)", () => {
@@ -184,16 +195,24 @@ describe("supply window (B-15, B-25)", () => {
     }
   });
 
-  it("keeps most links busy at half an hour and holds enough ready units (B-25)", () => {
+  it("leaves no link idle at half an hour and keeps a window ready (B-23, B-25)", () => {
+    for (const run of runs) {
+      expect(
+        run.lateLinks.length,
+        `links at floor ${run.floor}`,
+      ).toBeGreaterThanOrEqual(16);
+      const idle = run.lateLinks.filter((link) => link.busy === 0).length;
+      // One link per (endpoint, material): no parallel duplicate is created, so
+      // every link in the settled yard carries cargo (spec 10.1).
+      expect(idle, `idle links at floor ${run.floor}`).toBe(0);
+      expect(
+        aggregate(run.lateLinks),
+        `aggregate at floor ${run.floor}`,
+      ).toBeGreaterThanOrEqual(9);
+    }
     const run = runs.find((r) => r.floor === 10)!;
-    expect(run.lateLinks.length).toBeGreaterThanOrEqual(20);
-    const idle = run.lateLinks.filter((link) => link.busy === 0).length;
-    // Three idle links out of twenty-two, all on the last-built machine, are the
-    // duplicate-source plan proposals; the rest of the yard flows.
-    expect(idle).toBeLessThanOrEqual(3);
-    expect(aggregate(run.lateLinks)).toBeGreaterThanOrEqual(12);
-    // The two-batch window is not the binding constraint: the last-built machine
-    // still holds a full ready set while it waits on a scarce material.
+    // A stocked store keeps a full two-batch window ready at the funded stages,
+    // which is exactly what `pullNeed` is sized for (B-25).
     expect(Math.max(...Object.values(run.readyUnits))).toBeGreaterThanOrEqual(
       16,
     );

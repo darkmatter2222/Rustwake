@@ -1,7 +1,7 @@
 // Screenshot capture for README evidence. Requires a running preview server.
 // Usage: npm run preview (background) then node scripts/capture.mjs
 import { chromium } from "playwright-core";
-import { existsSync, mkdirSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -256,9 +256,19 @@ try {
     viewport: { width: 1440, height: 900 },
     deviceScaleFactor: 1,
   });
+  // A mature yard from `npx tsx scripts/probe-supply.mjs` is installed as the
+  // stored save before the first paint, so the research dock (which needs data)
+  // is on screen inside the capture window (BL-07).
+  const seedPath = resolve(root, "docs/evidence/yard-mature.json");
+  if (existsSync(seedPath)) {
+    await desktop.addInitScript((text) => {
+      localStorage.setItem("rustwake.save.v1", text);
+    }, readFileSync(seedPath, "utf8"));
+  }
   const desktopPage = await desktop.newPage();
   await playSession(desktopPage);
   await desktopPage.screenshot({ path: resolve(out, "latest-desktop.png") });
+  await captureResearch(desktopPage);
 
   console.log("captured latest-mobile.png, latest-desktop.png, latest-machine-mobile.png");
 } finally {
