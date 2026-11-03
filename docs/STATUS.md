@@ -9,13 +9,14 @@ follower within about one second and production continues from the same ledger. 
 the save reference moved to an absolute wall clock, which also fixed a reopened tab crediting
 zero offline production.
 
-Current commit and remote sync status: the previous pushed head was `fb28325` (docs
-checkpoint after `70c360f`). This pass adds one commit: the lease plus the two-clock fix and
-its tests, documentation, and refreshed captures. After pushing, `git log --oneline
-origin/main -1` is the verification line recorded in the commit message below. CI state:
-still unread in this environment (BL-06: `gh` unauthenticated, the unauthenticated API 404s
-for the private repository), so CI is reported as pending rather than green; the three local
-checks plus a real-Chrome session are this pass's gate.
+Current commit and remote sync status: `403df7a` ("Add single-writer tab lease with
+wall-clock ledger reference") is the pushed `origin/main` head, verified with `git log
+--oneline origin/main -2` after a fast-forward push from `fb28325` (which `git fetch`
+confirmed was still the remote head immediately before pushing). Its parent is `fb28325`,
+the previous docs checkpoint after `70c360f`. CI state: still unread in this environment
+(BL-06: `gh` unauthenticated, the unauthenticated API 404s for the private repository), so
+CI is reported as pending rather than green; the three local checks plus a real-Chrome
+session are this pass's gate.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
