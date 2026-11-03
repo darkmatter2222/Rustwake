@@ -25,8 +25,11 @@ button changes the text size; contrast and keyboard focus are measured in real C
   `:focus-visible` ring `solid 2px rgb(95, 216, 232)`; a scripted `focus()` still reports
   `outline: none`, which is why the real key press is the one that counts.
 
-Current commit and remote sync status: this pass is the head after `git push origin HEAD:main`
-(hash in the latest `git log --oneline -1`; `docs/DECISIONS.md` D-31 is its design record). The
+Current commit and remote sync status: `808dbc8` ("Fit panels at large text and add one
+text-scale control (B-13)") is the pushed `origin/main` head after `git push origin HEAD:main`
+(`0a4964e..808dbc8`, verified by `git rev-parse HEAD origin/main`, both
+`808dbc80b3debc7856e0b4899c7459ad0de4e70d`); a documentation-only checkpoint commit (this line)
+sits on top of it. `docs/DECISIONS.md` D-31 is the design record of this pass. The
 previous pushed head was `0a4964e` ("Record pushed head 266d9d6 and the B-16 pass scope"), before
 that `266d9d6` (B-16), `fc99db1`, `4ac39c5`, `0506f46`, `57f15af`.
 CI state: still unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
@@ -55,8 +58,14 @@ Screenshot evidence and capture provenance: all five images recaptured 2026-11-0
 `docs/evidence/yard-mature.json`). What is new in them relative to the previous set: the top-right
 cluster has three buttons (`Sound ✓`, `A 1`, `Home`), the chip row is two lines of two at 390 px
 with tighter padding, and the selected-machine image shows the panel head row
-(`Polymer recycler` beside `Close`) with the body scrolling under it. The mobile session's own
-numbers come from the capture log quoted in the README gallery notes.
+(`Polymer recycler` beside `Close`) with the body scrolling under it. Capture log for this build:
+mobile absence `tick 1 010 → 433 020` (`Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries
+342 · Batches 774 · Bottleneck storage-full`), final mobile yard `tick 433 630` with sorter L6 ×582,
+furnace L6 ×232, polymer recycler L5 ×1, copper separator L6 ×4 on 9 links and 130 credits, reader
+chips `Scrap 10 Ferrous 5 Credits 130 Store 332/900`, lease `t1-gfx3 → t1-7pg5` with the tick
+433 640 → 433 668 and the owner's store at 336/900 after handover; seeded desktop context absence
+`tick 91 547 → 523 557`, `tick 524 207`, 8 machines on 18 links, `circuits 16, data 20`, three
+research nodes known.
 
 Known blockers with exact unblock conditions:
 - BL-01 real-device frame/thermal traces: needs a connected device or a hosted trace. (The no-scroll,
@@ -83,8 +92,9 @@ Next three bounded tasks:
    resting HUD paints 57.4 % of the viewport; put the cost beside the label (or on the objective
    line) keeping 30 px labels and re-measure the 2.0 table, aiming under ~45 %.
 
-Long-running processes owned by this session: the `vite preview` server on port 4173, started for
-the measurements and the captures; stop it at the end of the pass. Nothing else runs.
+Long-running processes owned by this session: none. The `vite preview` server on port 4173 was
+started for the measurements and the two captures and stopped at the end of the pass; nothing else
+runs.
 
 Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npx vitest run` before editing;
 `tests/ui/hud-layout.test.ts` holds the chip budget at both widths and scales,
