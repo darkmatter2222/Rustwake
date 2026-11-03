@@ -25,6 +25,8 @@ source tree is identical to `47c85c4`, so the previous pass's runtime and bundle
 describe this build. CI state: still unread in this environment (BL-06: `gh run list`
 asks for `gh auth login`, the unauthenticated API 404s for the private repository), so CI is
 reported as pending, not green.
+  One documentation-only checkpoint commit sits on top of `87e66b3` (it records this line and the
+  pass scope), so `origin/main` head is that checkpoint and `87e66b3` is its parent.
 
 Checks run and actual results (this pass, the measurement pass):
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
@@ -37,7 +39,10 @@ Checks run and actual results (this pass, the measurement pass):
 - `npx tsx scripts/probe-supply.mjs` — 4 floors in one process (~4 s), writes the evidence file.
   Reserve-floor sweep, 1 800 rounds at one ladder command per second: floor 0 → 4 machines and 670
   batches; 5 → 5 and 1 152; 10 → 7 and 1 196; 20 → 8 and 1 137. Aggregate link utilisation at the
-  end of the floor-10 run: 16.6 % across 22 links, with 19 carrying cargo.
+  end of the floor-10 run: 16.6 % across 22 links, with 19 carrying cargo. Rerunning the probe
+  printed the same four lines, so the tables are reproducible.
+- `tsx` is now a devDependency (B-24), so the probe runs with no network after `npm ci`; the
+  112-test run and the bundle are unchanged by that install.
 
 Checks from the previous pass, retained for the record:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
