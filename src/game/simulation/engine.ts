@@ -141,7 +141,7 @@ function enqueueCargo(s: SimState): void {
 /** Store-sourced routes draw material into transit, honouring their filter.
  * A small reserve floor keeps construction affordable and prevents a
  * starved-then-stranded starter account (spec 4.3, 7.5). */
-const RESERVE_FLOOR = 10;
+const RESERVE_FLOOR = TUNING.reserveFloor;
 
 function pullFromStore(s: SimState): void {
   for (const route of s.routes) {

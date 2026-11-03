@@ -19,6 +19,18 @@ const executablePath = candidates.find((path) => existsSync(path));
 
 // One scripted session: six pulses, repair, then build and connect as the
 // primary action changes. Real time lets the drone deliver between clicks.
+const clickByText = async (page, text) => {
+  const handle = await page.evaluateHandle((label) => {
+    return [...document.querySelectorAll("button")].find((node) =>
+      (node.textContent ?? "").trim().startsWith(label)
+    );
+  }, text);
+  const element = handle.asElement();
+  if (!element) return false;
+  await element.click();
+  return true;
+};
+
 const playSession = async (page) => {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForSelector("text=Begin recovery");
@@ -28,12 +40,34 @@ const playSession = async (page) => {
     await page.waitForTimeout(650);
   }
   await page.click(".dock__btn--primary"); // Repair drone
-  for (let i = 0; i < 30; i += 1) {
+  for (let i = 0; i < 60; i += 1) {
     const button = await page.$(".dock__btn--primary");
     if (!button) break;
     await button.click();
-    await page.waitForTimeout(700);
+    await page.waitForTimeout(1100);
+    // A rejected placement leaves build mode; back out so the loop continues.
+    if (await page.$(".toast")) {
+      await page.waitForTimeout(1100); // Let the drone deliver first.
+      await clickByText(page, "Cancel");
+      await page.waitForTimeout(150);
+    }
   }
+  await clickByText(page, "Cancel");
+  await page.waitForTimeout(1500); // Let the yard run for the final frame.
+  const summary = await page.evaluate(() => {
+    const raw = localStorage.getItem("rustwake.save.v1");
+    if (!raw) return null;
+    const sim = JSON.parse(raw).payload.sim;
+    return {
+      tick: sim.tick,
+      tutorial: sim.tutorial,
+      credits: sim.credits,
+      store: sim.store,
+      machines: sim.machines.map((m) => `${m.blueprint} L${m.level} x${m.batchesDone}`),
+      routes: sim.routes.length,
+    };
+  });
+  console.log(`session state: ${JSON.stringify(summary)}`);
 };
 
 const browser = await chromium.launch({ executablePath });

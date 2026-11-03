@@ -47,3 +47,17 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 - Evidence: no lease module exists; `app/store.ts` writes on each commit and cadence tick.
 - Unblock: implement B-01 (lease with heartbeat and revision checks) with tests.
 - Risk note: with one tab open, the behaviour is already correct and deterministic.
+
+## BL-06 CI result read-back
+
+- Blocked: the GitHub Actions run for `origin/main` cannot be inspected from this session,
+  so its outcome is recorded as pending rather than green.
+- Evidence: `gh run list` reports "To get started with GitHub CLI, please run: gh auth
+  login"; the unauthenticated `api.github.com` lookup for the private repository returns
+  404. The workflow file itself (`.github/workflows/ci.yml`) is present and identical in
+  content to the one that ran previously.
+- Unblock: an authenticated `gh` on this machine (`gh auth login`) or an exported
+  `GH_TOKEN`, then `gh run list --repo darkmatter2222/Rustwake`.
+- Meanwhile: run the same steps locally in the documented order — `npm run typecheck`,
+  `npx vitest run`, `npm run build` — and record those three results as the effective
+  gate, with the CI badge kept as pending.

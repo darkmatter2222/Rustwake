@@ -1,57 +1,70 @@
 # STATUS
 
-Active milestone: M1 (first-feel vertical slice), M0 complete.
+Active milestone: M2 (a useful small factory). M0 and M1 complete.
 
-Last completed player-visible change: full first-feel loop is playable end to end —
-gate with mute, tap-to-salvage pulses on a finite wreck pool, drone repair at 30 scrap,
-autonomous 5-unit deliveries, sorter placement with ghost, two real dock routes, furnace,
-first export contract for 30 credits, and a first credit-funded upgrade. Blocked actions
-show one local explanation and charge nothing.
+Last completed player-visible change: the copper and polymer chain is playable. The build
+picker reveals seven blueprints in five steps, each new machine is linked with one
+**Connect** action, a machine panel now shows `4.00s → 3.64s · 45 credits` before an
+upgrade is bought, surplus material is sold at published per-unit prices in capped
+tranches, and the objective card and the dock button now come from one shared ladder so
+they always name the same next step. The action toast now dismisses during the frame loop.
 
-Current commit and remote sync status: `ed38ff1` is the pushed `origin/main` head
-("Build M1 first-feel slice: deterministic sim core, full-screen yard UI, persistence,
-tests, CI"), verified by `git log --oneline origin/main -1` after a non-fast-forward-free
-push from `dcdd74e`. GitHub Actions CI was triggered on that push; the result is not read
-back in this pass, so treat the CI badge as pending until the next pass confirms it.
+Current commit and remote sync status: the previous pushed head was `9bb6561`
+("Record pushed head and CI state for the M1 checkpoint"); this pass adds the M2 chain
+work on top of it and is pushed with `git push origin HEAD:main`. `git log --oneline -1`
+after the push is the authoritative head for the next pass. CI state: the GitHub
+Actions run for the previous push could not be read back — `gh` is unauthenticated in
+this environment and the unauthenticated API returns 404 for the private repository
+(recorded as BL-06 in `docs/BLOCKERS.md`). Treat CI as pending/unread rather than green.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
-- `npm test` — 44 passed / 44 (5 files: economy, logistics, offline, persistence, ui, plus
-  the headless perf bench). No skipped tests, no deleted assertions.
-- `npm run build` — succeeded: `index.html` 0.68 kB (0.37 gzip), CSS 4.59 kB (1.53 gzip),
-  JS 185.98 kB (59.04 gzip), 46 modules, ~456 ms.
-- Headless simulation cost (Node 22.18): 12 h tick-by-tick catch-up with 4 machines
-  33 ms; idle-yard event jump < 1 ms; 500 machines × 6 000 ticks 18 ms.
-- Browser behaviour exercised through jsdom-driven React tests (start gate, salvage,
-  tutorial progression, blocked-action toast, mute persistence).
+- `npx vitest run` — 66 passed / 66 (8 files: economy, logistics, offline, chain,
+  persistence, ui, perf). No skipped tests, no deleted assertions.
+- `npm run build` — succeeded: `index.html` 0.68 kB (0.37 gzip), CSS 4.60 kB (1.53 gzip),
+  JS 191.89 kB (60.75 gzip), 46 modules, ~494 ms.
+- Headless simulation cost (Node 22.18, median of 3): 12 h tick-by-tick catch-up with
+  4 machines 28 ms; idle-yard event jump < 1 ms; 500 machines × 6 000 ticks 19 ms;
+  100 machines × 10 000 ticks 6 ms.
+- Chain fixture (1 200 ticks, seeded store): sorter 29 and copper separator 23 batches at
+  their cycle limits; wire mill 12 and polymer recycler 14 batches at their supply limits;
+  per-resource totals reconcile exactly against completed batches.
+- Browser behaviour exercised twice: jsdom-driven React tests (gate, salvage, tutorial,
+  blocked-action toast plus self-dismissal, store sell, machine Connect) and a real Chrome
+  headless session through `scripts/capture.mjs`, which is what surfaced the toast defect.
 
 Screenshot evidence and capture provenance: `docs/screenshots/latest-mobile.png`
-(390 × 844 @2x) and `docs/screenshots/latest-desktop.png` (1440 × 900 @1x), captured by
-`scripts/capture.mjs` (playwright-core, Chrome headless) from the production preview build
-at this commit. Capture date: 2026-11-02.
+(390 × 844 @2x) and `docs/screenshots/latest-desktop.png` (1440 × 900 @1x), recaptured
+2026-11-03 from the current production preview build. Both scripted sessions reached
+tutorial 8 with three machines (sorter, furnace, polymer recycler), 6 routes, 39 credits,
+tick 1008. The 2026-11-02 pair (two machines, tick 750) is superseded, not relabelled.
 
 Known blockers with exact unblock conditions:
-- Real-device (midrange Android/iPhone) frame and thermal traces: needs a connected
-  device or a hosted run; until then the 30/60 FPS targets stay unverified.
-- Human first-feel playtest (target 8 of 10 fresh testers completing the automated loop
-  unaided): needs at least one human tester; agent self-play is not a substitute.
-- Server-authoritative mode, payments, and public launch: need provisioned infrastructure
-  and explicit owner authorization.
+- BL-01 real-device frame/thermal traces: needs a connected device or a hosted trace.
+- BL-02 human first-feel playtest (8 of 10 unaided): needs fresh human testers.
+- BL-03 server authority, payments, public launch: needs provisioning and owner
+  authorization.
+- BL-06 CI status read-back: needs an authenticated `gh` (`gh auth login`) or a readable
+  status check; until then the badge is reported as pending.
+- BL-11 human audio review: needs one listening pass.
 
-Assumptions/decisions made: see `docs/DECISIONS.md` (renderer choice, integer quantities,
-power model, reserve floor, store-funded purchases, 12 h cap, single-writer loop).
+Assumptions/decisions made: `docs/DECISIONS.md` D-01…D-12 as before, plus D-13 one-way
+export prices with a capped tranche and reserve floor, D-14 one shared yard ladder,
+D-15 progressive blueprint reveal, D-16 frame-render-safe timers.
 
 Next three bounded tasks:
-1. Copper separation and polymer recovery with a visible bottleneck report, plus a small
-   research branch (M2).
-2. Multi-tab single-writer lease with revision checks and heartbeat, plus save-export
-   import round-trip tests (M2 reliability).
-3. Worker-based catch-up for the 8/12-hour window with cancellation and a versioned
-   result handoff, keeping main-thread stalls under 100 ms (M2 idle).
+1. B-03 bottleneck assistant: measured occupancy, starvation percentage, route utilisation,
+   and power ratio per machine, with one recommendation that is not always a purchase.
+2. B-01 multi-tab single-writer lease: owner id plus heartbeat, read-only second tab,
+   revision-checked takeover, tests for both paths.
+3. B-05 small research branch: three nodes with exact visible effects, purchased with data,
+   each effect applied exactly once.
 
-Long-running processes owned by this session: one background `vite preview` server on
-port 4173 for screenshot capture (stopped after capture).
+Long-running processes owned by this session: the `vite preview` server on port 4173 was
+started for capture and stopped (pid 48400 released); nothing else is running.
 
-Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npm test` before
-editing; the deterministic engine fixtures in `tests/simulation/` are the contract for
-any simulation change.
+Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npx vitest run` before
+editing; `tests/simulation/chain.test.ts` is the contract for chain throughput and sell
+behaviour, and `tests/simulation/logistics.test.ts` for route and power behaviour. To
+refresh the README evidence, run `npm run build`, start `npm run preview`, then
+`node scripts/capture.mjs` (it prints the resulting session state as a JSON summary).

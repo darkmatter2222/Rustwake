@@ -2,13 +2,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { GameStore } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
-import { BLUEPRINTS, TUNING } from "../game/content/defs";
+import { BLUEPRINTS, TUNING, unlockedBlueprints } from "../game/content/defs";
 import {
   DOCK_TILE,
+  YARD_TILES,
   upgradeCost,
   type Command,
   type CommandReject,
 } from "../game/simulation/commands";
+import type { SimState } from "../game/simulation/types";
 import {
   WRECK_POSITION,
   drawScene,
@@ -19,7 +21,8 @@ import {
   type Camera,
 } from "../game/renderer/scene";
 import { createAudio, type AudioApi, type CueName } from "../game/audio/audio";
-import { objectiveFor, hintFor } from "./text";
+import { hintFor, objectiveFor, primaryFor } from "./text";
+import { nextYardStep, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
 import { useRevision, useSettings, useSim } from "./useGame";
 import { MachinePanel, ReturnReportPanel, StorePanel } from "./Panels";
@@ -99,7 +102,10 @@ export function App({ store }: { store: GameStore }) {
         reducedMotion: settings.reducedMotion,
         buildMode: buildBlueprint !== null,
         ghostTile: buildBlueprint !== null ? ghostTile : null,
-        ghostValid: ghostTile !== null && ghostTile !== DOCK_TILE,
+        ghostValid:
+          ghostTile !== null &&
+          ghostTile !== DOCK_TILE &&
+          !store.getState().machines.some((m) => m.tile === ghostTile),
         selected,
       });
       raf = requestAnimationFrame(render);
@@ -235,9 +241,10 @@ export function App({ store }: { store: GameStore }) {
         <DockButtons
           primary={primary}
           buildBlueprint={buildBlueprint}
+          unlocked={unlockedBlueprints(state.tutorial)}
           onPickBlueprint={(id) => {
             setBuildBlueprint(id);
-            setGhostTile(8);
+            setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(store.getState())));
             setSelected(null);
           }}
           onPlace={() => {
@@ -255,6 +262,7 @@ export function App({ store }: { store: GameStore }) {
       </div>
       {machine ? (
         <MachinePanel
+          state={state}
           machine={machine}
           tick={state.tick}
           powerRatio={state.powerRatio}
@@ -262,7 +270,9 @@ export function App({ store }: { store: GameStore }) {
           onClose={() => setSelected(null)}
         />
       ) : null}
-      {selected === -2 ? <StorePanel state={state} onClose={() => setSelected(null)} /> : null}
+      {selected === -2 ? (
+        <StorePanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+      ) : null}
       {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
     </div>
   );
@@ -368,25 +378,82 @@ export function buildPrimary(
       run: () => dispatch({ id: nextCommandId(), type: "contract.export" }),
     };
   }
-  const machine =
-    selected !== null && selected > 0
-      ? state.machines.find((m) => m.id === selected)
-      : state.machines[0];
-  if (machine) {
-    const def = BLUEPRINTS[machine.blueprint];
-    return {
-      label: `Upgrade ${def.label}`,
-      cost: `${upgradeCost(def.baseUpgradeCost, machine.level)} credits`,
-      run: () => dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: machine.id }),
-    };
+  // With an explicit selection the panel's own next step leads; otherwise the
+  // dock follows the same ladder as the objective card.
+  if (selected !== null && selected > 0) {
+    const machine = state.machines.find((m) => m.id === selected);
+    if (machine) {
+      const plans = planConnections(state, machine.id);
+      if (plans.length > 0) {
+        return {
+          label: "Connect",
+          run: () => {
+            for (const plan of plans) {
+              dispatch({
+                id: nextCommandId(),
+                type: "route.connect",
+                from: plan.from,
+                to: plan.to,
+                filter: plan.filter,
+              });
+            }
+          },
+        };
+      }
+      const def = BLUEPRINTS[machine.blueprint];
+      return {
+        label: `Upgrade ${def.label}`,
+        cost: `${upgradeCost(def.baseUpgradeCost, machine.level)} credits`,
+        run: () => dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: machine.id }),
+      };
+    }
   }
-  return {
-    label: "Build",
-    run: () => {
-      setBuildBlueprint("sorter");
-      setGhostTile(8);
-    },
-  };
+  const next = nextYardStep(state);
+  return { ...primaryFor(state, next), run: () => runStep(state, next, dispatch, setBuildBlueprint, setGhostTile) };
+}
+
+/** Executes the shared yard ladder; one primary press, one authoritative step. */
+function runStep(
+  state: SimState,
+  step: YardStep,
+  dispatch: (command: Command) => unknown,
+  setBuildBlueprint: (id: string | null) => void,
+  setGhostTile: (tile: number | null) => void
+): void {
+  switch (step.kind) {
+    case "connect":
+      for (const plan of step.plans) {
+        dispatch({
+          id: nextCommandId(),
+          type: "route.connect",
+          from: plan.from,
+          to: plan.to,
+          filter: plan.filter,
+        });
+      }
+      return;
+    case "build":
+      setBuildBlueprint(step.blueprint);
+      setGhostTile(firstFreeTile(state));
+      return;
+    case "sell":
+      dispatch({ id: nextCommandId(), type: "contract.sell", resource: step.resource, qty: step.qty });
+      return;
+    case "upgrade":
+      dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: step.machineId });
+      return;
+    default:
+      dispatch({ id: nextCommandId(), type: "manual.salvage" });
+  }
+}
+
+/** First unoccupied yard cell, so a new machine never lands on the dock tile. */
+export function firstFreeTile(state: SimState): number {
+  for (let tile = 0; tile < YARD_TILES; tile += 1) {
+    if (tile === DOCK_TILE) continue;
+    if (!state.machines.some((m) => m.tile === tile)) return tile;
+  }
+  return 8;
 }
 
 function cueFor(type: Command["type"]): CueName {
@@ -420,6 +487,8 @@ export function labelForReject(reason: CommandReject): string {
       return "That would loop back";
     case "already-claimed":
       return "Contract already sold";
+    case "locked":
+      return "Sell opens after your first steel contract";
     default:
       return "No longer available";
   }

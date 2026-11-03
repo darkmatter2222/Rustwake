@@ -103,3 +103,49 @@ Format: date · problem · options · choice · reason · reversibility.
   45 ms identical-cue coalescing window; created only after the Begin gesture.
 - Reason: no binary assets yet, deterministic-ish, respects mute and hidden tabs.
 - Pending: human listening review (B-11).
+
+## D-13 · 2026-11-03 · One-way export prices
+
+- Problem: after the one-shot onboarding contract, credits must remain earnable without a
+  free conversion loop (spec 8.4).
+- Options: a live market; per-recipe computed value; a static one-way price table.
+- Choice: static `EXPORT_PRICES` per unit (`steel 10`, `copper 6`, `polymer 8`, `wire 4`,
+  `circuits 30`, …), sold only above a 10-unit per-material reserve floor, in tranches of
+  at most 60 units, and only after `exportClaimed` is set.
+- Reason: materials are never repurchased for credits, so value can only grow through
+  machine work under a shared power budget and bounded storage; the recipe graph is a
+  topologically ordered DAG, verified by a cycle test.
+- Reversible: yes, one table plus two tuning constants (`reserveFloor`, `sellBatchCap`).
+- Reconsider when: a second sink competes for the same materials, or playtests show the
+  tranche cap reads as a chore.
+
+## D-14 · 2026-11-03 · One shared yard ladder
+
+- Problem: the objective card and the dock button drifted (card said "Build Copper
+  separator", button said "Upgrade Scrap sorter").
+- Options: compute each independently; hardcode a second sequence; one pure planner.
+- Choice: `simulation/plan.ts` returns a single `YardStep`
+  (connect → affordable build → sell → expensive build → upgrade → salvage) that both
+  surfaces format from.
+- Reason: one authoritative next-step rule, testable without React, matches spec 3.3 and
+  the "one primary action per screen" constraint.
+- Reversible: yes; the ladder is one function and the panels take an explicit step.
+
+## D-15 · 2026-11-03 · Progressive blueprint reveal
+
+- Problem: seven blueprints at once violates "teach one action first" and crowds the dock.
+- Choice: each blueprint declares `unlockAt` (tutorial step 4, 6, 7, 7, 8, 8, 9); the picker
+  cycles only unlocked entries and shows label plus cost.
+- Reason: two new machines arrive with the first credit decision, keeping at least two
+  viable upgrade targets visible at once.
+- Reversible: yes; `unlockAt` is data.
+
+## D-16 · 2026-11-03 · Frame-render-safe timers
+
+- Problem: the action toast never dismissed. Its effect depended on the whole `props`
+  object, which is new on every animation-frame render, so the 1.8 s timer was re-armed
+  about ten times per second.
+- Choice: depend on the toast text only and call the callback through a ref.
+- Reason: with a 10 Hz view version, any per-render dependency identity makes a timer
+  unreachable. Recorded as a rule for future overlays.
+- Evidence: regression test advances 1.9 s of real frames and asserts the toast is gone.

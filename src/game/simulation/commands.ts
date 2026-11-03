@@ -3,6 +3,7 @@ import {
   RESOURCES,
   RECIPES,
   TUNING,
+  exportPrice,
   type ResourceId,
 } from "../content/defs";
 import {
@@ -28,7 +29,8 @@ export type CommandReject =
   | "duplicate"
   | "cooldown"
   | "cycle"
-  | "already-claimed";
+  | "already-claimed"
+  | "locked";
 
 export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
 
@@ -41,7 +43,8 @@ export type Command =
   | { id: string; type: "machine.move"; machineId: number; tile: number }
   | { id: string; type: "route.connect"; from: number; to: number; filter: ResourceId | null }
   | { id: string; type: "route.remove"; routeId: number }
-  | { id: string; type: "contract.export" };
+  | { id: string; type: "contract.export" }
+  | { id: string; type: "contract.sell"; resource: ResourceId; qty: number };
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 export type CommandBody = DistributiveOmit<Command, "id">;
@@ -78,6 +81,8 @@ function execute(s: SimState, command: Command): CommandResult {
       return removeRoute(s, command.routeId);
     case "contract.export":
       return exportContract(s);
+    case "contract.sell":
+      return sellResource(s, command.resource, command.qty);
     default:
       return { ok: false, reason: "not-found" };
   }
@@ -267,6 +272,30 @@ function exportContract(s: SimState): CommandResult {
   s.credits += TUNING.exportContractCredits;
   s.exportSteelDelivered = TUNING.exportContractSteel;
   return commit(s, "export", s.credits);
+}
+
+/**
+ * Repeatable export at a content-defined price (spec 8.4). Supply is limited by
+ * the yard's own throughput and by the per-resource reserve floor, so no
+ * unbounded credit loop exists. Opens after the onboarding contract teaches the
+ * exchange, keeping the tutorial's one-off rate distinct.
+ */
+function sellResource(s: SimState, resource: ResourceId, qty: number): CommandResult {
+  if (!s.exportClaimed) return { ok: false, reason: "locked" };
+  const price = exportPrice(resource);
+  if (price <= 0) return { ok: false, reason: "not-found" };
+  if (!Number.isInteger(qty) || qty <= 0) return { ok: false, reason: "not-found" };
+  const amount = Math.min(qty, sellableAmount(s, resource));
+  if (amount <= 0) return { ok: false, reason: "insufficient" };
+  if (!spendFromStore(s, [{ resource, qty: amount }])) return { ok: false, reason: "insufficient" };
+  s.credits += price * amount;
+  return commit(s, "sell", amount);
+}
+
+/** Units of one resource a sell may take: above the floor, within one tranche. */
+export function sellableAmount(s: SimState, resource: ResourceId): number {
+  const held = s.store[resource] ?? 0;
+  return Math.min(Math.max(0, held - TUNING.reserveFloor), TUNING.sellBatchCap);
 }
 
 export function upgradeCost(baseUpgradeCost: number, level: number): number {

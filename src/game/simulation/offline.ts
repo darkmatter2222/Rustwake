@@ -87,5 +87,7 @@ export function suggestedAction(s: SimState): string {
   for (const m of s.machines) if (m.status === "starved") return "hint.starved";
   for (const m of s.machines) if (m.status === "outputFull") return "hint.cargo-full";
   if (!s.exportClaimed && (s.store["steel"] ?? 0) >= 3) return "objective.export";
+  if (s.powerRatio < 0.999) return "hint.power";
+  if (s.tutorial >= 9) return "objective.chain";
   return "objective.upgrade";
 }

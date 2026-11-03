@@ -50,6 +50,8 @@ export interface BlueprintDef {
   readonly inputBuffer: number;
   readonly outputBuffer: number;
   readonly baseUpgradeCost: number;
+  /** Tutorial step at which the blueprint appears in the build picker (spec 5.5). */
+  readonly unlockAt: number;
 }
 
 const seconds = (s: number): number => s * TICKS_PER_SECOND;
@@ -69,6 +71,7 @@ export const RESOURCES: readonly ResourceId[] = [
   "battery",
   "alloy",
   "data",
+  "chassis",
 ] as const;
 
 /** Recipes R01..R12 from spec 9.3. */
@@ -160,7 +163,7 @@ export const RECIPES: Readonly<Record<string, RecipeDef>> = {
       { resource: "circuits", qty: 2 },
       { resource: "battery", qty: 1 },
     ],
-    outputs: [{ resource: "plates", qty: 0 }],
+    outputs: [{ resource: "chassis", qty: 1 }],
     cycleTicks: seconds(30),
     power: 5,
   },
@@ -197,6 +200,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 12,
     outputBuffer: 12,
     baseUpgradeCost: 30,
+    unlockAt: 4,
   },
   furnace: {
     id: "furnace",
@@ -210,6 +214,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 12,
     outputBuffer: 12,
     baseUpgradeCost: 40,
+    unlockAt: 6,
   },
   copperSeparator: {
     id: "copperSeparator",
@@ -223,6 +228,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 12,
     outputBuffer: 12,
     baseUpgradeCost: 45,
+    unlockAt: 7,
   },
   polymerRecycler: {
     id: "polymerRecycler",
@@ -236,6 +242,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 16,
     outputBuffer: 12,
     baseUpgradeCost: 50,
+    unlockAt: 7,
   },
   wireMill: {
     id: "wireMill",
@@ -249,6 +256,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 12,
     outputBuffer: 18,
     baseUpgradeCost: 55,
+    unlockAt: 8,
   },
   platePress: {
     id: "platePress",
@@ -262,6 +270,7 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 12,
     outputBuffer: 18,
     baseUpgradeCost: 60,
+    unlockAt: 8,
   },
   circuitAssembler: {
     id: "circuitAssembler",
@@ -275,8 +284,47 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     inputBuffer: 16,
     outputBuffer: 12,
     baseUpgradeCost: 70,
+    unlockAt: 9,
   },
 } as const;
+
+/**
+ * Content-defined export prices in credits per cargo unit (spec 8.4). Materials
+ * are never repurchased for credits, so these one-way values cannot form a
+ * free buy/sell loop; the tiers rise with the work and power each recipe costs.
+ * Values are tuning hypotheses, not validated market rates.
+ */
+export const EXPORT_PRICES: Readonly<Partial<Record<ResourceId, number>>> = {
+  scrap: 1,
+  ferrous: 2,
+  nonferrous: 2,
+  residue: 1,
+  steel: 10,
+  copper: 6,
+  polymer: 8,
+  wire: 4,
+  plates: 15,
+  circuits: 30,
+  motors: 60,
+  battery: 90,
+  alloy: 120,
+  data: 5,
+} as const;
+
+/** Credit value for one unit, or 0 when the resource has no export price. */
+export function exportPrice(resource: ResourceId): number {
+  return EXPORT_PRICES[resource] ?? 0;
+}
+
+/**
+ * Blueprints shown in the build picker at a tutorial step, in reveal order
+ * (spec 5.4, 5.5). Two machines arrive with the first processing choice so the
+ * player has a real decision once credits exist.
+ */
+export function unlockedBlueprints(tutorial: number): string[] {
+  const step = Math.max(4, tutorial);
+  return Object.keys(BLUEPRINTS).filter((id) => BLUEPRINTS[id].unlockAt <= step);
+}
 
 /** Design defaults for the starter yard (spec 4.3, 8.3, 10.4). */
 export const TUNING = {
@@ -296,6 +344,10 @@ export const TUNING = {
   routeLatencyTicks: 5,
   offlineCapTicks: 12 * 3600 * TICKS_PER_SECOND,
   activeBoostCapPercent: 10,
+  /** Units of one resource the yard keeps back so routes and builds still work. */
+  reserveFloor: 10,
+  /** Largest single sellable tranche; keeps one transaction bounded (spec 5.1). */
+  sellBatchCap: 60,
 } as const;
 
 export type Tuning = typeof TUNING;

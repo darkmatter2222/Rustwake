@@ -1,14 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { BLUEPRINTS, TUNING } from "../game/content/defs";
 import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
-import { RESOURCE_LABEL, formatNumber, visibleResources } from "./text";
+import { RESOURCE_LABEL, costSummary, formatNumber, visibleResources } from "./text";
 
 const DOT_COLORS: Record<string, string> = {
   scrap: "#c9713a",
   credits: "#ffb765",
   ferrous: "#6f93ad",
+  nonferrous: "#8a7ad8",
+  residue: "#7b8a99",
   steel: "#5fd8e8",
+  copper: "#e0975b",
+  polymer: "#c9b45d",
+  wire: "#9fd0d8",
+  plates: "#a9b6c4",
+  circuits: "#b39ddb",
+  data: "#7fd6c2",
 };
 
 export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute: () => void }) {
@@ -91,12 +99,13 @@ export function ObjectiveCard(props: { text: string; hint: string }) {
 export function DockButtons(props: {
   primary: PrimaryAction;
   buildBlueprint: string | null;
+  unlocked: string[];
   onPickBlueprint: (id: string) => void;
   onPlace: () => void;
   onCancelBuild: () => void;
   onInventory: () => void;
 }) {
-  const blueprintIds = Object.keys(BLUEPRINTS);
+  const blueprintIds = props.unlocked.length > 0 ? props.unlocked : Object.keys(BLUEPRINTS);
   if (props.buildBlueprint !== null) {
     return (
       <div className="dock">
@@ -104,15 +113,13 @@ export function DockButtons(props: {
           Cancel
         </button>
         <button className="dock__btn dock__btn--primary" onClick={props.onPlace}>
-          Place
-          <span className="dock__cost">
-            {costText(props.buildBlueprint)}
-          </span>
+          Place {BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint}
+          <span className="dock__cost">{costText(props.buildBlueprint)}</span>
         </button>
         <button
           className="dock__btn"
           onClick={() => {
-            const index = blueprintIds.indexOf(props.buildBlueprint ?? "sorter");
+            const index = blueprintIds.indexOf(props.buildBlueprint ?? blueprintIds[0]);
             props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
           }}
         >
@@ -130,7 +137,7 @@ export function DockButtons(props: {
         {props.primary.label}
         {props.primary.cost ? <span className="dock__cost">{props.primary.cost}</span> : null}
       </button>
-      <button className="dock__btn" onClick={() => props.onPickBlueprint("sorter")}>
+      <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
         Build
       </button>
     </div>
@@ -140,14 +147,18 @@ export function DockButtons(props: {
 function costText(blueprint: string): string {
   const def = BLUEPRINTS[blueprint];
   if (!def) return "";
-  return def.buildCost.map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`).join(" + ");
+  return costSummary(def);
 }
 
 export function Toast(props: { text: string; onDone: () => void }) {
+  const done = useRef(props.onDone);
+  done.current = props.onDone;
+  // Depend on the text only: the sim re-renders every animation frame, and a
+  // per-render dependency would restart the timer so it never fires.
   useEffect(() => {
-    const timer = setTimeout(props.onDone, 1800);
+    const timer = setTimeout(() => done.current(), 1800);
     return () => clearTimeout(timer);
-  }, [props]);
+  }, [props.text]);
   return (
     <div className="toast" role="status">
       {props.text}
