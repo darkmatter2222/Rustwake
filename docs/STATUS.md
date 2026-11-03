@@ -13,11 +13,13 @@ plate press ×84, polymer recycler ×69, circuit assembler ×1); phone session s
 batches and furnace 5 → 301, with the 12 h report now `Ferrous +9 · Nonferrous +584 ·
 Steel +287 · Deliveries 365 · Batches 876`.
 
-Current commit and remote sync status: `4f2ba96` is the verified `origin/main` head; this pass's
-work is committed locally and pushed with `git push origin HEAD:main`, after which the pushed
-hash is recorded in the next checkpoint commit (the pattern used all week). CI state: still
-unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the unauthenticated
-API 404s for the private repository), so CI is reported as pending, not green.
+Current commit and remote sync status: `47c85c4` ("Size input pulls to machine need and route
+each tray item by material") is the pushed `origin/main` head: `git push origin HEAD:main`
+reported `4f2ba96..47c85c4 HEAD -> main`, and the following `git fetch origin main` showed
+`git rev-parse HEAD origin/main` both equal to
+`47c85c4043446cf8643f815026ed991ec4ee96f7` with a clean working tree. Its parent is `4f2ba96`.
+CI state: still unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
+unauthenticated API 404s for the private repository), so CI is reported as pending, not green.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
