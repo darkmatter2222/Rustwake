@@ -10,9 +10,10 @@ Each machine carries two `(age, batchesDone)` samples on a fixed 600-tick grid, 
 from the tick loop and from the event-jump branch, so the whole `machines` array still serialises
 identically under `advance` and `advanceTo` (decision D-29). Schema version is unchanged.
 
-Current commit and remote sync status: the feature commit below is the `origin/main` head after
-`git push origin HEAD:main`; a documentation-only checkpoint commit (this line, with the SHA) sits on
-top of it. The previous pushed head was `0506f46` ("Record pushed head 57f15af and the pass scope").
+Current commit and remote sync status: `4ac39c5` ("Measure machine rate over a 60 s window (B-17)")
+is the pushed `origin/main` head after `git push origin HEAD:main`; a documentation-only checkpoint
+commit (this line) sits on top of it. The previous pushed head was `0506f46` ("Record pushed head
+57f15af and the pass scope").
 CI state: still unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
 unauthenticated API 404s for the private repository), so CI is reported as pending, not green.
 
