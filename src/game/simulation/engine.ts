@@ -1,0 +1,371 @@
+import { addRational } from "../economy/quantity";
+import {
+  BLUEPRINTS,
+  RECIPES,
+  RESOURCES,
+  TUNING,
+  type ResourceId,
+  type ItemStack,
+} from "../content/defs";
+import {
+  machineById,
+  STORE_ENDPOINT,
+  type MachineState,
+  type RouteState,
+  type SimState,
+} from "./types";
+
+/**
+ * Deterministic simulation advance (spec 9.5, 21.4).
+ *
+ * Phase order per tick: finish eligible batches, enqueue cargo, settle
+ * arriving cargo, allocate shared power, start next batches fairly, then
+ * resolve drone and contract events. The order is fixed so equal-priority
+ * consumers do not depend on insertion order alone.
+ */
+export function advance(s: SimState, ticks: number): void {
+  for (let i = 0; i < ticks; i += 1) stepTick(s);
+}
+
+/**
+ * Advance to an absolute tick, jumping ranges with no pending event.
+ * Identical results to `advance` for the same target (spec 21.4 equivalence).
+ */
+export function advanceTo(s: SimState, target: number): void {
+  let guard = 0;
+  while (s.tick < target) {
+    if (guard++ > 20_000_000) break;
+    const due = nextDueTick(s, target);
+    if (due > s.tick + 1 && !hasContinuousWork(s)) {
+      s.tick = Math.min(due, target);
+      continue;
+    }
+    stepTick(s);
+  }
+  if (s.tick > target) s.tick = target;
+}
+
+function hasContinuousWork(s: SimState): boolean {
+  if (s.overflow.length > 0) return true;
+  for (const m of s.machines) {
+    if (m.progress > 0 || m.trayUnits > 0) return true;
+    if (inBufTotal(m) > 0) return true;
+  }
+  for (const r of s.routes) if (r.inFlight > 0) return true;
+  if (s.routes.length > 0 && s.storeUnits > 0) return true;
+  if (s.drone.repaired) return true;
+  return false;
+}
+
+function nextDueTick(s: SimState, target: number): number {
+  let due = target;
+  if (s.drone.repaired) due = Math.min(due, Math.max(s.tick + 1, s.drone.nextDeliveryTick));
+  for (const r of s.routes) {
+    for (const item of r.items) due = Math.min(due, Math.max(s.tick + 1, item.arrive));
+  }
+  for (const m of s.machines) {
+    if (m.progress > 0) {
+      const remaining = Math.ceil((m.batchMilli - m.progress) / 1000);
+      due = Math.min(due, s.tick + Math.max(1, remaining));
+    }
+  }
+  return due;
+}
+
+function inBufTotal(m: MachineState): number {
+  return m.inBufUnits;
+}
+
+function stepTick(s: SimState): void {
+  finishBatches(s);
+  enqueueCargo(s);
+  settleArrivals(s);
+  drainOverflow(s);
+  const requested = allocatePower(s);
+  startBatches(s, requested);
+  advanceProgress(s, requested);
+  updateDrone(s);
+  s.tick += 1;
+  syncTutorial(s);
+}
+
+/** Phase 1: complete batches whose work is finished and whose tray is free. */
+function finishBatches(s: SimState): void {
+  for (const m of s.machines) {
+    if (m.progress <= 0) continue;
+    if (m.progress < m.batchMilli) {
+      m.status = "running";
+      continue;
+    }
+    const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+    const outputs = recipe.outputs;
+    const outUnits = totalUnits(outputs);
+    if (m.trayUnits + outUnits > BLUEPRINTS[m.blueprint].outputBuffer) {
+      m.status = "outputFull";
+      continue;
+    }
+    for (const out of outputs) {
+      m.tray.push({ ...out });
+      m.trayUnits += out.qty;
+    }
+    m.batch = [];
+    m.progress = 0;
+    m.progressRem = 0;
+    m.batchesDone += 1;
+    m.status = "idle";
+  }
+}
+
+/** Phase 2: move a completed tray onto the outgoing route when it fits. */
+function enqueueCargo(s: SimState): void {
+  for (const m of s.machines) {
+    if (m.trayUnits === 0) continue;
+    const route = m.outRoute === null ? undefined : routeById(s, m.outRoute);
+    if (!route) continue;
+    if (route.capacity - route.inFlight < m.trayUnits) {
+      m.status = "outputFull";
+      continue;
+    }
+    const arrive = s.tick + route.latency;
+    for (const item of m.tray) {
+      route.items.push({ resource: item.resource, qty: item.qty, arrive });
+      route.inFlight += item.qty;
+    }
+    m.tray.length = 0;
+    m.trayUnits = 0;
+    m.status = "running";
+  }
+  pullFromStore(s);
+}
+
+/** Store-sourced routes draw material into transit, honouring their filter.
+ * A small reserve floor keeps construction affordable and prevents a
+ * starved-then-stranded starter account (spec 4.3, 7.5). */
+const RESERVE_FLOOR = 10;
+
+function pullFromStore(s: SimState): void {
+  for (const route of s.routes) {
+    if (route.from.kind !== "store") continue;
+    const resources = route.filter === null ? RESOURCES : [route.filter];
+    for (const resource of resources) {
+      const space = route.capacity - route.inFlight;
+      if (space <= 0) break;
+      const available = Math.max(0, (s.store[resource] ?? 0) - RESERVE_FLOOR);
+      if (available <= 0) continue;
+      const moved = Math.min(space, available);
+      const left = (s.store[resource] ?? 0) - moved;
+      s.store[resource] = left > 0 ? left : 0;
+      s.storeUnits -= moved;
+      route.items.push({ resource, qty: moved, arrive: s.tick + route.latency });
+      route.inFlight += moved;
+    }
+  }
+}
+
+/** Phase 3: deliver route cargo whose latency elapsed, if the input has room. */
+function settleArrivals(s: SimState): void {
+  for (let index = 0; index < s.routes.length; index += 1) {
+    const route = s.routes[(s.routeCursor + index) % s.routes.length];
+    if (!route || route.items.length === 0) continue;
+    const head = route.items[0];
+    if (head.arrive > s.tick) continue;
+    const room = destinationRoom(s, route);
+    if (room <= 0) continue;
+    const moved = Math.min(head.qty, room);
+    if (moved <= 0) continue;
+    deliver(s, route, head.resource, moved);
+    if (head.qty === moved) route.items.shift();
+    else head.qty -= moved;
+    route.inFlight -= moved;
+    s.routeCursor = (s.routeCursor + 1) % Math.max(1, s.routes.length);
+  }
+}
+
+function drainOverflow(s: SimState): void {
+  while (s.overflow.length > 0 && s.storeUnits < s.storeCapacity) {
+    const head = s.overflow[0];
+    const moved = Math.min(head.qty, s.storeCapacity - s.storeUnits);
+    addToStore(s, head.resource, moved);
+    if (head.qty === moved) s.overflow.shift();
+    else s.overflow[0] = { resource: head.resource, qty: head.qty - moved };
+  }
+}
+
+/** Phase 4: shared power budget (spec 10.4). Returns requested power. */
+function allocatePower(s: SimState): number {
+  let requested = 0;
+  for (const m of s.machines) if (m.progress > 0) requested += m.batchPower;
+  const capacity = TUNING.yardPowerCapacity;
+  s.powerRatio = requested === 0 ? 1 : Math.min(1, capacity / requested);
+  return requested;
+}
+
+/** Phase 5: start batches in persistent fair order, reserving inputs once. */
+function startBatches(s: SimState, requested: number): void {
+  const count = s.machines.length;
+  if (count === 0) return;
+  const capacity = TUNING.yardPowerCapacity;
+  const start = s.machineCursor % count;
+  let lastStarted = -1;
+  for (let offset = 0; offset < count; offset += 1) {
+    const slot = (start + offset) % count;
+    const m = s.machines[slot];
+    if (m.progress > 0) continue;
+    if (m.trayUnits > 0) {
+      m.status = "outputFull";
+      continue;
+    }
+    const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+    if (!hasInputs(m, recipe.inputs)) {
+      m.starvedTicks += 1;
+      m.status = "starved";
+      continue;
+    }
+    if (m.inBufUnits < totalUnits(recipe.inputs)) continue;
+    for (const input of recipe.inputs) {
+      m.inBuf[input.resource] = (m.inBuf[input.resource] ?? 0) - input.qty;
+      m.inBufUnits -= input.qty;
+    }
+    m.batch = recipe.inputs.map((input) => ({ ...input }));
+    m.batchMilli = batchMilli(m);
+    m.batchPower = recipe.power;
+    m.progress = 1;
+    m.progressRem = 0;
+    m.progressDen = requested === 0 ? recipe.power : Math.max(requested, capacity);
+    m.status = "running";
+    lastStarted = slot;
+  }
+  if (lastStarted >= 0) s.machineCursor = (lastStarted + 1) % count;
+  if (requested > capacity) {
+    for (const m of s.machines) if (m.progress > 0) m.status = "powerLimited";
+  }
+}
+
+/** Phase 5b: accrue work using the shared power ratio. */
+function advanceProgress(s: SimState, requested: number): void {
+  const capacity = TUNING.yardPowerCapacity;
+  const denom = requested === 0 ? capacity : Math.max(requested, capacity);
+  for (const m of s.machines) {
+    if (m.progress <= 0) continue;
+    if (m.progressDen !== denom) {
+      m.progressDen = denom;
+      m.progressRem = 0;
+    }
+    if (requested !== 0 && requested <= capacity) {
+      m.progress += 1000;
+      continue;
+    }
+    const step = addRational(m.progress, m.progressRem, 1000 * capacity, denom);
+    m.progress = step.whole;
+    m.progressRem = step.remainder;
+  }
+}
+
+function updateDrone(s: SimState): void {
+  const d = s.drone;
+  if (!d.repaired) return;
+  if (d.inFlight) {
+    if (d.inFlight.arrive <= s.tick) {
+      const room = s.storeCapacity - s.storeUnits;
+      const moved = Math.min(d.inFlight.qty, Math.max(0, room));
+      if (moved <= 0) return;
+      addToStore(s, "scrap", moved);
+      if (moved === d.inFlight.qty) d.inFlight = null;
+      else d.inFlight = { qty: d.inFlight.qty - moved, arrive: d.inFlight.arrive };
+      d.deliveries += 1;
+    }
+    return;
+  }
+  if (s.tick >= d.nextDeliveryTick) {
+    const taken = Math.min(TUNING.droneDeliveryUnits, s.wreck.remaining);
+    s.wreck.remaining -= taken;
+    d.accumulated += taken;
+    if (s.wreck.remaining === 0) {
+      s.wreck.generation += 1;
+      s.wreck.remaining = TUNING.starterWreckPool;
+    }
+    d.inFlight = { qty: taken, arrive: s.tick + TUNING.droneTravelTicks };
+    d.nextDeliveryTick = s.tick + TUNING.droneDeliveryTicks;
+  }
+}
+
+export function batchMilli(m: MachineState): number {
+  const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+  return Math.ceil((recipe.cycleTicks * 10000) / (10 + (m.level - 1)));
+}
+
+function hasInputs(m: MachineState, inputs: readonly ItemStack[]): boolean {
+  for (const input of inputs) {
+    if ((m.inBuf[input.resource] ?? 0) < input.qty) return false;
+  }
+  return true;
+}
+
+export function totalUnits(items: readonly ItemStack[]): number {
+  let total = 0;
+  for (const item of items) total += item.qty;
+  return total;
+}
+
+export function routeById(s: SimState, id: number): RouteState | undefined {
+  for (const r of s.routes) if (r.id === id) return r;
+  return undefined;
+}
+
+function destinationRoom(s: SimState, route: RouteState): number {
+  if (route.to.kind === "store") return s.storeCapacity - s.storeUnits;
+  const machine = machineById(s, route.to.id);
+  if (!machine) return 0;
+  return BLUEPRINTS[machine.blueprint].inputBuffer - machine.inBufUnits;
+}
+
+function deliver(s: SimState, route: RouteState, resource: ResourceId, amount: number): void {
+  if (route.to.kind === "store") {
+    addToStore(s, resource, amount);
+    return;
+  }
+  const machine = machineById(s, route.to.id);
+  if (!machine) {
+    addToStore(s, resource, amount);
+    return;
+  }
+  machine.inBuf[resource] = (machine.inBuf[resource] ?? 0) + amount;
+  machine.inBufUnits += amount;
+}
+
+export function addToStore(s: SimState, resource: ResourceId, amount: number): void {
+  if (amount <= 0) return;
+  s.store[resource] = (s.store[resource] ?? 0) + amount;
+  s.storeUnits += amount;
+}
+
+export function spendFromStore(s: SimState, items: readonly ItemStack[]): boolean {
+  for (const item of items) {
+    if ((s.store[item.resource] ?? 0) < item.qty) return false;
+  }
+  for (const item of items) {
+    const left = (s.store[item.resource] ?? 0) - item.qty;
+    s.store[item.resource] = left > 0 ? left : 0;
+    s.storeUnits -= item.qty;
+  }
+  return true;
+}
+
+/** Tutorial progression from authoritative state only (spec 4.2). */
+function syncTutorial(s: SimState): void {
+  if (s.tutorial === 0 && s.wreck.pulses >= 1) s.tutorial = 1;
+  if (s.tutorial === 1 && s.wreck.pulses >= 6) s.tutorial = 2;
+  if (s.tutorial === 2 && s.drone.repaired) s.tutorial = 3;
+  if (s.tutorial === 3 && s.drone.deliveries >= 1) s.tutorial = 4;
+  if (s.tutorial === 4 && s.machines.some((m) => m.blueprint === "sorter")) s.tutorial = 5;
+  if (s.tutorial === 5 && s.routes.length >= 1) s.tutorial = 6;
+  if (s.tutorial === 6 && qtyOf(s, "steel") > 0) s.tutorial = 7;
+  if (s.tutorial === 7 && s.credits > 0) s.tutorial = 8;
+  if (s.tutorial === 8 && s.machines.some((m) => m.level > 1)) s.tutorial = 9;
+}
+
+function qtyOf(s: SimState, resource: ResourceId): number {
+  return s.store[resource] ?? 0;
+}
+
+export { STORE_ENDPOINT };
