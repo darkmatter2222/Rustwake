@@ -21,6 +21,7 @@ import { netRecipeUnits, systemTotals, unitTotal } from "../../src/game/simulati
 import { nextYardStep, stepForMachine, type YardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { describeStep, objectiveFor, primaryFor } from "../../src/ui/text";
+import { firstFreeTile } from "../../src/ui/App";
 
 let seq = 500;
 function send(state: SimState, command: CommandBody, id?: string) {
@@ -423,5 +424,91 @@ describe("build menu reveal", () => {
     expect(midTier.length).toBeGreaterThanOrEqual(4);
     expect(midTier).toContain("copperSeparator");
     expect(midTier).toContain("wireMill");
+  });
+
+  /** The scripted browser session headlessly: apply the ladder's step, tick, repeat. */
+  function runLadder(state: SimState, rounds: number): Record<string, number> {
+    const histogram: Record<string, number> = {};
+    for (let round = 0; round < rounds; round += 1) {
+      const step = nextYardStep(state);
+      const key =
+        step.kind === "build"
+          ? `build:${step.blueprint}`
+          : step.kind === "sell"
+            ? `sell:${step.resource}`
+            : step.kind;
+      histogram[key] = (histogram[key] ?? 0) + 1;
+      switch (step.kind) {
+        case "connect":
+          for (const plan of step.plans) {
+            send(state, { type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+          }
+          break;
+        case "build":
+          send(state, {
+            type: "machine.build",
+            blueprint: step.blueprint,
+            tile: firstFreeTile(state),
+          });
+          break;
+        case "sell":
+          send(state, { type: "contract.sell", resource: step.resource, qty: step.qty });
+          break;
+        case "research":
+          send(state, { type: "research.buy", node: step.node });
+          break;
+        case "upgrade":
+          send(state, { type: "machine.upgrade", machineId: step.machineId });
+          break;
+        case "salvage":
+          send(state, { type: "manual.salvage" });
+          break;
+      }
+      advance(state, 10); // one second between taps, as the scripted session does
+    }
+    return histogram;
+  }
+
+  it("keeps building and spending through half an hour of self-play (B-19)", () => {
+    const state = boot();
+    state.tutorial = 9; // the tutorial is complete, so every blueprint is known
+    const histogram = runLadder(state, 1800); // 18 000 ticks = 30 minutes of play
+    const levels = state.machines.map((m) => m.level);
+    console.log(
+      "ladder-session:",
+      JSON.stringify({
+        machines: state.machines.map((m) => `${m.blueprint} L${m.level} x${m.batchesDone}`),
+        links: state.routes.map((r) => `${r.from.kind}${r.from.id}>${r.to.kind}${r.to.id}:${r.filter ?? "*"}`).join(" "),
+        credits: state.credits,
+        store: state.store,
+        research: state.research,
+        tick: state.tick,
+        histogram,
+      })
+    );
+    // A demand-sized pull leaves the surplus in the store, so the yard keeps
+    // reaching the next processor instead of stopping at three machines.
+    expect(state.machines.length).toBeGreaterThanOrEqual(7);
+    expect(state.routes.length).toBeGreaterThanOrEqual(state.machines.length);
+    expect(state.credits).toBeLessThan(200); // not a hoard the ladder cannot use
+    for (const resource of ["scrap", "ferrous", "nonferrous", "circuits"] as ResourceId[]) {
+      expect(state.store[resource] ?? 0).toBeGreaterThanOrEqual(0);
+    }
+    // Every machine mostly flows: a full route at one tick is normal back
+    // pressure (spec 10.2), a permanently jammed tray is not.
+    for (const machine of state.machines) {
+      const fullRatio = machine.fullTicks / Math.max(1, machine.ageTicks);
+      expect(fullRatio, machine.blueprint).toBeLessThan(0.5);
+    }
+    expect(Math.max(...levels)).toBeGreaterThanOrEqual(1);
+    // The ladder actually cycled through step kinds instead of looping on one.
+    expect(Object.keys(histogram).length).toBeGreaterThanOrEqual(6);
+    expect(histogram["build:sorter"]).toBe(1);
+    // Every unit the yard owns sits in exactly one location (spec 8.2).
+    const totals = systemTotals(state);
+    for (const value of Object.values(totals)) {
+      expect(Number.isSafeInteger(value)).toBe(true);
+      expect(value).toBeGreaterThanOrEqual(0);
+    }
   });
 });

@@ -19,35 +19,52 @@ export function planConnections(state: SimState, machineId: number): ConnectionP
   if (!machine) return [];
   const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
   const plans: ConnectionPlan[] = [];
-  const existingInputs = new Set(
-    state.routes.filter((route) => route.to.kind === "machine" && route.to.id === machineId).map((route) => route.from.id)
-  );
-  const existingOutput = state.routes.some(
-    (route) => route.from.kind === "machine" && route.from.id === machineId
-  );
 
   for (const input of recipe.inputs) {
     const producer = findProducer(state, machineId, input.resource);
-    if (producer !== null && !existingInputs.has(producer)) {
+    if (producer !== null && !hasInputLink(state, machineId, producer, input.resource)) {
       plans.push({ from: producer, to: machineId, filter: input.resource });
-      existingInputs.add(producer);
       continue;
     }
-    if ((state.store[input.resource] ?? 0) > 0 && !existingInputs.has(0)) {
+    if ((state.store[input.resource] ?? 0) > 0 && !hasInputLink(state, machineId, 0, input.resource)) {
       plans.push({ from: 0, to: machineId, filter: input.resource });
-      existingInputs.add(0);
     }
   }
 
-  if (!existingOutput) {
-    const consumer = findConsumer(state, machineId, recipe);
-    if (consumer !== null) {
-      plans.push({ from: machineId, to: consumer, filter: recipe.outputs[0]?.resource ?? null });
-    } else {
-      plans.push({ from: machineId, to: 0, filter: recipe.outputs[0]?.resource ?? null });
-    }
+  // One link per output material, so a two-output recipe really does need two
+  // links and no material gets trapped behind a single-filter connection.
+  for (const output of recipe.outputs) {
+    if (hasOutputLink(state, machineId, output.resource)) continue;
+    const consumer = findConsumer(state, machineId, output.resource);
+    plans.push({ from: machineId, to: consumer ?? 0, filter: output.resource });
   }
   return dedupe(plans);
+}
+
+/** A link into this machine from one source already carries the material. */
+function hasInputLink(
+  state: SimState,
+  machineId: number,
+  fromId: number,
+  resource: ResourceId
+): boolean {
+  return state.routes.some(
+    (route) =>
+      route.to.kind === "machine" &&
+      route.to.id === machineId &&
+      route.from.id === fromId &&
+      (route.filter === resource || route.filter === null)
+  );
+}
+
+/** A link from this machine already carries the material (exact or any). */
+function hasOutputLink(state: SimState, machineId: number, resource: ResourceId): boolean {
+  return state.routes.some(
+    (route) =>
+      route.from.kind === "machine" &&
+      route.from.id === machineId &&
+      (route.filter === resource || route.filter === null)
+  );
 }
 
 function findProducer(state: SimState, exceptId: number, resource: ResourceId): number | null {
@@ -66,13 +83,13 @@ function findProducer(state: SimState, exceptId: number, resource: ResourceId): 
 function findConsumer(
   state: SimState,
   exceptId: number,
-  recipe: { outputs: readonly { resource: ResourceId }[] }
+  resource: ResourceId
 ): number | null {
   let found: number | null = null;
   for (const candidate of state.machines) {
     if (candidate.id === exceptId) continue;
     const theirs = RECIPES[BLUEPRINTS[candidate.blueprint].recipeId];
-    if (theirs.inputs.some((item) => recipe.outputs.some((out) => out.resource === item.resource))) {
+    if (theirs.inputs.some((item) => item.resource === resource)) {
       if (found !== null) return found;
       found = candidate.id;
     }

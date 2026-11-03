@@ -10,7 +10,7 @@ export interface MachineState {
   inBuf: Partial<Record<ResourceId, number>>;
   inBufUnits: number;
   /** Completed batch waiting for a free destination (spec 9.5). */
-  tray: ItemStack[];
+  tray: TrayItem[];
   trayUnits: number;
   /** Inputs reserved by the active batch until it completes (spec 9.5). */
   batch: ItemStack[];
@@ -59,6 +59,13 @@ export interface RouteItem {
   resource: ResourceId;
   qty: number;
   arrive: number;
+}
+
+/** A material waiting in a machine's tray; its `qty` shrinks as cargo ships
+ * onto a link, so the tray never reallocates while it waits (spec 9.5). */
+export interface TrayItem {
+  readonly resource: ResourceId;
+  qty: number;
 }
 
 export interface Endpoint {

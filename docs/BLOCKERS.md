@@ -54,11 +54,12 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 
 - Blocked: no photograph of the research panel yet, so B-05's visual acceptance stays open
   while its behaviour is covered by tests.
-- Evidence: the scripted capture session ends with `research: {}` and `data` absent, because
-  the circuit chain (copper, wire, polymer, circuits) is not finished inside the window; the
-  dock target only appears once `data > 0`.
-- Unblock: B-19 (input pulls sized to the need) letting the scripted session reach the
-  assemblers, or a seeded engine-produced save in a second capture context.
+- Evidence: after B-19 the scripted capture session ends with `research: {}` and no `data`;
+  the headless 30-minute driver reaches the circuit assembler at batch ×1 and does not buy the
+  signal lab, so the dock target (which needs `data > 0`) never unlocks inside the window.
+- Unblock: give the capture session a third click phase long enough to build the signal lab
+  (50 scrap + 12 ferrous), or seed a second capture context with an engine-produced save whose
+  `store.data` is already positive.
 - Meanwhile: `tests/ui/app.test.tsx` asserts the panel's exact strings and the one-purchase
   ledger change; the gallery records the gap instead of reusing an older image.
 

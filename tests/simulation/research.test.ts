@@ -19,7 +19,12 @@ import {
   type Command,
   type CommandBody,
 } from "../../src/game/simulation/commands";
-import { createInitialState, type SimState } from "../../src/game/simulation/types";
+import {
+  createInitialState,
+  type MachineState,
+  type RouteState,
+  type SimState,
+} from "../../src/game/simulation/types";
 import { nextYardStep } from "../../src/game/simulation/plan";
 import { objectiveFor, primaryFor } from "../../src/ui/text";
 import { showResearch } from "../../src/ui/App";
@@ -49,6 +54,16 @@ function boot(): SimState {
   send(state, { type: "drone.repair" });
   advance(state, 262);
   return state;
+}
+
+/** Highest input count the machine holds at once: buffer plus link cargo. */
+function peakReady(state: SimState, machine: MachineState, link: RouteState): number {
+  let peak = machine.inBufUnits + link.inFlight;
+  for (let i = 0; i < 200; i += 1) {
+    advance(state, 1);
+    peak = Math.max(peak, machine.inBufUnits + link.inFlight);
+  }
+  return peak;
 }
 
 /** Yard with one signal lab fed by the store, so `data` arrives on its own. */
@@ -156,14 +171,17 @@ describe("research branch (spec 12.2)", () => {
     expect((state.store.scrap ?? 0) - before).toBe(TUNING.manualSalvagePerPulse + 2);
   });
 
-  it("raises the effective input capacity that the engine enforces", () => {
+  it("widens the ready window the link fills, inside the effective capacity", () => {
     const state = boot();
     seed(state, { scrap: 60, data: 12 });
     send(state, { type: "machine.build", blueprint: "sorter", tile: 8 });
     const sorter = state.machines[state.machines.length - 1];
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
-    advance(state, 3);
-    expect(sorter.inBufUnits).toBeLessThanOrEqual(BLUEPRINT_CAPACITY("sorter"));
+    const link = state.routes[state.routes.length - 1];
+    // Two ready batches of the sorter's two scrap, and no more (B-19), so the
+    // surplus scrap stays in the store where build costs and sells are read.
+    expect(peakReady(state, sorter, link)).toBe(4);
+    expect(peakReady(state, sorter, link)).toBeLessThanOrEqual(BLUEPRINT_CAPACITY("sorter"));
     expect(inputCapacityFor(state, BLUEPRINT_CAPACITY("sorter"))).toBe(
       BLUEPRINT_CAPACITY("sorter")
     );
@@ -172,11 +190,9 @@ describe("research branch (spec 12.2)", () => {
     send(state, { type: "research.buy", node: "buffers" });
     expect(BLUEPRINT_CAPACITY("sorter")).toBe(12);
     expect(inputCapacityFor(state, BLUEPRINT_CAPACITY("sorter"))).toBe(18);
-    // The link keeps filling until the larger buffer is reached.
-    advance(state, 12);
-    const delivered = sorter.inBufUnits + sorter.trayUnits;
-    expect(delivered).toBeGreaterThan(BLUEPRINT_CAPACITY("sorter"));
-    expect(delivered).toBeLessThanOrEqual(18);
+    // Smart Buffers widens that window by exactly six units, still under 18.
+    expect(peakReady(state, sorter, link)).toBe(10);
+    expect(peakReady(state, sorter, link)).toBeLessThanOrEqual(18);
   });
 
   it("raises only links created after the purchase", () => {

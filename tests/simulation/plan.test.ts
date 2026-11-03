@@ -70,6 +70,8 @@ describe("yard ladder (spec 3.3, 10.5)", () => {
     for (const machine of [a, b]) {
       send(state, { type: "route.connect", from: 0, to: machine.id, filter: "scrap" });
       send(state, { type: "route.connect", from: machine.id, to: 0, filter: "ferrous" });
+      // R01 has two outputs, so a fully linked sorter carries both.
+      send(state, { type: "route.connect", from: machine.id, to: 0, filter: "nonferrous" });
     }
     expect(nextYardStep(state).kind).not.toBe("connect");
     a.busyTicks = 10;

@@ -288,3 +288,43 @@ Format: date · problem · options · choice · reason · reversibility.
   report line, and `tests/persistence/lease.test.ts` now expects 15 credited ticks for a
   1 501 ms following window.
 - Reversible: yes; the helper is local to the store.
+
+## D-25 - 2026-11-03 - Size a store pull to two ready batches, not to the whole buffer
+
+- Problem: the full-drain pull left `scrap 54, ferrous 1, nonferrous 1` in the store while
+  twelve-unit input buffers held the rest, and every price, sell, and build check reads the
+  store only, so the yard could not afford its fourth machine (B-19).
+- Choice: `pullNeed` = `min(effective input capacity, per-batch units of that resource × 2 +
+  Smart Buffers bonus)` minus what is already ready (input buffer plus this link's in-transit
+  cargo). Two batches covers the running batch, whose inputs are reserved separately in
+  `machine.batch`, and the next one, and 2 × per-batch ≥ the 5-tick link latency for every
+  shipped recipe.
+- Reason: the machine still cannot starve between taps, and the surplus becomes affordable
+  material where the transaction rules already look.
+- Evidence: the 30-minute self-play driver goes from 3 machines (sorter 29, furnace 5,
+  recycler 0) to 7 on 21 links with the sorter at 439 batches; the ready window is pinned at
+  4 units plain and 10 with Smart Buffers in `tests/simulation/research.test.ts`.
+- Reversible: yes, one helper in `engine.ts`.
+- Reconsider when: a recipe's two-batch window stops exceeding the link latency (a much higher
+  level cap or a longer-lat link), or B-15 changes the reserve floor.
+
+## D-26 - 2026-11-03 - Ship each tray item over the least-busy link that carries it
+
+- Problem: the whole tray moved over `machine.outRoute`, so R01's nonferrous travelled with the
+  ferrous into the furnace's 12-unit input buffer, filled it with a material the furnace cannot
+  use, and stalled the sorter at 30 batches in a 12-hour session.
+- Choice: per-item routing. For each tray item pick the first matching link with room at both
+  ends, ranked by fewest `busyTicks` (ties keep creation order), then a null-filter link, then
+  the machine's first outgoing link so a half-connected machine still ships.
+  `planConnections` proposes one link per output material and one per source/material pair.
+- Reason: spec 9.3 gives R01 two outputs and spec 10.1 wants each visible link to carry real
+  cargo; the least-busy ranking keeps the dock link and the direct link both busy instead of
+  one starving the other, and it is a pure function of serialised state.
+- Evidence: phone session sorter 30 → 619 batches and furnace 5 → 301, return report
+  `Ferrous +9 · Nonferrous +583 · Steel +286 · Deliveries 365 · Batches 875`; the yard reaches
+  the circuit assembler in the headless driver; 109 tests pass, including the existing
+  `advance`/`advanceTo` parity case with the new routing.
+- Reversible: yes; routing is chosen inside `enqueueCargo`, and the saved `RouteState` shape is
+  unchanged.
+- Reconsider when: a link's latency or capacity becomes a tuned trade-off worth exposing, or
+  the dead-link audit (B-22) shows a link stuck at 0 % busy.

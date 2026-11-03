@@ -17,8 +17,10 @@ simulation core. English only so far. No account, no server, no payments yet.
 3. **Repair drone** for 30 scrap. The drone then extracts 5-unit loads every 5 s and
    flies them to the dock, which is visibly filled by the delivered cargo.
 4. **Build sorter** (20 scrap) on a free yard tile using the placement ghost.
-5. **Connect dock to sorter** to create two real routes (scrap in, ferrous out) with
-   capacity, latency, and visible cargo movement.
+5. **Connect dock to sorter** to create real routes with capacity, latency, filters, and
+   visible cargo movement. Each link carries one material, so a machine gains one link per
+   material it needs or emits: the sorter's second output (nonferrous) appears with the next
+   **Connect** tap, which is when a two-output recipe stops being half-wired.
 6. **Build furnace** and connect it, then **Sell steel** to earn the first 30 credits.
 7. **Upgrade a machine** with those credits. Upgrades change speed only
    (`ceil(base * 1.16^(level-1))` cost, `1 + 0.10 * (level-1)` speed).
@@ -44,8 +46,8 @@ cannot disagree.
 
 Implemented systems: manual salvage with cooldown, drone automation, machine
 construction/upgrade/dismantle/move, 1×1 placement on a 6×6 yard with a protected dock
-tile, route logistics with capacity/latency/filters/fair allocation, shared power budget
-with proportional slowdown, storage capacity plus an overflow hold, one-shot onboarding
+tile, route logistics with capacity/latency/per-material filters/fair allocation,
+demand-sized input pulls, shared power budget with proportional slowdown, storage capacity plus an overflow hold, one-shot onboarding
 export contract plus repeatable priced sell contracts, eight blueprints (including the
 signal lab) with a progressive build picker, a three-node research branch bought with data
 where each effect applies exactly once, tutorial state machine (T0-T9), contextual
@@ -62,13 +64,13 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-19 input pulls sized to the need**: store→machine links currently fill the whole
-   input buffer, so material leaves the store while its price is still missing. Pull only
-   what the running and next batch need, then re-measure the scripted session's machine count.
-2. **B-15 reserve-floor sweep**: floors {0, 5, 10, 20} through the chain fixture, one table,
-   chosen value documented.
-3. **B-17 rolling 60 s rate window**: per-machine recent rate as spec 9.4 asks, with the
+1. **B-15 reserve-floor sweep**: floors {0, 5, 10, 20} through the chain fixture and the
+   30-minute self-play session, one table, chosen value documented. The floor now trades
+   directly against how fast the seventh machine is paid for.
+2. **B-17 rolling 60 s rate window**: per-machine recent rate as spec 9.4 asks, with the
    window shown in the panel next to the maximum rate.
+3. **B-16 HUD area share**: measure the resting HUD's share of the phone viewport against the
+   15-22% design target, with the four/five-chip and one-line-objective counts recorded.
 
 ## Controls
 
@@ -96,9 +98,9 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 108 unit/integration tests
+npm test      # 109 unit/integration tests
 npm run typecheck
-npm run build # dist/ (204.02 kB JS, 64.46 kB gzip, 50 modules)
+npm run build # dist/ (205.41 kB JS, 64.91 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -112,7 +114,54 @@ through the entire absence, so repeated reloads cannot double-claim the discarde
 To capture the README screenshots: `npm run preview` in one terminal, then
 `node scripts/capture.mjs`.
 
-## Latest update (M2: research branch and a ladder that spends, 2026-11-03)
+## Latest update (M2: material-sized pulls and one link per material, 2026-11-03)
+
+- **A store link now draws only what its machine still has in hand (B-19).** `pullFromStore`
+  sizes each pull to two ready batches of that material — per-batch units × 2, +6 with Smart
+  Buffers, capped by the machine's effective input capacity — counted across the input buffer
+  and the cargo already in transit, instead of moving everything above the reserve floor.
+  The surplus therefore stays where prices and build costs are read. Measured with the new
+  headless self-play driver (one ladder tap per second for 30 minutes,
+  `tests/simulation/chain.test.ts`): **before, 3 machines** (sorter 29 batches, furnace 5,
+  recycler 0) with 895 scrap parked in the store; **after, 7 machines on 21 links** — sorter
+  ×439, copper separator ×208, furnace ×200, wire mill ×195, plate press ×84, polymer
+  recycler ×69, circuit assembler ×1 — with 0 credits left unspent and a balanced store
+  (`scrap 16, ferrous 10, nonferrous 10, steel 20, copper 10, polymer 66, wire 542,
+  plates 225, circuits 1`).
+- **A two-output recipe now really needs two links (spec 9.3 R01, 10.1).** `enqueueCargo`
+  matches each tray item to the least-busy matching link with room at both ends, then a link
+  that carries anything, then the machine's first link, so a half-connected machine still
+  ships. Previously the sorter's whole tray (ferrous *and* nonferrous) went to one
+  destination, which filled the furnace's input buffer with a material it cannot use and
+  stalled the sorter: in the phone session the sorter went from 30 batches to 619 and the
+  furnace from 5 to 301.
+- `planConnections` proposes one link per output material and one per source/material pair,
+  so the single **Connect** action still creates the whole working set in one tap.
+- Real Chrome, the same scripted session plus a 12 h absence: `tick 1010 → 433 020`, and the
+  return report now reads `Away 12h 0m · Your operation worked for 12h 0m (capped) · Ferrous
+  +9 · Nonferrous +584 · Steel +287 · Deliveries 365 · Batches 876 · Bottleneck
+  storage-full`, where the previous build reported `Steel +1 · Deliveries 182 · Batches 15`.
+- Measured in this run: `npm test` 109 passed / 109 (11 files: +1 self-play regression case
+  in `tests/simulation/chain.test.ts`; the buffer case in `tests/simulation/research.test.ts`
+  restated as the ready-window contract, now 4 units plain and 10 with Smart Buffers; two
+  per-material-link expectations in `tests/simulation/plan.test.ts`), `npm run typecheck`
+  clean, `npm run build` 205.41 kB JS (64.91 kB gzip, 50 modules).
+- **Cost of the new routing, and what was done about it.** The first measurement after the
+  change roughly quadrupled the per-tick cost (100 machines × 10 000 ticks: 6.9 → 26 ms),
+  because every tray item rescanned the whole route list and rebuilt the tray array. Three
+  fixes brought it back: one per-state lookup table of machines and outgoing links rebuilt
+  only when a command changes the topology, one link list per machine read once per machine
+  per tick, and in-place tray compaction (with a mutable `TrayItem.qty`). The remaining
+  difference is about 1.9× at 100 machines and 1.7× at 500, inside the 100 ms catch-up budget
+  in spec 21.5; both before and after numbers are in the table below.
+- Known limitations: the 30-minute self-play run leaves every machine at level 1 because the
+  ladder funds builds first, so the upgrade curve is exercised only by the shorter real-Chrome
+  session (L7/L7/L7 there); the research panel is still unphotographed (BL-07); a follower's
+  picture steps at the 10 Hz adopt cadence (B-18); the no-scroll gate is still only
+  structurally verified in jsdom (BL-01); percentages remain lifetime-since-built (B-17);
+  audio is unverified by human listening (BL-11).
+
+## Earlier this week (M2: research branch and a ladder that spends, 2026-11-03)
 
 - **Research branch (spec 12.2, 27.5).** `game/content/research.ts` declares three nodes in
   one short chain — Efficient Cutters (4 data, "one cutting pulse gives 7 scrap instead of
@@ -213,42 +262,44 @@ before the wall-clock fix get exactly one capped 12 h window on their first load
 
 These are headless CPU costs for the simulation core, not mobile FPS claims.
 
-| Workload | Median of 3 |
-| --- | --- |
-| 12 h catch-up, 4-machine starter yard, tick-by-tick | 33.4 ms |
-| 12 h catch-up, idle yard, event-jump path | < 1 ms |
-| 500 machines, 6 000 ticks | 23.2 ms |
-| 100 machines, 10 000 ticks | 6.7 ms |
-| 50 machines, 10 000 ticks | 3.7 ms |
-| 5 machines, 10 000 ticks | 0.7 ms |
-| 1 machine, 10 000 ticks | 0.5 ms |
+| Workload | Median of 3 (this build) | Median of 3 (before the per-material routing) |
+| --- | --- | --- |
+| 12 h catch-up, 4-machine starter yard, tick-by-tick | 59.3 ms | 33.4 ms |
+| 12 h catch-up, idle yard, event-jump path | < 1 ms | < 1 ms |
+| 500 machines, 6 000 ticks | 40.4 ms | 23.2 ms |
+| 100 machines, 10 000 ticks | 13.8 ms | 6.7 ms |
+| 50 machines, 10 000 ticks | 6.4 ms | 3.7 ms |
+| 5 machines, 10 000 ticks | 1.1 ms | 0.7 ms |
+| 1 machine, 10 000 ticks | 0.8 ms | 0.5 ms |
 
 Run-to-run spread on this machine is a few milliseconds (the same 12 h case read 41.9 ms and
 29.9 ms in earlier passes), so treat these as bands. The per-tick occupancy counters added
 roughly 2 ms at 500 machines; the lease costs two extra `localStorage` operations per second
 in the owning tab and one read per 100 ms in a follower, which the headless table does not
-cover. The research branch is a small integer lookup per affected quantity and did not move
-any band above.
+cover. The per-material routing plus the per-state lookup table is the difference between the
+two columns: about 1.7× at 50-100 machines, and the 12 h tick-by-tick case stays inside the
+100 ms stall budget of spec 21.5.
 
 ## Screenshot gallery
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 3 machines (sorter L7 ×30, furnace L6 ×5, polymer recycler L6), 6 routes, tick 433 640, 27 credits, `Scrap 54 Ferrous 1 Nonferrous 1 Credits 27 Store 58/900` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.00s` after six upgrades, `Working 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%`, its next step names the missing supplier, and the dock offers the 107-credit upgrade | Same commit and session, Chrome headless, captured 2026-11-03 |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 54 Ferrous 1 Nonferrous 1 Credits 27 Store 58/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence in a separate context (so its counters differ by a few seconds): 3 machines at L7/L6/L6, tick 433 630, 68 credits | Same commit as this README, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L7 ×619, furnace L7 ×301, polymer recycler L7, copper separator L1), 8 links, tick 433 630, 133 credits, `Scrap 5 Ferrous 5 Nonferrous 14 Credits 133 Store 322/900`, five visible links between five sprites | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 3.75s`, `Working 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 45-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 5 Ferrous 5 Nonferrous 14 Credits 133 Store 322/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence in a separate context: the same four machines (sorter L7 ×619, furnace L7 ×301, polymer recycler L7, copper separator L1), tick 433 630, 133 credits, six resource chips and three dock targets | Same commit as this README, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover itself is logged as
 text by the capture script rather than inferred from these images, and so is the absence:
-`tick 1010 → 433 020` with the report line quoted in the latest-update section.
+`tick 1010 → 433 020` with the report line quoted in the latest-update section, and the
+handover line `t1-7501 → t1-jdu6` with the tick advancing 433 640 → 433 671.
 **Pending capture:** the research panel has no image yet. Its dock target appears only once
 `data > 0`, which needs the full circuit chain, and the scripted session stops before that
 within the capture window; `tests/ui/app.test.tsx` therefore asserts the panel's exact
 content (effect line, `Buy · 4 Data`, `Known`, and the blocked-node line) until a longer
-session can be photographed. The earlier 2026-11-03 captures (tick 1030/1370, three level-1
-machines, no absence) and the 2026-11-02 pair are superseded by these captures.
+session can be photographed. The 2026-11-03 set before this one (three machines at
+L7/L6/L6, 6 routes, `Store 58/900`) and the 2026-11-02 pair are superseded by these captures.
 
 ## Architecture
 

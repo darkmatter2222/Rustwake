@@ -55,9 +55,11 @@ reconcile measures no elapsed time.
 
 1. `finishBatches` — accrue-and-complete work whose milli-tick requirement is met and
    whose tray has room.
-2. `enqueueCargo` — move each tray onto its outgoing route (with latency), then pull
-   store-sourced material into routes that have space, honouring filters and the reserve
-   floor.
+2. `enqueueCargo` — ship each tray item over the machine's own link that carries that
+   material (least busy first, then a link with no filter, then the machine's first link),
+   compacting the tray in place; then let each store-sourced link draw only its machine's
+   remaining need — two ready batches of that material, widened by Smart Buffers, capped by
+   the machine's input capacity, and never below the reserve floor.
 3. `settleArrivals` — deliver route cargo whose latency elapsed, if the destination input
    has room; round-robin starting from a persistent cursor.
 4. `drainOverflow` — fold the overflow hold back into store space.
@@ -74,6 +76,11 @@ list and the same total ticks are byte-identical; the determinism test proves eq
 across tick chunk sizes of 1, 10, and 240, and between `advance` and `advanceTo`. The
 event-jump path in `advanceTo` accrues the same counters for the skipped idle range and
 always steps the final tick, which is what makes the two serialisations match exactly.
+
+The tick loop reads a derived lookup (`indexOf`) holding machine id to machine and machine id
+to outgoing links. It is rebuilt only when the state object, its revision, or the entity
+counts change, so a long `advance` builds it once; it stores no quantities, which keeps it
+invisible to the equality tests above.
 
 ## Yard ladder (spec 3.3, 10.5)
 
