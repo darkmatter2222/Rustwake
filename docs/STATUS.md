@@ -10,12 +10,14 @@ the sell tranche, and sells no longer strip the input the next machine is still 
 and a refresh that lands inside the 1.5 s lease window now credits the absence when the tab
 is promoted from follower to writer.
 
-Current commit and remote sync status: the head created by this commit is pushed with
-`git push origin HEAD:main`; the follow-up docs commit records the verified hash together
-with the CI read-back. CI state: still unread in this environment (BL-06: `gh`
-unauthenticated, the unauthenticated API 404s for the private repository), so CI is reported
-as pending rather than green; the three local checks plus a real-Chrome session are this
-pass's gate.
+Current commit and remote sync status: `14c5e43` ("Add research branch, spend-aware yard
+ladder, and promote-time absence credit") is the pushed `origin/main` head, verified after
+`git push origin HEAD:main` reported `a00df92..14c5e43 HEAD -> main` and a following
+`git fetch origin main` showed `git rev-parse HEAD origin/main` both equal to
+`14c5e43cff092f66808817a0c0ddcfb85a9a27d0`. Its parent is `a00df92`. CI state: still unread
+in this environment (BL-06: `gh run list` still asks for `gh auth login`, and the
+unauthenticated API 404s for the private repository), so CI is reported as pending rather
+than green; the three local checks plus a real-Chrome session are this pass's gate.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
@@ -79,8 +81,8 @@ Next three bounded tasks:
 3. B-17 rolling 60 s rate window: per-machine recent rate as spec 9.4 asks, with the window
    label next to the maximum rate.
 
-Long-running processes owned by this session: the `vite preview` server on port 4173 is
-running in the background for the captures and should be stopped when the captures are done.
+Long-running processes owned by this session: none. The `vite preview` server on port 4173
+was started for the captures and stopped (pid 14164 released).
 
 Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npx vitest run` before
 editing; `tests/simulation/plan.test.ts` and `tests/simulation/chain.test.ts` are the
