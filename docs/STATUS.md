@@ -12,7 +12,7 @@ dock primary, the yard panel's new `Drones` row, the ledger, the rate window, th
 event-jump horizon and the renderer all read the same fleet. Refusals are explained locally: `Every drone
 is already flying`, `Repair your drone first`.
 
-- Current commit and remote sync status: **`__CODE_COMMIT__` ("Recovery drones fly as a fleet: 45 credits
+- Current commit and remote sync status: **`a3c6c8d` ("Recovery drones fly as a fleet: 45 credits
   then doubling, five units, one new ladder stage (B-28)") is the code commit this pass pushes to
   `origin/main`**, with this checkpoint commit on top, as in previous passes. Earlier chain: `926d342`,
   `88e7257`, `cc0c665`, `1b0a091`, `b492074`, `5c95e33`, `5753efc`, `808dbc8`. CI remains unread in this
