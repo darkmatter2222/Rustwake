@@ -328,3 +328,31 @@ Format: date · problem · options · choice · reason · reversibility.
   unchanged.
 - Reconsider when: a link's latency or capacity becomes a tuned trade-off worth exposing, or
   the dead-link audit (B-22) shows a link stuck at 0 % busy.
+
+## D-27 - 2026-11-03 - Keep the reserve floor at 10, and size the surplus on real leftovers
+
+- Problem: two supply-knob values were guesses — the reserve floor the sell rule
+  leaves in the store, and the two-batch pull window from D-25. Both needed a
+  measured value or a measured reason (B-15, B-25).
+- Choice: keep `TUNING.reserveFloor = 10` and `pullNeed = 2 × per-batch units`. A
+  30-minute self-play run per floor (1 800 rounds at one ladder command per second,
+  exactly the driver in `tests/simulation/chain.test.ts`) gives machines
+  4 / 5 / 7 / 8 and total batches 670 / 1152 / 1196 / 1137 for floors
+  0 / 5 / 10 / 20: floor 0 starves the first builds, floor 20 buys one extra
+  machine but 59 fewer batches, and 10 is the best of the four on throughput.
+- Choice (B-25): the window is right because the leftover pattern shows it. At
+  floor 10 the yard ends with 22 links at 16.6 % aggregate busy, the sorter at
+  98 % (439 batches) and the copper separator at 61.8 % (208), and the only idle
+  links are the three that duplicate an already-carried material into the last
+  machine built. That machine still holds 16 ready units while it waits, so
+  `2 × per-batch` is not the binding constraint any more; a larger window would
+  only move units out of the store that prices, sells, and builds already read.
+- Evidence: `docs/evidence/2026-11-03-supply-window.md` (regenerate with
+  `npx tsx scripts/probe-supply.mjs`), and
+  `tests/simulation/supply-window.test.ts` reproduces the same four numbers inside
+  the suite (112 tests pass), so the tables and the assertions cannot drift apart.
+- Reversible: yes; two constants in `src/game/content/defs.ts`.
+- Reconsider when: link latency or capacity becomes a tuned value, a recipe with a
+  much longer two-batch window ships, or the 1-minute measured rate window (B-17)
+  shows a machine below 80 % busy while the store still holds that input.
+

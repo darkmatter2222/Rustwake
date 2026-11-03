@@ -57,6 +57,9 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 - Evidence: after B-19 the scripted capture session ends with `research: {}` and no `data`;
   the headless 30-minute driver reaches the circuit assembler at batch ×1 and does not buy the
   signal lab, so the dock target (which needs `data > 0`) never unlocks inside the window.
+  The floor sweep confirms it: every floor of `npx tsx scripts/probe-supply.mjs` ends with
+  `research=0`, because the ladder spends its credits on the seven earlier blueprints before
+  `signalLab` becomes affordable.
 - Unblock: give the capture session a third click phase long enough to build the signal lab
   (50 scrap + 12 ferrous), or seed a second capture context with an engine-produced save whose
   `store.data` is already positive.

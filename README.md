@@ -64,9 +64,9 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-15 reserve-floor sweep**: floors {0, 5, 10, 20} through the chain fixture and the
-   30-minute self-play session, one table, chosen value documented. The floor now trades
-   directly against how fast the seventh machine is paid for.
+1. **B-23 collapse duplicate input links**: `planConnections` should treat an input as covered by
+   its `(destination, material)` pair whatever the source, so the 30-minute session ends with 19
+   links instead of 22 with no link at 0 % busy and the same or better batch total.
 2. **B-17 rolling 60 s rate window**: per-machine recent rate as spec 9.4 asks, with the
    window shown in the panel next to the maximum rate.
 3. **B-16 HUD area share**: measure the resting HUD's share of the phone viewport against the
@@ -98,7 +98,7 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 109 unit/integration tests
+npm test      # 112 unit/integration tests
 npm run typecheck
 npm run build # dist/ (205.41 kB JS, 64.91 kB gzip, 50 modules)
 npm run preview
@@ -114,7 +114,42 @@ through the entire absence, so repeated reloads cannot double-claim the discarde
 To capture the README screenshots: `npm run preview` in one terminal, then
 `node scripts/capture.mjs`.
 
-## Latest update (M2: material-sized pulls and one link per material, 2026-11-03)
+To regenerate the supply-window tables (reserve-floor sweep and per-link utilisation):
+`npx tsx scripts/probe-supply.mjs`, which writes `docs/evidence/2026-11-03-supply-window.md`
+(about 4 s). The same four numbers are asserted by `tests/simulation/supply-window.test.ts`.
+
+## Latest update (M2: supply window measured — reserve floor and link utilisation, 2026-11-03)
+
+- **Both supply knobs now have measured values instead of guesses (B-15, B-25).** A new probe,
+  `scripts/probe-supply.mjs`, runs the 30-minute self-play session once per reserve floor, and
+  `tests/simulation/supply-window.test.ts` reproduces the same four numbers inside the suite.
+  Floors {0, 5, 10, 20} give machines **4 / 5 / 7 / 8** and total batches
+  **670 / 1152 / 1196 / 1137**, so 10 stays: floor 0 starves the first builds, floor 20 buys one
+  extra machine but 59 fewer batches. Aggregate link utilisation at the end of the floor-10 run is
+  **16.6 %** across 22 links.
+- **Dead-link audit (B-22).** 19 of 22 links carry cargo; the three at 0 % are all on the
+  last-built circuit assembler — `machine3>machine7:polymer`, `machine7>store0:circuits`,
+  `store0>machine7:wire` — while `machine5>machine7:wire` (97.7 % busy) and
+  `store0>machine7:polymer` (92 %) do the work. Two of the three duplicate an already-carried
+  material into the same machine, which is now B-23. The assembler itself holds a full 16-unit
+  ready set and stays at 0.6 % busy on a scarce input, so the two-batch ready window is not the
+  binding constraint and stays at 2 (decision D-27). Machine occupancy over the same session:
+  sorter 98 % (439 batches), copper separator 61.8 % (208), wire mill 48 % (195), furnace 45.3 %
+  (200), plate press 27 % (84), polymer recycler 24.1 % (69).
+- Tables land in **`docs/evidence/2026-11-03-supply-window.md`**, regenerated with
+  `npx tsx scripts/probe-supply.mjs` (about 4 s for all four floors).
+- Measured in this run: `npm run typecheck` clean, `npx vitest run` **112 passed / 112**
+  (12 files: +3 in the new `tests/simulation/supply-window.test.ts`, and the existing
+  `tests/simulation/chain.test.ts` self-play contract reproduces the same 7 machines, batch
+  counts, and 22 links as the probe), `npm run build` unchanged at 205.41 kB JS (64.91 kB gzip,
+  50 modules) — this pass changed no source, only the probe, one test file, and the docs.
+- Known limitations: no visual change, so the four screenshots keep their `16e8d1f` provenance and
+  the research panel is still unphotographed (BL-07); CI read-back is still pending (BL-06);
+  panel percentages remain lifetime-since-built until B-17; a follower's picture steps at the 10 Hz
+  adopt cadence (B-18); the no-scroll gate is still only structurally verified in jsdom (BL-01);
+  audio is unverified by human listening (BL-11).
+
+## Earlier this week (M2: material-sized pulls and one link per material, 2026-11-03)
 
 - **A store link now draws only what its machine still has in hand (B-19).** `pullFromStore`
   sizes each pull to two ready batches of that material — per-batch units × 2, +6 with Smart
