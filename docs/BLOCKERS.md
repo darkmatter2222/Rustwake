@@ -9,9 +9,11 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 - Evidence: only Node CPU medians exist (`tests/perf/bench.test.ts`); jsdom has no
   compositor. The README lists Node numbers as Node numbers.
 - Now measured in headless Chrome instead of jsdom (`scripts/measure-hud.mjs`, 2026-11-03): the
-  no-scroll gate at six sizes in three HUD states, the HUD area share against the 15–22 % target,
-  and the minimum touch-target sizes. Those are layout facts a device would not change; frame rate,
-  p95 frame work and thermals still are not measured anywhere.
+  no-scroll gate at six sizes in three HUD states × three text scales (18/18 contexts), the HUD
+  area share against the 15–22 % target, the minimum touch-target sizes, panel fit and internal
+  scroll at 2.0 text, the WCAG AA contrast of ten text pairs, and the focus ring a real `Tab`
+  produces. Those are layout facts a device would not change; frame rate, p95 frame work and
+  thermals still are not measured anywhere.
 - Unblock: a connected device with USB debugging, or a hosted trace service with an
   authorized token. Then run the 30-minute and 2-hour repeated-action soak.
 - Meanwhile: keep the frame loop allocation-light, keep effects pooled, prefer integer

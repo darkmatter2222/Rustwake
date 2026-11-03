@@ -71,6 +71,8 @@ export function ResourceStrip({ state }: { state: SimState }) {
 export function HudTop(props: {
   state: SimState;
   muted: boolean;
+  textScale: number;
+  onCycleText: () => void;
   onToggleMute: () => void;
   onHome: () => void;
 }) {
@@ -78,8 +80,19 @@ export function HudTop(props: {
     <div className="hud__top">
       <ResourceStrip state={props.state} />
       <div className="cluster">
-        <button className="icon-btn" onClick={props.onToggleMute} aria-label="Toggle sound">
-          {props.muted ? "Sound off" : "Sound on"}
+        <button
+          className="icon-btn"
+          onClick={props.onToggleMute}
+          aria-label={`Sound ${props.muted ? "off" : "on"}`}
+        >
+          {props.muted ? "Sound \u2715" : "Sound \u2713"}
+        </button>
+        <button
+          className="icon-btn"
+          onClick={props.onCycleText}
+          aria-label={`Text size ${props.textScale}`}
+        >
+          A {props.textScale}
         </button>
         <button className="icon-btn" onClick={props.onHome} aria-label="Return to yard view">
           Home

@@ -19,9 +19,10 @@ function memoryStorage() {
   };
 }
 
+/** Matches the accessible name: the aria-label when present, else the text. */
 function findButton(label: string): HTMLButtonElement | undefined {
-  return [...document.querySelectorAll("button")].find(
-    (node) => (node.textContent ?? "").trim().startsWith(label)
+  return [...document.querySelectorAll("button")].find((node) =>
+    (node.getAttribute("aria-label") ?? node.textContent ?? "").trim().startsWith(label)
   ) as HTMLButtonElement | undefined;
 }
 
@@ -94,6 +95,49 @@ describe("first-feel shell", () => {
     const second = createStore({ storage, now: () => 20 });
     expect(second.getSettings().muted).toBe(true);
     expect(storage.raw.get(SAVE_KEY)).toContain('"muted":true');
+  });
+
+  it("cycles the text scale, persists it, and marks the large-text layout", () => {
+    const storage = memoryStorage();
+    const store = createStore({ storage, now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    expect(store.getSettings().textScale).toBe(1);
+    expect(document.documentElement.classList.contains("text-large")).toBe(false);
+
+    // 1 -> 1.25 -> 1.5 -> 2 -> 1, the four steps the control offers (spec 6.4).
+    act(() => findButton("Text size")?.click());
+    expect(store.getSettings().textScale).toBe(1.25);
+    act(() => findButton("Text size")?.click());
+    expect(store.getSettings().textScale).toBe(1.5);
+    expect(document.documentElement.classList.contains("text-large")).toBe(true);
+    act(() => findButton("Text size")?.click());
+    expect(store.getSettings().textScale).toBe(2);
+    act(() => findButton("Text size")?.click());
+    expect(store.getSettings().textScale).toBe(1);
+    expect(document.documentElement.style.getPropertyValue("--text-scale")).toBe("1");
+    expect(storage.raw.get(SAVE_KEY)).toContain('"textScale":1');
+  });
+
+  it("leaves build mode on Escape instead of applying a remembered ghost", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262)); // first autonomous delivery, which reaches T4
+    const before = store.getState().machines.length;
+    act(() => findButton("Build sorter")?.click());
+    expect(findButton("Place")).toBeDefined();
+    act(() => {
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    });
+    expect(findButton("Place")).toBeUndefined();
+    expect(findButton("Build sorter")).toBeDefined();
+    expect(store.getState().machines.length).toBe(before);
   });
 
   it("sells a surplus from the store panel after the first contract", () => {

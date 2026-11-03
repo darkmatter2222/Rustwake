@@ -158,10 +158,23 @@ export function visibleResources(state: SimState, max = 5): ResourceId[] {
  * wide screen, counting the pinned resources plus the credits and Store status chips.
  * The measured reason for the small portrait budget is
  * docs/evidence/2026-11-03-hud-share.md: a fifth chip is what forces a third row and
- * pushes the resting HUD past the 22 % band at 360 × 640.
+ * pushes the resting HUD past the 22 % band at 360 × 640. At a large text scale one
+ * chip is dropped, which spec 6.4 allows because nonessential elements step back.
  */
-export function hudChipLimit(width = typeof window === "undefined" ? 1024 : window.innerWidth): number {
-  return width <= 420 ? 4 : 7;
+export function hudChipLimit(
+  width = typeof window === "undefined" ? 1024 : window.innerWidth,
+  scale = readTextScale(),
+): number {
+  const base = width <= 420 ? 4 : 7;
+  return scale >= 1.5 ? Math.max(3, base - 1) : base;
+}
+
+/** The scale the app publishes as a custom property, or 1 when unset. */
+function readTextScale(): number {
+  if (typeof document === "undefined") return 1;
+  const raw = getComputedStyle(document.documentElement).getPropertyValue("--text-scale").trim();
+  const value = Number.parseFloat(raw);
+  return Number.isFinite(value) && value > 0 ? value : 1;
 }
 
 /** Compact build cost, e.g. "25 scrap + 5 ferrous". */

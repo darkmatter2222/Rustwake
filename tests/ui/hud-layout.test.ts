@@ -8,12 +8,19 @@ import { hudChipLimit, visibleResources } from "../../src/ui/text";
 // a third row and pushes the resting HUD past the 22 % band at 360 × 640.
 describe("HUD resource chips (spec 5.4)", () => {
   it("budgets four chips on a portrait phone and seven on a wide screen", () => {
-    expect(hudChipLimit(360)).toBe(4);
-    expect(hudChipLimit(412)).toBe(4);
-    expect(hudChipLimit(420)).toBe(4);
-    expect(hudChipLimit(421)).toBe(7);
-    expect(hudChipLimit(844)).toBe(7);
-    expect(hudChipLimit(1440)).toBe(7);
+    expect(hudChipLimit(360, 1)).toBe(4);
+    expect(hudChipLimit(412, 1)).toBe(4);
+    expect(hudChipLimit(420, 1)).toBe(4);
+    expect(hudChipLimit(421, 1)).toBe(7);
+    expect(hudChipLimit(844, 1)).toBe(7);
+    expect(hudChipLimit(1440, 1)).toBe(7);
+  });
+
+  it("drops one chip at a large text scale (spec 6.4)", () => {
+    expect(hudChipLimit(360, 1.5)).toBe(3);
+    expect(hudChipLimit(360, 2)).toBe(3);
+    expect(hudChipLimit(1440, 1.5)).toBe(6);
+    expect(hudChipLimit(1440, 1.25)).toBe(7);
   });
 
   it("caps the pinned list in sell order and always leads with scrap", () => {

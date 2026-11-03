@@ -65,14 +65,16 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-13 large-text and contrast audit**: panel and HUD readability at 360 × 640 with the text
-   scale at 2.0, plus high-contrast selection outlines, with the pagination behaviour recorded.
-   The same `scripts/measure-hud.mjs` run adds the scaled pass, so the share table gains a column.
-2. **B-25 organic research unlock on the phone**: raise the post-absence tap phase until the mobile
+1. **B-25 organic research unlock on the phone**: raise the post-absence tap phase until the mobile
    yard buys its first research node (the probe says round 504 at floor 10) and photograph the
-   research panel at 390 × 844 with its own gallery provenance.
-3. **B-26 short-viewport HUD band**: get the stricter row-union measure to ≤ 22 % at 360 × 640 and
-   844 × 390 by spending the objective card's third line, without going under the readability floor.
+   research panel at 390 × 844 with its own gallery provenance, so that image no longer depends on
+   a seeded context.
+2. **B-26 short-viewport HUD band**: get the stricter row-union measure to ≤ 22 % at 360 × 640 and
+   844 × 390 (now 23 % and 26.2 % at the default scale) by spending the objective card's third
+   line, without going under the readability floor.
+3. **B-27 dock compaction at large text**: at text scale 2.0 each dock row is 144.9 px tall on
+   360 × 640, so keep the 30 px labels but put the cost beside the label and get the resting ink
+   peak from 57.4 % to under ~45 % with no clipped text.
 
 ## Controls
 
@@ -87,13 +89,16 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
 | Research panel | One line per node with its exact effect, `Buy · n Data`, `Known`, or `Needs <earlier node> first` |
 | Build / Place / Next / Cancel | Blueprint selection, ghost confirmation, cycling, abort |
-| Sound on/off | Toggles the master bus, persisted |
+| Sound on/off | Toggles the master bus, persisted (`Sound ✓` / `Sound ✕`) |
+| Text size (`A 1`) | Cycles the HUD text 1 → 1.25 → 1.5 → 2, persisted; from 1.5 the objective's second line and one resource chip step back |
 | Home | Recentres the camera on the yard and clears selection |
 | Second tab | Follows the owner: one status line, **Take over** promotes it once the owner's lease (1.5 s) lapses |
 
-Keyboard: standard focus order over the semantic buttons (`Tab`), activation with
-`Enter`/`Space`. Reduced-motion is honoured for the drone and cargo interpolation; the
-economy never depends on animation timing.
+Keyboard: standard focus order over the semantic buttons (`Tab`, visible 2 px cyan ring on the
+focused control), activation with `Enter`/`Space`, and `Escape` closing the most local context
+first — return report, then the open panel, then build mode (spec 5.5). Reduced-motion is honoured
+for the drone and cargo interpolation, from the operating-system preference as well as the saved
+setting; the economy never depends on animation timing.
 
 ## Run it
 
@@ -120,11 +125,45 @@ To regenerate the supply-window tables (reserve-floor sweep and per-link utilisa
 `npx tsx scripts/probe-supply.mjs`, which writes `docs/evidence/2026-11-03-supply-window.md`
 (about 4 s). The same four numbers are asserted by `tests/simulation/supply-window.test.ts`.
 
-To regenerate the HUD share and no-scroll table: `npm run preview`, then
-`node scripts/measure-hud.mjs`, which writes `docs/evidence/2026-11-03-hud-share.md` (about 15 s,
-six sizes × three states in one Chrome instance).
+To regenerate the HUD share, no-scroll, large-text and contrast table: `npm run preview`, then
+`node scripts/measure-hud.mjs`, which writes `docs/evidence/2026-11-03-hud-share.md` (about 70 s,
+six sizes × three text scales × three states in one Chrome instance).
 
-## Latest update (M2: HUD area share measured, chips and dock capped, 2026-11-03)
+## Latest update (M2: panels fit at large text, one text-scale control, 2026-11-03)
+
+- **Every panel now fits its box at every text scale (B-13, spec 6.4).** The panels are in-flow
+  flex children of the HUD column with a non-scrolling head (title plus the only Close button) and
+  a scrollable body. Measured in real Chrome over six sizes × three scales × three states: the
+  store panel's inner scroll went **105 px → 0 px** at 360 × 640 and **165 px → 0 px** in
+  landscape, the Close button is inside the viewport in all 18 contexts, and no panel overlaps the
+  dock or the objective card any more. No document scroll in 18/18 contexts.
+- **One control changes text size.** The top-right cluster is now `Sound ✓` / `A 1` / `Home`; the
+  middle button cycles 1 → 1.25 → 1.5 → 2, is written to the save as `textScale`, and drives
+  `--text-scale`. At ≥ 1.5 the objective's secondary hint line and one resource chip step back, so
+  the HUD shortens instead of shrinking type. `prefers-reduced-motion: reduce` is read from the
+  operating system once on mount and applied through the same setting as the in-game toggle.
+- **Contrast is measured, not assumed.** Ten text roles are composed over the real background and
+  judged against WCAG AA (4.5:1, 3:1 for large text). Minimum observed **5.77:1** (the objective
+  hint) at all three scales; every pair passes at every size. Keyboard focus now has an explicit
+  `:focus-visible` ring, and the audit presses a real `Tab` and reads the ring Chrome computes.
+- **Resting HUD share, default scale (spec 5.2 target 15–22 %):** **21.6 %** at 360 × 640,
+  **14.3 %** at 390 × 844, **13.0 %** at 412 × 915, **20.2 %** in landscape, **6.9 %** tablet,
+  **5.1 %** desktop. Adding the third cluster button had squeezed the chip row to one chip per
+  line, so the cluster padding, the gap and the chip padding were each trimmed a pixel and the
+  labels shortened (`Sound ✓` instead of `Sound on`): the chip block is two rows again, 190 × 48 px.
+- **Escape now walks the layers** — return report, then open panel, then build mode — as spec 5.5
+  asks, and a build that never gets `Place` commits nothing.
+- Checks in this run: `npx vitest run` **127 passed / 127** (15 files; two new cases: the text-scale
+  cycle persisting to the save with the `.text-large` class, and Escape leaving build mode without
+  building), `npm run build` **207.57 kB JS (65.61 kB gzip)**, CSS 4.82 kB (1.59 kB gzip), 50
+  modules (+0.39 kB gzip over `266d9d6`; the growth is the panel head/body markup and the focus
+  rule). The simulation core is untouched, so the headless timing table below still applies.
+- Known limitations: at the largest scale on 360 × 640 the HUD paints 57.4 % of the viewport
+  (30 px labels plus a cost line make each dock row 144.9 px) — recorded as **B-27** rather than
+  hidden; the stricter row-union measure is still 23 % at 360 × 640 and 26.2 % in landscape
+  (**B-26**); frame rate, thermals and human listening remain BL-01 and BL-11.
+
+## Earlier this week (M2: HUD area share measured, chips and dock capped, 2026-11-03)
 
 - **The 15–22 % HUD target now has numbers (B-16, spec 5.2).** `scripts/measure-hud.mjs` opens the
   production build in headless Chrome at the six sizes spec 25.1 names, with the mature-yard save
@@ -405,35 +444,39 @@ table does not cover. The 12 h case stays inside the 100 ms stall budget of spec
 changed only `src/ui/*` and CSS, so the table is the previous build's and still applies.
 
 Layout numbers for this build are in `docs/evidence/2026-11-03-hud-share.md`: resting HUD ink share
-5.4 %–22.1 % across the six sizes of spec 25.1, the no-scroll gate met in 6/6 sizes in three HUD
-states, smallest touch target 46.8 × 46 px. That harness is Chrome through `playwright-core` with
-`deviceScaleFactor` 2 on the phone sizes; it reports areas and scroll extents, not frame rate, so
-the real-device FPS and thermal rows of spec 21.5 remain BL-01.
+**5.1 %–21.6 %** across the six sizes of spec 25.1 at the default text scale (32.7 % peak at 1.5,
+57.4 % at 2.0), the no-scroll gate met in 18/18 contexts (six sizes × three text scales × three HUD
+states), smallest touch target 46.8 × 46 px, every panel reporting 0 px of inner scroll with its
+Close button on screen, and a minimum WCAG AA contrast of 5.77:1 over ten text pairs. That harness
+is Chrome through `playwright-core` with `deviceScaleFactor` 2 on the phone sizes; it reports areas,
+scroll extents and computed colours, not frame rate, so the real-device FPS and thermal rows of
+spec 21.5 remain BL-01.
 
 ## Screenshot gallery
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
 | `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 630, 130 credits, four-chip HUD `Scrap 10 Ferrous 5 Credits 130 Store 332/900` and a three-target dock | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 130 Store 331/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 482 901, `circuits 16, data 20` in the store, three research nodes known, seven chips `Scrap 10 Ferrous 107 Nonferrous 191 Steel 10 Copper 10 Polymer 10 Store 900/900` and the centred 560 px dock | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the scrolling body under it shows `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 130 Store 332/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 524 207, `circuits 16, data 20` in the store, three research nodes known, seven chips `Scrap 10 Ferrous 107 Nonferrous 191 Steel 10 Copper 10 Polymer 10 Store 900/900` and the centred 560 px dock | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
 | `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 20`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip` | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover and the absence are
 logged as text by the capture script rather than inferred from these images: mobile absence
 `tick 1 010 → 433 020` with `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 ·
-Batches 774 · Bottleneck storage-full`; seeded absence `tick 50 241 → 482 251` with
+Batches 774 · Bottleneck storage-full`; seeded absence `tick 91 547 → 523 557` with
 `Deliveries 0 · Batches 0 · Bottleneck storage-full` (the seeded store starts at 900/900);
-lease `t1-974f → t1-ka9j` with the tick advancing 433 640 → 433 671 and the promoted tab's card
+lease `t1-gfx3 → t1-7pg5` with the tick advancing 433 640 → 433 668 and the promoted tab's card
 switching to `upgrade Polymer recycler`.
 **Research panel:** photographed (`latest-research.png`) from a mature yard installed as a seed
 save; the seed is the file `docs/evidence/yard-mature.json` written by the supply probe, so the
 image and the headless tables describe the same 8-machine, 18-link yard. The short mobile session
 still ends before `data > 0`, which is why the desktop context carries the seed (B-25). All five
-images were recaptured from this build, so the chip budget and the capped dock of D-30 are in them:
-four chips on the phone images, seven on the desktop images.
+images were recaptured from this build, so they show this pass's HUD: three buttons in the
+top-right cluster (`Sound ✓`, `A 1`, `Home`), a two-line chip block at 390 px, and the selected
+machine's panel with its own head row above a scrolling body.
 
 ## Architecture
 

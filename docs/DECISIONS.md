@@ -457,3 +457,40 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reconsider when: the text-scale audit (B-13) shows the larger scale needs a different
   budget, or a fifth chip becomes necessary for a new currency.
 
+## D-31 — 2026-11-03 — Large-text layout: in-flow panels, one scale control, Escape order
+
+- Problem: at 2.0 text scale the absolutely positioned panel overflowed its own box (105 px of
+  inner scroll at 360 × 640, 165 px in landscape) with the Close button pushed out of view, the
+  15 px base font had no in-game control, and two secondary HUD affordances (focus ring, Escape)
+  were not implemented at all. Spec 6.4 requires adjustable text, visible focus, reduced motion
+  and a reduced HUD at large settings; spec 5.5 fixes the Back/Escape order.
+- Options considered: (a) keep `position: absolute` panels and hand-tune a `bottom` offset per
+  scale, which broke as soon as the dock grew past its 46 px minimum; (b) make the panel a normal
+  flex child of the HUD column so the column itself does the stacking; (c) four separate
+  settings rows in a settings panel, which costs a tap during play for the one setting that is
+  checked against the screen.
+- Chosen: (b) plus one cycling control. `.panel` is now an in-flow `align-self: center` flex
+  column with `margin-top: auto`, a non-scrolling `.panel__head` (title and the only Close
+  button) and a scrollable `.panel__body`; every panel in `Panels.tsx` uses that shape. One
+  cluster button `A {scale}` cycles 1 → 1.25 → 1.5 → 2 through the persisted `textScale`, and
+  `root.style.setProperty("--text-scale", …)` scales the whole HUD. At scale ≥ 1.5 the
+  objective's secondary hint line and one chip step back (`.text-large`, `hudChipLimit`), which
+  is the reduction spec 6.4 asks for; readable text outranks decoration, so the world loses area
+  rather than the type shrinking.
+- Also in this record: `prefers-reduced-motion: reduce` is read with `matchMedia` once on mount
+  and written into the same settings object the game's own toggle uses; Escape closes the return
+  report, then the open panel, then build mode, in that order, and a scripted `focus()` is
+  joined by a real `:focus-visible` ring (`2px solid var(--cyan)`, `outline-offset: 2px`).
+- Measured effect (`node scripts/measure-hud.mjs`, three scales × six sizes × three states,
+  `docs/evidence/2026-11-03-hud-share.md`): every panel reports **0 px inner scroll** and
+  `Close inside = yes` with **no dock overlap** in all 18 contexts (store panel at 360 × 640:
+  105 px → 0 px, landscape 165 px → 0 px); no document scroll in 18/18; minimum contrast
+  5.77:1 over the 10 measured text pairs at all three scales; resting ink share 21.6 % at
+  360 × 640 and 14.3 % at 390 × 844 at the default scale, 32.7 % at 1.5 and 57.4 % at 2.0.
+- Trade-off stated: at the largest scale on a 360 × 640 screen the HUD paints about 57 % of the
+  viewport, which is what 30 px text costs; the alternative is shrinking the type, which spec 6.4
+  forbids. The 15–22 % band of spec 5.2 is reported as a default-scale target.
+- Reversible: yes; CSS layout plus one helper argument, one button, two effects.
+- Reconsider when: a real-device trace (BL-01) shows the 584 px-tall dock row hurting
+  reachability, or a fourth cluster button is needed and the top row no longer fits two chips.
+

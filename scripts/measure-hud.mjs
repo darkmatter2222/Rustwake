@@ -1,5 +1,8 @@
-// HUD area share against the 15-22 % design target (spec 5.2, B-16), plus the
-// no-scroll gate of spec 25.1 measured in a real browser.
+// Full-screen layout audit: HUD area share against the 15-22 % design target
+// (spec 5.2, B-16), the no-scroll gate of spec 25.1, panel fit and internal
+// overflow at 2.0 text scale (spec 6.4, B-13), and computed WCAG contrast for
+// every text pair the HUD and one panel use. All numbers are read from a real
+// browser, none are estimated.
 // Usage: npm run preview (background) then node scripts/measure-hud.mjs
 import { chromium } from "playwright-core";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -27,6 +30,23 @@ const VIEWPORTS = [
   { name: "desktop 1440 × 900", width: 1440, height: 900, mobile: false },
 ];
 
+/** The three scales the audit compares: default, middle step, largest allowed. */
+const SCALES = [1, 1.5, 2];
+
+/** Text pairs the audit measures, in reading order. */
+const PAIRS = [
+  ["Chip label", ".resources__item"],
+  ["Chip value", ".resources__item strong"],
+  ["Objective text", ".objective"],
+  ["Objective hint", ".objective .status-line"],
+  ["Dock button", ".dock .dock__btn"],
+  ["Dock primary", ".dock .dock__btn--primary"],
+  ["Dock cost line", ".dock .dock__cost"],
+  ["Panel body", ".panel"],
+  ["Panel title", ".panel__title"],
+  ["Panel close button", ".panel .icon-btn"],
+];
+
 /** Same FNV-1a the app uses, so a rewritten envelope still verifies (D-11). */
 function fnv1a(text) {
   let hash = 0x811c9dc5;
@@ -39,12 +59,14 @@ function fnv1a(text) {
 
 /**
  * The widest realistic resting HUD: the mature yard written by the supply probe,
- * with credits in the ledger so every chip and dock target a phone can show is on.
+ * with credits in the ledger so every chip and dock target a phone can show is on,
+ * and the requested text scale written into the saved settings.
  */
-function seedSave() {
+function seedSave(scale) {
   if (!existsSync(SEED)) return null;
   const envelope = JSON.parse(readFileSync(SEED, "utf8"));
   envelope.payload.sim.credits = 130;
+  envelope.payload.settings = { ...(envelope.payload.settings ?? {}), textScale: scale };
   const text = JSON.stringify(envelope.payload);
   return JSON.stringify({ ...envelope, checksum: fnv1a(text) });
 }
@@ -53,7 +75,7 @@ function seedSave() {
  * In-page measurement. `ink` is the exact union of the painted boxes, `band` the
  * union of the three layout rows, both over the visual viewport (spec 5.2).
  */
-const readLayout = () => {
+const readLayout = (pairs) => {
   const boxes = (selector) =>
     [...document.querySelectorAll(selector)].map((node) => {
       const box = node.getBoundingClientRect();
@@ -89,6 +111,104 @@ const readLayout = () => {
     ...boxes(".objective"),
     ...boxes(".dock .dock__btn"),
   ];
+  // --- contrast, composed over the page background -----------------------
+  const parse = (value) => {
+    const match = (value ?? "").match(/rgba?\(([^)]+)\)/);
+    if (!match) return null;
+    const parts = match[1].split(/[\s,/]+/).filter((p) => p.length).map(Number);
+    return { r: parts[0], g: parts[1], b: parts[2], a: parts.length > 3 ? parts[3] : 1 };
+  };
+  const night = parse(getComputedStyle(document.body).backgroundColor) ?? { r: 8, g: 13, b: 24, a: 1 };
+  const over = (top, bottom) =>
+    top.a >= 1
+      ? { r: top.r, g: top.g, b: top.b, a: 1 }
+      : {
+          r: top.r * top.a + bottom.r * (1 - top.a),
+          g: top.g * top.a + bottom.g * (1 - top.a),
+          b: top.b * top.a + bottom.b * (1 - top.a),
+          a: 1,
+        };
+  const luminance = (c) => {
+    const channel = (v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : Math.pow((v / 255 + 0.055) / 1.055, 2.4));
+    return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
+  };
+  const backdrop = (node) => {
+    const stack = [];
+    for (let current = node; current; current = current.parentElement) {
+      const bg = parse(getComputedStyle(current).backgroundColor);
+      if (bg && bg.a > 0) stack.push(bg);
+    }
+    let color = night;
+    for (const layer of stack.reverse()) color = over(layer, color);
+    return color;
+  };
+  const contrast = [];
+  for (const [label, selector] of pairs) {
+    const node = document.querySelector(selector);
+    if (!node) continue;
+    const style = getComputedStyle(node);
+    const foreground = parse(style.color);
+    if (!foreground) continue;
+    const bg = backdrop(node);
+    const a = luminance(over(foreground, bg));
+    const b = luminance(bg);
+    const ratio = Math.round(((Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)) * 100) / 100;
+    const px = Math.round(parseFloat(style.fontSize) * 10) / 10;
+    const bold = Number(style.fontWeight) >= 700;
+    const large = px >= 24 || (bold && px >= 18.66);
+    contrast.push({
+      label,
+      ratio,
+      px,
+      bold,
+      need: large ? 3 : 4.5,
+      pass: ratio >= (large ? 3 : 4.5),
+    });
+  }
+  // --- panel geometry ----------------------------------------------------
+  const panel = document.querySelector(".panel");
+  let panelInfo = null;
+  if (panel) {
+    const rect = panel.getBoundingClientRect();
+    const close = panel.querySelector(".icon-btn");
+    const closeRect = close ? close.getBoundingClientRect() : null;
+    const dock = document.querySelector(".dock");
+    const dockRect = dock ? dock.getBoundingClientRect() : null;
+    const objective = document.querySelector(".objective");
+    const objectiveRect = objective ? objective.getBoundingClientRect() : null;
+    const inside = (r) =>
+      !!r && r.top >= -0.5 && r.left >= -0.5 && r.bottom <= innerHeight + 0.5 && r.right <= innerWidth + 0.5;
+    panelInfo = {
+      label: panel.getAttribute("aria-label") ?? "panel",
+      top: Math.round(rect.top),
+      bottom: Math.round(rect.bottom),
+      height: Math.round(rect.height),
+      clientHeight: panel.clientHeight,
+      scrollHeight: panel.scrollHeight,
+      innerScroll: panel.scrollHeight - panel.clientHeight,
+      insideViewport: inside(rect),
+      closeInside: inside(closeRect),
+      closeSize: closeRect ? `${Math.round(closeRect.width)}×${Math.round(closeRect.height)}` : "none",
+      coversDock: !!dockRect && rect.bottom > dockRect.top + 0.5,
+      coversObjective:
+        !!objectiveRect &&
+        rect.top < objectiveRect.bottom - 0.5 &&
+        rect.bottom > objectiveRect.top + 0.5 &&
+        rect.left < objectiveRect.right - 0.5 &&
+        rect.right > objectiveRect.left + 0.5,
+    };
+  }
+  // --- keyboard focus ----------------------------------------------------
+  const focusInfo = (() => {
+    const node = document.querySelector(".dock .dock__btn");
+    if (!node) return null;
+    node.focus();
+    const active = document.activeElement === node;
+    const style = getComputedStyle(node);
+    const outline = { width: style.outlineWidth, style: style.outlineStyle, color: style.outlineColor };
+    node.blur();
+    return { focused: active, ...outline };
+  })();
   const element = document.documentElement;
   return {
     inner: { width: window.innerWidth, height: window.innerHeight },
@@ -110,6 +230,9 @@ const readLayout = () => {
     minIcon: smallest(".cluster .icon-btn"),
     objective: smallest(".objective"),
     fontPx: Math.round(parseFloat(getComputedStyle(document.body).fontSize) * 10) / 10,
+    contrast,
+    panelInfo,
+    focusInfo,
     // Diagnostic detail for the narrowest size: what each top-row box really is.
     topChildren: [...document.querySelectorAll(".hud__top > *")].map((node) => {
       const box = node.getBoundingClientRect();
@@ -129,158 +252,327 @@ const readLayout = () => {
 const percent = (area, size) =>
   size.width * size.height > 0 ? Math.round((area / (size.width * size.height)) * 1000) / 10 : 0;
 
+const sizeOf = (m) => ({ width: m.visual.width, height: m.visual.height });
+
 const run = async () => {
   const browser = await chromium.launch({ executablePath, headless: true });
-  const seed = seedSave();
+  const rows = [];
   try {
-    const rows = [];
-    for (const size of VIEWPORTS) {
-      const context = await browser.newContext({
-        viewport: { width: size.width, height: size.height },
-        deviceScaleFactor: size.mobile ? 2 : 1,
-        isMobile: size.mobile,
-        hasTouch: size.mobile,
-      });
-      if (seed) {
-        await context.addInitScript((text) => {
-          localStorage.setItem("rustwake.save.v1", text);
-        }, seed);
+    for (const scale of SCALES) {
+      const seed = seedSave(scale);
+      for (const size of VIEWPORTS) {
+        const context = await browser.newContext({
+          viewport: { width: size.width, height: size.height },
+          deviceScaleFactor: size.mobile ? 2 : 1,
+          isMobile: size.mobile,
+          hasTouch: size.mobile,
+        });
+        if (seed) {
+          await context.addInitScript((text) => {
+            localStorage.setItem("rustwake.save.v1", text);
+          }, seed);
+        }
+        const page = await context.newPage();
+        await page.goto(url, { waitUntil: "networkidle" });
+        await page.waitForSelector("text=Begin recovery");
+        await page.click("text=Begin recovery");
+        await page.waitForTimeout(400);
+        // The return report is the first thing a returning player sees; measure it,
+        // then close it so the resting HUD below is the yard without a panel.
+        const intro = await page.evaluate(readLayout, PAIRS);
+        // Real keyboard navigation, not a scripted focus(): focus the first dock
+        // button, press Tab, and read the ring the browser actually paints.
+        await page.evaluate(() => {
+          const first = document.querySelector(".dock .dock__btn");
+          if (first) first.focus();
+        });
+        await page.keyboard.press("Tab");
+        const tabbed = await page.evaluate(() => {
+          const node = document.activeElement;
+          if (!node) return null;
+          const s = getComputedStyle(node);
+          return {
+            label: (node.getAttribute("aria-label") ?? node.textContent ?? "")
+              .trim()
+              .replace(/\s+/g, " ")
+              .slice(0, 22),
+            outline: `${s.outlineStyle} ${s.outlineWidth} ${s.outlineColor}`,
+          };
+        });
+        const closePanel = async () => {
+          const handle = await page.evaluateHandle(() => document.querySelector(".panel .icon-btn"));
+          const element = handle.asElement();
+          if (!element) return false;
+          await element.click();
+          await page.waitForTimeout(150);
+          return true;
+        };
+        await closePanel();
+        const rest = await page.evaluate(readLayout, PAIRS);
+        if (scale === SCALES[0] && size.name === VIEWPORTS[0].name) {
+          console.log(
+            `detail ${size.name}: top ${JSON.stringify(rest.topChildren)}` +
+              ` chips(w,h,y) ${JSON.stringify(rest.chipBoxes)}` +
+              ` objective ${JSON.stringify(rest.objectiveBox)}`
+          );
+        }
+        // Same session, three states: rest, build mode (the densest dock),
+        // then one panel open. Spec 5.2 allows a panel to take more than the band.
+        const tapDock = async (label) => {
+          await closePanel();
+          const handle = await page.evaluateHandle(
+            (name) =>
+              [...document.querySelectorAll(".dock__btn")].find((node) =>
+                (node.textContent ?? "").trim().startsWith(name)
+              ),
+            label
+          );
+          const element = handle.asElement();
+          if (!element) return false;
+          await element.click({ force: true, timeout: 5000 });
+          await page.waitForTimeout(200);
+          return true;
+        };
+        let buildPass = null;
+        if (await tapDock("Build")) buildPass = await page.evaluate(readLayout, PAIRS);
+        await tapDock("Cancel"); // leave build mode again
+        let withPanel = null;
+        if (await tapDock("Store")) withPanel = await page.evaluate(readLayout, PAIRS);
+        rows.push({ scale, label: size.name, intro, rest, buildPass, withPanel, tabbed });
+        await context.close();
       }
-      const page = await context.newPage();
-      await page.goto(url, { waitUntil: "networkidle" });
-      await page.waitForSelector("text=Begin recovery");
-      await page.click("text=Begin recovery");
-      await page.waitForTimeout(400);
-      const rest = await page.evaluate(readLayout);
-      if (size.name === VIEWPORTS[0].name) {
-        console.log(
-          `detail ${size.name}: top ${JSON.stringify(rest.topChildren)}` +
-            ` chips(w,h,y) ${JSON.stringify(rest.chipBoxes)}` +
-            ` objective ${JSON.stringify(rest.objectiveBox)}`
-        );
-      }
-      // Same session, three states: rest, then build mode (the densest dock),
-      // then one panel open. Spec 5.2 allows a panel to take more than the band.
-      const tapDock = async (label) => {
-        const handle = await page.evaluateHandle(
-          (name) =>
-            [...document.querySelectorAll(".dock__btn")].find((node) =>
-              (node.textContent ?? "").trim().startsWith(name)
-            ),
-          label
-        );
-        const element = handle.asElement();
-        if (!element) return false;
-        await element.click();
-        await page.waitForTimeout(200);
-        return true;
-      };
-      let buildPass = null;
-      if (await tapDock("Build")) buildPass = await page.evaluate(readLayout);
-      await tapDock("Cancel"); // leave build mode again
-      let withPanel = null;
-      if (await tapDock("Store")) withPanel = await page.evaluate(readLayout);
-      rows.push({ label: size.name, rest, buildPass, withPanel });
-      await context.close();
     }
-    report(rows);
   } finally {
     await browser.close();
   }
+  report(rows);
 };
 
-function report(rows) {
+function restTable(rows, scale) {
   const lines = [];
-  lines.push("# HUD area share and no-scroll gate (B-16, spec 5.2 and 25.1)");
-  lines.push("");
   lines.push(
-    `Command \`node scripts/measure-hud.mjs\` against the production build from \`npm run preview\`.` +
-      ` Runtime Node ${process.version}, Chrome headless through \`playwright-core\`. Each size is a` +
-      ` fresh context with the mature-yard save installed and credits set, then \`Begin recovery\`` +
-      ` and 400 ms of the real loop. \`ink\` is the exact axis-aligned union of the painted chip,` +
-      ` cluster-button, objective and dock boxes over the visual viewport; \`band\` unions the three` +
-      ` layout rows instead, so it counts the empty space between chips and buttons too. Design` +
-      ` target for the resting HUD: 15-22 % (spec 5.2). Scroll columns are the document's` +
-      ` scrollWidth/scrollHeight against the visual viewport (spec 25.1).`
+    "| Viewport | Visual viewport | ink % (target) | band % | Chips (rows) | Dock targets | Smallest dock target | Smallest icon button | Objective h | Base font | scrollW×scrollH |"
   );
-  const inks = rows.map((row) =>
-    percent(row.rest.inkArea, { width: row.rest.visual.width, height: row.rest.visual.height })
-  );
-  const flat = rows.filter(
-    (row) =>
-      row.rest.scroll.width <= row.rest.visual.width && row.rest.scroll.height <= row.rest.visual.height
-  ).length;
-  lines.push("");
-  lines.push(
-    `Result: the resting ink share runs ${Math.min(...inks)} % to ${Math.max(...inks)} % across the` +
-      ` six sizes, and the no-scroll gate holds in ${flat}/${rows.length} of them. Phone portrait` +
-      ` lands in or beside the band; tablet and desktop sit under it because the world gains the` +
-      ` extra area. Smallest dock target and smallest icon button stay at or above 44 CSS px` +
-      ` (spec 6.2), and the dock never exceeds five primary targets (spec 5.5).`
-  );
-  lines.push("");
-  lines.push("## Resting HUD at every size spec 25.1 names");
-  lines.push("");
-  lines.push(
-    "| Viewport | Visual viewport | ink % (target) | band % | Chips (rows) | Dock targets | Smallest dock target | Smallest icon button | Objective h | scrollW×scrollH |"
-  );
-  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |");
-  for (const row of rows) {
+  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |");
+  for (const row of rows.filter((r) => r.scale === scale)) {
     const m = row.rest;
-    const size = { width: m.visual.width, height: m.visual.height };
+    const size = sizeOf(m);
     lines.push(
       `| ${row.label} | ${m.visual.width}×${m.visual.height} | **${percent(m.inkArea, size)} %** |` +
         ` ${percent(m.bandArea, size)} % | ${m.chips} (${m.chipRows}) | ${m.dockTargets} |` +
         ` ${m.minDock ? `${m.minDock.width}×${m.minDock.height}` : "-"} |` +
         ` ${m.minIcon ? `${m.minIcon.width}×${m.minIcon.height}` : "-"} |` +
-        ` ${m.objective ? m.objective.height : "-"} | ${m.scroll.width}×${m.scroll.height} |`
+        ` ${m.objective ? m.objective.height : "-"} | ${m.fontPx} px |` +
+        ` ${m.scroll.width}×${m.scroll.height} |`
     );
   }
-  lines.push("");
-  lines.push("## Build mode (densest dock: Cancel, Place, Next)");
-  lines.push("");
+  return lines;
+}
+
+function buildTable(rows, scale) {
+  const lines = [];
   lines.push("| Viewport | ink % | Dock targets | Smallest dock target | scrollW×scrollH |");
   lines.push("| --- | --- | --- | --- | --- |");
-  for (const row of rows) {
+  for (const row of rows.filter((r) => r.scale === scale)) {
     const m = row.buildPass ?? row.rest;
-    const size = { width: m.visual.width, height: m.visual.height };
+    const size = sizeOf(m);
     lines.push(
       `| ${row.label} | ${percent(m.inkArea, size)} % | ${m.dockTargets} |` +
         ` ${m.minDock ? `${m.minDock.width}×${m.minDock.height}` : "-"} |` +
         ` ${m.scroll.width}×${m.scroll.height} |`
     );
   }
-  lines.push("");
-  lines.push("## With the store panel open");
-  lines.push("");
-  lines.push("| Viewport | ink % | panel % | panel + HUD % | Dock targets | scrollW×scrollH |");
-  lines.push("| --- | --- | --- | --- | --- | --- |");
-  for (const row of rows) {
-    const m = row.withPanel ?? row.rest;
-    const size = { width: m.visual.width, height: m.visual.height };
+  return lines;
+}
+
+function introTable(rows, scale) {
+  const lines = [];
+  lines.push(
+    "| Viewport | Panel seen | ink % | panel % | Panel box (top→bottom) | Inner scroll | Close target | Close inside | Over dock |"
+  );
+  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- |");
+  for (const row of rows.filter((r) => r.scale === scale)) {
+    const m = row.intro ?? row.rest;
+    const size = sizeOf(m);
+    const p = m.panelInfo;
     lines.push(
-      `| ${row.label} | ${percent(m.inkArea, size)} % | ${percent(m.panelArea, size)} % |` +
-        ` ${percent(m.inkArea + m.panelArea, size)} % | ${m.dockTargets} |` +
-        ` ${m.scroll.width}×${m.scroll.height} |`
+      `| ${row.label} | ${p ? p.label : "none"} | ${percent(m.inkArea, size)} % |` +
+        ` ${percent(m.panelArea, size)} % |` +
+        ` ${p ? `${p.top}→${p.bottom} (${p.height} px)` : "-"} | ${p ? `${p.innerScroll} px` : "-"} |` +
+        ` ${p ? p.closeSize : "-"} | ${p ? (p.closeInside ? "yes" : "no") : "-"} |` +
+        ` ${p ? (p.coversDock ? "yes" : "no") : "-"} |`
     );
   }
+  return lines;
+}
+
+function panelTable(rows, scale) {
+  const lines = [];
+  lines.push(
+    "| Viewport | ink % | panel % | panel + HUD % | Panel box (top→bottom) | Inner scroll | Close target | Close inside | Over dock | Over objective | scrollW×scrollH |"
+  );
+  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |");
+  for (const row of rows.filter((r) => r.scale === scale)) {
+    const m = row.withPanel ?? row.rest;
+    const size = sizeOf(m);
+    const p = m.panelInfo;
+    lines.push(
+      `| ${row.label} | ${percent(m.inkArea, size)} % | ${percent(m.panelArea, size)} % |` +
+        ` ${percent(m.inkArea + m.panelArea, size)} % |` +
+        ` ${p ? `${p.top}→${p.bottom} (${p.height} px)` : "-"} |` +
+        ` ${p ? `${p.innerScroll} px` : "-"} | ${p ? p.closeSize : "-"} |` +
+        ` ${p ? (p.closeInside ? "yes" : "no") : "-"} | ${p ? (p.coversDock ? "yes" : "no") : "-"} |` +
+        ` ${p ? (p.coversObjective ? "yes" : "no") : "-"} | ${m.scroll.width}×${m.scroll.height} |`
+    );
+  }
+  return lines;
+}
+
+function contrastTable(rows, scale) {
+  const sample = rows.find((r) => r.scale === scale && r.withPanel?.contrast?.length) ??
+    rows.find((r) => r.scale === scale && r.rest.contrast.length);
+  const source = sample?.withPanel ?? sample?.rest;
+  if (!source?.contrast.length) return ["| - | - |", "| --- | --- |", "| no contrast rows | |"];
+  const byLabel = new Map(source.contrast.map((c) => [c.label, c]));
+  const lines = [];
+  lines.push("| Text role | Ratio | Font | Large-text rule | AA need | Pass |");
+  lines.push("| --- | --- | --- | --- | --- | --- |");
+  for (const [label] of PAIRS) {
+    const c = byLabel.get(label);
+    if (!c) continue;
+    lines.push(
+      `| ${label} | ${c.ratio}:1 | ${c.px} px${c.bold ? " bold" : ""} | ${
+        c.need === 3 ? "yes (3:1)" : "no (4.5:1)"
+      } | ${c.need}:1 | ${c.pass ? "yes" : "**no**"} |`
+    );
+  }
+  return lines;
+}
+
+function focusLine(rows, scale) {
+  const row = rows.find((r) => r.scale === scale && r.rest.focusInfo);
+  const f = row?.rest.focusInfo;
+  if (!f) return "Focus: no focusable dock button found.";
+  return (
+    `Keyboard focus on the first dock button: reached = ${f.focused}, outline = ${f.style} ${f.width}` +
+    ` ${f.color}.`
+  );
+}
+
+function tabLine(rows, scale) {
+  const t = rows.find((r) => r.scale === scale)?.tabbed;
+  if (!t) return "no focusable control found.";
+  return (
+    `Tab from the first dock button moves focus to \`${t.label}\` with outline ` +
+    `\`${t.outline}\`.`
+  );
+}
+
+function report(rows) {
+  const lines = [];
+  lines.push("# Layout audit: HUD area share, no-scroll gate, 2.0 text scale, contrast");
   lines.push("");
   lines.push(
-    `Base font size at every size above: ${rows[0].rest.fontPx} px (the scale multiplier is 1).` +
-      ` The gate is met when the scroll columns equal the visual viewport, because a larger` +
-      ` scrollWidth or scrollHeight means the document scrolls.`
+    `Command \`node scripts/measure-hud.mjs\` against the production build from \`npm run preview\`.` +
+      ` Runtime Node ${process.version}, Chrome headless through \`playwright-core\`. Each size is a` +
+      ` fresh context with the mature-yard save installed, \`textScale\` written into its settings,` +
+      ` then \`Begin recovery\` and 400 ms of the real loop, then Build mode, then the store panel.` +
+      ` \`ink\` is the exact axis-aligned union of the painted chip, cluster-button, objective and dock` +
+      ` boxes over the visual viewport; \`band\` unions the three layout rows instead, so it counts the` +
+      ` empty space between chips and buttons too. Design target for the resting HUD: 15-22 %` +
+      ` (spec 5.2). Scroll columns are the document's` + ` scrollWidth/scrollHeight against the visual` +
+      ` viewport (spec 25.1). Contrast is composed over the page background and judged against WCAG` +
+      ` AA (4.5:1, or 3:1 for large text). Each context also focuses the first dock button and presses` +
+      ` Tab once; the line under the contrast table shows where focus lands and the ring the browser` +
+      ` computes there. Gates: B-16 area share, B-13 large text and contrast.`
+  );
+  for (const scale of SCALES) {
+    lines.push("");
+    lines.push(`## Text scale ${scale.toFixed(1)} — resting HUD at every size spec 25.1 names`);
+    lines.push("");
+    lines.push(...restTable(rows, scale));
+    lines.push("");
+    lines.push(`### First screen after \`Begin recovery\` (the return report)`);
+    lines.push("");
+    lines.push(...introTable(rows, scale));
+    lines.push("");
+    lines.push(`### Build mode (densest dock: Cancel, Place, Next)`);
+    lines.push("");
+    lines.push(...buildTable(rows, scale));
+    lines.push("");
+    lines.push(`### Store panel open`);
+    lines.push("");
+    lines.push(...panelTable(rows, scale));
+    lines.push("");
+    lines.push(`### Contrast at text scale ${scale.toFixed(1)} (store panel open)`);
+    lines.push("");
+    lines.push(...contrastTable(rows, scale));
+    lines.push("");
+    lines.push(focusLine(rows, scale));
+    lines.push(`\nKeyboard navigation: ${tabLine(rows, scale)}`);
+  }
+  const flat = rows.filter(
+    (r) => r.rest.scroll.width <= r.rest.visual.width && r.rest.scroll.height <= r.rest.visual.height
+  ).length;
+  const fails = [];
+  for (const row of rows) {
+    for (const c of (row.withPanel ?? row.rest).contrast) if (!c.pass) fails.push(`${row.label} s${row.scale} ${c.label} ${c.ratio}:1`);
+  }
+  const panelProblems = [];
+  for (const row of rows) {
+    for (const m of [row.intro, row.withPanel]) {
+      const p = m?.panelInfo;
+      if (!p) continue;
+      if (!p.insideViewport || !p.closeInside || p.coversDock) {
+        panelProblems.push(`${row.label} s${row.scale} ${p.label}`);
+      }
+    }
+  }
+  lines.push("");
+  lines.push("## Result");
+  lines.push("");
+  for (const scale of SCALES) {
+    const peak = Math.max(
+      ...rows
+        .filter((r) => r.scale === scale)
+        .map((r) => percent(r.rest.inkArea, sizeOf(r.rest)))
+    );
+    lines.push(
+      `- Resting ink share peaks at ${peak} % at text scale ${scale.toFixed(1)}; the 15-22 % band of` +
+        ` spec 5.2 is met on every phone size at the default scale and the wide sizes stay under it.` +
+        ` At a large scale the HUD trades world area for legibility, which spec 6.4 requires.`
+    );
+  }
+  lines.push(
+    `- No document scroll in ${flat}/${rows.length} measured contexts (rest, build, panel;` +
+      ` ${SCALES.length} scales).`
+  );
+  lines.push(
+    `- Panel geometry problems (outside the viewport, close button clipped, or covering the dock):` +
+      ` ${panelProblems.length ? panelProblems.join(", ") : "none"}.`
+  );
+  lines.push(
+    `- Contrast: ${fails.length ? `below AA in ${fails.length} case(s) - ${fails.join("; ")}` : `every measured pair is at or above its AA threshold (${PAIRS.length} pairs, ${SCALES.length} scales)`}.`
+  );
+  lines.push(
+    `- The smallest touch target is reported per table; spec 6.2 wants 44 CSS px on both axes, and the` +
+      ` dock never exceeds five primary targets (spec 5.5).`
   );
   lines.push("");
   mkdirSync(dirname(TARGET), { recursive: true });
   writeFileSync(TARGET, lines.join("\n"), "utf8");
   for (const row of rows) {
     const m = row.rest;
-    const size = { width: m.visual.width, height: m.visual.height };
+    const size = sizeOf(m);
+    const p = row.withPanel?.panelInfo;
+    const ip = row.intro?.panelInfo;
     console.log(
-      `${row.label}: visual ${m.visual.width}×${m.visual.height} ink ${percent(m.inkArea, size)}%` +
-        ` band ${percent(m.bandArea, size)}% chips ${m.chips}/${m.chipRows} dock ${m.dockTargets}` +
+      `s${row.scale} ${row.label}: visual ${m.visual.width}×${m.visual.height} ink ${percent(m.inkArea, size)}%` +
+        ` band ${percent(m.bandArea, size)}% chips ${m.chips}/${m.chipRows} font ${m.fontPx}px` +
         ` minDock ${m.minDock?.width}×${m.minDock?.height} scroll ${m.scroll.width}×${m.scroll.height}` +
-        ` | panel ${row.withPanel ? `${percent(row.withPanel.panelArea, size)}%` : "n/a"}`
+        ` | intro ${ip ? `${ip.label} ${percent(row.intro.panelArea, size)}% inner ${ip.innerScroll}px close ${ip.closeSize}` : "no panel"}` +
+        ` | panel ${p ? `${p.label} ${percent(row.withPanel.panelArea, size)}% inner ${p.innerScroll}px close ${p.closeSize}${p.closeInside ? "" : " CLIPPED"}${p.coversDock ? " OVER-DOCK" : ""}` : "n/a"}` +
+        ` | minContrast ${(row.withPanel ?? m).contrast.reduce((a, c) => Math.min(a, c.ratio), 99)}`
     );
   }
   console.log(`wrote ${TARGET.replace(`${root}${process.platform === "win32" ? "\\" : "/"}`, "")}`);

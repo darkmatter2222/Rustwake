@@ -55,7 +55,13 @@ export function MachinePanel(props: {
 
   return (
     <div className="panel" role="group" aria-label={`${def.label} details`}>
-      <h2 className="panel__title">{def.label}</h2>
+      <div className="panel__head">
+        <h2 className="panel__title">{def.label}</h2>
+        <button className="icon-btn" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+      <div className="panel__body">
       {page === 0 ? (
         <dl>
           <dt>Status</dt>
@@ -176,9 +182,7 @@ export function MachinePanel(props: {
         >
           Dismantle
         </button>
-        <button className="icon-btn" onClick={props.onClose}>
-          Close
-        </button>
+      </div>
       </div>
     </div>
   );
@@ -194,7 +198,13 @@ export function StorePanel(props: {
   );
   return (
     <div className="panel" role="group" aria-label="Store contents">
-      <h2 className="panel__title">Yard store</h2>
+      <div className="panel__head">
+        <h2 className="panel__title">Yard store</h2>
+        <button className="icon-btn" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+      <div className="panel__body">
       <dl>
         {rows.map((key) => {
           const amount = sellableAmount(props.state, key);
@@ -255,10 +265,6 @@ export function StorePanel(props: {
           </>
         ) : null}
       </dl>
-      <div className="panel__actions">
-        <button className="icon-btn" onClick={props.onClose}>
-          Close
-        </button>
       </div>
     </div>
   );
@@ -272,7 +278,13 @@ export function ResearchPanel(props: {
   const owned = props.state.research;
   return (
     <div className="panel" role="group" aria-label="Research">
-      <h2 className="panel__title">Research</h2>
+      <div className="panel__head">
+        <h2 className="panel__title">Research</h2>
+        <button className="icon-btn" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+      <div className="panel__body">
       <dl>
         <dt>Data</dt>
         <dd>{formatNumber(props.state.store.data ?? 0)}</dd>
@@ -309,10 +321,6 @@ export function ResearchPanel(props: {
           );
         })}
       </dl>
-      <div className="panel__actions">
-        <button className="icon-btn" onClick={props.onClose}>
-          Close
-        </button>
       </div>
     </div>
   );
@@ -332,7 +340,13 @@ export function ReturnReportPanel(props: {
   ];
   return (
     <div className="panel" role="group" aria-label="Return report">
-      <h2 className="panel__title">While you were away</h2>
+      <div className="panel__head">
+        <h2 className="panel__title">While you were away</h2>
+        <button className="icon-btn" onClick={props.onClose}>
+          Back to yard
+        </button>
+      </div>
+      <div className="panel__body">
       <dl>
         {summary.map((line) => (
           <div key={line}>
@@ -357,10 +371,6 @@ export function ReturnReportPanel(props: {
           </>
         ) : null}
       </dl>
-      <div className="panel__actions">
-        <button className="icon-btn" onClick={props.onClose}>
-          Back to yard
-        </button>
       </div>
     </div>
   );

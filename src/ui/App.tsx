@@ -75,8 +75,46 @@ export function App({ store }: { store: GameStore }) {
   );
 
   useEffect(() => {
-    document.documentElement.style.setProperty("--text-scale", String(settings.textScale));
+    const root = document.documentElement;
+    root.style.setProperty("--text-scale", String(settings.textScale));
+    // Spec 6.4: at a large text scale the HUD keeps only the essential lines.
+    root.classList.toggle("text-large", settings.textScale >= 1.5);
   }, [settings.textScale]);
+
+  useEffect(() => {
+    // The operating-system preference wins for reduced motion; the saved value
+    // covers every other case, and the renderer reads it from settings each frame.
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      store.setSettings({ reducedMotion: true });
+    }
+  }, [store]);
+
+  const cycleTextScale = useCallback(() => {
+    const steps = [1, 1.25, 1.5, 2];
+    const index = steps.indexOf(settings.textScale);
+    store.setSettings({ textScale: steps[(index + 1) % steps.length] });
+  }, [settings.textScale, store]);
+
+  useEffect(() => {
+    // Spec 5.5: Escape closes the most local context first - panel, then build mode.
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      if (reportOpen && store.getReturnReport()) {
+        setReportOpen(false);
+        return;
+      }
+      if (selected !== null) {
+        setSelected(null);
+        return;
+      }
+      if (buildBlueprint !== null) {
+        setBuildBlueprint(null);
+        setGhostTile(null);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [reportOpen, selected, buildBlueprint, store]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -233,6 +271,8 @@ export function App({ store }: { store: GameStore }) {
           <HudTop
             state={state}
             muted={settings.muted}
+            textScale={settings.textScale}
+            onCycleText={cycleTextScale}
             onToggleMute={() => {
               const next = !settings.muted;
               store.setSettings({ muted: next });
@@ -253,6 +293,25 @@ export function App({ store }: { store: GameStore }) {
           />
         </div>
         {toast ? <Toast text={toast} onDone={() => setToast(null)} /> : null}
+        {/* Panels are HUD-column children so the column keeps them between the
+            objective and the dock at every text scale. */}
+        {machine ? (
+          <MachinePanel
+            state={state}
+            machine={machine}
+            tick={state.tick}
+            powerRatio={state.powerRatio}
+            dispatch={dispatch}
+            onClose={() => setSelected(null)}
+          />
+        ) : null}
+        {selected === -2 ? (
+          <StorePanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+        ) : null}
+        {selected === -3 ? (
+          <ResearchPanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+        ) : null}
+        {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
         <DockButtons
           primary={primary}
           buildBlueprint={buildBlueprint}
@@ -277,23 +336,6 @@ export function App({ store }: { store: GameStore }) {
           onResearch={() => setSelected(-3)}
         />
       </div>
-      {machine ? (
-        <MachinePanel
-          state={state}
-          machine={machine}
-          tick={state.tick}
-          powerRatio={state.powerRatio}
-          dispatch={dispatch}
-          onClose={() => setSelected(null)}
-        />
-      ) : null}
-      {selected === -2 ? (
-        <StorePanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
-      ) : null}
-      {selected === -3 ? (
-        <ResearchPanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
-      ) : null}
-      {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
     </div>
   );
 }
