@@ -10,11 +10,12 @@ the first 32 taps typed in the window are queued and replayed on the adopted led
 (`Catching your yard up`) is painted under the objective card. Shorter gaps keep the inline branch, which
 is what jsdom exercises.
 
-- Current commit and remote sync status: the code commit of this pass is the one titled "The 12 h catch-up
-  runs off the main thread …(B-02)", with the checkpoint commit(s) on top. Verified chain before this
-  pass: `refs/heads/main` = `41bd4a6` (docs), `639dcd0` (B-10 string table), `b1c7bd1`, `7c78315`. CI
-  remains unread in this environment, so CI is reported **pending**, not green (BL-06: `gh run list` asks
-  for `gh auth login`, the unauthenticated API 404s for the private repository).
+- Current commit and remote sync status: **`906d542`** is the code commit of this pass ("Run the 12 h
+  catch-up off the main thread (B-02)"), pushed with `git push origin HEAD:main` and verified by
+  `git ls-remote origin refs/heads/main` → `906d542650a76384b40ad41f00bef25422ef70b9` (fast-forward from
+  `41bd4a6`, no concurrent change). The checkpoint commit(s) sit on top. CI remains unread in this
+  environment, so CI is reported **pending**, not green (BL-06: `gh run list` asks for `gh auth login`,
+  the unauthenticated API 404s for the private repository).
 - Checks run and actual results (this pass):
   - `npx vitest run` — **171 passed / 171** (21 files): six new cases in
     `tests/simulation/catchup-worker.test.ts` (protocol refusal, handler-versus-direct equivalence,
@@ -54,9 +55,10 @@ is what jsdom exercises.
   that run's own printed state lines (mobile absence `tick 1 020 → 433 030`, tick 442 700, 306 credits,
   dock `Sell 44 Scrap / +44 credits`; desktop absence `tick 150 419 → 582 419`, tick 582 479, `data 146`,
   `plates 376`, dock `Sell 60 Nonferrous / +120 credits`). The phone research image remains the seeded capture
-  (`research phone source: seeded mature yard`), tracked as **B-29**. The seed
-  `docs/evidence/yard-mature.json` is unchanged from the 13:43 supply-probe write (tick 18 298, 8 machines,
-  18 links, four flying units, `data 106`).
+  (`research phone source: seeded mature yard`), tracked as **B-29**; that one file re-rendered
+  byte-identical (116 613 bytes) from the unchanged seed, and the other six changed size as expected.
+  The seed `docs/evidence/yard-mature.json` is unchanged from the 13:43 supply-probe write (tick 18 298,
+  8 machines, 18 links, four flying units, `data 106`).
 - Known blockers with exact unblock conditions:
   - BL-01 real-device frame/thermal traces: needs a connected device or a hosted trace. The new
     `docs/evidence/2026-11-03-catchup.md` is page-level Chrome, so it does not close this row.
@@ -78,8 +80,10 @@ is what jsdom exercises.
      recorded at fixed intervals plus the worker handoff cost after several absences, published as a
      series so a slope is visible (spec 21.5). **B-31** (a real `Worker` in the automated suite) is the
      natural follow-up to this pass.
-- Long-running processes owned by this session: the `vite preview` server on port 4173 (background). Stop
-  it with `Get-NetTCPConnection -LocalPort 4173` → `Stop-Process -Id <pid>`.
+- Long-running processes owned by this session: none. The `vite preview` server that ran on port 4173
+  during this pass was stopped at its end (`Get-NetTCPConnection -LocalPort 4173` → no listener). Start a
+  fresh one with `npm run preview -- --port 4173 --strictPort` in the background when a probe or capture
+  is needed.
 - Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npm run validate` and
   `npx vitest run` before editing; `tests/simulation/catchup-worker.test.ts` is where the handoff is
   pinned, `tests/ui/i18n.test.tsx` is where a new sentence gets pinned and where the raw-key scan lives,
