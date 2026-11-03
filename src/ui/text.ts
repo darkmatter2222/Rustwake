@@ -137,15 +137,31 @@ export const STATUS_LABEL: Record<string, string> = {
   paused: "Paused",
 };
 
-/** Bulk resources shown in the HUD, revealed as they become meaningful (spec 5.4). */
-export function visibleResources(state: SimState): ResourceId[] {
+/**
+ * Bulk resources shown in the HUD, revealed as they become meaningful (spec 5.4).
+ * `max` is the entry count this layout can afford, which hudChipLimit() derives from
+ * the viewport width so the chip block stays two rows tall on a narrow phone.
+ */
+export function visibleResources(state: SimState, max = 5): ResourceId[] {
+  const limit = Math.max(1, Math.floor(max));
   const shown: ResourceId[] = ["scrap"];
   for (const resource of SELL_ORDER) {
-    if (shown.length >= 3) break;
+    if (shown.length >= limit) break;
     if (resource === "scrap") continue;
     if ((state.store[resource] ?? 0) > 0) shown.push(resource);
   }
   return shown;
+}
+
+/**
+ * Chip budget for the HUD top row (spec 5.4): four on a portrait phone, seven on a
+ * wide screen, counting the pinned resources plus the credits and Store status chips.
+ * The measured reason for the small portrait budget is
+ * docs/evidence/2026-11-03-hud-share.md: a fifth chip is what forces a third row and
+ * pushes the resting HUD past the 22 % band at 360 × 640.
+ */
+export function hudChipLimit(width = typeof window === "undefined" ? 1024 : window.innerWidth): number {
+  return width <= 420 ? 4 : 7;
 }
 
 /** Compact build cost, e.g. "25 scrap + 5 ferrous". */

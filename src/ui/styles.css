@@ -83,7 +83,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: 8px;
   background: var(--panel);
   border: 1px solid rgba(111, 147, 173, 0.35);
@@ -155,11 +155,18 @@ body {
   gap: 8px;
   align-items: stretch;
   pointer-events: auto;
+  /* Spec 5.2: sensible maximum width instead of stretching controls across a
+     wide screen. Measured in docs/evidence/2026-11-03-hud-share.md. */
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
 }
 
 .dock__btn {
   flex: 1 1 auto;
-  min-height: 48px;
+  /* 46 px keeps the spec 6.2 minimum of 44 with a little room, and the measured
+     1-2 px each are what bring the 360 × 640 share inside the 22 % band. */
+  min-height: 46px;
   border-radius: var(--radius);
   border: 1px solid rgba(111, 147, 173, 0.4);
   background: var(--panel);

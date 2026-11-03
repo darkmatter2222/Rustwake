@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { BLUEPRINTS, TUNING } from "../game/content/defs";
 import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
-import { RESOURCE_LABEL, costSummary, formatNumber, visibleResources } from "./text";
+import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, visibleResources } from "./text";
 
 const DOT_COLORS: Record<string, string> = {
   scrap: "#c9713a",
@@ -35,7 +35,11 @@ export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute:
 }
 
 export function ResourceStrip({ state }: { state: SimState }) {
-  const shown = visibleResources(state);
+  // Spec 5.4: a small number of chips, four on a portrait phone and seven on a wide
+  // screen. The credits and Store status chips share that budget, so the pinned
+  // resource list gets what is left. Measured reason: docs/evidence/2026-11-03-hud-share.md.
+  const statusChips = (state.credits > 0 ? 1 : 0) + 1;
+  const shown = visibleResources(state, hudChipLimit() - statusChips);
   return (
     <div className="resources" aria-label="Resources">
       <span className="resources__item" key="scrap">

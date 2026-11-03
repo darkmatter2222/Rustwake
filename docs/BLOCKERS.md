@@ -8,6 +8,10 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
   use on midrange Android and iPhone.
 - Evidence: only Node CPU medians exist (`tests/perf/bench.test.ts`); jsdom has no
   compositor. The README lists Node numbers as Node numbers.
+- Now measured in headless Chrome instead of jsdom (`scripts/measure-hud.mjs`, 2026-11-03): the
+  no-scroll gate at six sizes in three HUD states, the HUD area share against the 15–22 % target,
+  and the minimum touch-target sizes. Those are layout facts a device would not change; frame rate,
+  p95 frame work and thermals still are not measured anywhere.
 - Unblock: a connected device with USB debugging, or a hosted trace service with an
   authorized token. Then run the 30-minute and 2-hour repeated-action soak.
 - Meanwhile: keep the frame loop allocation-light, keep effects pooled, prefer integer
@@ -76,3 +80,13 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 - Meanwhile: run the same steps locally in the documented order — `npm run typecheck`,
   `npx vitest run`, `npm run build` — and record those three results as the effective
   gate, with the CI badge kept as pending.
+
+## BL-11 Human audio review
+
+- Blocked: harshness, fatigue, and mix balance of the synthesised cues are unjudged, which spec
+  24.2 does not let code inspection settle.
+- Evidence: the audio tests assert scheduling, voice budget, and mute persistence, not timbre; the
+  bus table in `game/audio/audio.ts` is a design default that no one has listened to end to end.
+- Unblock: one listening pass on the running build with per-cue notes and gain adjustments.
+- Meanwhile: keep cues rate-limited and the voice pool bounded, and keep the mute state persisted so
+  an automated browser never plays audio on the operator's speakers.

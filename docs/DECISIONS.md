@@ -430,3 +430,30 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reconsider when: the panel needs a sub-minute reading (a live sparkline or a
   10-second response), which is the point to switch to the completion-tick ring.
 
+## D-30 – 2026-11-03 – HUD chip budget and dock width from measurement
+
+- Problem: the resting HUD had never been measured against the 15–22 % area target in
+  spec 5.2, and the first measurement put the narrowest phone at 24.2 % of the visual
+  viewport with three wrapped chip rows.
+- Options considered: (a) leave the layout as it is and record 24.2 % as "roughly" the
+  target; (b) shrink the fonts, which spec 6.4 subordinates to readability; (c) bound the
+  chip count and the dock width, which are the two boxes that scale with content rather
+  than with the viewport.
+- Chosen: (c). `hudChipLimit(width)` budgets four chips at ≤ 420 CSS px and seven above,
+  and the credits and Store status chips pay for themselves out of that budget, so
+  `visibleResources` receives what is left. The dock is capped at `min(100%, 560px)` and
+  centred, per spec 5.2's "sensible maximum widths" instead of stretching across a wide
+  screen. Chip padding went 4 px → 3 px and `.dock__btn` min-height 48 px → 46 px, both
+  still above the 44 px minimum of spec 6.2.
+- Measured effect (same script, same seed, `docs/evidence/2026-11-03-hud-share.md`):
+  360 × 640 ink share **24.2 % → 22.1 %** with the chip block 90 px → 55 px tall;
+  390 × 844 **16.2 % → 14.7 %**; landscape 844 × 390 **24.2 % → 21.1 %**; desktop
+  1440 × 900 **8.4 % → 5.4 %** once the dock stops spanning 1 420 px. Smallest target
+  46.8 × 46 px, four dock targets at rest and three in build mode.
+- Trade-off stated: a portrait phone now shows one material chip instead of two
+  (plus Scrap, Credits and Store). The full list stays one tap away in the store panel,
+  and every contextual cost line still names its materials, as spec 5.4 allows.
+- Reversible: yes; one pure helper, one integer argument, three CSS values.
+- Reconsider when: the text-scale audit (B-13) shows the larger scale needs a different
+  budget, or a fifth chip becomes necessary for a new currency.
+

@@ -65,13 +65,14 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-16 HUD area share**: measure the resting HUD's share of the phone viewport against the
-   15-22% design target, with the four/five-chip and one-line-objective counts recorded.
-2. **B-13 large-text and contrast audit**: panel and HUD readability at 360 × 640 with the text
+1. **B-13 large-text and contrast audit**: panel and HUD readability at 360 × 640 with the text
    scale at 2.0, plus high-contrast selection outlines, with the pagination behaviour recorded.
-3. **B-25 organic research unlock on the phone**: raise the post-absence tap phase until the mobile
+   The same `scripts/measure-hud.mjs` run adds the scaled pass, so the share table gains a column.
+2. **B-25 organic research unlock on the phone**: raise the post-absence tap phase until the mobile
    yard buys its first research node (the probe says round 504 at floor 10) and photograph the
    research panel at 390 × 844 with its own gallery provenance.
+3. **B-26 short-viewport HUD band**: get the stricter row-union measure to ≤ 22 % at 360 × 640 and
+   844 × 390 by spending the objective card's third line, without going under the readability floor.
 
 ## Controls
 
@@ -99,9 +100,9 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 121 unit/integration tests
+npm test      # 124 unit/integration tests
 npm run typecheck
-npm run build # dist/ (206.21 kB JS, 65.16 kB gzip, 50 modules)
+npm run build # dist/ (206.35 kB JS, 65.22 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -119,7 +120,43 @@ To regenerate the supply-window tables (reserve-floor sweep and per-link utilisa
 `npx tsx scripts/probe-supply.mjs`, which writes `docs/evidence/2026-11-03-supply-window.md`
 (about 4 s). The same four numbers are asserted by `tests/simulation/supply-window.test.ts`.
 
-## Latest update (M2: measured 60 s rate window, 2026-11-03)
+To regenerate the HUD share and no-scroll table: `npm run preview`, then
+`node scripts/measure-hud.mjs`, which writes `docs/evidence/2026-11-03-hud-share.md` (about 15 s,
+six sizes × three states in one Chrome instance).
+
+## Latest update (M2: HUD area share measured, chips and dock capped, 2026-11-03)
+
+- **The 15–22 % HUD target now has numbers (B-16, spec 5.2).** `scripts/measure-hud.mjs` opens the
+  production build in headless Chrome at the six sizes spec 25.1 names, with the mature-yard save
+  installed, and unions the painted HUD boxes over the visual viewport. Resting share: **22.1 %** at
+  360 × 640, **14.7 %** at 390 × 844, **13.5 %** at 412 × 915, **21.1 %** at 844 × 390 landscape,
+  **7.2 %** at 820 × 1180, **5.4 %** at 1440 × 900. Method and full table:
+  `docs/evidence/2026-11-03-hud-share.md`.
+- **Two levers brought the narrowest phone into the band (decision D-30).** A width-derived chip
+  budget (`hudChipLimit`: four chips on a portrait phone, seven on a wide screen, with the credits
+  and Store status chips paying for themselves out of that budget) took the chip block from three
+  rows to two, and a centred 560 px dock stopped the bottom row stretching across wide screens:
+  24.2 % → 22.1 % at 360 × 640, 24.2 % → 21.1 % in landscape, 8.4 % → 5.4 % on desktop. Chip padding
+  4 → 3 px and dock `min-height` 48 → 46 px are both still above the 44 px minimum.
+- **The no-scroll gate has real-Chrome evidence now** (the structural half of BL-01): at all six
+  sizes the document's `scrollWidth`/`scrollHeight` equal the visual viewport exactly, in the
+  resting, build-mode and store-panel-open states. The jsdom suite cannot show this, because
+  `scrollHeight` is always 0 there.
+- **Touch limits verified at the narrowest size**: smallest dock target 46.8 × 46 px, smallest icon
+  button 50.3 × 44 px, four primary dock targets at rest and three in build mode, so spec 6.2 and
+  the five-target rule of spec 5.5 both hold.
+- Checks in this run: `npm run typecheck` clean, `npx vitest run` **124 passed / 124** (15 files: +3
+  in the new `tests/ui/hud-layout.test.ts`, which pins the chip budget at both widths and the
+  sell-order cap), `npm run build` 206.35 kB JS (65.22 kB gzip, 50 modules, +0.06 kB gzip). The
+  simulation core is untouched, so the headless timing table below carries over unchanged.
+- Known limitations: the stricter row-union (`band`) measure is still over the ceiling at the two
+  short-viewport sizes — 24 % at 360 × 640 and 27.9 % at 844 × 390 — because the objective card costs
+  two or three lines there, which is B-26; a portrait phone now shows one material chip instead of
+  two, with the rest one tap away in the store panel; every measurement above is at the 15 px base
+  font, so the 2.0 text-scale audit is still open (B-13); `isMobile` plus `deviceScaleFactor` is not
+  a real-device trace (BL-01); audio is unverified by human listening (BL-11).
+
+## Earlier this week (M2: measured 60 s rate window, 2026-11-03)
 
 - **The machine panel now reports a windowed rate (B-17, spec 9.4).** `Actual rate` reads the last
   complete 60 s window — or all available time while a machine is younger than one window — and the
@@ -325,57 +362,22 @@ To regenerate the supply-window tables (reserve-floor sweep and per-link utilisa
   jsdom (BL-01); percentages remain lifetime-since-built (B-17); audio is unverified by human
   listening (BL-11).
 
-## Earlier this week (M2: one writer per yard, 2026-11-03)
+## Earlier passes in one line
 
-- Two tabs no longer run two economies. `persistence/lease.ts` holds
-  `{owner, heartbeatMs, revision}`; the first tab owns it, extra tabs mirror the saved
-  revision at 10 Hz without ticking or writing, and show one status line plus
-  **Take over**. Promotion happens only when the lease is absent, own, or older than
-  1.5 s, so the new owner continues from the ledger it adopted instead of a fresh yard.
-- Found while testing that in a real browser: the store stamped `lastSeenMs` from
-  `performance.now()`, which restarts at 0 per document, so a reopened tab computed the
-  absence as zero and credited nothing. The store now keeps two clocks — an absolute wall
-  clock (`Date.now()`) for the save reference, the catch-up window, and the lease heartbeat,
-  and the page-relative timeline for frame deltas. The capture confirms a 13-digit epoch
-  stamp (`lastSeenMs: 1793689384704`).
-- The owner now checkpoints every second instead of every five, so a follower's mirror and
-  a crash both lose at most one second of visible progress.
-- Measured in this run: `npm test` 88 passed / 88 (9 files; 7 new in
-  `tests/persistence/lease.test.ts`, 1 new in `tests/persistence/save.test.ts`, 1 new in
-  `tests/ui/app.test.tsx`), `npm run typecheck` clean, `npm run build` 199.30 kB JS
-  (63.04 kB gzip, 49 modules).
-- Real-Chrome two-page session (`node scripts/capture.mjs`, which now opens a second page in
-  the same context): the follower printed `Following the other tab` with dock `Take over` and
-  the same counters as the owner (`Scrap 10 Ferrous 1 Nonferrous 1 Credits 39 Store 13/900`,
-  tick 1040, lease `{"owner":"t1-iur","heartbeatMs":1793689386491,"revision":28}`); after the
-  owner tab closed, one **Take over** press moved the lease to
-  `{"owner":"t1-5atq","heartbeatMs":1793689389781,"revision":28}`, the tick advanced to
-  1050, the card returned to the yard ladder, and the scrap counter went 10 → 11.
-- Known limitations: a follower's picture steps at the 10 Hz adopt cadence (B-18); the
-  no-scroll gate is still only structurally verified in jsdom (BL-01); percentages remain
-  lifetime-since-built (B-17); audio is unverified by human listening (BL-11).
+- **One writer per yard**: `persistence/lease.ts` keeps `{owner, heartbeatMs, revision}`, extra tabs
+  mirror at 10 Hz without ticking, and promotion happens only once the 1.5 s TTL lapses. The store
+  now keeps two clocks — `Date.now()` for the save reference, catch-up window and heartbeat, the
+  page-relative timeline for frame deltas — which is what made a refresh inside the lease window
+  credit its absence.
+- **Bottleneck assistant**: per-machine `ageTicks`/`busyTicks`/`fullTicks` and per-route
+  `ageTicks`/`busyTicks` counters live inside the simulation, so the panel's occupancy line is a
+  measurement rather than a formula; `advanceTo` always steps the final tick, so both advance paths
+  serialise identically, and `migrate` zero-fills the counters for older saves.
+- Still true from those passes: motors, battery, plates, alloy and chassis exist as content but are
+  unreachable until the plate press and motor bench blueprints arrive, and a save written before the
+  wall-clock fix gets exactly one capped 12 h window on its first load.
+- Full text of both passes is in the git history of `README.md` (before `0506f46`).
 
-## Earlier this week (M2: bottleneck assistant, 2026-11-03)
-
-- Machine panels report measured occupancy (`Working 62% · waiting for input 38% · output
-  waiting 0% · link 55% busy · power 100%`) from counters kept inside the simulation
-  (`ageTicks`, `busyTicks`, `fullTicks` per machine, `ageTicks`/`busyTicks` per route), plus
-  one next step that is often not a purchase; the store panel carries the yard-level version.
-- `advanceTo` now accounts for idle time and always steps the final tick, so tick-by-tick and
-  event-jump runs serialise identically; `migrate` zero-fills the new counters so pre-counter
-  saves still load, and `validateSim` rejects negative or non-integer ones.
-- Selecting a machine resolves one `YardStep` (`stepForMachine`) that both the objective card
-  and the dock label format from, which fixed a real-browser mismatch where the two named
-  different actions.
-
-Known limitations: no expedition/crew/PvP/store UI yet; the research panel is verified by a
-jsdom render test but not yet photographed; a follower tab mirrors at the 10 Hz adopt
-cadence (B-18); the no-scroll gate is only structurally verified in jsdom, so a real-device
-trace is still pending; the diagnosis percentages are lifetime-since-built, not a sliding
-60 s window; audio quality is unverified by human listening; motors, battery, plates, alloy,
-and chassis exist as content but are not reachable until the plate press and motor bench
-blueprints arrive, and `data` needs the signal lab plus the circuit chain; saves written
-before the wall-clock fix get exactly one capped 12 h window on their first load.
 
 ## Measured numbers (Node 22.18 on the development machine, `tests/perf/bench.test.ts`)
 
@@ -399,29 +401,39 @@ before per-material routing, and 59.3 ms for the 12 h case at 22 links (B-23 too
 tick). The per-tick
 occupancy counters added roughly 2 ms at 500 machines; the lease costs two extra `localStorage`
 operations per second in the owning tab and one read per 100 ms in a follower, which the headless
-table does not cover. The 12 h case stays inside the 100 ms stall budget of spec 21.5.
+table does not cover. The 12 h case stays inside the 100 ms stall budget of spec 21.5. This pass
+changed only `src/ui/*` and CSS, so the table is the previous build's and still applies.
+
+Layout numbers for this build are in `docs/evidence/2026-11-03-hud-share.md`: resting HUD ink share
+5.4 %–22.1 % across the six sizes of spec 25.1, the no-scroll gate met in 6/6 sizes in three HUD
+states, smallest touch target 46.8 × 46 px. That harness is Chrome through `playwright-core` with
+`deviceScaleFactor` 2 on the phone sizes; it reports areas and scroll extents, not frame rate, so
+the real-device FPS and thermal rows of spec 21.5 remain BL-01.
 
 ## Screenshot gallery
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 640, 130 credits, `Scrap 10 Ferrous 5 Nonferrous 83 Credits 130 Store 332/900` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 630, 130 credits, four-chip HUD `Scrap 10 Ferrous 5 Credits 130 Store 332/900` and a three-target dock | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
 | `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Nonferrous 83 Credits 130 Store 332/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 454 259, `circuits 16, data 20` in the store, three research nodes known | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 130 Store 331/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 482 901, `circuits 16, data 20` in the store, three research nodes known, seven chips `Scrap 10 Ferrous 107 Nonferrous 191 Steel 10 Copper 10 Polymer 10 Store 900/900` and the centred 560 px dock | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
 | `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 20`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip` | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
-long-session behaviour, which are covered by the tests above. The handover itself is logged as
-text by the capture script rather than inferred from these images, and so is the absence:
-`tick 1 020 → 433 030` with the report line quoted in the latest-update section, and the
-handover line `t1-7by6 → t1-7eik` with the tick advancing 433 650 → 433 679.
-**Research panel:** now photographed (`latest-research.png`) from a mature yard installed as a
-seed save; the seed is the file `docs/evidence/yard-mature.json` written by the supply probe, so
-the image and the headless tables describe the same 8-machine, 18-link yard. The short mobile
-session still ends before `data > 0`, which is why the desktop context carries the seed. The
-2026-11-03 set before this one (four machines at L6/L6/L5/L6 with 9 routes) and the 2026-11-02
-pair are superseded by these captures.
+long-session behaviour, which are covered by the tests above. The handover and the absence are
+logged as text by the capture script rather than inferred from these images: mobile absence
+`tick 1 010 → 433 020` with `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 ·
+Batches 774 · Bottleneck storage-full`; seeded absence `tick 50 241 → 482 251` with
+`Deliveries 0 · Batches 0 · Bottleneck storage-full` (the seeded store starts at 900/900);
+lease `t1-974f → t1-ka9j` with the tick advancing 433 640 → 433 671 and the promoted tab's card
+switching to `upgrade Polymer recycler`.
+**Research panel:** photographed (`latest-research.png`) from a mature yard installed as a seed
+save; the seed is the file `docs/evidence/yard-mature.json` written by the supply probe, so the
+image and the headless tables describe the same 8-machine, 18-link yard. The short mobile session
+still ends before `data > 0`, which is why the desktop context carries the seed (B-25). All five
+images were recaptured from this build, so the chip budget and the capped dock of D-30 are in them:
+four chips on the phone images, seven on the desktop images.
 
 ## Architecture
 
