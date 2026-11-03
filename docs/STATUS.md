@@ -26,13 +26,14 @@ hidden`; all 18 contexts now report none. Measured table:
 - Objective card height at scale 1.0: 49.6 px portrait (one text line plus the hint) and **29.8 px**
   in landscape, where the hint line steps back for the vertical budget.
 
-Current commit and remote sync status: the code-plus-docs commit of this pass is
-"Fit the HUD band and compact the dock at large text (B-26, B-27)"; the checkpoint commit that
-records the pushed head follows it, both on top of `5753efc` / `808dbc8` (the B-13 pass). Push with
-`git push origin HEAD:main` and confirm with `git rev-parse HEAD origin/main`; never force-push.
-`docs/DECISIONS.md` **D-32** is the design record of this pass. CI remains unread in this
-environment (BL-06: `gh run list` asks for `gh auth login`, the unauthenticated API 404s for the
-private repository), so CI is reported as pending, not green.
+Current commit and remote sync status: `5c95e33` ("Fit the HUD band and compact the dock at large
+text (B-26, B-27)") is the pushed `origin/main` head after `git push origin HEAD:main`
+(`5753efc..5c95e33`, verified by `git rev-parse HEAD origin/main`, both
+`5c95e33018cfec17ef71f0c170731d25acf5dfa3`); this documentation-only checkpoint sits on top of it.
+Before that: `5753efc` / `808dbc8` (the B-13 pass), `0a4964e`, `266d9d6`, `fc99db1`, `4ac39c5`,
+`0506f46`, `57f15af`. `docs/DECISIONS.md` **D-32** is the design record of this pass. CI remains
+unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the unauthenticated API
+404s for the private repository), so CI is reported as pending, not green.
 
 Checks run and actual results (this pass):
 - `npx vitest run` — **129 passed / 129** (15 files), no skipped tests, no deleted assertions.
