@@ -1,6 +1,6 @@
 import { BLUEPRINTS, type ResourceId } from "../game/content/defs";
 import { upgradeCost } from "../game/simulation/commands";
-import { SELL_ORDER, nextYardStep, sellValue, type YardStep } from "../game/simulation/plan";
+import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { SimState } from "../game/simulation/types";
 
 /** Short concrete verbs first (spec 4.4). Keys keep later translation cheap. */
@@ -17,10 +17,18 @@ export const OBJECTIVES: readonly string[] = [
   "Choose your next goal.",
 ];
 
-export function objectiveFor(state: SimState): string {
-  if (state.tutorial >= 8) return describeStep(state, nextYardStep(state));
+export function objectiveFor(state: SimState, selected?: number | null): string {
+  if (state.tutorial >= 8) return describeStep(state, stepFor(state, selected));
   const index = Math.min(state.tutorial, OBJECTIVES.length - 1);
   return OBJECTIVES[index].replace("{pulses}", String(state.wreck.pulses));
+}
+
+/** Selected machine leads when there is one; otherwise the yard ladder does. */
+function stepFor(state: SimState, selected?: number | null): YardStep {
+  if (selected !== undefined && selected !== null && selected > 0) {
+    return stepForMachine(state, selected) ?? nextYardStep(state);
+  }
+  return nextYardStep(state);
 }
 
 /** One phrased goal per yard step, shared with the dock's labels (spec 3.3). */

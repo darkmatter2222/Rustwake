@@ -27,6 +27,9 @@ simulation core. English only so far. No account, no server, no payments yet.
    unlock in that order, each with its own route and its own upgrade price.
 9. **Sell a surplus** from the store panel at published per-unit prices, then spend the
    credits on whichever machine is the current bottleneck.
+10. **Read the diagnosis** in a machine's panel: measured working/waiting/output-waiting
+    percentages, the busiest link, and the yard power speed, followed by one next step that
+    is sometimes "no purchase needed".
 
 After the tutorial, one authoritative ladder decides the next step for both the objective
 card and the dock button: an unmet link first, then an affordable build, then a sell
@@ -38,8 +41,9 @@ tile, route logistics with capacity/latency/filters/fair allocation, shared powe
 with proportional slowdown, storage capacity plus an overflow hold, one-shot onboarding
 export contract plus repeatable priced sell contracts, seven blueprints with a progressive
 build picker, tutorial state machine (T0-T9), contextual objective card, one localised
-explanation per blocked action, single-canvas HUD, local save with a return report and a
-12-hour offline cap, and a synthesised audio bus with a bounded voice pool.
+explanation per blocked action, measured per-machine and per-link occupancy with one
+recommended action, single-canvas HUD, local save with a return report and a 12-hour
+offline cap, and a synthesised audio bus with a bounded voice pool.
 
 Planned, not yet functional: research tree, expeditions/sector map, wreck composition
 and scan detail, restore/dismantle/sell choices for major objects, policies, prestige,
@@ -49,12 +53,12 @@ crews, PvP, store. Those are later milestones in `goal.md` (M2+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-03 bottleneck assistant**: one evidence line per machine (measured occupancy,
-   starvation percentage, power ratio) plus one recommendation that is not always a purchase.
-2. **B-01 multi-tab single-writer lease**: owner id plus heartbeat, a read-only second tab,
+1. **B-01 multi-tab single-writer lease**: owner id plus heartbeat, a read-only second tab,
    revision-checked takeover, tests for both paths.
-3. **B-05 small research branch**: three purchasable nodes with exact visible effects,
+2. **B-05 small research branch**: three purchasable nodes with exact visible effects,
    each applied exactly once, funded by data.
+3. **B-15 reserve-floor sweep**: floors {0, 5, 10, 20} through the chain fixture, one table,
+   chosen value documented.
 
 ## Controls
 
@@ -65,8 +69,8 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Drag one finger | Pan the camera, clamped to the yard |
 | Pinch / two-finger drag | Zoom between 1.2x and 6x |
 | Primary dock button | The single next action for the current objective, with cost |
-| Store | Bulk-material sheet with per-material **Sell** buttons, capacity, overflow hold |
-| Machine panel | Status, batch progress, measured and maximum rate, power share, **Connect**, **Upgrade**, **Dismantle** |
+| Machine panel | Status, batch progress, measured and maximum rate, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
+| Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
 | Build / Place / Next / Cancel | Blueprint selection, ghost confirmation, cycling, abort |
 | Sound on/off | Toggles the master bus, persisted |
 | Home | Recentres the camera on the yard and clears selection |
@@ -80,9 +84,9 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 66 unit/integration tests
+npm test      # 79 unit/integration tests
 npm run typecheck
-npm run build # dist/ (191.89 kB JS, 60.75 kB gzip)
+npm run build # dist/ (197.40 kB JS, 62.31 kB gzip)
 npm run preview
 ```
 
@@ -95,34 +99,43 @@ the entire absence, so repeated reloads cannot double-claim the discarded tail.
 To capture the README screenshots: `npm run preview` in one terminal, then
 `node scripts/capture.mjs`.
 
-## Latest update (M2 start: copper and polymer chain, 2026-11-03)
+## Latest update (M2: bottleneck assistant with measured evidence, 2026-11-03)
 
-- Chain content is now reachable in play: copper separator, polymer recycler, and wire
-  mill are buildable, each with its own route and upgrade price, and the build picker
-  reveals blueprints progressively (1 → 2 → 4 → 5 → all seven) as the tutorial advances.
-- Repeatable sell contracts at content-defined one-way prices (`steel 10`, `copper 6`,
-  `polymer 8`, `wire 4`, …), opening after the onboarding contract. Each tranche is capped
-  at 60 units and keeps a 10-unit per-material reserve floor so routes and builds stay
-  funded. Because materials are never repurchased, the recipe graph cannot form a credit
-  loop; a test walks it for cycles.
-- One shared yard ladder (`game/simulation/plan.ts`) drives both the objective card and
-  the dock label, so the stated goal and the primary button are always the same step.
-- Machine panel gained a **Connect** action plus a "next upgrade" line showing the actual
-  cycle change (for example `4.00s → 3.64s · 45 credits`).
-- Defect fixed from the real-browser run: the action toast timer was re-armed on every
-  animation-frame render, so it never dismissed. It now depends only on the toast text,
-  with a regression test that advances 1.9 s of frames.
-- Measured chain throughput in a deterministic fixture (1 200 ticks, seeded store):
-  sorter 29, copper separator 23, wire mill 12, polymer recycler 14 completed batches;
-  the mill and recycler sit at their supply limits, the first two at their cycle limits.
-- Checks: `npm test` 66 passed / 66 (8 files), `npm run typecheck` clean,
-  `npm run build` 191.89 kB JS (60.75 kB gzip).
+- The machine panel now reports measured occupancy instead of guesses: `Working 62% ·
+  waiting for input 38% · output waiting 0% · link 55% busy · power 100%`, where every
+  number is a whole percent of the machine's or link's own observed ticks. The store panel
+  carries the yard-level version (storage %, power %, busiest link, machines waiting).
+- Each machine also gets **one** next step chosen from the strongest evidence, and several
+  of them are not purchases: `… the dock is empty. One salvage pulse tops it up; no purchase
+  needed`, `Nothing to buy here: the link, not this machine, is the limit`,
+  `Runs at full speed 96% of the time. Nothing to fix on this machine`. A purchase is only
+  named when the supplier machine is actually the limiter.
+- Counters live in the simulation, not the view: `ageTicks`, `busyTicks`, `fullTicks` per
+  machine and `ageTicks`/`busyTicks` per route, advanced in one measurement phase at the end
+  of each tick. `advanceTo` now also advances the ages (and the waiting count for machines
+  with nothing buffered) across a jumped idle range, so tick-by-tick and event-jump runs are
+  byte-identical; a test compares the two serialisations.
+- Saves gain four additive numeric fields. `migrate` fills missing counters with zero and
+  `validateSim` rejects negative or non-integer counters, so a pre-counter save still loads
+  and simply reports percentages over a shorter observed window.
+- Capture script gained a machine-panel shot: it taps a coarse grid until a panel opens and
+  prints the panel text, so the README quotes the actual rendered lines.
+- Measured in this run: `npm test` 79 passed / 79 (8 files, 11 new in
+  `tests/simulation/diagnostics.test.ts`, 2 new in `tests/simulation/chain.test.ts` and
+  `tests/ui/app.test.tsx`), `npm run typecheck` clean, `npm run build` 197.40 kB JS
+  (62.31 kB gzip), panel text read back from real Chrome: `Working 0% · waiting for input
+  100% · output waiting 0% · link 0% busy · power 100%`.
+- One mismatch found in the real browser and fixed: with a machine selected the card named
+  one step and the dock another. Selecting a machine now resolves to that machine's own step
+  (unmet link → the supplier that is short → its own upgrade) and both surfaces format from
+  that one step, so the card sentence and the dock label name the same action and machine.
 
 Known limitations: no research/expedition/crew/PvP/store UI yet; no multi-tab lease; the
 no-scroll gate is only structurally verified in jsdom, so a real-device trace is still
-pending; audio quality is unverified by human listening; `data`, motors, battery, plates,
-alloy, and chassis exist as content but are not reachable until the plate press, motor
-bench, and signal lab blueprints arrive.
+pending; the diagnosis percentages are lifetime-since-built, not a sliding 60 s window;
+audio quality is unverified by human listening; `data`, motors, battery, plates, alloy, and
+chassis exist as content but are not reachable until the plate press, motor bench, and
+signal lab blueprints arrive.
 
 ## Measured numbers (Node 22.18 on the development machine, `tests/perf/bench.test.ts`)
 
@@ -130,23 +143,28 @@ These are headless CPU costs for the simulation core, not mobile FPS claims.
 
 | Workload | Median of 3 |
 | --- | --- |
-| 12 h catch-up, 4-machine starter yard, tick-by-tick | 28 ms |
+| 12 h catch-up, 4-machine starter yard, tick-by-tick | 29.9 ms |
 | 12 h catch-up, idle yard, event-jump path | < 1 ms |
-| 500 machines, 6 000 ticks | 19 ms |
-| 100 machines, 10 000 ticks | 6 ms |
-| 50 machines, 10 000 ticks | 3 ms |
-| 1 machine, 10 000 ticks | 0.4 ms |
+| 500 machines, 6 000 ticks | 21.8 ms |
+| 100 machines, 10 000 ticks | 6.6 ms |
+| 50 machines, 10 000 ticks | 3.5 ms |
+| 1 machine, 10 000 ticks | 0.5 ms |
+
+The 500-machine case rose from 19 ms to 21.8 ms when the per-tick occupancy counters were
+added (one pass over machines and routes per tick); the 12-hour case moved 28 ms → 29.9 ms.
 
 ## Screenshot gallery
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session to tutorial step 8: 3 machines (sorter, furnace, polymer recycler), 6 routes, 39 credits, tick 1008 | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence, wide viewport, same session state | Same commit as this README, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session to tutorial step 8: 3 machines (sorter ×14, furnace ×3, polymer recycler), 6 routes, 39 credits, tick 1006; the objective card and the dock button both read `Build Copper separator · 25 Scrap + 5 Ferrous` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its measured line reads `Working 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%`, its next step names the missing supplier, and the card and dock still match | Same commit and session, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence, wide viewport: 3 machines (sorter ×14, furnace ×3), 6 routes, 39 credits, tick 1006 | Same commit as this README, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
-long-session behaviour, which are covered by the tests above. The previous M1 pair
-(2026-11-02, two machines, tick 750) is superseded by these captures.
+long-session behaviour, which are covered by the tests above. The earlier 2026-11-03 pair
+(tick 1008, no diagnosis lines) and the 2026-11-02 pair (two machines, tick 750) are
+superseded by these captures.
 
 ## Architecture
 

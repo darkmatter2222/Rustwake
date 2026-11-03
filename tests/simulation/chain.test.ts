@@ -18,9 +18,9 @@ import {
 } from "../../src/game/simulation/commands";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 import { netRecipeUnits, systemTotals, unitTotal } from "../../src/game/simulation/invariants";
-import { nextYardStep } from "../../src/game/simulation/plan";
+import { nextYardStep, stepForMachine, type YardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
-import { describeStep, primaryFor } from "../../src/ui/text";
+import { describeStep, objectiveFor, primaryFor } from "../../src/ui/text";
 
 let seq = 500;
 function send(state: SimState, command: CommandBody, id?: string) {
@@ -362,6 +362,38 @@ describe("yard ladder", () => {
       expect(described).toContain("Connect");
       expect(primary.label).toBe("Connect");
     }
+  });
+
+  it("keeps the card and the dock on the same machine once one is selected", () => {
+    const state = ladderBase();
+    send(state, { type: "machine.build", blueprint: "sorter", tile: 0 });
+    send(state, { type: "machine.build", blueprint: "furnace", tile: 1 });
+    const sorter = state.machines[0];
+    const furnace = state.machines[1];
+    // Unlinked: both surfaces ask for that machine's link.
+    expect(objectiveFor(state, sorter.id)).toContain("sorter");
+    expect(primaryFor(state, stepForMachine(state, sorter.id) as YardStep).label).toBe("Connect");
+
+    // Link everything until no plan remains, then let material arrive.
+    for (let pass = 0; pass < 4; pass += 1) {
+      for (const machine of state.machines) {
+        for (const plan of planConnections(state, machine.id)) {
+          send(state, { type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+        }
+      }
+    }
+    advance(state, 120);
+
+    // Fed and linked: the card sentence and the dock label name the same machine.
+    const step = stepForMachine(state, furnace.id);
+    expect(step).not.toBeNull();
+    const card = objectiveFor(state, furnace.id);
+    const dock = primaryFor(state, step as YardStep);
+    expect(card).toContain("Furnace");
+    expect(dock.label).toBe("Upgrade Furnace");
+    expect(dock.cost).toBe(`${upgradeCost(BLUEPRINTS.furnace.baseUpgradeCost, 1)} credits`);
+    // Without a selection the yard ladder speaks for both surfaces again.
+    expect(objectiveFor(state, null)).not.toBe(card);
   });
 });
 

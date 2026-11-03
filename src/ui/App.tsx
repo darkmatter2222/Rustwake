@@ -2,11 +2,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { GameStore } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
-import { BLUEPRINTS, TUNING, unlockedBlueprints } from "../game/content/defs";
+import { TUNING, unlockedBlueprints } from "../game/content/defs";
 import {
   DOCK_TILE,
   YARD_TILES,
-  upgradeCost,
   type Command,
   type CommandReject,
 } from "../game/simulation/commands";
@@ -22,7 +21,7 @@ import {
 } from "../game/renderer/scene";
 import { createAudio, type AudioApi, type CueName } from "../game/audio/audio";
 import { hintFor, objectiveFor, primaryFor } from "./text";
-import { nextYardStep, type YardStep } from "../game/simulation/plan";
+import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
 import { useRevision, useSettings, useSim } from "./useGame";
 import { MachinePanel, ReturnReportPanel, StorePanel } from "./Panels";
@@ -233,7 +232,7 @@ export function App({ store }: { store: GameStore }) {
             }}
           />
           <ObjectiveCard
-            text={objectiveFor(state)}
+            text={objectiveFor(state, selected)}
             hint={hintFor(suggestedAction(state))}
           />
         </div>
@@ -378,33 +377,14 @@ export function buildPrimary(
       run: () => dispatch({ id: nextCommandId(), type: "contract.export" }),
     };
   }
-  // With an explicit selection the panel's own next step leads; otherwise the
-  // dock follows the same ladder as the objective card.
+  // With an explicit selection the machine's own step leads; otherwise the dock
+  // follows the same yard ladder as the objective card.
   if (selected !== null && selected > 0) {
-    const machine = state.machines.find((m) => m.id === selected);
-    if (machine) {
-      const plans = planConnections(state, machine.id);
-      if (plans.length > 0) {
-        return {
-          label: "Connect",
-          run: () => {
-            for (const plan of plans) {
-              dispatch({
-                id: nextCommandId(),
-                type: "route.connect",
-                from: plan.from,
-                to: plan.to,
-                filter: plan.filter,
-              });
-            }
-          },
-        };
-      }
-      const def = BLUEPRINTS[machine.blueprint];
+    const step = stepForMachine(state, selected);
+    if (step) {
       return {
-        label: `Upgrade ${def.label}`,
-        cost: `${upgradeCost(def.baseUpgradeCost, machine.level)} credits`,
-        run: () => dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: machine.id }),
+        ...primaryFor(state, step),
+        run: () => runStep(state, step, dispatch, setBuildBlueprint, setGhostTile),
       };
     }
   }

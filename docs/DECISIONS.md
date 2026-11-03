@@ -149,3 +149,45 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reason: with a 10 Hz view version, any per-render dependency identity makes a timer
   unreachable. Recorded as a rule for future overlays.
 - Evidence: regression test advances 1.9 s of real frames and asserts the toast is gone.
+
+## D-17 · 2026-11-03 · Measured occupancy lives in the simulation state
+
+- Problem: the bottleneck assistant needs percentages (spec 10.5) that survive a catch-up
+  jump, not a view-side sampler that only sees the last rendered frame.
+- Options: a UI-side sampler keyed by machine id; a fixed 600-tick rolling window in state;
+  cumulative per-machine and per-route counters in state.
+- Choice: cumulative counters in state (`ageTicks`, `busyTicks`, `fullTicks` per machine,
+  `ageTicks`/`busyTicks` per route), incremented in one `measure` phase at the end of the
+  tick; the assistant divides them and clamps to 0..100.
+- Reason: one pass per tick (+2.8 ms at 500 machines), identical in every run, readable
+  from a decoded save without replay, and it makes the jump path account for idle time.
+- Reversible: yes; four additive fields, zero-filled on load by `migrate`.
+- Reconsider when: a rolling window is needed for "recent rate" (spec 9.4) — that will add
+  a small ring per machine, so measure it again at 500 machines.
+
+## D-18 · 2026-11-03 · Jump path accounts for idle time and steps the last tick
+
+- Problem: `advanceTo` skipped idle ranges, so counters and machine status could differ from
+  a tick-by-tick run of the same length, which the determinism test compares.
+- Choice: during a jump, add the skipped length to each machine's age (and to the waiting
+  count when nothing is buffered or in progress), always leave the final tick to
+  `stepTick`, and mirror the `starved` status the same way the tick does.
+- Reason: keeps the two code paths byte-identical, which is what the offline path relies on;
+  verified by a test that serialises both machines and routes.
+- Reversible: yes; local to `advanceTo`.
+
+## D-19 · 2026-11-03 · One step per screen, selection-aware
+
+- Problem: with a machine selected, the objective card said "Build Copper separator" while
+  the dock said "Upgrade Polymer recycler" — two different instructions on one screen.
+- Options: the card always speaks for the yard and the panel carries machine actions; the
+  card follows the selection; two independent ladders.
+- Choice: one `YardStep` per screen. `stepForMachine` resolves the selected machine's own
+  step (unmet link → the stage that is short of the missing material → its own upgrade),
+  and the card, the dock label, and the dock action all come from that step. With no
+  selection the yard ladder speaks.
+- Reason: D-14's promise was that the two surfaces cannot disagree; a selection is part of
+  the screen state, so it must feed the same single step.
+- Reversible: yes; `objectiveFor(state, selected)` and `primaryFor(state, step)` are the
+  only formatting paths, covered by a test that compares the card sentence with the dock
+  label for the same machine.

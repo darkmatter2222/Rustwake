@@ -1,5 +1,6 @@
 import {
   BLUEPRINTS,
+  RECIPES,
   exportPrice,
   unlockedBlueprints,
   type ResourceId,
@@ -18,6 +19,51 @@ export type YardStep =
   | { kind: "sell"; resource: ResourceId; qty: number }
   | { kind: "upgrade"; machineId: number }
   | { kind: "salvage" };
+
+/** The step for one selected machine, so card, dock, and panel agree. */
+export function stepForMachine(state: SimState, machineId: number): YardStep | null {
+  const machine = state.machines.find((m) => m.id === machineId);
+  if (!machine) return null;
+  const plans = planConnections(state, machineId);
+  if (plans.length > 0) return { kind: "connect", machineId, plans };
+
+  const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
+  for (const input of recipe.inputs) {
+    if (machine.inBufUnits >= input.qty || (machine.inBuf[input.resource] ?? 0) >= input.qty) {
+      continue;
+    }
+    // Whichever stage is short, the fix belongs to the stage that must supply it.
+    if ((state.store[input.resource] ?? 0) >= input.qty) return { kind: "upgrade", machineId };
+    const producer = producerId(state, input.resource);
+    if (producer !== null) return { kind: "upgrade", machineId: producer };
+    const blueprint = firstUnbuiltProducer(state, input.resource);
+    if (blueprint) return { kind: "build", blueprint };
+    break;
+  }
+  return { kind: "upgrade", machineId };
+}
+
+/** Machine in the yard whose recipe yields the resource, or null. */
+function producerId(state: SimState, resource: ResourceId): number | null {
+  for (const m of state.machines) {
+    const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+    if (recipe.outputs.some((output) => output.resource === resource && output.qty > 0)) {
+      return m.id;
+    }
+  }
+  return null;
+}
+
+/** First unlocked, unbuilt blueprint whose recipe yields the resource. */
+function firstUnbuiltProducer(state: SimState, resource: ResourceId): string | null {
+  const unlocked = unlockedBlueprints(state.tutorial);
+  for (const id of unlocked) {
+    if (state.machines.some((m) => m.blueprint === id)) continue;
+    const recipe = RECIPES[BLUEPRINTS[id].recipeId];
+    if (recipe.outputs.some((output) => output.resource === resource && output.qty > 0)) return id;
+  }
+  return null;
+}
 
 /** Sell order follows how the yard meets each material. */
 export const SELL_ORDER: readonly ResourceId[] = [
