@@ -10,11 +10,12 @@ and the bottleneck assistant in `diagnostics.ts` read from it; three wording cha
 (lowercase material names inside sentences, singular "1 unit"/"1 credit", `Storage full` for the return
 report's bottleneck row) and every other string renders byte-identically.
 
-- Current commit and remote sync status: the code commit of this pass is the one titled "One string
-  table behind every sentence …(B-10)", with this checkpoint commit on top. Earlier chain: `b1c7bd1`,
-  `7c78315`, `6ae2576`, `a3c6c8d`, `926d342`, `88e7257`. CI remains unread in this environment (BL-06:
-  `gh run list` asks for `gh auth login`, the unauthenticated API 404s for the private repository), so
-  CI is reported as **pending**, not green.
+- Current commit and remote sync status: **pushed and verified** — `git push origin HEAD:main` moved
+  `refs/heads/main` from `b1c7bd1` to **`639dcd0`** ("One string table behind every sentence, one
+  formatter layer (B-10)"), confirmed by `git ls-remote origin refs/heads/main` on 2026-11-03. That push
+  should start one CI run (validate + tests + build); this environment still cannot read it, so CI is
+  reported **pending**, not green (BL-06: `gh run list` asks for `gh auth login`, the unauthenticated API
+  404s for the private repository). Earlier chain: `b1c7bd1`, `7c78315`, `6ae2576`, `a3c6c8d`.
 - Checks run and actual results (this pass):
   - `npx vitest run` — **164 passed / 164** (20 files): eight new cases in `tests/ui/i18n.test.tsx`
     (table integrity, `t()` semantics for a known key / an unknown key / an unfilled slot, formatter
@@ -71,9 +72,9 @@ report's bottleneck row) and every other string renders byte-identically.
      then re-capture and give `latest-research-phone.png` organic provenance.
   3. **B-18** follower-tab smoothness: interpolate a mirrored tab's sprites between the last two adopted
      snapshots (or raise the adopt cadence at a measured cost), with one trace at 390 × 844.
-- Long-running processes owned by this session: the `vite preview` server on port 4173 (background, for
-  the HUD audit, the dock probe and the capture run). Stop it with
-  `Get-NetTCPConnection -LocalPort 4173` → `Stop-Process -Id <pid>`.
+- Long-running processes owned by this session: **none** — the `vite preview` server on port 4173 was
+  stopped at the end of this pass (`Get-NetTCPConnection -LocalPort 4173` → `Stop-Process -Id 56128`).
+  The next pass starts it again before any browser probe.
 - Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npm run validate` and
   `npx vitest run` before editing; `tests/ui/i18n.test.tsx` is where a new sentence gets pinned and
   where the raw-key scan lives, `tests/content/validate.test.ts` is the injected-fault gate for content
