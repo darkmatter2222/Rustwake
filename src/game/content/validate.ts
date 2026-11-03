@@ -21,6 +21,17 @@ import {
   type ResourceId,
 } from "./defs";
 import { RESEARCH, RESEARCH_ORDER } from "./research";
+import {
+  CHIP_KEYS,
+  HINT_KEYS,
+  IMPORT_KEYS,
+  OBJECTIVE_KEYS,
+  REJECT_KEYS,
+  STATUS_KEYS,
+  STRINGS,
+  t,
+  unit,
+} from "./strings";
 import { applyCommand, upgradeCost, DOCK_TILE, YARD_TILES, type Command, type CommandBody } from "../simulation/commands";
 import { advance } from "../simulation/engine";
 import { systemTotals, allQuantities } from "../simulation/invariants";
@@ -41,35 +52,16 @@ import {
 /** Resources without an export price, deliberately (spec 8.1: an item, not a bulk good). */
 const UNPRICED: readonly ResourceId[] = ["chassis"];
 
-/** Every status the engine can put on a machine (spec 20.2's shipped subset). */
-const MACHINE_STATUSES = [
-  "idle",
-  "running",
-  "starved",
-  "outputFull",
-  "powerLimited",
-  "paused",
-] as const;
+/**
+ * Codes the engine and the persistence layer can answer with. These are the same lists
+ * the string table is keyed by, so a code without a sentence is one violation, not two.
+ */
+const MACHINE_STATUSES = STATUS_KEYS;
+const REJECTS = REJECT_KEYS;
+const DECODE_REASONS = IMPORT_KEYS;
 
-/** Every reject code `applyCommand` can answer with. */
-const REJECTS = [
-  "insufficient",
-  "blocked-placement",
-  "not-found",
-  "no-room",
-  "duplicate",
-  "cooldown",
-  "cycle",
-  "already-claimed",
-  "locked",
-  "already-known",
-  "prereq",
-  "fleet-full",
-  "no-drone",
-  "read-only",
-] as const;
-
-const DECODE_REASONS = ["empty", "parse", "schema", "checksum", "invalid"] as const;
+/** The bottleneck names `catchUp` can report (spec 18.3). */
+const BOTTLENECKS = ["storage-full", "power-limited", "starved"] as const;
 
 /** Positive whole numbers only; 0 is not a quantity in this economy. */
 function isCount(value: unknown): boolean {
@@ -292,6 +284,9 @@ export function validateContent(): string[] {
     const primary = primaryFor(probe, step);
     if (!line) say(`step ${step.kind} has no objective line`);
     if (!primary.label) say(`step ${step.kind} has no dock label`);
+    // An unfilled `{slot}` means the caller and the template disagree (spec 23.3).
+    if (line.includes("{") || primary.label.includes("{"))
+      say(`step ${step.kind} leaves an unfilled slot: ${line || primary.label}`);
     const priced =
       step.kind === "build" ||
       step.kind === "sell" ||
@@ -299,10 +294,50 @@ export function validateContent(): string[] {
       step.kind === "drone" ||
       step.kind === "upgrade";
     if (priced && !primary.cost) say(`step ${step.kind} shows a price-free purchase`);
+    if (priced && primary.cost && primary.cost.includes("{"))
+      say(`step ${step.kind} phrases its price with an unfilled slot: ${primary.cost}`);
     if (line && (line.includes("undefined") || line.includes("NaN")))
       say(`step ${step.kind} phrases itself with a missing value: ${line}`);
   }
   if (plans.length === 0) say("a built sorter produced no connection to phrase (fixture drift)");
+
+  // 13. The string table itself: defaults, well-formed slots, and one entry per code the
+  // surfaces ask for (spec 23.3). A missing key would otherwise paint its own name.
+  const keys = Object.keys(STRINGS);
+  if (keys.length < 120) say(`the string table has ${keys.length} keys, want at least 120`);
+  for (const key of keys) {
+    const value = STRINGS[key];
+    if (!value) say(`string key ${key} has no English default`);
+    const slots = value.match(/\{[^{}]*\}/g) ?? [];
+    if ((value.match(/\{/g) ?? []).length !== slots.length)
+      say(`string ${key} has an unbalanced slot marker: ${value}`);
+    for (const slot of slots)
+      if (!/^\{\w+\}$/.test(slot)) say(`string ${key} declares the malformed slot ${slot}`);
+    if (/\{\}/.test(value)) say(`string ${key} declares an empty slot`);
+  }
+  for (const key of OBJECTIVE_KEYS)
+    if (STRINGS[key] === undefined) say(`the tutorial card asks for a missing key ${key}`);
+  for (const key of HINT_KEYS)
+    if (STRINGS[key] === undefined) say(`the sub-hint line asks for a missing key ${key}`);
+  for (const key of CHIP_KEYS)
+    if (STRINGS[key] === undefined) say(`the top row asks for a missing chip ${key}`);
+  for (const id of RESOURCES)
+    if (STRINGS[`res.${id}`] === undefined) say(`resource ${id} has no name in the table`);
+  for (const status of MACHINE_STATUSES)
+    if (STRINGS[`status.${status}`] === undefined)
+      say(`machine status ${status} has no label in the table`);
+  for (const code of REJECTS)
+    if (STRINGS[`reject.${code}`] === undefined)
+      say(`reject code ${code} has no explanation in the table`);
+  for (const reason of DECODE_REASONS)
+    if (STRINGS[`import.${reason}`] === undefined)
+      say(`import reason ${reason} has no explanation in the table`);
+  for (const kind of BOTTLENECKS)
+    if (STRINGS[`bottleneck.${kind}`] === undefined)
+      say(`return-report bottleneck ${kind} has no label`);
+  // A second plural rule somewhere else is how "1 credits" survives review (spec 23.3).
+  if (unit(1, t("unit.credit")) !== "1 credit" || unit(2, t("unit.credit")) !== "2 credits")
+    say("the shared plural rule does not distinguish one from many");
 
   return bad;
 }

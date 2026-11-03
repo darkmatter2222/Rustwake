@@ -32,6 +32,15 @@ import {
   formatNumber,
   importNoteFor,
 } from "./text";
+import {
+  formatRate,
+  formatSeconds,
+  formatWholeSeconds,
+  plural,
+  t,
+  unit,
+  wholePercent,
+} from "../game/content/strings";
 import type { ImportResult } from "../game/persistence/save";
 
 export function MachinePanel(props: {
@@ -56,80 +65,91 @@ export function MachinePanel(props: {
   const [page, setPage] = useState(0);
 
   return (
-    <div className="panel" role="group" aria-label={`${def.label} details`}>
+    <div
+      className="panel"
+      role="group"
+      aria-label={t("aria.machineDetails", { machine: def.label })}
+    >
       <div className="panel__head">
         <h2 className="panel__title">{def.label}</h2>
         <button className="icon-btn" onClick={props.onClose}>
-          Close
+          {t("btn.close")}
         </button>
       </div>
       <div className="panel__body">
       {page === 0 ? (
         <dl>
-          <dt>Status</dt>
+          <dt>{t("row.status")}</dt>
           <dd>{STATUS_LABEL[machine.status] ?? machine.status}</dd>
-          <dt>Batch</dt>
+          <dt>{t("row.batch")}</dt>
           <dd>
-            {Math.min(
-              100,
-              Math.round(
-                (machine.progress / Math.max(1, machine.batchMilli)) * 100,
+            {t("value.percent", {
+              percent: Math.min(
+                100,
+                Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
               ),
-            )}
-            %
+            })}
           </dd>
-          <dt>Cycle</dt>
-          <dd>{effectiveSeconds.toFixed(2)}s</dd>
-          <dt>Actual rate</dt>
+          <dt>{t("row.cycle")}</dt>
+          <dd>{t("value.seconds", { seconds: formatSeconds(effectiveSeconds) })}</dd>
+          <dt>{t("row.actualRate")}</dt>
           <dd>
-            {reading.rate.toFixed(2)} batches/s ·{" "}
-            {Math.round(reading.windowSeconds)}s window
+            {t("value.actualRate", {
+              rate: formatRate(reading.rate),
+              window: formatWholeSeconds(reading.windowSeconds),
+            })}
           </dd>
-          <dt>Max rate</dt>
-          <dd>{maxRate.toFixed(2)} batches/s at full power</dd>
-          <dt>Power</dt>
+          <dt>{t("row.maxRate")}</dt>
+          <dd>{t("value.maxRate", { rate: formatRate(maxRate) })}</dd>
+          <dt>{t("row.power")}</dt>
           <dd>
-            {machine.batchPower} units
+            {t("value.powerUnits", {
+              count: machine.batchPower,
+              units: plural(machine.batchPower, t("unit.unit")),
+            })}
             {props.powerRatio < 0.999
-              ? ` · Power limited: ${Math.round(props.powerRatio * 100)}% speed`
+              ? t("value.powerLimited", { percent: wholePercent(props.powerRatio) })
               : ""}
           </dd>
-          <dt>Measured</dt>
+          <dt>{t("row.measured")}</dt>
           <dd>{diagnosis.evidence}</dd>
-          <dt>Next step</dt>
+          <dt>{t("row.nextStep")}</dt>
           <dd>{diagnosis.advice}</dd>
-          <dt>Next upgrade</dt>
+          <dt>{t("row.nextUpgrade")}</dt>
           <dd>
-            {effectiveSeconds.toFixed(2)}s → {nextSeconds.toFixed(2)}s · {cost}{" "}
-            credits
+            {t("value.nextUpgrade", {
+              from: formatSeconds(effectiveSeconds),
+              to: formatSeconds(nextSeconds),
+              cost: unit(cost, t("unit.credit")),
+            })}
           </dd>
           {plans.length > 0 ? (
             <>
-              <dt>Next link</dt>
+              <dt>{t("row.nextLink")}</dt>
               <dd>{describePlans(props.state, plans)}</dd>
             </>
           ) : null}
           {machine.status === "starved" ? (
             <>
-              <dt>Needs</dt>
+              <dt>{t("row.needs")}</dt>
               <dd>{describeInputs(recipe)}</dd>
             </>
           ) : null}
         </dl>
       ) : (
         <dl>
-          <dt>Inputs</dt>
+          <dt>{t("row.inputs")}</dt>
           <dd>{describeInputs(recipe)}</dd>
-          <dt>Outputs</dt>
+          <dt>{t("row.outputs")}</dt>
           <dd>{describeOutputs(recipe)}</dd>
-          <dt>Level</dt>
+          <dt>{t("row.level")}</dt>
           <dd>{machine.level}</dd>
-          <dt>In buffer</dt>
+          <dt>{t("row.inBuffer")}</dt>
           <dd>
             {formatNumber(machine.inBufUnits)}/
             {inputCapacityFor(props.state, def.inputBuffer)}
           </dd>
-          <dt>Tray</dt>
+          <dt>{t("row.tray")}</dt>
           <dd>
             {formatNumber(machine.trayUnits)}/{def.outputBuffer}
           </dd>
@@ -151,7 +171,7 @@ export function MachinePanel(props: {
               }
             }}
           >
-            Connect
+            {t("btn.connect")}
           </button>
         ) : null}
         <button
@@ -164,13 +184,13 @@ export function MachinePanel(props: {
             })
           }
         >
-          Upgrade · {cost} credits
+          {t("btn.upgradeCost", { cost: unit(cost, t("unit.credit")) })}
         </button>
         <button
           className="icon-btn"
           onClick={() => setPage(page === 0 ? 1 : 0)}
         >
-          {page === 0 ? "Recipe" : "Status"}
+          {page === 0 ? t("btn.recipe") : t("btn.statusPage")}
         </button>
         <button
           className="icon-btn"
@@ -182,7 +202,7 @@ export function MachinePanel(props: {
             })
           }
         >
-          Dismantle
+          {t("btn.dismantle")}
         </button>
       </div>
       </div>
@@ -199,11 +219,11 @@ export function StorePanel(props: {
     (key) => (props.state.store[key] ?? 0) > 0,
   );
   return (
-    <div className="panel" role="group" aria-label="Store contents">
+    <div className="panel" role="group" aria-label={t("aria.storeContents")}>
       <div className="panel__head">
-        <h2 className="panel__title">Yard store</h2>
+        <h2 className="panel__title">{t("title.store")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
-          Close
+          {t("btn.close")}
         </button>
       </div>
       <div className="panel__body">
@@ -227,37 +247,42 @@ export function StorePanel(props: {
                     })
                   }
                 >
-                  Sell {amount} · +{amount * price}
+                  {t("value.sellButton", { qty: amount, credits: amount * price })}
                 </button>
               ) : null}
             </div>
           );
         })}
-        <dt>Capacity</dt>
+        <dt>{t("row.capacity")}</dt>
         <dd>
           {formatNumber(props.state.storeUnits)}/
           {formatNumber(props.state.storeCapacity)}
         </dd>
         {yardSummary(props.state).map((line) => (
           <div key={line}>
-            <dt>Measured</dt>
+            <dt>{t("row.measured")}</dt>
             <dd>{line}</dd>
           </div>
         ))}
         {props.state.exportClaimed ? (
           <>
-            <dt>Sell floor</dt>
-            <dd>{TUNING.reserveFloor} units kept per material</dd>
+            <dt>{t("row.sellFloor")}</dt>
+            <dd>
+              {t("value.sellFloor", {
+                count: TUNING.reserveFloor,
+                units: plural(TUNING.reserveFloor, t("unit.unit")),
+              })}
+            </dd>
           </>
         ) : (
           <>
-            <dt>Sell</dt>
-            <dd>Opens after the first steel contract</dd>
+            <dt>{t("row.sell")}</dt>
+            <dd>{t("value.sellOpens")}</dd>
           </>
         )}
         {props.state.overflow.length > 0 ? (
           <>
-            <dt>Overflow hold</dt>
+            <dt>{t("row.overflow")}</dt>
             <dd>
               {props.state.overflow.reduce(
                 (total, item) => total + item.qty,
@@ -279,16 +304,16 @@ export function ResearchPanel(props: {
 }) {
   const owned = props.state.research;
   return (
-    <div className="panel" role="group" aria-label="Research">
+    <div className="panel" role="group" aria-label={t("aria.research")}>
       <div className="panel__head">
-        <h2 className="panel__title">Research</h2>
+        <h2 className="panel__title">{t("title.research")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
-          Close
+          {t("btn.close")}
         </button>
       </div>
       <div className="panel__body">
       <dl>
-        <dt>Data</dt>
+        <dt>{t("row.data")}</dt>
         <dd>{formatNumber(props.state.store.data ?? 0)}</dd>
         {RESEARCH_ORDER.map((id) => {
           const def = RESEARCH[id];
@@ -300,10 +325,12 @@ export function ResearchPanel(props: {
               <dt>{def.label}</dt>
               <dd>{def.effect}</dd>
               {rank > 0 ? (
-                <dd>Known</dd>
+                <dd>{t("value.known")}</dd>
               ) : blocked ? (
                 <dd>
-                  Needs {prereq ? prereq.label : "the earlier node"} first
+                  {t("value.needsPrereq", {
+                    node: prereq ? prereq.label : t("value.earlierNode"),
+                  })}
                 </dd>
               ) : (
                 <button
@@ -316,7 +343,7 @@ export function ResearchPanel(props: {
                     })
                   }
                 >
-                  Buy · {def.cost} Data
+                  {t("btn.buyData", { cost: t("value.dataCost", { cost: def.cost }) })}
                 </button>
               )}
             </div>
@@ -342,49 +369,49 @@ export function YardPanel(props: {
 }) {
   const [page, setPage] = useState(0);
   const [draft, setDraft] = useState("");
-  const [note, setNote] = useState("Copy this text, or open Import to paste one.");
+  const [note, setNote] = useState(t("note.exportIdle"));
   const exportId = "rustwake-save-export";
   const importId = "rustwake-save-import";
 
   const copyExport = () => {
     const clipboard = navigator.clipboard?.writeText;
     if (!clipboard) {
-      setNote("Select the text and copy it");
+      setNote(t("note.copyManual"));
       return;
     }
     clipboard.call(navigator.clipboard, props.exportText).then(
-      () => setNote("Copied to the clipboard"),
-      () => setNote("Select the text and copy it")
+      () => setNote(t("note.copied")),
+      () => setNote(t("note.copyManual"))
     );
   };
 
   return (
-    <div className="panel" role="group" aria-label="Yard record">
+    <div className="panel" role="group" aria-label={t("aria.yardRecord")}>
       <div className="panel__head">
-        <h2 className="panel__title">Yard record</h2>
+        <h2 className="panel__title">{t("title.yard")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
-          Close
+          {t("btn.close")}
         </button>
       </div>
       <div className="panel__body">
         {page === 0 ? (
           <>
             <dl>
-              <dt>Tick</dt>
+              <dt>{t("row.tick")}</dt>
               <dd>{props.state.tick}</dd>
-              <dt>Machines</dt>
+              <dt>{t("row.machines")}</dt>
               <dd>{props.state.machines.length}</dd>
-              <dt>Drones</dt>
-              <dd>{fleetUnits(props.state).filter((unit) => unit.repaired).length}</dd>
-              <dt>Links</dt>
+              <dt>{t("row.drones")}</dt>
+              <dd>{fleetUnits(props.state).filter((unitState) => unitState.repaired).length}</dd>
+              <dt>{t("row.links")}</dt>
               <dd>{props.state.routes.length}</dd>
-              <dt>Credits</dt>
+              <dt>{t("row.credits")}</dt>
               <dd>{props.state.credits}</dd>
-              <dt>Save</dt>
-              <dd>{props.exportText.length} characters</dd>
+              <dt>{t("row.save")}</dt>
+              <dd>{t("value.characters", { count: props.exportText.length })}</dd>
             </dl>
             <label className="panel__field" htmlFor={exportId}>
-              Saved yard
+              {t("field.savedYard")}
             </label>
             <textarea
               id={exportId}
@@ -395,18 +422,18 @@ export function YardPanel(props: {
             />
             <div className="panel__actions">
               <button className="icon-btn" onClick={copyExport}>
-                Copy
+                {t("btn.copy")}
               </button>
               <button className="icon-btn" onClick={() => setPage(1)}>
-                Import
+                {t("btn.import")}
               </button>
             </div>
           </>
         ) : (
           <>
-            <p className="status-line">Paste a saved yard, then Apply.</p>
+            <p className="status-line">{t("note.paste")}</p>
             <label className="panel__field" htmlFor={importId}>
-              Pasted text
+              {t("field.pastedText")}
             </label>
             <textarea
               id={importId}
@@ -419,10 +446,10 @@ export function YardPanel(props: {
                 className="icon-btn"
                 onClick={() => setNote(importNoteFor(props.onImport(draft)))}
               >
-                Apply
+                {t("btn.apply")}
               </button>
               <button className="icon-btn" onClick={() => setPage(0)}>
-                Back
+                {t("btn.back")}
               </button>
             </div>
           </>
@@ -440,24 +467,24 @@ export function ReturnReportPanel(props: {
   const report = props.report;
   const gains = Object.entries(report.gains) as [ResourceId, number][];
   const summary = [
-    `Away ${formatDuration(report.awayTicks)}`,
+    t("report.away", { duration: formatDuration(report.awayTicks) }),
     report.capped
-      ? `Your operation worked for ${formatDuration(report.creditedTicks)} (capped)`
-      : `Your operation worked for ${formatDuration(report.creditedTicks)}`,
+      ? t("report.workedCapped", { duration: formatDuration(report.creditedTicks) })
+      : t("report.worked", { duration: formatDuration(report.creditedTicks) }),
   ];
   return (
-    <div className="panel" role="group" aria-label="Return report">
+    <div className="panel" role="group" aria-label={t("aria.returnReport")}>
       <div className="panel__head">
-        <h2 className="panel__title">While you were away</h2>
+        <h2 className="panel__title">{t("title.report")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
-          Back to yard
+          {t("btn.backToYard")}
         </button>
       </div>
       <div className="panel__body">
       <dl>
         {summary.map((line) => (
           <div key={line}>
-            <dt>Time</dt>
+            <dt>{t("row.time")}</dt>
             <dd>{line}</dd>
           </div>
         ))}
@@ -467,14 +494,14 @@ export function ReturnReportPanel(props: {
             <dd>+{formatNumber(value)}</dd>
           </div>
         ))}
-        <dt>Deliveries</dt>
+        <dt>{t("row.deliveries")}</dt>
         <dd>{report.deliveries}</dd>
-        <dt>Batches</dt>
+        <dt>{t("row.batches")}</dt>
         <dd>{report.batchesDone}</dd>
         {report.bottleneck ? (
           <>
-            <dt>Bottleneck</dt>
-            <dd>{report.bottleneck}</dd>
+            <dt>{t("row.bottleneck")}</dt>
+            <dd>{t(`bottleneck.${report.bottleneck}`)}</dd>
           </>
         ) : null}
       </dl>
@@ -489,38 +516,38 @@ function describePlans(
 ): string {
   return plans
     .map((plan) => {
-      const source = plan.from === 0 ? "dock" : labelOf(state, plan.from);
-      const target = plan.to === 0 ? "dock" : labelOf(state, plan.to);
+      const source = plan.from === 0 ? t("value.dock") : labelOf(state, plan.from);
+      const target = plan.to === 0 ? t("value.dock") : labelOf(state, plan.to);
       const thing =
         plan.filter === null
-          ? "cargo"
+          ? t("value.cargo")
           : (RESOURCE_LABEL[plan.filter] ?? plan.filter);
-      return `${source} to ${target} carries ${thing}`;
+      return t("value.linkCarries", { source, target, thing });
     })
-    .join("; ");
+    .join(t("value.semicolon"));
 }
 
 function labelOf(state: SimState, machineId: number): string {
   const machine = state.machines.find((m) => m.id === machineId);
   return machine
-    ? BLUEPRINTS[machine.blueprint].label.toLowerCase()
-    : "machine";
+    ? BLUEPRINTS[machine.blueprint].label.toLocaleLowerCase()
+    : t("unit.machine");
 }
 
 function describeInputs(recipe: {
   inputs: readonly { resource: ResourceId; qty: number }[];
 }): string {
   return recipe.inputs
-    .map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`)
-    .join(", ");
+    .map((item) => t("value.recipeItem", { qty: item.qty, label: RESOURCE_LABEL[item.resource] }))
+    .join(t("value.comma"));
 }
 
 function describeOutputs(recipe: {
   outputs: readonly { resource: ResourceId; qty: number }[];
 }): string {
   return recipe.outputs
-    .map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`)
-    .join(", ");
+    .map((item) => t("value.recipeItem", { qty: item.qty, label: RESOURCE_LABEL[item.resource] }))
+    .join(t("value.comma"));
 }
 
 let seq = 0;

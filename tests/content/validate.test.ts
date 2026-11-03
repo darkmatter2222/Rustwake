@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { BLUEPRINTS, EXPORT_PRICES, RECIPES, RESOURCES, TUNING } from "../../src/game/content/defs";
 import { RESEARCH, RESEARCH_ORDER } from "../../src/game/content/research";
+import { STRINGS } from "../../src/game/content/strings";
 import { validateContent, validateBehaviour } from "../../src/game/content/validate";
 
 /**
@@ -23,6 +24,37 @@ describe("content validator (B-12)", () => {
     expect(RESEARCH_ORDER.length).toBe(3);
     expect(Object.keys(EXPORT_PRICES).length).toBe(14);
     expect(Object.keys(TUNING).length).toBeGreaterThanOrEqual(20);
+    expect(Object.keys(STRINGS).length).toBeGreaterThanOrEqual(120);
+  });
+
+  it("names a missing string key, an empty default, and a malformed slot (B-10)", () => {
+    const table = STRINGS as Record<string, string>;
+    const saved = {
+      research: table["objective.research"],
+      place: table["btn.place"],
+      salvage: table["btn.salvage"],
+    };
+
+    // A hint id the table never declared would paint its own key on the objective card.
+    delete table["objective.research"];
+    expect(
+      validateContent().some((line) => line.includes("objective.research") && line.includes("missing key"))
+    ).toBe(true);
+    table["objective.research"] = saved.research;
+
+    table["btn.place"] = "Place {machine";
+    expect(
+      validateContent().some((line) => line.includes("btn.place") && line.includes("unbalanced"))
+    ).toBe(true);
+    table["btn.place"] = saved.place;
+
+    table["btn.salvage"] = "";
+    expect(
+      validateContent().some((line) => line.includes("btn.salvage") && line.includes("no English default"))
+    ).toBe(true);
+    table["btn.salvage"] = saved.salvage;
+
+    expect(validateContent()).toEqual([]);
   });
 
   it("reports a zero-time cycle, an oversized footprint and a missing price", () => {

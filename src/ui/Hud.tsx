@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { BLUEPRINTS, TUNING } from "../game/content/defs";
+import { t } from "../game/content/strings";
 import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
 import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, visibleResources } from "./text";
@@ -22,13 +23,13 @@ const DOT_COLORS: Record<string, string> = {
 export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute: () => void }) {
   return (
     <div className="gate">
-      <h1 className="gate__title">RUSTWAKE</h1>
-      <p className="gate__sub">Salvage yard 07 · systems waking</p>
+      <h1 className="gate__title">{t("gate.title")}</h1>
+      <p className="gate__sub">{t("gate.sub")}</p>
       <button className="gate__btn" onClick={props.onBegin}>
-        Begin recovery
+        {t("gate.begin")}
       </button>
       <button className="icon-btn" onClick={props.onToggleMute}>
-        {props.muted ? "Sound off" : "Sound on"}
+        {props.muted ? t("sound.off") : t("sound.on")}
       </button>
     </div>
   );
@@ -44,7 +45,8 @@ export function ResourceStrip({ state }: { state: SimState }) {
     <div className="resources" aria-label="Resources">
       <span className="resources__item" key="scrap">
         <span className="resources__dot" style={{ background: DOT_COLORS["scrap"] }} />
-        Scrap <strong>{formatNumber(state.store["scrap"] ?? 0)}</strong>
+        {RESOURCE_LABEL["scrap"]}
+        <strong>{formatNumber(state.store["scrap"] ?? 0)}</strong>
       </span>
       {shown
         .filter((key) => key !== "scrap")
@@ -58,11 +60,13 @@ export function ResourceStrip({ state }: { state: SimState }) {
       {state.credits > 0 ? (
         <span className="resources__item">
           <span className="resources__dot" style={{ background: DOT_COLORS["credits"] }} />
-          Credits <strong>{formatNumber(state.credits)}</strong>
+          {t("chip.credits")}
+          <strong>{formatNumber(state.credits)}</strong>
         </span>
       ) : null}
       <span className="resources__item">
-        Store {formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}
+        {t("chip.store")}
+        {formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}
       </span>
     </div>
   );
@@ -83,7 +87,7 @@ export function HudTop(props: {
         <button
           className="icon-btn"
           onClick={props.onToggleMute}
-          aria-label={`Sound ${props.muted ? "off" : "on"}`}
+          aria-label={props.muted ? t("sound.off") : t("sound.on")}
         >
           {/* At a large scale the three cluster buttons share one row: the word "Sound"
               is 105 px at 30 px and would push the third button past the viewport. The
@@ -91,21 +95,21 @@ export function HudTop(props: {
               not only in colour (spec 6.4). */}
           {props.textScale >= 1.5
             ? props.muted
-              ? "\u2715"
-              : "\u266A"
+              ? t("glyph.muted")
+              : t("glyph.audible")
             : props.muted
-              ? "Sound \u2715"
-              : "Sound \u2713"}
+              ? t("btn.soundMuted")
+              : t("btn.soundAudible")}
         </button>
         <button
           className="icon-btn"
           onClick={props.onCycleText}
-          aria-label={`Text size ${props.textScale}`}
+          aria-label={t("aria.textSize", { scale: props.textScale })}
         >
-          A {props.textScale}
+          {t("btn.textScale", { scale: props.textScale })}
         </button>
-        <button className="icon-btn" onClick={props.onHome} aria-label="Return to yard view">
-          Home
+        <button className="icon-btn" onClick={props.onHome} aria-label={t("aria.home")}>
+          {t("btn.home")}
         </button>
       </div>
     </div>
@@ -141,10 +145,10 @@ export function DockButtons(props: {
     return (
       <div className="dock">
         <button className="dock__btn" onClick={props.onCancelBuild}>
-          Cancel
+          {t("btn.cancel")}
         </button>
         <button className="dock__btn dock__btn--primary" onClick={props.onPlace}>
-          Place {BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint}
+          {t("btn.place", { machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint })}
           <span className="dock__cost">{costText(props.buildBlueprint)}</span>
         </button>
         <button
@@ -154,7 +158,7 @@ export function DockButtons(props: {
             props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
           }}
         >
-          Next
+          {t("btn.next")}
         </button>
       </div>
     );
@@ -162,13 +166,13 @@ export function DockButtons(props: {
   return (
     <div className="dock">
       <button className="dock__btn" onClick={props.onInventory}>
-        Store
+        {t("btn.store")}
       </button>
       {/* The yard record and the save transfer, unlocked after the tutorial so the
           first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
       {props.yard ? (
         <button className="dock__btn" onClick={props.onYard}>
-          Yard
+          {t("btn.yard")}
         </button>
       ) : null}
       <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
@@ -176,11 +180,11 @@ export function DockButtons(props: {
         {props.primary.cost ? <span className="dock__cost">{props.primary.cost}</span> : null}
       </button>
       <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
-        Build
+        {t("btn.build")}
       </button>
       {props.research ? (
         <button className="dock__btn" onClick={props.onResearch}>
-          Research
+          {t("btn.research")}
         </button>
       ) : null}
     </div>

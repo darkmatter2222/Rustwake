@@ -6,6 +6,7 @@
  * per machine; several possible actions are not purchases.
  */
 import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../content/defs";
+import { plural, resourceWord, t } from "../content/strings";
 import { routeById } from "./engine";
 import type { MachineState, RouteState, SimState } from "./types";
 
@@ -49,18 +50,19 @@ export function diagnoseMachine(
   const linkPercent = busiestLinkPercent(s, m);
   const powerPercent = percent(Math.round(s.powerRatio * 1000), 1000);
   const parts = [
-    `Working ${busyPercent}%`,
-    `waiting for input ${starvedPercent}%`,
-    `output waiting ${fullPercent}%`,
+    t("evidence.working", { percent: busyPercent }),
+    t("evidence.waiting", { percent: starvedPercent }),
+    t("evidence.outputWaiting", { percent: fullPercent }),
   ];
-  if (linkPercent !== null) parts.push(`link ${linkPercent}% busy`);
+  if (linkPercent !== null) parts.push(t("evidence.linkBusy", { percent: linkPercent }));
+  parts.push(t("evidence.power", { percent: powerPercent }));
   return {
     busyPercent,
     starvedPercent,
     fullPercent,
     linkPercent,
     powerPercent,
-    evidence: `${parts.join(" · ")} · power ${powerPercent}%`,
+    evidence: parts.join(t("value.dotSeparator")),
     advice: advise(s, m, {
       busyPercent,
       starvedPercent,
@@ -121,51 +123,62 @@ function advise(s: SimState, m: MachineState, measured: Measures): string {
   const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
   const first = recipe.inputs[0];
   const inputText = recipe.inputs
-    .map((input) => `${input.qty} ${input.resource}`)
-    .join(" and ");
+    .map((input) => t("value.recipeItem", { qty: input.qty, label: resourceWord(input.resource) }))
+    .join(t("value.and"));
 
   if (s.storeCapacity - s.storeUnits <= 2) {
-    return `Storage is full at ${percent(s.storeUnits, s.storeCapacity)}%. Sell a surplus in the yard store to free room.`;
+    return t("advice.storageFull", { percent: percent(s.storeUnits, s.storeCapacity) });
   }
   if (requestedPower(s) > TUNING.yardPowerCapacity) {
-    return `Power limited: ${runningMachines(s)} machines want ${requestedPower(
-      s,
-    )} units against ${TUNING.yardPowerCapacity}, so work runs at ${percent(
-      Math.round(s.powerRatio * 1000),
-      1000,
-    )}% speed. Finish the line before adding another machine.`;
+    return t("advice.powerLimited", {
+      machines: runningMachines(s),
+      requested: requestedPower(s),
+      units: plural(requestedPower(s), t("unit.unit")),
+      capacity: TUNING.yardPowerCapacity,
+      percent: percent(Math.round(s.powerRatio * 1000), 1000),
+    });
   }
   if (m.inRoutes.length === 0 && m.inBufUnits === 0) {
     const supplier = supplierFor(s, first?.resource);
     if (supplier) {
-      return `Needs ${inputText}. Connect ${supplier.phrase} to this machine so its input arrives.`;
+      return t("advice.needsFromStore", { inputs: inputText, source: supplier.phrase });
     }
-    return `Needs ${inputText}, which nothing in the yard makes yet. Build the machine that outputs it, then connect.`;
+    return t("advice.needsNone", { inputs: inputText });
   }
   if (m.outRoute === null && m.trayUnits > 0) {
-    return `Output is waiting: ${m.trayUnits} units in the tray with nowhere to go. Connect this machine to the dock.`;
+    return t("advice.outputWaiting", {
+      count: m.trayUnits,
+      units: plural(m.trayUnits, t("unit.unit")),
+    });
   }
   if (measured.starvedPercent >= 20) {
     const supplier = supplierFor(s, first?.resource);
     if (supplier === null) {
-      return `Waits for input ${measured.starvedPercent}% of the time and nothing in the yard makes that material yet.`;
+      return t("advice.starvedNone", { percent: measured.starvedPercent });
     }
     if (supplier.fromStore) {
-      return `Waits for input ${measured.starvedPercent}% of the time because the dock is empty. One salvage pulse tops it up; no purchase needed.`;
+      return t("advice.starvedStore", { percent: measured.starvedPercent });
     }
-    return `Waits for input ${measured.starvedPercent}% of the time while ${supplier.phrase} is the limiter. Upgrade ${supplier.phrase} first.`;
+    return t("advice.starvedMachine", {
+      percent: measured.starvedPercent,
+      source: supplier.phrase,
+    });
   }
   if (measured.fullPercent >= 20) {
-    return `Its output waits ${measured.fullPercent}% of the time${
-      measured.linkPercent === null
-        ? ""
-        : ` while the link is busy ${measured.linkPercent}%`
-    }. Nothing to buy here: the link, not this machine, is the limit.`;
+    return measured.linkPercent === null
+      ? t("advice.fullNoLink", { percent: measured.fullPercent })
+      : t("advice.fullWithLink", {
+          percent: measured.fullPercent,
+          link: measured.linkPercent,
+        });
   }
   if (measured.busyPercent >= 85) {
-    return `Runs at full speed ${measured.busyPercent}% of the time. Nothing to fix on this machine.`;
+    return t("advice.busy", { percent: measured.busyPercent });
   }
-  return `Working ${measured.busyPercent}% of the time and waiting ${measured.starvedPercent}% for input. Both are inside normal range for this line.`;
+  return t("advice.normal", {
+    percent: measured.busyPercent,
+    starved: measured.starvedPercent,
+  });
 }
 
 function runningMachines(s: SimState): number {
@@ -181,12 +194,12 @@ function supplierFor(
 ): Supplier | null {
   if (!resource) return null;
   if ((s.store[resource] ?? 0) > 0)
-    return { phrase: "the dock store", fromStore: true };
+    return { phrase: t("value.dockStore"), fromStore: true };
   for (const m of s.machines) {
     const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
     if (recipe.outputs.some((output) => output.resource === resource)) {
       return {
-        phrase: BLUEPRINTS[m.blueprint].label.toLowerCase(),
+        phrase: BLUEPRINTS[m.blueprint].label.toLocaleLowerCase(),
         fromStore: false,
       };
     }
@@ -197,23 +210,37 @@ function supplierFor(
 /** Yard-level evidence lines for a bounded panel; every value is measured. */
 export function yardSummary(s: SimState): string[] {
   const lines = [
-    `Storage ${percent(s.storeUnits, s.storeCapacity)}% full (${s.storeUnits}/${s.storeCapacity})`,
-    `Power ${percent(Math.round(s.powerRatio * 1000), 1000)}% speed (${requestedPower(
-      s,
-    )} of ${TUNING.yardPowerCapacity} units requested)`,
+    t("yard.storageFull", {
+      percent: percent(s.storeUnits, s.storeCapacity),
+      units: s.storeUnits,
+      capacity: s.storeCapacity,
+    }),
+    t("yard.powerSpeed", {
+      percent: percent(Math.round(s.powerRatio * 1000), 1000),
+      requested: requestedPower(s),
+      capacity: TUNING.yardPowerCapacity,
+      units: plural(requestedPower(s), t("unit.unit")),
+    }),
   ];
   const busiest = busiestRoute(s);
   if (busiest) {
     lines.push(
-      `Busiest link ${percent(busiest.busyTicks, Math.max(1, busiest.ageTicks))}% busy (${
-        busiest.inFlight
-      }/${busiest.capacity} in transit)`,
+      t("yard.busiestLink", {
+        percent: percent(busiest.busyTicks, Math.max(1, busiest.ageTicks)),
+        inFlight: busiest.inFlight,
+        capacity: busiest.capacity,
+      }),
     );
   }
   let starved = 0;
   for (const m of s.machines) if (m.status === "starved") starved += 1;
   if (starved > 0)
-    lines.push(`${starved} machine${starved > 1 ? "s" : ""} waiting for input`);
+    lines.push(
+      t("yard.starved", {
+        count: starved,
+        machines: plural(starved, t("unit.machine")),
+      }),
+    );
   return lines;
 }
 

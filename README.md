@@ -59,7 +59,8 @@ export contract plus repeatable priced sell contracts, eight blueprints (includi
 signal lab) with a progressive build picker, a three-node research branch bought with data
 where each effect applies exactly once, tutorial state machine (T0-T9), contextual
 objective card, one localised explanation per blocked action, a measured 60 s rate window per
-machine plus per-machine and per-link occupancy with one recommended action, single-canvas HUD,
+machine plus per-machine and per-link occupancy with one recommended action, one key→default string
+table behind every sentence with a single number/time/plural formatter layer, single-canvas HUD,
 local save with a return
 report and a 12-hour offline cap, a versioned export/import pair that either replaces the yard in one
 step or changes nothing, a credit-priced recovery-drone fleet (one unit at a time, 45 credits then
@@ -74,14 +75,15 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-10 localisation readiness**: the remaining player-facing literals into keys with defaults
-   behind one number/time formatter, with panel text expansion re-measured at the 2.0 text scale.
-2. **B-02 worker catch-up**: move the 12 h catch-up off the main thread with cancellation, and
+1. **B-02 worker catch-up**: move the 12 h catch-up off the main thread with cancellation, and
    publish a measured stall histogram, against the 100 ms target of spec 21.5.
-3. **B-29 organic research panel at phone size**: the ladder buys its first node at round 975 in the
+2. **B-29 organic research panel at phone size**: the ladder buys its first node at round 975 in the
    headless driver, so raise the phone session's post-absence phase to the same 1 800 rounds (or let
    the ladder prefer the nearest payable blueprint) and give `latest-research-phone.png` organic
    provenance.
+3. **B-18 follower-tab smoothness**: a mirrored tab updates on the 10 Hz adopt cadence, so interpolate
+   its sprites between the last two adopted snapshots (or raise the cadence at a measured cost) and
+   publish one trace at 390 × 844.
 
 ## Controls
 
@@ -113,10 +115,10 @@ setting; the economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 155 unit/integration tests
+npm test      # 164 unit/integration tests
 npm run typecheck
 npm run validate  # content + behaviour gate the pipeline also runs (~0.5 s)
-npm run build # dist/ (213.12 kB JS, 67.12 kB gzip, 50 modules)
+npm run build # dist/ (222.69 kB JS, 69.44 kB gzip, 51 modules)
 npm run preview
 ```
 
@@ -155,7 +157,54 @@ six sizes × three text scales × six states in one Chrome instance). For the in
 the three ladder states the dock can show (plain, research, fleet), `node scripts/probe-dock.mjs`
 (about 1 s, one browser context per state).
 
-## Latest update (M2: the content gate joins the pipeline, 2026-11-03)
+## Latest update (M2: one string table behind every sentence, 2026-11-03)
+
+- **Every sentence the game paints now comes from one table (B-10, decision D-40).**
+  `src/game/content/strings.ts` holds **221 keys** (measured: `Object.keys(STRINGS).length`, 9 217
+  characters of compiled table) with their English defaults and named `{slot}` placeholders, plus the
+  only formatter layer: `formatNumber`, `formatDuration`,
+  `formatSeconds`, `formatRate`, `formatWholeSeconds`, `wholePercent` and one `plural`/`unit` rule.
+  `t(key, params)` returns the key itself when a key is missing, so a gap is visible on screen instead
+  of an empty row, and a slot the caller forgot keeps its own marker instead of painting `undefined`.
+  `Hud.tsx`, `Panels.tsx`, `App.tsx`, `text.ts` and the bottleneck assistant in `diagnostics.ts` all
+  read from it, so a second locale is one more object rather than a rewrite of the components
+  (spec 23.3). Names and effect texts that are *content* stay in their content modules —
+  `RESOURCES[…].name`, `BLUEPRINTS[…].name`, `RESEARCH_NODES[…].effect` — because spec 23.2 puts balance
+  and definition data there, and the table reaches them through `resourceName` / `resourceWord`.
+- **Numbers are typed once.** The tutorial lines interpolate `TUNING.repairCostScrap` (30),
+  `manualSalvagePerPulse` (5, so the card reads `0/6 pulses`), `exportContractSteel` (3) and
+  `exportContractCredits` (30), and every build price comes from `costSummary(BLUEPRINTS[…])`, so a
+  rebalance cannot leave one surface quoting the old figure.
+- **Three visible wording changes, on purpose:** material names inside a sentence are lowercase
+  (`Build a sorter · 20 scrap`), a count of one is singular (`1 unit`, `1 credit`), and the return
+  report's bottleneck row reads **Storage full** rather than the raw code `storage-full`. Everything
+  else renders byte-identically, which is why one capture run covers all seven images.
+- **The content gate got group 13** (`npm run validate`, B-12): every default non-empty, slot markers
+  balanced and named, one entry per tutorial card line, hint id, chip, resource, machine status,
+  reject code, import reason and return-report bottleneck, plus an unfilled-slot check on every
+  assembled ladder line and price. `tests/content/validate.test.ts` now also deletes a hint key, breaks
+  a slot and empties a default to prove all three are named, and a table-size floor (120+ keys) stops a
+  wiped table passing vacuously.
+- Checks in this run: `npx vitest run` **164 passed / 164** (20 files; eight new in
+  `tests/ui/i18n.test.tsx` plus three injected faults), `npm run typecheck` clean, `npm run validate`
+  **0 violations** with the same behaviour marks as the published tables (`machines=8 links=18
+  drones=4 batches=1 864 credits=165 nodes=3`, firstDrone 308, firstResearch 975).
+  All **seven** gallery images were then recaptured in one 16:07–16:09 run from this build
+  (`index-CT1NXZBc.js`, `index-DudncZlS.css`), and the capture's own printed state lines match the
+  gallery rows below — the mobile session ends at tick 442 700 with 361 credits and five flying units,
+  the seeded desktop yard at tick 537 643 with `data 146` and three known nodes.
+- Measured after the change: `node scripts/measure-hud.mjs` gives ink **19.1 %** and band **20.6 %** at
+  360 × 640 (identical to the previous pass, so the resting HUD did not move), the 2.0-scale ink peak
+  falls from 40.5 % to **38.3 %** because the shorter cost lines wrap less, no document scroll in
+  **108/108** states, **0 px** inner scroll in every panel, minimum contrast **5.77:1** over 11 pairs,
+  smallest dock target **44 × 46**. `node scripts/probe-dock.mjs` still measures the same three ladder
+  states (primaries 110 × 46, 130 × 54 and 102 × 46, band 20.6 %–21.8 %). `npm run build` gives
+  **222.69 kB JS (69.44 kB gzip)**, 51 modules: +2.32 kB gzip for the table, inside spec 21.5's 200 kB
+  preference.
+- Known limitations unchanged: the phone research image is still a seeded capture (**B-29**), and
+  **BL-01**, **BL-02**, **BL-03**, **BL-06**, **BL-11** stay open.
+
+## Earlier this week (M2: the content gate joins the pipeline, 2026-11-03)
 
 - **`npm run validate` is a real gate, in CI and in the test run (B-12, decision D-39).** One
   implementation, `src/game/content/validate.ts`, is used by `scripts/validate-content.mjs` (which
@@ -693,38 +742,41 @@ spec 21.5 remain BL-01.
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path (`Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 · Batches 774 · storage-full`), then **1 000 further one-second rounds**: 5 machines (sorter L19 ×1111, furnace L17 ×496, copper separator L16 ×258, wire mill L15 ×238, polymer recycler L15 ×85), 11 links, five drones flying, tick 442 690, 24 credits, store `scrap 35 ferrous 5 nonferrous 10 steel 11 copper 10 polymer 11 wire 16`, and a five-target dock whose primary reads `Sell 1 Steel` over `+10 credits` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 14:11 local |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the body under it shows `Status Working`, `Batch 4%`, `Cycle 2.50s`, `Actual rate 0.10 batches/s · 60s window`, `Max rate 0.40 batches/s at full power`, `Working 1% · waiting for input 99% · output waiting 0% · link 14% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 417-credit upgrade to it (`2.50s → 2.40s`) | Same commit and session, Chrome headless, captured 2026-11-03 14:11 local |
-| `docs/screenshots/latest-yard.png` | 390 × 844 @2x | The **Yard** panel, page one, on that same session: `Tick 442 700`, `Machines 5`, **`Drones 5`** (the B-28 fleet at its cap), `Links 11`, `Credits 24`, `Save 14 569 characters`, and the read-only export field (50 px tall, its own scroll) beginning `{"schemaVersion":1,"checksum":"dcf787a1",…}`, with **Copy** and **Import** under it — the B-06 surface at phone size | Same commit and session, Chrome headless, captured 2026-11-03 14:11 local |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 43 Ferrous 5 Credits 24 Store 110/900`, owner at tick 442 710). The same pair is re-checked after the handover: the promoted tab continues from tick 442 739 with `Scrap 59 … Store 131/900` | Same commit, two Chrome pages in one context, captured 2026-11-03 14:11 local |
-| `docs/screenshots/latest-research-phone.png` | 390 × 844 @2x | Research panel at phone size on the mature yard: `Data 146`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip`. **Seeded context**: the organic 1 000-round phone session is tried first and still ends with `research: {}` (5 machines, 24 credits, the store saturated by the absence), so this image shows the panel's appearance at 390 × 844, not a two-minute player path (D-35 mechanism, restated under D-38) | Same commit, separate phone-sized context with `docs/evidence/yard-mature.json` installed before first paint, Chrome headless, captured 2026-11-03 14:13 local |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, four drones in it, then the same 12 h absence: `Nonferrous +294 · Plates +219 · Deliveries 168 · Batches 525 · storage-full`): 8 machines at level 12–14 - sorter L14 ×1406, furnace L13 ×490, copper separator L13 ×398, wire mill L13 ×349, plate press L12 ×234, polymer recycler L12 ×128, circuit assembler L12 ×115, signal lab L13 ×85 - 18 links, tick 468 078, `data 146`, `plates 376`, `nonferrous 308`, 43 credits, three research nodes known, and the centred 560 px dock reading `Sell 60 Nonferrous` over `+120 credits` | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 14:13 local |
-| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 146` and the same three effect lines, each ending in `Known`, with the buy buttons retired | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 14:13 local |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path (`Ferrous +110 · Nonferrous +549 · Steel +219 · Deliveries 342 · Batches 773 · Bottleneck Storage full`), then **1 000 further one-second rounds**: 5 machines (sorter L18 ×1110, furnace L17 ×496, copper separator L16 ×255, wire mill L15 ×233, polymer recycler L15 ×84), 11 links, five drones flying, tick 442 700, 361 credits, store `scrap 68 ferrous 5 nonferrous 10 steel 12 copper 10 polymer 10 wire 16`, and a five-target dock whose primary reads `Sell 58 Scrap` over `+58 credits` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 16:07 local |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the body under it shows `Status Working`, `Batch 28%`, `Cycle 2.50s`, `Actual rate 0.10 batches/s · 60s window`, `Max rate 0.40 batches/s at full power`, `Power 1 unit` (singular under the new `unit()` rule), `Working 1% · waiting for input 99% · output waiting 0% · link 14% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 417-credit upgrade to it (`2.50s → 2.40s`) | Same commit and session, Chrome headless, captured 2026-11-03 16:07 local |
+| `docs/screenshots/latest-yard.png` | 390 × 844 @2x | The **Yard** panel, page one, on that same session: `Tick 442 710`, `Machines 5`, **`Drones 5`** (the B-28 fleet at its cap), `Links 11`, `Credits 361`, `Save 14 705 characters`, and the read-only export field (50 px tall, its own scroll) beginning `{"schemaVersion":1,"checksum":"55644765",…}`, with **Copy** and **Import** under it — the B-06 surface at phone size | Same commit and session, Chrome headless, captured 2026-11-03 16:07 local |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 76 Ferrous 5 Credits 361 Store 140/900`, owner at tick 442 720). The same pair is re-checked after the handover: the promoted tab continues from tick 442 749 with `Scrap 87`, while the first tab now mirrors at `Scrap 90 … Store 159/900` | Same commit, two Chrome pages in one context, captured 2026-11-03 16:07 local |
+| `docs/screenshots/latest-research-phone.png` | 390 × 844 @2x | Research panel at phone size on the mature yard: `Data 146`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units at once. Known`. **Seeded context**: the organic 1 000-round phone session is tried first and still ends with `research: {}` (5 machines, 361 credits, the store saturated by the absence), so this image shows the panel's appearance at 390 × 844, not a two-minute player path (D-35 mechanism, restated under D-38) | Same commit, separate phone-sized context with `docs/evidence/yard-mature.json` installed before first paint, Chrome headless, captured 2026-11-03 16:09 local |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes: tick 18 298 with four flying units, then the same 12 h absence: `Nonferrous +227 · Plates +169 · Deliveries 128 · Batches 409 · Bottleneck Storage full`): 8 machines at level 11–14 - sorter L14 ×1340, furnace L12 ×457, copper separator L12 ×398, wire mill L12 ×349, plate press L11 ×217, polymer recycler L11 ×128, circuit assembler L11 ×115, signal lab L12 ×85 - 18 links, tick 537 643, `data 146`, `plates 446`, `nonferrous 238`, 216 credits, three research nodes known, and the centred 560 px dock reading `Upgrade` over `215 credits` | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 16:09 local |
+| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 146` and the same three effect lines, each ending in `Known`, with the buy buttons retired | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 16:09 local |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover and the two absences are
 logged as text by the capture script rather than inferred from these images: organic mobile absence
-`tick 1 010 → 433 020` with `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 · Batches
-774 · Bottleneck storage-full`; seeded desktop absence `tick 36 018 → 468 028` with `Nonferrous +294 ·
-Plates +219 · Deliveries 168 · Batches 525 · Bottleneck storage-full` (that store starts near its
+`tick 1 020 → 433 030` with `Ferrous +110 · Nonferrous +549 · Steel +219 · Deliveries 342 · Batches
+773 · Bottleneck Storage full`; seeded desktop absence `tick 105 583 → 537 593` with `Nonferrous +227 ·
+Plates +169 · Deliveries 128 · Batches 409 · Bottleneck Storage full` (that store starts near its
 900-unit cap, so the credited window is storage-limited from the first minute);
-lease `t1-g56r → t1-g8rx` with the tick advancing 442 710 → 442 739 at an unchanged revision 771 and
-the promoted tab's card reading `Sell 49 Scrap for 49 credits.` over the hint `A machine waits for
+lease `t1-243l → t1-9jvp` with the tick advancing 442 720 → 442 749 at an unchanged revision 768 and
+the promoted tab's card reading `Sell 60 Scrap for 60 credits.` over the hint `A machine waits for
 input; check its empty side.`
 **Research panel:** two photographs, one per viewport width, both of the mature yard installed as a
 seed save (`docs/evidence/yard-mature.json`, written by the supply probe: tick 18 298, 8 machines,
 18 links, four flying units, `data 106`, three nodes known), so the images and the headless tables
 describe the same yard. The longer organic phone session still ends before `data > 0` — measured cause
 in decision D-35, restated under D-38: after the absence saturates the store, 1 000 rounds take the
-five machines it has to L15–L19 and the fleet to its cap of five, and the signal lab's price is met
+five machines it has to L15–L18 and the fleet to its cap of five, and the signal lab's price is met
 later than the 1 000-round mark — which is why the phone row is a seeded context;
 `scripts/capture.mjs` tries the organic session first and prints
-`research phone source:` with the answer. All **seven** images were recaptured in one 14:11–14:13 run
-from this build (artifacts `index-DDfppFoR.js` and `index-DudncZlS.css`), so they show the same HUD the
+`research phone source:` with the answer (this run: `seeded mature yard (docs/evidence/yard-mature.json),
+captured=true`). All **seven** images were recaptured in one 16:07–16:09 run
+from this build (artifacts `index-CT1NXZBc.js` and `index-DudncZlS.css`), so they show the same HUD the
 layout table describes: three buttons in the top-right cluster (`Sound ✓`, `A 1`, `Home`), a two-line
 chip block at 390 px, a one-line objective card, and a five-target dock whose primary still shows the
 verb over its price on one line (the 44 px floor and the 6 px gap of decision D-37, re-measured with
-the fleet label by `scripts/probe-dock.mjs`).
+the fleet label by `scripts/probe-dock.mjs`). The only visible wording deltas against the 14:11 run are
+the three intended ones from decision D-40: lowercase material names inside sentences, singular
+`1 unit` / `1 credit`, and the return report's `Bottleneck Storage full` row.
 
 ## Architecture
 

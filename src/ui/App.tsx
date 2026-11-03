@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import type { GameStore } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
-import { TUNING, unlockedBlueprints } from "../game/content/defs";
+import { TUNING, unlockedBlueprints, BLUEPRINTS } from "../game/content/defs";
 import {
   DOCK_TILE,
   YARD_TILES,
@@ -20,7 +20,8 @@ import {
   type Camera,
 } from "../game/renderer/scene";
 import { createAudio, type AudioApi, type CueName } from "../game/audio/audio";
-import { REJECT_TEXT, hintFor, objectiveFor, primaryFor } from "./text";
+import { REJECT_TEXT, costSummary, hintFor, objectiveFor, primaryFor } from "./text";
+import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
 import { useRevision, useSettings, useSim } from "./useGame";
@@ -227,11 +228,11 @@ export function App({ store }: { store: GameStore }) {
   const primary: PrimaryAction =
     role === "reader"
       ? {
-          label: "Take over",
+          label: t("btn.takeOver"),
           run: () => {
             if (store.takeOver() === "reader") {
               audio().play("blocked");
-              setToast("Another tab is still writing");
+              setToast(t("reader.stuck"));
             }
           },
         }
@@ -290,10 +291,10 @@ export function App({ store }: { store: GameStore }) {
             }}
           />
           <ObjectiveCard
-            text={role === "reader" ? "Following the other tab" : objectiveFor(state, selected)}
+            text={role === "reader" ? t("reader.objective") : objectiveFor(state, selected)}
             hint={
               role === "reader"
-                ? "This tab mirrors the yard exactly as the first tab writes it."
+                ? t("reader.hint")
                 : hintFor(suggestedAction(state))
             }
           />
@@ -392,20 +393,20 @@ export function buildPrimary(
   const state = store.getState();
   const step = state.tutorial;
   if (step <= 1) {
-    return { label: "Salvage", run: () => dispatch({ id: nextCommandId(), type: "manual.salvage" }) };
+    return { label: t("btn.salvage"), run: () => dispatch({ id: nextCommandId(), type: "manual.salvage" }) };
   }
   if (step === 2) {
     return {
-      label: "Repair drone",
-      cost: `${TUNING.repairCostScrap} scrap`,
+      label: t("tut.repair"),
+      cost: `${TUNING.repairCostScrap} ${resourceWord("scrap")}`,
       run: () => dispatch({ id: nextCommandId(), type: "drone.repair" }),
     };
   }
   if (step <= 6) {
     if (state.machines.length === 0) {
       return {
-        label: "Build sorter",
-        cost: "20 scrap",
+        label: t("tut.buildSorter"),
+        cost: costSummary(BLUEPRINTS.sorter),
         run: () => {
           setBuildBlueprint("sorter");
           setGhostTile(8);
@@ -414,7 +415,7 @@ export function buildPrimary(
     }
     if (state.routes.length === 0) {
       return {
-        label: "Connect dock to sorter",
+        label: t("tut.connectSorter"),
         run: () => {
           const sorter = state.machines.find((m) => m.blueprint === "sorter");
           if (!sorter) return;
@@ -425,8 +426,8 @@ export function buildPrimary(
     }
     if (!state.machines.some((m) => m.blueprint === "furnace")) {
       return {
-        label: "Build furnace",
-        cost: "10 scrap + 5 ferrous",
+        label: t("tut.buildFurnace"),
+        cost: costSummary(BLUEPRINTS.furnace),
         run: () => {
           setBuildBlueprint("furnace");
           setGhostTile(9);
@@ -438,7 +439,7 @@ export function buildPrimary(
       const plans = planConnections(state, furnace.id);
       if (plans.length > 0) {
         return {
-          label: "Connect sorter to furnace",
+          label: t("tut.connectFurnace"),
           run: () => {
             for (const plan of plans) {
               dispatch({ id: nextCommandId(), type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
@@ -447,12 +448,16 @@ export function buildPrimary(
         };
       }
     }
-    return { label: "Salvage", run: () => dispatch({ id: nextCommandId(), type: "manual.salvage" }) };
+    return { label: t("btn.salvage"), run: () => dispatch({ id: nextCommandId(), type: "manual.salvage" }) };
   }
   if (step === 7) {
     return {
-      label: "Sell steel",
-      cost: "3 steel · 30 credits",
+      label: t("tut.sellSteel"),
+      cost: t("value.exportContract", {
+        qty: TUNING.exportContractSteel,
+        label: resourceWord("steel"),
+        credits: TUNING.exportContractCredits,
+      }),
       run: () => dispatch({ id: nextCommandId(), type: "contract.export" }),
     };
   }
@@ -545,5 +550,5 @@ function cueFor(type: Command["type"]): CueName {
 
 /** One shared table, so no surface can show a different reason text. */
 export function labelForReject(reason: CommandReject): string {
-  return REJECT_TEXT[reason] ?? "No longer available";
+  return REJECT_TEXT[reason] ?? t("reject.not-found");
 }

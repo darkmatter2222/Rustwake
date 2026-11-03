@@ -744,3 +744,46 @@ Format: date · problem · options · choice · reason · reversibility.
   with composition-sum and hazard-reference checks added; or if the behaviour half outgrows 1 800
   rounds and should reuse a cached snapshot instead of re-running the ladder in both places.
 
+## D-40 - 2026-11-03 - One string table with named slots, one formatter layer
+
+- Problem (spec 23.3): player-facing sentences lived in five modules, several numbers were typed into
+  the sentence a second time next to the tuning constant that defines them, and the plural rule was
+  written out inline where it happened to be needed. A second locale would mean editing every
+  component, and one rebalance would leave a surface quoting the old number.
+- Options considered: (a) leave the literals where they are and add a key→text mapping beside them;
+  (b) a JSON locale file loaded at runtime; (c) one typed table with named `{slot}` placeholders plus
+  a shared formatter layer, imported by both the UI and the simulation.
+- Chosen: **(c)**, as `src/game/content/strings.ts`. It imports nothing, so the deterministic
+  simulation keeps that property (spec 21.1) while `diagnostics.ts` and the panels read the same
+  sentences; `src/ui/text.ts` stays as the assembler that decides which key the current state answers.
+- Rules the table encodes: `t(key, params)` fills `{name}` slots from `params`; an unknown key returns
+  the key itself, so a gap is visible rather than an empty row, and an unfilled slot keeps its own
+  marker rather than painting `undefined`. `unit(n, word)` is the only plural rule.
+  `formatNumber`, `formatDuration`, `formatSeconds`, `formatRate`, `formatWholeSeconds` and
+  `wholePercent` are the only display roundings. `resourceName()` is the chip form ("Ferrous"),
+  `resourceWord()` the in-sentence form ("ferrous"), which equals the resource id for all fifteen
+  shipped materials - which is why the bottleneck assistant's measured lines stayed identical.
+- What changed on screen, deliberately: material names inside a sentence are lowercase
+  ("Build a sorter · 20 scrap" rather than "20 Scrap"), a count of one reads "1 unit" and "1 credit",
+  and the return report's bottleneck row now reads **Storage full** instead of the raw code
+  `storage-full`. Every other rendered string is byte-identical, which is what lets the seven
+  screenshots keep one provenance set and what the layout re-measure confirms.
+- Measured after the change: the resting HUD at the default scale is unchanged (ink **19.1 %**, band
+  **20.6 %** at 360 × 640; 21.9 % landscape), no document scroll in **108/108** states, 0 px inner
+  scroll everywhere, minimum contrast **5.77:1**, minimum dock target **44 × 46**. The 2.0-scale ink
+  peak falls from 40.5 % to **38.3 %**, because the shorter cost lines wrap less. The dock probe still
+  measures the same three ladder states (primaries 110 × 46, 130 × 54, 102 × 46; band 20.6-21.8 %).
+- Cost: the bundle grew from 213.12 kB (67.12 kB gzip) to **222.69 kB (69.44 kB gzip)** - about 150
+  strings plus the formatters, still inside spec 21.5's preference of 200 kB gzip.
+- Validation: the content validator gained group 13 (every default non-empty, slot markers balanced
+  and named, and one entry per tutorial card line, hint id, chip, resource, machine status, reject
+  code, import reason, and return-report bottleneck), plus an unfilled-slot check on every assembled
+  ladder line and price. `tests/content/validate.test.ts` now also deletes a hint key, breaks a slot
+  and empties a default to prove those three violations are named. `npm run validate` **0 violations**,
+  `npx vitest run` **164 passed / 164** (20 files), `npm run typecheck` clean.
+- Reversible: yes; the table is data and each call site is a one-line swap.
+- Reconsider when: a second locale is actually requested (then `t()` reads an injected dictionary and
+  `STRINGS` becomes the `en` defaults), or when M3's wreck archetypes land - blueprint and research
+  labels are still table-owned data in `defs.ts` and `research.ts`, and that is where their display
+  keys should be added, so content and UI share one shape.
+
