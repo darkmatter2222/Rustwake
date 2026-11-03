@@ -14,10 +14,12 @@ have both branches affordable. B-25 closed with the mechanism recorded: one star
 1 scrap/s under an L13 sorter's ~1.2/s, so after a saturating 12 h absence every material pins at the
 reserve floor and the organic phone session stops at four machines with `research: {}`.
 
-- Current commit and remote sync status: this pass is uncommitted at the time of writing; the previous
-  head is `b492074` (checkpoint) over `5c95e33` (B-26/B-27), both on `origin/main`. Push with
-  `git push origin HEAD:main` and verify with `git rev-parse HEAD origin/main`. Earlier chain:
-  `5753efc`, `808dbc8`, `0a4964e`, `266d9d6`, `fc99db1`, `4ac39c5`, `0506f46`, `57f15af`.
+- Current commit and remote sync status: **`1b0a091` ("Open the market in the headless ladder and
+  measure what changes (B-15, B-21, B-25)") is the pushed `origin/main` head** after
+  `git push origin HEAD:main` (`b492074..1b0a091`), verified by `git rev-parse HEAD origin/main`
+  (both `1b0a0914d89b1f5bd39ee14ca4276afd58aca430`). The checkpoint commit that records this hash sits
+  on top of it, as in previous passes. Earlier chain: `b492074`, `5c95e33`, `5753efc`, `808dbc8`,
+  `0a4964e`, `266d9d6`, `fc99db1`, `4ac39c5`, `0506f46`, `57f15af`.
   CI remains unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
   unauthenticated API 404s for the private repository), so CI is reported as **pending**, not green.
 - Checks run and actual results (this pass):
