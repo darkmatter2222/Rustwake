@@ -90,4 +90,5 @@ report's bottleneck row) and every other string renders byte-identically.
   README, STATUS, BACKLOG, DECISIONS → commit → `git push origin HEAD:main` → verify with
   `git ls-remote origin refs/heads/main`. Any `src/` edit invalidates the seven images until a fresh
   capture run; a change limited to `src/game/content/validate.ts` does not, because the app does not
-  import it.
+  import it. Commit-message files: write them with `-Encoding ascii`, because PowerShell's `utf8`
+  writes a BOM that then appears in the committed subject line.
