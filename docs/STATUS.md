@@ -13,12 +13,16 @@ plate press ×84, polymer recycler ×69, circuit assembler ×1); phone session s
 batches and furnace 5 → 301, with the 12 h report now `Ferrous +9 · Nonferrous +584 ·
 Steel +287 · Deliveries 365 · Batches 876`.
 
-Current commit and remote sync status: `16e8d1f` is the pushed `origin/main` head at the start of
-this pass (its parent `47c85c4` carries the supply-window work). This pass adds the measurement
-artefacts only: `scripts/probe-supply.mjs`, `tests/simulation/supply-window.test.ts`,
-`docs/evidence/2026-11-03-supply-window.md`, and the D-27 / B-15 / B-22 / B-23 record updates; it
-is pushed as the new head with `git push origin HEAD:main` and verified by a following
-`git rev-parse HEAD origin/main`. CI state: still unread in this environment (BL-06: `gh run list`
+The newest pass (`87e66b3`) is measurement and documentation only: the reserve-floor sweep and the
+per-link utilisation audit described under "Checks run and actual results" below, with no change to
+`src/`.
+
+Current commit and remote sync status: `87e66b3` ("Measure the supply window: reserve-floor sweep
+and per-link utilisation (B-15, B-22)") is the pushed `origin/main` head: `git push origin
+HEAD:main` reported `16e8d1f..87e66b3 HEAD -> main`, and `git rev-parse HEAD origin/main` then
+printed the same `87e66b39dcfd872fe97ceff4473beaceaee79fc0` twice. Its parent is `16e8d1f`; the
+source tree is identical to `47c85c4`, so the previous pass's runtime and bundle numbers still
+describe this build. CI state: still unread in this environment (BL-06: `gh run list`
 asks for `gh auth login`, the unauthenticated API 404s for the private repository), so CI is
 reported as pending, not green.
 
