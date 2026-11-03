@@ -14,10 +14,11 @@ byte-identical. The dock change came out of the same audit: with five targets th
 fallen to 41.5 px, so `min-width: 44px`, a 6 px gap, 0.88rem labels, and `flex: 6 1 auto` on the
 primary brought both the target floor and the 20.6 % band back.
 
-- Current commit and remote sync status: the code commit of this pass is the pushed `origin/main`
-  head; its hash is written into the checkpoint commit immediately after it, as in previous passes.
-  Earlier chain: `cc0c665`, `1b0a091`, `b492074`, `5c95e33`, `5753efc`, `808dbc8`, `0a4964e`,
-  `266d9d6`, `fc99db1`, `4ac39c5`. CI remains unread in this environment (BL-06: `gh run list` asks
+- Current commit and remote sync status: **`88e7257` ("Move the yard between devices: export,
+  validated import, and a 44 px dock floor (B-06)") is the code commit this pass pushes to
+  `origin/main`**, with the checkpoint commit that records its hash sitting on top, as in previous
+  passes. Earlier chain: `cc0c665`, `1b0a091`, `b492074`, `5c95e33`, `5753efc`, `808dbc8`,
+  `0a4964e`, `266d9d6`, `fc99db1`, `4ac39c5`. CI remains unread in this environment (BL-06: `gh run list` asks
   for `gh auth login`, the unauthenticated API 404s for the private repository), so CI is reported
   as **pending**, not green.
 - Checks run and actual results (this pass):
