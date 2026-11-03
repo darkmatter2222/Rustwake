@@ -46,12 +46,12 @@ export function describeStep(state: SimState, step: YardStep): string {
       )} credits.`;
     case "research": {
       const def = RESEARCH[step.node];
-      return def
-        ? `Research ${def.label} · ${def.cost} Data. ${def.effect}`
-        : "Research a node when its data cost is covered.";
+      // The node's effect lives in the research panel beside its button; the card keeps
+      // one line so the objective never costs a third text row on a short screen (B-26).
+      return def ? `Research ${def.label} · ${def.cost} Data` : "Research a node when its data cost is covered.";
     }
     case "upgrade":
-      return `Improve recovery or production: upgrade ${machineLabel(state, step.machineId)}.`;
+      return `Upgrade the ${machineLabel(state, step.machineId)}.`;
     default:
       return "Tap the highlighted wreck to salvage scrap.";
   }
@@ -80,8 +80,11 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
       const machine = state.machines.find((m) => m.id === step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
       if (!machine || !def) return { label: "Upgrade" };
+      // The card above names the machine ("Upgrade the Scrap sorter."), so the button
+      // carries the verb and the price only. Measured reason: at text scale 2.0 the
+      // four-word label made the dock row 145 px tall, 21 % of a 360 × 640 viewport.
       return {
-        label: `Upgrade ${def.label}`,
+        label: "Upgrade",
         cost: `${upgradeCost(def.baseUpgradeCost, machine.level)} credits`,
       };
     }
@@ -160,12 +163,16 @@ export function visibleResources(state: SimState, max = 5): ResourceId[] {
  * docs/evidence/2026-11-03-hud-share.md: a fifth chip is what forces a third row and
  * pushes the resting HUD past the 22 % band at 360 × 640. At a large text scale one
  * chip is dropped, which spec 6.4 allows because nonessential elements step back.
+ * A short viewport (a phone turned sideways has ~390 px of height) takes the budget
+ * that fits a single wrapping row: each chip row is 24 px of those 390, so the 7-chip
+ * layout cost two rows and 6 % of the screen for information the store panel repeats.
  */
 export function hudChipLimit(
   width = typeof window === "undefined" ? 1024 : window.innerWidth,
   scale = readTextScale(),
+  height = typeof window === "undefined" ? 768 : window.innerHeight,
 ): number {
-  const base = width <= 420 ? 4 : 7;
+  const base = width <= 420 ? 4 : height <= 460 ? 5 : 7;
   return scale >= 1.5 ? Math.max(3, base - 1) : base;
 }
 

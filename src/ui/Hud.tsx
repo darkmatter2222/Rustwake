@@ -85,7 +85,17 @@ export function HudTop(props: {
           onClick={props.onToggleMute}
           aria-label={`Sound ${props.muted ? "off" : "on"}`}
         >
-          {props.muted ? "Sound \u2715" : "Sound \u2713"}
+          {/* At a large scale the three cluster buttons share one row: the word "Sound"
+              is 105 px at 30 px and would push the third button past the viewport. The
+              accessible name keeps the long form, and the two glyphs differ in shape,
+              not only in colour (spec 6.4). */}
+          {props.textScale >= 1.5
+            ? props.muted
+              ? "\u2715"
+              : "\u266A"
+            : props.muted
+              ? "Sound \u2715"
+              : "Sound \u2713"}
         </button>
         <button
           className="icon-btn"

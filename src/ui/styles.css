@@ -156,6 +156,26 @@ body {
   display: none;
 }
 
+/* Non-interactive chips are text, not 44 px controls, so they take the tighter
+   leading a large scale needs; at 2.0 one chip row is 40 px instead of 46. */
+.text-large .resources__item {
+  line-height: 1.15;
+  padding: 0 5px;
+}
+
+/* At a large scale the four dock labels' min-content widths are 433 px together, more
+   than a 360 px phone, so the row is trimmed to 327 px with small padding and a
+   narrower gap, and `flex-wrap` keeps any remainder from being clipped off-screen:
+   a fifth target or a longer label becomes a second row instead of lost text. */
+.text-large .dock {
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.text-large .dock__btn {
+  padding: 0 3px;
+}
+
 .objective__btn {
   min-height: 44px;
   padding: 0 12px;
@@ -353,4 +373,23 @@ body {
 .status-line {
   font-size: 0.78rem;
   color: var(--steel-light);
+}
+
+/* A phone turned sideways has ~390 px of height and three HUD rows cost 140 px of it,
+   so the short viewport spends its generous width instead: the secondary hint line
+   steps back (spec 6.4) and the card and dock take narrower columns. The dock cap is
+   520 px because that is the four buttons' combined min-content width, and a smaller
+   cap would leave them hanging past their own box. Declared after `.dock` and
+   `.objective` on purpose: the media query has the same specificity as the base rule.
+   Measured in docs/evidence/2026-11-03-hud-share.md (844 × 390, B-26). */
+@media (max-height: 460px) {
+  .objective {
+    max-width: min(100%, 400px);
+  }
+  .objective__row {
+    display: none;
+  }
+  .dock {
+    max-width: min(100%, 520px);
+  }
 }

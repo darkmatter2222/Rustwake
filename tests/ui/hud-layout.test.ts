@@ -23,6 +23,17 @@ describe("HUD resource chips (spec 5.4)", () => {
     expect(hudChipLimit(1440, 1.25)).toBe(7);
   });
 
+  it("budgets one wrapping row on a short viewport (spec 5.2, B-26)", () => {
+    // A landscape phone has ~390 px of height and each chip row costs 24 px of it,
+    // so the wide-but-short case takes the five-chip budget that fits one row.
+    expect(hudChipLimit(844, 1, 390)).toBe(5);
+    expect(hudChipLimit(844, 1.5, 390)).toBe(4);
+    expect(hudChipLimit(667, 1, 375)).toBe(5);
+    expect(hudChipLimit(1024, 1, 460)).toBe(5); // boundary inclusive
+    expect(hudChipLimit(1024, 1, 461)).toBe(7); // just above the short band
+    expect(hudChipLimit(1440, 1, 900)).toBe(7);
+  });
+
   it("caps the pinned list in sell order and always leads with scrap", () => {
     const state = createInitialState();
     state.store = {

@@ -494,3 +494,43 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reconsider when: a real-device trace (BL-01) shows the 584 px-tall dock row hurting
   reachability, or a fourth cluster button is needed and the top row no longer fits two chips.
 
+## D-32 — 2026-11-03 — HUD density: one-line card, verb-plus-price dock, height-aware chips
+
+- Problem: three measured layout costs survived D-30/D-31 — the row-union band was 23 % at
+  360 × 640 and 26.2 % at 844 × 390 (spec 5.2 names 15–22 %), the resting HUD painted 57.4 % of a
+  360 × 640 viewport at text scale 2.0, and at that scale the fourth dock target hung 21 px past
+  the right edge, hidden by the game root's `overflow: hidden`.
+- Options considered for the card: keep the long sentences and let them wrap to two lines; move
+  the card beside the chip row (which the 190 px chip block plus a 209 px cluster leaves no room
+  for at 360 px); or shorten each ladder sentence to one line and let the panel carry the detail.
+  The third wins because spec 4.4 asks for short concrete verbs and spec 12.2 only requires the
+  exact effect to be visible *before purchase*, which the research panel does beside its own button.
+- Chosen:
+  - **One line per card sentence.** `Upgrade the Scrap sorter.` replaces
+    `Improve recovery or production: upgrade Scrap sorter.`, and `Research Efficient Cutters · 4
+    Data` drops the trailing effect clause. `tests/ui/app.test.tsx` pins ≤ 48 characters.
+  - **Verb and price on the dock, noun on the card.** `primaryFor` returns `Upgrade` +
+    `30 credits`; the card directly above names the machine and starts with the same verb, so the
+    two surfaces still phrase one goal (spec 3.3), tested by the shared first word.
+  - **Height-aware chip budget**: `hudChipLimit(width, scale, height)` takes 5 on a viewport
+    ≤ 460 px tall, which is the count that fits one wrapping row at 844 px.
+  - **Density rules**: `.text-large` gives chips 1.15 leading with 5 px padding, the dock gap 4 px
+    with `flex-wrap: wrap`, dock padding `0 3px`, and the sound button the glyph `♪`/`✕` (the
+    long form stays as its accessible name). `@media (max-height: 460px)` hides the secondary hint
+    line and caps the card at 400 px and the dock at 520 px — 520 px is the four buttons' combined
+    min-content width, so a smaller cap would leave them past their own box.
+  - **New audit gate**: `scripts/measure-hud.mjs` records the furthest painted right/bottom edge
+    per state and lists any box past the visual viewport. This is what exposed the clipped fourth
+    dock target; both the 1.5 and 2.0 tables are now clean in 18/18 contexts.
+- Measured effect (`docs/evidence/2026-11-03-hud-share.md`): band 23 % → **20.6 %** at 360 × 640
+  and 26.2 % → **21.9 %** in landscape at the default scale; ink 21.6 % → **19.2 %** and at 1.5
+  32.7 % → **19.5 %**, both inside the spec 5.2 band; at 2.0 57.4 % → **40.5 %** with the dock
+  block 144.9 px → 118 px. Smallest dock target 94.6 × 46 px and smallest icon button 44 × 65.2 px
+  at 2.0, so spec 6.2 still holds. No document scroll in 18/18.
+- Trade-off stated: the dock's fourth target now starts a second wrapped line at 2.0 (a 340 px
+  full-width button under three narrower ones) instead of being clipped; the two-line card keeps
+  the machine name rather than the numbers, which are on the button and in the panel.
+- Reversible: yes; four CSS rules, three string changes, one optional helper argument.
+- Reconsider when: a fifth dock target arrives (the wrap budget changes), or a real-device trace
+  (BL-01) shows the glyph cluster being read less reliably than the words.
+

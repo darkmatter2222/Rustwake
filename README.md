@@ -69,12 +69,10 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
    yard buys its first research node (the probe says round 504 at floor 10) and photograph the
    research panel at 390 × 844 with its own gallery provenance, so that image no longer depends on
    a seeded context.
-2. **B-26 short-viewport HUD band**: get the stricter row-union measure to ≤ 22 % at 360 × 640 and
-   844 × 390 (now 23 % and 26.2 % at the default scale) by spending the objective card's third
-   line, without going under the readability floor.
-3. **B-27 dock compaction at large text**: at text scale 2.0 each dock row is 144.9 px tall on
-   360 × 640, so keep the 30 px labels but put the cost beside the label and get the resting ink
-   peak from 57.4 % to under ~45 % with no clipped text.
+2. **B-06 save export/import**: a versioned JSON export and a validating import so a yard can move
+   between devices, with the corrupt-file path keeping the previous state (spec 25.3 case 8).
+3. **B-21 build-versus-upgrade cadence**: one fixture comparing "build first" against "upgrade
+   first" over 1 800 rounds, with batches per minute, credits and machine count in one table.
 
 ## Controls
 
@@ -84,7 +82,7 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Tap the wreck | Manual cutting pulse (when a pulse is ready) |
 | Drag one finger | Pan the camera, clamped to the yard |
 | Pinch / two-finger drag | Zoom between 1.2x and 6x |
-| Primary dock button | The single next action for the current objective, with cost |
+| Primary dock button | The single next action for the current objective: the verb, with the price on its own line (`Upgrade` / `92 credits`). The objective card above names the machine |
 | Machine panel | Status, batch progress, measured rate over its named window (`60s window`, or all available time for a new machine), maximum rate at full power, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
 | Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
 | Research panel | One line per node with its exact effect, `Buy · n Data`, `Known`, or `Needs <earlier node> first` |
@@ -105,9 +103,9 @@ setting; the economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 124 unit/integration tests
+npm test      # 129 unit/integration tests
 npm run typecheck
-npm run build # dist/ (206.35 kB JS, 65.22 kB gzip, 50 modules)
+npm run build # dist/ (207.60 kB JS, 65.64 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -129,7 +127,45 @@ To regenerate the HUD share, no-scroll, large-text and contrast table: `npm run 
 `node scripts/measure-hud.mjs`, which writes `docs/evidence/2026-11-03-hud-share.md` (about 70 s,
 six sizes × three text scales × three states in one Chrome instance).
 
-## Latest update (M2: panels fit at large text, one text-scale control, 2026-11-03)
+## Latest update (M2: HUD band inside 22 %, dock compact at large text, 2026-11-03)
+
+- **The strict row-union measure is inside the design band now (B-26, spec 5.2).** At the default
+  text scale the `band` column — the union of the three HUD layout rows, so it counts the empty
+  space between the chips and the buttons too — is **20.6 %** at 360 × 640 (was 23 %) and
+  **21.9 %** at 844 × 390 (was 26.2 %). Painted-box share fell with it: **19.2 %** at 360 × 640,
+  **14.3 %** at 390 × 844, **13.0 %** at 412 × 915, **15.9 %** in landscape, **6.9 %** tablet,
+  **5.1 %** desktop, and the peak across all six sizes at text scale 1.5 is **19.5 %**.
+- **What made the rows shorter.** Each objective from the yard ladder now fits one line at 360 px
+  (`Upgrade the Polymer recycler.`, `Research Efficient Cutters · 4 Data`), the objective card's
+  second line disappears on a short viewport, the chip budget takes the viewport height into
+  account so a landscape phone gets the five-chip one-row layout instead of two rows of a 24 px
+  block, and the dock and card take narrower columns in landscape (`@media (max-height: 460px)`).
+  The research node's effect sentence lives in the research panel beside its own buy button, as
+  before, and in the card only as the price.
+- **The dock is compact at large text (B-27).** The primary button carries the verb and the price
+  (`Upgrade` + `30 credits`) while the card directly above names the machine, so a dock row at text
+  scale 2.0 is 118 px instead of 144.9 px and the resting HUD paints **40.5 %** of a 360 × 640
+  viewport instead of 57.4 %. The 30 px labels are kept (spec 6.4), the chip rows take 1.15 leading,
+  and the sound button shows `♪`/`✕` from 1.5 so all three cluster buttons share one row. The two
+  surfaces still state one goal: a test pins the shared first word and the card's ≤ 48 characters.
+- **A new audit gate catches clipped chrome.** `scripts/measure-hud.mjs` now records the furthest
+  painted right and bottom edge in every state and lists any box past the visual viewport. That is
+  how the previous build's fourth dock target — 21 px past a 360 px screen at scale 2.0, hidden by
+  `overflow: hidden` — was found, and all 18 contexts now report **none**. Smallest dock target
+  94.6 × 46 px and smallest icon button 44 × 65.2 px at scale 2.0, four dock targets at rest and
+  three in build mode (spec 6.2, spec 5.5); no document scroll in 18/18; contrast unchanged at a
+  minimum of 5.77:1; every panel still reports 0 px inner scroll.
+- Checks in this run: `npx vitest run` **129 passed / 129** (15 files; two new cases — the
+  height-aware chip budget at 390/460/461 px viewports, and the card/dock pairing that keeps the
+  card ≤ 48 characters and the same leading verb), `npm run build` **207.60 kB JS (65.64 kB gzip)**,
+  CSS 5.15 kB (**1.69 kB gzip**), 50 modules (+0.02 kB gzip over `808dbc8`). The simulation core is
+  untouched, so the headless timing table below still applies.
+- Known limitations: at 2.0 the fourth dock target starts a second wrapped line and is full width
+  where its three neighbours are narrower; the mobile capture session still ends before `data > 0`,
+  so the research image comes from the seeded desktop context (**B-25**); frame rate, thermals and
+  human listening remain BL-01, BL-02 and BL-11.
+
+## Earlier this week (M2: panels fit at large text, one text-scale control, 2026-11-03)
 
 - **Every panel now fits its box at every text scale (B-13, spec 6.4).** The panels are in-flow
   flex children of the HUD column with a non-scrolling head (title plus the only Close button) and
@@ -456,27 +492,32 @@ spec 21.5 remain BL-01.
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 630, 130 credits, four-chip HUD `Scrap 10 Ferrous 5 Credits 130 Store 332/900` and a three-target dock | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the scrolling body under it shows `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 130 Store 332/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 524 207, `circuits 16, data 20` in the store, three research nodes known, seven chips `Scrap 10 Ferrous 107 Nonferrous 191 Steel 10 Copper 10 Polymer 10 Store 900/900` and the centred 560 px dock | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
-| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 20`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip` | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 630, 130 credits, four-chip HUD `Scrap 13 Ferrous 5 Credits 130 Store 335/900` as logged at tick 433 668 immediately before the shot, and a three-target dock whose primary reads `Upgrade` over `92 credits` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 10:04 local |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the scrolling body under it shows `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 10:04 local |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 130 Store 331/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 10:04 local |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 555 015, `circuits 16, data 20` in the store, three research nodes known, seven chips `Scrap 10 Ferrous 107 Nonferrous 191 Steel 10 Copper 10 Polymer 10 Store 900/900` and the centred 560 px dock | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 10:08 local |
+| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 20`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip` | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 10:08 local |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover and the absence are
 logged as text by the capture script rather than inferred from these images: mobile absence
 `tick 1 010 → 433 020` with `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 ·
-Batches 774 · Bottleneck storage-full`; seeded absence `tick 91 547 → 523 557` with
+Batches 774 · Bottleneck storage-full`; seeded absence `tick 122 355 → 554 365` with
 `Deliveries 0 · Batches 0 · Bottleneck storage-full` (the seeded store starts at 900/900);
-lease `t1-gfx3 → t1-7pg5` with the tick advancing 433 640 → 433 668 and the promoted tab's card
-switching to `upgrade Polymer recycler`.
+lease `t1-d6l3 → t1-ip27` with the tick advancing 433 640 → 433 668 and the promoted tab's card
+reading `Upgrade the Polymer recycler.` over the hint `A machine waits for input; check its empty
+side.`
 **Research panel:** photographed (`latest-research.png`) from a mature yard installed as a seed
 save; the seed is the file `docs/evidence/yard-mature.json` written by the supply probe, so the
 image and the headless tables describe the same 8-machine, 18-link yard. The short mobile session
 still ends before `data > 0`, which is why the desktop context carries the seed (B-25). All five
-images were recaptured from this build, so they show this pass's HUD: three buttons in the
-top-right cluster (`Sound ✓`, `A 1`, `Home`), a two-line chip block at 390 px, and the selected
-machine's panel with its own head row above a scrolling body.
+images were recaptured from this build (artifacts `index-BONbSNIw.js` and `index-BTmHMPUU.css`),
+so they show this pass's HUD: three buttons in the top-right cluster (`Sound ✓`, `A 1`, `Home`), a
+two-line chip block at 390 px, a one-line objective card (`Upgrade the Polymer recycler.`), and the
+dock's primary showing the verb over its price. `latest-desktop.png` and `latest-research.png` came
+back byte-identical to the previous capture (the seeded context renders the same 8-machine yard at
+the same animation phase), so only three image files changed on disk; the tick values quoted above
+are the ones this run's log printed.
 
 ## Architecture
 

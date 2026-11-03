@@ -235,8 +235,10 @@ describe("research branch (spec 12.2)", () => {
     const dock = primaryFor(state, step);
     expect(dock.label).toBe(`Research ${RESEARCH.cutters.label}`);
     expect(dock.cost).toBe(`${RESEARCH.cutters.cost} Data`);
-    expect(card).toContain(RESEARCH.cutters.label);
-    expect(card).toContain(RESEARCH.cutters.effect);
+    // The card is one line: the node name and its price. The exact effect sentence
+    // belongs to the research panel beside the buy button (tests/ui/app.test.tsx).
+    expect(card).toBe(`Research ${RESEARCH.cutters.label} · ${RESEARCH.cutters.cost} Data`);
+    expect(RESEARCH.cutters.effect.length).toBeGreaterThan(0);
   });
 
   it("sells surplus data like any other ledger resource", () => {

@@ -332,6 +332,38 @@ describe("first-feel shell", () => {
     expect(machine.ageTicks).toBe(300);
   });
 
+  it("keeps the card one short line and the dock verb identical (spec 3.3, B-26/B-27)", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262));
+    act(() => findButton("Build sorter")?.click());
+    act(() => findButton("Place")?.click());
+    act(() => findButton("Connect dock to sorter")?.click());
+    act(() => store.step(300));
+
+    // The card's first line, not the secondary hint beneath it. During the tutorial the
+    // authored line is the teacher, and it stays inside one line at this width.
+    const card = (document.querySelector(".objective > span")?.textContent ?? "").trim();
+    expect(card.length).toBeLessThanOrEqual(56);
+    expect(card).toContain("Refine metal");
+
+    // Past the tutorial both surfaces come from the same yard step (spec 3.3): one goal,
+    // phrased on the card and answered by the dock's verb plus its price.
+    store.getState().tutorial = 9;
+    act(() => store.step(1));
+    const finalCard = (document.querySelector(".objective > span")?.textContent ?? "").trim();
+    const primary = (document.querySelector(".dock__btn--primary")?.textContent ?? "").trim();
+    expect(finalCard.length).toBeLessThanOrEqual(48);
+    expect(finalCard.split(" ")[0]).toBe(primary.split(" ")[0]);
+    expect(primary).not.toContain("NaN");
+  });
+
   it("adds a Research target to the dock once data exists", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);

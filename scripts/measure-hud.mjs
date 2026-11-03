@@ -210,8 +210,19 @@ const readLayout = (pairs) => {
     return { focused: active, ...outline };
   })();
   const element = document.documentElement;
+  // Every painted HUD box must land inside the visual viewport, not be clipped by the
+  // `overflow: hidden` game root (spec 25.1: primary actions stay reachable).
+  const painted = [...ink, ...boxes(".panel")];
+  const beyond =
+    painted.length === 0
+      ? null
+      : {
+          right: Math.round(Math.max(...painted.map((b) => b[0] + b[2]))),
+          bottom: Math.round(Math.max(...painted.map((b) => b[1] + b[3]))),
+        };
   return {
     inner: { width: window.innerWidth, height: window.innerHeight },
+    beyond,
     visual: {
       width: Math.round(window.visualViewport?.width ?? window.innerWidth),
       height: Math.round(window.visualViewport?.height ?? window.innerHeight),
@@ -246,6 +257,13 @@ const readLayout = (pairs) => {
     }),
     chipBoxes: boxes(".resources__item").map((b) => [Math.round(b[2]), Math.round(b[3]), Math.round(b[1])]),
     objectiveBox: boxes(".objective").map((b) => [Math.round(b[2]), Math.round(b[3]), Math.round(b[1])]),
+    dockBoxes: boxes(".dock .dock__btn").map((b) => [Math.round(b[2]), Math.round(b[3]), Math.round(b[0])]),
+    dockRow: (() => {
+      const node = document.querySelector(".dock");
+      if (!node) return null;
+      const box = node.getBoundingClientRect();
+      return [Math.round(box.width), Math.round(box.height)];
+    })(),
   };
 };
 
@@ -309,11 +327,13 @@ const run = async () => {
         };
         await closePanel();
         const rest = await page.evaluate(readLayout, PAIRS);
-        if (scale === SCALES[0] && size.name === VIEWPORTS[0].name) {
+        if (size.name === VIEWPORTS[0].name || size.name === VIEWPORTS[3].name) {
           console.log(
-            `detail ${size.name}: top ${JSON.stringify(rest.topChildren)}` +
+            `detail s${scale} ${size.name}: top ${JSON.stringify(rest.topChildren)}` +
               ` chips(w,h,y) ${JSON.stringify(rest.chipBoxes)}` +
-              ` objective ${JSON.stringify(rest.objectiveBox)}`
+              ` objective ${JSON.stringify(rest.objectiveBox)}` +
+              ` dock ${JSON.stringify(rest.dockBoxes)} row ${JSON.stringify(rest.dockRow)}` +
+              ` furthestPainted ${JSON.stringify(rest.beyond)}`
           );
         }
         // Same session, three states: rest, build mode (the densest dock),
@@ -484,7 +504,10 @@ function report(rows) {
       ` viewport (spec 25.1). Contrast is composed over the page background and judged against WCAG` +
       ` AA (4.5:1, or 3:1 for large text). Each context also focuses the first dock button and presses` +
       ` Tab once; the line under the contrast table shows where focus lands and the ring the browser` +
-      ` computes there. Gates: B-16 area share, B-13 large text and contrast.`
+      ` computes there. A painted box whose right or bottom edge passes the visual viewport is` +
+      ` listed as clipped, because the game root's \`overflow: hidden\` would hide it. ` +
+      `Gates: B-16 area share, B-13 large text and contrast, B-26 short-viewport band,` +
+      ` B-27 dock compaction.`
   );
   for (const scale of SCALES) {
     lines.push("");
@@ -528,19 +551,39 @@ function report(rows) {
       }
     }
   }
+  // Any painted box whose right or bottom edge passes the visual viewport is clipped
+  // by the game root's `overflow: hidden`, so it is reported per state.
+  const clipped = [];
+  for (const row of rows) {
+    for (const [name, m] of [
+      ["rest", row.rest],
+      ["build", row.buildPass],
+      ["panel", row.withPanel],
+    ]) {
+      const b = m?.beyond;
+      if (!b) continue;
+      if (b.right > m.visual.width + 0.5 || b.bottom > m.visual.height + 0.5) {
+        clipped.push(`${row.label} s${row.scale} ${name} (${b.right}×${b.bottom})`);
+      }
+    }
+  }
   lines.push("");
   lines.push("## Result");
   lines.push("");
   for (const scale of SCALES) {
-    const peak = Math.max(
-      ...rows
-        .filter((r) => r.scale === scale)
-        .map((r) => percent(r.rest.inkArea, sizeOf(r.rest)))
-    );
+    const at = rows.filter((r) => r.scale === scale);
+    const peak = Math.max(...at.map((r) => percent(r.rest.inkArea, sizeOf(r.rest))));
+    const peakBand = Math.max(...at.map((r) => percent(r.rest.bandArea, sizeOf(r.rest))));
+    const portrait = at.filter((r) => !r.label.startsWith("landscape"));
+    const peakPortraitBand = Math.max(...portrait.map((r) => percent(r.rest.bandArea, sizeOf(r.rest))));
     lines.push(
-      `- Resting ink share peaks at ${peak} % at text scale ${scale.toFixed(1)}; the 15-22 % band of` +
-        ` spec 5.2 is met on every phone size at the default scale and the wide sizes stay under it.` +
-        ` At a large scale the HUD trades world area for legibility, which spec 6.4 requires.`
+      `- Text scale ${scale.toFixed(1)}: resting ink share peaks at ${peak} %, the row-union band at` +
+        ` ${peakBand} % overall and ${peakPortraitBand} % on the portrait phones. Spec 5.2's 15-22 %` +
+        ` target ${
+          peak <= 22
+            ? "is met on every measured size"
+            : "is met at the wide sizes; a large scale trades world area for legibility, which spec 6.4 requires"
+        }.`
     );
   }
   lines.push(
@@ -550,6 +593,10 @@ function report(rows) {
   lines.push(
     `- Panel geometry problems (outside the viewport, close button clipped, or covering the dock):` +
       ` ${panelProblems.length ? panelProblems.join(", ") : "none"}.`
+  );
+  lines.push(
+    `- Painted HUD boxes that pass the visual viewport (clipped by the game root's` +
+      ` \`overflow: hidden\`): ${clipped.length ? clipped.join("; ") : "none"}.`
   );
   lines.push(
     `- Contrast: ${fails.length ? `below AA in ${fails.length} case(s) - ${fails.join("; ")}` : `every measured pair is at or above its AA threshold (${PAIRS.length} pairs, ${SCALES.length} scales)`}.`

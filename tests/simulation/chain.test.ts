@@ -391,7 +391,7 @@ describe("yard ladder", () => {
     const card = objectiveFor(state, furnace.id);
     const dock = primaryFor(state, step as YardStep);
     expect(card).toContain("Furnace");
-    expect(dock.label).toBe("Upgrade Furnace");
+    expect(dock.label).toBe("Upgrade");
     expect(dock.cost).toBe(`${upgradeCost(BLUEPRINTS.furnace.baseUpgradeCost, 1)} credits`);
     // Without a selection the yard ladder speaks for both surfaces again.
     expect(objectiveFor(state, null)).not.toBe(card);
