@@ -534,3 +534,81 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reconsider when: a fifth dock target arrives (the wrap budget changes), or a real-device trace
   (BL-01) shows the glyph cluster being read less reliably than the words.
 
+## D-33 — 2026-11-03 — Headless ladder drivers claim the onboarding export contract
+
+- Problem: the 30-minute self-play drivers (`tests/simulation/chain.test.ts`, the floor sweep in
+  `tests/simulation/supply-window.test.ts`, `scripts/probe-supply.mjs`) jump from the repaired drone
+  to `tutorial = 9`, which skips T7's one dock press on `Sell steel · 30 credits`. `sellResource`
+  returns `locked` while `exportClaimed` is false (commands.ts:301), so **every** sell was rejected:
+  the ladder ran 1 634 sell steps for 0 credits, never reached an upgrade price, and finished with
+  eight machines all at level 1 while the scripted Chrome session of the same build showed L12–L15.
+  Two harnesses describing one economy, which is what B-21 was opened for.
+- Options considered: (a) set `state.exportClaimed = true` directly, as the pure-ladder cases do —
+  it skips the 3-steel payment, so the ledger reconciliation would no longer describe the shipped
+  path; (b) replay the tutorial step by step, which is what `tests/ui/app.test.tsx` already covers;
+  (c) mirror the app's own mapping inside the loop — claim once the store holds
+  `TUNING.exportContractSteel` steel, exactly the condition `offline.ts:90` uses for
+  `objective.export`.
+- Chosen: (c) in all four drivers, one `contract.export` command on the first round it is possible.
+- Measured effect (same scripts, `docs/evidence/2026-11-03-supply-window.md`): the shipped yard now
+  ends the half hour at 8 machines with levels L13/L12/L10/L11/L10/L9/L8/L8, 1 757 batch completions
+  on 18 links, 25 credits, 3 research nodes, and the ladder's step histogram gains
+  `upgrade: 390` where it previously had none. The floor sweep changes shape: floors
+  0 / 5 / 10 / 20 give **5 / 7 / 8 / 8** machines and **1 456 / 1 457 / 1 757 / 1 677** batches, so
+  a floor below 10 now measurably costs stages (it strips the store below the next blueprint's
+  price) and 10 remains the shipped value with the best total. This restates the floor table in
+  D-27 and D-28, which were measured with the locked market.
+- Trade-off stated: the claim and the ladder step share one round, so the driver runs 1 801
+  commands in 1 800 seconds of simulated time; the payment itself is the same transaction the
+  player's tap issues.
+- Reversible: yes; one condition plus one command in four driver loops, no `src/` change, so the
+  bundle is byte-identical (`index-BONbSNIw.js`, `index-BTmHMPUU.css`).
+- Reconsider when: the tutorial's own export step moves into the ladder (then the drivers can call
+  `nextYardStep` alone), or `exportContractSteel` changes and the claim condition must follow it.
+
+## D-34 — 2026-11-03 — The ladder's build/upgrade priority is not a lever at 30 minutes
+
+- Problem (B-21): the ladder checks `build` before `upgrade` (D-23). Against the headless yard that
+  reached eight machines at L1 and the scripted one at L12 with four machines, that order looked
+  like the unmeasured variable.
+- Chosen: keep the shipped order, on measurement. `scripts/probe-cadence.mjs` runs the same ladder
+  twice with only that pair swapped (`upgrade` before `build`), and the totals are identical in both
+  rows — 8 machines, 1 757 batches (58.6/min), 25 credits, 3 nodes, the same eight levels, the same
+  per-kind step histogram (`sell 864, build 534, upgrade 390, connect 9, research 3`).
+- Reason: the swap can only matter on a round where both branches are available. The probe counts
+  those rounds: **0 of 1 800** in either order. Credits are consumed the moment they reach the
+  cheapest upgrade price (`upgradeCost(30, 1)` for the sorter), so the credit balance is short while
+  materials accumulate for the next blueprint, and vice versa; the two states barely overlap.
+  Table: `docs/evidence/2026-11-03-cadence.md`.
+- Also measured, and the reason the two sessions differ at all: 534 of the 1 800 rounds are the
+  `build` kind and only 8 of those are accepted — the rest are the near-goal probe that shows the
+  player a price while the store is short, which is by design (D-23, spec 10.5).
+- Reversible: yes; the probe is a script and `tests/simulation/cadence.test.ts` pins both rows plus
+  the 0-ambiguous count.
+- Reconsider when: a second drone or a second currency changes how fast the credit balance and the
+  material surplus move relative to each other (B-28), because that overlap is what makes the
+  priority matter.
+
+## D-35 — 2026-11-03 — One starter drone is the binding constraint, so the phone research image is seeded
+
+- Problem: with the post-absence phase raised to 240 rounds the phone session still never shows the
+  Research dock (`research: {}`), so the phone-size research image stayed uncaptured (B-25).
+- Measured cause: that session ends at `tick 435 380` with four machines on 9 links, 100 credits and
+  a store of `scrap 10 ferrous 5 nonferrous 11 steel 11 copper 12 polymer 11` — every material at or
+  one unit above the reserve floor. The starter drone delivers 5 units per 5 s (1 scrap/s) while the
+  sorter at L13 consumes about 1.2/s, so the store's scrap pins at the floor and the 30–50-scrap
+  blueprint prices are only met by chance; the ladder therefore spends its rounds on upgrades and
+  surplus sells and never reaches the wire mill, whose output the signal lab needs for `data`.
+  The headless driver, which starts the same ladder without the saturating 12 h absence, reaches
+  eight machines at round 731 and its first node at 797 — the absence is what changes the balance.
+- Chosen: photograph `latest-research-phone.png` from the same seeded mature yard the desktop row
+  already uses (`docs/evidence/yard-mature.json`, installed before first paint in a 390 × 844 @2x
+  context), and keep the organic attempt as the primary path so the image upgrades itself to the
+  organic session as soon as that session unlocks the dock. The gallery says which source produced
+  each file, and `scripts/capture.mjs` prints `research phone source: …`.
+- Trade-off stated: the seeded image proves the panel's appearance at phone size, not that a
+  two-minute session reaches it; that comprehension gate stays BL-02.
+- Reversible: yes; a context block in the capture script.
+- Reconsider when: B-28 (a second drone, or a delivery-sized store) lets the organic session reach
+  the signal lab inside 240 rounds, which is expected to make the seed unnecessary.
+

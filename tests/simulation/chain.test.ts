@@ -430,6 +430,12 @@ describe("build menu reveal", () => {
   function runLadder(state: SimState, rounds: number): Record<string, number> {
     const histogram: Record<string, number> = {};
     for (let round = 0; round < rounds; round += 1) {
+      // T7's dock primary is the onboarding contract while steel is stocked, and the
+      // repeatable market stays locked until it is claimed (commands.ts:301). The
+      // scripted session therefore claims it here, exactly once.
+      if (!state.exportClaimed && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+        send(state, { type: "contract.export" });
+      }
       const step = nextYardStep(state);
       const key =
         step.kind === "build"

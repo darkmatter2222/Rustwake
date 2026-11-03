@@ -44,20 +44,33 @@ const clickDock = async (page, label) => {
   return true;
 };
 
-/** Research appears in the dock once data exists; capture it when unlocked. */
-const captureResearch = async (page) => {
+/**
+ * Research appears in the dock once data exists. The panel is photographed with the
+ * first node already bought, so the image shows `Known` rather than only a price.
+ */
+const captureResearch = async (page, file) => {
   if (!(await clickDock(page, "Research"))) {
-    console.log("research panel: dock target not unlocked in this session");
+    console.log(`research panel (${file}): dock target not unlocked in this session`);
     return null;
   }
   await page.waitForTimeout(200);
+  const bought = await clickByText(page, "Buy ·");
+  if (bought) await page.waitForTimeout(200);
   const text = await page.evaluate(() => document.querySelector(".panel")?.textContent ?? "");
-  await page.screenshot({ path: resolve(out, "latest-research.png") });
-  console.log(`research panel: ${text.slice(0, 220)}`);
+  await page.screenshot({ path: resolve(out, file) });
+  console.log(`research panel (${file}, buy tapped=${bought}): ${text.slice(0, 240)}`);
   await clickByText(page, "Close");
   await page.waitForTimeout(150);
   return text;
 };
+
+/** True once the dock carries the Research target, which needs `data > 0`. */
+const researchUnlocked = (page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll(".dock__btn")].some(
+      (node) => (node.textContent ?? "").trim() === "Research"
+    )
+  );
 
 /** Same FNV-1a the app uses, so a rewritten envelope still verifies (D-11). */
 function fnv1a(text) {
@@ -135,7 +148,12 @@ const playSession = async (page) => {
   await clickByText(page, "Back to yard");
   await page.waitForTimeout(200);
 
-  for (let i = 0; i < 60; i += 1) {
+  // Keep working after the absence until the yard earns data, which is what unlocks
+  // the Research target (B-25). The headless ladder reaches its eighth machine at
+  // round 396, so 240 rounds is a settled mid-yard without spending the whole run.
+  let rounds = 0;
+  for (let i = 0; i < 240; i += 1) {
+    rounds = i + 1;
     const button = await page.$(".dock__btn--primary");
     if (!button) break;
     await button.click();
@@ -144,9 +162,17 @@ const playSession = async (page) => {
       await clickByText(page, "Cancel");
       await page.waitForTimeout(150);
     }
+    if (await researchUnlocked(page)) break;
   }
   await clickByText(page, "Cancel");
   await page.waitForTimeout(4000); // Let the yard run for the final frame.
+  const dockPrimary = await page.evaluate(() => {
+    const primary = document.querySelector(".dock__btn--primary");
+    const price = primary?.querySelector(".dock__cost")?.textContent ?? "";
+    return primary ? `${primary.textContent?.replace(price, "").trim()} / ${price}` : "";
+  });
+  console.log(`post-absence rounds worked: ${rounds}`);
+  console.log(`dock primary: ${dockPrimary}`);
   const summary = await page.evaluate(() => {
     const raw = localStorage.getItem("rustwake.save.v1");
     if (!raw) return null;
@@ -233,6 +259,17 @@ const checkLease = async (context, firstPage) => {
 };
 
 const browser = await chromium.launch({ executablePath });
+const seedPath = resolve(root, "docs/evidence/yard-mature.json");
+const seedText = existsSync(seedPath) ? readFileSync(seedPath, "utf8") : null;
+
+/** Installs a saved envelope before the first paint, so the yard starts mature. */
+const installSeed = async (context) => {
+  if (!seedText) return;
+  await context.addInitScript((value) => {
+    localStorage.setItem("rustwake.save.v1", value);
+  }, seedText);
+};
+
 try {
   const mobile = await browser.newContext({
     viewport: { width: 390, height: 844 },
@@ -247,8 +284,10 @@ try {
   const panelText = await openMachinePanel(mobilePage);
   await mobilePage.screenshot({ path: resolve(out, "latest-machine-mobile.png") });
   console.log(`machine panel: ${panelText ?? "not opened"}`);
+  await clickByText(mobilePage, "Close"); // So the research image carries one panel.
+  await mobilePage.waitForTimeout(150);
 
-  await captureResearch(mobilePage);
+  const organicResearch = await captureResearch(mobilePage, "latest-research-phone.png");
 
   await checkLease(mobile, mobilePage);
 
@@ -259,18 +298,45 @@ try {
   // A mature yard from `npx tsx scripts/probe-supply.mjs` is installed as the
   // stored save before the first paint, so the research dock (which needs data)
   // is on screen inside the capture window (BL-07).
-  const seedPath = resolve(root, "docs/evidence/yard-mature.json");
-  if (existsSync(seedPath)) {
-    await desktop.addInitScript((text) => {
-      localStorage.setItem("rustwake.save.v1", text);
-    }, readFileSync(seedPath, "utf8"));
-  }
+  await installSeed(desktop);
   const desktopPage = await desktop.newPage();
   await playSession(desktopPage);
   await desktopPage.screenshot({ path: resolve(out, "latest-desktop.png") });
-  await captureResearch(desktopPage);
+  await captureResearch(desktopPage, "latest-research.png");
 
-  console.log("captured latest-mobile.png, latest-desktop.png, latest-machine-mobile.png");
+  // The short organic session stops at four machines (one drone is the binding
+  // constraint, so the store sits at the reserve floor and the 30-50-scrap prices
+  // are rarely met), which is before the signal lab earns data. The phone-size
+  // research image therefore comes from the same seeded mature yard the desktop
+  // row uses, and the gallery says so.
+  if (!organicResearch && seedText) {
+    const seededPhone = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      deviceScaleFactor: 2,
+      isMobile: true,
+      hasTouch: true,
+    });
+    await installSeed(seededPhone);
+    const seededPage = await seededPhone.newPage();
+    await seededPage.goto(url, { waitUntil: "networkidle" });
+    await seededPage.waitForSelector("text=Begin recovery");
+    await seededPage.click("text=Begin recovery");
+    await seededPage.waitForTimeout(400);
+    await clickByText(seededPage, "Back to yard"); // The seed's gap opens a report.
+    await seededPage.waitForTimeout(200);
+    const seededResearch = await captureResearch(seededPage, "latest-research-phone.png");
+    console.log(
+      `research phone source: ${
+        organicResearch ? "organic session" : "seeded mature yard (docs/evidence/yard-mature.json)"
+      }, captured=${Boolean(organicResearch || seededResearch)}`
+    );
+    await seededPhone.close();
+  }
+
+  console.log(
+    "captured latest-mobile.png, latest-machine-mobile.png, latest-multitab.png," +
+      " latest-research-phone.png, latest-desktop.png, latest-research.png"
+  );
 } finally {
   await browser.close();
 }

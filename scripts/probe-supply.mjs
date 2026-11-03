@@ -73,6 +73,11 @@ async function singleRun(floor) {
   /** Round at which each machine appeared, and the first research purchase. */
   const milestones = { built: [], firstResearchRound: null };
   for (let round = 0; round < ROUNDS; round += 1) {
+    // T7's dock primary claims the onboarding contract once steel is stocked, and
+    // every repeatable sell stays locked until then (commands.ts:301).
+    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
+      send(state, { type: "contract.export" });
+    }
     const step = nextYardStep(state);
     if (step && step.kind === "build") milestones.built.push(`${step.blueprint}@${round + 1}`);
     if (step && step.kind === "research" && milestones.firstResearchRound === null) {
@@ -186,8 +191,10 @@ function assemble(runs) {
   lines.push(
     `Command: \`npx tsx scripts/probe-supply.mjs\`. Runtime: Node ${process.version}.` +
       ` Each floor is scripted exactly like the 30-minute self-play driver in` +
-      ` \`tests/simulation/chain.test.ts\`: tutorial completed, then ${ROUNDS} rounds at one` +
-      ` ladder command per second (${ROUNDS * 10} ticks = 30 minutes of active play).` +
+      ` \`tests/simulation/chain.test.ts\`: tutorial completed, the onboarding export contract` +
+      ` claimed on the first round three steel exist (T7's one press, which is what opens the` +
+      ` repeatable market), then ${ROUNDS} rounds at one ladder command per second` +
+      ` (${ROUNDS * 10} ticks = 30 minutes of active play).` +
       ` Busy % is ` +
       `\`busyTicks / ageTicks\`, the same counters the bottleneck assistant reads (spec 10.5).`,
   );

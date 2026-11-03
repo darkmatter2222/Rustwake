@@ -59,14 +59,19 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 
 ## BL-07 Research-panel visual gate
 
-- Status: resolved with B-20 (2026-11-03). `docs/screenshots/latest-research.png` shows the panel
-  open on a mature yard, and the gallery row names its provenance.
-- Evidence: `scripts/probe-supply.mjs` now writes `docs/evidence/yard-mature.json` (the floor-10
-  state encoded with the app's own `encodeSave`), and `scripts/capture.mjs` installs it into the
-  desktop context with `addInitScript` before first paint. That yard has `data 20`, so the research
-  dock target unlocks and the panel prints `Data 20` plus the three known effect lines.
-- Remaining gap: the 60-tap mobile session still stops before `data > 0`, so the phone-viewport
-  research image is tracked as B-25 rather than claimed here.
+- Status: resolved with B-20 (2026-11-03) and closed at phone size with B-25 (2026-11-03).
+  `docs/screenshots/latest-research.png` (1440 × 900) and `docs/screenshots/latest-research-phone.png`
+  (390 × 844 @2x) both show the panel open on a mature yard, and each gallery row names its provenance.
+- Evidence: `scripts/probe-supply.mjs` writes `docs/evidence/yard-mature.json` (the floor-10 state
+  encoded with the app's own `encodeSave`), and `scripts/capture.mjs` installs it with `addInitScript`
+  before first paint in the desktop context and, for the research image, in a 390 × 844 @2x context.
+  The seed's own store holds `data 10` with three nodes known, so the dock target unlocks and both
+  images print the `Data` line plus the three effect lines with `Known` — `Data 124` at each width in
+  the 2026-11-03 11:28 run, after each context credits its own catch-up window. A phone context
+  captured seconds after the probe writes the file credits fewer ticks and can print a smaller number
+  (it read `Data 80` at 11:15); both are the same settlement path the player sees, from one seed file.
+- Remaining gap, tracked elsewhere: the *organic* phone session still stops before `data > 0` for the
+  measured reason in decision D-35 (one drone under an L13 sorter), which is B-28.
 - Meanwhile: `tests/ui/app.test.tsx` still asserts the panel's exact strings and the one-purchase
   ledger change, so the behaviour is covered even where an image is not.
 
