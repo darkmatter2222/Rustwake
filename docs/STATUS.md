@@ -14,9 +14,12 @@ for themselves out of that budget), the dock is capped at `min(100%, 560px)` and
 padding went 4 → 3 px and `.dock__btn` min-height 48 → 46 px. Visible on a phone now: `Scrap 10 ·
 Ferrous 5 · Credits 130 · Store 332/900` instead of five chips over three rows.
 
-Current commit and remote sync status: this pass's commit is the pending `origin/main` head after
-`git push origin HEAD:main`; the previous pushed head was `fc99db1` ("Record pushed head 4ac39c5 and
-the pass scope"), before that `4ac39c5` (B-17), `0506f46`, `57f15af`.
+Current commit and remote sync status: `266d9d6` ("Measure the HUD area share and cap chips and dock
+width (B-16)") is the pushed `origin/main` head after `git push origin HEAD:main` (`fc99db1..266d9d6`,
+verified by `git rev-parse HEAD origin/main`, both `266d9d6d958c824cd287fe7eee6d72b7260326d0`); a
+documentation-only checkpoint commit (this line) sits on top of it. The previous pushed head was
+`fc99db1` ("Record pushed head 4ac39c5 and the pass scope"), before that `4ac39c5` (B-17),
+`0506f46`, `57f15af`.
 CI state: still unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
 unauthenticated API 404s for the private repository), so CI is reported as pending, not green.
 
@@ -80,8 +83,8 @@ Next three bounded tasks:
 3. B-26 short-viewport HUD band: the strict row-union measure is still 24 % at 360 × 640 and
    27.9 % at 844 × 390; spend the objective card's third line and re-measure both states.
 
-Long-running processes owned by this session: the `vite preview` server on port 4173 (started for
-the measurements and the captures). Stop it at the end of the pass; nothing else is running.
+Long-running processes owned by this session: none. The `vite preview` server on port 4173 was
+started for the measurements and the captures and stopped at the end of the pass; nothing else runs.
 
 Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npx vitest run` before editing;
 `tests/ui/hud-layout.test.ts` holds the chip budget, `tests/simulation/rate-window.test.ts` the rate
