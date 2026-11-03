@@ -9,13 +9,14 @@ upgrade is bought, surplus material is sold at published per-unit prices in capp
 tranches, and the objective card and the dock button now come from one shared ladder so
 they always name the same next step. The action toast now dismisses during the frame loop.
 
-Current commit and remote sync status: the previous pushed head was `9bb6561`
-("Record pushed head and CI state for the M1 checkpoint"); this pass adds the M2 chain
-work on top of it and is pushed with `git push origin HEAD:main`. `git log --oneline -1`
-after the push is the authoritative head for the next pass. CI state: the GitHub
-Actions run for the previous push could not be read back — `gh` is unauthenticated in
+Current commit and remote sync status: `c2b4f57` ("Add copper/polymer chain, priced sell
+contracts, and one shared yard ladder") is the pushed `origin/main` head, verified by
+`git log --oneline origin/main -1` after a fast-forward push from `9bb6561`, which
+`git fetch` confirmed was still the remote head immediately before pushing. CI state: the
+GitHub Actions run for this push could not be read back — `gh` is unauthenticated in
 this environment and the unauthenticated API returns 404 for the private repository
-(recorded as BL-06 in `docs/BLOCKERS.md`). Treat CI as pending/unread rather than green.
+(recorded as BL-06 in `docs/BLOCKERS.md`). Treat CI as pending/unread rather than green;
+the three equivalent local checks (typecheck, 66 tests, build) are this pass's gate.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
