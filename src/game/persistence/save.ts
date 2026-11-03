@@ -3,6 +3,7 @@ import { RESEARCH } from "../content/research";
 import {
   SCHEMA_VERSION,
   createInitialState,
+  type DroneState,
   type SimState,
 } from "../simulation/types";
 
@@ -193,6 +194,25 @@ export function validateSim(state: unknown): string | null {
         return `researchRank:${id}`;
     }
   }
+  if (s.spares !== undefined && !Array.isArray(s.spares)) return "spares";
+  const fleet: (DroneState | undefined)[] = [
+    s.drone,
+    ...(Array.isArray(s.spares) ? s.spares : []),
+  ];
+  for (let index = 0; index < fleet.length; index += 1) {
+    const unit = fleet[index];
+    if (!unit || typeof unit.repaired !== "boolean") return `drone:${index}`;
+    for (const key of ["accumulated", "nextDeliveryTick", "deliveries"] as const) {
+      const value = unit[key];
+      if (!Number.isSafeInteger(value) || value < 0) return `drone${key}:${index}`;
+    }
+    const flight = unit.inFlight;
+    if (flight !== null) {
+      if (!flight || !Number.isSafeInteger(flight.qty) || flight.qty < 0)
+        return `droneFlightQty:${index}`;
+      if (!Number.isSafeInteger(flight.arrive)) return `droneFlightArrive:${index}`;
+    }
+  }
   for (const recipe of Object.values(RECIPES)) {
     if (recipe.cycleTicks <= 0 || recipe.power <= 0)
       return `recipe:${recipe.id}`;
@@ -218,7 +238,11 @@ export function migrate(payload: SavePayload): SavePayload {
     ...payload.sim,
     schemaVersion: base.schemaVersion,
     research: { ...(payload.sim.research ?? {}) },
+    // v1 saves written before the fleet existed simply have no spares, so the yard
+    // runs on the repaired starter exactly as it did when they were written (B-28).
+    spares: Array.isArray(payload.sim.spares) ? payload.sim.spares.map((unit) => unitOf(unit, true)) : [],
   };
+  sim.drone = unitOf(payload.sim.drone, false);
   // v1 saves written before the measured counters existed still load: missing
   // counters become zero, so reported percentages simply cover a shorter window.
   for (const m of sim.machines ?? []) {
@@ -248,4 +272,29 @@ function countOf(value: number | undefined): number {
   return typeof value === "number" && Number.isSafeInteger(value) && value >= 0
     ? value
     : 0;
+}
+
+/**
+ * One drone record with safe counters. A missing unit gets the given `repaired`
+ * default: the starter arrives broken, a purchased spare arrives flying.
+ */
+function unitOf(unit: DroneState | undefined, repaired: boolean): DroneState {
+  if (!unit) {
+    return { repaired, accumulated: 0, nextDeliveryTick: 0, inFlight: null, deliveries: 0 };
+  }
+  return {
+    repaired: unit.repaired === true,
+    accumulated: countOf(unit.accumulated),
+    nextDeliveryTick: countOf(unit.nextDeliveryTick),
+    deliveries: countOf(unit.deliveries),
+    inFlight: flightOf(unit.inFlight),
+  };
+}
+
+/** An incomplete or impossible cargo leg counts as nothing in the air. */
+function flightOf(value: DroneState["inFlight"]): DroneState["inFlight"] {
+  if (!value) return null;
+  if (!Number.isSafeInteger(value.qty) || value.qty < 0) return null;
+  if (!Number.isSafeInteger(value.arrive)) return null;
+  return { qty: value.qty, arrive: value.arrive };
 }

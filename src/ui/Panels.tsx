@@ -7,7 +7,7 @@ import {
   type ResourceId,
 } from "../game/content/defs";
 import type { MachineState, SimState } from "../game/simulation/types";
-import { batchMilliFor } from "../game/simulation/types";
+import { batchMilliFor, fleetUnits } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
 import { sellableAmount, upgradeCost } from "../game/simulation/commands";
 import {
@@ -374,6 +374,8 @@ export function YardPanel(props: {
               <dd>{props.state.tick}</dd>
               <dt>Machines</dt>
               <dd>{props.state.machines.length}</dd>
+              <dt>Drones</dt>
+              <dd>{fleetUnits(props.state).filter((unit) => unit.repaired).length}</dd>
               <dt>Links</dt>
               <dd>{props.state.routes.length}</dd>
               <dt>Credits</dt>

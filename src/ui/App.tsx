@@ -501,6 +501,9 @@ function runStep(
     case "research":
       dispatch({ id: nextCommandId(), type: "research.buy", node: step.node });
       return;
+    case "drone":
+      dispatch({ id: nextCommandId(), type: "drone.add" });
+      return;
     case "upgrade":
       dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: step.machineId });
       return;
@@ -529,6 +532,8 @@ function cueFor(type: Command["type"]): CueName {
       return "salvage";
     case "drone.repair":
       return "repair";
+    case "drone.add":
+      return "drone";
     case "machine.upgrade":
       return "upgrade";
     case "contract.export":

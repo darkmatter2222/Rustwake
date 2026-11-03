@@ -349,6 +349,10 @@ export const TUNING = {
   droneDeliveryUnits: 5,
   droneDeliveryTicks: 5 * TICKS_PER_SECOND,
   droneTravelTicks: 10,
+  /** Working units one yard can run: the repaired starter plus three spares. */
+  fleetCap: 5,
+  /** First spare's price; each later one doubles (B-28, spec 8.6 curve family). */
+  droneAddBaseCost: 45,
   dockCapacity: 900, // ~15 min of starter output
   yardPowerCapacity: 8,
   repairCostScrap: 30,

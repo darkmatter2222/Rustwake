@@ -1,5 +1,5 @@
 import { BLUEPRINTS, RECIPES, type ResourceId } from "../content/defs";
-import type { SimState } from "./types";
+import { fleetUnits, type SimState } from "./types";
 
 /**
  * Ledger helpers used by invariant tests and future diagnostics.
@@ -20,7 +20,9 @@ export function systemTotals(state: SimState): Record<string, number> {
   for (const route of state.routes) {
     for (const item of route.items) bump(item.resource, item.qty);
   }
-  if (state.drone.inFlight) bump("scrap", state.drone.inFlight.qty);
+  for (const unit of fleetUnits(state)) {
+    if (unit.inFlight) bump("scrap", unit.inFlight.qty);
+  }
   return totals;
 }
 
@@ -56,6 +58,11 @@ export function allQuantities(state: SimState): number[] {
   for (const route of state.routes) {
     values.push(route.inFlight);
     for (const item of route.items) values.push(item.qty, item.arrive);
+  }
+  // Every drone's own counters join the same nonnegative-integer gate (B-28).
+  for (const unit of fleetUnits(state)) {
+    values.push(unit.accumulated, unit.deliveries, unit.nextDeliveryTick);
+    if (unit.inFlight) values.push(unit.inFlight.qty, unit.inFlight.arrive);
   }
   return values;
 }

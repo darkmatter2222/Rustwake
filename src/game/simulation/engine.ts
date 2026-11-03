@@ -11,6 +11,7 @@ import {
 import {
   machineById,
   STORE_ENDPOINT,
+  type DroneState,
   type MachineState,
   type RouteState,
   type SimState,
@@ -121,13 +122,22 @@ function hasContinuousWork(s: SimState): boolean {
   for (const r of s.routes) if (r.inFlight > 0) return true;
   if (s.routes.length > 0 && s.storeUnits > 0) return true;
   if (s.drone.repaired) return true;
+  for (const d of s.spares) if (d.repaired) return true;
   return false;
+}
+
+/** Earliest tick a repaired unit does something: launch, or land. */
+function unitDueTick(s: SimState, d: DroneState, due: number): number {
+  if (!d.repaired) return due;
+  let next = Math.min(due, Math.max(s.tick + 1, d.nextDeliveryTick));
+  if (d.inFlight) next = Math.min(next, Math.max(s.tick + 1, d.inFlight.arrive));
+  return next;
 }
 
 function nextDueTick(s: SimState, target: number): number {
   let due = target;
-  if (s.drone.repaired)
-    due = Math.min(due, Math.max(s.tick + 1, s.drone.nextDeliveryTick));
+  due = unitDueTick(s, s.drone, due);
+  for (const d of s.spares) due = unitDueTick(s, d, due);
   for (const r of s.routes) {
     for (const item of r.items)
       due = Math.min(due, Math.max(s.tick + 1, item.arrive));
@@ -455,8 +465,13 @@ function advanceProgress(s: SimState, requested: number): void {
   }
 }
 
+/** One pass per working unit: the repaired starter, then each spare (B-28). */
 function updateDrone(s: SimState): void {
-  const d = s.drone;
+  updateUnit(s, s.drone);
+  for (const d of s.spares) updateUnit(s, d);
+}
+
+function updateUnit(s: SimState, d: DroneState): void {
   if (!d.repaired) return;
   if (d.inFlight) {
     if (d.inFlight.arrive <= s.tick) {

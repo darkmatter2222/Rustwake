@@ -1,6 +1,6 @@
 import { TUNING } from "../content/defs";
 import { DOCK_TILE, YARD_COLS, YARD_ROWS } from "../simulation/commands";
-import type { MachineState, SimState } from "../simulation/types";
+import type { DroneState, MachineState, SimState } from "../simulation/types";
 
 export const CELL = 32;
 export const WORLD_W = YARD_COLS * CELL;
@@ -274,6 +274,11 @@ function drawRoutes(
   }
 }
 
+/**
+ * Every working drone, each on its own leg of the same wreck↔dock route. Units are
+ * spaced sideways so a two-drone fleet reads as two machines rather than one fat
+ * sprite, and each interpolates on its own launch tick (spec 20.3).
+ */
 function drawDrone(
   ctx: CanvasRenderingContext2D,
   state: SimState,
@@ -289,22 +294,29 @@ function drawDrone(
   }
   const dock = worldToScreen(camera, view, ...centerOf(DOCK_TILE));
   const wreck = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
-  let t = 0;
-  if (state.drone.inFlight) {
-    const depart = state.drone.inFlight.arrive - TUNING.droneTravelTicks;
-    t = Math.min(1, Math.max(0, (state.tick - depart) / TUNING.droneTravelTicks));
+  const units: (DroneState | undefined)[] = [state.drone, ...state.spares];
+  const spread = 5;
+  for (let i = 0; i < units.length; i += 1) {
+    const unit = units[i];
+    if (!unit || !unit.repaired) continue;
+    let t = 0;
+    if (unit.inFlight) {
+      const depart = unit.inFlight.arrive - TUNING.droneTravelTicks;
+      t = Math.min(1, Math.max(0, (state.tick - depart) / TUNING.droneTravelTicks));
+    }
+    if (reducedMotion) t = unit.inFlight ? 0.5 : 0;
+    const lean = (i - (units.length - 1) / 2) * spread;
+    const x = wreck.x + (dock.x - wreck.x) * t + lean;
+    const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * camera.scale;
+    const size = 4 * camera.scale;
+    ctx.fillStyle = PALETTE.cyan;
+    ctx.beginPath();
+    ctx.moveTo(x, y - size);
+    ctx.lineTo(x + size, y + size);
+    ctx.lineTo(x - size, y + size);
+    ctx.closePath();
+    ctx.fill();
   }
-  if (reducedMotion) t = state.drone.inFlight ? 0.5 : 0;
-  const x = wreck.x + (dock.x - wreck.x) * t;
-  const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * camera.scale;
-  const size = 4 * camera.scale;
-  ctx.fillStyle = PALETTE.cyan;
-  ctx.beginPath();
-  ctx.moveTo(x, y - size);
-  ctx.lineTo(x + size, y + size);
-  ctx.lineTo(x - size, y + size);
-  ctx.closePath();
-  ctx.fill();
 }
 
 function outline(

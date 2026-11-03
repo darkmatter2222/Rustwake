@@ -1,7 +1,7 @@
 import { TICK_MS, TUNING, type ResourceId } from "../content/defs";
 import { nextResearchNode } from "../content/research";
 import { advanceTo } from "./engine";
-import type { SimState } from "./types";
+import { fleetDeliveries, type SimState } from "./types";
 
 export interface ReturnReport {
   readonly awayTicks: number;
@@ -32,7 +32,7 @@ export function catchUp(
 
   const before = snapshotTotals(s);
   const beforeCredits = s.credits;
-  const beforeDeliveries = s.drone.deliveries;
+  const beforeDeliveries = fleetDeliveries(s);
   const beforeBatches = totalBatches(s);
   const startTick = s.tick;
 
@@ -52,7 +52,7 @@ export function catchUp(
       capped: elapsed > TUNING.offlineCapTicks,
       gains,
       creditsGained: s.credits - beforeCredits,
-      deliveries: s.drone.deliveries - beforeDeliveries,
+      deliveries: fleetDeliveries(s) - beforeDeliveries,
       batchesDone: totalBatches(s) - beforeBatches,
       bottleneck: detectBottleneck(s),
     },

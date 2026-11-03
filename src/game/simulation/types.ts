@@ -114,6 +114,8 @@ export interface SimState {
     nextPulseTick: number;
   };
   drone: DroneState;
+  /** Extra recovery drones, in purchase order; the starter stays in `drone` (B-28). */
+  spares: DroneState[];
   credits: number;
   exportSteelDelivered: number;
   exportClaimed: boolean;
@@ -160,6 +162,7 @@ export function createInitialState(): SimState {
       inFlight: null,
       deliveries: 0,
     },
+    spares: [],
     credits: 0,
     exportSteelDelivered: 0,
     exportClaimed: false,
@@ -178,6 +181,33 @@ export function createInitialState(): SimState {
 /** Integer store access keeps undefined out of arithmetic. */
 export function qty(s: SimState, r: ResourceId): number {
   return s.store[r] ?? 0;
+}
+
+/** One working drone's starting record; every unit runs the same starter route. */
+export function createUnit(): DroneState {
+  return { repaired: true, accumulated: 0, nextDeliveryTick: 0, inFlight: null, deliveries: 0 };
+}
+
+/**
+ * Every drone in stable order: the repaired starter then each spare in purchase
+ * order (B-28). The order is fixed, so iteration is deterministic.
+ */
+export function fleetUnits(s: SimState): readonly DroneState[] {
+  return [s.drone, ...s.spares];
+}
+
+/** Deliveries landed by the whole fleet, for the return report and the fixtures. */
+export function fleetDeliveries(s: SimState): number {
+  let total = s.drone.deliveries;
+  for (const d of s.spares) total += d.deliveries;
+  return total;
+}
+
+/** Units lifted from the wreck by the whole fleet, the ledger's flight leg. */
+export function fleetAccumulated(s: SimState): number {
+  let total = s.drone.accumulated;
+  for (const d of s.spares) total += d.accumulated;
+  return total;
 }
 
 /** Quantity the priced transactions may spend (spec 8.2 rule). */

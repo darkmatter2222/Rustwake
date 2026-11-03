@@ -29,12 +29,14 @@ type LooseStep =
   | { kind: "build"; blueprint: string }
   | { kind: "sell"; resource: Parameters<typeof sellableAmount>[1]; qty: number }
   | { kind: "research"; node: string }
+  | { kind: "drone" }
   | { kind: "upgrade"; machineId: number }
   | { kind: "salvage" };
 
 interface Run {
   order: string;
   machines: number;
+  fleet: number;
   totals: number;
   credits: number;
   research: number;
@@ -113,6 +115,12 @@ function nextStep(state: SimState, upgradeFirst: boolean): LooseStep {
       ? ({ kind: "research", node: node.id } as LooseStep)
       : null;
   };
+  const makeDrone = () => {
+    if (!state.drone.repaired) return null;
+    if (1 + state.spares.length >= TUNING.fleetCap) return null;
+    if (state.credits < TUNING.droneAddBaseCost * 2 ** state.spares.length) return null;
+    return { kind: "drone" } as LooseStep;
+  };
   const makeSell = (skipPending: boolean) => {
     const blocked = skipPending ? pending(state, unbuilt) : new Set<string>();
     for (const resource of SELL_ORDER) {
@@ -126,8 +134,8 @@ function nextStep(state: SimState, upgradeFirst: boolean): LooseStep {
     unbuilt.length > 0 ? { kind: "build" as const, blueprint: nearest(state, unbuilt) } : null;
 
   const stages = upgradeFirst
-    ? [makeResearch, () => upgradeStep(state), makeBuild, () => makeSell(true), makeNearBuild, () => makeSell(false)]
-    : [makeBuild, makeResearch, () => upgradeStep(state), () => makeSell(true), makeNearBuild, () => makeSell(false)];
+    ? [makeResearch, makeDrone, () => upgradeStep(state), makeBuild, () => makeSell(true), makeNearBuild, () => makeSell(false)]
+    : [makeBuild, makeResearch, makeDrone, () => upgradeStep(state), () => makeSell(true), makeNearBuild, () => makeSell(false)];
   for (const stage of stages) {
     const step = stage();
     if (step) return step as LooseStep;
@@ -193,6 +201,9 @@ function runOrder(order: string): Run {
       case "research":
         send(state, { type: "research.buy", node: step.node });
         break;
+      case "drone":
+        send(state, { type: "drone.add" });
+        break;
       case "upgrade":
         send(state, { type: "machine.upgrade", machineId: step.machineId });
         break;
@@ -205,6 +216,7 @@ function runOrder(order: string): Run {
   return {
     order,
     machines: state.machines.length,
+    fleet: 1 + state.spares.length,
     totals: state.machines.reduce((sum, machine) => sum + machine.batchesDone, 0),
     credits: state.credits,
     research: Object.keys(state.research).length,
@@ -229,7 +241,11 @@ describe("build-versus-upgrade cadence (B-21)", () => {
     expect(first.research).toBe(3);
     // The same number the probe prints, so the fixture and the evidence table cannot
     // drift apart.
-    expect(first.totals).toBe(1757);
+    expect(first.totals).toBe(1864);
+    // The fleet step is a real stage: the ladder bought spare drones in both orders,
+    // which is what lifts the batch total above the one-drone 1 757 (B-28, D-38).
+    expect(first.fleet).toBeGreaterThan(1);
+    expect(first.kinds["drone"] ?? 0).toBeGreaterThan(0);
     expect(Math.max(...(first.levels.match(/L(\d+)/g) ?? []).map((part) => Number(part.slice(1)))))
       .toBeGreaterThan(1);
     console.log("cadence:", JSON.stringify(runs));
@@ -237,6 +253,7 @@ describe("build-versus-upgrade cadence (B-21)", () => {
 
   it("lands on the same yard whichever of the two stages is checked first", () => {
     expect(second.machines).toBe(first.machines);
+    expect(second.fleet).toBe(first.fleet);
     expect(second.totals).toBe(first.totals);
     expect(second.credits).toBe(first.credits);
     expect(second.research).toBe(first.research);

@@ -659,3 +659,48 @@ Format: date · problem · options · choice · reason · reversibility.
   both ladder states, and the longest label the ladder produces, `Research Efficient Cutters`,
   measures 130 × 54 px with the row at 54 px and a band of **21.8 %** at 360 × 640.
 
+## D-38 — 2026-11-03 — A credit-priced drone fleet, added one unit at a time
+
+- Problem (B-28): D-35 measured one repaired drone as the binding constraint of the young yard —
+  5 units per 5 s (1 scrap/s) against an L13 sorter's ~1.2/s — so the store pinned at the reserve
+  floor, blueprint prices were met only by chance, and the post-absence session stopped at four
+  machines with `research: {}`.
+- Options considered: (a) raise `droneDeliveryUnits` or shorten `droneDeliveryTicks`, which changes
+  one number but removes the purchase from the ladder and the choice from the player; (b) raise
+  `dockCapacity`, which stores the same trickle without raising it; (c) a second and later third and
+  fourth unit bought with credits, each running the same route independently.
+- Chosen: (c). `SimState.spares: DroneState[]` sits beside the starter's own `drone` record, so a
+  v1 save without the field simply has no spares and `migrate` zero-fills the array;
+  `drone.add` costs `TUNING.droneAddBaseCost × 2^spares` = 45 / 90 / 180 / 360 credits up to
+  `TUNING.fleetCap = 5` units. The ladder gains one stage, `{ kind: "drone" }`, placed after the
+  `build` and `research` stages and immediately above `affordableUpgrade`, so the only purchase that
+  raises what the wreck yields goes in before the percentage sinks. Every phase loops per unit, and
+  the ledger, the rate window, the offline report, and the renderer sum over the fleet.
+- Reason: each unit is the same 5-unit/5 s cycle, so two units are 2 scrap/s while the finite wreck
+  pool still decides the total — efficiency and work rate, not new matter (spec 7.2). The doubling
+  price keeps the fleet a sequence of real decisions against upgrades (spec 8.6).
+- Measured effect (`npx tsx scripts/probe-supply.mjs`, `docs/evidence/2026-11-03-supply-window.md`):
+  the 30-minute driver at the shipped floor 10 now ends with **8 machines on 18 links, 4 drones,
+  1 864 batches (62.1/min), 165 credits, 3 nodes**, the first spare at round **308**, the signal lab
+  at round **931** and its first node at **975**. Before the fleet the same driver stopped at 1 757
+  batches and the signal lab arrived later still (D-33, D-34). The floor sweep changed shape and is
+  restated here: floors {0, 5, 10, 20} give **6 / 8 / 8 / 8** machines and **1 558 / 1 949 / 1 864 /
+  1 753** batches, with the first spare at rounds 104 / 198 / 308 / 385 — three floors now tie within
+  6 %, and only floor 0 stays stripped, so 10 remains shipped as the middle value that clears every
+  starter blueprint's price with room. D-34's parity result survives: both ladder orders give the
+  same 1 864 batches, the same levels, and **0 ambiguous rounds of 1 800**.
+- Evidence: `tests/simulation/fleet.test.ts` (8 cases: refusal before the repair with a byte-identical
+  state, one payment for one unit plus the idempotent retry, the doubling price and the cap refusal,
+  ~1.9× deliveries with two units on the same pool, `advance`/`advanceTo` byte parity with a fleet,
+  the ledger counting one leg per unit and the offline report summing the fleet, one phrased step on
+  card and dock, and the 240/900-round session marks), the restated pins in
+  `tests/simulation/cadence.test.ts` and `tests/simulation/supply-window.test.ts`, and the yard
+  panel's new `Drones` row. `npx vitest run` **151 passed / 151** (18 files).
+- Trade-off stated: the fleet is not a per-tap multiplier and stops at five units, and the ladder now
+  spends the first 45 credits on a drone instead of a machine level, so a 240-round session shows
+  five machines with three nodes still locked (measured in the phone capture).
+- Reversible: yes; one optional state field, one command, one ladder stage, zero-filled on migrate.
+- Reconsider when: drone roles and equipment arrive (spec 11.1), which is when a unit stops being a
+  copy of the starter and the fleet cap should become a hull-budget rule; or when a real-device trace
+  (BL-01) shows five simultaneous flight legs costing frame work worth bounding.
+

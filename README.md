@@ -29,24 +29,27 @@ simulation core. English only so far. No account, no server, no payments yet.
    unlock in that order, each with its own route and its own upgrade price.
 9. **Sell a surplus** from the store panel at published per-unit prices, then spend the
    credits on whichever machine is the current bottleneck.
-10. **Read the diagnosis** in a machine's panel: measured working/waiting/output-waiting
+10. **Add a recovery drone** once 45 credits are banked: each spare unit runs the same
+    wreck→dock cycle, so two units hand over about 2 scrap/s and the store starts holding
+    whole blueprint prices. The price doubles (45, 90, 180, 360) and stops at five units.
+11. **Read the diagnosis** in a machine's panel: measured working/waiting/output-waiting
     percentages, the busiest link, and the yard power speed, followed by one next step that
     is sometimes "no purchase needed".
-11. **Research a node** once the yard produces data: the dock gains a fourth target,
+12. **Research a node** once the yard produces data: the dock gains a fourth target,
     **Research**, which lists each node's exact effect and cost, and one tap buys one rank.
-12. **Open a second tab** and it follows the first: the follower shows
+13. **Open a second tab** and it follows the first: the follower shows
     `Following the other tab`, mirrors the owner's saved yard, and writes nothing. Close the
     first tab and **Take over** promotes the follower, which continues from the same ledger.
-13. **Move the yard to another device** once the tutorial ends: the dock gains a fifth target,
-    **Yard**, whose panel shows the record (tick, machines, links, credits, save size) with the
-    export text, and an **Import** page for pasting one. `Apply` either settles the whole yard in
-    one step or explains why it did not and changes nothing.
+14. **Move the yard to another device** once the tutorial ends: the dock gains a fifth target,
+    **Yard**, whose panel shows the record (tick, machines, drones, links, credits, save size)
+    with the export text, and an **Import** page for pasting one. `Apply` either settles the
+    whole yard in one step or explains why it did not and changes nothing.
 
 After the tutorial, one authoritative ladder decides the next step for both the objective
 card and the dock button: an unmet link first, then an affordable build, then an affordable
-research node, then the cheapest useful upgrade, then a sell of a surplus that is not the
-next machine's missing input, then the build that is closest to payable. The two surfaces
-cannot disagree.
+research node, then a spare drone while the fleet has room, then the cheapest useful upgrade,
+then a sell of a surplus that is not the next machine's missing input, then the build that is
+closest to payable. The two surfaces cannot disagree.
 
 Implemented systems: manual salvage with cooldown, drone automation, machine
 construction/upgrade/dismantle/move, 1×1 placement on a 6×6 yard with a protected dock
@@ -59,7 +62,8 @@ objective card, one localised explanation per blocked action, a measured 60 s ra
 machine plus per-machine and per-link occupancy with one recommended action, single-canvas HUD,
 local save with a return
 report and a 12-hour offline cap, a versioned export/import pair that either replaces the yard in one
-step or changes nothing, a synthesised audio bus with a bounded voice pool, and a
+step or changes nothing, a credit-priced recovery-drone fleet (one unit at a time, 45 credits then
+doubling, five units), a synthesised audio bus with a bounded voice pool, and a
 single-writer multi-tab lease with read-only followers.
 
 Planned, not yet functional: expeditions/sector map, wreck composition and scan detail,
@@ -70,14 +74,12 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-28 second delivery drone**: the measured 30-minute stall in decision D-35 is one drone's
-   1 scrap/s against an L13 sorter's ~1.2/s, so the store never reaches the next blueprint's price.
-   A second drone (or a delivery-sized store) inside the first 30 minutes, then the same driver
-   reaches the signal lab from a post-absence start.
-2. **B-12 content validator in CI**: run the typed-content checks in the pipeline so a missing
+1. **B-12 content validator in CI**: run the typed-content checks in the pipeline so a missing
    reference, an invalid footprint, or a zero-time cycle fails the build instead of the playtest.
-3. **B-10 localisation readiness**: the remaining player-facing literals into keys with defaults
+2. **B-10 localisation readiness**: the remaining player-facing literals into keys with defaults
    behind one number/time formatter, with panel text expansion re-measured at the 2.0 text scale.
+3. **B-02 worker catch-up**: move the 12 h catch-up off the main thread with cancellation, and
+   publish a measured stall histogram, against the 100 ms target of spec 21.5.
 
 ## Controls
 
@@ -91,7 +93,7 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Machine panel | Status, batch progress, measured rate over its named window (`60s window`, or all available time for a new machine), maximum rate at full power, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
 | Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
 | Research panel | One line per node with its exact effect, `Buy · n Data`, `Known`, or `Needs <earlier node> first` |
-| Yard panel | Two pages. Page one: `Tick`, `Machines`, `Links`, `Credits`, `Save n characters`, the read-only export field and **Copy**; page two: one editable field, **Apply** and **Back**. One short note line reports the result (`Applied · tick 698, 1 machines`, `Damaged file (store)`, `Newer version than this build`, `Another tab is writing this yard`) |
+| Yard panel | Two pages. Page one: `Tick`, `Machines`, `Drones`, `Links`, `Credits`, `Save n characters`, the read-only export field and **Copy**; page two: one editable field, **Apply** and **Back**. One short note line reports the result (`Applied · tick 698, 1 machines`, `Damaged file (store)`, `Newer version than this build`, `Another tab is writing this yard`) |
 | Build / Place / Next / Cancel | Blueprint selection, ghost confirmation, cycling, abort |
 | Sound on/off | Toggles the master bus, persisted (`Sound ✓` / `Sound ✕`) |
 | Text size (`A 1`) | Cycles the HUD text 1 → 1.25 → 1.5 → 2, persisted; from 1.5 the objective's second line and one resource chip step back |
@@ -147,9 +149,63 @@ refresh the seed before capturing.
 To regenerate the HUD share, no-scroll, large-text and contrast table: `npm run preview`, then
 `node scripts/measure-hud.mjs`, which writes `docs/evidence/2026-11-03-hud-share.md` (about 70 s,
 six sizes × three text scales × six states in one Chrome instance). For the individual dock boxes in
-both ladder states, `node scripts/probe-dock.mjs` (about 1 s).
+the three ladder states the dock can show (plain, research, fleet), `node scripts/probe-dock.mjs`
+(about 1 s, one browser context per state).
 
-## Latest update (M2: the yard travels, and the dock keeps its floor at five targets, 2026-11-03)
+## Latest update (M2: a credit-priced drone fleet, 2026-11-03)
+
+- **The yard buys recovery drones one unit at a time (B-28, decision D-38).** `SimState.spares` sits
+  beside the starter's own record, `drone.add` costs 45 credits and doubles to 90, 180, 360, and stops
+  at `TUNING.fleetCap = 5`. Each unit runs the same wreck→dock cycle independently, so two units hand
+  over about 2 scrap/s while the wreck's finite pool still decides the total (spec 7.2). Every engine
+  phase loops per unit — batch completion, launch, landing — and the ledger, the rate window, the
+  offline report, the event-jump horizon, the yard panel (`Drones 5`) and the renderer (each unit on its
+  own leg, 5 px apart) all sum over the fleet. The ladder gained exactly one stage, `{ kind: "drone" }`,
+  between the research node and the credit sink, because the spare is the only purchase that raises what
+  the wreck yields. Refusals are local and explained: `Every drone is already flying`,
+  `Repair your drone first`.
+- **The 30-minute driver measures what the second drone was for** (`npx tsx scripts/probe-supply.mjs`,
+  `docs/evidence/2026-11-03-supply-window.md`). At the shipped reserve floor 10 the headless session now
+  ends with **8 machines on 18 links, 4 drones, 1 864 batches (62.1/min), 165 credits and 3 research
+  nodes**, the first spare bought at round **308**, the signal lab built at **931** and its first node at
+  **975** — against **1 757** batches and a later signal lab with one drone (D-33, D-34, D-35). The floor
+  sweep changed shape and is restated: floors {0, 5, 10, 20} give **6 / 8 / 8 / 8** machines and
+  **1 558 / 1 949 / 1 864 / 1 753** batches, first spare at rounds 104 / 198 / 308 / 385, so three floors
+  now tie inside 6 % and 10 stays shipped as the middle value that still clears every starter price.
+  D-34's parity result survives the fleet: both ladder orders finish at the same 1 864 batches, the same
+  eight levels, and **0 ambiguous rounds of 1 800**.
+- **The dock's 44 px floor holds with the new label.** `scripts/probe-dock.mjs` measures three ladder
+  states now, each in its own browser context (two tabs on one origin would share one localStorage and
+  the second would mirror the first, spec 22.3). At 360 × 640 the fleet state's row is **340 px wide with
+  a 6 px gap** and five targets: `Store 50×46`, `Yard 44×46`, the new primary **`Add drone` over
+  `45 credits` at 102 × 46**, `Build 48×46`, `Research 72×46` — shortest target **44 × 46** at a
+  **20.6 %** band. The longest label the ladder can produce is unchanged: `Research Efficient Cutters`
+  at **130 × 54** in a 54 px row, **21.8 %** (D-37).
+- **The organic phone session got longer and stayed honest.** the post-absence phase now runs
+  **1 000 rounds** (it was 240): the same 12 h absence settles `tick 1010 → 433 020` with
+  `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 · Batches 774 · storage-full`, then a
+  second of work per round takes the yard to **tick 442 690** with `sorter L19 ×1111`, `furnace L17 ×496`,
+  `copper separator L16 ×258`, `wire mill L15 ×238`, `polymer recycler L15 ×85`, **11 links**, a full
+  **five-drone fleet**, 24 credits and the dock on `Sell 1 Steel` over `+10 credits`. It still ends with
+  `research: {}`, so `latest-research-phone.png` is the seeded mature capture as before (B-25's
+  mechanism, D-35): the absence leaves the store saturated, and the ladder spends its credits on the five
+  machines it has, so the signal lab's price is met later than the 1 000-round mark.
+- Checks in this run: `npx vitest run` **151 passed / 151** (18 files; `tests/simulation/fleet.test.ts`
+  is new with eight cases, and the `cadence`/`supply-window` pins are restated from fresh measurement),
+  `tsc --noEmit` clean, `npm run build` **213.12 kB JS (67.12 kB gzip)** — +0.71 kB gzip over
+  `926d342`, the per-unit phases, the fleet step and its two strings — CSS **5.59 kB (1.81 kB gzip)**,
+  50 modules, artifacts `index-DDfppFoR.js` / `index-DudncZlS.css`. `node scripts/measure-hud.mjs`
+  re-run: **20.6 %** band at 360 × 640 (ink **19.1 %**), 15.7 % at 390 × 844, 14.5 % at 412 × 915,
+  21.9 % landscape, **0 px** inner scroll on the store, yard-record and import panels including the new
+  `Drones` row, minimum contrast **5.77:1**, **108/108** no-scroll states. Headless simulation cost is
+  re-measured below (12 h tick-by-tick **41.9 ms**), and all **seven** images were recaptured in one
+  **14:11–14:13** run from that build.
+- Known limitations: the fleet shares one route and one finite wreck pool, so the doubling price is the
+  governor rather than a per-tap multiplier, and it stops at five units until drone roles arrive
+  (spec 11.1); the organic phone session still ends before `data > 0`; CI read-back stays pending
+  (**BL-06**); frame rate, thermals and human listening remain **BL-01**, **BL-02**, **BL-11**.
+
+## Earlier this week (M2: the yard travels, and the dock keeps its floor at five targets, 2026-11-03)
 
 - **Save export and import shipped (B-06, spec 22.1, spec 25.3 case 8).** `store.exportSave()` is the
   exact text the checkpoint writes (verified by equality in a test), and `store.importSave()` runs the
@@ -563,31 +619,31 @@ both ladder states, `node scripts/probe-dock.mjs` (about 1 s).
 
 These are headless CPU costs for the simulation core, not mobile FPS claims.
 
-| Workload | Median of 3 (this build, 60 s rate window) | Median of 3 (previous build) |
+| Workload | Median of 3 (this build, drone fleet) | Median of 3 (previous build) |
 | --- | --- | --- |
-| 12 h catch-up, 4-machine starter yard, tick-by-tick | 41.2 ms | 42.2 ms |
+| 12 h catch-up, 4-machine starter yard, tick-by-tick | 41.9 ms | 41.2 ms |
 | 12 h catch-up, idle yard, event-jump path | < 1 ms | < 1 ms |
-| 500 machines, 6 000 ticks | 41.7 ms | 41.0 ms |
-| 100 machines, 10 000 ticks | 13.4 ms | 13.7 ms |
-| 50 machines, 10 000 ticks | 6.4 ms | 6.1 ms |
-| 5 machines, 10 000 ticks | 0.97 ms | 1.0 ms |
-| 1 machine, 10 000 ticks | 0.71 ms | 0.8 ms |
+| 500 machines, 6 000 ticks | 43.2 ms | 41.7 ms |
+| 100 machines, 10 000 ticks | 14.1 ms | 13.4 ms |
+| 50 machines, 10 000 ticks | 6.5 ms | 6.4 ms |
+| 5 machines, 10 000 ticks | 0.99 ms | 0.97 ms |
+| 1 machine, 10 000 ticks | 0.77 ms | 0.71 ms |
 
 Run-to-run spread on this machine is a few milliseconds (the same 12 h case read 41.9 ms and
 29.9 ms in earlier passes), so treat these as bands, and every row above is inside that band: the
-four new integers and the one extra compare per machine per tick are not measurable here. Earlier
-reference points on the same harness: 33.4 ms / < 1 ms / 23.2 ms / 6.7 ms / 3.7 ms / 0.7 ms / 0.5 ms
-before per-material routing, and 59.3 ms for the 12 h case at 22 links (B-23 took it to 18 links per
-tick). The per-tick
+per-unit drone loop costs one extra pass over an array of at most five records per tick, which is not
+measurable here. Earlier reference points on the same harness: 33.4 ms / < 1 ms / 23.2 ms / 6.7 ms /
+3.7 ms / 0.7 ms / 0.5 ms before per-material routing, and 59.3 ms for the 12 h case at 22 links (B-23
+took it to 18 links per tick). The per-tick
 occupancy counters added roughly 2 ms at 500 machines; the lease costs two extra `localStorage`
 operations per second in the owning tab and one read per 100 ms in a follower, which the headless
 table does not cover. The 12 h case stays inside the 100 ms stall budget of spec 21.5. This pass
-touched `src/ui/*`, the store's two new methods and the save decoder's failure type, so the
-simulation core is unchanged and the table is still the previous build's.
+changed the simulation core (per-unit drone phases, a fleet-aware event horizon) and the UI, so the
+table above is from this build.
 
 Layout numbers for this build are in `docs/evidence/2026-11-03-hud-share.md`: resting HUD ink share
-**5.1 %–19.1 %** across the six sizes of spec 25.1 at the default text scale (26.1 % peak at 1.5,
-40.2 % at 2.0) with a row-union band of **20.6 %** on the narrowest phone and 21.9 % in landscape, the
+**5.1 %–19.1 %** across the six sizes of spec 25.1 at the default text scale (26.2 % peak at 1.5,
+40.4 % at 2.0) with a row-union band of **20.6 %** on the narrowest phone and 21.9 % in landscape, the
 no-scroll gate met in **108/108 states** (six sizes × three text scales × six states: return report,
 rest, build, store, yard record, import page), smallest dock target **44 × 46** px and smallest icon
 button 44 × 44 px, every panel reporting 0 px of inner scroll with its Close button on screen, and a
@@ -600,34 +656,38 @@ spec 21.5 remain BL-01.
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L14 ×670, furnace L12 ×276, polymer recycler L10 ×16, copper separator L11 ×50), 9 links, tick 435 380, 108 credits, store `scrap 10 ferrous 5 nonferrous 10 steel 11 copper 12 polymer 11`, and a four-target dock whose primary reads `Sell 1 Steel` over `+10 credits` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 12:41 local |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the scrolling body under it shows `Status Needs input`, `Cycle 3.16s`, `Actual rate 0.08 batches/s · 60s window`, `Max rate 0.32 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 13% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 197-credit upgrade to it (`3.16s → 3.00s`) | Same commit and session, Chrome headless, captured 2026-11-03 12:41 local |
-| `docs/screenshots/latest-yard.png` | 390 × 844 @2x | The **Yard** panel, page one, on that same session: `Tick 435 392`, `Machines 4`, `Links 9`, `Credits 108`, `Save 6 844 characters`, and the read-only export field (50 px tall, its own scroll) beginning `{"schemaVersion":1,"checksum":"31c44866",…}`, with **Copy** and **Import** under it — the B-06 surface at phone size | Same commit and session, Chrome headless, captured 2026-11-03 12:41 local |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Credits 108 Store 59/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 12:41 local |
-| `docs/screenshots/latest-research-phone.png` | 390 × 844 @2x | Research panel at phone size on the mature yard: `Data 124`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip`. **Seeded context**: the same organic 240-round phone session is tried first and ended at 4 machines with `research: {}`, so this image shows the panel's appearance at 390 × 844, not a two-minute player path (D-35) | Same commit, separate phone-sized context with `docs/evidence/yard-mature.json` installed before first paint, Chrome headless, captured 2026-11-03 12:43 local |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 12–14 - sorter L14 ×1431, copper separator L13 ×687, wire mill L12 ×640, furnace L13 ×442, circuit assembler L12 ×213, signal lab L13 ×191, polymer recycler L12 ×229, plate press L12 ×210 - 18 links, tick 460 966, `data 128`, `wire 425`, `plates 277`, 110 credits, three research nodes known, and the centred 560 px dock reading `Sell 60 Wire` over `+240 credits` | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 12:43 local |
-| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 128` and the same three effect lines, each ending in `Known`, with the buy buttons retired | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 12:43 local |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path (`Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 · Batches 774 · storage-full`), then **1 000 further one-second rounds**: 5 machines (sorter L19 ×1111, furnace L17 ×496, copper separator L16 ×258, wire mill L15 ×238, polymer recycler L15 ×85), 11 links, five drones flying, tick 442 690, 24 credits, store `scrap 35 ferrous 5 nonferrous 10 steel 11 copper 10 polymer 11 wire 16`, and a five-target dock whose primary reads `Sell 1 Steel` over `+10 credits` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 14:11 local |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its panel head row reads `Polymer recycler` beside `Close`, and the body under it shows `Status Working`, `Batch 4%`, `Cycle 2.50s`, `Actual rate 0.10 batches/s · 60s window`, `Max rate 0.40 batches/s at full power`, `Working 1% · waiting for input 99% · output waiting 0% · link 14% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 417-credit upgrade to it (`2.50s → 2.40s`) | Same commit and session, Chrome headless, captured 2026-11-03 14:11 local |
+| `docs/screenshots/latest-yard.png` | 390 × 844 @2x | The **Yard** panel, page one, on that same session: `Tick 442 700`, `Machines 5`, **`Drones 5`** (the B-28 fleet at its cap), `Links 11`, `Credits 24`, `Save 14 569 characters`, and the read-only export field (50 px tall, its own scroll) beginning `{"schemaVersion":1,"checksum":"dcf787a1",…}`, with **Copy** and **Import** under it — the B-06 surface at phone size | Same commit and session, Chrome headless, captured 2026-11-03 14:11 local |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 43 Ferrous 5 Credits 24 Store 110/900`, owner at tick 442 710). The same pair is re-checked after the handover: the promoted tab continues from tick 442 739 with `Scrap 59 … Store 131/900` | Same commit, two Chrome pages in one context, captured 2026-11-03 14:11 local |
+| `docs/screenshots/latest-research-phone.png` | 390 × 844 @2x | Research panel at phone size on the mature yard: `Data 146`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip`. **Seeded context**: the organic 1 000-round phone session is tried first and still ends with `research: {}` (5 machines, 24 credits, the store saturated by the absence), so this image shows the panel's appearance at 390 × 844, not a two-minute player path (D-35 mechanism, restated under D-38) | Same commit, separate phone-sized context with `docs/evidence/yard-mature.json` installed before first paint, Chrome headless, captured 2026-11-03 14:13 local |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, four drones in it, then the same 12 h absence: `Nonferrous +294 · Plates +219 · Deliveries 168 · Batches 525 · storage-full`): 8 machines at level 12–14 - sorter L14 ×1406, furnace L13 ×490, copper separator L13 ×398, wire mill L13 ×349, plate press L12 ×234, polymer recycler L12 ×128, circuit assembler L12 ×115, signal lab L13 ×85 - 18 links, tick 468 078, `data 146`, `plates 376`, `nonferrous 308`, 43 credits, three research nodes known, and the centred 560 px dock reading `Sell 60 Nonferrous` over `+120 credits` | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 14:13 local |
+| `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 146` and the same three effect lines, each ending in `Known`, with the buy buttons retired | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 14:13 local |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover and the two absences are
 logged as text by the capture script rather than inferred from these images: organic mobile absence
 `tick 1 010 → 433 020` with `Ferrous +110 · Nonferrous +550 · Steel +220 · Deliveries 342 · Batches
-774 · Bottleneck storage-full`; seeded desktop absence `tick 28 906 → 460 916` with `Wire +415 ·
-Plates +267 · Data +118 · Deliveries 141 · Batches 1 159 · Bottleneck storage-full` (that
-store starts near its 900-unit cap, so the credited window is storage-limited from the first minute);
-lease `t1-fjpv → t1-6hqp` with the tick advancing 435 400 → 435 432 at an unchanged revision 172 and
-the promoted tab's card reading `Sell 3 Steel for 30 credits.` over the hint `A machine waits for
+774 · Bottleneck storage-full`; seeded desktop absence `tick 36 018 → 468 028` with `Nonferrous +294 ·
+Plates +219 · Deliveries 168 · Batches 525 · Bottleneck storage-full` (that store starts near its
+900-unit cap, so the credited window is storage-limited from the first minute);
+lease `t1-g56r → t1-g8rx` with the tick advancing 442 710 → 442 739 at an unchanged revision 771 and
+the promoted tab's card reading `Sell 49 Scrap for 49 credits.` over the hint `A machine waits for
 input; check its empty side.`
 **Research panel:** two photographs, one per viewport width, both of the mature yard installed as a
-seed save (`docs/evidence/yard-mature.json`, written by the supply probe), so the images and the
-headless tables describe the same 8-machine, 18-link yard. The short organic phone session still ends
-before `data > 0` — measured cause in decision D-35, fix recorded as B-28 — which is why the phone row
-is a seeded context; `scripts/capture.mjs` tries the organic session first and prints
-`research phone source:` with the answer. All **seven** images were recaptured in one 12:41–12:43 run
-from this build (artifacts `index-BKbcOrrd.js` and `index-DudncZlS.css`), so they show the same HUD the
+seed save (`docs/evidence/yard-mature.json`, written by the supply probe: tick 18 298, 8 machines,
+18 links, four flying units, `data 106`, three nodes known), so the images and the headless tables
+describe the same yard. The longer organic phone session still ends before `data > 0` — measured cause
+in decision D-35, restated under D-38: after the absence saturates the store, 1 000 rounds take the
+five machines it has to L15–L19 and the fleet to its cap of five, and the signal lab's price is met
+later than the 1 000-round mark — which is why the phone row is a seeded context;
+`scripts/capture.mjs` tries the organic session first and prints
+`research phone source:` with the answer. All **seven** images were recaptured in one 14:11–14:13 run
+from this build (artifacts `index-DDfppFoR.js` and `index-DudncZlS.css`), so they show the same HUD the
 layout table describes: three buttons in the top-right cluster (`Sound ✓`, `A 1`, `Home`), a two-line
 chip block at 390 px, a one-line objective card, and a five-target dock whose primary still shows the
-verb over its price on one line (the 44 px floor and the 6 px gap of decision D-37).
+verb over its price on one line (the 44 px floor and the 6 px gap of decision D-37, re-measured with
+the fleet label by `scripts/probe-dock.mjs`).
 
 ## Architecture
 

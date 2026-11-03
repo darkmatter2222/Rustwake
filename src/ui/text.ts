@@ -1,6 +1,6 @@
 import { BLUEPRINTS, type ResourceId } from "../game/content/defs";
 import { RESEARCH } from "../game/content/research";
-import { upgradeCost } from "../game/simulation/commands";
+import { droneAddCost, upgradeCost } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { ImportResult } from "../game/persistence/save";
 import type { SimState } from "../game/simulation/types";
@@ -51,6 +51,8 @@ export function describeStep(state: SimState, step: YardStep): string {
       // one line so the objective never costs a third text row on a short screen (B-26).
       return def ? `Research ${def.label} · ${def.cost} Data` : "Research a node when its data cost is covered.";
     }
+    case "drone":
+      return `Add a recovery drone · ${droneAddCost(state)} credits`;
     case "upgrade":
       return `Upgrade the ${machineLabel(state, step.machineId)}.`;
     default:
@@ -77,6 +79,8 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
       if (!def) return { label: "Research" };
       return { label: `Research ${def.label}`, cost: `${def.cost} Data` };
     }
+    case "drone":
+      return { label: "Add drone", cost: `${droneAddCost(state)} credits` };
     case "upgrade": {
       const machine = state.machines.find((m) => m.id === step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
@@ -111,6 +115,8 @@ export const REJECT_TEXT: Record<string, string> = {
   locked: "Sell opens after your first steel contract",
   "already-known": "Already researched",
   prereq: "Research the earlier node first",
+  "fleet-full": "Every drone is already flying",
+  "no-drone": "Repair your drone first",
   "read-only": "Another tab is writing this yard",
 };
 

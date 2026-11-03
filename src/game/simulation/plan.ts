@@ -1,12 +1,13 @@
 import {
   BLUEPRINTS,
   RECIPES,
+  TUNING,
   exportPrice,
   unlockedBlueprints,
   type ResourceId,
 } from "../content/defs";
 import { planConnections, type ConnectionPlan } from "./autoconnect";
-import { sellableAmount, upgradeCost } from "./commands";
+import { droneAddCost, sellableAmount, upgradeCost } from "./commands";
 import { nextResearchNode } from "../content/research";
 import type { SimState } from "./types";
 
@@ -19,6 +20,7 @@ export type YardStep =
   | { kind: "build"; blueprint: string }
   | { kind: "sell"; resource: ResourceId; qty: number }
   | { kind: "research"; node: string }
+  | { kind: "drone" }
   | { kind: "upgrade"; machineId: number }
   | { kind: "salvage" };
 
@@ -96,6 +98,11 @@ export function nextYardStep(state: SimState): YardStep {
   // a node is affordable; both actions stay available afterwards.
   const node = nextResearchNode(state);
   if (node && (state.store.data ?? 0) >= node.cost) return { kind: "research", node: node.id };
+  // A spare drone sits between the material steps and the credit sink: it is the
+  // only purchase that raises what the wreck hands over, so the store can hold a
+  // whole blueprint price instead of hovering at the reserve floor (B-28).
+  const fleet = fleetStep(state);
+  if (fleet) return fleet;
   const upgrade = affordableUpgrade(state);
   if (upgrade) return upgrade;
   // A sell must never hold back the next machine, so resources that are still
@@ -135,7 +142,20 @@ function nearestBlueprint(state: SimState, unbuilt: readonly string[]): string {
   return best;
 }
 
-/** Resources still short of an unbuilt blueprint's price. */function pendingInputs(state: SimState, unbuilt: readonly string[]): Set<ResourceId> {
+/**
+ * The fleet step, offered while the yard still needs a purchase and the credit price
+ * is covered. Null when the drone is not flying yet, when the fleet is complete, or
+ * when the credits fall short (spec 11.1, B-28).
+ */
+function fleetStep(state: SimState): YardStep | null {
+  if (!state.drone.repaired) return null;
+  if (1 + state.spares.length >= TUNING.fleetCap) return null;
+  if (state.credits < droneAddCost(state)) return null;
+  return { kind: "drone" };
+}
+
+/** Resources still short of an unbuilt blueprint's price. */
+function pendingInputs(state: SimState, unbuilt: readonly string[]): Set<ResourceId> {
   const pending = new Set<ResourceId>();
   for (const id of unbuilt) {
     const def = BLUEPRINTS[id];

@@ -9,6 +9,7 @@ import {
 import { RESEARCH, researchBonus } from "../content/research";
 import {
   SCHEMA_VERSION,
+  createUnit,
   machineById,
   pushLog,
   type MachineState,
@@ -34,6 +35,8 @@ export type CommandReject =
   | "locked"
   | "already-known"
   | "prereq"
+  | "fleet-full"
+  | "no-drone"
   | "read-only";
 
 export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
@@ -41,6 +44,7 @@ export type CommandResult = { ok: true; revision: number } | { ok: false; reason
 export type Command =
   | { id: string; type: "manual.salvage" }
   | { id: string; type: "drone.repair" }
+  | { id: string; type: "drone.add" }
   | { id: string; type: "machine.build"; blueprint: string; tile: number }
   | { id: string; type: "machine.upgrade"; machineId: number }
   | { id: string; type: "machine.dismantle"; machineId: number }
@@ -72,6 +76,8 @@ function execute(s: SimState, command: Command): CommandResult {
       return manualSalvage(s);
     case "drone.repair":
       return repairDrone(s);
+    case "drone.add":
+      return addDrone(s);
     case "machine.build":
       return buildMachine(s, command.blueprint, command.tile);
     case "machine.upgrade":
@@ -132,6 +138,31 @@ function repairDrone(s: SimState): CommandResult {
   s.drone.repaired = true;
   s.drone.nextDeliveryTick = s.tick + TUNING.droneDeliveryTicks;
   return commit(s, "repair", 1);
+}
+
+/**
+ * Credit price of the next spare: 45 then double each time, so the fleet is a real
+ * choice against upgrades instead of a flat list (spec 8.6, B-28).
+ */
+export function droneAddCost(s: SimState): number {
+  return TUNING.droneAddBaseCost * 2 ** s.spares.length;
+}
+
+/**
+ * Buys one additional recovery drone (B-28). Every unit works the same starter route
+ * independently, so two units double what the wreck hands over per second while the
+ * finite pool still decides the total (spec 7.2: efficiency and work, not new matter).
+ */
+function addDrone(s: SimState): CommandResult {
+  if (!s.drone.repaired) return { ok: false, reason: "no-drone" };
+  if (1 + s.spares.length >= TUNING.fleetCap) return { ok: false, reason: "fleet-full" };
+  const cost = droneAddCost(s);
+  if (s.credits < cost) return { ok: false, reason: "insufficient" };
+  s.credits -= cost;
+  const unit = createUnit();
+  unit.nextDeliveryTick = s.tick + TUNING.droneDeliveryTicks;
+  s.spares.push(unit);
+  return commit(s, "drone", s.spares.length);
 }
 
 function buildMachine(s: SimState, blueprint: string, tile: number): CommandResult {

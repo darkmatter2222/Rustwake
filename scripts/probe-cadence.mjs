@@ -5,7 +5,7 @@
 // file re-implements the ladder locally with one boolean controlling the swap and
 // nothing else. Run: `npx tsx scripts/probe-cadence.mjs`.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { BLUEPRINTS, RECIPES, unlockedBlueprints } from "../src/game/content/defs";
+import { BLUEPRINTS, RECIPES, TUNING, unlockedBlueprints } from "../src/game/content/defs";
 import { nextResearchNode } from "../src/game/content/research";
 import { sellableAmount, upgradeCost } from "../src/game/simulation/commands";
 import { planConnections } from "../src/game/simulation/autoconnect";
@@ -90,6 +90,13 @@ function nextStep(state, upgradeFirst) {
   };
 
   const upgradeStep = () => affordableUpgrade(state);
+  // The shipped fleet stage: same gate and price as `fleetStep` in `plan.ts`.
+  const droneStep = () => {
+    if (!state.drone.repaired) return null;
+    if (1 + state.spares.length >= TUNING.fleetCap) return null;
+    if (state.credits < TUNING.droneAddBaseCost * 2 ** state.spares.length) return null;
+    return { kind: "drone" };
+  };
   // Exactly the shipped tail: a pending-skipping sell, then the near-goal build
   // (possibly unaffordable, which is a rejected command, not a charge), then any
   // sell, then the first machine's upgrade.
@@ -98,6 +105,7 @@ function nextStep(state, upgradeFirst) {
   const order = upgradeFirst
     ? [
         researchStep,
+        droneStep,
         upgradeStep,
         buildStep,
         () => sellStep(true),
@@ -107,6 +115,7 @@ function nextStep(state, upgradeFirst) {
     : [
         buildStep,
         researchStep,
+        droneStep,
         upgradeStep,
         () => sellStep(true),
         nearBuildStep,
@@ -221,6 +230,9 @@ async function singleRun(order) {
         break;
       case "research":
         send(state, { type: "research.buy", node: step.node });
+        break;
+      case "drone":
+        send(state, { type: "drone.add" });
         break;
       case "upgrade":
         send(state, { type: "machine.upgrade", machineId: step.machineId });

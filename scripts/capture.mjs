@@ -179,10 +179,11 @@ const playSession = async (page) => {
   await page.waitForTimeout(200);
 
   // Keep working after the absence until the yard earns data, which is what unlocks
-  // the Research target (B-25). The headless ladder reaches its eighth machine at
-  // round 396, so 240 rounds is a settled mid-yard without spending the whole run.
+  // the Research target (B-25). With the fleet in the ladder (B-28) the headless run
+  // reaches its eighth machine at round 931 and buys its first node at 975, so the
+  // cap sits just past that: the phone image is then organic rather than seeded.
   let rounds = 0;
-  for (let i = 0; i < 240; i += 1) {
+  for (let i = 0; i < 1000; i += 1) {
     rounds = i + 1;
     const button = await page.$(".dock__btn--primary");
     if (!button) break;

@@ -23,8 +23,11 @@ interface Run {
   floor: number;
   tick: number;
   machines: number;
+  fleet: number;
   totals: number;
   research: number;
+  idleEarly: number;
+  idleLate: number;
   earlyLinks: Row[];
   lateLinks: Row[];
   readyUnits: Record<number, number>;
@@ -119,6 +122,9 @@ async function runFloor(floor: number): Promise<Run> {
       case "research":
         send(state, { type: "research.buy", node: step.node });
         break;
+      case "drone":
+        send(state, { type: "drone.add" });
+        break;
       case "upgrade":
         send(state, { type: "machine.upgrade", machineId: step.machineId });
         break;
@@ -135,11 +141,14 @@ async function runFloor(floor: number): Promise<Run> {
     floor,
     tick: late.tick,
     machines: state.machines.length,
+    fleet: 1 + state.spares.length,
     totals: state.machines.reduce(
       (sum, machine) => sum + machine.batchesDone,
       0,
     ),
     research: Object.keys(state.research).length,
+    idleEarly: early ? early.links.filter((link) => link.busy === 0).length : 0,
+    idleLate: late.links.filter((link) => link.busy === 0).length,
     earlyLinks: early ? early.links : [],
     lateLinks: late.links,
     readyUnits,
@@ -170,32 +179,42 @@ describe("supply window (B-15, B-25)", () => {
         runs.map((run) => ({
           floor: run.floor,
           machines: run.machines,
+          fleet: run.fleet,
           batches: run.totals,
           research: run.research,
+          idle: run.idleLate,
           aggregate: aggregate(run.lateLinks),
           ready: Math.max(...Object.values(run.readyUnits)),
         })),
       ),
     );
-    // With the onboarding market open, the floor is a real lever: 0 and 5 strip the
-    // store below the next blueprint's material price, so the ladder upgrades the
-    // machines it has instead of adding stages, and the signal lab (data) never
-    // arrives inside the half hour.
+    // With the onboarding market open and the fleet step in the ladder, three floors
+    // now reach the same full yard: 5, 10, and 20 all land on eight machines and three
+    // nodes inside the half hour. Only floor 0 stays stripped, so the floor is still a
+    // real lever - and a flatter one than before the second drone (B-28, D-38).
     expect(full.machines).toBe(8);
     expect(full.research).toBe(3);
-    for (const floor of [0, 5]) {
+    expect(full.fleet).toBe(4);
+    const stripped = runs.find((r) => r.floor === 0)!;
+    expect(stripped.machines).toBeLessThan(8);
+    expect(stripped.research).toBe(0);
+    expect(stripped.totals).toBeLessThan(full.totals);
+    for (const floor of [5, 20]) {
       const run = runs.find((r) => r.floor === floor)!;
-      expect(run.machines, `machines at floor ${floor}`).toBeLessThan(8);
-      expect(run.research, `research at floor ${floor}`).toBe(0);
-      expect(run.totals, `batches at floor ${floor}`).toBeLessThanOrEqual(full.totals);
+      expect(run.machines, `machines at floor ${floor}`).toBe(8);
+      expect(run.research, `research at floor ${floor}`).toBe(3);
+      // The whole sweep sits inside ±6 % of the shipped floor: 1 949 / 1 864 / 1 753
+      // batches at floors 5 / 10 / 20, against 1 558 with no reserve at all.
+      expect(run.totals, `batches at floor ${floor}`).toBeGreaterThanOrEqual(
+        Math.round(full.totals * 0.94)
+      );
+      expect(run.totals, `batches at floor ${floor}`).toBeLessThanOrEqual(
+        Math.round(full.totals * 1.06)
+      );
     }
-    // Floor 20 is the near-tie: same depth, within 5 % of the batches, so 10 is kept
-    // as the tighter value that still clears every starter blueprint's price.
-    const high = runs.find((r) => r.floor === 20)!;
-    expect(high.machines).toBe(8);
-    expect(high.research).toBe(3);
-    expect(high.totals).toBeGreaterThanOrEqual(Math.round(full.totals * 0.95));
-    expect(full.totals).toBe(Math.max(...runs.map((run) => run.totals)));
+    // 10 stays shipped: it is the middle value that clears every starter blueprint's
+    // price with room left over, and it is no longer the single batch leader.
+    expect(full.totals).toBe(1864);
   });
 
   it("ships on every link while the young yard is filling (B-25)", () => {
@@ -214,10 +233,10 @@ describe("supply window (B-15, B-25)", () => {
       ).toBeGreaterThanOrEqual(run.machines);
       const idle = run.lateLinks.filter((link) => link.busy === 0).length;
       // One link per (endpoint, material): no parallel duplicate is created, so every
-      // link in the settled shipped yard carries cargo (spec 10.1). The two stripped
-      // floors leave the youngest machine's store fallback idle (1 of 11 links), which
-      // is the measured cost of a floor below the next blueprint's price.
-      const ceiling = run.floor >= 10 ? 0 : 1;
+      // link in the settled shipped yard carries cargo (spec 10.1). Only the stripped
+      // floor-0 run leaves links idle (3 of them), because it never reaches the last
+      // three stages - the measured cost of a floor below the next blueprint's price.
+      const ceiling = run.floor >= 5 ? 0 : 3;
       expect(idle, `idle links at floor ${run.floor}`).toBeLessThanOrEqual(ceiling);
       expect(
         aggregate(run.lateLinks),
@@ -228,11 +247,11 @@ describe("supply window (B-15, B-25)", () => {
     expect(run.lateLinks.length).toBeGreaterThanOrEqual(16);
     // The shipped floor leaves the store with its reserve plus the machine buffers,
     // so the best-prepared stage still has a whole tranche ready (10 units = five
-    // sorter batches). The stripped floor 0 run ends with nothing ready at all, which
-    // is the visible cost of pulling every unit out of the store.
+    // sorter batches). The stripped floor-0 run reaches 2 at best, which is the visible
+    // cost of pulling every unit out of the store before the next price is met.
     expect(Math.max(...Object.values(run.readyUnits))).toBeGreaterThanOrEqual(10);
     expect(Math.max(...Object.values(runs.find((r) => r.floor === 0)!.readyUnits))).toBeLessThanOrEqual(
-      10
+      2
     );
   });
 });

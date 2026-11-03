@@ -18,6 +18,7 @@ import {
 } from "../../src/game/simulation/commands";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 import { netRecipeUnits, systemTotals, unitTotal } from "../../src/game/simulation/invariants";
+import { fleetAccumulated, fleetDeliveries, fleetUnits } from "../../src/game/simulation/types";
 import { nextYardStep, stepForMachine, type YardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { describeStep, objectiveFor, primaryFor } from "../../src/ui/text";
@@ -158,7 +159,7 @@ describe("copper and polymer chain", () => {
     const expected =
       yard.seeded +
       TUNING.manualSalvagePerPulse * yard.state.wreck.pulses +
-      yard.state.drone.accumulated +
+      fleetAccumulated(yard.state) +
       netRecipeUnits(yard.state) -
       yard.spent -
       TUNING.repairCostScrap;
@@ -463,6 +464,9 @@ describe("build menu reveal", () => {
         case "research":
           send(state, { type: "research.buy", node: step.node });
           break;
+        case "drone":
+          send(state, { type: "drone.add" });
+          break;
         case "upgrade":
           send(state, { type: "machine.upgrade", machineId: step.machineId });
           break;
@@ -489,6 +493,8 @@ describe("build menu reveal", () => {
         store: state.store,
         research: state.research,
         tick: state.tick,
+        fleet: fleetUnits(state).filter((unit) => unit.repaired).length,
+        deliveries: fleetDeliveries(state),
         histogram,
       })
     );

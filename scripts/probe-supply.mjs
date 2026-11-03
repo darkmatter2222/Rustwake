@@ -71,7 +71,7 @@ async function singleRun(floor) {
 
   let early = null;
   /** Round at which each machine appeared, and the first research purchase. */
-  const milestones = { built: [], firstResearchRound: null };
+  const milestones = { built: [], firstResearchRound: null, firstDroneRound: null };
   for (let round = 0; round < ROUNDS; round += 1) {
     // T7's dock primary claims the onboarding contract once steel is stocked, and
     // every repeatable sell stays locked until then (commands.ts:301).
@@ -82,6 +82,9 @@ async function singleRun(floor) {
     if (step && step.kind === "build") milestones.built.push(`${step.blueprint}@${round + 1}`);
     if (step && step.kind === "research" && milestones.firstResearchRound === null) {
       milestones.firstResearchRound = round + 1;
+    }
+    if (step && step.kind === "drone" && milestones.firstDroneRound === null) {
+      milestones.firstDroneRound = round + 1;
     }
     if (step) {
       switch (step.kind) {
@@ -112,6 +115,9 @@ async function singleRun(floor) {
         case "research":
           send(state, { type: "research.buy", node: step.node });
           break;
+        case "drone":
+          send(state, { type: "drone.add" });
+          break;
         case "upgrade":
           send(state, { type: "machine.upgrade", machineId: step.machineId });
           break;
@@ -128,6 +134,7 @@ async function singleRun(floor) {
     floor,
     ticks: state.tick,
     machines: state.machines.length,
+    fleet: 1 + state.spares.length,
     totals: state.machines.reduce(
       (sum, machine) => sum + machine.batchesDone,
       0,
@@ -205,6 +212,7 @@ function assemble(runs) {
     ...table(runs, [
       ["Floor", (run) => run.floor],
       ["Machines", (run) => run.machines],
+      ["Drones", (run) => run.fleet],
       ["Total batches", (run) => run.totals],
       ["Credits", (run) => run.credits],
       ["Research nodes", (run) => run.research],
@@ -254,11 +262,11 @@ const mature = runs.find((run) => run.floor === 10) ?? runs[0];
 writeFileSync(SEED, encodeSave(mature.state, Date.now(), DEFAULT_SETTINGS), "utf8");
 for (const run of runs) {
   console.log(
-    `floor=${run.floor} machines=${run.machines} batches=${run.totals} credits=${run.credits}` +
+    `floor=${run.floor} machines=${run.machines} drones=${run.fleet} batches=${run.totals} credits=${run.credits}` +
       ` research=${run.research} aggregate=${aggregate(run)}% store ${run.store}` +
       ` | lastBuild=${run.milestones.built.at(-1) ?? "-"} firstResearch=${
         run.milestones.firstResearchRound ?? "-"
-      }`,
+      } firstDrone=${run.milestones.firstDroneRound ?? "-"}`,
   );
 }
 console.log(`wrote ${TARGET} and ${SEED}`);
