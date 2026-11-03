@@ -27,6 +27,10 @@ export interface MachineState {
   starvedTicks: number;
   /** Count of batches completed, for rate measurement. */
   batchesDone: number;
+  /** Measured occupancy evidence for the bottleneck assistant (spec 10.5). */
+  ageTicks: number;
+  busyTicks: number;
+  fullTicks: number;
 }
 
 export type MachineStatus =
@@ -46,6 +50,9 @@ export interface RouteState {
   latency: number;
   items: RouteItem[];
   inFlight: number;
+  /** Measured utilisation: ticks with cargo in transit, over `ageTicks`. */
+  busyTicks: number;
+  ageTicks: number;
 }
 
 export interface RouteItem {

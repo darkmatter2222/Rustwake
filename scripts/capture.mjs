@@ -70,6 +70,21 @@ const playSession = async (page) => {
   console.log(`session state: ${JSON.stringify(summary)}`);
 };
 
+/** Taps a coarse grid until a machine panel opens, then returns its text. */
+const openMachinePanel = async (page) => {
+  for (let y = 120; y <= 560; y += 24) {
+    for (let x = 40; x <= 350; x += 24) {
+      await page.mouse.click(x, y);
+      const text = await page.evaluate(() => {
+        const panel = document.querySelector(".panel");
+        return panel ? panel.textContent ?? "" : null;
+      });
+      if (text && text.includes("Next step")) return text;
+    }
+  }
+  return null;
+};
+
 const browser = await chromium.launch({ executablePath });
 try {
   const mobile = await browser.newContext({
@@ -81,6 +96,10 @@ try {
   const mobilePage = await mobile.newPage();
   await playSession(mobilePage);
   await mobilePage.screenshot({ path: resolve(out, "latest-mobile.png") });
+
+  const panelText = await openMachinePanel(mobilePage);
+  await mobilePage.screenshot({ path: resolve(out, "latest-machine-mobile.png") });
+  console.log(`machine panel: ${panelText ?? "not opened"}`);
 
   const desktop = await browser.newContext({
     viewport: { width: 1440, height: 900 },

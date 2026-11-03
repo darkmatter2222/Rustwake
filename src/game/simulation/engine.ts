@@ -36,8 +36,21 @@ export function advanceTo(s: SimState, target: number): void {
   while (s.tick < target) {
     if (guard++ > 20_000_000) break;
     const due = nextDueTick(s, target);
-    if (due > s.tick + 1 && !hasContinuousWork(s)) {
-      s.tick = Math.min(due, target);
+    if (due > s.tick + 1 && target > s.tick + 1 && !hasContinuousWork(s)) {
+      const next = Math.min(due, target);
+      // A jump covers only idle ticks: no batch runs and no cargo flies, so
+      // only the measured ages advance. Keeps `advance` and `advanceTo`
+      // numerically identical for one target (spec 21.4).
+      const delta = next - s.tick;
+      for (const m of s.machines) {
+        m.ageTicks += delta;
+        if (m.progress === 0 && m.trayUnits === 0 && m.inBufUnits === 0) {
+          m.starvedTicks += delta;
+          m.status = "starved";
+        }
+      }
+      for (const r of s.routes) r.ageTicks += delta;
+      s.tick = next;
       continue;
     }
     stepTick(s);
@@ -85,8 +98,22 @@ function stepTick(s: SimState): void {
   startBatches(s, requested);
   advanceProgress(s, requested);
   updateDrone(s);
+  measure(s);
   s.tick += 1;
   syncTutorial(s);
+}
+
+/** Occupancy counters the bottleneck assistant reports (spec 10.5). */
+function measure(s: SimState): void {
+  for (const m of s.machines) {
+    m.ageTicks += 1;
+    if (m.progress > 0) m.busyTicks += 1;
+    else if (m.status === "outputFull") m.fullTicks += 1;
+  }
+  for (const r of s.routes) {
+    r.ageTicks += 1;
+    if (r.inFlight > 0) r.busyTicks += 1;
+  }
 }
 
 /** Phase 1: complete batches whose work is finished and whose tray is free. */

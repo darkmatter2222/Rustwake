@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 import { App, buildPrimary } from "../../src/ui/App";
+import { MachinePanel } from "../../src/ui/Panels";
 import { createStore, type GameStore } from "../../src/app/store";
 import { SAVE_KEY } from "../../src/game/persistence/save";
 import { TUNING } from "../../src/game/content/defs";
@@ -194,8 +195,7 @@ describe("first-feel shell", () => {
     expect(store.getState().machines.length).toBe(0);
   });
 
-  it("dismisses its own toast while the frame loop keeps running", async () => {
-    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+  it("dismisses its own toast while the frame loop keeps running", async () => {    const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     act(() => findButton("Begin recovery")?.click());
     for (let i = 0; i < 6; i += 1) {
@@ -211,5 +211,46 @@ describe("first-feel shell", () => {
       await new Promise((resolve) => setTimeout(resolve, 1900));
     });
     expect(document.querySelector(".toast")).toBeNull();
+  });
+
+  it("shows measured diagnosis lines in the machine panel", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262));
+    act(() => findButton("Build sorter")?.click());
+    act(() => findButton("Place")?.click());
+    act(() => findButton("Connect dock to sorter")?.click());
+    act(() => store.step(300));
+
+    const state = store.getState();
+    const machine = state.machines[0];
+    const host = document.createElement("div");
+    document.body.appendChild(host);
+    act(() => {
+      createRoot(host).render(
+        <MachinePanel
+          state={state}
+          machine={machine}
+          tick={state.tick}
+          powerRatio={state.powerRatio}
+          dispatch={(command) => store.dispatch(command)}
+          onClose={() => undefined}
+        />
+      );
+    });
+    const text = host.textContent ?? "";
+    // Measured evidence plus one next step, no NaN, and the machine is working.
+    expect(text).toContain("Working ");
+    expect(text).toContain("% busy");
+    expect(text).toContain("Next step");
+    expect(text).not.toContain("NaN");
+    expect(machine.busyTicks).toBeGreaterThan(0);
+    expect(machine.ageTicks).toBe(300);
   });
 });

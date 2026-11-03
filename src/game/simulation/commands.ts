@@ -152,6 +152,9 @@ function buildMachine(s: SimState, blueprint: string, tile: number): CommandResu
     outRoute: null,
     starvedTicks: 0,
     batchesDone: 0,
+    ageTicks: 0,
+    busyTicks: 0,
+    fullTicks: 0,
   };
   s.machines.push(machine);
   return commit(s, "build", machine.id);
@@ -225,6 +228,8 @@ function connectRoute(
     latency: TUNING.routeLatencyTicks,
     items: [],
     inFlight: 0,
+    busyTicks: 0,
+    ageTicks: 0,
   };
   s.routes.push(route);
   if (to !== 0) {

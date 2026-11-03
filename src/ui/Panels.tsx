@@ -5,6 +5,7 @@ import { batchMilliFor } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
 import { sellableAmount, upgradeCost } from "../game/simulation/commands";
 import { planConnections, type ConnectionPlan } from "../game/simulation/autoconnect";
+import { diagnoseMachine, yardSummary } from "../game/simulation/diagnostics";
 import type { ReturnReport } from "../game/simulation/offline";
 import { RESOURCE_LABEL, STATUS_LABEL, formatDuration, formatNumber } from "./text";
 
@@ -26,6 +27,7 @@ export function MachinePanel(props: {
   const cost = upgradeCost(def.baseUpgradeCost, machine.level);
   const nextSeconds = batchMilliFor(machine.blueprint, machine.level + 1) / 10000;
   const plans = planConnections(props.state, machine.id);
+  const diagnosis = diagnoseMachine(props.state, machine);
   const [page, setPage] = useState(0);
 
   return (
@@ -50,6 +52,10 @@ export function MachinePanel(props: {
             {machine.batchPower} units
             {props.powerRatio < 0.999 ? ` · Power limited: ${Math.round(props.powerRatio * 100)}% speed` : ""}
           </dd>
+          <dt>Measured</dt>
+          <dd>{diagnosis.evidence}</dd>
+          <dt>Next step</dt>
+          <dd>{diagnosis.advice}</dd>
           <dt>Next upgrade</dt>
           <dd>
             {effectiveSeconds.toFixed(2)}s → {nextSeconds.toFixed(2)}s · {cost} credits
@@ -172,6 +178,12 @@ export function StorePanel(props: {
         <dd>
           {formatNumber(props.state.storeUnits)}/{formatNumber(props.state.storeCapacity)}
         </dd>
+        {yardSummary(props.state).map((line) => (
+          <div key={line}>
+            <dt>Measured</dt>
+            <dd>{line}</dd>
+          </div>
+        ))}
         {props.state.exportClaimed ? (
           <>
             <dt>Sell floor</dt>

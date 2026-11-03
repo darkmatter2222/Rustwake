@@ -46,6 +46,9 @@ function starterYard(machines: number): SimState {
       outRoute: null,
       starvedTicks: 0,
       batchesDone: 0,
+      ageTicks: 0,
+      busyTicks: 0,
+      fullTicks: 0,
     });
   }
   return state;

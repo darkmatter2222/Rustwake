@@ -103,6 +103,12 @@ export function validateSim(state: unknown): string | null {
       if (!item || !Number.isSafeInteger(item.qty) || item.qty < 0) return `batchQty:${m.id}`;
     }
     if (!Number.isSafeInteger(m.progress) || m.progress < 0) return `progress:${m.id}`;
+    for (const key of ["ageTicks", "busyTicks", "fullTicks", "starvedTicks"] as const) {
+      const value = m[key];
+      if (value !== undefined && (!Number.isSafeInteger(value) || value < 0)) {
+        return `${key}:${m.id}`;
+      }
+    }
   }
   if (!Array.isArray(s.routes)) return "routes";
   for (const r of s.routes) {
@@ -114,6 +120,12 @@ export function validateSim(state: unknown): string | null {
     for (const item of r.items) {
       if (!Number.isSafeInteger(item.qty) || item.qty < 0) return `routeItemQty:${r.id}`;
       if (!Number.isSafeInteger(item.arrive)) return `routeItemArrive:${r.id}`;
+    }
+    for (const key of ["ageTicks", "busyTicks"] as const) {
+      const value = r[key];
+      if (value !== undefined && (!Number.isSafeInteger(value) || value < 0)) {
+        return `${key}:${r.id}`;
+      }
     }
   }
   for (const recipe of Object.values(RECIPES)) {
@@ -133,7 +145,23 @@ function isQuantityMap(value: unknown): boolean {
 
 /** Forward migration entry point; v1 is the baseline shape. */
 export function migrate(payload: SavePayload): SavePayload {
-  if (payload.sim.schemaVersion === SCHEMA_VERSION) return payload;
   const base = createInitialState();
-  return { ...payload, sim: { ...payload.sim, schemaVersion: base.schemaVersion } };
+  const sim = { ...payload.sim, schemaVersion: base.schemaVersion };
+  // v1 saves written before the measured counters existed still load: missing
+  // counters become zero, so reported percentages simply cover a shorter window.
+  for (const m of sim.machines ?? []) {
+    m.ageTicks = countOf(m.ageTicks);
+    m.busyTicks = countOf(m.busyTicks);
+    m.fullTicks = countOf(m.fullTicks);
+    m.starvedTicks = countOf(m.starvedTicks);
+  }
+  for (const r of sim.routes ?? []) {
+    r.ageTicks = countOf(r.ageTicks);
+    r.busyTicks = countOf(r.busyTicks);
+  }
+  return { ...payload, sim };
+}
+
+function countOf(value: number | undefined): number {
+  return typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? value : 0;
 }

@@ -37,11 +37,16 @@ A repeated `id` returns the first committed result, so a retried tap cannot spen
 5. `allocatePower` — sum requested power of machines with active work, derive the ratio.
 6. `startBatches` — persistent round-robin start order; inputs reserved exactly once.
 7. `advanceProgress` — exact rational accrual at the power ratio.
-8. `updateDrone` — extraction and delivery events, then `tick += 1` and tutorial sync.
+8. `updateDrone` — extraction and delivery events.
+9. `measure` — per-tick occupancy counters: `ageTicks`/`busyTicks`/`fullTicks` per machine,
+   `ageTicks`/`busyTicks` per route. Pure bookkeeping; no quantity changes.
+10. `tick += 1`, then tutorial sync.
 
 Because the order is fixed and quantities are integers, two runs with the same command
 list and the same total ticks are byte-identical; the determinism test proves equality
-across tick chunk sizes of 1, 10, and 240, and between `advance` and `advanceTo`.
+across tick chunk sizes of 1, 10, and 240, and between `advance` and `advanceTo`. The
+event-jump path in `advanceTo` accrues the same counters for the skipped idle range and
+always steps the final tick, which is what makes the two serialisations match exactly.
 
 ## State locations (spec 8.2)
 
