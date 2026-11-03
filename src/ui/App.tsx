@@ -20,11 +20,11 @@ import {
   type Camera,
 } from "../game/renderer/scene";
 import { createAudio, type AudioApi, type CueName } from "../game/audio/audio";
-import { hintFor, objectiveFor, primaryFor } from "./text";
+import { REJECT_TEXT, hintFor, objectiveFor, primaryFor } from "./text";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
 import { useRevision, useSettings, useSim } from "./useGame";
-import { MachinePanel, ReturnReportPanel, StorePanel } from "./Panels";
+import { MachinePanel, ResearchPanel, ReturnReportPanel, StorePanel } from "./Panels";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 
 export interface PrimaryAction {
@@ -273,6 +273,8 @@ export function App({ store }: { store: GameStore }) {
             setGhostTile(null);
           }}
           onInventory={() => setSelected(-2)}
+          research={showResearch(state)}
+          onResearch={() => setSelected(-3)}
         />
       </div>
       {machine ? (
@@ -287,6 +289,9 @@ export function App({ store }: { store: GameStore }) {
       ) : null}
       {selected === -2 ? (
         <StorePanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+      ) : null}
+      {selected === -3 ? (
+        <ResearchPanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
       ) : null}
       {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
     </div>
@@ -435,6 +440,9 @@ function runStep(
     case "sell":
       dispatch({ id: nextCommandId(), type: "contract.sell", resource: step.resource, qty: step.qty });
       return;
+    case "research":
+      dispatch({ id: nextCommandId(), type: "research.buy", node: step.node });
+      return;
     case "upgrade":
       dispatch({ id: nextCommandId(), type: "machine.upgrade", machineId: step.machineId });
       return;
@@ -452,6 +460,11 @@ export function firstFreeTile(state: SimState): number {
   return 8;
 }
 
+/** Research appears in the dock once data exists or a node is known (spec 5.5). */
+export function showResearch(state: SimState): boolean {
+  return (state.store.data ?? 0) > 0 || Object.keys(state.research ?? {}).length > 0;
+}
+
 function cueFor(type: Command["type"]): CueName {
   switch (type) {
     case "manual.salvage":
@@ -467,27 +480,7 @@ function cueFor(type: Command["type"]): CueName {
   }
 }
 
+/** One shared table, so no surface can show a different reason text. */
 export function labelForReject(reason: CommandReject): string {
-  switch (reason) {
-    case "insufficient":
-      return "Not enough material";
-    case "blocked-placement":
-      return "Tile blocked";
-    case "no-room":
-      return "Store full";
-    case "cooldown":
-      return "Cutting pulse recharging";
-    case "duplicate":
-      return "Already connected";
-    case "cycle":
-      return "That would loop back";
-    case "already-claimed":
-      return "Contract already sold";
-    case "locked":
-      return "Sell opens after your first steel contract";
-    case "read-only":
-      return "Another tab is writing this yard";
-    default:
-      return "No longer available";
-  }
+  return REJECT_TEXT[reason] ?? "No longer available";
 }

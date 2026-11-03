@@ -1,4 +1,5 @@
 import { addRational } from "../economy/quantity";
+import { inputCapacityFor } from "../content/research";
 import {
   BLUEPRINTS,
   RECIPES,
@@ -343,7 +344,7 @@ function destinationRoom(s: SimState, route: RouteState): number {
   if (route.to.kind === "store") return s.storeCapacity - s.storeUnits;
   const machine = machineById(s, route.to.id);
   if (!machine) return 0;
-  return BLUEPRINTS[machine.blueprint].inputBuffer - machine.inBufUnits;
+  return inputCapacityFor(s, BLUEPRINTS[machine.blueprint].inputBuffer) - machine.inBufUnits;
 }
 
 function deliver(s: SimState, route: RouteState, resource: ResourceId, amount: number): void {

@@ -235,3 +235,56 @@ Format: date · problem · options · choice · reason · reversibility.
 - Note: envelopes written before this change carry a page-relative `lastSeenMs`, so their
   first load is credited exactly one capped 12 h window and then re-stamped — no repeated
   claim, because the reference moves forward on that first load.
+
+## D-22 - 2026-11-03 - Research as typed content with integer bonuses
+
+- Problem: spec 12.2 wants a research graph whose exact effect is visible before purchase,
+  without a formula engine or a per-node special case in the simulation.
+- Choice: `game/content/research.ts` holds `{id, label, effect, cost, requires, maxRank}` and
+  a derived `researchBonus()` returning plain integers (`pulseScrap`, `inputBuffer`,
+  `routeCapacity`). `SimState.research` is `{nodeId: rank}`; the engine reads it through
+  `inputCapacityFor` and the command layer through the bonus, so every effect is an integer
+  change to a quantity the state already reports.
+- Reason: one table drives panel, cost, and effect; `maxRank: 1` makes "applied exactly
+  once" a data property that `research.buy` enforces with `already-known`, and the save
+  validator rejects an unknown node id or a negative rank instead of clamping them.
+- Evidence: `tests/simulation/research.test.ts` (14 cases) checks pulse 5 to 7, buffer 12 to
+  18, new-link 24 to 32 with the old link unchanged, parity between `advance` and `advanceTo`
+  with nodes owned, and a legacy envelope without the field loading as an empty map.
+- Reversible: yes; the field is additive and zero-filled by `migrate`.
+- Reconsider when: branches exceed a handful of nodes or a node changes a rule rather than a
+  quantity, which is the point to introduce an effect enum instead of an integer triple.
+
+## D-23 - 2026-11-03 - Ladder priority: spend, and never sell a pending input
+
+- Problem: with the lease work done the scripted session exposed a stall - three machines at
+  level 1, 964 credits, and the same `Sell 10 Scrap` action forever. Sells were always
+  available (the drone delivers every 5 s), so they permanently preempted the upgrade step,
+  and each sell trimmed the surplus to the reserve floor, below most machine prices.
+- Choice: order is now unmet link, affordable build, affordable research node, affordable
+  upgrade (lowest level, then highest `busyTicks`), surplus sell skipping resources that are
+  still short for an unbuilt blueprint, nearest build, then any sell.
+- Reason: spec 10.5 asks for one evidence-based recommendation and explicitly allows "no
+  purchase needed"; a permanent repeatable sell is not a recommendation, and a sell that
+  blocks the next machine is the wrong trade.
+- Evidence: same scripted session now reaches L7/L6/L6 with 27 credits, and
+  `tests/simulation/plan.test.ts` pins each rule, including the skipped-pending sell and the
+  two upgrade tie-breaks.
+- Reversible: yes; `nextYardStep` is one function with no state beyond the counters it reads.
+- Reconsider when: B-19 changes what the store holds, because the pending-input rule reads
+  store quantities only.
+
+## D-24 - 2026-11-03 - Credit the absence on promotion as well as at creation
+
+- Problem: `catchUp` ran only when a store was created while already holding the lease. After
+  a reload the previous document's lease is usually still under the 1.5 s TTL, so the new tab
+  started as a follower and the whole absence was never credited.
+- Choice: extract `creditAbsence()` (credit, advance the reference, keep the report only when
+  `creditedTicks > 0`, checkpoint), call it at creation for a writer and from `reconcile()`
+  whenever a follower is promoted; an adopted snapshot also adopts its `lastSeenMs`.
+- Reason: one economy across active and away states (spec 18.1), no double claim because the
+  reference moves to `now()` at the first credit and the adopted value is the newest write.
+- Evidence: the capture prints `tick 1010 -> 433 020` (exactly the 432 000-tick cap) plus the
+  report line, and `tests/persistence/lease.test.ts` now expects 15 credited ticks for a
+  1 501 ms following window.
+- Reversible: yes; the helper is local to the store.

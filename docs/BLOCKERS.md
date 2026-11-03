@@ -42,11 +42,25 @@ Each entry: exact blocker, evidence, unblock condition, work that continues mean
 
 ## BL-05 Multi-tab write coordination
 
-- Blocked on nothing, but deliberately not yet implemented: two tabs currently both own
-  their in-memory state and the last writer wins the local save.
-- Evidence: no lease module exists; `app/store.ts` writes on each commit and cadence tick.
-- Unblock: implement B-01 (lease with heartbeat and revision checks) with tests.
-- Risk note: with one tab open, the behaviour is already correct and deterministic.
+- Status: resolved with B-01 (2026-11-03). `game/persistence/lease.ts` stores
+  `{owner, heartbeatMs, revision}` under `rustwake.lease.v1`; only the holder ticks and
+  writes, extra tabs adopt whole checkpoints, and promotion requires the lease to be absent,
+  own, or older than the 1.5 s TTL.
+- Evidence: `tests/persistence/lease.test.ts` (7 cases) plus the two-page real-Chrome session
+  printed by `scripts/capture.mjs`, where the lease id changes only after the owner closes.
+- Risk note: with one tab open, the behaviour is the same single-writer path.
+
+## BL-07 Research-panel visual gate
+
+- Blocked: no photograph of the research panel yet, so B-05's visual acceptance stays open
+  while its behaviour is covered by tests.
+- Evidence: the scripted capture session ends with `research: {}` and `data` absent, because
+  the circuit chain (copper, wire, polymer, circuits) is not finished inside the window; the
+  dock target only appears once `data > 0`.
+- Unblock: B-19 (input pulls sized to the need) letting the scripted session reach the
+  assemblers, or a seeded engine-produced save in a second capture context.
+- Meanwhile: `tests/ui/app.test.tsx` asserts the panel's exact strings and the one-purchase
+  ledger change; the gallery records the gap instead of reusing an older image.
 
 ## BL-06 CI result read-back
 

@@ -6,6 +6,7 @@ import {
   exportPrice,
   type ResourceId,
 } from "../content/defs";
+import { RESEARCH, researchBonus } from "../content/research";
 import {
   SCHEMA_VERSION,
   machineById,
@@ -31,6 +32,8 @@ export type CommandReject =
   | "cycle"
   | "already-claimed"
   | "locked"
+  | "already-known"
+  | "prereq"
   | "read-only";
 
 export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
@@ -45,7 +48,8 @@ export type Command =
   | { id: string; type: "route.connect"; from: number; to: number; filter: ResourceId | null }
   | { id: string; type: "route.remove"; routeId: number }
   | { id: string; type: "contract.export" }
-  | { id: string; type: "contract.sell"; resource: ResourceId; qty: number };
+  | { id: string; type: "contract.sell"; resource: ResourceId; qty: number }
+  | { id: string; type: "research.buy"; node: string };
 
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 export type CommandBody = DistributiveOmit<Command, "id">;
@@ -84,6 +88,8 @@ function execute(s: SimState, command: Command): CommandResult {
       return exportContract(s);
     case "contract.sell":
       return sellResource(s, command.resource, command.qty);
+    case "research.buy":
+      return buyResearch(s, command.node);
     default:
       return { ok: false, reason: "not-found" };
   }
@@ -96,12 +102,13 @@ function commit(s: SimState, key: string, value: number): CommandResult {
 
 function manualSalvage(s: SimState): CommandResult {
   if (s.tick < s.wreck.nextPulseTick) return { ok: false, reason: "cooldown" };
-  const taken = Math.min(TUNING.manualSalvagePerPulse, s.wreck.remaining);
+  const perPulse = TUNING.manualSalvagePerPulse + researchBonus(s).pulseScrap;
+  const taken = Math.min(perPulse, s.wreck.remaining);
   if (taken <= 0) {
     s.wreck.generation += 1;
     s.wreck.remaining = TUNING.starterWreckPool;
   }
-  const amount = Math.min(TUNING.manualSalvagePerPulse, s.wreck.remaining);
+  const amount = Math.min(perPulse, s.wreck.remaining);
   s.wreck.remaining -= amount;
   s.wreck.pulses += 1;
   s.wreck.nextPulseTick = s.tick + TUNING.manualPulseTicks;
@@ -225,7 +232,7 @@ function connectRoute(
     from: { kind: from === 0 ? "store" : "machine", id: from },
     to: { kind: to === 0 ? "store" : "machine", id: to },
     filter,
-    capacity: TUNING.routeCapacity,
+    capacity: TUNING.routeCapacity + researchBonus(s).routeCapacity,
     latency: TUNING.routeLatencyTicks,
     items: [],
     inFlight: 0,
@@ -302,6 +309,26 @@ function sellResource(s: SimState, resource: ResourceId, qty: number): CommandRe
 export function sellableAmount(s: SimState, resource: ResourceId): number {
   const held = s.store[resource] ?? 0;
   return Math.min(Math.max(0, held - TUNING.reserveFloor), TUNING.sellBatchCap);
+}
+
+/**
+ * Buys one research rank (spec 12.2). Costs data, needs the prerequisite, and
+ * stops at the declared rank so an effect can never be applied twice.
+ */
+function buyResearch(s: SimState, node: string): CommandResult {
+  const def = RESEARCH[node];
+  if (!def) return { ok: false, reason: "not-found" };
+  const rank = s.research[def.id] ?? 0;
+  if (rank >= def.maxRank) return { ok: false, reason: "already-known" };
+  if (def.requires && (s.research[def.requires] ?? 0) <= 0) {
+    return { ok: false, reason: "prereq" };
+  }
+  if ((s.store.data ?? 0) < def.cost) return { ok: false, reason: "insufficient" };
+  if (!spendFromStore(s, [{ resource: "data", qty: def.cost }])) {
+    return { ok: false, reason: "insufficient" };
+  }
+  s.research[def.id] = rank + 1;
+  return commit(s, "research", def.cost);
 }
 
 export function upgradeCost(baseUpgradeCost: number, level: number): number {

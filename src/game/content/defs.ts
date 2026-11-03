@@ -286,6 +286,20 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     baseUpgradeCost: 70,
     unlockAt: 9,
   },
+  signalLab: {
+    id: "signalLab",
+    label: "Signal lab",
+    recipeId: "R11",
+    buildCost: [
+      { resource: "scrap", qty: 50 },
+      { resource: "ferrous", qty: 12 },
+    ],
+    footprint: [1, 1],
+    inputBuffer: 12,
+    outputBuffer: 12,
+    baseUpgradeCost: 75,
+    unlockAt: 9,
+  },
 } as const;
 
 /**

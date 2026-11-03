@@ -100,10 +100,12 @@ export function DockButtons(props: {
   primary: PrimaryAction;
   buildBlueprint: string | null;
   unlocked: string[];
+  research: boolean;
   onPickBlueprint: (id: string) => void;
   onPlace: () => void;
   onCancelBuild: () => void;
   onInventory: () => void;
+  onResearch: () => void;
 }) {
   const blueprintIds = props.unlocked.length > 0 ? props.unlocked : Object.keys(BLUEPRINTS);
   if (props.buildBlueprint !== null) {
@@ -140,6 +142,11 @@ export function DockButtons(props: {
       <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
         Build
       </button>
+      {props.research ? (
+        <button className="dock__btn" onClick={props.onResearch}>
+          Research
+        </button>
+      ) : null}
     </div>
   );
 }

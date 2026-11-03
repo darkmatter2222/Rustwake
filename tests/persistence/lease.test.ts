@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createStore, type GameStore } from "../../src/app/store";
 import { SAVE_KEY } from "../../src/game/persistence/save";
 import { LEASE_KEY, LEASE_TTL_MS, createLease } from "../../src/game/persistence/lease";
-import { TUNING } from "../../src/game/content/defs";
+import { TICK_MS, TUNING } from "../../src/game/content/defs";
 
 interface TrackedStorage {
   readonly raw: Map<string, string>;
@@ -130,17 +130,20 @@ describe("multi-tab lease", () => {
 
     clock += LEASE_TTL_MS + 1;
     expect(second.takeOver()).toBe("writer");
-    // Takeover continues from the ledger it adopted, not from a fresh yard.
-    expect(second.getState().tick).toBe(ownerTick);
+    // Takeover continues from the ledger it adopted, not from a fresh yard, and
+    // the window spent following is credited once by the same economy (18.1/18.4).
+    const gapTicks = Math.floor((LEASE_TTL_MS + 1) / TICK_MS);
+    expect(second.getState().tick).toBe(ownerTick + gapTicks);
+    expect(second.getReturnReport()?.creditedTicks).toBe(gapTicks);
     expect(second.getState().revision).toBe(first.getState().revision);
     expect(second.getState().store["scrap"]).toBe(10);
 
     second.step(60);
-    expect(second.getState().tick).toBe(ownerTick + 60);
+    expect(second.getState().tick).toBe(ownerTick + gapTicks + 60);
     // The previous owner sees the live lease and steps back down.
     first.step(1);
     expect(first.getRole()).toBe("reader");
-    expect(first.getState().tick).toBe(ownerTick + 60);
+    expect(first.getState().tick).toBe(ownerTick + gapTicks + 60);
   });
 
   it("loads a valid save even when the lease record is damaged", () => {

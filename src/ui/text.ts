@@ -1,4 +1,5 @@
 import { BLUEPRINTS, type ResourceId } from "../game/content/defs";
+import { RESEARCH } from "../game/content/research";
 import { upgradeCost } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { SimState } from "../game/simulation/types";
@@ -43,6 +44,12 @@ export function describeStep(state: SimState, step: YardStep): string {
         step.resource,
         step.qty
       )} credits.`;
+    case "research": {
+      const def = RESEARCH[step.node];
+      return def
+        ? `Research ${def.label} · ${def.cost} Data. ${def.effect}`
+        : "Research a node when its data cost is covered.";
+    }
     case "upgrade":
       return `Improve recovery or production: upgrade ${machineLabel(state, step.machineId)}.`;
     default:
@@ -64,6 +71,11 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
         label: `Sell ${step.qty} ${RESOURCE_LABEL[step.resource]}`,
         cost: `+${sellValue(step.resource, step.qty)} credits`,
       };
+    case "research": {
+      const def = RESEARCH[step.node];
+      if (!def) return { label: "Research" };
+      return { label: `Research ${def.label}`, cost: `${def.cost} Data` };
+    }
     case "upgrade": {
       const machine = state.machines.find((m) => m.id === step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
@@ -93,6 +105,9 @@ export const REJECT_TEXT: Record<string, string> = {
   cycle: "That would loop back",
   "already-claimed": "Contract already sold",
   locked: "Sell opens after your first steel contract",
+  "already-known": "Already researched",
+  prereq: "Research the earlier node first",
+  "read-only": "Another tab is writing this yard",
 };
 
 export const RESOURCE_LABEL: Record<string, string> = {
@@ -155,6 +170,7 @@ export const HINT_LABELS: Record<string, string> = {
   "objective.export": "Sell the steel to earn your first credits.",
   "objective.upgrade": "Pick a machine and upgrade its speed.",
   "objective.chain": "Sell a surplus, then fund the next processor or an upgrade.",
+  "objective.research": "Data pays for one research node; open Research to see its effect.",
   "hint.starved": "A machine waits for input; check its empty side.",
   "hint.cargo-full": "A machine's output is waiting; connect storage.",
   "hint.power": "Machines share one power budget; slowest ones share it.",

@@ -8,7 +8,7 @@ Rolling, prioritised. IDs are stable within this file.
 | B-02 | Worker catch-up | 12 h catch-up can exceed the 100 ms main-thread stall target on low-end phones | Off-main-thread catch-up with cancellation and versioned result; measured stall histogram in a trace | Todo |
 | B-03 | Bottleneck assistant | Starved/full/power-limited machines are visible but not explained | One evidence line per machine with the measured occupancy/starvation percentage and one recommendation; no purchase forced | Done (2026-11-03) |
 | B-04 | Copper + polymer chain | First meaningful choice of where to spend an upgrade budget | R03/R04/R05 reachable with two viable upgrade targets; throughput verified in a fixture | Done (2026-11-03) |
-| B-05 | Small research branch | Session-length goal beyond machine count | Three-node branch with visible exact effects, purchasable with data, effects applied once | Todo |
+| B-05 | Small research branch | Session-length goal beyond machine count | Three-node branch with visible exact effects, purchasable with data, effects applied once | Done (2026-11-03) |
 | B-06 | Store export/import | Players cannot move a yard between devices | Versioned JSON export, validated import, corrupt file keeps the previous state | Todo |
 | B-07 | Wreck scan detail | Yield is opaque once machines exceed the starter two | Coarse then fine scan, seed committed once, remaining pool shown exactly | Todo |
 | B-08 | Real-device performance trace | 30/60 FPS and thermal claims are unverified | Trace from a midrange Android and an iPhone with p95 main-thread work < 10 ms at default scene | Blocked (needs device) |
@@ -22,6 +22,9 @@ Rolling, prioritised. IDs are stable within this file.
 | B-16 | HUD area measurement | The 15–22 % HUD target is currently eyeballed from screenshots | Bounding-box sum of HUD elements as a share of the visual viewport at 360 × 640, 390 × 844, and 1440 × 900 | Todo |
 | B-17 | Rolling 60 s rate window | The panel's "Actual rate" divides by total elapsed time, but spec 9.4 asks for a 60 s window (or all time for a new machine) | Per-machine batch-completion ring or tick-pair snapshot; panel shows window and both rates; test compares against a fixture at 300 and 1 200 ticks | Todo |
 | B-18 | Follower-tab smoothness | A mirrored tab updates on the 10 Hz adopt cadence, so cargo motion reads steppier than in the owner tab | Interpolate follower sprites between the last two adopted snapshots, or raise the cadence with a measured cost; one trace at 390 × 844 | Todo |
+
+| B-19 | Input pulls sized to the need | The yard stops at three machines: `pullFromStore` moves everything above the floor into a 12-unit input buffer at once, so the store shows `ferrous 1, nonferrous 1` while the prices of the next machines (5-12 units) are read from the store only | Pull only what the running and next batch need plus one buffer tranche; chain fixture keeps its throughput numbers, the store keeps an affordable balance, and the scripted session's machine count is re-measured | Todo |
+| B-20 | Research-panel screenshot | The panel is asserted in jsdom but has no image, so the visual gate for B-05 stays open | Either the capture session reaches `data > 0` or a second context seeds a save produced by the engine; gallery entry with dimensions, tick, and node state | Todo |
 
 ## Notes
 

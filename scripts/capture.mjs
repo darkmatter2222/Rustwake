@@ -31,6 +31,62 @@ const clickByText = async (page, text) => {
   return true;
 };
 
+/** Opens the Research dock target by exact label, so the primary is not hit. */
+const clickDock = async (page, label) => {
+  const handle = await page.evaluateHandle((text) => {
+    return [...document.querySelectorAll(".dock__btn")].find(
+      (node) => (node.textContent ?? "").trim() === text
+    );
+  }, label);
+  const element = handle.asElement();
+  if (!element) return false;
+  await element.click();
+  return true;
+};
+
+/** Research appears in the dock once data exists; capture it when unlocked. */
+const captureResearch = async (page) => {
+  if (!(await clickDock(page, "Research"))) {
+    console.log("research panel: dock target not unlocked in this session");
+    return null;
+  }
+  await page.waitForTimeout(200);
+  const text = await page.evaluate(() => document.querySelector(".panel")?.textContent ?? "");
+  await page.screenshot({ path: resolve(out, "latest-research.png") });
+  console.log(`research panel: ${text.slice(0, 220)}`);
+  await clickByText(page, "Close");
+  await page.waitForTimeout(150);
+  return text;
+};
+
+/** Same FNV-1a the app uses, so a rewritten envelope still verifies (D-11). */
+function fnv1a(text) {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < text.length; i += 1) {
+    hash ^= text.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(16).padStart(8, "0");
+}
+
+/**
+ * Simulates an absence: shift the ledger reference back, install it as the
+ * stored save before scripts run, and reload so the real offline catch-up path
+ * (spec 18.1) does the work rather than a hand-written state.
+ */
+const applyAbsence = async (page, hours) => {
+  const raw = await page.evaluate(() => localStorage.getItem("rustwake.save.v1"));
+  if (!raw) return false;
+  const env = JSON.parse(raw);
+  env.payload.lastSeenMs -= hours * 3600000;
+  env.checksum = fnv1a(JSON.stringify(env.payload));
+  const text = JSON.stringify(env);
+  await page.addInitScript((value) => {
+    localStorage.setItem("rustwake.save.v1", value);
+  }, text);
+  return true;
+};
+
 const playSession = async (page) => {
   await page.goto(url, { waitUntil: "networkidle" });
   await page.waitForSelector("text=Begin recovery");
@@ -53,7 +109,44 @@ const playSession = async (page) => {
     }
   }
   await clickByText(page, "Cancel");
-  await page.waitForTimeout(1500); // Let the yard run for the final frame.
+
+  // A twelve-hour absence exercises the same economy, then the yard continues.
+  const beforeAbsence = await page.evaluate(
+    () => JSON.parse(localStorage.getItem("rustwake.save.v1") ?? "{}")?.payload?.sim?.tick ?? null
+  );
+  const stamped = await applyAbsence(page, 12);
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector("text=Begin recovery");
+  await page.click("text=Begin recovery");
+  await page.waitForTimeout(300);
+  // The refreshed tab starts as a follower while the previous document's lease
+  // lapses (1.5 s), and the absence is credited when it is promoted.
+  await page.waitForTimeout(1800);
+  const report = await page.evaluate(
+    () => document.querySelector(".panel")?.textContent ?? "(no report)"
+  );
+  const afterAbsence = await page.evaluate(
+    () => JSON.parse(localStorage.getItem("rustwake.save.v1") ?? "{}")?.payload?.sim?.tick ?? null
+  );
+  console.log(
+    `absence: applied=${stamped} tick ${beforeAbsence} -> ${afterAbsence}`
+  );
+  console.log(`return report: ${report.slice(0, 200)}`);
+  await clickByText(page, "Back to yard");
+  await page.waitForTimeout(200);
+
+  for (let i = 0; i < 60; i += 1) {
+    const button = await page.$(".dock__btn--primary");
+    if (!button) break;
+    await button.click();
+    await page.waitForTimeout(900);
+    if (await page.$(".toast")) {
+      await clickByText(page, "Cancel");
+      await page.waitForTimeout(150);
+    }
+  }
+  await clickByText(page, "Cancel");
+  await page.waitForTimeout(4000); // Let the yard run for the final frame.
   const summary = await page.evaluate(() => {
     const raw = localStorage.getItem("rustwake.save.v1");
     if (!raw) return null;
@@ -66,6 +159,7 @@ const playSession = async (page) => {
       store: sim.store,
       machines: sim.machines.map((m) => `${m.blueprint} L${m.level} x${m.batchesDone}`),
       routes: sim.routes.length,
+      research: sim.research,
     };
   });
   console.log(`session state: ${JSON.stringify(summary)}`);
@@ -154,6 +248,8 @@ try {
   await mobilePage.screenshot({ path: resolve(out, "latest-machine-mobile.png") });
   console.log(`machine panel: ${panelText ?? "not opened"}`);
 
+  await captureResearch(mobilePage);
+
   await checkLease(mobile, mobilePage);
 
   const desktop = await browser.newContext({
@@ -164,7 +260,7 @@ try {
   await playSession(desktopPage);
   await desktopPage.screenshot({ path: resolve(out, "latest-desktop.png") });
 
-  console.log("captured latest-mobile.png and latest-desktop.png");
+  console.log("captured latest-mobile.png, latest-desktop.png, latest-machine-mobile.png");
 } finally {
   await browser.close();
 }

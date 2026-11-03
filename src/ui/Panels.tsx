@@ -5,6 +5,7 @@ import { batchMilliFor } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
 import { sellableAmount, upgradeCost } from "../game/simulation/commands";
 import { planConnections, type ConnectionPlan } from "../game/simulation/autoconnect";
+import { RESEARCH, RESEARCH_ORDER, inputCapacityFor } from "../game/content/research";
 import { diagnoseMachine, yardSummary } from "../game/simulation/diagnostics";
 import type { ReturnReport } from "../game/simulation/offline";
 import { RESOURCE_LABEL, STATUS_LABEL, formatDuration, formatNumber } from "./text";
@@ -83,7 +84,7 @@ export function MachinePanel(props: {
           <dd>{machine.level}</dd>
           <dt>In buffer</dt>
           <dd>
-            {formatNumber(machine.inBufUnits)}/{def.inputBuffer}
+            {formatNumber(machine.inBufUnits)}/{inputCapacityFor(props.state, def.inputBuffer)}
           </dd>
           <dt>Tray</dt>
           <dd>
@@ -201,6 +202,54 @@ export function StorePanel(props: {
             <dd>{props.state.overflow.reduce((total, item) => total + item.qty, 0)}</dd>
           </>
         ) : null}
+      </dl>
+      <div className="panel__actions">
+        <button className="icon-btn" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function ResearchPanel(props: {
+  state: SimState;
+  dispatch: (command: Command) => unknown;
+  onClose: () => void;
+}) {
+  const owned = props.state.research;
+  return (
+    <div className="panel" role="group" aria-label="Research">
+      <h2 className="panel__title">Research</h2>
+      <dl>
+        <dt>Data</dt>
+        <dd>{formatNumber(props.state.store.data ?? 0)}</dd>
+        {RESEARCH_ORDER.map((id) => {
+          const def = RESEARCH[id];
+          const rank = owned[def.id] ?? 0;
+          const prereq = def.requires ? RESEARCH[def.requires] : null;
+          const blocked = prereq !== null && (owned[prereq.id] ?? 0) <= 0;
+          return (
+            <div key={def.id}>
+              <dt>{def.label}</dt>
+              <dd>{def.effect}</dd>
+              {rank > 0 ? (
+                <dd>Known</dd>
+              ) : blocked ? (
+                <dd>Needs {prereq ? prereq.label : "the earlier node"} first</dd>
+              ) : (
+                <button
+                  className="icon-btn"
+                  onClick={() =>
+                    props.dispatch({ id: nextId("k"), type: "research.buy", node: def.id })
+                  }
+                >
+                  Buy · {def.cost} Data
+                </button>
+              )}
+            </div>
+          );
+        })}
       </dl>
       <div className="panel__actions">
         <button className="icon-btn" onClick={props.onClose}>

@@ -218,6 +218,12 @@ function drawMachine(
     ctx.fillStyle = PALETTE.furnace;
     ctx.fillRect(p.x + 6 * s, p.y - 14 * s, 5 * s, 5 * s);
   }
+  // The signal lab reads as a mast at a glance, without a separate atlas.
+  if (machine.blueprint === "signalLab") {
+    ctx.fillStyle = PALETTE.cyan;
+    ctx.fillRect(p.x - 1 * s, p.y - 18 * s, 2 * s, 6 * s);
+    ctx.fillRect(p.x - 4 * s, p.y - 19 * s, 8 * s, 2 * s);
+  }
   if (selected) outline(ctx, p.x, p.y, 14 * s, 14 * s);
 }
 

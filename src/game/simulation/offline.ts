@@ -1,4 +1,5 @@
 import { TICK_MS, TUNING, type ResourceId } from "../content/defs";
+import { nextResearchNode } from "../content/research";
 import { advanceTo } from "./engine";
 import type { SimState } from "./types";
 
@@ -87,6 +88,8 @@ export function suggestedAction(s: SimState): string {
   for (const m of s.machines) if (m.status === "starved") return "hint.starved";
   for (const m of s.machines) if (m.status === "outputFull") return "hint.cargo-full";
   if (!s.exportClaimed && (s.store["steel"] ?? 0) >= 3) return "objective.export";
+  const node = nextResearchNode(s);
+  if (node && (s.store["data"] ?? 0) >= node.cost) return "objective.research";
   if (s.powerRatio < 0.999) return "hint.power";
   if (s.tutorial >= 9) return "objective.chain";
   return "objective.upgrade";

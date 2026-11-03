@@ -30,35 +30,41 @@ simulation core. English only so far. No account, no server, no payments yet.
 10. **Read the diagnosis** in a machine's panel: measured working/waiting/output-waiting
     percentages, the busiest link, and the yard power speed, followed by one next step that
     is sometimes "no purchase needed".
-11. **Open a second tab** and it follows the first: the follower shows
+11. **Research a node** once the yard produces data: the dock gains a fourth target,
+    **Research**, which lists each node's exact effect and cost, and one tap buys one rank.
+12. **Open a second tab** and it follows the first: the follower shows
     `Following the other tab`, mirrors the owner's saved yard, and writes nothing. Close the
     first tab and **Take over** promotes the follower, which continues from the same ledger.
 
 After the tutorial, one authoritative ladder decides the next step for both the objective
-card and the dock button: an unmet link first, then an affordable build, then a sell
-tranche, then an upgrade. The two surfaces cannot disagree.
+card and the dock button: an unmet link first, then an affordable build, then an affordable
+research node, then the cheapest useful upgrade, then a sell of a surplus that is not the
+next machine's missing input, then the build that is closest to payable. The two surfaces
+cannot disagree.
 
 Implemented systems: manual salvage with cooldown, drone automation, machine
 construction/upgrade/dismantle/move, 1×1 placement on a 6×6 yard with a protected dock
 tile, route logistics with capacity/latency/filters/fair allocation, shared power budget
 with proportional slowdown, storage capacity plus an overflow hold, one-shot onboarding
-export contract plus repeatable priced sell contracts, seven blueprints with a progressive
-build picker, tutorial state machine (T0-T9), contextual objective card, one localised
-explanation per blocked action, measured per-machine and per-link occupancy with one
-recommended action, single-canvas HUD, local save with a return report and a 12-hour
-offline cap, a synthesised audio bus with a bounded voice pool, and a single-writer
-multi-tab lease with read-only followers.
+export contract plus repeatable priced sell contracts, eight blueprints (including the
+signal lab) with a progressive build picker, a three-node research branch bought with data
+where each effect applies exactly once, tutorial state machine (T0-T9), contextual
+objective card, one localised explanation per blocked action, measured per-machine and
+per-link occupancy with one recommended action, single-canvas HUD, local save with a return
+report and a 12-hour offline cap, a synthesised audio bus with a bounded voice pool, and a
+single-writer multi-tab lease with read-only followers.
 
-Planned, not yet functional: research tree, expeditions/sector map, wreck composition
-and scan detail, restore/dismantle/sell choices for major objects, policies, prestige,
-crews, PvP, store. Those are later milestones in `goal.md` (M2+).
+Planned, not yet functional: expeditions/sector map, wreck composition and scan detail,
+restore/dismantle/sell choices for major objects, policies, prestige, crews, PvP, store.
+Those are later milestones in `goal.md` (M3+).
 
 ## Milestone and next three goals
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-05 small research branch**: three purchasable nodes with exact visible effects,
-   each applied exactly once, funded by data (needs the signal lab blueprint to produce it).
+1. **B-19 input pulls sized to the need**: store→machine links currently fill the whole
+   input buffer, so material leaves the store while its price is still missing. Pull only
+   what the running and next batch need, then re-measure the scripted session's machine count.
 2. **B-15 reserve-floor sweep**: floors {0, 5, 10, 20} through the chain fixture, one table,
    chosen value documented.
 3. **B-17 rolling 60 s rate window**: per-machine recent rate as spec 9.4 asks, with the
@@ -75,6 +81,7 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Primary dock button | The single next action for the current objective, with cost |
 | Machine panel | Status, batch progress, measured and maximum rate, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
 | Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
+| Research panel | One line per node with its exact effect, `Buy · n Data`, `Known`, or `Needs <earlier node> first` |
 | Build / Place / Next / Cancel | Blueprint selection, ghost confirmation, cycling, abort |
 | Sound on/off | Toggles the master bus, persisted |
 | Home | Recentres the camera on the yard and clears selection |
@@ -89,9 +96,9 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 88 unit/integration tests
+npm test      # 108 unit/integration tests
 npm run typecheck
-npm run build # dist/ (199.30 kB JS, 63.04 kB gzip)
+npm run build # dist/ (204.02 kB JS, 64.46 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -105,7 +112,52 @@ through the entire absence, so repeated reloads cannot double-claim the discarde
 To capture the README screenshots: `npm run preview` in one terminal, then
 `node scripts/capture.mjs`.
 
-## Latest update (M2: one writer per yard, 2026-11-03)
+## Latest update (M2: research branch and a ladder that spends, 2026-11-03)
+
+- **Research branch (spec 12.2, 27.5).** `game/content/research.ts` declares three nodes in
+  one short chain — Efficient Cutters (4 data, "one cutting pulse gives 7 scrap instead of
+  5"), Smart Buffers (8, +6 input capacity per machine), Route Dispatch (12, +8 capacity for
+  links created after purchase). Costs, prerequisite, and `maxRank: 1` are content data; the
+  effect is an integer change to a quantity the simulation already reports, so a node can be
+  checked without a formula. Purchases live in `sim.research` as `{nodeId: rank}`;
+  `research.buy` refuses an unknown node, an unmet prerequisite (`prereq`), an unaffordable
+  node, and a second rank (`already-known`), and a retried command id returns the first
+  result. The panel shows the exact effect before the buy, and the dock gains a fourth
+  target only once data exists. The signal lab blueprint (R11, 1 circuit → 2 data per 15 s)
+  produces the currency.
+- **The ladder now spends.** `nextYardStep` puts an affordable upgrade above the sell
+  tranche and skips selling a resource that is still short for the next unbuilt machine, so
+  a yard no longer sits at three machines with 900 credits and nothing bought. The upgrade
+  target is the lowest level, then the busiest stage. Measured in the same scripted session:
+  the three machines reached L7/L6/L6 with 27 credits left, where the previous build had
+  964 credits, three level-1 machines, and a repeated "Sell 10 Scrap".
+- **A refresh inside the lease window now credits the absence.** The store credited only at
+  construction time, when the tab was already the writer; after a reload the previous
+  document's 1.5 s lease was still live, so the new tab started as a follower and the gap was
+  never credited. `creditAbsence()` now also runs when a reconcile promotes a follower, and an
+  adopted snapshot carries its own write time so the window cannot be counted twice. The
+  capture shows `tick 1010 → 433020` (432 000 ticks = the 12 h cap) and the report
+  `Away 12h 0m · Your operation worked for 12h 0m (capped) · Scrap +881 · Steel +1 ·
+  Deliveries 182 · Batches 15 · Bottleneck storage-full`.
+- Measured in this run: `npm test` 108 passed / 108 (11 files; 14 new in
+  `tests/simulation/research.test.ts`, 5 new in `tests/simulation/plan.test.ts`, 1 new in
+  `tests/ui/app.test.tsx`, 1 updated handover expectation in
+  `tests/persistence/lease.test.ts`), `npm run typecheck` clean, `npm run build` 204.02 kB JS
+  (64.46 kB gzip, 50 modules).
+- **Open finding, recorded as B-19.** In a long scripted session the yard reaches three
+  machines and stops: the store holds `scrap 54, ferrous 1, nonferrous 1` while the furnace
+  and recycler input buffers hold up to 12 each, and build prices are read from the store
+  only. The store→machine links pull everything above the reserve floor in one go, so the
+  price of the next machine never accumulates. B-19 sizes those pulls to the machine's real
+  need; the ladder's pending-input rule already stops the surplus sells from adding to it.
+- Known limitations: the research panel has no screenshot yet because the scripted session
+  does not finish the circuit chain in the capture window, so its content is covered by the
+  jsdom render test instead (see the gallery note); a follower's picture still steps at the
+  10 Hz adopt cadence (B-18); the no-scroll gate is still only structurally verified in
+  jsdom (BL-01); percentages remain lifetime-since-built (B-17); audio is unverified by human
+  listening (BL-11).
+
+## Earlier this week (M2: one writer per yard, 2026-11-03)
 
 - Two tabs no longer run two economies. `persistence/lease.ts` holds
   `{owner, heartbeatMs, revision}`; the first tab owns it, extra tabs mirror the saved
@@ -148,13 +200,14 @@ To capture the README screenshots: `npm run preview` in one terminal, then
   and the dock label format from, which fixed a real-browser mismatch where the two named
   different actions.
 
-Known limitations: no research/expedition/crew/PvP/store UI yet; a follower tab mirrors at
-the 10 Hz adopt cadence (B-18); the no-scroll gate is only structurally verified in jsdom, so
-a real-device trace is still pending; the diagnosis percentages are lifetime-since-built, not
-a sliding 60 s window; audio quality is unverified by human listening; `data`, motors,
-battery, plates, alloy, and chassis exist as content but are not reachable until the plate
-press, motor bench, and signal lab blueprints arrive; saves written before the wall-clock fix
-get exactly one capped 12 h window on their first load.
+Known limitations: no expedition/crew/PvP/store UI yet; the research panel is verified by a
+jsdom render test but not yet photographed; a follower tab mirrors at the 10 Hz adopt
+cadence (B-18); the no-scroll gate is only structurally verified in jsdom, so a real-device
+trace is still pending; the diagnosis percentages are lifetime-since-built, not a sliding
+60 s window; audio quality is unverified by human listening; motors, battery, plates, alloy,
+and chassis exist as content but are not reachable until the plate press and motor bench
+blueprints arrive, and `data` needs the signal lab plus the circuit chain; saves written
+before the wall-clock fix get exactly one capped 12 h window on their first load.
 
 ## Measured numbers (Node 22.18 on the development machine, `tests/perf/bench.test.ts`)
 
@@ -162,33 +215,40 @@ These are headless CPU costs for the simulation core, not mobile FPS claims.
 
 | Workload | Median of 3 |
 | --- | --- |
-| 12 h catch-up, 4-machine starter yard, tick-by-tick | 41.9 ms |
+| 12 h catch-up, 4-machine starter yard, tick-by-tick | 33.4 ms |
 | 12 h catch-up, idle yard, event-jump path | < 1 ms |
-| 500 machines, 6 000 ticks | 24.8 ms |
-| 100 machines, 10 000 ticks | 7.0 ms |
-| 50 machines, 10 000 ticks | 3.8 ms |
+| 500 machines, 6 000 ticks | 23.2 ms |
+| 100 machines, 10 000 ticks | 6.7 ms |
+| 50 machines, 10 000 ticks | 3.7 ms |
 | 5 machines, 10 000 ticks | 0.7 ms |
 | 1 machine, 10 000 ticks | 0.5 ms |
 
-Run-to-run spread on this machine is a few milliseconds (the same 12 h case read 29.9 ms in
-the previous pass), so treat these as bands. The per-tick occupancy counters added roughly
-2 ms at 500 machines; the lease costs two extra `localStorage` operations per second in the
-owning tab and one read per 100 ms in a follower, which the headless table does not cover.
+Run-to-run spread on this machine is a few milliseconds (the same 12 h case read 41.9 ms and
+29.9 ms in earlier passes), so treat these as bands. The per-tick occupancy counters added
+roughly 2 ms at 500 machines; the lease costs two extra `localStorage` operations per second
+in the owning tab and one read per 100 ms in a follower, which the headless table does not
+cover. The research branch is a small integer lookup per affected quantity and did not move
+any band above.
 
 ## Screenshot gallery
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session to tutorial step 8: 3 machines (sorter ×15, furnace ×4, polymer recycler), 6 routes, 39 credits, tick 1030; card and dock both name one step | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected, its measured line reads `Working 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%`, its next step names the missing supplier, and the card and dock still match | Same commit and session, Chrome headless, captured 2026-11-03 |
-| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 1 Nonferrous 1 Credits 39 Store 13/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence, wide viewport: 3 machines, 6 routes, 39 credits, tick 1030 | Same commit as this README, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 3 machines (sorter L7 ×30, furnace L6 ×5, polymer recycler L6), 6 routes, tick 433 640, 27 credits, `Scrap 54 Ferrous 1 Nonferrous 1 Credits 27 Store 58/900` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.00s` after six upgrades, `Working 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%`, its next step names the missing supplier, and the dock offers the 107-credit upgrade | Same commit and session, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 54 Ferrous 1 Nonferrous 1 Credits 27 Store 58/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Same scripted sequence in a separate context (so its counters differ by a few seconds): 3 machines at L7/L6/L6, tick 433 630, 68 credits | Same commit as this README, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover itself is logged as
-text by the capture script rather than inferred from these images. The earlier 2026-11-03
-captures (tick 1006/1008, no diagnosis lines) and the 2026-11-02 pair (two machines, tick 750)
-are superseded by these captures.
+text by the capture script rather than inferred from these images, and so is the absence:
+`tick 1010 → 433 020` with the report line quoted in the latest-update section.
+**Pending capture:** the research panel has no image yet. Its dock target appears only once
+`data > 0`, which needs the full circuit chain, and the scripted session stops before that
+within the capture window; `tests/ui/app.test.tsx` therefore asserts the panel's exact
+content (effect line, `Buy · 4 Data`, `Known`, and the blocked-node line) until a longer
+session can be photographed. The earlier 2026-11-03 captures (tick 1030/1370, three level-1
+machines, no absence) and the 2026-11-02 pair are superseded by these captures.
 
 ## Architecture
 
@@ -196,6 +256,7 @@ are superseded by these captures.
 src/
   app/store.ts            authoritative state owner, frame loop, save cadence
   game/content/defs.ts    resources, recipes R01-R12, blueprints, tuning
+  game/content/research.ts research nodes, rank table, derived integer bonuses
   game/simulation/        types, engine (tick phases), commands, offline, invariants, autoconnect, plan
   game/renderer/scene.ts  camera, world/sprite drawing, ports
   game/audio/audio.ts     buses, cue table, bounded voice pool

@@ -6,7 +6,8 @@ import {
   type ResourceId,
 } from "../content/defs";
 import { planConnections, type ConnectionPlan } from "./autoconnect";
-import { sellableAmount } from "./commands";
+import { sellableAmount, upgradeCost } from "./commands";
+import { nextResearchNode } from "../content/research";
 import type { SimState } from "./types";
 
 /**
@@ -17,6 +18,7 @@ export type YardStep =
   | { kind: "connect"; machineId: number; plans: ConnectionPlan[] }
   | { kind: "build"; blueprint: string }
   | { kind: "sell"; resource: ResourceId; qty: number }
+  | { kind: "research"; node: string }
   | { kind: "upgrade"; machineId: number }
   | { kind: "salvage" };
 
@@ -77,6 +79,7 @@ export const SELL_ORDER: readonly ResourceId[] = [
   "wire",
   "plates",
   "circuits",
+  "data",
 ];
 
 export function nextYardStep(state: SimState): YardStep {
@@ -89,14 +92,81 @@ export function nextYardStep(state: SimState): YardStep {
   for (const blueprint of unbuilt) {
     if (affordable(state, blueprint)) return { kind: "build", blueprint };
   }
+  // Research data competes with nothing else, so it leads the surplus sells once
+  // a node is affordable; both actions stay available afterwards.
+  const node = nextResearchNode(state);
+  if (node && (state.store.data ?? 0) >= node.cost) return { kind: "research", node: node.id };
+  const upgrade = affordableUpgrade(state);
+  if (upgrade) return upgrade;
+  // A sell must never hold back the next machine, so resources that are still
+  // short for an unbuilt blueprint wait their turn (spec 10.5).
+  const pending = pendingInputs(state, unbuilt);
+  for (const resource of SELL_ORDER) {
+    if (pending.has(resource)) continue;
+    const qty = sellableAmount(state, resource);
+    if (qty > 0) return { kind: "sell", resource, qty };
+  }
+  if (unbuilt.length > 0) return { kind: "build", blueprint: nearestBlueprint(state, unbuilt) };
   for (const resource of SELL_ORDER) {
     const qty = sellableAmount(state, resource);
     if (qty > 0) return { kind: "sell", resource, qty };
   }
-  if (unbuilt.length > 0) return { kind: "build", blueprint: unbuilt[0] };
   const machine = state.machines[0];
   if (machine) return { kind: "upgrade", machineId: machine.id };
   return { kind: "salvage" };
+}
+
+/** Unbuilt blueprint whose inputs are closest to complete, so the goal is near. */
+function nearestBlueprint(state: SimState, unbuilt: readonly string[]): string {
+  let best = unbuilt[0] ?? "";
+  let bestShortfall = Number.POSITIVE_INFINITY;
+  for (const id of unbuilt) {
+    const def = BLUEPRINTS[id];
+    if (!def) continue;
+    let shortfall = 0;
+    for (const item of def.buildCost) {
+      shortfall += Math.max(0, item.qty - (state.store[item.resource] ?? 0));
+    }
+    if (shortfall < bestShortfall) {
+      best = id;
+      bestShortfall = shortfall;
+    }
+  }
+  return best;
+}
+
+/** Resources still short of an unbuilt blueprint's price. */function pendingInputs(state: SimState, unbuilt: readonly string[]): Set<ResourceId> {
+  const pending = new Set<ResourceId>();
+  for (const id of unbuilt) {
+    const def = BLUEPRINTS[id];
+    if (!def) continue;
+    for (const item of def.buildCost) {
+      if ((state.store[item.resource] ?? 0) < item.qty) pending.add(item.resource);
+    }
+  }
+  return pending;
+}
+
+/**
+ * Cheapest affordable upgrade: lowest level first, then the busiest machine, so
+ * a saturated yard strengthens the stage that is actually the limit.
+ */
+function affordableUpgrade(state: SimState): YardStep | null {
+  let best: { machineId: number; level: number; busy: number } | null = null;
+  for (const machine of state.machines) {
+    const def = BLUEPRINTS[machine.blueprint];
+    if (!def) continue;
+    if (state.credits < upgradeCost(def.baseUpgradeCost, machine.level)) continue;
+    const busy = machine.busyTicks ?? 0;
+    if (
+      !best ||
+      machine.level < best.level ||
+      (machine.level === best.level && busy > best.busy)
+    ) {
+      best = { machineId: machine.id, level: machine.level, busy };
+    }
+  }
+  return best ? { kind: "upgrade", machineId: best.machineId } : null;
 }
 
 /** Credit value of a sell tranche, for a single shared formatting path. */

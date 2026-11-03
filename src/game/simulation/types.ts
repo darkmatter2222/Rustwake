@@ -107,6 +107,8 @@ export interface SimState {
   powerRatio: number;
   log: LogEntry[];
   seenCommands: Record<string, number>;
+  /** Purchased research nodes, id to rank; each node's effect applies once. */
+  research: Record<string, number>;
 }
 
 export const SCHEMA_VERSION = 1;
@@ -150,6 +152,7 @@ export function createInitialState(): SimState {
     powerRatio: 1,
     log: [],
     seenCommands: {},
+    research: {},
   };
 }
 

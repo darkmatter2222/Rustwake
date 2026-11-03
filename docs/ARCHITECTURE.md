@@ -5,6 +5,8 @@
 | Layer | Module | Mutability | Notes |
 | --- | --- | --- | --- |
 | Content | `game/content/defs.ts` | frozen data | Resources, recipes R01-R12, blueprints, tuning constants |
+| Content | `game/content/research.ts` | frozen data | Node costs, prerequisites, `maxRank`, and the derived integer bonuses |
+| Plan | `game/simulation/plan.ts` | pure over state | One `YardStep` ladder shared by the objective card and the dock |
 | Simulation | `game/simulation/*` | single mutable state object | Authoritative economy, no DOM access |
 | Presentation | `game/renderer/scene.ts` | reads simulation each frame | Camera, sprites, ports, selection |
 | Audio | `game/audio/audio.ts` | lazy `AudioContext` after gesture | Buses, cue table, bounded voice pool |
@@ -43,6 +45,12 @@ with the `read-only` reason and one local explanation. Two clocks back this up: 
 wall clock (`Date.now`) for `lastSeenMs`, the catch-up window, and the heartbeat; the
 monotonic page timeline only for frame deltas.
 
+One absence is credited per writer by `creditAbsence()`: at store creation when the tab
+already holds the lease, and from `reconcile()` the moment a follower is promoted. The credit
+advances `lastSeenMs` to `now`, and an adopted snapshot brings its own write time, so a
+reload inside the 1.5 s lease window still settles the gap exactly once and a repeated
+reconcile measures no elapsed time.
+
 ## Tick pipeline (fixed order, `simulation/engine.ts`)
 
 1. `finishBatches` — accrue-and-complete work whose milli-tick requirement is met and
@@ -66,6 +74,21 @@ list and the same total ticks are byte-identical; the determinism test proves eq
 across tick chunk sizes of 1, 10, and 240, and between `advance` and `advanceTo`. The
 event-jump path in `advanceTo` accrues the same counters for the skipped idle range and
 always steps the final tick, which is what makes the two serialisations match exactly.
+
+## Yard ladder (spec 3.3, 10.5)
+
+`plan.ts` derives exactly one `YardStep` from the state, in this priority: an unmet
+connection for a machine, an affordable build, an affordable research node, an affordable
+upgrade (lowest level, then the highest `busyTicks`), a surplus sell whose resource is not
+still short for an unbuilt blueprint, the nearest build by total input shortfall, then any
+sell. The objective card and the dock label both format that one step, so they cannot name
+different actions. Skipping a pending input in the sell scan is what lets a machine price
+accumulate while the drone keeps delivering.
+
+Research bonuses are read, not replayed: `researchBonus(state)` returns integers derived from
+`state.research`, and the pulse reward, the effective input capacity (`inputCapacityFor`), and
+the capacity given to a newly created link are the only three places that consult it. Existing
+links keep the capacity they were created with, so a purchase changes the future, not history.
 
 ## State locations (spec 8.2)
 

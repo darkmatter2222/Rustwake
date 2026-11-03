@@ -1,4 +1,5 @@
 import { BLUEPRINTS, RECIPES } from "../content/defs";
+import { RESEARCH } from "../content/research";
 import { SCHEMA_VERSION, createInitialState, type SimState } from "../simulation/types";
 
 export const SAVE_KEY = "rustwake.save.v1";
@@ -128,6 +129,13 @@ export function validateSim(state: unknown): string | null {
       }
     }
   }
+  if (s.research !== undefined) {
+    if (typeof s.research !== "object" || s.research === null) return "research";
+    for (const [id, rank] of Object.entries(s.research)) {
+      if (!RESEARCH[id]) return `researchNode:${id}`;
+      if (!Number.isSafeInteger(rank) || (rank as number) < 0) return `researchRank:${id}`;
+    }
+  }
   for (const recipe of Object.values(RECIPES)) {
     if (recipe.cycleTicks <= 0 || recipe.power <= 0) return `recipe:${recipe.id}`;
   }
@@ -146,7 +154,9 @@ function isQuantityMap(value: unknown): boolean {
 /** Forward migration entry point; v1 is the baseline shape. */
 export function migrate(payload: SavePayload): SavePayload {
   const base = createInitialState();
-  const sim = { ...payload.sim, schemaVersion: base.schemaVersion };
+  // v1 saves written before research existed still load: the map simply starts
+  // empty, so the branch is unpurchased rather than the run being reset.
+  const sim = { ...payload.sim, schemaVersion: base.schemaVersion, research: { ...(payload.sim.research ?? {}) } };
   // v1 saves written before the measured counters existed still load: missing
   // counters become zero, so reported percentages simply cover a shorter window.
   for (const m of sim.machines ?? []) {

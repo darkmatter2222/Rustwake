@@ -280,4 +280,41 @@ describe("first-feel shell", () => {
     expect(machine.busyTicks).toBeGreaterThan(0);
     expect(machine.ageTicks).toBe(300);
   });
+
+  it("adds a Research target to the dock once data exists", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262));
+    // Nothing to spend yet, so the dock stays at three targets.
+    expect(findButton("Research")).toBeUndefined();
+
+    const state = store.getState();
+    state.store["data"] = 6;
+    state.storeUnits += 6;
+    act(() => store.step(1));
+    expect(findButton("Research")).toBeDefined();
+    act(() => findButton("Research")?.click());
+
+    const panel = () => document.querySelector(".panel")?.textContent ?? "";
+    const opened = panel();
+    // Every node states its exact effect and cost before it is bought (12.2).
+    expect(opened).toContain("Efficient Cutters");
+    expect(opened).toContain("One cutting pulse gives 7 scrap instead of 5.");
+    expect(opened).toContain("Buy · 4 Data");
+    expect(opened).toContain("Needs Efficient Cutters first");
+
+    act(() => findButton("Buy · 4 Data")?.click());
+    expect(store.getState().research.cutters).toBe(1);
+    expect(store.getState().store["data"]).toBe(2);
+    expect(panel()).toContain("Known");
+    // The next node is now open, and the purchased one cannot be bought twice.
+    expect(panel()).toContain("Buy · 8 Data");
+    expect(panel().indexOf("Known")).toBeLessThan(panel().indexOf("Buy · 8 Data"));
+  });
 });

@@ -103,14 +103,21 @@ export function createStore(options: StoreOptions = {}): GameStore {
 
   let returnReport: ReturnReport | null = null;
 
+  /**
+   * Credits one absence against the shared economy and checkpoints the window
+   * (spec 18.1). Safe to call again: the reference moves to `now`, so a repeat
+   * measures no elapsed time and produces no second report.
+   */
+  const creditAbsence = () => {
+    const { report, nextLastSeenMs } = catchUp(state, lastSeenMs, now());
+    lastSeenMs = Math.max(lastSeenMs, nextLastSeenMs);
+    if (report.creditedTicks > 0) returnReport = report;
+    persist();
+  };
+
   if (loaded.ok && role === "writer") {
     // Reconcile the absence once, then render the latest world (spec 18.4).
-    // A follower tab has nothing to credit: the owner settles its own absence.
-    returnReport = catchUp(state, lastSeenMs, now()).report;
-    lastSeenMs = now();
-    // Checkpoint the credited window at once so a quick reload cannot claim the
-    // discarded remainder again (spec 18.1).
-    persist();
+    creditAbsence();
   }
 
   /**
@@ -120,10 +127,14 @@ export function createStore(options: StoreOptions = {}): GameStore {
    */
   const reconcile = (): boolean => {
     let changed = false;
+    let promoted = false;
     if (lease) {
       const previous = role;
       role = lease.claim(state.revision);
-      changed = previous !== role;
+      if (previous !== role) {
+        changed = true;
+        promoted = role === "writer";
+      }
     }
     if (storage) {
       const incoming = decodeSave(safeGet(storage, SAVE_KEY));
@@ -133,9 +144,15 @@ export function createStore(options: StoreOptions = {}): GameStore {
       ) {
         state = migrate(incoming.payload).sim;
         settings = { ...DEFAULT_SETTINGS, ...incoming.payload.settings };
+        // The adopted snapshot carries the newest write time, so a later credit
+        // measures the gap that snapshot actually left (spec 18.1).
+        lastSeenMs = Math.max(lastSeenMs, incoming.payload.lastSeenMs);
         changed = true;
       }
     }
+    // A tab promoted from follower to writer settles the gap itself, which is how
+    // a refresh inside the lease window still credits one absence (spec 18.4).
+    if (promoted && loaded.ok) creditAbsence();
     return changed;
   };
 
