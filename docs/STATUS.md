@@ -8,9 +8,11 @@ autonomous 5-unit deliveries, sorter placement with ghost, two real dock routes,
 first export contract for 30 credits, and a first credit-funded upgrade. Blocked actions
 show one local explanation and charge nothing.
 
-Current commit and remote sync status: M0/M1 core implemented locally; see `git log` for
-the pushed head. The first checkpoint commit for this implementation is recorded here as
-the M1 core commit; remote verification follows the push.
+Current commit and remote sync status: `ed38ff1` is the pushed `origin/main` head
+("Build M1 first-feel slice: deterministic sim core, full-screen yard UI, persistence,
+tests, CI"), verified by `git log --oneline origin/main -1` after a non-fast-forward-free
+push from `dcdd74e`. GitHub Actions CI was triggered on that push; the result is not read
+back in this pass, so treat the CI badge as pending until the next pass confirms it.
 
 Checks run and actual results:
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
