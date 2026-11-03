@@ -49,6 +49,10 @@ function starterYard(machines: number): SimState {
       ageTicks: 0,
       busyTicks: 0,
       fullTicks: 0,
+      rateAge: 0,
+      rateFrom: 0,
+      rateAgePrev: 0,
+      rateFromPrev: 0,
     });
   }
   return state;

@@ -51,8 +51,9 @@ demand-sized input pulls, shared power budget with proportional slowdown, storag
 export contract plus repeatable priced sell contracts, eight blueprints (including the
 signal lab) with a progressive build picker, a three-node research branch bought with data
 where each effect applies exactly once, tutorial state machine (T0-T9), contextual
-objective card, one localised explanation per blocked action, measured per-machine and
-per-link occupancy with one recommended action, single-canvas HUD, local save with a return
+objective card, one localised explanation per blocked action, a measured 60 s rate window per
+machine plus per-machine and per-link occupancy with one recommended action, single-canvas HUD,
+local save with a return
 report and a 12-hour offline cap, a synthesised audio bus with a bounded voice pool, and a
 single-writer multi-tab lease with read-only followers.
 
@@ -64,12 +65,13 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-17 rolling 60 s rate window**: per-machine recent rate as spec 9.4 asks, with the
-   window shown in the panel next to the maximum rate.
-2. **B-16 HUD area share**: measure the resting HUD's share of the phone viewport against the
+1. **B-16 HUD area share**: measure the resting HUD's share of the phone viewport against the
    15-22% design target, with the four/five-chip and one-line-objective counts recorded.
-3. **B-13 large-text and contrast audit**: panel and HUD readability at 360 × 640 with the text
+2. **B-13 large-text and contrast audit**: panel and HUD readability at 360 × 640 with the text
    scale at 2.0, plus high-contrast selection outlines, with the pagination behaviour recorded.
+3. **B-25 organic research unlock on the phone**: raise the post-absence tap phase until the mobile
+   yard buys its first research node (the probe says round 504 at floor 10) and photograph the
+   research panel at 390 × 844 with its own gallery provenance.
 
 ## Controls
 
@@ -80,7 +82,7 @@ Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 | Drag one finger | Pan the camera, clamped to the yard |
 | Pinch / two-finger drag | Zoom between 1.2x and 6x |
 | Primary dock button | The single next action for the current objective, with cost |
-| Machine panel | Status, batch progress, measured and maximum rate, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
+| Machine panel | Status, batch progress, measured rate over its named window (`60s window`, or all available time for a new machine), maximum rate at full power, power share, **Measured** line (busy / waiting / output-waiting / busiest link / power) and one **Next step** recommendation, **Connect**, **Upgrade**, **Dismantle** |
 | Store panel | Material list with **Sell** buttons, capacity, measured storage/power/link lines, overflow hold |
 | Research panel | One line per node with its exact effect, `Buy · n Data`, `Known`, or `Needs <earlier node> first` |
 | Build / Place / Next / Cancel | Blueprint selection, ghost confirmation, cycling, abort |
@@ -97,9 +99,9 @@ economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 116 unit/integration tests
+npm test      # 121 unit/integration tests
 npm run typecheck
-npm run build # dist/ (205.41 kB JS, 64.91 kB gzip, 50 modules)
+npm run build # dist/ (206.21 kB JS, 65.16 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -117,7 +119,47 @@ To regenerate the supply-window tables (reserve-floor sweep and per-link utilisa
 `npx tsx scripts/probe-supply.mjs`, which writes `docs/evidence/2026-11-03-supply-window.md`
 (about 4 s). The same four numbers are asserted by `tests/simulation/supply-window.test.ts`.
 
-## Latest update (M2: one link per material, dead links gone, 2026-11-03)
+## Latest update (M2: measured 60 s rate window, 2026-11-03)
+
+- **The machine panel now reports a windowed rate (B-17, spec 9.4).** `Actual rate` reads the last
+  complete 60 s window — or all available time while a machine is younger than one window — and the
+  line names the span it covers: `Actual rate 0.00 batches/s · 60s window`. The lifetime average is
+  no longer presented as the current rate, so a machine that stopped a minute ago reads as stopped.
+- **How it is measured.** Each machine keeps two `(machine age, batchesDone)` samples on a fixed
+  600-tick grid, written once a minute per machine from the tick loop, plus the same rule inside the
+  event-jump branch, so `advance` and `advanceTo` still produce byte-identical machine state
+  (asserted on the whole `machines` array). Decision D-29 records the alternatives considered.
+- **Cost is inside the noise.** Same harness, median of 3, Node 22.18: 41.2 ms / < 1 ms / 41.7 ms /
+  13.4 ms / 6.4 ms / 0.97 ms / 0.71 ms against 42.2 / < 1 / 41.0 / 13.7 / 6.1 / 1.0 / 0.76 last
+  pass. Four integers and one compare per machine per tick.
+- **Real Chrome, both contexts.** Mobile: absence `tick 1 020 → 433 030` with the report
+  `Ferrous +110 · Nonferrous +549 · Steel +219 · Deliveries 342 · Batches 773 · Bottleneck
+  storage-full`; final yard 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5 ×1,
+  copper separator L6 ×4) on 9 links, 130 credits, HUD `Scrap 10 Ferrous 5 Nonferrous 83 Credits 130
+  Store 332/900`. The selected recycler's panel reads `Actual rate 0.00 batches/s · 60s window`
+  directly above `Max rate 0.23 batches/s at full power` and the lifetime `Measured Working 0% ·
+  waiting for input 100% · output waiting 0% · link 10% busy · power 100%` line - the two windows are
+  deliberately different and both are labelled. Desktop from the probe's seed save: 8 machines on 18
+  links, `research {cutters, buffers, dispatch}`, `circuits 16, data 20`, tick 454 259, research
+  panel open on `Data 20`. Lease handover `t1-7by6 → t1-7eik` with the tick advancing
+  433 650 → 433 679.
+- Checks in this run: `npm run typecheck` clean, `npx vitest run` **121 passed / 121** (14 files: +5
+  in the new `tests/simulation/rate-window.test.ts`, +2 assertions on the panel's window label),
+  `npm run build` 206.21 kB JS (65.16 kB gzip, 50 modules, +0.26 kB gzip), and
+  `npx tsx scripts/probe-supply.mjs` prints the same four floors as the previous pass
+  (1 075 / 1 056 / 1 018 / 1 103 batches), which shows the new counters are behaviour-neutral.
+- **Save compatibility:** schema 1 unchanged. A save written without the four fields loads through
+  `migrate` with the window restarting at zero and still yields a finite reading; `validateSim`
+  rejects non-integer or negative window fields (test-covered in `tests/persistence/*`).
+- Known limitations: the **Measured** occupancy percentages stay lifetime-since-built - only the
+  rate is windowed; a completed window can lag the current tick by up to 60 s, so the newest
+  delivery appears in the reading at the next sample; the short mobile session still ends before
+  `data > 0` (B-25); the mature yard's own absence stays storage-limited (`Deliveries 4 · Batches
+  39`); machines are level 1 in the headless session and level 4-6 in the click-paced one (B-21); a
+  follower's picture steps at the 10 Hz adopt cadence (B-18); the no-scroll gate is still only
+  structurally verified in jsdom (BL-01); audio is unverified by human listening (BL-11).
+
+## Earlier this week (M2: one link per material, dead links gone, 2026-11-03)
 
 - **Each material now reaches a machine over exactly one link (B-23).** `planConnections` keys a
   suggested input on `(destination machine, material)` and an output on `(source machine,
@@ -339,21 +381,22 @@ before the wall-clock fix get exactly one capped 12 h window on their first load
 
 These are headless CPU costs for the simulation core, not mobile FPS claims.
 
-| Workload | Median of 3 (this build, one link per material) | Median of 3 (previous build, duplicate links) |
+| Workload | Median of 3 (this build, 60 s rate window) | Median of 3 (previous build) |
 | --- | --- | --- |
-| 12 h catch-up, 4-machine starter yard, tick-by-tick | 42.2 ms | 59.3 ms |
+| 12 h catch-up, 4-machine starter yard, tick-by-tick | 41.2 ms | 42.2 ms |
 | 12 h catch-up, idle yard, event-jump path | < 1 ms | < 1 ms |
-| 500 machines, 6 000 ticks | 41.0 ms | 40.4 ms |
-| 100 machines, 10 000 ticks | 13.7 ms | 13.8 ms |
-| 50 machines, 10 000 ticks | 6.1 ms | 6.4 ms |
-| 5 machines, 10 000 ticks | 1.0 ms | 1.1 ms |
-| 1 machine, 10 000 ticks | 0.8 ms | 0.8 ms |
+| 500 machines, 6 000 ticks | 41.7 ms | 41.0 ms |
+| 100 machines, 10 000 ticks | 13.4 ms | 13.7 ms |
+| 50 machines, 10 000 ticks | 6.4 ms | 6.1 ms |
+| 5 machines, 10 000 ticks | 0.97 ms | 1.0 ms |
+| 1 machine, 10 000 ticks | 0.71 ms | 0.8 ms |
 
 Run-to-run spread on this machine is a few milliseconds (the same 12 h case read 41.9 ms and
-29.9 ms in earlier passes), so treat these as bands. The 12 h tick-by-tick case improved from
-59.3 ms to 42.2 ms because a settled yard now walks 18 links per tick instead of 22 (B-23), and
-the rest are flat inside the spread. For reference, before the per-material routing landed the
-same harness read 33.4 ms / < 1 ms / 23.2 ms / 6.7 ms / 3.7 ms / 0.7 ms / 0.5 ms. The per-tick
+29.9 ms in earlier passes), so treat these as bands, and every row above is inside that band: the
+four new integers and the one extra compare per machine per tick are not measurable here. Earlier
+reference points on the same harness: 33.4 ms / < 1 ms / 23.2 ms / 6.7 ms / 3.7 ms / 0.7 ms / 0.5 ms
+before per-material routing, and 59.3 ms for the 12 h case at 22 links (B-23 took it to 18 links per
+tick). The per-tick
 occupancy counters added roughly 2 ms at 500 machines; the lease costs two extra `localStorage`
 operations per second in the owning tab and one read per 100 ms in a follower, which the headless
 table does not cover. The 12 h case stays inside the 100 ms stall budget of spec 21.5.
@@ -362,17 +405,17 @@ table does not cover. The 12 h case stays inside the 100 ms stall budget of spec
 
 | File | Capture size | Scenario | Source |
 | --- | --- | --- | --- |
-| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 630, 130 credits, `Scrap 10 Ferrous 5 Nonferrous 83 Credits 130 Store 332/900` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
-| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.29s`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
+| `docs/screenshots/latest-mobile.png` | 390 × 844 @2x | Scripted session, then a 12 h absence settled by the real catch-up path: 4 machines (sorter L6 ×582, furnace L6 ×232, polymer recycler L5, copper separator L6), 9 links, tick 433 640, 130 credits, `Scrap 10 Ferrous 5 Nonferrous 83 Credits 130 Store 332/900` | Same commit as this README, Chrome headless via `scripts/capture.mjs`, captured 2026-11-03 |
+| `docs/screenshots/latest-machine-mobile.png` | 390 × 844 @2x | Same mobile session, a few seconds later (the frame loop keeps running): the polymer recycler is selected with `Cycle 4.29s`, `Actual rate 0.00 batches/s · 60s window`, `Max rate 0.23 batches/s at full power`, `Working 0% · waiting for input 100% · output waiting 0% · link 10% busy · power 100%`, its next step names the copper separator as the limiter, and the dock offers the 92-credit upgrade to it | Same commit and session, Chrome headless, captured 2026-11-03 |
 | `docs/screenshots/latest-multitab.png` | 390 × 844 @2x | Second page in the same browser context while the first still owns the lease: `Following the other tab` with the `Take over` action, counters identical to the owner (`Scrap 10 Ferrous 5 Nonferrous 83 Credits 130 Store 332/900`) | Same commit, two Chrome pages in one context, captured 2026-11-03 |
-| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 454 370, `circuits 16, data 20` in the store, three research nodes known | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
+| `docs/screenshots/latest-desktop.png` | 1440 × 900 @1x | Seeded mature yard (the save `scripts/probe-supply.mjs` writes, then the same 12 h absence): 8 machines at level 1 - sorter ×535, furnace ×194, copper separator ×158, wire mill ×115, plate press ×90, circuit assembler ×38, polymer recycler ×48, signal lab ×22 - 18 links, tick 454 259, `circuits 16, data 20` in the store, three research nodes known | Same commit as this README, separate Chrome context with `docs/evidence/yard-mature.json` installed before first paint, captured 2026-11-03 |
 | `docs/screenshots/latest-research.png` | 1440 × 900 @1x | Research panel open on that mature yard: `Data 20`, then `Efficient Cutters - One cutting pulse gives 7 scrap instead of 5. Known`, `Smart Buffers - Every machine holds 6 more units of input, so short gaps do not halt it. Known`, `Route Dispatch - A newly connected link carries 8 more units per trip` | Same commit and session as `latest-desktop.png`, Chrome headless, captured 2026-11-03 |
 
 Screenshots demonstrate appearance only: they do not prove audio, persistence, or
 long-session behaviour, which are covered by the tests above. The handover itself is logged as
 text by the capture script rather than inferred from these images, and so is the absence:
-`tick 1010 → 433 020` with the report line quoted in the latest-update section, and the
-handover line `t1-kou8 → t1-7ujv` with the tick advancing 433 640 → 433 669.
+`tick 1 020 → 433 030` with the report line quoted in the latest-update section, and the
+handover line `t1-7by6 → t1-7eik` with the tick advancing 433 650 → 433 679.
 **Research panel:** now photographed (`latest-research.png`) from a mature yard installed as a
 seed save; the seed is the file `docs/evidence/yard-mature.json` written by the supply probe, so
 the image and the headless tables describe the same 8-machine, 18-link yard. The short mobile

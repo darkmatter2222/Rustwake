@@ -360,6 +360,8 @@ export const TUNING = {
   activeBoostCapPercent: 10,
   /** Units of one resource the yard keeps back so routes and builds still work. */
   reserveFloor: 10,
+  /** Rate window for a machine's measured rate: 60 s, or all time when younger (spec 9.4). */
+  rateWindowTicks: 60 * TICKS_PER_SECOND,
   /** Largest single sellable tranche; keeps one transaction bounded (spec 5.1). */
   sellBatchCap: 60,
 } as const;

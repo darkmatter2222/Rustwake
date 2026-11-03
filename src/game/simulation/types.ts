@@ -1,4 +1,10 @@
-import { BLUEPRINTS, RECIPES, TUNING, type ResourceId, type ItemStack } from "../content/defs";
+import {
+  BLUEPRINTS,
+  RECIPES,
+  TUNING,
+  type ResourceId,
+  type ItemStack,
+} from "../content/defs";
 
 export interface MachineState {
   readonly id: number;
@@ -31,15 +37,16 @@ export interface MachineState {
   ageTicks: number;
   busyTicks: number;
   fullTicks: number;
+  /** Rolling rate window (spec 9.4): newest sample, at machine age `rateAge`. */
+  rateAge: number;
+  rateFrom: number;
+  /** Previous sample, exactly one window earlier, so the published span is fixed. */
+  rateAgePrev: number;
+  rateFromPrev: number;
 }
 
 export type MachineStatus =
-  | "idle"
-  | "running"
-  | "starved"
-  | "outputFull"
-  | "powerLimited"
-  | "paused";
+  "idle" | "running" | "starved" | "outputFull" | "powerLimited" | "paused";
 
 export interface RouteState {
   readonly id: number;
@@ -100,7 +107,12 @@ export interface SimState {
   overflow: ItemStack[];
   machines: MachineState[];
   routes: RouteState[];
-  wreck: { remaining: number; generation: number; pulses: number; nextPulseTick: number };
+  wreck: {
+    remaining: number;
+    generation: number;
+    pulses: number;
+    nextPulseTick: number;
+  };
   drone: DroneState;
   credits: number;
   exportSteelDelivered: number;

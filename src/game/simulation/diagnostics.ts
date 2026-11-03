@@ -38,7 +38,10 @@ export function requestedPower(s: SimState): number {
   return requested;
 }
 
-export function diagnoseMachine(s: SimState, m: MachineState): MachineDiagnosis {
+export function diagnoseMachine(
+  s: SimState,
+  m: MachineState,
+): MachineDiagnosis {
   const age = Math.max(1, m.ageTicks);
   const busyPercent = percent(m.busyTicks, age);
   const starvedPercent = percent(Math.min(m.starvedTicks, age), age);
@@ -58,7 +61,12 @@ export function diagnoseMachine(s: SimState, m: MachineState): MachineDiagnosis 
     linkPercent,
     powerPercent,
     evidence: `${parts.join(" · ")} · power ${powerPercent}%`,
-    advice: advise(s, m, { busyPercent, starvedPercent, fullPercent, linkPercent }),
+    advice: advise(s, m, {
+      busyPercent,
+      starvedPercent,
+      fullPercent,
+      linkPercent,
+    }),
   };
 }
 
@@ -67,6 +75,28 @@ interface Measures {
   readonly starvedPercent: number;
   readonly fullPercent: number;
   readonly linkPercent: number | null;
+}
+
+/** A measured throughput reading: batches per second and the seconds it covers. */
+export interface RateReading {
+  readonly rate: number;
+  readonly windowSeconds: number;
+}
+
+/**
+ * Recent rate over the defined window (spec 9.4): 60 s once a full window exists,
+ * otherwise all available time, so a new machine is not read as a stalled one.
+ * Both numbers come from counters the simulation writes, never from a formula.
+ */
+export function rateReading(m: MachineState): RateReading {
+  const span = m.rateAge - m.rateAgePrev;
+  if (span > 0) {
+    const seconds = span / 10;
+    const gained = Math.max(0, m.rateFrom - m.rateFromPrev);
+    return { rate: gained / seconds, windowSeconds: seconds };
+  }
+  const age = Math.max(1, m.ageTicks);
+  return { rate: m.batchesDone / (age / 10), windowSeconds: age / 10 };
 }
 
 function busiestLinkPercent(s: SimState, m: MachineState): number | null {
@@ -99,10 +129,10 @@ function advise(s: SimState, m: MachineState, measured: Measures): string {
   }
   if (requestedPower(s) > TUNING.yardPowerCapacity) {
     return `Power limited: ${runningMachines(s)} machines want ${requestedPower(
-      s
+      s,
     )} units against ${TUNING.yardPowerCapacity}, so work runs at ${percent(
       Math.round(s.powerRatio * 1000),
-      1000
+      1000,
     )}% speed. Finish the line before adding another machine.`;
   }
   if (m.inRoutes.length === 0 && m.inBufUnits === 0) {
@@ -127,7 +157,9 @@ function advise(s: SimState, m: MachineState, measured: Measures): string {
   }
   if (measured.fullPercent >= 20) {
     return `Its output waits ${measured.fullPercent}% of the time${
-      measured.linkPercent === null ? "" : ` while the link is busy ${measured.linkPercent}%`
+      measured.linkPercent === null
+        ? ""
+        : ` while the link is busy ${measured.linkPercent}%`
     }. Nothing to buy here: the link, not this machine, is the limit.`;
   }
   if (measured.busyPercent >= 85) {
@@ -143,13 +175,20 @@ function runningMachines(s: SimState): number {
 }
 
 /** Label of whatever holds or makes a resource, or null when the yard has none. */
-function supplierFor(s: SimState, resource: ResourceId | undefined): Supplier | null {
+function supplierFor(
+  s: SimState,
+  resource: ResourceId | undefined,
+): Supplier | null {
   if (!resource) return null;
-  if ((s.store[resource] ?? 0) > 0) return { phrase: "the dock store", fromStore: true };
+  if ((s.store[resource] ?? 0) > 0)
+    return { phrase: "the dock store", fromStore: true };
   for (const m of s.machines) {
     const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
     if (recipe.outputs.some((output) => output.resource === resource)) {
-      return { phrase: BLUEPRINTS[m.blueprint].label.toLowerCase(), fromStore: false };
+      return {
+        phrase: BLUEPRINTS[m.blueprint].label.toLowerCase(),
+        fromStore: false,
+      };
     }
   }
   return null;
@@ -160,7 +199,7 @@ export function yardSummary(s: SimState): string[] {
   const lines = [
     `Storage ${percent(s.storeUnits, s.storeCapacity)}% full (${s.storeUnits}/${s.storeCapacity})`,
     `Power ${percent(Math.round(s.powerRatio * 1000), 1000)}% speed (${requestedPower(
-      s
+      s,
     )} of ${TUNING.yardPowerCapacity} units requested)`,
   ];
   const busiest = busiestRoute(s);
@@ -168,12 +207,13 @@ export function yardSummary(s: SimState): string[] {
     lines.push(
       `Busiest link ${percent(busiest.busyTicks, Math.max(1, busiest.ageTicks))}% busy (${
         busiest.inFlight
-      }/${busiest.capacity} in transit)`
+      }/${busiest.capacity} in transit)`,
     );
   }
   let starved = 0;
   for (const m of s.machines) if (m.status === "starved") starved += 1;
-  if (starved > 0) lines.push(`${starved} machine${starved > 1 ? "s" : ""} waiting for input`);
+  if (starved > 0)
+    lines.push(`${starved} machine${starved > 1 ? "s" : ""} waiting for input`);
   return lines;
 }
 

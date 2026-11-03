@@ -280,6 +280,10 @@ describe("first-feel shell", () => {
     expect(text).toContain("% busy");
     expect(text).toContain("Next step");
     expect(text).not.toContain("NaN");
+    // The rate line names the window it covers (spec 9.4). At 300 ticks the
+    // machine is younger than one window, so that window is all available time.
+    expect(text).toContain("s window");
+    expect(text).toContain(`${(machine.batchesDone / 30).toFixed(2)} batches/s`);
     expect(machine.busyTicks).toBeGreaterThan(0);
     expect(machine.ageTicks).toBe(300);
   });

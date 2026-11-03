@@ -395,3 +395,38 @@ Format: date · problem · options · choice · reason · reversibility.
   filtered or weighted link), which is the point to store per-source demand on the
   route instead of one filter per link.
 
+## D-29 - 2026-11-03 - Two samples on a 600-tick grid for the measured rate window
+
+- Problem: the panel's `Actual rate` divided lifetime `batchesDone` by the session
+  tick, so a machine that stopped a minute ago still read as if it were running.
+  Spec 9.4 asks for a recent rate over a defined window, 60 s, or all available time
+  for a new machine.
+- Choice: each machine carries two samples `(rateAge, rateFrom)` and
+  `(rateAgePrev, rateFromPrev)` on a fixed 600-tick grid keyed on its own
+  `ageTicks`. Once one window exists the published span is exactly
+  `rateAge - rateAgePrev` = 600 ticks; before that the reading uses all available
+  time, which is the spec's own new-machine clause.
+- Considered: (a) a single sample reset every 600 ticks - the window length then
+  cycles 1..600 ticks, so the same factory reads 0.00 then 0.45 batches/s within one
+  minute; (b) a ring of ~32 completion ticks - exact trailing window at any length,
+  but the ring size caps the measurable rate and an array enters the hot loop; (c)
+  the shipped two-sample grid.
+- Reason: (c) keeps a fixed window length, so the label the player reads is stable,
+  and costs one integer compare per machine per tick plus a roll once a minute.
+  Measured on the existing harness, the numbers stay inside the run-to-run spread
+  (12 h case 41.2 ms against 42.2 ms, 100-machine case 13.4 ms against 13.7 ms), and
+  the whole-machine JSON is still identical between `advance` and `advanceTo` because
+  an event jump covers only ticks in which nothing completes.
+- Trade-off stated to the player: a completed window can lag the current tick by up
+  to 60 s, so the panel prints the span it used rather than implying "now". The
+  lifetime occupancy line stays as the second, longer-window evidence.
+- Evidence: `tests/simulation/rate-window.test.ts` (young machine uses all available
+  time; the first full window reads 60 s; a starved tail reads 0.00 while the
+  lifetime average is positive; byte parity between the two advance paths; a save
+  written before the fields existed still yields a finite reading) and the panel
+  assertions in `tests/ui/app.test.tsx`.
+- Reversible: yes; four integers per machine, one pure reader function, schema
+  version unchanged.
+- Reconsider when: the panel needs a sub-minute reading (a live sparkline or a
+  10-second response), which is the point to switch to the completion-tick ring.
+

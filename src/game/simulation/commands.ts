@@ -163,6 +163,10 @@ function buildMachine(s: SimState, blueprint: string, tile: number): CommandResu
     ageTicks: 0,
     busyTicks: 0,
     fullTicks: 0,
+    rateAge: 0,
+    rateFrom: 0,
+    rateAgePrev: 0,
+    rateFromPrev: 0,
   };
   s.machines.push(machine);
   return commit(s, "build", machine.id);

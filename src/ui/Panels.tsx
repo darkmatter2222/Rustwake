@@ -1,14 +1,36 @@
 import { useState } from "react";
-import { BLUEPRINTS, RECIPES, TUNING, exportPrice, type ResourceId } from "../game/content/defs";
+import {
+  BLUEPRINTS,
+  RECIPES,
+  TUNING,
+  exportPrice,
+  type ResourceId,
+} from "../game/content/defs";
 import type { MachineState, SimState } from "../game/simulation/types";
 import { batchMilliFor } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
 import { sellableAmount, upgradeCost } from "../game/simulation/commands";
-import { planConnections, type ConnectionPlan } from "../game/simulation/autoconnect";
-import { RESEARCH, RESEARCH_ORDER, inputCapacityFor } from "../game/content/research";
-import { diagnoseMachine, yardSummary } from "../game/simulation/diagnostics";
+import {
+  planConnections,
+  type ConnectionPlan,
+} from "../game/simulation/autoconnect";
+import {
+  RESEARCH,
+  RESEARCH_ORDER,
+  inputCapacityFor,
+} from "../game/content/research";
+import {
+  diagnoseMachine,
+  rateReading,
+  yardSummary,
+} from "../game/simulation/diagnostics";
 import type { ReturnReport } from "../game/simulation/offline";
-import { RESOURCE_LABEL, STATUS_LABEL, formatDuration, formatNumber } from "./text";
+import {
+  RESOURCE_LABEL,
+  STATUS_LABEL,
+  formatDuration,
+  formatNumber,
+} from "./text";
 
 export function MachinePanel(props: {
   state: SimState;
@@ -23,10 +45,10 @@ export function MachinePanel(props: {
   const recipe = RECIPES[def.recipeId];
   const effectiveSeconds = machine.batchMilli / 10000;
   const maxRate = effectiveSeconds > 0 ? 10000 / machine.batchMilli : 0;
-  const elapsed = Math.max(1, props.tick) / 10;
-  const actualRate = machine.batchesDone / elapsed;
+  const reading = rateReading(machine);
   const cost = upgradeCost(def.baseUpgradeCost, machine.level);
-  const nextSeconds = batchMilliFor(machine.blueprint, machine.level + 1) / 10000;
+  const nextSeconds =
+    batchMilliFor(machine.blueprint, machine.level + 1) / 10000;
   const plans = planConnections(props.state, machine.id);
   const diagnosis = diagnoseMachine(props.state, machine);
   const [page, setPage] = useState(0);
@@ -40,18 +62,29 @@ export function MachinePanel(props: {
           <dd>{STATUS_LABEL[machine.status] ?? machine.status}</dd>
           <dt>Batch</dt>
           <dd>
-            {Math.min(100, Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100))}%
+            {Math.min(
+              100,
+              Math.round(
+                (machine.progress / Math.max(1, machine.batchMilli)) * 100,
+              ),
+            )}
+            %
           </dd>
           <dt>Cycle</dt>
           <dd>{effectiveSeconds.toFixed(2)}s</dd>
           <dt>Actual rate</dt>
-          <dd>{actualRate.toFixed(2)} batches/s</dd>
+          <dd>
+            {reading.rate.toFixed(2)} batches/s ·{" "}
+            {Math.round(reading.windowSeconds)}s window
+          </dd>
           <dt>Max rate</dt>
           <dd>{maxRate.toFixed(2)} batches/s at full power</dd>
           <dt>Power</dt>
           <dd>
             {machine.batchPower} units
-            {props.powerRatio < 0.999 ? ` · Power limited: ${Math.round(props.powerRatio * 100)}% speed` : ""}
+            {props.powerRatio < 0.999
+              ? ` · Power limited: ${Math.round(props.powerRatio * 100)}% speed`
+              : ""}
           </dd>
           <dt>Measured</dt>
           <dd>{diagnosis.evidence}</dd>
@@ -59,7 +92,8 @@ export function MachinePanel(props: {
           <dd>{diagnosis.advice}</dd>
           <dt>Next upgrade</dt>
           <dd>
-            {effectiveSeconds.toFixed(2)}s → {nextSeconds.toFixed(2)}s · {cost} credits
+            {effectiveSeconds.toFixed(2)}s → {nextSeconds.toFixed(2)}s · {cost}{" "}
+            credits
           </dd>
           {plans.length > 0 ? (
             <>
@@ -84,7 +118,8 @@ export function MachinePanel(props: {
           <dd>{machine.level}</dd>
           <dt>In buffer</dt>
           <dd>
-            {formatNumber(machine.inBufUnits)}/{inputCapacityFor(props.state, def.inputBuffer)}
+            {formatNumber(machine.inBufUnits)}/
+            {inputCapacityFor(props.state, def.inputBuffer)}
           </dd>
           <dt>Tray</dt>
           <dd>
@@ -114,18 +149,29 @@ export function MachinePanel(props: {
         <button
           className="icon-btn"
           onClick={() =>
-            props.dispatch({ id: nextId("u"), type: "machine.upgrade", machineId: machine.id })
+            props.dispatch({
+              id: nextId("u"),
+              type: "machine.upgrade",
+              machineId: machine.id,
+            })
           }
         >
           Upgrade · {cost} credits
         </button>
-        <button className="icon-btn" onClick={() => setPage(page === 0 ? 1 : 0)}>
+        <button
+          className="icon-btn"
+          onClick={() => setPage(page === 0 ? 1 : 0)}
+        >
           {page === 0 ? "Recipe" : "Status"}
         </button>
         <button
           className="icon-btn"
           onClick={() =>
-            props.dispatch({ id: nextId("d"), type: "machine.dismantle", machineId: machine.id })
+            props.dispatch({
+              id: nextId("d"),
+              type: "machine.dismantle",
+              machineId: machine.id,
+            })
           }
         >
           Dismantle
@@ -144,7 +190,7 @@ export function StorePanel(props: {
   onClose: () => void;
 }) {
   const rows = (Object.keys(props.state.store) as ResourceId[]).filter(
-    (key) => (props.state.store[key] ?? 0) > 0
+    (key) => (props.state.store[key] ?? 0) > 0,
   );
   return (
     <div className="panel" role="group" aria-label="Store contents">
@@ -177,7 +223,8 @@ export function StorePanel(props: {
         })}
         <dt>Capacity</dt>
         <dd>
-          {formatNumber(props.state.storeUnits)}/{formatNumber(props.state.storeCapacity)}
+          {formatNumber(props.state.storeUnits)}/
+          {formatNumber(props.state.storeCapacity)}
         </dd>
         {yardSummary(props.state).map((line) => (
           <div key={line}>
@@ -199,7 +246,12 @@ export function StorePanel(props: {
         {props.state.overflow.length > 0 ? (
           <>
             <dt>Overflow hold</dt>
-            <dd>{props.state.overflow.reduce((total, item) => total + item.qty, 0)}</dd>
+            <dd>
+              {props.state.overflow.reduce(
+                (total, item) => total + item.qty,
+                0,
+              )}
+            </dd>
           </>
         ) : null}
       </dl>
@@ -236,12 +288,18 @@ export function ResearchPanel(props: {
               {rank > 0 ? (
                 <dd>Known</dd>
               ) : blocked ? (
-                <dd>Needs {prereq ? prereq.label : "the earlier node"} first</dd>
+                <dd>
+                  Needs {prereq ? prereq.label : "the earlier node"} first
+                </dd>
               ) : (
                 <button
                   className="icon-btn"
                   onClick={() =>
-                    props.dispatch({ id: nextId("k"), type: "research.buy", node: def.id })
+                    props.dispatch({
+                      id: nextId("k"),
+                      type: "research.buy",
+                      node: def.id,
+                    })
                   }
                 >
                   Buy · {def.cost} Data
@@ -260,7 +318,10 @@ export function ResearchPanel(props: {
   );
 }
 
-export function ReturnReportPanel(props: { report: ReturnReport; onClose: () => void }) {
+export function ReturnReportPanel(props: {
+  report: ReturnReport;
+  onClose: () => void;
+}) {
   const report = props.report;
   const gains = Object.entries(report.gains) as [ResourceId, number][];
   const summary = [
@@ -305,13 +366,18 @@ export function ReturnReportPanel(props: { report: ReturnReport; onClose: () => 
   );
 }
 
-function describePlans(state: SimState, plans: readonly ConnectionPlan[]): string {
+function describePlans(
+  state: SimState,
+  plans: readonly ConnectionPlan[],
+): string {
   return plans
     .map((plan) => {
-      const source =
-        plan.from === 0 ? "dock" : labelOf(state, plan.from);
+      const source = plan.from === 0 ? "dock" : labelOf(state, plan.from);
       const target = plan.to === 0 ? "dock" : labelOf(state, plan.to);
-      const thing = plan.filter === null ? "cargo" : RESOURCE_LABEL[plan.filter] ?? plan.filter;
+      const thing =
+        plan.filter === null
+          ? "cargo"
+          : (RESOURCE_LABEL[plan.filter] ?? plan.filter);
       return `${source} to ${target} carries ${thing}`;
     })
     .join("; ");
@@ -319,16 +385,25 @@ function describePlans(state: SimState, plans: readonly ConnectionPlan[]): strin
 
 function labelOf(state: SimState, machineId: number): string {
   const machine = state.machines.find((m) => m.id === machineId);
-  return machine ? BLUEPRINTS[machine.blueprint].label.toLowerCase() : "machine";
+  return machine
+    ? BLUEPRINTS[machine.blueprint].label.toLowerCase()
+    : "machine";
 }
 
-function describeInputs(
-  recipe: { inputs: readonly { resource: ResourceId; qty: number }[] }
-): string {  return recipe.inputs.map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`).join(", ");
+function describeInputs(recipe: {
+  inputs: readonly { resource: ResourceId; qty: number }[];
+}): string {
+  return recipe.inputs
+    .map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`)
+    .join(", ");
 }
 
-function describeOutputs(recipe: { outputs: readonly { resource: ResourceId; qty: number }[] }): string {
-  return recipe.outputs.map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`).join(", ");
+function describeOutputs(recipe: {
+  outputs: readonly { resource: ResourceId; qty: number }[];
+}): string {
+  return recipe.outputs
+    .map((item) => `${item.qty} ${RESOURCE_LABEL[item.resource]}`)
+    .join(", ");
 }
 
 let seq = 0;

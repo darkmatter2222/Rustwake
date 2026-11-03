@@ -49,6 +49,7 @@ export function advanceTo(s: SimState, target: number): void {
           m.starvedTicks += delta;
           m.status = "starved";
         }
+        rollRateWindow(m);
       }
       for (const r of s.routes) r.ageTicks += delta;
       s.tick = next;
@@ -125,9 +126,11 @@ function hasContinuousWork(s: SimState): boolean {
 
 function nextDueTick(s: SimState, target: number): number {
   let due = target;
-  if (s.drone.repaired) due = Math.min(due, Math.max(s.tick + 1, s.drone.nextDeliveryTick));
+  if (s.drone.repaired)
+    due = Math.min(due, Math.max(s.tick + 1, s.drone.nextDeliveryTick));
   for (const r of s.routes) {
-    for (const item of r.items) due = Math.min(due, Math.max(s.tick + 1, item.arrive));
+    for (const item of r.items)
+      due = Math.min(due, Math.max(s.tick + 1, item.arrive));
   }
   for (const m of s.machines) {
     if (m.progress > 0) {
@@ -163,10 +166,28 @@ function measure(s: SimState): void {
     m.ageTicks += 1;
     if (m.progress > 0) m.busyTicks += 1;
     else if (m.status === "outputFull") m.fullTicks += 1;
+    // One integer compare per machine per tick; the sample rolls once a minute.
+    if (m.ageTicks - m.rateAge >= RATE_WINDOW_TICKS) rollRateWindow(m);
   }
   for (const r of s.routes) {
     r.ageTicks += 1;
     if (r.inFlight > 0) r.busyTicks += 1;
+  }
+}
+
+/**
+ * Fixed-grid rate samples for the measured window (spec 9.4).
+ *
+ * The grid advances by whole windows from the machine's own age, so a tick-by-tick
+ * run and an event-jump run reach the same sample ticks and, because a jump covers
+ * only ticks where nothing completes, the same sample values.
+ */
+function rollRateWindow(m: MachineState): void {
+  while (m.ageTicks - m.rateAge >= RATE_WINDOW_TICKS) {
+    m.rateAgePrev = m.rateAge;
+    m.rateFromPrev = m.rateFrom;
+    m.rateAge += RATE_WINDOW_TICKS;
+    m.rateFrom = m.batchesDone;
   }
 }
 
@@ -210,11 +231,17 @@ function enqueueCargo(s: SimState, idx: SimIndex): void {
     let keep = 0;
     for (let i = 0; i < m.tray.length; i += 1) {
       const item = m.tray[i];
-      const route = links ? pickOutputLink(idx, links, item.resource) : undefined;
+      const route = links
+        ? pickOutputLink(idx, links, item.resource)
+        : undefined;
       const room = route ? route.capacity - route.inFlight : 0;
       const moved = Math.min(item.qty, Math.max(0, room));
       if (moved > 0 && route) {
-        route.items.push({ resource: item.resource, qty: moved, arrive: s.tick + route.latency });
+        route.items.push({
+          resource: item.resource,
+          qty: moved,
+          arrive: s.tick + route.latency,
+        });
         route.inFlight += moved;
       }
       const left = item.qty - moved;
@@ -240,14 +267,17 @@ function enqueueCargo(s: SimState, idx: SimIndex): void {
 function pickOutputLink(
   idx: SimIndex,
   links: RouteState[],
-  resource: ResourceId
+  resource: ResourceId,
 ): RouteState | undefined {
   let unfiltered: RouteState | undefined;
   let best: RouteState | undefined;
   for (let i = 0; i < links.length; i += 1) {
     const route = links[i];
     if (route.filter === resource && route.capacity - route.inFlight > 0) {
-      if (destinationRoom(idx, route) > 0 && (!best || route.busyTicks < best.busyTicks)) {
+      if (
+        destinationRoom(idx, route) > 0 &&
+        (!best || route.busyTicks < best.busyTicks)
+      ) {
         best = route;
       }
     }
@@ -272,6 +302,9 @@ const RESERVE_FLOOR = TUNING.reserveFloor;
 /** Ready units a fed machine keeps in hand: the next batch plus one still flying. */
 const PULL_LOOKAHEAD_BATCHES = 2;
 
+/** Sample spacing for the measured rate window, in ticks (spec 9.4). */
+const RATE_WINDOW_TICKS = TUNING.rateWindowTicks;
+
 function pullFromStore(s: SimState, idx: SimIndex): void {
   for (const route of s.routes) {
     if (route.from.kind !== "store") continue;
@@ -287,7 +320,11 @@ function pullFromStore(s: SimState, idx: SimIndex): void {
       const left = (s.store[resource] ?? 0) - moved;
       s.store[resource] = left > 0 ? left : 0;
       s.storeUnits -= moved;
-      route.items.push({ resource, qty: moved, arrive: s.tick + route.latency });
+      route.items.push({
+        resource,
+        qty: moved,
+        arrive: s.tick + route.latency,
+      });
       route.inFlight += moved;
     }
   }
@@ -298,7 +335,7 @@ function pullNeed(
   idx: SimIndex,
   route: RouteState,
   resource: ResourceId,
-  space: number
+  space: number,
 ): number {
   if (route.to.kind !== "machine") return space;
   const machine = indexedMachine(idx, route.to.id);
@@ -387,7 +424,8 @@ function startBatches(s: SimState, requested: number): void {
     m.batchPower = recipe.power;
     m.progress = 1;
     m.progressRem = 0;
-    m.progressDen = requested === 0 ? recipe.power : Math.max(requested, capacity);
+    m.progressDen =
+      requested === 0 ? recipe.power : Math.max(requested, capacity);
     m.status = "running";
     lastStarted = slot;
   }
@@ -427,7 +465,8 @@ function updateDrone(s: SimState): void {
       if (moved <= 0) return;
       addToStore(s, "scrap", moved);
       if (moved === d.inFlight.qty) d.inFlight = null;
-      else d.inFlight = { qty: d.inFlight.qty - moved, arrive: d.inFlight.arrive };
+      else
+        d.inFlight = { qty: d.inFlight.qty - moved, arrive: d.inFlight.arrive };
       d.deliveries += 1;
     }
     return;
@@ -469,15 +508,23 @@ export function routeById(s: SimState, id: number): RouteState | undefined {
 }
 
 function destinationRoom(idx: SimIndex, route: RouteState): number {
-  if (route.to.kind === "store") return idx.state.storeCapacity - idx.state.storeUnits;
+  if (route.to.kind === "store")
+    return idx.state.storeCapacity - idx.state.storeUnits;
   const machine = indexedMachine(idx, route.to.id);
   if (!machine) return 0;
   return (
-    BLUEPRINTS[machine.blueprint].inputBuffer + idx.bufferBonus - machine.inBufUnits
+    BLUEPRINTS[machine.blueprint].inputBuffer +
+    idx.bufferBonus -
+    machine.inBufUnits
   );
 }
 
-function deliver(s: SimState, route: RouteState, resource: ResourceId, amount: number): void {
+function deliver(
+  s: SimState,
+  route: RouteState,
+  resource: ResourceId,
+  amount: number,
+): void {
   if (route.to.kind === "store") {
     addToStore(s, resource, amount);
     return;
@@ -491,13 +538,20 @@ function deliver(s: SimState, route: RouteState, resource: ResourceId, amount: n
   machine.inBufUnits += amount;
 }
 
-export function addToStore(s: SimState, resource: ResourceId, amount: number): void {
+export function addToStore(
+  s: SimState,
+  resource: ResourceId,
+  amount: number,
+): void {
   if (amount <= 0) return;
   s.store[resource] = (s.store[resource] ?? 0) + amount;
   s.storeUnits += amount;
 }
 
-export function spendFromStore(s: SimState, items: readonly ItemStack[]): boolean {
+export function spendFromStore(
+  s: SimState,
+  items: readonly ItemStack[],
+): boolean {
   for (const item of items) {
     if ((s.store[item.resource] ?? 0) < item.qty) return false;
   }
@@ -515,7 +569,8 @@ function syncTutorial(s: SimState): void {
   if (s.tutorial === 1 && s.wreck.pulses >= 6) s.tutorial = 2;
   if (s.tutorial === 2 && s.drone.repaired) s.tutorial = 3;
   if (s.tutorial === 3 && s.drone.deliveries >= 1) s.tutorial = 4;
-  if (s.tutorial === 4 && s.machines.some((m) => m.blueprint === "sorter")) s.tutorial = 5;
+  if (s.tutorial === 4 && s.machines.some((m) => m.blueprint === "sorter"))
+    s.tutorial = 5;
   if (s.tutorial === 5 && s.routes.length >= 1) s.tutorial = 6;
   if (s.tutorial === 6 && qtyOf(s, "steel") > 0) s.tutorial = 7;
   if (s.tutorial === 7 && s.credits > 0) s.tutorial = 8;
