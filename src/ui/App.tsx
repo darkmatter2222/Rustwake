@@ -298,6 +298,12 @@ export function App({ store }: { store: GameStore }) {
                 : hintFor(suggestedAction(state))
             }
           />
+          {store.isReconciling() ? (
+            // Spec 18.5: one small line while a long absence is settled off-thread.
+            <p className="reconcile" role="status">
+              {t("report.reconciling")}
+            </p>
+          ) : null}
         </div>
         {toast ? <Toast text={toast} onDone={() => setToast(null)} /> : null}
         {/* Panels are HUD-column children so the column keeps them between the

@@ -118,6 +118,8 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "reject.fleet-full": "Every drone is already flying",
   "reject.no-drone": "Repair your drone first",
   "reject.read-only": "Another tab is writing this yard",
+  "reject.reconciling": "Catching your yard up",
+  "report.reconciling": "Catching your yard up",
 
   // ---- Save import results (spec 22.2, 25.3 case 8) -----------------------------
   "import.empty": "Nothing pasted",
@@ -344,6 +346,7 @@ export const REJECT_KEYS: readonly string[] = [
   "fleet-full",
   "no-drone",
   "read-only",
+  "reconciling",
 ];
 
 /** Import failure reasons (spec 22.2). */

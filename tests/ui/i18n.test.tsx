@@ -254,6 +254,29 @@ describe("string table (B-10)", () => {
     }
   });
 
+  it("paints the reconcile line only while a handoff is reported pending", () => {
+    const stateStore = createStore({ storage: memoryStorage(), now: () => 10 });
+    stateStore.getState().tutorial = 9;
+    const pending: HTMLDivElement = render(
+      <App store={{ ...stateStore, isReconciling: () => true }} />
+    );
+    act(() => {
+      pending.querySelector<HTMLButtonElement>(".gate__btn")?.click();
+    });
+    const pendingLine = pending.querySelector(".reconcile");
+    expect(pendingLine?.textContent).toBe(t("report.reconciling"));
+    expect(pendingLine?.getAttribute("role")).toBe("status");
+    // The rest of the HUD still answers, so the line is an addition, not a block (spec 18.5).
+    expect((pending.querySelector(".dock__btn--primary")?.textContent ?? "").length).toBeGreaterThan(0);
+
+    const settled = render(<App store={stateStore} />);
+    act(() => {
+      settled.querySelector<HTMLButtonElement>(".gate__btn")?.click();
+    });
+    // Without a handoff in flight the line is absent rather than an empty box.
+    expect(settled.querySelectorAll(".reconcile").length).toBe(0);
+  });
+
   it("phrases every panel from the table, singular and plural included", () => {
     const state = yardWithASorter();
     const machine = state.machines[state.machines.length - 1];

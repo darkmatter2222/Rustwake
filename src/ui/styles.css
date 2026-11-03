@@ -150,6 +150,20 @@ body {
   margin-top: 4px;
 }
 
+/* One line while a long absence is settled in the worker (spec 18.5). It sits in the
+   same column so the dock never moves, and it is short enough to survive a large
+   text scale, where it is the only signal that the yard is being reconciled. */
+.reconcile {
+  align-self: flex-start;
+  max-width: min(92%, 420px);
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--panel);
+  font-size: 0.8rem;
+  color: var(--cyan);
+}
+
 /* Spec 6.4: at a large text scale the guidance card keeps its one essential line
    and the secondary hint steps back, so the objective stays above the world. */
 .text-large .objective__row {

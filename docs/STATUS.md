@@ -2,93 +2,99 @@
 
 Active milestone: M2 (a useful small factory). M0 and M1 complete.
 
-Last completed player-visible change: **every sentence now comes from one string table (B-10, D-40).**
-`src/game/content/strings.ts` holds ~150 keys with English defaults and named `{slot}` placeholders,
-plus the only formatter layer (`formatNumber`, `formatDuration`, `formatSeconds`, `formatRate`,
-`formatWholeSeconds`, `wholePercent`, `plural`/`unit`). `Hud.tsx`, `Panels.tsx`, `App.tsx`, `text.ts`
-and the bottleneck assistant in `diagnostics.ts` read from it; three wording changes are deliberate
-(lowercase material names inside sentences, singular "1 unit"/"1 credit", `Storage full` for the return
-report's bottleneck row) and every other string renders byte-identically.
+Last completed player-visible change: **the 12 h catch-up now runs off the main thread (B-02, D-41).**
+`src/game/workers/catchup.ts` carries the versioned protocol, the single `handleCatchUp` function and the
+client; `catchup.worker.ts` is the worker entry that calls the same function. Absences of 20 000 ticks
+(2 000 s) or more are posted to the worker, the frame loop paints but does not tick during that handoff,
+the first 32 taps typed in the window are queued and replayed on the adopted ledger, and one line
+(`Catching your yard up`) is painted under the objective card. Shorter gaps keep the inline branch, which
+is what jsdom exercises.
 
-- Current commit and remote sync status: **pushed and verified** — `git push origin HEAD:main` moved
-  `refs/heads/main` from `b1c7bd1` to **`639dcd0`** ("One string table behind every sentence, one
-  formatter layer (B-10)"), confirmed by `git ls-remote origin refs/heads/main` on 2026-11-03. That push
-  should start one CI run (validate + tests + build); this environment still cannot read it, so CI is
-  reported **pending**, not green (BL-06: `gh run list` asks for `gh auth login`, the unauthenticated API
-  404s for the private repository). Earlier chain: `b1c7bd1`, `7c78315`, `6ae2576`, `a3c6c8d`.
+- Current commit and remote sync status: the code commit of this pass is the one titled "The 12 h catch-up
+  runs off the main thread …(B-02)", with the checkpoint commit(s) on top. Verified chain before this
+  pass: `refs/heads/main` = `41bd4a6` (docs), `639dcd0` (B-10 string table), `b1c7bd1`, `7c78315`. CI
+  remains unread in this environment, so CI is reported **pending**, not green (BL-06: `gh run list` asks
+  for `gh auth login`, the unauthenticated API 404s for the private repository).
 - Checks run and actual results (this pass):
-  - `npx vitest run` — **164 passed / 164** (20 files): eight new cases in `tests/ui/i18n.test.tsx`
-    (table integrity, `t()` semantics for a known key / an unknown key / an unfilled slot, formatter
-    pins, the one plural rule reaching the card and the dock, tutorial prices derived from `TUNING`,
-    resource-name casing, and two rendered-surface scans that fail if any raw key such as
-    `chip.credits` reaches the page), plus three injected faults in `tests/content/validate.test.ts`.
-    The 155 pre-existing cases still pass, which is the byte-identity proof for the wording.
+  - `npx vitest run` — **171 passed / 171** (21 files): six new cases in
+    `tests/simulation/catchup-worker.test.ts` (protocol refusal, handler-versus-direct equivalence,
+    the worker entry answering one request with one versioned result, the inline client before and after
+    a `cancel()`, the store settling a 12 h window once with the same ledger as the handler, and the
+    20 000-tick threshold keeping a short gap inline) plus one new case in `tests/ui/i18n.test.tsx`
+    (the `Catching your yard up` line is painted only while a handoff is reported pending). The 164
+    pre-existing cases still pass, which is the byte-identity proof for the economy.
   - `npm run validate` — **0 violations**: `content: 0 violation(s) in 3 ms`, behaviour marks still
     `firstDrone=308 firstResearch=975 tick=18 298 machines=8 links=18 drones=4 batches=1 864
     credits=165 nodes=3`, equal to the published supply-window rows.
-  - `npm run typecheck` clean. `npm run build` — `index.html` 0.68 kB, CSS **5.59 kB (1.81 kB gzip)**,
-    JS **222.69 kB (69.44 kB gzip)**, 51 modules: +2.32 kB gzip over the previous pass, the price of
-    the table, inside spec 21.5's 200 kB preference. Artifact `index-CT1NXZBc.js`.
+  - `npm run typecheck` clean. `npm run build` — `index.html` 0.68 kB, CSS **5.76 kB (1.83 kB gzip)**,
+    JS **224.63 kB (70.19 kB gzip)** plus the **13.02 kB** worker chunk, 52 modules. Artifacts
+    `index-ZDmIvNkZ.js`, `index-B8G4dl_D.css`, `catchup.worker-DphWaCEx.js`.
+  - `node scripts/probe-catchup.mjs` (new) — the 12 h absence in a page at 390 × 844, one context per
+    path: **worker** 0 long tasks (the observer reports ≥ 50 ms only), handoff 405 ms wall, input
+    acknowledgement 29 ms, one `.reconcile` node after the gate tap; **inline** one long task of
+    **281 ms** (1 over the 100 ms target of spec 21.5), input acknowledgement 31 ms, no reconcile node.
+    Both produced the byte-identical report. Table in
+    `docs/evidence/2026-11-03-catchup.md`.
   - `node scripts/measure-hud.mjs` (re-run, `src/ui` changed) — restated in
-    `docs/evidence/2026-11-03-hud-share.md`: resting ink **19.1 %** and band **20.6 %** at 360 × 640
-    (identical to the previous pass), band 21.9 % landscape, **2.0-scale ink peak 38.3 %** at
-    360 × 640 (was 40.5 %, the shorter cost lines wrap less), no document scroll in **108/108** states,
-    **0 px** inner scroll in every panel at all three scales, no painted box passing the visual
-    viewport, minimum contrast **5.77:1** over 11 pairs, smallest dock target **44 × 46**.
-  - `node scripts/probe-dock.mjs` — the same three ladder states at 360 × 640: starter (primary
-    `Sell 39 Ferrous for 78 credits.`, button 110 × 46, band 20.6 %), research (`Research Efficient
-    Cutters · 4 Data` over `4 Data`, 130 × 54, band 21.8 %), fleet (`Add a recovery drone · 45 credits`,
-    102 × 46, band 20.6 %).
-  - Not re-run, still valid: the headless CPU table (`tests/perf/bench.test.ts`) and the supply/cadence
-    probes — no simulation file changed except `diagnostics.ts`'s sentence assembly, and the validator's
-    behaviour half reproduces the published numbers exactly.
-- Screenshot evidence and capture provenance: all **seven** images recaptured from this build in one
-  **16:07–16:09** run (artifact `index-CT1NXZBc.js`, CSS `index-DudncZlS.css`), and the capture's printed
-  state lines are what the README gallery now quotes: mobile session `tick 442 700`, 361 credits, five
-  machines at L15–L18, 11 links, dock `Sell 58 Scrap` / `+58 credits`, machine panel `Batch 28%` and
-  `Power 1 unit`, yard panel `Save 14 705 characters` with checksum `55644765`; handover
-  `t1-243l → t1-9jvp`, tick 442 720 → 442 749 at unchanged revision 768; seeded desktop session
-  `tick 537 643`, 216 credits, `data 146`, `plates 446`, dock `Upgrade` / `215 credits`.
-  The phone research image remains the seeded capture (the run printed
-  `research phone source: seeded mature yard (docs/evidence/yard-mature.json), captured=true`),
-  tracked as B-29. The seed file itself is the one `scripts/probe-supply.mjs` wrote at 13:43 from the
-  fleet build (tick 18 298, 8 machines, 18 links, four flying units, `data 106`).
+    `docs/evidence/2026-11-03-hud-share.md`: resting ink **19.1 %** and band **20.6 %** at 360 × 640,
+    band 21.9 % landscape, 2.0-scale ink peak **38.3 %**, no document scroll in **108/108** states,
+    **0 px** inner scroll in every panel at all three scales, minimum contrast **5.77:1** over 11 pairs,
+    smallest dock target **44 × 46**. Identical to the previous pass, so the reconcile line does not move
+    the resting layout.
+  - Not re-run, still valid: the headless CPU table (`tests/perf/bench.test.ts`, 12 h tick-by-tick
+    **41.9 ms**), `scripts/probe-supply.mjs` and `scripts/probe-cadence.mjs` — the simulation's arithmetic
+    is untouched (the engine imports no worker code, the worker calls the same `catchUp`), and the
+    validator's behaviour half reproduces the published numbers exactly. `scripts/probe-dock.mjs` was not
+    re-run: no dock label changed.
+- Screenshot evidence and capture provenance: all **seven** images were recaptured from this build in one
+  run at 17:22–17:24 local (artifact `index-ZDmIvNkZ.js`), and the file timestamps match the printed lines:
+  `latest-mobile.png` 17:22:26, `latest-machine-mobile.png`/`latest-yard.png` 17:22:27,
+  `latest-multitab.png` 17:22:28, `latest-desktop.png` 17:23:53, `latest-research.png` 17:23:54,
+  `latest-research-phone.png` 17:23:55. The README gallery rows and their capture times are written from
+  that run's own printed state lines (mobile absence `tick 1 020 → 433 030`, tick 442 700, 306 credits,
+  dock `Sell 44 Scrap / +44 credits`; desktop absence `tick 150 419 → 582 419`, tick 582 479, `data 146`,
+  `plates 376`, dock `Sell 60 Nonferrous / +120 credits`). The phone research image remains the seeded capture
+  (`research phone source: seeded mature yard`), tracked as **B-29**. The seed
+  `docs/evidence/yard-mature.json` is unchanged from the 13:43 supply-probe write (tick 18 298, 8 machines,
+  18 links, four flying units, `data 106`).
 - Known blockers with exact unblock conditions:
-  - BL-01 real-device frame/thermal traces: needs a connected device or a hosted trace.
+  - BL-01 real-device frame/thermal traces: needs a connected device or a hosted trace. The new
+    `docs/evidence/2026-11-03-catchup.md` is page-level Chrome, so it does not close this row.
   - BL-02 human first-feel playtest (8 of 10 unaided): needs fresh human testers.
   - BL-03 server authority, payments, public launch: needs provisioning and owner authorization.
   - BL-06 CI status read-back: needs an authenticated `gh` or a readable status check.
   - BL-11 human audio review: needs one listening pass.
     (BL-04, BL-05, BL-07 stay resolved.)
-- Assumptions/decisions made: `docs/DECISIONS.md` D-01…D-39 as before, plus **D-40** (one string table
-  with named slots, one formatter layer, one plural rule; in-sentence material names lowercase; the
-  simulation may import that table because it imports nothing itself). Save schema is unchanged (1);
-  the fleet is still five units at 45/90/180/360 credits.
+- Assumptions/decisions made: `docs/DECISIONS.md` D-01…D-40 as before, plus **D-41** (off-thread catch-up
+  from 20 000 ticks with a versioned handoff, one adoption path, a painted-but-not-ticked frame loop, a
+  32-deep intent queue, and a 2 s inline fallback). Save schema is unchanged (1); no tuning value changed.
 - Next three bounded tasks:
-  1. **B-02** worker catch-up: move the 12 h catch-up off the main thread with cancellation and publish
-     a measured stall histogram against the 100 ms target of spec 21.5.
-  2. **B-29** organic research panel at phone size: raise the phone session's post-absence phase to the
-     1 800 rounds the headless driver runs (or let the ladder prefer the nearest payable blueprint),
-     then re-capture and give `latest-research-phone.png` organic provenance.
-  3. **B-18** follower-tab smoothness: interpolate a mirrored tab's sprites between the last two adopted
+  1. **B-29** organic research panel at phone size: raise the phone session's post-absence phase to the
+     1 800 rounds the headless driver runs (or let the ladder prefer the nearest payable blueprint), then
+     re-capture and give `latest-research-phone.png` organic provenance.
+  2. **B-18** follower-tab smoothness: interpolate a mirrored tab's sprites between the last two adopted
      snapshots (or raise the adopt cadence at a measured cost), with one trace at 390 × 844.
-- Long-running processes owned by this session: **none** — the `vite preview` server on port 4173 was
-  stopped at the end of this pass (`Get-NetTCPConnection -LocalPort 4173` → `Stop-Process -Id 56128`).
-  The next pass starts it again before any browser probe.
+  3. **B-30** long-session soak: one 30-minute repeated-action run with the JS heap and DOM node count
+     recorded at fixed intervals plus the worker handoff cost after several absences, published as a
+     series so a slope is visible (spec 21.5). **B-31** (a real `Worker` in the automated suite) is the
+     natural follow-up to this pass.
+- Long-running processes owned by this session: the `vite preview` server on port 4173 (background). Stop
+  it with `Get-NetTCPConnection -LocalPort 4173` → `Stop-Process -Id <pid>`.
 - Resume instructions: read this file, then `docs/BACKLOG.md`. Run `npm run validate` and
-  `npx vitest run` before editing; `tests/ui/i18n.test.tsx` is where a new sentence gets pinned and
-  where the raw-key scan lives, `tests/content/validate.test.ts` is the injected-fault gate for content
-  and string checks, `tests/simulation/fleet.test.ts` the fleet contract, `tests/persistence/transfer.test.ts`
-  the export/import contract, `tests/ui/app.test.tsx` the tutorial walk and the card/dock pairing,
-  `tests/simulation/cadence.test.ts` the two-order comparison, `tests/simulation/chain.test.ts` the
-  ladder and self-play regression, `tests/simulation/supply-window.test.ts` the floor sweep,
-  `tests/ui/hud-layout.test.ts` the chip budget. Standard loop: `npm run validate` and `npx vitest run`
-  → `npm run build` → `npm run preview` (4173, background) → `npx tsx scripts/probe-supply.mjs` (writes
-  the seed) and `npx tsx scripts/probe-cadence.mjs` if simulation-facing → `node scripts/probe-dock.mjs`
-  if the dock changed → `node scripts/measure-hud.mjs` (~70 s, only when `src/ui` changed) →
-  `node scripts/capture.mjs` (~17 min, only when `src/` changed, it reads the seed once at start) →
-  README, STATUS, BACKLOG, DECISIONS → commit → `git push origin HEAD:main` → verify with
-  `git ls-remote origin refs/heads/main`. Any `src/` edit invalidates the seven images until a fresh
-  capture run; a change limited to `src/game/content/validate.ts` does not, because the app does not
-  import it. Commit-message files: write them with `-Encoding ascii`, because PowerShell's `utf8`
-  writes a BOM that then appears in the committed subject line.
+  `npx vitest run` before editing; `tests/simulation/catchup-worker.test.ts` is where the handoff is
+  pinned, `tests/ui/i18n.test.tsx` is where a new sentence gets pinned and where the raw-key scan lives,
+  `tests/content/validate.test.ts` is the injected-fault gate, `tests/simulation/fleet.test.ts` the fleet
+  contract, `tests/persistence/transfer.test.ts` the export/import contract, `tests/ui/app.test.tsx` the
+  tutorial walk and the card/dock pairing, `tests/simulation/cadence.test.ts` the two-order comparison,
+  `tests/simulation/chain.test.ts` the ladder and self-play regression, `tests/simulation/supply-window.test.ts`
+  the floor sweep, `tests/ui/hud-layout.test.ts` the chip budget. Standard loop: `npm run validate` and
+  `npx vitest run` → `npm run build` → `npm run preview` (4173, background) → `npx tsx scripts/probe-supply.mjs`
+  (writes the seed) and `npx tsx scripts/probe-cadence.mjs` if simulation-facing → `node scripts/probe-dock.mjs`
+  if the dock changed → `node scripts/probe-catchup.mjs` if the catch-up path changed →
+  `node scripts/measure-hud.mjs` (~70 s, only when `src/ui` changed) → `node scripts/capture.mjs`
+  (~17 min, only when `src/` changed, it reads the seed once at start) → README, STATUS, BACKLOG,
+  DECISIONS → commit → `git push origin HEAD:main` → verify with `git ls-remote origin refs/heads/main`.
+  Any `src/` edit invalidates the seven images until a fresh capture run; a change limited to
+  `src/game/content/validate.ts` does not, because the app does not import it. Commit-message files: write
+  them with `-Encoding ascii`, because PowerShell's `utf8` writes a BOM that then appears in the committed
+  subject line.

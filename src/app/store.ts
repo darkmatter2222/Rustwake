@@ -1,6 +1,13 @@
 import { TICK_MS } from "../game/content/defs";
 import { advance } from "../game/simulation/engine";
-import { catchUp, type ReturnReport } from "../game/simulation/offline";
+import { type ReturnReport } from "../game/simulation/offline";
+import {
+  CATCHUP_PROTOCOL,
+  CATCHUP_WORKER_MIN_TICKS,
+  createCatchUpClient,
+  handleCatchUp,
+  type CatchUpResponse,
+} from "../game/workers/catchup";
 import { applyCommand, type Command, type CommandResult } from "../game/simulation/commands";
 import { createInitialState, type SimState } from "../game/simulation/types";
 import {
@@ -23,6 +30,8 @@ export interface GameStore {
   getReturnReport(): ReturnReport | null;
   /** "reader" when another tab owns the save (spec 22.3). */
   getRole(): StoreRole;
+  /** True while a heavy offline catch-up is settled off the main thread (spec 18.5). */
+  isReconciling(): boolean;
   dispatch(command: Command): CommandResult;
   subscribe(listener: () => void): () => void;
   start(): void;
@@ -107,17 +116,60 @@ export function createStore(options: StoreOptions = {}): GameStore {
   };
 
   let returnReport: ReturnReport | null = null;
+  const catchUpClient = createCatchUpClient();
+  let reconciling = false;
+  /** Intents typed during an off-thread catch-up, replayed in order after adoption. */
+  const deferred: Command[] = [];
+  let deferredTicks = 0;
+
+  /** Adopts a settled catch-up, then applies what the player typed while it ran. */
+  const adoptCatchUp = (settled: CatchUpResponse) => {
+    state = settled.sim;
+    lastSeenMs = Math.max(lastSeenMs, settled.nextLastSeenMs);
+    if (settled.report.creditedTicks > 0) returnReport = settled.report;
+    reconciling = false;
+    mark("rustwake:catchup-adopted");
+    for (const command of deferred.splice(0, deferred.length)) {
+      // Same gate the live path applies: a tab demoted during the handoff writes nothing.
+      if (role !== "writer") break;
+      applyCommand(state, command);
+    }
+    if (deferredTicks > 0) {
+      advance(state, deferredTicks);
+      deferredTicks = 0;
+    }
+    lastFrameMs = frameClock();
+    accumulator = 0;
+    persist();
+    notify();
+  };
 
   /**
    * Credits one absence against the shared economy and checkpoints the window
    * (spec 18.1). Safe to call again: the reference moves to `now`, so a repeat
-   * measures no elapsed time and produces no second report.
+   * measures no elapsed time and produces no second report. A long window is
+   * settled in a worker so the page keeps answering input (spec 18.5); the same
+   * pure function runs inline when there is no worker or no real gap.
    */
   const creditAbsence = () => {
-    const { report, nextLastSeenMs } = catchUp(state, lastSeenMs, now());
-    lastSeenMs = Math.max(lastSeenMs, nextLastSeenMs);
-    if (report.creditedTicks > 0) returnReport = report;
-    persist();
+    const rawElapsed = Math.max(0, Math.floor((now() - lastSeenMs) / TICK_MS));
+    if (rawElapsed >= CATCHUP_WORKER_MIN_TICKS && catchUpClient.backed === "worker") {
+      reconciling = true;
+      mark("rustwake:catchup-start");
+      void catchUpClient.run(state, lastSeenMs, now()).then((settled) => {
+        if (!settled) return; // cancelled: a newer run owns the handoff
+        adoptCatchUp(settled);
+      });
+      return;
+    }
+    const settled = handleCatchUp({
+      protocol: CATCHUP_PROTOCOL,
+      id: 0,
+      sim: state,
+      lastSeenMs,
+      nowMs: now(),
+    });
+    if (settled) adoptCatchUp(settled);
   };
 
   if (loaded.ok && role === "writer") {
@@ -164,6 +216,12 @@ export function createStore(options: StoreOptions = {}): GameStore {
   const tickLoop = (timeMs: number) => {
     const delta = Math.max(0, timeMs - lastFrameMs);
     lastFrameMs = timeMs;
+    if (reconciling) {
+      // The world is frozen for the length of one worker handoff: neither the
+      // owner's ticks nor a storage adopt can interleave with it (spec 18.4).
+      frame = requestAnimationFrame(tickLoop);
+      return;
+    }
     sinceReconcile += delta;
     if (sinceReconcile >= RECONCILE_MS) {
       sinceReconcile = 0;
@@ -197,7 +255,17 @@ export function createStore(options: StoreOptions = {}): GameStore {
     getViewVersion: () => viewVersion,
     getReturnReport: () => returnReport,
     getRole: () => role,
+    isReconciling: () => reconciling,
     dispatch(command: Command): CommandResult {
+      if (reconciling) {
+        // Typed during the handoff: kept in order and applied to the adopted
+        // snapshot, which is exactly the order the inline path would have used.
+        if (deferred.length < 32) {
+          deferred.push(command);
+          return { ok: true, revision: state.revision };
+        }
+        return { ok: false, reason: "reconciling" };
+      }
       if (reconcile()) notify();
       if (role !== "writer") return { ok: false, reason: "read-only" };
       const result = applyCommand(state, command);
@@ -242,6 +310,12 @@ export function createStore(options: StoreOptions = {}): GameStore {
       if (!decoded.ok) {
         return { ok: false, reason: decoded.reason, detail: decoded.detail };
       }
+      if (reconciling) {
+        // The imported envelope replaces the yard wholesale, so the in-flight
+        // handoff is abandoned instead of clobbering it with an older snapshot.
+        catchUpClient.cancel();
+        reconciling = false;
+      }
       if (reconcile()) notify();
       if (role !== "writer") return { ok: false, reason: "read-only" };
       // Checksum and invariant pass already succeeded, so the whole yard swaps over
@@ -258,6 +332,11 @@ export function createStore(options: StoreOptions = {}): GameStore {
       return { ok: true, tick: state.tick, machines: state.machines.length };
     },
     step(ticks: number) {
+      if (reconciling) {
+        // Same rule as commands: the ticks land on the adopted snapshot.
+        deferredTicks = Math.min(432_000, deferredTicks + Math.max(0, Math.floor(ticks)));
+        return;
+      }
       if (reconcile()) notify();
       if (role !== "writer") return;
       advance(state, ticks);
@@ -270,6 +349,13 @@ export function createStore(options: StoreOptions = {}): GameStore {
 
 function defaultWallClock(): number {
   return Date.now();
+}
+
+/** Timeline marks for the catch-up probe (spec 21.6); a no-op without the API. */
+function mark(name: string): void {
+  if (typeof performance !== "undefined" && typeof performance.mark === "function") {
+    performance.mark(name);
+  }
 }
 
 function defaultStorage(): StorageLike | null {

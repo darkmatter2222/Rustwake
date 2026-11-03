@@ -37,7 +37,8 @@ export type CommandReject =
   | "prereq"
   | "fleet-full"
   | "no-drone"
-  | "read-only";
+  | "read-only"
+  | "reconciling";
 
 export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
 

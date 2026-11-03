@@ -787,3 +787,45 @@ Format: date · problem · options · choice · reason · reversibility.
   labels are still table-owned data in `defs.ts` and `research.ts`, and that is where their display
   keys should be added, so content and UI share one shape.
 
+## D-41 - 2026-11-03 - Off-thread catch-up with one adoption path and a frozen frame loop
+
+- Problem (spec 18.5, spec 21.5): the 12 h catch-up costs 41.9 ms of tick-by-tick work in Node, and the
+  same function measured **281 ms** of single long task in a page on the development machine - over the
+  100 ms stall target, and likely further over it on a midrange phone (BL-01).
+- Options considered: (a) keep the inline loop and shorten the cap; (b) analytic batching of the whole
+  window in one pass, which needs a second, provably equivalent model per machine; (c) a module worker
+  running the same pure function, with a versioned handoff and the inline path as fallback.
+- Chosen: **(c)**. `src/game/workers/catchup.ts` holds the protocol, the one `handleCatchUp` function and
+  the client; `catchup.worker.ts` is a small entry (a `handleWorkerMessage` helper plus the `onmessage`
+  assignment) that calls the same function, so there is no
+  second implementation to drift (the pattern of D-39). An equivalent-by-construction pair is then
+  pinned by a test that compares the two paths field by field.
+- Threshold: the worker is used from **20 000 ticks (2 000 s)** of absence upward. Derivation: the shipped
+  bench measures 41.9 ms for the full 432 000-tick cap, so a 20 000-tick gap costs roughly 2 ms inline -
+  less than the cost of fetching and compiling the worker module on a cold cache (the measured handoff is
+  405 ms wall for the full cap, of which the compute is ~42 ms).
+- Cancellation and staleness: starting a run abandons the previous one, an import abandons the in-flight
+  handoff, and a response whose `protocol` or `id` is not the current one is discarded, so an old snapshot
+  can never overwrite a newer adopted one. A worker that never answers is replaced by the inline function
+  after 2 s, and a page without the worker API uses that function from the start.
+- Ordering: while a handoff is in flight the frame loop paints but does not tick, and the first 32 intents
+  typed in that window are queued and applied to the adopted snapshot in order - the same order the inline
+  path would have used, so command ids, the ledger and the idempotency table are unchanged. A 33rd intent
+  is refused with the new `reconciling` reason. `step()` follows the same rule through one accumulated tick
+  count. This is why `adoptCatchUp` is the only writer of `state`, the reference clock, the report and the
+  freeze flag.
+- Visible feedback: one line, `Catching your yard up`, from the string table (spec 18.5's "small in-game
+  reconciliation indicator"). Measured effect on layout: none, the resting ink and band are identical to
+  the previous pass because the line is gone before the audit's first sample.
+- Cost: the main bundle is 222.69 kB → **224.63 kB (70.19 kB gzip)** and a **13.02 kB** worker chunk is
+  emitted next to it. Both inside spec 21.5's preferences.
+- Validation: `npx vitest run` **171 passed / 171** (21 files, seven new), `npm run typecheck` clean,
+  `npm run validate` **0 violations**, `node scripts/probe-catchup.mjs` publishing the table in
+  `docs/evidence/2026-11-03-catchup.md`.
+- Reversible: yes; removing the threshold returns every absence to the inline branch, which is already the
+  tested path in jsdom.
+- Reconsider when: the real-device trace lands (BL-01) - if a phone shows the worker's module fetch
+  dominating a cold start, inlining the worker with `?worker&inline` is the one-line change; or when the
+  event-jump model is proven equivalent per machine (option (b)), at which point the worker becomes a
+  convenience rather than the thing that keeps the page responsive.
+
