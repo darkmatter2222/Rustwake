@@ -9,6 +9,7 @@ import {
   decodeSave,
   encodeSave,
   migrate,
+  type ImportResult,
   type SaveSettings,
 } from "../game/persistence/save";
 import { createLease, nextLeaseId, type LeaseRole } from "../game/persistence/lease";
@@ -29,6 +30,10 @@ export interface GameStore {
   setSettings(next: Partial<SaveSettings>): void;
   /** Controlled takeover; succeeds only once the previous owner's lease expires. */
   takeOver(): StoreRole;
+  /** Versioned JSON text of the current yard, ready to move to another device. */
+  exportSave(): string;
+  /** Replaces the yard with an imported envelope; a failure changes nothing. */
+  importSave(text: string): ImportResult;
   /** Test hook: run authoritative ticks without a frame loop. */
   step(ticks: number): void;
 }
@@ -226,6 +231,31 @@ export function createStore(options: StoreOptions = {}): GameStore {
       // live owner is never silently overwritten by a second writer.
       if (reconcile()) notify();
       return role;
+    },
+    exportSave(): string {
+      // The exact text the checkpoint writes, so an exported file is byte-identical
+      // to what this tab persists and re-imports without a translation layer.
+      return encodeSave(state, lastSeenMs, settings);
+    },
+    importSave(text: string): ImportResult {
+      const decoded = decodeSave(text);
+      if (!decoded.ok) {
+        return { ok: false, reason: decoded.reason, detail: decoded.detail };
+      }
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, reason: "read-only" };
+      // Checksum and invariant pass already succeeded, so the whole yard swaps over
+      // in one step and a refused file leaves the running state untouched
+      // (spec 22.2, spec 25.3 case 8). The imported envelope's own reference clock
+      // is replaced by this moment, so a later reload credits only the gap this
+      // device actually saw rather than the sum of both devices' windows.
+      const next = migrate(decoded.payload);
+      state = next.sim;
+      settings = { ...DEFAULT_SETTINGS, ...next.settings };
+      lastSeenMs = now();
+      persist();
+      notify();
+      return { ok: true, tick: state.tick, machines: state.machines.length };
     },
     step(ticks: number) {
       if (reconcile()) notify();

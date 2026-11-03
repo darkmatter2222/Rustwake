@@ -35,6 +35,23 @@ function mount(store: GameStore): HTMLDivElement {
   return host;
 }
 
+/**
+ * React tracks the value it wrote, so assigning `.value` directly makes it treat the
+ * following input event as its own and drop the change. The prototype setter is the
+ * documented way to drive a controlled field from a test.
+ */
+function typeInto(field: HTMLTextAreaElement | undefined, text: string) {
+  if (!field) return;
+  const setValue = Object.getOwnPropertyDescriptor(
+    HTMLTextAreaElement.prototype,
+    "value"
+  )?.set;
+  act(() => {
+    setValue?.call(field, text);
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+}
+
 describe("first-feel shell", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
@@ -399,5 +416,69 @@ describe("first-feel shell", () => {
     // The next node is now open, and the purchased one cannot be bought twice.
     expect(panel()).toContain("Buy · 8 Data");
     expect(panel().indexOf("Known")).toBeLessThan(panel().indexOf("Buy · 8 Data"));
+  });
+
+  it("unlocks the Yard target after the tutorial and shows the save text (B-06)", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    // The first ten minutes keep three dock targets, so the record is not there yet.
+    expect(findButton("Yard")).toBeUndefined();
+
+    const state = store.getState();
+    state.tutorial = 9;
+    act(() => store.step(1));
+    expect(findButton("Yard")).toBeDefined();
+    act(() => findButton("Yard")?.click());
+
+    const panel = document.querySelector(".panel");
+    expect(panel?.textContent).toContain("Yard record");
+    expect(panel?.textContent).toContain("Saved yard");
+    expect(panel?.textContent).toContain(`Tick${state.tick}`);
+    const field = panel?.querySelector("textarea") as HTMLTextAreaElement | undefined;
+    expect(field?.value.startsWith('{"schemaVersion":1,')).toBe(true);
+    expect(JSON.parse(field?.value ?? "{}").payload.sim.tick).toBe(state.tick);
+    expect(findButton("Copy")).toBeDefined();
+    expect(findButton("Import")).toBeDefined();
+  });
+
+  it("imports a pasted yard and keeps the running one when the text is damaged (B-06)", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    const state = store.getState();
+    state.tutorial = 9;
+    act(() => store.step(1));
+
+    // A yard from another device: repaired drone, one machine, one link, batches.
+    const source = createStore({ storage: memoryStorage(), now: () => 500 });
+    for (let i = 0; i < 6; i += 1) {
+      source.dispatch({ id: `q${i}`, type: "manual.salvage" });
+      source.step(TUNING.manualPulseTicks);
+    }
+    source.dispatch({ id: "qre", type: "drone.repair" });
+    source.step(262);
+    source.dispatch({ id: "qb1", type: "machine.build", blueprint: "sorter", tile: 8 });
+    const sorter = source.getState().machines[0];
+    source.dispatch({ id: "qr1", type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
+    source.step(400);
+    const text = source.exportSave();
+
+    act(() => findButton("Yard")?.click());
+    act(() => findButton("Import")?.click());
+    const field = document.querySelector(".panel textarea") as HTMLTextAreaElement;
+    expect(field).toBeDefined();
+    typeInto(field, text);
+    act(() => findButton("Apply")?.click());
+    expect(store.getState().tick).toBe(source.getState().tick);
+    expect(store.getState().machines.length).toBe(1);
+    expect(document.querySelector(".panel")?.textContent).toContain("Applied");
+
+    // A damaged file is refused and the yard stays exactly where it was.
+    const settled = JSON.stringify(store.getState());
+    typeInto(field, "not json");
+    act(() => findButton("Apply")?.click());
+    expect(document.querySelector(".panel")?.textContent).toContain("Not a Rustwake file");
+    expect(JSON.stringify(store.getState())).toBe(settled);
   });
 });

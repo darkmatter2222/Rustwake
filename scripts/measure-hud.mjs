@@ -45,6 +45,7 @@ const PAIRS = [
   ["Panel body", ".panel"],
   ["Panel title", ".panel__title"],
   ["Panel close button", ".panel .icon-btn"],
+  ["Save field", ".panel__code"],
 ];
 
 /** Same FNV-1a the app uses, so a rewritten envelope still verifies (D-11). */
@@ -358,7 +359,25 @@ const run = async () => {
         await tapDock("Cancel"); // leave build mode again
         let withPanel = null;
         if (await tapDock("Store")) withPanel = await page.evaluate(readLayout, PAIRS);
-        rows.push({ scale, label: size.name, intro, rest, buildPass, withPanel, tabbed });
+        // The yard record panel carries the two save fields, so it is measured as its
+        // own state (B-06): one textarea per page keeps the panel's inner scroll at 0.
+        let yardPanel = null;
+        if (await tapDock("Yard")) yardPanel = await page.evaluate(readLayout, PAIRS);
+        let importPanel = null;
+        if (yardPanel) {
+          const handle = await page.evaluateHandle(() =>
+            [...document.querySelectorAll(".panel .icon-btn")].find(
+              (node) => (node.textContent ?? "").trim() === "Import"
+            )
+          );
+          const element = handle.asElement();
+          if (element) {
+            await element.click({ force: true, timeout: 5000 });
+            await page.waitForTimeout(200);
+            importPanel = await page.evaluate(readLayout, PAIRS);
+          }
+        }
+        rows.push({ scale, label: size.name, intro, rest, buildPass, withPanel, yardPanel, importPanel, tabbed });
         await context.close();
       }
     }
@@ -426,14 +445,14 @@ function introTable(rows, scale) {
   return lines;
 }
 
-function panelTable(rows, scale) {
+function panelTable(rows, scale, key = "withPanel") {
   const lines = [];
   lines.push(
     "| Viewport | ink % | panel % | panel + HUD % | Panel box (top→bottom) | Inner scroll | Close target | Close inside | Over dock | Over objective | scrollW×scrollH |"
   );
   lines.push("| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |");
   for (const row of rows.filter((r) => r.scale === scale)) {
-    const m = row.withPanel ?? row.rest;
+    const m = row[key] ?? row.rest;
     const size = sizeOf(m);
     const p = m.panelInfo;
     lines.push(
@@ -449,11 +468,16 @@ function panelTable(rows, scale) {
 }
 
 function contrastTable(rows, scale) {
-  const sample = rows.find((r) => r.scale === scale && r.withPanel?.contrast?.length) ??
-    rows.find((r) => r.scale === scale && r.rest.contrast.length);
-  const source = sample?.withPanel ?? sample?.rest;
-  if (!source?.contrast.length) return ["| - | - |", "| --- | --- |", "| no contrast rows | |"];
-  const byLabel = new Map(source.contrast.map((c) => [c.label, c]));
+  // Merge by label across the measured states: the save field only exists while the
+  // Yard panel is open, the rest of the pairs exist everywhere, so a single state's
+  // list would silently drop a row from the table.
+  const byLabel = new Map();
+  for (const row of rows.filter((r) => r.scale === scale)) {
+    for (const state of [row.rest, row.withPanel, row.yardPanel, row.importPanel]) {
+      for (const c of state?.contrast ?? []) if (!byLabel.has(c.label)) byLabel.set(c.label, c);
+    }
+  }
+  if (byLabel.size === 0) return ["| - | - |", "| --- | --- |", "| no contrast rows | |"];
   const lines = [];
   lines.push("| Text role | Ratio | Font | Large-text rule | AA need | Pass |");
   lines.push("| --- | --- | --- | --- | --- | --- |");
@@ -496,7 +520,8 @@ function report(rows) {
     `Command \`node scripts/measure-hud.mjs\` against the production build from \`npm run preview\`.` +
       ` Runtime Node ${process.version}, Chrome headless through \`playwright-core\`. Each size is a` +
       ` fresh context with the mature-yard save installed, \`textScale\` written into its settings,` +
-      ` then \`Begin recovery\` and 400 ms of the real loop, then Build mode, then the store panel.` +
+      ` then \`Begin recovery\` and 400 ms of the real loop, then Build mode, then the store panel,` +
+      ` then the Yard panel and its import page.` +
       ` \`ink\` is the exact axis-aligned union of the painted chip, cluster-button, objective and dock` +
       ` boxes over the visual viewport; \`band\` unions the three layout rows instead, so it counts the` +
       ` empty space between chips and buttons too. Design target for the resting HUD: 15-22 %` +
@@ -527,7 +552,15 @@ function report(rows) {
     lines.push("");
     lines.push(...panelTable(rows, scale));
     lines.push("");
-    lines.push(`### Contrast at text scale ${scale.toFixed(1)} (store panel open)`);
+    lines.push(`### Yard panel open (record page: five lines plus the export field)`);
+    lines.push("");
+    lines.push(...panelTable(rows, scale, "yardPanel"));
+    lines.push("");
+    lines.push(`### Yard panel, import page (one editable field)`);
+    lines.push("");
+    lines.push(...panelTable(rows, scale, "importPanel"));
+    lines.push("");
+    lines.push(`### Contrast at text scale ${scale.toFixed(1)} (merged over the measured states)`);
     lines.push("");
     lines.push(...contrastTable(rows, scale));
     lines.push("");
@@ -537,13 +570,37 @@ function report(rows) {
   const flat = rows.filter(
     (r) => r.rest.scroll.width <= r.rest.visual.width && r.rest.scroll.height <= r.rest.visual.height
   ).length;
+  // The same gate counted once per measured state, so a panel that introduces its own
+  // page scroll cannot hide behind the resting row (spec 25.1).
+  const stateKeys = ["intro", "rest", "buildPass", "withPanel", "yardPanel", "importPanel"];
+  let stateChecked = 0;
+  let stateFlat = 0;
+  const scrollStates = [];
+  for (const row of rows) {
+    for (const key of stateKeys) {
+      const m = row[key];
+      if (!m) continue;
+      stateChecked += 1;
+      const isFlat =
+        m.scroll.width <= m.visual.width && m.scroll.height <= m.visual.height;
+      if (isFlat) stateFlat += 1;
+      else scrollStates.push(`${row.label} s${row.scale} ${key}`);
+    }
+  }
   const fails = [];
   for (const row of rows) {
-    for (const c of (row.withPanel ?? row.rest).contrast) if (!c.pass) fails.push(`${row.label} s${row.scale} ${c.label} ${c.ratio}:1`);
+    const seen = new Set();
+    for (const state of [row.rest, row.withPanel, row.yardPanel, row.importPanel]) {
+      for (const c of state?.contrast ?? []) {
+        if (seen.has(c.label)) continue;
+        seen.add(c.label);
+        if (!c.pass) fails.push(`${row.label} s${row.scale} ${c.label} ${c.ratio}:1`);
+      }
+    }
   }
   const panelProblems = [];
   for (const row of rows) {
-    for (const m of [row.intro, row.withPanel]) {
+    for (const m of [row.intro, row.withPanel, row.yardPanel, row.importPanel]) {
       const p = m?.panelInfo;
       if (!p) continue;
       if (!p.insideViewport || !p.closeInside || p.coversDock) {
@@ -559,6 +616,8 @@ function report(rows) {
       ["rest", row.rest],
       ["build", row.buildPass],
       ["panel", row.withPanel],
+      ["yard", row.yardPanel],
+      ["import", row.importPanel],
     ]) {
       const b = m?.beyond;
       if (!b) continue;
@@ -587,8 +646,10 @@ function report(rows) {
     );
   }
   lines.push(
-    `- No document scroll in ${flat}/${rows.length} measured contexts (rest, build, panel;` +
-      ` ${SCALES.length} scales).`
+    `- No document scroll in ${stateFlat}/${stateChecked} measured states (return report, rest,` +
+      ` build, store, yard record, import page over ${rows.length}/${flat} viewport rows,` +
+      ` ${SCALES.length} scales)` +
+      (scrollStates.length ? `; scrolling: ${scrollStates.join(", ")}` : ".")
   );
   lines.push(
     `- Panel geometry problems (outside the viewport, close button clipped, or covering the dock):` +
@@ -613,12 +674,16 @@ function report(rows) {
     const size = sizeOf(m);
     const p = row.withPanel?.panelInfo;
     const ip = row.intro?.panelInfo;
+    const yp = row.yardPanel?.panelInfo;
+    const up = row.importPanel?.panelInfo;
     console.log(
       `s${row.scale} ${row.label}: visual ${m.visual.width}×${m.visual.height} ink ${percent(m.inkArea, size)}%` +
         ` band ${percent(m.bandArea, size)}% chips ${m.chips}/${m.chipRows} font ${m.fontPx}px` +
         ` minDock ${m.minDock?.width}×${m.minDock?.height} scroll ${m.scroll.width}×${m.scroll.height}` +
         ` | intro ${ip ? `${ip.label} ${percent(row.intro.panelArea, size)}% inner ${ip.innerScroll}px close ${ip.closeSize}` : "no panel"}` +
         ` | panel ${p ? `${p.label} ${percent(row.withPanel.panelArea, size)}% inner ${p.innerScroll}px close ${p.closeSize}${p.closeInside ? "" : " CLIPPED"}${p.coversDock ? " OVER-DOCK" : ""}` : "n/a"}` +
+        ` | yard ${yp ? `${yp.label} ${percent(row.yardPanel.panelArea, size)}% inner ${yp.innerScroll}px close ${yp.closeSize}${yp.closeInside ? "" : " CLIPPED"}` : "n/a"}` +
+        ` | import ${up ? `${up.label} ${percent(row.importPanel.panelArea, size)}% inner ${up.innerScroll}px close ${up.closeSize}${up.closeInside ? "" : " CLIPPED"}` : "n/a"}` +
         ` | minContrast ${(row.withPanel ?? m).contrast.reduce((a, c) => Math.min(a, c.ratio), 99)}`
     );
   }

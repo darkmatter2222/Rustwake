@@ -128,11 +128,13 @@ export function DockButtons(props: {
   buildBlueprint: string | null;
   unlocked: string[];
   research: boolean;
+  yard: boolean;
   onPickBlueprint: (id: string) => void;
   onPlace: () => void;
   onCancelBuild: () => void;
   onInventory: () => void;
   onResearch: () => void;
+  onYard: () => void;
 }) {
   const blueprintIds = props.unlocked.length > 0 ? props.unlocked : Object.keys(BLUEPRINTS);
   if (props.buildBlueprint !== null) {
@@ -162,6 +164,13 @@ export function DockButtons(props: {
       <button className="dock__btn" onClick={props.onInventory}>
         Store
       </button>
+      {/* The yard record and the save transfer, unlocked after the tutorial so the
+          first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
+      {props.yard ? (
+        <button className="dock__btn" onClick={props.onYard}>
+          Yard
+        </button>
+      ) : null}
       <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
         {props.primary.label}
         {props.primary.cost ? <span className="dock__cost">{props.primary.cost}</span> : null}

@@ -24,7 +24,13 @@ import { REJECT_TEXT, hintFor, objectiveFor, primaryFor } from "./text";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
 import { useRevision, useSettings, useSim } from "./useGame";
-import { MachinePanel, ResearchPanel, ReturnReportPanel, StorePanel } from "./Panels";
+import {
+  MachinePanel,
+  ResearchPanel,
+  ReturnReportPanel,
+  StorePanel,
+  YardPanel,
+} from "./Panels";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 
 export interface PrimaryAction {
@@ -311,6 +317,14 @@ export function App({ store }: { store: GameStore }) {
         {selected === -3 ? (
           <ResearchPanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
         ) : null}
+        {selected === -4 ? (
+          <YardPanel
+            state={state}
+            exportText={store.exportSave()}
+            onImport={(text) => store.importSave(text)}
+            onClose={() => setSelected(null)}
+          />
+        ) : null}
         {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
         <DockButtons
           primary={primary}
@@ -334,6 +348,8 @@ export function App({ store }: { store: GameStore }) {
           onInventory={() => setSelected(-2)}
           research={showResearch(state)}
           onResearch={() => setSelected(-3)}
+          yard={state.tutorial >= 9}
+          onYard={() => setSelected(-4)}
         />
       </div>
     </div>

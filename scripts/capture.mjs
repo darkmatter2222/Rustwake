@@ -64,6 +64,36 @@ const captureResearch = async (page, file) => {
   return text;
 };
 
+/**
+ * The yard record panel (B-06), photographed at phone size because it is the surface
+ * a player uses to move a yard to another device: the record lines and the export
+ * field in one frame.
+ */
+const captureYard = async (page, file) => {
+  if (!(await clickDock(page, "Yard"))) {
+    console.log(`yard panel (${file}): dock target not unlocked in this session`);
+    return null;
+  }
+  await page.waitForTimeout(200);
+  const info = await page.evaluate(() => {
+    const panel = document.querySelector(".panel");
+    const field = panel?.querySelector("textarea");
+    return {
+      text: panel?.textContent ?? "",
+      fieldChars: field?.value.length ?? 0,
+      fieldHeight: field ? Math.round(field.getBoundingClientRect().height) : 0,
+    };
+  });
+  await page.screenshot({ path: resolve(out, file) });
+  console.log(
+    `yard panel (${file}, ${info.fieldChars} chars, field ${info.fieldHeight} px):` +
+      ` ${info.text.slice(0, 170)}`
+  );
+  await clickByText(page, "Close");
+  await page.waitForTimeout(150);
+  return info;
+};
+
 /** True once the dock carries the Research target, which needs `data > 0`. */
 const researchUnlocked = (page) =>
   page.evaluate(() =>
@@ -288,6 +318,7 @@ try {
   await mobilePage.waitForTimeout(150);
 
   const organicResearch = await captureResearch(mobilePage, "latest-research-phone.png");
+  const organicYard = await captureYard(mobilePage, "latest-yard.png");
 
   await checkLease(mobile, mobilePage);
 
@@ -309,7 +340,7 @@ try {
   // are rarely met), which is before the signal lab earns data. The phone-size
   // research image therefore comes from the same seeded mature yard the desktop
   // row uses, and the gallery says so.
-  if (!organicResearch && seedText) {
+  if ((!organicResearch || !organicYard) && seedText) {
     const seededPhone = await browser.newContext({
       viewport: { width: 390, height: 844 },
       deviceScaleFactor: 2,
@@ -325,6 +356,7 @@ try {
     await clickByText(seededPage, "Back to yard"); // The seed's gap opens a report.
     await seededPage.waitForTimeout(200);
     const seededResearch = await captureResearch(seededPage, "latest-research-phone.png");
+    const seededYard = organicYard ?? (await captureYard(seededPage, "latest-yard.png"));
     console.log(
       `research phone source: ${
         organicResearch ? "organic session" : "seeded mature yard (docs/evidence/yard-mature.json)"
@@ -335,7 +367,7 @@ try {
 
   console.log(
     "captured latest-mobile.png, latest-machine-mobile.png, latest-multitab.png," +
-      " latest-research-phone.png, latest-desktop.png, latest-research.png"
+      " latest-research-phone.png, latest-desktop.png, latest-research.png, latest-yard.png"
   );
 } finally {
   await browser.close();

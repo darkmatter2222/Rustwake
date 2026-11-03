@@ -612,3 +612,50 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reconsider when: B-28 (a second drone, or a delivery-sized store) lets the organic session reach
   the signal lab inside 240 rounds, which is expected to make the seed unnecessary.
 
+## D-36 — 2026-11-03 — An imported save takes the importing device's clock as its reference
+
+- Problem: the same envelope can be applied on a second device seconds after the first wrote it.
+  If the imported `lastSeenMs` survived, the new device would credit the exporting device's whole
+  absence **and** its own, so one yard could claim two overlapping 12 h windows in a row
+  (spec 18.1 asks for one economy, spec 28.1 fixes the single-window rule).
+- Choice: `store.importSave()` decodes and validates first, refuses while the tab is a read-only
+  follower (`reason: "read-only"`), and on success swaps the whole yard in one step, writes
+  `lastSeenMs = now()` from this device's clock, checkpoints immediately, and returns
+  `{ok: true, tick, machines}`. A refused file changes nothing at all: the live `state`,
+  `settings`, and the stored envelope stay exactly as they were, which the tests compare by
+  serialised snapshot.
+- Reason: the alternative — keeping the imported stamp — makes the return report a function of
+  which device happened to write last, and a repeated reload of the same pasted text would claim
+  the discarded tail again (spec 18.1 says it must not).
+- Evidence: `tests/persistence/transfer.test.ts` (nine cases: byte-identical export, identical
+  restore in another store, idempotent second import, the clock rule plus a reopened store whose
+  report is `null`, damaged checksum, newer schema, unparseable text, empty text, violated
+  invariant named in `detail`, settings carried across, and a follower's refusal), and the
+  `App`-level pair in `tests/ui/app.test.tsx` (record page shows the field, Apply settles the
+  yard at the source tick 698 with one machine, a damaged paste leaves the JSON snapshot equal).
+- Reversible: yes; two store methods and one panel.
+- Reconsider when: the cloud milestone (M5) brings a server clock, which replaces `now()` with the
+  authoritative timestamp and turns the same rule into a server-side one.
+
+## D-37 — 2026-11-03 — Dock: 44 px width floor, 6 px gap, and the primary takes the spare room
+
+- Problem: the fifth dock target (`Yard`, B-06) at 360 px width pushed the shortest label to
+  **41.5 × 56 px**, under the 44 px floor of spec 6.2, and the primary's label wrapped to two
+  lines so the stretched row became 56 px tall — the resting HUD band rose from 20.6 % to 22.1 %
+  at 360 × 640, outside the 15–22 % target of spec 5.2.
+- Choice: `min-width: 44px` on `.dock__btn`, the row gap 8 → 6 px, the button font 0.92 → 0.88rem,
+  and `flex: 6 1 auto` on `.dock__btn--primary` so the one two-line button claims the leftover
+  width instead of the short labels growing to no purpose.
+- Reason: with five targets the row has 340 px, and the five labels need 316 px of content plus
+  24 px of gap; the earlier 8 px gap plus a 41 px label left nothing for the primary, so the
+  wrap — not the count of targets — was what cost the 1.5 points of band.
+- Evidence: `node scripts/probe-dock.mjs` reports the row as five buttons of 47/44/110/46/69 px
+  at 46 px height, all labels one line; `node scripts/measure-hud.mjs` then gives band
+  **20.6 %** at 360 × 640, 15.7 % at 390 × 844, 14.5 % at 412 × 915, 21.9 % landscape, and the
+  smallest dock target **44 × 46** px on the narrowest phone, with no clipping in 108 states.
+- Reversible: yes; three CSS declarations.
+- Reconsider when: a sixth target is unlocked (spec 5.5 caps the narrow dock at five), or when the
+  label set grows past what 340 px holds — `scripts/probe-dock.mjs` prints the per-button boxes for
+  both ladder states, and the longest label the ladder produces, `Research Efficient Cutters`,
+  measures 130 × 54 px with the row at 54 px and a band of **21.8 %** at 360 × 640.
+

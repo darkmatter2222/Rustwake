@@ -2,6 +2,7 @@ import { BLUEPRINTS, type ResourceId } from "../game/content/defs";
 import { RESEARCH } from "../game/content/research";
 import { upgradeCost } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
+import type { ImportResult } from "../game/persistence/save";
 import type { SimState } from "../game/simulation/types";
 
 /** Short concrete verbs first (spec 4.4). Keys keep later translation cheap. */
@@ -112,6 +113,25 @@ export const REJECT_TEXT: Record<string, string> = {
   prereq: "Research the earlier node first",
   "read-only": "Another tab is writing this yard",
 };
+
+/** One bounded explanation per import failure (spec 22.2, spec 25.3 case 8). */
+export const IMPORT_TEXT: Record<string, string> = {
+  empty: "Nothing pasted",
+  parse: "Not a Rustwake file",
+  schema: "Newer version than this build",
+  checksum: "Damaged file",
+  invalid: "Impossible values",
+  "read-only": "Another tab is writing this yard",
+};
+
+/** The one-line note the Yard panel shows after an import attempt. */
+export function importNoteFor(result: ImportResult): string {
+  if (result.ok) return `Applied · tick ${result.tick}, ${result.machines} machines`;
+  const base = IMPORT_TEXT[result.reason] ?? "Not applied";
+  // The invariant name is developer-facing but short and useful when a file was
+  // hand-edited; it never replaces the plain-language reason.
+  return result.detail ? `${base} (${result.detail})` : base;
+}
 
 export const RESOURCE_LABEL: Record<string, string> = {
   scrap: "Scrap",

@@ -30,7 +30,9 @@ import {
   STATUS_LABEL,
   formatDuration,
   formatNumber,
+  importNoteFor,
 } from "./text";
+import type { ImportResult } from "../game/persistence/save";
 
 export function MachinePanel(props: {
   state: SimState;
@@ -321,6 +323,109 @@ export function ResearchPanel(props: {
           );
         })}
       </dl>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The yard record plus the two save transfers (spec 22.1, B-06). Two pages so one
+ * textarea is on screen at a time and the panel keeps its 0 px inner scroll at the
+ * 2.0 text scale (spec 6.4): page 0 shows the record and the export, page 1 the
+ * import field. A refused file leaves the running yard untouched.
+ */
+export function YardPanel(props: {
+  state: SimState;
+  exportText: string;
+  onImport: (text: string) => ImportResult;
+  onClose: () => void;
+}) {
+  const [page, setPage] = useState(0);
+  const [draft, setDraft] = useState("");
+  const [note, setNote] = useState("Copy this text, or open Import to paste one.");
+  const exportId = "rustwake-save-export";
+  const importId = "rustwake-save-import";
+
+  const copyExport = () => {
+    const clipboard = navigator.clipboard?.writeText;
+    if (!clipboard) {
+      setNote("Select the text and copy it");
+      return;
+    }
+    clipboard.call(navigator.clipboard, props.exportText).then(
+      () => setNote("Copied to the clipboard"),
+      () => setNote("Select the text and copy it")
+    );
+  };
+
+  return (
+    <div className="panel" role="group" aria-label="Yard record">
+      <div className="panel__head">
+        <h2 className="panel__title">Yard record</h2>
+        <button className="icon-btn" onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+      <div className="panel__body">
+        {page === 0 ? (
+          <>
+            <dl>
+              <dt>Tick</dt>
+              <dd>{props.state.tick}</dd>
+              <dt>Machines</dt>
+              <dd>{props.state.machines.length}</dd>
+              <dt>Links</dt>
+              <dd>{props.state.routes.length}</dd>
+              <dt>Credits</dt>
+              <dd>{props.state.credits}</dd>
+              <dt>Save</dt>
+              <dd>{props.exportText.length} characters</dd>
+            </dl>
+            <label className="panel__field" htmlFor={exportId}>
+              Saved yard
+            </label>
+            <textarea
+              id={exportId}
+              className="panel__code"
+              readOnly
+              value={props.exportText}
+              onFocus={(event) => event.currentTarget.select()}
+            />
+            <div className="panel__actions">
+              <button className="icon-btn" onClick={copyExport}>
+                Copy
+              </button>
+              <button className="icon-btn" onClick={() => setPage(1)}>
+                Import
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="status-line">Paste a saved yard, then Apply.</p>
+            <label className="panel__field" htmlFor={importId}>
+              Pasted text
+            </label>
+            <textarea
+              id={importId}
+              className="panel__code"
+              value={draft}
+              onChange={(event) => setDraft(event.currentTarget.value)}
+            />
+            <div className="panel__actions">
+              <button
+                className="icon-btn"
+                onClick={() => setNote(importNoteFor(props.onImport(draft)))}
+              >
+                Apply
+              </button>
+              <button className="icon-btn" onClick={() => setPage(0)}>
+                Back
+              </button>
+            </div>
+          </>
+        )}
+        <p className="status-line">{note}</p>
       </div>
     </div>
   );

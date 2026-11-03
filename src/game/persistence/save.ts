@@ -32,11 +32,28 @@ export const DEFAULT_SETTINGS: SaveSettings = {
   textScale: 1,
 };
 
+/** Why an envelope was refused; `detail` carries the first violated invariant. */
+export type DecodeFailure =
+  | "empty"
+  | "parse"
+  | "schema"
+  | "checksum"
+  | "invalid";
+
 export type DecodeResult =
   | { ok: true; payload: SavePayload }
+  | { ok: false; reason: DecodeFailure; detail?: string };
+
+/**
+ * Outcome of a manual import (spec 22.2). A failure never touches the live state,
+ * so the yard keeps running from the last known-good checkpoint.
+ */
+export type ImportResult =
+  | { ok: true; tick: number; machines: number }
   | {
       ok: false;
-      reason: "empty" | "parse" | "schema" | "checksum" | "invalid";
+      reason: DecodeFailure | "read-only";
+      detail?: string;
     };
 
 /** FNV-1a over the serialized payload: enough to detect truncation and mixes. */
@@ -82,7 +99,7 @@ export function decodeSave(text: string | null): DecodeResult {
   if (checksum(body) !== envelope.checksum)
     return { ok: false, reason: "checksum" };
   const invalid = validateSim(envelope.payload.sim);
-  if (invalid) return { ok: false, reason: "invalid" };
+  if (invalid) return { ok: false, reason: "invalid", detail: invalid };
   return { ok: true, payload: envelope.payload };
 }
 
