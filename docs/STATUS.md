@@ -12,11 +12,14 @@ machines to **18 links with 0 at 0 % busy and 8 machines**, the circuit assemble
 to 38, and the signal lab appeared with `data 20` — which is what let the research panel be
 photographed for the first time.
 
-Current commit and remote sync status: this pass's commit is the `origin/main` head after
-`git push origin HEAD:main`; `git rev-parse HEAD origin/main` printed the same SHA twice
-(`3f078127facdf69cd639c5ae6078d9384763ffec` was the parent, "Pin tsx as a devDependency"). CI
+Current commit and remote sync status: `57f15af` ("One link per material keyed on the owned
+endpoint (B-23, B-20)") is the pushed `origin/main` head: `git push origin HEAD:main` reported
+`3f07812..57f15af HEAD -> main`, and `git rev-parse HEAD origin/main` then printed the same
+`57f15af10339f30e9e910a11467adff7cececbef` twice. Its parent is `3f07812`. CI
 state: still unread in this environment (BL-06: `gh run list` asks for `gh auth login`, the
 unauthenticated API 404s for the private repository), so CI is reported as pending, not green.
+One documentation-only checkpoint commit sits on top of `57f15af` (it records this line), so
+`origin/main` head is that checkpoint and `57f15af` is its parent.
 
 Checks run and actual results (this pass):
 - `npm run typecheck` — clean (tsc 5.6.3, strict).
