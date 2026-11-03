@@ -62,6 +62,7 @@ const playSession = async (page) => {
       tick: sim.tick,
       tutorial: sim.tutorial,
       credits: sim.credits,
+      lastSeenMs: JSON.parse(raw).payload.lastSeenMs,
       store: sim.store,
       machines: sim.machines.map((m) => `${m.blueprint} L${m.level} x${m.batchesDone}`),
       routes: sim.routes.length,
@@ -85,6 +86,58 @@ const openMachinePanel = async (page) => {
   return null;
 };
 
+/** Two pages in one context share localStorage, so this is the real 22.3 case. */
+const checkLease = async (context, firstPage) => {
+  const second = await context.newPage();
+  await second.goto(url, { waitUntil: "networkidle" });
+  await second.waitForSelector("text=Begin recovery");
+  await second.click("text=Begin recovery");
+  await second.waitForTimeout(400);
+  const readerLine = await second.evaluate(() => {
+    return document.querySelector(".objective")?.textContent ?? "";
+  });
+  const readerDock = await second.evaluate(() => {
+    return document.querySelector(".dock__btn--primary")?.textContent ?? "";
+  });
+  const before = await second.evaluate(() => {
+    const raw = localStorage.getItem("rustwake.save.v1");
+    const lease = localStorage.getItem("rustwake.lease.v1");
+    const sim = raw ? JSON.parse(raw).payload.sim : null;
+    return {
+      tick: sim?.tick,
+      scrap: sim?.store?.scrap,
+      hud: document.querySelector(".resources")?.textContent ?? "",
+      lease,
+    };
+  });
+  await second.screenshot({ path: resolve(out, "latest-multitab.png") });
+
+  // The owner goes away; the follower may claim the expired lease.
+  await firstPage.close();
+  await second.waitForTimeout(2000);
+  await clickByText(second, "Take over");
+  await second.waitForTimeout(1200);
+  const after = await second.evaluate(() => {
+    const raw = localStorage.getItem("rustwake.save.v1");
+    const lease = localStorage.getItem("rustwake.lease.v1");
+    const sim = raw ? JSON.parse(raw).payload.sim : null;
+    return {
+      tick: sim?.tick,
+      scrap: sim?.store?.scrap,
+      hud: document.querySelector(".resources")?.textContent ?? "",
+      card: document.querySelector(".objective")?.textContent ?? "",
+      lease,
+    };
+  });
+  console.log(`reader card: ${readerLine}`);
+  console.log(`reader dock: ${readerDock}`);
+  console.log(`reader hud:  ${before.hud}`);
+  console.log(`before handover: ${JSON.stringify({ ...before, hud: undefined })}`);
+  console.log(`after handover:  ${JSON.stringify({ ...after, hud: undefined })}`);
+  console.log(`owner hud after handover: ${after.hud}`);
+  await second.close();
+};
+
 const browser = await chromium.launch({ executablePath });
 try {
   const mobile = await browser.newContext({
@@ -100,6 +153,8 @@ try {
   const panelText = await openMachinePanel(mobilePage);
   await mobilePage.screenshot({ path: resolve(out, "latest-machine-mobile.png") });
   console.log(`machine panel: ${panelText ?? "not opened"}`);
+
+  await checkLease(mobile, mobilePage);
 
   const desktop = await browser.newContext({
     viewport: { width: 1440, height: 900 },

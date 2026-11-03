@@ -4,7 +4,7 @@ Rolling, prioritised. IDs are stable within this file.
 
 | ID | Title | Player problem / invariant | Acceptance criteria | Status |
 | --- | --- | --- | --- | --- |
-| B-01 | Multi-tab single-writer lease | Two tabs can both mutate the local save and double-settle progress | Lease with owner id + heartbeat; second tab becomes read-only with a visible notice; revision-checked takeover; tests for both paths | Todo |
+| B-01 | Multi-tab single-writer lease | Two tabs can both mutate the local save and double-settle progress | Lease with owner id + heartbeat; second tab becomes read-only with a visible notice; revision-checked takeover; tests for both paths | Done (2026-11-03) |
 | B-02 | Worker catch-up | 12 h catch-up can exceed the 100 ms main-thread stall target on low-end phones | Off-main-thread catch-up with cancellation and versioned result; measured stall histogram in a trace | Todo |
 | B-03 | Bottleneck assistant | Starved/full/power-limited machines are visible but not explained | One evidence line per machine with the measured occupancy/starvation percentage and one recommendation; no purchase forced | Done (2026-11-03) |
 | B-04 | Copper + polymer chain | First meaningful choice of where to spend an upgrade budget | R03/R04/R05 reachable with two viable upgrade targets; throughput verified in a fixture | Done (2026-11-03) |
@@ -21,6 +21,7 @@ Rolling, prioritised. IDs are stable within this file.
 | B-15 | Reserve-floor tuning | The 10-unit floor measurably caps the wire mill: 12 batches against the separator's 23 in the 1 200-tick fixture | Floor swept over {0, 5, 10, 20} with the chain fixture, one table in docs, chosen value documented | Todo |
 | B-16 | HUD area measurement | The 15–22 % HUD target is currently eyeballed from screenshots | Bounding-box sum of HUD elements as a share of the visual viewport at 360 × 640, 390 × 844, and 1440 × 900 | Todo |
 | B-17 | Rolling 60 s rate window | The panel's "Actual rate" divides by total elapsed time, but spec 9.4 asks for a 60 s window (or all time for a new machine) | Per-machine batch-completion ring or tick-pair snapshot; panel shows window and both rates; test compares against a fixture at 300 and 1 200 ticks | Todo |
+| B-18 | Follower-tab smoothness | A mirrored tab updates on the 10 Hz adopt cadence, so cargo motion reads steppier than in the owner tab | Interpolate follower sprites between the last two adopted snapshots, or raise the cadence with a measured cost; one trace at 390 × 844 | Todo |
 
 ## Notes
 

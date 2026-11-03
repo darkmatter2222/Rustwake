@@ -179,7 +179,19 @@ export function App({ store }: { store: GameStore }) {
     }
   };
 
-  const primary = buildPrimary(store, dispatch, selected, setBuildBlueprint, setGhostTile);
+  const role = store.getRole();
+  const primary: PrimaryAction =
+    role === "reader"
+      ? {
+          label: "Take over",
+          run: () => {
+            if (store.takeOver() === "reader") {
+              audio().play("blocked");
+              setToast("Another tab is still writing");
+            }
+          },
+        }
+      : buildPrimary(store, dispatch, selected, setBuildBlueprint, setGhostTile);
 
   const machine =
     selected !== null && selected > 0 ? state.machines.find((m) => m.id === selected) : undefined;
@@ -232,8 +244,12 @@ export function App({ store }: { store: GameStore }) {
             }}
           />
           <ObjectiveCard
-            text={objectiveFor(state, selected)}
-            hint={hintFor(suggestedAction(state))}
+            text={role === "reader" ? "Following the other tab" : objectiveFor(state, selected)}
+            hint={
+              role === "reader"
+                ? "This tab mirrors the yard exactly as the first tab writes it."
+                : hintFor(suggestedAction(state))
+            }
           />
         </div>
         {toast ? <Toast text={toast} onDone={() => setToast(null)} /> : null}
@@ -469,6 +485,8 @@ export function labelForReject(reason: CommandReject): string {
       return "Contract already sold";
     case "locked":
       return "Sell opens after your first steel contract";
+    case "read-only":
+      return "Another tab is writing this yard";
     default:
       return "No longer available";
   }

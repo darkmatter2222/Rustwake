@@ -191,3 +191,47 @@ Format: date · problem · options · choice · reason · reversibility.
 - Reversible: yes; `objectiveFor(state, selected)` and `primaryFor(state, step)` are the
   only formatting paths, covered by a test that compares the card sentence with the dock
   label for the same machine.
+
+## D-20 · 2026-11-03 · One writer per yard (multi-tab lease)
+
+- Problem: two tabs of the same local save each ran their own frame loop, so each credited
+  its own production and the last writer won — the yard's ledger depended on window order
+  (spec 22.3).
+- Options: last-write-wins with a revision check; both tabs replaying a shared command log;
+  one lease holder plus mirroring followers.
+- Choice: `persistence/lease.ts` stores `{owner, heartbeatMs, revision}` under
+  `rustwake.lease.v1`. The first claimant writes; a later tab sees a heartbeat younger than
+  1 500 ms and becomes a follower that (a) does not tick, (b) does not write, (c) adopts whole
+  persisted snapshots when `tick` or `revision` moves ahead, and (d) shows one status line
+  plus a **Take over** action. `takeOver()` succeeds only when the lease is absent, its own,
+  or older than the TTL, so a live owner is never silently displaced; on promotion the new
+  owner continues from the adopted ledger, and the demoted tab sees the live heartbeat at its
+  next authoritative call.
+- Reason: whole-snapshot adoption keeps one authoritative ledger with no merging rules, which
+  is what the offline cap and the sell contract rely on. A 1.5 s TTL is imperceptible on a tap
+  and short enough that closing the owner tab hands over inside one second.
+- Evidence: `tests/persistence/lease.test.ts` (7 cases: claim, TTL boundary, release, corrupt
+  record, non-writing follower, mirrored snapshot, handover plus demotion) and a real-Chrome
+  two-page session printed by `scripts/capture.mjs`.
+- Reversible: yes; the lease is one extra key, and with storage absent (or one tab) the
+  single-writer path is unchanged.
+- Reconsider when: the online milestone replaces this with server revisions, or a follower's
+  10 Hz mirror reads as choppy and needs interpolation from the owner's snapshots.
+
+## D-21 · 2026-11-03 · Two clocks, absolute for the ledger and page-relative for frames
+
+- Problem: with the lease in place it became visible that the store used `performance.now()`
+  for everything. That clock restarts at 0 in each document, so a reopened tab computed the
+  absence as `(small − large) → 0` and credited nothing, and a lease heartbeat written in one
+  tab could not be compared in another.
+- Choice: `now()` is the absolute wall clock (`Date.now()`) and feeds `lastSeenMs`,
+  `catchUp`, and the lease; the frame delta uses the monotonic page timeline
+  (`performance.now`, injected as `frameClock` in tests), seeded from the rAF timestamp.
+- Reason: an absence and a lease timeout are cross-document facts; a frame delta is not.
+  Injecting both clocks keeps the tests deterministic.
+- Evidence: `lastSeenMs` is now a 13-digit epoch stamp in the real capture
+  (`1793689384704`), and `tests/persistence/save.test.ts` asserts that shape.
+- Reversible: yes; one default per clock.
+- Note: envelopes written before this change carry a page-relative `lastSeenMs`, so their
+  first load is credited exactly one capped 12 h window and then re-stamped — no repeated
+  claim, because the reference moves forward on that first load.

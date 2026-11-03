@@ -30,7 +30,8 @@ export type CommandReject =
   | "cooldown"
   | "cycle"
   | "already-claimed"
-  | "locked";
+  | "locked"
+  | "read-only";
 
 export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
 

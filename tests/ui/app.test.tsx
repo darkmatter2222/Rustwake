@@ -5,6 +5,7 @@ import { App, buildPrimary } from "../../src/ui/App";
 import { MachinePanel } from "../../src/ui/Panels";
 import { createStore, type GameStore } from "../../src/app/store";
 import { SAVE_KEY } from "../../src/game/persistence/save";
+import { LEASE_TTL_MS } from "../../src/game/persistence/lease";
 import { TUNING } from "../../src/game/content/defs";
 
 function memoryStorage() {
@@ -211,6 +212,32 @@ describe("first-feel shell", () => {
       await new Promise((resolve) => setTimeout(resolve, 1900));
     });
     expect(document.querySelector(".toast")).toBeNull();
+  });
+
+  it("mirrors a second tab in the shell and hands over after the lease lapses", () => {
+    const storage = memoryStorage();
+    let clock = 10;
+    const first = createStore({ storage, now: () => clock, leaseId: "tab-a" });
+    for (const id of ["m1", "m2"]) {
+      first.dispatch({ id, type: "manual.salvage" });
+      first.step(36);
+    }
+
+    const second = createStore({ storage, now: () => clock, leaseId: "tab-b" });
+    expect(second.getRole()).toBe("reader");
+    mount(second);
+    act(() => findButton("Begin recovery")?.click());
+    expect(document.querySelector(".objective")?.textContent).toContain("Following the other tab");
+    expect(findButton("Take over")).toBeDefined();
+
+    act(() => findButton("Take over")?.click());
+    expect(second.getRole()).toBe("reader"); // the owner is still live
+
+    clock += LEASE_TTL_MS + 1;
+    act(() => findButton("Take over")?.click());
+    expect(second.getRole()).toBe("writer");
+    expect(findButton("Take over")).toBeUndefined();
+    expect(second.getState().store["scrap"]).toBe(first.getState().store["scrap"]);
   });
 
   it("shows measured diagnosis lines in the machine panel", () => {

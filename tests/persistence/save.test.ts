@@ -108,6 +108,19 @@ describe("storage adapter", () => {
     expect(again.getState().tick).toBe(state.tick);
   });
 
+  it("stamps the save with the shared wall clock, not the page timeline", () => {
+    const storage = memoryStorage();
+    const store = createStore({ storage });
+    store.dispatch({ id: "w1", type: "manual.salvage" });
+    const saved = JSON.parse(storage.raw.get(SAVE_KEY) ?? "{}") as {
+      payload?: { lastSeenMs?: number; sim?: { tick?: number } };
+    };
+    // A page-relative `performance.now()` would restart at 0 on every reload and
+    // silently cancel offline credit, so the stored reference must be epoch ms.
+    expect(saved.payload?.lastSeenMs).toBeGreaterThan(1_000_000_000_000);
+    expect(saved.payload?.sim?.tick).toBe(0);
+  });
+
   it("starts a fresh session when the stored envelope is unusable", () => {
     const storage = memoryStorage();
     storage.setItem(SAVE_KEY, "{ broken");

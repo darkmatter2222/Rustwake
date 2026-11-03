@@ -24,6 +24,25 @@ each animation frame → advance(state, elapsedTicks) → notify()
 `Command` is a discriminated union; every command carries a client-generated `id`.
 A repeated `id` returns the first committed result, so a retried tap cannot spend twice.
 
+## Tab ownership (spec 22.3)
+
+`localStorage` is shared by every tab, so exactly one tab may advance the economy.
+
+```
+rustwake.lease.v1 → { owner, heartbeatMs, revision }     heartbeat = epoch ms, TTL 1500 ms
+
+owner  : claim at creation → tick each frame → checkpoint every 1 s → heartbeat with it
+follower: no ticks, no writes; every 100 ms refresh the lease and adopt the checkpoint when
+          its `tick` or `revision` is ahead; render the adopted snapshot
+takeOver: promotes a follower only when the record is absent, its own, or older than the TTL
+```
+
+Adoption replaces the whole `sim` object, so a follower's ledger is byte-identical to the
+owner's instead of a merge of two partial runs. Commands issued in a follower are rejected
+with the `read-only` reason and one local explanation. Two clocks back this up: an absolute
+wall clock (`Date.now`) for `lastSeenMs`, the catch-up window, and the heartbeat; the
+monotonic page timeline only for frame deltas.
+
 ## Tick pipeline (fixed order, `simulation/engine.ts`)
 
 1. `finishBatches` — accrue-and-complete work whose milli-tick requirement is met and
