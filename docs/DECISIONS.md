@@ -704,3 +704,43 @@ Format: date · problem · options · choice · reason · reversibility.
   copy of the starter and the fleet cap should become a hull-budget rule; or when a real-device trace
   (BL-01) shows five simultaneous flight legs costing frame work worth bounding.
 
+## D-39 — 2026-11-03 — One content validator, two entry points
+
+- Problem (B-12): broken content references surfaced as a strange yard in a screenshot or a hand
+  calculation, not as a failing check - a recipe id no blueprint uses, two recipes producing one
+  material, a zero-time cycle, a build cost whose material no unlocked machine makes.
+- Options considered: (a) assertions spread through the existing per-module tests; (b) a standalone
+  script the developer runs by hand; (c) one module exporting two functions - pure table checks and a
+  ladder run - consumed by both a CLI script (which CI runs and which prints the violated invariant
+  with its name) and one test file.
+- Chosen: (c). `src/game/content/validate.ts` exposes `validateContent()` (12 groups of pure table
+  checks) and `validateBehaviour(rounds)` (the real ladder plus the ledger walk, returning violations
+  and the measured marks). `scripts/validate-content.mjs` prints both and sets `process.exitCode`;
+  `package.json` gains `"validate": "tsx scripts/validate-content.mjs"`; `ci.yml` runs it between
+  typecheck and tests so a content break names itself before the 4-second suite starts.
+- Reason: one implementation means the pipeline and the local suite cannot disagree, and the pure part
+  costs 3 ms, so running it twice a day is free. The behaviour half doubles as the cross-check on the
+  probe drivers: it lands on the same `8 machines / 18 links / 4 drones / 1 864 batches / 165 credits /
+  3 nodes` with `firstDrone=308` and `firstResearch=975` as
+  `docs/evidence/2026-11-03-supply-window.md`, from independently written loops.
+- What it rejects, in one line each: an unknown resource in any stack; a missing recipe; two
+  blueprints claiming one recipe; a recipe with 0 or >4 inputs or >2 outputs, a non-positive or
+  fractional cycle, or no power draw; a buffer smaller than its own batch; a footprint over four cells
+  or over `YARD_TILES - 1`; a non-integer price; a material with two producers (spec 7.2); a cycle in
+  the material graph; a build cost unpayable at its unlock step; a duplicated, cheaper-than-its-
+  predecessor, or wrongly ordered research node; a status, reject code, import reason, objective or
+  hint without text; a non-positive tuning constant or a derived constant that stopped deriving
+  (432 000 ticks for 12 h, 15 minutes of starter output inside the dock cap, the yard powering its
+  largest recipe); an upgrade price that stops rising as a safe integer within 40 levels; and a
+  ladder that never reaches `build`, `connect`, `sell`, `research` or `drone`.
+- Evidence: `tests/content/validate.test.ts` (4 cases - tables pass, table sizes are non-trivial, an
+  injected zero cycle / 4x4 footprint / missing price is named and then repaired, and the behaviour
+  marks equal the published probe numbers). `npx vitest run` **155 passed / 155** (19 files);
+  `npm run validate` exits 0; the bundle is unchanged at `index-DDfppFoR.js` 213.12 kB (67.12 kB
+  gzip) because the app does not import the validator.
+- Reversible: yes; one module, one script, one npm script, one CI step. Nothing in `src/app` or
+  `src/ui` changed.
+- Reconsider when: wreck archetypes and sectors arrive (M3), which need the same two-function shape
+  with composition-sum and hazard-reference checks added; or if the behaviour half outgrows 1 800
+  rounds and should reuse a cached snapshot instead of re-running the ladder in both places.
+

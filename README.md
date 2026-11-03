@@ -74,12 +74,14 @@ Those are later milestones in `goal.md` (M3+).
 
 Active milestone: **M2 — a useful small factory** (M0 and M1 complete).
 
-1. **B-12 content validator in CI**: run the typed-content checks in the pipeline so a missing
-   reference, an invalid footprint, or a zero-time cycle fails the build instead of the playtest.
-2. **B-10 localisation readiness**: the remaining player-facing literals into keys with defaults
+1. **B-10 localisation readiness**: the remaining player-facing literals into keys with defaults
    behind one number/time formatter, with panel text expansion re-measured at the 2.0 text scale.
-3. **B-02 worker catch-up**: move the 12 h catch-up off the main thread with cancellation, and
+2. **B-02 worker catch-up**: move the 12 h catch-up off the main thread with cancellation, and
    publish a measured stall histogram, against the 100 ms target of spec 21.5.
+3. **B-29 organic research panel at phone size**: the ladder buys its first node at round 975 in the
+   headless driver, so raise the phone session's post-absence phase to the same 1 800 rounds (or let
+   the ladder prefer the nearest payable blueprint) and give `latest-research-phone.png` organic
+   provenance.
 
 ## Controls
 
@@ -111,9 +113,10 @@ setting; the economy never depends on animation timing.
 ```bash
 npm ci        # install
 npm run dev   # http://localhost:5173
-npm test      # 143 unit/integration tests
+npm test      # 155 unit/integration tests
 npm run typecheck
-npm run build # dist/ (210.60 kB JS, 66.41 kB gzip, 50 modules)
+npm run validate  # content + behaviour gate the pipeline also runs (~0.5 s)
+npm run build # dist/ (213.12 kB JS, 67.12 kB gzip, 50 modules)
 npm run preview
 ```
 
@@ -152,7 +155,41 @@ six sizes × three text scales × six states in one Chrome instance). For the in
 the three ladder states the dock can show (plain, research, fleet), `node scripts/probe-dock.mjs`
 (about 1 s, one browser context per state).
 
-## Latest update (M2: a credit-priced drone fleet, 2026-11-03)
+## Latest update (M2: the content gate joins the pipeline, 2026-11-03)
+
+- **`npm run validate` is a real gate, in CI and in the test run (B-12, decision D-39).** One
+  implementation, `src/game/content/validate.ts`, is used by `scripts/validate-content.mjs` (which
+  exits non-zero and prints each violated invariant) and by four cases in
+  `tests/content/validate.test.ts`, so the pipeline and the local suite cannot drift apart. The pure
+  part checks: a recipe id a blueprint does not have, an unknown resource in any cost or stack, a
+  **zero-time cycle**, a footprint larger than four cells or larger than the yard minus the dock, a
+  buffer too small for its own recipe's batch, a material with two producers (spec 7.2's one-producer
+  rule), an acyclic material graph, a build cost whose material no machine up to that tutorial step
+  produces, a research node that is duplicated, priced below its predecessor, or requires a later
+  node, a status/reject/import reason/objective/hint without player text, a non-integer or zero
+  tuning constant, a derived constant that stopped deriving (12 h = 432 000 ticks, 15 minutes of
+  starter output inside the dock cap, the yard able to power its largest recipe), and an upgrade
+  price that stops being a rising safe integer within 40 levels.
+- **The behaviour half runs the real ladder** for 1 800 rounds from a fresh tutorial state and
+  requires it to reach `build`, `connect`, `sell`, `research` and `drone`, to build all eight
+  blueprints, buy all three nodes and grow the fleet, with the ledger and every stored quantity
+  checked every 200 rounds. Measured on this build: `firstDrone=308 firstResearch=975 tick=18 298
+  machines=8 links=18 drones=4 batches=1 864 credits=165 nodes=3` — identical to the numbers
+  `scripts/probe-supply.mjs` publishes in `docs/evidence/2026-11-03-supply-window.md`, from a second
+  implementation, which is what makes the pair useful (D-38).
+- **Injected faults are proven to be caught**, not skipped: the test sets a cycle to 0, a footprint
+  to 4 × 4, and removes a price, and each time the validator must name it, after which the tables
+  must pass again. A fifth case pins the table sizes (15 resources, 8 blueprints, 12 recipes, 3 nodes,
+  14 prices, 20+ tuning keys) so no check can pass by inspecting nothing.
+- Checks in this run: `npx vitest run` **155 passed / 155** (19 files; four new), `npm run typecheck`
+  clean, `npm run validate` **0 violations** (3 ms of content checks), and `npm run build` unchanged
+  at **213.12 kB JS (67.12 kB gzip)**, 50 modules, artifacts `index-DDfppFoR.js` /
+  `index-DudncZlS.css` — the validator is not imported by the app, so all seven screenshots from the
+  14:11–14:13 run still describe this exact build.
+- Known limitations unchanged: the phone research image is still a seeded capture (**B-29**), and
+  **BL-01**, **BL-02**, **BL-03**, **BL-06**, **BL-11** stay open.
+
+## Earlier this week (M2: a credit-priced drone fleet, 2026-11-03)
 
 - **The yard buys recovery drones one unit at a time (B-28, decision D-38).** `SimState.spares` sits
   beside the starter's own record, `drone.add` costs 45 credits and doubles to 90, 180, 360, and stops
