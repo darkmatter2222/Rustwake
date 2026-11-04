@@ -364,6 +364,10 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       isMuted = next;
       // One write on the single parent does the whole mute (S-04).
       if (masterNode) masterNode.gain.value = next ? 0 : BUS_LEVELS.master;
+      // A-25: the gesture that lifts the mute also brings the beds back, so a
+      // session started muted is not left without room tone and music bed. The
+      // `bedsStarted` guard inside `startBeds` makes a repeat call a no-op.
+      if (!next && ctx) startBeds(ctx, ctx.currentTime);
     },
     isMuted: () => isMuted,
     play(cue: CueName, at?: Distance) {
@@ -457,6 +461,10 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       busNodes.clear();
       masterNode = null;
       table.clear();
+      // A-24: the beds are gone with the rest of the graph, so the guard that keeps
+      // them single-instance has to fall back too, or a later `resume()` rebuilds
+      // the buses and never re-creates the two sustained voices.
+      bedsStarted = false;
       if (ctx) {
         const closing = ctx.close();
         void closing;
