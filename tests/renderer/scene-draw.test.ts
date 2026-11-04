@@ -1521,7 +1521,7 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
 
   it("G-1: copper and circuit no longer share the outer ink box at either scale", () => {
     const roles = ["polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "generic"] as const;
-    const boxes: Record<string, Record<string, { w: number; h: number }>> = {};
+    const boxes: Record<string, { w: number; h: number }> = {};
     for (const scale of [1.8056, 4]) {
       for (const role of roles) {
         boxes[`${role}@${scale}`] = inkBoxOf(role, scale);
@@ -1637,5 +1637,55 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(amberOps).toBeLessThanOrEqual(12);
     expect(gridStrokes).toBe(0);
     expect(minFeaturePx).toBeGreaterThanOrEqual(3.5);
+  });
+
+  it("C-02: five 22-px drone bodies, 4+ amber gauge pips at 720/900, amber/floor 7.049", () => {
+    // The B6 row already ties the tray tokens and the gauge to the numbers at 312/900 (two
+    // filled pips); the missing numbers are the fuller store, the drone body count and the
+    // amber contrast of the gauge ink against the floor.
+    const state = relaid({ store: [720, 900] });
+    const { stub } = draw(state, { ...rest, framePhase: 0.5 });
+    const cyan = stub.log.filter(
+      (r) => r.op === "fillRect" && r.style === "#5fd8e8" && onGrid(r.args[2], BODY_W) && onGrid(r.args[3], BODY_H)
+    );
+    const lefts = cyan.map((r) => r.args[0]).sort((a, b) => a - b);
+    const widthPx = +(cyan.length > 0 ? cyan[0].args[2] * DPR : 0).toFixed(2);
+    const pitches = lefts.slice(1).map((v, i) => +((v - lefts[i]) * DPR).toFixed(2));
+    const gauge = storeGauge(stub.log);
+    // WCAG 1.4.3 ratio of the gauge hex over the floor, same channel model as D-3.
+    const channel = (v: number): number => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
+    const luminance = (hex: string): number =>
+      rgb(hex).reduce((sum, v, i) => sum + channel(v) * [0.2126, 0.7152, 0.0722][i], 0);
+    const ratio = +(
+      (Math.max(luminance("#ffb765"), luminance(PALETTE.floor)) + 0.05) /
+      (Math.min(luminance("#ffb765"), luminance(PALETTE.floor)) + 0.05)
+    ).toFixed(3);
+    console.log("C-02 measured", JSON.stringify({
+      cyanBodies: cyan.length,
+      bodyWidthDevicePx: widthPx,
+      pitchDevicePx: pitches,
+      bodyBoxes: cyan.map((r) => r.args.map((v) => +(v * DPR).toFixed(1))),
+      store: `${state.storeUnits}/${state.storeCapacity}`,
+      gaugeTotal: gauge.total,
+      gaugeFilled: gauge.filled,
+      amberOverFloor: ratio,
+    }));
+    console.log(
+      `C-02 cyan=${cyan.length} width=${widthPx}px pitch=${JSON.stringify(pitches)} ` +
+        `pips=${gauge.filled}/${gauge.total} amberOverFloor=${ratio}`
+    );
+    // Five units, one cyan body each, inside the 22-36 px band the review names (the body is
+    // 6 units = 11 CSS px = 22 device px; A8 pins the 4-unit pitch the row is laid out on).
+    expect(cyan.length).toBe(5);
+    expect(bodies(stub.log).length).toBe(5);
+    for (const box of cyan.map((r) => r.args)) {
+      expect(box[2] * DPR).toBeGreaterThanOrEqual(22);
+      expect(box[2] * DPR).toBeLessThanOrEqual(36);
+    }
+    expect(new Set(lefts.map((v) => Math.round(v * 2))).size).toBe(5);
+    // The store gauge: a 5-box row with at least four 2-unit amber pips at 720/900.
+    expect(gauge.total).toBe(5);
+    expect(gauge.filled).toBeGreaterThanOrEqual(4);
+    expect(Math.abs(ratio - 7.049)).toBeLessThanOrEqual(0.5);
   });
 });
