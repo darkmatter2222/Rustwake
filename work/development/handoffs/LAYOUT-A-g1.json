@@ -1,0 +1,76 @@
+{
+  "task": "LAYOUT-A-g1",
+  "head": "49b3152d2c8d48dcb04829c228669e0bc6232b94",
+  "prior": "f229704",
+  "tests": 232,
+  "entry": "dist/assets/index-CnTKM6SY.js",
+  "entry_bytes": 226717,
+  "tables_bytes": 7416,
+  "css_bytes": 7313,
+  "behaviour_line": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)",
+  "gates": {
+    "vitest": "pass - Test Files 23 passed, Tests 232 passed, Duration 4.10s (baseline after q004a was 228; +1 per row)",
+    "typecheck": "pass - tsc --noEmit, no output",
+    "validate": "pass - tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s); behaviour: 0 violation(s); validated: no violations",
+    "build": "pass - 4 chunks, entry 226717 B under the 233000 B ceiling (headroom 6283 B), tables 7416 B, css 7313 B, worker 13015 B",
+    "pixeldiff": [
+      { "pair": "landscape-rest (844x390 dpr2, base f229704 -> 49b3152)", "fraction": 0.77387 },
+      { "pair": "landscape-mature (844x390 dpr2)", "fraction": 0.778145 },
+      { "pair": "landscape-mature-ts2 (844x390 dpr2)", "fraction": 0.778728 },
+      { "pair": "phone-rest-ts1 (390x844 dpr2)", "fraction": 0 },
+      { "pair": "phone-rest-ts2 (390x844 dpr2)", "fraction": 0 },
+      { "pair": "phone-mature-ts1 (390x844 dpr2)", "fraction": 0.001277 },
+      { "pair": "phone-mature-ts2 (390x844 dpr2)", "fraction": 0.001277 },
+      { "pair": "desktop-mature-ts1 (1440x900 dpr1)", "fraction": 0.27309 },
+      { "pair": "per-row, same-build (canvas only, 100 ms apart, reducedMotion=reduce)", "fraction": 0 },
+      { "pair": "L-2 step f229704+L-1 -> +L-2, all 8 cases (canvas only)", "fraction": 0 },
+      { "pair": "L-3 step +L-2 -> +L-3, landscape-mature-ts2 (canvas only)", "fraction": 0.058814 },
+      { "pair": "L-3 step +L-2 -> +L-3, the other 7 cases (canvas only)", "fraction": 0 },
+      { "pair": "L-4 step +L-3 -> +L-4, phone-mature-ts1/ts2 (canvas only, largest)", "fraction": 0.001277 },
+      { "pair": "L-4 step +L-3 -> +L-4, landscape-mature, desktop-mature-ts1, rest cases", "fraction": 0.000574 }
+    ]
+  },
+  "rows": [
+    {
+      "id": "L-1",
+      "measured": "landscape 844x390: s=1.2034 (=284/236), yard rect [59.22, 328.78] (269.56 tall), dock tile y=78.47, wreck y=307.60, band [52, 336] - all four inside the band; phone 390x844: s=1.8056 and camera.y=WORLD_H/2, i.e. byte-identical to the legacy fit (canvas fraction 0); desktop 1440x900: s=3.3644, yard [72.19, 825.81], dock y=126.02, wreck y=766.60 inside [52, 846]",
+      "expected": "s=1.2034, yard [59.22, 328.78], dock 78.47, wreck 307.60 (rev-layout-g1 sec.2); phone unchanged; desktop 'unchanged 4.0000'",
+      "pass": true
+    },
+    {
+      "id": "L-2",
+      "measured": "chromium: .status-line offsetHeight 16 px at ts1 and 63 px at ts2 (3 wrapped lines of the 23.4 px = 0.78rem x 2 line box), display block, parent .objective, in landscape (max-height 460) and at ts2 where the chip row is display:none; jsdom: hintDisplay block, hintFontSize 0.78rem, marginTop 4px, parent objective, rowDisplay flex at ts1 / none at ts2; canvas bitmap identical before/after in all 8 cases (0.000000), composite 0.192874 / 0.165794 where the newly visible line is inside the element box",
+      "expected": "statusLine height >= 14 px at ts1 and >= 18 px at ts2, canvas fraction 0.000152",
+      "pass": true
+    },
+    {
+      "id": "L-3",
+      "measured": "ts2 phone per-button widths before: row 1 Store 76.7 + Yard 66.1 + Sell 219.2 = 362 (>366 available with the 4 px gap), row 2 Build 159.6 + Research 206.4 -> dock [10,719.22,370,116.78], 2 rows, buttons 66.8 and 46 px; after (gap 2px, padding 0 2px, label 0.62rem, cost 0.5rem, line-height 1.1, nowrap): Store 51.1 + Yard 44 + Sell 134.8 + Build 49.6 + Research 82.5 = 362 + 4x2 px gaps = 370 -> dock [10,790,370,46], 1 row, every button min-height 46 px and height 46 px; rest state identical [10,790,370,46]; landscape ts2 dock [162,336,520,46]; jsdom flexWrap nowrap, gap 2px, btn fontSize 0.62rem, minHeight 46px, cost 0.5rem",
+      "expected": "dock 10,790,370,46 at ts2, one row, min-height 46 px unchanged",
+      "pass": true
+    },
+    {
+      "id": "L-4",
+      "measured": "glyph box from the recorded fillText anchor plus the chromium-measured ascent (5 px at font 7, 8 at 11, 16 at 23, 17 at 24 = 0.708-0.727 of the em): s=4 row 0 [2.75, 7.00], s=3.9074 [2.91, 7.00], s=1.8056 [2.57, 7.00], s=1.2034 [2.85, 7.00] against the rail bands [0,2] and [190,192] read out of FLOOR_KIT; overlap = 0 for all 6 rows x 4 scales (smallest clearance 0.57 units = 1.03 CSS px at s=1.8056); canvas delta 0.001277 max",
+      "expected": "box [4.75, 9.00] vs rail [0,2], overlap == 0 at s in {1.2034, 1.8056, 3.9074, 4}",
+      "pass": true
+    }
+  ],
+  "summary": [
+    "fc61c2b: L-1 - fitCamera takes optional {top,bottom} chrome insets, scale = clamp(min(widthTerm, usableH/(WORLD_H+12)), 1.2, 4) with the band centre folded into Camera.y; App.tsx measures .hud__top bottom and .dock top per frame and re-fits when either edge moves, so portrait (band not binding) keeps the legacy 1.4/4.0 fit byte for byte",
+    "50799d7: L-2 - the guidance line is now a block sibling of .objective__row (display:block, margin-top 4px, the row's 4px lead-in moved onto it), the two 'step back' rules still hide only the chip row; + tests/ui/vite-asset.d.ts for the ?raw sheet import and test.css:true so jsdom gets the cascade",
+    "9d94246: L-3 - .text-large .dock {gap:2px; flex-wrap:nowrap} + .dock__btn {padding:0 2px; font-size:0.62rem; line-height:1.1} + .dock__cost {font-size:0.5rem}, declared after the base .dock/.dock__btn/.dock__cost blocks so the later-wins order matches the specificity (jsdom ignores specificity)",
+    "49b3152: L-4 - the level digit's anchor is p.y - 9*s (was 12*s); test asserts overlap == 0 against the FLOOR_KIT rail bands at four scales x six rows and prints its own measured font size, ascent, box and overlap"
+  ],
+  "notes": [
+    "Band convention (as asked, one convention throughout): insets = {top: .hud__top.bottom, bottom: cssHeight - .dock.top}, usableH = height - top - bottom. That makes the landscape band 336 - 52 = 284 px and reproduces the reviewer's 1.2034 = 284/236 exactly; the alternative reading (292) is not used.",
+    "Desktop is the one case where the reviewer's expectation and the measurement differ: measured s = 3.3644, not the 'unchanged 4.0000'. Reason, measured: usableH = 900 - 52 - 54 = 794 and 794/236 = 3.3644 < the width term 4, so the band binds and the world is 3.3644 rather than 4 with the yard at [72.19, 825.81] inside [52, 846]. The legacy 4.0 fit puts the yard's bottom edge at 898 px, 52 px of it under the dock (top 846); in landscape the legacy 3.9074 fit put it at 632.63 px in a 390 px viewport (the wreck at 508.85 px), which is the L-1 blocker.",
+    "The 0.000152 figure is the reviewer's run-to-run AA noise. With the canvas read through toDataURL (the canvas' own pixels, not the composited element) the DOM-only rows come out at exactly 0.000000 before/after, which is the stronger statement; the composite (element screenshot, includes the chrome over the canvas) is reported in gates.pixeldiff for the same pairs.",
+    "L-3's own geometry effect: in the banded landscape case the dock's height goes 66.78 -> 46 px, which moves the band centre by ~10 px, so landscape-mature-ts2 is 0.058814 while every non-banded case is 0. This is the one-row fix showing up in the fit, not drift.",
+    "L-4 box convention: measured from the cell's top edge in world units, the same reference as the reviewer's old box [-0.25, 4.00]; their printed post-fix box [4.75, 9.00] is 2 units off their own anchor (9 units above the centre is 7 units from the cell's top edge). Both boxes give the same conclusion: overlap 0.",
+    "Root font-size is calc(15px * --text-scale) (styles.css:34), so .status-line at 0.78rem measures 11.7 px at ts1 and 23.4 px at ts2, not the 12.48/24.96 of a 16 px root.",
+    "jsdom needs the sheet in the document for any cascade, so the test imports styles.css?raw and injects it; vite's default css:false stub returned '' (tests/vite-asset.d.ts declares the ?raw module because the project ships no @types/node).",
+    "Harness note: canvas geometry was measured in chromium (playwright-core over three static servers on the built trees) at 390x844/844x390/1440x900 with reducedMotion=reduce, seeds from docs/evidence/yard-mature.json via rustwake.save.v1; intra-build pairs 100 ms apart are 0 in every case, so the fractions above are geometry deltas and not animation noise.",
+    "No existing assertion was relaxed or renamed; the four new cases are additive (scene-draw.test.ts 29 -> 31, app.test.tsx 17 -> 19)."
+  ]
+}
