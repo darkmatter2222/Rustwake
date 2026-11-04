@@ -45,8 +45,12 @@ export interface CameraInsets {
   bottom: number;
 }
 
-/** Floor of a band-fitted scale; the legacy unbanded floor is the original 1.4. */
-const BAND_MIN_SCALE = 1.2;
+/**
+ * Floor of a band-fitted scale; the legacy unbanded floor is the original 1.4. E-3: the
+ * ts2 landscape band works out at 1.1189, so the floor sits just under it - a floor above
+ * the binding band term is what pushed the yard 3 px into the dock.
+ */
+const BAND_MIN_SCALE = 1.1;
 
 /**
  * A width-only fit cannot show a 224-unit-tall world in a 390 px-tall landscape

@@ -983,4 +983,40 @@ describe("REV-MOTION-C-g1 E rows", () => {
       expect(stillAtTicks.length).toBe(0);
     }
   });
+
+  it("E-3: the landscape yard ends where the dock starts, also at text scale 2", () => {
+    // rev-q4a-lay-g1 E-3. The chrome edges are the ones this run measures in chromium at
+    // 844x390, ts2: the top cluster's bottom edge 71.94 and the dock's top edge 336, so
+    // the band is 264.06 px and its own term is 1.1189. The floor has to stay under it.
+    const view: ViewState = { width: 844, height: 390 };
+    const dockTop = 336;
+    const insets: CameraInsets = { top: 71.94, bottom: view.height - dockTop };
+    const camera = fitCamera(view, insets);
+    const s = (worldY: number) => worldToScreen(camera, view, 0, worldY).y;
+    const usableH = view.height - insets.top - insets.bottom;
+    const bandTerm = usableH / (WORLD_H + 12);
+    const yardTop = s(0);
+    const yardBottom = s(WORLD_H);
+    console.log("E-3 measured", JSON.stringify({
+      s: +camera.scale.toFixed(4),
+      bandTerm: +bandTerm.toFixed(4),
+      usableH: +usableH.toFixed(2),
+      yardTop: +yardTop.toFixed(2),
+      yardBottom: +yardBottom.toFixed(2),
+      dockTop,
+      overlapPx: +(yardBottom - dockTop).toFixed(2),
+    }));
+    // No floor above the band term, and the yard's lower edge inside the dock's top edge.
+    expect(camera.scale).toBeLessThanOrEqual(bandTerm + 1e-9);
+    expect(yardBottom).toBeLessThanOrEqual(dockTop + 0.5);
+    // The fit is the band minus the 12-unit world padding, symmetric: `6 * scale` of
+    // clearance above and below, so the yard centred in the band instead of shrinking.
+    expect(dockTop - yardBottom).toBeCloseTo(6 * camera.scale, 1);
+    expect(yardTop - insets.top).toBeCloseTo(6 * camera.scale, 1);
+    // The other three cases keep the numbers L-1 accepted: 1.2034 (landscape ts1),
+    // 1.8056 (phone, legacy) and 3.3644 (desktop ts1).
+    for (const [label, scale] of [["landscape", 284 / (WORLD_H + 12)], ["phone", 390 / (WORLD_W + 24)], ["desktop", 794 / (WORLD_H + 12)]] as [keyof typeof CHROME, number][]) {
+      expect(bandCase(label).camera.scale).toBeCloseTo(scale, 4);
+    }
+  });
 });
