@@ -20,6 +20,7 @@
 
 Own element-scoped captures (`probe-glyph-g1.mjs`, per-role `<canvas>` elements screenshotted by locator, dpr 2, PNG IHDR compared to the measured content box): **11 role PNGs + 1 contact sheet**, `C:/Users/ryans/AppData/Local/Temp/opencode/glyph/`.
 
+- Amended (REV-COMP-g1): per-role separation evidence is the mask/Hamming census plus the contact sheet, since the 22 per-role files are only two unique images (11 byte-identical files per scale).
 | artefact | CSS content box | PNG IHDR | box x dpr == IHDR | ink bbox (device px) | ink device px |
 |---|---|---|---|---|---|
 | each role at s = 1.8056 (11 files) | **65 x 65** | **130 x 130** | yes | dock 18,29,94,76; sorter 22,25,87,87; furnace 11,14,112,105; wireMill 14,11,109,101; signalLab 11,7,112,112; polymer 22,25,97,79; copper 11,11,98,93; plate 11,25,108,79; circuit 11,11,98,94; generic 11,25,108,79; drone 47,54,36,36 | 894 (drone) .. 7482 (sorter) |
