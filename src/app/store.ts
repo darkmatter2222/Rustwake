@@ -27,6 +27,13 @@ export interface GameStore {
   getState(): SimState;
   getSettings(): SaveSettings;
   getViewVersion(): number;
+  /**
+   * Q-004 C-1: the elapsed fraction of the current 100 ms tick, in [0, 1), from the
+   * same monotonic frame clock the tick loop consumes. The renderer interpolates with
+   * it instead of reading a clock itself; a follower measures from its last adopted
+   * snapshot, which is the only timeline it owns.
+   */
+  getFramePhase(): number;
   getReturnReport(): ReturnReport | null;
   /** "reader" when another tab owns the save (spec 22.3). */
   getRole(): StoreRole;
@@ -99,6 +106,8 @@ export function createStore(options: StoreOptions = {}): GameStore {
   let lastFrameMs = frameClock();
   let sinceSave = 0;
   let sinceReconcile = 0;
+  /** Q-004 C-1: the frame-time base of the timeline the current snapshot carries. */
+  let adoptedAtFrame = frameClock();
 
   const notify = () => {
     viewVersion += 1;
@@ -125,6 +134,7 @@ export function createStore(options: StoreOptions = {}): GameStore {
   /** Adopts a settled catch-up, then applies what the player typed while it ran. */
   const adoptCatchUp = (settled: CatchUpResponse) => {
     state = settled.sim;
+    adoptedAtFrame = frameClock();
     lastSeenMs = Math.max(lastSeenMs, settled.nextLastSeenMs);
     if (settled.report.creditedTicks > 0) returnReport = settled.report;
     reconciling = false;
@@ -253,6 +263,13 @@ export function createStore(options: StoreOptions = {}): GameStore {
     getState: () => state,
     getSettings: () => settings,
     getViewVersion: () => viewVersion,
+    getFramePhase() {
+      // The owner's phase is the tick remainder the frame loop left in the
+      // accumulator; a follower has no accumulator of its own, so it measures from
+      // the moment it adopted. Neither branch reads Date.now (A10).
+      const elapsed = role === "reader" ? frameClock() - adoptedAtFrame : accumulator;
+      return Math.min(1, Math.max(0, elapsed / TICK_MS));
+    },
     getReturnReport: () => returnReport,
     getRole: () => role,
     isReconciling: () => reconciling,

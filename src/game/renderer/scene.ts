@@ -79,6 +79,17 @@ export interface DrawOptions {
   ghostTile: number | null;
   ghostValid: boolean;
   selected: number | null;
+  /**
+   * Q-004 C-1/A1: the sub-tick phase in [0, 1) supplied by the caller (`store.getFramePhase()`),
+   * so a moving unit interpolates between its tick-start and tick-end position instead of
+   * stepping once per tick. Absent it the draw is the tick-start frame, phase 0.
+   */
+  framePhase?: number;
+}
+
+/** The caller's phase, clamped to the one-tick window; no clock is read here (A10). */
+function subTickPhase(phase: number | undefined): number {
+  return typeof phase === "number" && Number.isFinite(phase) ? Math.min(1, Math.max(0, phase)) : 0;
 }
 
 /** Half-CSS-px grid = one device pixel at dpr 2 (D6). */
@@ -167,6 +178,8 @@ export function drawScene(
 ): void {
   ctx.imageSmoothingEnabled = false;
   const s = camera.scale;
+  // A1: one phase for the whole frame, shared by every moving group (Q-004 C-1).
+  const phase = subTickPhase(options.framePhase);
   // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
@@ -177,13 +190,13 @@ export function drawScene(
   ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(YARD_ROWS * CELL * s));
   drawFloorKit(ctx, camera, view, s);
   if (options.buildMode) drawGrid(ctx, camera, view);
-  drawRoutes(ctx, state, camera, view);
+  drawRoutes(ctx, state, camera, view, phase);
   drawWreck(ctx, state, camera, view, options.selected === -1);
   drawDock(ctx, state, camera, view, options.selected === -2);
   for (const machine of state.machines) {
     drawMachine(ctx, machine, camera, view, options.selected === machine.id);
   }
-  drawDrones(ctx, state, camera, view, options.reducedMotion);
+  drawDrones(ctx, state, camera, view, options.reducedMotion, phase);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
 }
 
@@ -367,7 +380,8 @@ function drawRoutes(
   ctx: CanvasRenderingContext2D,
   state: SimState,
   camera: Camera,
-  view: ViewState
+  view: ViewState,
+  phase: number
 ): void {
   const s = camera.scale;
   ctx.strokeStyle = "rgba(95,216,232,0.5)";
@@ -383,8 +397,12 @@ function drawRoutes(
     ctx.stroke();
     for (const item of route.items) {
       // 3x3 amber token per in-transit item, snapped, scaled with the camera.
+      // A9: the same sub-tick phase as the drone, over the 5-tick latency window.
       const depart = item.arrive - route.latency;
-      const t = route.latency === 0 ? 1 : Math.min(1, Math.max(0, (state.tick - depart) / route.latency));
+      const t =
+        route.latency === 0 ?
+          1 :
+          Math.min(1, Math.max(0, (state.tick + phase - depart) / route.latency));
       const x = pa.x + (pb.x - pa.x) * t;
       const y = pa.y + (pb.y - pa.y) * t;
       rectOf(ctx, x - 1.5 * s, y - 1.5 * s, 3 * s, 3 * s, "amber");
@@ -402,7 +420,8 @@ function drawDrones(
   state: SimState,
   camera: Camera,
   view: ViewState,
-  reducedMotion: boolean
+  reducedMotion: boolean,
+  phase: number
 ): void {
   const s = camera.scale;
   if (!state.drone.repaired) {
@@ -419,9 +438,11 @@ function drawDrones(
     if (!unit || !unit.repaired) continue;
     let t = 0;
     if (unit.inFlight) {
+      // A1: position is a function of (arrive, framePhase), not of `state.tick` alone.
       const depart = unit.inFlight.arrive - TUNING.droneTravelTicks;
-      t = Math.min(1, Math.max(0, (state.tick - depart) / TUNING.droneTravelTicks));
+      t = Math.min(1, Math.max(0, (state.tick + phase - depart) / TUNING.droneTravelTicks));
     }
+    // A7: reduced motion keeps the two documented steps, no interpolation at all.
     if (reducedMotion) t = unit.inFlight ? 0.5 : 0;
     const lean = (i - (units.length - 1) / 2) * LEAN_UNITS * s;
     const x = wreck.x + (dock.x - wreck.x) * t + lean;

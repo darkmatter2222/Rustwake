@@ -168,6 +168,8 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           ghostTile !== DOCK_TILE &&
           !store.getState().machines.some((m) => m.tile === ghostTile),
         selected,
+        // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
+        framePhase: store.getFramePhase(),
       });
       // Q-005 S-14: the machine-state cues come from the state diff itself, so a
       // working sorter, a working furnace and the first data unit each get their
