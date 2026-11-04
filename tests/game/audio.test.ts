@@ -549,23 +549,48 @@ describe("Q-005 mix graph structure", () => {
   });
 
   it("S-16: near/far attenuation is monotonic, clamped and independent of the cue", () => {
+    // A-29: the exact table, not only the ordering - these are the attenuation constants.
     expect(distanceGain(0, 1)).toBe(1);
+    expect(distanceGain(4, 1)).toBe(0.7143);
+    expect(distanceGain(6, 2)).toBe(0.5952);
+    expect(distanceGain(8, 1)).toBe(0.5556);
+    expect(distanceGain(0, 3)).toBe(0.9091);
+    expect(distanceGain(12, 1)).toBe(0.4545);
+    expect(distanceGain(400, 8)).toBe(0.35); // the MIN_DISTANCE_GAIN clamp
     expect(distanceGain(8, 1)).toBeLessThan(distanceGain(4, 1));
     expect(distanceGain(0, 3)).toBeLessThan(distanceGain(0, 1));
-    expect(distanceGain(400, 8)).toBeGreaterThanOrEqual(0.35);
     expect(distanceGain()).toBe(1);
-    const stub = makeStub();
-    const api = createAudio(false);
-    api.resume();
-    api.play("upgrade");
-    const near = peakOf(mainGainCalls(stub, "upgrade"));
-    stub.advance(0.1);
-    api.play("upgrade", { distance: 6, zoom: 2 });
-    const far = peakOf(mainGainCalls(stub, "upgrade"));
-    expect(far).toBeDefined();
-    expect(near).toBeDefined();
-    expect((far as number) < (near as number)).toBe(true);
-    api.dispose();
+    // In-voice half, de-contaminated (A-29): one fresh instance per measurement, so the
+    // cue always uses variant index 0 and the peak is exactly `variant.gain x
+    // distanceGain(d, z)`, with no rotation factor left inside the ratio.
+    const variantGain = CUE_VARIANTS.upgrade[0].gain;
+    expect(variantGain).toBe(CUE_TABLE.upgrade.gain);
+    const peakAt = (distance: number, zoom: number): number => {
+      const stub = makeStub();
+      const api = createAudio(false);
+      api.resume();
+      api.play("upgrade", { distance, zoom });
+      const peak = peakOf(mainGainCalls(stub, "upgrade")) as number;
+      api.dispose();
+      return peak;
+    };
+    const near = peakAt(0, 1);
+    const mid = peakAt(4, 1);
+    const far = peakAt(6, 2);
+    const clamped = peakAt(400, 8);
+    expect(near).toBe(variantGain); // distanceGain(0, 1) === 1
+    expect(mid).toBe(Math.round(variantGain * distanceGain(4, 1) * 10000) / 10000);
+    expect(far).toBe(Math.round(variantGain * distanceGain(6, 2) * 10000) / 10000);
+    expect(clamped).toBe(Math.round(variantGain * distanceGain(400, 8) * 10000) / 10000);
+    expect(far < near).toBe(true);
+    // Divide the peak by the variant gain: what is left is the constant itself.
+    expect(near / variantGain).toBe(distanceGain(0, 1));
+    expect(mid / variantGain).toBeCloseTo(distanceGain(4, 1), 4);
+    expect(clamped / variantGain).toBe(distanceGain(400, 8));
+    // The peak itself only carries four decimals, so this ratio costs its last digit.
+    expect(far / variantGain).toBeCloseTo(distanceGain(6, 2), 3);
+    // The factor that used to contaminate the ratio, recorded for the reader.
+    expect(CUE_VARIANTS.upgrade[1].gain / variantGain).toBeCloseTo(0.92, 6);
   });
 
   it("S-17 (A-26): a settings write is the audio object's only mute source", () => {
