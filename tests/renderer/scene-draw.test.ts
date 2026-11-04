@@ -24,6 +24,7 @@ import {
   FLOOR_KIT,
   GRID_STYLE,
   LEAN_UNITS,
+  PALETTE,
   PARTS,
   SELECT_STYLE,
   STATUS_ACCENTS,
@@ -1125,5 +1126,92 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     // Below the shadow ellipse (which ends at unit 6) and inside the cell.
     expect(podOffsetY).toBeGreaterThan(6 * S - 0.5);
     expect(podOffsetY + TOKEN_W).toBeLessThanOrEqual(16 * S + 0.5);
+  });
+
+  it("D-3: powerLimited adds a shape mark - accent shape Hamming 3, hue band unchanged", () => {
+    // Accent shape of one status = the 6x2 bar plus any shape mark the painter adds,
+    // read off the drawn frame as unit offsets from the cell centre.
+    const shapeOf = (status: MachineStatus): { mask: number[]; rects: number } => {
+      const base = fs1();
+      const state = {
+        ...base,
+        machines: [{ ...base.machines[0], id: 1, tile: 8, blueprint: "sorter", status }],
+      } as unknown as SimState;
+      const log = draw(state, rest).stub.log;
+      const p = cellOf(8);
+      const rects = log.filter(
+        (r) =>
+          r.op === "fillRect" &&
+          onGrid(r.args[2], half(6 * S)) &&
+          onGrid(r.args[0], p.x - 9 * S) &&
+          (onGrid(r.args[1], p.y + 10 * S) || onGrid(r.args[1], p.y + 13 * S))
+      );
+      const boxes = rects.map(
+        (r) => [(r.args[0] - p.x) / S, (r.args[1] - p.y) / S, r.args[2] / S, r.args[3] / S, 0] as PartTuple
+      );
+      return { mask: maskOf(boxes), rects: rects.length };
+    };
+    const shape = {} as Record<MachineStatus, { mask: number[]; rects: number }>;
+    for (const status of CYCLE) shape[status] = shapeOf(status);
+    const shapeHamming = (a: MachineStatus, b: MachineStatus): number =>
+      shape[a].mask.reduce((sum, bit, k) => sum + Math.abs(bit - shape[b].mask[k]), 0);
+    const runningVsPower = shapeHamming("running", "powerLimited");
+    const others = (["idle", "running", "starved", "outputFull"] as MachineStatus[]).flatMap((a, i, list) =>
+      list.slice(i + 1).map((b) => [`${a}/${b}`, shapeHamming(a, b)] as [string, number])
+    );
+    // Hue separability and the WCAG band against the floor are the numbers D-3 quotes.
+    const deltas = (a: string, b: string): number[] =>
+      rgb(a).map((v, i) => Math.abs(v - rgb(b)[i]));
+    const FIVE: MachineStatus[] = ["idle", "running", "starved", "outputFull", "powerLimited"];
+    const pairs: [string, number[]][] = [];
+    let minOver20 = 99;
+    for (let i = 0; i < FIVE.length; i += 1) {
+      for (let j = i + 1; j < FIVE.length; j += 1) {
+        const d = deltas(STATUS_ACCENTS[FIVE[i]], STATUS_ACCENTS[FIVE[j]]);
+        minOver20 = Math.min(minOver20, d.filter((v) => v > 20).length);
+        pairs.push([`${FIVE[i]}/${FIVE[j]}`, d]);
+      }
+    }
+    const nearest = [...pairs].sort((a, b) => a[1].reduce((s, v) => s + v, 0) - b[1].reduce((s, v) => s + v, 0))[0];
+    // WCAG 1.4.3 relative luminance over the sRGB channels.
+    const channel = (v: number): number => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
+    const luminance = (hex: string): number => {
+      const [r, g, b] = rgb(hex).map(channel);
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const contrast = (a: string, b: string): number => {
+      const la = luminance(a);
+      const lb = luminance(b);
+      return +((Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)).toFixed(3);
+    };
+    const accents = [...new Set(Object.values(STATUS_ACCENTS))];
+    const band = accents.map((hex) => contrast(hex, PALETTE.floor)).sort((a, b) => a - b);
+    const markContrast = contrast(PALETTE.select, PALETTE.floor);
+    console.log("D-3 measured", JSON.stringify({
+      runningVsPowerLimitedShapeHamming: runningVsPower,
+      otherAccentPairs: others,
+      rectsPerStatus: Object.fromEntries(CYCLE.map((s) => [s, shape[s].rects])),
+      minChannelsOver20: minOver20,
+      nearestHuePair: nearest,
+      wcagVsFloor: Object.fromEntries(accents.map((h) => [h, contrast(h, PALETTE.floor)])),
+      markStyle: PALETTE.select,
+      markContrast,
+    }));
+    expect(runningVsPower).toBe(3);
+    expect(runningVsPower).toBeGreaterThanOrEqual(3);
+    // The four untouched accents still share the one 3-cell bar (shape Hamming 0).
+    for (const [, value] of others) expect(value).toBe(0);
+    expect(shape.powerLimited.rects).toBe(2);
+    expect(shape.running.rects).toBe(1);
+    expect(minOver20).toBe(2);
+    expect(nearest[0]).toBe("running/powerLimited");
+    expect(nearest[1]).toEqual([32, 2, 38]);
+    // Every accent, and the new mark, clears 3.0 against the floor inside the measured band.
+    for (const value of band) {
+      expect(value).toBeGreaterThanOrEqual(3.0);
+      expect(value).toBeGreaterThanOrEqual(3.38 - 0.01);
+      expect(value).toBeLessThanOrEqual(7.2 + 0.01);
+    }
+    expect(markContrast).toBeGreaterThanOrEqual(3.0);
   });
 });

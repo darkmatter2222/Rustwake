@@ -351,6 +351,11 @@ function drawMachine(
   paintParts(ctx, p.x, p.y, s, row);
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
   rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
+  if (machine.status === "powerLimited") {
+    // D-3: the fifth hue alone is not separable at phone size, so `powerLimited` also
+    // carries a shape mark - one short tick under the bar, in an existing colour index.
+    rectOf(ctx, p.x - 9 * s, p.y + 13 * s, 6 * s, 2 * s, "select");
+  }
   if (machine.blueprint === "furnace" && machine.status === "outputFull") {
     rectOf(ctx, p.x + 5 * s, p.y - 14 * s, 4 * s, 2 * s, "rust");
   }
