@@ -1,0 +1,153 @@
+{
+  "id": "ops-006-g1",
+  "role": "deployer",
+  "session": "ses_e5971b6bbffejhjp362XpARuhc",
+  "date": "2026-11-04",
+  "lease": "ops-006-g1",
+  "release_id": "rustwake-3d589aa",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "route_lan": "http://192.168.86.48:8700/",
+  "target_sha": "3d589aa811cec54bd2fbe7427a909cde9bab356b",
+  "target_verification": {
+    "git_ls_remote_main": "3d589aa811cec54bd2fbe7427a909cde9bab356b\trefs/heads/main",
+    "build_worktree_head": "3d589aa811cec54bd2fbe7427a909cde9bab356b",
+    "build_worktree": "C:\\Users\\ryans\\.local\\share\\opencode\\worktree\\fe4e05\\ops006-build (detached, clean tree, npm ci)"
+  },
+  "gates": {
+    "npx_vitest_run": "Test Files 23 passed (23); Tests 212 passed (212); duration 5.43s; exit 0",
+    "npm_run_typecheck": "tsc --noEmit clean; exit 0",
+    "npm_run_build": "vite v5.4.11 53 modules transformed; built in 540ms; exit 0",
+    "npm_run_validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s); behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s); validated: no violations; exit 0",
+    "entry_chunk_ceiling": "225861 <= 233000 -> PASS (E3 headroom restored by the manualChunks tables split)"
+  },
+  "assets": [
+    { "name": "index.html", "bytes": 778, "sha256": "8e51585fb3d6b2a574f4727cbf9b11857f194de942f7618efe10ccd55387bc4a" },
+    { "name": "assets/index-BZ9knt75.js", "bytes": 225861, "sha256": "6bfeb389f02a047d7a0774498bb2829ec53f54a2c8a8f06b71ee9850560ad92e" },
+    { "name": "assets/tables-B-vOLV1r.js", "bytes": 7416, "sha256": "daacab3ba110fe4553951e67ea66137f86f8155d2ab4777571139f11b72de40a" },
+    { "name": "assets/index-Cwg_kGXQ.css", "bytes": 7224, "sha256": "2ae5609e8506ab20803075ff78857957414443f79b5c6371784bade0c85a9ef5" },
+    { "name": "assets/catchup.worker-DphWaCEx.js", "bytes": 13015, "sha256": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5" }
+  ],
+  "asset_expectations_from_coordinator": "index-BZ9knt75.js 225861 B, tables-B-vOLV1r.js 7416 B, index-Cwg_kGXQ.css 7224 B, catchup.worker-DphWaCEx.js 13015 B, index.html 778 B with modulepreload for the tables chunk - all five equal the local build (no mismatch)",
+  "install": {
+    "release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-3d589aa",
+    "release_files": 5,
+    "previous_release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-090260a",
+    "previous_release_files": 4,
+    "previous_release_retained": true,
+    "previous_release_digests_unchanged": "index.html 3118a814…, assets/index-oeY4tDi3.js ccd3e1ae… (232815 B), assets/index-Cwg_kGXQ.css 2ae5609e…, worker 9a604065… == OPS-005-g1 recorded values",
+    "host_digests_equal_local_build": "5/5",
+    "other_release_dirs_untouched": ["rustwake-14b6ea1", "rustwake-c241ab7", "rustwake-7f82bec"]
+  },
+  "endpoint_identity_verified": true,
+  "endpoint_id": 3,
+  "endpoint_name": "Databrick",
+  "endpoint_status": 1,
+  "endpoint_url": "tcp://192.168.86.48:9001",
+  "stack_name": "rustwake",
+  "stack_id": 125,
+  "stack_update_date_before_put": 1793783605,
+  "stack_update_date_after_put": 1793797704,
+  "stack_put_http": 200,
+  "stack_put_note": "PUT /api/stacks/125?endpointId=3&force=1; the Portainer 2.39.5 update payload requires stackFileContent (stackFile alone returns 400 'Invalid stack file content'); both keys sent with identical content",
+  "stack_compose_diff_lines": 1,
+  "stack_compose_only_change": "volumes[0] html bind path releases/rustwake-090260a -> releases/rustwake-3d589aa (line 13); all other keys byte-identical",
+  "rustwake_stack_count_after": 1,
+  "total_stacks_endpoint3": 26,
+  "container_name": "rustwake-static-1",
+  "container_id": "14308e58fb48f7941dc03cb11275f048dd67eb4a23198184412c8307a57ae4a6",
+  "container_config_hash": "cbf79e1a6c0aa4151fd3c9d1805053b34589ae61f86b2fb575c5d57cc8fe1743",
+  "container_config_hash_before": "f9ab685c11756b2052ee534695cb0cbb65dfe98b1fb7499ace093cfddd1f08b3",
+  "container_health": "healthy (health log exit=0 at 13:11:30Z and 13:12:00Z)",
+  "container_started_at": "2026-11-04T13:08:24Z",
+  "container_restart_count": 0,
+  "container_hardening": "user 101:101, read_only rootfs true, tmpfs /tmp + /var/cache/nginx, mem 134217728 (128M), nano_cpus 500000000 (0.50), restart unless-stopped, healthcheck wget --spider http://127.0.0.1:8080/healthz",
+  "network": "rustwake_default (unchanged; 1 container)",
+  "port": "8700 -> 8080 (unchanged; ipv4 + ipv6 listeners)",
+  "containers": {
+    "total_running_before": 49,
+    "total_running_after": 49,
+    "rustwake_owned_containers": 1,
+    "rustwake_owned_networks": 1
+  },
+  "mutations": [
+    "added release directory /home/darkmatter2222/rustwake/releases/rustwake-3d589aa (5 files)",
+    "PUT /api/stacks/125?endpointId=3&force=1 with the one-line compose change; only service static recreated"
+  ],
+  "mutation_count": 2,
+  "external": [
+    { "path": "/rustwake/", "status": 200, "bytes": 778 },
+    { "path": "/rustwake/assets/index-BZ9knt75.js", "status": 200, "bytes": 225861 },
+    { "path": "/rustwake/assets/tables-B-vOLV1r.js", "status": 200, "bytes": 7416 },
+    { "path": "/rustwake/assets/index-Cwg_kGXQ.css", "status": 200, "bytes": 7224 },
+    { "path": "/rustwake/assets/catchup.worker-DphWaCEx.js", "status": 200, "bytes": 13015 }
+  ],
+  "external_extras": [
+    "https://home.darkmatter2222.com/rustwake (no slash) -> 301 redirect=https://home.darkmatter2222.com/rustwake/",
+    "https://home.darkmatter2222.com/rustwake/some/spa/route -> 200 778 B (SPA fallback)",
+    "https://home.darkmatter2222.com/rustwake/assets/index-oeY4tDi3.js (previous release asset) -> 404 (expected, single-dir bind)",
+    "ssl_verify_result=0 on every asset without -k (chain valid)"
+  ],
+  "served_html_assertions": {
+    "id_root": true,
+    "entry_module": "./assets/index-BZ9knt75.js",
+    "tables_modulepreload": "./assets/tables-B-vOLV1r.js",
+    "stylesheet": "./assets/index-Cwg_kGXQ.css"
+  },
+  "digest_match": "5/5",
+  "node_sweep": {
+    "provider": "check-host.net check-http (max_nodes=4)",
+    "request_id": "5582e599k276",
+    "permanent_link": "https://check-host.net/check-report/5582e599k276",
+    "nodes": ["de4", "at1", "rs1", "ch1"],
+    "nodes_returned_200": 4,
+    "nodes_total": 4,
+    "times_seconds": { "de4": 0.3356, "at1": 0.4326, "rs1": 0.4423, "ch1": 0.4703 },
+    "resolved_ip_from_nodes": "99.122.58.29",
+    "verdict": "4/4 distributed nodes returned HTTP 200 for https://home.darkmatter2222.com/rustwake/"
+  },
+  "browser_smoke": {
+    "engine": "playwright-core headless Chrome, viewport 390x844 dsf 2, isMobile/hasTouch",
+    "status": 200,
+    "title": "Rustwake",
+    "canvas": { "attr": "780x1688", "css": "390x844" },
+    "layout": "no overflow (scrollW=clientW=390, scrollH=clientH=844)",
+    "start_button": "Begin recovery",
+    "hud_after_start": "Scrap 0 Store0/900 Sound ✓ A 1 Home Tap the highlighted wreck to salvage scrap. Tap Salvage until the drone repair is affordable. Store Salvage Build",
+    "salvage_tap": "scrap 0 -> 5, tip advanced to 'Keep salvaging: 1/6 pulses for the drone repair.' (game loop running through the new chunks)",
+    "route_requests": ["200 /rustwake/", "200 /rustwake/assets/index-Cwg_kGXQ.css", "200 /rustwake/assets/tables-B-vOLV1r.js", "200 /rustwake/assets/index-BZ9knt75.js"],
+    "failed_requests": [],
+    "console_errors": "2 x 404 for /favicon.ico at the domain root (known non-gating, unchanged since OPS-002)"
+  },
+  "unaffected_services_before_after": {
+    "https://home.darkmatter2222.com/portainer/": "200 -> 200",
+    "https://home.darkmatter2222.com/grafana/": "302 -> 302",
+    "https://home.darkmatter2222.com/": "301 -> 301",
+    "http://192.168.86.48:8001/health (llm-router)": "200 -> 200",
+    "http://192.168.86.48:9190/env (mailcal)": "200 -> 200",
+    "https://192.168.86.48:9181/admin/ (mailcow, self-signed)": "200 -> 200",
+    "susman-ingress": "Up (not recreated this round); nginx -t successful",
+    "grafana-ingress / vega-ingress / llm-router / mailcal-nginx / mailcow nginx": "all Up, unchanged"
+  },
+  "ingress_unchanged": true,
+  "unchanged_config_identity": {
+    "susman_conf_sha256": "1c8e3bdfecf7db6f20e0c2698ad829de282a329915c207df22f60238220764c4 (594 lines, before == after == OPS-005 end state)",
+    "susman_ingress_nginx_T_sha256": "e393ae1b978e6c3947fea93ab14545cd701a8299ce8a807936bb7935738ec918 (before == after)",
+    "susman_ingress_conf_d_default_md5": "0f4ec716473c919fbfd998b31dffc4ca (before == after)",
+    "dnsmasq_conf_sha256": "c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8 (DNS untouched)",
+    "rustwake_nginx_default_conf_sha256": "47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2 (== OPS-005)",
+    "rustwake_nginx_conf_sha256": "83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd (== OPS-005)"
+  },
+  "ci": "pending (gh 2.95.0 unauthenticated; api.github.com check-suites + commit status both 404 for the private repo) - not claimed as passed",
+  "rollback": { "needed": false, "step": null },
+  "rollback_procedure_if_needed": "PUT /api/stacks/125?endpointId=3&force=1 with the same compose body but the html bind path restored to releases/rustwake-090260a (stackFileContent + stackFile); nothing else changed",
+  "drift_notes": [
+    "Endpoint identity, stack id 125, port 8700, network, both Rustwake nginx config hashes and all shared config hashes matched the OPS-005-g1 end state before and after; no third-party edit landed in the mutation window",
+    "Exactly one Rustwake-owned container and one Rustwake-owned network before and after; config-hash advanced f9ab685c… -> cbf79e1a… as expected for the bind-path change",
+    "No new stack/network/port, no DNS change, no global prune, no fleet compose down, no unrelated stack recreated",
+    "tables-B-vOLV1r.js is served 200 with application/javascript and is referenced by a modulepreload in the served index.html (E3 chunk split live)",
+    "No secret values recorded; credentials loaded from HomeAILab .env in-process only"
+  ],
+  "verdict": "pass - rustwake-3d589aa deployed and verified on the existing route; no rollback",
+  "blocker": null,
+  "verifiedAt": "2026-11-04T13:22:00Z"
+}
