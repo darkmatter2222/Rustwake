@@ -1,0 +1,8 @@
+# PUB-18 — OPS-007 live + verified (records checkpoint)
+
+- **Lease:** `pub-18-g18` (publisher session `ses_e5acebf2effeAolzrbFKrGm0aT`). **Base:** `4c30fb4e247fe2a9da400b8e778296f422d6721e` (= `origin/main` at claim time). Docs/records only — no code change.
+- **Records:** `.rustwake-runtime/deployer/ops-007-g1.json` → `work/deployments/OPS-007-g1.json` (**11335 B**, 164 lines, sha256 `1E8E3D6D…FDFD5DC`); `work/review/rev-motion-g1.md` / `.json` were already tracked from PUB-17 (no re-copy needed).
+- **Board:** `OPS-006` → superseded by OPS-007; new `OPS-007 | P0 | deployed + verified (external)` for release `rustwake-4c30fb4` (source `4c30fb4`, code `c92899b`): 5/5 served sha256 == local build, 49 containers before/after, `susman-ingress` not recreated with shared config hashes unchanged, 4/4 check-host nodes 200 (report `5590c139k5cf`), predecessor assets 404, headless gameplay advanced (Scrap 0 → 5, guidance line 15.8 px at text scale 2), `failedRequests []` with only the known 2× `/favicon.ico` 404, no rollback, `rustwake-3d589aa` retained intact.
+- **README:** live line is now `rustwake-4c30fb4` with **no** "(next release pending)" marker — the deployed release equals the integrated head; 78 lines (cap 80).
+- **Gates (docs-only change):** `npx vitest run` → `Test Files 23 passed (23)` / `Tests 235 passed (235)`, exit 0; `npm run build` → entry `assets/index-DeEJxXGK.js` **226888 B** (+ tables 7416 B, css 7313 B, worker 13015 B), exit 0.
+- **CI:** still **pending** (`gh` unauthenticated; anonymous API 404). Deployment status itself is externally verified by the deployer receipt, not by CI.
