@@ -212,8 +212,52 @@ const run = async () => {
       canvas.style.top = "0";
       canvas.style.left = "0";
       document.body.append(canvas);
-      mod.drawSpriteSheet(canvas.getContext("2d"), { width: 900, height: 420 });
+      const ctx = canvas.getContext("2d");
+      // G-2: the CSS box is 900x420 while the backing store is 1800x840, so the sheet
+      // has to be drawn under the dpr transform or three quarters of the PNG stays empty.
+      ctx.setTransform(2, 0, 0, 2, 0, 0);
+      ctx.imageSmoothingEnabled = false;
+      mod.drawSpriteSheet(ctx, { width: 900, height: 420 });
+      const ids = Object.keys(mod.PARTS);
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      const night = [11, 18, 32];
+      let x0 = canvas.width;
+      let y0 = canvas.height;
+      let x1 = -1;
+      let y1 = -1;
+      let ink = 0;
+      for (let y = 0; y < canvas.height; y += 1) {
+        for (let x = 0; x < canvas.width; x += 1) {
+          const i = (y * canvas.width + x) * 4;
+          const blank =
+            Math.abs(data[i] - night[0]) <= 1 && Math.abs(data[i + 1] - night[1]) <= 1 && Math.abs(data[i + 2] - night[2]) <= 1;
+          if (!blank) {
+            ink += 1;
+            if (x < x0) x0 = x;
+            if (y < y0) y0 = y;
+            if (x > x1) x1 = x;
+            if (y > y1) y1 = y;
+          }
+        }
+      }
+      const boxW = x1 - x0 + 1;
+      const boxH = y1 - y0 + 1;
+      const fraction = +((boxW * boxH) / (canvas.width * canvas.height)).toFixed(4);
+      window.__sheet = {
+        ihdr: [canvas.width, canvas.height],
+        ids: ids.length,
+        partsRows: ids.length,
+        roles: ids,
+        inkBbox: [x0, y0, boxW, boxH],
+        inkFractionOfIhdr: fraction,
+        inkPx: ink,
+      };
     });
+    const sheetInfo = await sheetPage.evaluate(() => (window).__sheet);
+    console.log(
+      `sheet: ids=${sheetInfo.ids} partsRows=${sheetInfo.partsRows} inkBbox=${JSON.stringify(sheetInfo.inkBbox)} ` +
+        `inkFraction=${sheetInfo.inkFractionOfIhdr} inkPx=${sheetInfo.inkPx} roles=${sheetInfo.roles.join(",")}`
+    );
     await sheetPage.screenshot({ path: resolve(shotsDir, "slice-sheet-silhouette.png") });
     await sheetContext.close();
   } finally {

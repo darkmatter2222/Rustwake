@@ -548,24 +548,41 @@ function outline(
 }
 
 /**
- * The silhouette sheet (E8/B1-B2): six roles plus the drone, two rows at the
- * phone and desktop scales, desaturated to the gray steps of the same palette.
+ * The silhouette sheet (E8/B1-B2): every role that owns a `PARTS` row, the phone
+ * scale on one line and the desktop scale wrapped over two, desaturated to the gray
+ * steps of the same palette. The layout is derived from the view box so the ink
+ * reaches all four edges (G-2: the shipped PNG used to fill only a quarter of it).
  */
 export function drawSpriteSheet(ctx: CanvasRenderingContext2D, view: ViewState): void {
-  const ids = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"] as const;
+  const ids = Object.keys(PARTS);
   const grays: PaletteKey[] = ["shadow", "well", "floor", "wreck", "select"];
   // Gray step by colour index (dark table entries -> light accents), no CSS filter.
   const gray = (i: number): PaletteKey => grays[Math.min(4, Math.floor(i / 4))];
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
-  const scales = [1.8056, 4];
-  for (let r = 0; r < scales.length; r += 1) {
-    const s = scales[r];
-    for (let i = 0; i < ids.length; i += 1) {
-      const cx = 24 + i * 40 * (r === 1 ? 1.6 : 1);
-      const cy = r === 0 ? 30 : 90;
+  // Outermost ink of the whole table, in units from the glyph centre.
+  const LEFT = 15;
+  const TOP = 16;
+  const BOTTOM = 15;
+  const MARGIN = 2;
+  const bands = [
+    { scale: 1.8056, from: 0, to: ids.length },
+    { scale: 4, from: 0, to: Math.ceil(ids.length / 2) },
+    { scale: 4, from: Math.ceil(ids.length / 2), to: ids.length },
+  ];
+  const heights = bands.map((b) => (TOP + BOTTOM) * b.scale);
+  const gap = (view.height - 2 * MARGIN - heights.reduce((a, b) => a + b, 0)) / (bands.length - 1);
+  let top = MARGIN;
+  for (let r = 0; r < bands.length; r += 1) {
+    const s = bands[r].scale;
+    const count = bands[r].to - bands[r].from;
+    const pitch = count > 1 ? (view.width - 2 * MARGIN - 2 * LEFT * s) / (count - 1) : 0;
+    const cy = top + TOP * s;
+    for (let i = bands[r].from; i < bands[r].to; i += 1) {
+      const cx = MARGIN + LEFT * s + (i - bands[r].from) * pitch;
       paintParts(ctx, cx, cy, s, PARTS[ids[i]], gray);
     }
+    top += heights[r] + gap;
   }
 }
 

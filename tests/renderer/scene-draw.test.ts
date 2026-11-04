@@ -10,6 +10,7 @@ import {
   WORLD_W,
   WRECK_POSITION,
   drawScene,
+  drawSpriteSheet,
   droneLeg,
   fitCamera,
   tileToWorld,
@@ -1433,6 +1434,49 @@ function inkBoxOf(blueprint: string, scale: number): { w: number; h: number } {
 }
 
 describe("REV-COMPOSITION-D-g1 rows", () => {
+  it("G-2: the silhouette sheet paints every PARTS role and fills its box", () => {
+    const sheetView: ViewState = { width: 900, height: 420 };
+    const stub = makeCtx();
+    drawSpriteSheet(stub.ctx, sheetView);
+    const ids = Object.keys(PARTS);
+    const shapes = stub.log.filter(
+      (r) =>
+        (r.op === "fillRect" || r.op === "rect" || r.op === "ellipse") &&
+        !(r.args.length === 4 && r.args[2] === sheetView.width && r.args[3] === sheetView.height)
+    );
+    let x0 = Infinity;
+    let y0 = Infinity;
+    let x1 = -Infinity;
+    let y1 = -Infinity;
+    for (const r of shapes) {
+      const box =
+        r.op === "ellipse"
+          ? [r.args[0] - r.args[2], r.args[1] - r.args[3], 2 * r.args[2], 2 * r.args[3]]
+          : r.args;
+      x0 = Math.min(x0, box[0]);
+      y0 = Math.min(y0, box[1]);
+      x1 = Math.max(x1, box[0] + box[2]);
+      y1 = Math.max(y1, box[1] + box[3]);
+    }
+    const boxW = Math.round(x1 - x0);
+    const boxH = Math.round(y1 - y0);
+    const fraction = +((boxW * boxH) / (sheetView.width * sheetView.height)).toFixed(4);
+    console.log("G-2 measured", JSON.stringify({
+      ids: ids.length,
+      partsRows: ids.length,
+      roles: ids,
+      paintedShapes: shapes.length,
+      inkBboxCss: [Math.round(x0), Math.round(y0), boxW, boxH],
+      inkFractionOfIhdr: fraction,
+    }));
+    expect(ids.length).toBe(Object.keys(PARTS).length);
+    expect(ids.length).toBe(11);
+    expect(shapes.length).toBeGreaterThanOrEqual(100);
+    expect(fraction).toBeGreaterThanOrEqual(0.9);
+    expect(boxW).toBeLessThanOrEqual(sheetView.width);
+    expect(boxH).toBeLessThanOrEqual(sheetView.height);
+  });
+
   it("G-1: copper and circuit no longer share the outer ink box at either scale", () => {
     const roles = ["polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "generic"] as const;
     const boxes: Record<string, Record<string, { w: number; h: number }>> = {};
