@@ -1,8 +1,16 @@
 # Studio coordination update
 
-Presentation acceptance is reopened by owner feedback. Existing M0/M1 labels below are historical functional completion, not approval of art/audio/motion/navigation. Current priority is `work/BOARD.md` Q-001 through Q-006. Runtime activation is **not verified**: local coordinator must execute the concurrency canary in `docs/AGENT_WORKFLOW.md`. Databrick deployment is **access-blocked in this cloud session**, not lacking owner authorization; follow `docs/DEPLOYMENT.md` from local HomeAILab. No live URL has been verified.
+## Current checkpoint (PUB-9, integrated head `aaa3a4e` plus this docs-only commit on top, 2026-11-04)
 
-This update changes instructions, role definitions and work queues only. Existing gameplay and screenshot assets are preserved. Independent screenshot/source findings are in `work/review/BASELINE.md`.
+- Live build: [https://home.darkmatter2222.com/rustwake/](https://home.darkmatter2222.com/rustwake/) serves release `rustwake-7f82bec` (source `7f82bec`, code `8eb720c` — the Q-001r build). Deployer receipt `work/deployments/OPS-004-g3.json`: container `cc90cf77c6c8` healthy, 4/4 served files sha256-identical to the local build (`index-C26PXQsL.js` 230027 B, `index-DiRtZOre.css` 7149 B, worker 13015 B), HTTPS 200 with `ssl_verify_result=0` without `-k`, 45 of 48 check-host.net nodes 200.
+- Remote truth: `git ls-remote origin refs/heads/main` was `7f82bec5947b5a1439b57ecb84ab189dcf8e4217` at fetch time; this pass pushes `HEAD:main` without force and re-verifies the new head. CI is reported **pending** only: `gh` is unauthenticated here and the anonymous API returns 404 for the private repo (BL-06 remains open).
+- Quality state: **Q-001** accepted on both independent passes ([g4](../work/review/REV-Q001.md), [g5](../work/review/REV-Q001R.md)). **Q-005** audio: structural half **accepted** at `6ff436f` ([verdict](../work/review/rev-q005-g1.md), S-00..S-22 all pass or listening-gated, 15 of 16 earlier defects closed); listening half pending on B-11. **Q-002** style slice: implemented, **quality-review pending** — labelled as such, not deployment-eligible until the independent visual pass lands.
+- Measured at this head by this publisher pass (`npm ci --prefer-offline`, then each command at the final tree): `npx vitest run` **23 files / 206 tests** passed (193 carried forward + 13 new cases in `tests/renderer/scene-draw.test.ts`); `npm run typecheck` clean (exit 0); `npm run build` `index-CmwRilug.js` **232754 B**, `index-Cwg_kGXQ.css` **7224 B**, worker unchanged 13015 B, 543 ms; `npm run validate` 0 content and 0 behaviour violations.
+- Handoff offset, explained: the developer receipt records 221 tests and `index-B288LHif.js` 231892 B at base `ade4b60`, which predates `4319104` (VITE-BASE) and `8eb720c` (Q-001r). Both files were measured against a smaller tree, so the head values above are the ones the review should use; no test was removed (193 → 206 is exactly +13).
+- Open spec decision: `work/review/REV-Q2SPEC.md` E3 pins `index-*.js <= 229000 B`, measured before the audio rebuild (baseline 224968 B, audio build 230027 B, this head 232754 B), so the line is stale; proposed restatement **232800 B** (the drafted 232000 B is already below the measured value), pending reviewer concurrence. Until then Q-002's E3 row is unevaluated, not failed.
+- Ordered next work: Q-002 independent review → audio follow-ups **A-25, A-31, A-24** (P2) then **A-26, A-29, A-17, A-18** (P3) → presentation line Q-003, Q-004, R-16, Q-007.
+- History: the verbose operational transcript of earlier passes stays below and in `docs/history/README-before-studio.md`; README carries only the short current update.
+
 
 ## Prior implementation checkpoint (preserved)
 

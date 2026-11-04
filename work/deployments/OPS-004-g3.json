@@ -1,0 +1,97 @@
+{
+  "task": "OPS-004",
+  "gen": 3,
+  "lease": "ops-004-g3",
+  "session": "ses_e5b740842ffewMPrySTUDnB0sG",
+  "role": "deployer",
+  "date": "2026-11-04",
+  "status": "deployed",
+  "environment": "databrick",
+  "operation": "recurring release promotion on already-adopted resources (no new stack/network/port created; single bind-inode recreate)",
+  "sourceSha": "7f82bec5947b5a1439b57ecb84ab189dcf8e4217",
+  "codeCommit": "8eb720c (Q-001r: title/cost separation, per-card state, DOM cost, dot gap R-11..R-14); 72736ba and 7f82bec are docs-only publisher commits",
+  "previousRelease": "rustwake-c241ab7",
+  "releaseId": "rustwake-7f82bec",
+  "artifactDigests_sha256": {
+    "index.html": "1d59a50932534952e80fd29691fb9d44f1c53394b73375eebe0504ef9cc0ea16",
+    "assets/index-C26PXQsL.js": "f7f0354eb271f891cd1ae2fa2b8402520b5ec4f5f52a45c68d920620e4404085",
+    "assets/index-DiRtZOre.css": "9f7d1a18dfe5f3e594f66690cf5687e806b94beac10e584f77a92554b845ccc8",
+    "assets/catchup.worker-DphWaCEx.js": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5"
+  },
+  "artifactSizes_bytes": { "index.html": 700, "assets/index-C26PXQsL.js": 230027, "assets/index-DiRtZOre.css": 7149, "assets/catchup.worker-DphWaCEx.js": 13015 },
+  "changedAssetsVsPreviousRelease": ["index-C26PXQsL.js (was index-UQQoKDG9.js)", "index-DiRtZOre.css (was index-BKoAXyKv.css)", "index.html (asset filenames)"],
+  "unchangedAssetsVsPreviousRelease": ["catchup.worker-DphWaCEx.js 9a60406519b6183d..."],
+  "artifactBaseUrls": "./assets/... relative in the served index.html (VITE-BASE still in effect)",
+  "endpointIdentityVerified": true,
+  "endpointId": 3,
+  "endpointName": "Databrick",
+  "endpointUrl": "tcp://192.168.86.48:9001",
+  "stackName": "rustwake",
+  "stackId": 125,
+  "stackUpdateDateBeforePut": 1793766491,
+  "stackUpdateDateAfterPut": 1793769848,
+  "containerName": "rustwake-static-1",
+  "containerId": "cc90cf77c6c89648ead",
+  "containerConfigHash": "b91445618089ec66",
+  "containerHealth": "healthy; user 101:101, read_only rootfs True, tmpfs /tmp + /var/cache/nginx, mem 128M, cpus 0.50, restart unless-stopped, healthcheck wget --spider http://127.0.0.1:8080/healthz",
+  "containerStartedAt": "2026-11-04T05:24:08Z",
+  "network": "rustwake_default (unchanged; 1 container on it)",
+  "port": "8700 -> 8080 (unchanged; 2 listeners ipv4+ipv6)",
+  "mutationCount": 2,
+  "mutations": [
+    "added release directory /home/darkmatter2222/rustwake/releases/rustwake-7f82bec (4 files, uploaded digests == local build digests)",
+    "PUT /api/stacks/125?endpointId=3 with the identical compose body except the html bind path releases/rustwake-c241ab7 -> releases/rustwake-7f82bec; recreated only the rustwake-static service"
+  ],
+  "unchangedConfigIdentity": {
+    "rustwake_nginx_default.conf_sha256": "47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2 (before == after)",
+    "rustwake_nginx.conf_sha256": "83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd (before == after)",
+    "susman.conf_sha256": "1c8e3bdfecf7db6f20e0c2698ad829de282a329915c207df22f60238220764c4, 594 lines (before == after == OPS-003 end state; the /rustwake upstream + two locations are the only Rustwake lines)",
+    "susman-ingress_conf_d_default_md5": "0f4ec716473c919fbfd998b31dffc4ca (before == after)",
+    "susman-ingress_nginx_T_sha256": "e393ae1b978e6c3947fea93ab14545cd701a8299ce8a807936bb7935738ec918 (before == after; nginx -t successful)",
+    "dnsmasq.conf_sha256": "c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8 (unchanged, DNS untouched)"
+  },
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "reachability": "external",
+  "checks": [
+    "build of 7f82bec in the isolated ops002-build worktree (npm ci cached): typecheck clean; npm test 22 files / 193 tests passed; npm run validate content 0 + behaviour 0 violations; vite build -> index.html 0.70 kB, assets/index-C26PXQsL.js 230.00 kB, assets/index-DiRtZOre.css 7.15 kB, assets/catchup.worker-DphWaCEx.js 13.02 kB",
+    "served index.html links ./assets/index-C26PXQsL.js and ./assets/index-DiRtZOre.css (relative)",
+    "container: 1 rustwake container total, 1 rustwake network, State healthy, StartedAt 05:24:08Z, bind /usr/share/nginx/html -> releases/rustwake-7f82bec",
+    "LAN http://192.168.86.48:8700/ -> 200 700 B; /healthz -> 200 3 B; /assets/index-C26PXQsL.js -> 200 230027 B; /assets/index-DiRtZOre.css -> 200 7149 B; /assets/catchup.worker-DphWaCEx.js -> 200 13015 B",
+    "LAN previous-release asset /assets/index-UQQoKDG9.js -> 404 (expected: bind inode switched to the new release dir)",
+    "HTTPS https://home.darkmatter2222.com/rustwake/ -> 200 700 B; js 200 230027 B; css 200 7149 B; worker 200 13015 B; SPA route /rustwake/some/spa/route -> 200 700 B; previous js -> 404; ssl_verify_result=0 without -k",
+    "HTTPS body sha256 == local build sha256 for all 4 served files (root/js/css/worker, 4/4)",
+    "external non-LAN vantage: check-host.net http check id 5570b341kaab -> 45 of 48 distributed nodes returned 200 for https://home.darkmatter2222.com/rustwake/; hk1, ru2, us3 reported node-side connection timeouts (same three nodes as OPS-003)",
+    "fleet size 49 running containers before and after (expectation met); releases on disk: rustwake-14b6ea1, rustwake-c241ab7, rustwake-7f82bec"
+  ],
+  "unaffectedServicesBeforeAfter": {
+    "https://home.darkmatter2222.com/portainer/": "200 -> 200",
+    "https://home.darkmatter2222.com/grafana/": "302 -> 302",
+    "https://home.darkmatter2222.com/": "301 -> 301",
+    "http://192.168.86.48:8001/health": "200 -> 200",
+    "http://192.168.86.48:9190/env": "200 -> 200",
+    "https://192.168.86.48:9181/admin/": "200 -> 200",
+    "susman-ingress / grafana-ingress / vega-ingress": "all Up, none recreated this round"
+  },
+  "driftNotes": [
+    "Between OPS-003 and this round the static container had already been recreated once by another PUT (observed id 65a87132f742, config-hash c3797c8801a109f0, StartedAt 05:06:12Z, bind still releases/rustwake-c241ab7, healthy); this round's PUT produced id cc90cf77c6c8 with config-hash b91445618089ec66. Still exactly one owned container and one owned network, so no duplicate-resource drift",
+    "Shared configs susman.conf, in-container default.conf, nginx -T and dnsmasq.conf carry identical hashes before and after this round, i.e. no third-party edit landed during the mutation window and no owned line was lost",
+    "Only Rustwake-owned resources were touched: releases/rustwake-7f82bec added, stack 125 PUT, service rustwake-static recreated. No global prune, no fleet compose down, no DNS change",
+    "Rollback baseline releases/c241ab7 retained intact on disk (plus the older 14b6ea1); previous-release asset 404 is the expected consequence of the single-dir bind, not a fault"
+  ],
+  "priorRelease": {
+    "releaseId": "rustwake-c241ab7",
+    "dir": "/home/darkmatter2222/rustwake/releases/rustwake-c241ab7",
+    "retained": true
+  },
+  "rollbackResult": null,
+  "rollbackProcedure": "PUT /api/stacks/125?endpointId=3 with the same compose body but the html bind path restored to releases/rustwake-c241ab7; nothing else changed, so no other revert is needed",
+  "buildChecks": {
+    "typecheck": "clean",
+    "test": "22 files / 193 tests passed",
+    "validate": "content 0 violation(s), behaviour 0 violation(s), validated: no violations",
+    "build": "vite build ok"
+  },
+  "secretsPolicy": "No secret values recorded; credentials loaded from HomeAILab .env in-process only",
+  "blocker": null,
+  "verifiedAt": "2026-11-04T05:31:00Z"
+}

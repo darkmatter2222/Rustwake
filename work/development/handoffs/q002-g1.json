@@ -1,0 +1,31 @@
+{
+  "id": "q002-g1",
+  "role": "rustwake-developer",
+  "task": "Q-002 style slice (REV-Q2SPEC phases A-D)",
+  "generatedBy": "developer final message, materialized as coordinator copy (child finished run with this receipt inline)",
+  "branch": "style-slice",
+  "base": "ade4b60 (Q-005 on main)",
+  "commits": {
+    "A": "4d3c4bb (sprites.ts table, scene.ts layered painters, Hud.tsx, styles.css)",
+    "C": "aff2ec6 (tests/renderer/scene-draw.test.ts, 295 lines: A1-A4, B2-B7, D1-D9, E6 + 4 more)"
+  },
+  "untrackedArtifacts": [
+    "scripts/capture-style.mjs",
+    "docs/screenshots/slice-desktop-{rest,build,mature}.png",
+    "docs/screenshots/slice-phone-{rest,build,mature,one-machine}.png",
+    "docs/screenshots/slice-sheet-silhouette.png",
+    "docs/evidence/2026-11-03-style-slice-pixels.json"
+  ],
+  "checks": {
+    "vitest": "23 files, 221 passed, 0 failed, 0 skipped",
+    "typecheck": "clean",
+    "build": "52 modules; index-B288LHif.js 231.89 kB (231892 B); index-DiRtZOre.css 7149 B unchanged; worker unchanged",
+    "pixelDiff": "5 pairs; max changed-pixel frac 0.000152 (E3 gate 0.02); 100% ink coverage (E1/E2)"
+  },
+  "audioJsDiffBytes": 1865,
+  "notes": [
+    "E5 sheet geometry hand-computed from the source table (no sheet in drawImage); E6 asserts the table copy actually painted (9658/9658 cells)",
+    "silhouette sheet saved separately: slice-sheet-silhouette.png",
+    "untracked leftovers: .git-commit-msg-q001r.txt, .git-commit-msg-q005.txt, .m-a.txt, .m-c.txt"
+  ]
+}
