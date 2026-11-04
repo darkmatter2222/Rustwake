@@ -1,0 +1,173 @@
+{
+  "task": "OPS-005",
+  "gen": 1,
+  "lease": "ops-005-g1",
+  "session": "ses_e5bff86deffegs755kGIkp3IAs",
+  "role": "deployer",
+  "date": "2026-11-04",
+  "status": "deployed",
+  "environment": "databrick",
+  "operation": "recurring release promotion on already-adopted resources (no new stack/network/port; single bind-inode recreate)",
+  "released_sha": "090260aa751ec3c6f3d734849b3844b11a2d97cb",
+  "released_sha_short": "090260a",
+  "release_id": "rustwake-090260a",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "route_lan": "http://192.168.86.48:8700/",
+  "revision_verification": {
+    "ls_remote_main": "090260aa751ec3c6f3d734849b3844b11a2d97cb refs/heads/main",
+    "local_cat_file": "commit",
+    "build_worktree_head": "090260aa751ec3c6f3d734849b3844b11a2d97cb",
+    "build_worktree": "C:\\Users\\ryans\\.local\\share\\opencode\\worktree\\fe4e05\\ops005-build (clean tree, npm ci 161 packages)"
+  },
+  "buildChecks": {
+    "npx_vitest_run": "23 files passed / 210 tests passed, exit 0",
+    "typecheck": "clean, exit 0",
+    "build": "vite build ok, 53 modules transformed, exit 0",
+    "validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content 0 violation(s); behaviour 0 violation(s); validated: no violations, exit 0"
+  },
+  "artifacts_built": {
+    "index.html": { "bytes": 700, "sha256": "3118a81494df6413c42988d7e7d584bb6ac263f5a6573504efad046cd33bf6bf" },
+    "assets/index-oeY4tDi3.js": { "bytes": 232815, "sha256": "ccd3e1ae0a27f385a12ee6692bafe9ca11fc4befa6f6eb3140c45ed1d18abe29" },
+    "assets/index-Cwg_kGXQ.css": { "bytes": 7224, "sha256": "2ae5609e8506ab20803075ff78857957414443f79b5c6371784bade0c85a9ef5" },
+    "assets/catchup.worker-DphWaCEx.js": { "bytes": 13015, "sha256": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5" }
+  },
+  "comparisonAgainstCoordinatorMeasurements": {
+    "index-oeY4tDi3.js_bytes": "232815 == 232815 match",
+    "index-Cwg_kGXQ.css_bytes": "7224 == 7224 match",
+    "catchup.worker-DphWaCEx.js_bytes": "13015 == 13015 match",
+    "vitest": "23 files / 210 tests == measured match",
+    "validate": "0 content + 0 behaviour == measured match",
+    "mismatches": "none"
+  },
+  "installed_release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-090260a (4 files; host sha256 == local build sha256 for all 4)",
+  "rollback_dir_retained": {
+    "release_id": "rustwake-7f82bec",
+    "dir": "/home/darkmatter2222/rustwake/releases/rustwake-7f82bec",
+    "retained": true,
+    "verified_unchanged": "index.html 1d59a5093253..., assets/index-C26PXQsL.js f7f0354eb271... (230027 B), assets/index-DiRtZOre.css 9f7d1a18dfe5..., worker 9a604065... == OPS-004-g3 receipt values",
+    "other_releases_on_disk": ["rustwake-14b6ea1", "rustwake-c241ab7", "rustwake-7f82bec", "rustwake-090260a"]
+  },
+  "endpointIdentityVerified": true,
+  "endpointId": 3,
+  "endpointName": "Databrick",
+  "endpointStatus": 1,
+  "endpointUrl": "tcp://192.168.86.48:9001",
+  "stackName": "rustwake",
+  "stackId": 125,
+  "stack_updateDate_before_put": 1793769848,
+  "stack_updateDate_after_put": 1793783605,
+  "stack_put_http": 200,
+  "stack_compose_diff_lines": 1,
+  "stack_compose_only_change": "volumes[0] html bind path releases/rustwake-7f82bec -> releases/rustwake-090260a (all other keys byte-identical: image, restart, user 101:101, read_only, tmpfs /tmp + /var/cache/nginx, command, other two mounts, ports 8700:8080, healthcheck, deploy limits 128M/0.50, labels)",
+  "rustwake_stack_count_after": 1,
+  "total_stacks_endpoint3": 26,
+  "containerName": "rustwake-static-1",
+  "containerId": "35028ecc046ddfdf11c7694e7016002e5a77d6c1e9a265a83414fc5b7d2fc063",
+  "containerConfigHash": "f9ab685c11756b2052ee534695cb0cbb65dfe98b1fb7499ace093cfddd1f08b3",
+  "containerHealth": "healthy",
+  "containerHardening": "user 101:101, read_only rootfs true, tmpfs /tmp + /var/cache/nginx, mem 134217728 (128M), nano_cpus 500000000 (0.50), restart unless-stopped, healthcheck wget --spider http://127.0.0.1:8080/healthz",
+  "containerStartedAt": "2026-11-04T09:13:25Z",
+  "containerMounts": [
+    "/home/darkmatter2222/rustwake/releases/rustwake-090260a -> /usr/share/nginx/html",
+    "/home/darkmatter2222/rustwake/nginx/default.conf -> /etc/nginx/conf.d/default.conf",
+    "/home/darkmatter2222/rustwake/nginx/nginx.conf -> /etc/nginx/nginx.conf"
+  ],
+  "network": "rustwake_default (unchanged; single container rustwake-static-1)",
+  "port": "8700 -> 8080 (unchanged, ipv4+ipv6 listeners)",
+  "mutations": [
+    "added release dir /home/darkmatter2222/rustwake/releases/rustwake-090260a (4 files)",
+    "PUT /api/stacks/125?endpointId=3&force=1 with the one-line compose change; recreated only service static"
+  ],
+  "mutationCount": 2,
+  "lanChecks": [
+    "http://127.0.0.1:8700/ -> 200 700 B text/html; charset=utf-8",
+    "http://127.0.0.1:8700/healthz -> 200 3 B text/plain",
+    "http://127.0.0.1:8700/assets/index-oeY4tDi3.js -> 200 232815 B application/javascript; charset=utf-8",
+    "http://127.0.0.1:8700/assets/index-Cwg_kGXQ.css -> 200 7224 B text/css",
+    "http://127.0.0.1:8700/assets/catchup.worker-DphWaCEx.js -> 200 13015 B application/javascript; charset=utf-8",
+    "http://127.0.0.1:8700/assets/index-C26PXQsL.js (previous release) -> 404 (expected: single-dir bind)",
+    "loopback body sha256 == local build for index/js/css/worker (4/4)"
+  ],
+  "externalChecks": [
+    "https://home.darkmatter2222.com/rustwake/ -> 200 700 B, ssl_verify_result=0 without -k (chain valid)",
+    "https://home.darkmatter2222.com/rustwake/assets/index-oeY4tDi3.js -> 200 232815 B application/javascript; charset=utf-8",
+    "https://home.darkmatter2222.com/rustwake/assets/index-Cwg_kGXQ.css -> 200 7224 B text/css",
+    "https://home.darkmatter2222.com/rustwake/assets/catchup.worker-DphWaCEx.js -> 200 13015 B application/javascript; charset=utf-8",
+    "https://home.darkmatter2222.com/rustwake/assets/index-C26PXQsL.js (previous release asset) -> 404",
+    "https://home.darkmatter2222.com/rustwake (no trailing slash) -> 301 redirect=https://home.darkmatter2222.com/rustwake/",
+    "https://home.darkmatter2222.com/rustwake/some/spa/route -> 200 700 B (SPA fallback)"
+  ],
+  "externalAssetAssertions": {
+    "served_js_filename": "index-oeY4tDi3.js (named in served index.html) == built filename",
+    "served_js_bytes": "232815 == built 232815",
+    "served_css_filename": "index-Cwg_kGXQ.css == built filename",
+    "served_css_bytes": "7224 == built 7224",
+    "digest_match_count": "4/4 (index.html, js, css, worker: external HTTPS body sha256 == local build sha256, byte lengths equal)",
+    "asset_link_style": "./assets/... relative (VITE-BASE in effect)"
+  },
+  "nodeSweep": {
+    "provider": "check-host.net http check",
+    "request_id": "557bb8edk83a",
+    "permanent_link": "https://check-host.net/check-report/557bb8edk83a",
+    "nodes_requested": 48,
+    "nodes_returned_200": 44,
+    "nodes_node_side_timeout": 4,
+    "timeout_nodes": ["us3", "ru2", "hk1", "ir6"],
+    "resolved_ip_from_nodes": "99.122.58.29",
+    "verdict": "all 44 answering distributed nodes returned HTTP 200 for https://home.darkmatter2222.com/rustwake/; the 4 non-200 rows are node-side connect timeouts, not server responses (same three nodes as OPS-004 plus ir6); external reachability confirmed",
+    "comparisonToOps004": "OPS-004: 45/48 200 with us3/ru2/hk1 timeouts; this round 44/48 with ir6 additionally timing out node-side"
+  },
+  "browserSmoke": {
+    "engine": "Chrome headless via playwright-core, viewport 390x844 dsf 2",
+    "status": 200,
+    "title": "Rustwake",
+    "loadMs": 4928,
+    "canvas": { "attr": "780x1688", "css": "390x844" },
+    "firstTapLabel": "Begin recovery",
+    "hudChangedAfterTap": true,
+    "hudAfterTap": "Scrap 0 Store0/900 Sound ✓ A 1 Home Tap the highlighted wreck to salvage scrap. Tap Salvage until the drone repair is affordable. Store Salvage Build",
+    "routeRequestsSeen": ["200 /rustwake/", "200 /rustwake/assets/index-Cwg_kGXQ.css", "200 /rustwake/assets/index-oeY4tDi3.js"],
+    "failedRequests": [],
+    "consoleErrors": "2 x 404 -> provenance /favicon.ico at the domain root (known non-gating, unchanged since OPS-002)",
+    "layoutOverflow": "none (scrollW=clientW=390, scrollH=clientH=844)"
+  },
+  "unaffectedServicesBeforeAfter": {
+    "https://home.darkmatter2222.com/portainer/": "200 -> 200",
+    "https://home.darkmatter2222.com/grafana/": "302 -> 302",
+    "https://home.darkmatter2222.com/": "301 -> 301",
+    "http://192.168.86.48:8001/health (llm-router)": "200 -> 200",
+    "http://192.168.86.48:9190/env (mailcal)": "200 -> 200",
+    "https://192.168.86.48:9181/admin/ (mailcow)": "200 -> 200",
+    "susman-ingress / grafana-ingress / vega-ingress / llm-router / mailcal-nginx / mailcow nginx": "all Up; only susman-ingress shows the OPS-003 recreate age (6 hours), none recreated this round",
+    "containerCount": "49 == OPS-004 baseline 48 + 1 rustwake (unchanged by this round)"
+  },
+  "unchangedConfigIdentity": {
+    "susman.conf_sha256": "1c8e3bdfecf7db6f20e0c2698ad829de282a329915c207df22f60238220764c4, 594 lines (== OPS-004 end state)",
+    "susman-ingress_nginx_T_sha256": "e393ae1b978e6c3947fea93ab14545cd701a8299ce8a807936bb7935738ec918 (== OPS-004)",
+    "susman-ingress_conf_d_default_md5": "0f4ec716473c919fbfd998b31dffc4ca (== OPS-004)",
+    "dnsmasq.conf_sha256": "c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8 (DNS untouched)",
+    "rustwake_nginx_default.conf_sha256": "47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2 (== OPS-004)",
+    "rustwake_nginx.conf_sha256": "83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd (== OPS-004)"
+  },
+  "healthVerdicts": {
+    "staticContainer": "healthy (bind now rustwake-090260a)",
+    "stack": "status 1, exactly one rustwake stack (id 125)",
+    "route": "200 with correct hashed assets over LAN, host loopback and 44 distributed nodes",
+    "digestIntegrity": "4/4 served == built",
+    "unrelatedServices": "no status changed before/after",
+    "overall": "pass - no rollback needed"
+  },
+  "priorRelease": { "releaseId": "rustwake-7f82bec", "dir": "/home/darkmatter2222/rustwake/releases/rustwake-7f82bec", "retained": true },
+  "rollbackResult": null,
+  "rollbackProcedure": "PUT /api/stacks/125?endpointId=3&force=1 with the same compose body but the html bind path restored to releases/rustwake-7f82bec; nothing else changed",
+  "ci": "pending (gh unauthenticated; API 404 for private repo)",
+  "driftNotes": [
+    "Endpoint identity, stack id, port, network, both static config hashes and all shared config hashes matched the OPS-004-g3 end state before and after; no third-party edit landed in the mutation window",
+    "Single owned container and single owned network before and after (config-hash advanced b9144561 -> f9ab685c as expected for the bind-path change)",
+    "No global prune, no fleet compose down, no DNS change, no new stack/network/port created",
+    "check-host.net result endpoint now serves HTML for the get-result paths; the per-node rows were parsed from the check-report page instead (same data, 48 rows). Sweep semantics unchanged from OPS-004",
+    "No secret values recorded; credentials loaded from HomeAILab .env in-process only"
+  ],
+  "blocker": null,
+  "verifiedAt": "2026-11-04T09:26:00Z"
+}
