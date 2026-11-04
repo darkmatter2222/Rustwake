@@ -6,10 +6,10 @@ A React/TypeScript mobile browser idle salvage game: repair a drone, recover wre
 
 **Presentation quality is being reworked.** The current graphics, sound, animation and navigation are functional prototypes and have not met the owner's quality bar. The independent review found a broken narrow research column, indistinct machine silhouettes, an empty grid-heavy world, crude drone motion and placeholder oscillator audio. [Baseline findings](work/review/BASELINE.md) · [Priority board](work/BOARD.md).
 
-**Latest checkpoint (2026-11-03, tested `1f0f722`).** Phone research layout is now full-width cards: tallest text block 10 to 3 lines at 360 px, card widths 314/344/366/534 px, no document scroll in 36/36 captures, purchase costs 8 and 12 Data verified in-browser ([evidence](q001-evidence/research-after.json), [handoff](q001-handoff.md)). Quality verdict on this candidate is still pending independent review. [Reviewer baseline](work/review/REV-BASE.md)
+**Latest checkpoint (2026-11-03, tested `4319104`).** Phone research layout is now full-width cards: tallest text block 10 to 3 lines at 360 px, card widths 314/344/366/534 px, no document scroll in 36/36 captures, purchase costs 8 and 12 Data verified in-browser ([evidence](q001-evidence/research-after.json), [handoff](q001-handoff.md)). Quality verdict on this candidate is still pending independent review. [Reviewer baseline](work/review/REV-BASE.md)
 Audio review is published too: 16 structural defects plus acceptance spec `S-00..S-22`, listening gate blocked. [Audio review](work/review/REV-AUD1.md) Deployment discovery is complete and adoption is gated on the one-line Vite `base: './'` fix. [Deployment discovery receipt](work/deployments/OPS-001-g1.md)
 
-**Play URL:** not yet deployed — the Databrick adoption round is gated on `VITE-BASE` integration. The planned route `https://home.darkmatter2222.com/rustwake/` becomes the clickable URL once end-to-end verification passes. [Deployment runbook](docs/DEPLOYMENT.md).
+**Play URL:** not yet deployed — `VITE-BASE` is now integrated (`4319104`), so the Databrick adoption round is the remaining step. The planned route `https://home.darkmatter2222.com/rustwake/` becomes the clickable URL once end-to-end verification passes. [Deployment runbook](docs/DEPLOYMENT.md).
 
 ## Current gameplay
 

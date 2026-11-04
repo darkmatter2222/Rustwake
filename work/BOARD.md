@@ -16,8 +16,8 @@ This is the initial published queue, not proof that agents are running. The coor
 | Q-009 | P2 | ready | unassigned | `Store 118/900` chip separator | none |
 | REV-BASE | P1 | accepted | reviewer (ses_e5c04ffbdffedFAAymfdVAdGbI) | Independent baseline rubric review of a8fb14a; verdict `rework` — receipt `work/review/REV-BASE.md` | none |
 | REV-AUD1 | P1 | accepted | reviewer (ses_e5bd1dd86ffeLYB8p74g5E9Pv1) | Audio review of 3f1b4ac: defects `A-1..A-16`, acceptance spec `S-00..S-22`; verdict `rework` (structural), listening blocked B-11 — receipt `work/review/REV-AUD1.md` | none |
-| OPS-001 | P1 | discovery-complete/ready | deployer (ses_e5bff86deffegs755kGIkp3IAs) | Discovery receipt `work/deployments/OPS-001-g1.md`; adoption pending `VITE-BASE` | VITE-BASE; local HomeAILab/live server |
-| VITE-BASE | P1 | in progress | developer (ses_e5c04ffbeffed38Ir78EbqIVPT, branch vite-base) | Set Vite `base: './'` so path-route assets resolve | none |
+| OPS-001 | P1 | discovery-complete/ready | deployer (ses_e5bff86deffegs755kGIkp3IAs) | Discovery receipt `work/deployments/OPS-001-g1.md`; adoption round pending, `VITE-BASE` integrated | local HomeAILab/live server |
+| VITE-BASE | P1 | integrated | developer (ses_e5c04ffbeffed38Ir78EbqIVPT, branch vite-base) | Set Vite `base: './'` so path-route assets resolve — candidate `bbf58e4`, integrated `4319104` | none |
 | ENG-001 | P1 | ready | unassigned | Fast focused capture fixtures alongside full organic capture suite | none |
 | ENG-002 | P2 | ready | unassigned | Re-verify polled session status and explicit cancel propagation when team MCP is healthy | none |
 
