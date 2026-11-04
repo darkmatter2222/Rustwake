@@ -1,8 +1,10 @@
 // Q-002 style-slice capture (spec rev-q2spec-g3, evidence E1-E9).
-// Phone + desktop contexts, FS-1 fixture through the localStorage envelope,
-// states rest/build/mature/one-machine, plus the grayscale silhouette sheet.
-// Pixel samples use ctx.getImageData modal RGB over 3x3 + the WCAG ratio,
-// read inside the running page - no assumptions from source.
+// Phone 390x844 dpr2 + desktop 1440x900 dpr1, FS-1 fixture through the
+// localStorage envelope, states rest/build/mature/one-machine, plus the
+// grayscale silhouette sheet. Sample points are the first exact palette-RGB
+// matches found by scanning the live canvas (both viewports, no hand-derived
+// coordinates); each sample carries its measured block size (runX/runY in
+// device px) and total coverage count. Contrast = WCAG ratio vs the floor.
 //
 // Usage: RUSTWAKE_URL=http://localhost:5174/ node scripts/capture-style.mjs
 import { chromium } from "playwright-core";
@@ -43,7 +45,7 @@ function part(id, blueprint, tile, status, trayUnits) {
   };
 }
 
-/** FS-1: the two-machine yard, both links loaded, tick 344 (spec 2.1). */
+/** FS-1: dock + sorter(8) + furnace(14, outputFull) + 2 loaded routes, tick 344. */
 function fs1Envelope(oneMachine) {
   const env = JSON.parse(JSON.stringify(template));
   const sim = env.payload.sim;
@@ -71,28 +73,44 @@ function fs1Envelope(oneMachine) {
 }
 
 const worldSample = () => {
-  /** Modal RGB over 3x3 device px + WCAG ratio against the floor sample. */
   const canvas = document.querySelector("canvas");
   const ctx = canvas.getContext("2d");
   const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
   const w = canvas.width;
-  const h = canvas.height;
-  const img = ctx.getImageData(0, 0, w, h).data;
-  const modal = (cssX, cssY) => {
-    const cx = Math.round(cssX * dpr);
-    const cy = Math.round(cssY * dpr);
-    const tally = new Map();
-    for (let dy = -1; dy <= 1; dy += 1) {
-      for (let dx = -1; dx <= 1; dx += 1) {
-        const i = ((cy + dy) * w + (cx + dx)) * 4;
-        const key = `${img[i]},${img[i + 1]},${img[i + 2]}`;
-        tally.set(key, (tally.get(key) ?? 0) + 1);
+  const img = ctx.getImageData(0, 0, w, canvas.height).data;
+  const rgbOf = (px, py) => {
+    const i = (py * w + px) * 4;
+    return [img[i], img[i + 1], img[i + 2]];
+  };
+  /** First pixel (row-major) with the exact RGB + horizontal/vertical runs. */
+  const firstOf = (rgb, box) => {
+    const parts = rgb.split(",").map(Number);
+    const y0 = box ? box[1] : 0;
+    const y1 = box ? box[3] : canvas.height;
+    const x1 = box ? box[2] : w;
+    const same = (px, py) => {
+      const p = rgbOf(px, py);
+      return p[0] === parts[0] && p[1] === parts[1] && p[2] === parts[2];
+    };
+    for (let py = y0; py < y1; py += 1) {
+      for (let px = box ? box[0] : 0; px < x1; px += 1) {
+        if (!same(px, py)) continue;
+        let runX = 0;
+        while (px + runX < x1 && same(px + runX, py)) runX += 1;
+        let runY = 0;
+        while (py + runY < y1 && same(px, py + runY)) runY += 1;
+        let count = 0;
+        for (let qy = 0; qy < canvas.height; qy += 1) {
+          for (let qx = 0; qx < w; qx += 1) if (same(qx, qy)) count += 1;
+        }
+        return { x: px / dpr, y: py / dpr, runX, runY, count };
       }
     }
-    let best = "";
-    let bestN = -1;
-    for (const [key, n] of tally) if (n > bestN) [best, bestN] = [key, n];
-    return best;
+    return null;
+  };
+  const at = (rgb) => {
+    const p = firstOf(rgb);
+    return p ? { rgb, ...p } : { rgb, x: null, y: null, runX: 0, runY: 0, count: 0 };
   };
   const lum = (rgb) =>
     rgb.split(",").map((v) => {
@@ -102,30 +120,30 @@ const worldSample = () => {
   const ratio = (a, b) => {
     const la = lum(a);
     const lb = lum(b);
-    return Math.round(((Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)) * 1000) / 1000;
+    return Math.round((Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05) * 1000) / 1000;
   };
-  const scale = Math.max(1.4, Math.min(4, innerWidth / (192 + 24)));
-  const sx = (wx) => Math.round(((wx - 96) * scale + innerWidth / 2) * 10) / 10;
-  const sy = (wy) => Math.round(((wy - 112) * scale + (document.querySelector(".game")?.clientHeight ?? innerHeight) / 2) * 10) / 10;
-  const pts = {
-    backdrop: modal(10, 10),
-    floor: modal(sx(112), sy(80)), // tile 15 centre, an empty cell
-    wreck: modal(sx(88), sy(206.4)), // hull, stepped right of the amber pip band
-    machineTop: modal(sx(80), sy(48 - 8)),
-    machineWell: modal(sx(80), sy(48 - 2)),
-    dockPad: modal(sx(80), sy(16)),
-    amberToken: modal(sx(73.9), sy(20.9)), // dock store gauge pip, amber
-  };
+  // floor(34,56,74) / bodyLight(138,169,196) / well(14,23,38) / bodyMid(127,159,187) / steelLight(109,144,171) / amber(255,183,101)
+  const backdrop = at("11,18,32"); // nightDeep: sky band above the floor
+  const floor = at("34,56,74");
+  const wreck = at("109,144,171"); // steelLight: hull only
+  const machineBody = at("138,169,196"); // bodyLight: bodies + crate tops
+  const dockPad = at("127,159,187"); // bodyMid: pad + crates
+  const amberToken = at("255,183,101");
+  const machineWell = at("14,23,38"); // well: slots, empty pip sockets
+  const s = (o) => o.rgb;
   return {
     dpr,
-    scale: Math.round(scale * 10000) / 10000,
-    samples: pts,
+    samples: {
+      backdrop: s(backdrop), floor: s(floor), wreck: s(wreck), machineBody: s(machineBody),
+      machineWell: s(machineWell), dockPad: s(dockPad), amberToken: s(amberToken),
+    },
+    points: { backdrop, floor, wreck, machineBody, machineWell, dockPad, amberToken },
     ratios: {
-      C1_floorVsBackdrop: ratio(pts.floor, pts.backdrop),
-      C2_wreckVsFloor: ratio(pts.wreck, pts.floor),
-      C3_machineVsFloor: ratio(pts.machineTop, pts.floor),
-      C4_dockVsFloor: ratio(pts.dockPad, pts.floor),
-      C5_amberVsFloor: ratio(pts.amberToken, pts.floor),
+      C1_floorVsBackdrop: ratio(s(floor), s(backdrop)),
+      C2_wreckVsFloor: ratio(s(wreck), s(floor)),
+      C3_machineBodyVsFloor: ratio(s(machineBody), s(floor)),
+      C4_dockVsFloor: ratio(s(dockPad), s(floor)),
+      C5_amberVsFloor: ratio(s(amberToken), s(floor)),
     },
   };
 };
@@ -181,7 +199,7 @@ const run = async () => {
       results.push({ case: c.name, viewport: `${c.width}x${c.height}`, dpr: c.dpr, ...pixels });
       await context.close();
     }
-    // The grayscale silhouette sheet from the same PARTS table (E8/B1-B2).
+    // Grayscale silhouette sheet from the same PARTS table (E8 / B1-B2).
     const sheetContext = await browser.newContext({ viewport: { width: 900, height: 420 }, deviceScaleFactor: 2 });
     const sheetPage = await sheetContext.newPage();
     await sheetPage.goto(url, { waitUntil: "networkidle" });
@@ -190,6 +208,9 @@ const run = async () => {
       const canvas = document.createElement("canvas");
       canvas.width = 1800;
       canvas.height = 840;
+      canvas.style.position = "fixed";
+      canvas.style.top = "0";
+      canvas.style.left = "0";
       document.body.append(canvas);
       mod.drawSpriteSheet(canvas.getContext("2d"), { width: 900, height: 420 });
     });
@@ -202,9 +223,10 @@ const run = async () => {
   writeFileSync(out, JSON.stringify(results, null, 2), "utf8");
   for (const r of results) {
     console.log(
-      `${r.case} ${r.viewport} dpr${r.dpr} s=${r.scale} ` +
-        `floor[${r.samples.floor}] backdrop[${r.samples.backdrop}] wreck[${r.samples.wreck}] ` +
-        `C1=${r.ratios.C1_floorVsBackdrop} C2=${r.ratios.C2_wreckVsFloor} C3=${r.ratios.C3_machineVsFloor} ` +
+      `${r.case} ${r.viewport} dpr${r.dpr} floor[${r.samples.floor}] backdrop[${r.samples.backdrop}] ` +
+        `wreck[${r.samples.wreck}] body[${r.samples.machineBody}] well[${r.samples.machineWell}] ` +
+        `pad[${r.samples.dockPad}] amber[${r.samples.amberToken}] ` +
+        `C1=${r.ratios.C1_floorVsBackdrop} C2=${r.ratios.C2_wreckVsFloor} C3=${r.ratios.C3_machineBodyVsFloor} ` +
         `C4=${r.ratios.C4_dockVsFloor} C5=${r.ratios.C5_amberVsFloor}`
     );
   }

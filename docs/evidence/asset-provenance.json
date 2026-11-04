@@ -1,0 +1,46 @@
+{
+  "id": "rustwake-q002-asset-provenance",
+  "generatedOn": "2026-11-03",
+  "branch": "style-slice",
+  "candidateCommits": ["ade4b60", "4d3c4bb", "aff2ec6"],
+  "paletteVersion": "q002-palette-1",
+  "license": "UNLICENSED (private: true, see package.json)",
+  "author": "Q-002 phase A tables, hand-tuned from the spec 2.2 hex list (no external atlas)",
+  "toolVersion": { "typescript": "5.6.3", "vite": "5.4.11", "vitest": "2.1.8", "playwright-core": "1.49.1" },
+  "notes": [
+    "Every sprite is a row of [x, y, w, h, colourIndex, ellipse?] tuples in PARTS; colourIndex is the position in Object.keys(PALETTE).",
+    "The same PALETTE is mirrored into src/ui/styles.css :root (--floor #22384a, --body-light #8aa9c4, --body-mid #7f9fbb, --well #0e1726) so DOM and canvas agree.",
+    "No binary asset files exist: all nine roles are code tables, so a rebuild is byte-identical for a given commit."
+  ],
+  "assets": [
+    { "id": "dock", "role": "sorting dock", "sourceModule": "src/game/renderer/sprites.ts#PARTS.dock", "partsCount": 8, "identityMark": "corner ticks + arm post (D2/D3)" },
+    { "id": "sorter", "role": "roller sorter", "sourceModule": "src/game/renderer/sprites.ts#PARTS.sorter", "partsCount": 7, "identityMark": "three roller rows + split chutes" },
+    { "id": "furnace", "role": "furnace", "sourceModule": "src/game/renderer/sprites.ts#PARTS.furnace", "partsCount": 8, "identityMark": "chimney block, rust band when outputFull" },
+    { "id": "wireMill", "role": "wire mill", "sourceModule": "src/game/renderer/sprites.ts#PARTS.wireMill", "partsCount": 5, "identityMark": "two overhanging reels + top tension arm" },
+    { "id": "signalLab", "role": "signal lab", "sourceModule": "src/game/renderer/sprites.ts#PARTS.signalLab", "partsCount": 7, "identityMark": "tall mast + full-width scanner bar" },
+    { "id": "generic", "role": "fallback body", "sourceModule": "src/game/renderer/sprites.ts#PARTS.generic", "partsCount": 3, "identityMark": "plain body + slot" },
+    { "id": "drone", "role": "drone unit", "sourceModule": "src/game/renderer/sprites.ts#PARTS.drone", "partsCount": 4, "identityMark": "twin rotors, shadow ellipse alpha 0.35" },
+    { "id": "floorKit", "role": "worn path, drain, rails, crates, pole", "sourceModule": "src/game/renderer/sprites.ts#FLOOR_KIT", "partsCount": 11, "identityMark": "fixed coords, no random placement" },
+    { "id": "floorPosts", "role": "rail posts", "sourceModule": "src/game/renderer/sprites.ts#FLOOR_POSTS", "partsCount": 24, "identityMark": "2x3 every 16 units on both rails" },
+    { "id": "puddles", "role": "puddles", "sourceModule": "src/game/renderer/sprites.ts#PUDDLES", "partsCount": 3, "identityMark": "rx 10 ry 3, alpha 0.14" },
+    { "id": "gravel", "role": "gravel ticks", "sourceModule": "src/game/renderer/sprites.ts#GRAVEL", "partsCount": 72, "identityMark": "two ticks per tile, derived from the 6x6 grid" },
+    { "id": "wreckHull", "role": "wreck", "sourceModule": "src/game/renderer/sprites.ts#WRECK_HULL", "partsCount": 5, "identityMark": "snapped pentagon + 3 rust shards" }
+  ],
+  "fixtureFS1": {
+    "tick": 344,
+    "provenance": "seeded (hand-written envelope, FNV-1a checksum recomputed by scripts/capture-style.mjs)",
+    "commands": [
+      "localStorage.rustwake.save.v1 = <envelope>",
+      "tutorial = 9 (yard open, no panel)",
+      "machines: [{id:1,blueprint:sorter,tile:8,status:running},{id:2,blueprint:furnace,tile:14,status:outputFull,trayUnits:1}]",
+      "routes: [{id:1,store->machine1,scrap,1 item arrive 344},{id:2,machine1->machine2,ferrous,1 item arrive 345}]",
+      "storeUnits 770 / storeCapacity 900 (gauge reads 5 pips)",
+      "one-machine variant: drop machine 2 and route 2"
+    ]
+  },
+  "matureFixture": {
+    "path": "docs/evidence/yard-mature.json",
+    "provenance": "seeded by scripts/validate-content.mjs, replayed unchanged in phone-mature/desktop-mature",
+    "behaviourLine": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)"
+  }
+}
