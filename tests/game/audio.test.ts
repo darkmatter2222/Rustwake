@@ -10,6 +10,7 @@ import {
   CUE_VARIANTS,
   HEADROOM,
   MUSIC_BED_GAIN,
+  NOISE_PERIOD,
   VARIANT_COUNTS,
   createAudio,
   busVoiceSum,
@@ -577,6 +578,36 @@ describe("Q-005 mix graph structure", () => {
     // A later gesture rebuilds a usable graph rather than writing into a dead one.
     api.resume();
     expect(buses(api).length).toBe(CATEGORY_BUSES.length + 1);
+    api.dispose();
+  });
+
+  it("A-31: the room tone is aperiodic inside its period and its loop is a whole number of periods", () => {
+    const stub = makeStub();
+    const api = createAudio(false);
+    api.resume();
+    const bed = stub.nodes.find((node) => node.kind === "bufferSource" && node.loop === true);
+    const buffer = bed?.buffer as { length: number; getChannelData(): Float32Array } | undefined;
+    expect(buffer).toBeTruthy();
+    const data = (buffer as { length: number; getChannelData(): Float32Array }).getChannelData();
+    expect(data.length).toBe((buffer as { length: number }).length);
+    // The old `index % 7` saw repeated its own first 7 samples exactly; the sum of
+    // the 7- and 11-sample stages does not, so the wash is not one steady pitch.
+    expect([...data.slice(0, 7)]).not.toEqual([...data.slice(7, 14)]);
+    for (const shorter of [1, 7, 11]) {
+      expect([...data.slice(0, shorter)]).not.toEqual([...data.slice(shorter, 2 * shorter)]);
+    }
+    // The fundamental period is lcm(7, 11) = 77: the first period does repeat at 77,
+    // which keeps the fill deterministic (S-20) while being aperiodic at 7 and 11.
+    for (let index = 0; index < NOISE_PERIOD; index += 1) {
+      expect(data[index + NOISE_PERIOD]).toBe(data[index]);
+    }
+    // Loop seam: an exact whole number of periods, so no step at the boundary.
+    expect(buffer!.length % NOISE_PERIOD).toBe(0);
+    expect(buffer!.length).toBe(Math.round(buffer!.length / NOISE_PERIOD) * NOISE_PERIOD);
+    // The shared debris-tail buffer follows the same rule.
+    api.play("salvage");
+    const tailSource = stub.nodes.filter((node) => node.kind === "bufferSource").slice(-1)[0];
+    expect((tailSource.buffer as { length: number }).length % NOISE_PERIOD).toBe(0);
     api.dispose();
   });
 
