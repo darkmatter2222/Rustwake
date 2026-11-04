@@ -167,26 +167,73 @@ const readLayout = (pairs) => {
     });
   }
   // --- panel geometry ----------------------------------------------------
+  // D-6/E-4: the yard column is the ink box of the world rect on the canvas (the sky band is
+  // `night`, the backdrop and floor from there down are not), so the share of the column the
+  // open card hides is a measured number rather than an estimate.
+  const yardBox = (() => {
+    const canvas = document.querySelector("canvas");
+    if (!canvas || !canvas.width || !canvas.height) return null;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    const night = [11, 18, 32];
+    const blank = (x, y) => {
+      const i = (y * canvas.width + x) * 4;
+      return (
+        Math.abs(data[i] - night[0]) <= 1 &&
+        Math.abs(data[i + 1] - night[1]) <= 1 &&
+        Math.abs(data[i + 2] - night[2]) <= 1
+      );
+    };
+    let x0 = canvas.width;
+    let y0 = canvas.height;
+    let x1 = -1;
+    let y1 = -1;
+    for (let y = 0; y < canvas.height; y += 1) {
+      for (let x = 0; x < canvas.width; x += 1) {
+        if (blank(x, y)) continue;
+        if (x < x0) x0 = x;
+        if (y < y0) y0 = y;
+        if (x > x1) x1 = x;
+        if (y > y1) y1 = y;
+      }
+    }
+    if (x1 < 0) return null;
+    const box = canvas.getBoundingClientRect();
+    const k = box.width > 0 ? canvas.width / box.width : 1;
+    return [x0 / k, y0 / k, (x1 - x0 + 1) / k, (y1 - y0 + 1) / k].map((v) => Math.round(v * 10) / 10);
+  })();
   const panel = document.querySelector(".panel");
   let panelInfo = null;
   if (panel) {
     const rect = panel.getBoundingClientRect();
     const close = panel.querySelector(".icon-btn");
     const closeRect = close ? close.getBoundingClientRect() : null;
+    const body = panel.querySelector(".panel__body");
     const dock = document.querySelector(".dock");
     const dockRect = dock ? dock.getBoundingClientRect() : null;
     const objective = document.querySelector(".objective");
     const objectiveRect = objective ? objective.getBoundingClientRect() : null;
     const inside = (r) =>
       !!r && r.top >= -0.5 && r.left >= -0.5 && r.bottom <= innerHeight + 0.5 && r.right <= innerWidth + 0.5;
+    const cover = (() => {
+      if (!yardBox) return null;
+      const w = Math.min(rect.x + rect.width, yardBox[0] + yardBox[2]) - Math.max(rect.x, yardBox[0]);
+      const h = Math.min(rect.y + rect.height, yardBox[1] + yardBox[3]) - Math.max(rect.y, yardBox[1]);
+      if (w <= 0 || h <= 0) return 0;
+      return Math.round(((w * h) / (yardBox[2] * yardBox[3])) * 1000) / 10;
+    })();
     panelInfo = {
       label: panel.getAttribute("aria-label") ?? "panel",
       top: Math.round(rect.top),
       bottom: Math.round(rect.bottom),
       height: Math.round(rect.height),
+      rect: [rect.x, rect.y, rect.width, rect.height].map((v) => Math.round(v * 10) / 10),
+      coversYard: cover,
       clientHeight: panel.clientHeight,
       scrollHeight: panel.scrollHeight,
       innerScroll: panel.scrollHeight - panel.clientHeight,
+      bodyInnerScroll: body ? body.scrollHeight - body.clientHeight : 0,
       insideViewport: inside(rect),
       closeInside: inside(closeRect),
       closeSize: closeRect ? `${Math.round(closeRect.width)}×${Math.round(closeRect.height)}` : "none",
@@ -224,6 +271,12 @@ const readLayout = (pairs) => {
   return {
     inner: { width: window.innerWidth, height: window.innerHeight },
     beyond,
+    yardBox,
+    dockRows: (() => {
+      const node = document.querySelector(".dock");
+      if (!node) return 0;
+      return [...new Set([...node.querySelectorAll(".dock__btn")].map((b) => Math.round(b.getBoundingClientRect().y)))].length;
+    })(),
     visual: {
       width: Math.round(window.visualViewport?.width ?? window.innerWidth),
       height: Math.round(window.visualViewport?.height ?? window.innerHeight),
@@ -377,7 +430,11 @@ const run = async () => {
             importPanel = await page.evaluate(readLayout, PAIRS);
           }
         }
-        rows.push({ scale, label: size.name, intro, rest, buildPass, withPanel, yardPanel, importPanel, tabbed });
+        let researchPanel = null;
+        if (await tapDock("Research")) researchPanel = await page.evaluate(readLayout, PAIRS);
+        rows.push({
+          scale, label: size.name, intro, rest, buildPass, withPanel, yardPanel, importPanel, researchPanel, tabbed,
+        });
         await context.close();
       }
     }
@@ -462,6 +519,26 @@ function panelTable(rows, scale, key = "withPanel") {
         ` ${p ? `${p.innerScroll} px` : "-"} | ${p ? p.closeSize : "-"} |` +
         ` ${p ? (p.closeInside ? "yes" : "no") : "-"} | ${p ? (p.coversDock ? "yes" : "no") : "-"} |` +
         ` ${p ? (p.coversObjective ? "yes" : "no") : "-"} | ${m.scroll.width}×${m.scroll.height} |`
+    );
+  }
+  return lines;
+}
+
+/** D-6/E-4: how much of the yard column the open research card hides, per size and scale. */
+function researchTable(rows, scale) {
+  const lines = [];
+  lines.push("| Viewport | coversYard % | panel box x,y,w,h | panel ch/sh | body inner | yard box | dock rows |");
+  lines.push("| --- | --- | --- | --- | --- | --- | --- |");
+  for (const row of rows.filter((r) => r.scale === scale)) {
+    const m = row.researchPanel;
+    const p = m?.panelInfo;
+    if (!p) {
+      lines.push(`| ${row.label} | - | - | - | - | - | - |`);
+      continue;
+    }
+    lines.push(
+      `| ${row.label} | ${p.coversYard} % | ${JSON.stringify(p.rect)} | ${p.clientHeight}/${p.scrollHeight} |` +
+        ` ${p.bodyInnerScroll} | ${JSON.stringify(m.yardBox)} | ${m.dockRows} |`
     );
   }
   return lines;
@@ -560,6 +637,10 @@ function report(rows) {
     lines.push("");
     lines.push(...panelTable(rows, scale, "importPanel"));
     lines.push("");
+    lines.push(`### Research panel open (D-6/E-4: the yard column against the card)`);
+    lines.push("");
+    lines.push(...researchTable(rows, scale));
+    lines.push("");
     lines.push(`### Contrast at text scale ${scale.toFixed(1)} (merged over the measured states)`);
     lines.push("");
     lines.push(...contrastTable(rows, scale));
@@ -572,7 +653,7 @@ function report(rows) {
   ).length;
   // The same gate counted once per measured state, so a panel that introduces its own
   // page scroll cannot hide behind the resting row (spec 25.1).
-  const stateKeys = ["intro", "rest", "buildPass", "withPanel", "yardPanel", "importPanel"];
+  const stateKeys = ["intro", "rest", "buildPass", "withPanel", "yardPanel", "importPanel", "researchPanel"];
   let stateChecked = 0;
   let stateFlat = 0;
   const scrollStates = [];
@@ -686,6 +767,15 @@ function report(rows) {
         ` | import ${up ? `${up.label} ${percent(row.importPanel.panelArea, size)}% inner ${up.innerScroll}px close ${up.closeSize}${up.closeInside ? "" : " CLIPPED"}` : "n/a"}` +
         ` | minContrast ${(row.withPanel ?? m).contrast.reduce((a, c) => Math.min(a, c.ratio), 99)}`
     );
+    // D-6/E-4: the four mature+research cases the review lists (phone/desktop x ts1/ts2).
+    const rp = row.researchPanel?.panelInfo;
+    if (rp && (row.scale === 1 || row.scale === 2) && (row.label === "phone 390 × 844" || row.label === "desktop 1440 × 900")) {
+      console.log(
+        `D-6 s${row.scale} ${row.label}: coversYard ${rp.coversYard}% panel ${JSON.stringify(rp.rect)}` +
+          ` ch/sh ${rp.clientHeight}/${rp.scrollHeight} bodyInner ${rp.bodyInnerScroll}px` +
+          ` yard ${JSON.stringify(row.researchPanel.yardBox)} dockRows ${row.researchPanel.dockRows}`
+      );
+    }
   }
   console.log(`wrote ${TARGET.replace(`${root}${process.platform === "win32" ? "\\" : "/"}`, "")}`);
 }

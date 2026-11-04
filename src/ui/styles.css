@@ -283,13 +283,31 @@ body {
   max-width: min(100%, 560px);
   /* Push the panel down so it hugs the dock instead of centring in the gap. */
   margin-top: auto;
-  max-height: 58dvh;
+  /* D-6/E-4: 42 % of the HUD column so the research card leaves the yard it just changed
+     visible underneath it (at 58 dvh the card covered 97.55 % of the column at ts2). The
+     review's 45 % measures 51.2 % here: the percentage resolves against the `.hud` content
+     box (828 px at 390x844) while the dock top is at 790, so the cap that puts `coversYard`
+     inside the pinned 45.0 +/- 2.0 band is 42 % = 347.8 px of card. */
+  max-height: 42%;
   min-height: 0;
   padding: 10px 12px 12px;
   border-radius: 12px;
   border: 1px solid rgba(111, 147, 173, 0.4);
   background: var(--panel);
   pointer-events: auto;
+}
+
+/* D-6/E-4 on the wide sizes: the desktop yard occupies x 397..1043 at the fitted scale, so
+   the card takes its own column in the right gutter instead of sitting on the yard (the
+   gutter carried no ink at all: 46.7 % of the width). `left` is the gutter start, `width`
+   the 320 px the widest row needs, and the column is tall enough for the research list. */
+@media (min-width: 1200px) {
+  .panel {
+    position: absolute;
+    left: 1104px;
+    width: 320px;
+    max-height: 70%;
+  }
 }
 
 .panel__head {
