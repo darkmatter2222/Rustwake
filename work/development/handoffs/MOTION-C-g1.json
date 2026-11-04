@@ -1,0 +1,65 @@
+{
+  "task": "MOTION-C-g1",
+  "head": "c92899be657b8cdb290d64ceda6b74ba796d82f5",
+  "prior": "49b3152",
+  "tests": 235,
+  "entry": "index-DeEJxXGK.js",
+  "entry_bytes": 226888,
+  "tables_bytes": 7416,
+  "css_bytes": 7313,
+  "behaviour_line": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)",
+  "gates": {
+    "vitest": "pass - Test Files 23 passed (23) / Tests 235 passed (235) / Duration 4.20s; no A1..A10, B1..B7 or L-1..L-4 name changed or relaxed (232 at 49b3152 -> 233 at 723e735 -> 234 at e14e8de -> 235 at c92899b, one case per row)",
+    "typecheck": "pass - npm run typecheck (tsc --noEmit), no output",
+    "validate": "pass - tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s); behaviour line identical to 49b3152; validated: no violations",
+    "build": "pass - dist/assets/index-DeEJxXGK.js 226888 B (ceiling 233000, 6112 B headroom), index-gVFVLc-k.css 7313 B, tables-B-vOLV1r.js 7416 B, catchup.worker-DphWaCEx.js 13015 B; css/tables byte-identical to 49b3152",
+    "pixeldiff": [
+      { "pair": "class1 pinned-mature-ts1 (save as committed, rAF f0->f1)", "fraction": 0.000000, "class": 1 },
+      { "pair": "class1 pinned-mature-ts1 (rAF f1->f2)", "fraction": 0.000000, "class": 1 },
+      { "pair": "class1 pinned-mature-ts1 (rAF f2->f3)", "fraction": 0.000000, "class": 1 },
+      { "pair": "class1 phone-rest-ts1 interpolated (1 unit mid-leg)", "fraction": 0.001025, "class": 1 },
+      { "pair": "class1 phone-mature-ts1 interpolated (max of 3 pairs)", "fraction": 0.003112, "class": 1 },
+      { "pair": "class1 phone-mature-ts2 interpolated (max of 3 pairs)", "fraction": 0.002636, "class": 1 },
+      { "pair": "class1 landscape-mature-ts2 interpolated (max of 3 pairs)", "fraction": 0.001019, "class": 1 },
+      { "pair": "class1 desktop-mature-ts1 interpolated (max of 3 pairs)", "fraction": 0.003076, "class": 1 },
+      { "pair": "class2 49b3152->c92899b pinned-mature-ts1", "fraction": 0.000000, "class": 2 },
+      { "pair": "class2 49b3152->c92899b phone-rest-ts1", "fraction": 0.000000, "class": 2 },
+      { "pair": "class2 49b3152->c92899b phone-mature-ts1", "fraction": 0.000000, "class": 2 },
+      { "pair": "class2 49b3152->c92899b phone-mature-ts2", "fraction": 0.000254, "class": 2 },
+      { "pair": "class2 49b3152->c92899b landscape-mature-ts2", "fraction": 0.062638, "class": 2 },
+      { "pair": "class2 49b3152->c92899b desktop-mature-ts1", "fraction": 0.001517, "class": 2 }
+    ]
+  },
+  "rows": [
+    {
+      "id": "E-1",
+      "measured": "max per-frame displacement of the lead body over 300 driven frames (6 frames/tick, engine-stepped): 7.00 CSS px in both fixtures (was 343.50 at 49b3152). Leg-boundary window, 18 consecutive pairs across the loaded->empty seam (px): [5,4.5,5,5,5,4.5,5,5,4.5,5,4.5,5,1.5,1,1,1.5,1,1]; the same window's segment parameter: [0.8,0.8167,0.8333,0.85,0.8667,0.8833,0.9,0.9167,0.9333,0.95,0.9667,0.9833,1,0.9958,0.9917,0.9875,0.9833,0.9792] - one step per frame, no whole-leg jump, no repeat; min distinct segment params per tick 6. Class-1 same-build max 0.003112 (interpolated row), pinned rest pair 0.000000 <= 0.000152.",
+      "expected": "<= 7.00 px (A3 cap) + 0.5 px snap tolerance, every consecutive pair; reviewer's E-1 names 7.00 (phone) / 15 (desktop)",
+      "pass": true
+    },
+    {
+      "id": "E-2",
+      "measured": "airborne duty over 300 driven frames (299 pairs), pairs whose body moved >= 0.5 CSS px: FS-1 288->299/299 = 100.0 % lead share (reviewer baseline 18.4 %), mature 299/299 = 100.0 % lead share (baseline 75.3 %); canvas level (any of the 5 staggered bodies moved) mature 299/299 = 100.0 %. Max per-frame delta 7.00 px, ticks with no grid step: [] (was [9,49] = the two whole-tick clamps). 50/50 ticks carry six distinct segment parameters.",
+      "expected": "share >= 0.80 and max per-frame delta <= 7.00, mature fixture and FS-1",
+      "pass": true
+    },
+    {
+      "id": "E-3",
+      "measured": "landscape 844x390 ts2, chromium edges insets {top: 71.94, bottom: 54} -> usableH 264.06, band term 1.1189, fit s = 1.1189 (floor 1.1 no longer binding), yardTop 78.65, yardBottom 329.29, dockTop 336 -> overlap 0 px (clearance 6.71 px = 6 * scale, the 12-unit world padding, symmetric; was 338 vs 336 = 3 px overlap). Class-2 before/after delta 0.062638 vs the intended-region sum: refit ink box [614,139,1074,676] = 0.188372 area fraction -> 0.062638 <= 0.198372. Class-1 same-build for this scenario 0.001019 (interpolated), pinned rest 0.000000.",
+      "expected": "yardBottom <= dockTop within 0.5 px; reviewer's one-line fix BAND_MIN_SCALE 1.2 -> 1.1",
+      "pass": true
+    }
+  ],
+  "summary": [
+    "723e735: E-1 - one exported droneLeg(unit, tick, phase) segment parameter in src/game/renderer/scene.ts replaces the two discrete t values (in-flight clamp / parked 0), so the leg boundary is a 1-frame step; +1 case in tests/renderer/scene-draw.test.ts, max per-frame delta 343.50 -> 7.00 px, 232 -> 233 tests.",
+    "e14e8de: E-2 - the same segment parameter now runs over the drawn frame clock (loaded leg arrive-travel+1 .. arrive+1, empty leg lastArrive+1 .. nextDeliveryTick+1), which removes the 34 px launch hitch and both whole-tick clamps: A5 duty 18.4 %/75.3 % -> 100 % with max 7.00 px, no engine.ts stagger needed and no new state field, save format or checksum input; +1 case, 234 tests.",
+    "c92899b: E-3 - BAND_MIN_SCALE 1.2 -> 1.1 so the floor stays under the binding landscape band term (1.1189 at ts2): yard bottom 329.29 vs dock top 336, 0 px overlap; landscape ts1 (1.2034), phone (1.8056) and desktop ts1 (3.3644) keep the L-1 accepted scales; +1 case, 235 tests."
+  ],
+  "notes": {
+    "class1_ceiling": "Reviewer's pinned ceiling 0.000152 applies to same-build pairs outside the interpolated rows: the pinned/rest pairs measure 0.000000 here. The five interpolated rows are nonzero by design (A9 requires 6 sub-positions per leg); their max is 0.003112 of 1316640 px, all inside the drone/route ink box.",
+    "class2_rule": "Pass iff delta <= sum of the run-printed intended-region area fractions + 0.01: phone-mature-ts2 0.000254 <= 0.023526+0.01, landscape-mature-ts2 0.062638 <= 0.188372+0.01, desktop-mature-ts1 0.001517 <= 0.121512+0.01.",
+    "e2_no_engine_stagger": "The reviewer's optional engine.ts launch stagger is not applied: with the empty leg interpolated, one unit already covers 100 % of the pairs in both fixtures, and touching nextDeliveryTick would move the checksum and the behaviour baseline.",
+    "e4_untouched": "E-4 (desktop panel gutters) is out of this task's scope; no work/ or docs/ file was modified.",
+    "limitations": "Headless evidence only: chromium 390x844/844x390/1440x900 via playwright-core, dist served over 127.0.0.1. Class-1 pairs come from four consecutive rAF shots of one page (canvas.toDataURL); class-2 pairs are captured with the save's settings.reducedMotion true so the step positions pin. The live envelopes carry lastSeenMs = now - 1000 (a full store stalls the walk: the raw fixture's 17h33m absence fills 900/900 and freezes the canvas), tick 18294 with the first arrive at 18298 so at least one unit is mid-leg at load. E-1/E-2 numbers are the stub-context walk in tests/renderer/scene-draw.test.ts, so they are reproducible by `npx vitest run`; the pixel fractions need the scratch harness (deleted after this receipt)."
+  }
+}
