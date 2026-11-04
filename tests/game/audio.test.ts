@@ -719,6 +719,54 @@ describe("Q-005 mix graph structure", () => {
     api.dispose();
   });
 
+  it("A-17: the snapshot reports the edges the module actually made", () => {
+    const stub = makeStub();
+    const api = createAudio(false);
+    api.resume();
+    api.play("upgrade"); // one single-layer voice, on the ui bus
+    const gains = stub.nodes.filter((node) => node.kind === "gain");
+    const compressor = stub.nodes.find((node) => node.kind === "compressor");
+    // Gains in creation order: master, the five buses in CATEGORY_BUSES order, the
+    // two beds, then the one-shot voice.
+    const stubId: Record<string, string | undefined> = {
+      destination: compressor?.id,
+      master: gains[0]?.id,
+      music: gains[1]?.id,
+      ambience: gains[2]?.id,
+      machinery: gains[3]?.id,
+      effects: gains[4]?.id,
+      ui: gains[5]?.id,
+      "bed-ambience": gains[6]?.id,
+      "bed-music": gains[7]?.id,
+      v1: gains[8]?.id,
+    };
+    const recorded = stub.nodes.flatMap((node) => node.connects.map((to) => `${node.id}->${to}`));
+    // The eight edges the table models: five buses into the master, the master into the
+    // output stage, that stage into the destination, plus the voice into its bus.
+    const modelled = [
+      `${compressor?.id}->destination`,
+      `${gains[0]?.id}->${compressor?.id}`,
+      ...CATEGORY_BUSES.map((name) => `${stubId[name]}->${gains[0]?.id}`),
+      `${gains[8]?.id}->${stubId.ui}`,
+    ];
+    expect(modelled.length).toBe(8);
+    for (const edge of modelled) expect(recorded).toContain(edge);
+    // Every non-null outputId is exactly the one connection that node made, and the
+    // parent lists the child in its inputs - the table is not a literal any more.
+    const snapshot = api.graphSnapshot();
+    for (const node of snapshot) {
+      const own = stub.nodes.find((candidate) => candidate.id === stubId[node.id]);
+      expect(own, node.id).toBeDefined();
+      if (node.outputId === null) {
+        expect(own?.id).toBe(compressor?.id); // the one terminal entry
+        continue;
+      }
+      expect(own?.connects).toEqual([stubId[node.outputId]]);
+      expect(snapshot.find((candidate) => candidate.id === node.outputId)?.inputIds).toContain(node.id);
+    }
+    api.dispose();
+  });
+
   it("keeps the declared cue set complete", () => {
     expect(CUE_NAMES).toHaveLength(10);
     for (const name of CUE_NAMES) {

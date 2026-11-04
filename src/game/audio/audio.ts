@@ -29,6 +29,9 @@ export interface Distance {
   zoom?: number;
 }
 
+/** Minimal shape `link()` needs from a real node, stub or native (A-17). */
+type Linkable = { connect(target: unknown): void };
+
 export interface AudioApi {
   resume(): void;
   setMuted(muted: boolean): void;
@@ -226,6 +229,27 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
   const variantIndex = new Map<CueName, number>();
   let voiceSeq = 0;
 
+  /** A-17: the table id each real node carries, so an edge can be recorded twice. */
+  const nodeIds = new Map<unknown, string>();
+
+  /**
+   * A-17: one connection call that also records the edge on both sides of the table,
+   * so `graphSnapshot` reports observed wiring instead of a literal table. The output
+   * stage carries the `destination` id, so its own hop collapses onto that entry.
+   */
+  const link = (from: Linkable, to: Linkable): void => {
+    from.connect(to);
+    const fromId = nodeIds.get(from);
+    const toId = nodeIds.get(to) ?? null;
+    if (!fromId || fromId === toId) return;
+    const entry = table.get(fromId);
+    if (entry) entry.outputId = toId;
+    if (toId) {
+      const parent = table.get(toId);
+      if (parent && !parent.inputIds.includes(fromId)) parent.inputIds.push(fromId);
+    }
+  };
+
   const declareBus = (name: BusName): GraphNode => {
     const existing = table.get(name);
     if (existing) return existing;
@@ -234,7 +258,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       kind: "bus",
       level: BUS_LEVELS[name],
       inputIds: [],
-      outputId: name === "master" ? "destination" : "master",
+      outputId: null,
     };
     table.set(name, node);
     return node;
@@ -246,27 +270,32 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       typeof AudioContext !== "undefined" ? AudioContext : undefined;
     if (!Ctor) return null;
     ctx = new Ctor();
-    // Output stage first so the chain has somewhere to land (S-05).
+    // Output stage first so the chain has somewhere to land (S-05). It is part of the
+    // `destination` entry, hence the same table id (A-17).
     const output = ctx.createDynamicsCompressor();
-    output.connect(ctx.destination);
+    nodeIds.set(output, "destination");
+    nodeIds.set(ctx.destination, "destination");
+    link(output as unknown as Linkable, ctx.destination as unknown as Linkable);
     table.set("destination", {
       id: "destination",
       kind: "destination",
       level: 1,
-      inputIds: ["master"],
+      inputIds: [],
       outputId: null,
     });
     const master = ctx.createGain();
     master.gain.value = isMuted ? 0 : BUS_LEVELS.master;
-    master.connect(output as unknown as GainNode);
     masterNode = master;
     declareBus("master");
+    nodeIds.set(master, "master");
+    link(master as unknown as Linkable, output as unknown as Linkable);
     for (const name of CATEGORY_BUSES) {
       const node = ctx.createGain();
       node.gain.value = BUS_LEVELS[name];
-      node.connect(master);
       busNodes.set(name, node);
+      nodeIds.set(node, name);
       declareBus(name);
+      link(node as unknown as Linkable, master as unknown as Linkable);
     }
     return ctx;
   };
@@ -287,7 +316,16 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     for (const bed of specs) {
       const node = context.createGain();
       node.gain.value = bed.gain;
-      node.connect(busNodes.get(bed.bus) ?? (masterNode as GainNode));
+      // A-17: the entry exists before the link, so both sides of the edge are recorded.
+      nodeIds.set(node, bed.id);
+      table.set(bed.id, {
+        id: bed.id,
+        kind: "voice",
+        level: bed.gain,
+        inputIds: [],
+        outputId: null,
+      });
+      link(node as unknown as Linkable, (busNodes.get(bed.bus) ?? masterNode) as unknown as Linkable);
       // The room tone is a looping buffer source, the music bed a sustained
       // oscillator (S-15 asks for at least one `loop === true` source).
       let source: AudioBufferSourceNode | OscillatorNode;
@@ -304,15 +342,6 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       }
       source.connect(node);
       source.start(now);
-      table.set(bed.id, {
-        id: bed.id,
-        kind: "voice",
-        level: bed.gain,
-        inputIds: [],
-        outputId: bed.bus,
-      });
-      const parent = table.get(bed.bus);
-      if (parent && !parent.inputIds.includes(bed.id)) parent.inputIds.push(bed.id);
     }
   };
 
@@ -427,11 +456,12 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
         sources.push(source as unknown as { stop(time: number): void });
       }
 
-      gain.connect(busNodes.get(spec.bus) ?? (masterNode as GainNode));
       envelope(gain.gain, peak, now, spec.attack, spec.duration);
-      table.set(id, { id, kind: "voice", level: peak, inputIds: [], outputId: spec.bus });
-      const bus = table.get(spec.bus);
-      if (bus) bus.inputIds.push(id);
+      // A-17: the entry is created first, then `link` makes the connection and records
+      // the edge on both sides of the table.
+      table.set(id, { id, kind: "voice", level: peak, inputIds: [], outputId: null });
+      nodeIds.set(gain, id);
+      link(gain as unknown as Linkable, (busNodes.get(spec.bus) ?? masterNode) as unknown as Linkable);
       voices.push({
         id,
         priority: CUE_PRIORITY[spec.bus],
@@ -471,6 +501,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       busNodes.clear();
       masterNode = null;
       table.clear();
+      nodeIds.clear();
       // A-24: the beds are gone with the rest of the graph, so the guard that keeps
       // them single-instance has to fall back too, or a later `resume()` rebuilds
       // the buses and never re-creates the two sustained voices.
