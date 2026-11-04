@@ -205,6 +205,7 @@ const run = async () => {
     await sheetPage.goto(url, { waitUntil: "networkidle" });
     await sheetPage.evaluate(async () => {
       const mod = await import("/src/game/renderer/scene.ts");
+      const sprites = await import("/src/game/renderer/sprites.ts");
       const canvas = document.createElement("canvas");
       canvas.width = 1800;
       canvas.height = 840;
@@ -218,7 +219,7 @@ const run = async () => {
       ctx.setTransform(2, 0, 0, 2, 0, 0);
       ctx.imageSmoothingEnabled = false;
       mod.drawSpriteSheet(ctx, { width: 900, height: 420 });
-      const ids = Object.keys(mod.PARTS);
+      const ids = Object.keys(sprites.PARTS);
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
       const night = [11, 18, 32];
       let x0 = canvas.width;
