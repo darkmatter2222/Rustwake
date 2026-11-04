@@ -11,8 +11,9 @@ This is the initial published queue, not proof that agents are running. The coor
 | Q-004 | P1 | ready | unassigned | Interpolated drone/machine motion and salvage feedback | coordinate with Q-002 |
 | Q-005 | P1 | ready | unassigned | Real master mix, layered varied cues and ambience | none |
 | Q-006 | P1 | ready | unassigned | Stable game destinations and visual blueprint picker | coordinate with Q-001 |
-| REV-BASE | P1 | running | reviewer (ses_e5c04ffbdffedFAAymfdVAdGbI) | Baseline rubric review of a8fb14a | none |
-| OPS-001 | P1 | blocked-local-access | unassigned | Discover/adopt isolated Databrick deployment and verified URL | local HomeAILab/live server |
+| REV-BASE | P1 | accepted | reviewer (ses_e5c04ffbdffedFAAymfdVAdGbI) | Independent baseline rubric review of a8fb14a; verdict `rework` — receipt `work/review/REV-BASE.md` | none |
+| OPS-001 | P1 | discovery-complete/ready | deployer (ses_e5bff86deffegs755kGIkp3IAs) | Discovery receipt `work/deployments/OPS-001-g1.md`; adoption pending `VITE-BASE` | VITE-BASE; local HomeAILab/live server |
+| VITE-BASE | P1 | ready | unassigned | Set Vite `base: './'` so path-route assets resolve | none |
 | ENG-001 | P1 | ready | unassigned | Fast focused capture fixtures alongside full organic capture suite | none |
 | ENG-002 | P2 | ready | unassigned | Re-verify polled session status and explicit cancel propagation when team MCP is healthy | none |
 

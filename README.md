@@ -6,6 +6,10 @@ A React/TypeScript mobile browser idle salvage game: repair a drone, recover wre
 
 **Presentation quality is being reworked.** The current graphics, sound, animation and navigation are functional prototypes and have not met the owner's quality bar. The independent review found a broken narrow research column, indistinct machine silhouettes, an empty grid-heavy world, crude drone motion and placeholder oscillator audio. [Baseline findings](work/review/BASELINE.md) · [Priority board](work/BOARD.md).
 
+**Latest checkpoint (2026-11-03, `727dccf`).** The independent baseline review is published with rubric scores (scene composition 1, asset identity 1, readability/interaction/state fidelity/performance 2, motion/audio pending evidence): first-feel acceptance **not met**, and `Q-001` (research cards, mobile navigation) is in development. [Reviewer baseline](work/review/REV-BASE.md)
+Deployment discovery is complete — target host, ingress owner, DNS, TLS coverage and free port verified — and adoption is pending the one-line Vite `base: './'` fix. [Deployment discovery receipt](work/deployments/OPS-001-g1.md)
+There is still **no live URL**: the planned route is `https://home.darkmatter2222.com/rustwake/` and it stays unlisted as clickable until end-to-end verification passes after adoption.
+
 **Play URL:** pending verified Databrick deployment. No Rustwake hostname or live deployment has been established by this update. The local deployment agent will inspect existing HomeAILab ingress/DNS, deploy an isolated Rustwake stack, verify it, and replace this line with the real clickable URL and deployed SHA. [Deployment runbook](docs/DEPLOYMENT.md).
 
 ## Current gameplay
