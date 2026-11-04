@@ -230,6 +230,25 @@ describe("repeatable export contracts", () => {
     expect(sellableAmount(state, "copper")).toBe(TUNING.sellBatchCap);
   });
 
+  it("leaves the consuming machine's own window in the store (D-42)", () => {
+    const yard = chainYard();
+    const state = yard.state;
+    state.exportClaimed = true;
+    const before = state.store["copper"] ?? 0;
+    state.store["copper"] = 40;
+    state.storeUnits += 40 - before;
+    // The wire mill takes 1 copper per batch and keeps two batches in hand, so the
+    // sell stops at 12 units: the 10-unit reserve plus the mill's own window.
+    expect(sellableAmount(state, "copper")).toBe(28);
+    expect(send(state, { type: "contract.sell", resource: "copper", qty: 60 }).ok).toBe(true);
+    expect(state.store["copper"]).toBe(TUNING.reserveFloor + 2);
+    // The point of the window: the mill's link still has something to draw in the
+    // same tick, so the stage keeps working instead of halting at the floor.
+    advance(state, 100);
+    const mill = machineById(state, yard.mill);
+    expect((mill?.inBuf["copper"] ?? 0) + (mill?.batchesDone ?? 0)).toBeGreaterThan(0);
+  });
+
   it("replays the same command id without paying twice", () => {
     const state = priced();
     const first = send(state, { type: "contract.sell", resource: "copper", qty: 12 }, "sell-1");

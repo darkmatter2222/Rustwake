@@ -188,13 +188,14 @@ describe("supply window (B-15, B-25)", () => {
         })),
       ),
     );
-    // With the onboarding market open and the fleet step in the ladder, three floors
-    // now reach the same full yard: 5, 10, and 20 all land on eight machines and three
-    // nodes inside the half hour. Only floor 0 stays stripped, so the floor is still a
-    // real lever - and a flatter one than before the second drone (B-28, D-38).
+    // With the onboarding market open, the fleet step in the ladder and a sell that
+    // leaves the machines' own window in the store (D-42), three floors reach the same
+    // full yard: 5, 10, and 20 all land on eight machines and three nodes inside the
+    // half hour. Only floor 0 stays stripped, so the floor is still a real lever - and
+    // a flatter one than before the second drone (B-28, D-38).
     expect(full.machines).toBe(8);
     expect(full.research).toBe(3);
-    expect(full.fleet).toBe(4);
+    expect(full.fleet).toBe(5);
     const stripped = runs.find((r) => r.floor === 0)!;
     expect(stripped.machines).toBeLessThan(8);
     expect(stripped.research).toBe(0);
@@ -203,18 +204,18 @@ describe("supply window (B-15, B-25)", () => {
       const run = runs.find((r) => r.floor === floor)!;
       expect(run.machines, `machines at floor ${floor}`).toBe(8);
       expect(run.research, `research at floor ${floor}`).toBe(3);
-      // The whole sweep sits inside ±6 % of the shipped floor: 1 949 / 1 864 / 1 753
-      // batches at floors 5 / 10 / 20, against 1 558 with no reserve at all.
+      // The whole sweep sits inside ±7 % of the shipped floor: 2 028 / 1 902 / 1 792
+      // batches at floors 5 / 10 / 20, against 1 533 with no reserve at all.
       expect(run.totals, `batches at floor ${floor}`).toBeGreaterThanOrEqual(
-        Math.round(full.totals * 0.94)
+        Math.round(full.totals * 0.93)
       );
       expect(run.totals, `batches at floor ${floor}`).toBeLessThanOrEqual(
-        Math.round(full.totals * 1.06)
+        Math.round(full.totals * 1.07)
       );
     }
     // 10 stays shipped: it is the middle value that clears every starter blueprint's
-    // price with room left over, and it is no longer the single batch leader.
-    expect(full.totals).toBe(1864);
+    // price with room left over, and it now also buys the first node earliest (478).
+    expect(full.totals).toBe(1902);
   });
 
   it("ships on every link while the young yard is filling (B-25)", () => {
@@ -245,13 +246,13 @@ describe("supply window (B-15, B-25)", () => {
     }
     const run = runs.find((r) => r.floor === 10)!;
     expect(run.lateLinks.length).toBeGreaterThanOrEqual(16);
-    // The shipped floor leaves the store with its reserve plus the machine buffers,
-    // so the best-prepared stage still has a whole tranche ready (10 units = five
-    // sorter batches). The stripped floor-0 run reaches 2 at best, which is the visible
+    // The shipped floor leaves both a build reserve and each machine's window in the
+    // store, so the best-prepared stage holds at least a whole tranche ready (the sweep
+    // logs the value). The stripped floor-0 run reaches 4 at best, which is the visible
     // cost of pulling every unit out of the store before the next price is met.
     expect(Math.max(...Object.values(run.readyUnits))).toBeGreaterThanOrEqual(10);
     expect(Math.max(...Object.values(runs.find((r) => r.floor === 0)!.readyUnits))).toBeLessThanOrEqual(
-      2
+      4
     );
   });
 });

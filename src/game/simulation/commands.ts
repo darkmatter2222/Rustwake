@@ -16,7 +16,13 @@ import {
   type RouteState,
   type SimState,
 } from "./types";
-import { addToStore, routeById, spendFromStore, totalUnits } from "./engine";
+import {
+  addToStore,
+  PULL_LOOKAHEAD_BATCHES,
+  routeById,
+  spendFromStore,
+  totalUnits,
+} from "./engine";
 
 export const YARD_COLS = 6;
 export const YARD_ROWS = 6;
@@ -341,10 +347,37 @@ function sellResource(s: SimState, resource: ResourceId, qty: number): CommandRe
   return commit(s, "sell", amount);
 }
 
-/** Units of one resource a sell may take: above the floor, within one tranche. */
+/** Units of one resource the store must keep so its consumers can start their next
+ * batches: the same two-batch window `pullFromStore` asks for, per consumer, minus
+ * what that machine already holds. A sell may only take what sits above this demand
+ * and the reserve floor, so the store keeps one meaning for both readers - what the
+ * yard does not itself need right now (spec 8.2, 10.5). Without this the deep chain
+ * halts: a saturated store sold to the floor leaves a machine-destination link with
+ * nothing to draw, so the last stage never runs (B-29). */
+function machineInputDemand(s: SimState, resource: ResourceId): number {
+  const bonus = researchBonus(s).inputBuffer;
+  let need = 0;
+  for (const machine of s.machines) {
+    const def = BLUEPRINTS[machine.blueprint];
+    if (!def) continue;
+    const recipe = RECIPES[def.recipeId];
+    let perBatch = 0;
+    for (const input of recipe.inputs) {
+      if (input.resource === resource) perBatch += input.qty;
+    }
+    if (perBatch === 0) continue;
+    const window = Math.min(def.inputBuffer + bonus, perBatch * PULL_LOOKAHEAD_BATCHES + bonus);
+    need += Math.max(0, window - (machine.inBuf[resource] ?? 0));
+  }
+  return need;
+}
+
+/** Units of one resource a sell may take: above the floor and above what the
+ * machines still need, within one tranche. */
 export function sellableAmount(s: SimState, resource: ResourceId): number {
   const held = s.store[resource] ?? 0;
-  return Math.min(Math.max(0, held - TUNING.reserveFloor), TUNING.sellBatchCap);
+  const floor = TUNING.reserveFloor + machineInputDemand(s, resource);
+  return Math.min(Math.max(0, held - floor), TUNING.sellBatchCap);
 }
 
 /**

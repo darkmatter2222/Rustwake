@@ -83,10 +83,10 @@ describe("content validator (B-12)", () => {
     expect(violations).toEqual([]);
     // Same numbers the standalone driver publishes in docs/evidence (D-38), measured by a
     // second implementation, so the two cannot drift apart unnoticed.
-    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 4, batches: 1864, nodes: 3 });
-    expect(marks["firstDrone"]).toBe(308);
-    expect(marks["firstResearch"]).toBe(975);
-    expect(marks["credits"]).toBe(165);
+    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 5, batches: 1902, nodes: 3 });
+    expect(marks["firstDrone"]).toBe(268);
+    expect(marks["firstResearch"]).toBe(478);
+    expect(marks["credits"]).toBe(82);
   });
 });
 

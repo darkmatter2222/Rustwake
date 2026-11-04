@@ -241,7 +241,7 @@ describe("build-versus-upgrade cadence (B-21)", () => {
     expect(first.research).toBe(3);
     // The same number the probe prints, so the fixture and the evidence table cannot
     // drift apart.
-    expect(first.totals).toBe(1864);
+    expect(first.totals).toBe(1902);
     // The fleet step is a real stage: the ladder bought spare drones in both orders,
     // which is what lifts the batch total above the one-drone 1 757 (B-28, D-38).
     expect(first.fleet).toBeGreaterThan(1);

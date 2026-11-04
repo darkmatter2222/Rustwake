@@ -310,7 +310,7 @@ function pickOutputLink(
 const RESERVE_FLOOR = TUNING.reserveFloor;
 
 /** Ready units a fed machine keeps in hand: the next batch plus one still flying. */
-const PULL_LOOKAHEAD_BATCHES = 2;
+export const PULL_LOOKAHEAD_BATCHES = 2;
 
 /** Sample spacing for the measured rate window, in ticks (spec 9.4). */
 const RATE_WINDOW_TICKS = TUNING.rateWindowTicks;

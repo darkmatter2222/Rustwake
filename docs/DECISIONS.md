@@ -829,3 +829,53 @@ Format: date · problem · options · choice · reason · reversibility.
   event-jump model is proven equivalent per machine (option (b)), at which point the worker becomes a
   convenience rather than the thing that keeps the page responsive.
 
+## D-42 - 2026-11-03 - A sell leaves each consumer's own input window in the store
+
+- Problem (B-29): the phone session and the headless driver disagree about how far thirty minutes gets.
+  From a saturated 12 h absence the ladder built eight machines but the store printed
+  `"circuits": 1, "data": 2` and `research {}` after 1 800 rounds, while the same ladder with no absence
+  bought its first node at 975. The printed link table names the mechanism: a link whose source is a
+  machine (`m7->m8:circuits`, `m3->m5:copper`, `m4->m7:polymer`) shows `busy 5/17880` - one 5-tick
+  flight in 1 788 ticks - because `planConnections` picks a machine source only while that machine's tray
+  holds the material and, once the tray has emptied into the link, the store's surplus is never admitted:
+  `hasInputLink` allows one link per material, so the store-sourced alternative cannot be added beside it.
+  With the whole store sitting at the reserve floor after the last tranche was sold, the consumer starves
+  while its material is on the same page in a warehouse (spec 8.2's locations, 10.3's blocked capacity).
+- Options considered: (a) let the planner replace a machine-sourced input link with a store-sourced one
+  when the store is stocked - a second ladder pass and a route-rewrite transaction; (b) let
+  `pullFromStore` fall back to the store whenever the machine-sourced link is empty - tried first, it
+  regressed the shipped 30-minute session to **7 machines, 1 157 batches, 0 nodes**, because a store-sourced
+  pull competes with the producer's own tray item for the same 24-unit capacity and the fair allocator then
+  feeds the wrong stage, so it was reverted; (c) make the one number the store uses for "surplus" mean the
+  same thing to both readers, by stating the machines' own demand in the sell bound.
+- Chosen: **(c)**, in `sellableAmount` (`src/game/simulation/commands.ts`). A sell now leaves
+  `TUNING.reserveFloor + machineInputDemand(s, resource)`, where the new `machineInputDemand` sums, over
+  every machine whose recipe consumes the resource, `min(inputBuffer + bufferBonus, perBatch ×
+  PULL_LOOKAHEAD_BATCHES + bufferBonus) − inBuf[resource]` - the same two-batch window `pullFromStore`
+  asks for, so the reserve and the window are one stated figure rather than two competing ones
+  (spec 8.2's "available + reserved equals owned"). `PULL_LOOKAHEAD_BATCHES` is exported from
+  `engine.ts` so the two cannot be typed differently. `pullFromStore` keeps its shipped bound
+  (`held − RESERVE_FLOOR`), which is what keeps the store's own surplus visible to the build price.
+- Measured, same 1 800-round session and the same shipped tuning, before → after: first research node
+  **975 → 478**, total batch completions **1 864 → 1 902** (63.4/min), fleet **4 → 5** units (the cap),
+  first drone **308 → 268**, end credits **165 → 82**, store at end `circuits 5 → 40`, `data 106 → 76`,
+  and the eight-machine, eighteen-link topology is unchanged so the comparison is stage-for-stage
+  (`docs/evidence/2026-11-03-supply-window.md`, both cadence rows in `docs/evidence/2026-11-03-cadence.md`).
+  The phone session (`scripts/probe-phone.mjs 1800 12 10`) builds all eight blueprints and sees data at
+  round **143** instead of never; its node still lands beyond the 1 800-round phase, so **B-29** stays open.
+- Cost: two extra loops over `s.machines` per sell (eight machines, one 1 800-round session: the probe's
+  wall time is unchanged at about 1 s), no new state field, save schema still 1.
+- Validation: `tests/simulation/chain.test.ts` gained "leaves the consuming machine's own window in the
+  store (D-42)", which sets copper to 40 and expects a 28-unit tranche - the 10-unit floor plus the wire
+  mill's `min(12, 1 × 2) = 2`-per-batch window - and then checks the mill still works after the sell.
+  The three measured pins (`tests/content/validate.test.ts`, `tests/simulation/cadence.test.ts`,
+  `tests/simulation/supply-window.test.ts`) are restated to the numbers above, and the floor sweep is
+  re-published: floors {0, 5, 10, 20} give **6 / 8 / 8 / 8** machines and **1 533 / 2 028 / 1 902 / 1 792**
+  batches, so the shipped floor 10 is still inside ±7 % of its neighbours and floor 0 is still the one
+  that strips stages. `npx vitest run` **172 passed / 172** (21 files), `npm run typecheck` clean,
+  `npm run validate` **0 violations**.
+- Reversible: yes; the floor expression is one line and `pullFromStore` is untouched.
+- Reconsider when: a machine-sourced link's tray and its store fallback are proven to be one aggregate
+  buffer (then option (b) becomes worth re-measuring), or when the event-jump model of D-16 lands, because
+  a stated-window floor is the form that model can consume directly.
+
