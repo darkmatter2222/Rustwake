@@ -11,6 +11,21 @@ export default defineConfig({
   build: {
     target: "es2022",
     outDir: "dist",
+    rollupOptions: {
+      output: {
+        // E3: the two static data-table modules (audio cue/variant tables plus the
+        // authored sprite part table) move to their own `tables` chunk, which keeps the
+        // entry chunk under its pinned byte ceiling. Same module graph, no new runtime
+        // dependency, and `base: "./"` still emits relative ./assets/... links for the
+        // subpath-safe worker import as well.
+        manualChunks(id: string): string | null {
+          if (id.includes("/game/audio/audio.") || id.includes("/game/renderer/sprites.")) {
+            return "tables";
+          }
+          return null;
+        },
+      },
+    },
   },
   test: {
     globals: true,
