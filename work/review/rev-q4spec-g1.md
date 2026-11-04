@@ -1,11 +1,11 @@
-﻿# REV-Q4SPEC - implementation-ready spec for Q-004 (generation 1, id `rev-q4spec-g1`)
+# REV-Q4SPEC - implementation-ready spec for Q-004 (generation 1, id `rev-q4spec-g1`)
 
 - Base measured: `0606d3784667d416fea797119deaf328e9212635` (integrated head, remote main; reviewer checkout detached at it, production files unmodified).
 - Owns the **motion clock** and the salvage-feedback group. Does not re-open Q-002 geometry: `PARTS`, `AMBER_SHAPES`, `FEATURE_MIN_UNITS = 2`, `LEAN_UNITS = 4`, `STATUS_ACCENTS`, `CELL = 32`, `WORLD_W/H = 192/224`, `WRECK_POSITION = (80, 206.4)`, `DOCK_TILE = 2`, `TICK_MS = 100`, `droneTravelTicks = 10`, `manualPulseTicks = 6`, `routeLatencyTicks = 5` stay as they are.
 - Scope files: `src/game/renderer/scene.ts` (`drawDrones`, `drawRoutes`, new `framePhase` use), `src/app/store.ts` (expose the sub-tick phase already computed by the frame loop: `accumulator / TICK_MS`), `src/ui/App.tsx` (pass it into `DrawOptions`), `src/game/renderer/sprites.ts` (feedback part rows only), `tests/renderer/scene-draw.test.ts` (new cases), `scripts/capture-clip.mjs` (new, reuses the `scripts/capture-style.mjs` lease/viewport convention), `docs/evidence/` (clip manifest + frame list).
 - Out of scope: the audio bus/listening work (Q-005 / B-11), `Panels.tsx` DOM (Q-001), the two open Q-002 follow-ups **B-01** (element-scoped sheet) and **B-02/B-03** (sampler agreement + D8 mask assert) - this spec requires them as 3D-9 and 3D-10 but does not replace them.
 - Clock facts measured at this base: `store.ts` keeps `accumulator` after subtracting whole ticks (line ~236), so the sub-tick phase exists but is not exported; `drawDrones` still derives `t` from the integer `state.tick` (`scene.ts` line 423) and `drawRoutes` from `state.tick` (line 387) - that is the teleport source.
-- Baseline measured by this review at the base: `npm test` -> `Test Files 23 passed (23) / Tests 208 passed (208)`; `tsc --noEmit` clean; `validated: no violations` with `firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)`; `dist/assets/index-oeY4tDi3.js` = **232,815 bytes** (gzip 73.63 kB, 53 modules); draw census (stub ctx, FS-1 at 390x844, s=1.8056): rest **63** paints / 283 ops, build **66** / 322, selected **64**, mature **168** / 607, mature build **171**; grid strokes 0 at rest and 1 in build; min painted feature height **3.50 CSS px**; ink 46.03 % phone rest.
+- Baseline measured by this review at the base: `npm test` -> `Test Files 23 passed (23) / Tests 210 passed (210)` (re-measured at `090260aa751ec3c6f3d734849b3844b11a2d97cb`, 4.03 s; `0606d37` printed 208 passed / 4.06 s before A-26/A-29 landed); `tsc --noEmit` clean; `validated: no violations` with `firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)`; `dist/assets/index-oeY4tDi3.js` = **232,815 bytes** (gzip 73.63 kB, 53 modules); draw census (stub ctx, FS-1 at 390x844, s=1.8056): rest **63** paints / 283 ops, build **66** / 322, selected **64**, mature **168** / 607, mature build **171**; grid strokes 0 at rest and 1 in build; min painted feature height **3.50 CSS px**; ink 46.03 % phone rest.
 
 ## 2. The two contracts every number depends on
 
@@ -77,7 +77,7 @@
 
 | id | requirement | measured at this base | limit |
 |---|---|---|---|
-| E1 | `npm test` | `Test Files 23 passed (23) / Tests 208 passed (208)`, 0 skipped | >= **208** tests / 23 files, 0 skipped-by-deletion, no existing assertion relaxed (re-measure if another slice lands first) |
+| E1 | `npm test` | `Test Files 23 passed (23) / Tests 210 passed (210)` at `090260a` (4.03 s), 0 skipped | >= **210** tests / 23 files, 0 skipped-by-deletion, no existing assertion relaxed (re-measure if another slice lands first) |
 | E2 | `npm run typecheck` | clean (`tsc --noEmit`, no output) | clean |
 | E3 | `npm run validate` | `validated: no violations` **and** behaviour line `| 0 violation(s)` | 0 + 0, and the behaviour line stays `firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3` |
 | E4 | built js size | `dist/assets/index-oeY4tDi3.js` = **232,815 B** (gzip 73.63 kB, 53 modules) | <= **233,000 B** per `rev-q002-g1` section 5 (185 B of headroom today: 232815 > 232800, which is why the ceiling is 233000 and not 232800) |
@@ -85,6 +85,8 @@
 | E6 | draw census floor | rest 63 / build 66 / mature 168 paints; total ops 283 / 322 / 607; grid strokes 0 / 1; min feature 3.50 CSS px | no paint or op increase beyond C3-C6, and grid strokes still 0 at rest |
 | E7 | no new runtime dependency | `package.json` unchanged over the base range | empty diff; devDependencies only if the clip needs a runner, otherwise none |
 | E8 | touch and layout floors | dock minimum targets and the 46 px floor from `tests/ui/hud-layout.test.ts`; ink band of 3D D3/D4 | green, ink inside the band |
+
+> Note 2026-11-04 (entry-chunk ceiling, added after the 3E measurement): at audio-fixes tip `56b6e7c` (A-17 + A-18, not yet in main) the entry chunk measures `index-CDIgZVOa.js` **233061 B**, i.e. **61 B above the pinned 233000 ceiling** of E4. The developer's chunk-split slice (static tables into their own chunk) is the fix, so the Q-004 E-row must be evaluated on the post-split tree, where **the gate is the entry chunk only** and the tables chunk is reported separately.
 
 ## 4. What is gateable headlessly and what stays pending
 
