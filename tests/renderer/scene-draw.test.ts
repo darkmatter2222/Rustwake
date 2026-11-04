@@ -726,8 +726,12 @@ describe("Q-004a 3B: world and panel agree in the same frame", () => {
       for (const t of row) expect(t[3]).toBeGreaterThanOrEqual(FEATURE_MIN_UNITS);
       (PARTS[id] ? dedicated : fallback).push(id);
     }
-    expect(dedicated.sort().join(",")).toBe("furnace,signalLab,sorter,wireMill");
-    expect(fallback.sort().join(",")).toBe("circuitAssembler,copperSeparator,platePress,polymerRecycler");
+    // D-1 gives the four tier-3/tier-4 blueprints their own row, so the fallback list
+    // is empty and every authored id resolves to a dedicated silhouette.
+    expect(dedicated.sort().join(",")).toBe(
+      "circuitAssembler,copperSeparator,furnace,platePress,polymerRecycler,signalLab,sorter,wireMill"
+    );
+    expect(fallback.length).toBe(0);
   });
 });
 
@@ -1018,5 +1022,63 @@ describe("REV-MOTION-C-g1 E rows", () => {
     for (const [label, scale] of [["landscape", 284 / (WORLD_H + 12)], ["phone", 390 / (WORLD_W + 24)], ["desktop", 794 / (WORLD_H + 12)]] as [keyof typeof CHROME, number][]) {
       expect(bandCase(label).camera.scale).toBeCloseTo(scale, 4);
     }
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* REV-GLYPH-B-g1 rows D-1..D-4, F-1 (rev-desk-g1 sec.2/3, rev-motion-g1 F-1).   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The ten drawn glyph roles: the dock, the five authored machine silhouettes, the four
+ * roles that used to fall through to `generic`, and `generic` itself (D-1). The drone and
+ * the cargo pod are the D-2 pair; the wreck path and the build ghost are two full-field
+ * shapes and are named separately, as the 64-cell mask cannot separate them.
+ */
+const GLYPH_ROLES = [
+  "dock",
+  "sorter",
+  "furnace",
+  "wireMill",
+  "signalLab",
+  "polymerRecycler",
+  "copperSeparator",
+  "platePress",
+  "circuitAssembler",
+  "generic",
+] as const;
+
+describe("REV-GLYPH-B-g1 D rows", () => {
+  it("D-1: ten glyph silhouettes, every pair of the 45 at least 12 of 64 cells apart", () => {
+    const masks = GLYPH_ROLES.map((id) => maskOf(PARTS[id] ?? []));
+    const pairs: [string, number][] = [];
+    for (let i = 0; i < GLYPH_ROLES.length; i += 1) {
+      for (let j = i + 1; j < GLYPH_ROLES.length; j += 1) {
+        const distance = masks[i].reduce((sum, bit, k) => sum + Math.abs(bit - masks[j][k]), 0);
+        pairs.push([`${GLYPH_ROLES[i]}/${GLYPH_ROLES[j]}`, distance]);
+      }
+    }
+    const worstFive = [...pairs].sort((a, b) => a[1] - b[1]).slice(0, 5);
+    const min = Math.min(...pairs.map(([, d]) => d));
+    console.log("D-1 measured", JSON.stringify({
+      roles: GLYPH_ROLES.length,
+      pairs: pairs.length,
+      min,
+      worstFive,
+      cells: Object.fromEntries(GLYPH_ROLES.map((id, i) => [id, masks[i].reduce((sum, v) => sum + v, 0)])),
+      maskPrint: Object.fromEntries(GLYPH_ROLES.map((id, i) => [id, masks[i].join("").replace(/(.{8})/g, "$1 ").trim()])),
+      genericEqualsSorter: JSON.stringify(PARTS.generic) === JSON.stringify(PARTS.sorter),
+    }));
+    console.log(
+      `D-1 pairs=${pairs.length} min=${min} worst5=${worstFive.map(([k, v]) => `${v}:${k}`).join("  ")}`
+    );
+    expect(pairs.length).toBe(45);
+    expect(min).toBeGreaterThanOrEqual(12);
+    // The five roles that shared two silhouettes now carry their own mask.
+    for (const id of ["polymerRecycler", "copperSeparator", "platePress", "circuitAssembler"]) {
+      expect(maskOf(PARTS[id]).join("")).not.toBe(maskOf(PARTS.sorter).join(""));
+      expect(maskOf(PARTS[id]).join("")).not.toBe(maskOf(PARTS.generic).join(""));
+    }
+    expect(JSON.stringify(PARTS.generic)).not.toBe(JSON.stringify(PARTS.sorter));
   });
 });

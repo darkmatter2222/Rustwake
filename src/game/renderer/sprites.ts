@@ -112,9 +112,39 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [11, 5, 5, 4, 6], // right leg
   ],
   generic: [
-    [-12, 11, 24, 2, 15],
-    [-12, -11, 24, 22, 3],
-    [-9, -2, 18, 10, 6],
+    // D-1: its own lattice (two bars, both posts) so it is no longer the sorter's copy.
+    [-12, -8, 24, 3, 3], // bar at mask row 2
+    [-12, 4, 24, 3, 3], // bar at mask row 5
+    [-15, -11, 3, 22, 4], // left post
+    [12, -11, 3, 22, 4], // right post
+  ],
+  polymerRecycler: [
+    // D-1: drum stack - three bars with the right-hand post, no shared silhouette.
+    [-12, -11, 24, 3, 3], // bar at mask row 1
+    [-12, -4, 24, 3, 3], // bar at mask row 3
+    [-12, 4, 24, 3, 3], // bar at mask row 5
+    [12, -11, 3, 22, 4], // right post
+  ],
+  copperSeparator: [
+    // D-1: three bars one row higher, left-hand post.
+    [-12, -15, 24, 3, 3], // bar at mask row 0
+    [-12, -8, 24, 3, 3], // bar at mask row 2
+    [-12, -1, 24, 3, 3], // bar at mask rows 3-4
+    [-15, -11, 3, 22, 4], // left post
+  ],
+  platePress: [
+    // D-1: two wide plattens between both posts.
+    [-12, -11, 24, 3, 3], // bar at mask row 1
+    [-12, -1, 24, 3, 3], // bar at mask rows 3-4
+    [-15, -11, 3, 22, 4], // left post
+    [12, -11, 3, 22, 4], // right post
+  ],
+  circuitAssembler: [
+    // D-1: three sparse bars, the top one flush with the frame, left-hand post.
+    [-12, -15, 24, 3, 3], // bar at mask row 0
+    [-12, -4, 24, 3, 3], // bar at mask row 3
+    [-12, 8, 24, 3, 3], // bar at mask rows 6-7
+    [-15, -11, 3, 22, 4], // left post
   ],
   drone: [
     [-5, 3, 10, 4, 15, 1], // DR5 shadow ellipse (alpha 0.35)
