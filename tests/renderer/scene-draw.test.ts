@@ -29,7 +29,8 @@ import {
   AMBER_SHAPES,
   type PartTuple,
 } from "../../src/game/renderer/sprites";
-import { createInitialState, type MachineStatus, type SimState } from "../../src/game/simulation/types";
+import { createInitialState, createUnit, type DroneState, type MachineStatus, type SimState } from "../../src/game/simulation/types";
+import { advance } from "../../src/game/simulation/engine";
 import { DOCK_TILE, YARD_ROWS } from "../../src/game/simulation/commands";
 
 /**
@@ -838,5 +839,75 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
       }
     }
     console.log("L-4 measured", JSON.stringify(lines, null, 0));
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* REV-MOTION-C-g1 rows E-1..E-3 (rev-q4a-lay-g1 sec.3).                       */
+/* -------------------------------------------------------------------------- */
+
+/** The A3 cap for one frame's displacement and the half-pixel snap it is read on. */
+const A3_CAP = 7.0;
+const SNAP_TOL = 0.5;
+
+/** The engine's own unit record; one per working drone. */
+function fleetUnits(count: number): DroneState[] {
+  return Array.from({ length: count }, () => ({ ...createUnit() }));
+}
+
+/** A fixture with `count` working units, so the engine can be walked for real. The two
+ *  silhouette-only machines of the mature fixture carry `blueprint: "generic"`, which the
+ *  engine's recipe table does not know, so they take a real id for the walk. */
+function driven(base: SimState, count: number): SimState {
+  const list = fleetUnits(count);
+  return {
+    ...base,
+    machines: base.machines.map((m) => (BLUEPRINTS[m.blueprint] ? m : { ...m, blueprint: "sorter" })),
+    drone: list[0],
+    spares: list.slice(1),
+  } as unknown as SimState;
+}
+
+/** Six frames per tick of the real engine, stepped before each draw as the app's frame
+ *  loop does (`store.step` then `getState()` + `getFramePhase()`): the lead body per frame. */
+function leadTrack(state: SimState, ticks: number): [number, number][] {
+  const track: [number, number][] = [];
+  for (let k = 0; k < ticks; k += 1) {
+    advance(state, 1);
+    for (let f = 0; f < 6; f += 1) {
+      track.push(bodies(draw(state, { ...rest, framePhase: f / 6 }).stub.log)[0]);
+    }
+  }
+  return track;
+}
+
+function stepDeltas(track: [number, number][]): number[] {
+  return track.slice(1).map((p, i) => Math.hypot(p[0] - track[i][0], p[1] - track[i][1]));
+}
+
+describe("REV-MOTION-C-g1 E rows", () => {
+  it("E-1: a leg boundary is a frame step, not a teleport - every pair within the A3 cap", () => {
+    for (const [name, count] of [["fs1", 1], ["mature", 5]] as [string, number][]) {
+      const state = driven(name === "fs1" ? fs1() : mature(), count);
+      const track = leadTrack(state, 50);
+      const d = stepDeltas(track);
+      const max = Math.max(...d);
+      // The first leg is launched at tick 0 and arrives at tick 10, so tick 10 is the
+      // samples 54..59 pair block: five pairs of the loaded leg, the hold, the return.
+      const boundary = d.slice(48, 66).map((v) => +v.toFixed(2));
+      const top = d
+        .map((v, i) => [i + 1, +v.toFixed(2)] as [number, number])
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 6);
+      console.log(`E-1 ${name} measured`, JSON.stringify({
+        frames: track.length,
+        maxPerFrameDelta: +max.toFixed(2),
+        largestPairs: top,
+        atLegBoundary: boundary,
+        leadAt: [track[53], track[54], track[59], track[60], track[65], track[66]].map((p) => [+p[0].toFixed(2), +p[1].toFixed(2)]),
+      }));
+      expect(track.length).toBe(300);
+      expect(max).toBeLessThanOrEqual(A3_CAP + SNAP_TOL);
+    }
   });
 });

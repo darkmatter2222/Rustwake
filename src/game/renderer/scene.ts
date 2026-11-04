@@ -447,6 +447,29 @@ function drawRoutes(
 }
 
 /**
+ * E-1: the drone's place on its own cycle as one continuous parameter. The loaded leg is
+ * the in-flight record (wreck -> dock over `droneTravelTicks`); after the batch is counted
+ * the unit holds at the dock for that tick and then runs the empty leg back, `t = 1 - u`,
+ * finishing exactly at the next launch, so the position never teleports the whole leg.
+ * The model's own spacing makes the last arrival recoverable without a new state field
+ * (`nextDeliveryTick - arrive == droneDeliveryTicks - droneTravelTicks`), so the save
+ * format and the checksum inputs are untouched.
+ */
+export function droneLeg(unit: DroneState, tick: number, phase: number): number {
+  const travel = TUNING.droneTravelTicks;
+  if (unit.inFlight) {
+    // A1: position is a function of (arrive, framePhase), not of `state.tick` alone.
+    const depart = unit.inFlight.arrive - travel;
+    return Math.min(1, Math.max(0, (tick + phase - depart) / travel));
+  }
+  if (!(unit.deliveries > 0) || !(unit.nextDeliveryTick > 0)) return 0; // never launched
+  const lastArrive = unit.nextDeliveryTick - (TUNING.droneDeliveryTicks - travel);
+  const span = Math.max(1, unit.nextDeliveryTick - (lastArrive + 1));
+  const u = Math.min(1, Math.max(0, (tick + phase - (lastArrive + 1)) / span));
+  return 1 - u;
+}
+
+/**
  * Every working drone: shadow, rotors (one group), body, cargo pod and a `select`
  * nose on the heading side; units keep a 4-unit lateral lean under reduced motion
  * so five units read as five (B7).
@@ -472,14 +495,11 @@ function drawDrones(
   for (let i = 0; i < units.length; i += 1) {
     const unit = units[i];
     if (!unit || !unit.repaired) continue;
-    let t = 0;
-    if (unit.inFlight) {
-      // A1: position is a function of (arrive, framePhase), not of `state.tick` alone.
-      const depart = unit.inFlight.arrive - TUNING.droneTravelTicks;
-      t = Math.min(1, Math.max(0, (state.tick + phase - depart) / TUNING.droneTravelTicks));
-    }
+    // E-1: one continuous segment parameter over the whole delivery cycle, so a leg
+    // boundary is a step of one frame's worth rather than the whole 343.5 px leg.
+    const leg = droneLeg(unit, state.tick, phase);
     // A7: reduced motion keeps the two documented steps, no interpolation at all.
-    if (reducedMotion) t = unit.inFlight ? 0.5 : 0;
+    const t = reducedMotion ? (unit.inFlight ? 0.5 : 0) : leg;
     const lean = (i - (units.length - 1) / 2) * LEAN_UNITS * s;
     const x = wreck.x + (dock.x - wreck.x) * t + lean;
     const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * s;
