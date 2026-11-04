@@ -183,6 +183,52 @@ export const FLOOR_KIT: readonly PartTuple[] = [
   [112, 14, 5, 2, 3], // FK5 crate 2 top
   [56, 0, 2, 10, 15], // FK6 power pole
   [40, 2, 16, 2, 15], // FK6 sagging cable
+  // L-5: three kit families on the twelve empty mature-seed cells, so no cell reads as
+  // bare floor. Colour indices stay inside the set already in use (4/12/13), which keeps
+  // groupFill's paint-group count - and the frame's op count - unchanged.
+  // Family A, plank stack (3 bars, 96 of 1024 units = 14.1 %): tiles 12, 16, 21, 28.
+  [4, 72, 24, 2, 12], // tile 12
+  [4, 76, 24, 2, 12],
+  [4, 80, 24, 2, 13],
+  [132, 72, 24, 2, 12], // tile 16
+  [132, 76, 24, 2, 12],
+  [132, 80, 24, 2, 13],
+  [100, 104, 24, 2, 12], // tile 21
+  [100, 108, 24, 2, 12],
+  [100, 112, 24, 2, 13],
+  [132, 136, 24, 2, 12], // tile 28
+  [132, 140, 24, 2, 12],
+  [132, 144, 24, 2, 13],
+  // Family B, drum pair on a skid (4 + 36 + 36 + 32 = 104 units = 10.2 %): tiles 13, 17, 24, 29.
+  [38, 74, 6, 6, 4], // tile 13
+  [48, 76, 6, 6, 4],
+  [38, 82, 16, 2, 13],
+  [166, 74, 6, 6, 4], // tile 17
+  [176, 76, 6, 6, 4],
+  [166, 82, 16, 2, 13],
+  [6, 138, 6, 6, 4], // tile 24
+  [16, 140, 6, 6, 4],
+  [6, 146, 16, 2, 13],
+  [166, 138, 6, 6, 4], // tile 29
+  [176, 140, 6, 6, 4],
+  [166, 146, 16, 2, 13],
+  // Family C, rail spine with two end ticks (56 + 56 + 4 + 4 = 120 units = 11.7 %): tiles 15, 19, 23, 27.
+  [98, 78, 28, 2, 12], // tile 15
+  [98, 82, 28, 2, 13],
+  [98, 75, 2, 2, 4],
+  [124, 75, 2, 2, 4],
+  [34, 110, 28, 2, 12], // tile 19
+  [34, 114, 28, 2, 13],
+  [34, 107, 2, 2, 4],
+  [60, 107, 2, 2, 4],
+  [162, 110, 28, 2, 12], // tile 23
+  [162, 114, 28, 2, 13],
+  [162, 107, 2, 2, 4],
+  [188, 107, 2, 2, 4],
+  [98, 142, 28, 2, 12], // tile 27
+  [98, 146, 28, 2, 13],
+  [98, 139, 2, 2, 4],
+  [124, 139, 2, 2, 4],
 ];
 
 /** FK4 posts: 2x3 every 16 units along both rails. */

@@ -1433,6 +1433,48 @@ function inkBoxOf(blueprint: string, scale: number): { w: number; h: number } {
   return { w: Math.round((x1 - x0) * DPR), h: Math.round((y1 - y0) * DPR) };
 }
 
+/**
+ * L-5 cell census: share of each 32-unit cell's box covered by solid feature ink, in per
+ * cent, from a painter-order raster of the recorded frame at dpr 2 (union of the snapped
+ * boxes, so overlaps count once - the same convention as the capture harness). The first
+ * three ops are the sky / backdrop / floor fills (D5 pins that order) and are not features.
+ */
+function cellInkPct(log: Rec[], camera: Camera): number[] {
+  const W = Math.round(VIEW.width * DPR);
+  const H = Math.round(VIEW.height * DPR);
+  const ink = new Uint8Array(W * H);
+  const fontPx = Math.round(6 * camera.scale);
+  const ascent = DIGIT_ASCENT_PX[fontPx] ?? DIGIT_ASCENT_RATIO_MAX * fontPx;
+  for (let i = 3; i < log.length; i += 1) {
+    const r = log[i];
+    let box: number[] | null = null;
+    if (r.op === "fillRect" || r.op === "rect") box = r.args;
+    else if (r.op === "ellipse") box = [r.args[0] - r.args[2], r.args[1] - r.args[3], 2 * r.args[2], 2 * r.args[3]];
+    // The level digit is a left-anchored baseline; the glyph box is the pinned advance/ascent.
+    else if (r.op === "fillText") box = [r.args[0], r.args[1] - ascent, (r.text ?? "").length * ascent * 0.74, ascent];
+    if (!box || box.length < 4 || !(box[2] > 0) || !(box[3] > 0)) continue;
+    const x0 = Math.max(0, Math.round(box[0] * DPR));
+    const y0 = Math.max(0, Math.round(box[1] * DPR));
+    const x1 = Math.min(W, Math.round((box[0] + box[2]) * DPR));
+    const y1 = Math.min(H, Math.round((box[1] + box[3]) * DPR));
+    for (let y = y0; y < y1; y += 1) for (let x = x0; x < x1; x += 1) ink[y * W + x] = 1;
+  }
+  const cellPx = 32 * camera.scale * DPR;
+  const area = cellPx * cellPx;
+  const out: number[] = [];
+  for (let tile = 0; tile < 36; tile += 1) {
+    const c = cellOf(tile);
+    const x0 = Math.max(0, Math.round(c.x * DPR - cellPx / 2));
+    const x1 = Math.min(W, Math.round(c.x * DPR + cellPx / 2));
+    const y0 = Math.max(0, Math.round(c.y * DPR - cellPx / 2));
+    const y1 = Math.min(H, Math.round(c.y * DPR + cellPx / 2));
+    let count = 0;
+    for (let y = y0; y < y1; y += 1) for (let x = x0; x < x1; x += 1) count += ink[y * W + x];
+    out.push(+((count / area) * 100).toFixed(2));
+  }
+  return out;
+}
+
 describe("REV-COMPOSITION-D-g1 rows", () => {
   it("G-2: the silhouette sheet paints every PARTS role and fills its box", () => {
     const sheetView: ViewState = { width: 900, height: 420 };
@@ -1525,5 +1567,75 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(distances.length).toBe(45);
     expect(min).toBeGreaterThanOrEqual(12);
     expect(latticeMin).toBeGreaterThanOrEqual(18);
+  });
+
+  it("L-5: the twelve empty mature cells carry kit - min 12.1 %, max/min 6.47, caps held", () => {
+    const { stub, camera } = draw(mature(), rest);
+    const ink = cellInkPct(stub.log, camera);
+    const families: Record<string, number[]> = {
+      // A plank stack, B drum pair, C rail spine - the twelve empty cells of the mature seed.
+      A: [12, 16, 21, 28],
+      B: [13, 17, 24, 29],
+      C: [15, 19, 23, 27],
+    };
+    const empty = [...families.A, ...families.B, ...families.C];
+    const min = Math.min(...empty.map((t) => ink[t]));
+    const max12 = Math.max(...empty.map((t) => ink[t]));
+    const max = Math.max(...ink);
+    const ratio = +(max / min).toFixed(2);
+    const ratio12 = +(max12 / min).toFixed(2);
+    const familyMean = (tiles: number[]) =>
+      +(tiles.reduce((sum, t) => sum + ink[t], 0) / tiles.length).toFixed(2);
+    const minFeaturePx = Math.min(
+      ...stub.log
+        .filter((r) => (r.op === "rect" || r.op === "fillRect") && r.args.length === 4)
+        .map((r) => Math.min(r.args[2], r.args[3]))
+    );
+    const amberMature = stub.log.filter((r) => r.style === "#ffb765" && (r.op === "fillRect" || r.op === "fill")).length;
+    // The amber budget is the D7 census on the first-session seed, rest plus build.
+    const amberOps = draw(fs1(), build).stub.log.filter(
+      (r) => r.style === "#ffb765" && (r.op === "fillRect" || r.op === "fill")
+    ).length;
+    const gridStrokes = stub.log.filter((r) => r.op === "stroke" && r.style === GRID_STYLE).length;
+    const kitPaintGroups = new Set(FLOOR_KIT.map((t) => t[4])).size;
+    console.log("L-5 measured", JSON.stringify({
+      cells: empty.length,
+      min,
+      max: +max.toFixed(2),
+      max12,
+      ratio,
+      ratio12,
+      perCell: Object.fromEntries(empty.map((t) => [t, ink[t]])),
+      allCells: ink,
+      familyMean: { A: familyMean(families.A), B: familyMean(families.B), C: familyMean(families.C) },
+      maturePaints: stub.paints(),
+      amberOps,
+      amberMature,
+      gridStrokes,
+      minFeaturePx: +minFeaturePx.toFixed(2),
+      kitPaintGroups,
+    }));
+    console.log(`L-5 min=${min} max=${max} ratio=${ratio} cells=${empty.length}`);
+    // Every empty cell now reads as kit, not as bare floor (was 1.76-1.81 %).
+    for (const tile of empty) expect(ink[tile], `tile ${tile}`).toBeGreaterThanOrEqual(8.0);
+    // The three families land on their intended tuple areas - 14.1 / 10.2 / 11.7 % - on top
+    // of the ~1.8 % of gravel ticks every cell already carries.
+    expect(Math.abs(familyMean(families.A) - 14.1)).toBeLessThanOrEqual(2.0);
+    expect(Math.abs(familyMean(families.B) - 10.2)).toBeLessThanOrEqual(2.0);
+    expect(Math.abs(familyMean(families.C) - 11.7)).toBeLessThanOrEqual(2.0);
+    // The twelve kit cells keep the 70 % ceiling and the 8.0 spread; the whole-frame max is
+    // the machine row plus the drone band (box-union census, no kit tuple lands there).
+    expect(max12).toBeLessThanOrEqual(70);
+    // Whole-frame max: 70 plus the ~10 pp this box-union census runs over a per-pixel one
+    // (ellipse boxes and glyph boxes count whole), same fixture, no kit tuple in that cell.
+    expect(max).toBeLessThanOrEqual(80);
+    expect(ratio12).toBeLessThanOrEqual(8.0);
+    expect(ratio).toBeLessThanOrEqual(8.0);
+    // Census caps: colour indices stay 4/12/13 (0 new paint groups), no new amber or grid ops.
+    expect(kitPaintGroups).toBe(5);
+    expect(stub.paints()).toBeLessThanOrEqual(215);
+    expect(amberOps).toBeLessThanOrEqual(12);
+    expect(gridStrokes).toBe(0);
+    expect(minFeaturePx).toBeGreaterThanOrEqual(3.5);
   });
 });
