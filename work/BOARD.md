@@ -5,8 +5,8 @@ This is the initial published queue, not proof that agents are running. The coor
 | ID | Priority | State | Owner | Outcome | Dependencies |
 |---|---|---|---|---|---|
 | ORCH-001 | P0 | accepted-published | coordinator | Verify agent loading and asynchronous dispatch/poll/cancel canary on local OpenCode — receipt `work/review/CAPABILITY.md` | local runtime |
-| Q-001 | P0 | rework in progress (R-11..R-14) | developer (ses_e5c04ffbeffed38Ir78EbqIVPT, worktree q001-dev, branch q001-rework at e35a642) | Full-width research cards and readable mobile navigation — first pass integrated (`24429e1`/`1f0f722`); now reworking findings R-11..R-14 (verdict file `review-r1/rev-q001-g4.md` pending on disk) | none |
-| Q-002 | P1 | implementation in progress (per `work/review/REV-Q2SPEC.md`) | developer | Approved style slice: composed world and distinct machine sprites; scored against gates 3A-3E with captures E1-E8 | `work/review/REV-Q2SPEC.md` |
+| Q-001 | P0 | rework implemented, re-verdict g5 in flight | developer (ses_e5c04ffbeffed38Ir78EbqIVPT, worktree q001-dev, branch q001-rework) | First pass accepted at `24429e1` (verdict `work/review/REV-Q001.md`); follow-ups R-11..R-13 plus R-14 implemented — candidate `8cfc172`, integrated `8eb720c` | none |
+| Q-002 | P1 | implementation started (style-slice) | developer | Approved style slice: composed world and distinct machine sprites; scored against gates 3A-3E with captures E1-E8 | `work/review/REV-Q2SPEC.md` |
 | Q-003 | P1 | ready | unassigned | Clamp high-level indicators to bounds | none |
 | Q-004 | P1 | ready | unassigned | Interpolated drone/machine motion and salvage feedback | coordinate with Q-002 |
 | Q-005 | P1 | implemented (structural half), quality-review pending | developer (ses_e5c04ffbeffed38Ir78EbqIVPT, worktree q001-dev, branch q005-audio, base a8fb14a) | Audio mix-graph restructure `S-01..S-22` — candidate `ade4b60`, integrated `6ff436f`; handoff `work/evidence/q005-handoff.md`; listening half blocked B-11 | none |
