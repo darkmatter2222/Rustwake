@@ -1,0 +1,140 @@
+{
+  "task": "OPS-002",
+  "generation": 1,
+  "session": "ses_e5bff86deffegs755kGIkp3IAs",
+  "lease": { "name": "deployer", "id": "ops-001-g1", "reusedFor": "OPS-002 adoption round" },
+  "verifiedAt": "2026-11-04T03:26:40Z",
+  "environment": "databrick",
+  "status": "deployed",
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "urlLan": "http://192.168.86.48:8700/",
+  "reachability": "LAN verified + public-IP (hairpin) verified from the workstation; non-LAN vantage not independently sampled this round",
+
+  "prechecks": {
+    "portainerEndpointIdentity": { "id": 3, "name": "Databrick", "status": 1, "url": "tcp://192.168.86.48:9001", "matchesDiscoveryReceipt": true },
+    "apiAuth": "POST /api/auth 200, JWT present (values not recorded)",
+    "port8700": "FREE (8701 also free) at precheck",
+    "noPriorRustwakeResources": { "containers": "none", "networks": "none", "stacks": "none", "hostDir": "absent" },
+    "configIdentityComparedToDiscovery": {
+      "gruntwork/nginx/susman.conf": { "before": "716a06024aac974a1c30fe86193fcd094587f1a4137a9d98b82280fe718020dc", "lines": 583, "match": true },
+      "lan-dns/dnsmasq.conf": { "before": "c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8", "lines": 30, "match": true },
+      "gruntwork/docker-compose.prod.yml": { "before": "19aee44b7d7bc1381531116cd84de6fba138240001721a56161ed4a6706fe889", "match": true },
+      "ingress nginx -T digest": { "before": "5160be80243d5160d1a9453e803a94956b4b6645e4205372c6d8b196f890b0cc", "match": true },
+      "ingress conf.d/default.conf md5": { "before": "ee5ce7e03cc74c3b12047640f3d20a0c", "match": true }
+    },
+    "driftDetected": false,
+    "baselineContainerCount": 48
+  },
+
+  "candidate": {
+    "sourceSha": "14b6ea13f731fd62df50ed70bf88b0dffe88957c",
+    "codeTreeCommit": "4319104",
+    "buildLocation": "worktree fe4e05/ops002-build (detached HEAD 14b6ea1), node_modules installed by npm ci",
+    "buildChecks": { "typecheck": "clean", "test": "172 passed / 21 files", "build": "ok", "validate": "content 0 violations, behaviour 0 violations" },
+    "viteBase": "./ (relative asset links confirmed in dist/index.html)",
+    "artifactDigests": {
+      "index.html": "27f44ba5a5d520d1b95c5bedf9f0d6bad25440e449722294d1590f9807db63ab",
+      "assets/index-QdRGKUFy.js": "9f22ad9a7f75c92e165ff06124de771a93d67b419796f2b12c7496e362772839",
+      "assets/index-BKoAXyKv.css": "1c20412f9feb42b9294187ecd9af685b20f40e29ecde5bdee2c472e98b1b4250",
+      "assets/catchup.worker-DphWaCEx.js": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5"
+    }
+  },
+
+  "release": {
+    "id": "rustwake-14b6ea1",
+    "hostDir": "/home/darkmatter2222/rustwake/releases/rustwake-14b6ea1",
+    "staticConfig": "/home/darkmatter2222/rustwake/nginx/default.conf (sha256 47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2)",
+    "mainNginxConfig": "/home/darkmatter2222/rustwake/nginx/nginx.conf (sha256 83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd)",
+    "priorRelease": null,
+    "note": "first adoption: no previous release exists yet; this dir is kept as the known-good baseline"
+  },
+
+  "ownedResources": {
+    "stack": { "name": "rustwake", "id": 125, "endpointId": 3, "type": "standalone(2)", "projectPath": "/data/compose/125", "labels": { "app": "rustwake", "repo": "Rustwake", "env": "databrick", "managed-by": "portainer" }, "countWithThisName": 1 },
+    "container": { "name": "rustwake-static-1", "id": "3704bca65ff2c2976420dbc8de84d323da7af2110913eb792f220753e30cda80", "image": "nginx:stable-alpine (970364228b1e, already present locally)", "user": "101:101", "readonlyRootfs": true, "memoryLimit": 134217728, "nanoCpus": 500000000, "ports": "0.0.0.0:8700->8080", "network": "rustwake_default (own bridge)", "restartPolicy": "unless-stopped", "health": "healthy" },
+    "ingressEdit": {
+      "file": "/home/darkmatter2222/gruntwork/nginx/susman.conf",
+      "backup": "/home/darkmatter2222/gruntwork/nginx/susman.conf.bak-ops002-20261103",
+      "sha256_after": "1c8e3bdfecf7db6f20e0c2698ad829de282a329915c207df22f60238220764c4",
+      "addedLinesOnly": ["upstream rustwake-upstream { server 192.168.86.48:8700; }", "location = /rustwake { return 301 /rustwake/; }", "location /rustwake/ { proxy_http_version 1.1; proxy_set_header Host $host; proxy_pass http://rustwake-upstream/; }"],
+      "imageRebuilt": "susman-ingress:latest (docker compose -f docker-compose.prod.yml build susman-ingress)",
+      "nginxTest": "successful (checked in the new image before recreate, and container is Up)",
+      "nginxTDigest_after": "e393ae1b978e6c3947fea93ab14545cd701a8299ce8a807936bb7935738ec918",
+      "confMd5_after": "0f4ec716473c919fbfd998b31dffc4ca",
+      "recreatedServices": ["susman-ingress"]
+    },
+    "dnsEdit": "none (dnsmasq.conf sha256 unchanged c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8)"
+  },
+
+  "healthResults": {
+    "containerHealthcheck": "healthy (wget spider /healthz, interval 30s)",
+    "directLan": {
+      "http://192.168.86.48:8700/": 200,
+      "http://127.0.0.1:8700/healthz": 200,
+      "js": "200 application/javascript; charset=utf-8",
+      "css": "200 text/css",
+      "unknownPath": "200 (SPA fallback)"
+    },
+    "servedDigestsMatchBuild": true,
+    "cacheHeaders": "Cache-Control: public, immutable + Expires 1y on /assets/ (note: two Cache-Control headers are emitted, see notes)"
+  },
+
+  "externalHttpsVerification": [
+    "GET https://home.darkmatter2222.com/rustwake/ -> 200 text/html; charset=utf-8 (no -k, Let's Encrypt chain validated, cert CN/SAN home.darkmatter2222.com notAfter 2026-12-10)",
+    "GET https://home.darkmatter2222.com/rustwake/assets/index-QdRGKUFy.js -> 200 application/javascript; charset=utf-8, Content-Encoding: gzip, sha256 9f22ad9a... == build digest",
+    "GET https://home.darkmatter2222.com/rustwake/assets/index-BKoAXyKv.css -> 200 text/css, sha256 1c20412f... == build digest",
+    "GET https://home.darkmatter2222.com/rustwake/assets/catchup.worker-DphWaCEx.js -> 200",
+    "GET https://home.darkmatter2222.com/rustwake -> 301 -> https://home.darkmatter2222.com/rustwake/",
+    "GET http://home.darkmatter2222.com/rustwake/ -> 301 (existing 80->443 behaviour unchanged)",
+    "index.html as served carries ./assets/index-BKoAXyKv.css and ./assets/index-QdRGKUFy.js; both resolve under /rustwake/assets/ (200)"
+  ],
+
+  "browserSmoke": {
+    "tool": "playwright-core + Chrome, viewport 390x844 dsf 2, headless",
+    "status": 200,
+    "title": "Rustwake",
+    "loadMs": 4887,
+    "canvas": { "attr": "780x1688", "css": "390x844" },
+    "hudBefore": "RUSTWAKE Salvage yard 07 · systems waking Begin recovery Sound on",
+    "hudAfterTap": "Scrap 0 Store0/900 Sound ✓ A 1 Home Tap the highlighted wreck to salvage scrap. Tap Salvage until the drone repair is affordable. Store Salvage Build",
+    "gameplayAdvanced": true,
+    "firstTapLabel": "Begin recovery",
+    "layoutOverflow": "none (scrollW=clientW=390, scrollH=clientH=844)",
+    "requestsForRoute": ["200 /rustwake/", "200 /rustwake/assets/index-BKoAXyKv.css", "200 /rustwake/assets/index-QdRGKUFy.js"],
+    "failedRequests": [],
+    "consoleErrors": ["404 x2 -> provenance: /favicon.ico requested at the domain root, which is not a routed path"],
+    "screenshot": "C:\\Users\\ryans\\AppData\\Local\\Temp\\opencode\\ops002-live.png (local spool artifact, not committed)"
+  },
+
+  "unrelatedServicesBeforeAfter": [
+    { "check": "http://127.0.0.1:8001/health (llm-router)", "before": 200, "after": 200 },
+    { "check": "http://127.0.0.1:9190/env (mailcal)", "before": 200, "after": 200 },
+    { "check": "https://127.0.0.1:9181/admin/ (mailcow)", "before": 200, "after": 200 },
+    { "check": "http://127.0.0.1/ (ingress root)", "before": 301, "after": 301 },
+    { "check": "http://127.0.0.1/portainer/", "before": 200, "after": 200 },
+    { "check": "Host: susmannet.duckdns.org /pitch/", "before": 301, "after": 301 },
+    { "check": "Host: susmannet.duckdns.org /tracker/", "before": 301, "after": 301 },
+    { "check": "Host: home.darkmatter2222.com /grafana/", "before": 302, "after": 302 },
+    { "check": "Host: home.darkmatter2222.com /portainer/", "before": 200, "after": 200 },
+    { "check": "lan-dns answers (susmannet / mail / home)", "before": "192.168.86.48 | 192.168.86.48 | 99.122.58.29", "after": "identical" },
+    { "check": "running container count", "before": 48, "after": 49, "delta": "rustwake-static-1 only; susman-ingress recreated in place (same name/ports); docucraft-worker, gruntwork-worker, seismometer, vega-tracker-ingest show their own short uptimes in both samples (pre-existing restart cadence)" }
+  ],
+
+  "rollbackPointer": {
+    "staticContainer": "remove/recreate only: docker compose -f /data/compose/125/docker-compose.yml (or Portainer stack 125) -> single service `static`, network rustwake_default, host port 8700; no other stack touched",
+    "ingress": "restore /home/darkmatter2222/gruntwork/nginx/susman.conf from susman.conf.bak-ops002-20261103 (sha256 716a0602..., 583 lines), rebuild susman-ingress, up -d susman-ingress; expected digest returns to 5160be80.../ee5ce7e0...",
+    "releaseDirs": "keep /home/darkmatter2222/rustwake/releases/rustwake-14b6ea1 as the known-good baseline; cleanup only rustwake-owned retired release dirs",
+    "dns": "nothing to revert"
+  },
+
+  "driftAndNotes": [
+    "No precheck drift: endpoint identity, port 8700, and all four config identities matched the OPS-001-g1 discovery receipt exactly.",
+    "Stack create is idempotent-verified: the first POST returned through a PowerShell client-side error, and the follow-up run found exactly one stack `rustwake` (id 125) and reconciled instead of creating a duplicate (stack count on endpoint 3 stayed 26).",
+    "Two config iterations inside the owned stack before the container went healthy: (1) `-g \"pid ...\"` duplicated the image's own `pid` directive -> `\"pid\" directive is duplicate`; fixed by shipping a dedicated main nginx.conf with a single `pid /tmp/nginx.pid`. (2) read-only rootfs + uid 101 -> `mkdir() \"/var/cache/nginx/client_temp\" failed (13)`; fixed by pointing the nginx temp areas at the /tmp tmpfs. Final state: user 101:101, read-only rootfs, 128 MB / 0.5 CPU limits.",
+    "Single-file bind mounts are inode-pinned: content edits require recreating the container (Portainer PUT with force=1), which was done.",
+    "Cosmetic, non-gating: two console 404s for /favicon.ico at the domain root (index.html declares no icon link and the root has no favicon route). Fix with a relative icon link or a favicon.ico in the release dir.",
+    "Cosmetic, non-gating: /assets/ responses carry two Cache-Control headers (nginx `expires 1y` plus the explicit `add_header`), i.e. `max-age=31536000` and `public, immutable`. Consolidate into one `add_header Cache-Control \"public, max-age=31536000, immutable\"` in a later static-config revision.",
+    "Reachability truth: LAN and public-IP hairpin verified from the workstation; a non-LAN vantage still not independently sampled.",
+    "No secret values recorded; credentials were read from HomeAILab .env in-process only, per docs/KEEPASS.md and the keepass skill."
+  ]
+}
