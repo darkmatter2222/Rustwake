@@ -11,6 +11,7 @@ import {
 } from "../game/simulation/commands";
 import type { SimState } from "../game/simulation/types";
 import {
+  CELL,
   WRECK_POSITION,
   drawScene,
   fitCamera,
@@ -19,7 +20,7 @@ import {
   worldToTile,
   type Camera,
 } from "../game/renderer/scene";
-import { createAudio, type AudioApi, type CueName } from "../game/audio/audio";
+import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
 import { REJECT_TEXT, costSummary, hintFor, objectiveFor, primaryFor } from "./text";
 import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
@@ -45,13 +46,14 @@ let commandSeq = 0;
 const nextCommandId = (): string => `c${++commandSeq}`;
 const TAP_THRESHOLD = 8;
 
-export function App({ store }: { store: GameStore }) {
+export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi }) {
   useRevision(store);
   const state = useSim(store);
   const settings = useSettings(store);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const cameraRef = useRef<Camera>(fitCamera({ width: 360, height: 640 }));
-  const audioRef = useRef<AudioApi | null>(null);
+  const audioRef = useRef<AudioApi | null>(audioApi ?? null);
+  const cueStateRef = useRef<SimState>(store.getState());
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const drag = useRef({ moved: 0, lastX: 0, lastY: 0, pinch: 0 });
 
@@ -63,9 +65,9 @@ export function App({ store }: { store: GameStore }) {
   const [reportOpen, setReportOpen] = useState(true);
 
   const audio = useCallback((): AudioApi => {
-    if (!audioRef.current) audioRef.current = createAudio(settings.muted);
+    if (!audioRef.current) audioRef.current = createAudio(store.getSettings().muted);
     return audioRef.current;
-  }, [settings.muted]);
+  }, [store]);
 
   const dispatch = useCallback(
     (command: Command) => {
@@ -87,6 +89,21 @@ export function App({ store }: { store: GameStore }) {
     // Spec 6.4: at a large text scale the HUD keeps only the essential lines.
     root.classList.toggle("text-large", settings.textScale >= 1.5);
   }, [settings.textScale]);
+
+  useEffect(() => {
+    // Q-005 S-17: the store is the one source of truth for mute. An import or a
+    // leader/follower adopt replaces `settings` wholesale, and this write keeps the
+    // audio object equal to the stored value, so the glyph and the mix agree.
+    audio().setMuted(store.getSettings().muted);
+  }, [settings.muted, store, audio]);
+
+  useEffect(() => {
+    // Q-005 S-19: one paired suspend/resume per audio object, removed on unmount so
+    // a re-mount cannot leave a second listener behind.
+    const handler = onVisibility(audio());
+    document.addEventListener("visibilitychange", handler);
+    return () => document.removeEventListener("visibilitychange", handler);
+  }, [audio]);
 
   useEffect(() => {
     // The operating-system preference wins for reduced motion; the saved value
@@ -152,11 +169,28 @@ export function App({ store }: { store: GameStore }) {
           !store.getState().machines.some((m) => m.tile === ghostTile),
         selected,
       });
+      // Q-005 S-14: the machine-state cues come from the state diff itself, so a
+      // working sorter, a working furnace and the first data unit each get their
+      // declared voice without a per-machine timer. Near/far is the tile distance
+      // from the camera centre, so a zoomed-out yard reads with depth (S-16).
+      const previous = cueStateRef.current;
+      const current = store.getState();
+      if (previous !== current) {
+        const centre = worldToTile(cameraRef.current.x, cameraRef.current.y) ?? DOCK_TILE;
+        for (const cue of stateCues(previous, current)) {
+          const tile = cueTile(current, cue);
+          audio().play(cue, {
+            distance: tile === null ? 0 : tileDistance(tile, centre),
+            zoom: cameraRef.current.scale,
+          });
+        }
+        cueStateRef.current = current;
+      }
       raf = requestAnimationFrame(render);
     };
     raf = requestAnimationFrame(render);
     return () => cancelAnimationFrame(raf);
-  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected]);
+  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio]);
 
   const pinchDistance = (): number => {
     const list = [...pointers.current.values()];
@@ -535,6 +569,47 @@ export function firstFreeTile(state: SimState): number {
 /** Research appears in the dock once data exists or a node is known (spec 5.5). */
 export function showResearch(state: SimState): boolean {
   return (state.store.data ?? 0) > 0 || Object.keys(state.research ?? {}).length > 0;
+}
+
+/** Which working cue a running machine owns (Q-005 S-14). */
+export function machineCueFor(blueprint: string): CueName | null {
+  if (blueprint === "sorter") return "sorter";
+  if (blueprint === "furnace") return "furnace";
+  return null;
+}
+
+/** The tile a machine cue belongs to, for near/far attenuation; null for yard cues. */
+function cueTile(state: SimState, cue: CueName): number | null {
+  if (cue !== "sorter" && cue !== "furnace") return null;
+  for (const machine of state.machines) {
+    if (machineCueFor(machine.blueprint) === cue) return machine.tile;
+  }
+  return null;
+}
+
+/** Manhattan distance in cells between two yard tiles. */
+function tileDistance(a: number, b: number): number {
+  const first = tileToWorld(a);
+  const second = tileToWorld(b);
+  return (Math.abs(first.x - second.x) + Math.abs(first.y - second.y)) / CELL;
+}
+
+/**
+ * Cues the yard state itself produces, i.e. the voices no command tap fires
+ * (Q-005 S-14): a machine that completed a batch since the previous frame plays its
+ * own working cue, and the first data unit in the store plays the discovery accent.
+ * A pure diff over two states, so it is testable without a timer or a context.
+ */
+export function stateCues(previous: SimState, next: SimState): CueName[] {
+  const cues: CueName[] = [];
+  for (const machine of next.machines) {
+    const before = previous.machines.find((item) => item.id === machine.id);
+    if (!before || machine.batchesDone <= before.batchesDone) continue;
+    const cue = machineCueFor(machine.blueprint);
+    if (cue !== null && !cues.includes(cue)) cues.push(cue);
+  }
+  if ((previous.store.data ?? 0) <= 0 && (next.store.data ?? 0) > 0) cues.push("discovery");
+  return cues;
 }
 
 function cueFor(type: Command["type"]): CueName {
