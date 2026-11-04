@@ -457,16 +457,20 @@ function drawRoutes(
  */
 export function droneLeg(unit: DroneState, tick: number, phase: number): number {
   const travel = TUNING.droneTravelTicks;
+  const cycle = TUNING.droneDeliveryTicks - travel; // 40 ticks of empty leg + hold
+  const now = tick + phase;
   if (unit.inFlight) {
     // A1: position is a function of (arrive, framePhase), not of `state.tick` alone.
-    const depart = unit.inFlight.arrive - travel;
-    return Math.min(1, Math.max(0, (tick + phase - depart) / travel));
+    // The launch is recorded on the tick *before* the first frame that shows it and the
+    // cargo is counted on the tick *after* the last one, so the drawn frames of the leg
+    // are `arrive - travel + 1 .. arrive + 1`; that window is the parameter's 0..1.
+    return Math.min(1, Math.max(0, (now - (unit.inFlight.arrive - travel + 1)) / travel));
   }
   if (!(unit.deliveries > 0) || !(unit.nextDeliveryTick > 0)) return 0; // never launched
-  const lastArrive = unit.nextDeliveryTick - (TUNING.droneDeliveryTicks - travel);
-  const span = Math.max(1, unit.nextDeliveryTick - (lastArrive + 1));
-  const u = Math.min(1, Math.max(0, (tick + phase - (lastArrive + 1)) / span));
-  return 1 - u;
+  // The empty leg starts on the frame right after the cargo is counted and runs out
+  // exactly on the frame the next launch shows, so no seam between the two branches.
+  const lastArrive = unit.nextDeliveryTick - cycle;
+  return 1 - Math.min(1, Math.max(0, (now - (lastArrive + 1)) / cycle));
 }
 
 /**

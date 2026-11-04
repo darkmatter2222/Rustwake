@@ -10,6 +10,7 @@ import {
   WORLD_W,
   WRECK_POSITION,
   drawScene,
+  droneLeg,
   fitCamera,
   tileToWorld,
   worldToScreen,
@@ -850,16 +851,21 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
 const A3_CAP = 7.0;
 const SNAP_TOL = 0.5;
 
-/** The engine's own unit record; one per working drone. */
-function fleetUnits(count: number): DroneState[] {
-  return Array.from({ length: count }, () => ({ ...createUnit() }));
+/** The engine's own unit record; one per working drone. The fleet is staggered by 10
+ *  ticks, the spacing the mature save carries (`nextDeliveryTick` 18298 / 18318 / 18328 /
+ *  18336 / 18338), so the units do not hold at the dock in lockstep. */
+function fleetUnits(count: number, startTick: number): DroneState[] {
+  return Array.from({ length: count }, (_unused, i) => ({
+    ...createUnit(),
+    nextDeliveryTick: startTick + i * 10,
+  }));
 }
 
 /** A fixture with `count` working units, so the engine can be walked for real. The two
  *  silhouette-only machines of the mature fixture carry `blueprint: "generic"`, which the
  *  engine's recipe table does not know, so they take a real id for the walk. */
 function driven(base: SimState, count: number): SimState {
-  const list = fleetUnits(count);
+  const list = fleetUnits(count, base.tick);
   return {
     ...base,
     machines: base.machines.map((m) => (BLUEPRINTS[m.blueprint] ? m : { ...m, blueprint: "sorter" })),
@@ -868,17 +874,22 @@ function driven(base: SimState, count: number): SimState {
   } as unknown as SimState;
 }
 
-/** Six frames per tick of the real engine, stepped before each draw as the app's frame
- *  loop does (`store.step` then `getState()` + `getFramePhase()`): the lead body per frame. */
-function leadTrack(state: SimState, ticks: number): [number, number][] {
-  const track: [number, number][] = [];
+/** One driven walk: six frames per tick of the real engine, stepped before each draw as
+ *  the app's frame loop does (`store.step`, then `getState()` + `getFramePhase()`). The
+ *  body centres and the segment parameter `t` that produced them, per frame and per unit. */
+function trackAll(state: SimState, ticks: number): { tracks: [number, number][][]; params: number[][] } {
+  const tracks: [number, number][][] = [];
+  const params: number[][] = [];
   for (let k = 0; k < ticks; k += 1) {
     advance(state, 1);
     for (let f = 0; f < 6; f += 1) {
-      track.push(bodies(draw(state, { ...rest, framePhase: f / 6 }).stub.log)[0]);
+      tracks.push(bodies(draw(state, { ...rest, framePhase: f / 6 }).stub.log));
+      params.push(
+        [state.drone, ...state.spares].map((unit) => +droneLeg(unit, state.tick, f / 6).toFixed(4))
+      );
     }
   }
-  return track;
+  return { tracks, params };
 }
 
 function stepDeltas(track: [number, number][]): number[] {
@@ -889,12 +900,19 @@ describe("REV-MOTION-C-g1 E rows", () => {
   it("E-1: a leg boundary is a frame step, not a teleport - every pair within the A3 cap", () => {
     for (const [name, count] of [["fs1", 1], ["mature", 5]] as [string, number][]) {
       const state = driven(name === "fs1" ? fs1() : mature(), count);
-      const track = leadTrack(state, 50);
+      const { tracks, params } = trackAll(state, 50);
+      const track = tracks.map((f) => f[0]);
       const d = stepDeltas(track);
       const max = Math.max(...d);
-      // The first leg is launched at tick 0 and arrives at tick 10, so tick 10 is the
-      // samples 54..59 pair block: five pairs of the loaded leg, the hold, the return.
+      // The first leg is recorded on the first step (cargo `arrive` = start + 10), so the
+      // samples 54..59 are its last whole tick: the numbers below run straight through the
+      // loaded -> empty seam, where the pre-fix code teleported the whole 343.5 px leg.
       const boundary = d.slice(48, 66).map((v) => +v.toFixed(2));
+      const legParam = params.slice(48, 66).map((p) => p[0]);
+      // Every tick of six frames carries six different parameters (A2's rule, per tick).
+      const distinctPerTick = Array.from({ length: 50 }, (_u, k) =>
+        new Set(params.slice(k * 6, k * 6 + 6).map((p) => p[0])).size
+      );
       const top = d
         .map((v, i) => [i + 1, +v.toFixed(2)] as [number, number])
         .sort((a, b) => b[1] - a[1])
@@ -904,10 +922,65 @@ describe("REV-MOTION-C-g1 E rows", () => {
         maxPerFrameDelta: +max.toFixed(2),
         largestPairs: top,
         atLegBoundary: boundary,
+        segmentParamAtBoundary: legParam,
+        minDistinctParamPerTick: Math.min(...distinctPerTick),
         leadAt: [track[53], track[54], track[59], track[60], track[65], track[66]].map((p) => [+p[0].toFixed(2), +p[1].toFixed(2)]),
       }));
       expect(track.length).toBe(300);
       expect(max).toBeLessThanOrEqual(A3_CAP + SNAP_TOL);
+      // The seam is visible in the parameter itself: six steps per tick, no jump of a
+      // whole leg anywhere in the walk.
+      expect(Math.max(...boundary)).toBeLessThanOrEqual(A3_CAP + SNAP_TOL);
+      expect(Math.min(...distinctPerTick)).toBe(6);
+    }
+  });
+
+  it("E-2: airborne duty - at least 80 % of consecutive frames really move in both fixtures", () => {
+    // A5's definition: over 300 driven frames (299 pairs) at six frames per tick, the share
+    // of pairs whose lead body moved >= 0.5 CSS px (one grid step), plus its max step. The
+    // fleet line is the same count on the canvas level: a pair counts when *any* body moved,
+    // which is what "at least one unit airborne on every tick" gives the eye.
+    for (const [name, count] of [["fs1", 1], ["mature", 5]] as [string, number][]) {
+      const state = driven(name === "fs1" ? fs1() : mature(), count);
+      const { tracks: frames, params } = trackAll(state, 50);
+      const leadD = stepDeltas(frames.map((f) => f[0]));
+      const fleetD = frames.slice(1).map((f, i) =>
+        Math.max(...f.map((p, k) => Math.hypot(p[0] - frames[i][k][0], p[1] - frames[i][k][1])))
+      );
+      const duty = (list: number[]): [number, number] => {
+        const moving = list.filter((v) => v >= 0.5).length;
+        return [moving, +(moving / list.length).toFixed(4)];
+      };
+      const [leadMoving, leadShare] = duty(leadD);
+      const [fleetMoving, fleetShare] = duty(fleetD);
+      const max = Math.max(...leadD);
+      const stillAtTicks = [
+        ...new Set(leadD.reduce<number[]>((acc, v, i) => (v < 0.5 ? [...acc, Math.floor(i / 6)] : acc), [])),
+      ];
+      // Six different segment parameters in every one of the 50 ticks is the proof that
+      // the position is a function of the frame, not of the integer tick.
+      const sixTicks = Array.from({ length: 50 }, (_u, k) =>
+        new Set(params.slice(k * 6, k * 6 + 6).map((p) => p[0])).size
+      ).filter((n) => n === 6).length;
+      console.log(`E-2 ${name} measured`, JSON.stringify({
+        pairs: leadD.length,
+        bodiesPerFrame: frames[0].length,
+        leadMoving,
+        leadDutySharePct: +(leadShare * 100).toFixed(1),
+        fleetMoving,
+        fleetDutySharePct: +(fleetShare * 100).toFixed(1),
+        maxPerFrameDelta: +max.toFixed(2),
+        ticksWithSixDistinctParams: sixTicks,
+        // Ticks whose lead body did not move one grid step. With the segment parameter
+        // running over the drawn frames there is none; the pre-fix walk carried the two
+        // whole-tick clamps of the leg (343.5 px apart).
+        stillAtTicks,
+      }));
+      expect(leadShare).toBeGreaterThanOrEqual(0.8);
+      expect(fleetShare).toBeGreaterThanOrEqual(0.8);
+      expect(max).toBeLessThanOrEqual(A3_CAP);
+      expect(sixTicks).toBe(50);
+      expect(stillAtTicks.length).toBe(0);
     }
   });
 });
