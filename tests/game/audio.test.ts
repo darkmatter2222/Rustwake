@@ -324,7 +324,18 @@ describe("Q-005 mix graph structure", () => {
     api.setMuted(true);
     expect(api.isMuted()).toBe(true);
     expect(entry(api, "master")?.level).toBe(0);
-    for (const bus of CATEGORY_BUSES) expect(entry(api, bus)?.level).toBe(0);
+    // A-18 read-back: the mute is the single master write, so the buses keep their own
+    // gains in the snapshot as well as on the nodes (see the A-18 case for the arrays).
+    for (const bus of CATEGORY_BUSES) expect(entry(api, bus)?.level).toBe(BUS_LEVELS[bus]);
+    // A-18: the same numbers come off the real nodes - the snapshot is a read-back.
+    const nodeValues = stub.nodes
+      .filter((node) => node.kind === "gain")
+      .map((node) => node.gain?.value);
+    expect(nodeValues[0]).toBe(0); // the master, the single write
+    expect(entry(api, "master")?.level).toBe(nodeValues[0]);
+    CATEGORY_BUSES.forEach((name, index) => {
+      expect(entry(api, name)?.level).toBe(nodeValues[index + 1]);
+    });
     expect(voices(api).length).toBeGreaterThanOrEqual(1);
     // Muted: play() is a no-op, so no further gain node is allocated.
     const afterMute = stub.counter.gains;
@@ -610,7 +621,15 @@ describe("Q-005 mix graph structure", () => {
     expect(api.isMuted()).toBe(store.getSettings().muted);
     // The real node, not the table echo: the single master write did the muting.
     expect(masterGainValue(stub)).toBe(0);
-    for (const bus of CATEGORY_BUSES) expect(entry(api, bus)?.level).toBe(0);
+    // A-18 read-back: the snapshot levels are the node values, so the five buses show
+    // their own gains while the master alone reads 0.
+    for (const bus of CATEGORY_BUSES) {
+      expect(entry(api, bus)?.level).toBe(BUS_LEVELS[bus]);
+      expect(entry(api, bus)?.level).toBe(
+        stub.nodes.filter((node) => node.kind === "gain")[CATEGORY_BUSES.indexOf(bus) + 1]?.gain?.value
+      );
+    }
+    expect(entry(api, "master")?.level).toBe(0);
     api.dispose();
   });
 
@@ -765,6 +784,36 @@ describe("Q-005 mix graph structure", () => {
       expect(snapshot.find((candidate) => candidate.id === node.outputId)?.inputIds).toContain(node.id);
     }
     api.dispose();
+  });
+
+  it("A-18: the snapshot levels are read back from the real gain nodes", () => {
+    const stub = makeStub();
+    const api = createAudio(false);
+    api.resume();
+    const gainValues = () =>
+      stub.nodes.filter((node) => node.kind === "gain").map((node) => node.gain?.value);
+    const mixIds = ["master", ...CATEGORY_BUSES, "bed-ambience", "bed-music"];
+    const mixLevels = () => mixIds.map((id) => entry(api, id)?.level);
+    // Unmuted: master, the five buses in CATEGORY_BUSES order, then the two beds.
+    expect(gainValues()).toEqual([0.9, 0.25, 0.2, 0.45, 0.8, 0.6, 0.12, 0.1]);
+    expect(mixLevels()).toEqual(gainValues());
+    // Muted: one write, so only the master's own value moved - and the snapshot moves
+    // with the node instead of echoing a flag.
+    api.setMuted(true);
+    expect(gainValues()).toEqual([0, 0.25, 0.2, 0.45, 0.8, 0.6, 0.12, 0.1]);
+    expect(mixLevels()).toEqual(gainValues());
+    expect(entry(api, "master")?.level).toBe(0);
+    // And back again: the restore is the same single write.
+    api.setMuted(false);
+    expect(gainValues()).toEqual([0.9, 0.25, 0.2, 0.45, 0.8, 0.6, 0.12, 0.1]);
+    expect(mixLevels()).toEqual(gainValues());
+    api.dispose();
+    // With no context the declared levels are the fallback, not undefined.
+    const cold = createAudio(false);
+    expect(cold.graphSnapshot()).toEqual([]);
+    cold.resume();
+    expect(entry(cold, "master")?.level).toBe(BUS_LEVELS.master);
+    cold.dispose();
   });
 
   it("keeps the declared cue set complete", () => {

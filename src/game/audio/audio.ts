@@ -223,6 +223,8 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
   let bedsStarted = false;
   let listener: (() => void) | null = null;
   const busNodes = new Map<BusName, GainNode>();
+  /** A-18: the unautomated mix-stage nodes by table id, for reading levels back. */
+  const gainNodes = new Map<string, GainNode>();
   const table = new Map<string, GraphNode>();
   const voices: VoiceRecord[] = [];
   const lastPlayed = new Map<CueName, number>();
@@ -286,6 +288,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     const master = ctx.createGain();
     master.gain.value = isMuted ? 0 : BUS_LEVELS.master;
     masterNode = master;
+    gainNodes.set("master", master);
     declareBus("master");
     nodeIds.set(master, "master");
     link(master as unknown as Linkable, output as unknown as Linkable);
@@ -293,6 +296,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       const node = ctx.createGain();
       node.gain.value = BUS_LEVELS[name];
       busNodes.set(name, node);
+      gainNodes.set(name, node);
       nodeIds.set(node, name);
       declareBus(name);
       link(node as unknown as Linkable, master as unknown as Linkable);
@@ -300,10 +304,17 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     return ctx;
   };
 
-  /** Effective level of a table entry, with the single mute write applied (S-04). */
+  /**
+   * A-18: a table entry reports the value its real node holds, so the snapshot is a
+   * read-back and not an echo of the closure flags - the master carries the single mute
+   * write while the buses and beds keep their own gains, all visible at once. Without a
+   * context, and for the one-shot voices whose param is under envelope automation, the
+   * declared level is the only truth (S-04).
+   */
   const effectiveLevel = (node: GraphNode): number => {
-    const base = node.kind === "destination" ? 1 : node.level;
-    return isMuted ? 0 : base;
+    if (node.kind === "destination") return 1;
+    const live = gainNodes.get(node.id)?.gain.value;
+    return live === undefined ? node.level : live;
   };
 
   const startBeds = (context: AudioContext, now: number): void => {
@@ -318,6 +329,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       node.gain.value = bed.gain;
       // A-17: the entry exists before the link, so both sides of the edge are recorded.
       nodeIds.set(node, bed.id);
+      gainNodes.set(bed.id, node);
       table.set(bed.id, {
         id: bed.id,
         kind: "voice",
@@ -499,6 +511,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       for (const node of busNodes.values()) node.disconnect();
       if (masterNode) masterNode.disconnect();
       busNodes.clear();
+      gainNodes.clear();
       masterNode = null;
       table.clear();
       nodeIds.clear();
