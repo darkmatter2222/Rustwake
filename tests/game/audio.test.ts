@@ -478,6 +478,40 @@ describe("Q-005 mix graph structure", () => {
       .slice(6, 8)
       .map((node) => node.gain?.value);
     expect(bedGains).toEqual([AMBIENCE_BED_GAIN, MUSIC_BED_GAIN]);
+    // A-24: `dispose()` clears the bed guard together with the graph, so the next
+    // `resume()` rebuilds both sustained voices instead of leaving the yard with
+    // no room tone and no music bed.
+    api.dispose();
+    api.resume();
+    expect(voices(api).map((voice) => voice.id).sort()).toEqual(["bed-ambience", "bed-music"]);
+    expect(entry(api, "ambience")?.inputIds).toEqual(["bed-ambience"]);
+    expect(entry(api, "music")?.inputIds).toEqual(["bed-music"]);
+    // Two separate looping sources: one per started generation, never a third.
+    expect(stub.nodes.filter((node) => node.kind === "bufferSource" && node.loop === true).length).toBe(2);
+    api.dispose();
+  });
+
+  it("A-25: unmuting restarts both beds and a repeat call adds no second oscillator", () => {
+    const stub = makeStub();
+    const api = createAudio(true);
+    api.resume();
+    // Muted start: `resume()` leaves the sustained voices out of the graph.
+    expect(voices(api)).toEqual([]);
+    expect(entry(api, "ambience")?.inputIds).toEqual([]);
+    expect(entry(api, "music")?.inputIds).toEqual([]);
+    // The HUD mute button calls `setMuted`, not `resume()`; it must restore the beds.
+    api.setMuted(false);
+    expect(voices(api).map((voice) => voice.id).sort()).toEqual(["bed-ambience", "bed-music"]);
+    expect(entry(api, "ambience")?.inputIds).toEqual(["bed-ambience"]);
+    expect(entry(api, "music")?.inputIds).toEqual(["bed-music"]);
+    // Idempotent through the `bedsStarted` guard: no second oscillator on repeats.
+    const oscillators = stub.counter.oscillators;
+    api.setMuted(false);
+    api.setMuted(true);
+    api.setMuted(false);
+    expect(stub.counter.oscillators).toBe(oscillators);
+    expect(voices(api).map((voice) => voice.id).sort()).toEqual(["bed-ambience", "bed-music"]);
+    expect(stub.nodes.filter((node) => node.kind === "bufferSource" && node.loop === true).length).toBe(1);
     api.dispose();
   });
 
