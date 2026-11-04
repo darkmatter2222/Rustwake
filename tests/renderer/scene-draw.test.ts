@@ -1081,4 +1081,49 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     }
     expect(JSON.stringify(PARTS.generic)).not.toBe(JSON.stringify(PARTS.sorter));
   });
+
+  it("D-2: the cargo pod sits outside the drone body envelope - 13 of 64 cells apart", () => {
+    const base = fs1();
+    const loaded = {
+      ...base,
+      drone: { ...base.drone, repaired: true, inFlight: { arrive: 350, qty: 3 } },
+    } as unknown as SimState;
+    const group = droneOps(loaded, 0.5); // one airborne unit: the tail is the whole group
+    const body = group.find(
+      (r) => r.op === "fillRect" && r.style === "#5fd8e8" && onGrid(r.args[2], BODY_W) && onGrid(r.args[3], BODY_H)
+    );
+    const pod = group.find((r) => r.op === "fillRect" && onGrid(r.args[2], TOKEN_W) && onGrid(r.args[3], TOKEN_W));
+    expect(body, "the drone body").toBeDefined();
+    expect(pod, "the cargo pod").toBeDefined();
+    // The glyph origin is the body centre (DR1 is [-3,-2,6,4]); the pod's unit box comes
+    // off the same painted frame, so the mask below is the drawn geometry, not a table.
+    const cx = body!.args[0] + body!.args[2] / 2;
+    const cy = body!.args[1] + body!.args[3] / 2;
+    const podBox: readonly PartTuple[] = [[
+      (pod!.args[0] - cx) / S, (pod!.args[1] - cy) / S, pod!.args[2] / S, pod!.args[3] / S, 7,
+    ]];
+    const droneMask = maskOf(PARTS.drone);
+    const cargoMask = maskOf(podBox);
+    const droneCells = droneMask.reduce((sum, v) => sum + v, 0);
+    const cargoCells = cargoMask.reduce((sum, v) => sum + v, 0);
+    const pair = droneMask.reduce((sum, bit, k) => sum + Math.abs(bit - cargoMask[k]), 0);
+    const podOffsetX = pod!.args[0] - cx;
+    const podOffsetY = pod!.args[1] - cy;
+    console.log(`D-2 droneCells=${droneCells} cargoCells=${cargoCells} hamming=${pair}`, JSON.stringify({
+      podStyle: String(pod!.style),
+      podBoxUnits: podBox[0].slice(0, 4).map((v) => +v.toFixed(3)),
+      podOffsetPx: [+podOffsetX.toFixed(2), +podOffsetY.toFixed(2)],
+      cargoCellIndex: cargoMask.findIndex((v) => v === 1),
+      droneRows: [...new Set(droneMask.map((v, i) => (v ? Math.floor(i / 8) : -1)).filter((r) => r >= 0))],
+    }));
+    expect(droneCells).toBe(12);
+    expect(cargoCells).toBe(1);
+    expect(pair).toBe(13);
+    expect(pair).toBeGreaterThanOrEqual(12);
+    // Amber keeps its colour index, so the frame carries no new paint group.
+    expect(String(pod!.style)).toBe("#ffb765");
+    // Below the shadow ellipse (which ends at unit 6) and inside the cell.
+    expect(podOffsetY).toBeGreaterThan(6 * S - 0.5);
+    expect(podOffsetY + TOKEN_W).toBeLessThanOrEqual(16 * S + 0.5);
+  });
 });

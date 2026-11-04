@@ -520,7 +520,9 @@ function drawDrones(
     ctx.globalAlpha = 1;
     paintParts(ctx, x, y, s, PARTS.drone);
     const carrying = (unit.inFlight?.qty ?? 0) > 0; // DR3 amber when loaded
-    rectOf(ctx, x - 1.5 * s, y + 1.5 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");
+    // D-2: the pod hangs below the body envelope (mask rows 3-5) so the two glyphs are
+    // separable: 3-unit box on the left half of the body, one mask cell at row 6.
+    rectOf(ctx, x - 3 * s, y + 8 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");
     const noseRight = t <= 0.5; // DR4 nose at the heading end
     rectOf(ctx, noseRight ? x + 3 * s : x - 5 * s, y - 1 * s, 2 * s, 2 * s, "select");
   }
