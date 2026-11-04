@@ -74,7 +74,7 @@ body {
 .resources {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px;
+  gap: 2px 1px;
   max-width: 62%;
   font-variant-numeric: tabular-nums;
 }
@@ -361,10 +361,12 @@ body {
   color: var(--paper);
 }
 
+/* R-12: the state is its own line under the effect (Needs … first / Buy · N
+   Data / Known), never squeezed onto the title row. */
 .node__state {
+  margin: 0;
   color: var(--steel-light);
   font-size: 0.78rem;
-  text-align: right;
 }
 
 .node__effect {
@@ -376,12 +378,19 @@ body {
 .node__foot {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 8px;
+  gap: 6px 6px;
   align-items: center;
   justify-content: space-between;
 }
 
+/* R-11: the cost is a chip - its own box below the text stack with the shared
+   6 px gap, so "Efficient Cutters" and "8 Data" can never read as one string. */
 .node__cost {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid rgba(255, 183, 101, 0.5);
+  border-radius: 6px;
+  background: rgba(255, 183, 101, 0.1);
   color: var(--furnace);
   font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
@@ -551,6 +560,11 @@ body {
    `.objective` on purpose: the media query has the same specificity as the base rule.
    Measured in docs/evidence/2026-11-03-hud-share.md (844 × 390, B-26). */
 @media (max-height: 460px) {
+  /* Q-001r R-14: the dot grid breathes in this band - 2 px horizontal gap so the
+     first row carries about seven dots, not a twelve-wide sheet. */
+  .resources {
+    column-gap: 2px;
+  }
   .objective {
     max-width: min(100%, 400px);
   }

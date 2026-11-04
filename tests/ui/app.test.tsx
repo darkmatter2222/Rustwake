@@ -418,6 +418,36 @@ describe("first-feel shell", () => {
     expect(panel().indexOf("Known")).toBeLessThan(panel().indexOf("Buy · 8 Data"));
   });
 
+  it("gives every research card its own state line and a DOM cost node (Q-001r R-11..R-13)", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262));
+    const state = store.getState();
+    state.store["data"] = 6;
+    state.storeUnits += 6;
+    act(() => store.step(1));
+    act(() => findButton("Research")?.click());
+    const cards = [...document.querySelectorAll(".panel .node")];
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) {
+      const stateLine = card.querySelector("p.node__state");
+      const cost = card.querySelector(".node__cost");
+      expect(stateLine).not.toBeNull();
+      expect(cost?.textContent ?? "").toMatch(/^\d+ Data$/);
+      const mode = card.getAttribute("data-state");
+      const text = stateLine?.textContent ?? "";
+      if (mode === "known") expect(text).toBe("Known");
+      else if (mode === "locked") expect(text).toMatch(/^Needs .* first$/);
+      else expect(text).toBe(`Buy · ${cost?.textContent ?? ""}`);
+    }
+  });
+
   it("unlocks the Yard target after the tutorial and shows the save text (B-06)", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);

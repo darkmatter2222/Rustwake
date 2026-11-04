@@ -47,14 +47,20 @@ for (const [k, a] of after) {
   );
 }
 const flat = afterDoc.summary.filter((r) => r.noDocScroll).length;
+const rPassed = afterDoc.summary.filter((r) => r.rPass).length;
+const rGap = Math.min(...afterDoc.summary.map((r) => r.rGapMin ?? 999));
+console.log(
+  `Q-001r (R-11..R-13): pass ${rPassed}/${afterDoc.summary.length} cases;` +
+    ` smallest title->cost gap ${rGap} px; state lines + DOM cost nodes asserted per card.`
+);
 const clipped = afterDoc.summary.filter((r) => r.clippedText.length).length;
 const minTarget = Math.min(...afterDoc.summary.map((r) => r.minTarget).filter((n) => n < 999));
 console.log("");
-console.log(`after: no document scroll in ${flat}/${after.summary.length} cases;` +
+console.log(`after: no document scroll in ${flat}/${afterDoc.summary.length} cases;` +
   ` horizontally clipped text blocks in ${clipped} cases;` +
   ` smallest painted control ${minTarget} px;` +
   ` missing panels: ${(afterDoc.missingPanels || []).length ? (afterDoc.missingPanels || []).join(", ") : "none"}`);
-const purchase = after.summary.find((r) => r.purchase)?.purchase;
+const purchase = afterDoc.summary.find((r) => r.purchase)?.purchase;
 if (purchase) {
   for (const frame of purchase.frames) {
     console.log(

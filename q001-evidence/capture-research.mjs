@@ -127,7 +127,45 @@ const readPanel = () => {
   });
   const panelBox = panel.getBoundingClientRect();
   const root = document.documentElement;
+  // Q-001r (R-11..R-13): per-card structural metrics, read from real boxes.
+  const metrics = [...body.querySelectorAll(".node")].map((card) => {
+    const name = card.querySelector(".node__name");
+    const cost = card.querySelector(".node__cost");
+    const state = card.querySelector(".node__state");
+    const effect = card.querySelector(".node__effect");
+    const nb = name?.getBoundingClientRect();
+    const cb = cost?.getBoundingClientRect();
+    const sb = state?.getBoundingClientRect();
+    const eb = effect?.getBoundingClientRect();
+    return {
+      node: card.getAttribute("data-node") ?? "",
+      state: card.getAttribute("data-state") ?? "",
+      // R-11: strict vertical gap between the title line and the cost chip.
+      titleCostGap: nb && cb ? round(cb.top - nb.bottom) : null,
+      // R-12: a state line of its own, below the effect line.
+      ownStateLine: !!(sb && eb && sb.width > 0 && sb.top >= eb.bottom - 0.5),
+      stateText: (state?.textContent ?? "").trim(),
+      // R-13: the exact cost text present in the DOM in every state.
+      costText: (cost?.textContent ?? "").trim(),
+    };
+  });
+  const rPass =
+    metrics.length > 0 &&
+    metrics.every(
+      (c) =>
+        c.titleCostGap !== null &&
+        c.titleCostGap > 0 &&
+        c.ownStateLine &&
+        /^\d+(?:\.\d+)? Data$/.test(c.costText) &&
+        (c.state === "known"
+          ? c.stateText === "Known"
+          : c.state === "locked"
+            ? c.stateText.startsWith("Needs ") && c.stateText.endsWith(" first")
+            : c.stateText === `Buy · ${c.costText}`)
+    );
   return {
+    metrics,
+    rPass,
     ariaLabel: panel.getAttribute("aria-label") ?? "",
     text: panel.textContent ?? "",
     panel: { top: round(panelBox.top), bottom: round(panelBox.bottom), height: round(panelBox.height) },
@@ -363,6 +401,11 @@ const run = async () => {
         buttons: m.buttons.map((b) => `${b.text}${b.disabled ? " [disabled]" : ""} ${b.w}x${b.h}${b.insideViewport ? "" : " OUTSIDE"}`),
         minTarget: Math.round(minTarget * 10) / 10,
         blocks: m.textBlocks,
+        metrics: m.metrics,
+        rPass: m.rPass === true,
+        rGapMin: m.metrics.length
+          ? Math.min(...m.metrics.map((c) => c.titleCostGap ?? 999))
+          : null,
         reachable: row.reachable,
         purchase: row.purchase,
       };
@@ -396,6 +439,9 @@ const run = async () => {
     }
   }
   console.log(`wrote ${outDir.replace(/\\/g, "/")}/research-${label}.json + pngs (${summary.length} cases)`);
+  const rPassed = summary.filter((row) => row.rPass).length;
+  const rGap = Math.min(...summary.map((row) => row.rGapMin ?? 999));
+  console.log(`Q-001r metrics: pass ${rPassed}/${summary.length} cases; smallest title->cost gap ${rGap} px`);
 };
 
 await run();

@@ -336,6 +336,14 @@ export function ResearchPanel(props: {
             const blocked = prereq !== null && (owned[prereq.id] ?? 0) <= 0;
             const known = rank > 0;
             const cost = t("value.dataCost", { cost: def.cost });
+            // R-12: one state line per card, in its own row under the effect.
+            const stateLine = known
+              ? t("value.known")
+              : blocked
+                ? t("value.needsPrereq", {
+                    node: prereq ? prereq.label : t("value.earlierNode"),
+                  })
+                : t("btn.buyData", { cost });
             return (
               <article
                 className="node"
@@ -345,18 +353,13 @@ export function ResearchPanel(props: {
               >
                 <h3 className="node__title">
                   <span className="node__name">{def.label}</span>
-                  {known ? (
-                    <span className="node__state">{t("value.known")}</span>
-                  ) : blocked ? (
-                    <span className="node__state">
-                      {t("value.needsPrereq", {
-                        node: prereq ? prereq.label : t("value.earlierNode"),
-                      })}
-                    </span>
-                  ) : null}
                 </h3>
                 <p className="node__effect">{def.effect}</p>
+                <p className="node__state">{stateLine}</p>
                 <div className="node__foot">
+                  {/* R-13: the exact cost text lives in the DOM in every state,
+                      not only in the button label; R-11: it is a chip with its
+                      own box, its own row, and a 6 px gap under the stack. */}
                   <span className="node__cost">{cost}</span>
                   {known ? null : (
                     <button

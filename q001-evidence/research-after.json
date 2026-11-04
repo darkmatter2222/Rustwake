@@ -6,8 +6,8 @@
       "set": "all-known",
       "png": "research-after-phone-360x640-s1-all-known.png",
       "fontPx": 15,
-      "panelHeight": 358.8,
-      "containedScroll": 0,
+      "panelHeight": 371.2,
+      "containedScroll": 57,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -17,8 +17,8 @@
         "known:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "292px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "292px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -31,23 +31,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 287.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -59,30 +52,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 292,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 287.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -94,30 +87,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 292,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 287.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -129,14 +122,61 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 292,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
-      "reachable": null,
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 61.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
+      "reachable": {
+        "maxScroll": 57,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 225.8,
+            "h": 44,
+            "scrollTop": 0,
+            "insideViewport": true,
+            "insideBody": false
+          }
+        ]
+      },
       "purchase": null
     },
     {
@@ -146,7 +186,7 @@
       "png": "research-after-phone-360x640-s1-mixed.png",
       "fontPx": 15,
       "panelHeight": 371.2,
-      "containedScroll": 44,
+      "containedScroll": 106,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -156,12 +196,12 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "292px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "292px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 93.6x44",
-        "Buy · 12 Data [disabled] 100.9x44"
+        "Buy · 12 Data [disabled] 100.9x44 OUTSIDE"
       ],
       "minTarget": 44,
       "blocks": [
@@ -173,23 +213,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 287.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -201,9 +234,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 292,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 47.6,
           "lines": 1,
           "clip": 0
         },
@@ -229,30 +269,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 292,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 186.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -264,15 +304,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 292,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
       "reachable": {
-        "maxScroll": 44,
+        "maxScroll": 106,
         "rows": [
           {
             "text": "Close",
@@ -284,17 +359,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 441.4,
+            "y": 395.5,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 89,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 521.2,
+            "y": 511.5,
             "h": 44,
-            "scrollTop": 34,
+            "scrollTop": 106,
             "insideViewport": true,
             "insideBody": true
           }
@@ -309,7 +384,7 @@
       "png": "research-after-phone-360x640-s1-fresh.png",
       "fontPx": 15,
       "panelHeight": 371.2,
-      "containedScroll": 72,
+      "containedScroll": 130,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -319,13 +394,13 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "292px / 3 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "292px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 93.6x44",
         "Buy · 8 Data [disabled] 93.6x44",
-        "Buy · 12 Data [disabled] 100.9x44"
+        "Buy · 12 Data [disabled] 100.9x44 OUTSIDE"
       ],
       "minTarget": 44,
       "blocks": [
@@ -358,30 +433,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 292,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 174.7,
-          "w": 151.3,
           "lines": 1,
           "clip": 0
         },
@@ -393,30 +468,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 34,
-          "w": 33.6,
+          "w": 292,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 292,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 186.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -428,15 +503,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 292,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 56.9,
       "reachable": {
-        "maxScroll": 72,
+        "maxScroll": 130,
         "rows": [
           {
             "text": "Close",
@@ -448,7 +558,7 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 338.8,
+            "y": 358.6,
             "h": 44,
             "scrollTop": 0,
             "insideViewport": true,
@@ -456,17 +566,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 469.6,
+            "y": 395.7,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 113,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 520.4,
+            "y": 511.7,
             "h": 44,
-            "scrollTop": 63,
+            "scrollTop": 130,
             "insideViewport": true,
             "insideBody": true
           }
@@ -480,7 +590,7 @@
       "set": "all-known",
       "png": "research-after-phone-390x844-s1-all-known.png",
       "fontPx": 15,
-      "panelHeight": 358.8,
+      "panelHeight": 428.4,
       "containedScroll": 0,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
@@ -491,8 +601,8 @@
         "known:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "322px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "322px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -505,23 +615,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 317.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -533,30 +636,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 322,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 317.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -568,30 +671,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 322,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 317.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -603,13 +706,48 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 322,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 61.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
       "reachable": null,
       "purchase": null
     },
@@ -619,7 +757,7 @@
       "set": "mixed",
       "png": "research-after-phone-390x844-s1-mixed.png",
       "fontPx": 15,
-      "panelHeight": 414.6,
+      "panelHeight": 476.8,
       "containedScroll": 0,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
@@ -630,8 +768,8 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "322px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "322px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 93.6x44",
@@ -647,23 +785,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 317.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -675,9 +806,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 322,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 47.6,
           "lines": 1,
           "clip": 0
         },
@@ -703,30 +841,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 322,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 216.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -738,13 +876,48 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 322,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
       "reachable": null,
       "purchase": {
         "frames": [
@@ -766,7 +939,7 @@
               "buffers=open",
               "dispatch=locked"
             ],
-            "panelText": "ResearchCloseData40Efficient CuttersKnownOne cutting pulse gives 7 scrap instead of 5.4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.8 DataBuy · 8 DataRoute DispatchNeeds Smart Buffers firstA newly connected link carries 8 more units at once.12 DataBuy · 12 Data"
+            "panelText": "ResearchCloseData40Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Buy · 8 Data8 DataBuy · 8 DataRoute DispatchA newly connected link carries 8 more units at once.Needs Smart Buffers first12 DataBuy · 12 Data"
           },
           {
             "at": "after Buy · 8 Data",
@@ -786,7 +959,7 @@
               "buffers=known",
               "dispatch=open"
             ],
-            "panelText": "ResearchCloseData32Efficient CuttersKnownOne cutting pulse gives 7 scrap instead of 5.4 DataSmart BuffersKnownEvery machine holds 6 more units of input, so short gaps do not halt it.8 DataRoute DispatchA newly connected link carries 8 more units at once.12 DataBuy · 12 Data"
+            "panelText": "ResearchCloseData32Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Buy · 12 Data12 DataBuy · 12 Data"
           },
           {
             "at": "after Buy · 12 Data",
@@ -806,7 +979,7 @@
               "buffers=known",
               "dispatch=known"
             ],
-            "panelText": "ResearchCloseData20Efficient CuttersKnownOne cutting pulse gives 7 scrap instead of 5.4 DataSmart BuffersKnownEvery machine holds 6 more units of input, so short gaps do not halt it.8 DataRoute DispatchKnownA newly connected link carries 8 more units at once.12 Data"
+            "panelText": "ResearchCloseData20Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data"
           },
           {
             "at": "after retap Buy · 8 Data",
@@ -826,7 +999,7 @@
               "buffers=known",
               "dispatch=known"
             ],
-            "panelText": "ResearchCloseData20Efficient CuttersKnownOne cutting pulse gives 7 scrap instead of 5.4 DataSmart BuffersKnownEvery machine holds 6 more units of input, so short gaps do not halt it.8 DataRoute DispatchKnownA newly connected link carries 8 more units at once.12 Data"
+            "panelText": "ResearchCloseData20Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data"
           }
         ],
         "dataCostNote": "costs: buffers 8, dispatch 12"
@@ -838,8 +1011,8 @@
       "set": "fresh",
       "png": "research-after-phone-390x844-s1-fresh.png",
       "fontPx": 15,
-      "panelHeight": 442.8,
-      "containedScroll": 0,
+      "panelHeight": 489.5,
+      "containedScroll": 11,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -849,8 +1022,8 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "322px / 3 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "322px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 93.6x44",
@@ -888,30 +1061,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 322,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 204.7,
-          "w": 151.3,
           "lines": 1,
           "clip": 0
         },
@@ -923,30 +1096,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 34,
-          "w": 33.6,
+          "w": 322,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 322,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 216.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -958,14 +1131,85 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 322,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
-      "reachable": null,
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 56.9,
+      "reachable": {
+        "maxScroll": 11,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 303.3,
+            "h": 44,
+            "scrollTop": 0,
+            "insideViewport": true,
+            "insideBody": false
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 444.3,
+            "h": 44,
+            "scrollTop": 0,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 583.3,
+            "h": 44,
+            "scrollTop": 11,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 12 Data",
+            "y": 716.3,
+            "h": 44,
+            "scrollTop": 11,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
       "purchase": null
     },
     {
@@ -974,7 +1218,7 @@
       "set": "all-known",
       "png": "research-after-phone-412x915-s1-all-known.png",
       "fontPx": 15,
-      "panelHeight": 358.8,
+      "panelHeight": 428.4,
       "containedScroll": 0,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
@@ -985,8 +1229,8 @@
         "known:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "344px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "344px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -999,23 +1243,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 339.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1027,30 +1264,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 344,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 339.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1062,30 +1299,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 34,
-          "w": 33.6,
+          "w": 344,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 339.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1097,13 +1334,48 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 344,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 61.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
       "reachable": null,
       "purchase": null
     },
@@ -1113,7 +1385,7 @@
       "set": "mixed",
       "png": "research-after-phone-412x915-s1-mixed.png",
       "fontPx": 15,
-      "panelHeight": 414.6,
+      "panelHeight": 476.8,
       "containedScroll": 0,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
@@ -1124,8 +1396,8 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "344px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "344px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 93.6x44",
@@ -1141,23 +1413,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 34,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 339.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1169,9 +1434,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 34,
+          "w": 344,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 47.6,
           "lines": 1,
           "clip": 0
         },
@@ -1197,30 +1469,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 344,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 238.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -1232,13 +1504,48 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 344,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 44.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 44.8,
       "reachable": null,
       "purchase": null
     },
@@ -1248,7 +1555,7 @@
       "set": "fresh",
       "png": "research-after-phone-412x915-s1-fresh.png",
       "fontPx": 15,
-      "panelHeight": 442.8,
+      "panelHeight": 501,
       "containedScroll": 0,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
@@ -1259,8 +1566,8 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "344px / 3 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "344px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 93.6x44",
@@ -1298,30 +1605,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 34,
-          "w": 33.6,
+          "w": 344,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 34,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 226.7,
-          "w": 151.3,
           "lines": 1,
           "clip": 0
         },
@@ -1333,30 +1640,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 34,
-          "w": 33.6,
+          "w": 344,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 34,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 34,
           "w": 344,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 34,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 238.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -1368,13 +1675,48 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 34,
+          "w": 344,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 34,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 73.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 56.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 56.9,
       "reachable": null,
       "purchase": null
     },
@@ -1385,7 +1727,7 @@
       "png": "research-after-landscape-844x390-s1-all-known.png",
       "fontPx": 15,
       "panelHeight": 248.2,
-      "containedScroll": 54,
+      "containedScroll": 117,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -1395,8 +1737,8 @@
         "known:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "534px / 1 lines \"Data102\"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -1409,23 +1751,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 641.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1437,30 +1772,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 164,
-          "w": 33.6,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 164,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 641.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1472,30 +1807,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 164,
-          "w": 33.6,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 164,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 641.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1507,15 +1842,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 38.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 38.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 38.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 38.8,
       "reachable": {
-        "maxScroll": 54,
+        "maxScroll": 117,
         "rows": [
           {
             "text": "Close",
@@ -1536,7 +1906,7 @@
       "png": "research-after-landscape-844x390-s1-mixed.png",
       "fontPx": 15,
       "panelHeight": 248.2,
-      "containedScroll": 110,
+      "containedScroll": 166,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -1546,8 +1916,8 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 3 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "534px / 1 lines \"Data40\"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 93.6x44",
@@ -1563,23 +1933,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 101.9,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 641.8,
-          "w": 38.2,
           "lines": 1,
           "clip": 0
         },
@@ -1591,9 +1954,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 164,
-          "w": 33.6,
+          "w": 47.6,
           "lines": 1,
           "clip": 0
         },
@@ -1619,30 +1989,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 164,
-          "w": 33.6,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 540.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -1654,15 +2024,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 38.8,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 50.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 50.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 38.8,
       "reachable": {
-        "maxScroll": 110,
+        "maxScroll": 166,
         "rows": [
           {
             "text": "Close",
@@ -1674,17 +2079,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 278.6,
+            "y": 214.6,
             "h": 44,
-            "scrollTop": 5,
+            "scrollTop": 108,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 279.4,
+            "y": 273.7,
             "h": 44,
-            "scrollTop": 104,
+            "scrollTop": 166,
             "insideViewport": true,
             "insideBody": true
           }
@@ -1699,7 +2104,7 @@
       "png": "research-after-landscape-844x390-s1-fresh.png",
       "fontPx": 15,
       "panelHeight": 248.2,
-      "containedScroll": 138,
+      "containedScroll": 190,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -1709,12 +2114,12 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "33.6px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 3 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "47.6px / 1 lines \"4 Data\"",
+      "tallestBlock": "534px / 1 lines \"Data22\"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 93.6x44",
-        "Buy · 8 Data [disabled] 93.6x44",
+        "Buy · 8 Data [disabled] 93.6x44 OUTSIDE",
         "Buy · 12 Data [disabled] 100.9x44 OUTSIDE"
       ],
       "minTarget": 44,
@@ -1748,30 +2153,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 164,
-          "w": 33.6,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 164,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 87.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 528.7,
-          "w": 151.3,
           "lines": 1,
           "clip": 0
         },
@@ -1783,30 +2188,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 164,
-          "w": 33.6,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 47.6,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 96.2,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 540.9,
-          "w": 139.1,
           "lines": 1,
           "clip": 0
         },
@@ -1818,15 +2223,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 39.9,
+          "w": 53.9,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 50.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 50.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 50.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 50.9,
       "reachable": {
-        "maxScroll": 138,
+        "maxScroll": 190,
         "rows": [
           {
             "text": "Close",
@@ -1838,25 +2278,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 212,
+            "y": 214.8,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 15,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 8 Data",
-            "y": 278.8,
+            "y": 214.8,
             "h": 44,
-            "scrollTop": 33,
+            "scrollTop": 132,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 278.6,
+            "y": 273.9,
             "h": 44,
-            "scrollTop": 133,
+            "scrollTop": 190,
             "insideViewport": true,
             "insideBody": true
           }
@@ -1871,7 +2311,7 @@
       "png": "research-after-phone-360x640-s1.5-all-known.png",
       "fontPx": 22.5,
       "panelHeight": 371.2,
-      "containedScroll": 134,
+      "containedScroll": 226,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -1881,7 +2321,7 @@
         "known:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
       "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
@@ -1895,23 +2335,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 270.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -1923,30 +2356,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 270.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -1958,30 +2391,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 270.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -1993,15 +2426,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 109.2,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
       "reachable": {
-        "maxScroll": 134,
+        "maxScroll": 226,
         "rows": [
           {
             "text": "Close",
@@ -2022,7 +2490,7 @@
       "png": "research-after-phone-360x640-s1.5-mixed.png",
       "fontPx": 22.5,
       "panelHeight": 371.2,
-      "containedScroll": 200,
+      "containedScroll": 259,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -2032,7 +2500,7 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
       "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -2049,23 +2517,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 270.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2077,9 +2538,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 64.4,
           "lines": 1,
           "clip": 0
         },
@@ -2105,30 +2573,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -2140,15 +2608,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 117.4,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
       "reachable": {
-        "maxScroll": 200,
+        "maxScroll": 259,
         "rows": [
           {
             "text": "Close",
@@ -2160,17 +2663,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 474.7,
+            "y": 349,
             "h": 44,
-            "scrollTop": 19,
+            "scrollTop": 202,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 474.7,
+            "y": 467.1,
             "h": 44,
-            "scrollTop": 193,
+            "scrollTop": 259,
             "insideViewport": true,
             "insideBody": true
           }
@@ -2185,7 +2688,7 @@
       "png": "research-after-phone-360x640-s1.5-fresh.png",
       "fontPx": 22.5,
       "panelHeight": 326.8,
-      "containedScroll": 290,
+      "containedScroll": 319,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -2195,7 +2698,7 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
       "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -2234,30 +2737,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 226.8,
           "lines": 1,
           "clip": 0
         },
@@ -2269,30 +2772,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 50.4,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -2304,15 +2807,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 117.4,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 91.9,
       "reachable": {
-        "maxScroll": 290,
+        "maxScroll": 319,
         "rows": [
           {
             "text": "Close",
@@ -2324,25 +2862,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 334.5,
+            "y": 321.2,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 40,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 8 Data",
-            "y": 424.1,
+            "y": 320.8,
             "h": 44,
-            "scrollTop": 110,
+            "scrollTop": 241,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 424.1,
+            "y": 417.8,
             "h": 44,
-            "scrollTop": 284,
+            "scrollTop": 319,
             "insideViewport": true,
             "insideBody": true
           }
@@ -2356,8 +2894,8 @@
       "set": "all-known",
       "png": "research-after-phone-390x844-s1.5-all-known.png",
       "fontPx": 22.5,
-      "panelHeight": 479.7,
-      "containedScroll": 0,
+      "panelHeight": 489.5,
+      "containedScroll": 82,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -2367,8 +2905,8 @@
         "known:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "326px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "326px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -2381,23 +2919,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 300.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2409,30 +2940,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 300.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2444,30 +2975,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 300.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2479,14 +3010,61 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
-      "reachable": null,
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
+      "reachable": {
+        "maxScroll": 82,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 256.9,
+            "h": 44,
+            "scrollTop": 0,
+            "insideViewport": true,
+            "insideBody": false
+          }
+        ]
+      },
       "purchase": null
     },
     {
@@ -2496,7 +3074,7 @@
       "png": "research-after-phone-390x844-s1.5-mixed.png",
       "fontPx": 22.5,
       "panelHeight": 489.5,
-      "containedScroll": 56,
+      "containedScroll": 114,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -2506,8 +3084,8 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "326px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "326px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 129.4x44",
@@ -2523,23 +3101,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 300.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2551,9 +3122,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 64.4,
           "lines": 1,
           "clip": 0
         },
@@ -2579,30 +3157,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -2614,15 +3192,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
       "reachable": {
-        "maxScroll": 56,
+        "maxScroll": 114,
         "rows": [
           {
             "text": "Close",
@@ -2634,17 +3247,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 553.8,
+            "y": 497.2,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 114,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 678.9,
+            "y": 672.3,
             "h": 44,
-            "scrollTop": 49,
+            "scrollTop": 114,
             "insideViewport": true,
             "insideBody": true
           }
@@ -2659,7 +3272,7 @@
       "png": "research-after-phone-390x844-s1.5-fresh.png",
       "fontPx": 22.5,
       "panelHeight": 489.5,
-      "containedScroll": 102,
+      "containedScroll": 131,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -2669,13 +3282,13 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
       "tallestBlock": "326px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 129.4x44",
         "Buy · 8 Data [disabled] 129.4x44",
-        "Buy · 12 Data [disabled] 140.3x44"
+        "Buy · 12 Data [disabled] 140.3x44 OUTSIDE"
       ],
       "minTarget": 44,
       "blocks": [
@@ -2708,30 +3321,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 226.8,
           "lines": 1,
           "clip": 0
         },
@@ -2743,30 +3356,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 50.4,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -2778,15 +3391,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 91.9,
       "reachable": {
-        "maxScroll": 102,
+        "maxScroll": 131,
         "rows": [
           {
             "text": "Close",
@@ -2798,7 +3446,7 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 425.8,
+            "y": 452.5,
             "h": 44,
             "scrollTop": 0,
             "insideViewport": true,
@@ -2806,17 +3454,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 599.8,
+            "y": 496.5,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 131,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 678.9,
+            "y": 671.6,
             "h": 44,
-            "scrollTop": 95,
+            "scrollTop": 131,
             "insideViewport": true,
             "insideBody": true
           }
@@ -2830,8 +3478,8 @@
       "set": "all-known",
       "png": "research-after-phone-412x915-s1.5-all-known.png",
       "fontPx": 22.5,
-      "panelHeight": 479.7,
-      "containedScroll": 0,
+      "panelHeight": 530.7,
+      "containedScroll": 41,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -2841,8 +3489,8 @@
         "known:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "348px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "348px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -2855,23 +3503,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 322.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2883,30 +3524,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 322.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2918,30 +3559,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 50.4,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 322.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -2953,14 +3594,61 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
-      "reachable": null,
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
+      "reachable": {
+        "maxScroll": 41,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 286.7,
+            "h": 44,
+            "scrollTop": 0,
+            "insideViewport": true,
+            "insideBody": false
+          }
+        ]
+      },
       "purchase": null
     },
     {
@@ -2970,7 +3658,7 @@
       "png": "research-after-phone-412x915-s1.5-mixed.png",
       "fontPx": 22.5,
       "panelHeight": 530.7,
-      "containedScroll": 15,
+      "containedScroll": 73,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -2980,8 +3668,8 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "348px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "348px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 129.4x44",
@@ -2997,23 +3685,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 322.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -3025,9 +3706,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 64.4,
           "lines": 1,
           "clip": 0
         },
@@ -3053,30 +3741,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -3088,15 +3776,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 83.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 83.7,
       "reachable": {
-        "maxScroll": 15,
+        "maxScroll": 73,
         "rows": [
           {
             "text": "Close",
@@ -3108,17 +3831,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 583.7,
+            "y": 568,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 73,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 749.7,
+            "y": 743.1,
             "h": 44,
-            "scrollTop": 8,
+            "scrollTop": 73,
             "insideViewport": true,
             "insideBody": true
           }
@@ -3133,7 +3856,7 @@
       "png": "research-after-phone-412x915-s1.5-fresh.png",
       "fontPx": 22.5,
       "panelHeight": 530.7,
-      "containedScroll": 61,
+      "containedScroll": 90,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -3143,7 +3866,7 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
       "tallestBlock": "348px / 2 lines \"One cutting pulse gives 7 scrap instead of 5.\"",
       "clippedText": [],
       "buttons": [
@@ -3182,30 +3905,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 50.4,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 226.8,
           "lines": 1,
           "clip": 0
         },
@@ -3217,30 +3940,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 50.4,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -3252,15 +3975,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 91.9,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 91.9,
       "reachable": {
-        "maxScroll": 61,
+        "maxScroll": 90,
         "rows": [
           {
             "text": "Close",
@@ -3272,7 +4030,7 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 455.6,
+            "y": 482.3,
             "h": 44,
             "scrollTop": 0,
             "insideViewport": true,
@@ -3280,17 +4038,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 629.7,
+            "y": 567.3,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 90,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 749.7,
+            "y": 742.4,
             "h": 44,
-            "scrollTop": 54,
+            "scrollTop": 90,
             "insideViewport": true,
             "insideBody": true
           }
@@ -3305,7 +4063,7 @@
       "png": "research-after-landscape-844x390-s1.5-all-known.png",
       "fontPx": 22.5,
       "panelHeight": 234.7,
-      "containedScroll": 176,
+      "containedScroll": 265,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -3315,8 +4073,8 @@
         "known:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -3329,23 +4087,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 622.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -3357,30 +4108,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 164,
-          "w": 50.4,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 164,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 622.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -3392,30 +4143,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 164,
-          "w": 50.4,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 164,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 622.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -3427,15 +4178,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 55.2,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 80.7,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 55.2,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 55.2,
       "reachable": {
-        "maxScroll": 176,
+        "maxScroll": 265,
         "rows": [
           {
             "text": "Close",
@@ -3456,7 +4242,7 @@
       "png": "research-after-landscape-844x390-s1.5-mixed.png",
       "fontPx": 22.5,
       "panelHeight": 234.7,
-      "containedScroll": 216,
+      "containedScroll": 297,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -3466,8 +4252,8 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 129.4x44 OUTSIDE",
@@ -3483,23 +4269,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 152.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 622.7,
-          "w": 57.3,
           "lines": 1,
           "clip": 0
         },
@@ -3511,9 +4290,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 164,
-          "w": 50.4,
+          "w": 64.4,
           "lines": 1,
           "clip": 0
         },
@@ -3539,30 +4325,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 164,
-          "w": 50.4,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 471.5,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -3574,15 +4360,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 55.2,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 88.9,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 63.4,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 55.2,
       "reachable": {
-        "maxScroll": 216,
+        "maxScroll": 297,
         "rows": [
           {
             "text": "Close",
@@ -3594,17 +4415,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 274.1,
+            "y": 217.5,
             "h": 44,
-            "scrollTop": 95,
+            "scrollTop": 207,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 274,
+            "y": 270,
             "h": 44,
-            "scrollTop": 212,
+            "scrollTop": 297,
             "insideViewport": true,
             "insideBody": true
           }
@@ -3619,7 +4440,7 @@
       "png": "research-after-landscape-844x390-s1.5-fresh.png",
       "fontPx": 22.5,
       "panelHeight": 234.7,
-      "containedScroll": 237,
+      "containedScroll": 314,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -3629,8 +4450,8 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "50.4px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "64.4px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 129.4x44",
@@ -3668,30 +4489,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 164,
-          "w": 50.4,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 164,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 131.7,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 453.2,
-          "w": 226.8,
           "lines": 1,
           "clip": 0
         },
@@ -3703,30 +4524,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 164,
-          "w": 50.4,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 64.4,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 144.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 471.5,
-          "w": 208.5,
           "lines": 1,
           "clip": 0
         },
@@ -3738,15 +4559,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 59.8,
+          "w": 73.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 63.4,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 88.9,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 63.4,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 63.4,
       "reachable": {
-        "maxScroll": 237,
+        "maxScroll": 314,
         "rows": [
           {
             "text": "Close",
@@ -3758,25 +4614,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 247.1,
+            "y": 216.8,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 56,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 8 Data",
-            "y": 274.4,
+            "y": 216.8,
             "h": 44,
-            "scrollTop": 115,
+            "scrollTop": 224,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 274.3,
+            "y": 269.3,
             "h": 44,
-            "scrollTop": 232,
+            "scrollTop": 314,
             "insideViewport": true,
             "insideBody": true
           }
@@ -3791,7 +4647,7 @@
       "png": "research-after-phone-360x640-s2-all-known.png",
       "fontPx": 30,
       "panelHeight": 321,
-      "containedScroll": 337,
+      "containedScroll": 453,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -3801,7 +4657,7 @@
         "known:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
@@ -3815,23 +4671,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 251.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -3843,30 +4692,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 251.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -3878,30 +4727,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 251.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -3913,15 +4762,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 142.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 142.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 337,
+        "maxScroll": 453,
         "rows": [
           {
             "text": "Close",
@@ -3942,7 +4826,7 @@
       "png": "research-after-phone-360x640-s2-mixed.png",
       "fontPx": 30,
       "panelHeight": 271,
-      "containedScroll": 446,
+      "containedScroll": 520,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -3952,7 +4836,7 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -3969,23 +4853,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 251.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -3997,9 +4874,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 81.2,
           "lines": 1,
           "clip": 0
         },
@@ -4025,30 +4909,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -4060,15 +4944,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 446,
+        "maxScroll": 520,
         "rows": [
           {
             "text": "Close",
@@ -4080,17 +4999,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 408.2,
+            "y": 333.4,
             "h": 44,
-            "scrollTop": 197,
+            "scrollTop": 345,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 408.3,
+            "y": 401.5,
             "h": 44,
-            "scrollTop": 439,
+            "scrollTop": 520,
             "insideViewport": true,
             "insideBody": true
           }
@@ -4105,7 +5024,7 @@
       "png": "research-after-phone-360x640-s2-fresh.png",
       "fontPx": 30,
       "panelHeight": 271,
-      "containedScroll": 523,
+      "containedScroll": 528,
       "docScroll": "360x640 vs 360x640",
       "noDocScroll": true,
       "cards": 3,
@@ -4115,8 +5034,8 @@
         "locked:314@x23"
       ],
       "bodyWidth": 314,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
-      "tallestBlock": "296px / 3 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
+      "tallestBlock": "296px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 4 Data 165.3x44",
@@ -4154,17 +5073,24 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 296,
-          "lines": 3,
+          "lines": 1,
           "clip": 0
         },
         {
@@ -4175,13 +5101,6 @@
           "clip": 0
         },
         {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 296,
-          "lines": 2,
-          "clip": 0
-        },
-        {
           "text": "Every machine holds 6 more units of input, so ",
           "x": 32,
           "w": 296,
@@ -4189,30 +5108,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 67.2,
+          "w": 296,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 296,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -4224,15 +5143,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 296,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 112.8,
       "reachable": {
-        "maxScroll": 523,
+        "maxScroll": 528,
         "rows": [
           {
             "text": "Close",
@@ -4244,25 +5198,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 408.1,
+            "y": 332.7,
             "h": 44,
-            "scrollTop": 1,
+            "scrollTop": 111,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 8 Data",
-            "y": 407.8,
+            "y": 332.8,
             "h": 44,
-            "scrollTop": 275,
+            "scrollTop": 354,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 407.9,
+            "y": 401.9,
             "h": 44,
-            "scrollTop": 517,
+            "scrollTop": 528,
             "insideViewport": true,
             "insideBody": true
           }
@@ -4277,7 +5231,7 @@
       "png": "research-after-phone-390x844-s2-all-known.png",
       "fontPx": 30,
       "panelHeight": 489.5,
-      "containedScroll": 135,
+      "containedScroll": 251,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -4287,7 +5241,7 @@
         "known:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "326px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
@@ -4301,23 +5255,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 281.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4329,30 +5276,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 281.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4364,30 +5311,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 281.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4399,15 +5346,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 142.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 135,
+        "maxScroll": 251,
         "rows": [
           {
             "text": "Close",
@@ -4428,7 +5410,7 @@
       "png": "research-after-phone-390x844-s2-mixed.png",
       "fontPx": 30,
       "panelHeight": 475,
-      "containedScroll": 208,
+      "containedScroll": 282,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -4438,7 +5420,7 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "326px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -4455,23 +5437,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 281.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4483,9 +5458,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 81.2,
           "lines": 1,
           "clip": 0
         },
@@ -4511,30 +5493,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -4546,15 +5528,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 208,
+        "maxScroll": 282,
         "rows": [
           {
             "text": "Close",
@@ -4566,17 +5583,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 605.2,
+            "y": 435.4,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 243,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 612.3,
+            "y": 605.5,
             "h": 44,
-            "scrollTop": 201,
+            "scrollTop": 282,
             "insideViewport": true,
             "insideBody": true
           }
@@ -4591,7 +5608,7 @@
       "png": "research-after-phone-390x844-s2-fresh.png",
       "fontPx": 30,
       "panelHeight": 475,
-      "containedScroll": 254,
+      "containedScroll": 290,
       "docScroll": "390x844 vs 390x844",
       "noDocScroll": true,
       "cards": 3,
@@ -4601,7 +5618,7 @@
         "locked:344@x23"
       ],
       "bodyWidth": 344,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "326px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -4640,30 +5657,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 302.6,
           "lines": 1,
           "clip": 0
         },
@@ -4675,30 +5692,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 67.2,
+          "w": 326,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 326,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -4710,15 +5727,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 326,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 112.8,
       "reachable": {
-        "maxScroll": 254,
+        "maxScroll": 290,
         "rows": [
           {
             "text": "Close",
@@ -4730,25 +5782,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 409.1,
+            "y": 434.7,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 9,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 8 Data",
-            "y": 612.2,
+            "y": 434.8,
             "h": 44,
-            "scrollTop": 39,
+            "scrollTop": 252,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 612.3,
+            "y": 605.9,
             "h": 44,
-            "scrollTop": 247,
+            "scrollTop": 290,
             "insideViewport": true,
             "insideBody": true
           }
@@ -4763,7 +5815,7 @@
       "png": "research-after-phone-412x915-s2-all-known.png",
       "fontPx": 30,
       "panelHeight": 530.7,
-      "containedScroll": 94,
+      "containedScroll": 210,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -4773,7 +5825,7 @@
         "known:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "348px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
@@ -4787,23 +5839,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 303.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4815,30 +5860,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 303.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4850,30 +5895,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 32,
-          "w": 67.2,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 303.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4885,15 +5930,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 142.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 94,
+        "maxScroll": 210,
         "rows": [
           {
             "text": "Close",
@@ -4914,7 +5994,7 @@
       "png": "research-after-phone-412x915-s2-mixed.png",
       "fontPx": 30,
       "panelHeight": 530.7,
-      "containedScroll": 153,
+      "containedScroll": 227,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -4924,12 +6004,12 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "348px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 165.3x44",
-        "Buy · 12 Data [disabled] 179.8x44"
+        "Buy · 12 Data [disabled] 179.8x44 OUTSIDE"
       ],
       "minTarget": 44,
       "blocks": [
@@ -4941,23 +6021,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 32,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 303.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -4969,9 +6042,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 81.2,
           "lines": 1,
           "clip": 0
         },
@@ -4997,30 +6077,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -5032,15 +6112,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 108.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 108.6,
       "reachable": {
-        "maxScroll": 153,
+        "maxScroll": 227,
         "rows": [
           {
             "text": "Close",
@@ -5052,17 +6167,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 620.6,
+            "y": 477.8,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 216,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 683.6,
+            "y": 675.8,
             "h": 44,
-            "scrollTop": 145,
+            "scrollTop": 227,
             "insideViewport": true,
             "insideBody": true
           }
@@ -5077,7 +6192,7 @@
       "png": "research-after-phone-412x915-s2-fresh.png",
       "fontPx": 30,
       "panelHeight": 530.7,
-      "containedScroll": 199,
+      "containedScroll": 235,
       "docScroll": "412x915 vs 412x915",
       "noDocScroll": true,
       "cards": 3,
@@ -5087,7 +6202,7 @@
         "locked:366@x23"
       ],
       "bodyWidth": 366,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
       "tallestBlock": "348px / 3 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
@@ -5126,30 +6241,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 32,
-          "w": 67.2,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 32,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 32,
-          "w": 302.6,
           "lines": 1,
           "clip": 0
         },
@@ -5161,30 +6276,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 32,
-          "w": 67.2,
+          "w": 348,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 32,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 32,
           "w": 348,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 32,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 32,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -5196,15 +6311,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 32,
+          "w": 348,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 32,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 146.8,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 112.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 112.8,
       "reachable": {
-        "maxScroll": 199,
+        "maxScroll": 235,
         "rows": [
           {
             "text": "Close",
@@ -5216,7 +6366,7 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 424.5,
+            "y": 459.1,
             "h": 44,
             "scrollTop": 0,
             "insideViewport": true,
@@ -5224,17 +6374,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 666.6,
+            "y": 478.2,
             "h": 44,
-            "scrollTop": 0,
+            "scrollTop": 224,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 683.6,
+            "y": 676.2,
             "h": 44,
-            "scrollTop": 191,
+            "scrollTop": 235,
             "insideViewport": true,
             "insideBody": true
           }
@@ -5249,7 +6399,7 @@
       "png": "research-after-landscape-844x390-s2-all-known.png",
       "fontPx": 30,
       "panelHeight": 189.6,
-      "containedScroll": 349,
+      "containedScroll": 462,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -5259,8 +6409,8 @@
         "known:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [],
       "minTarget": 999,
@@ -5273,23 +6423,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 603.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -5301,30 +6444,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Known",
           "x": 164,
-          "w": 67.2,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersKnown",
+          "text": "4 Data",
+          "x": 164,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 603.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -5336,30 +6479,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Known",
           "x": 164,
-          "w": 67.2,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchKnown",
+          "text": "8 Data",
+          "x": 164,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 603.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -5371,15 +6514,50 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 71.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "known",
+          "titleCostGap": 105.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "known",
+          "titleCostGap": 105.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 71.6,
       "reachable": {
-        "maxScroll": 349,
+        "maxScroll": 462,
         "rows": [
           {
             "text": "Close",
@@ -5400,7 +6578,7 @@
       "png": "research-after-landscape-844x390-s2-mixed.png",
       "fontPx": 30,
       "panelHeight": 139.6,
-      "containedScroll": 424,
+      "containedScroll": 529,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -5410,8 +6588,8 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Efficient CuttersKnown\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
         "Buy · 8 Data 165.3x44 OUTSIDE",
@@ -5427,23 +6605,16 @@
           "clip": 0
         },
         {
-          "text": "Efficient CuttersKnown",
+          "text": "Efficient Cutters",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Efficient Cutters",
           "x": 164,
           "w": 203.8,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Known",
-          "x": 603.5,
-          "w": 76.5,
           "lines": 1,
           "clip": 0
         },
@@ -5455,9 +6626,16 @@
           "clip": 0
         },
         {
+          "text": "Known",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "4 Data",
           "x": 164,
-          "w": 67.2,
+          "w": 81.2,
           "lines": 1,
           "clip": 0
         },
@@ -5483,30 +6661,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Buy · 8 Data",
           "x": 164,
-          "w": 67.2,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 401.8,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -5518,15 +6696,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "known",
+          "titleCostGap": 71.6,
+          "ownStateLine": true,
+          "stateText": "Known",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "open",
+          "titleCostGap": 109.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 8 Data",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 109.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 71.6,
       "reachable": {
-        "maxScroll": 424,
+        "maxScroll": 529,
         "rows": [
           {
             "text": "Close",
@@ -5538,17 +6751,17 @@
           },
           {
             "text": "Buy · 8 Data",
-            "y": 208.6,
+            "y": 198.8,
             "h": 44,
-            "scrollTop": 250,
+            "scrollTop": 331,
             "insideViewport": true,
             "insideBody": true
           },
           {
             "text": "Buy · 12 Data",
-            "y": 208,
+            "y": 202.8,
             "h": 44,
-            "scrollTop": 419,
+            "scrollTop": 529,
             "insideViewport": true,
             "insideBody": true
           }
@@ -5563,7 +6776,7 @@
       "png": "research-after-landscape-844x390-s2-fresh.png",
       "fontPx": 30,
       "panelHeight": 104,
-      "containedScroll": 471,
+      "containedScroll": 572,
       "docScroll": "844x390 vs 844x390",
       "noDocScroll": true,
       "cards": 3,
@@ -5573,11 +6786,11 @@
         "locked:534@x155"
       ],
       "bodyWidth": 534,
-      "narrowestBlock": "67.2px / 1 lines \"4 Data\"",
-      "tallestBlock": "516px / 2 lines \"Smart BuffersNeeds Efficient Cutters first\"",
+      "narrowestBlock": "81.2px / 1 lines \"4 Data\"",
+      "tallestBlock": "516px / 2 lines \"Every machine holds 6 more units of input, so \"",
       "clippedText": [],
       "buttons": [
-        "Buy · 4 Data 165.3x44",
+        "Buy · 4 Data 165.3x44 OUTSIDE",
         "Buy · 8 Data [disabled] 165.3x44 OUTSIDE",
         "Buy · 12 Data [disabled] 179.8x44 OUTSIDE"
       ],
@@ -5612,30 +6825,30 @@
           "clip": 0
         },
         {
-          "text": "4 Data",
+          "text": "Buy · 4 Data",
           "x": 164,
-          "w": 67.2,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Smart BuffersNeeds Efficient Cutters first",
+          "text": "4 Data",
+          "x": 164,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Smart Buffers",
           "x": 164,
           "w": 175.6,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Efficient Cutters first",
-          "x": 377.4,
-          "w": 302.6,
           "lines": 1,
           "clip": 0
         },
@@ -5647,30 +6860,30 @@
           "clip": 0
         },
         {
-          "text": "8 Data",
+          "text": "Needs Efficient Cutters first",
           "x": 164,
-          "w": 67.2,
+          "w": 516,
           "lines": 1,
           "clip": 0
         },
         {
-          "text": "Route DispatchNeeds Smart Buffers first",
+          "text": "8 Data",
+          "x": 164,
+          "w": 81.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
           "x": 164,
           "w": 516,
-          "lines": 2,
+          "lines": 1,
           "clip": 0
         },
         {
           "text": "Route Dispatch",
           "x": 164,
           "w": 192.3,
-          "lines": 1,
-          "clip": 0
-        },
-        {
-          "text": "Needs Smart Buffers first",
-          "x": 401.8,
-          "w": 278.2,
           "lines": 1,
           "clip": 0
         },
@@ -5682,15 +6895,50 @@
           "clip": 0
         },
         {
+          "text": "Needs Smart Buffers first",
+          "x": 164,
+          "w": 516,
+          "lines": 1,
+          "clip": 0
+        },
+        {
           "text": "12 Data",
           "x": 164,
-          "w": 79.8,
+          "w": 93.8,
           "lines": 1,
           "clip": 0
         }
       ],
+      "metrics": [
+        {
+          "node": "cutters",
+          "state": "open",
+          "titleCostGap": 75.8,
+          "ownStateLine": true,
+          "stateText": "Buy · 4 Data",
+          "costText": "4 Data"
+        },
+        {
+          "node": "buffers",
+          "state": "locked",
+          "titleCostGap": 109.8,
+          "ownStateLine": true,
+          "stateText": "Needs Efficient Cutters first",
+          "costText": "8 Data"
+        },
+        {
+          "node": "dispatch",
+          "state": "locked",
+          "titleCostGap": 109.8,
+          "ownStateLine": true,
+          "stateText": "Needs Smart Buffers first",
+          "costText": "12 Data"
+        }
+      ],
+      "rPass": true,
+      "rGapMin": 75.8,
       "reachable": {
-        "maxScroll": 471,
+        "maxScroll": 572,
         "rows": [
           {
             "text": "Close",
@@ -5702,25 +6950,25 @@
           },
           {
             "text": "Buy · 4 Data",
-            "y": 225.2,
+            "y": 216.8,
             "h": 44,
-            "scrollTop": 113,
+            "scrollTop": 155,
             "insideViewport": true,
             "insideBody": false
           },
           {
             "text": "Buy · 8 Data",
-            "y": 224.6,
+            "y": 216.8,
             "h": 44,
-            "scrollTop": 282,
+            "scrollTop": 357,
             "insideViewport": true,
             "insideBody": false
           },
           {
             "text": "Buy · 12 Data",
-            "y": 225.1,
+            "y": 216.9,
             "h": 44,
-            "scrollTop": 450,
+            "scrollTop": 559,
             "insideViewport": true,
             "insideBody": false
           }

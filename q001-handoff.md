@@ -6,6 +6,31 @@
 - Candidate commit: `24429e1a1d5135dc5b989f44767353512c4702b0`
 - Quality verdict: pending independent reviewer (developer self-report is not acceptance)
 
+## Q-001r addendum (rework, assignment q001-g2, branch q001-rework from e35a642)
+
+- R-11: the title is its own `h3` row; the cost moved into a boxed chip
+  (`.node__cost`: padding 1px 6px, 1px amber border, radius 6px); the foot gap
+  uses the existing 6 px token (`gap: 6px 6px`). Real-browser check: smallest
+  title-bottom -> cost-top gap over the 36 cases = 38.8 px (> 0).
+- R-12: one own `<p class="node__state">` line per card under the effect, exact
+  strings: "Known" (known) / "Needs X first" (locked) / "Buy · N Data" (open),
+  asserted per state in the new jsdom test.
+- R-13: the exact cost text ("4/8/12 Data") is a DOM node in every state
+  (the chip), regex `^\d+ Data$` per card; the button label is unchanged.
+- R-14: the dot grid (`.resources`) column-gap is 1 px at the base and widened
+  to 2 px inside the `@media (max-height: 460px)` band, so the first row of the
+  landscape strip carries about seven dots instead of twelve.
+- Harness: `capture-research.mjs` now records per-card `titleCostGap`,
+  `ownStateLine`, `stateText`, `costText` + a per-case `rPass`; `compare.mjs`
+  prints the aggregate line (and two pre-existing `after.summary` crashes on
+  the Map were fixed to `afterDoc.summary`).
+- Checks: vitest 21 files / 173 passed (172 existing + 1 new, no existing
+  assertion edited); typecheck/validate/build clean; JS 225.42 kB gzip 70.42.
+- Evidence: `q001-evidence/research-after.json` + 39 after PNGs regenerated;
+  compare prints `Q-001r (R-11..R-13): pass 36/36 cases`; purchase sequence
+  still moves ranks/data (8 then 12 bought, no double-charge).
+- Candidate: this commit; listening/motion gates unchanged (still pending).
+
 ## What changed
 
 `src/ui/Panels.tsx` ??? `ResearchPanel` renders one full-width `<article class="node">` card per
