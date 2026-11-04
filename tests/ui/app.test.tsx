@@ -560,4 +560,56 @@ describe("REV-LAYOUT-g1 chrome rows", () => {
       expect(rowStyle?.display).toBe(textScale >= 1.5 ? "none" : "flex");
     }
   });
+
+  it("L-3: one dock row at text scale 2 keeps the 46 px floor on every button", () => {
+    injectSheet();
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    act(() => {
+      store.setSettings({ textScale: 2 });
+    });
+    mount(store);
+    act(() => findButton("Begin recovery")?.click());
+    for (let i = 0; i < 6; i += 1) {
+      act(() => findButton("Salvage")?.click());
+      act(() => store.step(TUNING.manualPulseTicks));
+    }
+    act(() => findButton("Repair drone")?.click());
+    act(() => store.step(262));
+    const state = store.getState();
+    state.store["data"] = 6;
+    state.storeUnits += 6;
+    state.tutorial = 9; // the five dock targets, as in the measured yard fixture
+    act(() => store.step(1));
+
+    const dock = document.querySelector(".dock");
+    const buttons = [...document.querySelectorAll(".dock__btn")] as HTMLButtonElement[];
+    const costs = [...document.querySelectorAll(".dock__cost")];
+    const dockStyle = dock ? getComputedStyle(dock) : null;
+    const btnStyle = buttons[0] ? getComputedStyle(buttons[0]) : null;
+    const costStyle = costs[0] ? getComputedStyle(costs[0]) : null;
+    console.log("L-3 ts2 measured", JSON.stringify({
+      buttons: buttons.map((b) => (b.textContent ?? "").trim().split(" ")[0]),
+      flexWrap: dockStyle?.flexWrap ?? null,
+      gap: dockStyle?.gap ?? null,
+      btnFontSize: btnStyle?.fontSize ?? null,
+      btnPadding: btnStyle?.padding ?? null,
+      btnMinHeight: btnStyle?.minHeight ?? null,
+      btnLineHeight: btnStyle?.lineHeight ?? null,
+      costNodes: costs.length,
+      costFontSize: costStyle?.fontSize ?? null,
+    }));
+
+    expect(buttons.length).toBe(5);
+    // One row: the row may not wrap, so the five labels have to fit their measured
+    // 370 px (chromium: 51.1 + 44 + 134.8 + 49.6 + 82.5 + 4 x 2 px gaps = 370), and
+    // the height floor is untouched by the smaller type.
+    expect(dockStyle?.flexWrap).toBe("nowrap");
+    expect(dockStyle?.gap).toBe("2px");
+    for (const button of buttons) {
+      expect(getComputedStyle(button).minHeight).toBe("46px");
+      expect(getComputedStyle(button).fontSize).toBe("0.62rem");
+    }
+    expect(costs.length).toBeGreaterThan(0);
+    expect(costStyle?.fontSize).toBe("0.5rem");
+  });
 });

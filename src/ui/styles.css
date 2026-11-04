@@ -184,19 +184,6 @@ body {
   padding: 0 5px;
 }
 
-/* At a large scale the four dock labels' min-content widths are 433 px together, more
-   than a 360 px phone, so the row is trimmed to 327 px with small padding and a
-   narrower gap, and `flex-wrap` keeps any remainder from being clipped off-screen:
-   a fifth target or a longer label becomes a second row instead of lost text. */
-.text-large .dock {
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.text-large .dock__btn {
-  padding: 0 3px;
-}
-
 .objective__btn {
   min-height: 44px;
   padding: 0 12px;
@@ -255,6 +242,33 @@ body {
   display: block;
   font-size: 0.72rem;
   color: var(--furnace);
+}
+
+/* L-3. At a large scale the five dock labels' min-content widths together are 1.6x a
+   360 px phone, so a wrapping row costs two lines of 46 and 66.8 px (measured dock
+   10,740,370,96 at rest and 10,719.2,370,116.8 with the Sell target) and the world loses
+   another band. One row needs the labels themselves smaller: the gap goes to 2 px, the
+   padding to 2 px and both font sizes step down, which is enough for the five min-contents
+   to fit 370 px with `nowrap` while every button keeps the 46 px height floor. Declared
+   after `.dock`, `.dock__btn` and `.dock__cost` on purpose so the later-wins order matches
+   the specificity, as with the short-viewport block below. */
+.text-large .dock {
+  gap: 2px;
+  flex-wrap: nowrap;
+}
+
+.text-large .dock__btn {
+  padding: 0 2px;
+  font-size: 0.62rem;
+  /* Two lines of a 0.62rem label plus a 0.5rem cost measure 35.6 px at this leading, so
+     the button stays at its 46 px floor instead of growing to 47.34 px. */
+  line-height: 1.1;
+}
+
+/* The cost line is the second line of the two-line primary button; it steps down with the
+   label so that button still measures 46 px rather than growing past the row. */
+.text-large .dock__cost {
+  font-size: 0.5rem;
 }
 
 /* In the .hud column so the panel always sits between the objective and the dock
