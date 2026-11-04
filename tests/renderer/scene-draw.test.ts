@@ -1214,4 +1214,68 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     }
     expect(markContrast).toBeGreaterThanOrEqual(3.0);
   });
+
+  it("D-4: identity marks are 3 units tall - min painted feature 5.42 px at the phone scale", () => {
+    const roles = [
+      "sorter", "furnace", "wireMill", "signalLab",
+      "polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "generic",
+    ] as const;
+    const measured: Record<string, { minFeaturePx: number; bodyPx: number }> = {};
+    for (const scale of [1.8056, 4]) {
+      const camera: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale };
+      for (const blueprint of roles) {
+        const base = fs1();
+        const stub = makeCtx();
+        drawScene(stub.ctx, {
+          ...base,
+          machines: [{ ...base.machines[0], id: 1, blueprint, tile: 8 }],
+        } as unknown as SimState, camera, VIEW, rest);
+        const rects = stub.log.filter((r) => r.op === "fillRect").map((r) => r.args);
+        // The glyph's own rows, matched on the rect the painter actually emitted. The
+        // ground/base bands (colour index 15) are one palette step, not an identity mark,
+        // and the tallest rect is the body or the posts; what is left is the identity set.
+        const row = PARTS[blueprint] ?? PARTS.generic;
+        const c = tileToWorld(8);
+        const p = worldToScreen(camera, VIEW, c.x, c.y);
+        const tallest = Math.max(...row.map((t) => t[3]));
+        const identity = row.filter((t) => t[4] !== 15 && t[3] < tallest);
+        const painted = new Set(rects.map((a) => JSON.stringify(a)));
+        expect(identity.length, `${blueprint} identity rows`).toBeGreaterThan(0);
+        for (const t of identity) {
+          const box = [half(p.x + t[0] * scale), half(p.y + t[1] * scale), half(t[2] * scale), half(t[3] * scale)];
+          expect(painted.has(JSON.stringify(box)), `${blueprint} box ${JSON.stringify(box)}`).toBe(true);
+        }
+        const minUnits = Math.min(...identity.map((t) => t[3]));
+        const bodyUnits = tallest;
+        measured[`${blueprint}@${scale}`] = {
+          minFeaturePx: +(minUnits * scale).toFixed(4),
+          bodyPx: +(bodyUnits * scale).toFixed(2),
+        };
+        if (scale === 1.8056) {
+          expect(minUnits, `${blueprint} identity height`).toBeGreaterThanOrEqual(3);
+        }
+      }
+    }
+    const phone = roles.map((r) => measured[`${r}@1.8056`].minFeaturePx);
+    const desk = roles.map((r) => measured[`${r}@4`].minFeaturePx);
+    const sorterBody = measured["sorter@1.8056"].bodyPx;
+    const sorterBodyDesk = measured["sorter@4"].bodyPx;
+    console.log("D-4 measured", JSON.stringify({
+      minFeaturePhone: Math.min(...phone),
+      minFeatureDesktop: Math.min(...desk),
+      sorterBody: [sorterBody, sorterBodyDesk],
+      perRole: measured,
+      featureMinUnits: FEATURE_MIN_UNITS,
+    }));
+    expect(Math.min(...phone)).toBeCloseTo(5.42, 2);
+    expect(Math.min(...phone)).toBeGreaterThanOrEqual(5.42 - 0.05);
+    expect(Math.min(...phone)).toBeLessThanOrEqual(5.42 + 0.05);
+    expect(Math.min(...desk)).toBeCloseTo(12, 1);
+    expect(Math.min(...desk)).toBeGreaterThanOrEqual(12 - 0.1);
+    expect(Math.min(...desk)).toBeLessThanOrEqual(12 + 0.1);
+    // The 22-unit body is untouched by the thicker marks (39.70 px at phone, 88 at desk).
+    expect(sorterBody).toBeCloseTo(39.7, 1);
+    expect(sorterBodyDesk).toBeCloseTo(88, 1);
+    expect(FEATURE_MIN_UNITS).toBe(2);
+  });
 });

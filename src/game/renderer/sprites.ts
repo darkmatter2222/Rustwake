@@ -79,17 +79,17 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   sorter: [
     [-12, 11, 24, 2, 15],
     [-12, -11, 24, 22, 3], // S1 body
-    [-9, -6, 18, 2, 6], // S2 rollers (identity mark)
-    [-9, -2, 18, 2, 6],
-    [-9, 2, 18, 2, 6],
-    [-9, 7, 8, 2, 6], // S3 split chutes
-    [2, 7, 8, 2, 6],
+    [-9, -6, 18, 3, 6], // S2 rollers (identity mark, D-4: 3 units tall)
+    [-9, -2, 18, 3, 6],
+    [-9, 2, 18, 3, 6],
+    [-9, 7, 8, 3, 6], // S3 split chutes
+    [2, 7, 8, 3, 6],
   ],
   furnace: [
     [-10, 13, 20, 2, 15],
     [-10, -8, 20, 16, 3], // F1 chamber
     [5, -14, 4, 6, 3], // F2 chimney (identity mark)
-    [-5, -6, 8, 2, 6], // F3 intake slot
+    [-5, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
     [-10, 10, 20, 2, 15], // base band
     [11, -2, 5, 8, 6], // vent stub, right column
     [11, 8, 5, 4, 6], // vent base, right column
@@ -100,14 +100,14 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [-12, -4, 24, 16, 3], // body, one row lower than the sorter
     [-14, 0, 6, 6, 6], // paired reels overhanging left
     [10, 0, 6, 6, 6], // paired reels overhanging right
-    [-3, -15, 6, 2, 6], // tension arm, top row
+    [-3, -15, 6, 3, 6], // tension arm, top row (D-4: 3 units tall)
   ],
   signalLab: [
     [-10, 13, 20, 2, 15],
     [-10, 10, 20, 2, 15], // base band
     [-10, -6, 20, 16, 3], // body
     [-2, -14, 4, 8, 3], // tall mast (identity mark)
-    [-15, -16, 28, 2, 8], // scanner bar across the top row
+    [-15, -16, 28, 3, 8], // scanner bar across the top row (D-4: 3 units tall)
     [-15, 3, 4, 4, 6], // left leg
     [11, 5, 5, 4, 6], // right leg
   ],
