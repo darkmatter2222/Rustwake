@@ -1,0 +1,57 @@
+{
+  "task": "GLYPH-B-g1",
+  "head": "912ef51023b88bc723998389ba82a4ec7726ca97",
+  "prior": "c92899b",
+  "branch": "audio-fixes",
+  "worktree": "C:/Users/ryans/.local/share/opencode/worktree/fe4e05/q001-dev",
+  "tests": { "files": 23, "passed": 240, "failed": 0, "baseline": 235, "new": 5,
+    "named_green_by_name": ["A1","A2","A3","A4","A5","A6","A7","A8","A9","A10","B1","B2","B3","B4","B5","B6","B7","L-1","L-4","E-1","E-2","E-3","D9","E6","C-1"] },
+  "entry": "dist/assets/index-DcP9-Mcw.js",
+  "entry_bytes": 226977,
+  "tables_bytes": 7758,
+  "css_bytes": 7313,
+  "entry_line_ok": true,
+  "behaviour_line": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)",
+  "gates": {
+    "vitest": "pass 240/240 (23 files)",
+    "typecheck": "pass (tsc --noEmit, no output)",
+    "validate": "pass (validated: no violations; behaviour line unchanged)",
+    "build": "pass (53 modules; entry 226977 B <= 232000 working line, ceiling 233000)",
+    "pixeldiff": [
+      { "pair": "1a fs1 rest vs rest, identical framePhase 0.5", "fraction": 0.000000, "class": "1a" },
+      { "pair": "1a mature rest vs rest, identical framePhase 0.5", "fraction": 0.000000, "class": "1a" },
+      { "pair": "1a mature4 (four new blueprints) rest vs rest", "fraction": 0.000000, "class": "1a" },
+      { "pair": "1b fs1 rest framePhase 0.5 vs 4/6", "fraction": 0.001248, "class": "1b" },
+      { "pair": "1b mature rest framePhase 0.5 vs 4/6", "fraction": 0.002757, "class": "1b" },
+      { "pair": "1b mature4 rest framePhase 0.5 vs 4/6", "fraction": 0.002757, "class": "1b" },
+      { "pair": "2 row1 four dedicated rows + generic (6 glyph cells)", "fraction": 0.021565, "class": "2" },
+      { "pair": "2 row2 cargo pod below the envelope (fs1 lead unit)", "fraction": 0.000184, "class": "2" },
+      { "pair": "2 row3 powerLimited shape mark (mature tile 5)", "fraction": 0.000043, "class": "2" },
+      { "pair": "2 row4 identity thickness (mature tiles 1-4)", "fraction": 0.001161, "class": "2" },
+      { "pair": "2 rest vs build (ghost + grid, mature)", "fraction": 0.000406, "class": "2" }
+    ],
+    "pixeldiff_regions": { "row1": 0.034494, "row2": 0.000184, "row3": 0.000117, "row4": 0.003383, "rest_vs_build": 1.0 },
+    "pixeldiff_note": "own painter-order rasteriser over the stub op log, phone 390x844 at dpr 2 = 1,316,640 device px; every class-2 pair also passes the no-slack form delta <= regionSum. Class 1a is exactly 0 (0.000152 is the chromium-pinned ceiling); 1b pairs stay under the pinned 0.003112."
+  },
+  "rows": [
+    { "id": "D-1", "measured": "pairs=45 min=13; worst5 = 13 sorter/furnace, 13 furnace/signalLab, 15 furnace/wireMill, 16 sorter/signalLab, 16 wireMill/signalLab; cells dock48 sorter42 furnace47 wireMill36 signalLab50 polymer24 copper30 plate30 circuit24 generic24; PARTS.generic !== PARTS.sorter by string", "expected": "min Hamming >= 12 over 45 pairs; generic not a copy of sorter", "pass": true },
+    { "id": "D-2", "measured": "droneCells=12 cargoCells=1 hamming=13; pod box [-3,8,3,3] units -> mask cell 51 (row 6, col 3), drone envelope rows 3-5; style #ffb765 kept", "expected": "hamming(drone,cargo) == 13 >= 12, 12/1 cells", "pass": true },
+    { "id": "D-3", "measured": "accentShapeHamming(running,powerLimited)=3; the other four accent pairs 0 (unchanged); rects per status 2 vs 1; min channelsOver20=2; nearest hue pair running/powerLimited deltas [32,2,38]; WCAG vs floor 3.38-7.20; mark #f4f7fb 11.28", "expected": "shape Hamming >= 3, other four unchanged, every accent >= 3.0", "pass": true },
+    { "id": "D-4", "measured": "min painted identity feature 5.4168 CSS px at s=1.8056 and 12.00 at s=4 for all nine machine roles; sorter body 39.72 px / 88.00 px; FEATURE_MIN_UNITS still 2", "expected": "5.42 +/- 0.05 at phone, 12.00 +/- 0.1 at s=4, body 39.70/88.00", "pass": true },
+    { "id": "F-1", "measured": "maxNoseXStep (mark offset from the body, same slope sign) = 0.00 px over 300 driven frames, fs1 and mature(5 units); off-travel-side frames 0; side runs 61/239 (fs1) and 121/179, 181/119, 241/59 (mature) = the 60/240-frame legs; offsets +/-7.25 px", "expected": "maxNoseXStep <= 0.50 px and the mark on the travel side in every frame", "pass": true }
+  ],
+  "summary": [
+    "b8a335b: D-1 four dedicated PARTS rows (polymerRecycler, copperSeparator, platePress, circuitAssembler) plus a lattice generic; 45-pair min Hamming 13, generic no longer the sorter copy",
+    "a0fc7fc: D-2 cargo pod drawn at y+8*s below the drone envelope (mask row 6), amber index kept, hamming(drone,cargo) 11 -> 13",
+    "2f64ef2: D-3 powerLimited gains a 6x2 select-coloured shape mark under its accent bar; accent shape Hamming 0 -> 3, hue band 3.38-7.20 unchanged (closes Q-007)",
+    "3385491: D-4 identity rows thickened 2 -> 3 units (sorter rollers/chutes, furnace intake, wireMill arm, signalLab scanner bar); min feature 3.50 -> 5.42 px at phone, masks unchanged",
+    "912ef51: F-1 nose side derived from the droneLeg slope (one-frame backward difference) instead of t <= 0.5; reduced motion keeps the documented steps"
+  ],
+  "notes_and_limitations": [
+    "Pod offset chosen as +8 units (the row-2 suggestion was +5): at +5 the 3x3 box still falls inside mask row 5, which the shadow ellipse already covers, so Hamming stays 11; at +8 it is the single disjoint cell that gives the pinned 13.",
+    "Reviewer-suggested D-1 marks collide under the 8x8 mask (polymer/copper differ in 1 cell), so each new row uses a 24-wide bar lattice with one or two 3-unit posts; all five lattice silhouettes are distinct (min pair 13).",
+    "F-1 flip counting: the absolute nose x still steps 8 units (14.44 px) on the two reversal frames - that is the intended turn; the <= 0.50 px bound is the rigid-attachment step within a leg direction.",
+    "Pixel classes come from this session's own rasteriser over the recorded op log (rects, ellipse bboxes, polygon bboxes), not the chromium probe; identical builds give an exact 0.",
+    "Not provable headlessly here: B-08 device trace, B-09 readers, B-11 listening pass, Q-004 5 s clip."
+  ]
+}
