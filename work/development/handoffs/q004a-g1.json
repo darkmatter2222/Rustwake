@@ -1,0 +1,72 @@
+{
+  "task": "q004a-g1",
+  "head": "f229704c14d3e6a5230a2d0f65b8702f25acf554",
+  "prior": "1f6833e",
+  "tests": 228,
+  "entry": "assets/index-Bfy3uiX4.js",
+  "entry_bytes": 226081,
+  "tables_bytes": 7416,
+  "css_bytes": 7224,
+  "worker_bytes": 13015,
+  "behaviour_line": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)",
+  "gates": {
+    "vitest": "pass",
+    "typecheck": "pass",
+    "validate": "pass",
+    "build": "pass",
+    "pixeldiff": 0
+  },
+  "summary": [
+    "173293a: sub-tick interpolation - store.getFramePhase() exposes the tick remainder (accumulator/TICK_MS for a writer, frameClock minus the adopt instant for a reader), DrawOptions.framePhase is threaded into one per-frame phase, drawDrones and drawRoutes interpolate with it, App passes it; 3 files, 46 insertions, 6 deletions",
+    "1f6833e: one store.getState() per rAF feeding canvas + ghost check + cue diff, and the drawn accent is the STATUS_ACCENTS value itself (hexOf/rectOf widened so #7fd6c2 reaches the canvas); 2 files, 19 insertions, 11 deletions",
+    "f229704: 16 new assertions in tests/renderer/scene-draw.test.ts (13 -> 29 in that file, 212 -> 228 overall), no existing assertion edited; 1 file, 419 insertions, 1 deletion"
+  ],
+  "test_count_arithmetic": "212 (at 56b6e7c) + 16 new rows = 228; scene-draw.test.ts 13 -> 29; the other 22 files are unchanged at 199 tests total",
+  "evidence_rows": [
+    { "row": "C-1 getFramePhase", "measured": "0 at start, monotone within a tick, in [0,1) after 140 ms of fake clock with the tick advanced", "limit": "[0,1), advances between two fake-timestamp frames", "pass": true },
+    { "row": "A1", "measured": "7 of 7 coord-carrying drone ops differ between framePhase 0.0 and 0.9 (6 declared elements; the shadow is an ellipse+fill pair)", "limit": ">= 4 of 6", "pass": true },
+    { "row": "A2", "measured": "6 distinct lead centres per tick on fs1 (166,437.5 to 166,408) and 6 on the mature seed (152,437.5 to 152,408)", "limit": ">= 5 per tick", "pass": true },
+    { "row": "A5", "measured": "299 of 299 consecutive pairs move >= 0.5 CSS px (share 1.000); in-leg per-frame displacement 4.5 to 7.0 CSS px", "limit": ">= 80 % of pairs; the A3 phone cap is 7.0", "pass": true },
+    { "row": "A7", "measured": "5 lead centres, max |dx| 0.33 and |dy| 0.03 against (166.11 + lean_i, 402.47); the drone block is byte-identical at framePhase 0, 0.5 and 0.9", "limit": "+/- 1 CSS px, t in {0, 0.5}", "pass": true },
+    { "row": "A8", "measured": "body left edges [146.5, 153.5, 160.5, 168, 175], pitches [7, 7, 7.5, 7] CSS px; analytic pitch LEAN_UNITS x scale = 7.2222", "limit": "5 units, pitch >= 4 units (7.22) minus the 0.5 px snap", "pass": true },
+    { "row": "A9", "measured": "token y [350, 352, 354, 355.5, 357.5, 359.5] over the 6 sub-positions, steps 1.5 to 2.0 px per frame, monotone", "limit": ">= 5 sub-positions, monotone within the leg", "pass": true },
+    { "row": "A10", "measured": "two runs of the same 6-phase (state, framePhase) sequence give byte-identical op logs", "limit": "identical", "pass": true },
+    { "row": "B1", "measured": "6 getState reads after mount+begin, 14 after 5 further rAF frames = 1.6 reads per frame", "limit": "<= 2 per rAF", "pass": true },
+    { "row": "B2", "measured": "8 of 8 machines: #5fd8e8,#8a7ad8,#c9713a,#6f93ad,#7fd6c2,#6f93ad,#5fd8e8,#c9713a equals STATUS_ACCENTS by cell geometry", "limit": "8/8", "pass": true },
+    { "row": "B3", "measured": "#7fd6c2 (127,214,194) vs #6f93ad (111,147,173), channel deltas 16/67/21 -> 2 channels >= 20, both hexes present at framePhase 0.9", "limit": ">= 2 of 3 channels by >= 20", "pass": true },
+    { "row": "B4", "measured": "0 mismatches over 300 frames, observed animating counts {1, 2}", "limit": "0 mismatches", "pass": true },
+    { "row": "B5", "measured": "5 starved machines, 11 to 17 pip/level boxes each, signature identical across 3 frames, accent #8a7ad8 for all 5", "limit": "delta 0 across 3 frames, #8a7ad8", "pass": true },
+    { "row": "B6", "measured": "tray [0,12,1,5,12,0,3,12] -> tokens [0,1,1,1,1,0,1,1]; store gauge 5 boxes with 2 amber at 312/900; clamp check 0->0, 1->1, 900->5", "limit": "token iff trayUnits > 0; pips = clamp(ceil(ratio x 5),0,5); 312/900 -> 2", "pass": true },
+    { "row": "B7", "measured": "0 SELECT_STYLE strokes before the tap, 1 in the very next draw; the outline box is 58 x 58 with centre delta (0, 0)", "limit": "present in the first drawScene (<= 1 rAF)", "pass": true },
+    { "row": "blueprint/part coverage", "measured": "8 blueprint ids; 4 dedicated part rows (furnace, signalLab, sorter, wireMill), 4 resolve through PARTS.generic (circuitAssembler, copperSeparator, platePress, polymerRecycler); min tuple height 2 units = FEATURE_MIN_UNITS", "limit": "every id resolves to a non-empty row above the feature floor", "pass": true }
+  ],
+  "gate_tails": {
+    "vitest": "Test Files 23 passed (23) / Tests 228 passed (228) / Duration 4.07s (transform 1.56s, setup 0ms, collect 6.02s, tests 5.33s, environment 21.73s, prepare 3.39s)",
+    "typecheck": "npm run typecheck -> tsc --noEmit, no output, clean",
+    "validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s) in 3 ms; behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s); validated: no violations",
+    "build": "index.html 0.78 kB; assets/catchup.worker-DphWaCEx.js 13.02 kB; assets/index-Cwg_kGXQ.css 7.22 kB / gzip 2.15 kB; assets/tables-B-vOLV1r.js 7.42 kB / gzip 3.27 kB; assets/index-Bfy3uiX4.js 226.05 kB / gzip 70.69 kB; built in 533ms",
+    "iterations": "4 assertions failed on the first run of the new file (gauge row filter, B5 signature included the moving tokens, the outline rect is recorded under the last fill style, and one hand-sorted id list); all four were probe-side filter fixes, no limit was relaxed"
+  },
+  "chunk_table": {
+    "at_fe643d5": { "index": 225861, "tables": 7416, "css": 7224, "worker": 13015 },
+    "at_f229704": { "index": 226081, "tables": 7416, "css": 7224, "worker": 13015 },
+    "delta": "entry +220 B (the phase parameter, subTickPhase/hexOf and the single-read frame body); tables, css and worker are byte-identical, entry 226081 <= 233000 with 6919 B of headroom (5919 B under the 232000 working line)"
+  },
+  "pixeldiff_detail": {
+    "how": "scratch probe over the built dist with the capture-style.mjs envelope convention (FS-1 rest, and docs/evidence/yard-mature.json for mature), 390x844 dpr2, exact-RGB census",
+    "pairs": {
+      "rest_same_page_100ms": 0,
+      "rest_two_fresh_loads": 0,
+      "mature_same_page_100ms": 0,
+      "mature_two_fresh_loads": 0.025585
+    },
+    "canvas": "780x1688, 560768 non-floor pixels, status line 'A machine waits for input; check its empty side.'",
+    "reading": "the E3 pairing (same page, consecutive frames) did not move the gate: max 0.000000 against 0.000152 at the Q-002 slice, because the draw is now a pure function of (state, framePhase). The only non-zero pair is two independently loaded pages: they are not frame-synchronised, so at the capture instant each carries its own tick/phase offset and every interpolated element (5 drones, 18 cargo tokens) is a half-step along its leg."
+  },
+  "limitations": [
+    "3C (C1-C11 salvage-feedback census) and 3D (D1-D8 clip, D9-D11) are not in this phase, so the motion category stays pending until the 10-PNG clip with per-frame ink and mask hashes is attached; A3/A4/A6 are clip-side caps and are not asserted here (the 300-frame log does print in-leg displacement 4.5-7.0 CSS px, inside the 7.0 phone cap)",
+    "listening rows S-05b/S-08b/S-16b/S-17b still wait on B-11 and the real-device trace on B-08",
+    "the 4 blueprints without a dedicated part row still paint through PARTS.generic; that is the existing fallback, not a new behaviour",
+    "no push, no deployment, no reviewer verdict edited; scratch files .m-probe.mts, .m-probe2.mts, .m-probe3.mts, .m-keys.mts and .m-pixeldiff.mjs are deleted after this receipt, .git-commit-msg-q001r.txt and .git-commit-msg-q005.txt are left as found"
+  ]
+}
