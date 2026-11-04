@@ -10,10 +10,11 @@ two-batch window `pullFromStore` draws, so the store has one meaning for "surplu
 engine's pull rule is unchanged (`held − RESERVE_FLOOR`); the store-fallback variant of `pullFromStore` was
 measured and reverted (7 machines, 1 157 batches, 0 nodes).
 
-- Current commit and remote sync status: the head before this pass was **`efd25c2`** (the B-02 checkpoint);
-  this pass's code commit is `906d542` + 1, written below after the commit is made. `git push origin HEAD:main`,
-  then verified with `git ls-remote origin refs/heads/main`. CI remains unread in this environment, so CI is
-  reported **pending**, not green (BL-06: `gh run list` asks for `gh auth login`).
+- Current commit and remote sync status: the code commit of this pass is **`e76c803`** ("Leave each machine's
+  input window in the store when selling (B-29, D-42)"), pushed with `git push origin HEAD:main` and verified
+  by `git ls-remote origin refs/heads/main` (fast-forward from `efd25c2`, no concurrent change). The
+  checkpoint commit sits on top. CI remains unread in this environment, so CI is reported **pending**, not
+  green (BL-06: `gh run list` asks for `gh auth login`).
 - Checks run and actual results (this pass):
   - `npm run validate` — **0 violations**, behaviour marks `firstDrone=268 firstResearch=478 tick=18298
     machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3`, equal to the restated supply-window rows.
