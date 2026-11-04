@@ -1,0 +1,187 @@
+/**
+ * Authored part tables for the style slice (Q-002, spec rev-q2spec-g3 sections 2-3).
+ * One source for the palette and geometry; `scene.ts` paints these rows and the
+ * tests assert them, so a review can read the art as text. Units are world units
+ * (CELL = 32); part coords are top-left offsets from the cell centre, y down.
+ */
+
+import type { MachineStatus } from "../simulation/types";
+
+/** The one palette (spec 2.3); mirrored 1:1 in `styles.css :root` and `Hud.DOT_COLORS`. */
+export const PALETTE = {
+  night: "#0b1220",
+  nightDeep: "#080d18",
+  floor: "#22384a",
+  bodyLight: "#8aa9c4",
+  bodyMid: "#7f9fbb",
+  wreck: "#6d90ab",
+  well: "#0e1726",
+  amber: "#ffb765",
+  cyan: "#5fd8e8",
+  rust: "#c9713a",
+  violet: "#8a7ad8",
+  select: "#f4f7fb",
+  path: "#2c4257",
+  drain: "#16283a",
+  puddle: "#35566b",
+  shadow: "#101b28",
+  steelLight: "#6f93ad",
+} as const;
+
+export type PaletteKey = keyof typeof PALETTE;
+
+/** The grid is the only painter with this stroke style (spec 3A). */
+export const GRID_STYLE = "rgba(111,147,173,0.22)";
+export const SELECT_STYLE = PALETTE.select;
+
+/** Every painted feature is at least this tall in world units (spec 3B-4). */
+export const FEATURE_MIN_UNITS = 2;
+
+/** Lateral spacing between drone units, kept under reduced motion (spec 3B-7). */
+export const LEAN_UNITS = 4;
+
+/** The whole-frame amber budget: exactly these three (w, h) tuples (spec 3B-3). */
+export const AMBER_SHAPES: readonly (readonly [number, number])[] = [
+  [2, 2], // pip: wreck band, store gauge, level pips
+  [3, 3], // token: cargo, tray
+  [4, 4], // glow: furnace core
+];
+
+/** Five distinct hexes over the six statuses; `powerLimited` keeps its own hue (D9). */
+export const STATUS_ACCENTS: Record<MachineStatus, string> = {
+  idle: PALETTE.steelLight,
+  running: PALETTE.cyan,
+  starved: PALETTE.violet,
+  outputFull: PALETTE.rust,
+  powerLimited: "#7fd6c2", // reserved fifth hue (R-08 / Q-007)
+  paused: PALETTE.steelLight,
+};
+
+
+/** Part tuple: [x, y, w, h, colourIndex (into COLOR_KEYS), ellipse?]. Units from the cell centre. */
+export type PartTuple = readonly [number, number, number, number, number, (0 | 1)?];
+
+/** Colour index -> palette key; same order as the PALETTE declaration. */
+export const COLOR_KEYS = Object.keys(PALETTE) as PaletteKey[];
+
+/** Row of parts per sprite id; painted in order, all coords inside +/- 16 units (B6). */
+export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
+  dock: [
+    [-13, 9, 26, 2, 15], // D5 pad shadow
+    [-13, -10, 26, 20, 4], // D1 pad
+    [-13, -10, 3, 2, 8], // D2 corner ticks (4)
+    [10, -10, 3, 2, 8],
+    [-13, 8, 3, 2, 8],
+    [10, 8, 3, 2, 8],
+    [9, -2, 2, 8, 3], // D3 arm post
+    [8, 6, 4, 2, 3], // D3 foot
+  ],
+  sorter: [
+    [-12, 11, 24, 2, 15],
+    [-12, -11, 24, 22, 3], // S1 body
+    [-9, -6, 18, 2, 6], // S2 rollers (identity mark)
+    [-9, -2, 18, 2, 6],
+    [-9, 2, 18, 2, 6],
+    [-9, 7, 8, 2, 6], // S3 split chutes
+    [2, 7, 8, 2, 6],
+  ],
+  furnace: [
+    [-10, 13, 20, 2, 15],
+    [-10, -8, 20, 16, 3], // F1 chamber
+    [5, -14, 4, 6, 3], // F2 chimney (identity mark)
+    [-5, -6, 8, 2, 6], // F3 intake slot
+    [-10, 10, 20, 2, 15], // base band
+    [11, -2, 5, 8, 6], // vent stub, right column
+    [11, 8, 5, 4, 6], // vent base, right column
+    [-15, 3, 4, 8, 6], // feed notch, left column
+  ],
+  wireMill: [
+    [-12, 11, 24, 2, 15],
+    [-12, -4, 24, 16, 3], // body, one row lower than the sorter
+    [-14, 0, 6, 6, 6], // paired reels overhanging left
+    [10, 0, 6, 6, 6], // paired reels overhanging right
+    [-3, -15, 6, 2, 6], // tension arm, top row
+  ],
+  signalLab: [
+    [-10, 13, 20, 2, 15],
+    [-10, 10, 20, 2, 15], // base band
+    [-10, -6, 20, 16, 3], // body
+    [-2, -14, 4, 8, 3], // tall mast (identity mark)
+    [-15, -16, 28, 2, 8], // scanner bar across the top row
+    [-15, 3, 4, 4, 6], // left leg
+    [11, 5, 5, 4, 6], // right leg
+  ],
+  generic: [
+    [-12, 11, 24, 2, 15],
+    [-12, -11, 24, 22, 3],
+    [-9, -2, 18, 10, 6],
+  ],
+  drone: [
+    [-5, 3, 10, 4, 15, 1], // DR5 shadow ellipse (alpha 0.35)
+    [-5, -3, 4, 2, 8], // DR2 rotors
+    [1, -3, 4, 2, 8],
+    [-3, -2, 6, 4, 8], // DR1 body
+  ],
+};
+
+/** Wreck hull as a snapped pentagon path (world-unit offsets from its position). */
+export const WRECK_HULL: readonly (readonly [number, number])[] = [
+  [-22, 10],
+  [-14, -12],
+  [6, -16],
+  [22, 4],
+  [16, 12],
+];
+
+/** W5: three rust shards, fixed coords. */
+export const WRECK_SHARDS: readonly (readonly [number, number])[] = [
+  [-30, 12],
+  [26, -4],
+  [30, 10],
+];
+
+/** Floor kit FK1..FK8, fixed world coords as [x, y, w, h, colourIndex] - no random placement. */
+export const FLOOR_KIT: readonly PartTuple[] = [
+  [64, 96, 6, 100, 12], // FK1 worn path band
+  [64, 10, 22, 6, 12], // FK1 spur to the dock
+  [8, 190, 176, 2, 13], // FK2 drainage line
+  [0, 0, 192, 2, 15], // FK4 top rail
+  [0, 190, 192, 2, 15], // FK4 bottom rail
+  [104, 12, 5, 5, 4], // FK5 crate 1
+  [104, 10, 5, 2, 3], // FK5 crate 1 top
+  [112, 16, 5, 5, 4], // FK5 crate 2
+  [112, 14, 5, 2, 3], // FK5 crate 2 top
+  [56, 0, 2, 10, 15], // FK6 power pole
+  [40, 2, 16, 2, 15], // FK6 sagging cable
+];
+
+/** FK4 posts: 2x3 every 16 units along both rails. */
+export const FLOOR_POSTS: readonly (readonly [number, number])[] = (() => {
+  const posts: (readonly [number, number])[] = [];
+  for (let x = 0; x <= 176; x += 16) {
+    posts.push([x, 0], [x, 189]);
+  }
+  return posts;
+})();
+
+/** FK3 puddles (rx 10 ry 3, alpha 0.14) and FK8 gravel corner ticks, fixed spots. */
+export const PUDDLES: readonly (readonly [number, number])[] = [
+  [24, 200],
+  [88, 204],
+  [150, 198],
+];
+
+export const GRAVEL: readonly (readonly [number, number])[] = (() => {
+  const ticks: (readonly [number, number])[] = [];
+  for (let tile = 0; tile < 36; tile += 1) {
+    const col = tile % 6;
+    const row = Math.floor(tile / 6);
+    const cx = col * 32 + 16;
+    const cy = row * 32 + 16;
+    ticks.push([cx + 11, cy + 11], [cx - 14, cy - 14]);
+  }
+  return ticks;
+})();
+
+/** Gray steps for the desaturated silhouette sheet, keyed by palette index. */
+export const GRAY_STEPS = ["#101b28", "#22384a", "#6d90ab", "#8aa9c4", "#f4f7fb"] as const;

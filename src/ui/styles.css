@@ -9,6 +9,11 @@
   --violet: #8a7ad8;
   --paper: #f4f7fb;
   --panel: rgba(11, 18, 32, 0.92);
+  /* Q-002 (2.3): mirrored 1:1 from PALETTE in src/game/renderer/sprites.ts. */
+  --floor: #22384a;
+  --body-light: #8aa9c4;
+  --body-mid: #7f9fbb;
+  --well: #0e1726;
   --radius: 10px;
   color-scheme: dark;
 }

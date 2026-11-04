@@ -1,6 +1,23 @@
 import { TUNING } from "../content/defs";
 import { DOCK_TILE, YARD_COLS, YARD_ROWS } from "../simulation/commands";
 import type { DroneState, MachineState, SimState } from "../simulation/types";
+import {
+  COLOR_KEYS,
+  FLOOR_KIT,
+  FLOOR_POSTS,
+  GRAVEL,
+  GRID_STYLE,
+  LEAN_UNITS,
+  PALETTE,
+  PARTS,
+  PUDDLES,
+  SELECT_STYLE,
+  STATUS_ACCENTS,
+  WRECK_HULL,
+  WRECK_SHARDS,
+  type PaletteKey,
+  type PartTuple,
+} from "./sprites";
 
 export const CELL = 32;
 export const WORLD_W = YARD_COLS * CELL;
@@ -16,19 +33,6 @@ export interface ViewState {
   width: number;
   height: number;
 }
-
-const PALETTE = {
-  night: "#0b1220",
-  nightDeep: "#080d18",
-  steel: "#38556b",
-  steelLight: "#6f93ad",
-  rust: "#c9713a",
-  furnace: "#ffb765",
-  cyan: "#5fd8e8",
-  violet: "#8a7ad8",
-  grid: "rgba(111,147,173,0.22)",
-  select: "#f4f7fb",
-} as const;
 
 export function fitCamera(view: ViewState): Camera {
   const scale = Math.max(1.4, Math.min(4, view.width / (WORLD_W + 24)));
@@ -77,6 +81,83 @@ export interface DrawOptions {
   selected: number | null;
 }
 
+/** Half-CSS-px grid = one device pixel at dpr 2 (D6). */
+const snap = (v: number): number => Math.round(v * 2) / 2;
+
+function rectOf(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  color: PaletteKey
+): void {
+  ctx.fillStyle = PALETTE[color];
+  ctx.fillRect(snap(x), snap(y), snap(w), snap(h));
+}
+
+/** One path fill for a same-colour group: N rects cost one paint op (D3 caps). */
+function groupFill(
+  ctx: CanvasRenderingContext2D,
+  rects: readonly [number, number, number, number][],
+  color: PaletteKey,
+  alpha = 1
+): void {
+  if (rects.length === 0) return;
+  ctx.fillStyle = PALETTE[color];
+  ctx.globalAlpha = alpha;
+  ctx.beginPath();
+  for (const [x, y, w, h] of rects) ctx.rect(snap(x), snap(y), snap(w), snap(h));
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+/** Paint a PARTS row from tuples; the 6th slot marks an ellipse (the drone shadow). */
+function paintParts(
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  s: number,
+  parts: readonly PartTuple[],
+  gray?: (index: number) => PaletteKey
+): void {
+  for (const t of parts) {
+    const key = gray ? gray(t[4]) : COLOR_KEYS[t[4]];
+    if (t[5] === 1) {
+      ctx.fillStyle = PALETTE[key];
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      ctx.ellipse(snap(cx + (t[0] + t[2] / 2) * s), snap(cy + (t[1] + t[3] / 2) * s),
+        snap((t[2] / 2) * s), snap((t[3] / 2) * s), 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    } else {
+      rectOf(ctx, cx + t[0] * s, cy + t[1] * s, t[2] * s, t[3] * s, key);
+    }
+  }
+}
+
+/** Quantised pip row, never a continuous ratio bar (B5). */
+function pipRow(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  s: number,
+  filled: number,
+  total: number,
+  color: PaletteKey,
+  empty?: PaletteKey
+): void {
+  const filledRects: [number, number, number, number][] = [];
+  const emptyRects: [number, number, number, number][] = [];
+  for (let i = 0; i < total; i += 1) {
+    const box: [number, number, number, number] = [x + i * 3 * s, y, 2 * s, 2 * s];
+    (i < filled ? filledRects : emptyRects).push(box);
+  }
+  groupFill(ctx, emptyRects, empty ?? "well");
+  groupFill(ctx, filledRects, color);
+}
+
 export function drawScene(
   ctx: CanvasRenderingContext2D,
   state: SimState,
@@ -85,54 +166,74 @@ export function drawScene(
   options: DrawOptions
 ): void {
   ctx.imageSmoothingEnabled = false;
+  const s = camera.scale;
+  // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
-  drawBackdrop(ctx, camera, view);
-  if (options.buildMode || camera.scale >= 1.5) drawGrid(ctx, camera, view);
+  const origin = worldToScreen(camera, view, 0, 0);
+  ctx.fillStyle = PALETTE.nightDeep;
+  ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(WORLD_H * s));
+  ctx.fillStyle = PALETTE.floor;
+  ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(YARD_ROWS * CELL * s));
+  drawFloorKit(ctx, camera, view, s);
+  if (options.buildMode) drawGrid(ctx, camera, view);
   drawRoutes(ctx, state, camera, view);
   drawWreck(ctx, state, camera, view, options.selected === -1);
   drawDock(ctx, state, camera, view, options.selected === -2);
   for (const machine of state.machines) {
     drawMachine(ctx, machine, camera, view, options.selected === machine.id);
   }
-  drawDrone(ctx, state, camera, view, options.reducedMotion);
+  drawDrones(ctx, state, camera, view, options.reducedMotion);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
 }
 
-function drawBackdrop(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState): void {
-  const origin = worldToScreen(camera, view, 0, 0);
-  const w = WORLD_W * camera.scale;
-  const h = WORLD_H * camera.scale;
-  ctx.fillStyle = PALETTE.nightDeep;
-  ctx.fillRect(origin.x, origin.y, w, h);
-  // Yard floor panel distinguishes the buildable area from scenery.
-  const floor = worldToScreen(camera, view, 0, 0);
-  ctx.fillStyle = "rgba(24,40,58,0.85)";
-  ctx.fillRect(floor.x, floor.y, WORLD_W * camera.scale, YARD_ROWS * CELL * camera.scale);
-  ctx.fillStyle = "rgba(95,216,232,0.06)";
-  for (let i = 0; i < 3; i += 1) {
-    const puddle = worldToScreen(camera, view, 24 + i * 64, WORLD_H - 8 - i * 4);
-    ctx.beginPath();
-    ctx.ellipse(puddle.x, puddle.y, 16 * camera.scale, 4 * camera.scale, 0, 0, Math.PI * 2);
-    ctx.fill();
+function drawFloorKit(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState, s: number): void {
+  const ox = worldToScreen(camera, view, 0, 0);
+  const byColor = new Map<number, [number, number, number, number][]>();
+  for (const t of FLOOR_KIT) {
+    const list = byColor.get(t[4]) ?? [];
+    list.push([ox.x + t[0] * s, ox.y + t[1] * s, t[2] * s, t[3] * s]);
+    byColor.set(t[4], list);
   }
+  for (const [ci, boxes] of byColor) groupFill(ctx, boxes, COLOR_KEYS[ci]);
+  groupFill(
+    ctx,
+    FLOOR_POSTS.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 2 * s, 3 * s] as [number, number, number, number]),
+    "shadow"
+  );
+  // FK3 puddles: one alpha path of three ellipses.
+  ctx.fillStyle = PALETTE.puddle;
+  ctx.globalAlpha = 0.14;
+  ctx.beginPath();
+  for (const [px, py] of PUDDLES) {
+    ctx.ellipse(snap(ox.x + px * s), snap(ox.y + py * s), snap(10 * s), snap(3 * s), 0, 0, Math.PI * 2);
+  }
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  groupFill(
+    ctx,
+    GRAVEL.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 3 * s, 3 * s] as [number, number, number, number]),
+    "bodyLight",
+    0.5
+  );
 }
 
+/** Context-only grid: exactly one path, (COLS+1)+(ROWS+1) segments (A1/A2). */
 function drawGrid(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState): void {
-  ctx.strokeStyle = PALETTE.grid;
+  ctx.strokeStyle = GRID_STYLE;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let col = 0; col <= YARD_COLS; col += 1) {
     const a = worldToScreen(camera, view, col * CELL, 0);
     const b = worldToScreen(camera, view, col * CELL, YARD_ROWS * CELL);
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
+    ctx.moveTo(snap(a.x), snap(a.y));
+    ctx.lineTo(snap(b.x), snap(b.y));
   }
   for (let row = 0; row <= YARD_ROWS; row += 1) {
     const a = worldToScreen(camera, view, 0, row * CELL);
     const b = worldToScreen(camera, view, YARD_COLS * CELL, row * CELL);
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
+    ctx.moveTo(snap(a.x), snap(a.y));
+    ctx.lineTo(snap(b.x), snap(b.y));
   }
   ctx.stroke();
 }
@@ -146,22 +247,29 @@ function drawWreck(
 ): void {
   const p = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
   const s = camera.scale;
-  const openness = 1 - state.wreck.remaining / TUNING.starterWreckPool;
-  ctx.fillStyle = "#22384a";
-  ctx.beginPath();
-  ctx.moveTo(p.x - 22 * s, p.y + 10 * s);
-  ctx.lineTo(p.x - 14 * s, p.y - 12 * s);
-  ctx.lineTo(p.x + 6 * s, p.y - 16 * s);
-  ctx.lineTo(p.x + 22 * s, p.y + 4 * s);
-  ctx.lineTo(p.x + 16 * s, p.y + 12 * s);
+  rectOf(ctx, p.x - 12 * s, p.y + 13 * s, 24 * s, 2 * s, "well"); // W4 shadow
+  ctx.fillStyle = PALETTE.wreck;
+  ctx.beginPath(); // W1 pentagon hull
+  WRECK_HULL.forEach(([dx, dy], i) => {
+    const x = snap(p.x + dx * s);
+    const y = snap(p.y + dy * s);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
   ctx.closePath();
   ctx.fill();
-  ctx.strokeStyle = PALETTE.rust;
-  ctx.lineWidth = Math.max(1, s);
+  ctx.strokeStyle = PALETTE.rust; // W2 1-unit outline
+  ctx.lineWidth = Math.max(1, snap(1 * s));
   ctx.stroke();
-  ctx.fillStyle = PALETTE.rust;
-  ctx.fillRect(p.x - 6 * s, p.y - 6 * s, 4 * s * (1 - openness), 3 * s);
-  if (selected) outline(ctx, p.x, p.y, 26 * s, 18 * s);
+  // W3 remaining band as three 2x2 pips, quantised by the remaining ratio (B5).
+  const ratio = state.wreck.remaining / (TUNING.starterWreckPool || 1);
+  pipRow(ctx, p.x - 3 * s, p.y - 1 * s, s, Math.min(3, Math.ceil(ratio * 3)), 3, "amber");
+  groupFill(
+    ctx,
+    WRECK_SHARDS.map(([sx, sy]) => [p.x + sx * s, p.y + sy * s, 3 * s, 3 * s] as [number, number, number, number]),
+    "rust"
+  );
+  if (selected) outline(ctx, p.x, p.y, snap(24 * s), snap(16 * s));
 }
 
 function drawDock(
@@ -171,18 +279,13 @@ function drawDock(
   view: ViewState,
   selected: boolean
 ): void {
-  const p = worldToScreen(camera, view, ...centerOf(DOCK_TILE));
+  const c = tileToWorld(DOCK_TILE);
+  const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
-  ctx.fillStyle = PALETTE.steel;
-  ctx.fillRect(p.x - 13 * s, p.y - 11 * s, 26 * s, 20 * s);
-  ctx.fillStyle = PALETTE.steelLight;
-  ctx.fillRect(p.x - 13 * s, p.y - 11 * s, 26 * s, 5 * s);
-  ctx.fillStyle = PALETTE.nightDeep;
-  ctx.fillRect(p.x - 8 * s, p.y - 3 * s, 16 * s, 9 * s);
-  const fill = state.storeCapacity === 0 ? 0 : state.storeUnits / state.storeCapacity;
-  ctx.fillStyle = PALETTE.furnace;
-  ctx.fillRect(p.x - 8 * s, p.y + 6 * s - 9 * s * fill, 16 * s, 9 * s * fill);
-  if (selected) outline(ctx, p.x, p.y, 16 * s, 14 * s);
+  paintParts(ctx, p.x, p.y, s, PARTS.dock);
+  const ratio = state.storeCapacity === 0 ? 0 : state.storeUnits / state.storeCapacity;
+  pipRow(ctx, p.x - 7 * s, p.y + 4 * s, s, Math.min(5, Math.ceil(ratio * 5)), 5, "amber"); // D4
+  if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(14 * s));
 }
 
 function drawMachine(
@@ -192,39 +295,52 @@ function drawMachine(
   view: ViewState,
   selected: boolean
 ): void {
-  const p = worldToScreen(camera, view, ...centerOf(machine.tile));
+  const c = tileToWorld(machine.tile);
+  const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
-  const working = machine.progress > 0;
-  ctx.fillStyle = PALETTE.steel;
-  ctx.fillRect(p.x - 12 * s, p.y - 12 * s, 24 * s, 24 * s);
-  ctx.fillStyle = PALETTE.steelLight;
-  ctx.fillRect(p.x - 12 * s, p.y - 12 * s, 24 * s, 6 * s);
-  ctx.fillStyle = PALETTE.nightDeep;
-  ctx.fillRect(p.x - 9 * s, p.y - 2 * s, 18 * s, 10 * s);
-  const accent =
-    machine.status === "starved"
-      ? PALETTE.violet
-      : machine.status === "outputFull"
-        ? PALETTE.rust
-        : working
-          ? PALETTE.cyan
-          : PALETTE.steelLight;
-  ctx.fillStyle = accent;
-  const fillRatio = machine.batchMilli === 0 ? 0 : Math.min(1, machine.progress / machine.batchMilli);
-  ctx.fillRect(p.x - 9 * s, p.y + 8 * s - 10 * s * fillRatio, 18 * s, 10 * s * fillRatio);
-  ctx.fillStyle = PALETTE.furnace;
-  ctx.fillRect(p.x - 9 * s, p.y - 10 * s, 6 * s * (machine.level / 3 + 0.4), 2 * s);
+  const row = PARTS[machine.blueprint] ?? PARTS.generic;
+  paintParts(ctx, p.x, p.y, s, row);
+  // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
+  rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
+  if (machine.blueprint === "furnace" && machine.status === "outputFull") {
+    rectOf(ctx, p.x + 5 * s, p.y - 14 * s, 4 * s, 2 * s, "rust");
+  }
+  if (machine.blueprint === "furnace" && machine.status === "running") {
+    // F4 amber glow circle, diameter 4, only while running.
+    ctx.fillStyle = PALETTE.amber;
+    ctx.beginPath();
+    ctx.ellipse(snap(p.x + 0 * s), snap(p.y + 2 * s), snap(2 * s), snap(2 * s), 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  // S6 level pips: three 2x2 marks, digit from level 4 up (B5, never a ratio bar).
+  groupFill(
+    ctx,
+    Array.from({ length: Math.min(3, machine.level) }, (_, i) => [
+      p.x - 11 * s + i * 3 * s, p.y - 14 * s, 2 * s, 2 * s,
+    ] as [number, number, number, number]),
+    "bodyLight"
+  );
+  if (machine.level > 3) {
+    ctx.fillStyle = PALETTE.bodyLight;
+    ctx.font = `${Math.round(6 * s)}px system-ui, sans-serif`;
+    ctx.textAlign = "left";
+    ctx.fillText(String(machine.level), p.x - 2 * s, p.y - 12 * s);
+  }
   if (machine.trayUnits > 0) {
-    ctx.fillStyle = PALETTE.furnace;
-    ctx.fillRect(p.x + 6 * s, p.y - 14 * s, 5 * s, 5 * s);
+    rectOf(ctx, p.x + 8 * s, p.y - 13 * s, 3 * s, 3 * s, "amber"); // S4 tray token
   }
-  // The signal lab reads as a mast at a glance, without a separate atlas.
-  if (machine.blueprint === "signalLab") {
-    ctx.fillStyle = PALETTE.cyan;
-    ctx.fillRect(p.x - 1 * s, p.y - 18 * s, 2 * s, 6 * s);
-    ctx.fillRect(p.x - 4 * s, p.y - 19 * s, 8 * s, 2 * s);
+  // Progress as one quantised pip row (B5): 1-5 filled, never k x ratio.
+  const ratio = machine.batchMilli === 0 ? 0 : Math.min(1, machine.progress / machine.batchMilli);
+  pipRow(ctx, p.x - 9 * s, p.y + 13 * s, s, ratio > 0 ? Math.max(1, Math.ceil(ratio * 5)) : 0, 5, "cyan");
+  if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(16 * s));
+}
+
+function statusColor(status: MachineState["status"]): PaletteKey {
+  const hex = STATUS_ACCENTS[status];
+  for (const key of Object.keys(PALETTE) as PaletteKey[]) {
+    if (PALETTE[key] === hex) return key;
   }
-  if (selected) outline(ctx, p.x, p.y, 14 * s, 14 * s);
+  return "steelLight";
 }
 
 function drawGhost(
@@ -234,16 +350,17 @@ function drawGhost(
   tile: number,
   valid: boolean
 ): void {
-  const [x, y] = centerOf(tile);
-  const p = worldToScreen(camera, view, x, y);
+  const c = tileToWorld(tile);
+  const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
-  ctx.strokeStyle = valid ? PALETTE.cyan : PALETTE.rust;
-  ctx.lineWidth = Math.max(1.5, s);
-  ctx.strokeRect(p.x - 14 * s, p.y - 14 * s, 28 * s, 28 * s);
-  ctx.fillStyle = valid ? PALETTE.cyan : PALETTE.rust;
+  const key: PaletteKey = valid ? "cyan" : "rust";
+  ctx.strokeStyle = PALETTE[key];
+  ctx.lineWidth = Math.max(1.5, snap(1.5 * s));
+  ctx.strokeRect(snap(p.x - 14 * s), snap(p.y - 14 * s), snap(28 * s), snap(28 * s));
+  ctx.fillStyle = PALETTE[key];
   ctx.font = `${Math.round(9 * s)}px system-ui, sans-serif`;
   ctx.textAlign = "center";
-  ctx.fillText(valid ? "\u2713" : "\u2715", p.x, p.y - 16 * s);
+  ctx.fillText(valid ? "\u2713" : "\u2715", snap(p.x), snap(p.y - 16 * s));
 }
 
 function drawRoutes(
@@ -252,6 +369,7 @@ function drawRoutes(
   camera: Camera,
   view: ViewState
 ): void {
+  const s = camera.scale;
   ctx.strokeStyle = "rgba(95,216,232,0.5)";
   ctx.lineWidth = 2;
   for (const route of state.routes) {
@@ -260,42 +378,42 @@ function drawRoutes(
     const pa = worldToScreen(camera, view, a.x, a.y);
     const pb = worldToScreen(camera, view, b.x, b.y);
     ctx.beginPath();
-    ctx.moveTo(pa.x, pa.y);
-    ctx.lineTo(pb.x, pb.y);
+    ctx.moveTo(snap(pa.x), snap(pa.y));
+    ctx.lineTo(snap(pb.x), snap(pb.y));
     ctx.stroke();
     for (const item of route.items) {
+      // 3x3 amber token per in-transit item, snapped, scaled with the camera.
       const depart = item.arrive - route.latency;
       const t = route.latency === 0 ? 1 : Math.min(1, Math.max(0, (state.tick - depart) / route.latency));
       const x = pa.x + (pb.x - pa.x) * t;
       const y = pa.y + (pb.y - pa.y) * t;
-      ctx.fillStyle = PALETTE.furnace;
-      ctx.fillRect(x - 2, y - 2, 4, 4);
+      rectOf(ctx, x - 1.5 * s, y - 1.5 * s, 3 * s, 3 * s, "amber");
     }
   }
 }
 
 /**
- * Every working drone, each on its own leg of the same wreck↔dock route. Units are
- * spaced sideways so a two-drone fleet reads as two machines rather than one fat
- * sprite, and each interpolates on its own launch tick (spec 20.3).
+ * Every working drone: shadow, rotors (one group), body, cargo pod and a `select`
+ * nose on the heading side; units keep a 4-unit lateral lean under reduced motion
+ * so five units read as five (B7).
  */
-function drawDrone(
+function drawDrones(
   ctx: CanvasRenderingContext2D,
   state: SimState,
   camera: Camera,
   view: ViewState,
   reducedMotion: boolean
 ): void {
+  const s = camera.scale;
   if (!state.drone.repaired) {
-    const p = worldToScreen(camera, view, ...centerOf(DOCK_TILE));
-    ctx.fillStyle = PALETTE.steelLight;
-    ctx.fillRect(p.x + 10 * camera.scale, p.y + 2 * camera.scale, 6 * camera.scale, 4 * camera.scale);
+    const c = tileToWorld(DOCK_TILE);
+    const p = worldToScreen(camera, view, c.x, c.y);
+    paintParts(ctx, p.x + 12 * s, p.y + 2 * s, s, PARTS.drone);
     return;
   }
   const dock = worldToScreen(camera, view, ...centerOf(DOCK_TILE));
   const wreck = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
   const units: (DroneState | undefined)[] = [state.drone, ...state.spares];
-  const spread = 5;
   for (let i = 0; i < units.length; i += 1) {
     const unit = units[i];
     if (!unit || !unit.repaired) continue;
@@ -305,17 +423,21 @@ function drawDrone(
       t = Math.min(1, Math.max(0, (state.tick - depart) / TUNING.droneTravelTicks));
     }
     if (reducedMotion) t = unit.inFlight ? 0.5 : 0;
-    const lean = (i - (units.length - 1) / 2) * spread;
+    const lean = (i - (units.length - 1) / 2) * LEAN_UNITS * s;
     const x = wreck.x + (dock.x - wreck.x) * t + lean;
-    const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * camera.scale;
-    const size = 4 * camera.scale;
-    ctx.fillStyle = PALETTE.cyan;
+    const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * s;
+    // DR5 shadow ellipse, alpha 0.35.
+    ctx.fillStyle = PALETTE.shadow;
+    ctx.globalAlpha = 0.35;
     ctx.beginPath();
-    ctx.moveTo(x, y - size);
-    ctx.lineTo(x + size, y + size);
-    ctx.lineTo(x - size, y + size);
-    ctx.closePath();
+    ctx.ellipse(snap(x), snap(y + 4 * s), snap(5 * s), snap(2 * s), 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = 1;
+    paintParts(ctx, x, y, s, PARTS.drone);
+    const carrying = (unit.inFlight?.qty ?? 0) > 0; // DR3 amber when loaded
+    rectOf(ctx, x - 1.5 * s, y + 1.5 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");
+    const noseRight = t <= 0.5; // DR4 nose at the heading end
+    rectOf(ctx, noseRight ? x + 3 * s : x - 5 * s, y - 1 * s, 2 * s, 2 * s, "select");
   }
 }
 
@@ -326,11 +448,33 @@ function outline(
   rx: number,
   ry: number
 ): void {
-  ctx.strokeStyle = PALETTE.select;
+  ctx.strokeStyle = SELECT_STYLE;
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.rect(x - rx, y - ry, rx * 2, ry * 2);
   ctx.stroke();
+}
+
+/**
+ * The silhouette sheet (E8/B1-B2): six roles plus the drone, two rows at the
+ * phone and desktop scales, desaturated to the gray steps of the same palette.
+ */
+export function drawSpriteSheet(ctx: CanvasRenderingContext2D, view: ViewState): void {
+  const ids = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"] as const;
+  const grays: PaletteKey[] = ["shadow", "well", "floor", "wreck", "select"];
+  // Gray step by colour index (dark table entries -> light accents), no CSS filter.
+  const gray = (i: number): PaletteKey => grays[Math.min(4, Math.floor(i / 4))];
+  ctx.fillStyle = PALETTE.night;
+  ctx.fillRect(0, 0, view.width, view.height);
+  const scales = [1.8056, 4];
+  for (let r = 0; r < scales.length; r += 1) {
+    const s = scales[r];
+    for (let i = 0; i < ids.length; i += 1) {
+      const cx = 24 + i * 40 * (r === 1 ? 1.6 : 1);
+      const cy = r === 0 ? 30 : 90;
+      paintParts(ctx, cx, cy, s, PARTS[ids[i]], gray);
+    }
+  }
 }
 
 function centerOf(tile: number): [number, number] {

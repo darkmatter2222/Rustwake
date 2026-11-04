@@ -5,13 +5,17 @@ import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
 import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, visibleResources } from "./text";
 
+import { PALETTE } from "../game/renderer/sprites";
+
+/* Q-002: the five hexes shared with the renderer read from the one PALETTE
+   source; the rest are chip-only tints. */
 const DOT_COLORS: Record<string, string> = {
-  scrap: "#c9713a",
-  credits: "#ffb765",
-  ferrous: "#6f93ad",
-  nonferrous: "#8a7ad8",
+  scrap: PALETTE.rust,
+  credits: PALETTE.amber,
+  ferrous: PALETTE.steelLight,
+  nonferrous: PALETTE.violet,
   residue: "#7b8a99",
-  steel: "#5fd8e8",
+  steel: PALETTE.cyan,
   copper: "#e0975b",
   polymer: "#c9b45d",
   wire: "#9fd0d8",
