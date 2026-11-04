@@ -528,7 +528,7 @@ function drawDrones(
     // D-2: the pod hangs below the body envelope (mask rows 3-5) so the two glyphs are
     // separable: 3-unit box on the left half of the body, one mask cell at row 6.
     rectOf(ctx, x - 3 * s, y + 8 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");
-    const noseRight = t <= 0.5; // DR4 nose at the heading end
+    const noseRight = reducedMotion ? t <= 0.5 : leg - droneLeg(unit, state.tick, phase - 1 / 6) >= 0; // F-1
     rectOf(ctx, noseRight ? x + 3 * s : x - 5 * s, y - 1 * s, 2 * s, 2 * s, "select");
   }
 }

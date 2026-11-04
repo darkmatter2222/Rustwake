@@ -1112,7 +1112,7 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     const podOffsetY = pod!.args[1] - cy;
     console.log(`D-2 droneCells=${droneCells} cargoCells=${cargoCells} hamming=${pair}`, JSON.stringify({
       podStyle: String(pod!.style),
-      podBoxUnits: podBox[0].slice(0, 4).map((v) => +v.toFixed(3)),
+      podBoxUnits: podBox[0].slice(0, 4).map((v) => +Number(v).toFixed(3)),
       podOffsetPx: [+podOffsetX.toFixed(2), +podOffsetY.toFixed(2)],
       cargoCellIndex: cargoMask.findIndex((v) => v === 1),
       droneRows: [...new Set(droneMask.map((v, i) => (v ? Math.floor(i / 8) : -1)).filter((r) => r >= 0))],
@@ -1277,5 +1277,122 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     expect(sorterBody).toBeCloseTo(39.7, 1);
     expect(sorterBodyDesk).toBeCloseTo(88, 1);
     expect(FEATURE_MIN_UNITS).toBe(2);
+  });
+
+  it("F-1: the nose side comes from the leg slope - 0.50 px attachment step, two flips a cycle", () => {
+    const NOSE_W = half(2 * S); // the 2-unit select mark, the only one of its width
+    const rows: Record<string, unknown> = {};
+    for (const [name, count] of [["fs1", 1], ["mature", 5]] as [string, number][]) {
+      const state = driven(name === "fs1" ? fs1() : mature(), count);
+      const sides: number[][] = [];
+      const offsets: number[][] = [];
+      const signs: number[][] = [];
+      for (let k = 0; k < 50; k += 1) {
+        advance(state, 1);
+        for (let f = 0; f < 6; f += 1) {
+          const phase = f / 6;
+          const log = draw(state, { ...rest, framePhase: phase }).stub.log;
+          const bodyCentres = bodies(log).map((p) => p[0]);
+          const noseCentres = log
+            .filter((r) => r.op === "fillRect" && r.style === SELECT_STYLE && Math.abs(r.args[2] - NOSE_W) <= 0.5)
+            .map((r) => r.args[0] + r.args[2] / 2);
+          const units: DroneState[] = [state.drone, ...state.spares];
+          expect(noseCentres.length).toBe(bodyCentres.length);
+          sides.push(noseCentres.map((n, i) => (n > bodyCentres[i] ? 1 : -1)));
+          offsets.push(noseCentres.map((n, i) => n - bodyCentres[i]));
+          signs.push(
+            units.map((unit) =>
+              droneLeg(unit, state.tick, phase) - droneLeg(unit, state.tick, phase - 1 / 6) >= 0 ? 1 : -1
+            )
+          );
+        }
+      }
+      const units = count;
+      let maxAttachStep = 0;
+      let offTravel = 0;
+      let offLattice = 0;
+      const flipGaps: number[][] = [];
+      const firstFlips: number[] = [];
+      const flipCounts: number[] = [];
+      const noseXs = new Set<number>();
+      for (let u = 0; u < units; u += 1) {
+        const flipsAt: number[] = [];
+        for (let f = 1; f < offsets.length; f += 1) {
+          // The mark is rigid on the body: within one leg direction its offset from the
+          // body centre may only move on the 0.5 px snap grid. The reversal frames are
+          // the ones where the slope sign changes, and those are the side flips.
+          if (signs[f][u] === signs[f - 1][u]) {
+            const step = Math.abs(offsets[f][u] - offsets[f - 1][u]);
+            maxAttachStep = Math.max(maxAttachStep, step);
+            if (Math.abs(step * 2 - Math.round(step * 2)) > 1e-9) offLattice += 1;
+          } else {
+            flipsAt.push(f);
+          }
+          const expected = signs[f][u] >= 0 ? 1 : -1;
+          if (sides[f][u] !== expected) offTravel += 1;
+          noseXs.add(+offsets[f][u].toFixed(2));
+        }
+        flipGaps.push(flipsAt.slice(2).map((f, i) => f - flipsAt[i + 1]));
+        firstFlips.push(flipsAt.length ? flipsAt[0] : -1);
+        flipCounts.push(flipsAt.length);
+      }
+      // 300 frames = 50 ticks = one 50-tick delivery cycle, so the two reversals of a
+      // cycle sit 60 frames (the 10-tick loaded leg) and 240 frames (the empty leg) apart.
+      const gaps = flipGaps.flat();
+      rows[name] = {
+        frames: offsets.length,
+        units,
+        maxAttachmentStepPx: +maxAttachStep.toFixed(2),
+        flipCountPerUnit: flipCounts,
+        firstFlipPerUnit: firstFlips,
+        flipGaps,
+        offTravelSideFrames: offTravel,
+        offLatticeSteps: offLattice,
+        offsetValues: [...noseXs].sort((a, b) => a - b),
+        slopeSigns: [...new Set(signs.flat())].sort(),
+      };
+      const sideRuns = Array.from({ length: units }, (_u, u) => {
+        const runs: [number, number][] = [];
+        for (let f = 0; f < sides.length; f += 1) {
+          const last = runs[runs.length - 1];
+          if (last && last[0] === sides[f][u]) last[1] += 1;
+          else runs.push([sides[f][u], 1]);
+        }
+        return runs;
+      });
+      (rows as Record<string, Record<string, unknown>>)[name].sideRuns = sideRuns;
+      // A 50-tick cycle is 300 frames: the loaded leg 60, the empty leg 240. Every whole
+      // run of one side is one of those two lengths, and two consecutive runs make 300.
+      for (const runs of sideRuns) {
+        expect(runs.reduce((s, r) => s + r[1], 0)).toBe(300);
+        for (let i = 1; i < runs.length - 1; i += 1) {
+          expect(Math.min(...[60, 240].map((c) => Math.abs(runs[i][1] - c)))).toBeLessThanOrEqual(1);
+          expect(Math.abs(runs[i][1] + runs[i + 1][1] - 300)).toBeLessThanOrEqual(2);
+        }
+      }
+      // The lead unit shows both legs inside the window: 61 + 239 = one 300-frame cycle,
+      // so its mark changes side exactly twice per 50-tick cycle.
+      expect(sideRuns[0].length).toBeGreaterThanOrEqual(2);
+      expect(Math.abs(sideRuns[0][0][1] + (sideRuns[0][1]?.[1] ?? 0) - 300)).toBeLessThanOrEqual(1);
+      void gaps;
+      for (const gap of gaps) {
+        expect(Math.min(...[60, 240].map((c) => Math.abs(gap - c)))).toBeLessThanOrEqual(1);
+      }
+      for (const unitGaps of flipGaps) {
+        for (let i = 1; i < unitGaps.length; i += 1) {
+          expect(Math.abs(unitGaps[i - 1] + unitGaps[i] - 300)).toBeLessThanOrEqual(2);
+        }
+      }
+      for (const [i, n] of flipCounts.entries()) {
+        expect(n).toBeLessThanOrEqual(3);
+        if (i === 0) expect(n).toBeGreaterThanOrEqual(1);
+      }
+    }
+    console.log("F-1 measured", JSON.stringify(rows, null, 0));
+    for (const value of Object.values(rows)) {
+      const row = value as { maxAttachmentStepPx: number; offTravelSideFrames: number };
+      expect(row.maxAttachmentStepPx).toBeLessThanOrEqual(0.5);
+      expect(row.offTravelSideFrames).toBe(0);
+    }
   });
 });
