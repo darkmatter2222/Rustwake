@@ -95,15 +95,20 @@ function subTickPhase(phase: number | undefined): number {
 /** Half-CSS-px grid = one device pixel at dpr 2 (D6). */
 const snap = (v: number): number => Math.round(v * 2) / 2;
 
+/** Either a palette key or one of the literal accent hexes the status table carries. */
+function hexOf(color: PaletteKey | string): string {
+  return color.startsWith("#") ? color : PALETTE[color as PaletteKey];
+}
+
 function rectOf(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
   w: number,
   h: number,
-  color: PaletteKey
+  color: PaletteKey | string
 ): void {
-  ctx.fillStyle = PALETTE[color];
+  ctx.fillStyle = hexOf(color);
   ctx.fillRect(snap(x), snap(y), snap(w), snap(h));
 }
 
@@ -348,12 +353,12 @@ function drawMachine(
   if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(16 * s));
 }
 
-function statusColor(status: MachineState["status"]): PaletteKey {
-  const hex = STATUS_ACCENTS[status];
-  for (const key of Object.keys(PALETTE) as PaletteKey[]) {
-    if (PALETTE[key] === hex) return key;
-  }
-  return "steelLight";
+/**
+ * B2: the drawn accent is the one table value the panel prints, with no palette round
+ * trip, so `#7fd6c2` for a power-limited machine really does reach the canvas.
+ */
+function statusColor(status: MachineState["status"]): string {
+  return STATUS_ACCENTS[status];
 }
 
 function drawGhost(

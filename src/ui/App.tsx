@@ -159,14 +159,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         cameraRef.current = fitCamera({ width: cssWidth, height: cssHeight });
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawScene(ctx, store.getState(), cameraRef.current, { width: cssWidth, height: cssHeight }, {
+      // Q-004 B1: one state read per rendered frame, shared by the canvas, the ghost
+      // validity check and the cue diff, so both surfaces describe the same tick.
+      const snapshot = store.getState();
+      drawScene(ctx, snapshot, cameraRef.current, { width: cssWidth, height: cssHeight }, {
         reducedMotion: settings.reducedMotion,
         buildMode: buildBlueprint !== null,
         ghostTile: buildBlueprint !== null ? ghostTile : null,
         ghostValid:
           ghostTile !== null &&
           ghostTile !== DOCK_TILE &&
-          !store.getState().machines.some((m) => m.tile === ghostTile),
+          !snapshot.machines.some((m) => m.tile === ghostTile),
         selected,
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
@@ -176,7 +179,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       // declared voice without a per-machine timer. Near/far is the tile distance
       // from the camera centre, so a zoomed-out yard reads with depth (S-16).
       const previous = cueStateRef.current;
-      const current = store.getState();
+      const current = snapshot;
       if (previous !== current) {
         const centre = worldToTile(cameraRef.current.x, cameraRef.current.y) ?? DOCK_TILE;
         for (const cue of stateCues(previous, current)) {
