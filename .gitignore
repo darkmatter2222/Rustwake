@@ -4,3 +4,7 @@ coverage/
 .vite/
 *.log
 .DS_Store
+
+# Local studio sessions, leases and transient receipts (never credentials)
+.rustwake-runtime/
+

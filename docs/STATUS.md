@@ -1,3 +1,11 @@
+# Studio coordination update
+
+Presentation acceptance is reopened by owner feedback. Existing M0/M1 labels below are historical functional completion, not approval of art/audio/motion/navigation. Current priority is `work/BOARD.md` Q-001 through Q-006. Runtime activation is **not verified**: local coordinator must execute the concurrency canary in `docs/AGENT_WORKFLOW.md`. Databrick deployment is **access-blocked in this cloud session**, not lacking owner authorization; follow `docs/DEPLOYMENT.md` from local HomeAILab. No live URL has been verified.
+
+This update changes instructions, role definitions and work queues only. Existing gameplay and screenshot assets are preserved. Independent screenshot/source findings are in `work/review/BASELINE.md`.
+
+## Prior implementation checkpoint (preserved)
+
 # STATUS
 
 Active milestone: M2 (a useful small factory). M0 and M1 complete.
@@ -96,3 +104,4 @@ measured and reverted (7 machines, 1 157 batches, 0 nodes).
   change limited to `src/game/content/validate.ts` does not, because the app does not import it.
   Commit-message files: write them with `-Encoding ascii`, because PowerShell's `utf8` writes a BOM that then
   appears in the committed subject line.
+
