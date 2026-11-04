@@ -20,6 +20,7 @@ import {
 } from "../../src/game/renderer/scene";
 import {
   FEATURE_MIN_UNITS,
+  FLOOR_KIT,
   GRID_STYLE,
   LEAN_UNITS,
   PARTS,
@@ -29,7 +30,7 @@ import {
   type PartTuple,
 } from "../../src/game/renderer/sprites";
 import { createInitialState, type MachineStatus, type SimState } from "../../src/game/simulation/types";
-import { DOCK_TILE } from "../../src/game/simulation/commands";
+import { DOCK_TILE, YARD_ROWS } from "../../src/game/simulation/commands";
 
 /**
  * Deterministic draw-bound tests (spec 3D): the context is a plain recording
@@ -40,6 +41,8 @@ interface Rec {
   op: string;
   style: string | number;
   args: number[];
+  /** L-4: the string a `fillText` call carried, so a glyph can be found by its text. */
+  text?: string;
 }
 
 const PAINT_OPS = new Set(["fill", "stroke", "fillRect", "strokeRect", "fillText"]);
@@ -69,7 +72,7 @@ function makeCtx() {
     },
     fillRect: (...a: number[]) => log.push({ op: "fillRect", style: fillStyle, args: a }),
     strokeRect: (...a: number[]) => log.push({ op: "strokeRect", style: strokeStyle, args: a }),
-    fillText: (_t: string, ...a: number[]) => log.push({ op: "fillText", style: fillStyle, args: a }),
+    fillText: (t: string, ...a: number[]) => log.push({ op: "fillText", style: fillStyle, args: a, text: t }),
     beginPath: () => {
       segCount = 0;
     },
@@ -93,6 +96,15 @@ function makeCtx() {
     ctx: ctx as unknown as CanvasRenderingContext2D,
   };
 }
+
+/**
+ * L-4 glyph metrics for the level digit, measured in chromium with
+ * `TextMetrics.actualBoundingBoxAscent` for "4" at the font sizes the painter sets
+ * (`Math.round(6 * s)` px): 5 px at 7, 8 px at 11, 16 px at 23, 17 px at 24. The largest
+ * ratio is 8/11 = 0.7273, used as the conservative fallback for an unlisted size.
+ */
+const DIGIT_ASCENT_PX: Record<number, number> = { 7: 5, 11: 8, 23: 16, 24: 17 };
+const DIGIT_ASCENT_RATIO_MAX = 0.7273;
 
 const VIEW: ViewState = { width: 390, height: 844 };
 const SCALE = 390 / (192 + 24); // 1.8056, the phone scale the spec measures
@@ -781,5 +793,50 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
     // No insets at all still means the legacy fit.
     expect(fitCamera(VIEW).scale).toBe(390 / (WORLD_W + 24));
     expect(fitCamera(VIEW).y).toBe(WORLD_H / 2);
+  });
+
+  it("L-4: the level digit clears the perimeter rail at every fitted scale", () => {
+    // The two full-width 2-unit bands of the floor kit are the perimeter rails.
+    const rails = FLOOR_KIT.filter((t) => t[2] === WORLD_W && t[3] === 2).map(
+      (t) => [t[1], t[1] + t[3]] as [number, number]
+    );
+    expect(rails).toEqual([
+      [0, 2],
+      [190, 192],
+    ]);
+
+    const lines: string[] = [];
+    for (const scale of [1.2034, 1.8056, 3.9074, 4]) {
+      const camera: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale };
+      for (let row = 0; row < YARD_ROWS; row += 1) {
+        const base = fs1();
+        const state = {
+          ...base,
+          machines: [{ ...base.machines[0], id: 1, tile: row * 6, level: 4 }],
+        } as SimState;
+        const stub = makeCtx();
+        drawScene(stub.ctx, state, camera, VIEW, rest);
+        const digit = stub.log.find((r) => r.op === "fillText" && r.text === "4");
+        expect(digit, `row ${row} at s=${scale}`).toBeDefined();
+        // The font the painter actually set, read off the same context.
+        const font = parseFloat(String((stub.ctx as unknown as { font: string }).font));
+        expect(font).toBe(Math.round(6 * scale));
+        const baseline = digit!.args[1];
+        const ascent = DIGIT_ASCENT_PX[font] ?? DIGIT_ASCENT_RATIO_MAX * font;
+        const toWorld = (px: number): number => (px - VIEW.height / 2) / scale + camera.y;
+        const top = toWorld(baseline - ascent);
+        const bottom = toWorld(baseline);
+        let overlap = 0;
+        for (const [railTop, railBottom] of rails) {
+          overlap += Math.max(0, Math.min(bottom, railBottom) - Math.max(top, railTop));
+        }
+        lines.push(
+          `s=${scale} row=${row} font=${font}px ascent=${ascent}px ` +
+            `box=[${top.toFixed(2)},${bottom.toFixed(2)}] overlap=${+overlap.toFixed(2)}u/${+(overlap * scale).toFixed(2)}px`
+        );
+        expect(overlap).toBe(0);
+      }
+    }
+    console.log("L-4 measured", JSON.stringify(lines, null, 0));
   });
 });

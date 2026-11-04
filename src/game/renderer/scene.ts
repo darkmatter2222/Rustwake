@@ -369,7 +369,11 @@ function drawMachine(
     ctx.fillStyle = PALETTE.bodyLight;
     ctx.font = `${Math.round(6 * s)}px system-ui, sans-serif`;
     ctx.textAlign = "left";
-    ctx.fillText(String(machine.level), p.x - 2 * s, p.y - 12 * s);
+    // L-4: the 6-unit digit sits on a baseline 9 units above the cell centre, so its
+    // measured 4.25-unit ascent puts the glyph box at [2.75, 7.00] for a row-0 cell and
+    // clears the 2-unit perimeter rail (at 12 units it was [-0.25, 4.00], 8 CSS px of
+    // overlap at s = 4).
+    ctx.fillText(String(machine.level), p.x - 2 * s, p.y - 9 * s);
   }
   if (machine.trayUnits > 0) {
     rectOf(ctx, p.x + 8 * s, p.y - 13 * s, 3 * s, 3 * s, "amber"); // S4 tray token
