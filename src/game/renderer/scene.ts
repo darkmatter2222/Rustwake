@@ -34,9 +34,36 @@ export interface ViewState {
   height: number;
 }
 
-export function fitCamera(view: ViewState): Camera {
-  const scale = Math.max(1.4, Math.min(4, view.width / (WORLD_W + 24)));
-  return { x: WORLD_W / 2, y: WORLD_H / 2, scale };
+/**
+ * L-1: the unobstructed vertical band the world has to live in, as measured edges of
+ * the chrome painted over the canvas - `top` is the bottom edge of the top cluster and
+ * `bottom` the distance from the viewport's lower edge to the top of the dock. Without
+ * them the fit is the legacy width-only term, byte for byte.
+ */
+export interface CameraInsets {
+  top: number;
+  bottom: number;
+}
+
+/** Floor of a band-fitted scale; the legacy unbanded floor is the original 1.4. */
+const BAND_MIN_SCALE = 1.2;
+
+/**
+ * A width-only fit cannot show a 224-unit-tall world in a 390 px-tall landscape
+ * viewport, so the dock and the wreck left the screen (L-1). With a measured band the
+ * world is fitted to whichever term binds and the band itself becomes the centre.
+ */
+export function fitCamera(view: ViewState, insets?: CameraInsets): Camera {
+  const legacy = () => ({ x: WORLD_W / 2, y: WORLD_H / 2, scale: Math.max(1.4, Math.min(4, view.width / (WORLD_W + 24))) });
+  const usableH = insets ? view.height - insets.top - insets.bottom : 0;
+  if (!insets || usableH <= 0) return legacy();
+  const bandScale = usableH / (WORLD_H + 12);
+  const widthScale = Math.min(4, view.width / (WORLD_W + 24));
+  if (bandScale >= widthScale) return legacy(); // the band is not binding: unchanged fit
+  const scale = Math.max(BAND_MIN_SCALE, Math.min(widthScale, bandScale));
+  // The band centre, not the canvas centre, is where the world's middle goes.
+  const bandCentre = insets.top + usableH / 2;
+  return { x: WORLD_W / 2, y: WORLD_H / 2 + (view.height / 2 - bandCentre) / scale, scale };
 }
 
 export function tileToWorld(tile: number): { x: number; y: number } {

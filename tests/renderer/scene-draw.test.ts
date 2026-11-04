@@ -6,10 +6,15 @@ import { App } from "../../src/ui/App";
 import { createStore, type GameStore } from "../../src/app/store";
 import { BLUEPRINTS } from "../../src/game/content/defs";
 import {
+  WORLD_H,
+  WORLD_W,
+  WRECK_POSITION,
   drawScene,
   fitCamera,
   tileToWorld,
   worldToScreen,
+  type Camera,
+  type CameraInsets,
   type DrawOptions,
   type ViewState,
 } from "../../src/game/renderer/scene";
@@ -709,5 +714,72 @@ describe("Q-004a 3B: world and panel agree in the same frame", () => {
     }
     expect(dedicated.sort().join(",")).toBe("furnace,signalLab,sorter,wireMill");
     expect(fallback.sort().join(",")).toBe("circuitAssembler,copperSeparator,platePress,polymerRecycler");
+  });
+});
+
+/* -------------------------------------------------------------------------- */
+/* REV-LAYOUT-g1 rows 1-4 (sec.3 acceptance checks).                           */
+/* -------------------------------------------------------------------------- */
+
+/** Chrome edges as rev-layout-g1 sec.1 measured them in chromium (CSS px). */
+const CHROME = {
+  landscape: { view: { width: 844, height: 390 } as ViewState, hudBottom: 52, dockTop: 336 },
+  phone: { view: { width: 390, height: 844 } as ViewState, hudBottom: 52, dockTop: 790 },
+  desktop: { view: { width: 1440, height: 900 } as ViewState, hudBottom: 52, dockTop: 846 },
+};
+
+function bandCase(label: keyof typeof CHROME): { camera: Camera; s: (worldY: number) => number; insets: CameraInsets } {
+  const { view, hudBottom, dockTop } = CHROME[label];
+  const insets: CameraInsets = { top: hudBottom, bottom: view.height - dockTop };
+  const camera = fitCamera(view, insets);
+  const s = (worldY: number) => worldToScreen(camera, view, 0, worldY).y;
+  return { camera, s, insets };
+}
+
+describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
+  it("L-1: the landscape fit keeps dock and wreck inside the chrome band", () => {
+    const landscape = bandCase("landscape");
+    const { s, insets } = landscape;
+    const yardTop = s(0);
+    const yardBottom = s(WORLD_H);
+    const dockY = s(tileToWorld(DOCK_TILE).y);
+    const wreckY = s(WRECK_POSITION.y);
+    console.log("L-1 landscape measured", JSON.stringify({
+      s: +landscape.camera.scale.toFixed(4),
+      yard: [+yardTop.toFixed(2), +yardBottom.toFixed(2)],
+      height: +(yardBottom - yardTop).toFixed(2),
+      dockY: +dockY.toFixed(2),
+      wreckY: +wreckY.toFixed(2),
+      band: [insets.top, CHROME.landscape.view.height - insets.bottom],
+    }));
+    // The band binds in landscape: 284 px of clear column for a 236-unit world.
+    expect(landscape.camera.scale).toBeCloseTo(284 / (WORLD_H + 12), 4);
+    expect(yardTop).toBeGreaterThanOrEqual(insets.top);
+    expect(yardBottom).toBeLessThanOrEqual(CHROME.landscape.view.height - insets.bottom);
+    expect(dockY).toBeGreaterThanOrEqual(insets.top);
+    expect(dockY).toBeLessThanOrEqual(CHROME.landscape.view.height - insets.bottom);
+    expect(wreckY).toBeGreaterThanOrEqual(insets.top);
+    expect(wreckY).toBeLessThanOrEqual(CHROME.landscape.view.height - insets.bottom);
+    // Portrait keeps the width term and the legacy centre exactly, so that canvas is
+    // byte-identical; desktop is the one case the band pulls in.
+    const phone = bandCase("phone");
+    expect(phone.camera.scale).toBe(390 / (WORLD_W + 24));
+    expect(phone.camera.y).toBe(WORLD_H / 2);
+    expect(phone.camera.x).toBe(WORLD_W / 2);
+    const desktop = bandCase("desktop");
+    const dTop = desktop.s(0);
+    const dBottom = desktop.s(WORLD_H);
+    console.log("L-1 desktop measured", JSON.stringify({
+      s: +desktop.camera.scale.toFixed(4),
+      yard: [+dTop.toFixed(2), +dBottom.toFixed(2)],
+      dockY: +desktop.s(tileToWorld(DOCK_TILE).y).toFixed(2),
+      wreckY: +desktop.s(WRECK_POSITION.y).toFixed(2),
+    }));
+    expect(dTop).toBeGreaterThanOrEqual(CHROME.desktop.hudBottom);
+    expect(dBottom).toBeLessThanOrEqual(CHROME.desktop.dockTop);
+    expect(desktop.s(WRECK_POSITION.y)).toBeLessThanOrEqual(CHROME.desktop.dockTop);
+    // No insets at all still means the legacy fit.
+    expect(fitCamera(VIEW).scale).toBe(390 / (WORLD_W + 24));
+    expect(fitCamera(VIEW).y).toBe(WORLD_H / 2);
   });
 });

@@ -19,6 +19,7 @@ import {
   tileToWorld,
   worldToTile,
   type Camera,
+  type CameraInsets,
 } from "../game/renderer/scene";
 import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
 import { REJECT_TEXT, costSummary, hintFor, objectiveFor, primaryFor } from "./text";
@@ -46,6 +47,23 @@ let commandSeq = 0;
 const nextCommandId = (): string => `c${++commandSeq}`;
 const TAP_THRESHOLD = 8;
 
+/**
+ * L-1: the chrome band the world is fitted into, read from the boxes the layout
+ * actually paints - the bottom edge of the top cluster and the gap under the dock.
+ * The canvas covers the viewport, so both are already in the canvas' own CSS-px space.
+ * An empty measurement (a jsdom box of 0) yields no band and the legacy fit.
+ */
+function chromeInsets(cssHeight: number): CameraInsets | undefined {
+  if (cssHeight <= 0) return undefined;
+  const top = document.querySelector(".hud__top");
+  const dock = document.querySelector(".dock");
+  if (!top || !dock) return undefined;
+  const topEdge = top.getBoundingClientRect().bottom;
+  const dockTop = dock.getBoundingClientRect().top;
+  if (!(topEdge > 0) || !(dockTop > 0)) return undefined;
+  return { top: topEdge, bottom: Math.max(0, cssHeight - dockTop) };
+}
+
 export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi }) {
   useRevision(store);
   const state = useSim(store);
@@ -54,6 +72,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const cameraRef = useRef<Camera>(fitCamera({ width: 360, height: 640 }));
   const audioRef = useRef<AudioApi | null>(audioApi ?? null);
   const cueStateRef = useRef<SimState>(store.getState());
+  const insetsRef = useRef<CameraInsets | undefined>(undefined);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const drag = useRef({ moved: 0, lastX: 0, lastY: 0, pinch: 0 });
 
@@ -153,10 +172,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
       const w = Math.round(cssWidth * dpr);
       const h = Math.round(cssHeight * dpr);
-      if (canvas.width !== w || canvas.height !== h) {
+      const insets = chromeInsets(cssHeight);
+      // L-1: the chrome band changes with the text scale and with an open panel, so the
+      // fit is redone whenever either the canvas box or the band moved.
+      const moved =
+        (insets?.top ?? -1) !== (insetsRef.current?.top ?? -1) ||
+        (insets?.bottom ?? -1) !== (insetsRef.current?.bottom ?? -1);
+      if (canvas.width !== w || canvas.height !== h || moved) {
         canvas.width = w;
         canvas.height = h;
-        cameraRef.current = fitCamera({ width: cssWidth, height: cssHeight });
+        insetsRef.current = insets;
+        cameraRef.current = fitCamera({ width: cssWidth, height: cssHeight }, insets);
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // Q-004 B1: one state read per rendered frame, shared by the canvas, the ghost
