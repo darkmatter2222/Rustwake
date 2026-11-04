@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { createElement } from "react";
+import { createRoot } from "react-dom/client";
+import { act } from "react-dom/test-utils";
 import {
   AMBIENCE_BED_GAIN,
   BUS_LEVELS,
@@ -21,7 +24,9 @@ import {
   type AudioApi,
   type CueName,
 } from "../../src/game/audio/audio";
-import { machineCueFor, stateCues } from "../../src/ui/App";
+import { App, machineCueFor, stateCues } from "../../src/ui/App";
+import { createStore, type GameStore } from "../../src/app/store";
+import { SAVE_KEY, type ImportResult } from "../../src/game/persistence/save";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 
 /**
@@ -230,6 +235,33 @@ function machineState(blueprint: string, batches: number, data = 0): SimState {
     store: { ...base.store, data },
     machines: [{ id: 1, blueprint, tile: 3, level: 1, batchesDone: batches } as never],
   } as SimState;
+}
+
+/** In-memory `Storage`, the same shape `tests/ui/app.test.tsx` drives the store with. */
+function memoryStorage() {
+  const map = new Map<string, string>();
+  return {
+    getItem: (key: string) => (map.has(key) ? (map.get(key) as string) : null),
+    setItem: (key: string, value: string) => {
+      map.set(key, value);
+    },
+    raw: map,
+  };
+}
+
+/** Mount the live app with an injected audio object, as the real entry point does. */
+function mountApp(store: GameStore, audioApi: AudioApi): HTMLDivElement {
+  const host = document.createElement("div");
+  document.body.appendChild(host);
+  act(() => {
+    createRoot(host).render(createElement(App, { store, audioApi }));
+  });
+  return host;
+}
+
+/** The `.value` the real master gain node holds: the first gain the stub creates. */
+function masterGainValue(stub: Stub): number | undefined {
+  return stub.nodes.filter((node) => node.kind === "gain")[0]?.gain?.value;
 }
 
 describe("Q-005 mix graph structure", () => {
@@ -533,6 +565,57 @@ describe("Q-005 mix graph structure", () => {
     expect(far).toBeDefined();
     expect(near).toBeDefined();
     expect((far as number) < (near as number)).toBe(true);
+    api.dispose();
+  });
+
+  it("S-17 (A-26): a settings write is the audio object's only mute source", () => {
+    const stub = makeStub();
+    const api = createAudio(false);
+    const storage = memoryStorage();
+    const store = createStore({ storage, now: () => 10 });
+    mountApp(store, api);
+    // The start gesture opens the context; the mix is audible at the declared level.
+    act(() => api.resume());
+    expect(masterGainValue(stub)).toBe(BUS_LEVELS.master);
+    // The one player-facing mute control writes the store, and the app's sync effect
+    // is the only writer of the audio object (App.tsx, S-17).
+    act(() => store.setSettings({ muted: true }));
+    act(() => store.step(1));
+    expect(api.isMuted()).toBe(true);
+    expect(api.isMuted()).toBe(store.getSettings().muted);
+    // The real node, not the table echo: the single master write did the muting.
+    expect(masterGainValue(stub)).toBe(0);
+    for (const bus of CATEGORY_BUSES) expect(entry(api, bus)?.level).toBe(0);
+    api.dispose();
+  });
+
+  it("S-17 and S-18 (A-26): a save loaded with muted:true reaches the real node", () => {
+    const stub = makeStub();
+    const api = createAudio(false);
+    // The save the HUD produced with muted:true; S-18: the value survives encoding.
+    const writer = memoryStorage();
+    const first = createStore({ storage: writer, now: () => 10 });
+    first.setSettings({ muted: true });
+    const text = first.exportSave();
+    expect(text).toContain('"muted":true');
+
+    // A second store built from that serialized envelope, then the same text imported.
+    const seeded = memoryStorage();
+    seeded.setItem(SAVE_KEY, text);
+    const second = createStore({ storage: seeded, now: () => 20 });
+    expect(second.getSettings().muted).toBe(true);
+    // The audio object itself was constructed unmuted: only the store can flip it.
+    mountApp(second, api);
+    act(() => api.resume());
+    const imported: { result?: ImportResult } = {};
+    act(() => {
+      imported.result = second.importSave(text);
+    });
+    expect(imported.result?.ok).toBe(true);
+    act(() => second.step(1));
+    expect(api.isMuted()).toBe(true);
+    expect(api.isMuted()).toBe(second.getSettings().muted);
+    expect(masterGainValue(stub)).toBe(0);
     api.dispose();
   });
 
