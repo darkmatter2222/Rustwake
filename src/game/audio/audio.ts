@@ -160,6 +160,13 @@ export const AMBIENCE_BED_GAIN = 0.12;
 export const MUSIC_BED_GAIN = 0.1;
 
 /**
+ * A-31: the room-tone fill is the sum of two coprime stages, 7 and 11 samples, so
+ * its true period is `lcm(7, 11) = 77` samples. Every noise buffer holds a whole
+ * number of those periods, which is what keeps the loop seam continuous.
+ */
+export const NOISE_PERIOD = 77;
+
+/**
  * S-06: the documented headroom ceiling at the output stage, one-decimal value of
  * `BUS_LEVELS.master x maxConcurrentVoiceSum()` = 0.9 x 0.82 = 0.738 -> 0.7, so the
  * worst-case summed mix still sits below unity with room for the compressor.
@@ -315,13 +322,16 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     const cached = buffers.get(seconds);
     if (cached) return cached;
     const rate = context.sampleRate || 44100;
-    const frames = Math.max(1, Math.floor(rate * seconds));
-    const buffer = context.createBuffer(1, frames, rate);
-    // Deterministic fill so the stub and a real context produce the same numbers.
+    // A-31: a whole number of periods only, so the loop seam lands exactly on the
+    // period border instead of cutting it and adding a tick twice per second.
+    const periods = Math.max(1, Math.round(Math.floor(rate * seconds) / NOISE_PERIOD));
+    const buffer = context.createBuffer(1, periods * NOISE_PERIOD, rate);
+    // Deterministic aperiodic fill (A-31): two coprime stages, 7 and 11, repeat
+    // together only every lcm(7, 11) = 77 samples, so the wash is not one steady
+    // pitch the way the old single `index % 7` saw read.
     const data = buffer.getChannelData(0);
     for (let index = 0; index < data.length; index += 1) {
-      const phase = index % 7;
-      data[index] = (phase - 3) / 4;
+      data[index] = (((index % 7) - 3) / 4 + ((index % 11) - 5) / 8) / 1.6;
     }
     buffers.set(seconds, buffer);
     return buffer;
