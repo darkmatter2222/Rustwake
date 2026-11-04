@@ -118,3 +118,23 @@ First-feel acceptance **not met**: two observed categories are at 1, the rubric 
 - **Real-device performance/thermal** (B-08) and **human first-feel comprehension** (B-09): blocked, unchanged from BACKLOG.
 - Desktop/phone **first-minute organic path** at this SHA: only the seeded jsdom/capture fixtures exist (B-25 records the organic phone session not reaching `data > 0`), so organic provenance is still missing for `latest-research-phone.png`.
 - CI status for this SHA: not verified here (publisher's receipt records gh unauthenticated, API 404).
+
+## 5. Top-five prioritized improvements (expected alignment with Q-001..Q-006)
+
+1. **Q-001** - readable phone research cards (R-01). Cheapest real gain: a one-column card fixes the only rubric-named rejection in the panel family; 3 files, no schema change.
+2. **Q-002** - art-directed style slice with context-only grid (R-03, R-04, luminance part of R-10). Blocks both 1-scored categories (scene composition, asset identity); fold the grid-at-rest rule, the amber-token budget and the luminance ratios into its acceptance so no second pass is needed.
+3. **Q-003** - clamp the level indicator (R-02). Two-line change with a deterministic draw-bound test; already visible at the shipped L12-L15 range.
+4. **Q-004** - readable drone/fleet plus sub-tick interpolation (R-05) with the frame-delta and IoU metrics above; depends on Q-002's sprite set.
+5. **Q-006** - stable navigation and blueprint picker (R-09). Highest interaction-category leverage once Q-001 lands.
+
+**Deviations from the expected set**: (a) **Q-005 is ranked 6th/parallel rather than inside the five**, because full closure needs a listener (B-11 is blocked) while its structural half - master routing, a fed ambience bus, prioritized voices - is objectively testable and suits a parallel fill; (b) three findings have no Q-id and are proposed as new bounded tasks: **Q-007** `powerLimited` gets its own world token (R-08 - smallest complete rubric win: one ternary plus one colour test closes a world/panel contradiction), **Q-008** keyboard reachability for world selection (R-10 - one keydown handler plus one test), **Q-009** micro-format `Store 118/900` (one line; can ride with Q-001).
+
+## 6. Technical baseline recorded (not quality acceptance)
+
+`npm install` + `npm test` in `review-r1` at `a8fb14a`: **21 files / 172 tests passed** in 5.30 s. jsdom canvas warnings are expected: no `canvas` package is installed, so the 2D path is exercised by the capture scripts rather than jsdom - which is also why the motion/audio gates need real-browser evidence. Production code unmodified in this checkout; the only file added is this report.
+
+## 7. Verdict
+
+- **REV-BASE scope** (baseline rubric + image-capability receipt) for SHA `a8fb14a1fdd073723f67d3524a4b261013651019`: **rework**. Image input: supported, 7/7 captures consumed individually. Scene composition and asset identity sit at 1, motion and audio remain unevidenced at this SHA, so first-feel acceptance stays reopened; the technical gates pass and do not conflict with this verdict.
+- Per-category scores: scene composition 1, asset identity 1, readability 2, interaction 2, motion pending, audio pending, state fidelity 2, performance/accessibility 2.
+- Next-five queue for the reviewer to re-check after each candidate: Q-001, Q-002, Q-003, Q-004, Q-006 (Q-005 parallel/6th; Q-007..Q-009 as new small ids). Each finding needs its own before/after evidence at the candidate SHA before it may close; a developer completion statement is not acceptance.
