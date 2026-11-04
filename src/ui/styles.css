@@ -281,6 +281,10 @@ body {
 .panel__body {
   min-height: 0;
   overflow: hidden auto;
+  /* The `.game` root sets `touch-action: none` for the canvas, so the one
+     contained scroller in a panel states its own axis (spec 25.1 keeps the
+     document itself flat). */
+  touch-action: pan-y;
 }
 
 .panel__title {
@@ -304,6 +308,119 @@ body {
 .panel dd {
   margin: 0;
   font-variant-numeric: tabular-nums;
+}
+
+/* Q-001: the research list is one full-width card per node, in a single column
+   by construction. `.panel dl` above is a two-column `auto 1fr` grid for label /
+   value rows, and feeding it one `<div>` per node is what made each node land in
+   an alternating cell: "Smart Buffers" measured 27.6 px wide over 12 one-word
+   lines at 360 px. A one-column grid cannot do that, and every card is as wide
+   as the panel's own text column. */
+.panel__lead {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.panel__lead-key {
+  color: var(--steel-light);
+}
+
+.panel__lead-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.nodes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.32);
+  background: rgba(9, 15, 26, 0.55);
+  font-size: 0.84rem;
+}
+
+.node__title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--paper);
+}
+
+.node__state {
+  color: var(--steel-light);
+  font-size: 0.78rem;
+  text-align: right;
+}
+
+.node__effect {
+  margin: 0;
+}
+
+/* Cost and action share one line while both fit, and wrap to two when a large
+   text scale or the longest label demands it; the buy target keeps its 44 px. */
+.node__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.node__cost {
+  color: var(--furnace);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The three states read without relying on colour alone: a known node is a flat
+   cyan-edged block, the next buyable node keeps the amber edge a primary action
+   uses, and a prerequisite-locked card is dashed with an inert target. */
+.node[data-state="known"] {
+  border-color: rgba(95, 216, 232, 0.45);
+}
+
+.node[data-state="known"] .node__state {
+  color: var(--cyan);
+}
+
+.node[data-state="open"] {
+  border-color: rgba(255, 183, 101, 0.55);
+}
+
+.node[data-state="locked"] {
+  border-style: dashed;
+}
+
+/* A target the player cannot use yet stays on screen with its reason printed
+   above it, dimmed rather than removed. */
+.icon-btn:disabled {
+  opacity: 0.55;
+}
+
+/* At a large scale the cards give back their own padding before the type does,
+   so three cards still reach the dock inside two thumb-swipes at 2.0. */
+.text-large .nodes {
+  gap: 6px;
+}
+
+.text-large .node {
+  gap: 3px;
+  padding: 6px 8px;
 }
 
 .panel__actions {
@@ -442,5 +559,24 @@ body {
   }
   .dock {
     max-width: min(100%, 520px);
+  }
+  /* Three full-width research cards cost more of a short viewport than the
+     default 58 dvh cap, and the objective has already stepped back one line
+     here (spec 6.4), so the card list spends the freed height. */
+  .panel--research {
+    max-height: 66dvh;
+  }
+  /* Q-001: three full-width cards must still reach their buy targets inside a
+     thumb's worth of travel, so the card chrome gives way first. */
+  .nodes {
+    gap: 6px;
+  }
+  .node {
+    gap: 2px;
+    padding: 4px 8px;
+  }
+  .text-large .node {
+    gap: 2px;
+    padding: 4px 8px;
   }
 }

@@ -297,6 +297,18 @@ export function StorePanel(props: {
   );
 }
 
+/**
+ * Research as one full-width card per node (Q-001, design bible "Menus and
+ * navigation"). A definition-list grid treats every node `<div>` as another
+ * alternating cell of `auto 1fr`, which is what squeezed "Smart Buffers" into a
+ * one-word column in docs/screenshots/latest-research-phone.png; the card list
+ * below is a single column by construction, so a card is as wide as the panel.
+ * Each card carries the five things a purchase decision needs: title, exact
+ * effect, cost, prerequisite, and its own state — `Known`, an inert buy target
+ * while the prerequisite is missing, or a live one. The rank, cost and
+ * prerequisite rules themselves come from the same tables as before, so the
+ * engine sees the identical `research.buy` command.
+ */
 export function ResearchPanel(props: {
   state: SimState;
   dispatch: (command: Command) => unknown;
@@ -304,7 +316,7 @@ export function ResearchPanel(props: {
 }) {
   const owned = props.state.research;
   return (
-    <div className="panel" role="group" aria-label={t("aria.research")}>
+    <div className="panel panel--research" role="group" aria-label={t("aria.research")}>
       <div className="panel__head">
         <h2 className="panel__title">{t("title.research")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
@@ -312,44 +324,60 @@ export function ResearchPanel(props: {
         </button>
       </div>
       <div className="panel__body">
-      <dl>
-        <dt>{t("row.data")}</dt>
-        <dd>{formatNumber(props.state.store.data ?? 0)}</dd>
-        {RESEARCH_ORDER.map((id) => {
-          const def = RESEARCH[id];
-          const rank = owned[def.id] ?? 0;
-          const prereq = def.requires ? RESEARCH[def.requires] : null;
-          const blocked = prereq !== null && (owned[prereq.id] ?? 0) <= 0;
-          return (
-            <div key={def.id}>
-              <dt>{def.label}</dt>
-              <dd>{def.effect}</dd>
-              {rank > 0 ? (
-                <dd>{t("value.known")}</dd>
-              ) : blocked ? (
-                <dd>
-                  {t("value.needsPrereq", {
-                    node: prereq ? prereq.label : t("value.earlierNode"),
-                  })}
-                </dd>
-              ) : (
-                <button
-                  className="icon-btn"
-                  onClick={() =>
-                    props.dispatch({
-                      id: nextId("k"),
-                      type: "research.buy",
-                      node: def.id,
-                    })
-                  }
-                >
-                  {t("btn.buyData", { cost: t("value.dataCost", { cost: def.cost }) })}
-                </button>
-              )}
-            </div>
-          );
-        })}
-      </dl>
+        <p className="panel__lead">
+          <span className="panel__lead-key">{t("row.data")}</span>
+          <span className="panel__lead-value">{formatNumber(props.state.store.data ?? 0)}</span>
+        </p>
+        <div className="nodes">
+          {RESEARCH_ORDER.map((id) => {
+            const def = RESEARCH[id];
+            const rank = owned[def.id] ?? 0;
+            const prereq = def.requires ? RESEARCH[def.requires] : null;
+            const blocked = prereq !== null && (owned[prereq.id] ?? 0) <= 0;
+            const known = rank > 0;
+            const cost = t("value.dataCost", { cost: def.cost });
+            return (
+              <article
+                className="node"
+                key={def.id}
+                data-node={def.id}
+                data-state={known ? "known" : blocked ? "locked" : "open"}
+              >
+                <h3 className="node__title">
+                  <span className="node__name">{def.label}</span>
+                  {known ? (
+                    <span className="node__state">{t("value.known")}</span>
+                  ) : blocked ? (
+                    <span className="node__state">
+                      {t("value.needsPrereq", {
+                        node: prereq ? prereq.label : t("value.earlierNode"),
+                      })}
+                    </span>
+                  ) : null}
+                </h3>
+                <p className="node__effect">{def.effect}</p>
+                <div className="node__foot">
+                  <span className="node__cost">{cost}</span>
+                  {known ? null : (
+                    <button
+                      className="icon-btn node__buy"
+                      disabled={blocked}
+                      onClick={() =>
+                        props.dispatch({
+                          id: nextId("k"),
+                          type: "research.buy",
+                          node: def.id,
+                        })
+                      }
+                    >
+                      {t("btn.buyData", { cost })}
+                    </button>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

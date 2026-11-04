@@ -1,0 +1,3992 @@
+{
+  "summary": [
+    {
+      "scale": 1,
+      "viewport": "phone-360x640",
+      "set": "all-known",
+      "png": "research-before-phone-360x640-s1-all-known.png",
+      "fontPx": 15,
+      "panelHeight": 371.2,
+      "containedScroll": 15,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "47px / 1 lines \"102\"",
+      "tallestBlock": "47px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 290,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 290,
+          "w": 47,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 290,
+          "w": 47,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 290,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 257,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 15,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 225.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-360x640",
+      "set": "mixed",
+      "png": "research-before-phone-360x640-s1-mixed.png",
+      "fontPx": 15,
+      "panelHeight": 371.2,
+      "containedScroll": 52,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "49.8px / 1 lines \"40\"",
+      "tallestBlock": "49.8px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 49.8x53.6"
+      ],
+      "minTarget": 49.8,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 287.2,
+          "w": 49.8,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 287.2,
+          "w": 49.8,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 287.2,
+          "w": 49.8,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 254.2,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 254.2,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 52,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 217.6,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 440.6,
+            "h": 53.6,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-360x640",
+      "set": "fresh",
+      "png": "research-before-phone-360x640-s1-fresh.png",
+      "fontPx": 15,
+      "panelHeight": 371.2,
+      "containedScroll": 66,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "47px / 1 lines \"22\"",
+      "tallestBlock": "47px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 93.6x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 290,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 290,
+          "w": 47,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 290,
+          "w": 47,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 290,
+          "w": 47,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 257,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 257,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 66,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 217.6,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 256.6,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-390x844",
+      "set": "all-known",
+      "png": "research-before-phone-390x844-s1-all-known.png",
+      "fontPx": 15,
+      "panelHeight": 386,
+      "containedScroll": 0,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "47px / 1 lines \"102\"",
+      "tallestBlock": "47px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 320,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 320,
+          "w": 47,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 320,
+          "w": 47,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 320,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 287,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-390x844",
+      "set": "mixed",
+      "png": "research-before-phone-390x844-s1-mixed.png",
+      "fontPx": 15,
+      "panelHeight": 422.6,
+      "containedScroll": 0,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "49.8px / 1 lines \"40\"",
+      "tallestBlock": "49.8px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 49.8x53.6"
+      ],
+      "minTarget": 49.8,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 317.2,
+          "w": 49.8,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 317.2,
+          "w": 49.8,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 317.2,
+          "w": 49.8,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 284.2,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 284.2,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": {
+        "frames": [
+          {
+            "at": "opened",
+            "research": {
+              "cutters": 1
+            },
+            "data": 40,
+            "disabled": [],
+            "enabled": [
+              "Close",
+              "Buy · 8 Data"
+            ],
+            "states": [],
+            "panelText": "ResearchCloseData40Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.KnownSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Buy · 8 DataRoute DispatchA newly connected link carries 8 more units at once.Needs Smart Buffers first"
+          },
+          {
+            "at": "after Buy · 8 Data",
+            "tapped": true,
+            "research": {
+              "cutters": 1,
+              "buffers": 1
+            },
+            "data": 32,
+            "disabled": [],
+            "enabled": [
+              "Close",
+              "Buy · 12 Data"
+            ],
+            "states": [],
+            "panelText": "ResearchCloseData32Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.KnownSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.KnownRoute DispatchA newly connected link carries 8 more units at once.Buy · 12 Data"
+          },
+          {
+            "at": "after Buy · 12 Data",
+            "tapped": true,
+            "research": {
+              "cutters": 1,
+              "buffers": 1,
+              "dispatch": 1
+            },
+            "data": 20,
+            "disabled": [],
+            "enabled": [
+              "Close"
+            ],
+            "states": [],
+            "panelText": "ResearchCloseData20Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.KnownSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.KnownRoute DispatchA newly connected link carries 8 more units at once.Known"
+          },
+          {
+            "at": "after retap Buy · 8 Data",
+            "tapped": false,
+            "research": {
+              "cutters": 1,
+              "buffers": 1,
+              "dispatch": 1
+            },
+            "data": 20,
+            "disabled": [],
+            "enabled": [
+              "Close"
+            ],
+            "states": [],
+            "panelText": "ResearchCloseData20Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.KnownSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.KnownRoute DispatchA newly connected link carries 8 more units at once.Known"
+          }
+        ],
+        "dataCostNote": "costs: buffers 8, dispatch 12"
+      }
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-390x844",
+      "set": "fresh",
+      "png": "research-before-phone-390x844-s1-fresh.png",
+      "fontPx": 15,
+      "panelHeight": 437,
+      "containedScroll": 0,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "47px / 1 lines \"22\"",
+      "tallestBlock": "47px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 93.6x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 320,
+          "w": 47,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 320,
+          "w": 47,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 320,
+          "w": 47,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 320,
+          "w": 47,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 287,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 287,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-412x915",
+      "set": "all-known",
+      "png": "research-before-phone-412x915-s1-all-known.png",
+      "fontPx": 15,
+      "panelHeight": 335,
+      "containedScroll": 0,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "67.9px / 1 lines \"102\"",
+      "tallestBlock": "67.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-412x915",
+      "set": "mixed",
+      "png": "research-before-phone-412x915-s1-mixed.png",
+      "fontPx": 15,
+      "panelHeight": 362,
+      "containedScroll": 0,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "67.9px / 1 lines \"40\"",
+      "tallestBlock": "67.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 67.9x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "phone-412x915",
+      "set": "fresh",
+      "png": "research-before-phone-412x915-s1-fresh.png",
+      "fontPx": 15,
+      "panelHeight": 369,
+      "containedScroll": 0,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "67.9px / 1 lines \"22\"",
+      "tallestBlock": "67.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 93.6x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 321.1,
+          "w": 67.9,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "landscape-844x390",
+      "set": "all-known",
+      "png": "research-before-landscape-844x390-s1-all-known.png",
+      "fontPx": 15,
+      "panelHeight": 216,
+      "containedScroll": 0,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "235.9px / 1 lines \"102\"",
+      "tallestBlock": "235.9px / 2 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "landscape-844x390",
+      "set": "mixed",
+      "png": "research-before-landscape-844x390-s1-mixed.png",
+      "fontPx": 15,
+      "panelHeight": 226.2,
+      "containedScroll": 17,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "235.9px / 1 lines \"40\"",
+      "tallestBlock": "235.9px / 2 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 93.6x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 17,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 120.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 225.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1,
+      "viewport": "landscape-844x390",
+      "set": "fresh",
+      "png": "research-before-landscape-844x390-s1-fresh.png",
+      "fontPx": 15,
+      "panelHeight": 226,
+      "containedScroll": 0,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "235.9px / 1 lines \"22\"",
+      "tallestBlock": "235.9px / 2 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 93.6x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 453.1,
+          "w": 235.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 288.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": null,
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-360x640",
+      "set": "all-known",
+      "png": "research-before-phone-360x640-s1.5-all-known.png",
+      "fontPx": 22.5,
+      "panelHeight": 371.2,
+      "containedScroll": 194,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "70.5px / 1 lines \"102\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 233.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 233.5,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 194,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 171.2,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-360x640",
+      "set": "mixed",
+      "png": "research-before-phone-360x640-s1.5-mixed.png",
+      "fontPx": 22.5,
+      "panelHeight": 371.2,
+      "containedScroll": 248,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "70.5px / 1 lines \"40\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 70.5x79.4"
+      ],
+      "minTarget": 70.5,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 233.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 233.5,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 248,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 171.2,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 308.9,
+            "h": 79.4,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-360x640",
+      "set": "fresh",
+      "png": "research-before-phone-360x640-s1.5-fresh.png",
+      "fontPx": 22.5,
+      "panelHeight": 326.8,
+      "containedScroll": 314,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "70.5px / 1 lines \"22\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 129.4x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 233.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 266.5,
+          "w": 70.5,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 233.5,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 233.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 314,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 165.6,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 7.7,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-390x844",
+      "set": "all-known",
+      "png": "research-before-phone-390x844-s1.5-all-known.png",
+      "fontPx": 22.5,
+      "panelHeight": 489.5,
+      "containedScroll": 49,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "70.5px / 1 lines \"102\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 49,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 256.9,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-390x844",
+      "set": "mixed",
+      "png": "research-before-phone-390x844-s1.5-mixed.png",
+      "fontPx": 22.5,
+      "panelHeight": 489.5,
+      "containedScroll": 103,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "70.5px / 1 lines \"40\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 70.5x79.4"
+      ],
+      "minTarget": 70.5,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 103,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 256.9,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 539.6,
+            "h": 79.4,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-390x844",
+      "set": "fresh",
+      "png": "research-before-phone-390x844-s1.5-fresh.png",
+      "fontPx": 22.5,
+      "panelHeight": 489.5,
+      "containedScroll": 126,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "70.5px / 1 lines \"22\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 129.4x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 296.5,
+          "w": 70.5,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 263.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 263.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 126,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 256.9,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 287,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-412x915",
+      "set": "all-known",
+      "png": "research-before-phone-412x915-s1.5-all-known.png",
+      "fontPx": 22.5,
+      "panelHeight": 530.7,
+      "containedScroll": 8,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "70.5px / 1 lines \"102\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 8,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 286.7,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-412x915",
+      "set": "mixed",
+      "png": "research-before-phone-412x915-s1.5-mixed.png",
+      "fontPx": 22.5,
+      "panelHeight": 530.7,
+      "containedScroll": 62,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "70.5px / 1 lines \"40\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 70.5x79.4"
+      ],
+      "minTarget": 70.5,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 62,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 286.7,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 610.4,
+            "h": 79.4,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "phone-412x915",
+      "set": "fresh",
+      "png": "research-before-phone-412x915-s1.5-fresh.png",
+      "fontPx": 22.5,
+      "panelHeight": 530.7,
+      "containedScroll": 85,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "70.5px / 1 lines \"22\"",
+      "tallestBlock": "70.5px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 129.4x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 318.5,
+          "w": 70.5,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 285.5,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 285.5,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 85,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 286.7,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 357.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "landscape-844x390",
+      "set": "all-known",
+      "png": "research-before-landscape-844x390-s1.5-all-known.png",
+      "fontPx": 22.5,
+      "panelHeight": 226.2,
+      "containedScroll": 237,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "91.9px / 1 lines \"102\"",
+      "tallestBlock": "91.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 237,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 116.2,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "landscape-844x390",
+      "set": "mixed",
+      "png": "research-before-landscape-844x390-s1.5-mixed.png",
+      "fontPx": 22.5,
+      "panelHeight": 226.2,
+      "containedScroll": 265,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "91.9px / 1 lines \"40\"",
+      "tallestBlock": "91.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 91.9x53.6 OUTSIDE"
+      ],
+      "minTarget": 53.6,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 265,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 116.2,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 185.9,
+            "h": 53.6,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 1.5,
+      "viewport": "landscape-844x390",
+      "set": "fresh",
+      "png": "research-before-landscape-844x390-s1.5-fresh.png",
+      "fontPx": 22.5,
+      "panelHeight": 226.2,
+      "containedScroll": 313,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "91.9px / 1 lines \"22\"",
+      "tallestBlock": "91.9px / 8 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 129.4x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 8,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 597.1,
+          "w": 91.9,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 432.1,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 313,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 116.2,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": -66.2,
+            "h": 44,
+            "insideViewport": false,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-360x640",
+      "set": "all-known",
+      "png": "research-before-phone-360x640-s2-all-known.png",
+      "fontPx": 30,
+      "panelHeight": 321,
+      "containedScroll": 439,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "94px / 1 lines \"102\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 243,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 210,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 243,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 243,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 243,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 210,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 439,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 205.4,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-360x640",
+      "set": "mixed",
+      "png": "research-before-phone-360x640-s2-mixed.png",
+      "fontPx": 30,
+      "panelHeight": 271,
+      "containedScroll": 595,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "94px / 1 lines \"40\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 94x105.3 OUTSIDE"
+      ],
+      "minTarget": 94,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 243,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 210,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 243,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 243,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 210,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 210,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 595,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 205.4,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 106.9,
+            "h": 105.3,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-360x640",
+      "set": "fresh",
+      "png": "research-before-phone-360x640-s2-fresh.png",
+      "fontPx": 30,
+      "panelHeight": 271,
+      "containedScroll": 625,
+      "docScroll": "360x640 vs 360x640",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 314,
+      "narrowestBlock": "94px / 1 lines \"22\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 165.3x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 243,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 210,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 243,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 243,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 243,
+          "w": 94,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 210,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 210,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 210,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 625,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 205.4,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": -195.3,
+            "h": 44,
+            "insideViewport": false,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-390x844",
+      "set": "all-known",
+      "png": "research-before-phone-390x844-s2-all-known.png",
+      "fontPx": 30,
+      "panelHeight": 489.5,
+      "containedScroll": 237,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "94px / 1 lines \"102\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 273,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 273,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 273,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 273,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 237,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 240.9,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-390x844",
+      "set": "mixed",
+      "png": "research-before-phone-390x844-s2-mixed.png",
+      "fontPx": 30,
+      "panelHeight": 475,
+      "containedScroll": 357,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "94px / 1 lines \"40\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 94x105.3"
+      ],
+      "minTarget": 94,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 273,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 273,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 273,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 240,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 357,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 205.4,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 344.9,
+            "h": 105.3,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-390x844",
+      "set": "fresh",
+      "png": "research-before-phone-390x844-s2-fresh.png",
+      "fontPx": 30,
+      "panelHeight": 475,
+      "containedScroll": 387,
+      "docScroll": "390x844 vs 390x844",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 344,
+      "narrowestBlock": "94px / 1 lines \"22\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 165.3x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 273,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 273,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 273,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 273,
+          "w": 94,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 240,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 240,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 240,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 387,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 205.4,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 42.7,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-412x915",
+      "set": "all-known",
+      "png": "research-before-phone-412x915-s2-all-known.png",
+      "fontPx": 30,
+      "panelHeight": 530.7,
+      "containedScroll": 196,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "94px / 1 lines \"102\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 295,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 262,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 295,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 295,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 295,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 262,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 196,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 270.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-412x915",
+      "set": "mixed",
+      "png": "research-before-phone-412x915-s2-mixed.png",
+      "fontPx": 30,
+      "panelHeight": 530.7,
+      "containedScroll": 302,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "94px / 1 lines \"40\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 94x105.3"
+      ],
+      "minTarget": 94,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 295,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 262,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 295,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 295,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 262,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 262,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 302,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 220.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 415.2,
+            "h": 105.3,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "phone-412x915",
+      "set": "fresh",
+      "png": "research-before-phone-412x915-s2-fresh.png",
+      "fontPx": 30,
+      "panelHeight": 530.7,
+      "containedScroll": 332,
+      "docScroll": "412x915 vs 412x915",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 366,
+      "narrowestBlock": "94px / 1 lines \"22\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 165.3x44"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 295,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 23,
+          "w": 262,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 295,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 295,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 295,
+          "w": 94,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 23,
+          "w": 262,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 23,
+          "w": 262,
+          "lines": 3,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 23,
+          "w": 262,
+          "lines": 2,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 332,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 220.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": 79.1,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "landscape-844x390",
+      "set": "all-known",
+      "png": "research-before-landscape-844x390-s2-all-known.png",
+      "fontPx": 30,
+      "panelHeight": 189.6,
+      "containedScroll": 503,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "94px / 1 lines \"102\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [],
+      "minTarget": 999,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "102",
+          "x": 595,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 595,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 595,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 595,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 503,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 136.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "landscape-844x390",
+      "set": "mixed",
+      "png": "research-before-landscape-844x390-s2-mixed.png",
+      "fontPx": 30,
+      "panelHeight": 139.6,
+      "containedScroll": 625,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "94px / 1 lines \"40\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 8 Data 94x105.3 OUTSIDE"
+      ],
+      "minTarget": 94,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "40",
+          "x": 595,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Known",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 595,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 595,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 625,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 136.8,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 8 Data",
+            "y": 8.3,
+            "h": 105.3,
+            "insideViewport": true,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    },
+    {
+      "scale": 2,
+      "viewport": "landscape-844x390",
+      "set": "fresh",
+      "png": "research-before-landscape-844x390-s2-fresh.png",
+      "fontPx": 30,
+      "panelHeight": 104,
+      "containedScroll": 690,
+      "docScroll": "844x390 vs 844x390",
+      "noDocScroll": true,
+      "cards": 0,
+      "cardWidths": [],
+      "bodyWidth": 534,
+      "narrowestBlock": "94px / 1 lines \"22\"",
+      "tallestBlock": "94px / 10 lines \"Every machine holds 6 more units of input, so \"",
+      "clippedText": [],
+      "buttons": [
+        "Buy · 4 Data 165.3x44 OUTSIDE"
+      ],
+      "minTarget": 44,
+      "blocks": [
+        {
+          "text": "Data",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "22",
+          "x": 595,
+          "w": 94,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "Efficient Cutters",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "One cutting pulse gives 7 scrap instead of 5.",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Smart Buffers",
+          "x": 595,
+          "w": 94,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Every machine holds 6 more units of input, so ",
+          "x": 595,
+          "w": 94,
+          "lines": 10,
+          "clip": 0
+        },
+        {
+          "text": "Needs Efficient Cutters first",
+          "x": 595,
+          "w": 94,
+          "lines": 4,
+          "clip": 0
+        },
+        {
+          "text": "Route Dispatch",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        },
+        {
+          "text": "A newly connected link carries 8 more units at",
+          "x": 155,
+          "w": 430,
+          "lines": 2,
+          "clip": 0
+        },
+        {
+          "text": "Needs Smart Buffers first",
+          "x": 155,
+          "w": 430,
+          "lines": 1,
+          "clip": 0
+        }
+      ],
+      "reachable": {
+        "scrollTop": 690,
+        "rows": [
+          {
+            "text": "Close",
+            "y": 172.5,
+            "h": 44,
+            "insideViewport": true,
+            "insideBody": true
+          },
+          {
+            "text": "Buy · 4 Data",
+            "y": -327.2,
+            "h": 44,
+            "insideViewport": false,
+            "insideBody": true
+          }
+        ]
+      },
+      "purchase": null
+    }
+  ],
+  "missingPanels": []
+}
