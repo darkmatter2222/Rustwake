@@ -67,8 +67,8 @@ Current navigation labels and blueprint selection are being redesigned; use the 
 
 ## Evidence and latest update
 
-This update reorganizes the master goal, separates design from execution, adds five OpenCode roles, defines independent asynchronous work and safe publishing/deployment protocols, and seeds six concrete quality tasks. It does **not** change the game's art/audio code, start local agents or deploy Databrick.
+**Current update.** ORCH-001 concurrency canary passed on OpenCode 2.2.5: asynchronous child dispatch and out-of-order result arrival are verified, with the sanitized receipt at [work/review/CAPABILITY.md](work/review/CAPABILITY.md). Cancel propagation is still open as `ENG-002`. Q-001 (phone research card layout and navigation readability) is in development in the `q001-dev` worktree at base `a8fb14a`; the baseline rubric review is running in parallel. There is **no live deployment URL yet** — no deployment has been verified. [Priority board](work/BOARD.md).
 
-Existing screenshots depict the prior implementation, not new visual improvements from this documentation change. Baseline source/evidence was inspected at `6f42c2faff72e85e08dfb924cf50ad7f1153ef5c`; capture details and prior test/performance results remain in the [preserved checkpoint](docs/STATUS.md) and [previous detailed README](docs/history/README-before-studio.md). Those reported tests were not rerun for this documentation-only update.
+Earlier measurements and the previous detailed README remain in the [preserved checkpoint](docs/STATUS.md) and [docs/history/README-before-studio.md](docs/history/README-before-studio.md). Existing screenshots depict the prior implementation inspected at `6f42c2f`, not this update; no new visual claim is made until Q-001 has independent review.
 
-[Desktop](docs/screenshots/latest-desktop.png) · [Mature yard](docs/screenshots/latest-yard.png) · [Phone research](docs/screenshots/latest-research-phone.png). Runtime concurrency and live deployment verification remain pending on the user's local environment.
+[Desktop](docs/screenshots/latest-desktop.png) · [Mature yard](docs/screenshots/latest-yard.png) · [Phone research](docs/screenshots/latest-research-phone.png). Live deployment verification remains pending on the user's local environment.
