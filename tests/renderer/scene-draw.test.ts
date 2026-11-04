@@ -1396,3 +1396,90 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     }
   });
 });
+
+/* -------------------------------------------------------------------------- */
+/* REV-COMPOSITION-D-g1 rows G-1, G-2, L-5, D-6(E-4), C-02.                    */
+/* -------------------------------------------------------------------------- */
+
+const DPR = 2;
+
+/** Union ink box of one role's painted glyph, in device px, read off the drawn frame. */
+function inkBoxOf(blueprint: string, scale: number): { w: number; h: number } {
+  const camera: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale };
+  const base = fs1();
+  const stub = makeCtx();
+  drawScene(stub.ctx, {
+    ...base,
+    machines: [{ ...base.machines[0], id: 1, blueprint, tile: 8 }],
+  } as unknown as SimState, camera, VIEW, rest);
+  const row = PARTS[blueprint] ?? PARTS.generic;
+  const c = tileToWorld(8);
+  const p = worldToScreen(camera, VIEW, c.x, c.y);
+  const painted = new Map(stub.log.filter((r) => r.op === "fillRect").map((r) => [JSON.stringify(r.args), r.args]));
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+  for (const t of row) {
+    const box = [half(p.x + t[0] * scale), half(p.y + t[1] * scale), half(t[2] * scale), half(t[3] * scale)];
+    const hit = painted.get(JSON.stringify(box));
+    expect(hit, `${blueprint} ${JSON.stringify(box)}`).toBeDefined();
+    x0 = Math.min(x0, box[0]);
+    y0 = Math.min(y0, box[1]);
+    x1 = Math.max(x1, box[0] + box[2]);
+    y1 = Math.max(y1, box[1] + box[3]);
+  }
+  return { w: Math.round((x1 - x0) * DPR), h: Math.round((y1 - y0) * DPR) };
+}
+
+describe("REV-COMPOSITION-D-g1 rows", () => {
+  it("G-1: copper and circuit no longer share the outer ink box at either scale", () => {
+    const roles = ["polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "generic"] as const;
+    const boxes: Record<string, Record<string, { w: number; h: number }>> = {};
+    for (const scale of [1.8056, 4]) {
+      for (const role of roles) {
+        boxes[`${role}@${scale}`] = inkBoxOf(role, scale);
+      }
+    }
+    const phone = roles.map((r) => `${r} ${JSON.stringify(boxes[`${r}@1.8056`])}`).join(" | ");
+    const desk = roles.map((r) => `${r} ${JSON.stringify(boxes[`${r}@4`])}`).join(" | ");
+    // The 45-pair mask minimum is re-derived here so the geometry change is bounded.
+    const masks = GLYPH_ROLES.map((id) => maskOf(PARTS[id] ?? []));
+    const distances: [string, number][] = [];
+    for (let i = 0; i < GLYPH_ROLES.length; i += 1) {
+      for (let j = i + 1; j < GLYPH_ROLES.length; j += 1) {
+        distances.push([
+          `${GLYPH_ROLES[i]}/${GLYPH_ROLES[j]}`,
+          masks[i].reduce((sum, bit, k) => sum + Math.abs(bit - masks[j][k]), 0),
+        ]);
+      }
+    }
+    const min = Math.min(...distances.map((d) => d[1]));
+    const latticeMin = Math.min(
+      ...distances.filter(([k]) => k.split("/").every((p) => !["dock", "sorter", "furnace", "wireMill", "signalLab"].includes(p)))
+        .map((d) => d[1])
+    );
+    console.log("G-1 measured", JSON.stringify({
+      phone: boxes["circuitAssembler@1.8056"],
+      boxes: { phone: phone.split(" | "), desk: desk.split(" | ") },
+      pairs: distances.length,
+      minPairHamming: min,
+      latticeFamilyMinHamming: latticeMin,
+    }));
+    console.log(`G-1 ink bboxes phone: ${phone}`);
+    console.log(`G-1 ink bboxes s=4:   ${desk}`);
+    // platePress and generic still share their box; copper and circuit no longer do.
+    expect(boxes["platePress@1.8056"]).toEqual(boxes["generic@1.8056"]);
+    expect(boxes["platePress@4"]).toEqual(boxes["generic@4"]);
+    expect(Math.abs(boxes["platePress@1.8056"].w - 108)).toBeLessThanOrEqual(1);
+    expect(boxes["copperSeparator@1.8056"].h).toBe(93);
+    expect(boxes["circuitAssembler@1.8056"].h).toBeGreaterThanOrEqual(boxes["copperSeparator@1.8056"].h + 4);
+    expect(boxes["platePress@4"].w).toBe(240);
+    expect(boxes["copperSeparator@4"].w).toBe(216);
+    expect(boxes["circuitAssembler@4"].w).toBe(216);
+    expect(boxes["circuitAssembler@4"].h - boxes["copperSeparator@4"].h).toBeGreaterThanOrEqual(4);
+    expect(distances.length).toBe(45);
+    expect(min).toBeGreaterThanOrEqual(12);
+    expect(latticeMin).toBeGreaterThanOrEqual(18);
+  });
+});

@@ -143,7 +143,7 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     // D-1: three sparse bars, the top one flush with the frame, left-hand post.
     [-12, -15, 24, 3, 3], // bar at mask row 0
     [-12, -4, 24, 3, 3], // bar at mask row 3
-    [-12, 8, 24, 3, 3], // bar at mask rows 6-7
+    [-12, 12, 24, 3, 3], // bar at mask row 7 (G-1: the outer box now clears copper's)
     [-15, -11, 3, 22, 4], // left post
   ],
   drone: [
