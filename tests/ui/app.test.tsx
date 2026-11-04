@@ -1,5 +1,6 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { createRoot } from "react-dom/client";
+import stylesRaw from "../../src/ui/styles.css?raw";
 import { act } from "react-dom/test-utils";
 import { App, buildPrimary } from "../../src/ui/App";
 import { MachinePanel } from "../../src/ui/Panels";
@@ -510,5 +511,53 @@ describe("first-feel shell", () => {
     act(() => findButton("Apply")?.click());
     expect(document.querySelector(".panel")?.textContent).toContain("Not a Rustwake file");
     expect(JSON.stringify(store.getState())).toBe(settled);
+  });
+});
+
+describe("REV-LAYOUT-g1 chrome rows", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  /** jsdom gets no cascade unless the sheet is in the document (vitest stubs the import). */
+  function injectSheet() {
+    const style = document.createElement("style");
+    style.textContent = stylesRaw;
+    document.head.appendChild(style);
+  }
+
+  it("L-2: the guidance line keeps its own block at text scale 1 and 2", () => {
+    injectSheet();
+    for (const textScale of [1, 2]) {
+      const store = createStore({ storage: memoryStorage(), now: () => 10 });
+      act(() => {
+        store.setSettings({ textScale });
+      });
+      mount(store);
+      act(() => findButton("Begin recovery")?.click());
+      expect(document.documentElement.classList.contains("text-large")).toBe(textScale >= 1.5);
+      expect(document.documentElement.style.getPropertyValue("--text-scale")).toBe(String(textScale));
+      const hint = document.querySelector(".status-line");
+      const row = document.querySelector(".objective__row");
+      expect(hint).not.toBeNull();
+      expect(row).not.toBeNull();
+      const hintStyle = hint ? getComputedStyle(hint) : null;
+      const rowStyle = row ? getComputedStyle(row) : null;
+      console.log(`L-2 ts${textScale} measured`, JSON.stringify({
+        sheetBytes: stylesRaw.length,
+        hintDisplay: hintStyle?.display ?? null,
+        hintFontSize: hintStyle?.fontSize ?? null,
+        hintMargin: hintStyle?.marginTop ?? null,
+        hintParent: hint?.parentElement?.className ?? null,
+        rowDisplay: rowStyle?.display ?? null,
+        text: hint?.textContent ?? null,
+      }));
+      // The hint is a direct child of the card and stays a block in both rules' band,
+      // so the collapsed chip row cannot take its height with it.
+      expect(hintStyle?.display).toBe("block");
+      expect(hint?.parentElement?.className).toBe("objective");
+      expect((hint?.textContent ?? "").length).toBeGreaterThan(0);
+      expect(rowStyle?.display).toBe(textScale >= 1.5 ? "none" : "flex");
+    }
   });
 });

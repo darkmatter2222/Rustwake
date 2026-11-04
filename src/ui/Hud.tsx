@@ -124,9 +124,11 @@ export function ObjectiveCard(props: { text: string; hint: string }) {
   return (
     <div className="objective">
       <span>{props.text}</span>
-      <div className="objective__row">
-        <span className="status-line">{props.hint}</span>
-      </div>
+      {/* L-2: the hint is its own block, a sibling of the chip row, so the two
+          "step the secondary row back" rules (large text scale, short viewport) -
+          which now narrow to the chip row - cannot collapse it to zero height. */}
+      <span className="status-line">{props.hint}</span>
+      <div className="objective__row" />
     </div>
   );
 }

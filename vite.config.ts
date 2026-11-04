@@ -31,5 +31,9 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     include: ["tests/**/*.test.ts", "tests/**/*.test.tsx"],
+    // L-2: the stylesheet has to be *evaluated* so a `?raw` import hands the test the
+    // real declarations - with the default stub they come back empty and the cascade
+    // for the chrome rows (`.status-line`, `.objective__row`) cannot be inspected.
+    css: true,
   },
 });

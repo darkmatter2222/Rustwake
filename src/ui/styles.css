@@ -148,11 +148,13 @@ body {
   pointer-events: auto;
 }
 
+/* L-2: the row is the chips-only container now - the guidance line is the sibling block
+   below (see `.status-line`) - so the 4 px lead-in moved to that line and this empty box
+   adds nothing to the card's height. */
 .objective__row {
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-top: 4px;
 }
 
 /* One line while a long absence is settled in the worker (spec 18.5). It sits in the
@@ -552,7 +554,11 @@ body {
   pointer-events: none;
 }
 
+/* L-2: its own block, outside `.objective__row`, so it survives both "step back" rules
+   (`.text-large .objective__row` and the short-viewport one) that hide the chip row. */
 .status-line {
+  display: block;
+  margin-top: 4px;
   font-size: 0.78rem;
   color: var(--steel-light);
 }
