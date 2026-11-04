@@ -1,0 +1,156 @@
+[
+  {
+    "case": "phone-rest",
+    "viewport": "390x844",
+    "dpr": 2,
+    "scale": 1.8056,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "phone-build",
+    "viewport": "390x844",
+    "dpr": 2,
+    "scale": 1.8056,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "phone-mature",
+    "viewport": "390x844",
+    "dpr": 2,
+    "scale": 1.8056,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "138,169,196",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "phone-one-machine",
+    "viewport": "390x844",
+    "dpr": 2,
+    "scale": 1.8056,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "desktop-rest",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "scale": 4,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "desktop-build",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "scale": 4,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  },
+  {
+    "case": "desktop-mature",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "scale": 4,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineTop": "138,169,196",
+      "machineWell": "138,169,196",
+      "dockPad": "244,247,251",
+      "amberToken": "60,54,51"
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineVsFloor": 4.937,
+      "C4_dockVsFloor": 11.28,
+      "C5_amberVsFloor": 1.02
+    }
+  }
+]
