@@ -50,15 +50,30 @@ Target useful ready-work publication every **3–5 minutes**, investigate waits 
 
 ## Start in OpenCode
 
-**First launch:** follow the [commissioning sprint](docs/COMMISSIONING.md). The companion plugin must be installed separately before `/rustwake-team bind`; see the exact install commands in [startup instructions](docs/START_TEAM.md). The preceding operations commit `9555a94` passed GitHub CI; automatic delivery was skipped because commissioning is not enabled.
+**The Rustwake companion plugin is separate from MasterGoal.** Pulling this repository does not install it. The command `/rustwake-team bind` is available only after the companion is installed, registered in the active configuration and loaded by OpenCode.
 
-Stop the existing goal with `/goal stop`, let children checkpoint/stop, preserve local work and pull current main. Reload OpenCode agents, select **rustwake-coordinator**, then run:
+1. Stop the existing loop with `/goal stop` and let its children checkpoint and stop. Preserve unfinished local work, then pull current `origin/main` into a clean integration checkout.
+2. From the root of your local Rustwake checkout, install and register the companion:
 
-```text
-/goal forever goal.md
-```
+   ```powershell
+   npm --prefix tools/team-supervisor install --ignore-scripts
+   npm --prefix tools/team-supervisor run install:local
+   ```
 
-Use a fresh forever command to load the edited prompt; resume retains the previous snapshot. Do not launch each role separately. [Full restart and recovery instructions](docs/START_TEAM.md).
+3. **Check your active configuration.** The installer updates the project OpenCode configuration while preserving MasterGoal and provider settings. If your launcher sets `OPENCODE_CONFIG`, register the companion in that active configuration using your existing configuration procedure; the project registration may be overridden.
+4. Fully restart OpenCode and select **rustwake-coordinator**. Run these commands one at a time:
+
+   ```text
+   /rustwake-team bind
+   /rustwake-team status
+   /goal forever goal.md
+   ```
+
+If `/rustwake-team bind` is unknown, the companion has not loaded. Check installation and the active configuration; do not reinstall MasterGoal or launch duplicate forever loops. The companion's blocking-wait guard also requires the local team to map the installed runtime's actual wait-tool names and verify them. Installation alone does not prove enforcement or concurrent scheduling.
+
+Use a fresh `/goal forever goal.md` command to load the edited prompt; `/goal resume` retains the previous snapshot. Do not launch individual roles yourself. The coordinator begins the [commissioning sprint](docs/COMMISSIONING.md), verifies concurrent dispatch/refill and stop behavior, and records actual activation results. Server runner and deployment-adapter commissioning are separate from installing this companion.
+
+[Full restart and recovery instructions](docs/START_TEAM.md) · [Companion configuration and operational checks](docs/TEAM_OPERATIONS.md) · [Automatic delivery setup](docs/AUTOMATED_DELIVERY.md).
 
 ## Current gameplay and development
 
