@@ -19,12 +19,13 @@ Session cap: **4 total including coordinator**. Runtime: **activation-required**
 | DEF-002 | P3 | inbox | developer | Site-root favicon 404 while the release favicon serves 200 |
 | DEF-003 | P2 | rejected | developer | Candidate motion clip repeats one frame 26 times |
 | DEF-004 | P2 | inbox | developer | Drone freezes at one position after a large offline catch-up |
+| UI-001 | P2 | triaged | developer | Bring the open research card back inside the coverage band |
 
 ## Release evidence
 
 Last inspected source: `24daf0e4d5d27000ab9b0841fa8a2d236aefa045`.
 Last evidenced deployed source: `24daf0e4d5d27000ab9b0841fa8a2d236aefa045`.
 [Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/deployments/OPS-008-g1.json)
-OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified.
+OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified. UI-001 census recorded in work/evidence/UI-001-census-g1.md (coverage denominator = drawn yard region, panel-open state).
 
 Every role can submit feedback. Product owns priority; PM owns scheduling; release engineer publishes. Acceptance, publication, deployment and measured outcomes remain distinct.

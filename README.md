@@ -16,7 +16,7 @@ The game works, but the owner has reopened **strategy and presentation quality**
 | Evidence | [OPS-008-g1](work/deployments/OPS-008-g1.json) 2026-11-05 01:26 UTC · [release note](work/releases/RELEASE-001.md) · [capture provenance](docs/screenshots/style-slice-provenance.json) |
 | Rollback | `rustwake-4c30fb4` retained; restore is the one-line bind path on stack 125 |
 | CI | `remote-CI-unverified` — `gh` unauthenticated and the anonymous API returns 404 for this private repo |
-| Open | DEF-001 cached HTML naming removed assets, DEF-002 root favicon 404, DEF-003 repeated clip frames, DEF-004 drone position after catch-up; D-6/E-4 phone-ts2 card still over the ≤ 50 % band |
+| Open | DEF-001 cached HTML naming removed assets, DEF-002 root favicon 404, DEF-003 closed as a capture artefact, DEF-004 drone leg after catch-up (inFlight clamp); **UI-001** triaged: the open research card is the coverage problem — the rest-state HUD covers only 11.2 % of the canvas ([census](work/evidence/UI-001-census-g1.md)) |
 
 **Player-visible outcome of this build:** the yard is the composed slice — floor kit in empty tiles, a full-frame sprite sheet, and a research card that leaves the yard visible on desktop; the strategy census now says plainly that the scripted ladder, not the player, picks the plan (one option in 293 of 1800 naive rounds, a real build-vs-upgrade fork in only 4). **Next outcome:** one cost-bearing fork (A1, criteria A1-1..A1-6) plus the inspected art candidate `3f7555a`, then re-run the same three policies. [Sprint plan](work/product/SPRINT-002.md) · [Owner feedback](work/feedback/OWNER-002.md) · [STRAT-001 verdict](work/feedback/STRAT-001-g1.md).
 

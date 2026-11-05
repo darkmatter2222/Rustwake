@@ -14,7 +14,7 @@
     "deployed_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
     "url": "https://home.darkmatter2222.com/rustwake/",
     "receipt": "work/deployments/OPS-008-g1.json",
-    "verification": "OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified."
+    "verification": "OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified. UI-001 census recorded in work/evidence/UI-001-census-g1.md (coverage denominator = drawn yard region, panel-open state)."
   },
   "runtime": {
     "status": "activation-required",
@@ -174,10 +174,11 @@
       "evidence": [
         "work/feedback/OWNER-002.md",
         "work/development/handoffs (ART-001 g1 candidate 3f7555a, captures docs/evidence/candidate-3f7555a-art001-captures.json)",
-        "docs/screenshots/ (shipped 24daf0e captures) + docs/screenshots/style-slice-provenance.json"
+        "docs/screenshots/ (shipped 24daf0e captures) + docs/screenshots/style-slice-provenance.json",
+        "work/evidence/UI-001-census-g1.md"
       ],
       "candidate_sha": "3f7555a9c72185012c83f2b9ae8c8d967d300862",
-      "review_verdict": null,
+      "review_verdict": "accepted with notes",
       "published_sha": null,
       "deployed_sha": null,
       "outcome": null,
@@ -203,7 +204,8 @@
           "to_state": "review",
           "reason": "candidate submitted for independent QA at 3f7555a9c72185012c83f2b9ae8c8d967d300862 (branch art001-dev; supersedes 7e10288884383fd3cfef74a3e900f1522b063e6d, which only changed the capture script to per-iteration canvas.toDataURL() plus the evidence JSON, renderer files unchanged); clip-frame defect DEF-003 closed as a capture artefact, DEF-004 open, so no product acceptance is claimed"
         }
-      ]
+      ],
+      "review_note": "accepted with notes against 3f7555a9c72185012c83f2b9ae8c8d967d300862; acceptance must be re-issued on the final SHA, so the row stays in review while the next capture set lands"
     },
     {
       "id": "RELEASE-001",
@@ -531,7 +533,7 @@
       "owner": "developer",
       "generation": 1,
       "player_problem": "After a long offline period the yard looks frozen: the drone holds one spot and the canvas is byte-identical across samples.",
-      "hypothesis": "saturated droneLeg() clamp plus a full 900/900 gauge after the 432000-tick catch-up: seeded inFlight.arrive lags the credited tick, so the leg parameter never unwinds and the canvas is byte-identical across 26 samples at 1000 ms spacing (tick 432354 -> 432634, droneBodyCssPx [180.5, 248.5] every row, ~66 draws per sample)",
+      "hypothesis": "partly fixed: the empty-leg clamp is fixed by candidate 01a2e0d3b585d9bfd8716180abaa3225539d9d02 (entry assets/index-Bb52rZfR.js 227890 B, 24 files / 248 tests); the remaining piece is the inFlight branch clamp in src/game/renderer/scene.ts (~L476), under test in the next candidate generation",
       "scope": [
         "src/game/renderer/scene.ts drone leg",
         "offline catch-up credit"
@@ -546,7 +548,9 @@
       "dependencies": [],
       "product_approved": false,
       "evidence": [
-        "work/deployments/OPS-008-g1.json save-compatibility block"
+        "work/deployments/OPS-008-g1.json save-compatibility block",
+        "work/development/handoffs (ART-001 candidate 01a2e0d)",
+        "work/evidence/UI-001-census-g1.md"
       ],
       "candidate_sha": null,
       "review_verdict": null,
@@ -562,7 +566,61 @@
           "reason": "filed from OPS-008-g1 during the 24daf0e release; kept open as the carrying defect (saturated droneLeg() clamp after the 432000-tick catch-up), with the organic fresh-begin contrast at 5 distinct canvas hashes of 6 samples on the same live build"
         }
       ],
-      "severity": "minor"
+      "severity": "minor",
+      "control": "coordinator reduced-motion control on the deployed artifact: default 5 distinct canvas hashes of 6 samples, reduce 4 of 6, no-preference 5 of 6 -> reduced motion is not the cause"
+    },
+    {
+      "id": "UI-001",
+      "type": "delivery",
+      "title": "Bring the open research card back inside the coverage band",
+      "priority": "P2",
+      "status": "triaged",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "With the research card open the yard is mostly hidden on a phone, so the player cannot see what the card just changed.",
+      "hypothesis": "Coverage = intersection area / drawn yard region area in the panel-open state; the rest-state footprint is only 11.2 %, so this is specifically an open-panel problem, not a whole-HUD problem.",
+      "scope": [
+        "src/ui/styles.css (.panel)",
+        "work/evidence"
+      ],
+      "non_goals": [
+        "No rest-state HUD rework; the rest footprint already passes",
+        "No retroactive re-numbering of the failed rows"
+      ],
+      "acceptance": [
+        "rest-state footprint stays <= 15 % of the canvas element",
+        "panel-open coverage with the canonical definition (intersection / drawn yard region) is <= 50 %, both rects printed in the evidence JSON",
+        "smallest tap dimension stays >= 44 CSS px at text scale 1 and 2; scrollHeight == clientHeight at both scales"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/evidence/UI-001-census-g1.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "measurement_note": "coordinator-measured on rustwake-24daf0e (source 24daf0e, entry assets/index-D14MbFT6.js), headless Chrome 390x844 dpr2: canvas 390x844 = 329160 px2; largest overlay [10,8,370,99.6] = 11.2 %; .dock [10,790,370,46] 5.2 %; .objective [10,58,340.4,49.6] 5.1 %; .hud__top [10,8,370,44] 4.9 %; .dock__btn--primary [87.5,790,226.7,46] 3.2 %; min tap 44.0 CSS px at ts1 and ts2; scrollHeight == clientHeight == 844 at both scales",
+      "definition_resolution": "the 45.0 / 57.8 / 70.5 % spread mixes state (rest vs panel-open) with denominator (canvas element 329160 px2 vs drawn yard region ~140361 px2; the same intersection is 39 % of one and 73 % of the other). Canonical from now on: intersection / drawn yard region, panel-open state, both rects printed. Older failed rows keep their numbers and used the canvas-element denominator.",
+      "history": [
+        {
+          "at": "2026-11-05T02:10:00+00:00",
+          "actor": "coordinator",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "census measured by the coordinator on the deployed artifact rustwake-24daf0e (source 24daf0e, entry assets/index-D14MbFT6.js)"
+        },
+        {
+          "at": "2026-11-05T02:10:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "rest footprint is only 11.2 % -> UI-001 is an open-panel problem, not a whole-HUD problem"
+        }
+      ]
     }
   ]
 }
