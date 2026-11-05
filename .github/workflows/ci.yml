@@ -14,8 +14,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - run: node scripts/team-board.mjs --check
+      - run: node --test scripts/team-board.test.mjs
       - run: npm ci
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
       - run: npm run build
+

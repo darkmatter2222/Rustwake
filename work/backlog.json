@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-05T00:11:36+00:00",
+  "max_active_sessions": 4,
+  "session_scope": "including coordinator; static snapshot, not runtime liveness",
+  "sprint": {
+    "id": "SPRINT-002",
+    "goal": "I choose a plan; my yard comes alive",
+    "status": "proposed",
+    "plan": "work/product/SPRINT-002.md"
+  },
+  "publication": {
+    "inspected_head": "72ec26661ecda78605a4efb5458292614654e1fa",
+    "deployed_sha": "4c30fb4e247fe2a9da400b8e778296f422d6721e",
+    "url": "https://home.darkmatter2222.com/rustwake/",
+    "receipt": "work/deployments/OPS-007-g1.json",
+    "verification": "Repository deployment receipt; not re-tested by this configuration update"
+  },
+  "runtime": {
+    "status": "activation-required",
+    "sessions": []
+  },
+  "tickets": [
+    {
+      "id": "TEAM-001",
+      "type": "delivery",
+      "title": "Activate four-slot team and reconcile prior work",
+      "priority": "P0",
+      "status": "ready",
+      "owner": "coordinator",
+      "generation": 0,
+      "player_problem": "Old roles lack product/player ownership and verified stop propagation.",
+      "hypothesis": "Explicit lifecycle and slot ownership prevent duplicate work.",
+      "scope": [
+        ".opencode/agents",
+        "runtime capability receipt"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Load all new roles; verify two harmless overlapping tasks and cancellation/join",
+        "Count coordinator plus children <=4, including dispatching calls",
+        "Map consequential legacy/in-flight work without discarding changes"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "STRAT-001",
+      "type": "experiment",
+      "title": "Measure blind tapping versus deliberate plans",
+      "priority": "P0",
+      "status": "ready",
+      "owner": "player",
+      "generation": 0,
+      "player_problem": "Owner can click the bottom action through progression.",
+      "hypothesis": "Current progression lacks a meaningful opportunity cost.",
+      "scope": [
+        "playtest",
+        "work/feedback",
+        "work/product"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Record same-seed naive and two deliberate policies on exact build",
+        "Report actual choices, bottlenecks and outcome differences; label interaction versus harness",
+        "Product publishes concrete next experiment and criteria before implementation"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "ART-001",
+      "type": "experiment",
+      "title": "Create and inspect a coherent playable yard style slice",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "developer",
+      "generation": 0,
+      "player_problem": "Owner still finds the game ugly despite numeric art acceptance.",
+      "hypothesis": "Authored wreck, machinery, lighting and composition improve first impression.",
+      "scope": [
+        "art assets",
+        "world rendering",
+        "targeted UI"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Product selects style direction from fresh inspected current-game evidence",
+        "Ship one representative opening scene and mature view, with distinct machinery at phone size",
+        "QA visually inspects before/after at normal zoom; clip proves state-driven motion",
+        "No acceptance solely from mask distance, pixel counts or tiny decorative ticks"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "RELEASE-001",
+      "type": "delivery",
+      "title": "Refresh evidence and keep main/live status current",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "release-engineer",
+      "generation": 0,
+      "player_problem": "README shows stale imagery and deployment runbook contradicts receipts.",
+      "hypothesis": "A receipt-driven summary and regular preview release makes actual progress visible.",
+      "scope": [
+        "README.md",
+        "work",
+        "release operations"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Refresh changed-scene captures with source provenance",
+        "Publish tested/main versus deployed SHA separately; verify current live URL",
+        "Run generated-board check; deploy latest eligible gameplay and return live smoke",
+        "Open feedback ticket for release defects; no doc-only redeploy"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "STRAT-002",
+      "type": "experiment",
+      "title": "Implement one reversible strategic allocation choice",
+      "priority": "P1",
+      "status": "triaged",
+      "owner": "developer",
+      "generation": 0,
+      "player_problem": "Progression needs competing useful plans, not just additional clicks.",
+      "hypothesis": "A constrained allocation or policy creates situationally useful strategies.",
+      "scope": [
+        "simulation",
+        "UI",
+        "save compatibility"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Product approves exact tradeoff and criteria after baseline",
+        "Two plans useful in different documented conditions with costs visible before choice",
+        "Blind tapping cannot silently determine the entire plan",
+        "Save/offline/respec tests and independent playtest; record keep/revise/revert"
+      ],
+      "dependencies": [
+        "STRAT-001"
+      ],
+      "product_approved": false,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "triaged",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "AUDIO-001",
+      "type": "experiment",
+      "title": "Assess and improve an actual industrial mix",
+      "priority": "P1",
+      "status": "triaged",
+      "owner": "reviewer",
+      "generation": 0,
+      "player_problem": "Technical audio acceptance has not established appealing sound.",
+      "hypothesis": "Layered material cues and restrained ambience improve satisfaction without fatigue.",
+      "scope": [
+        "audio review",
+        "audio assets"
+      ],
+      "non_goals": [
+        "No repository wipe; preserve saves and unrelated work"
+      ],
+      "acceptance": [
+        "Render representative mix and inspect real listening capability",
+        "If supported, actually listen and report fatigue/identity/overlap; otherwise mark unverified",
+        "Product scopes highest-impact sound change; no automatic user speaker playback"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/feedback/OWNER-002.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T00:11:36+00:00",
+          "actor": "owner-direction",
+          "from_state": null,
+          "to_state": "triaged",
+          "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    }
+  ]
+}

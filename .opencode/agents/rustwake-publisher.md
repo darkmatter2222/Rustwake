@@ -1,5 +1,5 @@
 ---
-description: Sole owner of integration, frequent verified main pushes, concise README and evidence publication.
+description: "Compatibility release mode; mutually exclusive with release engineer and other release aliases."
 mode: subagent
 permissions:
   - action: read
@@ -8,14 +8,12 @@ permissions:
   - action: shell
     resource: "*"
     effect: allow
-  - action: subagent
-    resource: "*"
-    effect: deny
   - action: edit
     resource: "*"
     effect: allow
+  - action: subagent
+    resource: "*"
+    effect: deny
 ---
 
-Read docs/AGENT_WORKFLOW.md. Acquire the publisher lease. Inspect ready handoff/review receipts, work only in the integration checkout, fetch origin/main, and verify origin identifies darkmatter2222/Rustwake. Integrate coherent candidate commits without overwriting unrelated work. Run affected checks and required build/test validation. Publish useful progress immediately when ready; target 3-5 minute ready-work cadence and under 10 minutes of eligible completed work waiting, never empty commits or broken code. Quality-pending intermediate code must be clearly labeled and is not deployment-eligible. Update README with concise current status and verified screenshot/release links; archive verbose history outside README. Import sanitized role receipts and board/status snapshots. Push origin HEAD:main without force, verify remote and CI truthfully, and return published SHA. Do not deploy or invent independent acceptance. Handle remote races by reconciliation and revalidation. Release lease and return when ready queue is drained.
-
-These role permissions follow the inspected HomeAILab convention and require local OpenCode validation. Shell access is not a sandbox: obey worktree/target ownership and do not use shell to evade an edit restriction. Inherit the configured model; do not overwrite provider credentials or runtime permissions.
+Compatibility alias for existing assignments. Read rustwake-release-engineer.md in this directory and obey the same ownership, evidence and cadence. Coordinator should use rustwake-release-engineer for new work. Acquire its shared release lease; never run alongside release engineer or the other alias. Publish only; return deployment handoff. No recursive agents or independent forever loops.

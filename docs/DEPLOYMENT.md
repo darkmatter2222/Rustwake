@@ -2,9 +2,9 @@
 
 ## Current truth
 
-Deployment is requested and authorized for Rustwake in the user's existing Databrick container environment, using existing DNS/ingress. No Rustwake-specific live hostname, port, stack, TLS coverage or deployed revision has yet been verified by this repository update. **Play URL: pending environment discovery and successful verification.** Do not invent a clickable URL.
+The latest checked repository receipt, [OPS-007](../work/deployments/OPS-007-g1.json), records deployment of `4c30fb4e247fe2a9da400b8e778296f422d6721e` at [https://home.darkmatter2222.com/rustwake/](https://home.darkmatter2222.com/rustwake/), verified 2026-11-04T19:16:00Z with served asset hashes and external checks. This is receipt-backed status, not a new live check by the team-configuration update. Newer main work may not be deployed.
 
-This cloud workspace can read tracked HomeAILab documentation but cannot access `C:\Users\ryans\source\repos\HomeAILab`, its gitignored `.env`, Windows SSH configuration, KeePass files or the live private LAN. The local OpenCode deployer must perform the steps below. Missing local reachability is the current limitation; do not mislabel the user's deployment request as lacking authorization.
+Rustwake already exists. Read the newest receipt and inspect current ownership before any change; do not repeat initial installation. Local HomeAILab access was demonstrated by the local deployment agent; the earlier cloud workspace limitation is not a blocker for that local agent. Release engineer now owns this lane; legacy deployer is a mutually exclusive compatibility mode. Use the safety protocol below for any adoption/recovery, not as a reason to recreate a healthy stack.
 
 ## Verified HomeAILab references
 
@@ -83,3 +83,4 @@ Server changes use a deployer lease plus before/after resource/config identity c
 ```
 
 This is a schema example, not evidence of deployment. Publisher records a real receipt under `work/deployments/` and updates the README's live URL and deployed revision without secrets.
+

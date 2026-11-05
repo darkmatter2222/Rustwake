@@ -1,3 +1,5 @@
+> Historical status/reference. Current priorities and published state are in [the team board](../work/BOARD.md) and [canonical backlog](../work/backlog.json). TEAM_CHARTER and PRODUCT_STRATEGY supersede old queue ordering; preserve these receipts as evidence, not proof of current deployment or liveness.
+
 # Studio coordination update
 
 ## Current checkpoint (PUB-12, integrated head `1720401` plus this docs-only commit on top, 2026-11-04)
@@ -112,4 +114,5 @@ measured and reverted (7 machines, 1 157 batches, 0 nodes).
   change limited to `src/game/content/validate.ts` does not, because the app does not import it.
   Commit-message files: write them with `-Encoding ascii`, because PowerShell's `utf8` writes a BOM that then
   appears in the committed subject line.
+
 

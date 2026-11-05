@@ -1,3 +1,5 @@
+> Historical status/reference. Current priorities and published state are in [the team board](../work/BOARD.md) and [canonical backlog](../work/backlog.json). TEAM_CHARTER and PRODUCT_STRATEGY supersede old queue ordering; preserve these receipts as evidence, not proof of current deployment or liveness.
+
 # BACKLOG
 
 Rolling, prioritised. IDs are stable within this file.
@@ -43,3 +45,4 @@ Rolling, prioritised. IDs are stable within this file.
   a listening pass that an autonomous code pass cannot substitute.
 - Numbered milestones (M2-M9) live in `goal.md`; this table is the working order within
   and across them.
+

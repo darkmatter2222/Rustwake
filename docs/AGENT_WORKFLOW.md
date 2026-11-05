@@ -1,114 +1,59 @@
-# Rustwake continuous studio workflow
+# Team execution protocol
 
-## What is configured versus running
+Read TEAM_CHARTER for roles, decision rights and cadence. This file replaces the earlier five-role operating contract. Existing review/deployment evidence remains historical evidence. The runtime is local OpenCode plus MasterGoal, not these Markdown files or the board renderer.
 
-The repository contains OpenCode role definitions and operating contracts. It does not claim these Markdown files are a running scheduler. The local coordinator must verify the installed runtime's dispatch/status/cancel capabilities and write a capability receipt before reporting concurrent operation. MasterGoal source confirms forever prompt continuation for its bound session; it does not by itself establish this project's multi-session scheduler.
+## Activation and capability
 
-Roles follow the inspected HomeAILab `.opencode/agents/*.md` conventions: YAML `description`, `mode`, and `permissions` entries with `action`, `resource`, `effect`. Verify the local installed OpenCode accepts them; do not replace the user's provider settings or broad permissions. Keep model selection inherited. Inspect launcher overrides: HomeAILab's text-only 5090 launcher denies image reads; its vision launcher differs. A model family name is not proof that the actual review session can consume screenshots.
+Follow START_TEAM. Preserve the user's provider/model configuration. Verify all role definitions load in the installed version. The older CAPABILITY receipt proves async overlap but not reliable status polling/cancellation. Discover current documented dispatch/status/cancel mechanisms; do not invent SDK methods. Run two bounded harmless tasks, observe overlap/out-of-order completion, cancel/join a harmless task, and verify no orphan mutation. Confirm vision with an actual image and audio modality separately. Respect one-image context limits if configured.
 
-## Roles and exclusive ownership
+If only blocking dispatch is available, use bounded serial fallback honestly and create a runtime ticket. Do not launch ad-hoc independent forever processes. MasterGoal owns the coordinator continuation. A new goal file needs stop/start to reload its snapshot.
 
-| Role | Owns | May inspect | Must not do |
-|---|---|---|---|
-| Coordinator | assignment queue, priorities, runtime session ledger | all receipts and artifacts | edit production code concurrently, push main, mutate servers |
-| Developer | assigned source/test change in isolated worktree | design, reviews, fixtures | self-approve quality, push main, deploy |
-| Reviewer | design critique, hypotheses, screenshots/clips, independent verdicts in its area | immutable candidate build/source | modify production code, rewrite tests to accept its preferences, push/deploy |
-| Publisher | integration checkout, main commits/pushes, README and tracked status publication | handoffs, reviews, CI | deploy, invent review approval, push untested source |
-| Deployer | Rustwake release operations and deployment receipts | eligible immutable release, scoped HomeAILab references | push main, change other stacks, expose credentials |
+## Isolation and single-writer integration
 
-Only one writer per checkout and only one publisher/deployer lease. Agent permission frontmatter reduces accidental actions but is not a filesystem/security sandbox against arbitrary shell access. Enforce worktree separation, role-specific tools where supported, and target validation in actual deployment tooling.
+Discover the actual Rustwake checkout and `origin`; expected repository is darkmatter2222/Rustwake on GitHub. Do not convert it to GitLab. Preserve dirty user files. Developer, QA, player testing and release integration use separate worktrees or immutable build directories. Distinct localhost servers or an explicit browser/server lease prevent port collisions. Never run two writers in one checkout. Product/player/QA write only their own feedback artifacts, not production code.
 
-## Local paths and worktrees
+Coordinator owns `<canonical checkout>/.rustwake-runtime/` ignored spool and assignment ledger. Each worker writes a unique task/generation/message file via temp-file + atomic rename. PM deduplicates message IDs and rejects stale generations. Release engineer alone imports sanitized receipts and canonical JSON into tracked Git, generates board/README, commits and pushes. Do not concurrently edit the JSON from several roles. Secrets remain in HomeAILab credential storage.
 
-Discover the actual Rustwake checkout; do not assume the Windows path from a different machine. Use `git worktree` for developer, reviewer/build testing and integration, each with a role/task branch. Never share one mutable source tree among concurrent roles. Capture servers use distinct discovered free localhost ports or a serialized browser/server lease; no visible browser windows by default.
+Slot ledger records all active/dispatching children; max three children with coordinator, lower if actual capacity requires. Worker metadata: id, role, task, generation, session, worktree, base SHA, start, heartbeat, status, expected result. A slow worker remains active until completion or verified cancellation. A stale file is not permission to steal its lease. Cancellation prevents new assignments, joins active children, then releases ownership. An in-flight deployment finishes/rolls back its atomic step before ownership transfer.
 
-The coordinator maintains a local ignored spool at `<canonical Rustwake>/.rustwake-runtime/`. Add that exact directory to `.gitignore` during activation. It contains process/session IDs, heartbeats, leases, inbox messages, temporary reports and local-only deployment context. Secrets remain in HomeAILab's credential system, never this spool's public receipts. Do not commit local endpoint credentials or provider tokens.
+## Published board and event contract
 
-Workers write uniquely named messages to their own spool directory using temporary-file + atomic rename. Coordinator reads only complete messages. Publisher imports selected sanitized artifacts into tracked `work/` and `docs/`. No agent appends concurrently to another agent's file. Tracked `work/BOARD.md` is the published view; live queue changes are coordinator-owned in the spool until publisher commits them.
+`work/backlog.json` is canonical published product state. `node scripts/team-board.mjs` validates it and renders BOARD.md plus board.html; `--check` verifies outputs are current. It is a static published snapshot, not a real-time scheduler. Run `python -m http.server 8765` from repo root and open `/work/board.html` if you want a browser view; reloading shows newly generated output. No gameplay route or production service is required for this board.
 
-## Capability canary before activation
+Workers submit proposed events, not direct JSON edits:
 
-1. Inspect installed OpenCode version, actual launcher/config, registered agents and runtime documentation. Preserve user settings. Confirm the coordinator is selected and child role definitions load.
-2. Discover supported asynchronous child-session/task submission, status/result retrieval, cancellation and session reuse. Record exact documented mechanism, version and scope in a local receipt. Do not assume the ordinary task tool is nonblocking.
-3. Dispatch two harmless bounded read-only tasks with distinct IDs. Observe overlapping execution timestamps while coordinator remains able to inspect state. One task should finish before the other; process its result without waiting for the second.
-4. Verify cancel/pause propagation, stale-session reconciliation and output isolation. No child may continue mutating after coordinator relinquishes ownership.
-5. Verify reviewer image capability with one authorized repository screenshot, and verify it reports visible facts. Inspect images sequentially for the configured one-image limit.
-6. Publish a sanitized capability receipt to `work/review/` with `supported`, `serial-fallback`, or `blocked`. A serial fallback is useful but does not fulfill the parallel-run requirement; keep the adapter/capability task open.
-
-Use supported session APIs if available. Do not copy an SDK example with invented endpoint names or start multiple CLI `run` processes assuming they share lifecycle correctly. If an adapter is needed, build it against the locally installed documented interface, test it with the canary, and keep MasterGoal as the only outer continuation owner. Do not install a competing forever watchdog.
-
-## Coordinator scheduling algorithm
-
-Maintain per-role state: `idle | assigned | running | result-ready | failed | canceled | blocked`; include task ID, session ID, worktree, base SHA, assigned scope, heartbeat time and generation token.
-
-At each available heartbeat (target 30–60 seconds while work is active, subject to host scheduling):
-
-- Drain completed messages and record each once by message ID.
-- Process each ready result independently. There is no `wait for all agents` barrier.
-- Refill an idle developer from ready implementation tasks.
-- Refill reviewer with a completed candidate; if none, review the last stable build or design a bounded next improvement. Never review a half-written checkout.
-- Wake publisher when a coherent candidate or useful new progress receipt is ready.
-- Wake deployer when a new eligible reviewed revision exists and no deployment is active.
-- If capacity is saturated, queue short operations and preserve the primary developer/reviewer pair. Default two heavy model tasks; increase only within configured provider capacity.
-- Yield when no immediate coordination work remains. Children may continue under verified host session support.
-
-A slow task is not failed simply because a timer elapsed. Check actual runtime status. For absent heartbeats, investigate and cancel/join before reassigning ownership. Generation tokens prevent an old recovered worker's late result from overwriting a newer assignment. Do not launch duplicates on every coordinator turn.
-
-## Queue and task format
-
-Canonical IDs are stable (`Q-001`, `ENG-001`, `OPS-001`). A task file contains:
-
-```yaml
-id: Q-001
-status: ready
-priority: P0
-owner: unassigned
-base_sha: observed-source-sha
-scope: [src/ui/Panels.tsx, src/ui/styles.css]
-problem: visible player-facing failure
-expected_outcome: observable improvement
-acceptance: [specific checks]
-evidence: [path and scenario]
-dependencies: []
-review_required: true
+```json
+{"message_id":"STRAT-001-g1-result-1","task_id":"STRAT-001","generation":1,"role":"developer","kind":"candidate","candidate_sha":"full-git-sha","summary":"What changed for the player","evidence":["path"],"checks":[],"blockers":[]}
 ```
 
-Place prose detail below the frontmatter. Reviewers author findings; coordinator deduplicates and assigns them. Developer submits a handoff with candidate commit, changed files, checks, fresh evidence, known limitations and reproduction. Reviewer returns `accept | rework | blocked`, scoped to the exact SHA and criteria. Findings close only after acceptance evidence, not after a developer marks a checkbox.
+PM validates sender/assignment, deduplicates, applies product decisions and sends the complete next snapshot to release engineer. Record events in each ticket's history with actor, from/to, timestamp, reason and evidence. State path: inbox → triaged → ready → implementing → review → accepted → published → deployed → measured. Review can return rework; any active state can block; product can defer/reject with rationale. `measured` means post-release result recorded, not guaranteed success. Documentation tasks may go published → measured without deployment. A failed hypothesis is documented and can be reverted; do not erase failures. A pre-publication experiment rejected by product goes to deferred/rejected with a disposition reason after triage; measured is reserved for a published outcome.
 
-Task transitions: proposed → triaged → ready → assigned → implementing → review-ready → accepted/rework/blocked → integrated → published → deployed when relevant. Deployment is not required for a documentation-only task. A review rejection returns only its bounded task to rework; other independent tasks continue.
+Required ticket intent: problem, hypothesis, scope, non-goals, acceptance, dependencies, priority, product approval, role owner, generation, evidence and outcome. Lifecycle data includes candidate/review/publication/deployment SHAs, verdict and change history. Validator checks structural consistency and transition evidence, not the truth of external receipts; QA/release must inspect them. Board reports unknown rather than pretending a local session is running.
 
-## Review while development continues
+Legacy migration: retain BOARD-legacy, backlog and all receipts. During first planning, map consequential open legacy items to new tickets; do not automatically re-open fixed work or bulk declare everything accepted. Current sprint supersedes the old next-task order. Keep a link to each migrated ID. Existing in-flight candidates get checkpointed and inspected before cancellation/reassignment.
 
-Reviewer tests commit A in its own checkout while developer starts an independent task B from a safe base. If A needs rework, coordinator schedules it without editing B's worktree. At most one unreviewed large visual redesign should accumulate; small isolated fixes can proceed. This bounds wasted work without a global barrier.
+## Candidate and outcome review
 
-Reviewer should allocate time across actual screenshots, gameplay interaction, animation evidence, audio evidence, and concrete experiments. Static metrics alone do not satisfy review. New ideas must state player benefit, estimated scope, risks, and a test. Keep a top-five ready design queue rather than hundreds of unprioritized suggestions.
+Developer returns bounded candidate commit, changed paths, behavior, tests, evidence and known limitations. QA checks the immutable candidate independently; player gets build URL/scenario and goal, not a developer walkthrough or source before first play. Product receives both and makes keep/revise/revert/defer decision. Reviewer cannot approve its own implementation. PM cannot manufacture either approval.
 
-## Publishing cadence
+Reports lead with visible/experienced outcome and verdict in under a page; detailed arithmetic goes in a linked appendix. Reject duplicate/blank images and stale evidence. Screenshots carry source SHA, scenario, viewport, date and seeded/organic label. Clips carry duration and observed transitions. Audio claims distinguish actual listening from technical analysis. Simulated player runs identify persona, actions and evidence; no invented cohorts, surveys or retention numbers.
 
-Publisher is the sole main writer. Target useful ready checkpoints every 3–5 minutes; completed eligible work should normally wait under 10 minutes. Apply a rolling “latest ready” queue, not a fixed all-agent batch. No empty commits, fake tests, or redundant timestamp updates.
+A UI change requires actual affected-screen inspection. Strategic changes require policy comparison, save/offline regression checks and comprehension evidence. No-scroll measurements do not prove usability. Pixel difference, silhouette Hamming distance and test counts do not prove polish. A criterion changed after failure produces a new version and retest, never a retroactive pass.
 
-For implementation candidates: fetch, inspect/reconcile remote, integrate in the publisher checkout, run `npm test`, `npm run typecheck`, `npm run build`, and `npm run validate` where relevant. Run affected focused browser checks and review evidence; full extended capture/soak suites run on milestone/release cadence or when the change warrants them. Never repeatedly restate expected test values without independent invariant checks and an explained behavior change.
+## Publication and releases
 
-Independent visual review is required for declaring polish accepted and for deployment of visual changes. A technically safe intermediate change may be pushed as explicitly `quality-review pending` so GitHub remains visible; publisher does not mark it accepted or deploy it until the relevant review arrives. No broken functional build goes to main to satisfy frequency.
+One release-engineer lease covers integration/main ownership; a second exclusive deployment lease protects the server. Old publisher/deployer agents are compatibility modes of this same lane, never concurrent with release engineer or each other. PM maintains GitHub visibility through this role.
 
-Every push includes a short truthful README update. Keep detailed measurements/history outside README; aim for a readable landing page, not the current ~80 KB operational transcript. Archive old detail with links rather than deleting useful evidence. Preserve user content. Verify remote head and query CI using whichever authorized path works; a missing `gh` login need not block an already authenticated plugin/API path.
+Fetch before integration, reconcile current main without force, preserve unrelated changes, test the combined result. Run relevant package checks and existing CI requirements. Board-only changes run board validation; gameplay changes run test/typecheck/validate/build plus affected browser checks. Publish each useful coherent slice; target 3–5 minutes after readiness, investigate >10. Never push broken code or empty timestamp commits. A safe unaccepted prototype may be published with explicit quality-pending state; acceptance is separate.
 
-## Evidence cadence
+Use authenticated CI status if available. Missing gh login does not prove CI failed; pending/unavailable is not passed. Required configured branch/CI gates must be honored. If no mandatory remote gate exists, locally verified preview deployment may proceed with explicit remote-CI-unverified status, QA technical acceptance and product preview decision. Do not silently bypass a required check.
 
-Fast lane: deterministic scenario fixtures for fresh start, one machine, research menu, mature yard, and build picker; screenshots should take seconds once a build is serving. Seeded fixtures are clearly labeled and never claimed as organic progression tests.
+Every useful push updates README's compact status with player-visible outcome, next outcome, board link and evidence provenance. Use the tested predecessor SHA or a release label; do not chase a commit's own hash in its content. Display integrated and deployed revisions separately. Do not force a new screenshot for docs-only work; label the last capture accurately. Changed visual/gameplay release gets fresh relevant capture; full gallery at milestones. Keep logs outside README.
 
-Slow lane: full organic progression, offline catch-up, long soak and complete gallery capture. Keep these independent from every small visual edit so a 17-minute suite cannot block the whole team. A target-screen screenshot accompanies its change; a full gallery refresh accompanies a release/milestone.
+Deploy latest eligible immutable gameplay artifact within 5–10 minutes when accessible, coalescing superseded candidates. No redeployment for status/doc-only pushes. Follow DEPLOYMENT and latest receipts, recheck ownership live. Verify served files, HTTPS, smoke, save compatibility and unrelated routes. Preserve rollback and avoid old-client missing assets during promotion; retained previous release directory alone does not guarantee old asset URLs work. A failed deploy rolls back only owned resources and files a defect to PM/product with exact reproduction and severity.
 
-Store curated artifacts with candidate SHA, viewport, scenario, seed/organic provenance, timestamp and tool version. Avoid a commit's own hash self-reference: evidence records the tested source commit before packaging/publication; publisher records the resulting integration commit separately. Do not claim old screenshots depict a newer build.
+After successful release, request bounded live playtest, compare expected outcome and record measured result. PM reconciles receipt, README and board in the next useful publication. Never leave the README calling a known live route pending. Release delay and stale screenshot age are process signals, not reasons to manufacture activity.
 
-## Deployment cadence
+## Recovery and anti-churn
 
-After first environment adoption, deploy the latest eligible candidate promptly, target within 5–10 minutes of eligibility when accessible. Coalesce superseded ready candidates; do not redeploy the same digest or deploy every status-only commit. One deployer lease, immutable source SHA/artifact digest and local preflight receipt per operation. Follow `DEPLOYMENT.md` for scoped changes, verification and rollback.
-
-Deployment results return through the spool; publisher writes verified README URL, deployed SHA, scope (LAN/public), health and timestamp. A deployment failure should not block safe code/design work, but prohibit further release promotion until its cause is understood.
-
-## Stop, failure and recovery
-
-On pause/stop: stop scheduling, cancel or safely finish short in-flight atomic operations according to runtime capability, join children, record leases and deployment state, then release. No self-relaunch.
-
-A crash recovery reconciles Git, local spool, runtime session status and deployment receipt before any new mutation. Do not trust a stale lock file alone or steal a live lease by clock age alone. Retry a failing operation at most twice with materially different diagnosis; then back off and record the blocker. Infrastructure failure never authorizes global cleanup, resetting unrelated containers or skipping access controls.
+Before restart reconcile runtime sessions, branches, main and deployed receipt. Preserve ownership until a worker is terminal. Retry failures at most twice with different evidence-based diagnosis, then back off and unblock other work. Never continuously poll an unchanged error. If two implementation slices produce only measurement/prose changes, product must pick a player-visible experiment next unless a critical incident takes precedence. No endless scrum roleplay, queues of hundreds of untriaged ideas, or fabricated busy status.

@@ -1,5 +1,9 @@
 # Rustwake — spirit, style and experiential quality
 
+## Product authority
+
+Read TEAM_CHARTER and PRODUCT_STRATEGY. Owner feedback OWNER-002 reopens overall strategy and visual appeal. Historical scoped approvals remain evidence only. Product owner may evolve this bible with a decision and prospective acceptance; numeric proxy compliance cannot establish polish. Inspect the current immutable build before diagnosing defects from old screenshots.
+
 ## North star
 
 A small, beautiful industrial world that gradually comes alive under the player's care. Start with a broken recovery drone and a wreck. Recover material, repair the drone, watch it take over, then turn that flow into machines, equipment and expeditions. It should feel satisfying to touch, watch and hear before it becomes large.
@@ -8,7 +12,7 @@ Mobile browser first; React/TypeScript interface; dedicated 2D world renderer; d
 
 `GAME_DESIGN.md` contains the detailed systems. This bible defines what their presentation must feel like. A functional implementation may still fail this quality bar.
 
-## Evidence from the current build
+## Historical baseline (not a current-build diagnosis)
 
 Reviewed source/evidence is anchored to Rustwake `6f42c2faff72e85e08dfb924cf50ad7f1153ef5c` (refresh before implementation if main advances). Repository captures include `latest-mobile.png` and `latest-research-phone.png`. The current rendered world uses geometric primitives and sparse scenery; machine identity relies heavily on similar rectangular bodies. A phone research capture has one node squeezed into a narrow wrapping column. Current `src/game/audio/audio.ts` defines oscillator frequency sweeps; this is functional placeholder audio, not proof of a rich industrial mix. No listening verdict is implied by source review.
 
@@ -84,3 +88,4 @@ First-feel acceptance requires each observed category ≥3, no critical defect, 
 Describe what is seen/heard/experienced, why it harms the player, the proposed change, measurable acceptance, evidence path and candidate SHA. Reject generic “make it better” tasks. Propose at least one bounded experiment when uncertain. Recheck the result independently; a developer's completion statement is not acceptance.
 
 Do not loop forever on ratings. Once a task passes its scoped criteria, accept it and move to the next highest-value gap. After style is coherent, preserve it as the mechanics grow.
+
