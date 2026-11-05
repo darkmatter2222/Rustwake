@@ -181,6 +181,13 @@ const run = async () => {
       { name: "phone-build", width: 390, height: 844, dpr: 2, env: fs1Envelope(false), build: true },
       { name: "phone-mature", width: 390, height: 844, dpr: 2, env: JSON.stringify(template), build: false },
       { name: "phone-one-machine", width: 390, height: 844, dpr: 2, env: fs1Envelope(true), build: false },
+      // L-7: the other two portrait sizes spec 25.1 names, rest state.
+      { name: "phone360-rest", width: 360, height: 640, dpr: 2, env: fs1Envelope(false), build: false },
+      { name: "phone412-rest", width: 412, height: 915, dpr: 2, env: fs1Envelope(false), build: false },
+      // L-7: mobile landscape (844x390) across the same three states as the phone column.
+      { name: "landscape-rest", width: 844, height: 390, dpr: 2, env: fs1Envelope(false), build: false },
+      { name: "landscape-build", width: 844, height: 390, dpr: 2, env: fs1Envelope(false), build: true },
+      { name: "landscape-mature", width: 844, height: 390, dpr: 2, env: JSON.stringify(template), build: false },
       { name: "desktop-rest", width: 1440, height: 900, dpr: 1, env: fs1Envelope(false), build: false },
       { name: "desktop-build", width: 1440, height: 900, dpr: 1, env: fs1Envelope(false), build: true },
       { name: "desktop-mature", width: 1440, height: 900, dpr: 1, env: JSON.stringify(template), build: false },

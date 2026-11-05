@@ -1,0 +1,218 @@
+{
+  "id": "ops-008-g1",
+  "role": "release-engineer",
+  "session": "ses_e56de561affey0pTEzCHtAvCVp",
+  "date": "2026-11-05",
+  "lease": "ops-008-g1",
+  "release_id": "rustwake-24daf0e",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "route_lan": "http://192.168.86.48:8700/",
+  "integrated_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+  "target_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+  "prior_evidenced_release": "rustwake-4c30fb4 (source 4c30fb4e247fe2a9da400b8e778296f422d6721e, OPS-007-g1)",
+  "target_verification": {
+    "origin_main_before_push": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045 after git fetch origin main; local main identical",
+    "ancestor_4c30fb4_of_head": true,
+    "commits_between": 15,
+    "gameplay_delta_paths": [
+      "src/game/renderer/scene.ts",
+      "src/game/renderer/sprites.ts",
+      "src/ui/styles.css",
+      "tests/renderer/scene-draw.test.ts"
+    ],
+    "build_worktree": "C:/Users/ryans/.local/share/opencode/worktree/fe4e05/ops008-build (detached at 24daf0e, clean tree, npm ci exit 0); built by SHA, not by a mutable working directory",
+    "reproducible": "release001-int and ops008-build emitted 5/5 identical sha256 for the same asset names",
+    "previous_served_entry": "./assets/index-DeEJxXGK.js (4c30fb4); built entry at 24daf0e is index-D14MbFT6.js, so the deploy was eligible rather than a no-op"
+  },
+  "gates": {
+    "npm_run_typecheck": "tsc --noEmit, no output; exit 0",
+    "npm_run_validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s) in 3 ms; behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s); validated: no violations; exit 0 (behaviour line unchanged vs OPS-007)",
+    "npm_test": "Test Files 23 passed (23); Tests 244 passed (244); duration 5.35s; exit 0",
+    "npm_run_build": "vite v5.4.11; 53 modules transformed; built in 549ms; exit 0",
+    "entry_chunk_ceiling": "226977 <= 233000 -> PASS (6023 B headroom)",
+    "team_board_check": "node scripts/team-board.mjs --check -> exit 1 at 24daf0e ('Stale generated file: work/BOARD.md' + 'work/board.html'); regenerated in the release worktree -> exit 0",
+    "team_board_unit_test": "node --test scripts/team-board.test.mjs -> 5 pass / 0 fail; exit 0"
+  },
+  "artifactDigest": "combined sha256 of the five 'name hex-digest' manifest lines = 9ddb5524b1d70b73e5591a00925fa7cb8498d063b9760da9b818de52f1a04c50",
+  "assets": [
+    { "name": "index.html", "bytes": 778, "sha256": "23707fb3999d300954c8c074858889d3a669185f4b41bb61ecfa8f7a1031e481" },
+    { "name": "assets/index-D14MbFT6.js", "bytes": 226977, "sha256": "16b41a64610b2ed4db851dff9b19bf01a4639b882ff928b0083e1cbf637dac2a" },
+    { "name": "assets/tables-CUbg8a0k.js", "bytes": 8407, "sha256": "899c2e0f97a3584304da715cf024f61f1da596bca4a24647b7dd9d394298cc16" },
+    { "name": "assets/index-DpiCrzhv.css", "bytes": 7403, "sha256": "8806ee75b14decfb35e47a1af3429261f4393f123f5d216c2f3e20e65fad0f32" },
+    { "name": "assets/catchup.worker-DphWaCEx.js", "bytes": 13015, "sha256": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5" }
+  ],
+  "install": {
+    "release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-24daf0e",
+    "release_files": 5,
+    "host_digests_equal_local_build": "5/5 (sha256sum inside the release dir)",
+    "previous_release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-4c30fb4",
+    "previous_release_files": 5,
+    "previous_release_retained": true,
+    "previous_release_digests_unchanged": "worker 9a604065..., index-DeEJxXGK.js 0ccaf8d2..., index-gVFVLc-k.css 2e6c6fff..., tables-B-vOLV1r.js daacab3b..., index.html 12f1f38f... == OPS-007-g1 recorded values",
+    "release_dir_inventory_after": "rustwake-090260a 4, rustwake-14b6ea1 4, rustwake-24daf0e 5, rustwake-3d589aa 5, rustwake-4c30fb4 5, rustwake-7f82bec 4, rustwake-c241ab7 4 (no other directory touched)"
+  },
+  "endpoint_identity_verified": true,
+  "endpoint_id": 3,
+  "endpoint_name": "Databrick",
+  "endpoint_status": 1,
+  "endpoint_url": "tcp://192.168.86.48:9001",
+  "stack_name": "rustwake",
+  "stack_id": 125,
+  "stack_update_date_before_put": 1793819317,
+  "stack_update_date_after_put": 1793840124,
+  "stack_put_http": 200,
+  "stack_put_payload_form": "{name, stackFileContent, stackFile, env: [], fromAppTemplate: false} via PUT /api/stacks/125?endpointId=3&force=1",
+  "stack_compose_diff_lines": 1,
+  "stack_compose_only_change": "volumes[0] html bind path releases/rustwake-4c30fb4 -> releases/rustwake-24daf0e; every other key byte-identical",
+  "stored_compose_bind_after": "- /home/darkmatter2222/rustwake/releases/rustwake-24daf0e:/usr/share/nginx/html:ro",
+  "rustwake_stack_count_after": 1,
+  "total_stacks_endpoint3": 26,
+  "container_name": "rustwake-static-1",
+  "container_id_before": "74dbfcc21ba83f951e53d740c7d9d891b48d939cddf767946d0fb514f1de6a7f",
+  "container_id": "db0f98dba5e2ae0d2aadc8a9c122892f61136630f2237dedd82ba6aaba30bd35",
+  "container_state": "running",
+  "container_health": "healthy (health log exit=0 at 00:55:29, 00:55:59 and 00:56:30)",
+  "container_started_at": "2026-11-05T00:55:24.388099716Z",
+  "container_restart_count": 0,
+  "container_config_hash_before": "eaa00613e0c4c2a9953b1ad5d5c48a6a86ece086300d05da84e8b6c4774d87d3",
+  "container_config_hash": "ffe8b11279e15587148b3be6af340240c69c91ab6761b8a32a5d161acc229930",
+  "container_hardening": "user 101:101, read_only rootfs true, mem 134217728, nano_cpus 500000000, restart unless-stopped (unchanged)",
+  "port_map": "8080/tcp -> HostPort 8700",
+  "healthcheck": "wget -q --spider http://127.0.0.1:8080/healthz -> exit 0",
+  "containers": {
+    "total_running_before": 49,
+    "total_running_after": 49,
+    "rustwake_owned_containers": 1,
+    "rustwake_owned_networks": 1
+  },
+  "mutations": [
+    "added release directory /home/darkmatter2222/rustwake/releases/rustwake-24daf0e (5 files)",
+    "PUT /api/stacks/125?endpointId=3&force=1 with the one-line compose change; only service static recreated"
+  ],
+  "mutation_count": 2,
+  "lan_checks": [
+    "http://127.0.0.1:8700/ -> 200 778B text/html; charset=utf-8",
+    "http://127.0.0.1:8700/healthz -> 200 3B text/plain",
+    "http://127.0.0.1:8700/assets/index-D14MbFT6.js -> 200 226977B application/javascript",
+    "http://127.0.0.1:8700/assets/tables-CUbg8a0k.js -> 200 8407B application/javascript",
+    "http://127.0.0.1:8700/assets/index-DpiCrzhv.css -> 200 7403B text/css",
+    "http://127.0.0.1:8700/assets/catchup.worker-DphWaCEx.js -> 200 13015B application/javascript",
+    "http://127.0.0.1:8700/assets/index-DeEJxXGK.js (previous release) -> 404 153B",
+    "http://127.0.0.1:8700/assets/index-gVFVLc-k.css (previous release) -> 404 153B",
+    "http://127.0.0.1:8700/assets/tables-B-vOLV1r.js (previous release) -> 404 153B",
+    "http://127.0.0.1:8700/some/spa/route -> 200 778B (SPA fallback)",
+    "loopback body sha256 == local build for all five files (5/5)"
+  ],
+  "external": [
+    { "path": "/rustwake/", "status": 200, "bytes": 778, "sha256": "23707fb3999d300954c8c074858889d3a669185f4b41bb61ecfa8f7a1031e481", "equals_built": true, "cache_control": null, "etag": "W/\"6aebd3bf-30a\"", "last_modified": "Thu, 05 Nov 2026 00:54:23 GMT" },
+    { "path": "/rustwake/assets/index-D14MbFT6.js", "status": 200, "bytes": 226977, "sha256": "16b41a64610b2ed4db851dff9b19bf01a4639b882ff928b0083e1cbf637dac2a", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/tables-CUbg8a0k.js", "status": 200, "bytes": 8407, "sha256": "899c2e0f97a3584304da715cf024f61f1da596bca4a24647b7dd9d394298cc16", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/index-DpiCrzhv.css", "status": 200, "bytes": 7403, "sha256": "8806ee75b14decfb35e47a1af3429261f4393f123f5d216c2f3e20e65fad0f32", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/catchup.worker-DphWaCEx.js", "status": 200, "bytes": 13015, "sha256": "9a60406519b6183d44e5bc4f4b5002e7f948936081261b53fae07133684401d5", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/some/spa/route", "status": 200, "bytes": 778, "sha256": "23707fb3999d300954c8c074858889d3a669185f4b41bb61ecfa8f7a1031e481" }
+  ],
+  "served_equals_built": "5/5 sha256 and byte size equal the local build; the served index.html names ./assets/index-D14MbFT6.js (226977 B), modulepreload ./assets/tables-CUbg8a0k.js, stylesheet ./assets/index-DpiCrzhv.css",
+  "old_asset_names_now_404": [
+    "assets/index-DeEJxXGK.js -> 404 (153 B body)",
+    "assets/index-gVFVLc-k.css -> 404 (153 B body)",
+    "assets/tables-B-vOLV1r.js -> 404 (153 B body)"
+  ],
+  "digest_match": "5/5",
+  "node_sweep": {
+    "provider": "check-host.net check-http (max_nodes=4)",
+    "request_id": "559e8b5bkbf9",
+    "permanent_link": "https://check-host.net/check-report/559e8b5bkbf9",
+    "nodes": ["es2", "ir3", "ir8", "us5"],
+    "results": {
+      "es2": ["OK", "200", 0.4957, "99.122.58.29"],
+      "ir3": ["OK", "200", 0.6955, "99.122.58.29"],
+      "ir8": ["OK", "200", 0.6604, "99.122.58.29"],
+      "us5": ["OK", "200", 0.1498, "99.122.58.29"]
+    },
+    "nodes_200": "4/4"
+  },
+  "browser_smoke": {
+    "engine": "playwright-core headless Chrome, 390x844, deviceScaleFactor 2, textScaleFactor 2, isMobile/hasTouch",
+    "status": 200,
+    "title": "Rustwake",
+    "load_ms": 76,
+    "canvas": { "attr": "780x1688", "css": "390x844" },
+    "layout": "no overflow (scrollW=clientW=390, scrollH=clientH=844)",
+    "start_gate": "Begin recovery tapped -> HUD 'Scrap 5 Store5/900 ... Keep salvaging: 1/6 pulses for the drone repair.'",
+    "salvage_tap": "Scrap 0 -> 5",
+    "guidance_line": ".status-line 'Tap Salvage until the drone repair is affordable.' height 15.8 px at textScaleFactor 2",
+    "asset_requests": ["200 /rustwake/assets/index-DpiCrzhv.css", "200 /rustwake/assets/tables-CUbg8a0k.js", "200 /rustwake/assets/index-D14MbFT6.js"],
+    "failed_requests": [],
+    "console_errors": "1 x 404 for the site-root favicon (DEF-002); no pageerror"
+  },
+  "save_compatibility": {
+    "fixture": "docs/evidence/yard-mature.json: schemaVersion 1, checksum eede3c4f, tick 18298, store.data 76, machines 8",
+    "result": "the shipped v1 envelope loads unchanged: after 'Begin recovery' the yard restores 8 machines with the research panel populated (Data 102, Efficient Cutters / Smart Buffers rows) and the sim continues from the stored tick (450308 -> 450318 across 1.4 s, offline catch-up applied)",
+    "schema_and_checksum_behaviour": "schemaVersion stays 1; the app rewrites the envelope with a fresh FNV checksum per saved payload (90a03c66 / 48ea5a42 in these two runs), which is the behaviour the existing save tests pin - the fixture file itself is unchanged at eede3c4f",
+    "no_migration_error": "0 pageerror, 0 failed request in the save-loaded context"
+  },
+  "d6e4_covers_yard_own_measurement": {
+    "method": "own rect census on the live route: yard ink bbox from the canvas backing store divided by dpr, intersected with the open Research card rect (same formula as scripts/measure-hud.mjs)",
+    "phone_390x844": {
+      "text_scale_1": { "panel": [10, 157.4, 370, 347.8], "yard": [21.5, 220, 347, 404.5], "coversYardPct": 70.5 },
+      "text_scale_2": { "panel": [10, 157.4, 370, 347.8], "yard": [21.5, 220, 347, 404.5], "coversYardPct": 70.5 }
+    },
+    "comparison": "the canonical reviewer census at 1ae4a57 is 45.0 % (ts1, in band) and 57.8 % (ts2, out of band); my run is out of band at both scales and identical across scales, so text-scale sensitivity is not resolved by this run - the D-6/E-4 phone cell stays the open rework row either way",
+    "panel_internal_scroll": 0
+  },
+  "defects_filed_to_pm": [
+    {
+      "id": "DEF-001",
+      "severity": "low",
+      "repro": "assets/index-DeEJxXGK.js -> 404 (153 B), assets/index-gVFVLc-k.css -> 404, assets/tables-B-vOLV1r.js -> 404 while the new entry/tables/css/worker all -> 200",
+      "mechanism": "index.html serves 200 with ETag and Last-Modified but no Cache-Control header, so a returning client can hold heuristically-cached HTML that names the removed entry and see a blank first paint until revalidation",
+      "candidate_fixes_prospective_only": [
+        "add_cache_control_no_cache_on_index_html (achievable in the Rustwake-owned /home/darkmatter2222/rustwake/nginx/default.conf; hashed /assets/* already carry max-age=31536000 immutable today, so that half is in place)",
+        "serve_the_union_of_previous_and_current_release_asset_directories (needs a compose change: the container binds exactly one release directory read-only, so a second bind or a pre-merged union directory is required)"
+      ],
+      "implemented_this_release": false
+    },
+    {
+      "id": "DEF-002",
+      "severity": "cosmetic",
+      "repro": "https://home.darkmatter2222.com/favicon.ico -> 404 (153 B) while https://home.darkmatter2222.com/rustwake/favicon.ico -> 200; the built index.html declares no link rel=icon, so Chrome asks the site root"
+    },
+    {
+      "id": "DEF-003",
+      "severity": "blocks the motion gate",
+      "repro": "candidate lane: clip-opening-f01..f26.png are 26 files of identical size 63353 B with the same MD5 prefix BDA04B70CD - one frame repeated, so the clip cannot evidence motion",
+      "status": "in progress in the candidate lane (developer second attempt); not fixed and not deployed by this release"
+    }
+  ],
+  "unaffected_services_before_after": {
+    "https://home.darkmatter2222.com/": "301 -> /grafana/ (unchanged)",
+    "https://home.darkmatter2222.com/grafana/": "302 -> /grafana/login (unchanged)",
+    "https://home.darkmatter2222.com/portainer/": "200 -> 200",
+    "http://192.168.86.48:8001/health (llm-router)": "200 -> 200",
+    "http://192.168.86.48:9190/env (mailcal)": "200 -> 200",
+    "ingress_and_other_containers": "grafana-ingress / vega-ingress / llm-router / mailcal-nginx / mailcow nginx all 'Up 2 days', susman-ingress 'Up 22 hours' - none recreated this round"
+  },
+  "ingress_unchanged": true,
+  "unchanged_config_identity": {
+    "susman_conf_sha256": "1c8e3bdfecf7db6f20e0c2698ad829de282a329915c207df22f60238220764c4 (594 lines, before == after == OPS-007 end state)",
+    "dnsmasq_conf_sha256": "c0177b2916e592430ccad5774ed9e7f16cf7d113dbc2530146464becdcca2bd8 (30 lines, DNS untouched)",
+    "rustwake_nginx_default_conf_sha256": "47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2 (before == after)",
+    "rustwake_nginx_conf_sha256": "83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd (before == after)",
+    "susman_ingress_conf_d_default_md5": "0f4ec716473c919fbfd998b31dffc4ca (before == after)",
+    "susman_ingress_nginx_T_sha256": "e393ae1b978e6c3947fea93ab14545cd701a8299ce8a807936bb7935738ec918 (before == after; nginx -t successful)"
+  },
+  "ci": "remote-CI-unverified - gh 2.95.0 reports 'You are not logged into any GitHub hosts' and the anonymous api.github.com status/check-suites endpoints return 404 for this private repository; the locally reproduced workflow steps are green (board --check after regeneration, board unit test 5/5, test 244/23, typecheck, validate, build) but that is not a remote pass claim",
+  "rollback": { "needed": false, "step": null },
+  "rollback_procedure_if_needed": "PUT /api/stacks/125?endpointId=3&force=1 with the same compose body and the html bind path restored to releases/rustwake-4c30fb4 (stackFileContent + stackFile); nothing else changed",
+  "rollback_resource_name": "rustwake-4c30fb4",
+  "drift_notes": [
+    "Endpoint identity, stack id 125, port 8700, the Rustwake network and all six shared/rustwake config hashes equal the OPS-007 end state before and after; no third-party edit landed in the mutation window",
+    "Exactly one Rustwake-owned container and one Rustwake-owned network before and after; config hash advanced eaa00613... -> ffe8b112... as expected for the bind-path change; restart count 0",
+    "Fleet held at 49 running containers; no new stack, network, port or DNS record; no global prune, no fleet compose down, no unrelated stack recreated",
+    "catchup.worker-DphWaCEx.js keeps its OPS-006/007 digest 9a604065... - the worker is untouched by the composition slice, as expected; the tables chunk did change (daacab3b... -> 899c2e0f...) because FLOOR_KIT and the PARTS rows moved into it",
+    "No secret values recorded; Portainer credentials were loaded from HomeAILab .env in-process only"
+  ],
+  "verdict": "pass - rustwake-24daf0e deployed and verified on the existing route; served == built 5/5; no rollback",
+  "blocker": null,
+  "verifiedAt": "2026-11-05T01:26:00Z"
+}

@@ -1,0 +1,93 @@
+{
+ "captured": "2026-11-05T01:20:00Z",
+ "tool": "playwright-core headless Chrome via scripts/capture-style.mjs (dev server http://localhost:5176/)",
+ "source_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+ "deployed_release": "rustwake-24daf0e",
+ "integrated_as_pending": "docs commit on top of 24daf0e (this push)",
+ "scenario": "seeded: FS-1 envelope (dock + sorter tile 8 + furnace tile 14, two loaded routes, tick 344) for rest/build/one-machine, docs/evidence/yard-mature.json for mature, plus the grayscale silhouette sheet from the shipped PARTS table; no organic run",
+ "evidence": [
+  "docs/evidence/2026-11-03-style-slice-pixels.json (12 cases, regenerated at this source SHA)",
+  "docs/screenshots/slice-sheet-silhouette.png"
+ ],
+ "note": "Contrast set is identical in every case (C1 1.545 C2 3.594 C3 4.937 C4 4.375 C5 7.049) because the palette is fixed; the per-case difference is geometry, not colour.",
+ "files": [
+  {
+   "file": "slice-desktop-build.png",
+   "viewport": "1440x900 dpr1",
+   "bytes": 36397,
+   "sha256": "98a0aa623e58b11b4e07b1a6657387320761a26ed6c016b7f314a0d181183a7c"
+  },
+  {
+   "file": "slice-desktop-mature.png",
+   "viewport": "1440x900 dpr1",
+   "bytes": 40236,
+   "sha256": "f392783bc183bd6fbbb4344fbcc1260f55a9ce38935c672eec1ef15e0842b100"
+  },
+  {
+   "file": "slice-desktop-rest.png",
+   "viewport": "1440x900 dpr1",
+   "bytes": 33905,
+   "sha256": "89211dd0f87e8447f79da9f528ec13e16b7cfb5fb3a41df28b6fbba595711675"
+  },
+  {
+   "file": "slice-landscape-build.png",
+   "viewport": "844x390 dpr2",
+   "bytes": 63449,
+   "sha256": "ae50cd917e7f50f9ccce2302fbd7c1976995f868dddf0354dfcae4a21f89bef2"
+  },
+  {
+   "file": "slice-landscape-mature.png",
+   "viewport": "844x390 dpr2",
+   "bytes": 66274,
+   "sha256": "d0da37b3d52d7c2ca074ab56fe73faaed2e676fe5abbb73b19e44dc9e6b8624f"
+  },
+  {
+   "file": "slice-landscape-rest.png",
+   "viewport": "844x390 dpr2",
+   "bytes": 61004,
+   "sha256": "30f1fcf8a84b2104a9662bf6ba78af46fa918e82e5ba6dd18e315b8160130c2f"
+  },
+  {
+   "file": "slice-phone-build.png",
+   "viewport": "390x844 dpr2",
+   "bytes": 66915,
+   "sha256": "3ce63f68765542745b0490fc8b76159d3242ed635b687e6954b27d716e88b344"
+  },
+  {
+   "file": "slice-phone-mature.png",
+   "viewport": "390x844 dpr2",
+   "bytes": 71120,
+   "sha256": "0498ade1742a01e21046af62d0042b36e6632f98b755699705b631abe0e8750c"
+  },
+  {
+   "file": "slice-phone-one-machine.png",
+   "viewport": "390x844 dpr2",
+   "bytes": 63161,
+   "sha256": "ce17cb5284dfe8f01e2f3056d72f87bcab32d2fb7d270a633de97269507ca13c"
+  },
+  {
+   "file": "slice-phone-rest.png",
+   "viewport": "390x844 dpr2",
+   "bytes": 63420,
+   "sha256": "a4429b5f1a75f6e8aab4b85ff3152278de065930ba5ed0fe387b87aee3f8a320"
+  },
+  {
+   "file": "slice-phone360-rest.png",
+   "viewport": "360x640 dpr2",
+   "bytes": 60617,
+   "sha256": "e25958e9f7d02f5dd06f7d5a6dcedaedd7456e01baba33261e7daca5eaa9e1bf"
+  },
+  {
+   "file": "slice-phone412-rest.png",
+   "viewport": "412x915 dpr2",
+   "bytes": 65643,
+   "sha256": "f7306a7adb57c61efa9a1497d49703f036137366e5cc93d422bb4fa59fb79e6a"
+  },
+  {
+   "file": "slice-sheet-silhouette.png",
+   "viewport": "900x420 dpr2 (backing store 1800x840)",
+   "bytes": 9941,
+   "sha256": "db618eac56f8160bf4ced6602b5391bdfa8cbe5e32d6316b6b2141c5d79e9b1a"
+  }
+ ]
+}

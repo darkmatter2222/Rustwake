@@ -8,18 +8,19 @@ A mobile browser strategy-idle game about salvage, metals and automation. Built 
 
 The game works, but the owner has reopened **strategy and presentation quality**: repeated bottom-action clicks appear sufficient for progression, the art remains below the desired standard, and published evidence became stale. Technical test passes and pixel measurements do not establish a good game.
 
-This update installs an evolving product/team workflow. It does not itself improve the game graphics or start local agents. Next outcome: **“I choose a plan; my yard comes alive”**—a meaningful automation tradeoff, a coherent playable art slice and current release evidence. [Sprint plan](work/product/SPRINT-002.md) · [Owner feedback](work/feedback/OWNER-002.md).
-
-| State | Evidence |
+| State | Value |
 |---|---|
-| Source inspected for this team update | `72ec26661ecda78605a4efb5458292614654e1fa` |
-| Last evidenced live release | `rustwake-4c30fb4`, source `4c30fb4e247fe2a9da400b8e778296f422d6721e` |
-| Deployment verification | [OPS-007](work/deployments/OPS-007-g1.json), 2026-11-04 19:16 UTC; served hashes, gameplay smoke and external HTTPS checks reported |
-| Newer main versus live | Newer source exists; do not assume every main commit is deployed |
-| Local team | Restart required to load the new roles/goal; runtime liveness is not verified by this commit |
-| Screenshots | [Prior style slice](docs/screenshots/slice-phone-mature.png), seeded evidence at `8731f69`; historical, **not a current-build screenshot** |
+| Integrated revision (tested) | `24daf0e` — 244 tests / 23 files passed, `tsc --noEmit` clean, `0 violation(s)` content + behaviour, build exit 0 |
+| Deployed artifact (live) | `rustwake-24daf0e`, source `24daf0e` — entry `index-D14MbFT6.js` **226977 B**, tables 8407 B, css 7403 B, worker 13015 B, `index.html` 778 B |
+| Served == built | 5/5 sha256 over HTTPS and loopback; smoke at 390x844 dpr2 (Salvage 0→5, no page scroll), 4/4 external nodes 200, v1 save fixture `eede3c4f` resumes and keeps ticking |
+| Evidence | [OPS-008-g1](work/deployments/OPS-008-g1.json) 2026-11-05 01:26 UTC · [release note](work/releases/RELEASE-001.md) · [capture provenance](docs/screenshots/style-slice-provenance.json) |
+| Rollback | `rustwake-4c30fb4` retained; restore is the one-line bind path on stack 125 |
+| CI | `remote-CI-unverified` — `gh` unauthenticated and the anonymous API returns 404 for this private repo |
+| Open | DEF-001 cached HTML naming removed assets, DEF-002 root favicon 404, DEF-003 repeated clip frames, DEF-004 drone position after catch-up; D-6/E-4 phone-ts2 card still over the ≤ 50 % band |
 
-The live deployment status above comes from repository receipts, not a new external check in this configuration update. Fresh current-game captures and live retesting are prioritized. [Prior detailed checkpoint](docs/history/README-before-team-v2.md).
+**Player-visible outcome of this build:** the yard is the composed slice — floor kit in empty tiles, a full-frame sprite sheet, and a research card that leaves the yard visible on desktop; the strategy census now says plainly that the scripted ladder, not the player, picks the plan (one option in 293 of 1800 naive rounds, a real build-vs-upgrade fork in only 4). **Next outcome:** one cost-bearing fork (A1, criteria A1-1..A1-6) plus the inspected art candidate `7e10288`, then re-run the same three policies. [Sprint plan](work/product/SPRINT-002.md) · [Owner feedback](work/feedback/OWNER-002.md) · [STRAT-001 verdict](work/feedback/STRAT-001-g1.md).
+
+Screens are the seeded 12-case slice at `24daf0e` (portrait 360/390/412, mobile landscape 844x390, desktop 1440x900) in [docs/screenshots](docs/screenshots/style-slice-provenance.json); the older role and sheet PNGs are historical captures at `912ef51`.
 
 ## The development team
 

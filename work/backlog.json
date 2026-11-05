@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T00:11:36+00:00",
+  "updated_at": "2026-11-05T01:35:00+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "72ec26661ecda78605a4efb5458292614654e1fa",
-    "deployed_sha": "4c30fb4e247fe2a9da400b8e778296f422d6721e",
+    "inspected_head": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+    "deployed_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-007-g1.json",
-    "verification": "Repository deployment receipt; not re-tested by this configuration update"
+    "receipt": "work/deployments/OPS-008-g1.json",
+    "verification": "OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified."
   },
   "runtime": {
     "status": "activation-required",
@@ -68,9 +68,9 @@
       "type": "experiment",
       "title": "Measure blind tapping versus deliberate plans",
       "priority": "P0",
-      "status": "ready",
+      "status": "measured",
       "owner": "player",
-      "generation": 0,
+      "generation": 1,
       "player_problem": "Owner can click the bottom action through progression.",
       "hypothesis": "Current progression lacks a meaningful opportunity cost.",
       "scope": [
@@ -89,13 +89,17 @@
       "dependencies": [],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-002.md"
+        "work/feedback/OWNER-002.md",
+        "work/feedback/STRAT-001-g1.md",
+        "work/feedback/strat001-harness.json",
+        "work/feedback/strat001-interact.json",
+        "work/feedback/strat001-labels.json"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "review_verdict": "accept",
+      "published_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "deployed_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "outcome": "No meaningful strategic choice today: the scripted ladder decides and the player keeps pace with it. Naive census of 1800 rounds: exactly one non-salvage option 293 (16.3 %), exactly two 1387, three or more 120 (6.7 %) -> two or more 1507 (83.7 %); cost-bearing build-and-upgrade fork 4/4/2 across the three policies. Naive 2175 batches/8 machines/49 credits/3 nodes vs efficiency 2174/7/9/0 (one batch apart, weakly dominated) vs throughput 816/4/8203/0.",
       "history": [
         {
           "at": "2026-11-05T00:11:36+00:00",
@@ -103,6 +107,41 @@
           "from_state": null,
           "to_state": "ready",
           "reason": "Seeded from requested team reset; not yet assigned or running"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "player",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "harness (3 policies x 1800 rounds) and real-browser interaction run (360x640, 200 taps) recorded at 24daf0e"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "player",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "report work/feedback/STRAT-001-g1.md submitted with per-policy tables, divergence ticks, recoverability and method labels (interaction vs harness)"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent reproduction of all three harness rows byte-for-byte plus the four-counter correction (293/1387/120, derived >=2 1507 of 1800) applied by the release lane"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "artifacts and verdict imported into tracked state with this push"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "measured",
+          "reason": "result recorded against the shipped build 24daf0e; hypothesis 1 not supported by the numbers, STRAT-002 criteria follow"
         }
       ]
     },
@@ -111,9 +150,9 @@
       "type": "experiment",
       "title": "Create and inspect a coherent playable yard style slice",
       "priority": "P1",
-      "status": "ready",
+      "status": "review",
       "owner": "developer",
-      "generation": 0,
+      "generation": 1,
       "player_problem": "Owner still finds the game ugly despite numeric art acceptance.",
       "hypothesis": "Authored wreck, machinery, lighting and composition improve first impression.",
       "scope": [
@@ -133,9 +172,11 @@
       "dependencies": [],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-002.md"
+        "work/feedback/OWNER-002.md",
+        "work/development/handoffs (ART-001 g1 candidate 7e10288)",
+        "docs/screenshots/ (shipped 24daf0e captures) + docs/screenshots/style-slice-provenance.json"
       ],
-      "candidate_sha": null,
+      "candidate_sha": "7e10288884383fd3cfef74a3e900f1522b063e6d",
       "review_verdict": null,
       "published_sha": null,
       "deployed_sha": null,
@@ -147,6 +188,20 @@
           "from_state": null,
           "to_state": "ready",
           "reason": "Seeded from requested team reset; not yet assigned or running"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 7e10288 authored scene/motion slice built in its own worktree (entry index-M13CWGRc.js 227875 B under the 233000 ceiling)"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "candidate submitted for independent QA; clip-frame defect DEF-003 open, so no product acceptance is claimed"
         }
       ]
     },
@@ -155,9 +210,9 @@
       "type": "delivery",
       "title": "Refresh evidence and keep main/live status current",
       "priority": "P1",
-      "status": "ready",
+      "status": "measured",
       "owner": "release-engineer",
-      "generation": 0,
+      "generation": 1,
       "player_problem": "README shows stale imagery and deployment runbook contradicts receipts.",
       "hypothesis": "A receipt-driven summary and regular preview release makes actual progress visible.",
       "scope": [
@@ -177,13 +232,16 @@
       "dependencies": [],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-002.md"
+        "work/feedback/OWNER-002.md",
+        "work/deployments/OPS-008-g1.json",
+        "work/releases/RELEASE-001.md",
+        "docs/screenshots/style-slice-provenance.json"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "review_verdict": "accept",
+      "published_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "deployed_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+      "outcome": "Integrated 24daf0e and deployed as rustwake-24daf0e; served == built 5/5 by sha256, HTTPS 200, 4/4 external nodes, live smoke and v1 save fixture pass; 13 landscape/portrait captures with source provenance; board --check green in the committed state; remote CI recorded as remote-CI-unverified.",
       "history": [
         {
           "at": "2026-11-05T00:11:36+00:00",
@@ -191,17 +249,59 @@
           "from_state": null,
           "to_state": "ready",
           "reason": "Seeded from requested team reset; not yet assigned or running"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "gates at 24daf0e: 244 tests / 23 files, typecheck clean, 0+0 violations, build 226977 B entry; captures refreshed; board views regenerated"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "receipt and release note written with served-vs-built digests, node sweep, smoke, save compatibility and rollback identity"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "coordinator re-ran the gate set and the board check independently and cross-checked the served entry asset"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "this push"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "rustwake-24daf0e promoted on stack 125 with a one-line bind change; container healthy, restart 0, rollback resource rustwake-4c30fb4 retained"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy measurement: served assets 5/5 equal the build, 4/4 external nodes 200, save fixture resumes; three release defects filed"
         }
       ]
     },
     {
       "id": "STRAT-002",
       "type": "experiment",
-      "title": "Implement one reversible strategic allocation choice",
+      "title": "Implement one reversible strategic allocation choice (A1: power-vs-throughput fork)",
       "priority": "P1",
-      "status": "triaged",
+      "status": "ready",
       "owner": "developer",
-      "generation": 0,
+      "generation": 1,
       "player_problem": "Progression needs competing useful plans, not just additional clicks.",
       "hypothesis": "A constrained allocation or policy creates situationally useful strategies.",
       "scope": [
@@ -213,15 +313,17 @@
         "No repository wipe; preserve saves and unrelated work"
       ],
       "acceptance": [
-        "Product approves exact tradeoff and criteria after baseline",
-        "Two plans useful in different documented conditions with costs visible before choice",
-        "Blind tapping cannot silently determine the entire plan",
-        "Save/offline/respec tests and independent playtest; record keep/revise/revert"
+        "A1-1: the dock shows both costed options at the fork on the same screen before either is chosen",
+        "A1-2: ambiguous rounds (affordable build AND affordable upgrade) rise materially above the 4/1800 naive baseline",
+        "A1-3: neither plan may be weakly dominated; each must lead on at least one metric the other does not (baseline: naive 2175 batches/49 credits vs throughput 816/8203)",
+        "A1-4: the shared power budget is named by an on-screen label on the resting screen (baseline: never named)",
+        "A1-5: one reversible choice, save/offline catch-up and respec regression green on the v1 fixture (schemaVersion 1, checksum eede3c4f)",
+        "A1-6: independent playtest records keep/revise/revert with the same three-policy census reproducible"
       ],
       "dependencies": [
         "STRAT-001"
       ],
-      "product_approved": false,
+      "product_approved": true,
       "evidence": [
         "work/feedback/OWNER-002.md"
       ],
@@ -237,6 +339,13 @@
           "from_state": null,
           "to_state": "triaged",
           "reason": "Seeded from requested team reset; not yet assigned or running"
+        },
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "A1 tradeoff approved from the STRAT-001 baseline; criteria A1-1..A1-6 recorded"
         }
       ]
     },
@@ -279,6 +388,167 @@
           "from_state": null,
           "to_state": "triaged",
           "reason": "Seeded from requested team reset; not yet assigned or running"
+        }
+      ]
+    },
+    {
+      "id": "DEF-001",
+      "type": "defect",
+      "title": "Cached index.html can name removed hashed assets",
+      "priority": "P2",
+      "status": "inbox",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "A returning client on heuristically-cached HTML can request the gone entry and see a blank first paint until revalidation.",
+      "hypothesis": "index.html has ETag and Last-Modified but no Cache-Control; hashed assets are immutable-cached and the container binds one release directory.",
+      "scope": [
+        "rustwake nginx default.conf",
+        "stack 125 compose bind"
+      ],
+      "non_goals": [
+        "No infrastructure change beyond this defect's own fix"
+      ],
+      "acceptance": [
+        "assets/index-DeEJxXGK.js -> 404 (153 B) while entry/tables/css/worker -> 200 is explained and closed either by Cache-Control: no-cache on index.html or by serving the union of previous and current release asset directories",
+        "old and new index.html both render without a blank paint"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/deployments/OPS-008-g1.json"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed from OPS-008-g1 during the 24daf0e release"
+        }
+      ]
+    },
+    {
+      "id": "DEF-002",
+      "type": "defect",
+      "title": "Site-root favicon 404 while the release favicon serves 200",
+      "priority": "P3",
+      "status": "inbox",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "One or two console 404s on every fresh load.",
+      "hypothesis": "The built index.html declares no link rel=icon, so the browser asks the site root instead of the /rustwake/ asset.",
+      "scope": [
+        "index.html head"
+      ],
+      "non_goals": [
+        "No infrastructure change beyond this defect's own fix"
+      ],
+      "acceptance": [
+        "adding a relative link rel=icon href=\"./favicon.ico\" removes the console 404 while /rustwake/favicon.ico stays 200"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/deployments/OPS-008-g1.json"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed from OPS-008-g1 during the 24daf0e release"
+        }
+      ]
+    },
+    {
+      "id": "DEF-003",
+      "type": "defect",
+      "title": "Candidate motion clip repeats one frame 26 times",
+      "priority": "P2",
+      "status": "inbox",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "The motion evidence gate cannot be judged from the clip.",
+      "hypothesis": "clip-opening-f01..f26.png are all 63353 B with the same MD5 prefix BDA04B70CD, so the capture loop does not advance the simulated clock.",
+      "scope": [
+        "candidate clip capture script"
+      ],
+      "non_goals": [
+        "No infrastructure change beyond this defect's own fix"
+      ],
+      "acceptance": [
+        "assert 26 distinct frame hashes",
+        "record tick, framePhase and drone position per frame"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/development/handoffs (ART-001 g1)"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed from OPS-008-g1 during the 24daf0e release"
+        }
+      ]
+    },
+    {
+      "id": "DEF-004",
+      "type": "defect",
+      "title": "Drone freezes at one position after a large offline catch-up",
+      "priority": "P2",
+      "status": "inbox",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "After a long offline period the yard looks frozen: the drone holds one spot and the canvas is byte-identical across samples.",
+      "hypothesis": "The seeded inFlight.arrive lags the credited catch-up tick, so droneLeg() clamp saturates; observed tick 432354 -> 432634 with droneBodyCssPx [180.5, 248.5] in every row and ~66 draws per sample at 1000 ms spacing.",
+      "scope": [
+        "src/game/renderer/scene.ts drone leg",
+        "offline catch-up credit"
+      ],
+      "non_goals": [
+        "No infrastructure change beyond this defect's own fix"
+      ],
+      "acceptance": [
+        "after catch-up the drone leg parameter unwinds within one second",
+        "26 samples 1000 ms apart contain at least two distinct canvas hashes"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/deployments/OPS-008-g1.json save-compatibility block"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T01:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed from OPS-008-g1 during the 24daf0e release"
         }
       ]
     }

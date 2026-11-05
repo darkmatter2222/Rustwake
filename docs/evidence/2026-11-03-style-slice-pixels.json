@@ -3,154 +3,948 @@
     "case": "phone-rest",
     "viewport": "390x844",
     "dpr": 2,
-    "scale": 1.8056,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
+      "machineBody": "138,169,196",
       "machineWell": "14,23,38",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 780,
+        "runY": 1688,
+        "count": 756003
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 25,
+        "y": 223.5,
+        "runX": 1,
+        "runY": 679,
+        "count": 411430
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 174.5,
+        "y": 565,
+        "runX": 5,
+        "runY": 51,
+        "count": 9870
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 209.5,
+        "y": 238,
+        "runX": 18,
+        "runY": 7,
+        "count": 8444
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 150,
+        "y": 295.5,
+        "runX": 65,
+        "runY": 11,
+        "count": 5381
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 148,
+        "y": 230.5,
+        "runX": 72,
+        "runY": 25,
+        "count": 7843
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 146.5,
+        "y": 263,
+        "runX": 11,
+        "runY": 11,
+        "count": 994
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "phone-build",
     "viewport": "390x844",
     "dpr": 2,
-    "scale": 1.8056,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
+      "machineBody": "138,169,196",
       "machineWell": "14,23,38",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 780,
+        "runY": 1688,
+        "count": 753089
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 77.5,
+        "y": 223.5,
+        "runX": 3,
+        "runY": 107,
+        "count": 395751
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 174.5,
+        "y": 565,
+        "runX": 5,
+        "runY": 51,
+        "count": 9870
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 209.5,
+        "y": 238,
+        "runX": 18,
+        "runY": 7,
+        "count": 8444
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 150,
+        "y": 295.5,
+        "runX": 65,
+        "runY": 11,
+        "count": 5381
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 148,
+        "y": 230.5,
+        "runX": 72,
+        "runY": 25,
+        "count": 7843
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 146.5,
+        "y": 263,
+        "runX": 11,
+        "runY": 11,
+        "count": 994
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "phone-mature",
     "viewport": "390x844",
     "dpr": 2,
-    "scale": 1.8056,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
-      "machineWell": "138,169,196",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 780,
+        "runY": 1688,
+        "count": 755981
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 25,
+        "y": 223.5,
+        "runX": 1,
+        "runY": 126,
+        "count": 380100
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 174.5,
+        "y": 565,
+        "runX": 5,
+        "runY": 51,
+        "count": 9870
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 260,
+        "y": 221.5,
+        "runX": 87,
+        "runY": 11,
+        "count": 28474
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 334,
+        "y": 221.5,
+        "runX": 22,
+        "runY": 11,
+        "count": 8545
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 245.5,
+        "y": 229,
+        "runX": 11,
+        "runY": 79,
+        "count": 11808
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 296,
+        "y": 225,
+        "runX": 11,
+        "runY": 11,
+        "count": 830
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "phone-one-machine",
     "viewport": "390x844",
     "dpr": 2,
-    "scale": 1.8056,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
+      "machineBody": "138,169,196",
       "machineWell": "14,23,38",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 780,
+        "runY": 1688,
+        "count": 756003
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 25,
+        "y": 223.5,
+        "runX": 1,
+        "runY": 679,
+        "count": 418356
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 174.5,
+        "y": 565,
+        "runX": 5,
+        "runY": 51,
+        "count": 9870
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 209.5,
+        "y": 238,
+        "runX": 18,
+        "runY": 7,
+        "count": 4352
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 150,
+        "y": 295.5,
+        "runX": 65,
+        "runY": 11,
+        "count": 3686
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 148,
+        "y": 230.5,
+        "runX": 72,
+        "runY": 25,
+        "count": 7843
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 146.5,
+        "y": 263,
+        "runX": 11,
+        "runY": 11,
+        "count": 824
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
+    }
+  },
+  {
+    "case": "phone360-rest",
+    "viewport": "360x640",
+    "dpr": 2,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 720,
+        "runY": 1280,
+        "count": 443520
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 28.5,
+        "y": 137,
+        "runX": 36,
+        "runY": 233,
+        "count": 349599
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 162.5,
+        "y": 451.5,
+        "runX": 1,
+        "runY": 88,
+        "count": 8579
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 193.5,
+        "y": 150,
+        "runX": 17,
+        "runY": 7,
+        "count": 7226
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 138.5,
+        "y": 203.5,
+        "runX": 60,
+        "runY": 10,
+        "count": 4691
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 136.5,
+        "y": 143.5,
+        "runX": 67,
+        "runY": 23,
+        "count": 6535
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 135,
+        "y": 173.5,
+        "runX": 10,
+        "runY": 10,
+        "count": 847
+      }
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
+    }
+  },
+  {
+    "case": "phone412-rest",
+    "viewport": "412x915",
+    "dpr": 2,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 824,
+        "runY": 1830,
+        "count": 882060
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 32,
+        "y": 248,
+        "runX": 43,
+        "runY": 266,
+        "count": 458641
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 184.5,
+        "y": 608.5,
+        "runX": 5,
+        "runY": 54,
+        "count": 11095
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 221.5,
+        "y": 263,
+        "runX": 19,
+        "runY": 8,
+        "count": 9628
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 158.5,
+        "y": 324,
+        "runX": 69,
+        "runY": 11,
+        "count": 6015
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 156,
+        "y": 255.5,
+        "runX": 77,
+        "runY": 26,
+        "count": 8502
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 154.5,
+        "y": 289.5,
+        "runX": 11,
+        "runY": 11,
+        "count": 1039
+      }
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
+    }
+  },
+  {
+    "case": "landscape-rest",
+    "viewport": "844x390",
+    "dpr": 2,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1688,
+        "runY": 780,
+        "count": 1067622
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 312.5,
+        "y": 61.5,
+        "runX": 26,
+        "runY": 169,
+        "count": 182972
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 407.5,
+        "y": 289.5,
+        "runX": 5,
+        "runY": 34,
+        "count": 4385
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 431.5,
+        "y": 71.5,
+        "runX": 12,
+        "runY": 5,
+        "count": 3863
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 392,
+        "y": 110,
+        "runX": 43,
+        "runY": 7,
+        "count": 2380
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 390.5,
+        "y": 66.5,
+        "runX": 49,
+        "runY": 17,
+        "count": 3305
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 389.5,
+        "y": 88,
+        "runX": 7,
+        "runY": 7,
+        "count": 418
+      }
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
+    }
+  },
+  {
+    "case": "landscape-build",
+    "viewport": "844x390",
+    "dpr": 2,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1688,
+        "runY": 780,
+        "count": 1066154
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 343.5,
+        "y": 61.5,
+        "runX": 2,
+        "runY": 71,
+        "count": 172546
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 407.5,
+        "y": 289.5,
+        "runX": 5,
+        "runY": 34,
+        "count": 4385
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 431.5,
+        "y": 71.5,
+        "runX": 12,
+        "runY": 5,
+        "count": 3863
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 392,
+        "y": 110,
+        "runX": 43,
+        "runY": 7,
+        "count": 2380
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 390.5,
+        "y": 66.5,
+        "runX": 49,
+        "runY": 17,
+        "count": 3305
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 389.5,
+        "y": 88,
+        "runX": 7,
+        "runY": 7,
+        "count": 418
+      }
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
+    }
+  },
+  {
+    "case": "landscape-mature",
+    "viewport": "844x390",
+    "dpr": 2,
+    "samples": {
+      "backdrop": "11,18,32",
+      "floor": "34,56,74",
+      "wreck": "109,144,171",
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1688,
+        "runY": 780,
+        "count": 1067622
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 315,
+        "y": 61.5,
+        "runX": 2,
+        "runY": 7,
+        "count": 168718
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 407.5,
+        "y": 289.5,
+        "runX": 5,
+        "runY": 34,
+        "count": 4385
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 465.5,
+        "y": 60.5,
+        "runX": 58,
+        "runY": 7,
+        "count": 12627
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 514.5,
+        "y": 60.5,
+        "runX": 14,
+        "runY": 2,
+        "count": 3868
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 455.5,
+        "y": 65,
+        "runX": 7,
+        "runY": 53,
+        "count": 4989
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 489.5,
+        "y": 63,
+        "runX": 7,
+        "runY": 7,
+        "count": 333
+      }
+    },
+    "ratios": {
+      "C1_floorVsBackdrop": 1.545,
+      "C2_wreckVsFloor": 3.594,
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "desktop-rest",
     "viewport": "1440x900",
     "dpr": 1,
-    "scale": 4,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
+      "machineBody": "138,169,196",
       "machineWell": "14,23,38",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1440,
+        "runY": 900,
+        "count": 808916
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 414,
+        "y": 79,
+        "runX": 37,
+        "runY": 235,
+        "count": 355286
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 685,
+        "y": 715,
+        "runX": 1,
+        "runY": 88,
+        "count": 8599
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 747,
+        "y": 106,
+        "runX": 17,
+        "runY": 6,
+        "count": 6988
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 636,
+        "y": 214,
+        "runX": 60,
+        "runY": 9,
+        "count": 4321
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 633,
+        "y": 93,
+        "runX": 67,
+        "runY": 23,
+        "count": 6332
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 629,
+        "y": 153,
+        "runX": 10,
+        "runY": 10,
+        "count": 778
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "desktop-build",
     "viewport": "1440x900",
     "dpr": 1,
-    "scale": 4,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
+      "machineBody": "138,169,196",
       "machineWell": "14,23,38",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1440,
+        "runY": 900,
+        "count": 806849
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 500,
+        "y": 79,
+        "runX": 4,
+        "runY": 100,
+        "count": 343984
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 685,
+        "y": 715,
+        "runX": 1,
+        "runY": 88,
+        "count": 8599
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 747,
+        "y": 106,
+        "runX": 17,
+        "runY": 6,
+        "count": 6988
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 636,
+        "y": 214,
+        "runX": 60,
+        "runY": 9,
+        "count": 4321
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 633,
+        "y": 93,
+        "runX": 67,
+        "runY": 23,
+        "count": 6332
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 629,
+        "y": 153,
+        "runX": 10,
+        "runY": 10,
+        "count": 778
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   },
   {
     "case": "desktop-mature",
     "viewport": "1440x900",
     "dpr": 1,
-    "scale": 4,
     "samples": {
       "backdrop": "11,18,32",
       "floor": "34,56,74",
       "wreck": "109,144,171",
-      "machineTop": "138,169,196",
-      "machineWell": "138,169,196",
-      "dockPad": "244,247,251",
-      "amberToken": "60,54,51"
+      "machineBody": "138,169,196",
+      "machineWell": "14,23,38",
+      "dockPad": "127,159,187",
+      "amberToken": "255,183,101"
+    },
+    "points": {
+      "backdrop": {
+        "rgb": "11,18,32",
+        "x": 0,
+        "y": 0,
+        "runX": 1440,
+        "runY": 900,
+        "count": 808916
+      },
+      "floor": {
+        "rgb": "34,56,74",
+        "x": 421,
+        "y": 79,
+        "runX": 3,
+        "runY": 10,
+        "count": 327868
+      },
+      "wreck": {
+        "rgb": "109,144,171",
+        "x": 685,
+        "y": 715,
+        "runX": 1,
+        "runY": 88,
+        "count": 8599
+      },
+      "machineBody": {
+        "rgb": "138,169,196",
+        "x": 841,
+        "y": 76,
+        "runX": 80,
+        "runY": 9,
+        "count": 23332
+      },
+      "machineWell": {
+        "rgb": "14,23,38",
+        "x": 979,
+        "y": 76,
+        "runX": 20,
+        "runY": 9,
+        "count": 6723
+      },
+      "dockPad": {
+        "rgb": "127,159,187",
+        "x": 814,
+        "y": 89,
+        "runX": 10,
+        "runY": 74,
+        "count": 9620
+      },
+      "amberToken": {
+        "rgb": "255,183,101",
+        "x": 909,
+        "y": 83,
+        "runX": 9,
+        "runY": 9,
+        "count": 657
+      }
     },
     "ratios": {
       "C1_floorVsBackdrop": 1.545,
       "C2_wreckVsFloor": 3.594,
-      "C3_machineVsFloor": 4.937,
-      "C4_dockVsFloor": 11.28,
-      "C5_amberVsFloor": 1.02
+      "C3_machineBodyVsFloor": 4.937,
+      "C4_dockVsFloor": 4.375,
+      "C5_amberVsFloor": 7.049
     }
   }
 ]

@@ -1,0 +1,1602 @@
+[
+ {
+  "round": 1,
+  "tick": 298,
+  "tutorial": 4,
+  "kind": "build",
+  "label": "Build Scrap sorter",
+  "cost": "20 scrap"
+ },
+ {
+  "round": 2,
+  "tick": 308,
+  "tutorial": 5,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 3,
+  "tick": 318,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 4,
+  "tick": 328,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 5,
+  "tick": 338,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 6,
+  "tick": 348,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 7,
+  "tick": 358,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 8,
+  "tick": 368,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 9,
+  "tick": 378,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 10,
+  "tick": 388,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 11,
+  "tick": 398,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 12,
+  "tick": 408,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 13,
+  "tick": 418,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 14,
+  "tick": 428,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 15,
+  "tick": 438,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 16,
+  "tick": 448,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 17,
+  "tick": 458,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 18,
+  "tick": 468,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 19,
+  "tick": 478,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 20,
+  "tick": 488,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 21,
+  "tick": 498,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 22,
+  "tick": 508,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 23,
+  "tick": 518,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 24,
+  "tick": 528,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 1 Scrap",
+  "cost": "+1 credit"
+ },
+ {
+  "round": 25,
+  "tick": 538,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 3 Scrap",
+  "cost": "+3 credits"
+ },
+ {
+  "round": 26,
+  "tick": 548,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 8 Scrap",
+  "cost": "+8 credits"
+ },
+ {
+  "round": 27,
+  "tick": 558,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 8 Scrap",
+  "cost": "+8 credits"
+ },
+ {
+  "round": 28,
+  "tick": 568,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 4 Scrap",
+  "cost": "+4 credits"
+ },
+ {
+  "round": 29,
+  "tick": 578,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 6 Scrap",
+  "cost": "+6 credits"
+ },
+ {
+  "round": 30,
+  "tick": 588,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 6 Scrap",
+  "cost": "+6 credits"
+ },
+ {
+  "round": 31,
+  "tick": 598,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 11 Scrap",
+  "cost": "+11 credits"
+ },
+ {
+  "round": 32,
+  "tick": 608,
+  "tutorial": 6,
+  "kind": "build",
+  "label": "Build Furnace",
+  "cost": "10 scrap + 5 ferrous"
+ },
+ {
+  "round": 33,
+  "tick": 618,
+  "tutorial": 6,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 34,
+  "tick": 628,
+  "tutorial": 6,
+  "kind": "upgrade",
+  "label": "Upgrade",
+  "cost": "30 credits"
+ },
+ {
+  "round": 35,
+  "tick": 638,
+  "tutorial": 6,
+  "kind": "upgrade",
+  "label": "Upgrade",
+  "cost": "30 credits"
+ },
+ {
+  "round": 36,
+  "tick": 648,
+  "tutorial": 6,
+  "kind": "upgrade",
+  "label": "Upgrade",
+  "cost": "30 credits"
+ },
+ {
+  "round": 37,
+  "tick": 658,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 38,
+  "tick": 668,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 39,
+  "tick": 678,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 2 Scrap",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 40,
+  "tick": 688,
+  "tutorial": 6,
+  "kind": "upgrade",
+  "label": "Upgrade",
+  "cost": "30 credits"
+ },
+ {
+  "round": 41,
+  "tick": 698,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 42,
+  "tick": 708,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 43,
+  "tick": 718,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 5 Scrap",
+  "cost": "+5 credits"
+ },
+ {
+  "round": 44,
+  "tick": 728,
+  "tutorial": 6,
+  "kind": "sell",
+  "label": "Sell 1 Scrap",
+  "cost": "+1 credit"
+ },
+ {
+  "round": 45,
+  "tick": 738,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 46,
+  "tick": 748,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 47,
+  "tick": 758,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 48,
+  "tick": 768,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 49,
+  "tick": 778,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 50,
+  "tick": 788,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 51,
+  "tick": 798,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 52,
+  "tick": 808,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 53,
+  "tick": 818,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 54,
+  "tick": 828,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 55,
+  "tick": 838,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 56,
+  "tick": 848,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 57,
+  "tick": 858,
+  "tutorial": 7,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 58,
+  "tick": 868,
+  "tutorial": 7,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 59,
+  "tick": 878,
+  "tutorial": 7,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 60,
+  "tick": 888,
+  "tutorial": 7,
+  "kind": "sell",
+  "label": "Sell 2 Nonferrous",
+  "cost": "+4 credits"
+ },
+ {
+  "round": 61,
+  "tick": 898,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Polymer recycler",
+  "cost": "25 scrap + 5 nonferrous"
+ },
+ {
+  "round": 62,
+  "tick": 908,
+  "tutorial": 7,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 63,
+  "tick": 918,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 64,
+  "tick": 928,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 65,
+  "tick": 938,
+  "tutorial": 7,
+  "kind": "upgrade",
+  "label": "Upgrade",
+  "cost": "30 credits"
+ },
+ {
+  "round": 66,
+  "tick": 948,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 67,
+  "tick": 958,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 68,
+  "tick": 968,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 69,
+  "tick": 978,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 70,
+  "tick": 988,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 71,
+  "tick": 998,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 72,
+  "tick": 1008,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 73,
+  "tick": 1018,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 74,
+  "tick": 1028,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 75,
+  "tick": 1038,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 76,
+  "tick": 1048,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 77,
+  "tick": 1058,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 78,
+  "tick": 1068,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 79,
+  "tick": 1078,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 80,
+  "tick": 1088,
+  "tutorial": 7,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 81,
+  "tick": 1098,
+  "tutorial": 7,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 82,
+  "tick": 1108,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 83,
+  "tick": 1118,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 84,
+  "tick": 1128,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 85,
+  "tick": 1138,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 86,
+  "tick": 1148,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 87,
+  "tick": 1158,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 88,
+  "tick": 1168,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 89,
+  "tick": 1178,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 90,
+  "tick": 1188,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 91,
+  "tick": 1198,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 92,
+  "tick": 1208,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 93,
+  "tick": 1218,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 94,
+  "tick": 1228,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 95,
+  "tick": 1238,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 96,
+  "tick": 1248,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 97,
+  "tick": 1258,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 98,
+  "tick": 1268,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 99,
+  "tick": 1278,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 100,
+  "tick": 1288,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 101,
+  "tick": 1298,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 102,
+  "tick": 1308,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 103,
+  "tick": 1318,
+  "tutorial": 9,
+  "kind": "sell",
+  "label": "Sell 1 Nonferrous",
+  "cost": "+2 credits"
+ },
+ {
+  "round": 104,
+  "tick": 1328,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 105,
+  "tick": 1338,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 106,
+  "tick": 1348,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Copper separator",
+  "cost": "25 scrap + 5 ferrous"
+ },
+ {
+  "round": 107,
+  "tick": 1358,
+  "tutorial": 9,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 108,
+  "tick": 1368,
+  "tutorial": 9,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 109,
+  "tick": 1378,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 110,
+  "tick": 1388,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 111,
+  "tick": 1398,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 112,
+  "tick": 1408,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 113,
+  "tick": 1418,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 114,
+  "tick": 1428,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 115,
+  "tick": 1438,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 116,
+  "tick": 1448,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 117,
+  "tick": 1458,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 118,
+  "tick": 1468,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 119,
+  "tick": 1478,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 120,
+  "tick": 1488,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 121,
+  "tick": 1498,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 122,
+  "tick": 1508,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 123,
+  "tick": 1518,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 124,
+  "tick": 1528,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 125,
+  "tick": 1538,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 126,
+  "tick": 1548,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 127,
+  "tick": 1558,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 128,
+  "tick": 1568,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 129,
+  "tick": 1578,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 130,
+  "tick": 1588,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 131,
+  "tick": 1598,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 132,
+  "tick": 1608,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 133,
+  "tick": 1618,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 134,
+  "tick": 1628,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 135,
+  "tick": 1638,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 136,
+  "tick": 1648,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 137,
+  "tick": 1658,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 138,
+  "tick": 1668,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 139,
+  "tick": 1678,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 140,
+  "tick": 1688,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 141,
+  "tick": 1698,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 142,
+  "tick": 1708,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 143,
+  "tick": 1718,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 144,
+  "tick": 1728,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 145,
+  "tick": 1738,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 146,
+  "tick": 1748,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 147,
+  "tick": 1758,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 148,
+  "tick": 1768,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 149,
+  "tick": 1778,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 150,
+  "tick": 1788,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 151,
+  "tick": 1798,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 152,
+  "tick": 1808,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 153,
+  "tick": 1818,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 154,
+  "tick": 1828,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 155,
+  "tick": 1838,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 156,
+  "tick": 1848,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 157,
+  "tick": 1858,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 158,
+  "tick": 1868,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 159,
+  "tick": 1878,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 160,
+  "tick": 1888,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 161,
+  "tick": 1898,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 162,
+  "tick": 1908,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 163,
+  "tick": 1918,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 164,
+  "tick": 1928,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 165,
+  "tick": 1938,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 166,
+  "tick": 1948,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Wire mill",
+  "cost": "30 scrap + 6 nonferrous"
+ },
+ {
+  "round": 167,
+  "tick": 1958,
+  "tutorial": 9,
+  "kind": "connect",
+  "label": "Connect",
+  "cost": null
+ },
+ {
+  "round": 168,
+  "tick": 1968,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 169,
+  "tick": 1978,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 170,
+  "tick": 1988,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 171,
+  "tick": 1998,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 172,
+  "tick": 2008,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 173,
+  "tick": 2018,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 174,
+  "tick": 2028,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 175,
+  "tick": 2038,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 176,
+  "tick": 2048,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 177,
+  "tick": 2058,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 178,
+  "tick": 2068,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 179,
+  "tick": 2078,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 180,
+  "tick": 2088,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 181,
+  "tick": 2098,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 182,
+  "tick": 2108,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 183,
+  "tick": 2118,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 184,
+  "tick": 2128,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 185,
+  "tick": 2138,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 186,
+  "tick": 2148,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 187,
+  "tick": 2158,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 188,
+  "tick": 2168,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 189,
+  "tick": 2178,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 190,
+  "tick": 2188,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 191,
+  "tick": 2198,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 192,
+  "tick": 2208,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 193,
+  "tick": 2218,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 194,
+  "tick": 2228,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 195,
+  "tick": 2238,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 196,
+  "tick": 2248,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 197,
+  "tick": 2258,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 198,
+  "tick": 2268,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 199,
+  "tick": 2278,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ },
+ {
+  "round": 200,
+  "tick": 2288,
+  "tutorial": 9,
+  "kind": "build",
+  "label": "Build Plate press",
+  "cost": "35 scrap + 8 ferrous"
+ }
+]

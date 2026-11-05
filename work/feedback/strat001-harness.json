@@ -1,0 +1,361 @@
+{
+ "baseSha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+ "method": "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds",
+ "rows": [
+  {
+   "policy": "P1 naive",
+   "tick": 18298,
+   "machines": 8,
+   "links": 17,
+   "drones": 4,
+   "batches": 2175,
+   "credits": 49,
+   "nodes": 3,
+   "taps": 1983,
+   "commands": 1814,
+   "rejects": 249,
+   "firstDrone": 62,
+   "firstResearch": 386,
+   "tutorialDone": 61,
+   "twoChoiceRounds": 1387,
+   "threePlusChoiceRounds": 120,
+   "ambiguous": 4,
+   "powerLimitedRounds": 386,
+   "minPowerRatio": 0.615,
+   "levels": "sorter:L16 furnace:L14 polymerRecycler:L13 wireMill:L13 copperSeparator:L14 platePress:L12 circuitAssembler:L12 signalLab:L11",
+   "store": "scrap=24 ferrous=20 nonferrous=10 steel=10 wire=10 polymer=10 plates=10 circuits=21 data=52",
+   "kinds": {
+    "connect": 9,
+    "build": 175,
+    "upgrade": 160,
+    "sell": 1396,
+    "drone": 3,
+    "research": 3
+   },
+   "firstBuilds": "polymerRecycler@56,wireMill@58,copperSeparator@66,copperSeparator@67,copperSeparator@68,copperSeparator@69,copperSeparator@70,copperSeparator@71,copperSeparator@72,copperSeparator@73"
+  },
+  {
+   "policy": "P2 throughput",
+   "tick": 18298,
+   "machines": 4,
+   "links": 7,
+   "drones": 5,
+   "batches": 816,
+   "credits": 8203,
+   "nodes": 0,
+   "taps": 1818,
+   "commands": 1810,
+   "rejects": 25,
+   "firstDrone": 61,
+   "firstResearch": null,
+   "tutorialDone": 73,
+   "twoChoiceRounds": 61,
+   "threePlusChoiceRounds": 1711,
+   "ambiguous": 4,
+   "powerLimitedRounds": 0,
+   "minPowerRatio": 1,
+   "levels": "sorter:L6 furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "store": "scrap=15 ferrous=13 nonferrous=16 steel=159",
+   "kinds": {
+    "connect": 3,
+    "build": 10,
+    "sell": 1724,
+    "drone": 4,
+    "upgrade": 5
+   },
+   "firstBuilds": "polymerRecycler@56,wireMill@58,copperSeparator@65,copperSeparator@69,copperSeparator@74,copperSeparator@77,copperSeparator@79,copperSeparator@82,copperSeparator@84,copperSeparator@89"
+  },
+  {
+   "policy": "P3 efficiency",
+   "tick": 18298,
+   "machines": 7,
+   "links": 15,
+   "drones": 3,
+   "batches": 2174,
+   "credits": 9,
+   "nodes": 0,
+   "taps": 2434,
+   "commands": 1813,
+   "rejects": 638,
+   "firstDrone": 241,
+   "firstResearch": null,
+   "tutorialDone": 57,
+   "twoChoiceRounds": 1332,
+   "threePlusChoiceRounds": 370,
+   "ambiguous": 2,
+   "powerLimitedRounds": 317,
+   "minPowerRatio": 0.727,
+   "levels": "sorter:L18 furnace:L16 polymerRecycler:L15 wireMill:L14 copperSeparator:L15 platePress:L13 circuitAssembler:L12",
+   "store": "scrap=26 ferrous=14 nonferrous=10 steel=10 wire=11 polymer=10 plates=10 circuits=10",
+   "kinds": {
+    "connect": 8,
+    "upgrade": 96,
+    "build": 626,
+    "sell": 1014,
+    "drone": 2
+   },
+   "firstBuilds": "polymerRecycler@57,wireMill@59,copperSeparator@65,copperSeparator@66,copperSeparator@67,copperSeparator@68,copperSeparator@69,copperSeparator@70,copperSeparator@71,copperSeparator@72"
+  }
+ ],
+ "divergences": {
+  "p1_vs_p2_round": 60,
+  "p1_vs_p2_tick": 898,
+  "p1_vs_p2_actionA": "60:upgrade:m1",
+  "p1_vs_p2_actionB": "60:sell:scrap:60",
+  "p1_vs_p3_round": 56,
+  "p1_vs_p3_tick": 858,
+  "p1_vs_p3_actionA": "56:build:polymerRecycler",
+  "p1_vs_p3_actionB": "56:upgrade:m1",
+  "p2_vs_p3_round": 56,
+  "p2_vs_p3_tick": 858,
+  "p2_vs_p3_actionA": "56:build:polymerRecycler",
+  "p2_vs_p3_actionB": "56:upgrade:m1"
+ },
+ "recovery": {
+  "forcedUpgradeRound": 56,
+  "forcedUpgrade": {
+   "baseline": {
+    "batches": 2175,
+    "credits": 49,
+    "machines": 8,
+    "taps": 1983
+   },
+   "actual": {
+    "batches": 2084,
+    "credits": 220,
+    "machines": 8,
+    "taps": 1985
+   }
+  },
+  "skipFirstDroneRound": 62,
+  "skipFirstDrone": {
+   "baseline": {
+    "batches": 2175,
+    "credits": 49,
+    "drones": 4
+   },
+   "actual": {
+    "batches": 2110,
+    "credits": 169,
+    "drones": 5
+   }
+  }
+ },
+ "machineTables": {
+  "P1 naive": [
+   {
+    "id": 1,
+    "blueprint": "sorter",
+    "level": 16,
+    "busy": 100,
+    "starved": 0,
+    "full": 0,
+    "batches": 802,
+    "status": "running",
+    "power": 1
+   },
+   {
+    "id": 2,
+    "blueprint": "furnace",
+    "level": 14,
+    "busy": 29,
+    "starved": 71,
+    "full": 0,
+    "batches": 202,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 3,
+    "blueprint": "polymerRecycler",
+    "level": 13,
+    "busy": 28,
+    "starved": 72,
+    "full": 0,
+    "batches": 128,
+    "status": "running",
+    "power": 1
+   },
+   {
+    "id": 4,
+    "blueprint": "wireMill",
+    "level": 13,
+    "busy": 59,
+    "starved": 41,
+    "full": 0,
+    "batches": 386,
+    "status": "running",
+    "power": 2
+   },
+   {
+    "id": 5,
+    "blueprint": "copperSeparator",
+    "level": 14,
+    "busy": 73,
+    "starved": 27,
+    "full": 0,
+    "batches": 387,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 6,
+    "blueprint": "platePress",
+    "level": 12,
+    "busy": 20,
+    "starved": 80,
+    "full": 0,
+    "batches": 94,
+    "status": "starved",
+    "power": 3
+   },
+   {
+    "id": 7,
+    "blueprint": "circuitAssembler",
+    "level": 12,
+    "busy": 42,
+    "starved": 58,
+    "full": 0,
+    "batches": 118,
+    "status": "starved",
+    "power": 3
+   },
+   {
+    "id": 8,
+    "blueprint": "signalLab",
+    "level": 11,
+    "busy": 41,
+    "starved": 59,
+    "full": 0,
+    "batches": 58,
+    "status": "running",
+    "power": 2
+   }
+  ],
+  "P2 throughput": [
+   {
+    "id": 1,
+    "blueprint": "sorter",
+    "level": 6,
+    "busy": 100,
+    "starved": 0,
+    "full": 0,
+    "batches": 652,
+    "status": "running",
+    "power": 1
+   },
+   {
+    "id": 2,
+    "blueprint": "furnace",
+    "level": 1,
+    "busy": 37,
+    "starved": 63,
+    "full": 0,
+    "batches": 164,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 3,
+    "blueprint": "polymerRecycler",
+    "level": 1,
+    "busy": 0,
+    "starved": 100,
+    "full": 0,
+    "batches": 0,
+    "status": "starved",
+    "power": 1
+   },
+   {
+    "id": 4,
+    "blueprint": "wireMill",
+    "level": 1,
+    "busy": 0,
+    "starved": 100,
+    "full": 0,
+    "batches": 0,
+    "status": "starved",
+    "power": 2
+   }
+  ],
+  "P3 efficiency": [
+   {
+    "id": 1,
+    "blueprint": "sorter",
+    "level": 18,
+    "busy": 99,
+    "starved": 1,
+    "full": 0,
+    "batches": 823,
+    "status": "running",
+    "power": 1
+   },
+   {
+    "id": 2,
+    "blueprint": "furnace",
+    "level": 16,
+    "busy": 28,
+    "starved": 72,
+    "full": 0,
+    "batches": 207,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 3,
+    "blueprint": "polymerRecycler",
+    "level": 15,
+    "busy": 27,
+    "starved": 73,
+    "full": 0,
+    "batches": 132,
+    "status": "starved",
+    "power": 1
+   },
+   {
+    "id": 4,
+    "blueprint": "wireMill",
+    "level": 14,
+    "busy": 58,
+    "starved": 42,
+    "full": 0,
+    "batches": 397,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 5,
+    "blueprint": "copperSeparator",
+    "level": 15,
+    "busy": 70,
+    "starved": 30,
+    "full": 0,
+    "batches": 398,
+    "status": "starved",
+    "power": 2
+   },
+   {
+    "id": 6,
+    "blueprint": "platePress",
+    "level": 13,
+    "busy": 20,
+    "starved": 80,
+    "full": 0,
+    "batches": 96,
+    "status": "running",
+    "power": 3
+   },
+   {
+    "id": 7,
+    "blueprint": "circuitAssembler",
+    "level": 12,
+    "busy": 41,
+    "starved": 59,
+    "full": 0,
+    "batches": 121,
+    "status": "running",
+    "power": 3
+   }
+  ]
+ }
+}
