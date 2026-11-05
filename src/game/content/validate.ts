@@ -37,7 +37,7 @@ import { advance } from "../simulation/engine";
 import { systemTotals, allQuantities } from "../simulation/invariants";
 import { nextYardStep, SELL_ORDER, type YardStep } from "../simulation/plan";
 import { planConnections } from "../simulation/autoconnect";
-import { createInitialState, fleetUnits, type SimState } from "../simulation/types";
+import { createInitialState, fleetUnits, inputCapacityOf, type SimState } from "../simulation/types";
 import {
   HINT_LABELS,
   IMPORT_TEXT,
@@ -400,7 +400,7 @@ export function validateBehaviour(
           break;
         }
         if (machine.tile === DOCK_TILE) bad.push(`machine ${machine.id} sits on the dock at round ${round}`);
-        if (machine.inBufUnits > def.inputBuffer + (s.research.buffers ?? 0) * 6 + 6)
+        if (machine.inBufUnits > inputCapacityOf(machine, (s.research.buffers ?? 0) * 6) + 6)
           bad.push(`${machine.blueprint} input buffer overflows its capacity at round ${round}`);
       }
       if (fleetUnits(s).length > TUNING.fleetCap) bad.push(`the fleet passed its cap at round ${round}`);

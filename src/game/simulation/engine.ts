@@ -9,8 +9,12 @@ import {
   type ItemStack,
 } from "../content/defs";
 import {
+  batchMilliOf,
+  inputCapacityOf,
   machineById,
+  powerOf,
   STORE_ENDPOINT,
+  upgradeRanks,
   type DroneState,
   type MachineState,
   type RouteState,
@@ -360,8 +364,8 @@ function pullNeed(
   for (const item of route.items) {
     if (item.resource === resource) ready += item.qty;
   }
-  const window = perBatch * PULL_LOOKAHEAD_BATCHES + idx.bufferBonus;
-  const capacity = BLUEPRINTS[machine.blueprint].inputBuffer + idx.bufferBonus;
+  const window = perBatch * (PULL_LOOKAHEAD_BATCHES + upgradeRanks(machine).buffer) + idx.bufferBonus;
+  const capacity = inputCapacityOf(machine, idx.bufferBonus);
   return Math.max(0, Math.min(capacity, window) - ready);
 }
 
@@ -431,7 +435,7 @@ function startBatches(s: SimState, requested: number): void {
     }
     m.batch = recipe.inputs.map((input) => ({ ...input }));
     m.batchMilli = batchMilli(m);
-    m.batchPower = recipe.power;
+    m.batchPower = powerOf(m);
     m.progress = 1;
     m.progressRem = 0;
     m.progressDen =
@@ -500,8 +504,7 @@ function updateUnit(s: SimState, d: DroneState): void {
 }
 
 export function batchMilli(m: MachineState): number {
-  const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
-  return Math.ceil((recipe.cycleTicks * 10000) / (10 + (m.level - 1)));
+  return batchMilliOf(m);
 }
 
 function hasInputs(m: MachineState, inputs: readonly ItemStack[]): boolean {
@@ -527,11 +530,7 @@ function destinationRoom(idx: SimIndex, route: RouteState): number {
     return idx.state.storeCapacity - idx.state.storeUnits;
   const machine = indexedMachine(idx, route.to.id);
   if (!machine) return 0;
-  return (
-    BLUEPRINTS[machine.blueprint].inputBuffer +
-    idx.bufferBonus -
-    machine.inBufUnits
-  );
+  return inputCapacityOf(machine, idx.bufferBonus) - machine.inBufUnits;
 }
 
 function deliver(

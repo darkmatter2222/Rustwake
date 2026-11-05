@@ -2,6 +2,10 @@ import { TUNING } from "../content/defs";
 import { DOCK_TILE, YARD_COLS, YARD_ROWS } from "../simulation/commands";
 import type { DroneState, MachineState, SimState } from "../simulation/types";
 import {
+  APRON_EDGE,
+  APRON_PROPS,
+  APRON_SHADOWS,
+  APRON_TOPS,
   COLOR_KEYS,
   FLOOR_KIT,
   FLOOR_POSTS,
@@ -10,11 +14,18 @@ import {
   LEAN_UNITS,
   PALETTE,
   PARTS,
+  PATH_CORE,
   PUDDLES,
   SELECT_STYLE,
+  SKY_FAR,
+  SKY_NEAR,
   STATUS_ACCENTS,
   WRECK_HULL,
+  WRECK_MAST,
+  WRECK_RIBS,
   WRECK_SHARDS,
+  WRECK_STREAKS,
+  WRECK_VOIDS,
   type PaletteKey,
   type PartTuple,
 } from "./sprites";
@@ -184,6 +195,19 @@ function paintParts(
   }
 }
 
+/**
+ * The body of one glyph row: its largest-area solid part, ignoring the ground/base band
+ * (colour index 15) and the ellipse. Used for the bevel, so no per-role table is needed.
+ */
+function bodyRowOf(row: readonly PartTuple[]): PartTuple | null {
+  let best: PartTuple | null = null;
+  for (const t of row) {
+    if (t[5] === 1 || t[4] === 15) continue;
+    if (!best || t[2] * t[3] > best[2] * best[3]) best = t;
+  }
+  return best;
+}
+
 /** Quantised pip row, never a continuous ratio bar (B5). */
 function pipRow(
   ctx: CanvasRenderingContext2D,
@@ -224,16 +248,59 @@ export function drawScene(
   ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(WORLD_H * s));
   ctx.fillStyle = PALETTE.floor;
   ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(YARD_ROWS * CELL * s));
+  // ART-001: the distant plane first, then the pad and its kit, then the foreground apron.
+  drawBackdrop(ctx, camera, view, s);
   drawFloorKit(ctx, camera, view, s);
+  drawForeground(ctx, camera, view, s);
   if (options.buildMode) drawGrid(ctx, camera, view);
   drawRoutes(ctx, state, camera, view, phase);
   drawWreck(ctx, state, camera, view, options.selected === -1);
   drawDock(ctx, state, camera, view, options.selected === -2);
+  const sheen: [number, number, number, number][] = [];
+  const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade);
   }
+  // Two grouped paths for the whole machine row: the bevel that gives every body the same
+  // upper-left light, plus its underside. Existing hues, so no new paint group appears.
+  groupFill(ctx, sheen, "select", 0.9);
+  groupFill(ctx, shade, "path");
   drawDrones(ctx, state, camera, view, options.reducedMotion, phase);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
+}
+
+/** Paint one fixed world-coord table as one path per colour group (ART-001 depth planes). */
+function paintTable(
+  ctx: CanvasRenderingContext2D,
+  table: readonly PartTuple[],
+  ox: number,
+  oy: number,
+  s: number
+): void {
+  const byColor = new Map<number, [number, number, number, number][]>();
+  for (const t of table) {
+    const list = byColor.get(t[4]) ?? [];
+    list.push([ox + t[0] * s, oy + t[1] * s, t[2] * s, t[3] * s]);
+    byColor.set(t[4], list);
+  }
+  for (const [ci, boxes] of byColor) groupFill(ctx, boxes, COLOR_KEYS[ci]);
+}
+
+/** Far bank plus near roofline, in the night band above the perimeter rail. */
+function drawBackdrop(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState, s: number): void {
+  const o = worldToScreen(camera, view, 0, 0);
+  paintTable(ctx, SKY_FAR, o.x, o.y, s);
+  paintTable(ctx, SKY_NEAR, o.x, o.y, s);
+}
+
+/** Pad edge, kerb and the foreground props that set the near-plane scale. */
+function drawForeground(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState, s: number): void {
+  const o = worldToScreen(camera, view, 0, 0);
+  paintTable(ctx, PATH_CORE, o.x, o.y, s);
+  paintTable(ctx, APRON_EDGE, o.x, o.y, s);
+  paintTable(ctx, APRON_SHADOWS, o.x, o.y, s);
+  paintTable(ctx, APRON_PROPS, o.x, o.y, s);
+  paintTable(ctx, APRON_TOPS, o.x, o.y, s);
 }
 
 function drawFloorKit(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState, s: number): void {
@@ -318,6 +385,12 @@ function drawWreck(
     WRECK_SHARDS.map(([sx, sy]) => [p.x + sx * s, p.y + sy * s, 3 * s, 3 * s] as [number, number, number, number]),
     "rust"
   );
+  // W6: the hull reads as a hulk now - two empty ports, three ribs, a snapped mast and a
+  // stub of rail on its near side. All four rows are one grouped path each.
+  paintTable(ctx, WRECK_VOIDS, p.x, p.y, s);
+  paintTable(ctx, WRECK_RIBS, p.x, p.y, s);
+  paintTable(ctx, WRECK_MAST, p.x, p.y, s);
+  paintTable(ctx, WRECK_STREAKS, p.x, p.y, s);
   if (selected) outline(ctx, p.x, p.y, snap(24 * s), snap(16 * s));
 }
 
@@ -342,13 +415,22 @@ function drawMachine(
   machine: MachineState,
   camera: Camera,
   view: ViewState,
-  selected: boolean
+  selected: boolean,
+  sheen: [number, number, number, number][],
+  shade: [number, number, number, number][]
 ): void {
   const c = tileToWorld(machine.tile);
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
   paintParts(ctx, p.x, p.y, s, row);
+  // ART-001: one bevel pair per body, inset inside its own box so the union ink of the
+  // cell is unchanged: a lit top edge and a shaded underside, light from the upper left.
+  const body = bodyRowOf(row);
+  if (body) {
+    sheen.push([(p.x + (body[0] + 1) * s), p.y + body[1] * s, (body[2] - 2) * s, 2 * s]);
+    shade.push([p.x + (body[0] + 1) * s, p.y + (body[1] + body[3] - 2) * s, (body[2] - 2) * s, 2 * s]);
+  }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
   rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
   if (machine.status === "powerLimited") {
@@ -473,13 +555,36 @@ export function droneLeg(unit: DroneState, tick: number, phase: number): number 
     // The launch is recorded on the tick *before* the first frame that shows it and the
     // cargo is counted on the tick *after* the last one, so the drawn frames of the leg
     // are `arrive - travel + 1 .. arrive + 1`; that window is the parameter's 0..1.
-    return Math.min(1, Math.max(0, (now - (unit.inFlight.arrive - travel + 1)) / travel));
+    // A9: the same sub-tick phase as the drone, over the 5-tick latency window.
+    const since = now - (unit.inFlight.arrive - travel + 1);
+    // Inside the recorded window the parameter is the accepted linear leg, unchanged.
+    if (since <= travel) return Math.min(1, Math.max(0, since / travel));
+    // DEF-004/DEF-005: an in-flight record whose `arrive` is stale (a caught-up save keeps it
+    // while the tick has run far ahead) used to clamp at exactly 1 forever. The wrap runs the
+    // loaded leg, one tick of dock hold, the empty leg and one tick of wreck hold, so the
+    // value is continuous through the seam instead of snapping the whole leg in one frame.
+    const period = 2 * travel + 2; // 10 + 1 + 10 + 1
+    const within = since % period;
+    if (within <= travel) return within / travel;
+    if (within <= travel + 1) return 1; // the dock dwell, cargo being counted
+    if (within <= 2 * travel + 1) return 1 - (within - (travel + 1)) / travel;
+    return 0; // the wreck dwell before the next launch
   }
   if (!(unit.deliveries > 0) || !(unit.nextDeliveryTick > 0)) return 0; // never launched
   // The empty leg starts on the frame right after the cargo is counted and runs out
   // exactly on the frame the next launch shows, so no seam between the two branches.
   const lastArrive = unit.nextDeliveryTick - cycle;
-  return 1 - Math.min(1, Math.max(0, (now - (lastArrive + 1)) / cycle));
+  // DEF-004: the leg wraps on its own `cycle` instead of clamping, so a unit whose recorded
+  // anchor is stale relative to `now` (the store sat at its cap, so no further launch was
+  // recorded) keeps cycling rather than holding one lattice position forever. Inside the
+  // first window the modulo is the identity, so the accepted frames are unchanged: at
+  // `now = lastArrive + 1` this and the loaded leg both give 1.
+  const sinceLast = now - (lastArrive + 1);
+  if (sinceLast <= cycle) return 1 - Math.min(1, Math.max(0, sinceLast / cycle));
+  // DEF-005: same eased shape as the loaded leg - out over `cycle`, back over `cycle`, so the
+  // value stays continuous at every joint and one frame never moves the whole leg.
+  const back = sinceLast % (2 * cycle);
+  return back <= cycle ? 1 - back / cycle : (back - cycle) / cycle;
 }
 
 /**
@@ -514,8 +619,13 @@ function drawDrones(
     // A7: reduced motion keeps the two documented steps, no interpolation at all.
     const t = reducedMotion ? (unit.inFlight ? 0.5 : 0) : leg;
     const lean = (i - (units.length - 1) / 2) * LEAN_UNITS * s;
+    const carrying = (unit.inFlight?.qty ?? 0) > 0; // DR3 amber when loaded
     const x = wreck.x + (dock.x - wreck.x) * t + lean;
-    const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * s;
+    // ART-001: a loaded unit rides two units lower through the middle of its leg, so the
+    // cargo leg reads heavier than the empty one. Continuous in the leg parameter, so a
+    // frame step at the leg seam stays one frame's worth; off under reduced motion.
+    const heavy = !reducedMotion && carrying ? Math.sin(Math.PI * t) * 2 * s : 0;
+    const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * s + heavy;
     // DR5 shadow ellipse, alpha 0.35.
     ctx.fillStyle = PALETTE.shadow;
     ctx.globalAlpha = 0.35;
@@ -524,7 +634,6 @@ function drawDrones(
     ctx.fill();
     ctx.globalAlpha = 1;
     paintParts(ctx, x, y, s, PARTS.drone);
-    const carrying = (unit.inFlight?.qty ?? 0) > 0; // DR3 amber when loaded
     // D-2: the pod hangs below the body envelope (mask rows 3-5) so the two glyphs are
     // separable: 3-unit box on the left half of the body, one mask cell at row 6.
     rectOf(ctx, x - 3 * s, y + 8 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");

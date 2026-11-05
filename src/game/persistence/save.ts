@@ -161,6 +161,18 @@ export function validateSim(state: unknown): string | null {
         return `${key}:${m.id}`;
       }
     }
+    // The fork records one named outcome per purchased level. Absent is the pre-fork
+    // shape and stays valid; a damaged list is refused rather than renumbered.
+    if (m.branch !== undefined) {
+      if (!Array.isArray(m.branch) || m.branch.length > m.level - 1) {
+        return `branch:${m.id}`;
+      }
+      for (const pick of m.branch) {
+        if (pick !== "speed" && pick !== "buffer" && pick !== "draw") {
+          return `branch:${m.id}`;
+        }
+      }
+    }
   }
   if (!Array.isArray(s.routes)) return "routes";
   for (const r of s.routes) {

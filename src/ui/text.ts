@@ -3,7 +3,7 @@ import { RESEARCH } from "../game/content/research";
 import { droneAddCost, upgradeCost } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { ImportResult } from "../game/persistence/save";
-import type { SimState } from "../game/simulation/types";
+import type { SimState, UpgradeBranch } from "../game/simulation/types";
 import {
   HINT_KEYS,
   IMPORT_KEYS,
@@ -17,6 +17,7 @@ import {
   resourceWord,
   t,
   unit,
+  wholePercent,
 } from "../game/content/strings";
 
 /**
@@ -121,8 +122,17 @@ export function describeStep(state: SimState, step: YardStep): string {
     }
     case "drone":
       return t("step.drone", { cost: unit(droneAddCost(state), t("unit.credit")) });
-    case "upgrade":
-      return t("step.upgrade", { machine: machineLabel(state, step.machineId) });
+    case "upgrade": {
+      const machine = state.machines.find((m) => m.id === step.machineId);
+      const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
+      if (!machine || !def) return t("step.upgrade", { machine: t("unit.machine") });
+      // The fork: one price, three named outcomes, so the card names the choice and the
+      // dock answers it with three one-tap targets (STRAT-002/A1-3).
+      return t("step.fork", {
+        machine: def.label,
+        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit")),
+      });
+    }
     default:
       return t("card.tap-wreck");
   }
@@ -170,6 +180,42 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
     default:
       return { label: t("btn.salvage") };
   }
+}
+
+/**
+ * The three named outcomes one paid level can buy, each with the same price, in dock
+ * order (STRAT-002/A1-3). One tap on any of them commits that branch: no second
+ * confirming tap, so the fork costs one tap per choice like every other step.
+ */
+export function branchOptions(
+  state: SimState,
+  machineId: number
+): { id: UpgradeBranch; label: string; cost: string }[] {
+  const machine = state.machines.find((m) => m.id === machineId);
+  const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
+  if (!machine || !def) return [];
+  const cost = unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit"));
+  return [
+    { id: "speed", label: t("btn.branchSpeed"), cost },
+    { id: "buffer", label: t("btn.branchBuffer"), cost },
+    { id: "draw", label: t("btn.branchDraw"), cost },
+  ];
+}
+
+/**
+ * The shared power budget as one resting-screen line, e.g. `Power 8 · 9 requested ·
+ * 62 %` (STRAT-002/A1-4). Capacity is the yard's own, `requested` is what the running
+ * batches ask for, and the ratio is the one the engine paid out this tick, so the
+ * three figures always tell one story.
+ */
+export function powerLine(state: SimState): string {
+  let requested = 0;
+  for (const m of state.machines) if (m.progress > 0) requested += m.batchPower;
+  return t("hud.power", {
+    capacity: TUNING.yardPowerCapacity,
+    requested,
+    percent: wholePercent(state.powerRatio),
+  });
 }
 
 function machineLabel(state: SimState, machineId: number): string {

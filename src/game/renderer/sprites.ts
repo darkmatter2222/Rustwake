@@ -231,6 +231,98 @@ export const FLOOR_KIT: readonly PartTuple[] = [
   [124, 139, 2, 2, 4],
 ];
 
+/**
+ * ART-001 depth tiers. Three flat planes, each one path: the far bank (a distant skyline
+ * in the night above the top rail), the near bank (a roofline one step lighter), then the
+ * foreground apron below the bottom rail. Fixed coords, no random placement, and every
+ * entry reuses a colour index already in `FLOOR_KIT`, so no new paint group appears.
+ */
+export const SKY_FAR: readonly PartTuple[] = [
+  [6, -9, 12, 8, 13],
+  [22, -13, 7, 12, 13],
+  [34, -8, 10, 7, 13],
+  [52, -12, 6, 11, 13],
+  [62, -8, 14, 7, 13],
+  [84, -13, 5, 12, 13],
+  [92, -9, 16, 8, 13],
+  [116, -12, 7, 11, 13],
+  [126, -8, 12, 7, 13],
+  [142, -13, 6, 12, 13],
+  [152, -9, 14, 8, 13],
+  [172, -12, 6, 11, 13],
+  [180, -8, 10, 7, 13],
+];
+
+export const SKY_NEAR: readonly PartTuple[] = [
+  [10, -6, 18, 5, 12],
+  [40, -7, 16, 6, 12],
+  [66, -6, 26, 5, 12],
+  [98, -7, 14, 6, 12],
+  [118, -6, 20, 5, 12],
+  [146, -7, 18, 6, 12],
+  [168, -6, 22, 5, 12],
+];
+
+/** Lit kerb on the pad edge plus the two berm ticks; the apron below y = 192 is outside
+ *  every 32-unit cell box, so these add no cell ink (L-5). */
+export const APRON_EDGE: readonly PartTuple[] = [
+  [0, 192, 192, 2, 12],
+  [4, 195, 10, 2, 13],
+  [178, 195, 10, 2, 13],
+];
+
+/** Foreground props at a larger scale than the in-yard kit: crates, a drum, a skid. */
+export const APRON_PROPS: readonly PartTuple[] = [
+  [6, 198, 12, 12, 4],
+  [26, 200, 8, 10, 4],
+  [164, 198, 10, 12, 4],
+  [150, 202, 6, 8, 4],
+];
+
+/** Tops of the same props on the light side (light comes from the upper left). */
+export const APRON_TOPS: readonly PartTuple[] = [
+  [6, 198, 12, 2, 3],
+  [26, 200, 8, 2, 3],
+  [164, 198, 10, 2, 3],
+  [150, 202, 6, 2, 3],
+];
+
+/** Contact shadows under the props, one step under the pad tone. */
+export const APRON_SHADOWS: readonly PartTuple[] = [
+  [6, 210, 14, 2, 15],
+  [26, 210, 10, 2, 15],
+  [150, 210, 12, 2, 15],
+  [164, 210, 12, 2, 15],
+];
+
+/** Lit core inside the FK1 worn band and its spur, inset so no new ink appears. */
+export const PATH_CORE: readonly PartTuple[] = [
+  [65, 96, 4, 100, 14],
+  [65, 11, 20, 4, 14],
+];
+
+/** Wreck detail rows: dark voids, ribs, the broken mast and two rust streaks. */
+export const WRECK_VOIDS: readonly PartTuple[] = [
+  [-7, -6, 6, 3, 6],
+  [3, -5, 5, 3, 6],
+];
+
+export const WRECK_RIBS: readonly PartTuple[] = [
+  [-9, -10, 2, 9, 4],
+  [-2, -13, 2, 12, 4],
+  [9, -11, 2, 10, 4],
+];
+
+export const WRECK_MAST: readonly PartTuple[] = [
+  [13, -22, 3, 7, 12],
+  [-22, 6, 8, 2, 12],
+];
+
+export const WRECK_STREAKS: readonly PartTuple[] = [
+  [-16, 2, 3, 3, 9],
+  [16, -8, 3, 3, 9],
+];
+
 /** FK4 posts: 2x3 every 16 units along both rails. */
 export const FLOOR_POSTS: readonly (readonly [number, number])[] = (() => {
   const posts: (readonly [number, number])[] = [];

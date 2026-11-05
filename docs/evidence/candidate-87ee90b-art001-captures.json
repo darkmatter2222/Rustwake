@@ -1,0 +1,96 @@
+{
+  "task": "ART-001",
+  "generation": 4,
+  "role": "developer",
+  "capturedAt": "2026-11-04",
+  "candidateSha": "87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462",
+  "baseSha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+  "supersedes": ["7e10288", "3f7555a", "01a2e0d", "b8537af"],
+  "builtEntryAsset": "assets/index-Ct_60DnW.js",
+  "builtEntryBytes": 228014,
+  "entryBudgetBytes": 233000,
+  "insideEntryBudget": true,
+  "label": "DEF-005 eased leg wrap (1-tick dwells) plus the style slice; two clip receipts at 1000 ms and 250 ms spacing",
+  "tooling": {
+    "stills": "RUSTWAKE_URL=http://localhost:5175/ node scripts/capture-style.mjs (same FS-1 / mature seed as the accepted rev-D evidence)",
+    "clip": "26 samples x 1000 ms",
+    "clipCommand1000": "RUSTWAKE_URL=http://localhost:5175/ CANDIDATE_TAG=candidate-87ee90b CLIP_SAMPLE_MS=1000 node scripts/capture-clip.mjs",
+    "clipCommand250": "RUSTWAKE_URL=http://localhost:5175/ CANDIDATE_TAG=candidate-87ee90b CLIP_SAMPLE_MS=250 node scripts/capture-clip.mjs",
+    "note": "docs/screenshots/slice-*.png keep the release lane's shipped-SHA content; only candidate-87ee90b-* belongs to this lane. Both clip runs encode with canvas.toDataURL() per iteration. The 250 ms run writes its 26 PNGs beside its receipt in docs/evidence/ so docs/screenshots/ keeps exactly one candidate set."
+  },
+  "cadence": {
+    "tickMs": 100,
+    "ticksPerSecond": 10,
+    "droneTravelTicks": 10,
+    "loadedLegSeconds": 1,
+    "dockDwellTicks": 1,
+    "wreckDwellTicks": 1,
+    "loadedWrappedPeriodTicks": 22,
+    "loadedWrappedPeriodSeconds": 2.2,
+    "idleBranchFoldPeriodTicks": 80,
+    "idleBranchFoldPeriodSeconds": 8,
+    "relationToSampleInterval": "the loaded leg is exactly 1000 ms (10 ticks), i.e. one full leg per 1000 ms sample; the wrapped cycle is 2.2 s = 2.2 sample intervals",
+    "legLengthCssPx": 344,
+    "pxPerTick": 34.4,
+    "pxPerDrawnFrame": 5.73
+  },
+  "stillCaptures": [
+    { "file": "docs/screenshots/candidate-87ee90b-slice-phone-rest.png", "scenario": "opening yard at rest", "viewport": "390x844", "dpr": 2 },
+    { "file": "docs/screenshots/candidate-87ee90b-slice-phone-build.png", "scenario": "opening yard in build mode", "viewport": "390x844", "dpr": 2 },
+    { "file": "docs/screenshots/candidate-87ee90b-slice-phone-mature.png", "scenario": "mature yard (8 machines, 5 drones, 18 routes)", "viewport": "390x844", "dpr": 2 },
+    { "file": "docs/screenshots/candidate-87ee90b-slice-one-machine.png", "scenario": "opening yard, single machine", "viewport": "390x844", "dpr": 2 },
+    { "file": "docs/screenshots/candidate-87ee90b-slice-desktop-rest.png", "scenario": "opening yard at rest", "viewport": "1440x900", "dpr": 1 },
+    { "file": "docs/screenshots/candidate-87ee90b-slice-desktop-mature.png", "scenario": "mature yard", "viewport": "1440x900", "dpr": 1 }
+  ],
+  "clipReceipts": {
+    "acceptanceEvidence": "docs/evidence/2026-11-04-clip-opening-250ms.json",
+    "acceptanceReason": "at 250 ms (2.5 ticks) the sample interval is finer than the leg, so the strip resolves the eased triangle: distinctPngHashes 26 of 26, distinctDronePositions 26, max step 108.5 px and mean 77.86 px against a predicted 86 px per 2.5 ticks.",
+    "control": "docs/evidence/2026-11-04-clip-opening.json",
+    "controlReason": "1000 ms spacing equals one leg traversal, so the strip aliases: 23 distinct hashes of 26, 22 distinct positions of 25 recorded rows, max step 344 px = the whole leg (592.5 - 248.5), mean 204.542 px. The repeated hashes are the aliased grid, not a frozen frame."
+  },
+  "clipNumbers": {
+    "spacing1000ms": {
+      "receipt": "docs/evidence/2026-11-04-clip-opening.json",
+      "sampleMs": 1000,
+      "frameCount": 26,
+      "distinctPngHashes": 23,
+      "distinctDronePositions": 22,
+      "stepCssPxMax": 344,
+      "stepCssPxMean": 204.542,
+      "trailXRange": [180.5, 180.5],
+      "bodyYSeries": [455, 339, 502.5, 294, 558.5, 250.5, 592.5, 260.5, 545.5, 304, 490, 349.5, 437, 403.5, 381, 455, 339, 509, 289, 565, 248.5, 592.5, 265.5, 545.5, 491]
+    },
+    "spacing250ms": {
+      "receipt": "docs/evidence/2026-11-04-clip-opening-250ms.json",
+      "sampleMs": 250,
+      "frameCount": 26,
+      "distinctPngHashes": 26,
+      "distinctDronePositions": 26,
+      "stepCssPxMax": 108.5,
+      "stepCssPxMean": 77.86,
+      "trailXRange": [180.5, 180.5],
+      "consecutiveMiddleOfLeg": { "frames": [13, 14, 15, 16], "bodyY": [372.5, 288.5, 259, 340.5], "stepCssPx": [93, 84, 29.5, 81.5] },
+      "bodyYSeries": [475, 583.5, 536.5, 437, 346.5, 264.5, 282.5, 360.5, 452.5, 553, 560.5, 465.5, 372.5, 288.5, 259, 340.5, 430, 522.5, 592.5, 494.5, 398.5, 312.5, 248.5, 316, 397, 492.5]
+    }
+  },
+  "unitPinned": {
+    "maxPerFrameDeltaLoaded": 0.016667,
+    "maxPerFrameDeltaIdle": 0.004167,
+    "assertedBoundLoaded": "3 * (1 / (6 * travel)) = 0.05",
+    "assertedBoundIdle": "3 * (1 / (6 * cycle)) = 0.0125",
+    "pixelEquivalentLoaded": 5.73,
+    "source": "tests/renderer/drone-leg.test.ts, g4/DEF-005 block"
+  },
+  "gates": {
+    "typecheck": 0,
+    "test": 0,
+    "testFiles": 24,
+    "tests": 249,
+    "validate": 0,
+    "build": 0,
+    "behaviourLine": "firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)",
+    "schemaVersion": 1,
+    "ladderChecksum": "eede3c4f"
+  },
+  "stillUnverified": ["audio listening", "real-device trace", "human first-feel"]
+}

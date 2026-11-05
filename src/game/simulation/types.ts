@@ -43,6 +43,65 @@ export interface MachineState {
   /** Previous sample, exactly one window earlier, so the published span is fixed. */
   rateAgePrev: number;
   rateFromPrev: number;
+  /**
+   * Named quantities this machine's upgrades bought, in purchase order
+   * (STRAT-002/A1). Optional and `undefined` while untouched, so `JSON.stringify`
+   * drops the key and a pre-fork save stays byte-identical (checksum `eede3c4f`).
+   */
+  branch?: UpgradeBranch[];
+}
+
+/** Which named quantity one purchased level improved (STRAT-002/A1). */
+export type UpgradeBranch = "speed" | "buffer" | "draw";
+
+/** Dock order of the three named outcomes at the fork; also the respec order. */
+export const UPGRADE_BRANCHES: readonly UpgradeBranch[] = ["speed", "buffer", "draw"];
+
+/** Input units one `buffer` rank adds, the same step the Smart Buffers node takes. */
+export const BUFFER_RANK_UNITS = 6;
+
+/** How many times each named quantity was bought on this machine. */
+export function upgradeRanks(m: MachineState): {
+  readonly speed: number;
+  readonly buffer: number;
+  readonly draw: number;
+} {
+  const picks = m.branch;
+  // The pre-fork ladder bought the one scalar it always had; that scalar was the
+  // batch clock, so an untouched record reads as speed ranks and nothing else.
+  if (picks === undefined) return { speed: m.level - 1, buffer: 0, draw: 0 };
+  let speed = 0;
+  let buffer = 0;
+  let draw = 0;
+  for (const pick of picks) {
+    if (pick === "speed") speed += 1;
+    else if (pick === "buffer") buffer += 1;
+    else if (pick === "draw") draw += 1;
+  }
+  // A level paid for without naming a branch still moves the batch clock.
+  speed += m.level - 1 - picks.length;
+  return { speed, buffer, draw };
+}
+
+/** Milli-tick requirement of the current level, from the speed ranks. */
+export function batchMilliOf(m: MachineState): number {
+  const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+  return Math.ceil((recipe.cycleTicks * 10000) / (10 + upgradeRanks(m).speed));
+}
+
+/** Input capacity in units: the blueprint's own, plus Smart Buffers and buffer ranks. */
+export function inputCapacityOf(m: MachineState, bufferBonus: number): number {
+  return (
+    BLUEPRINTS[m.blueprint].inputBuffer +
+    bufferBonus +
+    BUFFER_RANK_UNITS * upgradeRanks(m).buffer
+  );
+}
+
+/** Power units one running batch of this machine draws. */
+export function powerOf(m: MachineState): number {
+  const recipe = RECIPES[BLUEPRINTS[m.blueprint].recipeId];
+  return Math.max(1, recipe.power - upgradeRanks(m).draw);
 }
 
 export type MachineStatus =

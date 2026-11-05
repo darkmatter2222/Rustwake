@@ -9,7 +9,7 @@ import {
   type Command,
   type CommandReject,
 } from "../game/simulation/commands";
-import type { SimState } from "../game/simulation/types";
+import type { SimState, UpgradeBranch } from "../game/simulation/types";
 import {
   CELL,
   WRECK_POSITION,
@@ -22,7 +22,7 @@ import {
   type CameraInsets,
 } from "../game/renderer/scene";
 import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
-import { REJECT_TEXT, costSummary, hintFor, objectiveFor, primaryFor } from "./text";
+import { REJECT_TEXT, branchOptions, costSummary, hintFor, objectiveFor, powerLine, primaryFor } from "./text";
 import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
@@ -41,6 +41,11 @@ export interface PrimaryAction {
   cost?: string;
   disabled?: boolean;
   run: () => void;
+  /**
+   * The three named outcomes of one paid level, present only at the fork
+   * (STRAT-002/A1-3). Each is one tap: pressing it commits that branch.
+   */
+  branches?: { id: UpgradeBranch; label: string; cost?: string; run: () => void }[];
 }
 
 let commandSeq = 0;
@@ -362,6 +367,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
                 ? t("reader.hint")
                 : hintFor(suggestedAction(state))
             }
+            power={state.machines.length > 0 ? powerLine(state) : ""}
           />
           {store.isReconciling() ? (
             // Spec 18.5: one small line while a long absence is settled off-thread.
@@ -536,15 +542,42 @@ export function buildPrimary(
   // follows the same yard ladder as the objective card.
   if (selected !== null && selected > 0) {
     const step = stepForMachine(state, selected);
-    if (step) {
-      return {
-        ...primaryFor(state, step),
-        run: () => runStep(state, step, dispatch, setBuildBlueprint, setGhostTile),
-      };
+    if (step) return primaryForStep(state, step, dispatch, setBuildBlueprint, setGhostTile);
+  }
+  return primaryForStep(state, nextYardStep(state), dispatch, setBuildBlueprint, setGhostTile);
+}
+
+/**
+ * One authoritative step as one dock action. The upgrade step also carries its three
+ * named outcomes, each priced the same and each committing on its own tap (A1-3).
+ */
+function primaryForStep(
+  state: SimState,
+  step: YardStep,
+  dispatch: (command: Command) => unknown,
+  setBuildBlueprint: (id: string | null) => void,
+  setGhostTile: (tile: number | null) => void
+): PrimaryAction {
+  const action: PrimaryAction = {
+    ...primaryFor(state, step),
+    run: () => runStep(state, step, dispatch, setBuildBlueprint, setGhostTile),
+  };
+  if (step.kind === "upgrade") {
+    const options = branchOptions(state, step.machineId);
+    if (options.length > 0) {
+      action.branches = options.map((option) => ({
+        ...option,
+        run: () =>
+          dispatch({
+            id: nextCommandId(),
+            type: "machine.upgrade",
+            machineId: step.machineId,
+            branch: option.id,
+          }),
+      }));
     }
   }
-  const next = nextYardStep(state);
-  return { ...primaryFor(state, next), run: () => runStep(state, next, dispatch, setBuildBlueprint, setGhostTile) };
+  return action;
 }
 
 /** Executes the shared yard ladder; one primary press, one authoritative step. */

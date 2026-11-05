@@ -120,7 +120,7 @@ export function HudTop(props: {
   );
 }
 
-export function ObjectiveCard(props: { text: string; hint: string }) {
+export function ObjectiveCard(props: { text: string; hint: string; power?: string }) {
   return (
     <div className="objective">
       <span>{props.text}</span>
@@ -128,6 +128,9 @@ export function ObjectiveCard(props: { text: string; hint: string }) {
           "step the secondary row back" rules (large text scale, short viewport) -
           which now narrow to the chip row - cannot collapse it to zero height. */}
       <span className="status-line">{props.hint}</span>
+      {/* A1-4: the shared power budget on the resting screen, in the same secondary
+          line style, so the throttled rounds are something the player can point at. */}
+      {props.power ? <span className="status-line">{props.power}</span> : null}
       <div className="objective__row" />
     </div>
   );
@@ -171,28 +174,44 @@ export function DockButtons(props: {
   }
   return (
     <div className="dock">
-      <button className="dock__btn" onClick={props.onInventory}>
-        {t("btn.store")}
-      </button>
-      {/* The yard record and the save transfer, unlocked after the tutorial so the
-          first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
-      {props.yard ? (
-        <button className="dock__btn" onClick={props.onYard}>
-          {t("btn.yard")}
-        </button>
-      ) : null}
-      <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
-        {props.primary.label}
-        {props.primary.cost ? <span className="dock__cost">{props.primary.cost}</span> : null}
-      </button>
-      <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
-        {t("btn.build")}
-      </button>
-      {props.research ? (
-        <button className="dock__btn" onClick={props.onResearch}>
-          {t("btn.research")}
-        </button>
-      ) : null}
+      {props.primary.branches && props.primary.branches.length > 0 ? (
+        /* The fork (A1-3): one price, three named outcomes, three equal thirds. Each
+           button is the whole choice - one tap commits that branch and the row returns
+           to its usual targets - so no blind tap can pick an unnamed default. */
+        props.primary.branches.map((branch) => (
+          <button className="dock__btn" key={branch.id} onClick={branch.run}>
+            {branch.label}
+            {branch.cost ? <span className="dock__cost">{branch.cost}</span> : null}
+          </button>
+        ))
+      ) : (
+        <>
+          <button className="dock__btn" onClick={props.onInventory}>
+            {t("btn.store")}
+          </button>
+          {/* The yard record and the save transfer, unlocked after the tutorial so the
+              first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
+          {props.yard ? (
+            <button className="dock__btn" onClick={props.onYard}>
+              {t("btn.yard")}
+            </button>
+          ) : null}
+          <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
+            {props.primary.label}
+            {props.primary.cost ? (
+              <span className="dock__cost">{props.primary.cost}</span>
+            ) : null}
+          </button>
+          <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
+            {t("btn.build")}
+          </button>
+          {props.research ? (
+            <button className="dock__btn" onClick={props.onResearch}>
+              {t("btn.research")}
+            </button>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }

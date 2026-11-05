@@ -7,7 +7,7 @@ import {
   type ResourceId,
 } from "../game/content/defs";
 import type { MachineState, SimState } from "../game/simulation/types";
-import { batchMilliFor, fleetUnits } from "../game/simulation/types";
+import { batchMilliFor, fleetUnits, inputCapacityOf, upgradeRanks } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
 import { sellableAmount, upgradeCost } from "../game/simulation/commands";
 import {
@@ -17,7 +17,7 @@ import {
 import {
   RESEARCH,
   RESEARCH_ORDER,
-  inputCapacityFor,
+  researchBonus,
 } from "../game/content/research";
 import {
   diagnoseMachine,
@@ -144,10 +144,25 @@ export function MachinePanel(props: {
           <dd>{describeOutputs(recipe)}</dd>
           <dt>{t("row.level")}</dt>
           <dd>{machine.level}</dd>
+          {machine.branch !== undefined ? (
+            <>
+              <dt>{t("row.branches")}</dt>
+              <dd>
+                {(() => {
+                  const ranks = upgradeRanks(machine);
+                  return t("value.branches", {
+                    speed: ranks.speed,
+                    buffer: ranks.buffer,
+                    draw: ranks.draw,
+                  });
+                })()}
+              </dd>
+            </>
+          ) : null}
           <dt>{t("row.inBuffer")}</dt>
           <dd>
             {formatNumber(machine.inBufUnits)}/
-            {inputCapacityFor(props.state, def.inputBuffer)}
+            {inputCapacityOf(machine, researchBonus(props.state).inputBuffer)}
           </dd>
           <dt>{t("row.tray")}</dt>
           <dd>

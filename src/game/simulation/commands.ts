@@ -9,12 +9,16 @@ import {
 import { RESEARCH, researchBonus } from "../content/research";
 import {
   SCHEMA_VERSION,
+  batchMilliOf,
   createUnit,
+  inputCapacityOf,
   machineById,
   pushLog,
+  upgradeRanks,
   type MachineState,
   type RouteState,
   type SimState,
+  type UpgradeBranch,
 } from "./types";
 import {
   addToStore,
@@ -53,7 +57,8 @@ export type Command =
   | { id: string; type: "drone.repair" }
   | { id: string; type: "drone.add" }
   | { id: string; type: "machine.build"; blueprint: string; tile: number }
-  | { id: string; type: "machine.upgrade"; machineId: number }
+  | { id: string; type: "machine.upgrade"; machineId: number; branch?: UpgradeBranch }
+  | { id: string; type: "machine.respec"; machineId: number; branch: UpgradeBranch }
   | { id: string; type: "machine.dismantle"; machineId: number }
   | { id: string; type: "machine.move"; machineId: number; tile: number }
   | { id: string; type: "route.connect"; from: number; to: number; filter: ResourceId | null }
@@ -88,7 +93,9 @@ function execute(s: SimState, command: Command): CommandResult {
     case "machine.build":
       return buildMachine(s, command.blueprint, command.tile);
     case "machine.upgrade":
-      return upgradeMachine(s, command.machineId);
+      return upgradeMachine(s, command.machineId, command.branch);
+    case "machine.respec":
+      return respecMachine(s, command.machineId, command.branch);
     case "machine.dismantle":
       return dismantleMachine(s, command.machineId);
     case "machine.move":
@@ -210,7 +217,16 @@ function buildMachine(s: SimState, blueprint: string, tile: number): CommandResu
   return commit(s, "build", machine.id);
 }
 
-function upgradeMachine(s: SimState, machineId: number): CommandResult {
+/**
+ * Pays the one price for the next level and records which named quantity it bought
+ * (STRAT-002/A1). An unnamed purchase keeps the pre-fork scalar, so the old ladder,
+ * the offline catch-up and every save written before the fork read unchanged.
+ */
+function upgradeMachine(
+  s: SimState,
+  machineId: number,
+  branch?: UpgradeBranch
+): CommandResult {
   const machine = machineById(s, machineId);
   if (!machine) return { ok: false, reason: "not-found" };
   const def = BLUEPRINTS[machine.blueprint];
@@ -218,8 +234,34 @@ function upgradeMachine(s: SimState, machineId: number): CommandResult {
   if (s.credits < cost) return { ok: false, reason: "insufficient" };
   s.credits -= cost;
   machine.level += 1;
-  machine.batchMilli = batchMilliForLevel(machine);
+  if (branch !== undefined) {
+    const picks = machine.branch ?? [];
+    picks.push(branch);
+    machine.branch = picks;
+  }
+  machine.batchMilli = batchMilliOf(machine);
   return commit(s, "upgrade", machine.level);
+}
+
+/**
+ * Re-chooses the newest named outcome at no cost (STRAT-002/A1). The credits were paid
+ * once with the level, so a re-pick only moves one rank between the three quantities:
+ * `level`, `credits` and every stored counter stay where they are, which makes the fork
+ * reversible by the same number of taps it took to take.
+ */
+function respecMachine(
+  s: SimState,
+  machineId: number,
+  branch: UpgradeBranch
+): CommandResult {
+  const machine = machineById(s, machineId);
+  if (!machine) return { ok: false, reason: "not-found" };
+  const picks = machine.branch;
+  if (picks === undefined || picks.length === 0) return { ok: true, revision: s.revision };
+  if (picks[picks.length - 1] === branch) return { ok: true, revision: s.revision };
+  picks[picks.length - 1] = branch;
+  machine.batchMilli = batchMilliOf(machine);
+  return commit(s, "respec", machine.level);
 }
 
 function dismantleMachine(s: SimState, machineId: number): CommandResult {
@@ -366,7 +408,10 @@ function machineInputDemand(s: SimState, resource: ResourceId): number {
       if (input.resource === resource) perBatch += input.qty;
     }
     if (perBatch === 0) continue;
-    const window = Math.min(def.inputBuffer + bonus, perBatch * PULL_LOOKAHEAD_BATCHES + bonus);
+    const window = Math.min(
+      inputCapacityOf(machine, bonus),
+      perBatch * (PULL_LOOKAHEAD_BATCHES + upgradeRanks(machine).buffer) + bonus
+    );
     need += Math.max(0, window - (machine.inBuf[resource] ?? 0));
   }
   return need;
@@ -404,11 +449,6 @@ export function upgradeCost(baseUpgradeCost: number, level: number): number {
   let cost = baseUpgradeCost;
   for (let i = 1; i < level; i += 1) cost = Math.ceil(cost * 1.16);
   return cost;
-}
-
-function batchMilliForLevel(machine: MachineState): number {
-  const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
-  return Math.ceil((recipe.cycleTicks * 10000) / (10 + (machine.level - 1)));
 }
 
 function validTile(s: SimState, tile: number): boolean {

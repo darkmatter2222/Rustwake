@@ -43,6 +43,9 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "btn.connect": "Connect",
   "btn.upgrade": "Upgrade",
   "btn.upgradeCost": "Upgrade · {cost}",
+  "btn.branchSpeed": "Faster batches",
+  "btn.branchBuffer": "More input",
+  "btn.branchDraw": "Less power",
   "btn.takeOver": "Take over",
   "btn.copy": "Copy",
   "btn.import": "Import",
@@ -80,6 +83,8 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "step.researchAny": "Research a node when its data cost is covered.",
   "step.drone": "Add a recovery drone · {cost}",
   "step.upgrade": "Upgrade the {machine}.",
+  "step.fork": "Choose what improves on the {machine} · {cost}",
+  "hud.power": "Power {capacity} · {requested} requested · {percent} %",
 
   // ---- Sub-hints under the objective (spec 4.4) ----------------------------------
   // These ids are exactly what suggestedAction() returns, so one lookup resolves both
@@ -162,6 +167,7 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "row.inputs": "Inputs",
   "row.outputs": "Outputs",
   "row.level": "Level",
+  "row.branches": "Branches",
   "row.inBuffer": "In buffer",
   "row.tray": "Tray",
   "row.capacity": "Capacity",
@@ -202,6 +208,7 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "value.actualRate": "{rate} batches/s · {window}s window",
   "value.maxRate": "{rate} batches/s at full power",
   "value.powerUnits": "{count} {units}",
+  "value.branches": "{speed} fast · {buffer} input · {draw} power",
   "value.powerLimited": " · Power limited: {percent}% speed",
   "value.nextUpgrade": "{from}s → {to}s · {cost}",
   "value.characters": "{count} characters",
