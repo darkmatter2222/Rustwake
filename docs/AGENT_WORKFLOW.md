@@ -2,6 +2,10 @@
 
 Read TEAM_CHARTER for roles, decision rights and cadence. This file replaces the earlier five-role operating contract. Existing review/deployment evidence remains historical evidence. The runtime is local OpenCode plus MasterGoal, not these Markdown files or the board renderer.
 
+## Current operations extension
+
+Read [TEAM_OPERATIONS](TEAM_OPERATIONS.md), [sponsor intake](SPONSOR_INBOX.md) and [automatic delivery](AUTOMATED_DELIVERY.md). Use fresh runtime observations and scheduler/checkpoint utilities; multiple developer instances are encouraged on nonoverlapping ownership. Publish changed board snapshots during implementation, not only at release end. The public board is a sanitized deployment, not a copy of private receipts.
+
 ## Activation and capability
 
 Follow START_TEAM. Preserve the user's provider/model configuration. Verify all role definitions load in the installed version. The older CAPABILITY receipt proves async overlap but not reliable status polling/cancellation. Discover current documented dispatch/status/cancel mechanisms; do not invent SDK methods. Run two bounded harmless tasks, observe overlap/out-of-order completion, cancel/join a harmless task, and verify no orphan mutation. Confirm vision with an actual image and audio modality separately. Respect one-image context limits if configured.
@@ -57,3 +61,4 @@ After successful release, request bounded live playtest, compare expected outcom
 ## Recovery and anti-churn
 
 Before restart reconcile runtime sessions, branches, main and deployed receipt. Preserve ownership until a worker is terminal. Retry failures at most twice with different evidence-based diagnosis, then back off and unblock other work. Never continuously poll an unchanged error. If two implementation slices produce only measurement/prose changes, product must pick a player-visible experiment next unless a critical incident takes precedence. No endless scrum roleplay, queues of hundreds of untriaged ideas, or fabricated busy status.
+

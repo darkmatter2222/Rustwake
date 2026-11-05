@@ -1,5 +1,7 @@
 # Rustwake team charter
 
+Read [TEAM_OPERATIONS](TEAM_OPERATIONS.md) for the current sponsor-intake, scheduling, telemetry and companion-plugin protocol; it supersedes earlier slot defaults.
+
 ## What success means
 
 A player can explain what they chose, what they gave up, why the factory behaves differently, and what they want to try next. The world is attractive at normal phone size, alive in motion, comfortable to hear, and usable without instructions from the developer. Idle time carries out the player's plan. Frequent releases expose improvements to the owner, not just activity logs.
@@ -21,7 +23,7 @@ Write short first-person role notes with role/task/candidate attribution. These 
 
 ## Four-slot scheduling
 
-Total active cap = min(4, actual configured capacity), including coordinator. Default coordinator + developer + QA + rotating slot. The rotating slot serves product, player or release. During planning use coordinator + product + player + QA, then return a slot to development. Product and player assignments are bounded and finish, not permanent occupied seats. Release work due for >10 minutes receives next free slot; no unsafe cancellation of in-flight commits/deployments to free one.
+Total active cap = min(4, actual configured capacity), including coordinator. Target all three child slots on useful independent work. Multiple developers are allowed, including three concurrently with distinct write ownership. Rotate QA, product, player and release as outcomes/dependencies require; no fixed one-developer seat. During planning use coordinator + product + player + QA, then return a slot to development. Product and player assignments are bounded and finish, not permanent occupied seats. Release work due for >10 minutes receives next free slot; no unsafe cancellation of in-flight commits/deployments to free one.
 
 Every child has task ID, generation, session ID, base SHA, worktree/scope, output path, stop condition and expected result. Dispatch reserves a slot before the call. Only terminal completion/cancel+join frees it; missing heartbeat does not prove a dead worker. No batching that briefly starts five and later cancels one. Compatibility publisher/deployer share the release lease and cap.
 
@@ -48,3 +50,4 @@ Ready: observable player problem, hypothesis, bounded scope, explicit non-goals,
 Done: code checked, independent QA verdict for exact candidate and changed scope, outcome decision, published SHA and documentation; gameplay release also needs deployment receipt and live smoke. A failed experiment can be resolved without shipping if its decision and evidence are recorded. Preview acceptance is separate from “final polish”. Keep unverified dimensions visible.
 
 Every progress claim identifies evidence type: owner report, actual agent interaction, source inspection, automated test, visual inspection, audio listening, numerical analysis, hypothesis, or simulated-persona inference. Never infer enjoyment, retention or revenue from a test count.
+

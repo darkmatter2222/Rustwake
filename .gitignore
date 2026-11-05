@@ -8,3 +8,9 @@ coverage/
 # Local studio sessions, leases and transient receipts (never credentials)
 .rustwake-runtime/
 
+
+# Local supervisor configuration backup and Python test caches
+*.rustwake-team.bak
+*.rustwake-team.tmp
+__pycache__/
+

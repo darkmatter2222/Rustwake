@@ -3,7 +3,7 @@
 Generated from `work/backlog.json`; do not edit this view manually. This is a published snapshot, not proof of live sessions.
 
 **SPRINT-002: I choose a plan; my yard comes alive** — proposed
-Session cap: **4 total including coordinator**. Runtime: **activation-required**. Snapshot: 2026-11-05T22:45:00+00:00.
+Session cap: **4 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-05T23:26:30+00:00.
 
 [Visual board](board.html) · [Canonical JSON](backlog.json) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
 
@@ -34,10 +34,22 @@ Session cap: **4 total including coordinator**. Runtime: **activation-required**
 | D-1 | P2 | triaged | developer | Card still exceeds the cap in the deepest real cell (44.6 % with one blocked tap) |
 | BLD-001 | P1 | triaged | developer | Blind tapping parks on the fork row because the leftmost face is the dearer plan |
 | RELEASE-006 | P1 | measured | release-engineer | Publish and deploy the css-only chrome-cap slice |
+| OPS-101 | P1 | ready | developer | Activate work-conserving dispatch and real session telemetry |
+| OPS-102 | P1 | ready | release-engineer | Activate automatic delivery and sanitized live team dashboard |
+| OPS-103 | P1 | ready | product-owner | Incorporate sponsor priorities and maintain an estimated parallel-ready queue |
+| ART-002 | P1 | triaged | reviewer | Critique actual current scenes against a stunning game standard |
+
+## Team efficiency (last 24 hours)
+
+Published tickets: **17** · Deployed tickets: **16** · Prospectively estimated points published: **unknown**
+Median implementation-to-publication: **2 h** · Tickets returned to rework: **0**
+Observed child-slot utilization: **unknown** over 0 min sampled (0% window coverage). Runtime telemetry: **unknown / stale**.
+17 published ticket(s) have no valid pre-work estimate; no retrospective points are fabricated.
+Published and deployed counts are distinct ticket transitions, not commits. Points count once at first publication only if estimated before implementation. Zero-duration/backfilled lifecycle pairs are excluded from cycle time. Utilization excludes unsampled gaps; no data is unknown.
 
 ## Release evidence
 
-Last inspected source: `d7af68a1df31d6b0cb5e313330f7cb5853d74a32`.
+Last inspected source: `5a024beb625adfe583d42c656bec6cbc06f5bbbd`.
 Last evidenced deployed source: `d7af68a1df31d6b0cb5e313330f7cb5853d74a32`.
 [Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/deployments/OPS-013-g1.json)
 served == built 5/5 sha256 over HTTPS and loopback; the served HTML names assets/index-DGy53fNu.js (231878 B, entry digest equal to the previously served index-Cmh4A1Sb.js) and assets/index-9FriNULu.css (7474 B, one byte differs from index-mmTSZ7Fz.css); the live smoke prints two priced faces at two prices with a 46 px minimum face, one tap on the cheapest face charging exactly 30, the resting fleet/power line, card 261.4 px = 40.8 % of the 640 px hud box at 360x640 text scale 2.0, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified

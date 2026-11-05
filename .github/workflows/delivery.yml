@@ -1,0 +1,81 @@
+name: delivery
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: rustwake-databrick-delivery
+  cancel-in-progress: false
+jobs:
+  package:
+    # No fork/PR artifact may reach the deployment runner. Enable only after bootstrap.
+    if: >-
+      vars.RUSTWAKE_CD_ENABLED == 'true' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    outputs:
+      source_sha: ${{ steps.identity.outputs.sha }}
+    steps:
+      - name: Record immutable source
+        id: identity
+        env:
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
+          echo "sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.identity.outputs.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node --test scripts/package-dashboard.test.mjs
+      - name: Package public dashboard and manifest
+        env:
+          RUSTWAKE_SOURCE_SHA: ${{ steps.identity.outputs.sha }}
+        run: node scripts/package-dashboard.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rustwake-${{ steps.identity.outputs.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+  deploy:
+    needs: package
+    runs-on: [self-hosted, Linux, X64, rustwake-deploy]
+    environment: rustwake-databrick
+    timeout-minutes: 20
+    steps:
+      # No checkout and no npm on this machine. The host-owned adapter is installed
+      # and reviewed during bootstrap, outside repository-writable paths.
+      - uses: actions/download-artifact@v4
+        with:
+          name: rustwake-${{ needs.package.outputs.source_sha }}
+          path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Validate and promote through host-owned adapter
+        env:
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+          ARTIFACT_DIR: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
+          RECEIPT_PATH: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}-receipt.json
+        run: |
+          test -x /opt/rustwake-delivery/deploy-artifact.py
+          /opt/rustwake-delivery/deploy-artifact.py "$ARTIFACT_DIR" "$SOURCE_SHA" "$RECEIPT_PATH"
+      - name: Publish sanitized receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustwake-deployment-${{ needs.package.outputs.source_sha }}
+          path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}-receipt.json
+          if-no-files-found: warn
+          retention-days: 30

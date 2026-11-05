@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T22:45:00+00:00",
+  "updated_at": "2026-11-05T23:26:30+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,15 +10,16 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "inspected_head": "5a024beb625adfe583d42c656bec6cbc06f5bbbd",
     "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
     "url": "https://home.darkmatter2222.com/rustwake/",
     "receipt": "work/deployments/OPS-013-g1.json",
     "verification": "served == built 5/5 sha256 over HTTPS and loopback; the served HTML names assets/index-DGy53fNu.js (231878 B, entry digest equal to the previously served index-Cmh4A1Sb.js) and assets/index-9FriNULu.css (7474 B, one byte differs from index-mmTSZ7Fz.css); the live smoke prints two priced faces at two prices with a 46 px minimum face, one tap on the cheapest face charging exactly 30, the resting fleet/power line, card 261.4 px = 40.8 % of the 640 px hud box at 360x640 text scale 2.0, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified"
   },
   "runtime": {
-    "status": "activation-required",
-    "sessions": []
+    "status": "observation-required",
+    "sessions": [],
+    "source": "No fresh local runtime observation available to this repository update"
   },
   "tickets": [
     {
@@ -356,7 +357,7 @@
         "A1-1": "MET - both/all costed options visible on one screen before either is chosen; harness >= 2 affordable 121 of 1800 against the 120 target (that 120 applies to the unnamed/speed row; buffer 101, draw 107)",
         "A1-2": "NOT MET as recorded - under the four listed acceptance metrics (batches, starved %, min power ratio, taps-to-next-milestone) the buffer branch leads none: 2175/1158/1191 batches, starved max 80/84/85, minPower 0.615/0.727/1.0, taps 1983/2046/2045. Its only unique lead (residual credits 190 vs 49/49) is not one of the four. Recorded as a metric-set defect, not a mechanism failure.",
         "A1-3": "MET on the distinctness that is measurable: two distinguishable plans plus one documented by-construction twin (speed equals the unnamed row on every scalar and all six kinds counters); no plan is weakly dominated on the primary columns the harness does score",
-        "A1-4": "MET - power named on the resting screen without opening a panel: 'Power 8 · 0 requested · 100 %' (seeded) and 'Power 8 · 1 requested · 100 %' (organic) at 390x844 and 360x640; the 24daf0e base shows no power line at the same seeds",
+        "A1-4": "MET - power named on the resting screen without opening a panel: 'Power 8 \u00b7 0 requested \u00b7 100 %' (seeded) and 'Power 8 \u00b7 1 requested \u00b7 100 %' (organic) at 390x844 and 360x640; the 24daf0e base shows no power line at the same seeds",
         "A1-5": "MET - save/offline catch-up and respec regression green on the v1 fixture (schemaVersion 1, checksum eede3c4f, byte-for-byte re-encode asserted in tests/simulation/fork.test.ts)",
         "A1-6": "MET - independent QA reproduced the three-policy census byte-identically (same SHA256 across two runs, equal to the committed harness JSON) and the product owner returned a keep/revise/revert decision with switch conditions",
         "A1-2v2": "executed at g2 and scored by machine in tests/simulation/fork.test.ts: under irregular supply buffer owns exactly one column, creditsPer1000Batches 12798.276 vs draw 12775.819 (absolute 22.457, relative 0.18 %), while starvedMax 84 vs 79 and starvedMean 57 vs 50 still favour speed and draw keeps powerLimitedRounds 0 - so the named-only leads are speed on the throughput/tap columns, draw on the two power columns, buffer on the ratio only",
@@ -1136,7 +1137,7 @@
           "actor": "release-engineer",
           "from_state": "published",
           "to_state": "deployed",
-          "reason": "served as the labelled preview rustwake-8a06e9d; the three strings re-read in a real browser on the live route - 'Need 20 scrap · have 0', 'Drones 1 · Power 8 · 0 requested · 100 %' at machines 0, and the three priced fork options (OPS-010-g1)"
+          "reason": "served as the labelled preview rustwake-8a06e9d; the three strings re-read in a real browser on the live route - 'Need 20 scrap \u00b7 have 0', 'Drones 1 \u00b7 Power 8 \u00b7 0 requested \u00b7 100 %' at machines 0, and the three priced fork options (OPS-010-g1)"
         },
         {
           "at": "2026-11-05T13:47:00+00:00",
@@ -1354,7 +1355,7 @@
       "review_verdict": "accept",
       "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
       "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
-      "outcome": "The two dock faces now print two numbers: Faster batches 40 credits and Less power 30 credits at the first rank of a base-30 ladder (50 and 40 on the furnace rank 1), and one tap charges exactly the number the tapped face printed (purse 30: the 30 face takes it to 0 and records branch [draw] at level 2; the 40 face is refused with toast \"Need 40 credits · have 30\" and no state change). The unnamed ladder still pays the plain price, so the behaviour line, schemaVersion 1 and the eede3c4f fixture checksum are unmoved. The persona A/B counts: the priced arm satisfies all three sentences (two named plans at two prices; the paid amount names the plan; an in-between purse is refused with a numbered shortfall) while the equal-price control fails sentence (2) - both its plans print 30 and both charge 30, so the paid amount identifies nothing.",
+      "outcome": "The two dock faces now print two numbers: Faster batches 40 credits and Less power 30 credits at the first rank of a base-30 ladder (50 and 40 on the furnace rank 1), and one tap charges exactly the number the tapped face printed (purse 30: the 30 face takes it to 0 and records branch [draw] at level 2; the 40 face is refused with toast \"Need 40 credits \u00b7 have 30\" and no state change). The unnamed ladder still pays the plain price, so the behaviour line, schemaVersion 1 and the eede3c4f fixture checksum are unmoved. The persona A/B counts: the priced arm satisfies all three sentences (two named plans at two prices; the paid amount names the plan; an in-between purse is refused with a numbered shortfall) while the equal-price control fails sentence (2) - both its plans print 30 and both charge 30, so the paid amount identifies nothing.",
       "history": [
         {
           "at": "2026-11-05T09:22:00+00:00",
@@ -1441,7 +1442,7 @@
       "review_verdict": "accept",
       "published_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
       "deployed_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-      "outcome": "Integrated per-file into 8a06e9debf7ff345681979cd6f731b24b2b5d581 and pushed to main; deployed as the labelled preview rustwake-8a06e9d on stack 125 with a one-line bind change. Measured: 268 tests / 27 files green, typecheck/validate/build exit 0, entry assets/index-CJfGk59d.js 231520 B inside the 233000 B ceiling with 1480 B spare and the same hash as the lane build, 5/5 served sha256 equal to the isolated SHA build over HTTPS and loopback, previous entry name 404, live smoke prints 'Need 20 scrap · have 0', 'Drones 1 · Power 8 · 0 requested · 100 %' at machines 0 and three priced fork options, unaffected routes unchanged, rollback resource rustwake-c2842e1 retained. Remote CI remains unreadable -> remote-CI-unverified.",
+      "outcome": "Integrated per-file into 8a06e9debf7ff345681979cd6f731b24b2b5d581 and pushed to main; deployed as the labelled preview rustwake-8a06e9d on stack 125 with a one-line bind change. Measured: 268 tests / 27 files green, typecheck/validate/build exit 0, entry assets/index-CJfGk59d.js 231520 B inside the 233000 B ceiling with 1480 B spare and the same hash as the lane build, 5/5 served sha256 equal to the isolated SHA build over HTTPS and loopback, previous entry name 404, live smoke prints 'Need 20 scrap \u00b7 have 0', 'Drones 1 \u00b7 Power 8 \u00b7 0 requested \u00b7 100 %' at machines 0 and three priced fork options, unaffected routes unchanged, rollback resource rustwake-c2842e1 retained. Remote CI remains unreadable -> remote-CI-unverified.",
       "history": [
         {
           "at": "2026-11-05T09:06:00+00:00",
@@ -2207,6 +2208,215 @@
           "reason": "post-deploy measurement recorded in OPS-013-g1: served == built 5/5 over HTTPS and loopback, the served HTML names the two new asset names while the previous entry name 404s, the live smoke strings printed with 0 pageerror and 0 favicon requests, the shipped harness against the live route reads 16.7 / 40.8 / 10.6 / 31.0 % (ALL PASS), board --check green at the docs tip"
         }
       ]
+    },
+    {
+      "id": "OPS-101",
+      "type": "operations",
+      "title": "Activate work-conserving dispatch and real session telemetry",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "developer",
+      "generation": 0,
+      "player_problem": "Activate work-conserving dispatch and real session telemetry",
+      "hypothesis": "Observable intake, parallel ownership and short release feedback reduce delivery delay without lowering the quality bar.",
+      "scope": [
+        "tools/team-supervisor/**",
+        "work/review/OPS-101.md"
+      ],
+      "non_goals": [
+        "No unrelated infrastructure or existing strategy replacement"
+      ],
+      "acceptance": [
+        "Verify installed async dispatch, status, cancellation and companion hooks in local OpenCode",
+        "Demonstrate three useful nonconflicting child assignments overlapping and immediate refill after one completes",
+        "Publish real observation samples and idle reasons; no fabricated utilization",
+        "Preserve all existing running work; clean stop/join passes"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-003.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T23:26:30+00:00",
+          "actor": "executive-sponsor",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "New owner-authorized operational priority; local activation not yet performed"
+        }
+      ],
+      "scheduling": {
+        "enabled": true,
+        "write_paths": [
+          "tools/team-supervisor/**",
+          "work/review/OPS-101.md"
+        ],
+        "ready_at": "2026-11-05T23:26:30+00:00",
+        "role": "developer"
+      }
+    },
+    {
+      "id": "OPS-102",
+      "type": "operations",
+      "title": "Activate automatic delivery and sanitized live team dashboard",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "release-engineer",
+      "generation": 0,
+      "player_problem": "Activate automatic delivery and sanitized live team dashboard",
+      "hypothesis": "Observable intake, parallel ownership and short release feedback reduce delivery delay without lowering the quality bar.",
+      "scope": [
+        "work/deployments/OPS-102.json",
+        "deployment operations"
+      ],
+      "non_goals": [
+        "No unrelated infrastructure or existing strategy replacement"
+      ],
+      "acceptance": [
+        "Provision isolated scoped runner/host adapter via HomeAILab; do not expose Docker or unrelated services",
+        "Successful main CI triggers immutable artifact deployment; failed CI and stale artifacts never promote",
+        "Verify /rustwake/team/ status/freshness and sanitization; README live link only after real smoke",
+        "Rollback and old asset compatibility verified; publish exact activation blockers if inaccessible"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-003.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T23:26:30+00:00",
+          "actor": "executive-sponsor",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "New owner-authorized operational priority; local activation not yet performed"
+        }
+      ],
+      "scheduling": {
+        "enabled": true,
+        "write_paths": [
+          "work/deployments/OPS-102.json",
+          "deployment operations"
+        ],
+        "ready_at": "2026-11-05T23:26:30+00:00",
+        "role": "release-engineer"
+      }
+    },
+    {
+      "id": "OPS-103",
+      "type": "operations",
+      "title": "Incorporate sponsor priorities and maintain an estimated parallel-ready queue",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "product-owner",
+      "generation": 0,
+      "player_problem": "Incorporate sponsor priorities and maintain an estimated parallel-ready queue",
+      "hypothesis": "Observable intake, parallel ownership and short release feedback reduce delivery delay without lowering the quality bar.",
+      "scope": [
+        "work/product/OPS-103.md",
+        "work/sponsor/**"
+      ],
+      "non_goals": [
+        "No unrelated infrastructure or existing strategy replacement"
+      ],
+      "acceptance": [
+        "Read inbox, interpret each request in existing strategy, preserve prior agenda",
+        "Acknowledged input links product decision and actionable tickets in same publication",
+        "Estimate future implementation before work and split nonconflicting scopes",
+        "Review recurring pipeline delays and pick one process improvement each sprint"
+      ],
+      "dependencies": [],
+      "product_approved": true,
+      "evidence": [
+        "work/feedback/OWNER-003.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T23:26:30+00:00",
+          "actor": "executive-sponsor",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "New owner-authorized operational priority; local activation not yet performed"
+        }
+      ],
+      "scheduling": {
+        "enabled": true,
+        "write_paths": [
+          "work/product/OPS-103.md",
+          "work/sponsor/**"
+        ],
+        "ready_at": "2026-11-05T23:26:30+00:00",
+        "role": "product-owner"
+      }
+    },
+    {
+      "id": "ART-002",
+      "type": "operations",
+      "title": "Critique actual current scenes against a stunning game standard",
+      "priority": "P1",
+      "status": "triaged",
+      "owner": "reviewer",
+      "generation": 0,
+      "player_problem": "Critique actual current scenes against a stunning game standard",
+      "hypothesis": "Observable intake, parallel ownership and short release feedback reduce delivery delay without lowering the quality bar.",
+      "scope": [
+        "work/review/ART-002/**"
+      ],
+      "non_goals": [
+        "No unrelated infrastructure or existing strategy replacement"
+      ],
+      "acceptance": [
+        "Inspect fresh actual phone/desktop scenes and motion, not just geometry metrics",
+        "Name top three visible weaknesses and one substantial bounded art direction experiment",
+        "Independent critical verdict with screenshots, candidate SHA and honest audio limitations"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "evidence": [
+        "work/feedback/OWNER-003.md"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T23:26:30+00:00",
+          "actor": "executive-sponsor",
+          "from_state": null,
+          "to_state": "triaged",
+          "reason": "New owner-authorized operational priority; local activation not yet performed"
+        }
+      ],
+      "scheduling": {
+        "enabled": true,
+        "write_paths": [
+          "work/review/ART-002/**"
+        ],
+        "ready_at": "2026-11-05T23:26:30+00:00",
+        "role": "reviewer"
+      }
     }
-  ]
+  ],
+  "telemetry": {
+    "samples": [],
+    "note": "No trustworthy historical utilization samples; begin actual observation after local activation."
+  }
 }

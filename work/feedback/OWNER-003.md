@@ -1,0 +1,5 @@
+# OWNER-003 — executive sponsor, utilization and delivery
+
+Source: direct executive sponsor request in this session. Incorporate new file-based directives without replacing earlier strategy. Remove only acknowledged directives with durable backlog/decision links. Use all four available sessions (PM plus three useful children), including multiple developers when safe. Current local observation is one waiting coordinator and one developer; GitHub history shows multi-hour publication gaps. Add truthful throughput/points/utilization, frequently published board, sanitized live dashboard and automatic CI/CD. Reviewers must judge actual game beauty and depth critically.
+
+Disposition: tooling and operating-contract changes delivered by this repository update; local activation and observations tracked in OPS-101/102/103, renewed visual critique ART-002. Prior agenda and all existing tickets are preserved. No claim that remote repository changes have installed a runner, loaded the plugin or started local sessions.
