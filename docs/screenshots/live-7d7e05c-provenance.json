@@ -1,0 +1,23 @@
+{
+  "captured": "2026-11-05T13:44:00Z",
+  "tool": "playwright-core headless Chrome (system Chrome), page.screenshot on the deployed route",
+  "source_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+  "deployed_release": "rustwake-7d7e05c",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "viewport": "390x844 dpr2 and 360x640 dpr2, isMobile, hasTouch, fresh storage per context, 250 ms taps on .dock__btn--primary; the gate button 'Begin recovery' is tapped first; text scale set through the player's own 'Text size' control",
+  "label": "organic, not seeded; the seeded 12-case slice at 24daf0e stays in docs/screenshots/slice-*.png with its own provenance",
+  "visible_readouts": {
+    "rest-tap1 (390x844 ts1)": "status lines 'Draw the route so cargo has somewhere to go.' and 'Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15' plus 'Batch pips · Scrap sorter #8 0/5'; card 105 px of a 844 px .hud content box = 12.4 %; scrollHeight 844 == innerHeight 844",
+    "idle-2.2s-after-one-blocked-tap (390x844 ts1)": "toast 'Need 20 scrap · have 15' immediately after the blocked tap; 2.2 s later .toast is null, no panel open, and the same .status-line still carries the trailing segment 'Last need 20 scrap · have 15'",
+    "fork-tap242 (390x844 ts1)": "exactly two dock buttons, 'Faster batches 30 credits' [x 10, w 191.8, h 46] and 'Less power 30 credits' [x 207.8, w 172.3, h 46]; status lines 'A machine waits for input; check its empty side.', 'Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 2', 'Batch pips · Scrap sorter #8 5/5 · Furnace #9 0/5 +2'; one tap on the first records branch [\"speed\"] at level 2 in the save (schemaVersion 1)",
+    "card-360-ts2 (360x640 ts2.0)": "the same three .status-line rows with the trailing segment intact; card 264.6 px of a 640 px .hud content box = 41.3 %, inside the recorded 42 % cap; no page scroll (640 == 640)",
+    "fork-tap239 (360x640 ts2.0)": "two buttons 'Faster batches 30 credits' [x 10, w 182.7, h 46] and 'Less power 30 credits' [x 194.7, w 155.3, h 46]; card 300.3 px = 46.9 % (the 4-machine fork frame, the one cell still outside the 42 % band); one tap records branch [\"speed\"]"
+  },
+  "note": "Fresh capture for the PLAY-002 g1 surfaces: the shortfall as a trailing .status-line segment past the 1.8 s toast window, the two named plans on the dock, and the two-entry tile-indexed pip legend. 0 pageerror in both browser sessions. The 360x640 scale-2.0 capture is the CHRM-001 re-measurement at 2-machine depth; the 46.9 % 4-machine fork-open cell stays open.",
+  "files": [
+    { "file": "live-7d7e05c-rest-tap1.png", "bytes": 77457, "sha256": "744b1ebd2b0b1ed1f8355a31dd498c9eb0af4e9687e262fe2b9f1fcf0629d2d5" },
+    { "file": "live-7d7e05c-fork-tap242.png", "bytes": 78016, "sha256": "1e3f35ab079b2abb7b073ce20a27ed8e6ab0ceadca18bfb8973d70263bf5dbc8" },
+    { "file": "live-7d7e05c-360-ts2-card.png", "bytes": 125861, "sha256": "3aba489795f4ab9cf77c1b22d62c3c932bf8c436e7562cda43608d266bb95463" },
+    { "file": "live-7d7e05c-360-ts2-fork-tap239.png", "bytes": 132999, "sha256": "6cb60cfb37cf967b3895ef85cf910f441775afe4edcd1edb94d3c131d554259a" }
+  ]
+}

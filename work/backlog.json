@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T09:22:00+00:00",
+  "updated_at": "2026-11-05T13:47:00+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-    "deployed_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
+    "inspected_head": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+    "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-010-g1.json",
-    "verification": "OPS-010-g1, 2026-11-05 09:22 UTC: deployed as the labelled preview rustwake-8a06e9d; served index.html names assets/index-CJfGk59d.js (231520 B) and 5/5 served sha256 == the isolated SHA build over HTTPS and loopback; the previous entry name assets/index-Br0Eyz3s.js now 404s and rustwake-c2842e1 is retained as the rollback resource. Integrated 8a06e9d = PLAY-001 g1 (487d3ca) + STRAT-002 g2 (88167c7) per file; 268 tests across 27 files, behaviour line and save checksum eede3c4f unchanged, entry 1480 B under the 233000 ceiling. Live smoke on the deployed artifact: toast 'Need 20 scrap · have 0', resting 'Drones 1 · Power 8 · 0 requested · 100 %' with machines 0, three named fork options at 30 credits each, one tap commits and the legend reads 'Batch pips · Scrap sorter 1/5 · Furnace 1/5 · Polymer recycler 0/5 +1'. Remote CI status unreadable (gh unauthenticated, anonymous API 404) -> remote-CI-unverified."
+    "receipt": "work/deployments/OPS-011-g1.json",
+    "verification": "OPS-011-g1, 2026-11-05 13:47 UTC: deployed as the labelled preview rustwake-7d7e05c; served index.html names assets/index-Bi7lF9Yv.js (231706 B) and 5/5 served sha256 equals the isolated SHA build over HTTPS and loopback; the previous entry name assets/index-CJfGk59d.js now 404s and rustwake-8a06e9d is retained as the rollback resource. Integrated 7d7e05c = PLAY-002 g1 (f607ad2b) carrying STRAT-002 g3 (d836a7a) per file; 275 tests across 27 files, behaviour line and save checksum eede3c4f unchanged, entry 1294 B under the 233000 ceiling and its digest equals the independent QA worktree build's. Live smoke on the deployed artifact: resting 'Drones 1 - Power 8 - 0 requested - 100 %' with the trailing 'Last need 20 scrap - have 15'; 2.2 s after one blocked tap the toast is null while that trailing segment is still painted; the fork row is exactly two options 'Faster batches 30 credits' and 'Less power 30 credits' and one tap records branch [speed]; 0 pageerror. Remote CI status unreadable (gh unauthenticated, anonymous API 404) -> remote-CI-unverified."
   },
   "runtime": {
     "status": "activation-required",
@@ -315,7 +315,7 @@
       "priority": "P1",
       "status": "measured",
       "owner": "developer",
-      "generation": 2,
+      "generation": 3,
       "player_problem": "Progression needs competing useful plans, not just additional clicks.",
       "hypothesis": "A constrained allocation or policy creates situationally useful strategies.",
       "scope": [
@@ -340,18 +340,18 @@
       "product_approved": true,
       "evidence": [
         "work/feedback/OWNER-002.md",
-        "work/feedback/strat002-harness.json and work/feedback/strat002-harness.mjs (v2: primary columns, named-only leads, irregular-supply ladder, per-column gaps block; deterministic, needs npx tsx)",
-        "work/development/handoffs/STRAT-002-g1.md and work/development/handoffs/STRAT-002-g2.md",
-        "work/review/STRAT-002-g1-qa.md and work/review/strat002-probe.mjs (independent QA, own runs)",
-        "work/product/STRAT-002-decision-g2.md (option b: A1-2 stands, A1-2v2 approved prospectively) plus its g2 addendum (A1-2v3 per-column MMG, buffer provisional)",
-        "work/product/PLAY-001-decision-g1.md section 5 (promotes STRAT-003 as the one next outcome)",
-        "tests/simulation/fork.test.ts (11 passed: 8 g1 cases + 3 A1-2v2 cases) and tests/ui/fork-ui.test.tsx (2 passed)"
+        "work/feedback/strat002-harness.json and work/feedback/strat002-harness.mjs (v3: inputStallTicks plus normalised inputStallPct on every row, two gap ladders, per-column gaps block; deterministic, needs npx tsx)",
+        "work/development/handoffs/STRAT-002-g1.md, work/development/handoffs/STRAT-002-g2.md and work/development/handoffs/STRAT-002-g3.md (the autoExec block)",
+        "work/review/STRAT-002-g1-qa.md plus work/review/strat002-probe.mjs (independent QA, own runs) and work/review/PLAY-002-g1-qa.md item A (independent recompute of both ladders, same sign and same leaders)",
+        "work/product/STRAT-002-decision-g2.md (option b: A1-2 stands, A1-2v2 approved prospectively) plus its g2 addendum (A1-2v3 per-column MMG, buffer provisional, drop clause armed)",
+        "tests/simulation/fork.test.ts (the g3 tree: the pre-fork fixture case plus the three-branch save-decode case) and tests/ui/fork-ui.test.tsx (two named options in painted order)",
+        "work/deployments/OPS-011-g1.json (the two-option row and the one-tap branch read on the live route)"
       ],
-      "candidate_sha": "88167c7bd37b58767d1fa5df85d559e54c21ce31",
+      "candidate_sha": "d836a7a1dc416c58baba369906e512550c698d25",
       "review_verdict": "accept",
-      "published_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-      "deployed_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-      "outcome": "g1 shipped the player-visible half: each machine upgrade names the quantity it improves, the dock offers three named options at one price, and the resting screen states the power budget. g2 shipped the instrument: the harness prints the scored columns, recomputes leads over named branches only, adds the irregular-supply ladder, and asserts the speed/unnamed twin (R3), the attempts-vs-purchased split (R4) and the surviving buffer verdict in CI. g2 measurement, printed under irregular supply: buffer leads exactly one column, creditsPer1000Batches 12798.276 vs draw 12775.819 (absolute 22.457, relative 0.18 %), while both mechanism columns still favour speed (starvedMax 84 vs 79, starvedMean 57 vs 50); the product owner rules that ratio a residue of a residue and keeps buffer as a third branch only provisionally, pending one inputStallPct run under two gap patterns. On the deployed artifact (rustwake-8a06e9d): three priced options 'Faster batches 30 credits', 'More input 30 credits', 'Less power 30 credits', one tap commits and the power line reads 'Drones 1 · Power 8 · 3 requested · 100 %'; the save stays schemaVersion 1 with the v1 fixture checksum eede3c4f unchanged.",
+      "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "outcome": "CLOSED at generation 3 with the executed outcome: the fork ships TWO named plans (speed = 'Faster batches', draw = 'Less power') and the third name is gone from the dock. The armed drop clause ran on the g3 instrument: inputStallPct under the two gap ladders gives buffer 186.9 (irregular) against speed 115.5 and draw 138.4, and 181.5 (gap6) against draw 123.3 and speed 140.5 - the best-rival-minus-buffer lead is -71.4 and -58.2, so buffer leads neither ladder and clears the 3-point per-column MMG on neither. The negative result is recorded rather than re-scored, per the addendum. The recorded criterion is A1-2v3 (per-column minimum meaningful gap: starvedMax/starvedMean/inputStallPct 3 points absolute, batches 900, powerLimitedRounds 200, minPowerRatio 0.25, creditsPer1000Batches 3 percent relative AND at least 100 units); the earlier A1-2 row stays NOT MET on the record, unchanged, and A1-2v2 keeps its g2 reading. Decode compatibility is asserted in CI: a save written while the dock named three branches still decodes, keeps level 3 and its paid buffer rank (upgradeRanks speed 1 / buffer 1 / draw 0, inputCapacityOf +6, validateSim null, byte-identical re-encode), so the drop costs no player their purchased level. On the deployed artifact rustwake-7d7e05c: two 46 px priced options at 390x844 (w 191.8 / 172.3) and at 360x640 ts2.0 (w 182.7 / 155.3), one tap records branch [speed] at level 2, save stays schemaVersion 1 with checksum eede3c4f.",
       "criteria_results": {
         "A1-1": "MET - both/all costed options visible on one screen before either is chosen; harness >= 2 affordable 121 of 1800 against the 120 target (that 120 applies to the unnamed/speed row; buffer 101, draw 107)",
         "A1-2": "NOT MET as recorded - under the four listed acceptance metrics (batches, starved %, min power ratio, taps-to-next-milestone) the buffer branch leads none: 2175/1158/1191 batches, starved max 80/84/85, minPower 0.615/0.727/1.0, taps 1983/2046/2045. Its only unique lead (residual credits 190 vs 49/49) is not one of the four. Recorded as a metric-set defect, not a mechanism failure.",
@@ -363,7 +363,7 @@
         "A1-2v3": "APPROVED prospectively (g2 addendum): per-column MMG replaces the scale-blind OR-disjunction and buffer must lead the new rows[].inputStallPct by >= 3 points under both gap patterns to stay a third branch; the run is still owed, so this row is open rather than met"
       },
       "acceptance_revision": "A1-2v2 approved prospectively by the product owner (option b, work/product/STRAT-002-decision-g2.md): dominance scored only over the three named rows on the primary column set (batches, powerLimitedRounds, minPowerRatio, rejects, taps, firstResearch, starvedMax/Mean promoted into rows[], plus creditsEarned and creditsPer1000Batches), residual credits excluded by R2, the speed/unnamed twin asserted by test under R3, and every pick counter naming its field under R4. It governs g2 onward only - the g1 A1-2 failure stands on the record (never retroactively passed). g2 addendum, same file: A1-2v2 was executed and the surviving buffer verdict rests on a 0.18 % ratio gap, so the '>= 5 % relative OR >= 10 absolute' disjunction is retired as scale-blind and replaced by **A1-2v3**, a per-column minimum meaningful gap (starvedMax, starvedMean, inputStallPct 3 points absolute; batches 900; powerLimitedRounds 200; minPowerRatio 0.25; creditsPer1000Batches 3 % relative AND >= 100 units), plus one newly named mechanism column rows[].inputStallTicks and its normalised inputStallPct. buffer is kept as a third branch **provisional**: it must lead inputStallPct by >= 3 points under the existing 5-on/4-off pattern and under one period-6 pattern, otherwise the drop clause ships the fork as two plans (speed, draw) and the negative result is recorded, never re-scored.",
-      "review_note": "QA verdict wording is 'accepted with notes' (work/review/STRAT-002-g1-qa.md): every gate exits 0 (254 tests / 25 files at 4b6e32c alone, entry assets/index-7328OjsX.js 229546 B), the mechanism is fully verified under its own runs, and the single reason it is not a plain accept is the A1-2 metric-set gap recorded above. g2 (harness/tests only, no src/ change) carries no separate independent QA report: its evidence is the developer's own byte-identity runs (stdout and harness JSON identical across two runs) plus the release lane's merged-tree gates (268 tests / 27 files, entry hash unchanged from the PLAY-001 lane build, which is itself the proof that the harness files are not bundled); that is the honest open item for this row.",
+      "review_note": "QA wording stays 'accepted with notes'. g3 carries no separate reviewer report of its own; the independent verification is item A of work/review/PLAY-002-g1-qa.md, where the reviewer recomputed inputStallPct with their own counters (work/review/_qa_recompute.mjs, no harness import) and reproduced 115.5/186.9/138.4 and 140.5/181.5/123.3 with leads -71.4 and -58.2, plus two alternative sampling conventions that keep the ranking and the sign, and proved the assertions non-vacuous by mutating the committed JSON.",
       "history": [
         {
           "at": "2026-11-05T00:11:36+00:00",
@@ -420,6 +420,62 @@
           "from_state": "deployed",
           "to_state": "measured",
           "reason": "g2 result recorded on the published and deployed tree 8a06e9debf7ff345681979cd6f731b24b2b5d581 (labelled preview rustwake-8a06e9d): the v2 harness with the irregular-supply ladder is shipped and its verdict is asserted in CI, A1-2v3 with per-column MMG is approved prospectively in the g2 addendum, and buffer stays a provisional third branch until one inputStallPct run under both gap patterns lands (lead on both -> third branch confirmed; lead on one or none -> two plans)"
+        },
+        {
+          "at": "2026-11-05T12:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": "measured",
+          "to_state": "triaged",
+          "reason": "the g2 addendum armed exactly one owed run (inputStallPct under both gap patterns) as the sole decider for the provisional third branch; re-triaged as that single measurement, not a new hypothesis"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "one bounded instrument task with the drop clause pre-fixed: lead on both ladders keeps three plans, lead on one or none ships two"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate d836a7a1dc416c58baba369906e512550c698d25 (branch strat002-g3): rows[].inputStallTicks and inputStallPct measured under the 5-on/4-off and period-6 ladders, per-column MMG replaces the scale-blind OR-disjunction, the drop clause executes so branchOptions returns speed then draw"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff work/development/handoffs/STRAT-002-g3.md with the two ladders, the per-column MMG table and the autoExec block; harness JSON and stdout byte-identical across runs"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independently accepted with notes at the stacked candidate f607ad2b: the reviewer's own counters reproduce both ladders with the same sign (work/review/PLAY-002-g1-qa.md item A.2), the committed JSON matches the harness output byte for byte, and mutating it fails the leader and drop-clause assertions, so the rows are not vacuous"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "the executed fact is the drop, not a proposal: buffer leads neither ladder (-71.4 irregular, -58.2 gap6) so the fork ships two named plans; the g1 A1-2 NOT MET row is kept unchanged and A1-2v3 is the recorded criterion; integrated per-file into 7d7e05c7124722857ba9828cff5dbd49df5ab04f and pushed in this pass"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served on the existing route as the labelled preview rustwake-7d7e05c: the two 46 px priced options and the one-tap branch [speed] read in a real browser on the live URL (OPS-011-g1)"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy measurement recorded in OPS-011-g1: the dock prints exactly two named plans on both measured cells, one tap records branch [speed] with level 2 in a schemaVersion 1 save, and the three-branch save still decodes with its paid rank, so the drop is decode-compatible"
         }
       ]
     },
@@ -942,7 +998,7 @@
       "type": "experiment",
       "title": "Make the resting screen answer three questions without a tap",
       "priority": "P1",
-      "status": "deployed",
+      "status": "measured",
       "owner": "player",
       "generation": 1,
       "player_problem": "The opening minute reads as a counter being decremented: the primary label mutates five ways for one continuing choice, a failed tap never states the shortfall, and idle production has no visible or numeric signal.",
@@ -979,7 +1035,7 @@
       "review_verdict": "accept",
       "published_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
       "deployed_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-      "outcome": "Three questions are answerable on the resting screen with no panel open, verified on the deployed artifact at 390x844: the blocked toast prints the numbers ('Need 20 scrap · have 0', and 'Need 5 ferrous · have 2' style for a mixed price), the status line carries 'Drones 1 · Power 8 · 0 requested · 100 %' from the first tick while machines is still 0, and the primary keeps one string across the build/place flip ('Build Scrap sorter20 scrap', 3 distinct labels and 2 transitions in 60 taps against the base's 4 and 45; 17 vs 23 distinct and 30 vs 579 transitions over 700 taps). Once machines exist the legend names the counted quantity per machine ('Batch pips · Scrap sorter 1/5 · Furnace 1/5 · Polymer recycler 0/5 +1'), matching the renderer's own max(1, ceil(ratio x 5)) quantisation. The entry chunk costs 937 B (231,520 B, 1,480 B under the ceiling); no simulation number moved (behaviour line identical, save checksum eede3c4f, schemaVersion 1, the three new reject fields never enter JSON.stringify(state)).",
+      "outcome": "Closed. The v1 three-sentence check is MET at the candidate 487d3ca (work/review/PLAY-001-g1-qa.md, work/feedback/PLAY-001-g1-persona.json): a blocked tap states the shortfall in numbers, the fleet/power line is painted from the first tick, and one label serves one committed choice (3 distinct primaries / 2 transitions in 60 taps against the base's 4 / 45; 17 / 30 against 23 / 579 over 700 taps). The g1 fixed-20-tap NOT MET row stays on the record unchanged and the v2 instrument (state-named checkpoints, per-step label rule, three-part comparison) governs prospectively only - never re-derived backwards. Deployed at 8a06e9d (rustwake-8a06e9d) and re-verified at 7d7e05c (rustwake-7d7e05c), where its two QA follow-ups landed in PLAY-002: D-3, the shortfall now survives the 1.8 s toast as a trailing segment, and the legend rows are the same numbers at 46 px with no page scroll. Entry cost 937 B inside the ceiling; no simulation number moved (behaviour line identical, save checksum eede3c4f, schemaVersion 1).",
       "acceptance_revision": "v1 (the ~20-tap three-sentence check) is what this generation is graded on, and the earlier NOT MET at that fixed checkpoint stays on the record unchanged. The product owner retires the fixed tap-count checkpoint prospectively as the wrong instrument (at tap 20 machines == 0, so the legend and two-machine separability are structurally untestable there, and one tap index lands on different ladder phases across builds): **PLAY-001 v2** replaces it with state-named checkpoints C1 (machines == 0 with a non-null toast), C2 (machines == 1), C3 (machines >= 2), a per-committed-step label rule (distinct(primaryLabel) == 1 per step, labelTransitions <= stepChanges + 1 over 700 taps) and a three-part comparison against its own base. v1's verdict is not re-derived backwards. Chrome follow-ups are fixed as CH-1 (card <= 42 % of the .hud content box at both viewports and both text scales, with that box's height printed), CH-2 (no overlap with the dock, yard coverage inside the pinned band) and CH-3 (legend names at most two machines before collapsing); the last rejection becomes one trailing status-line segment next slice.",
       "history": [
         {
@@ -1023,6 +1079,13 @@
           "from_state": "published",
           "to_state": "deployed",
           "reason": "served as the labelled preview rustwake-8a06e9d; the three strings re-read in a real browser on the live route - 'Need 20 scrap · have 0', 'Drones 1 · Power 8 · 0 requested · 100 %' at machines 0, and the three priced fork options (OPS-010-g1)"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-release measurement on the deployed artifact at 7d7e05c (OPS-011-g1): the resting line still reads 'Drones 1 - Power 8 - 0 requested - 100 %' at machines 1 and the save stays schemaVersion 1, so the v1 verdict holds across the two later releases; closed rather than left in flight"
         }
       ]
     },
@@ -1031,7 +1094,7 @@
       "type": "defect",
       "title": "Collapse the resting card at 360x640 text scale 2.0 (legend wrap exceeds the recorded cap)",
       "priority": "P2",
-      "status": "triaged",
+      "status": "measured",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -1058,15 +1121,17 @@
       ],
       "product_approved": true,
       "evidence": [
-        "work/review/PLAY-001-g1-qa.md sections 5 and 8 (D-2: 316.4 px card, 96.9 px chip block, legend 3 boxes at 360x640 scale 2.0)",
-        "work/product/PLAY-001-decision-g1.md sections 3 and 6 (CH-1..CH-3, keep-with-condition, final-polish promotion blocked)",
-        "work/deployments/OPS-010-g1.json defects_filed_to_pm (the same numbers re-measured on the deployed artifact)"
+        "work/review/PLAY-001-g1-qa.md sections 5 and 8 (the D-2 baseline: 316.4 px card, 96.9 px chip block, three-box legend at 360x640 scale 2.0)",
+        "work/review/PLAY-002-g1-qa.md items 8 and 10 (independent re-measurement: 16.4 / 41.3 / 12.4 / 31.4 % inside the cap in all four cells, 46 px minimum tap, no scroll, tile-indexed legend, 46.9 % at the 4-machine fork-open frame)",
+        "work/development/handoffs/PLAY-002-g1.md sections 2 and 3 (the four-combo table with both yard denominators and the 0.72rem band rule)",
+        "work/deployments/OPS-011-g1.json browser_smoke.chrome_band (the 41.3 % and 46.9 % cells read on the live route)",
+        "docs/screenshots/live-7d7e05c-provenance.json (fresh 360x640 ts2.0 capture at 2-machine depth plus the 4-machine fork frame)"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "f607ad2b4129d15adae9cd2c2547e8db6679bac7",
+      "review_verdict": "accept",
+      "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "outcome": "Closed at 2-machine depth. All four cells measured in chromium on the shipped artifact at the frame the ticket names (machines == 2): card 105 px / 264.6 px / 105 px / 264.6 px against a .hud content box of 640 / 640 / 844 / 844 = 16.4 % / 41.3 % / 12.4 % / 31.4 %, so CH-1 (card <= 42 % of that box, height printed) is MET in all four combinations, and the live route reproduces 41.3 % at 360x640 text scale 2.0 (OPS-011-g1). The cause named in the triage is gone: the pip legend now prints exactly two tile-indexed entries plus the +n tail ('Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2' at 4 machines, tail +2 against the two printed rows, so CH-3 is met and D-1's off-by-one is closed). Cheapest bought band: one css rule (.text-large .status-line font-size 0.72rem, line-height 1.2, margin-top 0) takes the card from 316.4 px to 264.6 px at that cell, and the font size itself is unchanged at scale 1. Still open inside this ticket: the 4-machine fork-OPEN cell measures 300.3 px = 46.9 % at 360x640 ts2.0 (cause named: the objective PRIMARY line prints one more 35.64 px box, 'Choose what improves on the Scrap sorter - 30 credits'), which is one cell outside the band and pre-existing at 49.4 % last generation; N-1, the lastReject slot is replaced but never cleared so a very old 'Last need ...' keeps riding the line (the 'Last' prefix makes it honest); and CH-2's coversYard 45 +/- 2 is not reproduced at rest by design, because those canonical cells are the panel-open census and the series still has to name one denominator.",
       "history": [
         {
           "at": "2026-11-05T09:06:00+00:00",
@@ -1081,6 +1146,55 @@
           "from_state": "inbox",
           "to_state": "triaged",
           "reason": "ruled not release-blocking but blocking promotion to final polish, on the fixed CH-1..CH-3 criteria; the named cause is the three-box legend wrap, cheapest fix is to name two entries and drop the +n tail, or move the legend into the Yard panel"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "promoted into the PLAY-002 g1 slice with the CH-1..CH-3 criteria fixed in advance and the legend collapse as the named cheapest cause"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate f607ad2b: pipLine slices two machines and prints label #tile n/5, then +n; one css rule for the status-line boxes at 0.72rem; no new line, panel or currency"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff section 2 and 3 with the four-combo chromium table, both yard denominators and the anatomy of the 4-machine fork frame"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independently accepted with notes at f607ad2b (work/review/PLAY-002-g1-qa.md item 8): the reviewer's own four-cell measurement is 16.4 / 41.3 / 12.4 / 31.4 % inside the 42 % cap, minimum tap 46 px, scrollHeight equals innerHeight, no clipped status line, and the legend tail is n-2 against two printed entries (4 -> +2, 6 -> +4)"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "closed at 2-machine depth with the 4-machine fork-open cell (46.9 %) and N-1 recorded as still open; integrated per-file into 7d7e05c7124722857ba9828cff5dbd49df5ab04f"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "the shipped artifact reproduces 264.6 px = 41.3 % at 360x640 ts2.0 with no page scroll (OPS-011-g1)"
+        },
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-release measurement on the live route: 41.3 % inside the cap at 2-machine depth, 46.9 % at the 4-machine fork-open frame, legend tail +2 at 4 machines; final polish is unblocked for this row while the 46.9 % cell stays visible as open"
         }
       ]
     },
@@ -1225,6 +1339,249 @@
           "from_state": "deployed",
           "to_state": "measured",
           "reason": "post-deploy measurement recorded in OPS-010-g1: served == built 5/5, the entry name and 231520 B size read back over HTTP equal the build, the three live-smoke strings printed, two console 404s traced to the favicon path, board --check green at the docs tip"
+        }
+      ]
+    },
+    {
+      "id": "PLAY-002",
+      "type": "experiment",
+      "title": "Put the two named plans, the last shortfall and a two-entry tile legend on the resting screen",
+      "priority": "P1",
+      "status": "deployed",
+      "owner": "player",
+      "generation": 1,
+      "player_problem": "At the fork the dock shows three same-priced buttons whose labels differ by one word, so the player cannot say what they gave up; the shortfall disappears with the 1.8 s toast, so a paused player cannot say what the last blocked tap wanted; and the pip legend prints three rows of identical 'Scrap sorter' entries that cannot be tied to a tile.",
+      "hypothesis": "One slice of three connected UI changes - the executed two-plan dock, one trailing status-line segment carrying the last shortfall, and a two-entry tile-indexed legend plus +n - keeps every answer on the resting screen and brings the 360x640 scale-2.0 card back inside the recorded 42 % cap.",
+      "scope": [
+        "src/ui/text.ts (branchOptions two entries, pipLine two tile-indexed entries plus +n, restingLine trailing last-shortfall segment)",
+        "src/ui/App.tsx (one lastReject component slot, never written to the save)",
+        "src/ui/styles.css (one status-line rule for the card band)",
+        "src/game/content/strings.ts (hud.lastShortfall in, btn.branchBuffer out)",
+        "tests/ui/{fork-ui,resting-screen}.test.tsx plus tests/simulation/fork.test.ts (the three-branch save-decode case)"
+      ],
+      "non_goals": [
+        "No new currency, machine, panel or second screen",
+        "No change to the ladder fixture, schemaVersion or the saved shape",
+        "No audio work",
+        "No re-scoring of the STRAT-002 A1-2 rows"
+      ],
+      "acceptance": [
+        "the fork row is exactly two named options, each with its own price and a minimum tap dimension of 44 CSS px, and one tap on either records that branch id in the save",
+        "after one blocked tap, at least 2 s later with .toast null and no panel open, the trailing segment 'Last need <n> <item> - have <m>' is still painted inside a .status-line and carries the same numbers as the toast carried",
+        "the pip legend prints at most two machine entries, each carrying its tile index, plus a +n tail equal to the number of machines not named",
+        "the card is inside the recorded 42 % cap in all four cells at 2-machine depth, no page scroll anywhere, and the gates stay green with the entry chunk under 233000 B"
+      ],
+      "dependencies": [
+        "PLAY-001",
+        "STRAT-002"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "f607ad2b4129d15adae9cd2c2547e8db6679bac7",
+      "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "outcome": "Preview-accepted and shipped. On the live artifact at 390x844 dpr2 (fresh storage, 250 ms taps): resting 'Drones 1 - Power 8 - 0 requested - 100 %' with the trailing 'Last need 20 scrap - have 15' appended; one blocked tap prints the toast 'Need 20 scrap - have 15' and 2.2 s later .toast is null while that trailing segment is still painted; the fork row is exactly two options 'Faster batches 30 credits' (x 10, w 191.8, h 46) and 'Less power 30 credits' (x 207.8, w 172.3, h 46), and one tap on the first records branch [speed] at level 2; the legend reads 'Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2' at 4 machines. 0 pageerror. Card 16.4 / 41.3 / 12.4 / 31.4 % in the four cells at 2-machine depth against the 42 % cap. Cost: entry index-Bi7lF9Yv.js 231,706 B (+186 B, 1,294 B under the ceiling) and css 7,474 B (+71 B); 275 tests / 27 files; behaviour line and save checksum eede3c4f unchanged, schemaVersion 1, and a save written while the dock named three branches still decodes with its paid rank.",
+      "evidence": [
+        "work/review/PLAY-002-g1-qa.md (independent QA at f607ad2b: own gates 275/27, own entry digest, own four-cell chromium census, own save round trip, 0 pageerror in 7 sessions)",
+        "work/development/handoffs/PLAY-002-g1.md (developer handoff: literal before/after strings, four-combo table with both yard denominators, entry byte ledger, save-compatibility case)",
+        "work/product/PLAY-001-decision-g1.md sections 3 and 5 (the CH items this slice answers and the next outcome), plus the product preview decision carried in the QA receipt's verdict line",
+        "tests/ui/resting-screen.test.tsx (the TST-001 shortfall-outlives-the-toast case and the CHRM-001 two-entry legend case), tests/ui/fork-ui.test.tsx (two named options in painted order), tests/simulation/fork.test.ts (three-branch save decodes)",
+        "work/deployments/OPS-011-g1.json (deployed-artifact smoke, served == built 5/5)",
+        "docs/screenshots/live-7d7e05c-provenance.json (fresh organic captures of the new surfaces)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T09:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "opened from the PLAY-001 g1 QA notes D-2/D-3/D-4 plus the STRAT-002 g2 addendum drop clause, as one connected resting-screen slice"
+        },
+        {
+          "actor": "product-owner",
+          "reason": "accepted for investigation with the four acceptance checks fixed in advance; the alternative of a numbered legend inside the Yard panel was rejected because it hides the answer behind a tap",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "product-owner",
+          "reason": "intent approved: two named plans, the shortfall past the toast window, a two-entry tile-indexed legend; no new currency, panel or screen",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "developer",
+          "reason": "candidate f607ad2b4129d15adae9cd2c2547e8db6679bac7 on branch play002-g1 (base d836a7a): branchOptions returns speed then draw, App keeps one lastReject slot and restingLine appends hud.lastShortfall, pipLine slices two tile-indexed entries plus +n, one css rule buys the band",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "developer",
+          "reason": "handoff work/development/handoffs/PLAY-002-g1.md with the literal before/after strings, the four-combo table with both denominators, the entry ledger and the save-compatibility proof",
+          "from_state": "implementing",
+          "to_state": "review",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "qa",
+          "reason": "independent QA 'accepted with notes' at f607ad2b (work/review/PLAY-002-g1-qa.md): every player-visible claim reproduces in the reviewer's own runs, the shortfall survives the toast window with .toast null, the fork row is exactly two 46 px named options with branch [speed] from one tap and no third face in 60 blind taps, the card is inside the cap in all four cells, and the STRAT-002 numbers reproduce under independent counters",
+          "from_state": "review",
+          "to_state": "accepted",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "product-owner",
+          "reason": "preview acceptance: the three player-visible changes are on the shipped artifact, so keep; integrated per-file into 7d7e05c7124722857ba9828cff5dbd49df5ab04f and pushed to main in this pass",
+          "from_state": "accepted",
+          "to_state": "published",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "served as the labelled preview rustwake-7d7e05c; the resting line, the trailing shortfall segment 2.2 s after the toast is gone, the two-option fork row and the one-tap branch [speed] all read in a real browser on the live route (OPS-011-g1)",
+          "from_state": "published",
+          "to_state": "deployed",
+          "at": "2026-11-05T13:47:00+00:00"
+        }
+      ]
+    },
+    {
+      "id": "DEF-006",
+      "type": "defect",
+      "title": "The carried last-shortfall segment is replaced but never cleared (QA label N-1)",
+      "priority": "P3",
+      "status": "inbox",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "A very old shortfall keeps riding the resting line: at 6 machines the line can still end in 'Last need 40 scrap - have 15' from a reject made hundreds of taps earlier, so the number on screen may no longer describe the current shortage.",
+      "hypothesis": "Nulling the lastReject slot on the next successful command keeps the segment honest without adding a timer or a second source; the 'Last' prefix already makes it a history statement rather than a current one.",
+      "scope": [
+        "src/ui/App.tsx (the lastReject slot)"
+      ],
+      "non_goals": [
+        "No new panel or line",
+        "No timer-based expiry"
+      ],
+      "acceptance": [
+        "after a rejected command the trailing 'Last need ...' segment appears, and after a subsequent successful command the segment is gone while the rest of the line is unchanged",
+        "a jsdom case pins the sequence: reject -> 2.2 s idle (toast null, segment painted) -> successful tap -> segment absent"
+      ],
+      "dependencies": [
+        "PLAY-002"
+      ],
+      "product_approved": false,
+      "evidence": [
+        "work/review/PLAY-002-g1-qa.md defect status note (a): 'lastReject is replaced but never cleared'"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T13:47:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed from the independent QA receipt for PLAY-002 g1 during the 7d7e05c release; minor, honest as printed, cheapest fix named"
+        }
+      ]
+    },
+    {
+      "id": "RELEASE-004",
+      "type": "delivery",
+      "title": "Publish and deploy the two-plan dock plus shortfall-carried-forward slice",
+      "priority": "P1",
+      "status": "measured",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "The two-plan dock, the carried shortfall and the tile-indexed legend existed only in a developer worktree plus an independent QA worktree, so the live route still showed three same-priced buttons and a legend that could not be tied to a tile.",
+      "hypothesis": "One per-file integration of a single stacked candidate plus one labelled preview deployment puts all three answers on the live resting screen with rollback retained and no file lost.",
+      "scope": [
+        "main integration",
+        "work",
+        "release operations"
+      ],
+      "non_goals": [
+        "No new service, port, network, DNS record or mirror",
+        "No doc-only redeploy"
+      ],
+      "acceptance": [
+        "per-file ownership honoured with no lane file lost (tripwire 275 tests across 27 files = 272 at d836a7a + 3 new cases)",
+        "typecheck, test, validate and build green on the merged tree with the entry chunk inside the 233000 B ceiling and its digest equal to the independent lane builds",
+        "CI status read honestly, then the merged artifact served on the existing route with served == built digests and a retained previous release",
+        "board and README reconciled to the published and deployed revisions, with the integrated and deployed revisions shown separately"
+      ],
+      "dependencies": [
+        "PLAY-002",
+        "STRAT-002"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "f607ad2b4129d15adae9cd2c2547e8db6679bac7",
+      "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+      "outcome": "Integrated per-file into 7d7e05c7124722857ba9828cff5dbd49df5ab04f (11 paths blob-equal to f607ad2b plus the imported QA receipt) and pushed to main (852832d..7d7e05c, no force, remote head fetch-verified); deployed as the labelled preview rustwake-7d7e05c on stack 125 with a one-line bind change. Measured: 275 tests / 27 files green, typecheck/validate/build exit 0, entry assets/index-Bi7lF9Yv.js 231706 B inside the 233000 B ceiling with 1294 B spare and the same digest as the QA and isolated SHA builds, 5/5 served sha256 equal to the build over HTTPS and loopback, previous entry name 404, live smoke prints the resting fleet/power line with the trailing shortfall segment, the two named 46 px plans with branch [speed] from one tap and 0 pageerror, unaffected routes unchanged, rollback resource rustwake-8a06e9d retained. Standing unverified set, unchanged: human audio listening, real-device p95, one human first-feel run, the 360x640 mature separability boxes and the three-phone interaction set; remote CI remains unreadable -> remote-CI-unverified.",
+      "evidence": [
+        "work/deployments/OPS-011-g1.json",
+        "work/releases/RELEASE-004.md",
+        "work/review/PLAY-002-g1-qa.md",
+        "docs/screenshots/live-7d7e05c-provenance.json"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T12:40:00+00:00",
+          "actor": "coordinator",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "the stacked candidate holds an independent QA verdict (accepted with notes) and the product preview decision, and the g3 measurement closed the last open instrument row, so the release slice is ready"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "main equal to origin at 852832d, the candidate extracted per file (11 paths blob-verified) plus the QA receipt imported from the review worktree; integration commit 7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "merged-tree gates run with real exit codes (typecheck 0, 275/27 tests, validate 0 with the verbatim behaviour line and eede3c4f, build 0 with the entry at 231706 B) and the receipt written",
+          "from_state": "implementing",
+          "to_state": "review",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "coordinator",
+          "reason": "tripwire matched exactly (275 = 272 at d836a7a + 3 new cases) and the lane entry digest equals the independent QA worktree build's, so no lane file was lost or reflowed",
+          "from_state": "review",
+          "to_state": "accepted",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "pushed to the existing GitHub origin (852832d..7d7e05c, no force), remote-tracking head verified equal to local HEAD",
+          "from_state": "accepted",
+          "to_state": "published",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "rustwake-7d7e05c installed (5 files, host digests equal the build) and promoted on the existing route via PUT /api/stacks/125?endpointId=3&force=1 with a one-line bind change (stored compose 156c03eb -> 56a2448b, both 898 B); container healthy, restart 0, fleet 49 before and after",
+          "from_state": "published",
+          "to_state": "deployed",
+          "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "actor": "release-engineer",
+          "reason": "post-deploy measurement recorded in OPS-011-g1: served == built 5/5, the entry name and 231706 B read back over HTTP equal the build, the live smoke strings printed in both viewport cells with 0 pageerror, board --check green at the docs tip",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "at": "2026-11-05T13:47:00+00:00"
         }
       ]
     }
