@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T13:47:00+00:00",
+  "updated_at": "2026-11-05T20:12:00+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
-    "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+    "inspected_head": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+    "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-011-g1.json",
-    "verification": "OPS-011-g1, 2026-11-05 13:47 UTC: deployed as the labelled preview rustwake-7d7e05c; served index.html names assets/index-Bi7lF9Yv.js (231706 B) and 5/5 served sha256 equals the isolated SHA build over HTTPS and loopback; the previous entry name assets/index-CJfGk59d.js now 404s and rustwake-8a06e9d is retained as the rollback resource. Integrated 7d7e05c = PLAY-002 g1 (f607ad2b) carrying STRAT-002 g3 (d836a7a) per file; 275 tests across 27 files, behaviour line and save checksum eede3c4f unchanged, entry 1294 B under the 233000 ceiling and its digest equals the independent QA worktree build's. Live smoke on the deployed artifact: resting 'Drones 1 - Power 8 - 0 requested - 100 %' with the trailing 'Last need 20 scrap - have 15'; 2.2 s after one blocked tap the toast is null while that trailing segment is still painted; the fork row is exactly two options 'Faster batches 30 credits' and 'Less power 30 credits' and one tap records branch [speed]; 0 pageerror. Remote CI status unreadable (gh unauthenticated, anonymous API 404) -> remote-CI-unverified."
+    "receipt": "work/deployments/OPS-012-g1.json",
+    "verification": "served == built 5/5 sha256 over HTTPS and LAN; the live smoke on the deployed artifact prints two priced faces with different prices, one tap charging the printed 30, the numbered refusal at purse 30, the resting fleet/power line, minimum face 46 px, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified"
   },
   "runtime": {
     "status": "activation-required",
@@ -568,7 +568,7 @@
       "type": "defect",
       "title": "favicon request answered by the SPA HTML fallback (no icon file in the release)",
       "priority": "P3",
-      "status": "inbox",
+      "status": "measured",
       "owner": "developer",
       "generation": 1,
       "player_problem": "The tab shows no icon: one console 404 (site root) plus one HTML body where an image is expected (app path).",
@@ -584,15 +584,17 @@
         "no console 404 and no HTML-as-icon body for the icon request while /rustwake/ keeps serving the hashed entry"
       ],
       "dependencies": [],
-      "product_approved": false,
+      "product_approved": true,
       "evidence": [
-        "work/deployments/OPS-008-g1.json"
+        "work/development/handoffs/STRAT-003-g1.md section 2 (the changed path) and section 3 (the pinned case)",
+        "work/review/STRAT-003-g1-qa.md (independent verification of this row)",
+        "work/deployments/OPS-012-g1.json (the same reading on the deployed artifact)"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "43cf3acd91911618983efef723c8f6879cdab2f3",
+      "review_verdict": "accept",
+      "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "outcome": "Closed at 43cf3acd. dist/index.html is 1290 B with exactly one rel=\"icon\" link (inline data:image/svg+xml, no fetch) and no favicon.ico occurrence; the chromium sessions issued 0 /favicon.ico requests on the candidate, and the deployed artifact reproduces 0 (OPS-012-g1). The previous 778 B HTML fallback answer is no longer reachable while this release is served.",
       "history": [
         {
           "at": "2026-11-05T01:35:00+00:00",
@@ -600,6 +602,62 @@
           "from_state": null,
           "to_state": "inbox",
           "reason": "filed from OPS-008-g1 during the 24daf0e release"
+        },
+        {
+          "at": "2026-11-05T15:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "the fix is one inline data-URI icon link in index.html, already named in the STRAT-003 slice the product owner approved"
+        },
+        {
+          "at": "2026-11-05T15:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "accepted into the STRAT-003 g1 slice as a named non-goal-free extra; no new panel, line or timer"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 43cf3acd carries the change with one new case"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff section 2 and 3 list the path and the case that pins it"
+        },
+        {
+          "at": "2026-11-05T18:55:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "verified independently in the same session as the rest of the slice (work/review/STRAT-003-g1-qa.md items 4 and 5)"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "integrated per-file into 0c03572 with the rest of the slice"
+        },
+        {
+          "at": "2026-11-05T20:04:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served in rustwake-0c03572"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "measured on the live route: the behaviour this row asks for is what the deployed artifact prints (OPS-012-g1)"
         }
       ],
       "severity": "cosmetic"
@@ -1094,7 +1152,7 @@
       "type": "defect",
       "title": "Collapse the resting card at 360x640 text scale 2.0 (legend wrap exceeds the recorded cap)",
       "priority": "P2",
-      "status": "measured",
+      "status": "triaged",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -1195,6 +1253,13 @@
           "from_state": "deployed",
           "to_state": "measured",
           "reason": "post-release measurement on the live route: 41.3 % inside the cap at 2-machine depth, 46.9 % at the 4-machine fork-open frame, legend tail +2 at 4 machines; final polish is unblocked for this row while the 46.9 % cell stays visible as open"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "product-owner",
+          "from_state": "measured",
+          "to_state": "triaged",
+          "reason": "re-opened for the single remaining row: at 360x640 text scale 2.0 with the fork open the card is 274.4 px of a 640 px .hud content box = 42.9 %, 0.9 pp outside the 42 % cap, identical in the 7d7e05c build so it is pre-existing and not introduced by the priced faces; the closing lever is named - .text-large .status-line line-height 1.2 to 1.1 at src/ui/styles.css:608 (about 1.6 pp), a css-only change deliberately not folded into the priced-fork slice"
         }
       ]
     },
@@ -1203,7 +1268,7 @@
       "type": "experiment",
       "title": "Give the three named plans unequal prices so the tradeoff is readable at rest",
       "priority": "P1",
-      "status": "ready",
+      "status": "deployed",
       "owner": "developer",
       "generation": 1,
       "player_problem": "All three named plans cost the same, so the dock is three buttons whose labels differ by one word and a player cannot say what the chosen plan costs them that the others do not.",
@@ -1230,14 +1295,17 @@
       ],
       "product_approved": true,
       "evidence": [
-        "work/product/PLAY-001-decision-g1.md section 5 (the chosen next outcome, with the deferred alternatives and their reasons)",
-        "work/feedback/OWNER-002.md (repeated clicks, no meaningful strategy)"
+        "work/development/handoffs/STRAT-003-g1.md sections 1, 4, 5 and 6 (price table, gates, the four chromium cells with an A/B against the base build, the priced harness row)",
+        "work/review/STRAT-003-g1-qa.md (independent QA, accepted with notes: gates 0 / 283 tests / 27 files, verbatim behaviour line, entry 231878 B, both faces charged exactly, DEF-006 tail retired after 18 successful taps, 0 favicon requests)",
+        "work/feedback/STRAT-003-g1-persona.json (one optimizer persona per run, priced arm versus the equal-price control, with the raw-frame provenance block)",
+        "work/feedback/strat002-harness.json (the priced row plus leadersTwoPlans, JSON sha256 2758058327621F06C856BCCFBC9166CFE1D199D7C0CF13694BA1894164C58F17 on both writes)",
+        "work/deployments/OPS-012-g1.json (served == built 5/5 and the live smoke strings on the deployed artifact)"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "43cf3acd91911618983efef723c8f6879cdab2f3",
+      "review_verdict": "accept",
+      "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "outcome": "The two dock faces now print two numbers: Faster batches 40 credits and Less power 30 credits at the first rank of a base-30 ladder (50 and 40 on the furnace rank 1), and one tap charges exactly the number the tapped face printed (purse 30: the 30 face takes it to 0 and records branch [draw] at level 2; the 40 face is refused with toast \"Need 40 credits · have 30\" and no state change). The unnamed ladder still pays the plain price, so the behaviour line, schemaVersion 1 and the eede3c4f fixture checksum are unmoved. The persona A/B counts: the priced arm satisfies all three sentences (two named plans at two prices; the paid amount names the plan; an in-between purse is refused with a numbered shortfall) while the equal-price control fails sentence (2) - both its plans print 30 and both charge 30, so the paid amount identifies nothing.",
       "history": [
         {
           "at": "2026-11-05T09:22:00+00:00",
@@ -1245,6 +1313,41 @@
           "from_state": null,
           "to_state": "ready",
           "reason": "selected as the one next outcome experiment over the tile batch clock, the numbered legend and the second wreck/second resource; the numbered legend rides inside CHRM-001 as a chrome defect instead"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 43cf3acd: BRANCH_PRICE_OFFSET and branchPrice in src/game/simulation/commands.ts charge the plan-specific price only when the command carries a branch, src/ui/text.ts prints that price per face, DEF-006 nulls lastReject on an accepted command and DEF-002 ships an inline icon link; styles.css untouched so the css chunk keeps its hash"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff sections 4 to 6: real exit codes, the four chromium cells with an A/B against the 7d7e05c build (identical boxes, 42.9 % in both) and the priced harness row with per-row pick attribution"
+        },
+        {
+          "at": "2026-11-05T18:55:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independently accepted with notes (work/review/STRAT-003-g1-qa.md): every player-visible number reproduced with the reviewer's own script and seed - 40/30 faces, 46 px minimum, the exact charge, the retiring Last tail, 0 favicon requests - and the single cap miss (42.9 % at 360x640 ts2.0) shown pre-existing against the base build"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "product preview acceptance: the priced arm satisfies all three sentences and the equal-price control fails sentence (2), so the experiment is informative and the slice is kept; integrated per-file into 0c03572"
+        },
+        {
+          "at": "2026-11-05T20:04:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served as the labelled preview rustwake-0c03572 on the existing route; the live smoke prints the two priced faces with different prices, one tap charging exactly the printed 30, the numbered refusal at purse 30, the resting fleet/power line, minimum face 46 px, scrollHeight equal to innerHeight, 0 pageerror and 0 favicon requests (OPS-012-g1)"
         }
       ]
     },
@@ -1347,7 +1450,7 @@
       "type": "experiment",
       "title": "Put the two named plans, the last shortfall and a two-entry tile legend on the resting screen",
       "priority": "P1",
-      "status": "deployed",
+      "status": "measured",
       "owner": "player",
       "generation": 1,
       "player_problem": "At the fork the dock shows three same-priced buttons whose labels differ by one word, so the player cannot say what they gave up; the shortfall disappears with the 1.8 s toast, so a paused player cannot say what the last blocked tap wanted; and the pip legend prints three rows of identical 'Scrap sorter' entries that cannot be tied to a tile.",
@@ -1380,14 +1483,15 @@
       "candidate_sha": "f607ad2b4129d15adae9cd2c2547e8db6679bac7",
       "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
       "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
-      "outcome": "Preview-accepted and shipped. On the live artifact at 390x844 dpr2 (fresh storage, 250 ms taps): resting 'Drones 1 - Power 8 - 0 requested - 100 %' with the trailing 'Last need 20 scrap - have 15' appended; one blocked tap prints the toast 'Need 20 scrap - have 15' and 2.2 s later .toast is null while that trailing segment is still painted; the fork row is exactly two options 'Faster batches 30 credits' (x 10, w 191.8, h 46) and 'Less power 30 credits' (x 207.8, w 172.3, h 46), and one tap on the first records branch [speed] at level 2; the legend reads 'Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2' at 4 machines. 0 pageerror. Card 16.4 / 41.3 / 12.4 / 31.4 % in the four cells at 2-machine depth against the 42 % cap. Cost: entry index-Bi7lF9Yv.js 231,706 B (+186 B, 1,294 B under the ceiling) and css 7,474 B (+71 B); 275 tests / 27 files; behaviour line and save checksum eede3c4f unchanged, schemaVersion 1, and a save written while the dock named three branches still decodes with its paid rank.",
+      "outcome": "Closed at 2-machine depth. The resting screen answers the three questions in one read: chips, the primary line and the fleet/power line with the carried shortfall, plus the two tile-indexed legend entries with the +n tail (\"Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2\"). The card measures 105 px / 264.6 px / 105 px / 264.6 px against a 640 / 640 / 844 / 844 .hud content box at 2-machine depth = 16.4 / 41.3 / 12.4 / 31.4 %, inside the recorded 42 % cap in all four cells, with a 46 px minimum tap and no page scroll. The one row still outside the band is the 4-machine fork-OPEN cell at 360x640 text scale 2.0, now 42.9 % against the 42 % cap (0.9 pp, pre-existing at the same reading in the 7d7e05c build), tracked in CHRM-001 with the css lever named.",
       "evidence": [
         "work/review/PLAY-002-g1-qa.md (independent QA at f607ad2b: own gates 275/27, own entry digest, own four-cell chromium census, own save round trip, 0 pageerror in 7 sessions)",
         "work/development/handoffs/PLAY-002-g1.md (developer handoff: literal before/after strings, four-combo table with both yard denominators, entry byte ledger, save-compatibility case)",
         "work/product/PLAY-001-decision-g1.md sections 3 and 5 (the CH items this slice answers and the next outcome), plus the product preview decision carried in the QA receipt's verdict line",
         "tests/ui/resting-screen.test.tsx (the TST-001 shortfall-outlives-the-toast case and the CHRM-001 two-entry legend case), tests/ui/fork-ui.test.tsx (two named options in painted order), tests/simulation/fork.test.ts (three-branch save decodes)",
         "work/deployments/OPS-011-g1.json (deployed-artifact smoke, served == built 5/5)",
-        "docs/screenshots/live-7d7e05c-provenance.json (fresh organic captures of the new surfaces)"
+        "docs/screenshots/live-7d7e05c-provenance.json (fresh organic captures of the new surfaces)",
+        "work/deployments/OPS-012-g1.json browser_smoke (the same four rows read on the deployed artifact)"
       ],
       "history": [
         {
@@ -1445,6 +1549,13 @@
           "from_state": "published",
           "to_state": "deployed",
           "at": "2026-11-05T13:47:00+00:00"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-release measurement on the live route: the four 2-machine cells are 16.4 / 41.3 / 12.4 / 31.4 % inside the cap with a 46 px minimum tap and no scroll, the carried shortfall segment retires on the next accepted tap, and the two plans now print two prices; closed at 2-machine depth with the 4-machine cell (42.9 %) left visible in CHRM-001"
         }
       ]
     },
@@ -1453,7 +1564,7 @@
       "type": "defect",
       "title": "The carried last-shortfall segment is replaced but never cleared (QA label N-1)",
       "priority": "P3",
-      "status": "inbox",
+      "status": "measured",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -1473,15 +1584,17 @@
       "dependencies": [
         "PLAY-002"
       ],
-      "product_approved": false,
+      "product_approved": true,
       "evidence": [
-        "work/review/PLAY-002-g1-qa.md defect status note (a): 'lastReject is replaced but never cleared'"
+        "work/development/handoffs/STRAT-003-g1.md section 2 (the changed path) and section 3 (the pinned case)",
+        "work/review/STRAT-003-g1-qa.md (independent verification of this row)",
+        "work/deployments/OPS-012-g1.json (the same reading on the deployed artifact)"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "43cf3acd91911618983efef723c8f6879cdab2f3",
+      "review_verdict": "accept",
+      "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "outcome": "Closed at 43cf3acd. An instrumented organic session counted 18 successful taps after a block and none of them still carried the tail: the line reads \"Drones 1 - Power 8 - 1 requested - 100 %\" while a fresh block brings the pair back (\"Drones 2 - Power 8 - 3 requested - 100 % - Last need 25 scrap - have 10\"). A jsdom case pins the sequence reject -> acceptance -> segment absent, and the live route reproduces both states (OPS-012-g1).",
       "history": [
         {
           "at": "2026-11-05T13:47:00+00:00",
@@ -1489,6 +1602,62 @@
           "from_state": null,
           "to_state": "inbox",
           "reason": "filed from the independent QA receipt for PLAY-002 g1 during the 7d7e05c release; minor, honest as printed, cheapest fix named"
+        },
+        {
+          "at": "2026-11-05T15:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "the fix is a one-line null of the lastReject slot on an accepted command, cheap enough to ride the STRAT-003 slice the product owner already approved"
+        },
+        {
+          "at": "2026-11-05T15:40:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "accepted into the STRAT-003 g1 slice as a named non-goal-free extra; no new panel, line or timer"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 43cf3acd carries the change with one new case"
+        },
+        {
+          "at": "2026-11-05T16:25:49+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff section 2 and 3 list the path and the case that pins it"
+        },
+        {
+          "at": "2026-11-05T18:55:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "verified independently in the same session as the rest of the slice (work/review/STRAT-003-g1-qa.md items 4 and 5)"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "integrated per-file into 0c03572 with the rest of the slice"
+        },
+        {
+          "at": "2026-11-05T20:04:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served in rustwake-0c03572"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "measured on the live route: the behaviour this row asks for is what the deployed artifact prints (OPS-012-g1)"
         }
       ]
     },
@@ -1582,6 +1751,100 @@
           "from_state": "deployed",
           "to_state": "measured",
           "at": "2026-11-05T13:47:00+00:00"
+        }
+      ]
+    },
+    {
+      "id": "RELEASE-005",
+      "type": "delivery",
+      "title": "Publish and deploy the priced-fork slice plus its persona A/B",
+      "priority": "P1",
+      "status": "measured",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "The two priced faces, the retiring shortfall segment and the inline icon existed only in the developer and QA worktrees, so the live route still showed two identical prices, a stale Last tail and an HTML-favicon fallback.",
+      "hypothesis": "One per-file integration of the single candidate plus one labelled preview deployment puts two different prices, the exact charge and the numbered refusal on the live resting screen with the previous release retained for rollback.",
+      "scope": [
+        "main integration",
+        "work",
+        "release operations"
+      ],
+      "non_goals": [
+        "No new service, port, network, DNS record or mirror",
+        "No doc-only redeploy"
+      ],
+      "acceptance": [
+        "per-file ownership honoured with no lane file lost (tripwire 283 tests across 27 files = 275 + 9 new cases - 1 restated)",
+        "typecheck, test, validate and build green on the merged tree with the entry chunk inside the 233000 B ceiling and its digest equal to the isolated SHA build",
+        "CI status read honestly, then the merged artifact served on the existing route with served == built digests and a retained previous release",
+        "board and README reconciled to the published and deployed revisions, shown separately"
+      ],
+      "dependencies": [
+        "STRAT-003",
+        "PLAY-002",
+        "STRAT-002"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "43cf3acd91911618983efef723c8f6879cdab2f3",
+      "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+      "outcome": "Integrated 0c03572 and deployed as the labelled preview rustwake-0c03572 on the existing route. Gates on the merged tree: typecheck 0, 283 tests / 27 files, validate 0 with the verbatim behaviour line and the eede3c4f ladder fixture, build 0 with entry index-Cmh4A1Sb.js at 231878 B (1122 B spare) and the same five digests from the isolated SHA worktree build; the css, tables and worker chunks are byte-identical to the previous release. CI read honestly as remote-CI-unverified (gh unauthenticated, exit 1 / exit 4). Served == built 5/5 over HTTPS and LAN, the served HTML names the new entry, the previous entry name 404s, and the live smoke printed the two priced faces, the exact charge, the numbered refusal, the resting line and 0 pageerror / 0 /favicon.ico requests. Rollback resource rustwake-7d7e05c retained; board --check exit 0 at the docs tip.",
+      "evidence": [
+        "work/deployments/OPS-012-g1.json",
+        "work/releases/RELEASE-005.md",
+        "work/review/STRAT-003-g1-qa.md",
+        "work/feedback/STRAT-003-g1-persona.json"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T15:40:00+00:00",
+          "actor": "coordinator",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "the candidate holds an independent QA verdict (accepted with notes) and the product preview decision, so the release slice is ready"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "origin fetched at 8c92940, the candidate extracted per file (12 paths blob-equal to 43cf3acd) plus the imported QA receipt and the sanitized persona receipt; integration commit 0c03572fa654388b52e023f72f4c47037a3aa42e"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "merged-tree gates run with real exit codes (typecheck 0, 283/27 tests, validate 0 with the verbatim behaviour line and eede3c4f, build 0 with the entry at 231878 B) and the isolated SHA worktree build agrees on all five served files"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "coordinator",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "tripwire matched exactly (283 = 275 + 9 - 1) and the lane entry digest equals the isolated SHA build and the QA worktree build, so no lane file was lost or reflowed"
+        },
+        {
+          "at": "2026-11-05T19:10:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "pushed to the existing GitHub origin (8c92940..0c03572, no force), remote-tracking head verified equal to local HEAD; remote CI unreadable -> remote-CI-unverified"
+        },
+        {
+          "at": "2026-11-05T20:04:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "rustwake-0c03572 installed (5 files, host digests equal the build) and promoted on the existing route via the one-line compose bind change on stack 125"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy measurement recorded in OPS-012-g1: served == built 5/5 over HTTPS and loopback, the served HTML names the new entry and the previous entry name 404s, the live smoke strings printed with 0 pageerror and 0 favicon requests, board --check green at the docs tip"
         }
       ]
     }

@@ -1,0 +1,302 @@
+{
+  "id": "ops-012-g1",
+  "role": "release-engineer",
+  "session": "ses_e52f19a48ffe7o16jgCJmALDEA",
+  "date": "2026-11-05",
+  "lease": "release-004-g1 (integration/main) plus the deployer lease, same lane, both acquired before the first server mutation; publisher/deployer stay aliases of this lane; prior release-003-g1 / OPS-011-g1 recorded released",
+  "release_id": "rustwake-0c03572",
+  "release_label_kind": "labelled preview of the merged candidate (one deploy, one lane)",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "route_lan": "http://192.168.86.48:8700/",
+  "integrated_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+  "target_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+  "lanes": {
+    "STRAT-003": "code 43cf3acd91911618983efef723c8f6879cdab2f3 (branch strat003-g1, parent 7d7e05c): BRANCH_PRICE_OFFSET plus branchPrice in src/game/simulation/commands.ts charge a plan-specific price only when the command carries a branch; src/ui/text.ts prints that price per face; the plain unnamed ladder keeps its plain price; independent QA 'accepted with notes' in work/review/STRAT-003-g1-qa.md; A/B in work/feedback/STRAT-003-g1-persona.json",
+    "DEF-006": "lastReject nulled on an accepted command, so the carried 'Last need ...' segment retires after the next success (one jsdom case plus an 18-tap instrumented organic count)",
+    "DEF-002": "one inline data-URI rel=icon link in index.html (778 B -> 1290 B), 0 /favicon.ico requests measured"
+  },
+  "prior_evidenced_release": "rustwake-7d7e05c (source 7d7e05c, OPS-011-g1)",
+  "target_verification": {
+    "origin_main_before_integration": "8c92940e201e9927b116465b3bcf49803e47a6f5 after git fetch origin (equals local HEAD, no fast-forward needed)",
+    "origin_main_after_push": "0c03572fa654388b52e023f72f4c47037a3aa42e (git push origin main -> 8c92940..0c03572, no force; fetch-verified remote-tracking head equals local HEAD)",
+    "integration_method": "per-file extraction, no -X theirs: the lane owns index.html, scripts/measure-strat003.mjs, src/game/simulation/commands.ts, src/ui/{App.tsx,text.ts}, tests/simulation/fork.test.ts, tests/ui/{app,fork-ui,resting-screen}.test.tsx, work/development/handoffs/STRAT-003-g1.md and work/feedback/strat002-harness.{mjs,json}; two evidence files are imported (work/review/STRAT-003-g1-qa.md from the QA worktree, work/feedback/STRAT-003-g1-persona.json sanitized with its raw-frame provenance block); main keeps docs/screenshots/slice-*.png, docs/evidence/2026-11-03-*, the 2026-11-04 clip, candidate-87ee90b-* and live-8a06e9d-*/live-7d7e05c-* captures untouched",
+    "blob_check": "12/12 extracted paths equal their candidate object at this tip (git rev-parse 43cf3ac:path == git rev-parse HEAD:path); sample: src/ui/text.ts 09a2c8e91b7292f582c0853d7b69954eb09525e4, src/game/simulation/commands.ts 652ca9194b022efa7531fd9aef875c8a629d07e1, index.html 14b276b7cdfa3a3dbc70fddd6ec6c710780935f0",
+    "tripwire": "Tests 283 passed (283) / Test Files 27 passed (27) = 275 at base 7d7e05c + 9 new cases - 1 restated. Exact match, so no lane file was lost",
+    "build_worktree": "C:/Users/ryans/AppData/Local/Temp/opencode/build-0c03572 (worktree detached at 0c03572, clean tree, npm ci) - built by SHA, not by a mutable working directory",
+    "reproducible": "5/5 served files (names, byte sizes and sha256) identical across the integration-tree build, the isolated SHA worktree build and the independent QA build; unlike OPS-011 even index.html agrees (1290 B in both, EOL-neutral because the template change is tracked)",
+    "entry_hash_equality": "assets/index-Cmh4A1Sb.js sha256 5376ec71cb0c4415cfd7f4c6861e45a1b39fd1a902586147ca7e0ffe097de7b6 in all three builds and in the served bytes",
+    "eligibility": "served index.html before the PUT named ./assets/index-Bi7lF9Yv.js (the 7d7e05c build, 231706 B, sha256 9c43471c...), so this was a real promotion and not a no-op"
+  },
+  "gates": {
+    "npm_run_typecheck": "tsc --noEmit, no output; exit 0",
+    "npm_test": "Test Files 27 passed (27); Tests 283 passed (283); duration 4.51 s; exit 0",
+    "npm_run_validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s) in 3 ms; behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s); validated: no violations; exit 0 (line byte-identical to OPS-010/OPS-011, so the unnamed ladder still pays the plain price)",
+    "ladder_fixture_identity": "docs/evidence/yard-mature.json schemaVersion 1, checksum eede3c4f (asserted unchanged in tests/simulation/fork.test.ts, which also decodes a save written while the dock named three branches)",
+    "npm_run_build": "vite; 53 modules transformed; built in 559 ms; exit 0",
+    "entry_chunk_ceiling": "assets/index-Cmh4A1Sb.js = 231878 B <= 233000 B -> PASS (1122 B spare; base index-Bi7lF9Yv.js 231706 B, +172 B); css assets/index-mmTSZ7Fz.css = 7474 B; tables 9298 B and the worker 13406 B byte-identical to the 7d7e05c release; index.html 778 -> 1290 B",
+    "team_board_unit_test": "node --test scripts/team-board.test.mjs -> exit 0 (5 pass / 0 fail)",
+    "board_check": "node scripts/team-board.mjs --check -> exit 0 at the docs commit tip of this pass"
+  },
+  "artifactDigest": "sha256 of the five served files as installed and read back (see assets); identical across the isolated SHA build, the integration-tree build and the independent QA build",
+  "assets": [
+    {
+      "name": "index.html",
+      "bytes": 1290,
+      "sha256": "1ac12d8f69609b9685272d0ed27f2724134e5f63a074d7a216c5584918628ca1"
+    },
+    {
+      "name": "assets/index-Cmh4A1Sb.js",
+      "bytes": 231878,
+      "sha256": "5376ec71cb0c4415cfd7f4c6861e45a1b39fd1a902586147ca7e0ffe097de7b6"
+    },
+    {
+      "name": "assets/tables-BB2NPvQ2.js",
+      "bytes": 9298,
+      "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968"
+    },
+    {
+      "name": "assets/index-mmTSZ7Fz.css",
+      "bytes": 7474,
+      "sha256": "7703e5e6ce7005c386de046d8b76e920f8ef6634f42a1c96beb6b309d4b7705c"
+    },
+    {
+      "name": "assets/catchup.worker-G_Jyr7uh.js",
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+    }
+  ],
+  "install": {
+    "release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-0c03572",
+    "release_files": 5,
+    "host_digests_equal_local_build": "5/5 (sha256sum inside the release dir equals the isolated SHA build)",
+    "file_mtime_as_served": "Last-Modified Thu, 05 Nov 2026 19:16:56/57 GMT on all five served files (the upload moment)",
+    "previous_release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-7d7e05c",
+    "previous_release_retained": true,
+    "cleanup": "none - bounded retention not exercised this round; only Rustwake-owned release directories exist there"
+  },
+  "endpoint_identity_verified": true,
+  "endpoint_id": 3,
+  "endpoint_name": "Databrick",
+  "endpoint_status": 1,
+  "endpoint_url": "tcp://192.168.86.48:9001",
+  "stack_name": "rustwake",
+  "stack_id": 125,
+  "stack_project_path": "/data/compose/125",
+  "stack_put_http": "PUT /api/stacks/125?endpointId=3&force=1 -> HTTP 200 with a JSON body at 2026-11-05T20:03:54.360Z (Id 125, Name rustwake, Type 2, EndpointId 3, Status 1). The first attempt on this host never answered: auth timed out three times at 240 s each (720 s), then on the retry auth succeeded at +623.2 s and the whole call chain finished at +637.4 s",
+  "stack_put_payload_form": "{name, stackFileContent, stackFile, env: [], fromAppTemplate: false}; compose read back with GET /api/stacks/125/file?endpointId=3&type=2",
+  "stored_compose_before_sha256": "56a2448b0aea16ba06f834650626bfb8bfc4373595d96e0158f68989d2690cec (898 B) - equals the OPS-011-g1 after-value, so no third-party edit landed in the window",
+  "stored_compose_after_sha256": "2e611cc73da32f8f9d05adaf0973e078325f21892baa85c52464df0fd687095c (921 B)",
+  "stored_compose_diff": "two lines on an 898 B file: line 13 bind path releases/rustwake-7d7e05c -> releases/rustwake-0c03572, plus a new service label line 'release: 0c03572'. Nothing else changed (the file is stored with LF, crlf_pairs 0)",
+  "no_op_detection": "the first PUT carried the bind change alone and was a no-op: the same 898 B model was re-submitted and Portainer kept the compose config-hash unchanged, so the service was not recreated and the served HTML still named the old entry. Adding the release label produced a real model change (898 B -> 921 B), which recreated the service. This is the recorded reason for a second PUT, not a retry of a failed one",
+  "stored_compose_bind_after": "- /home/darkmatter2222/rustwake/releases/rustwake-0c03572:/usr/share/nginx/html:ro",
+  "stored_compose_label_after": "release: 0c03572 (added next to managed-by: portainer)",
+  "identity_reads": "the before/after compose digests, the bind line, the added label, the PUT response body, the container start timestamp and the compose config-hash all come from the successful read/PUT run that finished at 2026-11-05T20:03:54.360Z (r4b-put). A further read at 20:2x failed to authenticate (auth try1/try2 timed out at 240 s, try3 returned HTTP 403 with no JWT after 610 s), so the fleet-wide running-container count and a fresh container restart-count were not re-read this round; the container's liveness is instead proven functionally (healthz 200 3 B, the five served files equal to the build over HTTPS and LAN, the previous entry name 404s, 0 pageerror in the live smoke)",
+  "container_name": "rustwake-static-1",
+  "container_started_at": "2026-11-05T20:03:52.091408774Z",
+  "container_compose_config_hash_after": "a260a9e72ad8b9a3b273ef8c262bb6582e1c4e629fc8e94835d8c3103cd18c75 (was 914a776bd3a5cb58057993518056b74306f9c0451bf2c975f2a44b84ab20fa9c in OPS-011-g1; it changed because the model changed)",
+  "container_labels": "app=rustwake repo=Rustwake env=databrick managed-by=portainer plus the new release=0c03572; project config_files /data/compose/125/docker-compose.yml",
+  "container_hardening": "user 101:101, read_only rootfs, mem 128M, cpus 0.50, restart unless-stopped, ports 8080/tcp -> HostPort 8700 (unchanged from OPS-011)",
+  "healthcheck": "/healthz -> 200 (3 B) over both LAN and the ingress route",
+  "mutations": [
+    "added release directory /home/darkmatter2222/rustwake/releases/rustwake-0c03572 (5 files, scp)",
+    "PUT /api/stacks/125?endpointId=3&force=1 with the two-line compose change; only service static recreated"
+  ],
+  "mutation_count": 2,
+  "promotion_timing": "integration commit 2026-11-05T19:07:39Z, push immediately after; artifact uploaded 19:16:56-57Z (served Last-Modified); container started 20:03:52Z, PUT acknowledged 20:03:54Z -> ~47 min from upload, ~56 min from push. Over the 5-10 min target. The measured API wait dominates: attempt 1 spent 720 s on three 240 s auth timeouts, attempt 2 got its JWT at +623.2 s and finished the compose read + PUT at +637.4 s, so about 23 min were the Portainer API alone; the remainder is this lane's serial reads (each capped at 240 s) and the no-op PUT round",
+  "external": [
+    {
+      "path": "/rustwake/",
+      "status": 200,
+      "bytes": 1290,
+      "sha256": "1ac12d8f69609b9685272d0ed27f2724134e5f63a074d7a216c5584918628ca1",
+      "equals_built": true,
+      "cache_control": null,
+      "last_modified": "Thu, 05 Nov 2026 19:16:56 GMT",
+      "names": "./assets/index-Cmh4A1Sb.js + modulepreload ./assets/tables-BB2NPvQ2.js + stylesheet ./assets/index-mmTSZ7Fz.css + one inline rel=icon data URI"
+    },
+    {
+      "path": "/rustwake/assets/index-Cmh4A1Sb.js",
+      "status": 200,
+      "bytes": 231878,
+      "sha256": "5376ec71cb0c4415cfd7f4c6861e45a1b39fd1a902586147ca7e0ffe097de7b6",
+      "equals_built": true,
+      "cache_control": "max-age=31536000, public, immutable",
+      "last_modified": "Thu, 05 Nov 2026 19:16:57 GMT"
+    },
+    {
+      "path": "/rustwake/assets/index-mmTSZ7Fz.css",
+      "status": 200,
+      "bytes": 7474,
+      "sha256": "7703e5e6ce7005c386de046d8b76e920f8ef6634f42a1c96beb6b309d4b7705c",
+      "equals_built": true,
+      "cache_control": "max-age=31536000, public, immutable",
+      "last_modified": "Thu, 05 Nov 2026 19:16:57 GMT"
+    },
+    {
+      "path": "/rustwake/assets/tables-BB2NPvQ2.js",
+      "status": 200,
+      "bytes": 9298,
+      "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968",
+      "equals_built": true,
+      "cache_control": "max-age=31536000, public, immutable",
+      "last_modified": "Thu, 05 Nov 2026 19:16:57 GMT"
+    },
+    {
+      "path": "/rustwake/assets/catchup.worker-G_Jyr7uh.js",
+      "status": 200,
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50",
+      "equals_built": true,
+      "cache_control": "max-age=31536000, public, immutable",
+      "last_modified": "Thu, 05 Nov 2026 19:16:57 GMT"
+    },
+    {
+      "path": "/rustwake/healthz",
+      "status": 200,
+      "bytes": 3
+    },
+    {
+      "path": "/rustwake/some/spa/route",
+      "status": 200,
+      "bytes": 1290
+    },
+    {
+      "path": "/rustwake/assets/index-Bi7lF9Yv.js (previous entry)",
+      "status": 404,
+      "bytes": 153
+    }
+  ],
+  "lan_checks": [
+    "http://192.168.86.48:8700/ -> 200 1290 B sha256 1ac12d8f... (equals the served HTML over HTTPS)",
+    "http://192.168.86.48:8700/assets/index-Cmh4A1Sb.js -> 200 231878 B sha256 5376ec71... (equals HTTPS and the build)",
+    "http://192.168.86.48:8700/assets/index-mmTSZ7Fz.css -> 200 7474 B sha256 7703e5e6... (equals HTTPS and the build)",
+    "http://192.168.86.48:8700/assets/tables-BB2NPvQ2.js -> 200 9298 B sha256 28bed3b0...",
+    "http://192.168.86.48:8700/assets/catchup.worker-G_Jyr7uh.js -> 200 13406 B sha256 0c784f3e...",
+    "http://192.168.86.48:8700/healthz -> 200 3 B"
+  ],
+  "served_equals_built": "5/5 sha256 and byte size equal the build over both HTTPS and loopback; the served index.html names ./assets/index-Cmh4A1Sb.js (231878 B), modulepreload ./assets/tables-BB2NPvQ2.js (9298 B), stylesheet ./assets/index-mmTSZ7Fz.css (7474 B), so the live route serves the new entry and the previous entry name now 404s",
+  "external_nodes": "single-node (this host) HTTPS verification; the 4-node check-host sweep was not re-run this round",
+  "browser_smoke": {
+    "engine": "playwright-core headless Chrome (system Chrome), mobile 390x844 (deviceScaleFactor 2, text scale 1.0) and 360x640 (text scale 2.0), isMobile/hasTouch, fresh storage per context, 250 ms taps, .gate__btn tapped first, route https://home.darkmatter2222.com/rustwake/",
+    "priced_fork_row": "exactly two options with different prices - 390x844 ts1: 'Faster batches | 40 credits' [x 10, w 191.8, h 46] and 'Less power | 30 credits' [x 207.8, w 172.3, h 46]; 360x640 ts2: [x 10, w 182.7, h 46] and [x 194.7, w 155.3, h 46]; minimum face dimension 46 px in both cells (>= 44); prices set = ['40 credits','30 credits']",
+    "exact_charge": "purse 30, one tap on the 30-credit face: credits 30 -> 0, charged 30 == the printed price; save decodes to schemaVersion 1 with machine id 1 at level 2 and branch ['draw'], revision 36 -> 37, four machines at levels 2/1/1/1; the dock returns to Store | Yard | 'Build Copper separator 25 scrap + 5 ferrous' | Build",
+    "refusal_at_in_between_purse": "purse 30, the dearer face: toast 'Need 40 credits · have 30' with no state change (credits 30, revision 35, level 1, branch null); the resting line then carries the tail 'Drones 1 · Power 8 · 1 requested · 100 % · Last need 40 credits · have 30'",
+    "resting_line": "'Drones 1 · Power 8 · 0 requested · 100 %' at machines 1 with 'Batch pips · Scrap sorter #8 0/5' underneath; at the fork frame 'Drones 1 · Power 8 · 1 requested · 100 %' with 'Batch pips · Scrap sorter #8 5/5 · Furnace #9 0/5 +2'",
+    "no_scroll_and_card": "scrollHeight == innerHeight in every measured cell (844/844 and 640/640, widths 390/390 and 360/360); card 89.2 px of an 844 px .hud content box = 10.6 % at 390x844 ts1, 274.4 px of 640 px = 42.9 % at 360x640 ts2 with the fork open (the one cell outside the 42 % cap, pre-existing at the identical reading in the 7d7e05c build), 89.2/640 = 13.9 % at rest in that cell",
+    "console": "pageerror 0 in both sessions (PAGEERRORS_TOTAL=0)",
+    "favicon": "0 /favicon.ico requests in both sessions (FAVICON_REQUESTS_TOTAL=0); the served 1290 B HTML carries one inline rel='icon' data URI",
+    "raw_frames": [
+      {
+        "file": "r4-live-390-rest.png",
+        "bytes": 73848,
+        "sha256": "d2d2b4f9bd58dce7b5320dc9db5e8a9193eb6a1ef8d2e57d1141bf111753d1fc"
+      },
+      {
+        "file": "r4-live-390-fork.png",
+        "bytes": 75177,
+        "sha256": "4679b9f9c3ed0d47338cf8f9f5f31edeccde0cb02cb84a89614f4b0340185512"
+      },
+      {
+        "file": "r4-live-390-refusal.png",
+        "bytes": 85985,
+        "sha256": "0e7e8244b875cc417a794019ce057c92e5da3bff40a03166c42a47428472091b"
+      },
+      {
+        "file": "r4-live-390-aftertap.png",
+        "bytes": 87730,
+        "sha256": "c193e943abe3c14e615fa5a0850ee22f62e3d01f459bae0e8824ca29e719b0ca"
+      },
+      {
+        "file": "r4-live-360-ts2-rest.png",
+        "bytes": 71667,
+        "sha256": "1046f12a4d04c50a461ab0bb1fff17e90aefd82ab1b6a84f3969c7b0d2e2f013"
+      },
+      {
+        "file": "r4-live-360-ts2-card.png",
+        "bytes": 118852,
+        "sha256": "0af39f685cb754cbabfb8102e16a9f8f63c8fd08d5ffecaa56a22c08ae96774c"
+      },
+      {
+        "file": "r4-live-360-ts2-fork.png",
+        "bytes": 124813,
+        "sha256": "bfa12227318c5b2c4c1501a7743bcbb8c0b8d4ba612a179861028f3fdc07afab"
+      },
+      {
+        "file": "r4-live-360-ts2-refusal.png",
+        "bytes": 146880,
+        "sha256": "583764de70bdf8abee7d8a58a6de34f70e2f2ab7f7300af9996035f2219b2eb9"
+      },
+      {
+        "file": "r4-live-360-ts2-aftertap.png",
+        "bytes": 142122,
+        "sha256": "599bacad36c1531b3bb87664f58a88d3a04cc1444b42e7e6170ce9462030e8a0"
+      }
+    ],
+    "raw_frames_directory": "C:/Users/ryans/AppData/Local/Temp/opencode (outside the repository, like the persona frames)"
+  },
+  "save_compatibility": "the live save after both runs is schemaVersion 1 with four machines at levels 2/1/1/1; the shipped v1 fixture (docs/evidence/yard-mature.json, checksum eede3c4f) still re-encodes byte-for-byte and tests/simulation/fork.test.ts also decodes a save written while the dock named three branches; lastReject is React session state only, absent from both stringified states, so no field was added to SimState and saves from rustwake-7d7e05c load unchanged",
+  "ci": "remote-CI-unverified - gh 2.95.0 unauthenticated (gh auth status exit 1 'You are not logged into any GitHub hosts', gh api exit 4); the locally reproduced .github/workflows/ci.yml steps are green (typecheck 0, 283/27 tests, validate 0, build 0, board --check 0 at the docs tip); no remote pass is claimed",
+  "rollback": {
+    "needed": false,
+    "step": null
+  },
+  "rollback_procedure_if_needed": "PUT /api/stacks/125?endpointId=3&force=1 with the same compose body, the html bind path restored to releases/rustwake-7d7e05c and the added 'release: 0c03572' label line removed (the pre-promotion file is stored byte-for-byte as 56a2448b...); nothing else changed",
+  "rollback_resource_name": "rustwake-7d7e05c",
+  "drift_notes": [
+    "Endpoint identity, stack 125, port 8700 and the container hardening equal the OPS-011 end state before and after; the stored compose differs only by the two recorded lines and the nginx config hashes are unchanged (/home/darkmatter2222/rustwake/nginx/default.conf 47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2, nginx.conf 83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd)",
+    "No new stack, network, port, DNS record or ingress include; no global prune, no fleet compose down, no unrelated stack recreated; exactly one Rustwake-owned container and one Rustwake-owned network",
+    "No secret values recorded; Portainer credentials were read from the HomeAILab .env in-process only",
+    "Untracked-in-worktree note: work/review/rev-q002-g1.md carries a pre-existing modification in the main checkout and the three work/review/_qa_s3g1_*.mjs probes are untracked; all were left untouched by this lane, so they are not part of 0c03572. stash@{0} (edaccd9cd79b670b5f7e007b67fc571b6ed0c990, 'WIP on ... f607ad2') holds no tracked-file changes; its two untracked helper scripts are not in HEAD, so nothing was lost"
+  ],
+  "defects_filed_to_pm": [
+    {
+      "id": "DEF-001",
+      "severity": "low",
+      "status": "open, unchanged",
+      "repro": "previous hashed asset /assets/index-Bi7lF9Yv.js -> 404 (153 B) while the five new names -> 200; index.html still has no Cache-Control (measured cache_control null, ETag + Last-Modified present)"
+    },
+    {
+      "id": "DEF-002",
+      "severity": "cosmetic",
+      "status": "closed at 43cf3ac, verified on the deployed artifact",
+      "repro": "served index.html is 1290 B with one inline data-URI rel=icon link and 0 /favicon.ico requests in both chromium sessions; the 778 B HTML fallback answer is no longer reachable while this release is served (QA note D-3: headless Chrome issued 0 favicon requests for the base too, so the fallback itself stayed unobservable)"
+    },
+    {
+      "id": "DEF-006",
+      "severity": "minor",
+      "status": "closed at 43cf3ac, verified on the deployed artifact",
+      "repro": "after an accepted command the 'Last need ...' segment is gone (QA counted 18 successful taps, 0 still showing it); the live route prints 'Drones 1 · Power 8 · 1 requested · 100 %' after the paid pick and brings the tail back on the next block"
+    },
+    {
+      "id": "CHRM-001",
+      "severity": "minor",
+      "status": "one cell open (back to triaged)",
+      "repro": "360x640 ts2.0 with the fork open: card 274.4 px of a 640 px .hud content box = 42.9 % against the 42 % cap (0.9 pp); the identical reading in the 7d7e05c build with the same script and seed shows it is pre-existing; the other three cells measure 16.7 / 10.6 / 32.5 %; closing lever named: .text-large .status-line line-height 1.2 -> 1.1 at src/ui/styles.css:608 (~1.6 pp), css-only"
+    },
+    {
+      "id": "D2",
+      "severity": "minor",
+      "status": "pre-existing, unchanged",
+      "repro": "360x640 at text scale 2.0: Store/Sell/Build/Research show scrollWidth > clientWidth; identical at the 24daf0e base, the two priced faces are not clipped"
+    }
+  ],
+  "unaffected_services_before_after": {
+    "https://home.darkmatter2222.com/": "301 -> /grafana/ (measured after the promotion)",
+    "https://home.darkmatter2222.com/grafana/": "302 -> /grafana/login (login redirect chain intact)"
+  },
+  "ingress_unchanged": true,
+  "status": "deployed",
+  "verdict": "pass - rustwake-0c03572 deployed and verified on the existing route; served == built 5/5; the served HTML names the new entry (index-Cmh4A1Sb.js 231878 B) and the previous one 404s; the live smoke prints two priced faces at two prices with 46 px faces, one tap charging exactly the printed 30, the numbered refusal at an in-between purse, the resting fleet/power line, scrollHeight equal to innerHeight, 0 pageerror and 0 favicon requests; no rollback",
+  "reachability": "external HTTPS plus LAN loopback on the same host",
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "environment": "databrick",
+  "ownedResources": [
+    "/home/darkmatter2222/rustwake/releases/rustwake-0c03572",
+    "portainer stack 125 (rustwake) compose file: bind line + release label",
+    "container rustwake-static-1"
+  ],
+  "priorRelease": "rustwake-7d7e05c",
+  "rollbackResult": null,
+  "verifiedAt": "2026-11-05T20:22:00Z",
+  "blocker": null
+}

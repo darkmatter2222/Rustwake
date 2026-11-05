@@ -1,0 +1,64 @@
+{
+  "captured": "2026-11-05T20:09:00Z",
+  "tool": "playwright-core headless Chrome (system Chrome), page.screenshot on the deployed route",
+  "source_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+  "deployed_release": "rustwake-0c03572",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "viewport": "390x844 dpr2 text scale 1.0 and 360x640 dpr2 text scale 2.0, isMobile, hasTouch, fresh storage per context, 250 ms taps on .dock__btn--primary; the gate button 'Begin recovery' is tapped first; text scale set through the player's own 'Text size' control",
+  "label": "organic, not seeded; the seeded 12-case slice at 24daf0e stays in docs/screenshots/slice-*.png with its own provenance",
+  "visible_readouts": {
+    "rest (390x844 ts1)": "status lines 'Draw the route so cargo has somewhere to go.' and 'Drones 1 · Power 8 · 0 requested · 100 %' plus 'Batch pips · Scrap sorter #8 0/5'; card 89.2 px of an 844 px .hud content box = 10.6 %; scrollHeight 844 == innerHeight 844",
+    "fork-tap251 (390x844 ts1)": "exactly two dock buttons with two prices: 'Faster batches 40 credits' [x 10, w 191.8, h 46] and 'Less power 30 credits' [x 207.8, w 172.3, h 46]; legend 'Batch pips · Scrap sorter #8 5/5 · Furnace #9 0/5 +2'",
+    "refusal (both cells)": "purse 30: the dearer face prints toast 'Need 40 credits · have 30' with no state change and the resting line carries the tail 'Drones 1 · Power 8 · 1 requested · 100 % · Last need 40 credits · have 30'",
+    "aftertap (both cells)": "one tap on the 30-credit face takes the purse 30 -> 0 and records branch [\"draw\"] at level 2 in the save (schemaVersion 1, revision 36 -> 37); the dock returns to Store | Yard | Build",
+    "360-ts2 cells (360x640 ts2.0)": "same two priced faces [x 10, w 182.7, h 46] and [x 194.7, w 155.3, h 46], minimum face 46 px; card 274.4 px of a 640 px .hud content box = 42.9 % with the fork open (0.9 pp outside the 42 % cap, the identical reading in the 7d7e05c build); no page scroll (640 == 640)"
+  },
+  "note": "Fresh capture for the STRAT-003 g1 surfaces on the deployed artifact: two named plans at two different prices, the exact charge from one tap, the numbered refusal at an in-between purse and the retiring Last segment. 0 pageerror and 0 /favicon.ico requests in both browser sessions (see work/deployments/OPS-012-g1.json).",
+  "files": [
+    {
+      "file": "live-0c03572-rest.png",
+      "bytes": 73848,
+      "sha256": "d2d2b4f9bd58dce7b5320dc9db5e8a9193eb6a1ef8d2e57d1141bf111753d1fc"
+    },
+    {
+      "file": "live-0c03572-fork-tap251.png",
+      "bytes": 75177,
+      "sha256": "4679b9f9c3ed0d47338cf8f9f5f31edeccde0cb02cb84a89614f4b0340185512"
+    },
+    {
+      "file": "live-0c03572-refusal.png",
+      "bytes": 85985,
+      "sha256": "0e7e8244b875cc417a794019ce057c92e5da3bff40a03166c42a47428472091b"
+    },
+    {
+      "file": "live-0c03572-aftertap.png",
+      "bytes": 87730,
+      "sha256": "c193e943abe3c14e615fa5a0850ee22f62e3d01f459bae0e8824ca29e719b0ca"
+    },
+    {
+      "file": "live-0c03572-360-ts2-rest.png",
+      "bytes": 71667,
+      "sha256": "1046f12a4d04c50a461ab0bb1fff17e90aefd82ab1b6a84f3969c7b0d2e2f013"
+    },
+    {
+      "file": "live-0c03572-360-ts2-card.png",
+      "bytes": 118852,
+      "sha256": "0af39f685cb754cbabfb8102e16a9f8f63c8fd08d5ffecaa56a22c08ae96774c"
+    },
+    {
+      "file": "live-0c03572-360-ts2-fork-tap249.png",
+      "bytes": 124813,
+      "sha256": "bfa12227318c5b2c4c1501a7743bcbb8c0b8d4ba612a179861028f3fdc07afab"
+    },
+    {
+      "file": "live-0c03572-360-ts2-refusal.png",
+      "bytes": 146880,
+      "sha256": "583764de70bdf8abee7d8a58a6de34f70e2f2ab7f7300af9996035f2219b2eb9"
+    },
+    {
+      "file": "live-0c03572-360-ts2-aftertap.png",
+      "bytes": 142122,
+      "sha256": "599bacad36c1531b3bb87664f58a88d3a04cc1444b42e7e6170ce9462030e8a0"
+    }
+  ]
+}
