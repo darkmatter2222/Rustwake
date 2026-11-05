@@ -1,0 +1,118 @@
+{
+  "task": "STRAT-003 g1",
+  "role": "player-researcher",
+  "persona": "one simulated persona per run (optimizer): taps the primary action to the first fork, then reads the resting power line and taps one named plan; no developer walkthrough, no source view before the first pass",
+  "kind": "simulated-persona inference plus numeric chromium readouts - not human research",
+  "candidate_sha": "43cf3acd91911618983efef723c8f6879cdab2f3",
+  "control_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
+  "question": "Can one sentence name what the chosen plan costs that the other one does not? A/B: priced faces (candidate) against equal-price faces (the deployed control build).",
+  "method": "playwright-core headless Chrome (system Chrome), 250 ms taps, fresh storage per context, one local static server per immutable build (127.0.0.1:8441 priced, 127.0.0.1:8442 control), seeded-free organic taps; the fork row, the toast, the resting line and the decoded save are read from the same frame. Three passes: R1 comprehension (390x844, one pick), R2 legibility grid (4 viewport x text-scale combos), R3 blind 60/120-tap run; plus a picks pass (pick0 and pick1 separately, purse 30) and a panel pass (what the on-screen text states after the paid pick).",
+  "sentences": [
+    {
+      "id": "S1",
+      "said": "The dock shows two named plans and each one prints its own price.",
+      "priced": {
+        "verdict": "pass",
+        "fork_row": ["Faster batches40 credits", "Less power30 credits"],
+        "dock_html": "<button class=\"dock__btn\">Faster batches<span class=\"dock__cost\">40 credits</span></button><button class=\"dock__btn\">Less power<span class=\"dock__cost\">30 credits</span></button>",
+        "face_boxes_px": [{ "label": "Faster batches", "w": 191.8, "h": 46 }, { "label": "Less power", "w": 172.3, "h": 46 }],
+        "min_face_px": 46,
+        "taps_to_first_fork": 349
+      },
+      "control": {
+        "verdict": "fail",
+        "fork_row": ["Faster batches30 credits", "Less power30 credits"],
+        "face_boxes_px": [{ "label": "Faster batches", "w": 191.8, "h": 46 }, { "label": "Less power", "w": 172.3, "h": 46 }],
+        "min_face_px": 46,
+        "taps_to_first_fork": 347,
+        "note": "both faces print the same number, so the row is two plans at one price"
+      }
+    },
+    {
+      "id": "S2",
+      "said": "One tap paid exactly the number printed on the face I tapped, and that number tells me which plan I got.",
+      "priced": {
+        "verdict": "pass",
+        "pick1_less_power": { "printed": "30 credits", "credits_before": 30, "credits_after": 0, "charged": 30, "level": 2, "branch": ["draw"], "revision": "36 -> 37" },
+        "furnace_rank1_follow_on": { "faces": ["Faster batches50 credits", "Less power40 credits"], "note": "the second ladder prints its own pair (50/40), so the printed pair is rank-specific, not one hard-coded number" },
+        "identification": "the paid amount differs per plan (40 for speed, 30 for draw at rank 1), so the number names the plan"
+      },
+      "control": {
+        "verdict": "fail",
+        "pick1_less_power": { "printed": "30 credits", "credits_before": 30, "credits_after": 0, "charged": 30, "level": 2, "branch": ["draw"] },
+        "pick0_faster_batches": { "printed": "30 credits", "credits_before": 30, "credits_after": 0, "charged": 30, "level": 2, "branch": ["speed"] },
+        "identification": "both plans print 30 and both charge 30, so the paid amount is the same for either choice and cannot identify the plan - this is the sentence the experiment exists to separate",
+        "why_it_counts": "the same script, same cadence, same purse gives 40/30 on the candidate and 30/30 on the control, so the difference is the change under test and not the harness"
+      }
+    },
+    {
+      "id": "S3",
+      "said": "With a purse between the two prices, the dearer plan was refused and the screen said by how much.",
+      "priced": {
+        "verdict": "pass",
+        "purse": 30,
+        "toast": "Need 40 credits · have 30",
+        "resting_line_with_tail": "Drones 1 · Power 8 · 1 requested · 100 % · Last need 40 credits · have 30",
+        "state_unchanged_after_refusal": { "credits": 30, "revision": 35, "level": 1, "branch": null },
+        "refusal_stability": "the tail was present on 30 of 30 subsequent taps in that session (the purse never covered 40), and the card kept printing the plain ladder price 30 beside the faces"
+      },
+      "control": {
+        "verdict": "not reachable",
+        "purse": 30,
+        "observed": "with one price there is no in-between purse: at 30 credits the tapped plan is simply bought (credits 30 -> 0, branch recorded at level 2) and no price shortfall line appears; the only toasts in that session were other build prices, e.g. 'Need 25 scrap · have 10'"
+      }
+    }
+  ],
+  "legibility_grid_priced": [
+    { "cell": "360x640 ts1", "costs": ["40 credits", "30 credits"], "face_h": [46, 46], "scroll": "360x640 vs 360x640, no page scroll" },
+    { "cell": "360x640 ts2", "costs": ["40 credits", "30 credits"], "face_h": [46, 46], "scroll": "360x640 vs 360x640, no page scroll" },
+    { "cell": "390x844 ts1", "costs": ["40 credits", "30 credits"], "face_h": [46, 46], "scroll": "390x844 vs 390x844, no page scroll" },
+    { "cell": "390x844 ts2", "costs": ["40 credits", "30 credits"], "face_h": [46, 46], "scroll": "390x844 vs 390x844, no page scroll" }
+  ],
+  "resting_line": { "priced_no_tail": "Drones 1 · Power 8 · 1 requested · 100 %", "priced_after_refusal": "Drones 1 · Power 8 · 1 requested · 100 % · Last need 40 credits · have 30", "priced_tail_retired_after_a_success": "Drones 1 · Power 8 · 1 requested · 100 %" },
+  "observations": [
+    "The two prices are readable at a glance: each face carries its own .dock__cost node, cost font 10.8 px at text scale 1.0 and 15.0 px at 2.0, measured contrast 10.9 against the panel.",
+    "The card's primary line still prints the plain ladder price ('Choose what improves on the Scrap sorter · 30 credits') beside the two priced faces; the persona read it as the cheaper of the two and was not misled into the dearer plan.",
+    "After the paid pick the dock returns to Store | Yard | 'Sell 40 Scrap+40 credits' | Build, so the fork really committed and the row is not left hanging.",
+    "Blind run (no pick, primary taps only): 0 machines at tap 60 and 1 machine at tap 120 with 0 credits at tick 310 - the same readings in both arms, so the price change did not alter the untaught progression; the fork itself first appears after 347-349 primary taps in the guided passes of both arms."
+  ],
+  "confusion_or_wish": "One wish, not a defect: the numbers 40 and 30 name the price but not the effect; the persona still has to remember that 'Faster batches' is the throughput plan. Suggested next sentence to test: print the moved quantity on the face ('+10 % batches') and see whether the same one-tap test then names the effect as well as the price.",
+  "verdict": "the priced arm satisfies all three sentences; the equal-price control fails S2 (and S1), so the experiment counts: unequal prices are what let one sentence name the chosen plan.",
+  "limits": [
+    "Simulated persona, one persona per run, no human playtest, no invented cohorts.",
+    "Audio not listened to; no enjoyment or retention inferred.",
+    "Raw PNGs stay outside the repository in C:/Users/ryans/AppData/Local/Temp/opencode and are listed by name below; only this JSON is tracked."
+  ],
+  "provenance": {
+    "pattern": "same shape as docs/screenshots/live-8a06e9d-provenance.json",
+    "captured": "2026-11-05T13:40:00Z",
+    "tool": "playwright-core headless Chrome (system Chrome), 250 ms taps, deviceScaleFactor 2, isMobile, hasTouch, fresh storage per context",
+    "route": "local static servers over the two immutable dist trees (127.0.0.1:8441 priced, 127.0.0.1:8442 control)",
+    "scenario": "organic (unseeded) fresh-save runs: primary taps to the first fork, one named-plan tap at purse 30, then the refusal and the following 20-30 taps",
+    "label": "organic, not seeded; the seeded 12-case slice at 24daf0e stays in docs/screenshots/slice-*.png with its own provenance",
+    "raw_directory": "C:/Users/ryans/AppData/Local/Temp/opencode",
+    "source_json": [
+      { "file": "strat003-harness.json", "bytes": 118051, "sha256": "78c4f319e2a6ca3746f8b04cf281431e1a2f3b8cf0128cfb2e22211ef658d8c2" },
+      { "file": "strat003-picks.json", "bytes": 69802, "sha256": "592c353017661102a9b99d6f53c0318dc1dfeeecb9095ce60ea186ba0344b401" },
+      { "file": "strat003-panel.json", "bytes": 16496, "sha256": "619711578bfea035b887a5921920787d0c20564d9048c9114d419e409fb8ad78" }
+    ],
+    "files": [
+      { "file": "strat003-priced-360x640ts1.png", "bytes": 75799, "sha256": "135c25c4d214d8b8b018514fbe513abd722786590e5278c7f10d166a64ec6cbb" },
+      { "file": "strat003-priced-360x640ts2.png", "bytes": 125000, "sha256": "26c760ac8eb464b877beb3bf6332da98b7acf827fbdec71098576d2d909d70c9" },
+      { "file": "strat003-priced-390x844-r1.png", "bytes": 86844, "sha256": "751d58f85414c4e1f810eb638bbd9680b152504c1433f377a97f89080072d22a" },
+      { "file": "strat003-priced-390x844ts1.png", "bytes": 75088, "sha256": "fc28edcfed35425b2efb71ddae92c50ddf26f2599e892db86d10611bae352eed" },
+      { "file": "strat003-priced-390x844ts2.png", "bytes": 126025, "sha256": "4496dcbebded82ca3b6041c0bcaa58f432867e33c34c3fa18ca1b543c7dc4c5c" },
+      { "file": "strat003-priced-panel.png", "bytes": 81108, "sha256": "fab298e58603e5ccf541cd62081daa42d29a76903901d612804428b2ddb8ff25" },
+      { "file": "strat003-priced-pick0.png", "bytes": 86973, "sha256": "ed012d8b747f5df6bf3b5d7a635119e130e924ae7faa8e42afa2976de538624" },
+      { "file": "strat003-priced-pick1.png", "bytes": 91715, "sha256": "80b887a0175f889a5321cebc55789106ffa706b259bee9a7d6e09b21ccce7460" },
+      { "file": "strat003-control-360x640ts1.png", "bytes": 79617, "sha256": "66f90682dd143bfb40d0c5d3e3f1f2fe4399b1bbe8d21c3b8345585eecd2729b" },
+      { "file": "strat003-control-360x640ts2.png", "bytes": 132695, "sha256": "5354dd8db14fb1ea3d75ee6da18bd609e00d5a2f0f3dce4b22300b2f09eb7180" },
+      { "file": "strat003-control-390x844-r1.png", "bytes": 91238, "sha256": "eecc088691d5f158c86162f892bcab8da928d32433511dfab890e77cf28ff2a6" },
+      { "file": "strat003-control-390x844ts1.png", "bytes": 77896, "sha256": "54bfd0c26d13cf39f66ae242f81cbc3214dfcd63735e7e6e3a8a1cac07b97761" },
+      { "file": "strat003-control-390x844ts2.png", "bytes": 134192, "sha256": "960a0c35b7ca6fb76267c871cddefc909b92f1d1272b74ac528400cd37370f9d" },
+      { "file": "strat003-control-panel.png", "bytes": 90454, "sha256": "4ba317d37172fcb306334a1ee8720527685909b7ca876ef5eb0968eb7f5eeeb8" },
+      { "file": "strat003-control-pick0.png", "bytes": 89970, "sha256": "668f5b8cc38c611eda003d3dc5b14e938216c51e91cb2f83e5791867d98cc67f" },
+      { "file": "strat003-control-pick1.png", "bytes": 91167, "sha256": "900b174126cd5a94c013131daa6df0e8c8d03cf3e11d5043dfa3c17a25f451cb" }
+    ]
+  }
+}

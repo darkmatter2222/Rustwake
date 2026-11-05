@@ -104,6 +104,11 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       const result = store.dispatch(command);
       if (result.ok) {
         audio().play(cueFor(command.type));
+        // DEF-006 (PLAY-002 g1 QA note a): a successful tap retires the old
+        // shortfall, so the `Last ...` segment is the freshest answer at the front
+        // of the line, not a hundreds-of-taps-old residue. Session state only -
+        // the save shape and every stored byte are untouched.
+        setLastReject(null);
       } else {
         audio().play("blocked");
         const text = labelForReject(result);
@@ -565,8 +570,9 @@ export function buildPrimary(
 }
 
 /**
- * One authoritative step as one dock action. The upgrade step also carries its three
- * named outcomes, each priced the same and each committing on its own tap (A1-3).
+ * One authoritative step as one dock action. The upgrade step also carries its two
+ * named outcomes, each at its own price, each committing on its own tap (A1-3,
+ * STRAT-003).
  */
 function primaryForStep(
   state: SimState,

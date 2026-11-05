@@ -3,6 +3,7 @@ import seedEnvelope from "../../docs/evidence/yard-mature.json";
 import { BLUEPRINTS, RECIPES, TUNING, unlockedBlueprints, type ResourceId } from "../../src/game/content/defs";
 import {
   applyCommand,
+  branchPrice,
   DOCK_TILE,
   droneAddCost,
   sellableAmount,
@@ -78,6 +79,46 @@ const GAP_SPECS = {
 } as const;
 type Ladder = "regular" | "gap9" | "gap6";
 
+/**
+ * STRAT-003: the two live plans cost different amounts; the mirror buys a plan
+ * only when its own price is covered (the same policy the harness prints), and
+ * takes the surplus sell in the rounds a plan is not covered.
+ */
+const LIVE = ["speed", "draw"] as const;
+const mirrorPrices = (base: number, level: number) => ({
+  speed: branchPrice(base, level, "speed"),
+  draw: branchPrice(base, level, "draw"),
+});
+function mirrorPolicyPick(s: SimState, base: number, level: number): (typeof LIVE)[number] {
+  const prices = mirrorPrices(base, level);
+  const preferred: (typeof LIVE)[number] = s.powerRatio < 1 ? "draw" : "speed";
+  if (s.credits >= prices[preferred]) return preferred;
+  const options = LIVE.map((b) => ({ branch: b, price: prices[b] })).filter(
+    (o) => s.credits >= o.price
+  );
+  options.sort((a, b) => a.price - b.price || LIVE.indexOf(a.branch) - LIVE.indexOf(b.branch));
+  return options.length > 0 ? options[0].branch : preferred;
+}
+
+/** The harness' `sellStep`: one surplus tranche outside the pending build inputs. */
+function mirrorSellStep(s: SimState): { resource: ResourceId; qty: number } | null {
+  const unbuilt = unlockedBlueprints(s.tutorial).filter(
+    (id) => !s.machines.some((m) => m.blueprint === id)
+  );
+  const pending = new Set<string>();
+  for (const id of unbuilt) {
+    for (const item of BLUEPRINTS[id].buildCost) {
+      if ((s.store[item.resource] ?? 0) < item.qty) pending.add(item.resource);
+    }
+  }
+  for (const resource of SELL_ORDER) {
+    if (pending.has(resource)) continue;
+    const qty = sellableAmount(s, resource);
+    if (qty > 0) return { resource, qty };
+  }
+  return null;
+}
+
 /** The harness' first free tile: the dock tile is skipped, 8 is the fallback. */
 function a12Tile(s: SimState): number {
   for (let tile = 0; tile < YARD_TILES; tile += 1) {
@@ -123,7 +164,7 @@ function tutorialBodies(s: SimState): CommandBody[] | null {
  * are taken one tick at a time - identical `stepTick` calls to `advance(s, 10)` - so
  * the per-tick `inputStallTicks` sample (A1-2v3: not busy while the store sits at the
  * reserve floor) reads the same state the harness reads. */
-function a12Row(branch: UpgradeBranch | null, ladder: Ladder) {
+function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
   const spec = ladder === "regular" ? null : GAP_SPECS[ladder];
   const s = createInitialState();
   let seq = 0;
@@ -168,7 +209,7 @@ function a12Row(branch: UpgradeBranch | null, ladder: Ladder) {
     } else {
       const step = nextYardStep(s);
       if (step && step.kind) {
-        if (step.kind !== "salvage") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
+        if (step.kind !== "salvage" && step.kind !== "upgrade") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
         switch (step.kind) {
           case "connect":
             for (const plan of step.plans) {
@@ -193,14 +234,41 @@ function a12Row(branch: UpgradeBranch | null, ladder: Ladder) {
             send({ type: "drone.add" });
             taps += 1;
             break;
-          case "upgrade":
-            send(
-              branch === null
-                ? { type: "machine.upgrade", machineId: step.machineId }
-                : { type: "machine.upgrade", machineId: step.machineId, branch }
-            );
-            taps += 1;
+          case "upgrade": {
+            // STRAT-003 mirror of the harness `run()` upgrade case: the attempt goes
+            // out only when the option's own price is covered; otherwise the round
+            // takes the surplus sell (or idles when there is no surplus).
+            const machine = s.machines.find((m) => m.id === step.machineId);
+            const base = machine ? BLUEPRINTS[machine.blueprint].baseUpgradeCost : 0;
+            const named: UpgradeBranch | null =
+              branch === "policy"
+                ? machine
+                  ? mirrorPolicyPick(s, base, machine.level)
+                  : null
+                : branch;
+            const price = machine
+              ? named == null
+                ? upgradeCost(base, machine.level)
+                : branchPrice(base, machine.level, named)
+              : 0;
+            if (named == null || s.credits >= price) {
+              kinds.upgrade = (kinds.upgrade ?? 0) + 1;
+              send(
+                named == null
+                  ? { type: "machine.upgrade", machineId: step.machineId }
+                  : { type: "machine.upgrade", machineId: step.machineId, branch: named }
+              );
+              taps += 1;
+            } else {
+              const sell = mirrorSellStep(s);
+              if (sell) {
+                kinds.sell = (kinds.sell ?? 0) + 1;
+                send({ type: "contract.sell", resource: sell.resource, qty: sell.qty });
+                taps += 1;
+              }
+            }
             break;
+          }
           default:
             send({ type: "manual.salvage" });
             taps += 1;
@@ -223,6 +291,8 @@ function a12Row(branch: UpgradeBranch | null, ladder: Ladder) {
     Math.round((Math.min(m.starvedTicks, m.ageTicks) / Math.max(1, m.ageTicks)) * 100)
   );
   const batches = s.machines.reduce((sum, m) => sum + m.batchesDone, 0);
+  const policyMix: Record<string, number> = {};
+  for (const m of s.machines) for (const b of m.branch ?? []) policyMix[b] = (policyMix[b] ?? 0) + 1;
   return {
     batches,
     credits: Math.round(s.credits),
@@ -239,6 +309,7 @@ function a12Row(branch: UpgradeBranch | null, ladder: Ladder) {
     inputStallPct: Number(((inputStallTicks / Math.max(1, s.tick)) * 100).toFixed(1)),
     firstResearch,
     kinds,
+    ...(branch === "policy" ? { policyMix } : {}),
     // R4: the three pick counts, each named by its own field.
     attempts: kinds.upgrade ?? 0,
     purchasedLevels: s.machines.reduce((sum, m) => sum + (m.level - 1), 0),
@@ -493,8 +564,8 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
           }
         }
         // The census the harness prints: distinct cost-bearing options payable now -
-        // each affordable blueprint, the fork's three named outcomes at one price,
-        // the fleet, the next research node, one sell tranche.
+        // each affordable blueprint, the fork's named options each at its own price
+        // (STRAT-003), the fleet, the next research node, one sell tranche.
         const options: string[] = [];
         const unbuilt = unlockedBlueprints(s.tutorial).filter(
           (id) => !s.machines.some((m) => m.blueprint === id)
@@ -508,8 +579,13 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
           (m) => s.credits >= upgradeCost(BLUEPRINTS[m.blueprint].baseUpgradeCost, m.level)
         );
         if (upgrade) {
-          const price = upgradeCost(BLUEPRINTS[upgrade.blueprint].baseUpgradeCost, upgrade.level);
-          for (const name of ["speed", "buffer", "draw"]) options.push(name + price);
+          // STRAT-003: each named option prints its own price, so the census reads
+          // the same per-option table the dock prints.
+          for (const name of ["speed", "buffer", "draw"] as const) {
+            options.push(
+              name + branchPrice(BLUEPRINTS[upgrade.blueprint].baseUpgradeCost, upgrade.level, name)
+            );
+          }
         }
         if (s.drone.repaired && 1 + s.spares.length < TUNING.fleetCap && s.credits >= droneAddCost(s)) {
           options.push("drone");
@@ -524,7 +600,7 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
       return counted;
     };
     // Both readings are the naive line's census, with and without an explicit pick:
-    // the count comes from the three named options the dock shows at one price.
+    // the count comes from the named options the dock shows, each at its own price.
     expect(census(null)).toBeGreaterThanOrEqual(120);
     expect(census("buffer")).toBeGreaterThanOrEqual(120);
   });
@@ -536,37 +612,66 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
  * count has to say which field it reads (R4).
  */
 describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
-  it("reports the unnamed row as the speed twin on every scored column (R3)", () => {
+  it("keeps the unnamed ladder exact and lets the price difference bite (R3 restated, STRAT-003)", () => {
+    const patternOf: Record<Ladder, "regular" | "irregular" | "gap6"> = {
+      regular: "regular",
+      gap9: "irregular",
+      gap6: "gap6",
+    };
+    type StoredFull = StoredRow & {
+      credits: number;
+      creditsEarned: number;
+      taps: number;
+      rejects: number;
+      inputStallTicks: number;
+      purchasedLevels: number;
+      kinds: Record<string, number>;
+    };
     for (const ladder of ["regular", "gap9", "gap6"] as Ladder[]) {
       const twin = a12Row(null, ladder);
-      const speed = a12Row("speed", ladder);
-      // Same plan, so every scalar column and all six kinds counters are equal.
-      const { picksRecorded: twinPicks, ...twinRest } = twin;
-      const { picksRecorded: speedPicks, ...speedRest } = speed;
-      expect(twinRest).toEqual(speedRest);
-      // The one field the twin cannot share: an unnamed level records no branch list,
-      // while the purchased-level count it paid for is the same 97 (R4's third number).
-      expect(twinPicks).toBe(0);
-      expect(speedPicks).toBe(twin.purchasedLevels);
-      // Non-vacuous: the other two names do move the same columns.
-      const buffer = a12Row("buffer", ladder);
-      const draw = a12Row("draw", ladder);
-      expect(buffer.batches).not.toBe(speed.batches);
-      expect(draw.powerLimitedRounds).not.toBe(speed.powerLimitedRounds);
-      expect(buffer.credits).not.toBe(speed.credits);
-      // The columns g2 promoted out of stages[] and added, plus the A1-2v3 inputStall
-      // pair, are present and numeric on every ladder.
-      expect(Number.isInteger(twin.starvedMax)).toBe(true);
-      expect(Number.isInteger(twin.starvedMean)).toBe(true);
-      expect(Number.isInteger(twin.creditsEarned)).toBe(true);
+      // The unnamed ladder is the golden-line ladder: same boot, plain price, so
+      // every stored scalar column and the kinds counters reproduce from the mirror.
+      const stored = storedTable(patternOf[ladder]).find(
+        (r) => r.policy === "naive (unnamed)"
+      ) as StoredFull;
+      expect(twin.batches).toBe(stored.batches);
+      expect(twin.credits).toBe(stored.credits);
+      expect(twin.creditsEarned).toBe(stored.creditsEarned);
+      expect(twin.creditsPer1000Batches).toBe(stored.creditsPer1000Batches);
+      expect(twin.taps).toBe(stored.taps);
+      expect(twin.rejects).toBe(stored.rejects);
+      expect(twin.powerLimitedRounds).toBe(stored.powerLimitedRounds);
+      expect(twin.minPowerRatio).toBe(stored.minPowerRatio);
+      expect(twin.starvedMax).toBe(stored.starvedMax);
+      expect(twin.starvedMean).toBe(stored.starvedMean);
+      expect(twin.inputStallTicks).toBe(stored.inputStallTicks);
+      expect(twin.inputStallPct).toBe(stored.inputStallPct);
+      expect(twin.kinds).toEqual(stored.kinds);
       expect(Number.isInteger(twin.inputStallTicks)).toBe(true);
       expect(twin.inputStallTicks).toBeGreaterThan(0);
-      expect(twin.inputStallPct).toBe(
-        Number(((twin.inputStallTicks / Math.max(1, twin.tick)) * 100).toFixed(1))
-      );
-      expect(twin.creditsPer1000Batches).toBe(
-        Number(((twin.creditsEarned / Math.max(1, twin.batches)) * 1000).toFixed(3))
-      );
+      // STRAT-003: with distinct prices no named row is a by-construction twin any
+      // more. `speed` pays the +10 premium per level, so its purse and its purchase
+      // clock diverge from the unnamed ladder; `draw` pays the plain price and
+      // diverges by mechanism (its batch clock stays where the recipe put it).
+      const speed = a12Row("speed", ladder);
+      const draw = a12Row("draw", ladder);
+      const buffer = a12Row("buffer", ladder);
+      expect(speed.credits).not.toBe(twin.credits);
+      expect(speed.batches).not.toBe(twin.batches);
+      expect(draw.batches).not.toBe(twin.batches);
+      // R4 now reconciles *exactly* on the named rows: under the buy-when-affordable
+      // policy the attempt counter, the purchased levels and the recorded picks
+      // are one number (the rejected-attempt noise of g3 is gone). The unnamed row
+      // keeps the old semantics (it always attempts the plain price).
+      for (const row of [speed, draw, buffer]) {
+        expect(row.kinds.upgrade).toBe(row.purchasedLevels);
+        expect(Number.isFinite(row.creditsPer1000Batches)).toBe(true);
+      }
+      // The named mechanisms still separate as in g3: clock leads batches, the
+      // budget plan never throttles.
+      expect(buffer.batches).not.toBe(speed.batches);
+      expect(draw.powerLimitedRounds).toBe(0);
+      expect(speed.powerLimitedRounds).toBeGreaterThan(0);
     }
   }, 30_000);
 
@@ -598,7 +703,8 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
     const draw = a12Row("draw", "gap9");
     const mmg = harnessJson.gaps.mmg;
     // The A1-2v3 per-column table replaces `>= 5 % relative OR >= 10 absolute`.
-    // speed owns `batches` by >= 900: measured gap 1126 over the best named rival.
+    // speed owns `batches` by >= 900: measured gap 1076 over the best named rival
+    // (2267 vs 1191; 1095 before the price premium, both above the floor).
     expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(
       mmg.batches.absolute
     );
@@ -610,24 +716,25 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
     expect(draw.minPowerRatio - Math.max(speed.minPowerRatio, buffer.minPowerRatio)).toBeGreaterThanOrEqual(
       mmg.minPowerRatio.absolute
     );
-    // The mechanism columns (starved %) go to speed by >= 3 points, as under g2.
+    // The mechanism columns (starved %) still go to speed, now exactly at the
+    // 3-point floor (starvedMax 81 vs 84, starvedMean 54 vs 57).
     expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBeGreaterThanOrEqual(
       mmg.starvedMax.absolute
     );
     expect(Math.max(buffer.starvedMean, draw.starvedMean) - speed.starvedMean).toBeGreaterThanOrEqual(
       mmg.starvedMean.absolute
     );
-    // buffer's single A1-2v3 column: inputStallPct, lower wins. The negative result:
-    // buffer 186.9 sits behind speed 115.5 (lead -71.4, MMG 3 points) - not a leader.
+    // buffer's single A1-2v3 column: inputStallPct, lower wins. The negative result
+    // stands: buffer 186.9 sits behind the best rival 128.8 (lead -58.1, MMG 3).
     expect(buffer.inputStallPct).toBe(186.9);
     expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeLessThan(
       mmg.inputStallPct.absolute
     );
-    // R4 at ladder scale: the branch-list length is the purchased-level count, while the
-    // attempt counter (`kinds.upgrade`) is a different, larger number.
+    // R4 at ladder scale: under the buy-when-affordable policy the three pick
+    // counts reconcile in one number (attempts = purchased levels = recorded picks).
     expect(buffer.picksRecorded).toBe(buffer.purchasedLevels);
-    expect(buffer.attempts).not.toBe(buffer.purchasedLevels);
-    expect(buffer.attempts).toBeGreaterThan(buffer.purchasedLevels);
+    expect(buffer.attempts).toBe(buffer.purchasedLevels);
+    expect(buffer.purchasedLevels).toBeGreaterThan(90);
   }, 30_000);
 });
 
@@ -709,15 +816,40 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
         ["speed", "speed"],
         ["buffer", "buffer"],
         ["draw", "draw"],
-      ] as [string, UpgradeBranch | null][]) {
+        ["priced", "policy"],
+      ] as [string, UpgradeBranch | null | "policy"][]) {
         const mirror = a12Row(branch, ladder);
         const stored = storedTable(pattern).find((r) => r.policy === name);
         if (!stored) throw new Error("stored row missing for " + name);
         // The stored row's new pair equals the mirror's, tick for tick.
-        const storedFull = stored as StoredRow & { inputStallTicks: number; tick: number };
+        const storedFull = stored as StoredRow & {
+          inputStallTicks: number;
+          tick: number;
+          batches: number;
+          credits: number;
+          taps: number;
+          rejects: number;
+          kinds: Record<string, number>;
+          policyMix?: Record<string, number>;
+        };
         expect(mirror.inputStallTicks).toBe(storedFull.inputStallTicks);
         expect(mirror.inputStallPct).toBe(storedFull.inputStallPct);
         expect(storedFull.inputStallTicks).toBeGreaterThan(0);
+        // STRAT-003: the whole trajectory, not only the stall pair - batches, purse,
+        // taps and rejects - reproduces from the in-test mirror on every row.
+        expect(mirror.batches).toBe(storedFull.batches);
+        expect(mirror.credits).toBe(storedFull.credits);
+        expect(mirror.taps).toBe(storedFull.taps);
+        expect(mirror.rejects).toBe(storedFull.rejects);
+        expect(mirror.kinds).toEqual(storedFull.kinds);
+        if (name === "priced") {
+          expect(storedFull.policyMix).toBeDefined();
+          expect(mirror.policyMix).toEqual(storedFull.policyMix);
+          // The policy buys both plans inside 1800 rounds, so the price difference
+          // actually steered purchases instead of one name absorbing everything.
+          expect(storedFull.policyMix!.speed).toBeGreaterThan(0);
+          expect(storedFull.policyMix!.draw).toBeGreaterThan(0);
+        }
       }
     }
   }, 30_000);
@@ -754,14 +886,55 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
     }
   });
 
+  /**
+   * STRAT-003: with the two plans priced differently, the same MMG census over just
+   * the pair on the dock (speed vs draw, buffer excluded as off the dock) still puts
+   * different columns on different names on both scored ladders: batches and the
+   * starved pair stay with `speed`, the power pair leaves `draw`; on gap6 the stall
+   * column stays `draw`'s. No scored column collapsed below its MMG.
+   */
+  it("keeps the two live plans leading different columns under the pair census", () => {
+    // 5-on/4-off: every column but the 10^4 ratio reproduces the g3 leaders.
+    expect(harnessJson.irregular.leadersTwoPlans).toEqual({
+      inputStallPct: "speed",
+      starvedMax: "speed",
+      starvedMean: "speed",
+      batches: "speed",
+      powerLimitedRounds: "draw",
+      minPowerRatio: "draw",
+      creditsPer1000Batches: "draw",
+    });
+    // Period 6: the stall column belongs to draw there as recorded; the power column
+    // now clears its floor against the sole rival (speed 425 throttled rounds).
+    expect(harnessJson.gap6.leadersTwoPlans).toEqual({
+      inputStallPct: "draw",
+      starvedMax: "speed",
+      starvedMean: "speed",
+      batches: "speed",
+      powerLimitedRounds: "draw",
+      minPowerRatio: "draw",
+      creditsPer1000Batches: "draw",
+    });
+    // The batches column of the PAIR census: irregular 2267 - 1191 = 1076 >= 900,
+    // gap6 2193 - 1191 = 1002 >= 900 - both above the MMG floor.
+    const at = (p: "irregular" | "gap6", name: string) =>
+      (storedTable(p).find((r) => r.policy === name) as StoredRow).batches;
+    expect(at("irregular", "speed") - at("irregular", "draw")).toBeGreaterThanOrEqual(
+      harnessJson.gaps.mmg.batches.absolute
+    );
+    expect(at("gap6", "speed") - at("gap6", "draw")).toBeGreaterThanOrEqual(
+      harnessJson.gaps.mmg.batches.absolute
+    );
+  });
+
   it("executes the drop clause: buffer leads inputStallPct on neither gap ladder", () => {
     const irregular = storedTable("irregular");
     const gap6 = storedTable("gap6");
     const at = (rows: StoredRow[], policy: string) =>
       (rows.find((r) => r.policy === policy) as StoredRow).inputStallPct;
-    // 5-on/4-off: buffer 186.9 vs best rival 115.5 -> lead -71.4 points (< 3).
+    // 5-on/4-off: buffer 186.9 vs best rival 128.8 (speed) -> lead -58.1 points (< 3).
     expect(at(irregular, "buffer")).toBe(186.9);
-    expect(Math.min(at(irregular, "speed"), at(irregular, "draw")) - at(irregular, "buffer")).toBeCloseTo(-71.4, 3);
+    expect(Math.min(at(irregular, "speed"), at(irregular, "draw")) - at(irregular, "buffer")).toBeCloseTo(-58.1, 3);
     // Period-6: buffer 181.5 vs best rival 123.3 -> lead -58.2 points (< 3).
     expect(at(gap6, "buffer")).toBe(181.5);
     expect(Math.min(at(gap6, "speed"), at(gap6, "draw")) - at(gap6, "buffer")).toBeCloseTo(-58.2, 3);
@@ -778,4 +951,93 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
       expect(harnessJson[pattern].verdicts.buffer.column).toBe("inputStallPct");
     }
   }, 30_000);
+});
+
+/**
+ * STRAT-003: named plans cost different amounts. The dock row itself carries the
+ * tradeoff: `Faster batches` pays the plain ladder plus the 10-credit throughput
+ * premium (one of ten clock-denominator units = 10 % batches/s at the first rank),
+ * `Less power` keeps the plain price (it removes the baseline unit step, 1 of the
+ * yard's 8 power units). Both stay within `upgradeCost + 10`.
+ */
+describe("STRAT-003 the two live plans carry their own prices", () => {
+  it("names the two plans at different prices on every ladder level", () => {
+    for (const base of [30, 40, 45, 50, 55, 60, 70, 75]) {
+      for (let level = 1; level <= 40; level += 1) {
+        const plain = upgradeCost(base, level);
+        const speed = branchPrice(base, level, "speed");
+        const draw = branchPrice(base, level, "draw");
+        const buffer = branchPrice(base, level, "buffer");
+        // The two visible prices differ at every level and the dearer one is the
+        // throughput plan, exactly +10 above the plain ladder's next step.
+        expect(speed).not.toBe(draw);
+        expect(speed).toBe(plain + 10);
+        expect(draw).toBe(plain);
+        expect(buffer).toBe(plain);
+        // Both within the unnamed price plus ten, integers, never decreasing.
+        for (const price of [speed, draw, buffer]) {
+          expect(Number.isInteger(price)).toBe(true);
+          expect(price).toBeLessThanOrEqual(plain + 10);
+        }
+      }
+    }
+  });
+
+  it("charges exactly the price the tapped option printed, for both plans", () => {
+    const parse = (cost?: string): number => Number((cost ?? "").split(" ")[0]);
+    for (const [id, wanted] of [
+      ["speed", 40],
+      ["draw", 30],
+    ] as [UpgradeBranch, number][]) {
+      const s = yard();
+      const sorter = pick(s, "sorter");
+      const option = branchOptions(s, sorter.id).find((o) => o.id === id);
+      if (!option) throw new Error("the dock must offer " + id);
+      expect(parse(option.cost)).toBe(wanted);
+      const before = s.credits;
+      expect(send(s, { type: "machine.upgrade", machineId: sorter.id, branch: id })).toBe(true);
+      // Sum of the chosen option equals the sim charge, credit for credit.
+      expect(before - s.credits).toBe(parse(option.cost));
+      expect(before - s.credits).toBe(wanted);
+    }
+  });
+
+  it("keeps the unnamed ladder at the plain price beside the priced options", () => {
+    const s = yard();
+    const sorter = pick(s, "sorter");
+    // The two faces print their own prices at the level the dock is answering.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["40 credits", "30 credits"]);
+    const before = s.credits;
+    expect(send(s, { type: "machine.upgrade", machineId: sorter.id })).toBe(true);
+    expect(before - s.credits).toBe(upgradeCost(BLUEPRINTS.sorter.baseUpgradeCost, 1));
+    // One level up, the pair moves with the plain ladder: 35 + 10 over 35.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["45 credits", "35 credits"]);
+  });
+
+  it("decodes a save whose machine names all three plans", () => {
+    const s = yard();
+    const furnace = pick(s, "furnace");
+    for (const branch of ["speed", "buffer", "draw"] as UpgradeBranch[]) {
+      expect(send(s, { type: "machine.upgrade", machineId: furnace.id, branch })).toBe(true);
+    }
+    const text = encodeSave(s, 5, { muted: false, reducedMotion: false, textScale: 1 });
+    expect(text).toContain('"branch":["speed","buffer","draw"]');
+    const decoded = decodeSave(text);
+    if (!decoded.ok) throw new Error("a three-plan save must still decode, got " + decoded.reason);
+    const loaded = pick(decoded.payload.sim, "furnace");
+    expect(loaded.branch).toEqual(["speed", "buffer", "draw"]);
+    expect(loaded.level).toBe(4);
+    expect(upgradeRanks(loaded)).toEqual({ speed: 1, buffer: 1, draw: 1 });
+    expect(validateSim(decoded.payload.sim)).toBeNull();
+    // Byte-for-byte again: the price table touches no stored byte.
+    expect(encodeSave(decoded.payload.sim, decoded.payload.lastSeenMs, decoded.payload.settings)).toBe(
+      text
+    );
+    // And the priced dock answers that save with its two live faces: the furnace's
+    // plain ladder at level 4 is 40 -> 47 -> 55 -> 64, so 64 + 10 over 64.
+    expect(branchOptions(decoded.payload.sim, loaded.id).map((o) => o.cost)).toEqual([
+      "74 credits",
+      "64 credits",
+    ]);
+  });
 });

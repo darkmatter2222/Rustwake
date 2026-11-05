@@ -102,23 +102,30 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     expect(card).toContain("30 credits");
 
     // The drop executed (STRAT-002 g3 / A1-2v3): `buffer` leads no column under either
-    // gap ladder, so the dock carries two names, in this order, at one shared price.
+    // gap ladder, so the dock carries two names, in this order. STRAT-003: each name
+    // carries its own price - the dearer one is the throughput plan.
     const machineId = store.getState().machines[0].id;
     expect(branchOptions(store.getState(), machineId).map((option) => option.id)).toEqual([
       "speed",
       "draw",
     ]);
+    expect(branchOptions(store.getState(), machineId).map((option) => option.cost)).toEqual([
+      "40 credits",
+      "30 credits",
+    ]);
 
     const buttons = [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")];
     const labels = buttons.map((node) => (node.textContent ?? "").trim());
     expect(labels.length).toBe(2);
-    // Order, not just membership: the first face is the batch clock, the last the budget.
-    expect(labels[0]).toMatch(/^Faster batches30 credits$/);
+    // Order, not just membership: the first face is the batch clock at the plain
+    // ladder plus its 10-credit premium, the last the budget at the plain price.
+    expect(labels[0]).toMatch(/^Faster batches40 credits$/);
     expect(labels[1]).toMatch(/^Less power30 credits$/);
     expect(labels.join("|")).not.toContain("More input");
-    // Every branch carries the same price on its own face: no hidden default.
+    // Each face prints its own price; the row is the tradeoff (STRAT-003).
+    expect(buttons[0].querySelector(".dock__cost")?.textContent).toBe("40 credits");
+    expect(buttons[1].querySelector(".dock__cost")?.textContent).toBe("30 credits");
     for (const button of buttons) {
-      expect(button.querySelector(".dock__cost")?.textContent).toBe("30 credits");
       expect(parseFloat(getComputedStyle(button).minHeight)).toBeGreaterThanOrEqual(44);
     }
 
@@ -129,6 +136,32 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     expect(store.getState().credits).toBe(4);
     // The row is back to its usual targets once the level is bought.
     expect([...document.querySelectorAll(".dock .dock__btn")].length).toBeGreaterThan(2);
+  });
+
+  /**
+   * STRAT-003: the purse covers the cheaper face and not the dearer one (34 credits
+   * against 30 and 40), so the row itself tells the player which side of the fork
+   * the current purse can pay for. The refusal prints the exact shortfall of the
+   * tapped option - its own price, not the other face's.
+   */
+  it("refuses the dearer plan below its own price and states that shortfall", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    boot(store);
+    forkState(store); // credits 34: covers 30, not 40
+    expect(nextYardStep(store.getState()).kind).toBe("upgrade");
+
+    act(() => findButton("Faster batches")?.click());
+    const toast = document.querySelector(".toast")?.textContent ?? "";
+    expect(toast).toBe("Need 40 credits · have 34");
+    const state = store.getState();
+    expect(state.machines[0].level).toBe(1);
+    expect(state.credits).toBe(34);
+
+    // The cheaper face still pays its own printed price and the level moves.
+    act(() => findButton("Less power")?.click());
+    expect(store.getState().machines[0].level).toBe(2);
+    expect(store.getState().credits).toBe(4);
   });
 
   it("names the power budget on the resting screen at text scale 1 and 2 (A1-4)", () => {

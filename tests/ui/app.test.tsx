@@ -1,4 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
+import indexHtmlRaw from "../../index.html?raw";
 import { createRoot } from "react-dom/client";
 import stylesRaw from "../../src/ui/styles.css?raw";
 import { act } from "react-dom/test-utils";
@@ -614,5 +615,26 @@ describe("REV-LAYOUT-g1 chrome rows", () => {
     }
     expect(costs.length).toBeGreaterThan(0);
     expect(costStyle?.fontSize).toBe("0.5rem");
+  });
+});
+
+/**
+ * DEF-002 (PLAY-002 g1 QA note b): the tab used to fall back to a /favicon.ico
+ * request, which the static route could only answer with the SPA document
+ * (measured before: text/html, 778 B). The shell now carries a real inline icon,
+ * so no request is made at all - a data: URI cannot miss the route table.
+ */
+describe("static shell", () => {
+  it("DEF-002 index.html ships a real inline icon so the tab stops fetching /favicon.ico", () => {
+    const html = indexHtmlRaw;
+    const match = /<link[^>]*rel="icon"[^>]*href="([^"]+)"[^>]*\/>/s.exec(html);
+    if (!match) throw new Error("index.html must carry a <link rel=\"icon\"> tag");
+    const href = match[1];
+    expect(href.startsWith("data:image/svg+xml,")).toBe(true);
+    // The palette it paints: the night background and the furnace amber, encoded.
+    expect(href).toContain("%230b1220");
+    expect(href).toContain("%23ffb765");
+    // No 404-prone file path is used as an href anywhere in the shell.
+    expect(/href="\/favicon\.ico"/.test(html)).toBe(false);
   });
 });

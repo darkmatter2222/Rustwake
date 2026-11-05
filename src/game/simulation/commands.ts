@@ -267,7 +267,10 @@ function upgradeMachine(
   const machine = machineById(s, machineId);
   if (!machine) return { ok: false, reason: "not-found" };
   const def = BLUEPRINTS[machine.blueprint];
-  const cost = upgradeCost(def.baseUpgradeCost, machine.level);
+  const cost =
+    branch === undefined
+      ? upgradeCost(def.baseUpgradeCost, machine.level)
+      : branchPrice(def.baseUpgradeCost, machine.level, branch);
   if (s.credits < cost) return shortCredits(s, cost);
   s.credits -= cost;
   machine.level += 1;
@@ -486,6 +489,31 @@ export function upgradeCost(baseUpgradeCost: number, level: number): number {
   let cost = baseUpgradeCost;
   for (let i = 1; i < level; i += 1) cost = Math.ceil(cost * 1.16);
   return cost;
+}
+
+/**
+ * STRAT-003: the two named plans are priced differently, each one integer credit
+ * premium over the shared plain ladder (`upgradeCost`) at the same level, so the
+ * dock row itself carries the tradeoff. Both premiums are derived from the rank's
+ * own first-step quantity, not fitted:
+ * - `speed` moves the batch-clock denominator of `batchMilliOf` by one of ten
+ *   (10 -> 11), a +10 % throughput step at the first rank: +10 credits.
+ * - `draw` removes exactly one of the yard's 8 power units (`TUNING.yardPowerCapacity`)
+ *   from the machine's draw: the baseline unit step, +0 credits, so the budget plan
+ *   keeps the plain ladder as its reference price.
+ * - `buffer` (off the dock since the A1-2v3 drop; still decodes from saves) keeps
+ *   the plain price too, which reproduces its pre-STRAT-003 measured rows.
+ * Both stay within `upgradeCost + 10`, and the unnamed ladder stays the plain one.
+ */
+export const BRANCH_PRICE_OFFSET: Readonly<Record<UpgradeBranch, number>> = {
+  speed: 10,
+  buffer: 0,
+  draw: 0,
+};
+
+/** The price of the next level for one named plan: the plain ladder plus its premium. */
+export function branchPrice(baseUpgradeCost: number, level: number, branch: UpgradeBranch): number {
+  return upgradeCost(baseUpgradeCost, level) + BRANCH_PRICE_OFFSET[branch];
 }
 
 function validTile(s: SimState, tile: number): boolean {

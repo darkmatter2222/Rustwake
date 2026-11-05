@@ -1,6 +1,6 @@
 import { BLUEPRINTS, RESOURCES, TUNING, type ResourceId } from "../game/content/defs";
 import { RESEARCH } from "../game/content/research";
-import { droneAddCost, upgradeCost } from "../game/simulation/commands";
+import { droneAddCost, upgradeCost, branchPrice } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { ImportResult } from "../game/persistence/save";
 import type { SimState, UpgradeBranch } from "../game/simulation/types";
@@ -183,9 +183,13 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
 }
 
 /**
- * The two named outcomes one paid level can buy, each with the same price, in dock
- * order (STRAT-002/A1-3). One tap on any of them commits that branch: no second
- * confirming tap, so the fork costs one tap per choice like every other step.
+ * The two named outcomes one paid level can buy, each at its own price, in dock
+ * order (STRAT-002/A1-3, re-priced by STRAT-003). One tap on any of them commits
+ * that branch: no second confirming tap, so the fork costs one tap per choice like
+ * every other step. The two faces print different numbers on purpose: the speed
+ * plan costs the plain ladder plus its 10-credit throughput premium, the draw plan
+ * keeps the plain price (`branchPrice`, documented derivation in `commands.ts`), so
+ * the row shows what each named quantity is worth against the other.
  *
  * PLAY-002 1: `buffer` is not offered. The A1-2v3 run (work/development/handoffs/
  * STRAT-002-g3.md) has it owning no column under either gap ladder - its
@@ -201,10 +205,17 @@ export function branchOptions(
   const machine = state.machines.find((m) => m.id === machineId);
   const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
   if (!machine || !def) return [];
-  const cost = unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit"));
   return [
-    { id: "speed", label: t("btn.branchSpeed"), cost },
-    { id: "draw", label: t("btn.branchDraw"), cost },
+    {
+      id: "speed",
+      label: t("btn.branchSpeed"),
+      cost: unit(branchPrice(def.baseUpgradeCost, machine.level, "speed"), t("unit.credit")),
+    },
+    {
+      id: "draw",
+      label: t("btn.branchDraw"),
+      cost: unit(branchPrice(def.baseUpgradeCost, machine.level, "draw"), t("unit.credit")),
+    },
   ];
 }
 

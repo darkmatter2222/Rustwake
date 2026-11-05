@@ -242,6 +242,96 @@ describe("PLAY-001 the resting screen", () => {
   });
 
   /**
+   * DEF-006 (PLAY-002 g1 QA note a): `lastReject` was replaced but never cleared, so
+   * a hundreds-of-taps-old `Last need ... · have ...` kept riding the resting line.
+   * Now the first *successful* tap retires the segment, while pure tick progress (no
+   * tap) keeps it exactly as TST-001 measured - the field stays session-only, so the
+   * save bytes and checksum are untouched.
+   */
+  it("DEF-006 a successful tap retires the stale Last-shortfall segment", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    repairTheDrone(store);
+    act(() => store.step(262));
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Connect dock to sorter")?.click());
+    act(() => store.step(400));
+    act(() => findButton("Build Furnace")?.click());
+    act(() => findButton("Build Furnace")?.click());
+    act(() => store.step(300));
+    expect(store.getState().machines.length).toBe(2);
+    store.getState().tutorial = 9;
+
+    const statusLines = () =>
+      [...document.querySelectorAll<HTMLElement>(".status-line")].map((node) => node.textContent ?? "");
+    const hasSegment = (needle: string) => statusLines().some((line) => line.includes(needle));
+
+    // One refused priced tap with a known pair: purse empty, scrap 13 under the
+    // 25-scrap copper-separator price - the pair `need 25 scrap · have 13` is the
+    // number that must stop riding the line.
+    const s = store.getState();
+    s.credits = 0;
+    s.store = { scrap: 13 };
+    s.storeUnits = 13;
+    let toast: string | null = null;
+    for (let tap = 0; tap < 24 && toast === null; tap += 1) {
+      act(() => document.querySelector<HTMLElement>(".dock__btn--primary")?.click());
+      const text = document.querySelector(".toast")?.textContent ?? null;
+      if (text !== null && /^Need \d+ \w+ · have \d+$/.test(text)) toast = text;
+      const pinned = store.getState();
+      pinned.credits = 0;
+      if ((pinned.store["scrap"] ?? 0) <= 13) {
+        pinned.store = { ...pinned.store, scrap: 13 };
+        pinned.storeUnits = Math.max(0, pinned.storeUnits + (13 - (pinned.store["scrap"] ?? 0)));
+      }
+    }
+    if (toast === null) throw new Error("no shortfall reject in twenty-four primary taps");
+    const oldTrailing = `Last ${toast.charAt(0).toLowerCase()}${toast.slice(1)}`;
+    expect(hasSegment(oldTrailing)).toBe(true);
+
+    // Ticks alone (no tap) keep the segment, exactly as TST-001 measured it.
+    act(() => store.step(900));
+    expect(hasSegment(oldTrailing)).toBe(true);
+
+    // The first successful tap clears it (DEF-006). 60 scrap / 500 credits is above
+    // every rank-1 price on this yard (the 25-scrap copper-separator build, the
+    // 30-scrap plain ladder step, the 40-scrap speed face), so a funded tap is
+    // accepted; a `build` step arms in two presses (blueprint, then the ghost tile),
+    // hence the small loop. The acceptance tap and the retirement of the stale pair
+    // are the same reading: whichever press first lifts `revision` must also be the
+    // press that leaves the pair off the line.
+    const live = store.getState();
+    const hadScrap = live.store["scrap"] ?? 0;
+    live.credits = 500;
+    live.store = { ...live.store, scrap: 60 };
+    live.storeUnits += 60 - hadScrap;
+    let acceptedAt = 0;
+    let segmentAfterAcceptance: boolean | null = null;
+    for (let tap = 1; tap <= 4 && acceptedAt === 0; tap += 1) {
+      const revision = store.getState().revision;
+      act(() => document.querySelector<HTMLElement>(".dock__btn--primary")?.click());
+      if (store.getState().revision > revision) {
+        acceptedAt = tap;
+        segmentAfterAcceptance = hasSegment(oldTrailing);
+      }
+    }
+    expect(acceptedAt).toBeGreaterThan(0); // the funded yard accepted a command
+    expect(segmentAfterAcceptance).toBe(false); // and that same press retired the pair
+
+    // 900 further taps: the stale pair never returns as residue. (A fresh reject may
+    // print its own newest pair; the old one had `have 13`, a value the funded yard
+    // does not sit at while the pulse keeps adding fives.)
+    let staleAt = -1;
+    for (let tap = 1; tap <= 900; tap += 1) {
+      act(() => store.step(10));
+      act(() => document.querySelector<HTMLElement>(".dock__btn--primary")?.click());
+      if (staleAt < 0 && hasSegment(oldTrailing)) staleAt = tap;
+    }
+    expect(staleAt).toBe(-1);
+  });
+
+  /**
    * CHRM-001 (QA D-2/D-4): the legend names at most two machines, each with the tile it is
    * drawn on, and counts the rest in one `+n`. Two machines of one blueprint therefore read
    * apart, and the line keeps its two wrapped boxes at 360 × 640 text scale 2.0.

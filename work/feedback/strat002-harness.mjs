@@ -32,7 +32,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { BLUEPRINTS, RECIPES, TUNING, unlockedBlueprints } from "../../src/game/content/defs";
 import { nextResearchNode } from "../../src/game/content/research";
-import { applyCommand, DOCK_TILE, YARD_TILES, droneAddCost, sellableAmount, upgradeCost } from "../../src/game/simulation/commands";
+import { applyCommand, branchPrice, DOCK_TILE, YARD_TILES, droneAddCost, sellableAmount, upgradeCost } from "../../src/game/simulation/commands";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { SELL_ORDER, nextYardStep } from "../../src/game/simulation/plan";
 import { advance } from "../../src/game/simulation/engine";
@@ -40,9 +40,45 @@ import { createInitialState } from "../../src/game/simulation/types";
 
 const ROUNDS = 1800;
 const TARGET = "work/feedback/strat002-harness.json";
-const BASE_SHA = "8a06e9debf7ff345681979cd6f731b24b2b5d581";
+const BASE_SHA = "7d7e05c7124722857ba9828cff5dbd49df5ab04f";
 const NAMED = ["speed", "buffer", "draw"];
 const TWIN = "naive (unnamed)";
+/** The two plans on the dock since the drop; the live pair the policy row chooses between. */
+const LIVE = ["speed", "draw"];
+
+/**
+ * STRAT-003: the two live plans now cost different amounts (src/game/simulation/
+ * commands.ts, `branchPrice`): the same plain ladder `ceil(base x 1.16^n)` plus a
+ * per-branch integer premium derived from the rank's own first-step quantity
+ * (`speed`: +1 of 10 clock-denominator = 10 % throughput -> +10 credits; `draw`/
+ * `buffer`: the plain price, the baseline unit step of 1 power of 8). The price
+ * table is an input to the engine's charge, and here to the `priced` policy row.
+ */
+const priceTable = (base, level) =>
+  Object.fromEntries(LIVE.map((b) => [b, branchPrice(base, level, b)]));
+
+/**
+ * The purchase policy for the `priced` row, stated exactly (the ticket: cheapest-
+ * first may not be the *only* tie-breaker):
+ *  - PRIMARY: the resting power line the player sees. If the yard is visibly
+ *    throttled (`powerRatio < 1`, i.e. the line reads below 100 %), prefer the
+ *    power plan `draw`; otherwise prefer the throughput plan `speed`.
+ *  - SECONDARY fallback: if the preferred plan's price is not covered by credits,
+ *    take the cheapest remaining affordable plan by price, ties in dock order
+ *    (`UPGRADE_BRANCHES`: speed before draw).
+ *  - Neither affordable: attempt the preferred plan anyway, so the rejected round
+ *    counts like every other row (one command per round).
+ */
+function policyPick(state, base, level) {
+  const prices = priceTable(base, level);
+  const preferred = state.powerRatio < 1 ? "draw" : "speed";
+  if (state.credits >= prices[preferred]) return preferred;
+  const options = LIVE.map((b) => ({ branch: b, price: prices[b] })).filter(
+    (o) => state.credits >= o.price
+  );
+  options.sort((a, b) => a.price - b.price || LIVE.indexOf(a.branch) - LIVE.indexOf(b.branch));
+  return options.length > 0 ? options[0].branch : preferred;
+}
 
 /**
  * The two gap ladders (decision 1.4 plus the g2 addendum), each 1800 rounds on the
@@ -159,8 +195,10 @@ function pricedOptions(state) {
   const upgrade = upgradeCandidate(state);
   if (upgrade) {
     const machine = state.machines.find((m) => m.id === upgrade.machineId);
-    const cost = upgradeCost(BLUEPRINTS[machine.blueprint].baseUpgradeCost, machine.level);
-    for (const branch of ["speed", "buffer", "draw"]) options.push("upgrade:" + branch + ":" + cost);
+    const base = BLUEPRINTS[machine.blueprint].baseUpgradeCost;
+    // STRAT-003: each named option carries its own price now, so the census reads
+    // the real per-option prices from the same table the dock prints.
+    for (const branch of ["speed", "buffer", "draw"]) options.push("upgrade:" + branch + ":" + branchPrice(base, machine.level, branch));
   }
   if (droneStep(state)) options.push("drone:" + droneAddCost(state));
   if (researchStep(state)) options.push("research:" + researchStep(state).node);
@@ -254,7 +292,7 @@ function run(rowName, branch, patternName) {
     } else {
       chosen = ladderStep(state);
       if (chosen && chosen.kind) {
-        if (chosen.kind !== "salvage") kinds[chosen.kind] = (kinds[chosen.kind] ?? 0) + 1;
+        if (chosen.kind !== "salvage" && chosen.kind !== "upgrade") kinds[chosen.kind] = (kinds[chosen.kind] ?? 0) + 1;
         switch (chosen.kind) {
           case "connect":
             for (const plan of chosen.plans) send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
@@ -274,12 +312,36 @@ function run(rowName, branch, patternName) {
             taps += 1;
             if (milestones.firstDrone === null) milestones.firstDrone = round + 1; break;
           case "upgrade": {
-            const before = state.machines.find((m) => m.id === chosen.machineId)?.level ?? 0;
-            send(branch === null
-              ? { type: "machine.upgrade", machineId: chosen.machineId }
-              : { type: "machine.upgrade", machineId: chosen.machineId, branch });
-            taps += 1;
-            branchByLevel.push((round + 1) + ":m" + chosen.machineId + ":L" + before + "->" + (branch ?? "unnamed"));
+            // STRAT-003 "a plan is bought when affordable": the attempt happens only
+            // when the option's own price is covered. A round whose price is not
+            // covered takes the surplus sell instead (the tranche the ladder itself
+            // would sell one step later), so credits accumulate like an idle player
+            // in the app, whose second button is always the affordable plain price.
+            const machine = state.machines.find((m) => m.id === chosen.machineId);
+            const before = machine?.level ?? 0;
+            const named = branch === "policy" && machine
+              ? policyPick(state, BLUEPRINTS[machine.blueprint].baseUpgradeCost, machine.level)
+              : branch;
+            const price = machine
+              ? (named == null
+                ? upgradeCost(BLUEPRINTS[machine.blueprint].baseUpgradeCost, machine.level)
+                : branchPrice(BLUEPRINTS[machine.blueprint].baseUpgradeCost, machine.level, named))
+              : 0;
+            if (named == null || state.credits >= price) {
+              kinds.upgrade = (kinds.upgrade ?? 0) + 1;
+              send(named == null
+                ? { type: "machine.upgrade", machineId: chosen.machineId }
+                : { type: "machine.upgrade", machineId: chosen.machineId, branch: named });
+              taps += 1;
+              branchByLevel.push((round + 1) + ":m" + chosen.machineId + ":L" + before + "->" + (named ?? "unnamed"));
+            } else {
+              const sell = sellStep(state);
+              if (sell) {
+                kinds.sell = (kinds.sell ?? 0) + 1;
+                send({ type: "contract.sell", resource: sell.resource, qty: sell.qty });
+                taps += 1;
+              }
+            }
             break;
           }
           default:
@@ -327,9 +389,13 @@ function run(rowName, branch, patternName) {
   const starvedMean = Math.round(stages.reduce((sum, s) => sum + s.starved, 0) / Math.max(1, stages.length));
   const batches = state.machines.reduce((sum, m) => sum + m.batchesDone, 0);
   const purchasedLevels = stages.reduce((sum, s) => sum + (s.level - 1), 0);
+  // The policy row's evidence: which named plan each purchased level became.
+  const policyMix = {};
+  for (const m of state.machines) for (const b of m.branch ?? []) policyMix[b] = (policyMix[b] ?? 0) + 1;
   return {
     policy: rowName,
     branch,
+    ...(branch === "policy" ? { policyMix } : {}),
     tick: state.tick,
     machines: state.machines.length,
     links: state.routes.length,
@@ -452,6 +518,40 @@ function leadersUnderMmg(rows) {
   for (const column of MMG_COLUMNS) {
     const sole = NAMED.find((policy) => soleLeader(census, column, policy)) ?? null;
     out[column] = sole !== null && passesMmg(column, gapOf(rows, sole, column)) ? sole : null;
+  }
+  return out;
+}
+
+/**
+ * STRAT-003: the same MMG leader test restricted to the two plans that are on the
+ * dock (speed, draw) - the answer to "do the two plans still lead different columns
+ * with distinct prices". Sole best among the pair whose gap over the other clears
+ * the column's MMG; null when the gap collapses below the MMG (a real finding).
+ */
+function leadersTwoPlans(rows) {
+  const pair = LIVE.map((policy) => rows.find((r) => r.policy === policy)).filter(Boolean);
+  const out = {};
+  for (const column of MMG_COLUMNS) {
+    if (pair.length !== 2) {
+      out[column] = null;
+      continue;
+    }
+    const spec = PRIMARY[column];
+    const [a, b] = pair;
+    const va = Number(spec.read(a));
+    const vb = Number(spec.read(b));
+    if (va === vb) {
+      out[column] = null;
+      continue;
+    }
+    const better = spec.higherWins ? (va > vb ? a : b) : va < vb ? a : b;
+    const other = better === a ? b : a;
+    const own = Number(spec.read(better));
+    const rival = Number(spec.read(other));
+    const absolute = spec.higherWins ? own - rival : rival - own;
+    const relative = rival === 0 ? (absolute === 0 ? 0 : 1) : absolute / rival;
+    const gap = { own, rival, absolute: Number(absolute.toFixed(3)), relative: Number(relative.toFixed(4)) };
+    out[column] = passesMmg(column, gap) ? better.policy : null;
   }
   return out;
 }
@@ -618,16 +718,23 @@ for (const [patternName, spec] of patterns) {
   const rows = [
     run(TWIN, null, patternName),
     ...NAMED.map((branch) => run(branch, branch, patternName)),
+    run("priced", "policy", patternName),
   ];
   blocks[patternName] = {
     supply: spec === null
       ? { name: "regular", note: "one command per round, 10 ticks apart, ungated wreck pulse (the g1 cadence)" }
       : spec,
+    prices: {
+      note: "per option: plain ladder ceil(base x 1.16^n) + BRANCH_PRICE_OFFSET (speed +10, draw/buffer +0)",
+      "sorterL1": priceTable(30, 1),
+      "furnaceL1": priceTable(40, 1),
+    },
     rows,
     stages: Object.fromEntries(rows.map((r) => [r.policy, r.stages])),
     branchByLevel: Object.fromEntries(rows.map((r) => [r.policy, r.branchByLevel])),
     leads: leadCensus(rows, false),
     leadsIncludingTwin: leadCensus(rows, true),
+    leadersTwoPlans: leadersTwoPlans(rows),
     attribution: attribution(rows),
     verdicts: verdicts(rows),
   };
@@ -650,8 +757,8 @@ const autoExec = {
 mkdirSync("work/feedback", { recursive: true });
 writeFileSync(TARGET, JSON.stringify({
   baseSha: BASE_SHA,
-  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row, three supply tables (regular, irregular 5-on/4-off, gap6 3-on/3-off)",
-  criteria: "A1-2v3 (g2 addendum): per-column MMG replaces the retired OR-disjunction; buffer judged solely on inputStallPct by >= 3 points under both gap ladders; creditsPer1000Batches reported but unable to satisfy R1; starvedMax/starvedMean and the inputStall pair promoted into rows[]",
+  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row plus one policy row, three supply tables (regular, irregular 5-on/4-off, gap6 3-on/3-off)",
+  criteria: "A1-2v3 (g2 addendum) plus STRAT-003 distinct prices: the two live plans carry different prices at the same level (plain ladder + BRANCH_PRICE_OFFSET: speed +10, draw +0, buffer +0); the `priced` row buys under the power-line signal (throttled -> draw, else speed) with a cheapest-affordable fallback; leaders under MMG reported for the named three and for the live pair",
   primaryColumns: Object.keys(PRIMARY),
   gaps: gapsBlock(),
   autoExec,
@@ -664,9 +771,18 @@ for (const name of ["regular", "irregular", "gap6"]) {
   const block = blocks[name];
   console.log("== " + name + " supply (" + block.supply.name + ") ==");
   if (name !== "regular") console.log("  pattern: " + JSON.stringify(block.supply));
+  console.log("  prices (level 1, sorter/furnace base): " + JSON.stringify(block.prices));
   console.log(table(block.rows).map((line) => "  " + line).join("\n"));
   console.log("  leads (named rows only): " + JSON.stringify(block.leads));
   console.log("  leads (twin included, not scored): " + JSON.stringify(block.leadsIncludingTwin));
+  console.log("  leaders under MMG (two live plans, speed vs draw): " + JSON.stringify(block.leadersTwoPlans));
+  const pricedRow = block.rows.find((r) => r.policy === "priced");
+  if (pricedRow) console.log(
+    "  priced policy: mix=" + JSON.stringify(pricedRow.policyMix) +
+      " batches=" + pricedRow.batches + " credits=" + pricedRow.credits +
+      " creditsEarned=" + pricedRow.creditsEarned + " inputStallPct=" + pricedRow.inputStallPct +
+      " taps=" + pricedRow.taps + " rejects=" + pricedRow.rejects
+  );
   console.log("  gaps (A1-2v3 per-column MMG, one declaration read by fork.test.ts): " + JSON.stringify(gapsBlock().mmg));
   console.log("  A1-2v3 verdict, owns the named column by the per-column MMG:");
   console.log(verdictLines(block.verdicts).join("\n"));
