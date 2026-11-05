@@ -10,17 +10,17 @@ The game works, but the owner has reopened **strategy and presentation quality**
 
 | State | Value |
 |---|---|
-| Integrated revision (tested) | `24daf0e` — 244 tests / 23 files passed, `tsc --noEmit` clean, `0 violation(s)` content + behaviour, build exit 0 |
-| Deployed artifact (live) | `rustwake-24daf0e`, source `24daf0e` — entry `index-D14MbFT6.js` **226977 B**, tables 8407 B, css 7403 B, worker 13015 B, `index.html` 778 B |
-| Served == built | 5/5 sha256 over HTTPS and loopback; smoke at 390x844 dpr2 (Salvage 0→5, no page scroll), 4/4 external nodes 200, v1 save fixture `eede3c4f` resumes and keeps ticking |
-| Evidence | [OPS-008-g1](work/deployments/OPS-008-g1.json) 2026-11-05 01:26 UTC · [release note](work/releases/RELEASE-001.md) · [capture provenance](docs/screenshots/style-slice-provenance.json) |
-| Rollback | `rustwake-4c30fb4` retained; restore is the one-line bind path on stack 125 |
+| Integrated revision (tested) | `c2842e1` — 259 tests / 26 files passed, `tsc --noEmit` clean, `0 violation(s)` content + behaviour, build exit 0, board `--check` exit 0 |
+| Deployed artifact (live) | `rustwake-c2842e1`, source `c2842e1` — entry `index-Br0Eyz3s.js` **230583 B**, tables 9298 B, css 7403 B, worker 13406 B, `index.html` 778 B |
+| Served == built | 5/5 sha256 over HTTPS and loopback; the served HTML names the new entry hash and the previous three names now 404; smoke at 390x844 and 360x640 (fork row of three named branches, one tap commits `speed`, resting line `Power 8 · 0 requested · 100 %`), organic 250 ms run 6/6 distinct frames and ticks, v1 save fixture `eede3c4f` loads unchanged |
+| Evidence | [OPS-009-g1](work/deployments/OPS-009-g1.json) · [release note](work/releases/RELEASE-002.md) · [capture provenance](docs/screenshots/style-slice-provenance.json) |
+| Rollback | `rustwake-24daf0e` retained; restore is the one-line bind path on stack 125 |
 | CI | `remote-CI-unverified` — `gh` unauthenticated and the anonymous API returns 404 for this private repo |
-| Open | DEF-001 cached HTML naming removed assets, DEF-002 root favicon 404, DEF-003 closed as a capture artefact, DEF-004 drone leg after catch-up (inFlight clamp); **UI-001** triaged: the open research card is the coverage problem — the rest-state HUD covers only 11.2 % of the canvas ([census](work/evidence/UI-001-census-g1.md)) |
+| Open | `A1-2` is **NOT MET** as recorded and `A1-2v2` is approved prospectively (g2 onward), so its re-run is owed; DEF-001 cached HTML naming removed assets and DEF-002 icon answered by the HTML fallback (site root 404 153 B; `/rustwake/favicon.ico` 200 `text/html` 778 B — a fallback, not an icon); audio, real-device p95 and human first-feel unverified; dock buttons clip at 360x640 / text scale 2 — identical at the base, so pre-existing; **UI-001** triaged ([census](work/evidence/UI-001-census-g1.md)) |
 
-**Player-visible outcome of this build:** the yard is the composed slice — floor kit in empty tiles, a full-frame sprite sheet, and a research card that leaves the yard visible on desktop; the strategy census now says plainly that the scripted ladder, not the player, picks the plan (one option in 293 of 1800 naive rounds, a real build-vs-upgrade fork in only 4). **Next outcome:** one cost-bearing fork (A1, criteria A1-1..A1-6) plus the inspected art candidate `3f7555a`, then re-run the same three policies. [Sprint plan](work/product/SPRINT-002.md) · [Owner feedback](work/feedback/OWNER-002.md) · [STRAT-001 verdict](work/feedback/STRAT-001-g1.md).
+**Player-visible outcome of this build:** each machine upgrade now names the quantity it improves — the dock offers `Faster batches`, `More input` or `Less power` at one price, and the resting screen carries the power line `Power 8 · 1 requested · 100 %`; the supply drone’s leg eases through its turnaround instead of snapping back (26/26 distinct frames in the 250 ms witness, 6/6 re-checked live). **Next outcome:** PLAY-001 — the resting screen answers three questions without a tap (stable primary label, shortfall numbers, one numeric idle beat). [Sprint plan](work/product/SPRINT-002.md) · [Owner feedback](work/feedback/OWNER-002.md) · [STRAT-001 verdict](work/feedback/STRAT-001-g1.md) · [STRAT-002 QA](work/review/STRAT-002-g1-qa.md).
 
-Screens are the seeded 12-case slice at `24daf0e` (portrait 360/390/412, mobile landscape 844x390, desktop 1440x900) in [docs/screenshots](docs/screenshots/style-slice-provenance.json); the older role and sheet PNGs are historical captures at `912ef51`.
+Screens are the seeded 12-case slice at `24daf0e` (portrait 360/390/412, mobile landscape 844x390, desktop 1440x900) in [docs/screenshots](docs/screenshots/style-slice-provenance.json); the ART-001 rows are candidate captures at `87ee90b` ([rest](docs/screenshots/candidate-87ee90b-slice-phone-rest.png), [mature](docs/screenshots/candidate-87ee90b-slice-phone-mature.png), 26 clip frames), and the older role and sheet PNGs are historical captures at `912ef51`.
 
 ## The development team
 

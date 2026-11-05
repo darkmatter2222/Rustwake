@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T01:35:00+00:00",
+  "updated_at": "2026-11-05T05:35:00+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
-    "deployed_sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045",
+    "inspected_head": "c2842e1c853a146f22afda5667e7410253f88ddf",
+    "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-008-g1.json",
-    "verification": "OPS-008-g1, 2026-11-05 01:26 UTC: served index.html names assets/index-D14MbFT6.js; 5/5 served sha256 == local build; 4/4 external nodes 200; live gameplay smoke + v1 save fixture pass. Remote CI status unreadable (gh unauthenticated) -> remote-CI-unverified. UI-001 census recorded in work/evidence/UI-001-census-g1.md (coverage denominator = drawn yard region, panel-open state)."
+    "receipt": "work/deployments/OPS-009-g1.json",
+    "verification": "OPS-009-g1, 2026-11-05 05:31 UTC: deployed as the labelled preview rustwake-c2842e1; served index.html names assets/index-Br0Eyz3s.js (230583 B) and 5/5 served sha256 == the isolated SHA build; previous release rustwake-24daf0e retained as the rollback resource. Live smoke on the deployed artifact: three named fork buttons at one 30-credit price, one tap commits branch speed, resting power line 'Power 8 · 0 requested · 100 %', organic 250 ms run gives 6/6 distinct canvas hashes and ticks. Remote CI status unreadable (gh unauthenticated, anonymous API 404) -> remote-CI-unverified."
   },
   "runtime": {
     "status": "activation-required",
@@ -150,9 +150,9 @@
       "type": "experiment",
       "title": "Create and inspect a coherent playable yard style slice",
       "priority": "P1",
-      "status": "review",
+      "status": "accepted",
       "owner": "developer",
-      "generation": 1,
+      "generation": 4,
       "player_problem": "Owner still finds the game ugly despite numeric art acceptance.",
       "hypothesis": "Authored wreck, machinery, lighting and composition improve first impression.",
       "scope": [
@@ -173,15 +173,20 @@
       "product_approved": true,
       "evidence": [
         "work/feedback/OWNER-002.md",
-        "work/development/handoffs (ART-001 g1 candidate 3f7555a, captures docs/evidence/candidate-3f7555a-art001-captures.json)",
-        "docs/screenshots/ (shipped 24daf0e captures) + docs/screenshots/style-slice-provenance.json",
-        "work/evidence/UI-001-census-g1.md"
+        "work/development/handoffs/ART-001-g1.md",
+        "docs/evidence/candidate-87ee90b-art001-captures.json",
+        "docs/evidence/2026-11-04-clip-opening-250ms.json (witness: 26/26 distinct pngSha256 and droneBodyCssPx)",
+        "docs/evidence/2026-11-04-clip-opening.json (control: 23 distinct of 26 at 1000 ms, explained as sampling aliasing)",
+        "docs/screenshots/candidate-87ee90b-*.png (26 clip frames + 6 stills)",
+        "tests/renderer/drone-leg.test.ts (5 passed, merged tree)",
+        "work/product/ART-001-decision-g4.md (product preview acceptance, own recount of the stored rows)",
+        "work/review/ART-001-g3-qa.md plus work/review/art001-motion-probe.mjs (independent QA at b8537af/697fb45)"
       ],
-      "candidate_sha": "3f7555a9c72185012c83f2b9ae8c8d967d300862",
-      "review_verdict": "accepted with notes",
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462",
+      "review_verdict": "accept",
+      "published_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "outcome": "Two player-visible changes ship in the merged artifact: the wrapped drone leg is eased with 1-tick dock and wreck dwells (the seam stops reading as a frame jump), and the opening/mature yard keeps the authored depth planes, bevelled machinery and detailed hulk. Witness: 26/26 distinct canvas hashes and drone positions at 250 ms, plus 6/6 distinct on the live organic run after deployment. The 1000 ms control's three repeated frames are recorded as sampling aliasing of a 22-tick cycle, not a product defect.",
       "history": [
         {
           "at": "2026-11-05T00:11:36+00:00",
@@ -203,9 +208,16 @@
           "from_state": "implementing",
           "to_state": "review",
           "reason": "candidate submitted for independent QA at 3f7555a9c72185012c83f2b9ae8c8d967d300862 (branch art001-dev; supersedes 7e10288884383fd3cfef74a3e900f1522b063e6d, which only changed the capture script to per-iteration canvas.toDataURL() plus the evidence JSON, renderer files unchanged); clip-frame defect DEF-003 closed as a capture artefact, DEF-004 open, so no product acceptance is claimed"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "generation 4 accepted at preview level (work/product/ART-001-decision-g4.md): seam explained as 1000 ms sampling aliasing, smoothness confirmed by the 250 ms witness the owner recounted personally (26/26 distinct hashes and positions, four samples sharing one tick with four distinct positions); not final polish - audio, real-device p95 and human first-feel remain unverified"
         }
       ],
-      "review_note": "accepted with notes against 3f7555a9c72185012c83f2b9ae8c8d967d300862; acceptance must be re-issued on the final SHA, so the row stays in review while the next capture set lands"
+      "review_note": "chain: QA 'accepted' at g3 for code b8537af / captures 697fb45 (work/review/ART-001-g3-qa.md, 24 files / 249 tests, 26/26 distinct clip hashes, its own organic probe 6/6 on candidate and live build). g4 code 87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462 implements exactly that QA finding D1 (1-tick dwells inside the wrapped cycle) plus the evidence-only follow-up f0e7f65ba7f821cd65156f4631ee8a0a217bbb4c. No separate independent QA rerun exists for 87ee90b, so it carries product preview acceptance plus the 250 ms witness and the release lane's own gate/measurement set (259/26 tests green, 6/6 distinct live organic samples); that gap is the honest open item for this row."
     },
     {
       "id": "RELEASE-001",
@@ -301,7 +313,7 @@
       "type": "experiment",
       "title": "Implement one reversible strategic allocation choice (A1: power-vs-throughput fork)",
       "priority": "P1",
-      "status": "ready",
+      "status": "deployed",
       "owner": "developer",
       "generation": 1,
       "player_problem": "Progression needs competing useful plans, not just additional clicks.",
@@ -327,13 +339,28 @@
       ],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-002.md"
+        "work/feedback/OWNER-002.md",
+        "work/feedback/strat002-harness.json and work/feedback/strat002-harness.mjs (deterministic, needs npx tsx)",
+        "work/development/handoffs/STRAT-002-g1.md",
+        "work/review/STRAT-002-g1-qa.md and work/review/strat002-probe.mjs (independent QA, own runs)",
+        "work/product/STRAT-002-decision-g2.md (option b: A1-2 stands, A1-2v2 approved prospectively)",
+        "tests/simulation/fork.test.ts (8 passed) and tests/ui/fork-ui.test.tsx (2 passed)"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "4b6e32ce653af1a97451f8eac4a0bc0fe3f3ab52",
+      "review_verdict": "accept",
+      "published_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "outcome": "The machine upgrade now names which quantity improves, and the resting screen states the power budget. On the deployed artifact: exactly three costed fork buttons ('Faster batches', 'More input', 'Less power', 30 credits each) in one dock row [10,790,370,46], one tap commits branch speed (machine 1 level 1 -> 2, credits 30 -> 0), and .objective ends with 'Power 8 · 0 requested · 100 %' with no panel opened. Save stays schemaVersion 1 with the v1 fixture checksum eede3c4f unchanged and byte-for-byte re-encodable. Three named plans give genuinely distinct orders (2175/1158/1191 batches); the unnamed default is a documented speed twin.",
+      "criteria_results": {
+        "A1-1": "MET - both/all costed options visible on one screen before either is chosen; harness >= 2 affordable 121 of 1800 against the 120 target (that 120 applies to the unnamed/speed row; buffer 101, draw 107)",
+        "A1-2": "NOT MET as recorded - under the four listed acceptance metrics (batches, starved %, min power ratio, taps-to-next-milestone) the buffer branch leads none: 2175/1158/1191 batches, starved max 80/84/85, minPower 0.615/0.727/1.0, taps 1983/2046/2045. Its only unique lead (residual credits 190 vs 49/49) is not one of the four. Recorded as a metric-set defect, not a mechanism failure.",
+        "A1-3": "MET on the distinctness that is measurable: two distinguishable plans plus one documented by-construction twin (speed equals the unnamed row on every scalar and all six kinds counters); no plan is weakly dominated on the primary columns the harness does score",
+        "A1-4": "MET - power named on the resting screen without opening a panel: 'Power 8 · 0 requested · 100 %' (seeded) and 'Power 8 · 1 requested · 100 %' (organic) at 390x844 and 360x640; the 24daf0e base shows no power line at the same seeds",
+        "A1-5": "MET - save/offline catch-up and respec regression green on the v1 fixture (schemaVersion 1, checksum eede3c4f, byte-for-byte re-encode asserted in tests/simulation/fork.test.ts)",
+        "A1-6": "MET - independent QA reproduced the three-policy census byte-identically (same SHA256 across two runs, equal to the committed harness JSON) and the product owner returned a keep/revise/revert decision with switch conditions"
+      },
+      "acceptance_revision": "A1-2v2 approved prospectively by the product owner (option b, work/product/STRAT-002-decision-g2.md): dominance scored only over the three named rows on the primary column set (batches, powerLimitedRounds, minPowerRatio, rejects, taps, firstResearch, starvedMax/Mean promoted into rows[], plus creditsEarned and creditsPer1000Batches), residual credits excluded by R2, the speed/unnamed twin asserted by test under R3, and every pick counter naming its field under R4. It governs g2 onward only - the g1 A1-2 failure stands on the record (never retroactively passed). If after the irregular-supply experiment buffer still leads nothing, the buffer-drop clause executes and the fork ships as two plans.",
+      "review_note": "QA verdict wording is 'accepted with notes' (work/review/STRAT-002-g1-qa.md): every gate exits 0 (254 tests / 25 files at 4b6e32c alone, entry assets/index-7328OjsX.js 229546 B), the mechanism is fully verified under its own runs, and the single reason it is not a plain accept is the A1-2 metric-set gap recorded above.",
       "history": [
         {
           "at": "2026-11-05T00:11:36+00:00",
@@ -348,6 +375,41 @@
           "from_state": "triaged",
           "to_state": "ready",
           "reason": "A1 tradeoff approved from the STRAT-001 baseline; criteria A1-1..A1-6 recorded"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 4b6e32ce653af1a97451f8eac4a0bc0fe3f3ab52 on branch strat002-dev (base 24daf0e): named upgrade branches in the simulation plus the resting power line, deterministic harness, 8 fork tests + 2 fork-ui tests"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff work/development/handoffs/STRAT-002-g1.md submitted with the per-policy table, harness determinism receipt and the save-compatibility assertions"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent QA 'accepted with notes' at 4b6e32c (work/review/STRAT-002-g1-qa.md): gates green, harness byte-identical across two runs, pricedGe2 121 >= 120, three distinct branch orders, one-tap named commit, power line and 44 px layout floor clean against the base-measured numbers; the A1-2 gap is a metric-set defect and the product owner chose option (b), so the shipped claim is stated as three named rows with A1-2 NOT MET and A1-2v2 governing g2 onward"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "product decision (b) recorded in work/product/STRAT-002-decision-g2.md; merged with ART-001 g4 per-file into c2842e1c853a146f22afda5667e7410253f88ddf and pushed to main in this push"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served on the existing route as the labelled preview rustwake-c2842e1, source c2842e1; entry assets/index-Br0Eyz3s.js 230583 B, 5/5 served sha256 equal to the build, fork row and power line verified in a real browser on the live URL (OPS-009-g1)"
         }
       ]
     },
@@ -438,13 +500,13 @@
     {
       "id": "DEF-002",
       "type": "defect",
-      "title": "Site-root favicon 404 while the release favicon serves 200",
+      "title": "favicon request answered by the SPA HTML fallback (no icon file in the release)",
       "priority": "P3",
       "status": "inbox",
       "owner": "developer",
       "generation": 1,
-      "player_problem": "One or two console 404s on every fresh load.",
-      "hypothesis": "The built index.html declares no link rel=icon, so the browser asks the site root instead of the /rustwake/ asset.",
+      "player_problem": "The tab shows no icon: one console 404 (site root) plus one HTML body where an image is expected (app path).",
+      "hypothesis": "The built index.html declares no link rel=icon, so the browser asks the site root instead of the /rustwake/ asset. Corrected measurement (OPS-009-g1): the site-root request /favicon.ico -> 404 with a 153 B text/html body, while /rustwake/favicon.ico -> 200 with 778 B text/html - that 200 is the SPA HTML fallback, not an icon, because the release directory carries no favicon.ico. So the earlier 'favicon serves 200' claim was the HTML fallback answering, and the app root route itself is the same 778 B text/html fallback.",
       "scope": [
         "index.html head"
       ],
@@ -452,7 +514,8 @@
         "No infrastructure change beyond this defect's own fix"
       ],
       "acceptance": [
-        "adding a relative link rel=icon href=\"./favicon.ico\" removes the console 404 while /rustwake/favicon.ico stays 200"
+        "a real icon file present in the release directory plus a relative link rel=icon href=\"./favicon.ico\" yields an image/png (or image/x-icon) response for the icon request, not 778 B of text/html",
+        "no console 404 and no HTML-as-icon body for the icon request while /rustwake/ keeps serving the hashed entry"
       ],
       "dependencies": [],
       "product_approved": false,
@@ -529,11 +592,11 @@
       "type": "defect",
       "title": "Drone freezes at one position after a large offline catch-up",
       "priority": "P2",
-      "status": "inbox",
+      "status": "deployed",
       "owner": "developer",
-      "generation": 1,
+      "generation": 2,
       "player_problem": "After a long offline period the yard looks frozen: the drone holds one spot and the canvas is byte-identical across samples.",
-      "hypothesis": "partly fixed: the empty-leg clamp is fixed by candidate 01a2e0d3b585d9bfd8716180abaa3225539d9d02 (entry assets/index-Bb52rZfR.js 227890 B, 24 files / 248 tests); the remaining piece is the inFlight branch clamp in src/game/renderer/scene.ts (~L476), under test in the next candidate generation",
+      "hypothesis": "fixed and shipped: the empty-leg clamp (candidate 01a2e0d), then the inFlight branch wrapped on its own travel cycle (01a2e0d -> b8537af) and eased with 1-tick dock/wreck dwells (87ee90b, DEF-005), so a saturated inFlight anchor still animates and the wrap seam no longer reads as a frame jump",
       "scope": [
         "src/game/renderer/scene.ts drone leg",
         "offline catch-up credit"
@@ -546,17 +609,20 @@
         "26 samples at 1000 ms spacing contain at least two distinct canvas hashes (organic fresh-begin contrast on the same live build: 5 distinct hashes of 6 samples)"
       ],
       "dependencies": [],
-      "product_approved": false,
+      "product_approved": true,
       "evidence": [
         "work/deployments/OPS-008-g1.json save-compatibility block",
-        "work/development/handoffs (ART-001 candidate 01a2e0d)",
+        "work/deployments/OPS-009-g1.json browser_smoke.motion_witness_live (6/6 distinct canvas hashes and ticks on the live route)",
+        "docs/evidence/2026-11-04-clip-opening-250ms.json (26/26 distinct) and docs/evidence/2026-11-04-clip-opening.json (control 23 distinct of 26)",
+        "tests/renderer/drone-leg.test.ts (5 passed: stale inFlight gives 3 distinct values, bounds 0..1, period invariance)",
+        "work/review/ART-001-g3-qa.md sections 1 and 5",
         "work/evidence/UI-001-census-g1.md"
       ],
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462",
+      "review_verdict": "accept",
+      "published_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "outcome": "closed on the shipped artifact: at least two distinct canvas hashes is exceeded at both spacings (26 of 26 at 250 ms, 23 of 26 at 1000 ms, 6 of 6 organic on the live route), so the post-catch-up freeze is gone; the three collisions in the 1000 ms control are the sampling period, not the leg",
       "history": [
         {
           "at": "2026-11-05T01:35:00+00:00",
@@ -564,6 +630,55 @@
           "from_state": null,
           "to_state": "inbox",
           "reason": "filed from OPS-008-g1 during the 24daf0e release; kept open as the carrying defect (saturated droneLeg() clamp after the 432000-tick catch-up), with the organic fresh-begin contrast at 5 distinct canvas hashes of 6 samples on the same live build"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "carrying defect of ART-001; fix belongs to the renderer leg wrap already under development in that lane"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "urgent bug fix using existing behaviour as intent (charter definition of ready); no new product mechanics involved"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "wrap on its own travel cycle (01a2e0d), inFlight branch (b8537af), 1-tick dock and wreck dwells (87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462) with tests/renderer/drone-leg.test.ts"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "two clip spacings submitted with per-sample tick, drone position and png hash (f0e7f65ba7f821cd65156f4631ee8a0a217bbb4c)"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent QA: 26/26 distinct clip hashes plus its own organic probe 6/6 on candidate and live build, 24 files / 249 tests green (work/review/ART-001-g3-qa.md); the dwells that close the residual seam shipped in 87ee90b"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "preview acceptance in work/product/ART-001-decision-g4.md; integrated per-file into c2842e1c853a146f22afda5667e7410253f88ddf"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "measured on the live route: 6/6 distinct canvas hashes with 6/6 distinct tick values at 250 ms on a fresh save (OPS-009-g1)"
         }
       ],
       "severity": "minor",
@@ -619,6 +734,244 @@
           "from_state": "inbox",
           "to_state": "triaged",
           "reason": "rest footprint is only 11.2 % -> UI-001 is an open-panel problem, not a whole-HUD problem"
+        }
+      ]
+    },
+    {
+      "id": "DEF-005",
+      "type": "defect",
+      "title": "Wrapped drone leg restarts in one drawn frame (no end dwell)",
+      "priority": "P3",
+      "status": "deployed",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "The drone appears to snap back at the ends of its leg instead of restarting smoothly, once per cycle.",
+      "hypothesis": "the wrapped leg carries no dwell at either end, so the wrap lands inside a drawn frame; a 1-tick dock hold and a 1-tick wreck hold inside the wrapped cycle give the eye a rest position at both ends",
+      "scope": [
+        "src/game/renderer/scene.ts wrapped leg parameter"
+      ],
+      "non_goals": [
+        "No infrastructure change beyond this defect's own fix",
+        "No droneTravelTicks retune (deferred: cosmetic instrument gain, real regression risk)"
+      ],
+      "acceptance": [
+        "the wrapped cycle keeps its period and gains a 1-tick dwell at both ends",
+        "the 250 ms strip shows a distinct canvas hash per sample and monotone mid-leg steps",
+        "the previous step/period invariants in tests/renderer/drone-leg.test.ts stay green"
+      ],
+      "dependencies": [
+        "DEF-004"
+      ],
+      "product_approved": true,
+      "evidence": [
+        "docs/evidence/2026-11-04-clip-opening-250ms.json (26/26 distinct hashes and positions, stepCssPxMean 77.86, max 108.5)",
+        "work/product/ART-001-decision-g4.md sections 2 and 3 (own recount, four samples one tick with four distinct positions)",
+        "work/deployments/OPS-009-g1.json browser_smoke.motion_witness_live (6/6 on the live route)"
+      ],
+      "candidate_sha": "87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462",
+      "review_verdict": "accept",
+      "published_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "outcome": "closed: dwells shipped, 26/26 distinct at 250 ms and 6/6 on the live organic run; the 1000 ms control's three repeated frames are recorded as sampling aliasing of a 22-tick cycle (2.2 samples per cycle), not as leg stutter - 250 ms is the witness, 1000 ms the control",
+      "history": [
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "raised as finding D1 in work/review/ART-001-g3-qa.md: the wrap teleports 336.5 px at frame 11 and 160.0 px at frame 25 because the wrapped leg has no end dwell"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "non-blocking residual of an accepted slice, quantified in the reviewer's own numbers"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "bug fix using existing behaviour as intent; one bounded change inside the existing wrapped cycle"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "87ee90b9ec1797fcba5c8cdaa582c72ba9ec7462 eases the leg through the seam with 1-tick dwells"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "two clip spacings captured on the same build (f0e7f65ba7f821cd65156f4631ee8a0a217bbb4c)"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "accepted as the recorded explanation at preview level (work/product/ART-001-decision-g4.md): the leg is smooth at ~5.73 CSS px per drawn frame and the 1000 ms collisions are instrument aliasing"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "integrated per-file into c2842e1c853a146f22afda5667e7410253f88ddf with its captures and provenance"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served as rustwake-c2842e1 and re-sampled live (6/6 distinct)"
+        }
+      ],
+      "severity": "minor"
+    },
+    {
+      "id": "RELEASE-002",
+      "type": "delivery",
+      "title": "Publish and deploy the merged fork-plus-motion slice",
+      "priority": "P1",
+      "status": "measured",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "Two accepted lanes sat in separate worktrees, so the live route showed neither the named upgrade branches nor the eased leg.",
+      "hypothesis": "One per-file integration plus one labelled preview deployment makes both changes visible on the existing route with rollback retained.",
+      "scope": [
+        "main integration",
+        "work",
+        "release operations"
+      ],
+      "non_goals": [
+        "No new service, port, network, DNS record or mirror",
+        "No doc-only redeploy"
+      ],
+      "acceptance": [
+        "per-file ownership honoured with no lane file lost (tripwire 259 tests across 26 files)",
+        "typecheck, test, validate and build green on the merged tree with the entry chunk inside the 233000 B ceiling",
+        "CI status read honestly, then the merged artifact served on the existing route with served == built digests and a retained previous release",
+        "board and README reconciled to the published and deployed revisions"
+      ],
+      "dependencies": [
+        "STRAT-002",
+        "ART-001"
+      ],
+      "product_approved": true,
+      "evidence": [
+        "work/deployments/OPS-009-g1.json",
+        "work/releases/RELEASE-002.md",
+        "work/review/STRAT-002-g1-qa.md",
+        "work/product/ART-001-decision-g4.md",
+        "work/product/STRAT-002-decision-g2.md"
+      ],
+      "candidate_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "review_verdict": "accept",
+      "published_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "deployed_sha": "c2842e1c853a146f22afda5667e7410253f88ddf",
+      "outcome": "Integrated per-file into c2842e1c853a146f22afda5667e7410253f88ddf and pushed to main; deployed as the labelled preview rustwake-c2842e1 on stack 125 with a one-line bind change. Measured: 259 tests / 26 files green, typecheck/validate/build exit 0, entry assets/index-Br0Eyz3s.js 230583 B inside the 233000 B ceiling, 5/5 served sha256 equal to the isolated SHA build, old asset names 404, fork row and resting power line verified in a real browser at 390x844 and 360x640, organic 250 ms motion witness 6/6, unaffected routes unchanged, rollback resource rustwake-24daf0e retained. Remote CI remains unreadable -> remote-CI-unverified.",
+      "history": [
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "both lanes hold acceptance (ART-001 preview, STRAT-002 accepted with notes plus product option b), so the release slice is ready"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "main fast-forwarded to 565f62d, lane A and lane B extracted per file, product and QA artifacts imported; integration commit c2842e1c853a146f22afda5667e7410253f88ddf"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "merged-tree gates run and recorded with real exit codes (typecheck 0, 259/26 tests, validate 0 with the verbatim behaviour line, build 0, entry 230583 B)"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "coordinator",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "tripwire matched exactly (259 = 244 base + 5 + 8 + 2), so no lane file was lost; both lane verdicts and the product decision are on file"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "pushed to the existing GitHub origin, remote-tracking head verified equal to local HEAD"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "rustwake-c2842e1 installed and promoted on the existing route 7 minutes after the integration commit; container healthy, restart 0, fleet 49 before and after"
+        },
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy measurement recorded in OPS-009-g1: served == built 5/5, entry hash read back from HTTP equals the build, live smoke and save fixture pass, one corrected and two carried defect rows updated"
+        }
+      ]
+    },
+    {
+      "id": "PLAY-001",
+      "type": "experiment",
+      "title": "Make the resting screen answer three questions without a tap",
+      "priority": "P1",
+      "status": "ready",
+      "owner": "player",
+      "generation": 1,
+      "player_problem": "The opening minute reads as a counter being decremented: the primary label mutates five ways for one continuing choice, a failed tap never states the shortfall, and idle production has no visible or numeric signal.",
+      "hypothesis": "A stable primary label, numeric shortfall inside the toast, and one numeric idle beat per production cycle let one persona state next action, shortfall and current output from the resting screen alone.",
+      "scope": [
+        "src/ui (primary label, toast, resting line)",
+        "work/feedback (one persona comprehension run)"
+      ],
+      "non_goals": [
+        "No new currency, machine, panel or second screen",
+        "No audio work this slice (deferred behind the numeric idle line)"
+      ],
+      "acceptance": [
+        "on a fresh start, about 20 taps at 250 ms, then without opening any panel the persona writes three sentences (next tap effect, last shortfall amount, current output) that all match the sim state read from the same build",
+        "the primary label string does not change while the underlying choice stays the same",
+        "the same three-sentence run on 24daf0e is recorded as the negative control and the candidate is strictly better than its own base, otherwise the slice is reverted",
+        "layout floor holds: no page scroll and every tap target >= 44 CSS px at text scale 1 and 2"
+      ],
+      "dependencies": [
+        "STRAT-002",
+        "ART-001"
+      ],
+      "product_approved": true,
+      "evidence": [
+        "work/product/STRAT-002-decision-g2.md section 2 (PL-1..PL-6 triage) and section 2.1",
+        "work/feedback/strat002-harness.json"
+      ],
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-05T05:35:00+00:00",
+          "actor": "product-owner",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "declared as the single next playable outcome experiment for this sprint, with the three-sentence check and the 24daf0e negative control fixed in advance"
         }
       ]
     }
