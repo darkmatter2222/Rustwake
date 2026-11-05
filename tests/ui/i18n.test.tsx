@@ -70,6 +70,9 @@ const KEY_PREFIXES = [
   "bottleneck",
   "reader",
   "chip",
+  // PLAY-001: the two namespaces the resting screen added (Drones/Power, pips, ghost).
+  "hud",
+  "phase",
 ];
 const KEY_PATTERN = new RegExp(`\\b(${KEY_PREFIXES.join("|")})\\.[a-z]`);
 

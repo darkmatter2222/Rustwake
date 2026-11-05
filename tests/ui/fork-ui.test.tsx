@@ -48,8 +48,8 @@ function boot(store: GameStore): void {
   }
   act(() => findButton("Repair drone")?.click());
   act(() => store.step(262));
-  act(() => findButton("Build sorter")?.click());
-  act(() => findButton("Place")?.click());
+  act(() => findButton("Build Scrap sorter")?.click());
+  act(() => findButton("Build Scrap sorter")?.click());
   act(() => findButton("Connect dock to sorter")?.click());
   act(() => store.step(300));
 }

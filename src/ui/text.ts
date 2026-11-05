@@ -218,6 +218,36 @@ export function powerLine(state: SimState): string {
   });
 }
 
+/**
+ * The resting state in one line (PLAY-001 P-2): how many drones are actually flying, then
+ * the shared power budget. It has no `progress > 0` gate anywhere behind it, so the yard
+ * answers "what is running" from the first tick, with no machine placed yet. The drone
+ * count is the flying fleet - the starter once repaired, plus every spare bought.
+ */
+export function restingLine(state: SimState): string {
+  const flying = (state.drone.repaired ? 1 : 0) + state.spares.length;
+  return `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
+}
+
+/**
+ * What the rows of five pips under each machine count (PLAY-001 P-4). The renderer paints
+ * the current batch in fifths - never a level, a buffer or a power share - so the line
+ * names that quantity and prints the same count of lit pips the tile shows: `4/5` is the
+ * row with four marks lit, and the machine panel's `Batch` row prints that same
+ * completion as a percent. Two machines on one screen read apart without a panel.
+ */
+export function pipLine(state: SimState): string {
+  const named = state.machines.slice(0, 3).map((m) => {
+    const ratio = m.batchMilli === 0 ? 0 : Math.min(1, m.progress / m.batchMilli);
+    return `${BLUEPRINTS[m.blueprint].label} ${ratio > 0 ? Math.max(1, Math.ceil(ratio * 5)) : 0}/5`;
+  });
+  const rest = state.machines.length - named.length;
+  return t("hud.pips", {
+    what: t("row.batch"),
+    detail: named.join(t("value.dotSeparator")) + (rest > 0 ? ` +${rest}` : ""),
+  });
+}
+
 function machineLabel(state: SimState, machineId: number): string {
   const machine = state.machines.find((m) => m.id === machineId);
   return machine ? BLUEPRINTS[machine.blueprint].label : t("unit.machine");

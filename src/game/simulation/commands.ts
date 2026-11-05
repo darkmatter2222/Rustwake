@@ -4,9 +4,11 @@ import {
   RECIPES,
   TUNING,
   exportPrice,
+  type ItemStack,
   type ResourceId,
 } from "../content/defs";
 import { RESEARCH, researchBonus } from "../content/research";
+import { plural, resourceWord, t } from "../content/strings";
 import {
   SCHEMA_VERSION,
   batchMilliOf,
@@ -50,7 +52,9 @@ export type CommandReject =
   | "read-only"
   | "reconciling";
 
-export type CommandResult = { ok: true; revision: number } | { ok: false; reason: CommandReject };
+export type CommandResult =
+  | { ok: true; revision: number }
+  | { ok: false; reason: CommandReject; need?: number; have?: number; word?: string };
 
 export type Command =
   | { id: string; type: "manual.salvage" }
@@ -120,6 +124,39 @@ function commit(s: SimState, key: string, value: number): CommandResult {
   return { ok: true, revision: s.revision + 1 };
 }
 
+/**
+ * PLAY-001 P-1: a blocked tap carries its own shortfall. Both numbers are read from the
+ * same table the button's price is printed from, so the toast can never disagree with the
+ * button that just refused, and the player sees how far off the price is. The three
+ * helpers here are the only places the pair is built; `spendFromStore` pre-checks every
+ * stack, so a failed price leaves the store exactly as it was and `have` stays truthful.
+ */
+function shortOf(s: SimState, resource: ResourceId, need: number): CommandResult {
+  return {
+    ok: false,
+    reason: "insufficient",
+    need,
+    have: s.store[resource] ?? 0,
+    word: resourceWord(resource),
+  };
+}
+
+/** The first priced stack the store cannot cover - the one line the player reads. */
+function shortCost(s: SimState, cost: readonly ItemStack[]): CommandResult {
+  const item = cost.find((each) => (s.store[each.resource] ?? 0) < each.qty) ?? cost[0];
+  return shortOf(s, item.resource, item.qty);
+}
+
+function shortCredits(s: SimState, need: number): CommandResult {
+  return {
+    ok: false,
+    reason: "insufficient",
+    need,
+    have: s.credits,
+    word: plural(need, t("unit.credit")),
+  };
+}
+
 function manualSalvage(s: SimState): CommandResult {
   if (s.tick < s.wreck.nextPulseTick) return { ok: false, reason: "cooldown" };
   const perPulse = TUNING.manualSalvagePerPulse + researchBonus(s).pulseScrap;
@@ -148,7 +185,7 @@ function manualSalvage(s: SimState): CommandResult {
 function repairDrone(s: SimState): CommandResult {
   if (s.drone.repaired) return { ok: false, reason: "duplicate" };
   const cost = [{ resource: "scrap" as ResourceId, qty: TUNING.repairCostScrap }];
-  if (!spendFromStore(s, cost)) return { ok: false, reason: "insufficient" };
+  if (!spendFromStore(s, cost)) return shortCost(s, cost);
   s.drone.repaired = true;
   s.drone.nextDeliveryTick = s.tick + TUNING.droneDeliveryTicks;
   return commit(s, "repair", 1);
@@ -171,7 +208,7 @@ function addDrone(s: SimState): CommandResult {
   if (!s.drone.repaired) return { ok: false, reason: "no-drone" };
   if (1 + s.spares.length >= TUNING.fleetCap) return { ok: false, reason: "fleet-full" };
   const cost = droneAddCost(s);
-  if (s.credits < cost) return { ok: false, reason: "insufficient" };
+  if (s.credits < cost) return shortCredits(s, cost);
   s.credits -= cost;
   const unit = createUnit();
   unit.nextDeliveryTick = s.tick + TUNING.droneDeliveryTicks;
@@ -183,7 +220,7 @@ function buildMachine(s: SimState, blueprint: string, tile: number): CommandResu
   const def = BLUEPRINTS[blueprint];
   if (!def) return { ok: false, reason: "not-found" };
   if (!validTile(s, tile)) return { ok: false, reason: "blocked-placement" };
-  if (!spendFromStore(s, def.buildCost)) return { ok: false, reason: "insufficient" };
+  if (!spendFromStore(s, def.buildCost)) return shortCost(s, def.buildCost);
   const machine: MachineState = {
     id: s.nextMachineId++,
     blueprint,
@@ -231,7 +268,7 @@ function upgradeMachine(
   if (!machine) return { ok: false, reason: "not-found" };
   const def = BLUEPRINTS[machine.blueprint];
   const cost = upgradeCost(def.baseUpgradeCost, machine.level);
-  if (s.credits < cost) return { ok: false, reason: "insufficient" };
+  if (s.credits < cost) return shortCredits(s, cost);
   s.credits -= cost;
   machine.level += 1;
   if (branch !== undefined) {
@@ -364,7 +401,7 @@ function dropRoute(s: SimState, routeId: number): void {
 function exportContract(s: SimState): CommandResult {
   if (s.exportClaimed) return { ok: false, reason: "already-claimed" };
   const cost = [{ resource: "steel" as ResourceId, qty: TUNING.exportContractSteel }];
-  if (!spendFromStore(s, cost)) return { ok: false, reason: "insufficient" };
+  if (!spendFromStore(s, cost)) return shortCost(s, cost);
   s.exportClaimed = true;
   s.credits += TUNING.exportContractCredits;
   s.exportSteelDelivered = TUNING.exportContractSteel;
@@ -383,8 +420,8 @@ function sellResource(s: SimState, resource: ResourceId, qty: number): CommandRe
   if (price <= 0) return { ok: false, reason: "not-found" };
   if (!Number.isInteger(qty) || qty <= 0) return { ok: false, reason: "not-found" };
   const amount = Math.min(qty, sellableAmount(s, resource));
-  if (amount <= 0) return { ok: false, reason: "insufficient" };
-  if (!spendFromStore(s, [{ resource, qty: amount }])) return { ok: false, reason: "insufficient" };
+  if (amount <= 0) return shortOf(s, resource, qty);
+  if (!spendFromStore(s, [{ resource, qty: amount }])) return shortOf(s, resource, amount);
   s.credits += price * amount;
   return commit(s, "sell", amount);
 }
@@ -437,9 +474,9 @@ function buyResearch(s: SimState, node: string): CommandResult {
   if (def.requires && (s.research[def.requires] ?? 0) <= 0) {
     return { ok: false, reason: "prereq" };
   }
-  if ((s.store.data ?? 0) < def.cost) return { ok: false, reason: "insufficient" };
+  if ((s.store.data ?? 0) < def.cost) return shortOf(s, "data", def.cost);
   if (!spendFromStore(s, [{ resource: "data", qty: def.cost }])) {
-    return { ok: false, reason: "insufficient" };
+    return shortOf(s, "data", def.cost);
   }
   s.research[def.id] = rank + 1;
   return commit(s, "research", def.cost);

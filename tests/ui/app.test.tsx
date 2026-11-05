@@ -94,8 +94,8 @@ describe("first-feel shell", () => {
     act(() => store.step(262));
     expect(store.getState().drone.deliveries).toBeGreaterThan(0);
     expect(store.getState().tutorial).toBeGreaterThanOrEqual(4);
-    act(() => findButton("Build sorter")?.click());
-    act(() => findButton("Place")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
     expect(store.getState().machines.length).toBe(1);
     act(() => findButton("Connect dock to sorter")?.click());
     expect(store.getState().routes.length).toBe(2);
@@ -148,13 +148,15 @@ describe("first-feel shell", () => {
     act(() => findButton("Repair drone")?.click());
     act(() => store.step(262)); // first autonomous delivery, which reaches T4
     const before = store.getState().machines.length;
-    act(() => findButton("Build sorter")?.click());
-    expect(findButton("Place")).toBeDefined();
+    act(() => findButton("Build Scrap sorter")?.click());
+    // The build-mode row is the one with the Cancel target (PLAY-001 P-3: the primary
+    // label no longer changes between the two phases of one committed choice).
+    expect(findButton("Cancel")).toBeDefined();
     act(() => {
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     });
-    expect(findButton("Place")).toBeUndefined();
-    expect(findButton("Build sorter")).toBeDefined();
+    expect(findButton("Cancel")).toBeUndefined();
+    expect(findButton("Build Scrap sorter")).toBeDefined();
     expect(store.getState().machines.length).toBe(before);
   });
 
@@ -168,13 +170,13 @@ describe("first-feel shell", () => {
     }
     act(() => findButton("Repair drone")?.click());
     act(() => store.step(262));
-    act(() => findButton("Build sorter")?.click());
-    act(() => findButton("Place")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(400));
-    expect(findButton("Build furnace")).toBeDefined();
-    act(() => findButton("Build furnace")?.click());
-    act(() => findButton("Place")?.click());
+    expect(findButton("Build Furnace")).toBeDefined();
+    act(() => findButton("Build Furnace")?.click());
+    act(() => findButton("Build Furnace")?.click());
     const connectFurnace = findButton("Connect sorter to furnace");
     expect(connectFurnace).toBeDefined();
     act(() => connectFurnace?.click());
@@ -254,10 +256,11 @@ describe("first-feel shell", () => {
     act(() => findButton("Repair drone")?.click());
     expect(store.getState().drone.repaired).toBe(true);
     act(() => store.step(1));
-    act(() => findButton("Build sorter")?.click());
-    act(() => findButton("Place")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
     const toast = document.querySelector(".toast");
-    expect(toast?.textContent).toBe("Not enough material");
+    // PLAY-001 P-1: the same blocked tap now states its own shortfall.
+    expect(toast?.textContent).toBe("Need 20 scrap · have 0");
     expect(store.getState().machines.length).toBe(0);
   });
 
@@ -315,8 +318,8 @@ describe("first-feel shell", () => {
     }
     act(() => findButton("Repair drone")?.click());
     act(() => store.step(262));
-    act(() => findButton("Build sorter")?.click());
-    act(() => findButton("Place")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(300));
 
@@ -360,8 +363,8 @@ describe("first-feel shell", () => {
     }
     act(() => findButton("Repair drone")?.click());
     act(() => store.step(262));
-    act(() => findButton("Build sorter")?.click());
-    act(() => findButton("Place")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(300));
 

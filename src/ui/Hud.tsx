@@ -43,8 +43,9 @@ export function ResourceStrip({ state }: { state: SimState }) {
   // Spec 5.4: a small number of chips, four on a portrait phone and seven on a wide
   // screen. The credits and Store status chips share that budget, so the pinned
   // resource list gets what is left. Measured reason: docs/evidence/2026-11-03-hud-share.md.
-  const statusChips = (state.credits > 0 ? 1 : 0) + 1;
-  const shown = visibleResources(state, hudChipLimit() - statusChips);
+  // PLAY-001 P-5: the credits chip is there at 0 too, so the charge that bought a level
+  // leaves its receipt on the screen - the row is two chips in every state.
+  const shown = visibleResources(state, hudChipLimit() - 2);
   return (
     <div className="resources" aria-label="Resources">
       <span className="resources__item" key="scrap">
@@ -61,13 +62,11 @@ export function ResourceStrip({ state }: { state: SimState }) {
             <strong>{formatNumber(state.store[key] ?? 0)}</strong>
           </span>
         ))}
-      {state.credits > 0 ? (
-        <span className="resources__item">
-          <span className="resources__dot" style={{ background: DOT_COLORS["credits"] }} />
-          {t("chip.credits")}
-          <strong>{formatNumber(state.credits)}</strong>
-        </span>
-      ) : null}
+      <span className="resources__item">
+        <span className="resources__dot" style={{ background: DOT_COLORS["credits"] }} />
+        {t("chip.credits")}
+        <strong>{formatNumber(state.credits)}</strong>
+      </span>
       <span className="resources__item">
         {t("chip.store")}
         {formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}
@@ -120,7 +119,12 @@ export function HudTop(props: {
   );
 }
 
-export function ObjectiveCard(props: { text: string; hint: string; power?: string }) {
+export function ObjectiveCard(props: {
+  text: string;
+  hint: string;
+  power?: string;
+  pips?: string;
+}) {
   return (
     <div className="objective">
       <span>{props.text}</span>
@@ -131,6 +135,9 @@ export function ObjectiveCard(props: { text: string; hint: string; power?: strin
       {/* A1-4: the shared power budget on the resting screen, in the same secondary
           line style, so the throttled rounds are something the player can point at. */}
       {props.power ? <span className="status-line">{props.power}</span> : null}
+      {/* PLAY-001 P-4: the same line style, one quantity named per machine, so a yard of
+          two machines separates without opening a panel. */}
+      {props.pips ? <span className="status-line">{props.pips}</span> : null}
       <div className="objective__row" />
     </div>
   );
@@ -156,8 +163,14 @@ export function DockButtons(props: {
         <button className="dock__btn" onClick={props.onCancelBuild}>
           {t("btn.cancel")}
         </button>
+        {/* PLAY-001 P-3: one committed choice, one label. The build step's own wording
+            carries through the phase flip - the same key and the same price the primary
+            button printed a tap ago - so the row's face never alternates while the goal
+            is unchanged. The phase itself is the `.status-line` under the objective. */}
         <button className="dock__btn dock__btn--primary" onClick={props.onPlace}>
-          {t("btn.place", { machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint })}
+          {t("btn.buildNamed", {
+            machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint,
+          })}
           <span className="dock__cost">{costText(props.buildBlueprint)}</span>
         </button>
         <button

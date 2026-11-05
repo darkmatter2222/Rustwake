@@ -143,9 +143,14 @@ describe("research branch (spec 12.2)", () => {
     const state = boot();
     seed(state, { data: 3 });
     const revision = state.revision;
+    // PLAY-001 P-1: the shortfall rides along with the reason, read off the same tables
+    // the button's price came from (3 Data held against the node's 4).
     expect(send(state, { type: "research.buy", node: "cutters" })).toEqual({
       ok: false,
       reason: "insufficient",
+      need: 4,
+      have: 3,
+      word: "data",
     });
     expect(send(state, { type: "research.buy", node: "nope" })).toEqual({
       ok: false,

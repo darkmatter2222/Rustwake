@@ -85,6 +85,15 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "step.upgrade": "Upgrade the {machine}.",
   "step.fork": "Choose what improves on the {machine} · {cost}",
   "hud.power": "Power {capacity} · {requested} requested · {percent} %",
+  // PLAY-001 P-2/P-4: the two resting numbers the yard answers without a tap - how many
+  // drones are actually flying, and what the rows of five pips count.
+  "hud.drones": "Drones {count}",
+  "hud.pips": "{what} pips · {detail}",
+  // PLAY-001 P-1: the same blocked tap, now with its own shortfall.
+  "reject.shortfall": "Need {need} {word} · have {have}",
+  // PLAY-001 P-3: the phase detail of the one committed choice, so the dock's primary
+  // label can stay the same words while the ghost waits for its second tap.
+  "phase.ghost": "Ghost on cell {tile} · tap again to place",
 
   // ---- Sub-hints under the objective (spec 4.4) ----------------------------------
   // These ids are exactly what suggestedAction() returns, so one lookup resolves both
@@ -101,10 +110,10 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "hint.power": "Machines share one power budget; slowest ones share it.",
 
   // ---- Tutorial dock labels (spec 4.2) ------------------------------------------
+  // The two build steps answer with `btn.buildNamed`, the same key the yard ladder and
+  // the build-mode row use, so one committed choice keeps one label (PLAY-001 P-3).
   "tut.repair": "Repair drone",
-  "tut.buildSorter": "Build sorter",
   "tut.connectSorter": "Connect dock to sorter",
-  "tut.buildFurnace": "Build furnace",
   "tut.connectFurnace": "Connect sorter to furnace",
   "tut.sellSteel": "Sell steel",
 

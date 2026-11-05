@@ -1,0 +1,48 @@
+﻿{
+ "task": "PLAY-001 g1 simulated-player pass",
+ "session": "ses_e55bde9c7ffeJ71yXNFGOtp8yX",
+ "persona": "newcomer (no panel opened in Run 1)",
+ "date": "2026-11-05",
+ "builds": {
+  "deployed": { "url": "https://home.darkmatter2222.com/rustwake/", "entry": "assets/index-Br0Eyz3s.js", "bytes": 230583, "css": "assets/index-DpiCrzhv.css", "tables": "assets/tables-BB2NPvQ2.js", "served_sha_per_backlog": "c2842e1c853a146f22afda5667e7410253f88ddf" },
+  "base": { "worktree": "strat002-play", "sha": "24daf0e4d5d27000ab9b0841fa8a2d236aefa045", "entry": "assets/index-D14MbFT6.js", "bytes": 226977, "css": "assets/index-DpiCrzhv.css", "tables": "assets/tables-CUbg8a0k.js", "served": "http://127.0.0.1:4311/" }
+ },
+ "viewport": { "w": 390, "h": 844, "dpr": 2, "isMobile": true, "hasTouch": true, "engine": "playwright-core + system Chrome, fresh context per run" },
+ "run1_resting_20taps_deployed": {
+  "body": "Scrap | 0 | Store0/900 | Sound check | A 1 | Home | Your drone now works for you. | Open Build and place the sorter on a lit cell. | Not enough material | Cancel | Place Scrap sorter | 20 scrap | Next",
+  "objective": ["Your drone now works for you.", "Open Build and place the sorter on a lit cell."],
+  "toast": ["Not enough material"],
+  "guidanceClassPresent": false,
+  "dock": [["Cancel","71.5x46","dock__btn"],["Place Scrap sorter / 20 scrap","226.7x46","dock__btn dock__btn--primary"],["Next","59.8x46","dock__btn"]],
+  "iconBtns": [["Sound check","59.6x44"],["A 1","44x44"],["Home","44.8x44"]],
+  "powerLine": false, "droneCount": false, "sim": { "tick": 50, "machines": 0, "storeUnits": 0, "storeCapacity": 900, "powerRatio": 1 },
+  "alt_phase_at_n20": "Build sorter / 20 scrap with Store | Build side buttons (run s2-r1) - same tap count, same tick, different primary label"
+ },
+ "run1_tap_cadence": { "tap_ms": 250, "elapsed_60_taps_ms": 16900, "salvage_log_ticks": [3,11,19,27,34,40], "salvage_log_value_each": 5, "repair_log_tick": 42, "storeUnits_at": { "n20": 0, "n40": 5, "n60": 10 } },
+ "label_census_identical_script": {
+  "deployed": { "mutations": { "20": 5, "40": 25, "60": 45, "80": 65, "100": 85, "120": 105 }, "distinct_labels_by_120": ["Salvage","Repair drone30 scrap","Build sorter20 scrap","Place Scrap sorter20 scrap","Connect dock to sorter","Build furnace10 scrap + 5 ferrous","Place Furnace10 scrap + 5 ferrous"], "machines": { "60": 0, "120": 1 } },
+  "base":      { "mutations": { "20": 5, "40": 25, "60": 45, "80": 65, "100": 85, "120": 105 }, "distinct_labels_by_120": ["Salvage","Repair drone30 scrap","Build sorter20 scrap","Place Scrap sorter20 scrap","Connect dock to sorter","Build furnace10 scrap + 5 ferrous","Place Furnace10 scrap + 5 ferrous"], "machines": { "60": 0, "120": 1 } }
+ },
+ "power_line_diff": { "deployed_at_n100": "Power 8 - 0 requested - 100 %", "base_at_n100": "absent", "first_appearance_tap": "between 80 and 100 (after the first machine exists)" },
+ "layout_floor": { "deployed_min_target_px": { "scale1": 44, "scale2_label_A_1.25": 44 }, "base_min_target_px": { "scale1": 44, "scale2_label_A_1.25": 44 }, "scroll_deployed": { "sh": 844, "ih": 844, "sw": 390, "iw": 390 }, "scroll_base": { "sh": 844, "ih": 844, "sw": 390, "iw": 390 } },
+ "run2_fork": {
+  "first_fork": { "tap": 347, "tick": 901, "seeded": false },
+  "objective": "Choose what improves on the Scrap sorter - 30 credits",
+  "status_line": "A machine waits for input; check its empty side.",
+  "power_line": "Power 8 - 1 requested - 100 %",
+  "dock_row": [["Faster batches 30 credits","132.1x46"],["More input 30 credits","113.3x46"],["Less power 30 credits","112.6x46"]],
+  "fork_has_primary_class": false, "per_option_description_strings": 0,
+  "branch_effects": [
+    { "pick": "More input", "machine": "1 sorter", "level": "1 to 2", "inBufMax_before": 4, "inBufMax_after": 6, "batchMilli": "40000 unchanged", "batchPower": "1 unchanged", "branch": ["buffer"] },
+    { "pick": "Less power", "machine": "2 furnace", "level": "1 to 2", "batchPower": "2 to 1 (lazy: still 2 on the immediate read, 1 on the next)", "power_line_before": "1 requested", "power_line_after": "1 requested (machine starved at that instant)" },
+    { "pick": "Faster batches", "machine": "1 sorter", "level": "2 to 3", "batchMilli": "40000 to 36364 (-9.09%)", "branch": ["buffer","speed"] },
+    { "pick": "More input", "machine": "1 sorter", "level": "3 to 4", "inBufMax_after": 8, "branch": ["buffer","speed","buffer"] }
+  ],
+  "costs_observed_credits": [30, 40, 35, 41],
+  "credits_hud_line_disappears_at_zero": true,
+  "tile_glyphs_at_rest": "per machine: one coloured dot inside the body, one thin progress bar under it, one row of 5 small pips with N lit; no on-screen legend",
+  "pip_observations": { "sorter_L2_buffer": "4 lit of 5 (in 6, bpw 1)", "furnace_L2_draw": "2 lit of 5 (in 1, bpw 2)" }
+ },
+ "audio": "numerics only, no audio decoding",
+ "evidence_files": ["s2-r1.json","s2-r1b.json","s2-r1c.json","s2-r2a.json","s2-r2b.json","s2-fork-exp.json","s2-fork-exp2.json","s2-pip.json","s2-pip2.json","s2-base-run.json","s2-base-120.json","s2-deploy-120.json","s2-layout.json","s2-rest20.png","s2-rest60.png","s2-deploy-120.png","s2-base-120.png","s2-base-rest60.png","s2-fork-appear.png","s2-fork-after-choose.png","s2-fork-two-rest.png","s2-fork-two-rest2.png","s2-pip-full.png","s2-pip-m1.png","s2-pip-m2.png","s2-f-e1.png","s2-f-e2.png"]
+}

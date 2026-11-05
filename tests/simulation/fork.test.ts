@@ -3,9 +3,11 @@ import seedEnvelope from "../../docs/evidence/yard-mature.json";
 import { BLUEPRINTS, RECIPES, TUNING, unlockedBlueprints, type ResourceId } from "../../src/game/content/defs";
 import {
   applyCommand,
+  DOCK_TILE,
   droneAddCost,
   sellableAmount,
   upgradeCost,
+  YARD_TILES,
   type Command,
   type CommandBody,
 } from "../../src/game/simulation/commands";
@@ -63,6 +65,165 @@ function yard(): SimState {
 
 const pick = (s: SimState, blueprint: string): MachineState =>
   s.machines.find((m) => m.blueprint === blueprint) as MachineState;
+
+/* ---- A1-2v2 instrument, mirrored from work/feedback/strat002-harness.mjs ---- */
+
+const PULSE_PERIOD = 9;
+const PULSE_ON = 5;
+
+/** The harness' first free tile: the dock tile is skipped, 8 is the fallback. */
+function a12Tile(s: SimState): number {
+  for (let tile = 0; tile < YARD_TILES; tile += 1) {
+    if (tile === DOCK_TILE) continue;
+    if (!s.machines.some((m) => m.tile === tile)) return tile;
+  }
+  return 8;
+}
+
+/** The same teaching sequence the harness runs, step by step. */
+function tutorialBodies(s: SimState): CommandBody[] | null {
+  const step = s.tutorial;
+  if (step <= 1) return [{ type: "manual.salvage" }];
+  if (step === 2) return [{ type: "drone.repair" }];
+  if (step <= 6) {
+    if (s.machines.length === 0) return [{ type: "machine.build", blueprint: "sorter", tile: 8 }];
+    if (s.routes.length === 0) {
+      return [
+        { type: "route.connect", from: 0, to: 1, filter: "scrap" },
+        { type: "route.connect", from: 1, to: 0, filter: "ferrous" },
+      ];
+    }
+    const furnace = s.machines.find((m) => m.blueprint === "furnace");
+    if (!furnace) {
+      if ((s.store["scrap"] ?? 0) >= 10 && (s.store["ferrous"] ?? 0) >= 5) {
+        return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
+      }
+      return [{ type: "manual.salvage" }];
+    }
+    const plans = planConnections(s, furnace.id);
+    if (plans.length > 0) {
+      return plans.map((plan) => ({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter }));
+    }
+    return [{ type: "manual.salvage" }];
+  }
+  if (step === 7) return [{ type: "contract.export" }];
+  return null;
+}
+
+/** One scored row: shared boot, one command per round, 10 ticks apart, 1800 rounds.
+ * `irregular` gates the wreck pulse into 5 pulsed / 4 silent rounds (decision 1.4). */
+function a12Row(branch: UpgradeBranch | null, irregular: boolean) {
+  const s = createInitialState();
+  let seq = 0;
+  let taps = 0;
+  let rejects = 0;
+  let earned = 0;
+  let pulses = 0;
+  let powerLimitedRounds = 0;
+  let minPowerRatio = 1;
+  let firstResearch: number | null = null;
+  const kinds: Record<string, number> = {};
+  const send = (body: CommandBody): boolean => {
+    const before = s.credits;
+    const ok = applyCommand(s, { ...body, id: "a12-" + (seq += 1) }).ok;
+    const delta = s.credits - before;
+    if (delta > 0) earned += delta;
+    if (!ok) rejects += 1;
+    return ok;
+  };
+  for (let i = 0; i < 6; i += 1) {
+    send({ type: "manual.salvage" });
+    advance(s, TUNING.manualPulseTicks);
+  }
+  send({ type: "drone.repair" });
+  advance(s, 262);
+  taps += 7;
+  for (let round = 0; round < 1800; round += 1) {
+    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+      send({ type: "contract.export" });
+      taps += 1;
+    }
+    if (irregular && round % PULSE_PERIOD < PULSE_ON) {
+      send({ type: "manual.salvage" });
+      pulses += 1;
+      taps += 1;
+    }
+    const taught = tutorialBodies(s);
+    if (taught !== null) {
+      for (const body of taught) send(body);
+      taps += 1;
+    } else {
+      const step = nextYardStep(s);
+      if (step && step.kind) {
+        if (step.kind !== "salvage") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
+        switch (step.kind) {
+          case "connect":
+            for (const plan of step.plans) {
+              send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+            }
+            taps += 1;
+            break;
+          case "build":
+            send({ type: "machine.build", blueprint: step.blueprint, tile: a12Tile(s) });
+            taps += 2;
+            break;
+          case "sell":
+            send({ type: "contract.sell", resource: step.resource, qty: step.qty });
+            taps += 1;
+            break;
+          case "research":
+            send({ type: "research.buy", node: step.node });
+            taps += 1;
+            if (firstResearch === null) firstResearch = round + 1;
+            break;
+          case "drone":
+            send({ type: "drone.add" });
+            taps += 1;
+            break;
+          case "upgrade":
+            send(
+              branch === null
+                ? { type: "machine.upgrade", machineId: step.machineId }
+                : { type: "machine.upgrade", machineId: step.machineId, branch }
+            );
+            taps += 1;
+            break;
+          default:
+            send({ type: "manual.salvage" });
+            taps += 1;
+        }
+      }
+    }
+    advance(s, 10);
+    if (s.powerRatio < 1) powerLimitedRounds += 1;
+    if (s.powerRatio < minPowerRatio) minPowerRatio = s.powerRatio;
+  }
+  const starved = s.machines.map((m) =>
+    Math.round((Math.min(m.starvedTicks, m.ageTicks) / Math.max(1, m.ageTicks)) * 100)
+  );
+  const batches = s.machines.reduce((sum, m) => sum + m.batchesDone, 0);
+  return {
+    batches,
+    credits: Math.round(s.credits),
+    creditsEarned: earned,
+    creditsPer1000Batches: Number(((earned / Math.max(1, batches)) * 1000).toFixed(3)),
+    taps,
+    rejects,
+    pulses,
+    powerLimitedRounds,
+    minPowerRatio: Number(minPowerRatio.toFixed(3)),
+    starvedMax: Math.max(...starved),
+    starvedMean: Math.round(starved.reduce((sum, value) => sum + value, 0) / Math.max(1, starved.length)),
+    firstResearch,
+    kinds,
+    // R4: the three pick counts, each named by its own field.
+    attempts: kinds.upgrade ?? 0,
+    purchasedLevels: s.machines.reduce((sum, m) => sum + (m.level - 1), 0),
+    picksRecorded: s.machines.reduce((sum, m) => sum + (m.branch ? m.branch.length : 0), 0),
+    tick: s.tick,
+    machines: s.machines.length,
+  };
+}
 
 describe("STRAT-002/A1 the named-outcome fork", () => {
   it("keeps a pre-fork save byte-identical: checksum eede3c4f, schemaVersion 1", () => {
@@ -312,4 +473,81 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
     expect(census(null)).toBeGreaterThanOrEqual(120);
     expect(census("buffer")).toBeGreaterThanOrEqual(120);
   });
+});
+
+/**
+ * STRAT-002/A1-2v2 (work/product/STRAT-002-decision-g2.md 1.2): the scored table is the
+ * three named rows, the unnamed row is the by-construction speed twin (R3), and a pick
+ * count has to say which field it reads (R4).
+ */
+describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
+  it("reports the unnamed row as the speed twin on every scored column (R3)", () => {
+    for (const irregular of [false, true]) {
+      const twin = a12Row(null, irregular);
+      const speed = a12Row("speed", irregular);
+      // Same plan, so every scalar column and all six kinds counters are equal.
+      const { picksRecorded: twinPicks, ...twinRest } = twin;
+      const { picksRecorded: speedPicks, ...speedRest } = speed;
+      expect(twinRest).toEqual(speedRest);
+      // The one field the twin cannot share: an unnamed level records no branch list,
+      // while the purchased-level count it paid for is the same 97 (R4's third number).
+      expect(twinPicks).toBe(0);
+      expect(speedPicks).toBe(twin.purchasedLevels);
+      // Non-vacuous: the other two names do move the same columns.
+      const buffer = a12Row("buffer", irregular);
+      const draw = a12Row("draw", irregular);
+      expect(buffer.batches).not.toBe(speed.batches);
+      expect(draw.powerLimitedRounds).not.toBe(speed.powerLimitedRounds);
+      expect(buffer.credits).not.toBe(speed.credits);
+      // The columns g2 promoted out of stages[] and added are present and numeric.
+      expect(Number.isInteger(twin.starvedMax)).toBe(true);
+      expect(Number.isInteger(twin.starvedMean)).toBe(true);
+      expect(Number.isInteger(twin.creditsEarned)).toBe(true);
+      expect(twin.creditsPer1000Batches).toBe(
+        Number(((twin.creditsEarned / Math.max(1, twin.batches)) * 1000).toFixed(3))
+      );
+    }
+  }, 30_000);
+
+  it("separates upgrade attempts from purchased levels, so a criterion names its field (R4)", () => {
+    const s = yard();
+    const furnace = pick(s, "furnace");
+    // 40 then 47 cover two levels; the third price is 55, so later attempts are refused.
+    s.credits = 87;
+    const attempts: boolean[] = [];
+    for (let i = 0; i < 4; i += 1) {
+      attempts.push(send(s, { type: "machine.upgrade", machineId: furnace.id, branch: "buffer" }));
+    }
+    const paid = attempts.filter((ok) => ok).length;
+    const rejects = attempts.length - paid;
+    expect(furnace.level).toBe(3);
+    expect(furnace.branch).toEqual(["buffer", "buffer"]);
+    expect(upgradeRanks(furnace).buffer).toBe(2);
+    // The purchased-level count is the paid attempts and the length of the branch list.
+    expect(furnace.level - 1).toBe(paid);
+    expect(furnace.branch!.length).toBe(paid);
+    // The attempt count is a third number: attempts minus rejects reconciles them.
+    expect(attempts.length).not.toBe(paid);
+    expect(attempts.length - rejects).toBe(furnace.level - 1);
+  });
+
+  it("keeps buffer on one mechanism-adjacent column under irregular supply, and only one", () => {
+    const speed = a12Row("speed", true);
+    const buffer = a12Row("buffer", true);
+    const draw = a12Row("draw", true);
+    // The rule as written: >= 5 % relative or >= 10 absolute on one mechanism column.
+    const rival = Math.max(speed.creditsPer1000Batches, draw.creditsPer1000Batches);
+    const absolute = buffer.creditsPer1000Batches - rival;
+    expect(absolute).toBeGreaterThanOrEqual(10);
+    // The preferred starvation columns stay with speed: the recorded negative result.
+    expect(buffer.starvedMax).toBeGreaterThan(speed.starvedMax);
+    expect(buffer.starvedMean).toBeGreaterThan(speed.starvedMean);
+    expect(draw.powerLimitedRounds).toBe(0);
+    expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(900);
+    // R4 at ladder scale: the branch-list length is the purchased-level count, while the
+    // attempt counter (`kinds.upgrade`) is a different, larger number.
+    expect(buffer.picksRecorded).toBe(buffer.purchasedLevels);
+    expect(buffer.attempts).not.toBe(buffer.purchasedLevels);
+    expect(buffer.attempts).toBeGreaterThan(buffer.purchasedLevels);
+  }, 30_000);
 });

@@ -7,7 +7,7 @@ import {
   DOCK_TILE,
   YARD_TILES,
   type Command,
-  type CommandReject,
+  type CommandResult,
 } from "../game/simulation/commands";
 import type { SimState, UpgradeBranch } from "../game/simulation/types";
 import {
@@ -22,7 +22,7 @@ import {
   type CameraInsets,
 } from "../game/renderer/scene";
 import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
-import { REJECT_TEXT, branchOptions, costSummary, hintFor, objectiveFor, powerLine, primaryFor } from "./text";
+import { REJECT_TEXT, branchOptions, costSummary, hintFor, objectiveFor, pipLine, primaryFor, restingLine } from "./text";
 import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
@@ -100,7 +100,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         audio().play(cueFor(command.type));
       } else {
         audio().play("blocked");
-        setToast(labelForReject(result.reason));
+        setToast(labelForReject(result));
       }
       return result;
     },
@@ -365,9 +365,14 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             hint={
               role === "reader"
                 ? t("reader.hint")
-                : hintFor(suggestedAction(state))
+                : buildBlueprint !== null
+                  ? // PLAY-001 P-3: the phase the dock is in, phrased where the secondary
+                    // line already lives, so the primary label can keep one wording.
+                    t("phase.ghost", { tile: ghostTile ?? 0 })
+                  : hintFor(suggestedAction(state))
             }
-            power={state.machines.length > 0 ? powerLine(state) : ""}
+            power={restingLine(state)}
+            pips={state.machines.length > 0 ? pipLine(state) : ""}
           />
           {store.isReconciling() ? (
             // Spec 18.5: one small line while a long absence is settled off-thread.
@@ -482,7 +487,9 @@ export function buildPrimary(
   if (step <= 6) {
     if (state.machines.length === 0) {
       return {
-        label: t("tut.buildSorter"),
+        // The same key the build-mode row prints, so the choice keeps one label across
+        // the phase flip (PLAY-001 P-3).
+        label: t("btn.buildNamed", { machine: BLUEPRINTS.sorter.label }),
         cost: costSummary(BLUEPRINTS.sorter),
         run: () => {
           setBuildBlueprint("sorter");
@@ -503,7 +510,7 @@ export function buildPrimary(
     }
     if (!state.machines.some((m) => m.blueprint === "furnace")) {
       return {
-        label: t("tut.buildFurnace"),
+        label: t("btn.buildNamed", { machine: BLUEPRINTS.furnace.label }),
         cost: costSummary(BLUEPRINTS.furnace),
         run: () => {
           setBuildBlueprint("furnace");
@@ -693,7 +700,19 @@ function cueFor(type: Command["type"]): CueName {
   }
 }
 
-/** One shared table, so no surface can show a different reason text. */
-export function labelForReject(reason: CommandReject): string {
-  return REJECT_TEXT[reason] ?? t("reject.not-found");
+/**
+ * One shared table, so no surface can show a different reason text. A material or credit
+ * shortfall also names its own two numbers - what the price asks and what the yard holds -
+ * read off the same result the button was refused by (PLAY-001 P-1).
+ */
+export function labelForReject(result: Extract<CommandResult, { ok: false }>): string {
+  const base = REJECT_TEXT[result.reason] ?? t("reject.not-found");
+  if (result.reason === "insufficient" && result.need !== undefined) {
+    return t("reject.shortfall", {
+      need: result.need,
+      have: result.have ?? 0,
+      word: result.word ?? "",
+    });
+  }
+  return base;
 }
