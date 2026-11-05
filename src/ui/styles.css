@@ -603,9 +603,19 @@ body {
    `scrollHeight == clientHeight` (no clipping). 41.3 % is the binding cell; the other three
    are 16.4 / 12.4 / 31.4 %. One step down in size is what buys the band back after the
    73-character shortfall segment joins the power line at its third wrapped box. */
+/* CHRM-002: the leading steps 1.2 → 1.1, the value `.text-large .dock__btn` already uses.
+   Each secondary line wraps to two boxes at 360 × 640 text scale 2.0, so one tenth of the
+   21.6 px font buys back 2.16 px per box: the card measures 261.4 px = **40.8 %** of the
+   640 px `.hud` content box instead of 274.4 px = 42.9 %. All four cells at both depths now
+   read 16.7 / 40.8 / 10.6 / 31.0 %, so the 42 % chrome cap holds everywhere. Legibility at
+   scale 2.0: 21.6 px text on 23.76 px leading keeps 1.8 px of white between a descender and
+   the next ascent (from the text-metrics engine), `scrollWidth == clientWidth` per line, and
+   the card still clears the dock by 213.7 px. On the two-box lines `scrollHeight` is 1 px
+   taller than `clientHeight` at this leading; that extra pixel sits inside the card's own
+   6 px bottom padding, where `overflow` is visible, so nothing is cut off. */
 .text-large .status-line {
   font-size: 0.72rem;
-  line-height: 1.2;
+  line-height: 1.1;
   margin-top: 0;
 }
 
