@@ -17,7 +17,7 @@ Session cap: **4 total including coordinator**. Runtime: **activation-required**
 | AUDIO-001 | P1 | triaged | reviewer | Assess and improve an actual industrial mix |
 | DEF-001 | P2 | inbox | developer | Cached index.html can name removed hashed assets |
 | DEF-002 | P3 | inbox | developer | Site-root favicon 404 while the release favicon serves 200 |
-| DEF-003 | P2 | inbox | developer | Candidate motion clip repeats one frame 26 times |
+| DEF-003 | P2 | rejected | developer | Candidate motion clip repeats one frame 26 times |
 | DEF-004 | P2 | inbox | developer | Drone freezes at one position after a large offline catch-up |
 
 ## Release evidence

@@ -173,10 +173,10 @@
       "product_approved": true,
       "evidence": [
         "work/feedback/OWNER-002.md",
-        "work/development/handoffs (ART-001 g1 candidate 7e10288)",
+        "work/development/handoffs (ART-001 g1 candidate 3f7555a, captures docs/evidence/candidate-3f7555a-art001-captures.json)",
         "docs/screenshots/ (shipped 24daf0e captures) + docs/screenshots/style-slice-provenance.json"
       ],
-      "candidate_sha": "7e10288884383fd3cfef74a3e900f1522b063e6d",
+      "candidate_sha": "3f7555a9c72185012c83f2b9ae8c8d967d300862",
       "review_verdict": null,
       "published_sha": null,
       "deployed_sha": null,
@@ -201,7 +201,7 @@
           "actor": "developer",
           "from_state": "implementing",
           "to_state": "review",
-          "reason": "candidate submitted for independent QA; clip-frame defect DEF-003 open, so no product acceptance is claimed"
+          "reason": "candidate submitted for independent QA at 3f7555a9c72185012c83f2b9ae8c8d967d300862 (branch art001-dev; supersedes 7e10288884383fd3cfef74a3e900f1522b063e6d, which only changed the capture script to per-iteration canvas.toDataURL() plus the evidence JSON, renderer files unchanged); clip-frame defect DEF-003 closed as a capture artefact, DEF-004 open, so no product acceptance is claimed"
         }
       ]
     },
@@ -430,7 +430,8 @@
           "to_state": "inbox",
           "reason": "filed from OPS-008-g1 during the 24daf0e release"
         }
-      ]
+      ],
+      "severity": "low"
     },
     {
       "id": "DEF-002",
@@ -469,14 +470,15 @@
           "to_state": "inbox",
           "reason": "filed from OPS-008-g1 during the 24daf0e release"
         }
-      ]
+      ],
+      "severity": "cosmetic"
     },
     {
       "id": "DEF-003",
       "type": "defect",
       "title": "Candidate motion clip repeats one frame 26 times",
       "priority": "P2",
-      "status": "inbox",
+      "status": "rejected",
       "owner": "developer",
       "generation": 1,
       "player_problem": "The motion evidence gate cannot be judged from the clip.",
@@ -508,8 +510,17 @@
           "from_state": null,
           "to_state": "inbox",
           "reason": "filed from OPS-008-g1 during the 24daf0e release"
+        },
+        {
+          "at": "2026-11-05T01:45:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "rejected",
+          "reason": "explained and closed in OPS-008-g1 / RELEASE-001; the carrying defect is DEF-004"
         }
-      ]
+      ],
+      "severity": "minor",
+      "disposition_reason": "closed as a capture artefact, not a product defect: at 1000 ms spacing the 26 page-screenshot frames are one 63353 B image (md5 prefix BDA04B70CD) and the 26 canvas.toDataURL() frames are one 48302 B image (md5 prefix 251321580e) while tick advances 432354 -> 432604 at ~61-66 draws per sample; 200/400/1000 ms spacings and both capture APIs agree, so it is neither quantisation nor the screenshot path. Mechanism is carried by DEF-004."
     },
     {
       "id": "DEF-004",
@@ -520,7 +531,7 @@
       "owner": "developer",
       "generation": 1,
       "player_problem": "After a long offline period the yard looks frozen: the drone holds one spot and the canvas is byte-identical across samples.",
-      "hypothesis": "The seeded inFlight.arrive lags the credited catch-up tick, so droneLeg() clamp saturates; observed tick 432354 -> 432634 with droneBodyCssPx [180.5, 248.5] in every row and ~66 draws per sample at 1000 ms spacing.",
+      "hypothesis": "saturated droneLeg() clamp plus a full 900/900 gauge after the 432000-tick catch-up: seeded inFlight.arrive lags the credited tick, so the leg parameter never unwinds and the canvas is byte-identical across 26 samples at 1000 ms spacing (tick 432354 -> 432634, droneBodyCssPx [180.5, 248.5] every row, ~66 draws per sample)",
       "scope": [
         "src/game/renderer/scene.ts drone leg",
         "offline catch-up credit"
@@ -529,8 +540,8 @@
         "No infrastructure change beyond this defect's own fix"
       ],
       "acceptance": [
-        "after catch-up the drone leg parameter unwinds within one second",
-        "26 samples 1000 ms apart contain at least two distinct canvas hashes"
+        "after a large catch-up the drone leg parameter unwinds within one second",
+        "26 samples at 1000 ms spacing contain at least two distinct canvas hashes (organic fresh-begin contrast on the same live build: 5 distinct hashes of 6 samples)"
       ],
       "dependencies": [],
       "product_approved": false,
@@ -548,9 +559,10 @@
           "actor": "release-engineer",
           "from_state": null,
           "to_state": "inbox",
-          "reason": "filed from OPS-008-g1 during the 24daf0e release"
+          "reason": "filed from OPS-008-g1 during the 24daf0e release; kept open as the carrying defect (saturated droneLeg() clamp after the 432000-tick catch-up), with the organic fresh-begin contrast at 5 distinct canvas hashes of 6 samples on the same live build"
         }
-      ]
+      ],
+      "severity": "minor"
     }
   ]
 }

@@ -179,9 +179,17 @@
     },
     {
       "id": "DEF-003",
-      "severity": "blocks the motion gate",
-      "repro": "candidate lane: clip-opening-f01..f26.png are 26 files of identical size 63353 B with the same MD5 prefix BDA04B70CD - one frame repeated, so the clip cannot evidence motion",
-      "status": "in progress in the candidate lane (developer second attempt); not fixed and not deployed by this release"
+      "severity": "minor",
+      "status": "closed as a capture artefact",
+      "repro": "at 1000 ms spacing the 26 page-screenshot frames are one 63353 B image (md5 prefix BDA04B70CD) and the 26 canvas.toDataURL() frames are one 48302 B image (md5 prefix 251321580e), while tick advances 432354 -> 432604 at ~61-66 draws per sample; spacings 200/400/1000 ms and both capture APIs give the same result, so it is neither quantisation nor the screenshot path",
+      "carried_by": "DEF-004"
+    },
+    {
+      "id": "DEF-004",
+      "severity": "minor",
+      "status": "open",
+      "repro": "after a large offline catch-up the drone holds one position and the canvas is byte-identical across 26 samples at 1000 ms spacing (tick 432354 -> 432634, droneBodyCssPx [180.5, 248.5] every row, ~66 draws per sample)",
+      "mechanism": "saturated droneLeg() clamp plus a full 900/900 gauge after the 432000-tick credit; the organic fresh-begin run on the same live build gives 5 distinct canvas hashes of 6 samples, which is the contrast"
     }
   ],
   "unaffected_services_before_after": {
