@@ -50,6 +50,8 @@ Target useful ready-work publication every **3–5 minutes**, investigate waits 
 
 ## Start in OpenCode
 
+**First launch:** follow the [commissioning sprint](docs/COMMISSIONING.md). The companion plugin must be installed separately before `/rustwake-team bind`; see the exact install commands in [startup instructions](docs/START_TEAM.md). The preceding operations commit `9555a94` passed GitHub CI; automatic delivery was skipped because commissioning is not enabled.
+
 Stop the existing goal with `/goal stop`, let children checkpoint/stop, preserve local work and pull current main. Reload OpenCode agents, select **rustwake-coordinator**, then run:
 
 ```text

@@ -3,14 +3,21 @@
 1. In the existing coordinator session, use `/goal stop`. Let it checkpoint and cancel/join children. If the runtime cannot confirm cancellation, stop the child sessions using its supported controls before starting another coordinator. Do not run two loops on the same checkout/server.
 2. In your local Rustwake checkout, inspect `git status` and `git worktree list`. Preserve unfinished work on its own branch; do not reset or delete it. When the integration checkout is clean, run `git pull --ff-only origin main`. If it cannot fast-forward, reconcile the local commits first rather than force pulling.
 3. Reopen/reload OpenCode so it loads the updated `.opencode/agents`. Keep your existing model/provider settings and MasterGoal plugin. Select **rustwake-coordinator** as the primary agent. Do not launch each role yourself.
-4. For the operational guard, install the local companion as described in [TEAM_OPERATIONS](TEAM_OPERATIONS.md), reload, and run `/rustwake-team bind` in this coordinator session. The local team should discover/map its actual wait-tool names and pass the canary. The CLI scheduling fallback remains available if this installed OpenCode differs. This does not install another forever loop.
+4. **Install the companion before using `/rustwake-team bind`.** Git pull alone does not install it, and MasterGoal does not provide that command. From the local Rustwake checkout run:
+
+   ```powershell
+   npm --prefix tools/team-supervisor install --ignore-scripts
+   npm --prefix tools/team-supervisor run install:local
+   ```
+
+   Fully restart OpenCode after installation, select **rustwake-coordinator**, then run `/rustwake-team bind`. If your launcher sets `OPENCODE_CONFIG`, register the companion in that active config using the existing local maintenance procedure; project config may be overridden. Keep MasterGoal and provider settings intact. An unknown command means the companion is not loaded. Use the CLI fallback while resolving loading; do not start another forever loop. Verify `/rustwake-team status`; the wait guard requires mapping the installed runtime's actual wait tools and passing its canary. See [TEAM_OPERATIONS](TEAM_OPERATIONS.md).
 5. Run:
 
    ```text
    /goal forever goal.md
    ```
 
-6. The coordinator reads the new goal, reconciles existing workers, validates loaded roles/async cancellation, and dispatches bounded assignments. Maximum is four active model sessions total, including itself. It begins with owner feedback, baseline playtesting, product planning and fresh visual evidence.
+6. The coordinator reads the new goal, reconciles existing workers, validates loaded roles/async cancellation, and dispatches bounded assignments. Maximum is four active model sessions total, including itself. It begins with the [commissioning sprint](COMMISSIONING.md), incorporating useful product review and existing work. Do not claim runtime readiness from repository tests alone.
 
 `/goal forever` snapshots the prompt. `/goal resume` restores the prior goal after a host interruption; it does not load edited goal text. For these updates use stop then the fresh forever command, not resume or `/goal init`. These commands follow the inspected MasterGoal contract; if your installed plugin differs, inspect its local help and use its documented equivalent instead of inventing flags.
 
