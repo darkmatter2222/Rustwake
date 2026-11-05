@@ -1,0 +1,139 @@
+{
+  "id": "ops-010-g1",
+  "role": "release-engineer",
+  "session": "ses_e551056ddffeppiYQf9ieAcCpJ",
+  "date": "2026-11-05",
+  "lease": "release-002-g2 (integration/main) + deployer (server), same lane, both active at claim; publisher/deployer are aliases of this lane",
+  "release_id": "rustwake-8a06e9d",
+  "release_label_kind": "labelled preview of the merged candidate (one deploy, both lanes)",
+  "route": "https://home.darkmatter2222.com/rustwake/",
+  "route_lan": "http://192.168.86.48:8700/",
+  "integrated_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
+  "target_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
+  "lanes": {
+    "PLAY-001": "code 487d3ca619928606b03022bb8e3cfd30797cc54f (branch PLAY-001-g1), independent QA 'accepted with notes' in work/review/PLAY-001-g1-qa.md, product preview acceptance in work/product/PLAY-001-decision-g1.md",
+    "STRAT-002": "harness/tests 88167c7bd37b58767d1fa5df85d559e54c21ce31 (branch strat002-g2), no src/ change; product addendum A1-2v3 in work/product/STRAT-002-decision-g2.md"
+  },
+  "prior_evidenced_release": "rustwake-c2842e1 (source c2842e1, OPS-009-g1)",
+  "target_verification": {
+    "origin_main_before_integration": "7c8d8e7497e79d983da267c6af3e43d02221ce9a after git fetch origin (equals local HEAD)",
+    "origin_main_after_push": "8a06e9debf7ff345681979cd6f731b24b2b5d581 (git push origin main -> 7c8d8e7..8a06e9d, no force; fetch-verified remote-tracking head equals local HEAD)",
+    "integration_method": "per-file extraction, no -X theirs: PLAY-001 lane owns src/game/{content/strings,simulation/commands}, src/ui/{App,Hud,text}, tests/simulation/research.test.ts, tests/ui/{app,fork-ui,i18n,resting-screen}.test.tsx and its handoff; STRAT-002 g2 lane owns work/feedback/strat002-harness.{mjs,json}, tests/simulation/fork.test.ts and its handoff; main owns docs/screenshots/slice-*.png, docs/evidence/2026-11-03-* and the 2026-11-04 clip/candidate evidence published in c2842e1 (untouched)",
+    "blob_check": "all 15 extracted paths equal their candidate blob (git rev-parse <sha>;<path> == git ls-files -s), so no lane file was lost or reflowed",
+    "tripwire": "Tests 268 passed (268) / Test Files 27 passed (27) = 259 base + 6 (tests/ui/resting-screen.test.tsx) + 3 (fork.test.ts A1-2v2 cases). Exact match",
+    "build_worktree": "C:/Users/ryans/AppData/Local/Temp/opencode/build-c2842e1 (worktree detached at 8a06e9d, clean tree) - built by SHA, not by a mutable working directory",
+    "reproducible": "the isolated SHA build and the integration-tree build agree on all four hashed assets (name + byte size + sha256); index.html differs only in EOL encoding (778 B CRLF in the build worktree vs 757 B LF in the integration tree), same content",
+    "eligibility": "served index.html before the PUT named ./assets/index-Br0Eyz3s.js (the c2842e1 build), so this was a real promotion and not a no-op"
+  },
+  "gates": {
+    "npm_run_typecheck": "tsc --noEmit, no output; exit 0",
+    "npm_test": "Test Files 27 passed (27); Tests 268 passed (268); duration 4.37s; exit 0",
+    "npm_run_validate": "tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes; content: 0 violation(s) in 3 ms; behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s); validated: no violations; exit 0 (line byte-identical to OPS-009)",
+    "ladder_fixture_identity": "docs/evidence/yard-mature.json schemaVersion 1, checksum eede3c4f (asserted unchanged in tests/simulation/fork.test.ts)",
+    "npm_run_build": "vite v5.4.11; 53 modules transformed; built in 564-571 ms; exit 0",
+    "entry_chunk_ceiling": "assets/index-CJfGk59d.js = 231520 B <= 233000 B -> PASS (1480 B spare); the hash equals the PLAY-001 lane build's entry name, as expected because the g2 slice touches only non-bundled harness/test files",
+    "team_board_unit_test": "node --test scripts/team-board.test.mjs -> exit 0",
+    "board_check": "node scripts/team-board.mjs --check -> exit 0 at the docs commit tip of this pass"
+  },
+  "artifactDigest": "sha256 of the five name/digest manifest lines in OPS-009 form: see assets array",
+  "assets": [
+    { "name": "index.html", "bytes": 778, "sha256": "a0283bd7c193c22307cf400418b3c54a47ceb528939821a79c7a50ac3d465289" },
+    { "name": "assets/index-CJfGk59d.js", "bytes": 231520, "sha256": "ffafb1d93d2ca9ee2f50d96183e202563ef58cd532d14f6ddcab45c19682f344" },
+    { "name": "assets/tables-BB2NPvQ2.js", "bytes": 9298, "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968" },
+    { "name": "assets/index-DpiCrzhv.css", "bytes": 7403, "sha256": "8806ee75b14decfb35e47a1af3429261f4393f123f5d216c2f3e20e65fad0f32" },
+    { "name": "assets/catchup.worker-G_Jyr7uh.js", "bytes": 13406, "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50" }
+  ],
+  "install": {
+    "release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-8a06e9d",
+    "release_files": 5,
+    "host_digests_equal_local_build": "5/5 (sha256sum inside the release dir equals the isolated SHA build)",
+    "previous_release_dir": "/home/darkmatter2222/rustwake/releases/rustwake-c2842e1",
+    "previous_release_retained": true,
+    "previous_release_digests_unchanged": "index.html f81ed49a06e64e74d33a5b48d46d442f8838395abb5c2f63fe8066a091ddc54d equals the OPS-009-g1 recorded value; directory untouched by this operation",
+    "release_dir_inventory_after_install": "rustwake-090260a, rustwake-14b6ea1, rustwake-24daf0e, rustwake-3d589aa, rustwake-4c30fb4, rustwake-7f82bec, rustwake-8a06e9d (new), rustwake-c241ab7, rustwake-c2842e1 - no other directory modified",
+    "cleanup": "none - bounded retention not exercised this round; only Rustwake-owned release directories exist there"
+  },
+  "endpoint_identity_verified": true,
+  "endpoint_id": 3,
+  "endpoint_name": "Databrick",
+  "endpoint_status": 1,
+  "endpoint_url": "tcp://192.168.86.48:9001",
+  "stack_name": "rustwake",
+  "stack_id": 125,
+  "stack_project_path": "/data/compose/125",
+  "stack_update_date_before_put": 1793856444,
+  "stack_put_http": 200,
+  "stack_put_payload_form": "{name, stackFileContent, stackFile, env: [], fromAppTemplate: false} via PUT /api/stacks/125?endpointId=3&force=1; compose read back with GET /api/stacks/125/file?endpointId=3&type=2",
+  "stored_compose_before_sha256": "703e0e3a7a248edeb3fec54be7bbf605a0eff5054c6f627c9268ed0f4322a688 (898 B) - equals the OPS-009-g1 after-value, so no third-party edit landed in the window",
+  "stored_compose_after_sha256": "156c03ebe31b20741a1fd313bfb0abfaffd54442f4c4046371c070e79bc06e26 (898 B)",
+  "stored_compose_diff": "one-line change, same byte count: releases/rustwake-c2842e1 -> releases/rustwake-8a06e9d in the html bind path",
+  "stored_compose_bind_after": "- /home/darkmatter2222/rustwake/releases/rustwake-8a06e9d:/usr/share/nginx/html:ro",
+  "container_name": "rustwake-static-1",
+  "container_id": "8350019b2f2f",
+  "container_state": "running",
+  "container_health": "healthy",
+  "container_created_at": "2026-11-05T09:16:58Z",
+  "container_restart_count": 0,
+  "container_compose_config_hash": "29ecddf4c79a5753498bc060eefddb602114eed24ed48ec8298e8c1867e52df8",
+  "container_hardening": "user 101:101, read_only rootfs, mem 128M, cpus 0.50, restart unless-stopped, ports 8080/tcp -> HostPort 8700 (unchanged); labels app=rustwake repo=Rustwake env=databrick managed-by=portainer unchanged",
+  "healthcheck": "/healthz -> 200 (3 B) over both LAN and the ingress route",
+  "containers": { "total_running_before": 49, "total_running_after": 49, "rustwake_owned_containers": 1, "rustwake_owned_networks": 1 },
+  "mutations": [
+    "added release directory /home/darkmatter2222/rustwake/releases/rustwake-8a06e9d (5 files, scp)",
+    "PUT /api/stacks/125?endpointId=3&force=1 with the one-line compose change; only service static recreated"
+  ],
+  "mutation_count": 2,
+  "promotion_timing": "integration commit 2026-11-05T09:05:53Z, push immediately after, container recreated 09:16:58Z (~11 min after the commit). The extra minutes over the 5-10 target were Portainer API-shape discovery in this session (jwt response key, /api/stacks/{id}/file for the compose body, docker proxy 404); the stack PUT itself was one call",
+  "external": [
+    { "path": "/rustwake/", "status": 200, "bytes": 778, "sha256": "a0283bd7c193c22307cf400418b3c54a47ceb528939821a79c7a50ac3d465289", "equals_built": true, "cache_control": null, "last_modified": "Thu, 05 Nov 2026 09:16:04 GMT" },
+    { "path": "/rustwake/assets/index-CJfGk59d.js", "status": 200, "bytes": 231520, "sha256": "ffafb1d93d2ca9ee2f50d96183e202563ef58cd532d14f6ddcab45c19682f344", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/tables-BB2NPvQ2.js", "status": 200, "bytes": 9298, "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/index-DpiCrzhv.css", "status": 200, "bytes": 7403, "sha256": "8806ee75b14decfb35e47a1af3429261f4393f123f5d216c2f3e20e65fad0f32", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/assets/catchup.worker-G_Jyr7uh.js", "status": 200, "bytes": 13406, "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50", "equals_built": true, "cache_control": "max-age=31536000, public, immutable" },
+    { "path": "/rustwake/healthz", "status": 200, "bytes": 3 },
+    { "path": "/rustwake/some/spa/route", "status": 200, "bytes": 778 },
+    { "path": "/rustwake/assets/index-Br0Eyz3s.js (previous entry)", "status": 404, "bytes": 153 }
+  ],
+  "lan_checks": [
+    "http://192.168.86.48:8700/ -> 200 778 B sha256 a0283bd7... (equals the served HTML over HTTPS)",
+    "http://192.168.86.48:8700/assets/index-CJfGk59d.js -> 200 231520 B sha256 ffafb1d9... (equals HTTPS and the build)",
+    "http://192.168.86.48:8700/healthz -> 200 3 B"
+  ],
+  "served_equals_built": "5/5 sha256 and byte size equal the isolated SHA build over both HTTPS and loopback; the served index.html names ./assets/index-CJfGk59d.js (231520 B), modulepreload ./assets/tables-BB2NPvQ2.js (9298 B), stylesheet ./assets/index-DpiCrzhv.css (7403 B) - so the live route serves the new entry, not a cached old one (the previous entry name now 404s)",
+  "external_nodes": "single-node (this host) HTTPS verification; the 4-node check-host sweep was not re-run this round",
+  "browser_smoke": {
+    "engine": "playwright-core headless Chrome, mobile 390x844, deviceScaleFactor 2, isMobile/hasTouch, fresh storage, 250 ms taps on .dock__btn--primary, route https://home.darkmatter2222.com/rustwake/",
+    "gate": "first frame shows the gate ('RUSTWAKE / Salvage yard 07 systems waking'); .gate__btn 'Begin recovery' is tapped before the census, as in the lane probes",
+    "rest_at_tap_20": "status lines 'Open Build and place the sorter on a lit cell.' and 'Drones 1 · Power 8 · 0 requested · 100 %' with the save read at the same instant showing machines 0 and schemaVersion 1; toast 'Need 20 scrap · have 0'; primary 'Build Scrap sorter20 scrap'; scrollHeight 844 == innerHeight 844",
+    "fork_row": "at tap 300 exactly three named options, each with its own price: 'Faster batches 30 credits', 'More input 30 credits', 'Less power 30 credits' (textContent joins price and label without a space because the price is a separate span); objective 'Choose what improves on the Scrap sorter · 30 credits' plus 'A machine waits for input; check the empty side.' and the legend 'Batch pips · Scrap sorter 1/5 · Furnace 0/5 · Polymer recycler 0/5 +1'",
+    "one_tap_commit": "tap on 'Faster batches' returns the dock to Store/Yard/'Sell 53 Scrap+53 credits'/Build, the power line advances to 'Drones 1 · Power 8 · 3 requested · 100 %' and the legend to 'Scrap sorter 1/5 · Furnace 1/5', so the pick landed",
+    "console": "pageerror 0 in the session; two resource 404 lines, both the favicon path already recorded as DEF-002"
+  },
+  "save_compatibility": "the live save after the run is schemaVersion 1; the shipped v1 fixture (docs/evidence/yard-mature.json, checksum eede3c4f) still re-encodes byte-for-byte and is asserted by tests/simulation/fork.test.ts at the merged tree; no field was added to SimState by either lane, so saves from rustwake-c2842e1 load unchanged",
+  "ci": "remote-CI-unverified - gh 2.95.0 'You are not logged into any GitHub hosts' (gh auth status exit 1, gh api exit 4) and the anonymous api.github.com check-suites endpoint returns 404 for this private repository; the locally reproduced workflow steps (.github/workflows/ci.yml) are green except that the generated board views are one commit behind at the integration commit and green again in the following docs commit; no remote pass is claimed",
+  "rollback": { "needed": false, "step": null },
+  "rollback_procedure_if_needed": "PUT /api/stacks/125?endpointId=3&force=1 with the same compose body and the html bind path restored to releases/rustwake-c2842e1; nothing else changed",
+  "rollback_resource_name": "rustwake-c2842e1",
+  "drift_notes": [
+    "Endpoint identity, stack 125, port 8700 and the container hardening equal the OPS-009 end state before and after; the two nginx config hashes are unchanged (/home/darkmatter2222/rustwake/nginx/default.conf 47a9db756da9cae248eef03c95a234c0177c1c4b2ddf9d9996179236f3d417a2, nginx.conf 83d4d548be51945317fa3d438d6b4ee3d6a08eefede1ed95111f1d4df67fd8bd)",
+    "Exactly one Rustwake-owned container and one Rustwake-owned network before and after; fleet held at 49 running containers; restart count 0",
+    "No new stack, network, port, DNS record or ingress include; no global prune, no fleet compose down, no unrelated stack recreated",
+    "No secret values recorded; Portainer credentials were read from HomeAILab .env in-process only",
+    "Untracked-in-worktree note: work/review/rev-q002-g1.md carries a pre-existing modification in the main checkout (126+/142-) from an earlier reviewer pass; it was left untouched and uncommitted by this lane, so it is not part of 8a06e9d"
+  ],
+  "defects_filed_to_pm": [
+    { "id": "DEF-001", "severity": "low", "status": "open, unchanged", "repro": "previous hashed asset /assets/index-Br0Eyz3s.js -> 404 (153 B) while the five new names -> 200; index.html still has no Cache-Control (measured cache_control null, ETag + Last-Modified present)" },
+    { "id": "DEF-002", "severity": "cosmetic", "status": "open, unchanged", "repro": "the live browser session logs two resource 404 lines, both the favicon path answered by the SPA HTML fallback (no favicon.ico in the release directory)" },
+    { "id": "CHRM-001", "severity": "minor", "status": "open, final-polish blocker (not a release blocker)", "repro": "at 360x640 text scale 2.0 the resting card is 316.4 px = 49.4 % of the viewport against the recorded 42 % cap arithmetic, because the pip legend wraps to three boxes; the legend collapse to at most two named entries plus +n is owed (CH-1..CH-3 in work/product/PLAY-001-decision-g1.md)" },
+    { "id": "D2", "severity": "minor", "status": "pre-existing, unchanged", "repro": "360x640 at text scale 2.0: Store/Sell/Build/Research show scrollWidth > clientWidth; identical at the 24daf0e base, the three fork labels are not clipped" }
+  ],
+  "unaffected_services_before_after": {
+    "https://home.darkmatter2222.com/": "301 -> /grafana/ (unchanged, measured after the promotion)",
+    "https://home.darkmatter2222.com/grafana/": "302 -> /grafana/login (unchanged behaviour)",
+    "https://home.darkmatter2222.com/portainer/": "200 14202 B (identical to the OPS-009 record)"
+  },
+  "ingress_unchanged": true,
+  "verdict": "pass - rustwake-8a06e9d deployed and verified on the existing route; served == built 5/5; entry hash read back from HTTP equals the build (index-CJfGk59d.js 231520 B); live smoke prints the numeric shortfall, the resting fleet/power line and three priced fork options; no rollback",
+  "blocker": null,
+  "verifiedAt": "2026-11-05T09:22:00Z"
+}

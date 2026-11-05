@@ -1,0 +1,19 @@
+{
+ "captured": "2026-11-05T09:19:00Z",
+ "tool": "playwright-core headless Chrome (system Chrome), page.screenshot on the deployed route",
+ "source_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
+ "deployed_release": "rustwake-8a06e9d",
+ "route": "https://home.darkmatter2222.com/rustwake/",
+ "viewport": "390x844 dpr2, isMobile, hasTouch, fresh storage, 250 ms taps on .dock__btn--primary",
+ "scenario": "organic (unseeded) fresh-save runs on the deployed artifact: 20 primary taps for the rest frame, 300 taps to reach the first fork; the gate button 'Begin recovery' is tapped first",
+ "label": "organic, not seeded; the seeded 12-case slice at 24daf0e stays in docs/screenshots/slice-*.png with its own provenance",
+ "visible_readouts": {
+  "rest-tap20": "chips Scrap 0 | Credits 0 | Store 0/900; objective 'Your drone now works for you.'; status lines 'Open Build and place the sorter on a lit cell.' and 'Drones 1 · Power 8 · 0 requested · 100 %'; toast 'Need 20 scrap · have 0'; primary 'Build Scrap sorter / 20 scrap'; save read at the same instant shows machines 0, schemaVersion 1",
+  "fork-tap300": "objective 'Choose what improves on the Scrap sorter · 30 credits'; status lines 'A machine waits for input; check its empty side.', 'Drones 1 · Power 8 · 1 requested · 100 %', 'Batch pips · Scrap sorter 1/5 · Furnace 0/5 · Polymer recycler 0/5 +1' (two line boxes at scale 1.0); three dock buttons 'Faster batches 30 credits', 'More input 30 credits', 'Less power 30 credits'"
+ },
+ "note": "These two frames are the fresh relevant capture for the PLAY-001 g1 surfaces (numeric shortfall, resting fleet/power line, batch-pip legend, stable primary label). The 360x640 scale-2.0 numbers are numeric-only in work/review/PLAY-001-g1-qa.md section 5; that combination is captured when CHRM-001 is re-measured.",
+ "files": [
+  { "file": "live-8a06e9d-rest-tap20.png", "bytes": 69463, "sha256": "f69451dd32f94b16ddbff6dc0f28e5535d22f44d6d6d6c42618c42702bbaa4cc" },
+  { "file": "live-8a06e9d-fork-tap300.png", "bytes": 81014, "sha256": "34adf40e2a833f161650ecbba117b54e7299cbc7d8070728340ad08251135a91" }
+ ]
+}
