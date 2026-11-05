@@ -1,0 +1,58 @@
+{
+  "artifact": "rustwake-d7af68a",
+  "source_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "captured_at": "2026-11-05T22:52:00+00:00",
+  "captured_by": "release-engineer (this lane), headless Chrome via playwright-core, deviceScaleFactor 2, isMobile + hasTouch, fresh storage per context, 250 ms taps, .gate__btn tapped first",
+  "capture_kind": "organic tap-driven run (no seeded save)",
+  "note": "the 360x640 text scale 2.0 pair is the affected screen for CHRM-002 (one css declaration, line-height 1.2 -> 1.1); the same run printed card 261.4 px of a 640 px .hud content box = 40.8 %, minimum dock face 46 px, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests",
+  "served_asset_names_at_capture": {
+    "entry": "./assets/index-DGy53fNu.js",
+    "stylesheet": "./assets/index-9FriNULu.css",
+    "modulepreload": "./assets/tables-BB2NPvQ2.js"
+  },
+  "frames": [
+    {
+      "file": "live-d7af68a-390-ts1-fork.png",
+      "bytes": 75104,
+      "sha256": "86281c905236d808b48bb43fc271eafedb62bf3a35c38e9822d146636dd24534",
+      "viewport": "390x844",
+      "text_scale": 1,
+      "primary_taps": 347,
+      "fork_row_reached_at_scan": 115,
+      "device_scale_factor": 2,
+      "moment": "fork row open, after the last primary tap"
+    },
+    {
+      "file": "live-d7af68a-390-ts1-rest.png",
+      "bytes": 75651,
+      "sha256": "2f1ad4f8565e1902f118f77adf42f82c092d288afb65b891f91974fd659c46b9",
+      "viewport": "390x844",
+      "text_scale": 1,
+      "primary_taps": 347,
+      "device_scale_factor": 2,
+      "moment": "resting frame, no tap within the last 1.2 s"
+    },
+    {
+      "file": "live-d7af68a-360-ts2-fork.png",
+      "bytes": 124541,
+      "sha256": "ccc4aad1d33765d16ba1d8c31ca048dcf06947e82b7205f465197ccd3e80a477",
+      "viewport": "360x640",
+      "text_scale": 2,
+      "primary_taps": 345,
+      "fork_row_reached_at_scan": 114,
+      "device_scale_factor": 2,
+      "moment": "fork row open, after the last primary tap"
+    },
+    {
+      "file": "live-d7af68a-360-ts2-rest.png",
+      "bytes": 124822,
+      "sha256": "8b029a7f34604fe7f65dcd6171ae1c530ca4942ece8f9cdff3550a85be9dfc7a",
+      "viewport": "360x640",
+      "text_scale": 2,
+      "primary_taps": 345,
+      "device_scale_factor": 2,
+      "moment": "resting frame, no tap within the last 1.2 s"
+    }
+  ]
+}

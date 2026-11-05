@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T20:12:00+00:00",
+  "updated_at": "2026-11-05T22:45:00+00:00",
   "max_active_sessions": 4,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "0c03572fa654388b52e023f72f4c47037a3aa42e",
-    "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
+    "inspected_head": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-012-g1.json",
-    "verification": "served == built 5/5 sha256 over HTTPS and LAN; the live smoke on the deployed artifact prints two priced faces with different prices, one tap charging the printed 30, the numbered refusal at purse 30, the resting fleet/power line, minimum face 46 px, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified"
+    "receipt": "work/deployments/OPS-013-g1.json",
+    "verification": "served == built 5/5 sha256 over HTTPS and loopback; the served HTML names assets/index-DGy53fNu.js (231878 B, entry digest equal to the previously served index-Cmh4A1Sb.js) and assets/index-9FriNULu.css (7474 B, one byte differs from index-mmTSZ7Fz.css); the live smoke prints two priced faces at two prices with a 46 px minimum face, one tap on the cheapest face charging exactly 30, the resting fleet/power line, card 261.4 px = 40.8 % of the 640 px hud box at 360x640 text scale 2.0, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified"
   },
   "runtime": {
     "status": "activation-required",
@@ -1152,7 +1152,7 @@
       "type": "defect",
       "title": "Collapse the resting card at 360x640 text scale 2.0 (legend wrap exceeds the recorded cap)",
       "priority": "P2",
-      "status": "triaged",
+      "status": "measured",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -1185,11 +1185,11 @@
         "work/deployments/OPS-011-g1.json browser_smoke.chrome_band (the 41.3 % and 46.9 % cells read on the live route)",
         "docs/screenshots/live-7d7e05c-provenance.json (fresh 360x640 ts2.0 capture at 2-machine depth plus the 4-machine fork frame)"
       ],
-      "candidate_sha": "f607ad2b4129d15adae9cd2c2547e8db6679bac7",
+      "candidate_sha": "237f5d76ca2bb45e042c7f5181a182704e288b12",
       "review_verdict": "accept",
-      "published_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
-      "deployed_sha": "7d7e05c7124722857ba9828cff5dbd49df5ab04f",
-      "outcome": "Closed at 2-machine depth. All four cells measured in chromium on the shipped artifact at the frame the ticket names (machines == 2): card 105 px / 264.6 px / 105 px / 264.6 px against a .hud content box of 640 / 640 / 844 / 844 = 16.4 % / 41.3 % / 12.4 % / 31.4 %, so CH-1 (card <= 42 % of that box, height printed) is MET in all four combinations, and the live route reproduces 41.3 % at 360x640 text scale 2.0 (OPS-011-g1). The cause named in the triage is gone: the pip legend now prints exactly two tile-indexed entries plus the +n tail ('Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2' at 4 machines, tail +2 against the two printed rows, so CH-3 is met and D-1's off-by-one is closed). Cheapest bought band: one css rule (.text-large .status-line font-size 0.72rem, line-height 1.2, margin-top 0) takes the card from 316.4 px to 264.6 px at that cell, and the font size itself is unchanged at scale 1. Still open inside this ticket: the 4-machine fork-OPEN cell measures 300.3 px = 46.9 % at 360x640 ts2.0 (cause named: the objective PRIMARY line prints one more 35.64 px box, 'Choose what improves on the Scrap sorter - 30 credits'), which is one cell outside the band and pre-existing at 49.4 % last generation; N-1, the lastReject slot is replaced but never cleared so a very old 'Last need ...' keeps riding the line (the 'Last' prefix makes it honest); and CH-2's coversYard 45 +/- 2 is not reproduced at rest by design, because those canonical cells are the panel-open census and the series still has to name one denominator.",
+      "published_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "outcome": "Closed at 2-machine depth. All four cells measured in chromium on the shipped artifact at the frame the ticket names (machines == 2): card 105 px / 264.6 px / 105 px / 264.6 px against a .hud content box of 640 / 640 / 844 / 844 = 16.4 % / 41.3 % / 12.4 % / 31.4 %, so CH-1 (card <= 42 % of that box, height printed) is MET in all four combinations, and the live route reproduces 41.3 % at 360x640 text scale 2.0 (OPS-011-g1). The cause named in the triage is gone: the pip legend now prints exactly two tile-indexed entries plus the +n tail ('Batch pips - Scrap sorter #8 5/5 - Furnace #9 0/5 +2' at 4 machines, tail +2 against the two printed rows, so CH-3 is met and D-1's off-by-one is closed). Cheapest bought band: one css rule (.text-large .status-line font-size 0.72rem, line-height 1.2, margin-top 0) takes the card from 316.4 px to 264.6 px at that cell, and the font size itself is unchanged at scale 1. Still open inside this ticket: the 4-machine fork-OPEN cell measures 300.3 px = 46.9 % at 360x640 ts2.0 (cause named: the objective PRIMARY line prints one more 35.64 px box, 'Choose what improves on the Scrap sorter - 30 credits'), which is one cell outside the band and pre-existing at 49.4 % last generation; N-1, the lastReject slot is replaced but never cleared so a very old 'Last need ...' keeps riding the line (the 'Last' prefix makes it honest); and CH-2's coversYard 45 +/- 2 is not reproduced at rest by design, because those canonical cells are the panel-open census and the series still has to name one denominator. Closed further at the 4-machine depth in the same generation: with one css declaration (CHRM-002) the fork-OPEN cell now measures 261.4 px = 40.8 % at 360x640 text scale 2.0 (was 46.9 % at 7d7e05c and 42.9 % at 0c03572), so CH-1 is met in all four cells at both depths; the deeper one-blocked-tap sub-state is tracked as D-1.",
       "history": [
         {
           "at": "2026-11-05T09:06:00+00:00",
@@ -1260,6 +1260,55 @@
           "from_state": "measured",
           "to_state": "triaged",
           "reason": "re-opened for the single remaining row: at 360x640 text scale 2.0 with the fork open the card is 274.4 px of a 640 px .hud content box = 42.9 %, 0.9 pp outside the 42 % cap, identical in the 7d7e05c build so it is pre-existing and not introduced by the priced faces; the closing lever is named - .text-large .status-line line-height 1.2 to 1.1 at src/ui/styles.css:608 (about 1.6 pp), a css-only change deliberately not folded into the priced-fork slice"
+        },
+        {
+          "at": "2026-11-05T21:00:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "the named css lever promoted into CHRM-002 g1 as the one next outcome; this ticket's last remaining row is closed by that single candidate, so the two tickets share the closing SHAs"
+        },
+        {
+          "at": "2026-11-05T21:19:53+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "candidate 237f5d7 changes one declaration (.text-large .status-line line-height 1.2 -> 1.1) plus the measurement harness; the CH-1 criterion is the one this row is scored against"
+        },
+        {
+          "at": "2026-11-05T21:19:53+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff sections 3 and 4 carry the eight before/after cells for this row and the legibility guard"
+        },
+        {
+          "at": "2026-11-05T22:22:22+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent QA measures the CH-1 row itself at 40.8 % in every recorded cell (work/review/CHRM-002-g1-qa.md item 2), so this row's criterion is met with the reviewer's own script"
+        },
+        {
+          "at": "2026-11-05T22:31:52+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "integrated per-file into d7af68a1df31d6b0cb5e313330f7cb5853d74a32 with the CHRM-002 candidate"
+        },
+        {
+          "at": "2026-11-05T22:38:41+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served on the existing route as the labelled preview rustwake-d7af68a (OPS-013-g1)"
+        },
+        {
+          "at": "2026-11-05T22:45:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "the last open row of this ticket is closed on the deployed artifact: card 261.4 px of a 640 px .hud content box = 40.8 % at 360x640 text scale 2.0 with the fork open (was 42.9 %), 89.2 px = 10.6 % at 390x844 text scale 1.0, minimum face 46 px, no page scroll and 0 pageerror, reproduced by this lane's own three-pass run of scripts/measure-chrm002.mjs against the live route (16.7 / 40.8 / 10.6 / 31.0 %, ALL PASS); the deeper sub-state (one blocked tap riding the line, 44.6 %) is handed to D-1 and the coversYard denominator question stays open here as recorded"
         }
       ]
     },
@@ -1845,6 +1894,317 @@
           "from_state": "deployed",
           "to_state": "measured",
           "reason": "post-deploy measurement recorded in OPS-012-g1: served == built 5/5 over HTTPS and loopback, the served HTML names the new entry and the previous entry name 404s, the live smoke strings printed with 0 pageerror and 0 favicon requests, board --check green at the docs tip"
+        }
+      ]
+    },
+    {
+      "id": "CHRM-002",
+      "type": "defect",
+      "title": "Bring the deepest resting cell inside the 42 % chrome cap with one leading value",
+      "priority": "P2",
+      "status": "measured",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "At 360x640 with text scale 2.0 and the fork row open the resting card is 274.4 px of a 640 px .hud content box = 42.9 %, 0.9 pp outside the recorded 42 % cap, so the world band between the card and the dock is 13 px shorter than it needs to be in exactly the frame where the player is reading two plans.",
+      "hypothesis": "The three secondary lines each wrap to two line boxes at that scale, so tightening only their leading from 1.2 to 1.1 (the value the dock buttons already use) buys back 2.16 px per box, about 13 px of card, and puts every cell inside the cap with no font-size change and no reflow elsewhere.",
+      "scope": [
+        "src/ui/styles.css (.text-large .status-line line-height 1.2 -> 1.1)",
+        "scripts/measure-chrm002.mjs (the eight-cell harness with the legibility guard)"
+      ],
+      "non_goals": [
+        "No font-size, padding or margin changes and no second css rule",
+        "No new line, panel or currency on the resting screen",
+        "No retroactive re-numbering of the CHRM-001 g1/g2 measurement rows"
+      ],
+      "acceptance": [
+        "card.height <= 0.42 * hudContentBox.height in all four cells (360x640 and 390x844 at text scale 1.0 and 2.0) at both machine depths, hudContentBox.height printed, measured in chromium on the shipped artifact",
+        "the .objective bottom -> .dock top gap stays >= 8 px and the smallest dock face stays >= 44 px in the same frames",
+        "legibility guard at text scale 2.0: every wrapped status line keeps > 0.5 px of true white between rows (line-height minus glyph ascent+descent) and no horizontal clipping (scrollWidth == clientWidth)",
+        "the entry chunk stays byte-identical to the base build and the css chunk changes at the minimum number of byte positions",
+        "0 pageerror and no page scroll (scrollWidth x scrollHeight == innerWidth x innerHeight) in every session"
+      ],
+      "dependencies": [
+        "CHRM-001"
+      ],
+      "product_approved": true,
+      "evidence": [
+        "work/review/CHRM-002-g1-qa.md (independent QA: 8/8 cells <= 42 % with the reviewer's own script, max 40.8 %, 1 byte of css delta, 283/27 tests, entry byte-identical)",
+        "work/development/handoffs/CHRM-002-g1.md sections 3 and 4 (the eight before/after cells and the legibility table)",
+        "scripts/measure-chrm002.mjs (the shipped harness: three passes, seeded and organic)",
+        "work/deployments/OPS-013-g1.json live_smoke plus harness_live_route (the same harness against the deployed route: 16.7 / 40.8 / 10.6 / 31.0 %, ALL PASS)"
+      ],
+      "candidate_sha": "237f5d76ca2bb45e042c7f5181a182704e288b12",
+      "review_verdict": "accept",
+      "published_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "outcome": "Closed: every recorded cell is inside the cap. One declaration (line-height 1.2 -> 1.1 on .text-large .status-line) takes the binding cell from 274.4 px = 42.9 % to 261.4 px = 40.8 % of the 640 px .hud content box at 360x640 text scale 2.0, at both depths and in the organic tap control; the four cells read 16.7 / 40.8 / 10.6 / 31.0 %, independently reproduced on the deployed route by this lane's own run of scripts/measure-chrm002.mjs (three passes, ALL PASS). The css chunk stays 7474 B and differs from the served predecessor at exactly one byte position (offset 7209, 2 -> 1); the entry chunk is byte-identical at 231878 B (same sha256 5376ec71..., only the chunk name changes because Vite folds the css name into the entry hash), so the player-visible change is 13 px of card given back to the world band with identical text. Minimum tap 46 px, no page scroll, 0 pageerror and 0 favicon requests in every session.",
+      "history": [
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "the re-opened CHRM-001 row carries the exact remaining defect (42.9 % at 360x640 ts2.0 with the fork open) and the named css lever; split into its own ticket so the css-only slice has one owner and one candidate"
+        },
+        {
+          "at": "2026-11-05T20:12:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "accepted as the one next outcome over the tile batch clock: css-only, one declaration, reversible by reverting one commit, and it does not touch the engine or the save"
+        },
+        {
+          "at": "2026-11-05T21:00:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "promoted with the acceptance rows fixed in advance (four cells at both depths, the legibility guard and the byte-identity expectations), so the candidate cannot be scored against a moving criterion"
+        },
+        {
+          "at": "2026-11-05T21:19:53+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "candidate_sha_note": "237f5d76ca2bb45e042c7f5181a182704e288b12",
+          "reason": "candidate 237f5d7 on branch chrm002-g1 (base 0c03572): one declaration changed plus the new measurement harness and the handoff; no other file touched"
+        },
+        {
+          "at": "2026-11-05T21:19:53+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "handoff sections 2 to 5: the eight before/after cells, the legibility table (21.6 px on 23.8 px leading, 1.8 px of white) and the real exit codes of all four gates"
+        },
+        {
+          "at": "2026-11-05T22:22:22+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independently accepted with notes (work/review/CHRM-002-g1-qa.md): the reviewer's own build of both SHAs and own chromium script reproduce 8/8 cells <= 42 % (max 40.8 %), one byte of css delta, the entry byte-identical at 231878 B, 283 tests over 27 files, 0 pageerror; notes are the deeper 44.6 % sub-state (D-1) and the parked leftmost dock face (BLD-001)"
+        },
+        {
+          "at": "2026-11-05T22:31:52+00:00",
+          "actor": "product-owner",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "product preview decision: keep - the cap now holds in every recorded cell and the change is one css declaration; integrated per-file into d7af68a1df31d6b0cb5e313330f7cb5853d74a32 (3 candidate paths blob-equal plus the imported QA receipt)"
+        },
+        {
+          "at": "2026-11-05T22:38:41+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "served as the labelled preview rustwake-d7af68a on the existing route (stack 125), the container recreated with the release: d7af68a label, served == built 5/5 over HTTPS and loopback (OPS-013-g1)"
+        },
+        {
+          "at": "2026-11-05T22:45:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-release measurement on the live route: 40.8 % at 360x640 ts2.0 (both the organic tap frame and this lane's three-pass run of the shipped harness: 16.7 / 40.8 / 10.6 / 31.0 %, ALL PASS), 46 px minimum face, scrollHeight equal to innerHeight, 0 pageerror, 0 favicon requests; the deeper 44.6 % sub-state stays visible as D-1"
+        }
+      ]
+    },
+    {
+      "id": "D-1",
+      "type": "defect",
+      "title": "Card still exceeds the cap in the deepest real cell (44.6 % with one blocked tap)",
+      "priority": "P2",
+      "status": "triaged",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "In the deepest real frame - 4 machines, fork row open, one tap refused so the 'Last need 40 credits - have 30' tail joins the resting line - the card is 285.2 px of a 640 px .hud content box = 44.6 % at 360x640 text scale 2.0, so the world band is 2.6 pp shorter than the cap in the exact moment the player is deciding between two plans.",
+      "hypothesis": "The tail is the cheapest thing to cut: shortening the 'Last need ...' segment (~39 characters) or dropping the pip legend to one named machine while a reject is riding costs about one 23.8 px box (~3.7 pp), which is enough to bring that sub-state back inside 42 % without touching font sizes.",
+      "scope": [
+        "src/ui/text.ts (the carried lastReject segment wording)"
+      ],
+      "non_goals": [
+        "No new line or panel",
+        "No change to the 42 % criterion itself",
+        "No further leading reduction (1.1 is already the dock-button value)"
+      ],
+      "acceptance": [
+        "card.height <= 0.42 * hudContentBox.height in the four-machine fork-open frame with one refused tap at 360x640 text scale 2.0, measured in chromium on the shipped artifact, hudContentBox.height printed",
+        "the refusal still names the number (what is needed and what is held) after the shortening",
+        "no regression in the four already-passing cells (16.7 / 40.8 / 10.6 / 31.0 %)"
+      ],
+      "dependencies": [
+        "CHRM-002"
+      ],
+      "product_approved": true,
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "evidence": [
+        "work/review/CHRM-002-g1-qa.md item 9 (the 44.6 % reading with its ink/box breakdown, and the same sub-state at 46.9 % on the base build)",
+        "work/deployments/OPS-013-g1.json live_smoke (the passing four cells this artifact reproduces, as the no-regression baseline)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T22:22:22+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "finding D-1 in work/review/CHRM-002-g1-qa.md: the blocked-tap sub-state of the 4-machine fork-open cell is 285.2 px = 44.6 % at 360x640 ts2.0 even after the leading change; nothing is clipped there (no scroll, 0 pageerror), so it is a band problem, not a correctness one"
+        },
+        {
+          "at": "2026-11-05T22:45:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept open and named: the cheapest lever is to shorten the 'Last need ...' tail (~39 characters, about one 23.8 px box = 3.7 pp), then the one-machine pip legend if that is still short; pre-existing, not introduced by the leading change"
+        }
+      ]
+    },
+    {
+      "id": "BLD-001",
+      "type": "defect",
+      "title": "Blind tapping parks on the fork row because the leftmost face is the dearer plan",
+      "priority": "P1",
+      "status": "triaged",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "A player who keeps pressing the leftmost dock button gets nothing: on the 4-machine fork row the leftmost face is 'Faster batches 40 credits' while the purse is 30, so 31 leftmost taps land 0 commands and the machine levels and the purse do not move at all - the game looks frozen while it is actually refusing every tap.",
+      "hypothesis": "Painting the dock faces cheapest-first un-parks blind play: with the same purse the 30-credit plan is affordable, and QA measured the first tap of that face landing immediately (levels 1+1+1+1 -> 2+1+1+1, credits 30 -> 0). Cheapest-first ordering is the candidate fix, not a new label or a new panel.",
+      "scope": [
+        "src/ui/text.ts (branchOptions paint order)"
+      ],
+      "non_goals": [
+        "No change to the prices themselves or to the branch effects",
+        "No third dock face",
+        "No save-schema change (branch names are stored, paint order is not)"
+      ],
+      "acceptance": [
+        "with fresh storage and the recorded tap method, the leftmost fork face is the one the current purse can pay, and the first tap on it lands a command (machine level sum increases)",
+        "the two faces still print two different prices and the same two plan names, so the priced-fork A/B sentences still hold",
+        "card chrome does not regress in the four recorded cells (16.7 / 40.8 / 10.6 / 31.0 %)"
+      ],
+      "dependencies": [
+        "STRAT-003"
+      ],
+      "product_approved": true,
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "evidence": [
+        "work/review/CHRM-002-g1-qa.md item 6 (31 leftmost taps -> 0 commands landed, levelSum stuck at 4 and credits stuck at 30; the next phase's 5 taps on the 30-credit face land on the first tap)",
+        "work/deployments/OPS-013-g1.json live_smoke (the same two faces painted left-to-right as 40 then 30 on the deployed artifact, cheapest index 1)"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T22:22:22+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "blind-tap park check on the candidate tree: the leftmost dock face is the dearer plan (40 vs a 30 purse) so a continuous leftmost tap loop makes no progress at all, while the second face pays on its first tap"
+        },
+        {
+          "at": "2026-11-05T22:45:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "accepted for the next slice as the cheapest-first dock ordering (one comparator in the paint order), because the purse covers the plain price but not the premium; must be re-measured with the priced-fork sentences so the A/B stays intact"
+        }
+      ]
+    },
+    {
+      "id": "RELEASE-006",
+      "type": "delivery",
+      "title": "Publish and deploy the css-only chrome-cap slice",
+      "priority": "P1",
+      "status": "measured",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "The shortened resting card existed only in the developer and QA worktrees, so the live route still showed the 42.9 % cell and the 13 px shorter world band was not visible to the owner.",
+      "hypothesis": "One per-file integration of the single css-only candidate plus one labelled preview deployment (with the release label present from the first PUT, so the service really recreates) shows the cap-compliant card on the existing route with the previous release retained.",
+      "scope": [
+        "main integration",
+        "work",
+        "release operations"
+      ],
+      "non_goals": [
+        "No new service, port, network, DNS record or mirror",
+        "No doc-only redeploy",
+        "No engine, save or price change"
+      ],
+      "acceptance": [
+        "per-file ownership honoured with no lane file lost (tripwire 283 tests across 27 files, unchanged from the base, because the candidate adds no test file)",
+        "typecheck, test, validate and build green on the merged tree with the entry inside the 233000 B ceiling and its digest equal to the previously served entry",
+        "CI status read honestly, then the merged artifact served on the existing route with served == built digests over HTTPS and loopback and a retained previous release",
+        "board and README reconciled to the published and deployed revisions, shown separately"
+      ],
+      "dependencies": [
+        "CHRM-002",
+        "STRAT-003"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "237f5d76ca2bb45e042c7f5181a182704e288b12",
+      "published_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+      "outcome": "Integrated per-file into d7af68a1df31d6b0cb5e313330f7cb5853d74a32 (3 candidate paths blob-equal to 237f5d7 plus the imported QA receipt; every other main path left as published) and pushed 8ea36e7..d7af68a with no force, remote head fetch-verified. Gates on the merged tree with real exit codes: typecheck 0, 283 tests / 27 files, validate 0 with the verbatim behaviour line and the eede3c4f ladder fixture, build 0 with entry assets/index-DGy53fNu.js 231878 B (digest equal to the previously served index-Cmh4A1Sb.js), css assets/index-9FriNULu.css 7474 B (one byte differs from index-mmTSZ7Fz.css), tables 9298 B, worker 13406 B; the isolated SHA worktree build agrees 5/5. CI read honestly as remote-CI-unverified (gh auth status exit 1, gh api exit 4). Deployed as the labelled preview rustwake-d7af68a on stack 125: the compose bind line and the release label both changed in one PUT (stored compose 2e611cc7 -> e8e7ccfb, 921 B), the container really recreated (new config-hash 0f03a453, release=d7af68a, healthy, restart streak 0), served == built 5/5 over HTTPS and loopback, the previous entry name 404s, healthz 200, unrelated routes unchanged (301/302 intact), fleet 49 running before and after. Live smoke prints the two priced faces with a 46 px minimum face, the cheapest tap charging exactly 30, the resting fleet/power line, 40.8 % card at 360x640 ts2, scrollHeight == innerHeight, 0 pageerror, 0 favicon requests. Rollback resource rustwake-0c03572 retained.",
+      "evidence": [
+        "work/deployments/OPS-013-g1.json",
+        "work/releases/RELEASE-006.md",
+        "work/review/CHRM-002-g1-qa.md",
+        "work/development/handoffs/CHRM-002-g1.md"
+      ],
+      "history": [
+        {
+          "at": "2026-11-05T22:22:22+00:00",
+          "actor": "coordinator",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "the candidate holds an independent QA verdict (accepted with notes) and the product preview decision, so the release slice is ready"
+        },
+        {
+          "at": "2026-11-05T22:31:52+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "origin fetched at 8ea36e7 (equal to local HEAD), the candidate extracted per file (3 paths blob-verified against 237f5d7) plus the QA receipt imported from the review worktree; integration commit d7af68a1df31d6b0cb5e313330f7cb5853d74a32"
+        },
+        {
+          "at": "2026-11-05T22:33:30+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "merged-tree gates run with real exit codes (typecheck 0, 283/27 tests, validate 0 with the verbatim behaviour line and eede3c4f, build 0 with the entry at 231878 B whose sha256 equals the served predecessor) and the isolated SHA worktree build agrees on all five served files"
+        },
+        {
+          "at": "2026-11-05T22:33:30+00:00",
+          "actor": "coordinator",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "tripwire matched exactly (283 tests / 27 files, the same counts as the base, as expected for a css-only candidate) and the lane entry digest equals both the isolated build and the previously served bytes, so no lane file was lost or reflowed"
+        },
+        {
+          "at": "2026-11-05T22:33:30+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "pushed to the existing GitHub origin (8ea36e7..d7af68a, no force), remote-tracking head verified equal to local HEAD; remote CI unreadable -> remote-CI-unverified"
+        },
+        {
+          "at": "2026-11-05T22:38:41+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "rustwake-d7af68a installed (5 files, host digests equal the build) and promoted on the existing route via PUT /api/stacks/125?endpointId=3&force=1 with the release label present in the first PUT, so the service recreated once (~6.8 min from push to container start)"
+        },
+        {
+          "at": "2026-11-05T22:45:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy measurement recorded in OPS-013-g1: served == built 5/5 over HTTPS and loopback, the served HTML names the two new asset names while the previous entry name 404s, the live smoke strings printed with 0 pageerror and 0 favicon requests, the shipped harness against the live route reads 16.7 / 40.8 / 10.6 / 31.0 % (ALL PASS), board --check green at the docs tip"
         }
       ]
     }
