@@ -86,6 +86,12 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const [buildBlueprint, setBuildBlueprint] = useState<string | null>(null);
   const [ghostTile, setGhostTile] = useState<number | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  /**
+   * PLAY-002 2 (TST-001, QA D-3): the last rejected command, kept after the 1.8 s toast
+   * is gone. `null` while nothing has been refused. It is plain component state - never
+   * written into the save - so the two surfaces share one string and the sim stays pure.
+   */
+  const [lastReject, setLastReject] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(true);
 
   const audio = useCallback((): AudioApi => {
@@ -100,7 +106,11 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         audio().play(cueFor(command.type));
       } else {
         audio().play("blocked");
-        setToast(labelForReject(result));
+        const text = labelForReject(result);
+        setToast(text);
+        // One string, computed once: the transient toast and the resting line's trailing
+        // segment are the same readout at two lifetimes (PLAY-002 2).
+        setLastReject(text);
       }
       return result;
     },
@@ -371,7 +381,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
                     t("phase.ghost", { tile: ghostTile ?? 0 })
                   : hintFor(suggestedAction(state))
             }
-            power={restingLine(state)}
+            power={restingLine(state, lastReject)}
             pips={state.machines.length > 0 ? pipLine(state) : ""}
           />
           {store.isReconciling() ? (

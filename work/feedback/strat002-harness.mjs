@@ -1,22 +1,30 @@
-// STRAT-002 g2 harness: the named-outcome fork measured one branch per run, scored by
-// the A1-2v2 primary column set (work/product/STRAT-002-decision-g2.md, section 1.2).
+// STRAT-002 g3 harness: the named-outcome fork measured one branch per run, scored by
+// the A1-2v3 per-column MMG (work/product/STRAT-002-decision-g2.md, section 1.2 plus
+// the `g2 addendum`). The addendum retires the `>= 5 % relative OR >= 10 absolute`
+// disjunction (it is scale-blind) and adds one mechanism column, `inputStallPct`, on
+// which `buffer` must lead by >= 3 points under BOTH gap ladders or be dropped
+// (the fork then ships two plans, `speed` and `draw`; negative result, never re-scored).
 // Method: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds
 // = 18 000 ticks. Boot and cadence mirror work/feedback/strat001-harness.mjs (same
 // seed: the same fixed command prefix, no Math.random anywhere), so the only difference
 // between rows is which named outcome the upgrade command carried.
 //
-// Two tables come off the same engine:
+// Three tables come off the same engine, 1800 rounds and the same tick budget each:
 //  - regular   : the g1 cadence, unchanged (one command per round, 10 ticks apart).
-//  - irregular : the section 1.4 ladder - the same 1800 rounds and the same tick
-//                budget, with the wreck pulse gated into bursts so the store's inflow
-//                carries real gaps. See SUPPLY_PATTERN.
+//  - irregular : the g2 ladder, the wreck pulse gated 5-on/4-off (round % 9 < 5).
+//  - gap6      : the g3 ladder, the wreck pulse gated 3-on/3-off (round % 6 < 3).
 //
-// A1-2v2 rules honoured here:
+// A1-2v3 rules honoured here:
 //  - the scored table is the three NAMED rows; the unnamed row is reported as the
-//    by-construction speed twin and excluded from the lead census,
+//    by-construction speed twin and excluded from the lead census (R1),
 //  - the residual rows[].credits is reported but is not a primary column (R2),
 //  - pick attribution is printed per row: kinds.upgrade = command attempts,
-//    sum(level-1) = purchased levels, branchByLevel.length = recorded picks (R4).
+//    sum(level-1) = purchased levels, branchByLevel.length = recorded picks (R4),
+//  - `buffer` is judged on exactly one mechanism column, `inputStallPct`, by the
+//    per-column minimum meaningful gap declared once in the `gaps` block and read by
+//    tests/simulation/fork.test.ts,
+//  - `creditsPer1000Batches` stays reported beside `creditsEarned` / `batches` and can
+//    no longer satisfy R1 for any branch.
 //
 // Run: npx tsx work/feedback/strat002-harness.mjs
 // Plain `node` cannot load it: the imports below are TypeScript modules and need the
@@ -32,23 +40,21 @@ import { createInitialState } from "../../src/game/simulation/types";
 
 const ROUNDS = 1800;
 const TARGET = "work/feedback/strat002-harness.json";
-const BASE_SHA = "c2842e1c853a146f22afda5667e7410253f88ddf";
+const BASE_SHA = "8a06e9debf7ff345681979cd6f731b24b2b5d581";
 const NAMED = ["speed", "buffer", "draw"];
 const TWIN = "naive (unnamed)";
 
 /**
- * Irregular-supply ladder (decision section 1.4), the smallest change that can make the
- * input buffer bite: the wreck pulse is gated instead of firing every round.
- * Period 9 with 5 pulsed and 4 silent rounds, so 1800 rounds hold exactly 200 whole
- * periods: 1000 pulsed rounds (+5 scrap each, TUNING.manualSalvagePerPulse) alternate
- * with 800 rounds where the only inflow is the fleet's own delivery (5 units per
- * TUNING.droneDeliveryTicks per unit). During a 4-round gap the store falls to the
- * reserve floor, store-sourced links stop drawing, and a machine keeps working only
- * from the units it already holds in hand - which is exactly what a buffer rank buys
- * (engine `pullNeed`: perBatch * (PULL_LOOKAHEAD_BATCHES + bufferRanks) + bonus,
- * capped by inputCapacityOf). One gated line, no engine change, identical tick budget.
+ * The two gap ladders (decision 1.4 plus the g2 addendum), each 1800 rounds on the
+ * shared boot: the wreck pulse is gated instead of firing every round, so the store's
+ * inflow carries real gaps. During a silent stretch the store falls to the reserve
+ * floor, store-sourced links stop drawing (engine `pullFromStore`: available =
+ * store - TUNING.reserveFloor), and a machine keeps working only from the units it
+ * already holds in hand - which is exactly what a buffer rank buys (`pullNeed`:
+ * perBatch * (PULL_LOOKAHEAD_BATCHES + bufferRanks) + bonus, capped by
+ * inputCapacityOf). One gated line per pattern, no engine change, identical tick budget.
  */
-const SUPPLY_PATTERN = {
+const SUPPLY_GAP9 = {
   name: "irregular",
   periodRounds: 9,
   pulsedRounds: 5,
@@ -59,7 +65,18 @@ const SUPPLY_PATTERN = {
     "manual.salvage fires only while round % 9 < 5; the other 4 rounds of every period " +
     "run on the fleet's own deliveries alone, so the store's inflow has 4-round gaps",
 };
-const pulseThisRound = (round) => round % SUPPLY_PATTERN.periodRounds < SUPPLY_PATTERN.pulsedRounds;
+const SUPPLY_GAP6 = {
+  name: "gap6",
+  periodRounds: 6,
+  pulsedRounds: 3,
+  silentRounds: 3,
+  periods: ROUNDS / 6,
+  pulsePerRound: TUNING.manualSalvagePerPulse,
+  note:
+    "manual.salvage fires only while round % 6 < 3; the other 3 rounds of every period " +
+    "run on the fleet's own deliveries alone, so the store's inflow has 3-round gaps",
+};
+const pulseThisRound = (round, spec) => round % spec.periodRounds < spec.pulsedRounds;
 
 const freeTile = (state) => {
   for (let tile = 0; tile < YARD_TILES; tile += 1) {
@@ -181,9 +198,11 @@ const pct = (part, whole) => (!Number.isFinite(part) || !Number.isFinite(whole) 
 
 /**
  * One row: the same ladder, one named outcome per level (or none at all).
- * `pattern` is "regular" (the g1 cadence) or "irregular" (gated wreck pulse).
+ * `patternName` is "regular" (the g1 cadence), "irregular" (the 5-on/4-off gate) or
+ * "gap6" (the 3-on/3-off gate).
  */
-function run(rowName, branch, pattern) {
+function run(rowName, branch, patternName) {
+  const spec = patternName === "irregular" ? SUPPLY_GAP9 : patternName === "gap6" ? SUPPLY_GAP6 : null;
   let seq = 0, taps = 0, rejects = 0, creditsEarned = 0, pulses = 0;
   const state = createInitialState();
   const send = (body) => {
@@ -210,12 +229,23 @@ function run(rowName, branch, pattern) {
   // store-sourced link cannot draw at all (engine `pullFromStore`: available =
   // store - TUNING.reserveFloor).
   let scrapMin = Number.POSITIVE_INFINITY, scrapMax = 0, floorRounds = 0;
+  // A1-2v3 mechanism column, exact definition from the g2 addendum:
+  // `inputStallTicks` = sum over machines of ticks in which that machine was NOT busy
+  // (no batch running: the engine's measure phase saw progress 0, so `busyTicks` did
+  // not increment that tick) while `store.scrap <= TUNING.reserveFloor`, i.e. the
+  // store could not supply an input demand. Counted per tick inside the round's ten
+  // steps; `advance(state, 10)` is the same ten `stepTick` calls, so every other
+  // column keeps the g2 values exactly.
+  // `inputStallPct = inputStallTicks / tick`, reported on the same points scale as
+  // starvedMax/starvedMean, i.e. 100 * inputStallTicks / tick to one decimal, so the
+  // addendum's "3 percentage points" reads as the integer 3 in `gaps.mmg`.
+  let inputStallTicks = 0;
   const branchByLevel = [];
 
   for (let round = 0; round < ROUNDS; round += 1) {
     if (!state.exportClaimed && (state.store.steel ?? 0) >= TUNING.exportContractSteel) { send({ type: "contract.export" }); taps += 1; }
-    // The one difference between the two tables: the gated wreck pulse.
-    if (pattern === "irregular" && pulseThisRound(round)) { send({ type: "manual.salvage" }); pulses += 1; taps += 1; }
+    // The one difference between the tables: the gated wreck pulse.
+    if (spec !== null && pulseThisRound(round, spec)) { send({ type: "manual.salvage" }); pulses += 1; taps += 1; }
     const tutorial = tutorialAction(state);
     let chosen;
     if (tutorial) {
@@ -262,7 +292,15 @@ function run(rowName, branch, pattern) {
     // A1-1 census, both readings, same round.
     if (buildStep(state) !== null && upgradeCandidate(state) !== null) legacyAmbiguous += 1;
     if (pricedOptions(state).length >= 2) pricedGe2 += 1;
-    advance(state, 10);
+    for (let tick = 0; tick < 10; tick += 1) {
+      const busyBefore = state.machines.map((m) => m.busyTicks);
+      advance(state, 1);
+      if ((state.store.scrap ?? 0) <= TUNING.reserveFloor) {
+        for (let k = 0; k < state.machines.length; k += 1) {
+          if (state.machines[k].busyTicks === (busyBefore[k] ?? 0)) inputStallTicks += 1;
+        }
+      }
+    }
     if (state.powerRatio < 1) powerLimitedRounds += 1;
     if (state.powerRatio < minPowerRatio) minPowerRatio = state.powerRatio;
     const scrap = state.store.scrap ?? 0;
@@ -311,6 +349,8 @@ function run(rowName, branch, pattern) {
     minPowerRatio: Number(minPowerRatio.toFixed(3)),
     starvedMax,
     starvedMean,
+    inputStallTicks,
+    inputStallPct: Number(((inputStallTicks / Math.max(1, state.tick)) * 100).toFixed(1)),
     legacyAmbiguous,
     pricedGe2,
     purchasedLevels,
@@ -324,9 +364,9 @@ function run(rowName, branch, pattern) {
 }
 
 /**
- * A1-2v2 primary column set, named by exact field. `credits` is deliberately absent
- * (R2: the residual balance cannot satisfy R1); `creditsEarned` and
- * `creditsPer1000Batches` replace it as the earned reading.
+ * A1-2v2 primary column set plus the A1-2v3 mechanism column, named by exact field.
+ * `credits` is deliberately absent (R2: the residual balance cannot satisfy R1);
+ * `creditsEarned` and `creditsPer1000Batches` are the earned readings.
  */
 const PRIMARY = {
   batches: { read: (r) => r.batches, higherWins: true },
@@ -337,12 +377,34 @@ const PRIMARY = {
   "milestones.firstResearch": { read: (r) => r.milestones.firstResearch ?? 9999, higherWins: false },
   starvedMax: { read: (r) => r.starvedMax, higherWins: false },
   starvedMean: { read: (r) => r.starvedMean, higherWins: false },
+  inputStallPct: { read: (r) => r.inputStallPct, higherWins: false },
   creditsEarned: { read: (r) => r.creditsEarned, higherWins: true },
   creditsPer1000Batches: { read: (r) => r.creditsPer1000Batches, higherWins: true },
 };
-/** The mechanism-adjacent columns the buffer branch is judged on (decision 1.2). */
-const MECHANISM = ["starvedMax", "starvedMean", "creditsPer1000Batches"];
-const GAP = { relative: 0.05, absolute: 10, batchesLead: 900, drawZero: 200, drawRatio: 0.25 };
+
+/**
+ * A1-2v3 per-column minimum meaningful gap (MMG), declared exactly once, in each
+ * column's own points scale, replacing the retired `>= 5 % relative OR >= 10 absolute`
+ * disjunction. `inputStallPct`, `starvedMax` and `starvedMean` are percentage points;
+ * `batches` and `powerLimitedRounds` are whole units; `minPowerRatio` is the ratio
+ * itself; `creditsPer1000Batches` is the only two-term entry (3 % relative AND
+ * >= 100 units). Where the rival value is exactly 0 the absolute term applies alone -
+ * that is the only case in which a bare absolute floor is well-defined.
+ * tests/simulation/fork.test.ts reads this table from the `gaps` block of
+ * work/feedback/strat002-harness.json and asserts against it.
+ */
+const MMG = {
+  inputStallPct: { absolute: 3 },
+  starvedMax: { absolute: 3 },
+  starvedMean: { absolute: 3 },
+  batches: { absolute: 900 },
+  powerLimitedRounds: { absolute: 200 },
+  minPowerRatio: { absolute: 0.25 },
+  creditsPer1000Batches: { relative: 0.03, absolute: 100 },
+};
+const MMG_COLUMNS = Object.keys(MMG);
+/** The single column `buffer` is judged on (g2 addendum); no other column satisfies R1 for it. */
+const BUFFER_COLUMN = "inputStallPct";
 
 const namedRows = (rows) => rows.filter((r) => NAMED.includes(r.policy));
 
@@ -370,12 +432,48 @@ function gapOf(rows, policy, column) {
   return { own, rival, absolute: Number(absolute.toFixed(3)), relative: Number(relative.toFixed(4)) };
 }
 
+/** MMG test: absolute in the column's scale; the two-term column also needs its 3 %;
+ * a rival of exactly 0 is judged by the absolute term alone (addendum clause). */
+function passesMmg(column, gap) {
+  const mmg = MMG[column];
+  if (gap.rival === 0) return gap.absolute >= mmg.absolute;
+  if (mmg.relative === undefined) return gap.absolute >= mmg.absolute;
+  return gap.absolute >= mmg.absolute && gap.relative >= mmg.relative;
+}
+
 /** Owns the column = sole best value among the named rows. */
 const soleLeader = (census, column, policy) => census[column].length === 1 && census[column][0] === policy;
 
-/** R1/R3/R4 plus the per-branch numeric gaps, as A1-2v2 states them. */
+/** The leading branch per MMG column, named rows only: the sole best value whose gap
+ * over the best rival clears that column's MMG; null when no branch clears it. */
+function leadersUnderMmg(rows) {
+  const census = leadCensus(rows, false);
+  const out = {};
+  for (const column of MMG_COLUMNS) {
+    const sole = NAMED.find((policy) => soleLeader(census, column, policy)) ?? null;
+    out[column] = sole !== null && passesMmg(column, gapOf(rows, sole, column)) ? sole : null;
+  }
+  return out;
+}
+
+function gapsBlock() {
+  return {
+    criteria: "A1-2v3 (g2 addendum): per-column minimum meaningful gap replaces the retired " +
+      "'>= 5 % relative OR >= 10 absolute' disjunction; absolute-only when the rival is exactly 0",
+    mmg: MMG,
+    bufferRule: "buffer leads inputStallPct by >= 3 points over the best named rival under BOTH " +
+      "gap ladders (irregular 5-on/4-off and gap6 3-on/3-off) or the drop executes and the fork " +
+      "ships two plans (speed, draw)",
+    inputStall: "rows[].inputStallTicks = sum over machines of ticks not busy while " +
+      "store.scrap <= TUNING.reserveFloor; rows[].inputStallPct = inputStallTicks / tick, " +
+      "reported on the 0-100 points scale (x100), the same unit as starvedMax/starvedMean",
+  };
+}
+
+/** R1/R3/R4 plus the A1-2v3 per-branch MMG verdicts, as the addendum states them. */
 function verdicts(rows) {
   const census = leadCensus(rows, false);
+  const leaders = leadersUnderMmg(rows);
   const out = {};
   for (const policy of NAMED) {
     const led = Object.keys(PRIMARY).filter((column) => census[column].includes(policy));
@@ -384,8 +482,8 @@ function verdicts(rows) {
       const gap = gapOf(rows, policy, "batches");
       record.column = "batches";
       record.gap = gap;
-      record.required = "batches lead by >= 900 over each other named branch";
-      record.pass = soleLeader(census, "batches", policy) && gap.absolute >= GAP.batchesLead;
+      record.required = "sole leader, batches lead by >= " + MMG.batches.absolute + " over the best named rival";
+      record.pass = soleLeader(census, "batches", policy) && passesMmg("batches", gap);
     } else if (policy === "draw") {
       const power = gapOf(rows, policy, "powerLimitedRounds");
       const ratio = gapOf(rows, policy, "minPowerRatio");
@@ -395,28 +493,29 @@ function verdicts(rows) {
       record.column = "powerLimitedRounds + minPowerRatio";
       record.power = power;
       record.ratio = ratio;
-      record.required = "powerLimitedRounds = 0 with both others >= 200, minPowerRatio gap >= 0.25";
+      record.required = "powerLimitedRounds = 0 with both others >= " + MMG.powerLimitedRounds.absolute +
+        ", minPowerRatio gap >= " + MMG.minPowerRatio.absolute;
       record.pass =
         soleLeader(census, "powerLimitedRounds", policy) &&
+        passesMmg("powerLimitedRounds", power) &&
         power.own === 0 &&
-        othersLimited.every((value) => value >= GAP.drawZero) &&
+        othersLimited.every((value) => value >= MMG.powerLimitedRounds.absolute) &&
         soleLeader(census, "minPowerRatio", policy) &&
-        ratio.absolute >= GAP.drawRatio;
+        passesMmg("minPowerRatio", ratio);
     } else {
-      // buffer: one mechanism-adjacent column by >= 5 % relative or >= 10 absolute.
-      const owned = MECHANISM.filter((column) => soleLeader(census, column, policy));
-      record.columns = MECHANISM.map((column) => ({ column, sole: soleLeader(census, column, policy), gap: gapOf(rows, policy, column) }));
-      record.required = "leads one mechanism-adjacent column by >= 5 % relative or >= 10 absolute";
-      const best = owned
-        .map((column) => ({ column, gap: gapOf(rows, policy, column) }))
-        .filter((entry) => entry.gap.absolute >= GAP.absolute || entry.gap.relative >= GAP.relative)
-        .sort((a, b) => b.gap.relative - a.gap.relative)[0];
-      record.column = best ? best.column : null;
-      record.gap = best ? best.gap : null;
-      record.pass = best !== undefined;
+      // buffer: exactly one mechanism column, inputStallPct, under the MMG (A1-2v3).
+      const gap = gapOf(rows, policy, BUFFER_COLUMN);
+      record.column = BUFFER_COLUMN;
+      record.gap = gap;
+      record.required = "sole leader, inputStallPct lead by >= " + MMG.inputStallPct.absolute + " points";
+      record.pass = soleLeader(census, BUFFER_COLUMN, policy) && passesMmg(BUFFER_COLUMN, gap);
     }
+    // A1-2v3: R1 is the MMG verdict on the branch's named column (the raw census above
+    // stays reported; `creditsPer1000Batches` no longer satisfies R1 for any branch).
+    record.r1 = record.pass;
     out[policy] = record;
   }
+  out.leadersUnderMmg = leaders;
   const twin = rows.find((r) => r.policy === TWIN);
   const speed = rows.find((r) => r.policy === "speed");
   // R3: the twin identity is printed next to the scored rows, and asserted in tests.
@@ -427,7 +526,8 @@ function verdicts(rows) {
 const SCALAR_COLUMNS = [
   "tick", "machines", "links", "drones", "batches", "credits", "creditsEarned", "creditsPer1000Batches",
   "nodes", "taps", "commands", "rejects", "pulses", "powerLimitedRounds", "minPowerRatio", "starvedMax",
-  "starvedMean", "legacyAmbiguous", "pricedGe2", "purchasedLevels", "scrapMin", "scrapMax", "floorRounds",
+  "starvedMean", "inputStallTicks", "inputStallPct", "legacyAmbiguous", "pricedGe2", "purchasedLevels",
+  "scrapMin", "scrapMax", "floorRounds",
 ];
 
 /** `levels` carries the branch names, so the identity reads it with the annotation off:
@@ -471,6 +571,7 @@ function table(rows) {
         " rejects=" + r.rejects + " pulses=" + r.pulses +
         " powerLimited=" + r.powerLimitedRounds + " minPower=" + r.minPowerRatio +
         " starvedMax=" + r.starvedMax + " starvedMean=" + r.starvedMean +
+        " inputStallTicks=" + r.inputStallTicks + " inputStallPct=" + r.inputStallPct +
         " scrapMin=" + r.scrapMin + " scrapMax=" + r.scrapMax + " atFloor=" + r.floorRounds +
         " >=2affordable=" + r.pricedGe2 + " legacyAmbiguous=" + r.legacyAmbiguous +
         " firstDrone=" + (r.milestones.firstDrone ?? "-") + " firstResearch=" + (r.milestones.firstResearch ?? "-")
@@ -500,25 +601,28 @@ function verdictLines(block) {
         " gap=" + measurement + " -> owns " + (v.column ?? "nothing") + " [" + v.required + "] " +
         (v.pass ? "PASS" : "FAIL")
     );
-    if (v.columns) lines.push("    mechanism columns: " + JSON.stringify(v.columns));
   }
+  lines.push("  leaders under MMG (named rows only): " + JSON.stringify(block.leadersUnderMmg));
   lines.push("  " + TWIN + " twin identity: " + JSON.stringify(block[TWIN]));
   return lines;
 }
 
 const patterns = [
   ["regular", null],
-  ["irregular", SUPPLY_PATTERN],
+  ["irregular", SUPPLY_GAP9],
+  ["gap6", SUPPLY_GAP6],
 ];
 
 const blocks = {};
-for (const [patternName] of patterns) {
+for (const [patternName, spec] of patterns) {
   const rows = [
     run(TWIN, null, patternName),
     ...NAMED.map((branch) => run(branch, branch, patternName)),
   ];
   blocks[patternName] = {
-    supply: patternName === "regular" ? { name: "regular", note: "one command per round, 10 ticks apart, ungated wreck pulse (the g1 cadence)" } : SUPPLY_PATTERN,
+    supply: spec === null
+      ? { name: "regular", note: "one command per round, 10 ticks apart, ungated wreck pulse (the g1 cadence)" }
+      : spec,
     rows,
     stages: Object.fromEntries(rows.map((r) => [r.policy, r.stages])),
     branchByLevel: Object.fromEntries(rows.map((r) => [r.policy, r.branchByLevel])),
@@ -529,28 +633,45 @@ for (const [patternName] of patterns) {
   };
 }
 
+// The auto-executing question from the g2 addendum, computed from the same run:
+// does `buffer` lead inputStallPct by >= 3 points under BOTH gap ladders?
+const bufferLead = { irregular: blocks.irregular.verdicts.buffer.pass, gap6: blocks.gap6.verdicts.buffer.pass };
+const bothPatterns = bufferLead.irregular && bufferLead.gap6;
+const autoExec = {
+  question: "does buffer lead inputStallPct by >= 3 points over the best named rival under BOTH gap ladders?",
+  irregular: bufferLead.irregular,
+  gap6: bufferLead.gap6,
+  bothPatterns,
+  outcome: bothPatterns
+    ? "three plans kept: speed, buffer, draw; the A1-2v3 MMG table is the standing rule"
+    : "the drop executes: the fork ships two plans (speed, draw); negative result recorded, never re-scored",
+};
+
 mkdirSync("work/feedback", { recursive: true });
 writeFileSync(TARGET, JSON.stringify({
   baseSha: BASE_SHA,
-  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row",
-  criteria: "A1-2v2 (work/product/STRAT-002-decision-g2.md 1.2): scored table = named rows only; rows[].credits reported but not scored; starvedMax/starvedMean promoted out of stages[]; creditsEarned and creditsPer1000Batches added",
+  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row, three supply tables (regular, irregular 5-on/4-off, gap6 3-on/3-off)",
+  criteria: "A1-2v3 (g2 addendum): per-column MMG replaces the retired OR-disjunction; buffer judged solely on inputStallPct by >= 3 points under both gap ladders; creditsPer1000Batches reported but unable to satisfy R1; starvedMax/starvedMean and the inputStall pair promoted into rows[]",
   primaryColumns: Object.keys(PRIMARY),
-  mechanismColumns: MECHANISM,
-  gaps: GAP,
+  gaps: gapsBlock(),
+  autoExec,
   regular: blocks.regular,
   irregular: blocks.irregular,
+  gap6: blocks.gap6,
 }, null, 1), "utf8");
 
-for (const name of ["regular", "irregular"]) {
+for (const name of ["regular", "irregular", "gap6"]) {
   const block = blocks[name];
   console.log("== " + name + " supply (" + block.supply.name + ") ==");
-  if (name === "irregular") console.log("  pattern: " + JSON.stringify(block.supply));
+  if (name !== "regular") console.log("  pattern: " + JSON.stringify(block.supply));
   console.log(table(block.rows).map((line) => "  " + line).join("\n"));
   console.log("  leads (named rows only): " + JSON.stringify(block.leads));
   console.log("  leads (twin included, not scored): " + JSON.stringify(block.leadsIncludingTwin));
-  console.log("  A1-2v2 verdict, owns at least one column by the required gap:");
+  console.log("  gaps (A1-2v3 per-column MMG, one declaration read by fork.test.ts): " + JSON.stringify(gapsBlock().mmg));
+  console.log("  A1-2v3 verdict, owns the named column by the per-column MMG:");
   console.log(verdictLines(block.verdicts).join("\n"));
 }
+console.log("auto-exec: " + JSON.stringify(autoExec));
 console.log("census note: the >=2 affordable figure applies to the named row shown with it; " +
   "the twin is the by-construction speed row, so 121 is speed's count as well.");
 console.log("wrote " + TARGET);

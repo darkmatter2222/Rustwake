@@ -183,9 +183,16 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
 }
 
 /**
- * The three named outcomes one paid level can buy, each with the same price, in dock
+ * The two named outcomes one paid level can buy, each with the same price, in dock
  * order (STRAT-002/A1-3). One tap on any of them commits that branch: no second
  * confirming tap, so the fork costs one tap per choice like every other step.
+ *
+ * PLAY-002 1: `buffer` is not offered. The A1-2v3 run (work/development/handoffs/
+ * STRAT-002-g3.md) has it owning no column under either gap ladder - its
+ * `inputStallPct` is the *largest* on both (186.9 / 181.5 against 115.5 / 123.3), so
+ * the drop clause in `work/product/STRAT-002-decision-g2.md` executes and the dock
+ * ships two plans. The decoder in `simulation/types.ts` still reads a saved
+ * `"buffer"` pick, so a save written while the name was on the dock keeps loading.
  */
 export function branchOptions(
   state: SimState,
@@ -197,7 +204,6 @@ export function branchOptions(
   const cost = unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit"));
   return [
     { id: "speed", label: t("btn.branchSpeed"), cost },
-    { id: "buffer", label: t("btn.branchBuffer"), cost },
     { id: "draw", label: t("btn.branchDraw"), cost },
   ];
 }
@@ -223,10 +229,20 @@ export function powerLine(state: SimState): string {
  * the shared power budget. It has no `progress > 0` gate anywhere behind it, so the yard
  * answers "what is running" from the first tick, with no machine placed yet. The drone
  * count is the flying fleet - the starter once repaired, plus every spare bought.
+ *
+ * PLAY-002 2 (TST-001): the last blocked reject rides along as a trailing segment of this
+ * same line, so the shortfall outlives the 1.8 s toast. `detail` is the string the toast
+ * printed - the same `labelForReject` call, the same `need`/`have`/`word` fields - so the
+ * two surfaces cannot state different numbers, and no second sentence table is needed.
  */
-export function restingLine(state: SimState): string {
+export function restingLine(state: SimState, lastReject?: string | null): string {
   const flying = (state.drone.repaired ? 1 : 0) + state.spares.length;
-  return `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
+  const base = `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
+  if (!lastReject) return base;
+  // The one difference from the toast: the sentence continues this line, so its first
+  // letter goes lowercase. Both figures still come from the rejected result itself.
+  const detail = `${lastReject.charAt(0).toLowerCase()}${lastReject.slice(1)}`;
+  return `${base}${t("value.dotSeparator")}${t("hud.lastShortfall", { detail })}`;
 }
 
 /**
@@ -234,12 +250,20 @@ export function restingLine(state: SimState): string {
  * the current batch in fifths - never a level, a buffer or a power share - so the line
  * names that quantity and prints the same count of lit pips the tile shows: `4/5` is the
  * row with four marks lit, and the machine panel's `Batch` row prints that same
- * completion as a percent. Two machines on one screen read apart without a panel.
+ * completion as a percent.
+ *
+ * PLAY-002 3 (CHRM-001): at most **two** machines are named, then a `+n` tail for the rest
+ * (QA D-2: three entries cost three wrapped line boxes at 360 × 640 text scale 2.0 and put
+ * the card past its band), and each entry carries the tile index the renderer draws it on,
+ * so two machines of one blueprint read apart - `Scrap sorter #8 3/5 · Scrap sorter #9 1/5`
+ * where the bare labels repeated (QA D-4). The tile number is the same one the build phase
+ * prints in `phase.ghost`, so the legend and the ghost name one cell the same way.
  */
 export function pipLine(state: SimState): string {
-  const named = state.machines.slice(0, 3).map((m) => {
+  const named = state.machines.slice(0, 2).map((m) => {
     const ratio = m.batchMilli === 0 ? 0 : Math.min(1, m.progress / m.batchMilli);
-    return `${BLUEPRINTS[m.blueprint].label} ${ratio > 0 ? Math.max(1, Math.ceil(ratio * 5)) : 0}/5`;
+    const lit = ratio > 0 ? Math.max(1, Math.ceil(ratio * 5)) : 0;
+    return `${BLUEPRINTS[m.blueprint].label} #${m.tile} ${lit}/5`;
   });
   const rest = state.machines.length - named.length;
   return t("hud.pips", {

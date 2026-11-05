@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { describe, expect, it, beforeEach, vi } from "vitest";
 import { createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 import { App, labelForReject } from "../../src/ui/App";
@@ -143,16 +143,22 @@ describe("PLAY-001 the resting screen", () => {
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(400));
     const resting = document.querySelector(".objective")?.textContent ?? "";
-    expect(resting).toMatch(/Batch pips · Scrap sorter \d\/5/);
+    expect(resting).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5/);
     // The lit count is over the five marks the tile paints, never over a buffer capacity.
-    expect(resting).toMatch(/Batch pips · Scrap sorter \d\/5( |$)/);
+    expect(resting).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5( |$)/);
+    // The index inside the entry is the tile the renderer draws that machine on (CHRM-001),
+    // the same number the build phase prints in `Ghost on cell {tile}`.
+    expect(resting).toContain(`Scrap sorter #${store.getState().machines[0].tile} `);
     // A second machine separates: the same row names both, in yard order.
     act(() => findButton("Build Furnace")?.click());
     act(() => findButton("Build Furnace")?.click());
     act(() => store.step(300));
     expect(store.getState().machines.length).toBe(2);
     const both = document.querySelector(".objective")?.textContent ?? "";
-    expect(both).toMatch(/Batch pips · Scrap sorter \d\/5 · Furnace \d\/5/);
+    expect(both).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5 · Furnace #\d+ \d\/5/);
+    const [first, second] = store.getState().machines;
+    expect(both).toContain(`Scrap sorter #${first.tile} `);
+    expect(both).toContain(`Furnace #${second.tile} `);
   });
 
   /** P-5: the credits chip survives its own charge down to zero. */
@@ -165,5 +171,119 @@ describe("PLAY-001 the resting screen", () => {
     );
     expect(chips.some((line) => /^Credits0$/.test(line))).toBe(true);
     expect(store.getState().credits).toBe(0);
+  });
+
+  /**
+   * TST-001 (QA D-3): the shortfall is not only a 1.8 s toast. The same sentence rides on
+   * as a trailing segment of a `.status-line`, so 2 s after the refused tap the number is
+   * still painted and no panel had to be opened.
+   */
+  it("TST-001 the shortfall outlives the toast window as a trailing segment", () => {
+    vi.useFakeTimers();
+    try {
+      const store = createStore({ storage: memoryStorage(), now: () => 10 });
+      mount(store);
+      repairTheDrone(store);
+      act(() => store.step(262));
+      act(() => findButton("Build Scrap sorter")?.click());
+      act(() => findButton("Build Scrap sorter")?.click());
+      act(() => findButton("Connect dock to sorter")?.click());
+      act(() => store.step(400));
+      act(() => findButton("Build Furnace")?.click());
+      act(() => findButton("Build Furnace")?.click());
+      act(() => store.step(300));
+      expect(store.getState().machines.length).toBe(2);
+      // The yard ladder, not the tutorial script: this is the frame a player rests in.
+      store.getState().tutorial = 9;
+
+      // The acceptance frame: two machines on the yard, no panel open.
+      const statusLines = () =>
+        [...document.querySelectorAll<HTMLElement>(".status-line")].map((node) => node.textContent ?? "");
+      const linesBefore = statusLines().length;
+      expect(linesBefore).toBeGreaterThan(0);
+
+      // Refuse one priced tap: empty the purse and the store, so the next priced step is
+      // blocked. The loop walks the ladder until a *shortfall* reject is on screen (an
+      // earlier tap can be refused for another reason, e.g. the cutting-pulse cooldown).
+      let toast: string | null = null;
+      for (let tap = 0; tap < 24 && toast === null; tap += 1) {
+        const state = store.getState();
+        state.credits = 0;
+        state.store = {};
+        state.storeUnits = 0;
+        act(() => document.querySelector<HTMLElement>(".dock__btn--primary")?.click());
+        const text = document.querySelector(".toast")?.textContent ?? null;
+        if (text !== null && /^Need \d+ \w+ · have \d+$/.test(text)) toast = text;
+      }
+      if (toast === null) throw new Error("no shortfall reject in twenty-four primary taps");
+
+      // Same instant: the toast and the resting line carry the identical sentence, the
+      // line's copy continuing its own sentence with a lowercase first letter.
+      const trailing = `Last ${toast.charAt(0).toLowerCase()}${toast.slice(1)}`;
+      expect(statusLines().some((line) => line.includes(trailing))).toBe(true);
+      expect(statusLines()).toHaveLength(linesBefore);
+
+      // 2.2 s later the toast is gone and the number is still on the screen.
+      act(() => vi.advanceTimersByTime(2200));
+      expect(document.querySelector(".toast")).toBeNull();
+      const settled = statusLines();
+      expect(settled).toHaveLength(linesBefore);
+      const carried = settled.find((line) => line.includes(trailing)) ?? "";
+      expect(carried.length).toBeGreaterThan(0);
+      // Both figures of the shortfall survived, not just the word "Last".
+      for (const digits of toast.match(/\d+/g) ?? []) expect(carried).toContain(digits);
+      expect(carried).toMatch(/Last need \d+ \w+ · have \d+$/);
+      // The literal line at this frame: the copper separator's 25-scrap price, one drone,
+      // one running batch. Written out so a rewording cannot pass by accident.
+      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 25 scrap · have 0");
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  /**
+   * CHRM-001 (QA D-2/D-4): the legend names at most two machines, each with the tile it is
+   * drawn on, and counts the rest in one `+n`. Two machines of one blueprint therefore read
+   * apart, and the line keeps its two wrapped boxes at 360 × 640 text scale 2.0.
+   */
+  it("CHRM-001 the pip legend caps at two tile-indexed entries plus a +n tail", () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    repairTheDrone(store);
+    act(() => store.step(262));
+    act(() => findButton("Build Scrap sorter")?.click());
+    act(() => findButton("Build Scrap sorter")?.click());
+    expect(store.getState().machines.length).toBe(1);
+    // Three more machines through the door: the 2nd and 4th share the 1st's blueprint.
+    const state = store.getState();
+    state.store["scrap"] = 300;
+    state.store["nonferrous"] = 20;
+    state.storeUnits += 320;
+    for (const [id, blueprint, tile] of [
+      ["p1", "sorter", 9],
+      ["p2", "polymerRecycler", 10],
+      ["p3", "sorter", 11],
+    ] as const) {
+      act(() => store.dispatch({ id, type: "machine.build", blueprint, tile }));
+    }
+    act(() => store.step(20));
+    expect(store.getState().machines.length).toBe(4);
+
+    const legend =
+      [...document.querySelectorAll<HTMLElement>(".status-line")]
+        .map((node) => node.textContent ?? "")
+        .find((text) => text.startsWith("Batch pips")) ?? "";
+    expect(legend.startsWith("Batch pips · ")).toBe(true);
+    // At most two entries, each with its tile index inside it.
+    const entries = legend.match(/[A-Za-z][A-Za-z ]*#\d+ \d\/5/g) ?? [];
+    expect(entries).toHaveLength(2);
+    // Duplicate blueprints are separable: same label, two tiles (8 and 9), no repeated text.
+    expect(entries[0]).toBe(`Scrap sorter #${store.getState().machines[0].tile} 0/5`);
+    expect(entries[1]).toBe(`Scrap sorter #${store.getState().machines[1].tile} 0/5`);
+    expect(new Set(entries).size).toBe(2);
+    // The unnamed remainder is counted, not dropped: 4 machines - 2 named = +2.
+    expect(legend.endsWith(" +2")).toBe(true);
+    expect(legend.match(/\d\/5/g)).toHaveLength(2);
+    expect(legend).not.toContain("Polymer");
   });
 });

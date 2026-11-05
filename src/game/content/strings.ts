@@ -43,8 +43,9 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "btn.connect": "Connect",
   "btn.upgrade": "Upgrade",
   "btn.upgradeCost": "Upgrade · {cost}",
+  // PLAY-002 1: two named outcomes on the dock. `btn.branchBuffer` ("More input") went
+  // with the dropped branch; `upgradeRanks` still decodes its saved name.
   "btn.branchSpeed": "Faster batches",
-  "btn.branchBuffer": "More input",
   "btn.branchDraw": "Less power",
   "btn.takeOver": "Take over",
   "btn.copy": "Copy",
@@ -91,6 +92,10 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "hud.pips": "{what} pips · {detail}",
   // PLAY-001 P-1: the same blocked tap, now with its own shortfall.
   "reject.shortfall": "Need {need} {word} · have {have}",
+  // PLAY-002 2 (TST-001): the same sentence again on the resting line, prefixed with
+  // "Last" and nothing else - `{detail}` is the toast's own string, so one shortfall
+  // exists in one place and the two surfaces cannot drift.
+  "hud.lastShortfall": "Last {detail}",
   // PLAY-001 P-3: the phase detail of the one committed choice, so the dock's primary
   // label can stay the same words while the ghost waits for its second tap.
   "phase.ghost": "Ghost on cell {tile} · tap again to place",

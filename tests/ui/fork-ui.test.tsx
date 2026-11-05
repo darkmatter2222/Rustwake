@@ -7,6 +7,7 @@ import { createStore, type GameStore } from "../../src/app/store";
 import { TUNING } from "../../src/game/content/defs";
 import { nextYardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
+import { branchOptions } from "../../src/ui/text";
 
 /**
  * STRAT-002/A1 surfaces: the fork on the dock (A1-3), the power budget on the resting
@@ -89,7 +90,7 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     document.head.appendChild(style);
   });
 
-  it("shows three named outcomes at one price and commits on one tap (A1-3)", () => {
+  it("shows two named outcomes at one price and commits on one tap (A1-3, PLAY-002 1)", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     boot(store);
@@ -100,12 +101,21 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     expect(card).toContain("Choose what improves on the Scrap sorter");
     expect(card).toContain("30 credits");
 
+    // The drop executed (STRAT-002 g3 / A1-2v3): `buffer` leads no column under either
+    // gap ladder, so the dock carries two names, in this order, at one shared price.
+    const machineId = store.getState().machines[0].id;
+    expect(branchOptions(store.getState(), machineId).map((option) => option.id)).toEqual([
+      "speed",
+      "draw",
+    ]);
+
     const buttons = [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")];
     const labels = buttons.map((node) => (node.textContent ?? "").trim());
-    expect(labels.length).toBe(3);
-    expect(labels.join("|")).toContain("Faster batches");
-    expect(labels.join("|")).toContain("More input");
-    expect(labels.join("|")).toContain("Less power");
+    expect(labels.length).toBe(2);
+    // Order, not just membership: the first face is the batch clock, the last the budget.
+    expect(labels[0]).toMatch(/^Faster batches30 credits$/);
+    expect(labels[1]).toMatch(/^Less power30 credits$/);
+    expect(labels.join("|")).not.toContain("More input");
     // Every branch carries the same price on its own face: no hidden default.
     for (const button of buttons) {
       expect(button.querySelector(".dock__cost")?.textContent).toBe("30 credits");
@@ -113,12 +123,12 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     }
 
     // One tap, no Build-then-Place pair: the chosen name is the recorded branch.
-    act(() => findButton("More input")?.click());
-    expect(store.getState().machines[0].branch).toEqual(["buffer"]);
+    act(() => findButton("Less power")?.click());
+    expect(store.getState().machines[0].branch).toEqual(["draw"]);
     expect(store.getState().machines[0].level).toBe(2);
     expect(store.getState().credits).toBe(4);
     // The row is back to its usual targets once the level is bought.
-    expect([...document.querySelectorAll(".dock .dock__btn")].length).toBeGreaterThan(3);
+    expect([...document.querySelectorAll(".dock .dock__btn")].length).toBeGreaterThan(2);
   });
 
   it("names the power budget on the resting screen at text scale 1 and 2 (A1-4)", () => {

@@ -595,6 +595,20 @@ body {
   color: var(--steel-light);
 }
 
+/* PLAY-002 2/3: at a large text scale the three secondary lines are numeric readouts, not
+   prose, so they take the tighter leading the non-interactive chips already use (see
+   `.text-large .resources__item`). Measured at 360 × 640 text scale 2.0, 2 machines, after
+   one blocked tap: the card is 264.6 px = **41.3 %** of the 640 px `.hud` content box with
+   these three declarations, against 316.4 px = 49.4 % without them, and every line keeps
+   `scrollHeight == clientHeight` (no clipping). 41.3 % is the binding cell; the other three
+   are 16.4 / 12.4 / 31.4 %. One step down in size is what buys the band back after the
+   73-character shortfall segment joins the power line at its third wrapped box. */
+.text-large .status-line {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  margin-top: 0;
+}
+
 /* A phone turned sideways has ~390 px of height and three HUD rows cost 140 px of it,
    so the short viewport spends its generous width instead: the secondary hint line
    steps back (spec 6.4) and the card and dock take narrower columns. The dock cap is
