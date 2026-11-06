@@ -38,15 +38,45 @@ export async function setup(ctx, statusRpc) {
   name:'rustwake-team',description:'Bind or stop the Rustwake coordinator guard: start | bind | stop | status',
   execute:async input=>{
    const action=input.prompt.text.trim();
-   if(action==='bind'||action==='start'){
-    const info=await ctx.session.get({sessionID:input.sessionID});
-    if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
-    if(coordinator&&coordinator!==input.sessionID)throw new Error('Guard bound elsewhere; stop it first');
-    coordinator=input.sessionID;stopping=false;
-    if(action==='start'){if(!ctx.session.create||!ctx.session.prompt||!ctx.event?.subscribe)throw Error('OpenCode session/event API unavailable; no worker launch claimed');try{await dispatcher.start(coordinator);}catch(error){await dispatcher.recordError(error.message);await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:'RUSTWAKE START BLOCKED: '+error.message+'\nDo not delete dispatcher.json or relaunch duplicate workers. Run /rustwake-team status and preserve the error text.'});return;}}
-   } else if(action==='stop') { if(coordinator&&coordinator!==input.sessionID)throw new Error('Only bound coordinator may stop guard');await dispatcher.stop();stopping=true;coordinator=null; }
-   else if(action!=='status')throw new Error('Use start, bind, stop or status');
-   await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
+   const prior={coordinator,stopping};
+   let phase='validate-command';
+   try{
+    if(action==='bind'||action==='start'){
+     phase='read-coordinator-session';
+     const info=await ctx.session.get({sessionID:input.sessionID});
+     if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
+     if(coordinator&&coordinator!==input.sessionID){
+      const current=await dispatcher.status();
+      const unresolved=current.workers.some(w=>!['succeeded','failed','interrupted'].includes(w.status));
+      if(unresolved)throw new Error('Guard owns unresolved workers under '+coordinator+'; inspect /rustwake-team status before transfer');
+     }
+     if(action==='start'){
+      phase='start-dispatcher';
+      if(!ctx.session.create||!ctx.session.prompt||!ctx.event?.subscribe)throw Error('OpenCode session/event API unavailable');
+      await dispatcher.start(input.sessionID);
+     }
+     // Bind only after setup has completed. Failed setup must not capture a new UI session.
+     coordinator=input.sessionID;stopping=false;
+    }else if(action==='stop'){
+     if(coordinator&&coordinator!==input.sessionID)throw Error('Only bound coordinator may stop guard: '+coordinator);
+     phase='stop-dispatcher';await dispatcher.stop();stopping=true;coordinator=null;
+    }else if(action!=='status')throw Error('Use start, bind, stop or status');
+    phase='render-command-result';
+    await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
+   }catch(error){
+    const message=String(error?.message??error);
+    const current=await dispatcher.status();
+    // Preserve an actually started team's ownership even if rendering its command result failed.
+    if(!current.enabled||current.coordinator!==input.sessionID){coordinator=prior.coordinator;stopping=prior.stopping;}
+    const diagnostic={at:new Date().toISOString(),action,phase,session_id:input.sessionID,
+      error_name:error?.name??'Error',message,cause:error?.cause?.message??null,
+      dispatcher_coordinator:current.coordinator,enabled:current.enabled,
+      workers:current.workers.map(w=>({id:w.id,session_id:w.session_id,status:w.status}))};
+    await fs.mkdir(path.join(root,'.rustwake-runtime'),{recursive:true});
+    await fs.writeFile(path.join(root,'.rustwake-runtime','last-command-error.json'),JSON.stringify(diagnostic,null,2)+'\n');
+    await dispatcher.recordError(phase+': '+message);
+    throw new Error('Rustwake '+phase+': '+message+'. Details saved in .rustwake-runtime/last-command-error.json');
+   }
   }
  })));
  registrations.push(await ctx.session.hook('context',async e=>{
@@ -61,6 +91,7 @@ export async function setup(ctx, statusRpc) {
  }));
  return async()=>{dispatcher.close();eventsAbort.abort();stopping=true;coordinator=null;await Promise.allSettled(registrations.map(r=>r.dispose()));};
 }
+
 
 
 
