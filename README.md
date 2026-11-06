@@ -4,6 +4,10 @@ A mobile browser strategy-idle game about salvage, metals and automation. Built 
 
 **[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
 
+## Team execution update
+
+The prior plugin was advisory and could report progress without launching workers. **Version 0.3 adds executable dispatch.** Update/reinstall the local plugin, restart OpenCode, select rustwake-coordinator, and use `/rustwake-team start` before `/goal forever goal.md`. Binding alone is insufficient. [Exact startup and recovery instructions](docs/TEAM_DISPATCH.md). The sidebar shows actual child IDs, queued/running state and errors. Runtime validation on your machine is still required; repository tests do not prove live worker execution.
+
 ## Automatic deployment is enabled
 
 Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.

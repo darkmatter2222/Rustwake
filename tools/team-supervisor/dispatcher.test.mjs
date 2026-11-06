@@ -1,0 +1,40 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import {createDispatcher,validateTask} from './dispatcher.mjs';
+async function fixture(t){
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'rw-dispatch-'));const infos=new Map();let calls=0,fail=false;
+ const ctx={session:{get:async({sessionID})=>sessionID==='parent'?{model:{id:'test',providerID:'local'}}:infos.get(sessionID),create:async input=>{const id='child'+(++calls);infos.set(id,{id,time:{}});return {id};},prompt:async()=>{if(fail)throw Error('provider unavailable');return {};},synthetic:async()=>{},interrupt:async({sessionID})=>{infos.set(sessionID,{outcome:'interrupted',time:{idle:Date.now()}});}}};
+ const d=createDispatcher(ctx,root);t.after(async()=>{d.close();await fs.rm(root,{recursive:true,force:true});});
+ return {root,ctx,d,infos,calls:()=>calls,fail:()=>fail=true};
+}
+test('start submits three real session prompts, never a fourth; completion refills',async t=>{
+ const f=await fixture(t);await f.d.start('parent');assert.equal(f.calls(),3);
+ const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');const q=JSON.parse(await fs.readFile(file));
+ q.tasks.push({id:'next',role:'developer',prompt:'Implement scoped change',write_paths:['src/new']});await fs.writeFile(file,JSON.stringify(q));
+ await f.d.tick();assert.equal(f.calls(),3);
+ f.infos.set('child1',{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),4);
+ assert.equal((await f.d.status()).workers.filter(w=>w.status==='queued').length,3);
+});
+test('restart adopts recorded sessions without duplicate launches',async t=>{
+ const f=await fixture(t);await f.d.start('parent');f.d.close();const next=createDispatcher(f.ctx,f.root);t.after(()=>next.close());
+ await next.start('parent');assert.equal(f.calls(),3);
+ await assert.rejects(next.start('different'),/Previous coordinator/);
+});
+test('uncertain prompt failure remains visible and reserves its slot',async t=>{
+ const f=await fixture(t);f.fail();await f.d.start('parent');assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/provider unavailable/);
+ await f.d.tick();assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/uncertain/);
+});
+test('stop interrupts known workers and stops dispatch',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await f.d.stop();await f.d.tick();assert.equal(f.calls(),3);assert.equal((await f.d.status()).enabled,false);
+ assert.equal(f.infos.get('child1').outcome,'interrupted');
+});
+test('execution status requires a host event',async t=>{
+ const f=await fixture(t);await f.d.start('parent');assert.equal((await f.d.status()).workers[0].status,'queued');
+ f.d.event({type:'session.execution.started',data:{sessionID:'child1'}});assert.equal((await f.d.status()).workers[0].status,'running');
+});
+test('unsafe/ambiguous write paths rejected',()=>{
+ for(const p of ['../x','/etc','src/*','src\\x'])assert.throws(()=>validateTask({id:'x',role:'developer',prompt:'x',write_paths:[p]}));
+});

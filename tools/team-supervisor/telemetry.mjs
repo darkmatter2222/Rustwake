@@ -14,6 +14,18 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  const tools=Array.isArray(s.guarded_wait_tools)?s.guarded_wait_tools:[];
  lines.push(`Wait guard: ${tools.length?'mapped ('+tools.length+')':'not configured'}`);
  if(bound&&!here){lines.push('Open the bound coordinator for telemetry.');return lines.join('\n');}
+ const d=s.dispatcher;
+ if(d?.enabled){
+  lines.push('Dispatcher: ON · host session API');
+  lines.push('Checked: '+label(age(d.checked_at,now)));
+  const workers=(d.workers??[]).filter(w=>!['succeeded','failed','interrupted'].includes(w.status));
+  lines.push(`Reserved slots: ${workers.length}/3`);
+  for(const w of workers)lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);
+  if(d.error)lines.push('BLOCKED: '+clean(d.error,200));
+  lines.push('Queued is not running; running requires a host execution event.');
+  return lines.join('\n');
+ }
+ lines.push('Dispatcher: OFF · /rustwake-team start');
  const o=s.observation;
  const seconds=age(o?.observed_at,now);
  const scoped=here&&o?.coordinator_session_id===sessionID;
@@ -36,3 +48,4 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+

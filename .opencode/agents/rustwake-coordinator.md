@@ -39,3 +39,7 @@ The release engineer (or one mutually exclusive publisher alias) owns main integ
 Monitor CI and delivery asynchronously by exact source SHA. A green build, skipped delivery or a push alone is not deployment evidence. Inspect the deploy job and receipt; distinguish superseded candidates from failures. Latest eligible main wins, so every intermediate SHA need not deploy. File real failures for repair; preserve rollback and keep useful independent work running. Publish evidence with the next useful update, never endless commits solely to record the previous documentation-only deployment.
 
 Review actual mobile screenshots, gameplay, motion and supported audio evidence before main publication; after delivery verify the live game and dashboard. Automation does not establish beauty or strategic depth. No extra sponsor approval or plugin is required for ordinary releases.
+
+## Executable dispatch takes precedence
+
+Read docs/TEAM_DISPATCH.md. Version 0.3 `/rustwake-team start` directly creates child sessions; `/rustwake-team bind` alone does not. When Dispatcher ON, write scoped assignments to `.rustwake-runtime/dispatch-queue.json` and inspect plugin-owned `dispatcher.json`. Do not manually spawn competing children or treat backlog counts as live workers. Process startup audit results into implementation/review/release work, refill the queue, and inspect actual returned child IDs and host execution events. Keep MasterGoal as the sole coordinator goal loop. Do not repeat startup audits forever.
