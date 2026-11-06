@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "SPONSOR-20261106141155404-3e33b40b",
+  "status": "incorporated",
+  "captured_at": "2026-11-06T14:11:55.404Z",
+  "source": "SPONSOR_INBOX.md",
+  "request": "\r\nPlease make sure we are making feature branches, merging on mina via github.",
+  "request_sha256": "96a729ec2c2fb6e29c7d5945b35532c68dbaee10c8e68e98ef0fb1468a0b96f5",
+  "inbox_sha256": "82e44342581d2993e3cc6e4997619e2116c12d5073c6636da07081f65f6fba6c",
+  "ticket_ids": [
+    "OPS-101",
+    "OPS-103",
+    "BLD-001"
+  ],
+  "decision": "work/product/SPONSOR-20261106141155404-3e33b40b-decision-g1.md",
+  "decision_sha256": "f69dee72fb6d68bedee14578b57465c8bc695a350e218d15e8cc8fb09f1459e0",
+  "backlog_sha256": "ab089b33144856bac2823b4ba30e490c068462e6e9cff04d5769bd9641728713",
+  "prepared_at": "2026-11-06T16:18:21.516Z",
+  "inbox_before_sha256": "82e44342581d2993e3cc6e4997619e2116c12d5073c6636da07081f65f6fba6c",
+  "inbox_after_sha256": "7acdf43c56618fc427513eef3c195e4ac80b06ccaae14fbeca7f50c79b9c8e32",
+  "remaining_text": "",
+  "incorporated_at": "2026-11-06T16:18:21.519Z"
+}

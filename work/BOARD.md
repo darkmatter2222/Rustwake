@@ -3,7 +3,7 @@
 Generated from `work/backlog.json`; do not edit this view manually. This is a published snapshot, not proof of live sessions.
 
 **SPRINT-002: I choose a plan; my yard comes alive** — proposed
-Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-05T23:26:30+00:00.
+Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-06T16:18:21+00:00.
 
 [Visual board](board.html) · [Canonical JSON](backlog.json) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
 
@@ -32,26 +32,30 @@ Session cap: **6 total including coordinator**. Runtime: **observation-required*
 | RELEASE-005 | P1 | measured | release-engineer | Publish and deploy the priced-fork slice plus its persona A/B |
 | CHRM-002 | P2 | measured | developer | Bring the deepest resting cell inside the 42 % chrome cap with one leading value |
 | D-1 | P2 | triaged | developer | Card still exceeds the cap in the deepest real cell (44.6 % with one blocked tap) |
-| BLD-001 | P1 | triaged | developer | Blind tapping parks on the fork row because the leftmost face is the dearer plan |
+| BLD-001 | P1 | measured | developer | Blind tapping parks on the fork row because the leftmost face is the dearer plan |
 | RELEASE-006 | P1 | measured | release-engineer | Publish and deploy the css-only chrome-cap slice |
+| RELEASE-007 | P1 | measured | release-engineer | Integrate and automatically deliver the cheapest-first dock fork row |
 | OPS-101 | P1 | ready | developer | Activate work-conserving dispatch and real session telemetry |
 | OPS-102 | P1 | ready | release-engineer | Activate automatic delivery and sanitized live team dashboard |
 | OPS-103 | P1 | ready | product-owner | Incorporate sponsor priorities and maintain an estimated parallel-ready queue |
 | ART-002 | P1 | triaged | reviewer | Critique actual current scenes against a stunning game standard |
+| DEF-007 | P3 | triaged | developer | team-board --check reports the generated views stale on a CRLF working copy while CI passes the same step |
+| UI-002 | P2 | triaged | ui-ux | Name the shared power budget at rest, not only after a refusal |
+| UI-003 | P3 | triaged | reviewer | Close the missing UI capture set: rest-state yard coverage, mature-cell boxes, phone interaction series |
 
 ## Team efficiency (last 24 hours)
 
-Published tickets: **17** · Deployed tickets: **16** · Prospectively estimated points published: **unknown**
-Median implementation-to-publication: **2 h** · Tickets returned to rework: **0**
+Published tickets: **8** · Deployed tickets: **8** · Prospectively estimated points published: **unknown**
+Median implementation-to-publication: **2.7 h** · Tickets returned to rework: **0**
 Observed child-slot utilization: **unknown** over 0 min sampled (0% window coverage). Runtime telemetry: **unknown / stale**.
-17 published ticket(s) have no valid pre-work estimate; no retrospective points are fabricated.
+8 published ticket(s) have no valid pre-work estimate; no retrospective points are fabricated.
 Published and deployed counts are distinct ticket transitions, not commits. Points count once at first publication only if estimated before implementation. Zero-duration/backfilled lifecycle pairs are excluded from cycle time. Utilization excludes unsampled gaps; no data is unknown.
 
 ## Release evidence
 
-Last inspected source: `5a024beb625adfe583d42c656bec6cbc06f5bbbd`.
-Last evidenced deployed source: `d7af68a1df31d6b0cb5e313330f7cb5853d74a32`.
-[Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/deployments/OPS-013-g1.json)
-served == built 5/5 sha256 over HTTPS and loopback; the served HTML names assets/index-DGy53fNu.js (231878 B, entry digest equal to the previously served index-Cmh4A1Sb.js) and assets/index-9FriNULu.css (7474 B, one byte differs from index-mmTSZ7Fz.css); the live smoke prints two priced faces at two prices with a 46 px minimum face, one tap on the cheapest face charging exactly 30, the resting fleet/power line, card 261.4 px = 40.8 % of the 640 px hud box at 360x640 text scale 2.0, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified
+Last inspected source: `12cc0e242bc2038be26ef7334ec1a945c3155181`.
+Last evidenced deployed source: `12cc0e242bc2038be26ef7334ec1a945c3155181`.
+[Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/releases/REL-007-g1.md)
+automatic Actions delivery for the pushed main SHA: ci run 42231570081 (run 89, push event) completed success 14:10:33-14:11:14Z with all 15 steps green including "node scripts/team-board.mjs --check"; the delivery run 42231679008 (run 19, workflow_run event) completed success 14:11:17-14:11:45Z, its packaging job 127938856751 building the immutable source and dashboard and its promotion job 127938993734 reporting "Validate and promote through host-owned adapter" and "Publish sanitized receipt" success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-CUnHr3Cs.js and all four hashed assets are sha256-equal to the local build of 12cc0e2 (entry 231943 B e369fe9bfe90913d..., css 7474 B d3a995b2c520590a..., tables 9298 B 28bed3b02f2f79cb..., worker 13406 B 0c784f3e68570923...); the previous entry index-DGy53fNu.js still serves 200 at 231878 B, so old clients keep their assets. Served index.html is 28 B shorter than the local file because the working copy is CRLF (core.autocrlf=true, 28 CR in 30 LF).
 
 Every role can submit feedback. Product owns priority; PM owns scheduling; release engineer publishes. Acceptance, publication, deployment and measured outcomes remain distinct.

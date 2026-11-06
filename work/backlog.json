@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-05T23:26:30+00:00",
+  "updated_at": "2026-11-06T16:18:21+00:00",
   "max_active_sessions": 6,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "5a024beb625adfe583d42c656bec6cbc06f5bbbd",
-    "deployed_sha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "inspected_head": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+    "deployed_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/deployments/OPS-013-g1.json",
-    "verification": "served == built 5/5 sha256 over HTTPS and loopback; the served HTML names assets/index-DGy53fNu.js (231878 B, entry digest equal to the previously served index-Cmh4A1Sb.js) and assets/index-9FriNULu.css (7474 B, one byte differs from index-mmTSZ7Fz.css); the live smoke prints two priced faces at two prices with a 46 px minimum face, one tap on the cheapest face charging exactly 30, the resting fleet/power line, card 261.4 px = 40.8 % of the 640 px hud box at 360x640 text scale 2.0, scrollHeight equal to innerHeight, 0 pageerror and 0 /favicon.ico requests; remote CI is remote-CI-unverified"
+    "receipt": "work/releases/REL-007-g1.md",
+    "verification": "automatic Actions delivery for the pushed main SHA: ci run 42231570081 (run 89, push event) completed success 14:10:33-14:11:14Z with all 15 steps green including \"node scripts/team-board.mjs --check\"; the delivery run 42231679008 (run 19, workflow_run event) completed success 14:11:17-14:11:45Z, its packaging job 127938856751 building the immutable source and dashboard and its promotion job 127938993734 reporting \"Validate and promote through host-owned adapter\" and \"Publish sanitized receipt\" success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-CUnHr3Cs.js and all four hashed assets are sha256-equal to the local build of 12cc0e2 (entry 231943 B e369fe9bfe90913d..., css 7474 B d3a995b2c520590a..., tables 9298 B 28bed3b02f2f79cb..., worker 13406 B 0c784f3e68570923...); the previous entry index-DGy53fNu.js still serves 200 at 231878 B, so old clients keep their assets. Served index.html is 28 B shorter than the local file because the working copy is CRLF (core.autocrlf=true, 28 CR in 30 LF)."
   },
   "runtime": {
     "status": "observation-required",
@@ -357,7 +357,7 @@
         "A1-1": "MET - both/all costed options visible on one screen before either is chosen; harness >= 2 affordable 121 of 1800 against the 120 target (that 120 applies to the unnamed/speed row; buffer 101, draw 107)",
         "A1-2": "NOT MET as recorded - under the four listed acceptance metrics (batches, starved %, min power ratio, taps-to-next-milestone) the buffer branch leads none: 2175/1158/1191 batches, starved max 80/84/85, minPower 0.615/0.727/1.0, taps 1983/2046/2045. Its only unique lead (residual credits 190 vs 49/49) is not one of the four. Recorded as a metric-set defect, not a mechanism failure.",
         "A1-3": "MET on the distinctness that is measurable: two distinguishable plans plus one documented by-construction twin (speed equals the unnamed row on every scalar and all six kinds counters); no plan is weakly dominated on the primary columns the harness does score",
-        "A1-4": "MET - power named on the resting screen without opening a panel: 'Power 8 \u00b7 0 requested \u00b7 100 %' (seeded) and 'Power 8 \u00b7 1 requested \u00b7 100 %' (organic) at 390x844 and 360x640; the 24daf0e base shows no power line at the same seeds",
+        "A1-4": "MET - power named on the resting screen without opening a panel: 'Power 8 · 0 requested · 100 %' (seeded) and 'Power 8 · 1 requested · 100 %' (organic) at 390x844 and 360x640; the 24daf0e base shows no power line at the same seeds",
         "A1-5": "MET - save/offline catch-up and respec regression green on the v1 fixture (schemaVersion 1, checksum eede3c4f, byte-for-byte re-encode asserted in tests/simulation/fork.test.ts)",
         "A1-6": "MET - independent QA reproduced the three-policy census byte-identically (same SHA256 across two runs, equal to the committed harness JSON) and the product owner returned a keep/revise/revert decision with switch conditions",
         "A1-2v2": "executed at g2 and scored by machine in tests/simulation/fork.test.ts: under irregular supply buffer owns exactly one column, creditsPer1000Batches 12798.276 vs draw 12775.819 (absolute 22.457, relative 0.18 %), while starvedMax 84 vs 79 and starvedMean 57 vs 50 still favour speed and draw keeps powerLimitedRounds 0 - so the named-only leads are speed on the throughput/tap columns, draw on the two power columns, buffer on the ratio only",
@@ -1137,7 +1137,7 @@
           "actor": "release-engineer",
           "from_state": "published",
           "to_state": "deployed",
-          "reason": "served as the labelled preview rustwake-8a06e9d; the three strings re-read in a real browser on the live route - 'Need 20 scrap \u00b7 have 0', 'Drones 1 \u00b7 Power 8 \u00b7 0 requested \u00b7 100 %' at machines 0, and the three priced fork options (OPS-010-g1)"
+          "reason": "served as the labelled preview rustwake-8a06e9d; the three strings re-read in a real browser on the live route - 'Need 20 scrap · have 0', 'Drones 1 · Power 8 · 0 requested · 100 %' at machines 0, and the three priced fork options (OPS-010-g1)"
         },
         {
           "at": "2026-11-05T13:47:00+00:00",
@@ -1355,7 +1355,7 @@
       "review_verdict": "accept",
       "published_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
       "deployed_sha": "0c03572fa654388b52e023f72f4c47037a3aa42e",
-      "outcome": "The two dock faces now print two numbers: Faster batches 40 credits and Less power 30 credits at the first rank of a base-30 ladder (50 and 40 on the furnace rank 1), and one tap charges exactly the number the tapped face printed (purse 30: the 30 face takes it to 0 and records branch [draw] at level 2; the 40 face is refused with toast \"Need 40 credits \u00b7 have 30\" and no state change). The unnamed ladder still pays the plain price, so the behaviour line, schemaVersion 1 and the eede3c4f fixture checksum are unmoved. The persona A/B counts: the priced arm satisfies all three sentences (two named plans at two prices; the paid amount names the plan; an in-between purse is refused with a numbered shortfall) while the equal-price control fails sentence (2) - both its plans print 30 and both charge 30, so the paid amount identifies nothing.",
+      "outcome": "The two dock faces now print two numbers: Faster batches 40 credits and Less power 30 credits at the first rank of a base-30 ladder (50 and 40 on the furnace rank 1), and one tap charges exactly the number the tapped face printed (purse 30: the 30 face takes it to 0 and records branch [draw] at level 2; the 40 face is refused with toast \"Need 40 credits · have 30\" and no state change). The unnamed ladder still pays the plain price, so the behaviour line, schemaVersion 1 and the eede3c4f fixture checksum are unmoved. The persona A/B counts: the priced arm satisfies all three sentences (two named plans at two prices; the paid amount names the plan; an in-between purse is refused with a numbered shortfall) while the equal-price control fails sentence (2) - both its plans print 30 and both charge 30, so the paid amount identifies nothing.",
       "history": [
         {
           "at": "2026-11-05T09:22:00+00:00",
@@ -1442,7 +1442,7 @@
       "review_verdict": "accept",
       "published_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
       "deployed_sha": "8a06e9debf7ff345681979cd6f731b24b2b5d581",
-      "outcome": "Integrated per-file into 8a06e9debf7ff345681979cd6f731b24b2b5d581 and pushed to main; deployed as the labelled preview rustwake-8a06e9d on stack 125 with a one-line bind change. Measured: 268 tests / 27 files green, typecheck/validate/build exit 0, entry assets/index-CJfGk59d.js 231520 B inside the 233000 B ceiling with 1480 B spare and the same hash as the lane build, 5/5 served sha256 equal to the isolated SHA build over HTTPS and loopback, previous entry name 404, live smoke prints 'Need 20 scrap \u00b7 have 0', 'Drones 1 \u00b7 Power 8 \u00b7 0 requested \u00b7 100 %' at machines 0 and three priced fork options, unaffected routes unchanged, rollback resource rustwake-c2842e1 retained. Remote CI remains unreadable -> remote-CI-unverified.",
+      "outcome": "Integrated per-file into 8a06e9debf7ff345681979cd6f731b24b2b5d581 and pushed to main; deployed as the labelled preview rustwake-8a06e9d on stack 125 with a one-line bind change. Measured: 268 tests / 27 files green, typecheck/validate/build exit 0, entry assets/index-CJfGk59d.js 231520 B inside the 233000 B ceiling with 1480 B spare and the same hash as the lane build, 5/5 served sha256 equal to the isolated SHA build over HTTPS and loopback, previous entry name 404, live smoke prints 'Need 20 scrap · have 0', 'Drones 1 · Power 8 · 0 requested · 100 %' at machines 0 and three priced fork options, unaffected routes unchanged, rollback resource rustwake-c2842e1 retained. Remote CI remains unreadable -> remote-CI-unverified.",
       "history": [
         {
           "at": "2026-11-05T09:06:00+00:00",
@@ -2066,7 +2066,7 @@
       "type": "defect",
       "title": "Blind tapping parks on the fork row because the leftmost face is the dearer plan",
       "priority": "P1",
-      "status": "triaged",
+      "status": "measured",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -2089,14 +2089,17 @@
         "STRAT-003"
       ],
       "product_approved": true,
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "candidate_sha": "6b5cee4f4fcc1bfe9c9703a5ad1df18ed06c4949",
+      "review_verdict": "accept",
+      "published_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+      "deployed_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+      "outcome": "The fork row now paints cheapest-first: at the recorded 30-credit purse the dock line reads \"Less power 30 credits\" then \"Faster batches 40 credits\" (it was 40 then 30 at d7af68a), so the leftmost face is the affordable one and the blind-tap park is gone. Prices, plan ids and the committed branch are untouched (each face still prints its own branchPrice number) and the save envelope is unchanged (schemaVersion 1, checksum 0053982a, sha256 bf8141887d9793ca, 5049 B). Not re-measured by this lane: the four-cell browser harness scripts/measure-bld001.mjs did not complete, so acceptance line 3 (the four recorded card cells 16.7 / 40.8 / 10.6 / 31.0 %) still rests on CHRM-002 evidence rather than a fresh run, and the 31-leftmost-tap count itself was not re-typed in a browser this cycle.",
       "evidence": [
-        "work/review/CHRM-002-g1-qa.md item 6 (31 leftmost taps -> 0 commands landed, levelSum stuck at 4 and credits stuck at 30; the next phase's 5 taps on the 30-credit face land on the first tap)",
-        "work/deployments/OPS-013-g1.json live_smoke (the same two faces painted left-to-right as 40 then 30 on the deployed artifact, cheapest index 1)"
+        "work/review/CHRM-002-g1-qa.md item 6 (31 leftmost taps -> 0 commands landed, levelSum stuck at 4 and credits stuck at 30; the next phase’s 5 taps on the 30-credit face land on the first tap)",
+        "work/deployments/OPS-013-g1.json live_smoke (the same two faces painted left-to-right as 40 then 30 on the deployed artifact, cheapest index 1)",
+        "work/releases/REL-007-g1.md (this lane’s own gate re-run on the integrated tree 12cc0e2, the probe-save-bld001.mjs reproduction, the Actions ci/delivery run ids and the served-byte check)",
+        "tests/simulation/fork.test.ts \"paints the two plans cheapest-first at every rank of the ladder (BLD-001)\" and tests/ui/fork-ui.test.tsx (284 tests / 27 files exit 0 on the merged tree)",
+        "work/sponsor/intake/SPONSOR-20261106141155404-3e33b40b.json"
       ],
       "history": [
         {
@@ -2112,7 +2115,59 @@
           "from_state": "inbox",
           "to_state": "triaged",
           "reason": "accepted for the next slice as the cheapest-first dock ordering (one comparator in the paint order), because the purse covers the plain price but not the premium; must be re-measured with the priced-fork sentences so the A/B stays intact"
+        },
+        {
+          "at": "2026-11-06T00:56:28+00:00",
+          "actor": "developer",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "candidate 6b5cee4f4fcc1bfe9c9703a5ad1df18ed06c4949 committed on branch bld001-g1 (worktree polish001-dev): branchOptions sorts its two plans by their own price ascending, prices/ids/committed branch untouched, plus scripts/measure-bld001.mjs and scripts/probe-save-bld001.mjs"
+        },
+        {
+          "at": "2026-11-06T00:56:28+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "slice complete in its own worktree (src/ui/text.ts, tests/simulation/fork.test.ts, tests/ui/fork-ui.test.tsx and the two evidence scripts); the developer reports typecheck/test/validate/build all exit 0 there"
+        },
+        {
+          "at": "2026-11-06T00:56:28+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "submitted for integration against origin/main; no save-schema, price or branch-effect change claimed"
+        },
+        {
+          "at": "2026-11-06T13:52:30+00:00",
+          "actor": "release-engineer",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent re-run on the integrated tree 12cc0e242bc2038be26ef7334ec1a945c3155181, whose src/ and tests/ are byte-identical to the candidate: npm run typecheck exit 0, npx vitest run exit 0 (284 tests / 27 files), npm run validate exit 0 with the behaviour line verbatim (firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3), npm run build exit 0 with entry assets/index-CUnHr3Cs.js 231943 B inside the 233000 B ceiling; npx tsx scripts/probe-save-bld001.mjs exit 0 prints dock [\"draw\" 30 credits, \"speed\" 40 credits] with an unchanged save envelope. No separate QA-lane artifact exists for this candidate, so the acceptance evidence is this lane’s own re-run, labelled as such"
+        },
+        {
+          "at": "2026-11-06T14:10:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "one non-force push 887b5bc..12cc0e2 to origin/main, remote head read back as 12cc0e242bc2038be26ef7334ec1a945c3155181 by git ls-remote; ci run 42231570081 for that exact SHA completed success"
+        },
+        {
+          "at": "2026-11-06T14:11:45+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "delivery run 42231679008 for 12cc0e2 completed success (package job 127938856751, promote job 127938993734 with \"Validate and promote through host-owned adapter\" and \"Publish sanitized receipt\" both success)"
+        },
+        {
+          "at": "2026-11-06T15:30:12+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy check on the live route: the served index.html names ./assets/index-CUnHr3Cs.js and all four hashed assets are sha256-equal to this lane’s build of 12cc0e2; the probe prints the fork row as 30 then 40 at the recorded purse, which is the first acceptance line. The browser four-cell harness did not complete in this window (the base preview port was already taken), so acceptance line 3 stays on the earlier CHRM-002 evidence"
         }
+      ],
+      "sponsor_requests": [
+        "SPONSOR-20261106141155404-3e33b40b"
       ]
     },
     {
@@ -2210,6 +2265,107 @@
       ]
     },
     {
+      "id": "RELEASE-007",
+      "type": "delivery",
+      "title": "Integrate and automatically deliver the cheapest-first dock fork row",
+      "priority": "P1",
+      "status": "measured",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "The cheapest-first dock row and the sponsor intake acknowledgement existed only in a developer worktree and in this lane’s local commit, so the live route still served the 40-then-30 fork row where blind tapping parks.",
+      "hypothesis": "One cherry-pick of the accepted candidate onto main, one gate re-run on the merged tree, then one non-force push is enough: the repository’s own ci run gates it and the delivery run promotes it, and the served bytes are checked against the local build instead of being asserted.",
+      "scope": [
+        "main integration (cherry-pick 6b5cee4 -> 12cc0e242bc2038be26ef7334ec1a945c3155181)",
+        "work/releases/REL-007-g1.md",
+        "work/backlog.json plus generated board",
+        "README status line",
+        "sponsor intake receipt and inbox acknowledgement"
+      ],
+      "non_goals": [
+        "No manual server promotion, no Portainer/mount/DNS edit, no rerun of the commissioning steps",
+        "No force push and no second deployment for the doc-only follow-up commit",
+        "No engine, price or save change"
+      ],
+      "acceptance": [
+        "the integrated tree carries the candidate with src/ and tests/ byte-identical to it, and every other main path is untouched",
+        "the four gates are re-run on the merged tree with real exit codes and the asset byte counts printed (entry inside the 233000 B ceiling)",
+        "the push is a single non-force push whose remote head is read back, and the ci run for that exact SHA is read from the API rather than inferred from the push",
+        "the delivery run for the same SHA is read at job level and the served entry/asset digests are compared to the local build, so a green build is never reported as a deployment",
+        "README, backlog and the generated board show integrated and deployed revisions, and the sponsor acknowledgement travels with its receipt, decision, board and inbox removal in one publication"
+      ],
+      "dependencies": [
+        "BLD-001",
+        "CHRM-002"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "6b5cee4f4fcc1bfe9c9703a5ad1df18ed06c4949",
+      "published_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+      "deployed_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+      "outcome": "Integrated as 12cc0e242bc2038be26ef7334ec1a945c3155181 on top of 887b5bcb754a9296155a644906e70cd321060c29 (one cherry-pick of 6b5cee4f..., whose parent is d7af68a; src/ and tests/ blob-identical to the candidate), pushed once with no force and verified by ls-remote. Gate exit codes on the merged tree: typecheck 0, vitest 0 (284 tests / 27 files), validate 0 with the verbatim behaviour line, build 0 with entry assets/index-CUnHr3Cs.js 231943 B, css index-9FriNULu.css 7474 B, tables-BB2NPvQ2.js 9298 B, worker catchup.worker-G_Jyr7uh.js 13406 B, index.html 1262 B served. ci run 42231570081 success (15/15 steps), delivery run 42231679008 success (packaging + host-adapter promotion + sanitized receipt), and this lane’s own HTTPS re-read shows the served HTML naming the new entry with 4/4 asset sha256 equal to the local build while the previous entry still serves. Rollback stays the retained rustwake-d7af68a release plus the previous asset set.",
+      "evidence": [
+        "work/releases/REL-007-g1.md",
+        "work/deployments/OPS-013-g1.json",
+        "work/review/CHRM-002-g1-qa.md",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42231570081",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42231679008"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T15:30:12+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "REL-007-g1 opened with the accepted BLD-001 candidate 6b5cee4 as its only gameplay input, on top of inspected origin/main 887b5bcb754a9296155a644906e70cd321060c29"
+        },
+        {
+          "at": "2026-11-06T13:43:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "origin fetched (no divergence), sole release/deployment lease taken, then one cherry-pick produced 12cc0e242bc2038be26ef7334ec1a945c3155181 with no conflicts and a clean worktree"
+        },
+        {
+          "at": "2026-11-06T13:52:30+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "gates re-run on the merged tree: typecheck 0, 284 tests / 27 files, validate 0 with the unchanged behaviour line, build 0 with the entry at 231943 B; probe-save-bld001.mjs reproduces the cheapest-first row and an unchanged save envelope"
+        },
+        {
+          "at": "2026-11-06T14:10:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "the candidate adds no test file and moves the count 283 -> 284 inside the existing 27 files, the behaviour line is verbatim and the css/tables/worker asset names are unchanged, so nothing outside the one paint-order lever moved"
+        },
+        {
+          "at": "2026-11-06T14:10:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "single non-force push 887b5bc..12cc0e2; git ls-remote reads the remote head back as 12cc0e242bc2038be26ef7334ec1a945c3155181"
+        },
+        {
+          "at": "2026-11-06T14:11:45+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "delivery run 42231679008 for that exact SHA completed success: packaging job 127938856751 then the self-hosted job 127938993734 whose steps \"Validate and promote through host-owned adapter\" and \"Publish sanitized receipt\" both report success"
+        },
+        {
+          "at": "2026-11-06T15:30:12+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "measured over HTTPS: served index.html (200, 1262 B) names ./assets/index-CUnHr3Cs.js, all four hashed assets are sha256-equal to the local build of 12cc0e2, and the retained previous entry index-DGy53fNu.js still answers 200 at 231878 B; the harness four-cell pass did not complete this cycle and is recorded as unverified rather than passed"
+        }
+      ],
+      "sponsor_requests": [
+        "SPONSOR-20261106141155404-3e33b40b"
+      ]
+    },
+    {
       "id": "OPS-101",
       "type": "operations",
       "title": "Activate work-conserving dispatch and real session telemetry",
@@ -2235,7 +2391,8 @@
       "dependencies": [],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-003.md"
+        "work/feedback/OWNER-003.md",
+        "work/sponsor/intake/SPONSOR-20261106141155404-3e33b40b.json"
       ],
       "candidate_sha": null,
       "review_verdict": null,
@@ -2259,7 +2416,10 @@
         ],
         "ready_at": "2026-11-05T23:26:30+00:00",
         "role": "developer"
-      }
+      },
+      "sponsor_requests": [
+        "SPONSOR-20261106141155404-3e33b40b"
+      ]
     },
     {
       "id": "OPS-102",
@@ -2339,7 +2499,8 @@
       "dependencies": [],
       "product_approved": true,
       "evidence": [
-        "work/feedback/OWNER-003.md"
+        "work/feedback/OWNER-003.md",
+        "work/sponsor/intake/SPONSOR-20261106141155404-3e33b40b.json"
       ],
       "candidate_sha": null,
       "review_verdict": null,
@@ -2363,7 +2524,10 @@
         ],
         "ready_at": "2026-11-05T23:26:30+00:00",
         "role": "product-owner"
-      }
+      },
+      "sponsor_requests": [
+        "SPONSOR-20261106141155404-3e33b40b"
+      ]
     },
     {
       "id": "ART-002",
@@ -2413,6 +2577,165 @@
         "ready_at": "2026-11-05T23:26:30+00:00",
         "role": "reviewer"
       }
+    },
+    {
+      "id": "DEF-007",
+      "type": "defect",
+      "title": "team-board --check reports the generated views stale on a CRLF working copy while CI passes the same step",
+      "priority": "P3",
+      "status": "triaged",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "No player-visible effect: the local board check says \"Stale generated file: work/BOARD.md\" on an untouched checkout, so a release lane can waste a cycle chasing a red gate that the same commit passes on CI.",
+      "hypothesis": "The generator compares LF strings against files that the Windows checkout materialises with CRLF (core.autocrlf=true), so the comparison fails on line endings alone. Measured this cycle: work/BOARD.md carries 57 CR bytes, work/backlog.json 2422 CRLF pairs, while the identical CI step in run 42231570081 reports success; after one in-place regeneration by node scripts/team-board.mjs the local check returns exit 0.",
+      "scope": [
+        "scripts/team-board.mjs (comparison only)"
+      ],
+      "non_goals": [
+        "No change to the rendered board content or the metric definitions",
+        "No repository-wide line-ending policy change"
+      ],
+      "acceptance": [
+        "node scripts/team-board.mjs --check returns exit 0 on a freshly checked-out working copy with core.autocrlf=true, with no manual regeneration",
+        "a genuinely stale view is still detected (one byte of content difference must still return exit 1)",
+        "CI step 1 stays green on the same commit"
+      ],
+      "dependencies": [],
+      "product_approved": false,
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "evidence": [
+        "work/releases/REL-007-g1.md"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "observed in the shared main checkout at 12cc0e2: --check exit 1 for work/BOARD.md and work/board.html with an empty git diff for those paths, while CI run 42231570081 step \"node scripts/team-board.mjs --check\" is success and the local check returns exit 0 right after one regeneration"
+        },
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "named as a tooling defect with an exact reproduction and a 3-line acceptance; it blocks nothing because the generated views are committed and CI agrees"
+        }
+      ]
+    },
+    {
+      "id": "UI-002",
+      "type": "delivery",
+      "title": "Name the shared power budget at rest, not only after a refusal",
+      "priority": "P2",
+      "status": "triaged",
+      "owner": "ui-ux",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "At rest the card names only Scrap / Store / Sound / A / Home, so when a build is refused for want of power the player has no on-screen quantity to compare against and cannot tell a power ceiling from a stalled factory.",
+      "hypothesis": "One additional rest-state line that prints the requested/available power pair (the same pair the harness reports, e.g. \"Power 8 · 1 requested · 100 %\") closes criterion A1-4 without touching the coverage cap, because the rest footprint is only 11.2 % of the canvas.",
+      "scope": [
+        "src/ui/styles.css",
+        "src/ui/text.ts",
+        "work/evidence"
+      ],
+      "non_goals": [
+        "No new panel and no fourth dock face",
+        "No simulation or pricing change"
+      ],
+      "acceptance": [
+        "the resting card names the power quantity and its requested pair in one line at 360x640 text scale 2",
+        "card ratio stays <= 42 % in all four recorded cells and the objective-to-dock gap stays >= 8 px",
+        "smallest tap dimension stays >= 44 CSS px and scrollHeight == clientHeight at text scale 1 and 2"
+      ],
+      "dependencies": [
+        "UI-001"
+      ],
+      "product_approved": false,
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "evidence": [
+        "work/releases/REL-007-g1.md",
+        "work/review/CHRM-002-g1-qa.md"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "carried from the STRAT-002 criterion A1-4: the deployed artifact’s resting card names no power readout, so the constraint is invisible until a tap is refused"
+        },
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept as its own UI slice behind D-1 and UI-001; one line, no new panel"
+        }
+      ]
+    },
+    {
+      "id": "UI-003",
+      "type": "delivery",
+      "title": "Close the missing UI capture set: rest-state yard coverage, mature-cell boxes, phone interaction series",
+      "priority": "P3",
+      "status": "triaged",
+      "owner": "reviewer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "The published evidence still has holes a player feels as unexplained judgement: the rest-state coversYard number was never reproduced under one named denominator, the 360x640 mature separability boxes were never captured, and only one phone interaction series exists.",
+      "hypothesis": "Three captures under the canonical definition (intersection / drawn yard region, both rects printed) close the open rows without any code change, so the next visual verdict can compare against fixed numbers instead of re-measuring.",
+      "scope": [
+        "work/evidence",
+        "docs/screenshots"
+      ],
+      "non_goals": [
+        "No css change in this ticket",
+        "No renumbering of previously published rows"
+      ],
+      "acceptance": [
+        "rest-state yard coverage printed with both rects and the denominator named, at 360x640 and 390x844",
+        "the 360x640 mature cell prints its separability boxes with source SHA, viewport and seeded/organic label",
+        "three phone interaction series (fresh, resumed, mid-run return) each with its tap list and the label sequence"
+      ],
+      "dependencies": [
+        "UI-001"
+      ],
+      "product_approved": false,
+      "candidate_sha": null,
+      "review_verdict": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "evidence": [
+        "work/evidence/UI-001-census-g1.md",
+        "work/releases/REL-007-g1.md"
+      ],
+      "history": [
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "the three unverified rows are listed in the README evidence table; REL-007-g1 adds a fourth (the four-cell harness for the cheapest-first row did not complete this cycle)"
+        },
+        {
+          "at": "2026-11-06T16:18:21+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "grouped as one reviewer capture slice so the next release can cite captured numbers instead of pending ones"
+        }
+      ]
     }
   ],
   "telemetry": {
