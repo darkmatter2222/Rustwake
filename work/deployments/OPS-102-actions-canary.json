@@ -1,0 +1,13 @@
+{
+  "status": "deployed",
+  "source_sha": "891ff04dc994ec9b1cffc5035ccb9ad0d38effe3",
+  "run_url": "https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481",
+  "event": "workflow_dispatch",
+  "github_run_verified": true,
+  "automatic_trigger_enabled": "confirmed by sponsor commissioning output",
+  "stable_mounts_verified": "sponsor server execution output",
+  "https_scope": "hostname via Databrick LAN hosts override; external reachability not verified",
+  "browser_review": "not performed in this commissioning",
+  "game_url": "https://home.darkmatter2222.com/rustwake/",
+  "dashboard_url": "https://home.darkmatter2222.com/rustwake/team/"
+}

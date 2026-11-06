@@ -4,9 +4,11 @@ A mobile browser strategy-idle game about salvage, metals and automation. Built 
 
 **[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
 
-## Databrick commissioning update
+## Automatic deployment is enabled
 
-The host installer and its 17 tests passed on Databrick. Hostname HTTPS now works through a Databrick-only LAN hosts entry; this is not an external Internet reachability check. Container mount adoption and a successful delivery canary remain pending. The pasted commissioning script failed at a nonseekable terminal prompt before changing mounts. The corrected, reusable [commissioning script](scripts/commission-databrick.sh) opens `/dev/tty` read-only and has a real-terminal regression test. Run it as the gh-authenticated owner on Databrick (`bash scripts/commission-databrick.sh`); it requests Portainer credentials, performs scoped mount adoption with rollback, verifies a successful deploy job, then enables automatic delivery. Do not call delivery operational until that canary succeeds.
+Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
+
+Push reviewed changes to `main`; GitHub Actions runs CI, packages the game/dashboard, and deploys automatically. No routine server commands are needed. [Delivery runs](https://github.com/darkmatter2222/Rustwake/actions/workflows/delivery.yml) · [Live dashboard](https://home.darkmatter2222.com/rustwake/team/) · [Runbook](docs/AUTOMATED_DELIVERY.md).
 
 ## Sponsor input and team operations
 
@@ -14,11 +16,11 @@ Write requests in **[SPONSOR_INBOX.md](SPONSOR_INBOX.md)** below its marker, loc
 
 The team now supports three concurrent developer instances on independent scopes, with QA/product/release rotated as useful work requires. [Board](work/BOARD.md) shows measured throughput, prospective points, cycle time, rework and observed utilization/coverage. Missing samples are unknown. Current repository update cannot observe local running sessions.
 
-**Databrick runner verified online:** it executed [readiness run 42141526810](https://github.com/darkmatter2222/Rustwake/actions/runs/42141526810). The deployment adapter/config were absent, so **automatic deployment and `/rustwake/team/` are not yet commissioned**. The repo now supplies the tested static adapter, host installer, nginx config, manual canary and main → CI → delivery workflow. The local release engineer must complete the [one-time commissioning steps](docs/AUTOMATED_DELIVERY.md#one-time-commissioning--local-release-engineer), then enable `RUSTWAKE_CD_ENABLED`. No additional OpenCode plugin is needed. [Delivery setup](docs/AUTOMATED_DELIVERY.md) · [Team supervisor setup](docs/TEAM_OPERATIONS.md). Existing game deployment below is preserved.
+All eight agent personas now use the automatic delivery contract. The release engineer owns main integration and deployment monitoring; other workers continue independent work while CI runs. Build success and deployment success are tracked separately.
 
-Delivery checks: 5 artifact-validation tests and 12 host-adapter tests pass locally; installer shell syntax passes. The first real runner job confirmed connectivity and identified missing host components. Full host commissioning and browser verification remain pending. Game source is unchanged by this update.
+## Historical gameplay evidence (before Actions commissioning)
 
-## Current status
+The table below records the earlier gameplay release and its review evidence. Current deployment provenance is the Actions run above; these historical screenshots and measurements are not fresh canary/browser verification.
 
 The game works, but the owner has reopened **strategy and presentation quality**: repeated bottom-action clicks appear sufficient for progression, the art remains below the desired standard, and published evidence became stale. Technical test passes and pixel measurements do not establish a good game.
 

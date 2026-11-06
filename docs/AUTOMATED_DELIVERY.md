@@ -2,9 +2,9 @@
 
 ## Verified status — 2026-11-06
 
-The official runner **databrick-rustwake** successfully executed [readiness run 42141526810](https://github.com/darkmatter2222/Rustwake/actions/runs/42141526810) on Databrick as a nonroot account. The job intentionally failed commissioning checks: the validator exists, but `host-adapter` and `host-config.json` do not. The earlier installation log's offline status was transient; actual job execution now proves connectivity. **Automatic production delivery is not yet commissioned.** Do not report a dashboard or a new gameplay release as deployed on the strength of a push.
+Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
 
-No additional OpenCode plugin is required. GitHub Actions owns recurring delivery; OpenCode owns development, review, publication and monitoring. The repository now includes the adapter, installer, nginx configuration, regression tests and pipeline. Protected host installation and one scoped Portainer mount change remain local work. Cloud GitHub access cannot perform that root installation or set repository administrative variables. The local release engineer is already authorized to finish it through HomeAILab access; do not ask for deployment permission again.
+The normal operation is to push reviewed work to main, then monitor CI and delivery. No extra OpenCode plugin or manual server deployment is needed. All eight agent personas share this contract. Keep bootstrap steps below only for recovery/new-host commissioning; do not rerun them on every assignment. Record any remaining rollback, browser, real-device or external reachability tests separately rather than resetting the completed host setup to pending.
 
 ## Recurring delivery contract
 
@@ -18,7 +18,7 @@ No additional OpenCode plugin is required. GitHub Actions owns recurring deliver
 
 All production source changes on main are intended for automatic release after CI; there is no extra undocumented discretionary promotion gate. Product/visual approval belongs before main publication. These instructions supersede the earlier unimplemented Portainer-per-release adapter contract.
 
-## One-time commissioning — local release engineer
+## Recovery reference: one-time commissioning — local release engineer
 
 Use `C:\Users\ryans\source\repos\HomeAILab` and its current instructions/credential helpers. Do not echo credentials. Acquire the sole release lease, pause manual promotions and record the old Rustwake compose/config and route health. Read `docs/DEPLOYMENT.md` for shared-host boundaries.
 
@@ -64,7 +64,7 @@ Use `C:\Users\ryans\source\repos\HomeAILab` and its current instructions/credent
 
 ## Public dashboard
 
-Intended URL: https://home.darkmatter2222.com/rustwake/team/ . Pending first verified delivery. Packaging exposes only allowlisted fields (ticket ID, stage, role, prospective points, approved public title and aggregate metrics). Never serve raw backlog, inbox, session IDs, credentials or host diagnostics. Dashboard snapshots refresh every 60 seconds and display age; they are not a direct live OpenCode feed.
+Intended URL: https://home.darkmatter2222.com/rustwake/team/ . First delivery verified by canary run 42144401481; browser visual review remains separate. Packaging exposes only allowlisted fields (ticket ID, stage, role, prospective points, approved public title and aggregate metrics). Never serve raw backlog, inbox, session IDs, credentials or host diagnostics. Dashboard snapshots refresh every 60 seconds and display age; they are not a direct live OpenCode feed.
 
 ## Tests
 

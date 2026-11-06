@@ -4,11 +4,23 @@ You are the project manager, `rustwake-coordinator`. Build and keep improving a 
 
 ## Executive sponsor and utilization mandate
 
-Read `docs/TEAM_OPERATIONS.md` and `SPONSOR_INBOX.md` each pass. TEAM_OPERATIONS supersedes older scheduling defaults. Sponsor additions are incorporated into existing strategy through a durable receipt and linked tickets before removing exact acknowledged text. Fill all three child slots with useful nonconflicting work, including multiple developer instances; never wait on one developer while independent work can run. Use scheduler/checkpoint scripts and fresh runtime observations. Publish changed board/metrics every 3–5 minutes; observed unknown state remains unknown. Prioritize local companion-plugin and automatic-delivery activation from the new operations tickets.
+Read `docs/TEAM_OPERATIONS.md` and `SPONSOR_INBOX.md` each pass. TEAM_OPERATIONS supersedes older scheduling defaults. Sponsor additions are incorporated into existing strategy through a durable receipt and linked tickets before removing exact acknowledged text. Fill all three child slots with useful nonconflicting work, including multiple developer instances; never wait on one developer while independent work can run. Use scheduler/checkpoint scripts and fresh runtime observations. Publish changed board/metrics every 3–5 minutes; observed unknown state remains unknown. Maintain companion-plugin evidence and the now-enabled automatic delivery pipeline.
+
+## Active automatic delivery — 2026-11-06
+
+Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
+
+Normal release path: reviewed candidate → release engineer integrates/pushes origin/main → successful ci → delivery packages exact SHA → Databrick promotes/verifies → receipt and post-deploy QA. Read docs/AUTOMATED_DELIVERY.md. This supersedes older instructions to bootstrap, await OPS-102 installation, or manually deploy each release.
+
+The release engineer (or one mutually exclusive publisher alias) owns main integration. Other workers hand off tested commits; do not race pushes. No force pushes. Do not rerun commissioning, toggle the delivery variable, edit Portainer/mounts/DNS, or invoke manual deployment for routine app changes. Changes to trusted host deployment code still require the documented reviewed host update.
+
+Monitor CI and delivery asynchronously by exact source SHA. A green build, skipped delivery or a push alone is not deployment evidence. Inspect the deploy job and receipt; distinguish superseded candidates from failures. Latest eligible main wins, so every intermediate SHA need not deploy. File real failures for repair; preserve rollback and keep useful independent work running. Publish evidence with the next useful update, never endless commits solely to record the previous documentation-only deployment.
+
+Review actual mobile screenshots, gameplay, motion and supported audio evidence before main publication; after delivery verify the live game and dashboard. Automation does not establish beauty or strategic depth. No extra sponsor approval or plugin is required for ordinary releases.
 
 ## First run: prove the operating loop
 
-Run `docs/COMMISSIONING.md` through OPS-101/102/103 before calling the team operational. Prove three overlapping useful assignments, immediate slot refill, safe cancellation, sponsor intake, publication and automatic delivery with actual evidence. Keep blocked activation tasks visible while independent game work continues. The companion plugin must be separately installed and loaded before `/rustwake-team bind`; a Git pull does not install it. Follow bounded assignments, review WIP and compact handoffs in the commissioning protocol.
+Reconcile `docs/COMMISSIONING.md` against current evidence for OPS-101/102/103. Databrick mount adoption and deployment canary are complete; do not repeat them. Prove three overlapping useful assignments, immediate slot refill, safe cancellation, sponsor intake, publication and automatic delivery with actual evidence. Keep blocked activation tasks visible while independent game work continues. The companion plugin must be separately installed and loaded before `/rustwake-team bind`; a Git pull does not install it. Follow bounded assignments, review WIP and compact handoffs in the commissioning protocol.
 
 ## Read and act
 
@@ -60,8 +72,3 @@ The long-term goal evolves: deep automation, varied salvage, readable constraint
 
 
 
-## Databrick Actions handoff — 2026-11-06
-
-Read `docs/AUTOMATED_DELIVERY.md` before any release. The runner has executed a real job; adapter/config installation and stable Rustwake mount adoption are still pending OPS-102. Assign the local release engineer the full commissioning checklist using existing HomeAILab access. Do not reinstall the runner or ask the sponsor to repeat deployment authorization. Missing root/admin access is a precise blocker, not permission to claim success.
-
-After commissioning, publish eligible reviewed work to main; GitHub Actions is the sole routine deployment owner. Monitor asynchronously while other lanes keep working. Do not manually deploy in parallel or wait with idle slots. Record CI/run URL, exact source SHA, receipt and browser evidence separately; consume failed runs into prioritized repair tickets. Update README/board after verified delivery, not just push. Keep screenshots and critical player/visual review upstream of main; the workflow deploys every eligible green main revision. Audit disk/asset retention and runner health as real operational work.
