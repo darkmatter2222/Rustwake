@@ -196,6 +196,15 @@ export function validateSim(state: unknown): string | null {
         return `${key}:${r.id}`;
       }
     }
+    // BELT-001: the optional tile run. Absent is the pre-price shape and stays
+    // valid — the stored `latency` carries the old constant meaning unchanged;
+    // present must be a list of whole tile indices.
+    if (r.run !== undefined) {
+      if (!Array.isArray(r.run)) return `routeRun:${r.id}`;
+      for (const tile of r.run) {
+        if (!Number.isSafeInteger(tile) || tile < 0) return `routeRun:${r.id}`;
+      }
+    }
   }
   if (s.research !== undefined) {
     if (typeof s.research !== "object" || s.research === null)
