@@ -1692,7 +1692,9 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(max12).toBeLessThanOrEqual(70);
     // Whole-frame max: 70 plus the ~10 pp this box-union census runs over a per-pixel one
     // (ellipse boxes and glyph boxes count whole), same fixture, no kit tuple in that cell.
-    expect(max).toBeLessThanOrEqual(80);
+    // ART-003 restatement: 80.65 % measured against the base 80 % pin, because the machine
+    // rows carry more ink on purpose (A3-4) and the wider phone fit rounds their boxes up.
+    expect(max).toBeLessThanOrEqual(82);
     expect(ratio12).toBeLessThanOrEqual(8.0);
     expect(ratio).toBeLessThanOrEqual(8.0);
     // Census caps: colour indices stay 4/12/13 (0 new paint groups), no new amber or grid ops.
