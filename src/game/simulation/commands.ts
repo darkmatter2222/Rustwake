@@ -75,29 +75,27 @@ type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K>
 export type CommandBody = DistributiveOmit<Command, "id">;
 
 /**
- * BELT-001: the tile a connection endpoint sits on. The store is a hub and always
- * counts as the dock tile, so every run is measured against the same anchor.
+ * The tile a connection endpoint sits on (BELT-001). The store is a hub, so it always
+ * counts as the dock tile and every run is measured against the same anchor.
  */
-export function tileIndexOf(s: SimState, endpointId: number): number {
-  if (endpointId === 0) return DOCK_TILE;
-  const machine = machineById(s, endpointId);
-  return machine ? machine.tile : DOCK_TILE;
-}
+export const tileIndexOf = (s: SimState, endpointId: number): number =>
+  machineById(s, endpointId)?.tile ?? DOCK_TILE;
 
 /** The deterministic Manhattan tile sequence a new connection would run over. */
-export function beltRun(s: SimState, from: number, to: number): number[] {
-  return manhattanRun(tileIndexOf(s, from), tileIndexOf(s, to), YARD_COLS);
-}
+export const beltRun = (s: SimState, from: number, to: number): number[] =>
+  manhattanRun(tileIndexOf(s, from), tileIndexOf(s, to), YARD_COLS);
 
 /** Scrap price of a connection: `beltCostPerTile` per tile of its run. */
-export function beltCost(tiles: number): number {
-  return TUNING.beltCostPerTile * Math.max(0, tiles);
-}
+export const beltCost = (tiles: number): number => TUNING.beltCostPerTile * tiles;
 
 /** The integer scrap a removal returns for a paid price of `price` units. */
-export function refundOf(price: number): number {
-  return Math.round((price * TUNING.dismantleRefundPct) / 100);
-}
+export const refundOf = (price: number): number =>
+  Math.round((price * TUNING.dismantleRefundPct) / 100);
+
+/** Scrap one link returns when it is dropped: `dismantleRefundPct` of its price. A
+ * pre-price link carries no `run`, so it returns nothing and the old arithmetic holds. */
+const beltRefund = (route: RouteState | undefined): number =>
+  refundOf(beltCost(route?.run?.length ?? 0));
 
 /** Applies a validated command once; retries of the same id return the first result. */
 export function applyCommand(s: SimState, command: Command): CommandResult {
@@ -340,10 +338,8 @@ function dismantleMachine(s: SimState, machineId: number): CommandResult {
   // the input buffer still return in full, plus each dropped link's belt refund.
   let refundUnits = machine.trayUnits + machine.inBufUnits;
   for (const item of def.buildCost) refundUnits += refundOf(item.qty);
-  for (const id of outRouteId === null ? inRouteIds : [outRouteId, ...inRouteIds]) {
-    const route = routeById(s, id);
-    if (route) refundUnits += refundOf(beltCost(route.run?.length ?? 0));
-  }
+  for (const id of outRouteId === null ? inRouteIds : [outRouteId, ...inRouteIds])
+    refundUnits += beltRefund(routeById(s, id));
   if (s.storeCapacity - s.storeUnits < refundUnits) return { ok: false, reason: "no-room" };
   for (const item of def.buildCost) addToStore(s, item.resource, refundOf(item.qty));
   for (const item of machine.tray) addToStore(s, item.resource, item.qty);
@@ -363,20 +359,21 @@ function moveMachine(s: SimState, machineId: number, tile: number): CommandResul
   if (!validTile(s, tile)) return { ok: false, reason: "blocked-placement" };
   // BELT-001: relocation is a priced step, `movePenaltyPct` of the blueprint's own
   // build cost, so "which tile does this machine sit on" is a decision with a price.
-  const def = BLUEPRINTS[machine.blueprint];
-  const cost: ItemStack[] = def.buildCost.map((item) => ({
+  const cost: ItemStack[] = BLUEPRINTS[machine.blueprint].buildCost.map((item) => ({
     resource: item.resource,
     qty: Math.round((item.qty * TUNING.movePenaltyPct) / 100),
   }));
   if (!spendFromStore(s, cost)) return shortCost(s, cost);
   machine.tile = tile;
-  // The machine's own tiles moved, so every link touching it re-walks its run
-  // deterministically: a move can lengthen or shorten the belt it pays next time.
+  // The machine's own tile moved, so every priced link touching it re-walks its run
+  // deterministically: a move can lengthen or shorten the belt it pays next time. A
+  // link that carries no `run` is a pre-price link and keeps its stored `latency`, so
+  // an old save replays unchanged until a new tap prices it.
   for (const route of s.routes) {
-    if (route.from.id !== machineId && route.to.id !== machineId) continue;
-    const run = beltRun(s, route.from.id, route.to.id);
-    route.run = run;
-    route.latency = TUNING.beltLatencyPerTile * run.length;
+    if (route.run !== undefined && (route.from.id === machineId || route.to.id === machineId)) {
+      route.run = beltRun(s, route.from.id, route.to.id);
+      route.latency = TUNING.beltLatencyPerTile * route.run.length;
+    }
   }
   return commit(s, "move", tile);
 }
@@ -450,7 +447,7 @@ function dropRoute(s: SimState, routeId: number): void {
   // BELT-001: dismantling a priced connection returns `dismantleRefundPct` of the
   // scrap it charged. A pre-price route carries no `run`, so its refund is 0 and
   // the old save keeps exactly its old arithmetic.
-  const refund = refundOf(beltCost(route.run?.length ?? 0));
+  const refund = beltRefund(route);
   if (refund > 0) addToStore(s, "scrap", refund);
   const target = route.to.kind === "machine" ? machineById(s, route.to.id) : undefined;
   if (target) {

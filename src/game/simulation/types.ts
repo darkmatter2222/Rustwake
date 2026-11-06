@@ -302,31 +302,19 @@ export function powerFor(blueprint: string): number {
 }
 
 /**
- * The deterministic Manhattan walk between two grid tiles (BELT-001): the ordered
- * tile indices from `fromTile` to `toTile`, closing the row difference first
- * (row-major first, one whole row per step) and then the column difference, so at
- * every corner exactly one next tile is legal and no tie ever needs breaking. A
- * 6-column yard means a step of one row is `cols` tile indices and one column is 1.
- * The list includes both endpoints, so two adjacent tiles run over 2 tiles.
+ * The deterministic Manhattan walk between two grid tiles (BELT-001): the ordered tile
+ * indices from `fromTile` to `toTile`, closing the row difference first (row-major
+ * first, one whole row per step) and then the column difference, so at every corner
+ * exactly one next tile is legal and no tie ever needs breaking. Both endpoints are in
+ * the list, so two adjacent tiles run over 2 tiles.
  */
 export function manhattanRun(fromTile: number, toTile: number, cols: number): number[] {
-  const run = [fromTile];
-  if (fromTile === toTile) return run;
-  const r0 = Math.floor(fromTile / cols);
-  const c0 = fromTile % cols;
-  const r1 = Math.floor(toTile / cols);
-  const c1 = toTile % cols;
+  const rows = Math.floor(toTile / cols) - Math.floor(fromTile / cols);
+  const columns = (toTile % cols) - (fromTile % cols);
+  const run: number[] = [fromTile];
   let tile = fromTile;
-  const rowStep = r1 > r0 ? cols : -cols;
-  for (let r = r0; r !== r1; r += r1 > r0 ? 1 : -1) {
-    tile += rowStep;
-    run.push(tile);
-  }
-  const colStep = c1 > c0 ? 1 : -1;
-  for (let c = c0; c !== c1; c += c1 > c0 ? 1 : -1) {
-    tile += colStep;
-    run.push(tile);
-  }
+  for (let i = 0; i < Math.abs(rows); i += 1) run.push((tile += rows > 0 ? cols : -cols));
+  for (let i = 0; i < Math.abs(columns); i += 1) run.push((tile += columns > 0 ? 1 : -1));
   return run;
 }
 
