@@ -4,6 +4,10 @@ A mobile browser strategy-idle game about salvage, metals and automation. Built 
 
 **[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
 
+## Databrick commissioning update
+
+The host installer and its 17 tests passed on Databrick. Hostname HTTPS now works through a Databrick-only LAN hosts entry; this is not an external Internet reachability check. Container mount adoption and a successful delivery canary remain pending. The pasted commissioning script failed at a nonseekable terminal prompt before changing mounts. The corrected, reusable [commissioning script](scripts/commission-databrick.sh) opens `/dev/tty` read-only and has a real-terminal regression test. Run it as the gh-authenticated owner on Databrick (`bash scripts/commission-databrick.sh`); it requests Portainer credentials, performs scoped mount adoption with rollback, verifies a successful deploy job, then enables automatic delivery. Do not call delivery operational until that canary succeeds.
+
 ## Sponsor input and team operations
 
 Write requests in **[SPONSOR_INBOX.md](SPONSOR_INBOX.md)** below its marker, locally or through GitHub. When the product owner has incorporated them into existing strategy and linked backlog work, the text is removed and preserved in an intake receipt. Removal means **in the work**, not shipped. [Intake details](docs/SPONSOR_INBOX.md).
