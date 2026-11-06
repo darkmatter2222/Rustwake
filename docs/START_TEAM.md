@@ -32,3 +32,10 @@ No child should start another forever loop. A running host and available model a
 
 
 Sponsor requests go in root SPONSOR_INBOX.md. Local team should complete OPS-101/102/103 immediately alongside useful game work; do not leave setup perpetually pending. The CI/CD workflow needs a dedicated server runner and host adapter before enabling its repository variable. See AUTOMATED_DELIVERY.
+
+
+## Sidebar telemetry upgrade
+
+Companion 0.2.0 exposes the OpenCode 2 TUI entrypoint. For an existing installation, stop/checkpoint, pull main, run `npm --prefix tools/team-supervisor ci --ignore-scripts` and `npm --prefix tools/team-supervisor run install:local`, then fully restart OpenCode and bind again. Look for **RUSTWAKE TEAM** alongside MasterGoal. See README for the fields and stale-state behavior. No separate TUI plugin registration is needed.
+
+Coordinator runtime observations must include `coordinator_session_id` matching the bound coordinator. The checkpoint utility now includes sanitized worker role/task/state rows and capacity in the ignored supervisor observation. Read real runtime state before writing it; never turn an old board snapshot into fresh telemetry.

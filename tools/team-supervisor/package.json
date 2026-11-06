@@ -1,9 +1,20 @@
 {
   "name": "@rustwake/team-supervisor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "exports": "./index.mjs",
-  "dependencies": { "@opencode/plugin": "2.0.22", "jsonc-parser": "3.3.1" },
-  "scripts": { "test": "node --test supervisor.test.mjs", "install:local": "node install.mjs" }
+  "exports": {
+    ".": "./index.mjs",
+    "./tui": "./tui.mjs"
+  },
+  "dependencies": {
+    "@opencode/plugin": "2.0.22",
+    "jsonc-parser": "3.3.1",
+    "@opentui/solid": "0.5.14",
+    "solid-js": "1.9.12"
+  },
+  "scripts": {
+    "test": "node --test *.test.mjs",
+    "install:local": "node install.mjs"
+  }
 }

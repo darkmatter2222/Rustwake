@@ -15,12 +15,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: node scripts/team-board.mjs --check
-      - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs tools/team-supervisor/supervisor.test.mjs
+      - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs tools/team-supervisor/*.test.mjs
       - run: python scripts/deploy-artifact.test.py
       - run: npm ci
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
       - run: npm run build
+
 
 

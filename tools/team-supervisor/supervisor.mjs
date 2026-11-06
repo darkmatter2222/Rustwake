@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { formatTeamStatus, sponsorState } from './telemetry.mjs';
 
 // No timers, model calls, child spawning or replacement forever loop.
 // Narrow guard: supported host hooks, bound coordinator only, locally mapped tool names.
@@ -8,7 +9,7 @@ export function shouldBlockWait({ tool, waitTools, observation, now, stopping })
   const age=now-Date.parse(observation.observed_at);
   return age>=0 && age<=120000 && observation.available_child_slots>0 && observation.runnable_task_ids?.length>0;
 }
-export async function setup(ctx) {
+export async function setup(ctx, statusRpc) {
  const root=await fs.realpath(ctx.location.directory);
  let coordinator=null, stopping=false;
  const registrations=[];
@@ -17,9 +18,16 @@ export async function setup(ctx) {
  async function status(){
   const b=await read('work/backlog.json');
   const observed=await read('.rustwake-runtime/supervisor-observation.json');
-  const inbox=await fs.readFile(path.join(root,'SPONSOR_INBOX.md'),'utf8').catch(()=>'');
-  return {board_updated_at:b?.updated_at??null,observation:observed,sponsor_file_bytes:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
+  const inbox=await fs.readFile(path.join(root,'SPONSOR_INBOX.md'),'utf8').catch(()=>null);
+  return {board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
  }
+ if(statusRpc) registrations.push(await ctx.rpc.register(statusRpc,{
+  read:async ({sessionID})=>{
+   const info=await ctx.session.get({sessionID});
+   if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
+   return {text:formatTeamStatus({bound_session:coordinator,stopping,...await status()},sessionID)};
+  }
+ }));
  registrations.push(await ctx.command.transform(editor=>editor.add({
   name:'rustwake-team',description:'Bind or stop the Rustwake coordinator guard: bind | stop | status',
   execute:async input=>{
@@ -37,7 +45,7 @@ export async function setup(ctx) {
  registrations.push(await ctx.session.hook('context',async e=>{
   if(e.sessionID!==coordinator||stopping)return;
   const s=await status();
-  e.system.push({type:'text',text:'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nBefore waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
+  e.system.push({type:'text',text:'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
  }));
  registrations.push(await ctx.tool.hook('execute.before',async e=>{
   if(e.sessionID!==coordinator||stopping)return;
@@ -46,3 +54,4 @@ export async function setup(ctx) {
  }));
  return async()=>{stopping=true;coordinator=null;await Promise.allSettled(registrations.map(r=>r.dispose()));};
 }
+

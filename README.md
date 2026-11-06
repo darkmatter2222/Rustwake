@@ -75,6 +75,23 @@ Use a fresh `/goal forever goal.md` command to load the edited prompt; `/goal re
 
 [Full restart and recovery instructions](docs/START_TEAM.md) · [Companion configuration and operational checks](docs/TEAM_OPERATIONS.md) · [Automatic delivery setup](docs/AUTOMATED_DELIVERY.md).
 
+## Team telemetry sidebar
+
+Companion **0.2.0** adds a **RUSTWAKE TEAM** section to OpenCode's existing sidebar, alongside MasterGoal. It refreshes every two seconds without sending model prompts. It shows binding for the selected session, wait-guard configuration, observed worker slots and role/task/state rows, ready assignments, sponsor inbox state and board freshness.
+
+**Upgrade an existing installation:** safely stop/checkpoint the running goal and children, pull main, run the following from the Rustwake checkout, then fully restart OpenCode:
+
+```powershell
+npm --prefix tools/team-supervisor ci --ignore-scripts
+npm --prefix tools/team-supervisor run install:local
+```
+
+Select the coordinator and run `/rustwake-team bind`, then `/goal forever goal.md`. Package export `./tui` supplies the sidebar through the same OpenCode 2 mechanism used by MasterGoal; there is no separate TUI registration to add. The active launcher configuration must still load the companion package.
+
+**Binding is live plugin state; worker activity is sampled evidence.** The coordinator must refresh actual runtime observations through `scripts/team-checkpoint.mjs`, including `coordinator_session_id` for its bound session. Missing, mismatched or older-than-two-minute observations show **unknown/stale**, not zero workers or fictitious activity. Empty inbox templates are correctly shown as empty. The sidebar does not start workers or guarantee scheduling. If absent, check that the sidebar is visible, the new package dependencies were installed, and the active OpenCode configuration loaded the package; `/rustwake-team status` remains the fallback.
+
+Server/RPC, session-switching and telemetry tests pass locally; rendering in your actual OpenCode host remains part of the local commissioning check.
+
 ## Current gameplay and development
 
 Implemented foundation: manual salvage, repairable automated drones, eight machine blueprints, resource routes, construction/upgrades, power/storage constraints, exports/research, local saves and offline catch-up. Strategic depth, art/audio and navigation remain under active development. Accounts, purchases and multiplayer are not implemented.
@@ -93,4 +110,5 @@ node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs tools/team-su
 ```
 
 [Master goal](goal.md) · [Team charter](docs/TEAM_CHARTER.md) · [Workflow](docs/AGENT_WORKFLOW.md) · [Product strategy](docs/PRODUCT_STRATEGY.md) · [Art and experience](docs/DESIGN_BIBLE.md) · [Mechanics reference](docs/GAME_DESIGN.md) · [Deployment](docs/DEPLOYMENT.md).
+
 
