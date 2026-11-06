@@ -1,150 +1,134 @@
-﻿# REV-Q002-g1 - independent review, Q-002 style slice
+﻿# REV-Q002-G1 — independent review of the Q-002 style slice
 
-- Task: Q-002 (style slice, phases A/B/C/D/E), generation 1, id `rev-q002-g1`
-- Candidate chain reviewed (branch `audio-fixes`, tip `add1f71`): `10bde02` (phase A tables + painters) -> `7861926` (phase C draw-bound tests) -> `aaa3a4e` (evidence captures + sampler) -> `df4d1df` (handoff note) -> `add1f71` (phase B finals: receipt, provenance, regenerated sheet, final sampler). Base `ade4b60` (Q-005). Parallel standalone branch `style-slice` (`ade4b60 -> 4d3c4bb -> aff2ec6 -> e8e9035`) carries identical `src/`, `tests/renderer/`, `scripts/capture-style.mjs`.
-- Spec under review: `review-r1/rev-q2spec-g3.md` (251 lines), acceptance sections 3A-3E.
-- Reviewer checkout: `C:\Users\ryans\.local\share\opencode\worktree\fe4e05\review-r1`, detached at `add1f71`; production files unmodified (only this report and the spool receipt are added).
-- Checked at: 2026-11-04T02:31-02:35 host local (gates re-run in this worktree at the tip).
+- Candidate SHA: `c659cf812bc2316b3be70125a4a80c5f76dd634b` (origin/main, `docs(publisher): PUB-9 …`).
+- Reviewer checkouts: `C:\Users\ryans\.local\share\opencode\worktree\fe4e05\rev-q002-g1` (my own worktree, `git checkout --detach c659cf8…`, used for all measurements) and the shared `review-r1` worktree (report artifacts). Production files unmodified in both.
+- Head movement note: while this review ran, `main` advanced past `c659cf8` to `090260a`, which adds `docs/evidence/2026-11-03-style-slice.md`, `docs/evidence/asset-provenance.json` and a regenerated sheet (13 652 B) plus a rewritten `scripts/capture-style.mjs`. All numbers below were taken against the pinned candidate `c659cf8` (verified by `git rev-parse HEAD` before and after the probe runs); differences against the later head are called out where they matter. At submission time the canonical checkout reads `main = 9fca373`; the verdict scope stays `c659cf8` (my worktree still reports that SHA with a clean `git status --porcelain`), so the later commits are, in this review's terms, still-unreviewed additions whose content matches what B-6 describes as absent-at-candidate.
+- Spec: `work/review/REV-Q2SPEC.md` (gen 3), checks A/B/C/3D, gates 3A–3E. Verdict scope: this SHA and this slice only.
+- Image capability verified first in this session: **7** repository PNGs consumed one at a time (`slice-phone-rest`, `-build`, `-mature`, `-one-machine`, `slice-desktop-rest`, `-mature`, `slice-sheet-silhouette`), each as a separate read. Visible facts are quoted per image below. (`slice-desktop-build.png` is the eighth artifact; its pixels are covered by the numeric decoder, it was not viewed as an image.)
+- Motion, audio listening, real-device trace and organic first-minute progression stay explicitly unverified (section 6).
 
-## 1. Gates re-run by the reviewer at `add1f71`
+## Verdict: **rework** (6 bounded findings, B-1 … B-6; the code itself is accepted as-is — findings 1, 3, 6 are evidence/harness work, 4 and 5 are ≤ 20-line table edits)
 
-| gate | value (this review) | note |
-|---|---|---|
-| `npm test` | 23 files / **206 tests passed**, 0 failed, 0 skipped, 4.05 s | >= 172 required; no existing assertion edited (new lines only) |
-| `npm run typecheck` | `tsc --noEmit`, no output | clean |
-| `npm run validate` | `validated: no violations`; behaviour line `firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3` | identical to the pinned Q-005 line |
-| `npm run build` | `assets/index-CmwRilug.js` **232,754 bytes** (232.72 kB, gzip 73.57 kB), 53 modules; `index-Cwg_kGXQ.css` 7.22 kB; `catchup.worker-DphWaCEx.js` 13.02 kB | byte count read from `dist/assets` directly, not from the vite print |
-| no new dependency | `git diff ade4b60..add1f71 -- package.json` empty | `vite.config.ts` `base: ./` comes from `4319104` (VITE-BASE), not from Q-002 |
-| `getContext` call sites | 1 in `src/ui/App.tsx` | unchanged |
+The renderer work is good: the grid is genuinely context-only, the six authored roles are separable at phone scale, the palette hierarchy is real (measured on the composited canvas, not quoted), and the paint budget has wide margin. The reason for rework is that the shipped evidence does not currently prove two of the gates it claims (C4/C5, B1), the captured FS-1 is not the state the draw-bound tests assert, and two numeric authoring choices (drone lean, missing PARTS rows) leave defects visible in the phone frame.
 
-## 2. Per-line verdicts (spec 3A-3E)
+## 1. Re-run of the technical gates (my own run, this SHA)
 
-Legend: measured = value the reviewer saw; source `T` = `docs/evidence/2026-11-03-style-slice.md`, `J` = `docs/evidence/2026-11-03-style-slice-pixels.json`, `R` = `tests/renderer/scene-draw.test.ts` (via the phase-C suite run above), `P` = this review's own page-PNG scan of `docs/screenshots/slice-*.png`.
-
-### 3A context-only grid
-
-| line | required | measured | verdict |
+| gate | required | measured here | result |
 |---|---|---|---|
-| A1 | 0 grid `stroke()` at rest | 0 (T sec.2); page check: hex `51,76,96` (grid over floor) = **0 px** in `slice-phone-rest.png`, `slice-phone-mature.png`, `slice-phone-one-machine.png` (P) | PASS |
-| A2 | exactly 1 grid stroke with 14 segments | 1 stroke, 14 `lineTo` = 7+7 in one path (T/R); page: 13,719 px of `51,76,96` in `slice-phone-build.png` (P) | PASS |
-| A3 | 1 `SELECT_STYLE` stroke when selected, grid unaffected | 1 stroke `#f4f7fb`, 0 grid strokes in the same frame; 2,295 px of `244,247,251` at 390x844 (T/P) | PASS |
-| A4 | holds at every fitted scale | asserted at 360/390/412/844/1440; `fitCamera(390)=1.8056`, `fitCamera(1440)=4.0` (T/R) | PASS |
-| A5 | empty-cell modal == floor hex +/- 2 | `34,56,74` = `#22384a` exactly, 430,282 px rest / 414,603 build (P, matches `J`) | PASS |
+| `npm ci` | clean | clean (5 audit notices, same as prior heads) | pass |
+| `npx vitest run` | 23 files / 206 tests at this head | `Test Files 23 passed (23)`, `Tests 206 passed (206)`, 0 skipped, 5.23 s | pass |
+| `npm run typecheck` | clean | no output | pass |
+| `npm run build` | clean | 53 modules; `dist/assets/index-CmwRilug.js`, `index-Cwg_kGXQ.css`, `catchup.worker-DphWaCEx.js` | pass |
+| `npm run validate` | `content: 0 violation(s)` | `content: 0 violation(s) in 3 ms`; `behaviour: … machines=8 links=18 drones=5 … 0 violation(s)` | pass |
+| exact bytes | publisher: js 232754, css 7224 | `index-CmwRilug.js = 232754 B`, `index-Cwg_kGXQ.css = 7224 B`, worker `= 13015 B` (gzip 73.57 kB / 2.15 kB from vite) | byte-exact match with the publisher |
+| E6 | no new runtime dep, `base` unchanged, one `getContext` | deps `react`, `react-dom` only; `base: "./"` unchanged (5 inserted lines in `vite.config.ts` are comment/`build.target` block); `getContext` once (`src/ui/App.tsx:146`) | pass |
 
-### 3B silhouette identity, amber budget, feature floor
+`tests/renderer/scene-draw.test.ts` = **13** `it` cases (A1/A2, A3/A4, D1/D2, D3, D4, D5, D6, D7, B4/B5/B6, B2, D9, B7, E6). My own stub-context run (independent of the committed file, `probe-draw-g1.mts`) reproduces the frame census:
 
-| line | required | measured | verdict |
-|---|---|---|---|
-| B1 | 6/6 grayscale roles named by two readers | 6/6 by one reader (reviewer) on `slice-sheet-silhouette.png`; second pass outstanding -> FU B-04/B-05 | PASS (single reader), gate provisional |
-| B2 | min pairwise Hamming >= 12/64 over 15 pairs | **13** (min at sorter/furnace and furnace/signalLab); max 38; all 15 pairs printed (T sec.3) | PASS |
-| B3 | exactly 3 amber `(w,h)` tuples | 1 tuple in FS-1: `5.5x5.5` CSS = 3.05 units, inside `AMBER_SHAPES` [[2,2],[3,3],[4,4]] -> subset, not violation; 3-tuple fixture outstanding -> B-06 | PASS (subset) |
-| B4 | min painted feature height >= 3.0 CSS px at 1.8056 | 2 units x 1.8056 = **3.61 px** floor of the part table (`FEATURE_MIN_UNITS = 2`) | PASS |
-| B5 | pips only, no `k x ratio` rects | level pips 1-3 + digit from 4, store gauge 5 pips, progress pips; no ratio-height rect in `PARTS` (R) | PASS |
-| B6 | every part inside +/- 16 units | all recorded coords inside +/-16 for levels 1..40, tray 0..12 (R) | PASS |
-| B7 | drone nose + shadow + 5 offsets under reduced motion | 5 distinct body x-offsets with `LEAN_UNITS = 4` in the reduced-motion case; nose/shadow in the table. Visual count still needs the Q-004 clip | PASS (draw-bound), clip pending |
+| frame | total ops | paints | grid strokes | amber ops | ceiling | result |
+|---|---:|---:|---:|---:|---|---|
+| RS-1 rest (390×844, s 1.8056) | 205 | 61 | 0 | 5 | ≤ 80 | pass |
+| RS-1 build (ghost 20) | 236 | 64 | 1 | 5 | ≤ 90 | pass |
+| RS-1 selected | 207 | 62 | 0 | 5 | — | pass |
+| RS-1 rest @1440×900 (s 4) | 205 | 61 | 0 | 5 | — | pass |
+| mature rest (8 machines, 18 links, 5 drones) | 415 | 182 | 0 | 24 | ≤ 240 and ≤ 215 (D3) | pass |
+| mature build | 446 | 185 | 1 | 24 | — | pass |
 
-### 3C luminance hierarchy
+Additional invariants I measured myself: D4 two consecutive draws element-wise identical (236 ops); D6 0 off-grid coordinates at 360/390/412/844/1440 and `imageSmoothingEnabled === false`; minimum painted height 3.5 CSS px at 360/390 (4.0 at 412, 8.0 at 844/1440) → 3B-4 ≥ 3.0 px holds at every fitted scale; 1 `fillText` per FS-1 frame (the level digit appears only from level 4); B2 Hamming minimum **13/64** (sorter/furnace and furnace/signalLab), all 15 pairs ≥ 12.
 
-| line | required | measured | verdict |
-|---|---|---|---|
-| C1 | floor vs backdrop >= 1.5 | **1.545** (`34,56,74` / `11,18,32`), identical in all 7 cases | PASS |
-| C2 | wreck hull vs floor >= 3 | **3.594** (`109,144,171`) | PASS |
-| C3 | machine body vs floor >= 4.5 | **4.937** (`138,169,196`) | PASS |
-| C4 | dock pad vs floor >= 3 | **4.375** (`127,159,187`, T) - `J` prints `244,247,251` -> 11.28 for the same key -> B-02 | PASS with B-02 |
-| C5 | amber/cyan tokens vs floor >= 4.5 | **7.049 / 7.200** (T) - `J` prints `60,54,51` -> 1.02 (105 px, the DOM amber button) -> B-02 | PASS with B-02 |
-| C6 | every floor-kit mark vs floor inside [1.15,1.60] | 1.433 (`16,27,40` shadow), 1.482 (`14,23,38` well) inside the band; channel delta >= 6 | PASS (reviewer recomputation) |
-| C7 | same ratios at both widths / dpr | identical in all 7 cases (flat opaque palette) | PASS |
+## 2. E3, size ceiling decision for this candidate
 
-### 3D deterministic draw-bound tests
+**Decision: ceiling = 232 800 B for `dist/assets/index-*.js` at `c659cf8`. E3 is evaluated: pass.**
+Ceiling history, each step tied to one measured integration: 229 000 B (spec 3E at `3f1b4ac`, measured 224 968) → 231 000 B (after Q-005, measured 230 892) → **232 800 B** (this head, measured 232 754, headroom 46 B). Rule for the next integration: re-measure and set the ceiling to the measured value rounded up to the next 100 B; a step larger than +1 000 B needs a one-line reason in the handoff. No shed requested: 232 754 B is 15 302 B of growth over `3f1b4ac` for the whole presentation layer plus the audio graph, and gzip is 73.57 kB.
 
-| line | required | measured | verdict |
-|---|---|---|---|
-| D1 | <= 80 (rest) / <= 90 (build) paints, FS-1 | **61** rest / **64** build | PASS |
-| D2 | <= 240 paints, mature | **182** | PASS |
-| D3 | per-entity caps (<= 12/machine, 3/link, 5/drone, 40 fixed) | 182 <= 40+8x12+18x3+5x5 = 215 | PASS |
-| D4 | two consecutive draws element-wise identical | identical op logs | PASS |
-| D5 | draw order: backdrop first, grid before entities, ghost last | op 0 = full-view `fillRect`; grid precedes `#6d90ab` hull; last paint of the build frame = ghost `fillText` at `[166,393]` | PASS |
-| D6 | half-CSS-px snapping, `imageSmoothingEnabled === false` | 0 offenders | PASS |
-| D7 | amber ops <= 12, only `AMBER_SHAPES` sizes | 5 ops, 1 shape (3.05 units) | PASS |
-| D8 | first frame: 9 entities + 8 floor-kit marks have non-empty masks | receipt reports "info" (5 ellipse ops) instead of the 17-mask assertion | **FAIL as written -> FU B-03** |
-| D9 | 5 distinct accents over 6 statuses, `powerLimited` own hue | 5 hexes: idle `#6f93ad`, running `#5fd8e8`, starved `#8a7ad8`, outputFull `#c9713a`, powerLimited `#7fd6c2`; `paused` shares idle by design | PASS |
+## 3. Captures and the pixel JSON, checked numerically
 
-### 3E regression floor
+Method: my own PNG decoder (zlib inflate + the 5 PNG filter types, no dependencies), plus the deterministic draw list from the stub context, plus `worldToScreen`. Frame cross-check: with `view = 390×844, s = 1.8056` the predicted floor rect is `x 43.4, y 439.6, 693×693 device px`; the PNG gives `x[43..735]` and the first floor row `447` = 439.6 + the 2-unit rail → the analytic frame is exact, so every sample can be attributed to a part.
 
-| line | required | measured | verdict |
-|---|---|---|---|
-| E1 | `npm test` >= 172, nothing skipped-by-deletion | 23 files / 206 passed, 0 skipped | PASS |
-| E2 | typecheck / build / validate clean | clean / 53 modules / `0 violation(s)` | PASS |
-| E3 | `dist/assets/index-*.js` <= 229000 | **232,754 B** | FAIL as written; PASS at the concur ceiling **233000** (section 5) |
-| E4 | touch targets 44/46 px minimums, 4 contexts + text scale 2.0 | `tests/ui/hud-layout.test.ts` green in the 206 | PASS |
-| E5 | same checksum, `schemaVersion` unchanged | `eede3c4f` / `schemaVersion: 1` in `docs/evidence/yard-mature.json`, parity tests green | PASS |
-| E6 | no new runtime dep, no `vite.config` `base` change by this task, `getContext` once | `package.json` untouched in `ade4b60..add1f71`; `base` came from `4319104`; 1 call site | PASS |
+Verified numerically (all 7 cases × 7 points): every RGB triple in `docs/evidence/2026-11-03-style-slice-pixels.json` reproduces at my independently computed device coordinates (`match=true` for all 49 samples) → the shipped JSON is an honest measurement of those pixels. Independently confirmed on the composited canvas: floor `#22384a` (34,56,74), backdrop `#0b1220` (11,18,32), WCAG **C1 = 1.545** (≥ 1.5), **C2 = 3.594** (≥ 3), **C3 = 4.937** (≥ 4.5), `well` 1.482, `bodyMid` 4.375, `amber` 7.049, `cyan` 7.200, `select` 11.280 — so the palette and the luminance hierarchy are real, and the two "problem" rows are sampling artefacts, not palette defects.
 
-Score-card: 33 PASS, 1 FAIL (D8), 1 FAIL-as-written-but-resolved (E3 with the new ceiling), 2 provisional (B1 second reader, B7 clip). No category is held back by a functional defect.
+Rows that do **not** measure their named part (see B-1): `dockPad` = `244,247,251` (`select`, ratio 11.28) is the drone nose mark; `amberToken` = `60,54,51` (ratio **1.02**, below its own 4.5 limit) is the amber pip under 4 stacked 0.35-alpha drone shadows — the arithmetic fits: `1 − 0.65⁴ = 0.821`, `0.821·(16,27,40) + 0.179·(255,183,101) = (59,55,51)`.
 
-## 3. Ink coverage at 390x844 and the reference comparison
+Ink/purity numbers I measured (my definitions, printed by the probes):
 
-Method (this review, independent of the developer sampler): full-page PNG decode + exact-RGB census, `ink = pixels that differ from the modal page colour (#0b1220 / `11,18,32`)`; the second column drops both navy field colours (`11,18,32`, `8,13,24`) so the DOM chrome is the only remaining non-field ink.
+| case | panel device bbox | ink in panel | distinct colours | cells with ink (of 36) | min cell ink |
+|---|---|---|---:|---|---|
+| phone-rest | x[43..735] y[447..1125] | 40 265 / 470 547 = **8.56 %** | 185 | **36 → 100.0 %** | 231 px |
+| phone-build | same | 55 265 = 11.76 % | 192 | 36 → 100 % | 471 px |
+| phone-mature | same | 85 423 = 18.15 % | 568 | 36 → 100 % | 242 px |
+| phone-one-machine | same | 33 339 = 7.09 % | 185 | 36 → 100 % | 231 px |
+| desktop-rest | x[336..1103] y[10..761] | 58 199 / 577 536 = 10.08 % | 305 | 36 → 100 % | 288 px |
+| desktop-mature | x[336..1103] y[114..761] | 50 557 = 10.16 % | 155 | 36 → 100 % | 288 px |
 
-| capture | ink % vs modal | ink % excl. navy fields |
-|---|---:|---:|
-| `slice-phone-rest.png` (390x844 dpr2) | 46.03 | 41.30 |
-| `slice-phone-one-machine.png` | 46.03 | 41.30 |
-| `slice-phone-mature.png` | 46.17 | 41.44 |
-| `slice-phone-build.png` | 47.61 | 42.92 |
-| `slice-desktop-rest.png` (1440x900 dpr1) | 53.53 | 49.10 |
-| `slice-desktop-mature.png` | 53.51 | 49.08 |
-| `slice-desktop-build.png` | 53.71 | 49.37 |
+So the handoff's "100 % ink coverage" holds under my definition (every one of the 36 cells contains ≥ 231 painted pixels) and is not an artefact of the whole-canvas average. Two rows are informative: in `phone-mature` the middle rows (tiles 18–29) carry only ~242 px of a 13 225-px cell = **1.8 %** each, against 63 % in tile 2 → the seeded crowded yard is a 2-row band over an empty board (finding B-6). Silhouette purity: B2 minimum 13/64 confirmed from the table; the sheet artifact carries **0** neutral-gray pixels of 1 478 314 ink pixels and **0** pixels of four of its five declared gray steps (finding B-3).
 
-Phone band **46.0-47.6 %**, desktop band **53.5-53.7 %**, overall **46.03-53.71 %** - inside the 45-61 % envelope previously reported for this slice, i.e. the slice keeps the frame filled without over-painting; the 560 px dock cap and 58 dvh panel cap still hold the bottom third.
+## 4. Composition and identity at phone scale (what the images actually show)
 
-Reference comparison (same viewports, pre-slice captures from the stable build): `latest-mobile.png` 47.07 % ink at 390x844, `latest-research.png` 53.70 % at 1440x900. Total ink is essentially unchanged (-1.04 pp phone, +0.01 pp desktop); what changed is **distribution**:
+- `slice-phone-rest.png`: no lattice at rest (only the gravel ticks and the rail dashes) → A1 also holds visually. The focal column dock → sorter → furnace → wreck reads in one vertical line; the sorter (three dark roller bars + two chutes + amber tray pip + rust status bar) and the furnace (smaller body, chimney stub on the right, side blocks, rust band) are separable without labels at 390 px. The dock is a legible pad (cyan corner ticks, 5-pip amber gauge row, arm post). The wreck is a pentagon with a rust outline, 3 remaining pips and 3 shards. Crude-rectangle remnants: **none** for the authored roles; the crates and the pole read as intended 5×5/2×10 marks.
+- `slice-phone-build.png`: the 6×6 lattice appears only in build mode (one path), the ghost box + check mark is drawn, but on **tile 0** (top-left) rather than tile 20 as the spec's E2 states (the harness never moves the pointer, so the app's own ghost tile wins). The picker is the tutorial flow (`Cancel / Place Scrap sorter 20 scrap / Next`), not the 8-blueprint picker.
+- `slice-phone-one-machine.png` (clean-session case): legible but sparse — rows 3–5 hold only the gravel lattice, and the gravel (72 ticks at 3×3 units, alpha 0.5 → 8 288 px of one blend colour) forms a regular dot lattice that re-telegraphs the hidden grid.
+- `slice-desktop-rest.png` / `-mature.png`: the yard is a 768-px board with ~336-px navy margins; identity at s = 4 is good for the authored roles; the level digits (9–14) sit above the cells and collide with the rail posts; 4 of the 8 mature machines are the `generic` fallback = body rect + one dark slot, i.e. the original nested rectangle (B-4). The drone row at the dock is one merged light bar with two pip rows (B-5).
+- `slice-sheet-silhouette.png`: 6 overlapping shapes inside the left ~40 % of an 1800×840 canvas, dark-on-dark, plus the DOM HUD strip on top; my own naming pass reached **2/6 with confidence** (drone, sorter) — the artifact, not the art, is the limitation (B-3). (The image I viewed is the regenerated 13 652-byte variant from the later head; the drawing code is unchanged between the two heads, so the composition facts hold, while the pixel measurements quoted in B-3 are from the `c659cf8` file.)
 
-| quantity | pre-slice reference | Q-002 slice |
-|---|---|---|
-| yard floor colour | `21,36,53` - an alpha composite, not a palette entry (401,273 px) | `34,56,74` = solid `#22384a` (430,282 px) |
-| floor vs backdrop | 1.24 | **1.545** |
-| hull / body / amber hexes present | 2 of 5 role hexes | 5 role hexes + 5 gray steps on the sheet |
-| distinct colours in the frame | 1,829 | 1,657 rest / 2,504 mature (more roles, fewer near-identical blends) |
+## 5. Findings (each: evidence → player impact → fix → acceptance)
 
-The reference frame had one 32-px nested rectangle repeated 7 times; the slice separates the same 9 entities into 6 role masks with min Hamming distance 13/64, so the ink gain is qualitative, not volumetric - which is the intended effect of the palette hierarchy rather than a bigger paint budget (D1/D2 fell from 109/31 ops at `3f1b4ac` to 61/64).
+**B-1 (P1) The shipped pixel receipt does not measure the parts its rows name.**
+Evidence (all at `c659cf8`, my own decoder + the analytic frame): `dockPad` = `244,247,251` (ratio **11.28**) is the `select` drone-nose mark, not the pad whose hex is `#7f9fbb` (4.375); `amberToken` = `60,54,51` (ratio **1.02**, below its own 4.5 limit) is the amber pip under 4 stacked 0.35-alpha drone shadows — `1 − 0.65⁴ = 0.8207`, `0.8207·(16,27,40) + 0.1793·(255,183,101) = (59,55,51)`, an exact match; `machineWell` is a 6-of-9 modal on the body/roller boundary (its 7×7 window shows the well hex only where the roller AA reaches). The other four rows reproduce their named hex exactly (`match=true`, n=9), and all 49 samples reproduce the shipped JSON — so the harness is honest and only the point placement is wrong. Second problem: at this SHA only `docs/evidence/2026-11-03-style-slice-pixels.json` ships (see B-6), and the numeric receipt added on the later head quotes `127,159,187`/`255,183,101` for these two rows and describes a row-major first-exact-match sampler with `runX/runY/count` that the shipped `scripts/capture-style.mjs` does not implement.
+Impact: a reader cannot tell which number is the measurement; C4 is unevaluated and C5 as printed fails its own gate, so the amber/cyan hierarchy — what the phone player uses for the store gauge and cargo tokens — is unproven.
+Fix (harness only): one sampler; implement the spec's point-stepping rule inside `modal()` (if the 3×3 modal is not one of the named part's declared hexes, walk to the nearest pixel that is); write the header block (`candidateSha`, viewport, `deviceScaleFactor`, scenario, provenance, timestamp, tool versions) into the JSON; generate the receipt's tables from that JSON.
+Acceptance: for all 7 cases × 7 points the sampled RGB equals the named part's palette hex within ±2 per channel and the modal count is 9/9; the receipt's contrast table is byte-derived from the JSON (no manual transcription); the JSON's `scale` equals the app's fitted scale (1.8056 at 390 CSS, 4.0 at 1440).
 
-## 4. Pixel-pair diff and silhouette sheet geometry
+**B-2 (P1) The captured FS-1 is not the state the draw-bound tests assert.**
+Evidence: the phone captures' HUD reads `Store900/900` while FS-1 fixes `storeUnits 770`; the dock band contains **5** nose marks (device x 285, 300, 314, 329, 343 → 4-unit pitch) so 5 drone units are drawn, while the test fixture has 1; `scripts/capture-style.mjs` replaces `sim.machines`/`sim.routes` but not `sim.spares`, `sim.drone.inFlight` or `sim.store`, and the frame loop keeps advancing during the 250 ms wait before the shot; the numeric receipt that ships on the later head quotes an amber census of 734 px where my measurement of the same hex on the shipped PNG totals 898 px in components ≥ 4 px.
+Impact: the still and the numbers describe different worlds, so an accepted number may not describe the accepted image (spec 2.1: "the numbers in 3A-3D are only valid for this fixture").
+Fix: in the harness, also set `sim.spares` (count as declared), `sim.drone.inFlight = {arrive: 350, units: 3}` and the store map so `storeUnits` recomputes to 770; stop the frame loop (or capture after a fixed tick) so no catch-up runs between load and shot; print the live state (tick, storeUnits, machine statuses, drone count) into the JSON per case.
+Acceptance: each case's state block in the JSON equals the fixture values (tick 344, storeUnits 770/900, machines 2, drones 1 for FS-1 and 5 for `seeded-mature`), the HUD text matches (`Store770/900`), and the nose-mark count in the dock band equals the declared drone count.
 
-- Regression pixel diff: **4/4 compared pairs changed, max changed-pixel fraction 0.000152** against the E-gate 0.02 -> PASS (worst pair is the mature frame; the numeric gate is met with 131x margin). The developer receipt counts "5 pairs"; the maximum is the same 0.000152 in both counts, so the difference is pair-scope bookkeeping only (logged as B-05, low).
-- Sheet geometry: `docs/screenshots/slice-sheet-silhouette.png` IHDR = **1800x840 device px** (CSS 900x420 at dpr 2, `scripts/capture-style.mjs` sheet block). Inside that canvas the drawn silhouette block measures **639x202 device px** (body-hex ink, first row set starting at y = 97); the page-level non-background bbox is 1800x839 because the sheet page still paints the HUD chrome around the canvas. The previously quoted **1306x258 does not reproduce** on the tip PNG and is logged as B-04 (low): the page-screenshot form makes the geometry unstable, an element-scoped clip would fix it.
+**B-3 (P1) The identity sheet is not usable as the B1 artifact.**
+Evidence (my measurements on the `c659cf8` `slice-sheet-silhouette.png`, 1800×840): **1 566** distinct colours and **0** neutral-gray pixels of 1 478 314 ink pixels, so the sheet is not grayscale at all; **none** of the five `GRAY_STEPS` hexes survives as an exact pixel (`#101b28`, `#22384a`, `#6d90ab`, `#8aa9c4` = 0 px each; only `#f4f7fb` = 10 958) because the appended canvas carries `width = 1800, height = 840` as bitmap attributes inside a 900-px-wide viewport → the browser resamples the bitmap 0.5× and every pixel becomes a blend; the ink profile is a **single** run covering the full 1800 px width in both row bands (row 0 pitch 40 CSS px vs cell width 57.8; row 1 pitch 64 vs 128), i.e. all six roles touch; by the step formula `gray(i) = grays[min(4, floor(i/4))]` the body step `#101b28` (luminance 0.0105) sits on the `#0b1220` background (0.0061) = WCAG **1.078**, and it is *darker* than the interior step `#22384a` (0.0366), so the sheet also inverts the in-game light/dark hierarchy.
+Impact: DESIGN_BIBLE line 31 asks for grayscale silhouette discrimination; the artifact delivers a bluish, low-contrast, overlapping cluster, so machine identity cannot be read (my pass: 2/6).
+Fix: give the sheet canvas an explicit CSS size (`canvas.style.width = "900px"; canvas.style.height = "420px"`) so the bitmap maps 1:2 with no resample and the hexes stay exact; paint the sheet background a step lighter than the body (or map the steps by luminance role instead of `floor(i/4)`); per-row pitch `ceil(maxPartExtent × s) + 8` (row 1 → 136); print the mask strings beside the PNG in the receipt.
+Acceptance: neutral-gray purity ≥ 95 % of sheet ink; all five step counts > 0; 6 separated ink runs per row with widths matching each role's extent (±2 px); the body step's contrast against the sheet background ≥ 3; a 6/6 naming pass by two readers with labels hidden.
 
-## 5. E3 js-size ceiling - reviewer decision
+**B-4 (P2) Four shipped blueprints still render as the crude rectangle.**
+Evidence: `Object.keys(BLUEPRINTS)` = `sorter, furnace, copperSeparator, polymerRecycler, wireMill, platePress, circuitAssembler, signalLab`; `PARTS` has rows for only `dock, sorter, furnace, wireMill, signalLab, drone, generic`; the seeded mature fixture's ids `polymerRecycler, copperSeparator, platePress, circuitAssembler` therefore all paint `PARTS.generic`, whose 8×8 mask is **identical** to the sorter's (Hamming 0/64; versus ≥ 13 for the six authored rows). Visible in `slice-desktop-mature.png` and `slice-phone-mature.png` as nested rectangles with one dark slot.
+Impact: in the mature yard, 4 of 8 machines are distinguishable only by the level digit and the status bar → the asset-identity category cannot reach 3 in the crowded case.
+Fix: four more `PARTS` rows (one per missing blueprint), each with one identity mark outside the body's rectangle (roller/cutter drum, press crown, coil stack, antenna ring), respecting 3B-4 (height ≥ 2 units) and 3B-6 (inside ±16 units).
+Acceptance: a new assertion `Object.keys(BLUEPRINTS).every(b => b in PARTS)`; the mask matrix over the 9 rows has minimum Hamming ≥ 12; in `slice-desktop-mature.png` no two of the 8 machines share an identical ink bounding box.
 
-- My previous ceiling (spec `rev-q2spec-g3` 3E-E3): **<= 229000 B** (baseline at spec time 224,968 B / gzip 70.28 kB).
-- Integrated-head measurement at `add1f71`, this review: **232,754 B** (`dist/assets/index-CmwRilug.js`, gzip 73.57 kB). Base `ade4b60` alone already measured 229.48 kB, i.e. the audio-table work of Q-005 consumed the old headroom before any Q-002 file existed; the Q-002 delta is +2.73 kB (phase A table + painters) and the phases A+B+C total is +7.79 kB over the spec-time baseline.
-- **Decision: raise the ceiling to `<= 233000 B` (not 232800, not keep-it).** Reason: the measured 232,754 leaves 246 B of headroom at 233000 but only 46 B at 232800 - one extra `PARTS` row (the Q-004 cargo-pod variants and the Q-007 accent slot are already table rows) or a single renamed local crosses 46 B, which would make the gate fire on non-regressions and get ignored. 233000 still fails a >= 300 B addition, so it keeps the invariant the ceiling exists for (an unbounded table or an inlined atlas shows up immediately). Record the change as a one-line edit in the spec plus the printed byte count in the receipt; no other budget moves, and the ceiling returns to ~229000 if the audio table is later split out of the main chunk (then re-measure and re-pin).
+**B-5 (P2) With a full fleet the drone row merges and hides the store gauge.**
+Evidence: `LEAN_UNITS = 4` while one unit's own painted extent is 10 units (rotors at −5..5, shadow rx 5); in `slice-phone-rest.png` the dock band contains **one** cyan component of 94×18 device px (26.03 × 4.98 units) covering all five units, 5 amber 3.05-unit pod marks at 14.4-px pitch (4 of them only 56 of 121 px, i.e. partially overpainted), and **zero** amber components of the 2-unit gauge size inside device y 460..540, while the same 2-unit size is present 3× in the wreck band.
+Impact: the two always-on quantity readings compete in one 8-unit band; with 5 drones the store level is not separable from the drone marks, and "five units" do not read as five.
+Fix: `LEAN_UNITS` 4 → 11 (or stagger each unit's `y` by 3 units), and draw the store gauge outside the pad's vertical centre (e.g. `y + 11`) so the drone row cannot cover it.
+Acceptance: in the dock band, 5 separated cyan components each ≈ 22–36 px wide, ≥ 4 amber components of the 2-unit gauge size, and the gauge's hex `#ffb765` ratio against the floor = 7.049 in the JSON.
 
-## 6. Findings (B-nn = finding ids of this review; not BACKLOG rows)
+**B-6 (P3) Evidence set is incomplete relative to spec §5.**
+Evidence (at `c659cf8`): tracked evidence files are `docs/evidence/2026-11-03-style-slice-pixels.json` and 8 `docs/screenshots/slice-*.png` only — the spec's **E9** numeric receipt (`2026-11-03-style-slice.md`) and **E10** provenance manifest (`asset-provenance.json`) are absent at this SHA (both appear only on the later head `0606d37`/`090260a`), so 3A–3E have no printed mask strings, no 15-pair Hamming matrix and no per-role manifest; `slice-phone-landscape.png` (E4, 844×390) is absent, so the short-viewport media query is unverified; the shipped `slice-phone-one-machine.png` is not in the spec's E-list; no per-artifact header block carries the candidate SHA (the later manifest lists only `ade4b60/4d3c4bb/aff2ec6`).
+Impact: the frame that the 844×390 layout depends on has no capture, and artifacts cannot be pinned to the accepted SHA.
+Fix: add the landscape case (844×390 dpr 2, FS-1) to the harness and keep `one-machine` as an extra; write `candidateSha: c659cf8…` into both JSON headers.
+Acceptance: 9 PNG artifacts present and listed; each JSON has the header block with the SHA; landscape shows the full focal column with no clipped panel.
 
-| id | sev | file / line | observed | expected outcome | acceptance test |
-|---|---|---|---|---|---|
-| B-01 | medium | `rev-q2spec-g3.md` 3E row E3 (`<= 229000`); `docs/evidence/2026-11-03-style-slice.md` sec.5 (E3 note) | measured 232,754 B > stale ceiling; the ceiling predates Q-005 | ceiling becomes `<= 233000 B` (section 5), receipt keeps printing the byte count | receipt line `index-*.js = <n> B (<= 233000)` and the byte count taken from `dist/assets`, one assert in the existing gate script |
-| B-02 | medium | `docs/evidence/2026-11-03-style-slice-pixels.json` lines 13-21 vs `docs/evidence/2026-11-03-style-slice.md` sec.1 rows C4/C5 | the two artifacts disagree for the same keys: `dockPad` = `244,247,251` (11.28) in the JSON vs `127,159,187` (4.375) in the table; `amberToken` = `60,54,51` (1.02) vs `255,183,101` (7.049). Reviewer census: `244,247,251` = 2,295 px (selection outline), `60,54,51` = 105 px (DOM amber button interior), `255,183,101` = 898 px | one sampler, one table; the JSON becomes machine-gateable | assert for every key: `samples[key]` equals the palette hex for that key within +/-2 per channel, over all 7 cases; the two artifacts must print the same tuple |
-| B-03 | medium | `docs/evidence/2026-11-03-style-slice.md` sec.4 row `D8` (printed as "info") | the 17-mask first-frame completeness check is not asserted anywhere | D8 is a real PASS/FAIL line | new case in `tests/renderer/scene-draw.test.ts`: from the first `drawScene` op log, 9 entities + 8 floor-kit marks each have a non-empty mask in their box; receipt prints `D8 17/17` |
-| B-04 | low | `scripts/capture-style.mjs` sheet block (viewport 900x420, canvas 1800x840); receipt sec.7.1 | sheet is a page screenshot, so its bbox is 1800x839 while the drawn block is 639x202; the earlier quoted 1306x258 does not reproduce | element-scoped screenshot whose size equals the printed content box | `slice-sheet-silhouette.png` IHDR (or clip bbox) equals the printed content geometry +/-1 px; the legacy figure either reproduces or is retired in the receipt |
-| B-05 | low | receipt sec.1 coverage table vs this review sec.3; diff-pair count in the handoff (`5 pairs`) vs this review (4/4) | amber coverage differs by method (canvas run-counts 734/734/515/564 vs page census 898/938/743/728) and the pair count differs by scope | every table names its measurement method; both counts agree or the tolerance is stated | one named method per table; diff harness prints the pair list with the max fraction per pair |
-| B-06 | low | `src/game/renderer/sprites.ts` `AMBER_SHAPES`; receipt sec.4 row D7 | FS-1 exercises 1 of the 3 declared amber shapes (`3.05` units); pip/glow distinction is untested on screen | a fixture shows all three tuples | fixture with `trayUnits > 0` + running furnace + stocked gauge asserts exactly 3 distinct amber tuples; FS-1 keeps asserting 1 |
+## 6. Scores, gates and unverified dimensions
 
-Carried forward, still pending (unchanged by this chain): motion gate Q-004 (no frame sequence yet), audio listening gate (B-11), real-device trace (B-08), human first-feel (B-09).
+| category | score | basis |
+|---|---:|---|
+| Scene composition | 3 | authored layers present and measured (path 7 491 px, rails/posts 12 276 px, gravel 8 288 px, puddle blends), 100 % cell coverage, clear focal column; capped by the empty middle rows in the mature seed (1.8 % per cell) and the broken path band (spur ends at y 16, band starts at y 96 → an 80-unit gap) |
+| Asset identity | 2 | six authored roles separable (B2 min 13/64) but 4/8 mature machines are `generic` (mask identical to the sorter) and the sheet artifact is unreadable (B-3/B-4) |
+| Readability | 3 | grid context-only, status accents in 5 hues (violet/rust/steel/cyan/mint visible), pips not ratio bars; capped by the gauge/drone overlap (B-5) and the digit-on-rail collision |
+| Interaction | not re-scored here | the 13 draw-bound cases are deterministic; the click-through path is Q-001/Q-004 evidence |
+| Motion | **pending (Q-004)** | screenshots cannot prove motion. The only cases in this file that touch the motion gate are **D4** (two consecutive draws identical → no wall-clock read entered the render path) and **B7** (the 4-unit lateral offset survives `reducedMotion`); the 5-second real clip stays with Q-004 |
+| Audio | pending (Q-005, structural accept already recorded) | no listening evidence in this set |
+| State fidelity | 2 | status accents correct, but the captured state ≠ the asserted fixture (B-2) and the store gauge is occluded (B-5) |
+| Performance / accessibility | 3 (from the suite) | paint census 61/64/182 with margin, 1 `fillText` per frame, 0 off-grid coords, `imageSmoothingEnabled = false`; touch targets only via the unchanged `tests/ui/hud-layout.test.ts` (green), reduced-motion only via B7 |
 
-## 7. Verdict and queue
+Explicitly **unverified** at this SHA: real-device trace and 10 ms p95 (B-08), audio listening (B-11), organic first-minute progression, Safari/Firefox, the 844×390 layout (B-6), and the two-reader naming pass.
 
-**Q-002: accept-with-follow-ups** for chain `10bde02 / 7861926 / aaa3a4e / df4d1df / add1f71` (tip `add1f71`).
+## 7. Prioritized next-five (presentation area, unchanged order plus one insertion)
 
-- Accepted on the numbers: 3A (0 grid strokes at rest, 1 stroke with 14 segments in build), 3B (min Hamming 13/64, amber 5 ops / 1 shape, feature floor 3.61 px), 3C (1.545 / 3.594 / 4.937 / 4.375 / 7.049, texture band inside [1.15,1.60]), 3D (61 / 64 / 182 paints, deterministic, snapped coords, 5 status accents), 3E (206 tests, clean typecheck/validate, save parity, no new dependency).
-- Follow-ups required before Q-002 may be called *closed* (not before it is used as the style reference): **B-02** (JSON/table agreement), **B-03** (D8 assertion), plus B-04/B-05/B-06 as low-priority polish, and the second silhouette-naming reader for B1.
-- Category movement justified by this evidence: scene composition 1 -> **3**, asset identity 1 -> **3** (six role masks separated by >= 13/64 with a printed Hamming matrix and a measured luminance ladder). State fidelity stays **2** pending the Q-004 clip (world-vs-panel agreement under motion), motion and audio stay **pending**, readability/performance keep their Q-001 values.
-- Ordered next five: **1. Q-004** (interpolated motion + the 5 s clip: the only remaining blocker for the motion gate, and it also closes B7's visual half); **2. B-02 + B-03** (evidence-layer hardening: sampler agreement and the D8 mask assert); **3. Q-003** (close on 3B-5/3B-6 - the pip table already satisfies its clamp, so it needs only the one clamp test); **4. Q-007** (the fifth accent already exists as `#7fd6c2`, so it reduces to the colour-distinctness test over all 6 statuses); **5. Q-008** (keyboard selection cycling), with B-04/B-05/B-06 filling any gap.
+1. Q-002 rework of B-1…B-6 (this file) — one harness commit + one `sprites.ts` table commit.
+2. Q-003 (pip clamp) closes on 3B-5/3B-6, already green here.
+3. Q-004 interpolated motion + the 5-second clip (unlocks the motion gate).
+4. B-4's four `PARTS` rows if not folded into the Q-002 rework.
+5. Q-007 fifth status accent test (hue table already reserves `#7fd6c2`); then the resource/control icon set as slice 2.
 
-## 8. Limitations of this review
-
-- Headless chromium only (the only local browser); no Safari/Firefox numbers.
-- Device-pixel measurements come from the committed PNGs plus the deterministic stub-context suite; no real-device trace (B-08 still blocked).
-- B1 used one reader (the reviewer); the second pass is a follow-up, not a completed gate.
-- No motion/audio verdict is implied here; those rows stay pending by design (DESIGN_BIBLE lines 45 and 53).
+Artifacts written by this review: `work/review/rev-q002-g1.md` (this file), `.rustwake-runtime/reviewer/rev-q002-g1.json`, probes `probe-px-g1.mjs`, `probe-px2-g1.mjs`, `probe-px3-g1.mts`, `probe-px4-g1.mjs`, `probe-sheet-g1.mjs`, `probe-draw-g1.mts`, `probe-mask2-g1.mts`, `probe-mirror-g1.mjs` (all in `.rustwake-runtime/reviewer/`, read-only over the candidate). Measurement worktree: `.local/share/opencode/worktree/fe4e05/rev-q002-g1` at detached `c659cf8`; the shared `review-r1` worktree moved to `090260a` mid-session, which is why every number above was re-taken in the pinned worktree and re-checked.

@@ -1,0 +1,458 @@
+{
+  "artifact": "rustwake-d7af68a",
+  "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "sampleMs": 250,
+  "frameCount": 26,
+  "viewport": "390x844",
+  "dpr": 2,
+  "label": "organic real-time rAF loop on the live route, seeded FS-1 opening envelope (tick 344)",
+  "distinctPngHashes": 26,
+  "distinctDronePositions": 26,
+  "stepCssPxMax": 102.5,
+  "stepCssPxMean": 77.84,
+  "rows": [
+    {
+      "frame": 1,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f01.png",
+      "pngSha256": "f458d006848c81b4",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432344,
+      "drawsInWindow": 61,
+      "droneBodyCssPx": [
+        180.5,
+        487
+      ],
+      "stepCssPx": 0,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 2,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f02.png",
+      "pngSha256": "b7215d92451f2c33",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432344,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        589.5
+      ],
+      "stepCssPx": 102.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 3,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f03.png",
+      "pngSha256": "30bde8396fd5f0ec",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432354,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        530.5
+      ],
+      "stepCssPx": 59,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 4,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f04.png",
+      "pngSha256": "7de5862aaf63a851",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432354,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        431.5
+      ],
+      "stepCssPx": 99,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 5,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f05.png",
+      "pngSha256": "99b65829e8e98b87",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432354,
+      "drawsInWindow": 15,
+      "droneBodyCssPx": [
+        180.5,
+        347
+      ],
+      "stepCssPx": 84.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 6,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f06.png",
+      "pngSha256": "e6e5c59d6212c655",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432354,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        265
+      ],
+      "stepCssPx": 82,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 7,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f07.png",
+      "pngSha256": "45b51d526ff5032f",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        282.5
+      ],
+      "stepCssPx": 17.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 8,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f08.png",
+      "pngSha256": "fd15caa3096a432c",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        365.5
+      ],
+      "stepCssPx": 83,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 9,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f09.png",
+      "pngSha256": "815d8aad7109e4c9",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        458
+      ],
+      "stepCssPx": 92.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 10,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f10.png",
+      "pngSha256": "2d3da868bb0f978d",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        559
+      ],
+      "stepCssPx": 101,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 11,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f11.png",
+      "pngSha256": "fa9955a7df582db1",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        560.5
+      ],
+      "stepCssPx": 1.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 12,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f12.png",
+      "pngSha256": "57f6fdb242351586",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        459.5
+      ],
+      "stepCssPx": 101,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 13,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f13.png",
+      "pngSha256": "53b339a39ebe21b5",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        367
+      ],
+      "stepCssPx": 92.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 14,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f14.png",
+      "pngSha256": "c8b80ceab4d66404",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        283.5
+      ],
+      "stepCssPx": 83.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 15,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f15.png",
+      "pngSha256": "77c4deb86c8187b8",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        263.5
+      ],
+      "stepCssPx": 20,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 16,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f16.png",
+      "pngSha256": "6ede4d70f3255104",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        345.5
+      ],
+      "stepCssPx": 82,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 17,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f17.png",
+      "pngSha256": "d3ad5ad2c32dc947",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        435.5
+      ],
+      "stepCssPx": 90,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 18,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f18.png",
+      "pngSha256": "0cb991c4a3264ff3",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 15,
+      "droneBodyCssPx": [
+        180.5,
+        528.5
+      ],
+      "stepCssPx": 93,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 19,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f19.png",
+      "pngSha256": "975bbe123bcdbbc2",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        591
+      ],
+      "stepCssPx": 62.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 20,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f20.png",
+      "pngSha256": "1362656655f1d844",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        488.5
+      ],
+      "stepCssPx": 102.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 21,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f21.png",
+      "pngSha256": "6d856517a7ee2581",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        393.5
+      ],
+      "stepCssPx": 95,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 22,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f22.png",
+      "pngSha256": "91e58683906bc17c",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 17,
+      "droneBodyCssPx": [
+        180.5,
+        302.5
+      ],
+      "stepCssPx": 91,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 23,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f23.png",
+      "pngSha256": "f64f11d0b6a14b58",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 15,
+      "droneBodyCssPx": [
+        180.5,
+        248.5
+      ],
+      "stepCssPx": 54,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 24,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f24.png",
+      "pngSha256": "29320ead81ae342f",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        321
+      ],
+      "stepCssPx": 72.5,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 25,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f25.png",
+      "pngSha256": "1a8497c061ec71b9",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        408
+      ],
+      "stepCssPx": 87,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    },
+    {
+      "frame": 26,
+      "png": "work/review/ART-002/captures/art002-clip-250ms-f26.png",
+      "pngSha256": "977e1b7d1d81cfa2",
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432414,
+      "drawsInWindow": 16,
+      "droneBodyCssPx": [
+        180.5,
+        505
+      ],
+      "stepCssPx": 97,
+      "hud": "Scrap148Ferrous21Credits82Store900/900"
+    }
+  ]
+}
