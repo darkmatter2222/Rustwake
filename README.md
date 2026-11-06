@@ -1,5 +1,8 @@
 # Rustwake
 
+**Plugin 0.6.1 recovery hotfix:** failed host-session checks no longer throw a startup modal. Recovery stays visible in the sidebar and retries every five seconds, preserving worker reservations. An inaccessible session remains a blocker, not evidence that it stopped. 20 focused local tests passed, including automatic retry; live host recovery is not yet verified.
+
+
 **Team plugin 0.6.0:** `/rustwake-team start` now recovers the team from a new coordinator session, preserving worker IDs and queued work. No manual session-ID copying. Recovery verifies existing sessions and pauses visibly if their status cannot be established. Six total sessions and UI/UX remain supported. [Startup and recovery](docs/TEAM_DISPATCH.md).
 
 A mobile browser strategy-idle game about salvage, metals and automation. Built with React/TypeScript: a full-screen industrial pixel world, no page scrolling, and a factory that keeps carrying out your plans while you are away.

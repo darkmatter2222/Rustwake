@@ -35,7 +35,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
   lines.push('Queued is not running; running requires a host execution event.');
   return lines.join('\n');
  }
- lines.push('Dispatcher: OFF · /rustwake-team start');
+ lines.push(d?.recovery_pending?'RECOVERING · retrying host checks every 5s':'Dispatcher: OFF · /rustwake-team start');
  if(d?.error)lines.push('START BLOCKED: '+clean(d.error,200));
  const o=s.observation;
  const seconds=age(o?.observed_at,now);

@@ -48,7 +48,8 @@ test('unsafe/ambiguous write paths rejected',()=>{
 test('unavailable worker blocks transfer without losing reservations or replaying work',async t=>{
  const f=await fixture(t);await f.d.start('parent');
  f.infos.set('replacement',{id:'replacement'});f.infos.delete('child1');
- await assert.rejects(f.d.start('replacement'),/no session/);
+ await f.d.start('replacement');assert.match((await f.d.status()).error,/no session/);
+ assert.equal((await f.d.status()).recovery_pending.session_id,'replacement');
  assert.equal(f.calls(),4);assert.equal((await f.d.status()).coordinator,'parent');
  assert.equal((await f.d.status()).workers.length,4);
  assert.equal((await f.d.status()).enabled,false);
@@ -61,6 +62,15 @@ test('repeated start does not interrupt children or replay terminal assignments'
  await f.d.start('parent');await f.d.start('parent');
  assert.equal(f.calls(),4);assert.equal((await f.d.status()).workers[0].status,'succeeded');
  assert.equal(f.infos.get('child2').outcome,undefined);
+});
+test('failed lookup recovers automatically without another start command',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ f.infos.set('replacement',{id:'replacement'});f.infos.delete('child1');
+ await f.d.start('replacement');
+ f.infos.set('child1',{id:'child1',time:{}});
+ await new Promise(r=>setTimeout(r,5300));
+ assert.equal((await f.d.status()).coordinator,'replacement');
+ assert.equal((await f.d.status()).enabled,true);assert.equal(f.calls(),4);
 });
 test('queued release drains conflicting workers instead of filling a spare slot with new work',async t=>{
  const f=await fixture(t);await f.d.start('parent');

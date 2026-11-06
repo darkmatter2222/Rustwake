@@ -3,6 +3,10 @@ import path from 'node:path';
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 const exec=promisify(execFile);
+export function hostError(e){
+ const parts=[e?.name,e?.message,e?.code,e?.status,e?.data?.message,e?.cause?.message].filter(x=>typeof x==='string'||typeof x==='number');
+ return [...new Set(parts)].join(': ')||'Host session API returned an error without a message';
+}
 
 export function prioritizeTasks(tasks){
  const rank=t=>t.role==='release-engineer'?0:t.role==='reviewer'?1:2;
@@ -42,7 +46,7 @@ export function createDispatcher(ctx,root){
    if(!w.session_id)throw Error('Unresolved dispatch intent '+w.id+'; reconcile before launching replacements');
    let info;
    try{info=await ctx.session.get({sessionID:w.session_id});}
-   catch(e){throw Error('Cannot reconcile '+w.id+' ('+w.session_id+'): '+e.message);}
+   catch(e){throw Error('Cannot reconcile '+w.id+' ('+w.session_id+'): '+hostError(e));}
    if(!info)throw Error('Host returned no session for '+w.id+' ('+w.session_id+'); preserve lease and inspect the host');
    if(terminal.has(info.outcome)&&info.time?.idle){w.status=info.outcome;w.finished_at=new Date().toISOString();notifyNeeded=true;}
    else if(w.status==='created')throw Error('Prompt acceptance uncertain for '+w.id+'; inspect child before retry');
@@ -107,7 +111,7 @@ export function createDispatcher(ctx,root){
     state.retired_coordinators=[...new Set([...(state.retired_coordinators??[]),from])].filter(x=>x!==id);
     notifyNeeded=true;
    }
-   state.coordinator=id;state.enabled=true;await save();
+   state.coordinator=id;state.enabled=true;state.recovery_pending=null;await save();
    const oldQueue=await read('dispatch-queue.json');
    if(oldQueue&&oldQueue.coordinator_session_id!==id){oldQueue.coordinator_session_id=id;const p=path.join(dir,'dispatch-queue.json');await fs.writeFile(p+'.tmp',JSON.stringify(oldQueue,null,2));await fs.rename(p+'.tmp',p);}
    if(!await read('dispatch-queue.json')){
@@ -119,14 +123,20 @@ export function createDispatcher(ctx,root){
     ];
     await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,'dispatch-queue.json'),JSON.stringify({coordinator_session_id:id,tasks},null,2));
    }
-   }catch(e){state.error='Recovery paused: '+e.message;state.enabled=false;await save();throw e;}
+   }catch(e){
+    state.error='Recovery paused: '+hostError(e);state.enabled=false;
+    state.recovery_pending={session_id:id,retry_seconds:5};
+    await save();
+    timer=setTimeout(()=>{void this.start(id).catch(()=>{});},5000);timer.unref?.();
+    return state;
+   }
    finally{starting=false;}
    await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();
    return state;
   },
   async stop(){
    while(starting)await new Promise(r=>setTimeout(r,25));
-   state.enabled=false;clearInterval(timer);
+   state.enabled=false;state.recovery_pending=null;clearInterval(timer);
    // A stop may arrive during a host request. Do not launch more work; retain unknown leases.
    while(busy)await new Promise(r=>setTimeout(r,25));
    for(const w of active())if(w.session_id){try{await ctx.session.interrupt({sessionID:w.session_id});}catch(e){state.error=e.message;}}
