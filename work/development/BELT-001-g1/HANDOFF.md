@@ -1,18 +1,23 @@
 # BELT-001 g1 — priced, tile-running connections (developer-sim)
 
-Lane: `rw/belt001-g1`, base `b4e8321e782a4debc55e58a6c7b123e86dd1047a`, worktree
+Lane: BELT-001, branch `rw/belt001-g1` at the first push and `rw/belt001-g2` (same worktree, renamed
+by the coordinator) at the second, base `b4e8321e782a4debc55e58a6c7b123e86dd1047a`, worktree
 `C:/Users/ryans/AppData/Local/Temp/opencode/belt001-dev`. Spec: `work/product/dispatch-startup/assignments.md`
 Assignment 3, rows B-1..B-5 (with the pre-armed B-2 drop clause and the cheaper B-3 fallback).
 
-Tip/history of this branch (verified pushes, helper `scripts/publish-feature.mjs`):
+Verified pushes from this worktree (helper `scripts/publish-feature.mjs`; the coordinator renamed the
+lane branch between the two pushes, so the two commits sit on two remote refs):
 
-| push | SHA | time (UTC) | what |
-| --- | --- | --- | --- |
-| 1 | `5eb4be6f2c9c661789bf934efb1678202941a7a7` | 2026-11-06T13:39:34Z | WIP carried over from the interrupted run, as one coherent commit (19 entries: engine price, `run` field, save decode, probe, restated tables) |
-| 2 | recorded in `$(git rev-parse --git-dir)/rustwake-publication/rw_belt001-g1.json` and in the lane report | — | finished slice: rewritten `tests/simulation/belt.test.ts`, byte-shrunk engine helpers, this handoff |
+| push | remote ref | SHA | time (UTC) | what |
+| --- | --- | --- | --- | --- |
+| 1 | `refs/heads/rw/belt001-g1` | `5eb4be6f2c9c661789bf934efb1678202941a7a7` | 2026-11-06T13:39:34Z | WIP carried over from the interrupted run, as one coherent commit (19 entries: engine price, `run` field, save decode, probe, restated tables) |
+| 2 | `refs/heads/rw/belt001-g2` | `8102ac4a89eb5a7abbf07a99b9e26cde6fb6ebe7` | 2026-11-06T22:20:13Z | **the complete candidate**: parent is `5eb4be6`; adds the rewritten `tests/simulation/belt.test.ts`, the byte-shrunk engine helpers (entry back inside the ceiling) and this handoff |
+| 3 | `refs/heads/rw/belt001-g2` | tip reported in the lane report / `$(git rev-parse --git-dir)/rustwake-publication/rw_belt001-g2.json` | — | this handoff's SHA table (docs only) |
 
-Gap between push 1 and push 2: ~50 minutes of implementation (the WIP was committed at 13:39Z,
-the candidate lands after the gates below). Both pushes are on `rw/belt001-g1` only; `main` untouched.
+Gap between push 1 and push 2: the WIP landed at 13:39Z and the finished candidate at 22:20Z, with
+the gates below run in between on the same tree. `main` untouched. Review target = **`8102ac4a89eb5a7abbf07a99b9e26cde6fb6ebe7`**
+(the only SHA whose tree carries the whole slice); `5eb4be6` alone is the incomplete checkpoint, whose
+`tests/simulation/belt.test.ts` was still the pre-API draft and does not typecheck.
 
 ## What changed (behaviour)
 
@@ -103,9 +108,9 @@ drops it while undefined).
 
 ## B-4 — determinism
 
-* `npx tsx scripts/probe-belt.mjs` twice: printed FNV `probe-belt checksum 52a20c95` both times and
-  file `SHA256 = 58f8bcba…`→ exact: `58F8BCBC1ED1EA46EA88818581B2E2AB35B9BB478A0938ADDFAC3D52491D7514`
-  both times (11 063 B). `git status` shows no diff after re-running, so the stored JSON is the
+* `npx tsx scripts/probe-belt.mjs` twice: printed FNV `probe-belt checksum 52a20c95` both times, and
+  the file hashes identically: `SHA256 = 58F8BCBC1ED1EA46EA88818581B2E2AB35B9BB478A0938ADDFAC3D52491D7514`
+  (11 063 B) on both runs. `git status` shows no diff after re-running, so the stored JSON is the
   generated one. The test re-derives the same hash from the imported body (`52a20c95`).
 * 12 h catch-up: `tests/simulation/catchup-worker.test.ts` "the shared handler reproduces the direct
   catch-up exactly" (report, `nextLastSeenMs`, tick, credits, `unitTotal` all equal) and the 12 h
@@ -135,7 +140,7 @@ fixture checksum `eede3c4f`. Reading: the same yard now pays scrap per tile for 
 purse reaches the same milestones a few rounds later and buys one spare drone fewer inside the
 half hour — the ladder is 30 batches richer because priced links settle the pull cadence.
 
-12 h bench (median of 3, `bench 12h starter yard (4 machines, tick-by-tick)`, isolated file runs):
+12 h bench cost, B-5's last row (median of 3, `bench 12h starter yard (4 machines, tick-by-tick)`, isolated file runs):
 
 | tree | run 1 | run 2 | run 3 | median |
 | --- | --- | --- | --- | --- |
