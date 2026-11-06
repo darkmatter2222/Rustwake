@@ -1,6 +1,6 @@
 # Rustwake
 
-**Team plugin 0.5.0:** six total sessions (coordinator + five workers), a dedicated UI/UX persona and skill, and readable startup diagnostics. Update/reinstall the plugin to activate. [UI/UX workflow](.opencode/skills/rustwake-ui-ux/SKILL.md) · [Team startup](docs/TEAM_DISPATCH.md).
+**Team plugin 0.6.0:** `/rustwake-team start` now recovers the team from a new coordinator session, preserving worker IDs and queued work. No manual session-ID copying. Recovery verifies existing sessions and pauses visibly if their status cannot be established. Six total sessions and UI/UX remain supported. [Startup and recovery](docs/TEAM_DISPATCH.md).
 
 A mobile browser strategy-idle game about salvage, metals and automation. Built with React/TypeScript: a full-screen industrial pixel world, no page scrolling, and a factory that keeps carrying out your plans while you are away.
 

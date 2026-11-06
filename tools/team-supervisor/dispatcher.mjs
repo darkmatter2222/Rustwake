@@ -33,7 +33,7 @@ export function validateTask(t){
 export function createDispatcher(ctx,root){
  const dir=path.join(root,'.rustwake-runtime');
  let state={version:1,coordinator:null,enabled:false,workers:[],error:null},busy=false,timer;
- let notifyNeeded=false;
+ let notifyNeeded=false,starting=false;
  const save=async()=>{await fs.mkdir(dir,{recursive:true});const p=path.join(dir,'dispatcher.json');await fs.writeFile(p+'.tmp',JSON.stringify(state,null,2));await fs.rename(p+'.tmp',p);};
  const read=async name=>{try{return JSON.parse(await fs.readFile(path.join(dir,name),'utf8'));}catch(e){if(e.code==='ENOENT')return null;throw e;}};
  const active=()=>state.workers.filter(w=>!terminal.has(w.status));
@@ -49,7 +49,7 @@ export function createDispatcher(ctx,root){
   }
  }
  async function tick(){
-  if(busy||!state.enabled)return;
+  if(busy||starting||!state.enabled)return;
   busy=true;
   try{
    await observe();
@@ -82,18 +82,34 @@ export function createDispatcher(ctx,root){
     notifyNeeded=false;
    }
   }catch(e){state.error=e.message;}
-  finally{state.checked_at=new Date().toISOString();await save();busy=false;}
+  finally{state.checked_at=new Date().toISOString();try{await save();}finally{busy=false;}}
  }
  return {
   async start(id){
-   if(busy)throw Error('Dispatch reconciliation in progress');
+   if(starting)throw Error('Team recovery is already in progress; wait for its result');
+   starting=true;clearInterval(timer);
+   try{
+   while(busy)await new Promise(r=>setTimeout(r,25));
    const previous=await read('dispatcher.json');if(previous)state=previous;
+   // Verify the requested host session before changing ownership or interrupting anything.
+   if(!await ctx.session.get({sessionID:id}))throw Error('Current coordinator session is unavailable');
    await observe();
-   // Parent identity is a lease: never abandon workers merely because UI restarted.
-   if(state.coordinator&&state.coordinator!==id&&active().length)throw Error('Previous coordinator owns unresolved workers. Open that coordinator and use status/stop before starting another.');
+   const from=state.coordinator;
+   if(from&&from!==id){
+    // Stop old scheduling before adopting its children. Never abort the children or replay prompts.
+    await ctx.session.interrupt({sessionID:from});
+    let old=await ctx.session.get({sessionID:from});
+    for(let attempt=0;old&&!old.time?.idle&&attempt<20;attempt++){
+     await new Promise(r=>setTimeout(r,100));old=await ctx.session.get({sessionID:from});
+    }
+    if(!old?.time?.idle)throw Error('Previous coordinator is still stopping. Run start again shortly; existing workers are preserved');
+    state.recovery={from,to:id,adopted_workers:active().length,at:new Date().toISOString()};
+    state.retired_coordinators=[...new Set([...(state.retired_coordinators??[]),from])].filter(x=>x!==id);
+    notifyNeeded=true;
+   }
    state.coordinator=id;state.enabled=true;await save();
    const oldQueue=await read('dispatch-queue.json');
-   if(oldQueue&&oldQueue.coordinator_session_id!==id&&!active().length){oldQueue.coordinator_session_id=id;await fs.writeFile(path.join(dir,'dispatch-queue.json'),JSON.stringify(oldQueue,null,2));}
+   if(oldQueue&&oldQueue.coordinator_session_id!==id){oldQueue.coordinator_session_id=id;const p=path.join(dir,'dispatch-queue.json');await fs.writeFile(p+'.tmp',JSON.stringify(oldQueue,null,2));await fs.rename(p+'.tmp',p);}
    if(!await read('dispatch-queue.json')){
     const tasks=[
      {id:'startup-ui-ux',role:'ui-ux',write_paths:['work/design/dispatch-startup'],prompt:'Use .opencode/skills/rustwake-ui-ux/SKILL.md. Inspect the current mobile game and actual screenshots. Produce one prioritized implementation-ready UI/UX brief in work/design/dispatch-startup, with before evidence, interaction states, accessibility and acceptance checks. Do not redesign everything or change production files.'},
@@ -103,10 +119,13 @@ export function createDispatcher(ctx,root){
     ];
     await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,'dispatch-queue.json'),JSON.stringify({coordinator_session_id:id,tasks},null,2));
    }
-   clearInterval(timer);await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();
+   }catch(e){state.error='Recovery paused: '+e.message;state.enabled=false;await save();throw e;}
+   finally{starting=false;}
+   await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();
    return state;
   },
   async stop(){
+   while(starting)await new Promise(r=>setTimeout(r,25));
    state.enabled=false;clearInterval(timer);
    // A stop may arrive during a host request. Do not launch more work; retain unknown leases.
    while(busy)await new Promise(r=>setTimeout(r,25));
@@ -124,5 +143,6 @@ export function createDispatcher(ctx,root){
   close(){state.enabled=false;clearInterval(timer);},
  };
 }
+
 
 

@@ -13,7 +13,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  const lines=['RUSTWAKE TEAM',s.stopping?'STOPPED':here?'BOUND · this session':bound?'BOUND · another session':'NOT BOUND · /rustwake-team bind'];
  const tools=Array.isArray(s.guarded_wait_tools)?s.guarded_wait_tools:[];
  lines.push(`Wait guard: ${tools.length?'mapped ('+tools.length+')':'not configured'}`);
- if(bound&&!here){lines.push('Open the bound coordinator for telemetry.');return lines.join('\n');}
+ if(bound&&!here){lines.push('/rustwake-team start here recovers the existing team.');}
  const pub=s.publication;
  if(pub){
   lines.push('Feature push: '+label(age(pub.feature_push?.verified_push_at,now)));
@@ -26,6 +26,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  const d=s.dispatcher;
  if(d?.enabled){
   lines.push('Dispatcher: ON · host session API');
+  if(d.recovery)lines.push('Recovered team · '+d.recovery.adopted_workers+' existing workers preserved');
   lines.push('Checked: '+label(age(d.checked_at,now)));
   const workers=(d.workers??[]).filter(w=>!['succeeded','failed','interrupted'].includes(w.status));
   lines.push(`Reserved slots: ${workers.length}/5`);
@@ -58,6 +59,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+
 
 
 

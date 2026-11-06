@@ -1,4 +1,4 @@
-# Executable team dispatcher (0.3.0)
+# Executable team dispatcher (0.6.0)
 
 The old 0.2 plugin was advisory: bind, telemetry and a mapped wait guard did not launch workers. Backlog progress counts do not prove active child sessions. Version 0.3 adds an explicit `/rustwake-team start` command using OpenCode 2.0.22's published `session.create`, `session.prompt`, `session.get`, `session.interrupt` and event subscription APIs. Host acceptance still must be verified in the installed OpenCode runtime; mock tests are not live-model evidence.
 
@@ -36,9 +36,9 @@ After initial triage, queue real implementation, independent QA and release task
 
 ## Restart and stop
 
-`.rustwake-runtime/dispatcher.json` is plugin-owned durable state: actual returned session IDs, dispatch intent, outcomes and errors. Do not edit/delete it to manufacture free slots. A restart reconciles recorded sessions using the host API. Unknown dispatch or prompt acceptance reserves capacity and blocks retries to avoid duplicate workers. A different coordinator cannot take unresolved leases. Reopen the owning coordinator and inspect/interupt its workers as appropriate; retain work before rescheduling. Existing legacy workers are not auto-discovered by this API, hence stop them before first use.
+`.rustwake-runtime/dispatcher.json` is plugin-owned durable state: actual returned session IDs, dispatch intent, outcomes and errors. Do not edit/delete it to manufacture free slots. A restart reconciles recorded sessions using the host API. Unknown dispatch or prompt acceptance reserves capacity and blocks retries to avoid duplicate workers. Run `/rustwake-team start` in the current coordinator session to recover the team. The plugin verifies recorded children, interrupts the previous coordinator, confirms it is idle, transfers queue ownership, and preserves active workers without replaying prompts. Completed tasks remain completed. The sidebar reports the recovered worker count. Old children keep their original host parent IDs; logical supervision transfers, not the host session tree. The retired coordinator is blocked from tool execution by this plugin if its goal loop wakes again. Use one OpenCode process per checkout; this is session recovery, not distributed multi-host orchestration. If a host session cannot be verified, recovery pauses with a visible error and preserves every reservation. Retry start after host access is restored; never delete state to bypass the check. Existing legacy workers are not auto-discovered by this API, hence stop them before first use.
 
-`/rustwake-team stop` disables dispatch and interrupts known workers; it does not claim their mutations are rolled back. Restarting the app does not auto-start the dispatcher; use start in the owning session. Plugin disposal clears its control timer. Stop MasterGoal too when ending the team.
+`/rustwake-team stop` disables dispatch and interrupts known workers; it does not claim their mutations are rolled back. Restarting the app does not auto-start the dispatcher; use start in the current coordinator session. Plugin disposal clears its control timer. Stop MasterGoal too when ending the team.
 
 The normal delivery path remains reviewed main push → CI → automatic Databrick deployment. No server reinstallation is needed for this plugin update.
 
