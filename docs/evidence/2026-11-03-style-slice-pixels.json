@@ -19,23 +19,23 @@
         "y": 0,
         "runX": 780,
         "runY": 1688,
-        "count": 756003
+        "count": 739070
       },
       "floor": {
         "rgb": "34,56,74",
         "x": 25,
         "y": 223.5,
-        "runX": 1,
+        "runX": 51,
         "runY": 679,
-        "count": 411430
+        "count": 415669
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 174.5,
         "y": 565,
         "runX": 5,
-        "runY": 51,
-        "count": 9870
+        "runY": 11,
+        "count": 7283
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -43,31 +43,31 @@
         "y": 238,
         "runX": 18,
         "runY": 7,
-        "count": 8444
+        "count": 6607
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 150,
         "y": 295.5,
-        "runX": 65,
-        "runY": 11,
-        "count": 5381
+        "runX": 18,
+        "runY": 14,
+        "count": 3816
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 148,
         "y": 230.5,
         "runX": 72,
-        "runY": 25,
-        "count": 7843
+        "runY": 72,
+        "count": 14457
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 146.5,
-        "y": 263,
-        "runX": 11,
-        "runY": 11,
-        "count": 994
+        "x": 153.5,
+        "y": 256,
+        "runX": 7,
+        "runY": 7,
+        "count": 980
       }
     },
     "ratios": {
@@ -98,7 +98,7 @@
         "y": 0,
         "runX": 780,
         "runY": 1688,
-        "count": 753089
+        "count": 736268
       },
       "floor": {
         "rgb": "34,56,74",
@@ -106,15 +106,15 @@
         "y": 223.5,
         "runX": 3,
         "runY": 107,
-        "count": 395751
+        "count": 399913
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 174.5,
         "y": 565,
         "runX": 5,
-        "runY": 51,
-        "count": 9870
+        "runY": 2,
+        "count": 7032
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -122,31 +122,31 @@
         "y": 238,
         "runX": 18,
         "runY": 7,
-        "count": 8444
+        "count": 6024
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 150,
         "y": 295.5,
-        "runX": 65,
-        "runY": 11,
-        "count": 5381
+        "runX": 18,
+        "runY": 14,
+        "count": 3341
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 148,
         "y": 230.5,
         "runX": 72,
-        "runY": 25,
-        "count": 7843
+        "runY": 72,
+        "count": 15311
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 146.5,
-        "y": 263,
-        "runX": 11,
-        "runY": 11,
-        "count": 994
+        "x": 153.5,
+        "y": 256,
+        "runX": 7,
+        "runY": 7,
+        "count": 1195
       }
     },
     "ratios": {
@@ -177,39 +177,39 @@
         "y": 0,
         "runX": 780,
         "runY": 1688,
-        "count": 755981
+        "count": 739070
       },
       "floor": {
         "rgb": "34,56,74",
         "x": 25,
         "y": 223.5,
-        "runX": 1,
+        "runX": 11,
         "runY": 126,
-        "count": 380100
+        "count": 381226
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 174.5,
         "y": 565,
         "runX": 5,
-        "runY": 51,
-        "count": 9870
+        "runY": 17,
+        "count": 6891
       },
       "machineBody": {
         "rgb": "138,169,196",
         "x": 260,
         "y": 221.5,
-        "runX": 87,
+        "runX": 4,
         "runY": 11,
-        "count": 28474
+        "count": 20969
       },
       "machineWell": {
         "rgb": "14,23,38",
-        "x": 334,
-        "y": 221.5,
-        "runX": 22,
-        "runY": 11,
-        "count": 8545
+        "x": 34.5,
+        "y": 238,
+        "runX": 18,
+        "runY": 14,
+        "count": 5741
       },
       "dockPad": {
         "rgb": "127,159,187",
@@ -217,15 +217,15 @@
         "y": 229,
         "runX": 11,
         "runY": 79,
-        "count": 11808
+        "count": 19854
       },
       "amberToken": {
         "rgb": "255,183,101",
         "x": 296,
-        "y": 225,
+        "y": 227,
         "runX": 11,
-        "runY": 11,
-        "count": 830
+        "runY": 7,
+        "count": 1017
       }
     },
     "ratios": {
@@ -256,23 +256,23 @@
         "y": 0,
         "runX": 780,
         "runY": 1688,
-        "count": 756003
+        "count": 739070
       },
       "floor": {
         "rgb": "34,56,74",
         "x": 25,
         "y": 223.5,
-        "runX": 1,
+        "runX": 51,
         "runY": 679,
-        "count": 418356
+        "count": 419758
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 174.5,
         "y": 565,
         "runX": 5,
-        "runY": 51,
-        "count": 9870
+        "runY": 37,
+        "count": 8439
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -280,31 +280,31 @@
         "y": 238,
         "runX": 18,
         "runY": 7,
-        "count": 4352
+        "count": 3868
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 150,
         "y": 295.5,
-        "runX": 65,
-        "runY": 11,
-        "count": 3686
+        "runX": 7,
+        "runY": 2,
+        "count": 2049
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 148,
         "y": 230.5,
         "runX": 72,
-        "runY": 25,
-        "count": 7843
+        "runY": 72,
+        "count": 15779
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 146.5,
-        "y": 263,
-        "runX": 11,
-        "runY": 11,
-        "count": 824
+        "x": 153.5,
+        "y": 256,
+        "runX": 7,
+        "runY": 7,
+        "count": 1025
       }
     },
     "ratios": {
@@ -335,23 +335,23 @@
         "y": 0,
         "runX": 720,
         "runY": 1280,
-        "count": 443520
+        "count": 428903
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 28.5,
+        "x": 23.5,
         "y": 137,
-        "runX": 36,
-        "runY": 233,
-        "count": 349599
+        "runX": 46,
+        "runY": 626,
+        "count": 352326
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 162.5,
         "y": 451.5,
         "runX": 1,
-        "runY": 88,
-        "count": 8579
+        "runY": 35,
+        "count": 6239
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -359,31 +359,31 @@
         "y": 150,
         "runX": 17,
         "runY": 7,
-        "count": 7226
+        "count": 5553
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 138.5,
         "y": 203.5,
-        "runX": 60,
-        "runY": 10,
-        "count": 4691
+        "runX": 17,
+        "runY": 13,
+        "count": 3404
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 136.5,
         "y": 143.5,
         "runX": 67,
-        "runY": 23,
-        "count": 6535
+        "runY": 67,
+        "count": 12215
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 135,
-        "y": 173.5,
-        "runX": 10,
-        "runY": 10,
-        "count": 847
+        "x": 141.5,
+        "y": 166.5,
+        "runX": 7,
+        "runY": 7,
+        "count": 779
       }
     },
     "ratios": {
@@ -414,23 +414,23 @@
         "y": 0,
         "runX": 824,
         "runY": 1830,
-        "count": 882060
+        "count": 862961
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 32,
+        "x": 27,
         "y": 248,
-        "runX": 43,
-        "runY": 266,
-        "count": 458641
+        "runX": 53,
+        "runY": 717,
+        "count": 461824
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 184.5,
         "y": 608.5,
         "runX": 5,
-        "runY": 54,
-        "count": 11095
+        "runY": 10,
+        "count": 8144
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -438,31 +438,31 @@
         "y": 263,
         "runX": 19,
         "runY": 8,
-        "count": 9628
+        "count": 7294
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 158.5,
         "y": 324,
-        "runX": 69,
-        "runY": 11,
-        "count": 6015
+        "runX": 19,
+        "runY": 15,
+        "count": 4315
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 156,
         "y": 255.5,
         "runX": 77,
-        "runY": 26,
-        "count": 8502
+        "runY": 76,
+        "count": 15963
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 154.5,
-        "y": 289.5,
-        "runX": 11,
-        "runY": 11,
-        "count": 1039
+        "x": 162,
+        "y": 282,
+        "runX": 8,
+        "runY": 8,
+        "count": 1068
       }
     },
     "ratios": {
@@ -493,23 +493,23 @@
         "y": 0,
         "runX": 1688,
         "runY": 780,
-        "count": 1067622
+        "count": 1060138
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 312.5,
+        "x": 309,
         "y": 61.5,
-        "runX": 26,
-        "runY": 169,
-        "count": 182972
+        "runX": 33,
+        "runY": 453,
+        "count": 184280
       },
       "wreck": {
         "rgb": "109,144,171",
-        "x": 407.5,
+        "x": 409,
         "y": 289.5,
-        "runX": 5,
-        "runY": 34,
-        "count": 4385
+        "runX": 2,
+        "runY": 24,
+        "count": 3215
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -517,31 +517,31 @@
         "y": 71.5,
         "runX": 12,
         "runY": 5,
-        "count": 3863
+        "count": 2975
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 392,
         "y": 110,
-        "runX": 43,
-        "runY": 7,
-        "count": 2380
+        "runX": 12,
+        "runY": 10,
+        "count": 1751
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 390.5,
         "y": 66.5,
         "runX": 49,
-        "runY": 17,
-        "count": 3305
+        "runY": 48,
+        "count": 6188
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 389.5,
-        "y": 88,
-        "runX": 7,
-        "runY": 7,
-        "count": 418
+        "x": 394.5,
+        "y": 83.5,
+        "runX": 5,
+        "runY": 5,
+        "count": 448
       }
     },
     "ratios": {
@@ -572,7 +572,7 @@
         "y": 0,
         "runX": 1688,
         "runY": 780,
-        "count": 1066154
+        "count": 1058737
       },
       "floor": {
         "rgb": "34,56,74",
@@ -580,15 +580,15 @@
         "y": 61.5,
         "runX": 2,
         "runY": 71,
-        "count": 172546
+        "count": 173816
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 407.5,
         "y": 289.5,
         "runX": 5,
-        "runY": 34,
-        "count": 4385
+        "runY": 9,
+        "count": 3159
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -596,31 +596,31 @@
         "y": 71.5,
         "runX": 12,
         "runY": 5,
-        "count": 3863
+        "count": 2678
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 392,
         "y": 110,
-        "runX": 43,
-        "runY": 7,
-        "count": 2380
+        "runX": 12,
+        "runY": 10,
+        "count": 1476
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 390.5,
         "y": 66.5,
         "runX": 49,
-        "runY": 17,
-        "count": 3305
+        "runY": 48,
+        "count": 6642
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 389.5,
-        "y": 88,
-        "runX": 7,
-        "runY": 7,
-        "count": 418
+        "x": 394.5,
+        "y": 83.5,
+        "runX": 5,
+        "runY": 5,
+        "count": 522
       }
     },
     "ratios": {
@@ -651,39 +651,39 @@
         "y": 0,
         "runX": 1688,
         "runY": 780,
-        "count": 1067622
+        "count": 1060138
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 315,
+        "x": 309,
         "y": 61.5,
-        "runX": 2,
-        "runY": 7,
-        "count": 168718
+        "runX": 7,
+        "runY": 84,
+        "count": 168197
       },
       "wreck": {
         "rgb": "109,144,171",
-        "x": 407.5,
-        "y": 289.5,
-        "runX": 5,
-        "runY": 34,
-        "count": 4385
+        "x": 402,
+        "y": 290.5,
+        "runX": 4,
+        "runY": 3,
+        "count": 3002
       },
       "machineBody": {
         "rgb": "138,169,196",
         "x": 465.5,
         "y": 60.5,
-        "runX": 58,
+        "runX": 2,
         "runY": 7,
-        "count": 12627
+        "count": 9108
       },
       "machineWell": {
         "rgb": "14,23,38",
-        "x": 514.5,
-        "y": 60.5,
-        "runX": 14,
-        "runY": 2,
-        "count": 3868
+        "x": 315,
+        "y": 71.5,
+        "runX": 12,
+        "runY": 10,
+        "count": 2747
       },
       "dockPad": {
         "rgb": "127,159,187",
@@ -691,15 +691,15 @@
         "y": 65,
         "runX": 7,
         "runY": 53,
-        "count": 4989
+        "count": 8604
       },
       "amberToken": {
         "rgb": "255,183,101",
         "x": 489.5,
-        "y": 63,
+        "y": 64,
         "runX": 7,
-        "runY": 7,
-        "count": 333
+        "runY": 5,
+        "count": 439
       }
     },
     "ratios": {
@@ -730,23 +730,23 @@
         "y": 0,
         "runX": 1440,
         "runY": 900,
-        "count": 808916
+        "count": 793891
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 414,
+        "x": 404,
         "y": 79,
-        "runX": 37,
-        "runY": 235,
-        "count": 355286
+        "runX": 47,
+        "runY": 632,
+        "count": 358870
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 685,
         "y": 715,
         "runX": 1,
-        "runY": 88,
-        "count": 8599
+        "runY": 35,
+        "count": 6250
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -754,30 +754,30 @@
         "y": 106,
         "runX": 17,
         "runY": 6,
-        "count": 6988
+        "count": 5251
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 636,
         "y": 214,
-        "runX": 60,
-        "runY": 9,
-        "count": 4321
+        "runX": 17,
+        "runY": 13,
+        "count": 3142
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 633,
         "y": 93,
         "runX": 67,
-        "runY": 23,
-        "count": 6332
+        "runY": 67,
+        "count": 11900
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 629,
-        "y": 153,
-        "runX": 10,
-        "runY": 10,
+        "x": 643,
+        "y": 140,
+        "runX": 6,
+        "runY": 6,
         "count": 778
       }
     },
@@ -809,7 +809,7 @@
         "y": 0,
         "runX": 1440,
         "runY": 900,
-        "count": 806849
+        "count": 791931
       },
       "floor": {
         "rgb": "34,56,74",
@@ -817,15 +817,15 @@
         "y": 79,
         "runX": 4,
         "runY": 100,
-        "count": 343984
+        "count": 347152
       },
       "wreck": {
         "rgb": "109,144,171",
         "x": 685,
         "y": 715,
         "runX": 1,
-        "runY": 88,
-        "count": 8599
+        "runY": 26,
+        "count": 6158
       },
       "machineBody": {
         "rgb": "138,169,196",
@@ -833,31 +833,31 @@
         "y": 106,
         "runX": 17,
         "runY": 6,
-        "count": 6988
+        "count": 4892
       },
       "machineWell": {
         "rgb": "14,23,38",
         "x": 636,
         "y": 214,
-        "runX": 60,
-        "runY": 9,
-        "count": 4321
+        "runX": 17,
+        "runY": 13,
+        "count": 2579
       },
       "dockPad": {
         "rgb": "127,159,187",
         "x": 633,
         "y": 93,
         "runX": 67,
-        "runY": 23,
-        "count": 6332
+        "runY": 67,
+        "count": 12963
       },
       "amberToken": {
         "rgb": "255,183,101",
-        "x": 629,
-        "y": 153,
-        "runX": 10,
-        "runY": 10,
-        "count": 778
+        "x": 643,
+        "y": 140,
+        "runX": 6,
+        "runY": 6,
+        "count": 860
       }
     },
     "ratios": {
@@ -888,39 +888,39 @@
         "y": 0,
         "runX": 1440,
         "runY": 900,
-        "count": 808916
+        "count": 793891
       },
       "floor": {
         "rgb": "34,56,74",
-        "x": 421,
+        "x": 404,
         "y": 79,
-        "runX": 3,
-        "runY": 10,
-        "count": 327868
+        "runX": 10,
+        "runY": 117,
+        "count": 328484
       },
       "wreck": {
         "rgb": "109,144,171",
-        "x": 685,
-        "y": 715,
-        "runX": 1,
-        "runY": 88,
-        "count": 8599
+        "x": 665,
+        "y": 719,
+        "runX": 4,
+        "runY": 4,
+        "count": 5823
       },
       "machineBody": {
         "rgb": "138,169,196",
         "x": 841,
         "y": 76,
-        "runX": 80,
+        "runX": 3,
         "runY": 9,
-        "count": 23332
+        "count": 16437
       },
       "machineWell": {
         "rgb": "14,23,38",
-        "x": 979,
-        "y": 76,
-        "runX": 20,
-        "runY": 9,
-        "count": 6723
+        "x": 421,
+        "y": 106,
+        "runX": 16,
+        "runY": 13,
+        "count": 4609
       },
       "dockPad": {
         "rgb": "127,159,187",
@@ -928,15 +928,15 @@
         "y": 89,
         "runX": 10,
         "runY": 74,
-        "count": 9620
+        "count": 16485
       },
       "amberToken": {
         "rgb": "255,183,101",
         "x": 909,
-        "y": 83,
+        "y": 86,
         "runX": 9,
-        "runY": 9,
-        "count": 657
+        "runY": 6,
+        "count": 762
       }
     },
     "ratios": {

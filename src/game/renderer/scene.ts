@@ -259,7 +259,7 @@ export function drawScene(
   const sheen: [number, number, number, number][] = [];
   const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, options.reducedMotion, phase);
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
@@ -326,11 +326,14 @@ function drawFloorKit(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewS
   }
   ctx.fill();
   ctx.globalAlpha = 1;
+  // ART-003 A3-4: one 2-unit tick per cell at alpha 0.28 - the resting dot field is a
+  // measured ground texture now, one step under the floor ink, so the machines carry
+  // the brightest pixels instead of the grid.
   groupFill(
     ctx,
-    GRAVEL.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 3 * s, 3 * s] as [number, number, number, number]),
+    GRAVEL.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 2 * s, 2 * s] as [number, number, number, number]),
     "bodyLight",
-    0.5
+    0.28
   );
 }
 
@@ -363,7 +366,14 @@ function drawWreck(
 ): void {
   const p = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
   const s = camera.scale;
-  rectOf(ctx, p.x - 12 * s, p.y + 13 * s, 24 * s, 2 * s, "well"); // W4 shadow
+  // W4/ART-003: the hulk sits on a contact shadow ellipse, one step under the floor,
+  // the same 0.35 ellipse every other static footprint carries.
+  ctx.fillStyle = PALETTE.shadow;
+  ctx.globalAlpha = 0.35;
+  ctx.beginPath();
+  ctx.ellipse(snap(p.x), snap(p.y + 14 * s), snap(14 * s), snap(2 * s), 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
   ctx.fillStyle = PALETTE.wreck;
   ctx.beginPath(); // W1 pentagon hull
   WRECK_HULL.forEach(([dx, dy], i) => {
@@ -417,19 +427,31 @@ function drawMachine(
   view: ViewState,
   selected: boolean,
   sheen: [number, number, number, number][],
-  shade: [number, number, number, number][]
+  shade: [number, number, number, number][],
+  reducedMotion: boolean,
+  phase: number
 ): void {
   const c = tileToWorld(machine.tile);
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
   paintParts(ctx, p.x, p.y, s, row);
-  // ART-001: one bevel pair per body, inset inside its own box so the union ink of the
-  // cell is unchanged: a lit top edge and a shaded underside, light from the upper left.
+  // ART-001/ART-003: one light direction for the whole sheet - upper left lit, lower
+  // right dark. The lit pair (top edge + left column) rides in the `select` group, the
+  // dark pair (underlying bottom + right column) in the `path` group: two grouped paths
+  // for the row, but now a real 2-step facet on every body, not just an edge line.
   const body = bodyRowOf(row);
   if (body) {
-    sheen.push([(p.x + (body[0] + 1) * s), p.y + body[1] * s, (body[2] - 2) * s, 2 * s]);
-    shade.push([p.x + (body[0] + 1) * s, p.y + (body[1] + body[3] - 2) * s, (body[2] - 2) * s, 2 * s]);
+    const [bx, by, bw, bh] = body;
+    const inset = bw >= 6 ? 1 : 0; // a 3-unit post keeps the whole width on its lit band
+    sheen.push([p.x + (bx + inset) * s, p.y + by * s, (bw - 2 * inset) * s, 2 * s]);
+    shade.push([p.x + (bx + inset) * s, p.y + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
+    // The side columns only exist on bodies that have a middle band to lighten/darken;
+    // a 3-unit bar is one step already, so the top/bottom pair is the whole facet.
+    if (bh >= 6 && bw >= 6) {
+      sheen.push([p.x + bx * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+      shade.push([p.x + (bx + bw - 2) * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+    }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
   rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
@@ -441,12 +463,25 @@ function drawMachine(
   if (machine.blueprint === "furnace" && machine.status === "outputFull") {
     rectOf(ctx, p.x + 5 * s, p.y - 14 * s, 4 * s, 2 * s, "rust");
   }
-  if (machine.blueprint === "furnace" && machine.status === "running") {
-    // F4 amber glow circle, diameter 4, only while running.
+  // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
+  // quantised 6-frame step drives each: frames 1-2 of the cycle move, the rest hold.
+  // `working` = two-step amber core that swells one step per cycle; `starved` = the
+  // visibly quiet core (one dim square, frozen); `output-blocked` = the accent bar
+  // settling between its 6-unit and 4-unit widths. Reduced motion keeps step 0 only.
+  const q = reducedMotion ? 0 : Math.min(5, Math.floor(phase * 6));
+  const pulse = q === 2 || q === 3; // the single swell/settle frame pair of the cycle
+  if (machine.status === "running") {
+    // Two-step amber core: a 4-unit glow (5 on the swell frames) plus the 2-unit inner.
+    const r = pulse ? 2.5 * s : 2 * s;
     ctx.fillStyle = PALETTE.amber;
     ctx.beginPath();
-    ctx.ellipse(snap(p.x + 0 * s), snap(p.y + 2 * s), snap(2 * s), snap(2 * s), 0, 0, Math.PI * 2);
+    ctx.ellipse(snap(p.x), snap(p.y + 2 * s), snap(r), snap(r), 0, 0, Math.PI * 2);
     ctx.fill();
+    rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "amber");
+  } else if (machine.status === "starved") {
+    rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "bodyMid"); // quiet core, no pulse
+  } else if (machine.status === "outputFull") {
+    rectOf(ctx, p.x - 9 * s, p.y + 10 * s, (pulse ? 4 : 6) * s, 2 * s, statusColor(machine.status));
   }
   // S6 level pips: three 2x2 marks, digit from level 4 up (B5, never a ratio bar).
   groupFill(

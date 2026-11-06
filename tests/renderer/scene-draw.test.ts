@@ -208,16 +208,26 @@ describe("Q-002 renderer draws (3A/3B/3D)", () => {
     expect(SCALE).toBeCloseTo(1.8056, 4);
   });
 
-  it("D1/D2: paint ceilings hold for rest, build and the mature seed", () => {
-    expect(draw(fs1(), rest).stub.paints()).toBeLessThanOrEqual(80);
-    expect(draw(fs1(), build).stub.paints()).toBeLessThanOrEqual(90);
-    expect(draw(mature(), rest).stub.paints()).toBeLessThanOrEqual(240);
+  it("D1/D2: paint ceilings hold for rest, build and the mature seed (ART-003 restated)", () => {
+    // Before (b4e8321): rest 75, build 78, mature 199 under caps 80/90/240 and D3's 215.
+    // After (ART-003): +contact-shadow ellipses per footprint, +one lit/dark column pair
+    // inside the existing two groups per machine, +the two-step amber core pair for
+    // working machines. Printed below; ceilings move 80->84, 90->96, 215->231.
+    const restP = draw(fs1(), rest).stub.paints();
+    const buildP = draw(fs1(), build).stub.paints();
+    const matureP = draw(mature(), rest).stub.paints();
+    console.log("D1/D3 paints measured", JSON.stringify({ rest: restP, build: buildP, mature: matureP, base: { rest: 75, build: 78, mature: 199 } }));
+    expect(restP).toBeLessThanOrEqual(84);
+    expect(buildP).toBeLessThanOrEqual(96);
+    expect(matureP).toBeLessThanOrEqual(240);
   });
 
-  it("D3: per-entity growth caps on the mature seed", () => {
+  it("D3: per-entity growth caps on the mature seed (ART-003 restated)", () => {
     const { stub } = draw(mature(), rest);
     const paints = stub.log.filter((r) => PAINT_OPS.has(r.op)).length;
-    expect(paints).toBeLessThanOrEqual(40 + 8 * 12 + 18 * 3 + 5 * 5);
+    // 12 ops/machine + the shared-row shadow ellipse (+1/machine) and amber core pair
+    // (running rows only); routes, drones and the fixed scene block unchanged.
+    expect(paints).toBeLessThanOrEqual(40 + 8 * 14 + 18 * 3 + 5 * 5);
   });
 
   it("D4: two consecutive calls on the frozen state are element-wise identical", () => {
@@ -1422,6 +1432,9 @@ function inkBoxOf(blueprint: string, scale: number): { w: number; h: number } {
   let x1 = -Infinity;
   let y1 = -Infinity;
   for (const t of row) {
+    // ART-003: the contact-shadow tuple is an ellipse (flag slot 1), painted as a path,
+    // not a fillRect box - the footprint ink box is the solid lattice feature union.
+    if (t[5] === 1) continue;
     const box = [half(p.x + t[0] * scale), half(p.y + t[1] * scale), half(t[2] * scale), half(t[3] * scale)];
     const hit = painted.get(JSON.stringify(box));
     expect(hit, `${blueprint} ${JSON.stringify(box)}`).toBeDefined();
@@ -1569,7 +1582,7 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(latticeMin).toBeGreaterThanOrEqual(18);
   });
 
-  it("L-5: the twelve empty mature cells carry kit - min 12.1 %, max/min 6.47, caps held", () => {
+  it("L-5: the twelve empty mature cells carry kit - min 10.66 %, max/min 7.45, caps held", () => {
     const { stub, camera } = draw(mature(), rest);
     const ink = cellInkPct(stub.log, camera);
     const families: Record<string, number[]> = {
@@ -1633,7 +1646,10 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(ratio).toBeLessThanOrEqual(8.0);
     // Census caps: colour indices stay 4/12/13 (0 new paint groups), no new amber or grid ops.
     expect(kitPaintGroups).toBe(5);
-    expect(stub.paints()).toBeLessThanOrEqual(215);
+    // ART-003 restatement: base 199 measured under the 215 ceiling; the shadow ellipse
+    // per machine footprint and the working-state core pair raise the measured count to
+    // 222 (printed as maturePaints), still inside the per-entity formula above (231).
+    expect(stub.paints()).toBeLessThanOrEqual(231);
     expect(amberOps).toBeLessThanOrEqual(12);
     expect(gridStrokes).toBe(0);
     expect(minFeaturePx).toBeGreaterThanOrEqual(3.5);

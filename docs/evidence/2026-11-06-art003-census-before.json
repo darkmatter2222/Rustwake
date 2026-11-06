@@ -1,0 +1,180 @@
+{
+  "tag": "before",
+  "url": "http://localhost:5175/",
+  "scene": {
+    "canvas": [
+      390,
+      844
+    ],
+    "topColors": [
+      "11,18,32 56%",
+      "34,56,74 30.4%",
+      "8,13,24 3.8%",
+      "44,66,87 1.8%",
+      "127,159,187 1.1%",
+      "22,40,58 1%",
+      "16,27,40 0.9%",
+      "138,169,196 0.5%",
+      "109,144,171 0.5%",
+      "86,113,135 0.5%",
+      "53,86,107 0.4%",
+      "14,23,38 0.3%"
+    ],
+    "luminanceBuckets8": [
+      96.4,
+      1,
+      1.7,
+      0.6,
+      0.3,
+      0,
+      0.1,
+      0
+    ],
+    "twoDarkestSharePct": 97.4,
+    "twoTopColorsSharePct": 86.4,
+    "cells": {
+      "sorter8": {
+        "box": [
+          137,
+          278,
+          195,
+          335
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "inkSharePct": 65.4
+      },
+      "furnace14": {
+        "box": [
+          137,
+          335,
+          195,
+          393
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7
+        ],
+        "inkSharePct": 57.5
+      },
+      "dock2": {
+        "box": [
+          137,
+          220,
+          195,
+          278
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "inkSharePct": 67
+      },
+      "wreck": {
+        "box": [
+          123,
+          564,
+          209,
+          621
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
+        ],
+        "inkSharePct": 100
+      }
+    },
+    "gridDotPx": 1743,
+    "gridDotSharePct": 0.53,
+    "machineBodyPx": 1723,
+    "machineBodySharePct": 0.52,
+    "contactShadowPx": 248
+  },
+  "sheet": {
+    "roles": 11,
+    "matrix": [
+      [
+        "dock/sorter",
+        90.4
+      ],
+      [
+        "dock/furnace",
+        58.3
+      ],
+      [
+        "dock/wireMill",
+        42.9
+      ],
+      [
+        "dock/signalLab",
+        34
+      ],
+      [
+        "dock/drone",
+        11.6
+      ],
+      [
+        "sorter/furnace",
+        90.5
+      ],
+      [
+        "sorter/wireMill",
+        58.3
+      ],
+      [
+        "sorter/signalLab",
+        43.1
+      ],
+      [
+        "sorter/drone",
+        14.1
+      ],
+      [
+        "furnace/wireMill",
+        90.1
+      ],
+      [
+        "furnace/signalLab",
+        58.3
+      ],
+      [
+        "furnace/drone",
+        17.8
+      ],
+      [
+        "wireMill/signalLab",
+        90.5
+      ],
+      [
+        "wireMill/drone",
+        24.2
+      ],
+      [
+        "signalLab/drone",
+        37.5
+      ]
+    ]
+  },
+  "pageErrors": 0
+}
