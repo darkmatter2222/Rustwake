@@ -102,35 +102,44 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     expect(card).toContain("30 credits");
 
     // The drop executed (STRAT-002 g3 / A1-2v3): `buffer` leads no column under either
-    // gap ladder, so the dock carries two names, in this order. STRAT-003: each name
-    // carries its own price - the dearer one is the throughput plan.
+    // gap ladder, so the dock carries two names. STRAT-003: each name carries its own
+    // price. BLD-001: the row is painted cheapest-first, so the plain-price budget plan is
+    // the leftmost face and the dearer throughput plan follows it.
     const machineId = store.getState().machines[0].id;
     expect(branchOptions(store.getState(), machineId).map((option) => option.id)).toEqual([
-      "speed",
       "draw",
+      "speed",
     ]);
     expect(branchOptions(store.getState(), machineId).map((option) => option.cost)).toEqual([
-      "40 credits",
       "30 credits",
+      "40 credits",
     ]);
 
     const buttons = [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")];
     const labels = buttons.map((node) => (node.textContent ?? "").trim());
     expect(labels.length).toBe(2);
-    // Order, not just membership: the first face is the batch clock at the plain
-    // ladder plus its 10-credit premium, the last the budget at the plain price.
-    expect(labels[0]).toMatch(/^Faster batches40 credits$/);
-    expect(labels[1]).toMatch(/^Less power30 credits$/);
+    // Order, not just membership: the first face is the budget plan at the plain price,
+    // the last the batch clock at the plain ladder plus its 10-credit premium.
+    expect(labels[0]).toMatch(/^Less power30 credits$/);
+    expect(labels[1]).toMatch(/^Faster batches40 credits$/);
     expect(labels.join("|")).not.toContain("More input");
     // Each face prints its own price; the row is the tradeoff (STRAT-003).
-    expect(buttons[0].querySelector(".dock__cost")?.textContent).toBe("40 credits");
-    expect(buttons[1].querySelector(".dock__cost")?.textContent).toBe("30 credits");
+    expect(buttons[0].querySelector(".dock__cost")?.textContent).toBe("30 credits");
+    expect(buttons[1].querySelector(".dock__cost")?.textContent).toBe("40 credits");
     for (const button of buttons) {
       expect(parseFloat(getComputedStyle(button).minHeight)).toBeGreaterThanOrEqual(44);
     }
 
-    // One tap, no Build-then-Place pair: the chosen name is the recorded branch.
-    act(() => findButton("Less power")?.click());
+    // One tap on the *leftmost* face, no Build-then-Place pair: the chosen name is the
+    // recorded branch, and the charge is exactly the number that face printed (34 - 30 = 4,
+    // the purse covers the plain price and not the premium).
+    const printed = Number(
+      (buttons[0].querySelector(".dock__cost")?.textContent ?? "0").split(" ")[0]
+    );
+    const creditsBefore = store.getState().credits;
+    act(() => buttons[0].click());
+    expect(printed).toBe(30);
+    expect(store.getState().credits).toBe(creditsBefore - printed);
     expect(store.getState().machines[0].branch).toEqual(["draw"]);
     expect(store.getState().machines[0].level).toBe(2);
     expect(store.getState().credits).toBe(4);
