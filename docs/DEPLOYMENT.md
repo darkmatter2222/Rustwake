@@ -1,6 +1,10 @@
 # Rustwake on Databrick — safe adoption and recurring releases
 
-## Current truth
+## Automatic delivery update
+
+`docs/AUTOMATED_DELIVERY.md` is authoritative for the new Actions delivery path and commissioning status. The runner executed a job on 2026-11-06; production adapter installation is still pending. Once commissioned, releases use a stable parent mount and atomic static-file promotion, not a Portainer bind change per release. Preserve the discovery/ownership/rollback guidance below for initial adoption and recovery.
+
+## Historical deployment evidence
 
 The latest checked repository receipt, [OPS-007](../work/deployments/OPS-007-g1.json), records deployment of `4c30fb4e247fe2a9da400b8e778296f422d6721e` at [https://home.darkmatter2222.com/rustwake/](https://home.darkmatter2222.com/rustwake/), verified 2026-11-04T19:16:00Z with served asset hashes and external checks. This is receipt-backed status, not a new live check by the team-configuration update. Newer main work may not be deployed.
 
@@ -83,4 +87,5 @@ Server changes use a deployer lease plus before/after resource/config identity c
 ```
 
 This is a schema example, not evidence of deployment. Publisher records a real receipt under `work/deployments/` and updates the README's live URL and deployed revision without secrets.
+
 

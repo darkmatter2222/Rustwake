@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Install a reviewed copy at /opt/rustwake-delivery; never run from an artifact.
-The machine-specific adapter is deliberately absent until local discovery/bootstrap.
+The static host adapter requires a one-time stable serving mount.
 """
 import datetime
 import fcntl
@@ -72,6 +72,8 @@ def trusted_adapter():
 def call_adapter(action, directory, sha):
     # No command text from repository data. No inherited provider/GitHub secrets.
     env = {'PATH': '/usr/bin:/bin', 'LANG': 'C.UTF-8'}
+    if os.environ.get('RUSTWAKE_GITHUB_TOKEN'):
+        env['RUSTWAKE_GITHUB_TOKEN'] = os.environ['RUSTWAKE_GITHUB_TOKEN']
     result = subprocess.run([str(ADAPTER), action, str(directory), sha], env=env,
                             capture_output=True, text=True, timeout=900, check=False)
     if result.returncode:
@@ -117,3 +119,4 @@ if __name__ == '__main__':
     except Exception as error:
         print('Delivery blocked: ' + type(error).__name__ + '; inspect local adapter setup/operation log.', file=sys.stderr)
         raise SystemExit(1)
+

@@ -1,5 +1,6 @@
 name: delivery
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: [ci]
     types: [completed]
@@ -14,11 +15,12 @@ jobs:
   package:
     # No fork/PR artifact may reach the deployment runner. Enable only after bootstrap.
     if: >-
-      vars.RUSTWAKE_CD_ENABLED == 'true' &&
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (vars.RUSTWAKE_CD_ENABLED == 'true' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.head_branch == 'main' &&
-      github.event.workflow_run.head_repository.full_name == github.repository
+      github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: ubuntu-latest
     outputs:
       source_sha: ${{ steps.identity.outputs.sha }}
@@ -26,7 +28,7 @@ jobs:
       - name: Record immutable source
         id: identity
         env:
-          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
           echo "sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
@@ -65,6 +67,7 @@ jobs:
           path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
       - name: Validate and promote through host-owned adapter
         env:
+          RUSTWAKE_GITHUB_TOKEN: ${{ github.token }}
           SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
           ARTIFACT_DIR: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
           RECEIPT_PATH: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}-receipt.json
@@ -79,3 +82,16 @@ jobs:
           path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}-receipt.json
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Explain delivery outcome
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+        run: |
+          printf '### Rustwake delivery\nSource: `%s`\n\nJob result: **%s**. See the receipt artifact for served verification.\n\n[Game](https://home.darkmatter2222.com/rustwake/) · [Team dashboard](https://home.darkmatter2222.com/rustwake/team/)\n' "$SOURCE_SHA" "$RESULT" >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove downloaded candidate
+        if: always()
+        env:
+          CANDIDATE: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
+        run: rm -rf -- "$CANDIDATE"

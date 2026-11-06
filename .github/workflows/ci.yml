@@ -17,11 +17,14 @@ jobs:
       - run: node scripts/team-board.mjs --check
       - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs tools/team-supervisor/*.test.mjs
       - run: python scripts/deploy-artifact.test.py
+      - run: python scripts/host-adapter.test.py
+      - run: bash -n scripts/install-delivery-host.sh
       - run: npm ci
       - run: npm run typecheck
       - run: npm run validate
       - run: npm test
       - run: npm run build
+
 
 
 

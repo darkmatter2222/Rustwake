@@ -58,3 +58,10 @@ Ship honestly labeled previews during continued product improvement if technical
 
 The long-term goal evolves: deep automation, varied salvage, readable constraints, compelling expeditions and defense, long progression, optional asynchronous competition and fair monetization. Introduce systems when evidence supports them. Optimize sustained voluntary enjoyment and strategic expression, not manipulative compulsion, punitive absences or pay-to-win.
 
+
+
+## Databrick Actions handoff — 2026-11-06
+
+Read `docs/AUTOMATED_DELIVERY.md` before any release. The runner has executed a real job; adapter/config installation and stable Rustwake mount adoption are still pending OPS-102. Assign the local release engineer the full commissioning checklist using existing HomeAILab access. Do not reinstall the runner or ask the sponsor to repeat deployment authorization. Missing root/admin access is a precise blocker, not permission to claim success.
+
+After commissioning, publish eligible reviewed work to main; GitHub Actions is the sole routine deployment owner. Monitor asynchronously while other lanes keep working. Do not manually deploy in parallel or wait with idle slots. Record CI/run URL, exact source SHA, receipt and browser evidence separately; consume failed runs into prioritized repair tickets. Update README/board after verified delivery, not just push. Keep screenshots and critical player/visual review upstream of main; the workflow deploys every eligible green main revision. Audit disk/asset retention and runner health as real operational work.

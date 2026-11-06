@@ -10,9 +10,9 @@ Write requests in **[SPONSOR_INBOX.md](SPONSOR_INBOX.md)** below its marker, loc
 
 The team now supports three concurrent developer instances on independent scopes, with QA/product/release rotated as useful work requires. [Board](work/BOARD.md) shows measured throughput, prospective points, cycle time, rework and observed utilization/coverage. Missing samples are unknown. Current repository update cannot observe local running sessions.
 
-**Dashboard route planned:** `/rustwake/team/` under the existing game host. Automatic packaging/delivery is configured but local runner/host-adapter activation remains OPS-102; it is not yet verified live. [Delivery setup](docs/AUTOMATED_DELIVERY.md) · [Team supervisor setup](docs/TEAM_OPERATIONS.md). Existing game deployment below is preserved.
+**Databrick runner verified online:** it executed [readiness run 42141526810](https://github.com/darkmatter2222/Rustwake/actions/runs/42141526810). The deployment adapter/config were absent, so **automatic deployment and `/rustwake/team/` are not yet commissioned**. The repo now supplies the tested static adapter, host installer, nginx config, manual canary and main → CI → delivery workflow. The local release engineer must complete the [one-time commissioning steps](docs/AUTOMATED_DELIVERY.md#one-time-commissioning--local-release-engineer), then enable `RUSTWAKE_CD_ENABLED`. No additional OpenCode plugin is needed. [Delivery setup](docs/AUTOMATED_DELIVERY.md) · [Team supervisor setup](docs/TEAM_OPERATIONS.md). Existing game deployment below is preserved.
 
-Operational tooling checks: 36 Node tests and 5 deployment-validation tests pass locally; runtime plugin loading and server commissioning still require the local canaries. Game source is unchanged by this update.
+Delivery checks: 5 artifact-validation tests and 12 host-adapter tests pass locally; installer shell syntax passes. The first real runner job confirmed connectivity and identified missing host components. Full host commissioning and browser verification remain pending. Game source is unchanged by this update.
 
 ## Current status
 
@@ -110,5 +110,6 @@ node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs tools/team-su
 ```
 
 [Master goal](goal.md) · [Team charter](docs/TEAM_CHARTER.md) · [Workflow](docs/AGENT_WORKFLOW.md) · [Product strategy](docs/PRODUCT_STRATEGY.md) · [Art and experience](docs/DESIGN_BIBLE.md) · [Mechanics reference](docs/GAME_DESIGN.md) · [Deployment](docs/DEPLOYMENT.md).
+
 
 

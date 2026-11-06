@@ -1,0 +1,15 @@
+{
+  "status": "blocked",
+  "environment": "databrick",
+  "verifiedAt": "2026-11-06T01:06:16Z",
+  "runUrl": "https://github.com/darkmatter2222/Rustwake/actions/runs/42141526810",
+  "runner": "databrick-rustwake",
+  "runnerReceivedJob": true,
+  "nonroot": true,
+  "validatorInstalled": true,
+  "adapterInstalled": false,
+  "configurationInstalled": false,
+  "productionMutationPerformed": false,
+  "blocker": "Local release engineer must install the supplied host adapter/config, adopt the stable Rustwake mount, verify a canary and enable automatic triggers.",
+  "runbook": "docs/AUTOMATED_DELIVERY.md"
+}
