@@ -51,3 +51,7 @@ Done: code checked, independent QA verdict for exact candidate and changed scope
 
 Every progress claim identifies evidence type: owner report, actual agent interaction, source inspection, automated test, visual inspection, audio listening, numerical analysis, hypothesis, or simulated-persona inference. Never infer enjoyment, retention or revenue from a test count.
 
+
+## Frequent publication contract (supersedes older no-push wording)
+
+Read docs/PUBLICATION.md. Developers are authorized and expected to commit and push their own rw/ feature branches from separate registered worktrees, targeting useful checkpoints every 5–10 minutes when changed work exists. They must not push main or peers' files. The coordinator prepares each worktree, supplies its absolute directory in the dispatch task, and queues independent review and a release engineer promptly when ready. A queued release now gets dispatcher priority and drains conflicting work rather than being starved by new assignments. No blanket wait for every worker. The release engineer remains sole main integrator; successful main CI deploys automatically. Feature pushes provide visibility without claiming acceptance. Report real remote SHA, test limitations and deployment receipts. After startup findings, prioritize a player-visible implementation; do not spend another night extending audits. Publication telemetry distinguishes actual verified helper pushes from commit activity and unknown state.

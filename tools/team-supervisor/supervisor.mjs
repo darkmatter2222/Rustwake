@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {publicationReader} from './publication.mjs';
 import {createDispatcher} from './dispatcher.mjs';
 import { formatTeamStatus, sponsorState } from './telemetry.mjs';
 
@@ -15,6 +16,7 @@ export async function setup(ctx, statusRpc) {
  let coordinator=null, stopping=false;
  const registrations=[];
  const dispatcher=createDispatcher(ctx,root);
+ const publication=publicationReader(root);
  const eventsAbort=new AbortController();
  if(ctx.event?.subscribe){void (async()=>{try{for await(const e of ctx.event.subscribe({signal:eventsAbort.signal}))dispatcher.event(e);}catch{}})();}
  const waitTools=Array.isArray(ctx.options?.waitTools)?ctx.options.waitTools:[];
@@ -23,7 +25,7 @@ export async function setup(ctx, statusRpc) {
   const b=await read('work/backlog.json');
   const observed=await read('.rustwake-runtime/supervisor-observation.json');
   const inbox=await fs.readFile(path.join(root,'SPONSOR_INBOX.md'),'utf8').catch(()=>null);
-  return {dispatcher:await dispatcher.status(),board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
+  return {publication:await publication(),dispatcher:await dispatcher.status(),board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
  }
  if(statusRpc) registrations.push(await ctx.rpc.register(statusRpc,{
   read:async ({sessionID})=>{
@@ -59,5 +61,6 @@ export async function setup(ctx, statusRpc) {
  }));
  return async()=>{dispatcher.close();eventsAbort.abort();stopping=true;coordinator=null;await Promise.allSettled(registrations.map(r=>r.dispose()));};
 }
+
 
 

@@ -1,5 +1,25 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+const exec=promisify(execFile);
+
+export function prioritizeTasks(tasks){
+ const rank=t=>t.role==='release-engineer'?0:t.role==='reviewer'?1:2;
+ return [...tasks].sort((a,b)=>rank(a)-rank(b));
+}
+export async function taskDirectory(root,task){
+ if(!task.directory)return root;
+ const directory=await fs.realpath(task.directory);
+ const {stdout}=await exec('git',['worktree','list','--porcelain'],{cwd:root});
+ const registered=await Promise.all(stdout.split('\n').filter(l=>l.startsWith('worktree ')).map(l=>fs.realpath(l.slice(9))));
+ if(!registered.includes(directory))throw Error('Assignment directory is not a registered worktree of this repository');
+ if(task.role==='developer'){
+  const branch=(await exec('git',['branch','--show-current'],{cwd:directory})).stdout.trim();
+  if(directory===root||!branch.startsWith('rw/'))throw Error('Developer publishing requires a separate rw/ feature worktree');
+ }
+ return directory;
+}
 
 const terminal = new Set(['succeeded','failed','interrupted']);
 const roles = new Set(['developer','reviewer','player','product-owner','release-engineer']);
@@ -32,21 +52,25 @@ export function createDispatcher(ctx,root){
    await observe();
    const queue=await read('dispatch-queue.json');
    if(queue && queue.coordinator_session_id!==state.coordinator)throw Error('Dispatch queue belongs to another coordinator');
-   const tasks=(queue?.tasks??[]).map(validateTask);
+   const tasks=prioritizeTasks((queue?.tasks??[]).map(validateTask));
+   const releasePending=tasks.some(t=>t.role==='release-engineer'&&!state.workers.some(w=>w.id===t.id));
    for(const t of tasks){
     if(!state.enabled||active().length>=3)break;
     if(state.workers.some(w=>w.id===t.id)||active().some(w=>conflict(w.write_paths,t.write_paths)))continue;
     if(t.role==='release-engineer'&&active().some(w=>w.role==='release-engineer'))continue;
+    // Drain conflicting work for the queued release instead of refilling every slot with new development.
+    if(releasePending&&t.role!=='release-engineer')continue;
+    const directory=await taskDirectory(root,t);
     // Persist intent before creation: ambiguous failures never silently retry/create duplicates.
     const w={...t,status:'creating',session_id:null,created_at:new Date().toISOString()};
     state.workers.push(w);await save();
     const parent=await ctx.session.get({sessionID:state.coordinator});
     const child=await ctx.session.create({parentID:state.coordinator,agent:'rustwake-'+t.role,
-      ...(parent.model?{model:parent.model}:{}),location:{directory:root},title:'Rustwake '+t.id,
+      ...(parent.model?{model:parent.model}:{}),location:{directory},title:'Rustwake '+t.id,
       metadata:{rustwake_dispatch_id:t.id}});
     w.session_id=child.id;w.status='created';await save();
     await ctx.session.prompt({sessionID:child.id,resume:true,text:
-      `Bounded Rustwake assignment ${t.id}. Read your role instructions and goal.md. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit another worker's files. Complete this assignment and return findings; do not run a forever loop.\n${t.prompt}`});
+      `Bounded Rustwake assignment ${t.id}. Read your role instructions, goal.md and docs/PUBLICATION.md. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit another worker's files. In an assigned rw/ feature worktree, commit and push coherent owned changes frequently using scripts/publish-feature.mjs; do not wait for final approval to publish a feature branch. Never push main unless you are the assigned release engineer. Complete this bounded assignment and return branch/SHA/test evidence; do not run a forever loop.\n${t.prompt}`});
     if(w.status==='created')w.status='queued';await save();
    }
    state.error=null;
@@ -95,3 +119,4 @@ export function createDispatcher(ctx,root){
   close(){state.enabled=false;clearInterval(timer);},
  };
 }
+

@@ -2,6 +2,11 @@
 
 You are the project manager, `rustwake-coordinator`. Build and keep improving a compelling React/TypeScript mobile browser strategy-idle game about recovering wrecks, mining resources, automating industry and preparing for danger. The player makes plans, sees their machinery execute them, and returns to meaningful progress. Capture the satisfaction of Factorio, mining games and The Tower without copying their assets or treating endless tapping as strategy. Preserve working code, saves, tests and history. No repo wipe or gratuitous rewrite.
 
+
+## Frequent publication contract (supersedes older no-push wording)
+
+Read docs/PUBLICATION.md. Developers are authorized and expected to commit and push their own rw/ feature branches from separate registered worktrees, targeting useful checkpoints every 5–10 minutes when changed work exists. They must not push main or peers' files. The coordinator prepares each worktree, supplies its absolute directory in the dispatch task, and queues independent review and a release engineer promptly when ready. A queued release now gets dispatcher priority and drains conflicting work rather than being starved by new assignments. No blanket wait for every worker. The release engineer remains sole main integrator; successful main CI deploys automatically. Feature pushes provide visibility without claiming acceptance. Report real remote SHA, test limitations and deployment receipts. After startup findings, prioritize a player-visible implementation; do not spend another night extending audits. Publication telemetry distinguishes actual verified helper pushes from commit activity and unknown state.
+
 ## Executable dispatch takes precedence
 
 Read docs/TEAM_DISPATCH.md. Version 0.3 `/rustwake-team start` directly creates child sessions; `/rustwake-team bind` alone does not. When Dispatcher ON, write scoped assignments to `.rustwake-runtime/dispatch-queue.json` and inspect plugin-owned `dispatcher.json`. Do not manually spawn competing children or treat backlog counts as live workers. Process startup audit results into implementation/review/release work, refill the queue, and inspect actual returned child IDs and host execution events. Keep MasterGoal as the sole coordinator goal loop. Do not repeat startup audits forever.
@@ -58,7 +63,7 @@ Use `work/backlog.json` as the one published state ledger, `work/BOARD.md` as it
 
 ## Cadence
 
-Publish coherent, verified progress to existing GitHub `origin/main` as soon as ready: target 3–5 minutes of ready-work latency, investigate >10 minutes. User said GitLab once but the supplied repository and established origin are GitHub; preserve that origin, do not create a new service or mirror. Update README's concise status on every meaningful push; do not churn timestamps. Deploy the latest safe eligible gameplay/artifact within 5–10 minutes of eligibility when the host is available. No redeploys for documentation-only changes. Main publication is not deployment. Failed or pending CI is never reported passed.
+Publish coherent, verified progress to existing GitHub `origin/main` as soon as ready: target 3–5 minutes of ready-work latency, investigate >10 minutes. User said GitLab once but the supplied repository and established origin are GitHub; preserve that origin, do not create a new service or mirror. Update README's concise status on every meaningful push; do not churn timestamps. Deploy the latest safe eligible gameplay/artifact within 5–10 minutes of eligibility when the host is available. The existing pipeline may publish a dashboard-only artifact for documentation/status changes; do not bypass or manually duplicate it. Main publication is not deployment. Failed or pending CI is never reported passed.
 
 Ship honestly labeled previews during continued product improvement if technical/security/save-compatibility and affected-scope review pass. Unrelated long-term polish gaps must not block every release; a new severe regression must. Product owner documents preview limitations; QA can veto a broken release. Release engineer records exact served SHA, URL, asset verification and rollback, then PM ensures README is reconciled.
 

@@ -38,3 +38,15 @@ test('execution status requires a host event',async t=>{
 test('unsafe/ambiguous write paths rejected',()=>{
  for(const p of ['../x','/etc','src/*','src\\x'])assert.throws(()=>validateTask({id:'x',role:'developer',prompt:'x',write_paths:[p]}));
 });
+test('queued release drains conflicting workers instead of filling a spare slot with new work',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');const q=JSON.parse(await fs.readFile(file));
+ q.tasks.push({id:'new-dev',role:'developer',prompt:'new work',write_paths:['src/new']},
+  {id:'release',role:'release-engineer',prompt:'publish accepted work',write_paths:['work/product/dispatch-startup']});
+ await fs.writeFile(file,JSON.stringify(q));
+ const workers=(await f.d.status()).workers;
+ f.infos.set(workers.find(w=>w.id==='startup-review').session_id,{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),3);
+ f.infos.set(workers.find(w=>w.id==='startup-product').session_id,{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),4);
+ assert.equal((await f.d.status()).workers.at(-1).id,'release');
+});
+

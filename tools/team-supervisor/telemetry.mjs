@@ -14,6 +14,15 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  const tools=Array.isArray(s.guarded_wait_tools)?s.guarded_wait_tools:[];
  lines.push(`Wait guard: ${tools.length?'mapped ('+tools.length+')':'not configured'}`);
  if(bound&&!here){lines.push('Open the bound coordinator for telemetry.');return lines.join('\n');}
+ const pub=s.publication;
+ if(pub){
+  lines.push('Feature push: '+label(age(pub.feature_push?.verified_push_at,now)));
+  lines.push('Latest commit: '+label(age(pub.latest_commit?.[1],now)));
+  lines.push('Unpublished commits: '+(pub.unpublished_commit_count??'unknown')+' (vs cached origin refs)');
+  lines.push('Dirty checkout entries: '+(pub.dirty_checkout_entries??'unknown'));
+  lines.push('Last deploy: '+(pub.deployment?clean(pub.deployment.headSha,8)+' · '+label(age(pub.deployment.updatedAt,now)):'unknown'));
+  if(pub.actions_error)lines.push(pub.actions_error);
+ }
  const d=s.dispatcher;
  if(d?.enabled){
   lines.push('Dispatcher: ON · host session API');
@@ -48,4 +57,5 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+
 

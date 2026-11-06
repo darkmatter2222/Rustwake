@@ -4,6 +4,10 @@ A mobile browser strategy-idle game about salvage, metals and automation. Built 
 
 **[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
 
+## Frequent feature publication (plugin 0.4.0)
+
+Developers can now commit/push their own `rw/` branches from separate worktrees. CI covers those branches; reviewed main integration still triggers automatic deployment. Queued releases get execution priority, and the sidebar shows verified feature pushes, commit activity, unpublished commit counts and successful deployment evidence. [Publication contract and commands](docs/PUBLICATION.md). Update/reinstall the plugin and restart to load these changes; existing workers are not moved or discarded automatically. Local publication/dispatcher tests passed; actual overnight cadence still requires runtime evidence.
+
 ## Team execution update
 
 The prior plugin was advisory and could report progress without launching workers. **Version 0.3 adds executable dispatch.** Update/reinstall the local plugin, restart OpenCode, select rustwake-coordinator, and use `/rustwake-team start` before `/goal forever goal.md`. Binding alone is insufficient. [Exact startup and recovery instructions](docs/TEAM_DISPATCH.md). The sidebar shows actual child IDs, queued/running state and errors. Runtime validation on your machine is still required; repository tests do not prove live worker execution.
