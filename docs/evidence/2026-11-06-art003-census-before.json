@@ -68,7 +68,7 @@
           6,
           7
         ],
-        "inkSharePct": 57.5
+        "inkSharePct": 57.2
       },
       "dock2": {
         "box": [
@@ -105,75 +105,250 @@
         "inkSharePct": 100
       }
     },
-    "gridDotPx": 1743,
+    "machineRow": {
+      "box": [
+        137,
+        220,
+        195,
+        393
+      ],
+      "distinctBuckets": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "inkSharePct": 63.2
+    },
+    "bandFit": {
+      "scale": 1.8056,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        219.78,
+        624.22
+      ],
+      "gapAbove": 163.78,
+      "gapBelow": 165.78,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        218.78,
+        623.22
+      ],
+      "legacyGapAbove": 162.78,
+      "legacyGapBelow": 166.78
+    },
+    "gridDotPx": 1747,
     "gridDotSharePct": 0.53,
+    "gridDotAlphaPx": 4,
+    "gridDotAlphaSharePct": 0,
+    "gridInkSharePct": 0.53,
     "machineBodyPx": 1723,
     "machineBodySharePct": 0.52,
-    "contactShadowPx": 248
+    "contactShadowPx": 265
   },
   "sheet": {
     "roles": 11,
+    "window": [
+      58,
+      58
+    ],
+    "boxes": {
+      "dock": [
+        -2,
+        114,
+        128,
+        128
+      ],
+      "sorter": [
+        153,
+        114,
+        128,
+        128
+      ],
+      "furnace": [
+        308,
+        114,
+        128,
+        128
+      ],
+      "wireMill": [
+        464,
+        114,
+        128,
+        128
+      ],
+      "signalLab": [
+        619,
+        114,
+        128,
+        128
+      ],
+      "generic": [
+        774,
+        114,
+        128,
+        128
+      ],
+      "polymerRecycler": [
+        -2,
+        294,
+        128,
+        128
+      ],
+      "copperSeparator": [
+        192,
+        294,
+        128,
+        128
+      ],
+      "platePress": [
+        386,
+        294,
+        128,
+        128
+      ],
+      "circuitAssembler": [
+        580,
+        294,
+        128,
+        128
+      ],
+      "drone": [
+        774,
+        294,
+        128,
+        128
+      ]
+    },
+    "inkPx": {
+      "dock": 8736,
+      "sorter": 9216,
+      "furnace": 8392,
+      "wireMill": 7472,
+      "signalLab": 8768,
+      "drone": 1378
+    },
     "matrix": [
       [
         "dock/sorter",
-        90.4
+        36.8
       ],
       [
         "dock/furnace",
-        58.3
+        59.4
       ],
       [
         "dock/wireMill",
-        42.9
+        56.9
       ],
       [
         "dock/signalLab",
-        34
+        68.1
       ],
       [
         "dock/drone",
-        11.6
+        53.1
       ],
       [
         "sorter/furnace",
-        90.5
+        48.7
       ],
       [
         "sorter/wireMill",
-        58.3
+        44.8
       ],
       [
         "sorter/signalLab",
-        43.1
+        57.1
       ],
       [
         "sorter/drone",
-        14.1
+        55
       ],
       [
         "furnace/wireMill",
-        90.1
+        39
       ],
       [
         "furnace/signalLab",
-        58.3
+        31.8
       ],
       [
         "furnace/drone",
-        17.8
+        50.8
       ],
       [
         "wireMill/signalLab",
-        90.5
+        37.3
       ],
       [
         "wireMill/drone",
-        24.2
+        45.8
       ],
       [
         "signalLab/drone",
-        37.5
+        54.9
       ]
+    ]
+  },
+  "witnesses": {
+    "scrollHeight": 844,
+    "innerHeight": 844,
+    "scrolls": false,
+    "minFacePx": 44,
+    "faces": [
+      {
+        "text": "Sound on",
+        "w": 47.7,
+        "h": 44
+      },
+      {
+        "text": "Text size 1",
+        "w": 44,
+        "h": 44
+      },
+      {
+        "text": "Return to yard view",
+        "w": 44,
+        "h": 44
+      },
+      {
+        "text": "Back to yard",
+        "w": 96,
+        "h": 44
+      },
+      {
+        "text": "Store",
+        "w": 54,
+        "h": 46
+      },
+      {
+        "text": "Yard",
+        "w": 48.6,
+        "h": 46
+      },
+      {
+        "text": "Connect",
+        "w": 114.3,
+        "h": 46
+      },
+      {
+        "text": "Build",
+        "w": 52.9,
+        "h": 46
+      },
+      {
+        "text": "Research",
+        "w": 76.3,
+        "h": 46
+      }
     ]
   },
   "pageErrors": 0

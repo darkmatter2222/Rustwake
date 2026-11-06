@@ -1,10 +1,17 @@
 // ART-003 g1 census instrument (new, modeled on capture-style.mjs): one page, 390x844 dpr 1.
-// Prints the rows A3-1/A3-3/A3-4 need: full-canvas colour/luminance census, the
-// luminance-band count inside one machine box, the dot-grid ink share and the machine
-// ink share, plus the grayscale pairwise differing-pixel matrix over the silhouette sheet.
-// Usage: RUSTWAKE_URL=http://localhost:5175/ node scripts/art003-census.mjs
+// Prints the rows A3-1/A3-3/A3-4 need, all from the live built artifact:
+//  * A3-1  grayscale pairwise differing-pixel matrix over the silhouette sheet, measured
+//          cell-by-cell in each role's own 32-unit box (an aligned comparison: local pixel
+//          (u,v) of role A against the same local (u,v) of role B, so the metric answers
+//          "do the silhouettes differ" instead of "are the boxes at different x").
+//  * A3-3  distinct luminance buckets + ink share inside each machine box, contact-shadow
+//          coverage, one light direction.
+//  * A3-4  dot-grid ink share versus the machine-row ink share at rest, plus the band-fit
+//          witness (plate edges and both chrome gaps) that the plate-still-floats fix moves.
+//  * A3-5  the DOM witnesses (no page scroll, minimum tap face, page errors).
+// Usage: RUSTWAKE_URL=http://localhost:5175/ CENSUS_TAG=before node scripts/art003-census.mjs
 import { chromium } from "playwright-core";
-import { existsSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -33,7 +40,6 @@ const CENSUS = () => {
     const f = (v) => (v / 255 <= 0.03928 ? v / 255 / 12.92 : ((v / 255 + 0.055) / 1.055) ** 2.4);
     return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
   };
-  // full canvas: top colours + 8 luminance buckets (same convention as the run2 witness)
   const counts = new Map();
   const buckets = new Array(8).fill(0);
   let total = 0;
@@ -49,7 +55,7 @@ const CENSUS = () => {
   const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12)
     .map(([k, v]) => `${k} ${+((100 * v) / total).toFixed(1)}%`);
   const bucketPct = buckets.map((v) => +((100 * v) / total).toFixed(1));
-  // Region census: distinct luminance buckets + ink shares inside a device-px box.
+  // Region census: distinct luminance buckets + ink share inside a device-px box.
   const region = (x0, y0, x1, y1) => {
     const seen = new Set();
     let ink = 0;
@@ -64,11 +70,16 @@ const CENSUS = () => {
     }
     return { distinctBuckets: [...seen].sort((a, b) => a - b), inkSharePct: +((100 * ink) / n).toFixed(1) };
   };
-  // World->screen on this page, using the module's own helpers.
   return window.__art003.then((m) => {
-    const { fitCamera, tileToWorld, worldToScreen, WRECK_POSITION } = m;
+    const { fitCamera, tileToWorld, worldToScreen, WRECK_POSITION, WORLD_H } = m;
     const view = { width: canvas.clientWidth, height: canvas.clientHeight };
-    const camera = fitCamera(view, { top: 52, bottom: view.height - 790 });
+    // The same two chrome edges the app measures (App.chromeInsets), read here from the DOM.
+    const hudBox = document.querySelector(".hud__top")?.getBoundingClientRect();
+    const dockBox = document.querySelector(".dock")?.getBoundingClientRect();
+    const insets = hudBox && dockBox && hudBox.bottom > 0 && dockBox.top > 0
+      ? { top: hudBox.bottom, bottom: Math.max(0, view.height - dockBox.top) }
+      : undefined;
+    const camera = fitCamera(view, insets);
     const box = (tile) => {
       const c = tileToWorld(tile);
       const p = worldToScreen(camera, view, c.x, c.y);
@@ -86,8 +97,38 @@ const CENSUS = () => {
         Math.round(pw.x + 24 * camera.scale), Math.round(pw.y + 16 * camera.scale)],
     };
     cells.wreck = { ...cells.wreck, ...region(...cells.wreck.box) };
-    // Dot-grid ink: the blended gravel colour is a fixed rgb; count exact matches, and
-    // machine ink: bodyLight/bodyMid exact matches inside the machine row band.
+    // A3-4 band-fit witness: the plate's two ink edges against the two chrome edges, and
+    // what the legacy canvas-centred fit of the same scale would have printed.
+    let bandFit = null;
+    if (insets) {
+      const plateTop = worldToScreen(camera, view, 0, 0).y;
+      const plateBottom = worldToScreen(camera, view, 0, WORLD_H).y;
+      const bandBottom = view.height - insets.bottom;
+      const bandCentre = insets.top + (bandBottom - insets.top) / 2;
+      // The old fit kept this exact scale and centred the world on the canvas instead.
+      const shiftPx = (bandCentre - view.height / 2) / 1; // CSS px the band centre sits below the canvas centre
+      bandFit = {
+        scale: +camera.scale.toFixed(4),
+        bandCssPx: [+insets.top.toFixed(1), +bandBottom.toFixed(1)],
+        plateCssPx: [+plateTop.toFixed(2), +plateBottom.toFixed(2)],
+        gapAbove: +(plateTop - insets.top).toFixed(2),
+        gapBelow: +(bandBottom - plateBottom).toFixed(2),
+        shiftFromCanvasCentrePx: +shiftPx.toFixed(2),
+        legacyPlateCssPx: [+(plateTop - shiftPx).toFixed(2), +(plateBottom - shiftPx).toFixed(2)],
+        legacyGapAbove: +(plateTop - shiftPx - insets.top).toFixed(2),
+        legacyGapBelow: +(bandBottom - (plateBottom - shiftPx)).toFixed(2),
+      };
+    }
+    // Machine-row ink: everything not floor inside the union of the painted machine boxes.
+    const rowBox = (() => {
+      const boxes = [box(8), box(14), box(2)];
+      const x0 = Math.min(...boxes.map((b) => b[0]));
+      const y0 = Math.min(...boxes.map((b) => b[1]));
+      const x1 = Math.max(...boxes.map((b) => b[2]));
+      const y1 = Math.max(...boxes.map((b) => b[3]));
+      return [x0, y0, x1, y1];
+    })();
+    const machineRow = { box: rowBox, ...region(...rowBox) };
     const blendCount = (rgb, tol) => {
       let c = 0;
       for (let py = 0; py < h; py += 1) {
@@ -98,6 +139,9 @@ const CENSUS = () => {
       }
       return c;
     };
+    const pct = (n) => +((100 * n) / (w * h)).toFixed(2);
+    const gridDotPx = blendCount([86, 113, 135], 2); // alpha-0.5 blend of bodyLight over floor (base)
+    const gridDotAlphaPx = blendCount([63, 88, 108], 2); // alpha-0.28 blend (candidate)
     return {
       canvas: [w, h],
       topColors: top,
@@ -107,21 +151,24 @@ const CENSUS = () => {
         (100 * ([...counts.values()].sort((a, b) => b - a).slice(0, 2).reduce((a, b) => a + b, 0))) / total
       ).toFixed(1),
       cells,
-      // blended gravel rgb at dpr1: 0.5*bodyLight(138,169,196) over floor(34,56,74)
-      gridDotPx: blendCount([86, 113, 135], 2), // base alpha-0.5 blend of bodyLight over floor
-      gridDotSharePct: +((100 * blendCount([86, 113, 135], 2)) / (w * h)).toFixed(2),
-      gridDotAlphaPx: blendCount([63, 88, 108], 2), // alpha-0.28 blend on the candidate
-      gridDotAlphaSharePct: +((100 * blendCount([63, 88, 108], 2)) / (w * h)).toFixed(2),
+      machineRow,
+      bandFit,
+      gridDotPx,
+      gridDotSharePct: pct(gridDotPx),
+      gridDotAlphaPx,
+      gridDotAlphaSharePct: pct(gridDotAlphaPx),
+      gridInkSharePct: pct(gridDotPx + gridDotAlphaPx), // the whole resting dot field
       machineBodyPx: blendCount([138, 169, 196], 2),
-      machineBodySharePct: +((100 * blendCount([138, 169, 196], 2)) / (w * h)).toFixed(2),
+      machineBodySharePct: pct(blendCount([138, 169, 196], 2)),
       contactShadowPx: blendCount([28, 46, 62], 3), // 0.35*shadow over floor
     };
   });
 };
 
 const SHEET = async () => {
-  // Grayscale sheet at dpr1: per-cell boxes from the same layout math, then pairwise
-  // differing-pixel fractions over each pair's union box.
+  // Grayscale sheet at dpr1. The pairwise matrix compares role A and role B in *aligned
+  // local* coordinates (each role's own 32-unit box mapped onto the same 58x58 window), so
+  // a differing pixel means the silhouettes really differ at that spot.
   const mod = await import("/src/game/renderer/scene.ts");
   const sprites = await import("/src/game/renderer/sprites.ts");
   const canvas = document.createElement("canvas");
@@ -146,9 +193,9 @@ const SHEET = async () => {
   const gap = (H - 2 * MARGIN - heights.reduce((a, b) => a + b, 0)) / (bands.length - 1);
   const tops = [];
   let top = MARGIN;
-  for (const h of heights) {
+  for (const hh of heights) {
     tops.push(top);
-    top += h + gap;
+    top += hh + gap;
   }
   const boxes = {};
   for (let r = 0; r < bands.length; r += 1) {
@@ -166,29 +213,44 @@ const SHEET = async () => {
     const i = (py * W + px) * 4;
     return `${data[i]},${data[i + 1]},${data[i + 2]}`;
   };
+  /** Aligned local window of one role: its own box, sampled on a fixed 58x58 lattice. */
+  const window58 = (id) => {
+    const [x, y, bw, bh] = boxes[id];
+    const out = new Array(58 * 58);
+    for (let v = 0; v < 58; v += 1) {
+      for (let u = 0; u < 58; u += 1) {
+        const px = x + Math.min(bw - 1, Math.floor((u * bw) / 58));
+        const py = y + Math.min(bh - 1, Math.floor((v * bh) / 58));
+        out[v * 58 + u] = grayAt(px, py);
+      }
+    }
+    return out;
+  };
   const ids6 = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"];
+  const wins = new Map(ids6.map((id) => [id, window58(id)]));
+  const inkPx = {};
+  for (const id of ids6) {
+    const [x, y, bw, bh] = boxes[id];
+    let ink = 0;
+    for (let py = y; py < y + bh; py += 1) {
+      for (let px = x; px < x + bw; px += 1) {
+        const c = grayAt(px, py);
+        if (c !== "11,18,32" && c !== "8,13,24") ink += 1; // != sheet/backdrop ground
+      }
+    }
+    inkPx[id] = ink;
+  }
   const matrix = [];
   for (let i = 0; i < ids6.length; i += 1) {
     for (let j = i + 1; j < ids6.length; j += 1) {
-      const [ax, ay, aw, ah] = boxes[ids6[i]];
-      const [bx, by, bw, bh] = boxes[ids6[j]];
-      const x0 = Math.min(ax, bx), y0 = Math.min(ay, by);
-      const x1 = Math.max(ax + aw, bx + bw), y1 = Math.max(ay + ah, by + bh);
-      let diff = 0, n = 0;
-      for (let py = Math.max(0, y0); py < Math.min(H, y1); py += 1) {
-        for (let px = Math.max(0, x0); px < Math.min(W, x1); px += 1) {
-          const inA = px >= ax && px < ax + aw && py >= ay && py < ay + ah;
-          const inB = px >= bx && px < bx + bw && py >= by && py < by + bh;
-          const a = inA ? grayAt(px, py) : "bg";
-          const b = inB ? grayAt(px, py) : "bg";
-          if (a !== b) diff += 1;
-          n += 1;
-        }
-      }
-      matrix.push([`${ids6[i]}/${ids6[j]}`, +((100 * diff) / n).toFixed(1)]);
+      const a = wins.get(ids6[i]);
+      const b = wins.get(ids6[j]);
+      let diff = 0;
+      for (let k = 0; k < a.length; k += 1) if (a[k] !== b[k]) diff += 1;
+      matrix.push([`${ids6[i]}/${ids6[j]}`, +((100 * diff) / a.length).toFixed(1)]);
     }
   }
-  return { roles: ids.length, matrix };
+  return { roles: ids.length, window: [58, 58], boxes, inkPx, matrix };
 };
 
 const run = async () => {
@@ -196,8 +258,7 @@ const run = async () => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   // Reuse the same FS-1 envelope as the stills (one sorter + furnace + dock + drone).
   const template = JSON.parse(
-    // eslint-disable-next-line no-undef
-    await (await import("node:fs")).readFileSync(resolve(root, "docs/evidence/yard-mature.json"), "utf8")
+    readFileSync(resolve(root, "docs/evidence/yard-mature.json"), "utf8")
   );
   const fnv1a = (t) => {
     let hash = 0x811c9dc5;
@@ -241,7 +302,6 @@ const run = async () => {
     window.__art003 = import("/src/game/renderer/scene.ts");
   });
   const scene = await page.evaluate(CENSUS);
-  const sheet = await page.evaluate(SHEET);
   const witnesses = await page.evaluate(() => {
     const faces = [...document.querySelectorAll("button")].map((b) => {
       const r = b.getBoundingClientRect();
@@ -260,10 +320,10 @@ const run = async () => {
   const other = await browser.newContext({ viewport: { width: 900, height: 420 }, deviceScaleFactor: 1 });
   const sheetPage = await other.newPage();
   await sheetPage.goto(url, { waitUntil: "networkidle" });
-  const sheetOnly = await sheetPage.evaluate(SHEET);
+  const sheet = await sheetPage.evaluate(SHEET);
   await other.close();
   await browser.close();
-  const out = { tag: TAG, url, scene, sheet: sheetOnly, witnesses, pageErrors: errors.length };
+  const out = { tag: TAG, url, scene, sheet, witnesses, pageErrors: errors.length };
   writeFileSync(resolve(root, `docs/evidence/2026-11-06-art003-census-${TAG}.json`), JSON.stringify(out, null, 2), "utf8");
   console.log(JSON.stringify(out, null, 1));
 };

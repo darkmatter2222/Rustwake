@@ -64,18 +64,33 @@ export interface CameraInsets {
 const BAND_MIN_SCALE = 1.1;
 
 /**
+ * ART-001/ART-003 width term: `WORLD_W + 8` is the pad plus a 4-unit gutter on each side.
+ * It was `+ 24` (a 12-unit gutter) at the base, which wasted 21 CSS px per side at 390 px and
+ * held the plate at 404 of 844 px tall; at 8 the same fit prints 437 px (47.9 % -> 51.8 % of
+ * the viewport height, gutters 21 -> 8 px). The arithmetic ceiling of the world itself is
+ * 224/192 * 390 = 455 px (53.9 %), reached at a zero gutter, so a taller plate is not
+ * obtainable from this term alone - stated in the handoff as the binding constraint.
+ */
+/**
  * A width-only fit cannot show a 224-unit-tall world in a 390 px-tall landscape
  * viewport, so the dock and the wreck left the screen (L-1). With a measured band the
  * world is fitted to whichever term binds and the band itself becomes the centre.
+ *
+ * ART-003 A3-4 (plate-still-floats): the band centre is used for **both** terms, not only
+ * the binding one. At 390x844 the width term binds, so the old code returned the legacy
+ * canvas-centred camera and the pad sat off the middle of the clear column the chrome
+ * actually leaves. The scale expression keeps both original terms exactly, only the y
+ * origin moves, so every footprint, ink box and the tap mapping (`screenToWorld` inverts
+ * the same camera) keep their geometry.
  */
 export function fitCamera(view: ViewState, insets?: CameraInsets): Camera {
-  const legacy = () => ({ x: WORLD_W / 2, y: WORLD_H / 2, scale: Math.max(1.4, Math.min(4, view.width / (WORLD_W + 24))) });
+  const raw = Math.min(4, view.width / (WORLD_W + 8)); // the un-floored width term (ART-003: 24 -> 8)
+  const legacy = () => ({ x: WORLD_W / 2, y: WORLD_H / 2, scale: Math.max(1.4, raw) });
   const usableH = insets ? view.height - insets.top - insets.bottom : 0;
   if (!insets || usableH <= 0) return legacy();
   const bandScale = usableH / (WORLD_H + 12);
-  const widthScale = Math.min(4, view.width / (WORLD_W + 24));
-  if (bandScale >= widthScale) return legacy(); // the band is not binding: unchanged fit
-  const scale = Math.max(BAND_MIN_SCALE, Math.min(widthScale, bandScale));
+  // One scale expression for both branches, identical to the two original terms.
+  const scale = bandScale >= raw ? Math.max(1.4, raw) : Math.max(BAND_MIN_SCALE, Math.min(raw, bandScale));
   // The band centre, not the canvas centre, is where the world's middle goes.
   const bandCentre = insets.top + usableH / 2;
   return { x: WORLD_W / 2, y: WORLD_H / 2 + (view.height / 2 - bandCentre) / scale, scale };

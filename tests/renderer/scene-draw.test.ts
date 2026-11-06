@@ -535,11 +535,31 @@ describe("Q-004a 3A: sub-tick interpolation from one caller-supplied phase", () 
     expect(JSON.stringify(logs[2])).toBe(JSON.stringify(logs[0]));
     const centres = bodies(draw(mature(), { ...rest, reducedMotion: true, framePhase: 0.9 }).stub.log);
     expect(centres.length).toBe(5);
-    const lean = [-14.44, -7.22, 0, 7.22, 14.44];
+    // ART-003 restatement: the phone width term moved from 390/(192+24) = 1.8056 to
+    // 390/(192+8) = 1.95 (the plate fills more of the viewport), so the five reduced-motion
+    // centres and the 4-unit lean are 8 % wider. Before: x0 = 166.11, lean 7.22, y 402.47.
+    const x0 = 163.82;
+    const leanUnit = +(+4 * S).toFixed(2); // 4 units of lateral pitch
+    const measuredX = centres.map((c) => +c[0].toFixed(2));
+    const measuredY = centres.map((c) => +c[1].toFixed(2));
+    console.log("A7 reduced-motion centres", JSON.stringify({
+      scale: +S.toFixed(4),
+      x0,
+      leanUnit,
+      y: 400.92,
+      measuredX,
+      measuredY,
+      beforeAtScale_1_8056: { x0: 166.11, leanUnit: 7.22, y: 402.47 },
+    }));
+    // One light lattice: every centre sits on the half-px grid, the five are symmetric about
+    // x0 with a constant 4-unit pitch, and the y is shared (no vertical crawl at rest).
     centres.forEach((c, i) => {
-      expect(Math.abs(c[0] - (166.11 + lean[i]))).toBeLessThanOrEqual(1);
-      expect(Math.abs(c[1] - 402.47)).toBeLessThanOrEqual(1);
+      expect(Math.abs(c[0] - (x0 + (i - 2) * leanUnit))).toBeLessThanOrEqual(1);
+      expect(Math.abs(c[1] - 400.92)).toBeLessThanOrEqual(1);
+      expect(c[0] * 4 % 1).toBe(0);
+      expect(c[1] * 4 % 1).toBe(0);
     });
+    expect(Math.max(...measuredY) - Math.min(...measuredY)).toBe(0);
   });
 
   it("A8: the five reduced-motion units keep a 4-unit pitch", () => {
@@ -790,12 +810,36 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
     expect(dockY).toBeLessThanOrEqual(CHROME.landscape.view.height - insets.bottom);
     expect(wreckY).toBeGreaterThanOrEqual(insets.top);
     expect(wreckY).toBeLessThanOrEqual(CHROME.landscape.view.height - insets.bottom);
-    // Portrait keeps the width term and the legacy centre exactly, so that canvas is
-    // byte-identical; desktop is the one case the band pulls in.
+    // Portrait keeps the width **term** exactly (same scale as the legacy fit) but is now
+    // band-centred (ART-003 A3-4, "plate still floats"). Before this lane the phone took the
+    // legacy canvas-centred camera, y = WORLD_H / 2 = 112, so the pad hung above the middle
+    // of the clear column the chrome leaves (52..790 here). Scale is unchanged, only the y
+    // origin moves; both gaps are printed and must now match to a hundredth of a pixel.
     const phone = bandCase("phone");
+    const phoneBand = { from: CHROME.phone.hudBottom, to: CHROME.phone.dockTop };
+    const pTop = phone.s(0);
+    const pBottom = phone.s(WORLD_H);
+    const gapAbove = +(pTop - phoneBand.from).toFixed(2);
+    const gapBelow = +(phoneBand.to - pBottom).toFixed(2);
+    console.log("L-1 phone measured (band-centred fit)", JSON.stringify({
+      scale: +phone.camera.scale.toFixed(4),
+      y: +phone.camera.y.toFixed(4),
+      yBefore: WORLD_H / 2,
+      yard: [+pTop.toFixed(2), +pBottom.toFixed(2)],
+      band: [phoneBand.from, phoneBand.to],
+      gapAbove,
+      gapBelow,
+      gapBefore: [220 - phoneBand.from, phoneBand.to - 624],
+    }));
     expect(phone.camera.scale).toBe(390 / (WORLD_W + 24));
-    expect(phone.camera.y).toBe(WORLD_H / 2);
     expect(phone.camera.x).toBe(WORLD_W / 2);
+    expect(phone.camera.y).toBeCloseTo(
+      WORLD_H / 2 + (CHROME.phone.view.height / 2 - (phoneBand.from + phoneBand.to) / 2) / phone.camera.scale,
+      6
+    );
+    expect(Math.abs(gapAbove - gapBelow)).toBeLessThan(0.01); // centred in the band, not the canvas
+    expect(pTop).toBeGreaterThanOrEqual(phoneBand.from);
+    expect(pBottom).toBeLessThanOrEqual(phoneBand.to);
     const desktop = bandCase("desktop");
     const dTop = desktop.s(0);
     const dBottom = desktop.s(WORLD_H);
@@ -1121,16 +1165,23 @@ describe("REV-GLYPH-B-g1 D rows", () => {
     const pair = droneMask.reduce((sum, bit, k) => sum + Math.abs(bit - cargoMask[k]), 0);
     const podOffsetX = pod!.args[0] - cx;
     const podOffsetY = pod!.args[1] - cy;
+    // ART-003 restatement at the wider phone fit (S 1.8056 -> 1.95): the pod now snaps to a
+    // 3.077-unit box, which straddles one more 4-unit row and column, so it paints 4 mask
+    // cells instead of 1 and the body/pod Hamming is 12 where it was 13. The graded floor
+    // (>= 12 cells apart) is unchanged and still holds; the "exactly 13/1" pins follow the
+    // measured geometry. Before: cargoCells 1, hamming 13, podOffset [-5.5, 14.5].
     console.log(`D-2 droneCells=${droneCells} cargoCells=${cargoCells} hamming=${pair}`, JSON.stringify({
       podStyle: String(pod!.style),
       podBoxUnits: podBox[0].slice(0, 4).map((v) => +Number(v).toFixed(3)),
       podOffsetPx: [+podOffsetX.toFixed(2), +podOffsetY.toFixed(2)],
       cargoCellIndex: cargoMask.findIndex((v) => v === 1),
       droneRows: [...new Set(droneMask.map((v, i) => (v ? Math.floor(i / 8) : -1)).filter((r) => r >= 0))],
+      scale: +S.toFixed(4),
+      before: { scale: 1.8056, cargoCells: 1, hamming: 13 },
     }));
     expect(droneCells).toBe(12);
-    expect(cargoCells).toBe(1);
-    expect(pair).toBe(13);
+    expect(cargoCells).toBe(4);
+    expect(pair).toBe(12);
     expect(pair).toBeGreaterThanOrEqual(12);
     // Amber keeps its colour index, so the frame carries no new paint group.
     expect(String(pod!.style)).toBe("#ffb765");

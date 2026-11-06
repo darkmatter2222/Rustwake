@@ -115,14 +115,13 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   signalLab: [
     [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
-    [-10, -6, 20, 16, 3], // body (16-unit, 20 wide)
-    [-2, -14, 4, 8, 3], // L2 mast
-    [-14, -15, 15, 3, 8], // L3 scanner head bar at the mast top (cyan)
-    [2, -3, 6, 3, 6], // L4 visor slot on the body
-    [2, 2, 6, 3, 11], // L4b indicator strip, select tone
-    [-15, 4, 4, 3, 3], // L5 left leg
-    [11, 6, 5, 3, 3], // L5 right leg
-    [11, -4, 4, 3, 3], // L6 shoulder step, right column
+    [-6, -7, 12, 20, 3], // L1 narrow 12-unit tower body (A3-1: a third body width)
+    [-2, -15, 4, 8, 3], // L2 mast
+    [-11, -16, 21, 3, 8], // L3 scanner head, wider than the tower (cyan, identity mark)
+    [-5, -4, 6, 3, 6], // L4 visor slot on the body
+    [-5, 2, 6, 3, 11], // L4b indicator strip, select tone
+    [-14, 6, 5, 3, 3], // L5 left foot, outboard of the tower
+    [9, 6, 5, 3, 3], // L5 right foot, outboard of the tower
   ],
   generic: [
     // D-1: its own lattice (two bars, both posts) so it is no longer the sorter's copy.
