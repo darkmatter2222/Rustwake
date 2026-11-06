@@ -22,7 +22,15 @@ import {
   type CameraInsets,
 } from "../game/renderer/scene";
 import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
-import { REJECT_TEXT, branchOptions, costSummary, hintFor, objectiveFor, pipLine, primaryFor, restingLine } from "./text";
+import {
+  REJECT_TEXT,
+  costSummary,
+  hintFor,
+  objectiveFor,
+  primaryFor,
+  restingLine,
+  sortedBranchOptions,
+} from "./text";
 import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
 import { planConnections } from "../game/simulation/autoconnect";
@@ -45,7 +53,14 @@ export interface PrimaryAction {
    * The three named outcomes of one paid level, present only at the fork
    * (STRAT-002/A1-3). Each is one tap: pressing it commits that branch.
    */
-  branches?: { id: UpgradeBranch; label: string; cost?: string; run: () => void }[];
+  branches?: {
+    id: UpgradeBranch;
+    label: string;
+    cost?: string;
+    /** The same number `branchPrice` answered, kept for the paint-order sort (BLD-001). */
+    price?: number;
+    run: () => void;
+  }[];
 }
 
 let commandSeq = 0;
@@ -159,13 +174,12 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   }, [settings.textScale, store]);
 
   useEffect(() => {
-    // Spec 5.5: Escape closes the most local context first - panel, then build mode.
+    // Spec 5.5 / UI-002 U-5: Escape closes the *nearest* context first - the panel the
+    // player just opened, then the build ghost, and only then the return report, which is
+    // the oldest overlay on the screen. One press, one overlay retired, so no press can
+    // clear the whole stack at once and no pile-up can survive a thumb.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
-      if (reportOpen && store.getReturnReport()) {
-        setReportOpen(false);
-        return;
-      }
       if (selected !== null) {
         setSelected(null);
         return;
@@ -173,6 +187,10 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       if (buildBlueprint !== null) {
         setBuildBlueprint(null);
         setGhostTile(null);
+        return;
+      }
+      if (reportOpen && store.getReturnReport()) {
+        setReportOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -377,7 +395,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           />
           <ObjectiveCard
             text={role === "reader" ? t("reader.objective") : objectiveFor(state, selected)}
-            hint={
+            phase={
               role === "reader"
                 ? t("reader.hint")
                 : buildBlueprint !== null
@@ -386,8 +404,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
                     t("phase.ghost", { tile: ghostTile ?? 0 })
                   : hintFor(suggestedAction(state))
             }
-            power={restingLine(state, lastReject)}
-            pips={state.machines.length > 0 ? pipLine(state) : ""}
+            numbers={restingLine(state, lastReject)}
           />
           {store.isReconciling() ? (
             // Spec 18.5: one small line while a long absence is settled off-thread.
@@ -586,7 +603,9 @@ function primaryForStep(
     run: () => runStep(state, step, dispatch, setBuildBlueprint, setGhostTile),
   };
   if (step.kind === "upgrade") {
-    const options = branchOptions(state, step.machineId);
+    // BLD-001: the paint order is cheapest-first, so the leftmost face is the plan the
+    // purse can pay; the ids and every printed number come straight from `branchOptions`.
+    const options = sortedBranchOptions(state, step.machineId);
     if (options.length > 0) {
       action.branches = options.map((option) => ({
         ...option,

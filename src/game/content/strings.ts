@@ -43,6 +43,12 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "btn.connect": "Connect",
   "btn.upgrade": "Upgrade",
   "btn.upgradeCost": "Upgrade · {cost}",
+  // UI-002: the three command faces of the machine panel each print their own number, so
+  // no two of them can be told apart without reading. `Move` names the cell it aims at and
+  // the charge the engine levies; `Dismantle` names the units it hands back.
+  "btn.move": "Move",
+  "btn.moveCost": "Move · cell {tile} · {charge}",
+  "btn.dismantleRefund": "Dismantle · +{refund}",
   // PLAY-002 1: two named outcomes on the dock. `btn.branchBuffer` ("More input") went
   // with the dropped branch; `upgradeRanks` still decodes its saved name.
   "btn.branchSpeed": "Faster batches",

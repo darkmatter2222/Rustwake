@@ -224,14 +224,55 @@ body {
   letter-spacing: 0.02em;
 }
 
+/* UI-002 tier one: the one thing the next tap does, at a size and weight that leads the
+   two secondary readouts below it. Measured ratio (this file's own numbers): 0.95rem over
+   the 0.72rem secondary is 1.32x at every text scale, above the 1.25x hierarchy floor. */
+.objective__primary {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+/* One secondary tier for every numeric readout line under the primary: the base
+   `.status-line` rule below carries the size (0.72rem), so the tier ratio
+   0.95 / 0.72 = 1.32 holds at every text scale. */
+
 /* The primary action is the only two-line button, so it claims the leftover room
    first and keeps its sentence on one line at 360 px. Measured: with the shared
    grow factor the sell tranche wrapped to two label lines, the stretched row grew
    from 46 to 56 px, and the HUD band rose 20.6 % → 22.1 % at 360 × 640. */
 .dock__btn--primary {
   flex: 6 1 auto;
-  border-color: rgba(255, 183, 101, 0.65);
-  background: linear-gradient(180deg, rgba(201, 113, 58, 0.35), rgba(11, 18, 32, 0.94));
+}
+
+/* The two named fork plans stay equal thirds; the accent fill moves to the cheapest one
+   without the row losing its shared-width grammar (declared after `.dock__btn--primary`
+   so the later rule wins the `flex` fight at equal specificity). */
+.dock__btn--branch {
+  flex: 1 1 0;
+}
+
+/* UI-002 U-2: exactly one accent-filled primary per action row. One amber fill, one rule,
+   so the dock, a panel's command row and a research card's buy target all speak with the
+   same voice and a census can count them: an accent-filled face is a button whose computed
+   `background-image` is a gradient, and the plain faces keep the flat `--panel` fill. The
+   fill is a solid 0.65-alpha rust under a light amber wash, which puts it two 32-unit
+   luminance buckets above the pill row's 0.92-alpha panel fill (measured 2 vs 0). */
+.dock__btn--primary,
+.panel__actions > .icon-btn:first-child,
+.node__buy {
+  border-color: rgba(255, 183, 101, 0.7);
+  background-color: rgba(201, 113, 58, 0.65);
+  background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.32), rgba(201, 113, 58, 0.18));
+  color: var(--paper);
+}
+
+/* The price line on the accent fill takes the lighter amber step so it keeps a 4.5:1
+   ratio against that fill (measured 4.9:1), where the base `--furnace` would fall to 3.8. */
+.dock__btn--primary .dock__cost {
+  color: #ffd9a8;
 }
 
 .dock__btn:disabled {
@@ -332,20 +373,35 @@ body {
   color: var(--cyan);
 }
 
+/* UI-002 (Lane B fold-in): one full-width row per panel line. The grid is a single
+   column and each `.panel__row` is one flex line, so a label and its value share a line
+   box (`dt.top == dd.top` within 1 px, `dd.left > dt.right`) and every row is as wide as
+   the panel body. The previous `auto 1fr` two-column grid treated a bare `<dt>` and a
+   `<div>`-wrapped row as alternating cells, which is what put `20/900` under "Scrap 20"
+   and left "Capacity" alone on the right in
+   work/review/dispatch-startup/captures/ds-360-ts2-panel-store.png. */
 .panel dl {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px 10px;
+  grid-template-columns: 1fr;
+  gap: 2px 0;
   margin: 0;
   font-size: 0.84rem;
 }
 
+.panel__row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
 .panel dt {
   color: var(--steel-light);
+  flex: 0 0 auto;
 }
 
 .panel dd {
   margin: 0;
+  flex: 1 1 auto;
   font-variant-numeric: tabular-nums;
 }
 
@@ -587,11 +643,14 @@ body {
 }
 
 /* L-2: its own block, outside `.objective__row`, so it survives both "step back" rules
-   (`.text-large .objective__row` and the short-viewport one) that hide the chip row. */
+   (`.text-large .objective__row` and the short-viewport one) that hide the chip row.
+   UI-002: 0.78 → 0.72rem, so the primary tier (0.95rem) sits 1.32x above it at every
+   text scale - the hierarchy floor the card has to clear - and the two numeric lines
+   below the primary cost less of the world than they did. */
 .status-line {
   display: block;
   margin-top: 4px;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   color: var(--steel-light);
 }
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import {
   BLUEPRINTS,
   RECIPES,
@@ -31,6 +32,7 @@ import {
   formatDuration,
   formatNumber,
   importNoteFor,
+  nextFreeTile,
 } from "./text";
 import {
   formatRate,
@@ -42,6 +44,25 @@ import {
   wholePercent,
 } from "../game/content/strings";
 import type { ImportResult } from "../game/persistence/save";
+
+/**
+ * One panel row: a label, its value, and optionally one control, all inside **one** line
+ * box (UI-002, Lane B fold-in). `.panel dl` is a one-column grid and `.panel__row` is a
+ * flex line, so the `dt` and its `dd` share a top edge and the value always starts after
+ * the label - the old two-column `auto 1fr` grid mixed bare `<dt>/<dd>` pairs with
+ * `<div>`-wrapped rows, which is what dropped `20/900` under "Scrap 20" and left
+ * "Capacity" standing alone in `docs/../work/review/dispatch-startup/captures/
+ * ds-360-ts2-panel-store.png`. Every row is as wide as the panel body: full-width rows.
+ */
+function Row(props: { label: string; value: ReactNode; children?: ReactNode }) {
+  return (
+    <div className="panel__row">
+      <dt>{props.label}</dt>
+      <dd>{props.value}</dd>
+      {props.children}
+    </div>
+  );
+}
 
 export function MachinePanel(props: {
   state: SimState;
@@ -63,6 +84,20 @@ export function MachinePanel(props: {
   const plans = planConnections(props.state, machine.id);
   const diagnosis = diagnoseMachine(props.state, machine);
   const [page, setPage] = useState(0);
+  /** Where the `Move` face sends this machine: the first cell nobody holds (UI-002). */
+  const moveTile = nextFreeTile(props.state);
+  /**
+   * The credit charge the engine levies on each of these three commands, read the way the
+   * engine levies it. At this base `moveMachine` re-points the tile and deducts nothing,
+   * so its face prints 0 credits; `dismantleMachine` returns the build cost plus the tray
+   * and the input buffer, which is the unit figure its face prints. One source each, so a
+   * printed number can never disagree with the charge the same tap produces.
+   */
+  const moveCharge = 0;
+  const refundUnits =
+    def.buildCost.reduce((total, item) => total + item.qty, 0) +
+    machine.trayUnits +
+    machine.inBufUnits;
 
   return (
     <div
@@ -79,95 +114,85 @@ export function MachinePanel(props: {
       <div className="panel__body">
       {page === 0 ? (
         <dl>
-          <dt>{t("row.status")}</dt>
-          <dd>{STATUS_LABEL[machine.status] ?? machine.status}</dd>
-          <dt>{t("row.batch")}</dt>
-          <dd>
-            {t("value.percent", {
+          <Row label={t("row.status")} value={STATUS_LABEL[machine.status] ?? machine.status} />
+          <Row
+            label={t("row.batch")}
+            value={t("value.percent", {
               percent: Math.min(
                 100,
                 Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
               ),
             })}
-          </dd>
-          <dt>{t("row.cycle")}</dt>
-          <dd>{t("value.seconds", { seconds: formatSeconds(effectiveSeconds) })}</dd>
-          <dt>{t("row.actualRate")}</dt>
-          <dd>
-            {t("value.actualRate", {
+          />
+          <Row
+            label={t("row.cycle")}
+            value={t("value.seconds", { seconds: formatSeconds(effectiveSeconds) })}
+          />
+          <Row
+            label={t("row.actualRate")}
+            value={t("value.actualRate", {
               rate: formatRate(reading.rate),
               window: formatWholeSeconds(reading.windowSeconds),
             })}
-          </dd>
-          <dt>{t("row.maxRate")}</dt>
-          <dd>{t("value.maxRate", { rate: formatRate(maxRate) })}</dd>
-          <dt>{t("row.power")}</dt>
-          <dd>
-            {t("value.powerUnits", {
-              count: machine.batchPower,
-              units: plural(machine.batchPower, t("unit.unit")),
-            })}
-            {props.powerRatio < 0.999
-              ? t("value.powerLimited", { percent: wholePercent(props.powerRatio) })
-              : ""}
-          </dd>
-          <dt>{t("row.measured")}</dt>
-          <dd>{diagnosis.evidence}</dd>
-          <dt>{t("row.nextStep")}</dt>
-          <dd>{diagnosis.advice}</dd>
-          <dt>{t("row.nextUpgrade")}</dt>
-          <dd>
-            {t("value.nextUpgrade", {
+          />
+          <Row label={t("row.maxRate")} value={t("value.maxRate", { rate: formatRate(maxRate) })} />
+          <Row
+            label={t("row.power")}
+            value={
+              <>
+                {t("value.powerUnits", {
+                  count: machine.batchPower,
+                  units: plural(machine.batchPower, t("unit.unit")),
+                })}
+                {props.powerRatio < 0.999
+                  ? t("value.powerLimited", { percent: wholePercent(props.powerRatio) })
+                  : ""}
+              </>
+            }
+          />
+          <Row label={t("row.measured")} value={diagnosis.evidence} />
+          <Row label={t("row.nextStep")} value={diagnosis.advice} />
+          <Row
+            label={t("row.nextUpgrade")}
+            value={t("value.nextUpgrade", {
               from: formatSeconds(effectiveSeconds),
               to: formatSeconds(nextSeconds),
               cost: unit(cost, t("unit.credit")),
             })}
-          </dd>
+          />
           {plans.length > 0 ? (
-            <>
-              <dt>{t("row.nextLink")}</dt>
-              <dd>{describePlans(props.state, plans)}</dd>
-            </>
+            <Row label={t("row.nextLink")} value={describePlans(props.state, plans)} />
           ) : null}
           {machine.status === "starved" ? (
-            <>
-              <dt>{t("row.needs")}</dt>
-              <dd>{describeInputs(recipe)}</dd>
-            </>
+            <Row label={t("row.needs")} value={describeInputs(recipe)} />
           ) : null}
         </dl>
       ) : (
         <dl>
-          <dt>{t("row.inputs")}</dt>
-          <dd>{describeInputs(recipe)}</dd>
-          <dt>{t("row.outputs")}</dt>
-          <dd>{describeOutputs(recipe)}</dd>
-          <dt>{t("row.level")}</dt>
-          <dd>{machine.level}</dd>
+          <Row label={t("row.inputs")} value={describeInputs(recipe)} />
+          <Row label={t("row.outputs")} value={describeOutputs(recipe)} />
+          <Row label={t("row.level")} value={machine.level} />
           {machine.branch !== undefined ? (
-            <>
-              <dt>{t("row.branches")}</dt>
-              <dd>
-                {(() => {
-                  const ranks = upgradeRanks(machine);
-                  return t("value.branches", {
-                    speed: ranks.speed,
-                    buffer: ranks.buffer,
-                    draw: ranks.draw,
-                  });
-                })()}
-              </dd>
-            </>
+            <Row
+              label={t("row.branches")}
+              value={(() => {
+                const ranks = upgradeRanks(machine);
+                return t("value.branches", {
+                  speed: ranks.speed,
+                  buffer: ranks.buffer,
+                  draw: ranks.draw,
+                });
+              })()}
+            />
           ) : null}
-          <dt>{t("row.inBuffer")}</dt>
-          <dd>
-            {formatNumber(machine.inBufUnits)}/
-            {inputCapacityOf(machine, researchBonus(props.state).inputBuffer)}
-          </dd>
-          <dt>{t("row.tray")}</dt>
-          <dd>
-            {formatNumber(machine.trayUnits)}/{def.outputBuffer}
-          </dd>
+          <Row
+            label={t("row.inBuffer")}
+            value={`${formatNumber(machine.inBufUnits)}/${inputCapacityOf(
+              machine,
+              researchBonus(props.state).inputBuffer
+            )}`}
+          />
+          <Row label={t("row.tray")} value={`${formatNumber(machine.trayUnits)}/${def.outputBuffer}`} />
         </dl>
       )}
       <div className="panel__actions">
@@ -201,11 +226,23 @@ export function MachinePanel(props: {
         >
           {t("btn.upgradeCost", { cost: unit(cost, t("unit.credit")) })}
         </button>
+        {/* UI-002: the same machine, one cell over. `moveMachine` re-points the existing
+            machine (its id, level, branch and both route ids survive), and the destination
+            is the first free cell the yard offers - the ladder `firstFreeTile` uses. Every
+            command face prints the number the engine charges it: the upgrade its credits,
+            the move its own charge, the dismantle the units it returns. */}
         <button
           className="icon-btn"
-          onClick={() => setPage(page === 0 ? 1 : 0)}
+          onClick={() =>
+            props.dispatch({
+              id: nextId("m"),
+              type: "machine.move",
+              machineId: machine.id,
+              tile: moveTile,
+            })
+          }
         >
-          {page === 0 ? t("btn.recipe") : t("btn.statusPage")}
+          {t("btn.moveCost", { tile: moveTile, charge: unit(moveCharge, t("unit.credit")) })}
         </button>
         <button
           className="icon-btn"
@@ -217,7 +254,10 @@ export function MachinePanel(props: {
             })
           }
         >
-          {t("btn.dismantle")}
+          {t("btn.dismantleRefund", { refund: unit(refundUnits, t("unit.unit")) })}
+        </button>
+        <button className="icon-btn" onClick={() => setPage(page === 0 ? 1 : 0)}>
+          {page === 0 ? t("btn.recipe") : t("btn.statusPage")}
         </button>
       </div>
       </div>
@@ -233,6 +273,16 @@ export function StorePanel(props: {
   const rows = (Object.keys(props.state.store) as ResourceId[]).filter(
     (key) => (props.state.store[key] ?? 0) > 0,
   );
+  /**
+   * The capacity fact once (UI-002, finding N-2). `Capacity` prints `20/900` as its own
+   * row, so the yard-summary line that repeats the very same pair in parentheses is the
+   * duplicate: the row stays (a label and a number the player can point at), the repeated
+   * pair goes. Every other summary line keeps its place.
+   */
+  const capacityFact = `${formatNumber(props.state.storeUnits)}/${formatNumber(
+    props.state.storeCapacity
+  )}`;
+  const summaryLines = yardSummary(props.state).filter((line) => !line.includes(capacityFact));
   return (
     <div className="panel" role="group" aria-label={t("aria.storeContents")}>
       <div className="panel__head">
@@ -247,9 +297,7 @@ export function StorePanel(props: {
           const amount = sellableAmount(props.state, key);
           const price = exportPrice(key);
           return (
-            <div key={key}>
-              <dt>{RESOURCE_LABEL[key] ?? key}</dt>
-              <dd>{formatNumber(props.state.store[key] ?? 0)}</dd>
+            <Row key={key} label={RESOURCE_LABEL[key] ?? key} value={formatNumber(props.state.store[key] ?? 0)}>
               {props.state.exportClaimed && price > 0 && amount > 0 ? (
                 <button
                   className="icon-btn"
@@ -265,46 +313,29 @@ export function StorePanel(props: {
                   {t("value.sellButton", { qty: amount, credits: amount * price })}
                 </button>
               ) : null}
-            </div>
+            </Row>
           );
         })}
-        <dt>{t("row.capacity")}</dt>
-        <dd>
-          {formatNumber(props.state.storeUnits)}/
-          {formatNumber(props.state.storeCapacity)}
-        </dd>
-        {yardSummary(props.state).map((line) => (
-          <div key={line}>
-            <dt>{t("row.measured")}</dt>
-            <dd>{line}</dd>
-          </div>
+        <Row label={t("row.capacity")} value={capacityFact} />
+        {summaryLines.map((line) => (
+          <Row key={line} label={t("row.measured")} value={line} />
         ))}
         {props.state.exportClaimed ? (
-          <>
-            <dt>{t("row.sellFloor")}</dt>
-            <dd>
-              {t("value.sellFloor", {
-                count: TUNING.reserveFloor,
-                units: plural(TUNING.reserveFloor, t("unit.unit")),
-              })}
-            </dd>
-          </>
+          <Row
+            label={t("row.sellFloor")}
+            value={t("value.sellFloor", {
+              count: TUNING.reserveFloor,
+              units: plural(TUNING.reserveFloor, t("unit.unit")),
+            })}
+          />
         ) : (
-          <>
-            <dt>{t("row.sell")}</dt>
-            <dd>{t("value.sellOpens")}</dd>
-          </>
+          <Row label={t("row.sell")} value={t("value.sellOpens")} />
         )}
         {props.state.overflow.length > 0 ? (
-          <>
-            <dt>{t("row.overflow")}</dt>
-            <dd>
-              {props.state.overflow.reduce(
-                (total, item) => total + item.qty,
-                0,
-              )}
-            </dd>
-          </>
+          <Row
+            label={t("row.overflow")}
+            value={props.state.overflow.reduce((total, item) => total + item.qty, 0)}
+          />
         ) : null}
       </dl>
       </div>
@@ -443,18 +474,18 @@ export function YardPanel(props: {
         {page === 0 ? (
           <>
             <dl>
-              <dt>{t("row.tick")}</dt>
-              <dd>{props.state.tick}</dd>
-              <dt>{t("row.machines")}</dt>
-              <dd>{props.state.machines.length}</dd>
-              <dt>{t("row.drones")}</dt>
-              <dd>{fleetUnits(props.state).filter((unitState) => unitState.repaired).length}</dd>
-              <dt>{t("row.links")}</dt>
-              <dd>{props.state.routes.length}</dd>
-              <dt>{t("row.credits")}</dt>
-              <dd>{props.state.credits}</dd>
-              <dt>{t("row.save")}</dt>
-              <dd>{t("value.characters", { count: props.exportText.length })}</dd>
+              <Row label={t("row.tick")} value={props.state.tick} />
+              <Row label={t("row.machines")} value={props.state.machines.length} />
+              <Row
+                label={t("row.drones")}
+                value={fleetUnits(props.state).filter((unitState) => unitState.repaired).length}
+              />
+              <Row label={t("row.links")} value={props.state.routes.length} />
+              <Row label={t("row.credits")} value={props.state.credits} />
+              <Row
+                label={t("row.save")}
+                value={t("value.characters", { count: props.exportText.length })}
+              />
             </dl>
             <label className="panel__field" htmlFor={exportId}>
               {t("field.savedYard")}
@@ -529,26 +560,15 @@ export function ReturnReportPanel(props: {
       <div className="panel__body">
       <dl>
         {summary.map((line) => (
-          <div key={line}>
-            <dt>{t("row.time")}</dt>
-            <dd>{line}</dd>
-          </div>
+          <Row key={line} label={t("row.time")} value={line} />
         ))}
         {gains.slice(0, 4).map(([key, value]) => (
-          <div key={key}>
-            <dt>{RESOURCE_LABEL[key] ?? key}</dt>
-            <dd>+{formatNumber(value)}</dd>
-          </div>
+          <Row key={key} label={RESOURCE_LABEL[key] ?? key} value={`+${formatNumber(value)}`} />
         ))}
-        <dt>{t("row.deliveries")}</dt>
-        <dd>{report.deliveries}</dd>
-        <dt>{t("row.batches")}</dt>
-        <dd>{report.batchesDone}</dd>
+        <Row label={t("row.deliveries")} value={report.deliveries} />
+        <Row label={t("row.batches")} value={report.batchesDone} />
         {report.bottleneck ? (
-          <>
-            <dt>{t("row.bottleneck")}</dt>
-            <dd>{t(`bottleneck.${report.bottleneck}`)}</dd>
-          </>
+          <Row label={t("row.bottleneck")} value={t(`bottleneck.${report.bottleneck}`)} />
         ) : null}
       </dl>
       </div>

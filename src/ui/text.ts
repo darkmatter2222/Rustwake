@@ -1,6 +1,12 @@
 import { BLUEPRINTS, RESOURCES, TUNING, type ResourceId } from "../game/content/defs";
 import { RESEARCH } from "../game/content/research";
-import { droneAddCost, upgradeCost, branchPrice } from "../game/simulation/commands";
+import {
+  DOCK_TILE,
+  YARD_TILES,
+  droneAddCost,
+  upgradeCost,
+  branchPrice,
+} from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { ImportResult } from "../game/persistence/save";
 import type { SimState, UpgradeBranch } from "../game/simulation/types";
@@ -197,11 +203,16 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
  * the drop clause in `work/product/STRAT-002-decision-g2.md` executes and the dock
  * ships two plans. The decoder in `simulation/types.ts` still reads a saved
  * `"buffer"` pick, so a save written while the name was on the dock keeps loading.
+ *
+ * UI-002 keeps this table in its declared order (`speed`, `draw`) and adds the numeric
+ * `price` beside the formatted `cost`: the paint order is a presentation decision, so it
+ * lives with the paint (see `sortedBranchOptions`, which the dock answers with), and one
+ * number source cannot drift from the other.
  */
 export function branchOptions(
   state: SimState,
   machineId: number
-): { id: UpgradeBranch; label: string; cost: string }[] {
+): { id: UpgradeBranch; label: string; cost: string; price: number }[] {
   const machine = state.machines.find((m) => m.id === machineId);
   const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
   if (!machine || !def) return [];
@@ -209,14 +220,45 @@ export function branchOptions(
     {
       id: "speed",
       label: t("btn.branchSpeed"),
+      price: branchPrice(def.baseUpgradeCost, machine.level, "speed"),
       cost: unit(branchPrice(def.baseUpgradeCost, machine.level, "speed"), t("unit.credit")),
     },
     {
       id: "draw",
       label: t("btn.branchDraw"),
+      price: branchPrice(def.baseUpgradeCost, machine.level, "draw"),
       cost: unit(branchPrice(def.baseUpgradeCost, machine.level, "draw"), t("unit.credit")),
     },
   ];
+}
+
+/**
+ * The fork row as the dock paints it: **cheapest-first** (BLD-001, riding inside UI-002).
+ * One lever, the paint order - `Array#sort` has been stable since ES2019, so equal prices
+ * keep the declared order and the ids, labels and every printed number are the ones
+ * `branchOptions` answered. QA note 6 measured the old row parking 31 leftmost taps at 0
+ * commands on a 30-credit purse because the dearer 40-credit face led; the leftmost face
+ * is now always a plan the current purse can pay whenever one is affordable.
+ */
+export function sortedBranchOptions(
+  state: SimState,
+  machineId: number
+): { id: UpgradeBranch; label: string; cost: string; price: number }[] {
+  return branchOptions(state, machineId).slice().sort((a, b) => a.price - b.price);
+}
+
+/**
+ * First unoccupied yard cell, so a new machine or a move never lands on the dock tile or
+ * on a neighbour that is already taken. The same ladder `App.firstFreeTile` answers with;
+ * the panel needs it too, and `Panels.tsx` cannot import from `App.tsx` (the dependency
+ * runs the other way), so the rule lives in this sentence layer both of them read.
+ */
+export function nextFreeTile(state: SimState): number {
+  for (let tile = 0; tile < YARD_TILES; tile += 1) {
+    if (tile === DOCK_TILE) continue;
+    if (!state.machines.some((m) => m.tile === tile)) return tile;
+  }
+  return 8;
 }
 
 /**
