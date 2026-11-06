@@ -1,5 +1,7 @@
 # Rustwake
 
+**Team plugin 0.5.0:** six total sessions (coordinator + five workers), a dedicated UI/UX persona and skill, and readable startup diagnostics. Update/reinstall the plugin to activate. [UI/UX workflow](.opencode/skills/rustwake-ui-ux/SKILL.md) · [Team startup](docs/TEAM_DISPATCH.md).
+
 A mobile browser strategy-idle game about salvage, metals and automation. Built with React/TypeScript: a full-screen industrial pixel world, no page scrolling, and a factory that keeps carrying out your plans while you are away.
 
 **[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
@@ -127,3 +129,10 @@ node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs tools/team-su
 
 
 
+
+
+## UI/UX specialist and six-session limit
+
+Plugin 0.5.0 permits six total model sessions: coordinator plus five workers. Queue role `ui-ux` to invoke `rustwake-ui-ux`; its workflow lives at `.opencode/skills/rustwake-ui-ux/SKILL.md`. It owns mobile interaction design, first-use clarity, navigation, visual hierarchy, accessibility and implementation-ready briefs. Product prioritizes, developers implement, and reviewers independently accept. Give it a scoped `work/design/<ticket>/` output. Do not turn design into endless audit reports or block ready releases.
+
+For existing teams, queue one bounded UI/UX assignment at the next useful free slot; do not recreate completed startup work or discard active leases. Fresh startup includes a UI/UX assignment. Five is a ceiling, not a requirement to invent work. Maintain release priority and feature publication cadence. Startup failures are now recorded in the dispatcher status and shown as START BLOCKED; preserve the exact error and existing session IDs rather than deleting runtime state. This improves diagnostics but does not establish the cause of an unreported host error.

@@ -28,26 +28,27 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
   lines.push('Dispatcher: ON · host session API');
   lines.push('Checked: '+label(age(d.checked_at,now)));
   const workers=(d.workers??[]).filter(w=>!['succeeded','failed','interrupted'].includes(w.status));
-  lines.push(`Reserved slots: ${workers.length}/3`);
+  lines.push(`Reserved slots: ${workers.length}/5`);
   for(const w of workers)lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);
   if(d.error)lines.push('BLOCKED: '+clean(d.error,200));
   lines.push('Queued is not running; running requires a host execution event.');
   return lines.join('\n');
  }
  lines.push('Dispatcher: OFF · /rustwake-team start');
+ if(d?.error)lines.push('START BLOCKED: '+clean(d.error,200));
  const o=s.observation;
  const seconds=age(o?.observed_at,now);
  const scoped=here&&o?.coordinator_session_id===sessionID;
  const fresh=scoped&&seconds!==null&&seconds<=120;
  lines.push(`Observation: ${!o?'missing':!scoped?'unscoped / previous session':seconds===null?'invalid timestamp':fresh?'fresh':'STALE'} (${label(seconds)})`);
  const capacity=o?.capacity_children;const active=o?.active_children;
- const valid=Number.isInteger(capacity)&&capacity>=0&&capacity<=3&&Number.isInteger(active)&&active>=0;
+ const valid=Number.isInteger(capacity)&&capacity>=0&&capacity<=5&&Number.isInteger(active)&&active>=0;
  lines.push(`Workers: ${fresh&&valid?`${active}/${capacity} child slots${active>capacity?' · OVER CAPACITY':''}`:'unknown'}`);
  if(fresh&&valid){
   lines.push(`Model sessions: ${active+1}/${capacity+1} incl. coordinator`);
   const workers=Array.isArray(o.workers)?o.workers:[];
-  for(const w of workers.slice(0,3))lines.push(`${clean(w.role,20)} · ${clean(w.task_id,24)} · ${clean(w.status,18)}`);
-  if(workers.length>3)lines.push(`+${workers.length-3} additional records`);
+  for(const w of workers.slice(0,5))lines.push(`${clean(w.role,20)} · ${clean(w.task_id,24)} · ${clean(w.status,18)}`);
+  if(workers.length>5)lines.push(`+${workers.length-5} additional records`);
   lines.push(`Ready assignments: ${Array.isArray(o.runnable_task_ids)?o.runnable_task_ids.length:'unknown'}`);
   if(active<capacity&&o.idle_reasons?.length)lines.push(`Idle: ${clean(o.idle_reasons[0],90)}`);
  }
@@ -57,5 +58,6 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+
 
 

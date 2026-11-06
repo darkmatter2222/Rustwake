@@ -15,7 +15,7 @@ export function computeMetrics(board,{now=board.updated_at,windowHours=24,maxSam
   if(d!==null&&d>=start&&d<=end)deployed.push(t.id);
   if((t.history??[]).some(e=>e.to_state==='rework'&&time(e.at)>=start&&time(e.at)<=end))reworked.add(t.id);
  }
- const samples=(board.telemetry?.samples??[]).filter(s=>time(s.observed_at)!==null&&Number.isInteger(s.active_children)&&Number.isInteger(s.capacity_children)&&s.capacity_children>0&&s.capacity_children<=3&&s.active_children>=0&&s.active_children<=s.capacity_children).sort((a,b)=>time(a.observed_at)-time(b.observed_at));
+ const samples=(board.telemetry?.samples??[]).filter(s=>time(s.observed_at)!==null&&Number.isInteger(s.active_children)&&Number.isInteger(s.capacity_children)&&s.capacity_children>0&&s.capacity_children<=5&&s.active_children>=0&&s.active_children<=s.capacity_children).sort((a,b)=>time(a.observed_at)-time(b.observed_at));
  let knownMs=0,busyMs=0,capacityMs=0;
  for(let i=0;i+1<samples.length;i++){
   const a=samples[i],b=samples[i+1],ta=time(a.observed_at),tb=time(b.observed_at);
@@ -30,3 +30,4 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
  if(!process.argv[2])throw new Error('Usage: node scripts/team-metrics.mjs <backlog.json>');
  console.log(JSON.stringify(computeMetrics(JSON.parse(fs.readFileSync(process.argv[2],'utf8')),{now:new Date().toISOString()}),null,2));
 }
+

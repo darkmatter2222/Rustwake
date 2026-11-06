@@ -3,7 +3,7 @@
 Generated from `work/backlog.json`; do not edit this view manually. This is a published snapshot, not proof of live sessions.
 
 **SPRINT-002: I choose a plan; my yard comes alive** — proposed
-Session cap: **4 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-05T23:26:30+00:00.
+Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-05T23:26:30+00:00.
 
 [Visual board](board.html) · [Canonical JSON](backlog.json) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
 

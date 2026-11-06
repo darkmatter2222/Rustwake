@@ -22,7 +22,7 @@ export async function taskDirectory(root,task){
 }
 
 const terminal = new Set(['succeeded','failed','interrupted']);
-const roles = new Set(['developer','reviewer','player','product-owner','release-engineer']);
+const roles = new Set(['developer','reviewer','player','product-owner','release-engineer','ui-ux']);
 const conflict=(a,b)=>a.some(x=>b.some(y=>x===y||x.startsWith(y+'/')||y.startsWith(x+'/')));
 export function validateTask(t){
  if(!t||!/^[-a-zA-Z0-9_]{1,80}$/.test(t.id)||!roles.has(t.role)||typeof t.prompt!=='string'||!t.prompt.trim())throw Error('Invalid dispatch task');
@@ -40,7 +40,10 @@ export function createDispatcher(ctx,root){
  async function observe(){
   for(const w of active()){
    if(!w.session_id)throw Error('Unresolved dispatch intent '+w.id+'; reconcile before launching replacements');
-   const info=await ctx.session.get({sessionID:w.session_id});
+   let info;
+   try{info=await ctx.session.get({sessionID:w.session_id});}
+   catch(e){throw Error('Cannot reconcile '+w.id+' ('+w.session_id+'): '+e.message);}
+   if(!info)throw Error('Host returned no session for '+w.id+' ('+w.session_id+'); preserve lease and inspect the host');
    if(terminal.has(info.outcome)&&info.time?.idle){w.status=info.outcome;w.finished_at=new Date().toISOString();notifyNeeded=true;}
    else if(w.status==='created')throw Error('Prompt acceptance uncertain for '+w.id+'; inspect child before retry');
   }
@@ -55,7 +58,7 @@ export function createDispatcher(ctx,root){
    const tasks=prioritizeTasks((queue?.tasks??[]).map(validateTask));
    const releasePending=tasks.some(t=>t.role==='release-engineer'&&!state.workers.some(w=>w.id===t.id));
    for(const t of tasks){
-    if(!state.enabled||active().length>=3)break;
+    if(!state.enabled||active().length>=5)break;
     if(state.workers.some(w=>w.id===t.id)||active().some(w=>conflict(w.write_paths,t.write_paths)))continue;
     if(t.role==='release-engineer'&&active().some(w=>w.role==='release-engineer'))continue;
     // Drain conflicting work for the queued release instead of refilling every slot with new development.
@@ -93,6 +96,7 @@ export function createDispatcher(ctx,root){
    if(oldQueue&&oldQueue.coordinator_session_id!==id&&!active().length){oldQueue.coordinator_session_id=id;await fs.writeFile(path.join(dir,'dispatch-queue.json'),JSON.stringify(oldQueue,null,2));}
    if(!await read('dispatch-queue.json')){
     const tasks=[
+     {id:'startup-ui-ux',role:'ui-ux',write_paths:['work/design/dispatch-startup'],prompt:'Use .opencode/skills/rustwake-ui-ux/SKILL.md. Inspect the current mobile game and actual screenshots. Produce one prioritized implementation-ready UI/UX brief in work/design/dispatch-startup, with before evidence, interaction states, accessibility and acceptance checks. Do not redesign everything or change production files.'},
      {id:'startup-product',role:'product-owner',write_paths:['work/product/dispatch-startup'],prompt:'Read sponsor inbox, backlog and game strategy. Produce a prioritized next implementation brief in work/product/dispatch-startup. Do not edit shared backlog. Return three useful independent assignments with exact file scopes.'},
      {id:'startup-review',role:'reviewer',write_paths:['work/review/dispatch-startup'],prompt:'Critically review the current game and available screenshots. If browser access works, inspect the actual mobile game. Report the three highest-impact visual/gameplay defects with evidence in work/review/dispatch-startup. Label unavailable visual/audio capabilities honestly.'},
      {id:'startup-code-audit',role:'developer',write_paths:['work/development/dispatch-startup'],prompt:'Inspect current source, tests and existing uncommitted work without changing app code. Identify the best next implementable improvement and any abandoned work needing recovery. Write an implementation handoff in work/development/dispatch-startup. Do not change other files or push.'}
@@ -110,6 +114,7 @@ export function createDispatcher(ctx,root){
    await save();return state;
   },
   async status(){return {...state,workers:state.workers.map(({prompt,...w})=>w)};},
+  async recordError(message){state.error=String(message);await save();},
   event(e){const w=state.workers.find(w=>w.session_id===e.data?.sessionID);if(!w)return;
    if(e.type==='session.execution.started')w.status='running';
    const outcome=e.type?.replace('session.execution.','');
@@ -119,4 +124,5 @@ export function createDispatcher(ctx,root){
   close(){state.enabled=false;clearInterval(timer);},
  };
 }
+
 
