@@ -7,16 +7,16 @@ seed=$(realpath -- "$1")
 test -f "$seed/index.html"
 id rustwake-runner >/dev/null
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-install -d -o root -g root -m 0755 /opt/rustwake-delivery
-install -o root -g root -m 0755 "$repo_dir/scripts/deploy-artifact.py" /opt/rustwake-delivery/deploy-artifact.py
-install -o root -g root -m 0755 "$repo_dir/scripts/host-adapter.py" /opt/rustwake-delivery/host-adapter
-install -o root -g root -m 0644 "$repo_dir/deploy/nginx.conf" /opt/rustwake-delivery/nginx.conf
 install -d -o root -g rustwake-runner -m 0750 /var/lib/rustwake-delivery
 touch /var/lib/rustwake-delivery/deploy.lock
 chown rustwake-runner:rustwake-runner /var/lib/rustwake-delivery/deploy.lock
 chmod 0600 /var/lib/rustwake-delivery/deploy.lock
 exec 9>/var/lib/rustwake-delivery/deploy.lock
 flock -n 9
+install -d -o root -g root -m 0755 /opt/rustwake-delivery
+install -o root -g root -m 0755 "$repo_dir/scripts/deploy-artifact.py" /opt/rustwake-delivery/deploy-artifact.py
+install -o root -g root -m 0755 "$repo_dir/scripts/host-adapter.py" /opt/rustwake-delivery/host-adapter
+install -o root -g root -m 0644 "$repo_dir/deploy/nginx.conf" /opt/rustwake-delivery/nginx.conf
 python3 - "$seed" <<'PY'
 import json, os, pathlib, pwd, shutil, sys
 root = pathlib.Path('/srv/rustwake-delivery')
