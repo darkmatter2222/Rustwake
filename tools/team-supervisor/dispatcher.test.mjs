@@ -19,17 +19,7 @@ test('five worker slots admit UI/UX, reject a sixth until completion',async t=>{
  f.infos.set('child1',{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),6);
  assert.equal((await f.d.status()).workers.filter(w=>w.status==='queued').length,5);
 });
-test('restart adopts recorded sessions without duplicate launches',async t=>{
- const f=await fixture(t);await f.d.start('parent');f.d.close();const next=createDispatcher(f.ctx,f.root);t.after(()=>next.close());
- await next.start('parent');assert.equal(f.calls(),4);
- f.infos.set('different',{id:'different',time:{}});
- await next.start('different');assert.equal(f.calls(),4);
- assert.equal((await next.status()).coordinator,'different');
- assert.equal((await next.status()).recovery.adopted_workers,4);
- assert.equal(f.infos.get('parent').outcome,'interrupted');
- const queue=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/dispatch-queue.json')));
- assert.equal(queue.coordinator_session_id,'different');assert.equal(queue.tasks.length,4);
-});
+
 test('uncertain prompt failure remains visible and reserves its slot',async t=>{
  const f=await fixture(t);f.fail();await f.d.start('parent');assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/provider unavailable/);
  await f.d.tick();assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/uncertain/);
@@ -45,33 +35,9 @@ test('execution status requires a host event',async t=>{
 test('unsafe/ambiguous write paths rejected',()=>{
  for(const p of ['../x','/etc','src/*','src\\x'])assert.throws(()=>validateTask({id:'x',role:'developer',prompt:'x',write_paths:[p]}));
 });
-test('unavailable worker blocks transfer without losing reservations or replaying work',async t=>{
- const f=await fixture(t);await f.d.start('parent');
- f.infos.set('replacement',{id:'replacement'});f.infos.delete('child1');
- await f.d.start('replacement');assert.match((await f.d.status()).error,/no session/);
- assert.equal((await f.d.status()).recovery_pending.session_id,'replacement');
- assert.equal(f.calls(),4);assert.equal((await f.d.status()).coordinator,'parent');
- assert.equal((await f.d.status()).workers.length,4);
- assert.equal((await f.d.status()).enabled,false);
- f.infos.set('child1',{id:'child1',time:{}});
- await f.d.start('replacement');assert.equal(f.calls(),4);
-});
-test('repeated start does not interrupt children or replay terminal assignments',async t=>{
- const f=await fixture(t);await f.d.start('parent');
- f.infos.set('child1',{outcome:'succeeded',time:{idle:Date.now()}});
- await f.d.start('parent');await f.d.start('parent');
- assert.equal(f.calls(),4);assert.equal((await f.d.status()).workers[0].status,'succeeded');
- assert.equal(f.infos.get('child2').outcome,undefined);
-});
-test('failed lookup recovers automatically without another start command',async t=>{
- const f=await fixture(t);await f.d.start('parent');
- f.infos.set('replacement',{id:'replacement'});f.infos.delete('child1');
- await f.d.start('replacement');
- f.infos.set('child1',{id:'child1',time:{}});
- await new Promise(r=>setTimeout(r,5300));
- assert.equal((await f.d.status()).coordinator,'replacement');
- assert.equal((await f.d.status()).enabled,true);assert.equal(f.calls(),4);
-});
+
+
+
 test('queued release drains conflicting workers instead of filling a spare slot with new work',async t=>{
  const f=await fixture(t);await f.d.start('parent');
  const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');const q=JSON.parse(await fs.readFile(file));
@@ -86,3 +52,25 @@ test('queued release drains conflicting workers instead of filling a spare slot 
 
 
 
+
+test('start creates a new team, archives old state and preserves dirty files',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ await fs.writeFile(path.join(f.root,'unfinished.txt'),'valuable edits');
+ const original=f.ctx.session.interrupt;
+ f.ctx.session.interrupt=async arg=>{if(arg.sessionID==='child1')throw {name:'Session.NotFoundError'};return original(arg);};
+ f.infos.delete('child1');f.infos.set('replacement',{id:'replacement'});
+ await f.d.start('replacement');
+ const state=await f.d.status();
+ assert.equal(state.enabled,true);assert.equal(state.workers.length,4);assert.equal(f.calls(),8);
+ assert.ok(state.workers.every(w=>!['child1','child2','child3','child4'].includes(w.session_id)));
+ assert.equal(await fs.readFile(path.join(f.root,'unfinished.txt'),'utf8'),'valuable edits');
+ const archived=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/archive',state.epoch,'previous-team.json')));
+ assert.equal(archived.dispatcher.workers.length,4);
+ await f.d.start('replacement');assert.equal(f.calls(),12);
+});
+test('transport failure during cancellation does not launch duplicate team',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ f.ctx.session.interrupt=async()=>{throw Error('network unavailable');};
+ await assert.rejects(f.d.start('parent'),/network unavailable/);
+ assert.equal(f.calls(),4);assert.equal((await f.d.status()).enabled,false);
+});

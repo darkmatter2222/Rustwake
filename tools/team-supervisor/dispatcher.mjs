@@ -90,31 +90,29 @@ export function createDispatcher(ctx,root){
  }
  return {
   async start(id){
-   if(starting)throw Error('Team recovery is already in progress; wait for its result');
+   if(starting)throw Error('Fresh team startup is already in progress');
    starting=true;clearInterval(timer);
    try{
    while(busy)await new Promise(r=>setTimeout(r,25));
-   const previous=await read('dispatcher.json');if(previous)state=previous;
-   // Verify the requested host session before changing ownership or interrupting anything.
    if(!await ctx.session.get({sessionID:id}))throw Error('Current coordinator session is unavailable');
-   await observe();
-   const from=state.coordinator;
-   if(from&&from!==id){
-    // Stop old scheduling before adopting its children. Never abort the children or replay prompts.
-    await ctx.session.interrupt({sessionID:from});
-    let old=await ctx.session.get({sessionID:from});
-    for(let attempt=0;old&&!old.time?.idle&&attempt<20;attempt++){
-     await new Promise(r=>setTimeout(r,100));old=await ctx.session.get({sessionID:from});
-    }
-    if(!old?.time?.idle)throw Error('Previous coordinator is still stopping. Run start again shortly; existing workers are preserved');
-    state.recovery={from,to:id,adopted_workers:active().length,at:new Date().toISOString()};
-    state.retired_coordinators=[...new Set([...(state.retired_coordinators??[]),from])].filter(x=>x!==id);
-    notifyNeeded=true;
-   }
-   state.coordinator=id;state.enabled=true;state.recovery_pending=null;await save();
+   const previous=await read('dispatcher.json');
    const oldQueue=await read('dispatch-queue.json');
-   if(oldQueue&&oldQueue.coordinator_session_id!==id){oldQueue.coordinator_session_id=id;const p=path.join(dir,'dispatch-queue.json');await fs.writeFile(p+'.tmp',JSON.stringify(oldQueue,null,2));await fs.rename(p+'.tmp',p);}
-   if(!await read('dispatch-queue.json')){
+   const epoch=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+   const archive=path.join(dir,'archive',epoch);
+   await fs.mkdir(archive,{recursive:true});
+   await fs.writeFile(path.join(archive,'previous-team.json'),JSON.stringify({dispatcher:previous,queue:oldQueue},null,2));
+   // Cancel known old executions. A confirmed missing session is already gone.
+   const oldIds=[...(previous?.workers??[]).filter(w=>!terminal.has(w.status)).map(w=>w.session_id),
+     previous?.coordinator!==id?previous?.coordinator:null].filter(Boolean);
+   for(const sessionID of new Set(oldIds)){
+    try{await ctx.session.interrupt({sessionID});}
+    catch(e){if(!/Session.NotFoundError|session.*not found/i.test(hostError(e)))throw Error('Cannot stop previous execution: '+hostError(e));}
+   }
+   const retired=[...(previous?.retired_coordinators??[]),...oldIds].filter(x=>x!==id);
+   state={version:2,epoch,coordinator:id,enabled:true,workers:[],error:null,
+     retired_coordinators:[...new Set(retired)],started_at:new Date().toISOString()};
+   notifyNeeded=false;await save();
+   {
     const tasks=[
      {id:'startup-ui-ux',role:'ui-ux',write_paths:['work/design/dispatch-startup'],prompt:'Use .opencode/skills/rustwake-ui-ux/SKILL.md. Inspect the current mobile game and actual screenshots. Produce one prioritized implementation-ready UI/UX brief in work/design/dispatch-startup, with before evidence, interaction states, accessibility and acceptance checks. Do not redesign everything or change production files.'},
      {id:'startup-product',role:'product-owner',write_paths:['work/product/dispatch-startup'],prompt:'Read sponsor inbox, backlog and game strategy. Produce a prioritized next implementation brief in work/product/dispatch-startup. Do not edit shared backlog. Return three useful independent assignments with exact file scopes.'},
@@ -124,11 +122,8 @@ export function createDispatcher(ctx,root){
     await fs.mkdir(dir,{recursive:true});await fs.writeFile(path.join(dir,'dispatch-queue.json'),JSON.stringify({coordinator_session_id:id,tasks},null,2));
    }
    }catch(e){
-    state.error='Recovery paused: '+hostError(e);state.enabled=false;
-    state.recovery_pending={session_id:id,retry_seconds:5};
-    await save();
-    timer=setTimeout(()=>{void this.start(id).catch(()=>{});},5000);timer.unref?.();
-    return state;
+    state.error='Fresh start blocked: '+hostError(e);state.enabled=false;
+    state.recovery_pending=null;await save();throw e;
    }
    finally{starting=false;}
    await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();

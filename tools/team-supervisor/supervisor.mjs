@@ -48,7 +48,7 @@ export async function setup(ctx, statusRpc) {
      if(action==='bind'&&coordinator&&coordinator!==input.sessionID){
       const current=await dispatcher.status();
       const unresolved=current.workers.some(w=>!['succeeded','failed','interrupted'].includes(w.status));
-      if(unresolved)throw new Error('A team already exists. Use /rustwake-team start here to recover it automatically');
+      if(unresolved)throw new Error('A team already exists. Use /rustwake-team start here to launch a fresh team');
      }
      if(action==='start'){
       phase='start-dispatcher';
@@ -80,6 +80,12 @@ export async function setup(ctx, statusRpc) {
   }
  })));
  registrations.push(await ctx.session.hook('context',async e=>{
+  if(!coordinator&&!stopping){
+   const info=await ctx.session.get({sessionID:e.sessionID});
+   if(info?.agent==='rustwake-coordinator'){
+    await dispatcher.start(e.sessionID);coordinator=e.sessionID;
+   }
+  }
   const current=await dispatcher.status();
   if(current.retired_coordinators?.includes(e.sessionID)){
    e.system.push({type:'text',text:'This Rustwake coordinator has been retired by an explicit team start in another session. Stop this goal loop. Do not schedule, edit files, or launch workers. The replacement coordinator owns the preserved team.'});return;
@@ -89,7 +95,7 @@ export async function setup(ctx, statusRpc) {
   if(s.dispatcher.recovery_pending){
    e.system.push({type:'text',text:'TEAM RECOVERY PENDING: the plugin is retrying host session checks automatically. Existing worker reservations remain owned. Do not spawn workers, change the queue, or edit worker-owned files. Report the visible recovery error honestly. This is not an active dispatcher.'});return;
   }
-  e.system.push({type:'text',text:(s.dispatcher.enabled?'EXECUTABLE DISPATCHER ACTIVE: do not call spawn/task yourself. Append scoped tasks to .rustwake-runtime/dispatch-queue.json with coordinator_session_id matching this session. Format tasks: [{id:unique,role:developer|reviewer|player|product-owner|release-engineer|ui-ux,prompt:complete assignment,write_paths:[explicit relative path prefixes]}]. Five slots are reserved by the plugin using real session IDs. Inspect .rustwake-runtime/dispatcher.json for running/queued/terminal/error state. On completion read child results with host tools; queue implementation, review and release. Never repeatedly requeue the same task or rewrite leases. A startup audit is followed by real implementation, not another audit. Read docs/TEAM_DISPATCH.md.\n':'')+'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
+  e.system.push({type:'text',text:(s.dispatcher.enabled?'EXECUTABLE DISPATCHER ACTIVE: do not call spawn/task yourself. Append scoped tasks to .rustwake-runtime/dispatch-queue.json with coordinator_session_id matching this session. Every new start is a fresh staffing run. Old runtime leases and queues are archived, never resumed. Use current source, sponsor priorities and backlog to plan new assignments. Preserve and inspect unfinished worktree edits before changing those files. Do not wait for archived employees or replay their queue. Format tasks: [{id:unique,role:developer|reviewer|player|product-owner|release-engineer|ui-ux,prompt:complete assignment,write_paths:[explicit relative path prefixes]}]. Five slots are reserved by the plugin using real session IDs. Inspect .rustwake-runtime/dispatcher.json for running/queued/terminal/error state. On completion read child results with host tools; queue implementation, review and release. Never repeatedly requeue the same task or rewrite leases. A startup audit is followed by real implementation, not another audit. Read docs/TEAM_DISPATCH.md.\n':'')+'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
  }));
  registrations.push(await ctx.tool.hook('execute.before',async e=>{
   const current=await dispatcher.status();
