@@ -16,7 +16,7 @@ const sha = value => typeof value === 'string' && /^[a-f0-9]{40}$/.test(value);
 export function validate(b) {
  const errors=[]; const need=(ok,msg)=>{if(!ok)errors.push(msg);};
  need(b.schema_version===1,'schema_version must be 1');
- need(Number.isInteger(b.max_active_sessions)&&b.max_active_sessions>=1&&b.max_active_sessions<=4,'session cap must be 1..4 including coordinator');
+ need(Number.isInteger(b.max_active_sessions)&&b.max_active_sessions>=1&&b.max_active_sessions<=6,'session cap must be 1..6 including coordinator');
  need(Number.isFinite(Date.parse(b.updated_at)),'updated_at must be a timestamp');
  need(Array.isArray(b.tickets),'tickets must be an array');
  if(!Array.isArray(b.tickets)) return errors;
@@ -78,4 +78,5 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
  const errors=validate(b);if(errors.length){console.error(errors.join('\n'));process.exitCode=1;}
  else {for(const [p,content]of Object.entries(render(b))){const f=path.join(root,p);if(process.argv.includes('--check')){if(!fs.existsSync(f)||fs.readFileSync(f,'utf8')!==content){console.error('Stale generated file: '+p);process.exitCode=1;}}else fs.writeFileSync(f,content);}if(!process.exitCode)console.log('Team board valid; '+(process.argv.includes('--check')?'generated views current':'views generated'));}
 }
+
 

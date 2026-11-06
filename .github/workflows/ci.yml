@@ -2,7 +2,7 @@ name: ci
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'rw/**']
   pull_request:
 
 jobs:
@@ -15,7 +15,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: node scripts/team-board.mjs --check
-      - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs tools/team-supervisor/*.test.mjs
+      - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs
       - run: python scripts/deploy-artifact.test.py
       - run: python scripts/host-adapter.test.py
       - run: python scripts/commission-databrick.test.py

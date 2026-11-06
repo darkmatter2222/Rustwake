@@ -1,0 +1,368 @@
+[
+  {
+    "file": "live--d7af68a-390-ts1-fork.png",
+    "sha256": "53c28be63debd32f5d06e765c14f6085dd2f7c00c48fe2bbb7d5522f34187209",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "390x844",
+    "dpr": 2,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "fork row open, after the last primary tap",
+    "primaryTaps": 310,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 844,
+      "innerHeight": 844,
+      "hudBox": {
+        "h": 844
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 191.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 172.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-390-ts1-rest.png",
+    "sha256": "0e54617ef956687605ed3480c19056e21007087ec95d57f52c01c79b6f191247",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "390x844",
+    "dpr": 2,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "rest frame, no tap within the last 1.2 s",
+    "primaryTaps": 310,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 844,
+      "innerHeight": 844,
+      "hudBox": {
+        "h": 844
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 191.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 172.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-360-ts2-fork.png",
+    "sha256": "f5f7eef6cea7b2d16c50978373677395840df9edeebe38746c83af1b7a66c33a",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "360x640",
+    "dpr": 2,
+    "textScale": 2,
+    "capture": "organic",
+    "moment": "fork row open, after the last primary tap",
+    "primaryTaps": 313,
+    "textScaleSet": true,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 640,
+      "innerHeight": 640,
+      "hudBox": {
+        "h": 640
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 182.7,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 155.3,
+          "h": 46
+        }
+      ],
+      "textScale": "2"
+    }
+  },
+  {
+    "file": "live--d7af68a-360-ts2-rest.png",
+    "sha256": "41c231e9d4a955a9dca7a90b8762beffe2c7abf8548964fb217f9fc5726741d2",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "360x640",
+    "dpr": 2,
+    "textScale": 2,
+    "capture": "organic",
+    "moment": "rest frame, no tap within the last 1.2 s",
+    "primaryTaps": 313,
+    "textScaleSet": true,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 640,
+      "innerHeight": 640,
+      "hudBox": {
+        "h": 640
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 182.7,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 155.3,
+          "h": 46
+        }
+      ],
+      "textScale": "2"
+    }
+  },
+  {
+    "file": "live--d7af68a-412-ts1-fork.png",
+    "sha256": "67de0adadc7202f2b12ed41c4db4be91b00e8446f3245579f828e3bc030f23ed",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "412x915",
+    "dpr": 2,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "fork row open, after the last primary tap",
+    "primaryTaps": 312,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 915,
+      "innerHeight": 915,
+      "hudBox": {
+        "h": 915
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 202.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 183.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-412-ts1-rest.png",
+    "sha256": "5cb5f1cfa521230f95aae67b2b1853cda2153434cb57e22b1657aa7485b7fcbc",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "412x915",
+    "dpr": 2,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "rest frame, no tap within the last 1.2 s",
+    "primaryTaps": 312,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 915,
+      "innerHeight": 915,
+      "hudBox": {
+        "h": 915
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 202.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 183.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-desktop-1440-fork.png",
+    "sha256": "aacf7ced0a0b55e0c9a6a6a7709ba5884e7c2d8546042e0fe306a1643e0fa375",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "fork row open, after the last primary tap",
+    "primaryTaps": 312,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "hudBox": {
+        "h": 900
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 286.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 267.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-desktop-1440-rest.png",
+    "sha256": "6c42c52e781940935b4c052a50d3f5b1c12b8553a7aab70ab49192b4fab85db6",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "textScale": 1,
+    "capture": "organic",
+    "moment": "rest frame, no tap within the last 1.2 s",
+    "primaryTaps": 312,
+    "textScaleSet": null,
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "hudBox": {
+        "h": 900
+      },
+      "faces": [
+        {
+          "text": "Faster batches40 credits",
+          "w": 286.8,
+          "h": 46
+        },
+        {
+          "text": "Less power30 credits",
+          "w": 267.3,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-seed-mature-390.png",
+    "sha256": "7b1b61c1d68853069718e4dbd37e5867f12e4c6f0d3722ba199baa61b3dbfacb",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "390x844",
+    "dpr": 2,
+    "textScale": 1,
+    "capture": "seeded",
+    "moment": "mature yard (docs/evidence/yard-mature.json), report dismissed",
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 844,
+      "innerHeight": 844,
+      "hudBox": {
+        "h": 844
+      },
+      "faces": [
+        {
+          "text": "Store",
+          "w": 50.1,
+          "h": 46
+        },
+        {
+          "text": "Yard",
+          "w": 44.8,
+          "h": 46
+        },
+        {
+          "text": "Sell 35 Ferrous+70 credits",
+          "w": 129.8,
+          "h": 46
+        },
+        {
+          "text": "Build",
+          "w": 49,
+          "h": 46
+        },
+        {
+          "text": "Research",
+          "w": 72.4,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  },
+  {
+    "file": "live--d7af68a-seed-mature-desktop.png",
+    "sha256": "81e55676d7bcee3c737dc26c6e76566c0cdbb7882e524baf1ab4324f98b5730f",
+    "artifact": "rustwake-d7af68a",
+    "sourceSha": "d7af68a1df31d6b0cb5e313330f7cb5853d74a32",
+    "viewport": "1440x900",
+    "dpr": 1,
+    "textScale": 1,
+    "capture": "seeded",
+    "moment": "mature yard (docs/evidence/yard-mature.json), report dismissed",
+    "pageErrors": 0,
+    "metrics": {
+      "scrollHeight": 900,
+      "innerHeight": 900,
+      "hudBox": {
+        "h": 900
+      },
+      "faces": [
+        {
+          "text": "Store",
+          "w": 69.1,
+          "h": 46
+        },
+        {
+          "text": "Yard",
+          "w": 63.8,
+          "h": 46
+        },
+        {
+          "text": "Sell 35 Ferrous+70 credits",
+          "w": 243.8,
+          "h": 46
+        },
+        {
+          "text": "Build",
+          "w": 68,
+          "h": 46
+        },
+        {
+          "text": "Research",
+          "w": 91.4,
+          "h": 46
+        }
+      ],
+      "textScale": "1"
+    }
+  }
+]

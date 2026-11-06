@@ -13,7 +13,7 @@ export function pathsConflict(a,b){
 /** Pure advisory planner. It never launches sessions, frees a lease, or claims liveness. */
 export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}={}){
  const observed=stamp(board.runtime?.observed_at),time=stamp(now);
- const cap=Math.max(0,Math.min(4,board.max_active_sessions??4)-1);
+ const cap=Math.max(0,Math.min(6,board.max_active_sessions??6)-1);
  const active=(board.runtime?.sessions??[]).filter(s=>!terminal.has(s.status));
  const warnings=[];
  if(time===null||observed===null||time-observed>staleAfterMs||observed>time){
@@ -34,7 +34,7 @@ export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}
   else if(t.status==='triaged'||t.status==='inbox')role='product-owner';
   else if(['ready','rework'].includes(t.status))role=t.scheduling.role??t.owner;
   else continue;
-  if(!['developer','reviewer','player','product-owner','release-engineer'].includes(role))continue;
+  if(!['developer','reviewer','player','product-owner','release-engineer','ui-ux'].includes(role))continue;
   if(role==='developer'&&!t.product_approved)continue;
   if(role==='release-engineer'&&releaseActive)continue;
   const writes=t.scheduling.write_paths;
@@ -60,3 +60,4 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
  const file=process.argv[2];if(!file)throw new Error('Usage: node scripts/team-scheduler.mjs <fresh-runtime-board.json>');
  console.log(JSON.stringify(planAssignments(JSON.parse(fs.readFileSync(file,'utf8')),{now:new Date().toISOString()}),null,2));
 }
+

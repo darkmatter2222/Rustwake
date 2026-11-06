@@ -6,7 +6,7 @@ At inspected main `5a024beb625adfe583d42c656bec6cbc06f5bbbd`, commits on Novembe
 
 ## The coordinator is a dispatcher, not a waiter
 
-Maximum is four model sessions including PM; target all three child slots occupied by useful eligible work during active host time. Roles can have multiple instances: developer-art, developer-economy, developer-UI are valid when they own nonoverlapping paths/worktrees. Do not impose one developer per team. Independent QA, current-live playtest, product research/triage and release are productive alternatives while another candidate builds.
+Maximum is six model sessions including PM; target all five child slots occupied by useful eligible work during active host time. Roles can have multiple instances: developer-art, developer-economy, developer-UI are valid when they own nonoverlapping paths/worktrees. Do not impose one developer per team. Independent QA, current-live playtest, product research/triage and release are productive alternatives while another candidate builds.
 
 At every completion and every 30–60 second available heartbeat:
 1. Refresh real runtime status and drain completed outputs without an all-worker barrier. Count dispatching calls as reserved slots. Unknown/stale status is not permission to launch duplicates.
@@ -57,3 +57,4 @@ This installer preserves provider and MasterGoal config, backs up the project Op
 Reload OpenCode, select coordinator, `/rustwake-team bind`, then `/goal forever goal.md`. Check `/rustwake-team status`. After host restart binding is lost intentionally; rebind after reconciliation. `/goal stop` remains authoritative; `/rustwake-team stop` clears the guard. No timers or automatic prompts are installed by this companion. If plugin loading fails, continue via scheduler/checkpoint CLI and record runtime incompatibility; do not install arbitrary community plugins blindly.
 
 The team is authorized to perform this local setup and the CI/CD setup using existing HomeAILab procedures. This cloud update cannot install on Ryan's PC or register a server runner; publish an activation receipt when the local team actually does so.
+

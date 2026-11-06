@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    {
+      "package": "file:///C:/Users/ryans/source/repos/Rustwake/tools/team-supervisor",
+      "options": {
+        "waitTools": []
+      }
+    }
+  ]
+}

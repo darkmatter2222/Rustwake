@@ -1,0 +1,591 @@
+{
+  "url": "https://home.darkmatter2222.com/rustwake/",
+  "capturedAt": "2026-11-06T02:31:59.036Z",
+  "cells": [
+    {
+      "cell": "390x844 ts1 organic",
+      "taps": 260,
+      "save": {
+        "tick": 330,
+        "machines": [
+          "sorter:1:starved:0"
+        ],
+        "routes": 2,
+        "drones": null,
+        "credits": 0,
+        "store": {
+          "scrap": 5
+        },
+        "research": []
+      },
+      "errors": [],
+      "rest": {
+        "inner": {
+          "w": 390,
+          "h": 844
+        },
+        "dpr": 2,
+        "pageScroll": {
+          "w": 390,
+          "h": 844,
+          "scrolls": false
+        },
+        "hud": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "card": {
+          "x": 10,
+          "y": 62,
+          "w": 340.4,
+          "h": 105
+        },
+        "cardText": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 5Batch pips · Scrap sorter #8 0/5",
+        "cardRatioPct": 12.4,
+        "dock": {
+          "x": 10,
+          "y": 790,
+          "w": 370,
+          "h": 46
+        },
+        "faces": [
+          {
+            "text": "Store",
+            "box": {
+              "x": 10,
+              "y": 790,
+              "w": 64.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build Furnace10 scrap + 5 ferrous",
+            "box": {
+              "x": 80.8,
+              "y": 790,
+              "w": 229.6,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build",
+            "box": {
+              "x": 316.3,
+              "y": 790,
+              "w": 63.7,
+              "h": 46
+            }
+          }
+        ],
+        "minFacePx": 46,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "panel": null,
+        "panelText": "",
+        "canvasPixels": {
+          "w": 780,
+          "h": 1688,
+          "distinctColors": 223,
+          "topColors": [
+            "11,18,32 56.2%",
+            "34,56,74 31.6%",
+            "8,13,24 4%",
+            "44,66,87 1.9%",
+            "127,159,187 1.2%",
+            "22,40,58 1.1%",
+            "16,27,40 1.1%",
+            "109,144,171 0.7%",
+            "86,113,135 0.6%",
+            "53,86,107 0.4%",
+            "138,169,196 0.3%",
+            "14,23,38 0.3%"
+          ],
+          "luminanceBuckets8": [
+            61.9,
+            34.6,
+            0.4,
+            0.6,
+            2,
+            0.4,
+            0,
+            0
+          ]
+        },
+        "inkByBandPct": [
+          0,
+          5,
+          86.2,
+          88.7,
+          88.7,
+          82,
+          0,
+          0
+        ]
+      },
+      "clipFrames": 6,
+      "panels": {
+        "Store": {
+          "opened": true,
+          "panelText": "Yard storeCloseScrap10Capacity10/900MeasuredStorage 1% full (10/900)MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 0% busy (0/24 in transit)Measured1 machine waiting for inputSellOpens after the first steel contract",
+          "panelBox": {
+            "x": 10,
+            "y": 502,
+            "w": 370,
+            "h": 288
+          }
+        },
+        "Yard": {
+          "opened": false,
+          "panelText": "",
+          "panelBox": null
+        },
+        "Research": {
+          "opened": false,
+          "panelText": "",
+          "panelBox": null
+        },
+        "Build": {
+          "opened": true,
+          "panelText": "",
+          "panelBox": null
+        }
+      },
+      "machinePanel": {
+        "at": [
+          160,
+          300
+        ],
+        "text": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 14s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%Next stepWaits for input 100% of the time because the dock is empty. One salvage pulse tops it up; no purchase needed.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap so",
+        "box": {
+          "x": 10,
+          "y": 442.3,
+          "w": 370,
+          "h": 347.8
+        }
+      }
+    },
+    {
+      "cell": "360x640 ts2 organic",
+      "taps": 200,
+      "save": {
+        "tick": 250,
+        "machines": [
+          "sorter:1:starved:0"
+        ],
+        "routes": 2,
+        "drones": null,
+        "credits": 0,
+        "store": {
+          "scrap": 0
+        },
+        "research": []
+      },
+      "textScale": 1,
+      "errors": [],
+      "rest": {
+        "inner": {
+          "w": 360,
+          "h": 640
+        },
+        "dpr": 2,
+        "pageScroll": {
+          "w": 360,
+          "h": 640,
+          "scrolls": false
+        },
+        "hud": {
+          "x": 0,
+          "y": 0,
+          "w": 360,
+          "h": 640
+        },
+        "card": {
+          "x": 10,
+          "y": 70.5,
+          "w": 312.8,
+          "h": 167.2
+        },
+        "cardText": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 0Batch pips · Scrap sorter #8 0/5",
+        "cardRatioPct": 26.1,
+        "dock": {
+          "x": 10,
+          "y": 586,
+          "w": 340,
+          "h": 46
+        },
+        "faces": [
+          {
+            "text": "Store",
+            "box": {
+              "x": 10,
+              "y": 586,
+              "w": 63.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build Furnace10 scrap + 5 ferrous",
+            "box": {
+              "x": 79.8,
+              "y": 586,
+              "w": 201.7,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build",
+            "box": {
+              "x": 287.5,
+              "y": 586,
+              "w": 62.5,
+              "h": 46
+            }
+          }
+        ],
+        "minFacePx": 46,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 360,
+          "h": 640
+        },
+        "panel": null,
+        "panelText": "",
+        "canvasPixels": {
+          "w": 720,
+          "h": 1280,
+          "distinctColors": 216,
+          "topColors": [
+            "11,18,32 46.6%",
+            "34,56,74 38.6%",
+            "8,13,24 4.7%",
+            "44,66,87 2.3%",
+            "127,159,187 1.5%",
+            "22,40,58 1.4%",
+            "16,27,40 1.2%",
+            "109,144,171 0.8%",
+            "86,113,135 0.7%",
+            "138,169,196 0.4%",
+            "53,86,107 0.4%",
+            "14,23,38 0.4%"
+          ],
+          "luminanceBuckets8": [
+            53.4,
+            42.3,
+            0.4,
+            0.8,
+            2.5,
+            0.5,
+            0,
+            0.1
+          ]
+        },
+        "inkByBandPct": [
+          0,
+          41.3,
+          88.9,
+          88.9,
+          88.9,
+          88.9,
+          30,
+          0
+        ]
+      },
+      "panels": {
+        "Store": {
+          "opened": true,
+          "panelText": "Yard storeCloseCapacity0/900MeasuredStorage 0% full (0/900)MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 0% busy (0/24 in transit)Measured1 machine waiting for inputSellOpens after the first steel contract",
+          "panelBox": {
+            "x": 10,
+            "y": 323.9,
+            "w": 340,
+            "h": 262.1
+          }
+        },
+        "Research": {
+          "opened": false,
+          "panelText": "",
+          "panelBox": null
+        }
+      }
+    },
+    {
+      "cell": "390x844 seeded mature",
+      "errors": [],
+      "rest": {
+        "inner": {
+          "w": 390,
+          "h": 844
+        },
+        "dpr": 2,
+        "pageScroll": {
+          "w": 390,
+          "h": 844,
+          "scrolls": false
+        },
+        "hud": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "card": {
+          "x": 10,
+          "y": 62,
+          "w": 340.4,
+          "h": 89.2
+        },
+        "cardText": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %Batch pips · Scrap sorter #0 0/5 · Furnace #1 0/5 +6",
+        "cardRatioPct": 10.6,
+        "dock": {
+          "x": 10,
+          "y": 790,
+          "w": 370,
+          "h": 46
+        },
+        "faces": [
+          {
+            "text": "Store",
+            "box": {
+              "x": 10,
+              "y": 790,
+              "w": 50.1,
+              "h": 46
+            }
+          },
+          {
+            "text": "Yard",
+            "box": {
+              "x": 66.1,
+              "y": 790,
+              "w": 44.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Sell 35 Ferrous+70 credits",
+            "box": {
+              "x": 116.8,
+              "y": 790,
+              "w": 129.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build",
+            "box": {
+              "x": 252.7,
+              "y": 790,
+              "w": 49,
+              "h": 46
+            }
+          },
+          {
+            "text": "Research",
+            "box": {
+              "x": 307.6,
+              "y": 790,
+              "w": 72.4,
+              "h": 46
+            }
+          }
+        ],
+        "minFacePx": 44.8,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "panel": null,
+        "panelText": "",
+        "canvasPixels": {
+          "w": 780,
+          "h": 1688,
+          "distinctColors": 500,
+          "topColors": [
+            "11,18,32 56.2%",
+            "34,56,74 28.5%",
+            "8,13,24 4%",
+            "44,66,87 2.1%",
+            "138,169,196 1.7%",
+            "127,159,187 1.4%",
+            "22,40,58 1.1%",
+            "16,27,40 1.1%",
+            "14,23,38 0.7%",
+            "109,144,171 0.7%",
+            "86,113,135 0.6%",
+            "53,86,107 0.4%"
+          ],
+          "luminanceBuckets8": [
+            62.3,
+            31.9,
+            0.5,
+            0.7,
+            2.4,
+            2,
+            0.1,
+            0.3
+          ]
+        },
+        "inkByBandPct": [
+          0,
+          5,
+          86.3,
+          88.7,
+          88.7,
+          82,
+          0,
+          0
+        ]
+      },
+      "research": {
+        "opened": true,
+        "panelText": "ResearchCloseData102Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data",
+        "panelBox": {
+          "x": 10,
+          "y": 442.3,
+          "w": 370,
+          "h": 347.8
+        }
+      }
+    },
+    {
+      "cell": "1440x900 seeded mature",
+      "errors": [],
+      "rest": {
+        "inner": {
+          "w": 1440,
+          "h": 900
+        },
+        "dpr": 1,
+        "pageScroll": {
+          "w": 1440,
+          "h": 900,
+          "scrolls": false
+        },
+        "hud": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 900
+        },
+        "card": {
+          "x": 10,
+          "y": 58,
+          "w": 420,
+          "h": 89.2
+        },
+        "cardText": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %Batch pips · Scrap sorter #0 0/5 · Furnace #1 0/5 +6",
+        "cardRatioPct": 9.9,
+        "dock": {
+          "x": 440,
+          "y": 846,
+          "w": 560,
+          "h": 46
+        },
+        "faces": [
+          {
+            "text": "Store",
+            "box": {
+              "x": 440,
+              "y": 846,
+              "w": 69.1,
+              "h": 46
+            }
+          },
+          {
+            "text": "Yard",
+            "box": {
+              "x": 515.1,
+              "y": 846,
+              "w": 63.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Sell 35 Ferrous+70 credits",
+            "box": {
+              "x": 584.8,
+              "y": 846,
+              "w": 243.8,
+              "h": 46
+            }
+          },
+          {
+            "text": "Build",
+            "box": {
+              "x": 834.7,
+              "y": 846,
+              "w": 68,
+              "h": 46
+            }
+          },
+          {
+            "text": "Research",
+            "box": {
+              "x": 908.6,
+              "y": 846,
+              "w": 91.4,
+              "h": 46
+            }
+          }
+        ],
+        "minFacePx": 46,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "w": 1440,
+          "h": 900
+        },
+        "panel": null,
+        "panelText": "",
+        "canvasPixels": {
+          "w": 1440,
+          "h": 900,
+          "distinctColors": 477,
+          "topColors": [
+            "11,18,32 61.2%",
+            "34,56,74 25%",
+            "8,13,24 3.4%",
+            "44,66,87 1.8%",
+            "138,169,196 1.3%",
+            "127,159,187 1.2%",
+            "22,40,58 0.9%",
+            "16,27,40 0.8%",
+            "109,144,171 0.6%",
+            "14,23,38 0.5%",
+            "86,113,135 0.5%",
+            "53,86,107 0.4%"
+          ],
+          "luminanceBuckets8": [
+            66.3,
+            28.4,
+            0.6,
+            0.8,
+            2.1,
+            1.6,
+            0.1,
+            0.2
+          ]
+        },
+        "inkByBandPct": [
+          25.9,
+          44.9,
+          44.9,
+          44.9,
+          44.9,
+          44.9,
+          44.9,
+          15.2
+        ]
+      }
+    }
+  ]
+}

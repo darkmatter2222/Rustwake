@@ -23,7 +23,7 @@ Write short first-person role notes with role/task/candidate attribution. These 
 
 ## Four-slot scheduling
 
-Total active cap = min(4, actual configured capacity), including coordinator. Target all three child slots on useful independent work. Multiple developers are allowed, including three concurrently with distinct write ownership. Rotate QA, product, player and release as outcomes/dependencies require; no fixed one-developer seat. During planning use coordinator + product + player + QA, then return a slot to development. Product and player assignments are bounded and finish, not permanent occupied seats. Release work due for >10 minutes receives next free slot; no unsafe cancellation of in-flight commits/deployments to free one.
+Total active cap = min(6, actual configured capacity), including coordinator. Target all five child slots on useful independent work. Multiple developers are allowed, including three concurrently with distinct write ownership. Rotate QA, product, player and release as outcomes/dependencies require; no fixed one-developer seat. During planning use coordinator + product + player + QA, then return a slot to development. Product and player assignments are bounded and finish, not permanent occupied seats. Release work due for >10 minutes receives next free slot; no unsafe cancellation of in-flight commits/deployments to free one.
 
 Every child has task ID, generation, session ID, base SHA, worktree/scope, output path, stop condition and expected result. Dispatch reserves a slot before the call. Only terminal completion/cancel+join frees it; missing heartbeat does not prove a dead worker. No batching that briefly starts five and later cancels one. Compatibility publisher/deployer share the release lease and cap.
 
@@ -41,7 +41,7 @@ Meetings produce decisions in `work/product/`, never pages of invented dialogue.
 
 All roles submit feedback using `work/feedback/TEMPLATE.md`. PM deduplicates; product owner triages each new substantive item within the next planning pass and at least each sprint. Feedback becomes accepted for investigation, linked to an existing task, deferred with revisit trigger, or rejected with reason. Every completed experiment has a follow-up decision, including negative results.
 
-Prioritize: save/security/live-breakage; blocked player comprehension; meaningful strategy and coherent art/audio; long-term content; cosmetic metric bookkeeping. Track impact, confidence, effort and evidence; do not hide judgment behind a fake precise score. Keep at most five ready tasks and three child assignments. Reconcile legacy issues, retain IDs and provenance, and defer micro-polish unless it supports a chosen outcome.
+Prioritize: save/security/live-breakage; blocked player comprehension; meaningful strategy and coherent art/audio; long-term content; cosmetic metric bookkeeping. Track impact, confidence, effort and evidence; do not hide judgment behind a fake precise score. Keep at most five ready tasks and five child assignments. Reconcile legacy issues, retain IDs and provenance, and defer micro-polish unless it supports a chosen outcome.
 
 ## Definition of ready and done
 
@@ -51,3 +51,14 @@ Done: code checked, independent QA verdict for exact candidate and changed scope
 
 Every progress claim identifies evidence type: owner report, actual agent interaction, source inspection, automated test, visual inspection, audio listening, numerical analysis, hypothesis, or simulated-persona inference. Never infer enjoyment, retention or revenue from a test count.
 
+
+## Frequent publication contract (supersedes older no-push wording)
+
+Read docs/PUBLICATION.md. Developers are authorized and expected to commit and push their own rw/ feature branches from separate registered worktrees, targeting useful checkpoints every 5–10 minutes when changed work exists. They must not push main or peers' files. The coordinator prepares each worktree, supplies its absolute directory in the dispatch task, and queues independent review and a release engineer promptly when ready. A queued release now gets dispatcher priority and drains conflicting work rather than being starved by new assignments. No blanket wait for every worker. The release engineer remains sole main integrator; successful main CI deploys automatically. Feature pushes provide visibility without claiming acceptance. Report real remote SHA, test limitations and deployment receipts. After startup findings, prioritize a player-visible implementation; do not spend another night extending audits. Publication telemetry distinguishes actual verified helper pushes from commit activity and unknown state.
+
+
+## UI/UX specialist and six-session limit
+
+Plugin 0.5.0 permits six total model sessions: coordinator plus five workers. Queue role `ui-ux` to invoke `rustwake-ui-ux`; its workflow lives at `.opencode/skills/rustwake-ui-ux/SKILL.md`. It owns mobile interaction design, first-use clarity, navigation, visual hierarchy, accessibility and implementation-ready briefs. Product prioritizes, developers implement, and reviewers independently accept. Give it a scoped `work/design/<ticket>/` output. Do not turn design into endless audit reports or block ready releases.
+
+For existing teams, queue one bounded UI/UX assignment at the next useful free slot; do not recreate completed startup work or discard active leases. Fresh startup includes a UI/UX assignment. Five is a ceiling, not a requirement to invent work. Maintain release priority and feature publication cadence. Startup failures are now recorded in the dispatcher status and shown as START BLOCKED; preserve the exact error and existing session IDs rather than deleting runtime state. This improves diagnostics but does not establish the cause of an unreported host error.

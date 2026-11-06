@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {publicationReader} from './publication.mjs';
 import {createDispatcher} from './dispatcher.mjs';
 import { formatTeamStatus, sponsorState } from './telemetry.mjs';
 
@@ -15,6 +16,7 @@ export async function setup(ctx, statusRpc) {
  let coordinator=null, stopping=false;
  const registrations=[];
  const dispatcher=createDispatcher(ctx,root);
+ const publication=publicationReader(root);
  const eventsAbort=new AbortController();
  if(ctx.event?.subscribe){void (async()=>{try{for await(const e of ctx.event.subscribe({signal:eventsAbort.signal}))dispatcher.event(e);}catch{}})();}
  const waitTools=Array.isArray(ctx.options?.waitTools)?ctx.options.waitTools:[];
@@ -23,7 +25,7 @@ export async function setup(ctx, statusRpc) {
   const b=await read('work/backlog.json');
   const observed=await read('.rustwake-runtime/supervisor-observation.json');
   const inbox=await fs.readFile(path.join(root,'SPONSOR_INBOX.md'),'utf8').catch(()=>null);
-  return {dispatcher:await dispatcher.status(),board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
+  return {publication:await publication(),dispatcher:await dispatcher.status(),board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
  }
  if(statusRpc) registrations.push(await ctx.rpc.register(statusRpc,{
   read:async ({sessionID})=>{
@@ -36,28 +38,77 @@ export async function setup(ctx, statusRpc) {
   name:'rustwake-team',description:'Bind or stop the Rustwake coordinator guard: start | bind | stop | status',
   execute:async input=>{
    const action=input.prompt.text.trim();
-   if(action==='bind'||action==='start'){
-    const info=await ctx.session.get({sessionID:input.sessionID});
-    if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
-    if(coordinator&&coordinator!==input.sessionID)throw new Error('Guard bound elsewhere; stop it first');
-    coordinator=input.sessionID;stopping=false;
-    if(action==='start'){if(!ctx.session.create||!ctx.session.prompt||!ctx.event?.subscribe)throw Error('OpenCode session/event API unavailable; no worker launch claimed');await dispatcher.start(coordinator);}
-   } else if(action==='stop') { if(coordinator&&coordinator!==input.sessionID)throw new Error('Only bound coordinator may stop guard');await dispatcher.stop();stopping=true;coordinator=null; }
-   else if(action!=='status')throw new Error('Use start, bind, stop or status');
-   await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
+   const prior={coordinator,stopping};
+   let phase='validate-command';
+   try{
+    if(action==='bind'||action==='start'){
+     phase='read-coordinator-session';
+     const info=await ctx.session.get({sessionID:input.sessionID});
+     if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
+     if(action==='bind'&&coordinator&&coordinator!==input.sessionID){
+      const current=await dispatcher.status();
+      const unresolved=current.workers.some(w=>!['succeeded','failed','interrupted'].includes(w.status));
+      if(unresolved)throw new Error('A team already exists. Use /rustwake-team start here to launch a fresh team');
+     }
+     if(action==='start'){
+      phase='start-dispatcher';
+      if(!ctx.session.create||!ctx.session.prompt||!ctx.event?.subscribe)throw Error('OpenCode session/event API unavailable');
+      await dispatcher.start(input.sessionID);
+     }
+     // Bind only after setup has completed. Failed setup must not capture a new UI session.
+     coordinator=input.sessionID;stopping=false;
+    }else if(action==='stop'){
+     if(coordinator&&coordinator!==input.sessionID)throw Error('Only bound coordinator may stop guard: '+coordinator);
+     phase='stop-dispatcher';await dispatcher.stop();stopping=true;coordinator=null;
+    }else if(action!=='status')throw Error('Use start, bind, stop or status');
+    phase='render-command-result';
+    await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
+   }catch(error){
+    const message=String(error?.message??error);
+    const current=await dispatcher.status();
+    // Preserve an actually started team's ownership even if rendering its command result failed.
+    if(!current.enabled||current.coordinator!==input.sessionID){coordinator=prior.coordinator;stopping=prior.stopping;}
+    const diagnostic={at:new Date().toISOString(),action,phase,session_id:input.sessionID,
+      error_name:error?.name??'Error',message,cause:error?.cause?.message??null,
+      dispatcher_coordinator:current.coordinator,enabled:current.enabled,
+      workers:current.workers.map(w=>({id:w.id,session_id:w.session_id,status:w.status}))};
+    await fs.mkdir(path.join(root,'.rustwake-runtime'),{recursive:true});
+    await fs.writeFile(path.join(root,'.rustwake-runtime','last-command-error.json'),JSON.stringify(diagnostic,null,2)+'\n');
+    await dispatcher.recordError(phase+': '+message);
+    throw new Error('Rustwake '+phase+': '+message+'. Details saved in .rustwake-runtime/last-command-error.json');
+   }
   }
  })));
  registrations.push(await ctx.session.hook('context',async e=>{
+  if(!coordinator&&!stopping){
+   const info=await ctx.session.get({sessionID:e.sessionID});
+   if(info?.agent==='rustwake-coordinator'){
+    await dispatcher.start(e.sessionID);coordinator=e.sessionID;
+   }
+  }
+  const current=await dispatcher.status();
+  if(current.retired_coordinators?.includes(e.sessionID)){
+   e.system.push({type:'text',text:'This Rustwake coordinator has been retired by an explicit team start in another session. Stop this goal loop. Do not schedule, edit files, or launch workers. The replacement coordinator owns the preserved team.'});return;
+  }
   if(e.sessionID!==coordinator||stopping)return;
   const s=await status();
-  e.system.push({type:'text',text:(s.dispatcher.enabled?'EXECUTABLE DISPATCHER ACTIVE: do not call spawn/task yourself. Append scoped tasks to .rustwake-runtime/dispatch-queue.json with coordinator_session_id matching this session. Format tasks: [{id:unique,role:developer|reviewer|player|product-owner|release-engineer,prompt:complete assignment,write_paths:[explicit relative path prefixes]}]. Three slots are reserved by the plugin using real session IDs. Inspect .rustwake-runtime/dispatcher.json for running/queued/terminal/error state. On completion read child results with host tools; queue implementation, review and release. Never repeatedly requeue the same task or rewrite leases. A startup audit is followed by real implementation, not another audit. Read docs/TEAM_DISPATCH.md.\n':'')+'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
+  if(s.dispatcher.recovery_pending){
+   e.system.push({type:'text',text:'TEAM RECOVERY PENDING: the plugin is retrying host session checks automatically. Existing worker reservations remain owned. Do not spawn workers, change the queue, or edit worker-owned files. Report the visible recovery error honestly. This is not an active dispatcher.'});return;
+  }
+  e.system.push({type:'text',text:(s.dispatcher.enabled?'EXECUTABLE DISPATCHER ACTIVE: do not call spawn/task yourself. Append scoped tasks to .rustwake-runtime/dispatch-queue.json with coordinator_session_id matching this session. Every new start is a fresh staffing run. Old runtime leases and queues are archived, never resumed. Use current source, sponsor priorities and backlog to plan new assignments. Preserve and inspect unfinished worktree edits before changing those files. Do not wait for archived employees or replay their queue. Format tasks: [{id:unique,role:developer|reviewer|player|product-owner|release-engineer|ui-ux,prompt:complete assignment,write_paths:[explicit relative path prefixes]}]. Five slots are reserved by the plugin using real session IDs. Inspect .rustwake-runtime/dispatcher.json for running/queued/terminal/error state. On completion read child results with host tools; queue implementation, review and release. Never repeatedly requeue the same task or rewrite leases. A startup audit is followed by real implementation, not another audit. Read docs/TEAM_DISPATCH.md.\n':'')+'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
  }));
  registrations.push(await ctx.tool.hook('execute.before',async e=>{
+  const current=await dispatcher.status();
+  if(current.retired_coordinators?.includes(e.sessionID))throw Error('This coordinator was replaced by /rustwake-team start. Work is supervised in the replacement session.');
   if(e.sessionID!==coordinator||stopping)return;
   if(shouldBlockWait({tool:e.tool,waitTools,observation:await read('.rustwake-runtime/supervisor-observation.json'),now:Date.now(),stopping}))
    throw new Error('Rustwake: fresh observation shows runnable work and spare capacity. Dispatch safe work or record why it cannot run before blocking wait. Reconcile existing sessions first.');
  }));
  return async()=>{dispatcher.close();eventsAbort.abort();stopping=true;coordinator=null;await Promise.allSettled(registrations.map(r=>r.dispose()));};
 }
+
+
+
+
 
 
