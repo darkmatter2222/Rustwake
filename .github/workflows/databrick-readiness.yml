@@ -1,0 +1,32 @@
+name: databrick-readiness
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/databrick-readiness.yml'
+permissions:
+  contents: read
+jobs:
+  readiness:
+    runs-on: [self-hosted, Linux, X64, rustwake-deploy]
+    timeout-minutes: 3
+    steps:
+      - name: Check installed delivery components without changing the host
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          paths = {
+            'validator_installed': '/opt/rustwake-delivery/deploy-artifact.py',
+            'adapter_installed': '/opt/rustwake-delivery/host-adapter',
+            'configuration_installed': '/opt/rustwake-delivery/host-config.json',
+          }
+          result = {'runner_received_job': True, 'nonroot': os.getuid() != 0}
+          result.update({key: pathlib.Path(value).is_file() for key, value in paths.items()})
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write('### Databrick readiness\n```json\n' + json.dumps(result, indent=2) + '\n```\n')
+          print(json.dumps(result))
+          if not all(result.values()):
+              raise SystemExit('Runner online; host commissioning is incomplete. See docs/AUTOMATED_DELIVERY.md.')
+          PY
