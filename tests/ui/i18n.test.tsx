@@ -298,7 +298,10 @@ describe("string table (B-10)", () => {
     const machineText = machinePanel.textContent ?? "";
     // One power unit and one batch are singular; the measured line is the assistant's.
     expect(machineText).toContain("1 unit");
-    expect(machineText).not.toContain("1 units");
+    // OPS-106: a digit-prefixed total ("21 units") is correctly pluralised and must
+    // not trip the bare "1 units" check, so anchor it to a word boundary only.
+    expect(machineText).not.toMatch(/(^|[^0-9])1 units\b/);
+    expect(machineText).toContain("Dismantle · +21 units");
     expect(machineText).toContain("Working ");
     expect(machineText).toContain("batches/s");
     expect(machinePanel.querySelector("[aria-label]")?.getAttribute("aria-label")).toBe(
