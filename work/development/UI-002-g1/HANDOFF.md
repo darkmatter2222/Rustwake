@@ -146,6 +146,14 @@ Smallest dock face **46 px** in every cell; the four machine-panel command faces
 (`actionsInRow [44,44,44,44]`), so the 44 CSS px floor holds. `scrollHeight == innerHeight`,
 entry chunk inside the ceiling, behaviour line unchanged (table above).
 
+jsdom side (`tests/ui/panel-rows.test.tsx`, real console output):
+`{"dlDisplay":"grid","dlColumns":"1fr","rows":5,...,"oneLineBox":true,"valueAfterLabel":true}` for
+the Store rows, and for the machine row with a link still pending
+`["Connect","Upgrade · 30 credits","Move · cell 0 · 0 credits","Dismantle · +23 units","Recipe"]`
+with exactly one face matching the accent selector — so the count of faces is 5 when a link is
+pending and 4 when it is not (the chromium cell above), and the single accent rule
+`.panel__actions > .icon-btn:first-child` holds either way.
+
 ## Evidence in this directory
 
 * `measure-ui002.txt` — full instrument log (rest 4 cells + panel 6 cells + dismiss chain + fork cell).
