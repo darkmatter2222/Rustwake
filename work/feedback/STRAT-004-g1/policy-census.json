@@ -1,0 +1,377 @@
+{
+ "task": "STRAT-004-g1",
+ "window": "W-3: 180 s wall, 1 tap/s, 390x844 dpr2, isMobile+hasTouch, fresh storage per context",
+ "denominator": "taps (total taps the policy issued); one denominator for every share",
+ "artifacts": {
+  "base": {
+   "dist": "C:/Users/ryans/source/repos/Rustwake/dist",
+   "assets": [
+    {
+     "name": "index-CWtGNGYE.js",
+     "bytes": 232365,
+     "isEntry": true
+    },
+    {
+     "name": "tables-BB2NPvQ2.js",
+     "bytes": 9298,
+     "isEntry": false
+    },
+    {
+     "name": "index-DbNBovuF.css",
+     "bytes": 8091,
+     "isEntry": false
+    }
+   ],
+   "url": "http://127.0.0.1:4391/"
+  },
+  "candidate": {
+   "dist": "C:\\Users\\ryans\\.local\\share\\opencode\\worktree\\fe4e05\\strat004-dev/dist",
+   "assets": [
+    {
+     "name": "index-Bzroy-nV.js",
+     "bytes": 232175,
+     "isEntry": true
+    },
+    {
+     "name": "tables-BB2NPvQ2.js",
+     "bytes": 9298,
+     "isEntry": false
+    },
+    {
+     "name": "index-B1FOV2xO.css",
+     "bytes": 7849,
+     "isEntry": false
+    }
+   ],
+   "url": "http://127.0.0.1:4392/"
+  }
+ },
+ "results": [
+  {
+   "artifact": "base",
+   "policy": "blind",
+   "taps": 177,
+   "wallSec": 180.4,
+   "finalTick": 1800,
+   "simMinutes": 3,
+   "machines": 5,
+   "links": 10,
+   "batches": 47,
+   "credits": 8,
+   "storeUnits": 38,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "batchesPerSimHour": 940,
+   "creditsPerSimHour": 160,
+   "appliedCommands": 37,
+   "commandsPerTap": 0.21,
+   "noopTaps": 141,
+   "denominator": {
+    "name": "taps",
+    "value": 177
+   },
+   "noopSharePct": 79.7,
+   "buckets": {
+    "inertLabel": 62,
+    "refusedShortfall": 69,
+    "unknown": 10,
+    "sum": 141
+   },
+   "sharesPctOfTaps": {
+    "inertLabel": 35,
+    "refusedShortfall": 39,
+    "unknown": 5.6
+   },
+   "longestIdenticalLabelStall": 34,
+   "stall": {
+    "label": "Build Furnace10 scrap + 5 ferrous",
+    "taps": 35,
+    "firstTap": 34,
+    "lastTap": 68,
+    "carryingPendingLineOnFace": 0,
+    "statusLineTailWithLastNeed": 34
+   },
+   "distinctPrimaryLabels": 14,
+   "lastFaceCosts": [
+    "35 scrap + 8 ferrous"
+   ],
+   "lastFaceText": "Build Plate press35 scrap + 8 ferrous",
+   "lastObjective": "Build Plate press · 35 scrap + 8 ferrous",
+   "lastStatus": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 6 requested · 100 % · Last need 35 scrap · have 15"
+   ],
+   "lastRow": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ],
+   "witnesses": {
+    "smallestFacePx": 46,
+    "maxDockRows": 1,
+    "noPageScroll": true,
+    "maxCardFillPct": 9.9,
+    "pageErrors": 0
+   },
+   "stills": [
+    {
+     "tap": 33,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap033.png"
+    },
+    {
+     "tap": 40,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap040.png"
+    },
+    {
+     "tap": 48,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap048.png"
+    }
+   ]
+  },
+  {
+   "artifact": "base",
+   "policy": "deliberate-v2",
+   "taps": 177,
+   "wallSec": 180.2,
+   "finalTick": 1800,
+   "simMinutes": 3,
+   "machines": 5,
+   "links": 10,
+   "batches": 47,
+   "credits": 8,
+   "storeUnits": 38,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "batchesPerSimHour": 940,
+   "creditsPerSimHour": 160,
+   "appliedCommands": 37,
+   "commandsPerTap": 0.21,
+   "noopTaps": 141,
+   "denominator": {
+    "name": "taps",
+    "value": 177
+   },
+   "noopSharePct": 79.7,
+   "buckets": {
+    "inertLabel": 62,
+    "refusedShortfall": 69,
+    "unknown": 10,
+    "sum": 141
+   },
+   "sharesPctOfTaps": {
+    "inertLabel": 35,
+    "refusedShortfall": 39,
+    "unknown": 5.6
+   },
+   "longestIdenticalLabelStall": 34,
+   "stall": {
+    "label": "Build Furnace10 scrap + 5 ferrous",
+    "taps": 35,
+    "firstTap": 34,
+    "lastTap": 68,
+    "carryingPendingLineOnFace": 0,
+    "statusLineTailWithLastNeed": 34
+   },
+   "distinctPrimaryLabels": 14,
+   "lastFaceCosts": [
+    "35 scrap + 8 ferrous"
+   ],
+   "lastFaceText": "Build Plate press35 scrap + 8 ferrous",
+   "lastObjective": "Build Plate press · 35 scrap + 8 ferrous",
+   "lastStatus": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 4 requested · 100 % · Last need 35 scrap · have 15"
+   ],
+   "lastRow": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ],
+   "witnesses": {
+    "smallestFacePx": 46,
+    "maxDockRows": 1,
+    "noPageScroll": true,
+    "maxCardFillPct": 9.9,
+    "pageErrors": 0
+   },
+   "stills": [
+    {
+     "tap": 33,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap033.png"
+    },
+    {
+     "tap": 40,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap040.png"
+    },
+    {
+     "tap": 48,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap048.png"
+    }
+   ]
+  },
+  {
+   "artifact": "candidate",
+   "policy": "blind",
+   "taps": 177,
+   "wallSec": 180.1,
+   "finalTick": 1800,
+   "simMinutes": 3,
+   "machines": 5,
+   "links": 10,
+   "batches": 51,
+   "credits": 8,
+   "storeUnits": 67,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "batchesPerSimHour": 1020,
+   "creditsPerSimHour": 160,
+   "appliedCommands": 37,
+   "commandsPerTap": 0.21,
+   "noopTaps": 141,
+   "denominator": {
+    "name": "taps",
+    "value": 177
+   },
+   "noopSharePct": 79.7,
+   "buckets": {
+    "inertLabel": 50,
+    "refusedShortfall": 68,
+    "unknown": 23,
+    "sum": 141
+   },
+   "sharesPctOfTaps": {
+    "inertLabel": 28.2,
+    "refusedShortfall": 38.4,
+    "unknown": 13
+   },
+   "longestIdenticalLabelStall": 9,
+   "stall": {
+    "label": "Build Furnace10 scrap + 5 ferrouswaits 5 ferrous · have 0",
+    "taps": 10,
+    "firstTap": 38,
+    "lastTap": 47,
+    "carryingPendingLineOnFace": 10,
+    "statusLineTailWithLastNeed": 10
+   },
+   "distinctPrimaryLabels": 46,
+   "lastFaceCosts": [
+    "35 scrap + 8 ferrous",
+    "waits 8 ferrous · have 4"
+   ],
+   "lastFaceText": "Build Plate press35 scrap + 8 ferrouswaits 8 ferrous · have 4",
+   "lastObjective": "Build Plate press · 35 scrap + 8 ferrous",
+   "lastStatus": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "lastRow": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrouswaits 8 ferrous · have 4",
+    "Build"
+   ],
+   "witnesses": {
+    "smallestFacePx": 46,
+    "maxDockRows": 1,
+    "noPageScroll": true,
+    "maxCardFillPct": 9.9,
+    "pageErrors": 0
+   },
+   "stills": [
+    {
+     "tap": 33,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap033.png"
+    },
+    {
+     "tap": 40,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap040.png"
+    },
+    {
+     "tap": 48,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-blind-tap048.png"
+    }
+   ]
+  },
+  {
+   "artifact": "candidate",
+   "policy": "deliberate-v2",
+   "taps": 177,
+   "wallSec": 180.2,
+   "finalTick": 1800,
+   "simMinutes": 3,
+   "machines": 5,
+   "links": 10,
+   "batches": 51,
+   "credits": 8,
+   "storeUnits": 67,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "batchesPerSimHour": 1020,
+   "creditsPerSimHour": 160,
+   "appliedCommands": 37,
+   "commandsPerTap": 0.21,
+   "noopTaps": 141,
+   "denominator": {
+    "name": "taps",
+    "value": 177
+   },
+   "noopSharePct": 79.7,
+   "buckets": {
+    "inertLabel": 51,
+    "refusedShortfall": 68,
+    "unknown": 22,
+    "sum": 141
+   },
+   "sharesPctOfTaps": {
+    "inertLabel": 28.8,
+    "refusedShortfall": 38.4,
+    "unknown": 12.4
+   },
+   "longestIdenticalLabelStall": 9,
+   "stall": {
+    "label": "Build Furnace10 scrap + 5 ferrouswaits 5 ferrous · have 0",
+    "taps": 10,
+    "firstTap": 38,
+    "lastTap": 47,
+    "carryingPendingLineOnFace": 10,
+    "statusLineTailWithLastNeed": 10
+   },
+   "distinctPrimaryLabels": 46,
+   "lastFaceCosts": [
+    "35 scrap + 8 ferrous",
+    "waits 8 ferrous · have 4"
+   ],
+   "lastFaceText": "Build Plate press35 scrap + 8 ferrouswaits 8 ferrous · have 4",
+   "lastObjective": "Build Plate press · 35 scrap + 8 ferrous",
+   "lastStatus": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "lastRow": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrouswaits 8 ferrous · have 4",
+    "Build"
+   ],
+   "witnesses": {
+    "smallestFacePx": 46,
+    "maxDockRows": 1,
+    "noPageScroll": true,
+    "maxCardFillPct": 9.9,
+    "pageErrors": 0
+   },
+   "stills": [
+    {
+     "tap": 33,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap033.png"
+    },
+    {
+     "tap": 40,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap040.png"
+    },
+    {
+     "tap": 48,
+     "file": "work/feedback/STRAT-004-g1/stills/undefined-deliberate-v2-tap048.png"
+    }
+   ]
+  }
+ ]
+}

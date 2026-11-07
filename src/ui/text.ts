@@ -19,6 +19,7 @@ import {
   STRINGS,
   formatDuration,
   formatNumber,
+  plural,
   resourceName,
   resourceWord,
   t,
@@ -77,6 +78,7 @@ export function importNoteFor(result: ImportResult): string {
 
 /** Short concrete verbs first (spec 4.4). Keys keep later translation cheap. */
 export function objectiveFor(state: SimState, selected?: number | null): string {
+  rememberSpoken(state);
   if (state.tutorial >= 8) return describeStep(state, stepFor(state, selected));
   const index = Math.min(state.tutorial, OBJECTIVE_KEYS.length - 1);
   return t(OBJECTIVE_KEYS[index], tutorialParams(state));
@@ -146,6 +148,7 @@ export function describeStep(state: SimState, step: YardStep): string {
 
 /** Dock label and cost line for the same step, so both agree. */
 export function primaryFor(state: SimState, step: YardStep): { label: string; cost?: string } {
+  rememberSpoken(state);
   switch (step.kind) {
     case "connect":
       return { label: t("btn.connect") };
@@ -284,6 +287,7 @@ export function powerLine(state: SimState): string {
  * two surfaces cannot state different numbers, and no second sentence table is needed.
  */
 export function restingLine(state: SimState, lastReject?: string | null): string {
+  rememberSpoken(state);
   const flying = (state.drone.repaired ? 1 : 0) + state.spares.length;
   const base = `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
   if (!lastReject) return base;
@@ -291,6 +295,131 @@ export function restingLine(state: SimState, lastReject?: string | null): string
   // letter goes lowercase. Both figures still come from the rejected result itself.
   const detail = `${lastReject.charAt(0).toLowerCase()}${lastReject.slice(1)}`;
   return `${base}${t("value.dotSeparator")}${t("hud.lastShortfall", { detail })}`;
+}
+
+/* ------------------------------------------------------------------------- *
+ * STRAT-004 g1 — the pending number on the pressed face itself
+ * ------------------------------------------------------------------------- */
+
+/**
+ * The one template the dock's own faces add under their price, in `t()`'s `{slot}` form.
+ * `strings.ts` is another lane's lease this sprint (POLISH-001), so this single key lives
+ * here for now with the same substitution mechanism; moving it into `STRINGS` is one paste
+ * with no call-site change.
+ */
+const FACE_LINES: Readonly<Record<string, string>> = {
+  "face.waits": "waits {need} · have {have}",
+};
+
+/** The sim object the sentence layer last answered from, for the dock's own readout. */
+let spokenStateValue: SimState | null = null;
+
+/** The state the resting sentences were assembled from; `null` before the first render. */
+export function spokenState(): SimState | null {
+  return spokenStateValue;
+}
+
+function rememberSpoken(state: SimState): void {
+  spokenStateValue = state;
+}
+
+/** One of the two lines the dock prints under a label: `5 ferrous`, then `have 3`. */
+function faceWaitLine(need: number, word: string, have: number): string {
+  const template = FACE_LINES["face.waits"];
+  return template
+    .replace(
+      "{need}",
+      t("value.recipeItem", { qty: formatNumber(need), label: word })
+    )
+    .replace("{have}", formatNumber(have));
+}
+
+/** The one quantity behind one price word, read off the state the panels print from. */
+function heldAmount(state: SimState, word: string): number | null {
+  if (word.startsWith("credit")) return state.credits;
+  const id = RESOURCES.find((resource) => resourceWord(resource) === word);
+  return id === undefined ? null : state.store[id] ?? 0;
+}
+
+/**
+ * The number the yard is still waiting for on one step, in the face's own short form:
+ * `waits 5 ferrous · have 3`. Both figures are read, never computed twice: `need` is the
+ * quantity the content table asks the step for, `have` is the same store or purse entry
+ * the Store panel and the `Last need …` tail print. Null when the step's price is already
+ * covered (or the step carries no price), so a covered face stays two lines tall.
+ */
+export function pendingForStep(state: SimState, step: YardStep): string | null {
+  rememberSpoken(state);
+  const short = shortfallForStep(state, step);
+  return short === null ? null : faceWaitLine(short.need, short.word, short.have);
+}
+
+/** The engine's own two numbers for one step, same shapes as `shortOf`/`shortCredits`. */
+function shortfallForStep(
+  state: SimState,
+  step: YardStep
+): { need: number; have: number; word: string } | null {
+  switch (step.kind) {
+    case "build": {
+      const def = BLUEPRINTS[step.blueprint];
+      if (!def) return null;
+      for (const item of def.buildCost) {
+        const have = state.store[item.resource] ?? 0;
+        if (have < item.qty) {
+          return { need: item.qty, have, word: resourceWord(item.resource) };
+        }
+      }
+      return null;
+    }
+    case "research": {
+      const def = RESEARCH[step.node];
+      const have = state.store.data ?? 0;
+      if (!def || have >= def.cost) return null;
+      return { need: def.cost, have, word: resourceWord("data") };
+    }
+    case "drone": {
+      const need = droneAddCost(state);
+      return state.credits < need ? { need, have: state.credits, word: plural(need, t("unit.credit")) } : null;
+    }
+    case "upgrade": {
+      const machine = state.machines.find((m) => m.id === step.machineId);
+      const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
+      if (!machine || !def) return null;
+      const need = upgradeCost(def.baseUpgradeCost, machine.level);
+      return state.credits < need ? { need, have: state.credits, word: plural(need, t("unit.credit")) } : null;
+    }
+    default:
+      return null;
+  }
+}
+
+/**
+ * The same line, derived from the price the face has just printed (STRAT-004 g1). The dock
+ * knows one price string per face, so the pending number always names the quantity the
+ * player can see on that face: the first `N word` the yard cannot cover yet, with the
+ * entry it is compared against read straight off the state. A `+N …` gain (a sale) is not
+ * a price and never blocks, and a covered price prints nothing extra.
+ */
+export function pendingFromCost(
+  cost: string | undefined | null,
+  state: SimState | null = spokenState()
+): string | null {
+  if (!cost || !state) return null;
+  rememberSpoken(state);
+  for (const group of cost.split(" + ")) {
+    // `"{qty} {label} · {credits} credits"` carries its own reward after the dot: the
+    // price is what comes before it.
+    const item = group.split(t("value.dotSeparator"))[0].trim();
+    if (!item || item.startsWith("+")) continue;
+    const parts = /^(\d+(?:\.\d+)?)\s+([A-Za-z]+)$/.exec(item);
+    if (!parts) continue;
+    const need = Number(parts[1]);
+    const word = parts[2].toLowerCase();
+    const have = heldAmount(state, word);
+    if (have === null || have >= need) continue;
+    return faceWaitLine(need, word, have);
+  }
+  return null;
 }
 
 /**
@@ -331,6 +460,7 @@ function machineLabel(state: SimState, machineId: number): string {
  * the viewport width so the chip block stays two rows tall on a narrow phone.
  */
 export function visibleResources(state: SimState, max = 5): ResourceId[] {
+  rememberSpoken(state);
   const limit = Math.max(1, Math.floor(max));
   const shown: ResourceId[] = ["scrap"];
   for (const resource of SELL_ORDER) {
