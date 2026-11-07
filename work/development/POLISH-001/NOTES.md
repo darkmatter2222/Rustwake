@@ -149,6 +149,18 @@ included): `13 / 38.1 / 9.9 / 24.8 %` in the four `rest` cells and **41.8 %** in
 cell — the deepest value the lane quoted, unchanged, still under the 42 % cap with 0.2 pp of
 margin. `Store 900/900` appears 4 times, `Store900/900` 0 times.
 
+### One observed layout consequence of the space (printed, not guessed)
+
+`Compare-Object` of the two `rest` prints shows exactly three geometry lines changed, all in
+the `360x640 ts2 2-machine` cell: the card's ink moved down by **28.97 px**
+(`line0 ink 114.91..255.47` → `143.88..284.44`, `line2 … 349.91` → `378.88`). Cause, from the
+stylesheet: `.resources` is `flex-wrap: wrap` and `.text-large .resources__item` has
+`line-height: 1.15`, so at the ts2 pill font 25.2 px one chip line is 25.2 × 1.15 = **28.98 px**
+— the chip row takes one extra wrapped line once the label is one character wider. Consequences:
+the U-1 ratio is untouched (its denominator is the content box, 640, not the HUD), the card's own
+box is byte-identical (`sh139/ch137`, `wrappedBoxes 4` in both runs), and the card ink bottom at
+378.88 px still clears the dock row (faces at top 586 px) by 207 px. Deepest fill stays 41.8 %.
+
 ## What stays unverified in this lane
 
 - Audio is decoded, not played: no listening pass on the decoded cues (no human ear in this run).
