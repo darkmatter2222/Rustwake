@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-06T16:18:21+00:00",
+  "updated_at": "2026-11-07T09:15:00+00:00",
   "max_active_sessions": 6,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "12cc0e242bc2038be26ef7334ec1a945c3155181",
-    "deployed_sha": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+    "inspected_head": "a5517948046f1327cb92cf35a9a02be53345f72f",
+    "deployed_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
     "url": "https://home.darkmatter2222.com/rustwake/",
-    "receipt": "work/releases/REL-007-g1.md",
-    "verification": "automatic Actions delivery for the pushed main SHA: ci run 42231570081 (run 89, push event) completed success 14:10:33-14:11:14Z with all 15 steps green including \"node scripts/team-board.mjs --check\"; the delivery run 42231679008 (run 19, workflow_run event) completed success 14:11:17-14:11:45Z, its packaging job 127938856751 building the immutable source and dashboard and its promotion job 127938993734 reporting \"Validate and promote through host-owned adapter\" and \"Publish sanitized receipt\" success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-CUnHr3Cs.js and all four hashed assets are sha256-equal to the local build of 12cc0e2 (entry 231943 B e369fe9bfe90913d..., css 7474 B d3a995b2c520590a..., tables 9298 B 28bed3b02f2f79cb..., worker 13406 B 0c784f3e68570923...); the previous entry index-DGy53fNu.js still serves 200 at 231878 B, so old clients keep their assets. Served index.html is 28 B shorter than the local file because the working copy is CRLF (core.autocrlf=true, 28 CR in 30 LF)."
+    "receipt": "work/releases/REL-009-g1.md",
+    "verification": "automatic Actions delivery for the pushed main SHA a5517948046f1327cb92cf35a9a02be53345f72f: ci run 42348495320 (push event) completed success with all 14 numbered steps green including node scripts/team-board.mjs --check, npm run typecheck, npm run validate, npm test and npm run build; the delivery run 42348528636 (workflow_run event) completed success, its package job 128331458500 building the immutable source plus dashboard and manifest and its self-hosted deploy job 128331520498 reporting Validate and promote through host-owned adapter, Publish sanitized receipt and Explain delivery outcome success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-C_K4oMJ5.js and all four hashed assets are sha256-equal to this lane build of a5517948046f1327cb92cf35a9a02be53345f72f (entry 231262 B 5B9A9845…, css 7849 B B4308206…, tables 9298 B 28BED3B0…, worker 13406 B 0C784F3E…); the previous pair index-CUnHr3Cs.js 231943 B (E369FE9B…) and index-9FriNULu.css 7474 B (D3A995B2…) still serves 200, so cached clients keep their assets. The entry chunk is 1738 B under the unchanged 233000 B ceiling."
   },
   "runtime": {
     "status": "observation-required",
@@ -2633,7 +2633,7 @@
       "type": "delivery",
       "title": "Name the shared power budget at rest, not only after a refusal",
       "priority": "P2",
-      "status": "triaged",
+      "status": "deployed",
       "owner": "ui-ux",
       "generation": 1,
       "severity": "minor",
@@ -2656,15 +2656,23 @@
       "dependencies": [
         "UI-001"
       ],
-      "product_approved": false,
-      "candidate_sha": null,
-      "review_verdict": null,
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "product_approved": true,
+      "candidate_sha": "588c1fa6ce6d0543828ec7562d1d6aae18f2ea15",
+      "review_verdict": "accept",
+      "published_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
+      "deployed_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
+      "outcome": "Integrated as a5517948046f1327cb92cf35a9a02be53345f72f (merge 2 of ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea + 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15; tree byte-identical to 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15). The UI lane reports from its own chromium instrument on this tip (lane-reported, not re-run by the release lane): U-1 hud content-box fill 13.0 / 38.1 / 9.9 / 24.8 / 41.8 %, all under the unchanged 42 % cap, with the control run reproducing the previously served artifact numbers exactly (16.7 / 40.8 / 10.6 / 31.0 / 44.6 %); U-2 two type tiers 14.25/600 and 10.8/400, ratio 1.32x; U-3 the leftmost face is \"Less power 30 credits\" and one tap raises the machine level sum 4 to 5 at a 30-credit purse; U-4 dTop 0, leftGap 8, zero overflow, the capacity pair printed once; U-5 every overlay closes by Close (87x44) and by Escape with 0 pageerror; U-7 dock face 46 px and command faces 44 px. Limitations carried from the lane: the deepest cell at 41.8 % leaves 0.2 pp of headroom; machine-panel cells build in yard row 4 at text scale 2; Move prints \"0 credits\" until BELT-001 lands. This lane proved the served artifact byte-identical to its own build (entry 231262 B, 4/4 hashed assets sha256-equal) but did not re-run the browser harness.",
       "evidence": [
         "work/releases/REL-007-g1.md",
-        "work/review/CHRM-002-g1-qa.md"
+        "work/review/CHRM-002-g1-qa.md",
+        "work/development/UI-002-g1/HANDOFF.md",
+        "work/development/UI-002-g1/measure-ui002.txt",
+        "work/development/UI-002-g1/measure-base-control.txt",
+        "work/development/UI-002-g1/UI-002-persona-g1.json",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md",
+        "work/releases/REL-009-g1.md",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42348495320",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42348528636"
       ],
       "history": [
         {
@@ -2680,6 +2688,48 @@
           "from_state": "inbox",
           "to_state": "triaged",
           "reason": "kept as its own UI slice behind D-1 and UI-001; one line, no new panel"
+        },
+        {
+          "at": "2026-11-07T03:50:47+00:00",
+          "actor": "developer",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "product D-3 row 4 promotes UI-002 with review_verdict accept; the two named open rows stay open (U-4 node-row probe printed rows 0 / lastRow null, inconclusive instrumentation; U-6 is machine agreement, not human comprehension)"
+        },
+        {
+          "at": "2026-11-07T03:50:47+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "lane completes the two-tier card, aligned panel rows, priced command faces and the 12 phone captures on its own worktree; tip 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15 with helper receipt verified_push_at 2026-11-07T03:50:49Z"
+        },
+        {
+          "at": "2026-11-07T03:50:47+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "submitted for integration; lane reports typecheck 0, vitest 287 tests / 28 files exit 0, validate 0 with the behaviour line unchanged, build 0 with entry index-C_K4oMJ5.js 231262 B"
+        },
+        {
+          "at": "2026-11-07T05:14:41+00:00",
+          "actor": "release-engineer",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "independent re-run on the integrated tree a5517948046f1327cb92cf35a9a02be53345f72f (whose tree is byte-identical to 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15): typecheck exit 0; npx vitest run exit 0 (287 tests / 28 files / 0 failures); npm run validate exit 0 with the behaviour line firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 (identical to the pinned reading); npm run build exit 0 with entry assets/index-C_K4oMJ5.js 231262 B (1738 B headroom under the 233000 B ceiling), css index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B, worker 13406 B; node scripts/team-board.mjs --check exit 0. Two merges were needed because the tip moved after the first was created: ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea = 8d8d2ad + b5940c8, then a5517948046f1327cb92cf35a9a02be53345f72f = ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea + 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15; the two conflicted paths took stage 3 (the lane side) both times, so branchOptions keeps main sort-inside form plus nextFreeTile, which is the form tests/simulation/fork.test.ts asserts"
+        },
+        {
+          "at": "2026-11-07T06:46:52+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "one non-force push, git push origin main printed 8d8d2ad..a551794, and git ls-remote origin refs/heads/main read the head back as a5517948046f1327cb92cf35a9a02be53345f72f; ci run 42348495320 for that exact SHA completed success with all 14 numbered steps green"
+        },
+        {
+          "at": "2026-11-07T06:47:22+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "delivery run 42348528636 for the same SHA completed success: package job 128331458500 then the self-hosted deploy job 128331520498 with Validate and promote through host-owned adapter, Publish sanitized receipt and Explain delivery outcome all success"
         }
       ]
     },
@@ -2734,6 +2784,730 @@
           "from_state": "inbox",
           "to_state": "triaged",
           "reason": "grouped as one reviewer capture slice so the next release can cite captured numbers instead of pending ones"
+        }
+      ]
+    },
+    {
+      "id": "BELT-001",
+      "type": "feature",
+      "title": "Price the belt by its extent: distance-dependent scrap cost, then per-tile transit time",
+      "priority": "P1",
+      "owner": "developer-economy",
+      "generation": 2,
+      "player_problem": "Every connection cost the same flat amount whatever its length, so laying a belt across the yard was not a decision: there was no reason to prefer a short link, and the player could not read a cost difference on screen.",
+      "hypothesis": "Charging beltCostPerTile per tile of the manhattan run gives the yard a priced object, so placement order becomes a plan choice; the g1 full variant (per-tile latency in state) failed its pre-armed 10 % bench ceiling at 17.619 %, so the accepted slice is the cost-only variant with a constant routeLatencyTicks, and per-tile latency moves to g2.",
+      "scope": [
+        "src/game/simulation/**",
+        "src/game/content/defs.ts",
+        "tests/simulation/**",
+        "scripts/probe-belt.mjs"
+      ],
+      "non_goals": [
+        "No belt sprite presentation (that is g2, behind ART-003)",
+        "No save-schema version bump",
+        "No new column set for the bench"
+      ],
+      "acceptance": [
+        "a 2-tile link and a 7-tile link of the same machine pair print different prices and the refund is round(price x 90 %)",
+        "a refused tap names the exact shortfall and changes no state (revision and routes byte-equal)",
+        "the v1 fixture round-trips byte-identically and a pre-price route refunds 0 without throwing",
+        "the 12 h bench moves less than the pre-armed 10 % against the base, printed per variant",
+        "entry chunk stays inside the 233000 B ceiling on one clean build of the integrated SHA"
+      ],
+      "dependencies": [
+        "STRAT-003",
+        "ART-003"
+      ],
+      "evidence": [
+        "work/review/BELT-001-g1/QA.md",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md",
+        "work/product/SPRINT-003-decisions-g1/measured-rows-g1.json",
+        "tests/simulation/belt.test.ts",
+        "work/review/BELT-001-g2/QA.md"
+      ],
+      "product_approved": true,
+      "review_verdict": "revise",
+      "candidate_sha": "5d5238b5b686d4c52bd6d1fdc8213ecf9f88c5bb",
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": "Variant table, one number per tree (each from its own build, not summed): 5eb4be6 full variant entry 233175 B = 175 B OVER the 233000 ceiling with bench 17.619 % against the 10 % ceiling (the failed reading, kept on record); 8102ac4 cost-only variant 232969 B (31 B spare), bench +3.4 % median by QA and +4.83 % by the lane; 5d5238b (candidate, branch tip fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d) 232914 B (86 B spare). Behaviour line per tree, labelled: base b4e8321 = firstDrone 268 / firstResearch 478 / drones 5 / batches 1902 / credits 82; at 8102ac4 = 314 / 498 / 4 / 1932 / 93; at 5d5238b = 379 / 527 / 4 / 1838 / 157. All three differ from the pinned main line because the price itself changes what the yard can afford within 12 h, which is the intended effect. Test counts to reconcile at integration: 287 tests on the integrated a551794 (this lane, 28 files) versus 301 on the belt lane own tree - the difference is the belt files that are not merged yet, which is exactly what BELT-001 integration must reconcile (plus OPS-106, the i18n units collision that only appears in the 3-way merge).",
+      "history": [
+        {
+          "at": "2026-11-06T15:58:42+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "independent QA read of 5eb4be6 (work/review/BELT-001-g1/QA.md): B-1a/B-1b/B-1c/B-2/B-3a/B-3b/B-3c/B-4a/B-4b/B-5e pass, B-5a typecheck exit 2 with 23 diagnostics, B-5b belt.test.ts never executes (no barrel module), B-5d build exit 2 with the entry 175 B over ceiling -> VETO on that checkpoint; the claimed head 4789d3a does not exist as an object"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "decision D-1 option (a): integrate the beltCostPerTile-only variant as the g1 candidate, per-tile latency to g2, the 10 % criterion is NOT revised (work/product/SPRINT-003-decisions-g1/DECISIONS.md)"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "pre-armed fallback accepted as the candidate shape; follow-ups DEF-008 (priced-route refund after a save round-trip is untested) and the exact assertion list in D-1; negative strategy result D-2 recorded on the same lane"
+        },
+        {
+          "at": "2026-11-06T22:20:11+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "cost-only variant committed as 8102ac4a89eb5a7abbf07a99b9e26cde6fb6ebe7 on rw/belt001-g2 (constant routeLatencyTicks, price folded into latency)"
+        },
+        {
+          "at": "2026-11-07T07:55:14+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "candidate 5d5238b5b686d4c52bd6d1fdc8213ecf9f88c5bb pushed with its branch tip fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d (helper receipt verified_push_at 2026-11-07T07:55:16Z); one attributed bench row per variant printed, 232914 B entry with 86 B spare"
+        }
+      ],
+      "status": "review"
+    },
+    {
+      "id": "ART-003",
+      "type": "feature",
+      "title": "Silhouette identity pass on the machinery sheet (bake 1: body, facets, grid, shadow)",
+      "priority": "P1",
+      "owner": "developer-art",
+      "generation": 1,
+      "player_problem": "Machines are known only by the printed digit on them: at phone size the eight bodies share one silhouette, so a player cannot tell a furnace from a lab without reading the number.",
+      "hypothesis": "Baking a second silhouette sheet (furnace body, joint furnace/lab parameter search, cell-normalised ink census) raises machine-body ink share above the gravel and grid layers, which is what makes the eight machines separable without reading text.",
+      "scope": [
+        "src/game/renderer/scene.ts",
+        "scripts/art003-census.mjs",
+        "tests/renderer/**",
+        "docs/evidence/**"
+      ],
+      "non_goals": [
+        "No simulation or pricing change",
+        "No new sheet format",
+        "No atlas migration this cycle"
+      ],
+      "acceptance": [
+        "A3-1: every pair of machine bodies differs by more than the named silhouette threshold (min pairwise distance printed)",
+        "A3-3/A3-4/A3-5: grid dot and gravel ink shares fall below the machine-body share, printed per layer",
+        "the census sheet is regenerated, not copied: the after-matrix must differ from its own before-copy",
+        "entry chunk stays inside the 233000 B ceiling on one clean build"
+      ],
+      "dependencies": [
+        "ART-002"
+      ],
+      "evidence": [
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md",
+        "work/product/SPRINT-003-decisions-g1/measured-rows-g1.json",
+        "tests/renderer/silhouette.test.ts"
+      ],
+      "product_approved": true,
+      "review_verdict": "revise",
+      "candidate_sha": "7f934cfe5ce540b24710156037e011be5b2323f1",
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": "Lane-measured, one row per criterion: A3-3, A3-4 and A3-5 pass; A3-1 is FALSIFIED at min pairwise 30.5 (below the named threshold), so the eight bodies are still not pairwise separable by silhouette. Plate floor is still 96.9 % in bucket 0 after the pass (was 96.4 %), machineBodySharePct fell 0.52 to 0.40, gridDotSharePct 0.53 to 0.01, contactShadowPx 248 to 449. Status stays review rather than measured because the candidate is only on its branch: the board schema reserves measured for a published outcome.",
+      "history": [
+        {
+          "at": "2026-11-06T13:48:00+00:00",
+          "actor": "developer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "ART-003 g1 checkpoint 7f934cfe5ce540b24710156037e011be5b2323f1 pushed on rw/art003-g1 with the silhouette world pass"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept as the identity slice; D-3 ranks 1-3 (plate floor, per-layer ink shares, silhouette proof) are its acceptance list"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "product ready queue R2: ranks 1-3 in one pass with the census regenerated"
+        },
+        {
+          "at": "2026-11-06T13:48:00+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "implementation in the art worktree; the lane reports 232337 B entry on its own build of 7f934cf (lane-reported, different tree from the integrated one)"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "developer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "submitted for independent review at 7f934cf; A3-1 falsified at min pairwise 30.5 while A3-3/A3-4/A3-5 pass, so the verdict is revise not accept"
+        }
+      ],
+      "status": "review"
+    },
+    {
+      "id": "ART-004",
+      "type": "feature",
+      "title": "Art lane continuation: furnace 22x16 body, joint furnace/lab parameter search, cell-normalised ink census",
+      "priority": "P1",
+      "owner": "developer-art",
+      "generation": 1,
+      "player_problem": "Same as ART-003: the machine bodies are not separable by silhouette at phone size, and the census that should prove it was a copied sheet.",
+      "hypothesis": "A second art lane instance running the joint furnace/lab parameter search with a cell-normalised ink census can move A3-1 above the threshold that the first pass missed, without spending more bytes than the ceiling allows.",
+      "scope": [
+        "src/game/renderer/scene.ts",
+        "scripts/art003-census.mjs",
+        "tests/renderer/scene-draw.test.ts",
+        "tests/renderer/silhouette.test.ts"
+      ],
+      "non_goals": [
+        "No simulation change",
+        "No UI file overlap with the UI lane",
+        "No atlas migration"
+      ],
+      "acceptance": [
+        "A3-1 passes on a regenerated after-matrix (min pairwise distance above the named threshold)",
+        "the census prints per-layer ink shares so gravel and grid can be compared against machinery",
+        "the branch ci run is green for the pushed SHA and the entry chunk is inside 233000 B"
+      ],
+      "dependencies": [
+        "ART-003"
+      ],
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42328207907",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md"
+      ],
+      "product_approved": true,
+      "review_verdict": null,
+      "candidate_sha": "d84f69ec3c8c73e5b8adc752383b35a11c9407ff",
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": "In flight at d84f69ec3c8c73e5b8adc752383b35a11c9407ff on rw/art004-g1. Its branch-push ci run 42328207907 is green, which closes the earlier branch failure (OPS-105). Not integrated this generation: the tip-freeze rule keeps this lane out of a551794, so no published or deployed SHA exists for it yet.",
+      "history": [
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "developer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "art004-g1 branch created with the ART-003 follow-up commits; 6a25c97 was its first tip (branch ci 42305154790 failed at Run npm test)"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "accepted as the continuation of D-3 ranks 1-3 under a second lane instance, non-overlapping paths with the UI lane"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "one pass, one commit, census regenerated (product ready queue R2)"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "tip d84f69ec3c8c73e5b8adc752383b35a11c9407ff pushed with branch ci run 42328207907 success; still ahead of the integrated tree, so review is not yet submitted"
+        }
+      ],
+      "status": "implementing"
+    },
+    {
+      "id": "OPS-104",
+      "type": "operations",
+      "title": "Quote only ls-remote tips and helper receipts: worker-quoted SHAs do not resolve as objects",
+      "priority": "P2",
+      "owner": "operations",
+      "generation": 1,
+      "player_problem": "No player-visible effect: seven SHAs quoted in worker reports are not objects in the repository, so a release lane spends its window re-deriving which tree a number belongs to, and byte counts cannot be attributed.",
+      "hypothesis": "If every quoted SHA must resolve with git cat-file -t and every branch head must come from git ls-remote --heads origin plus .git/rustwake-publication/*.json, the attribution gaps close without a new tool.",
+      "scope": [
+        "work/releases/**",
+        ".git/rustwake-publication/*.json"
+      ],
+      "non_goals": [
+        "No new scheduler service",
+        "No change to the board schema"
+      ],
+      "acceptance": [
+        "each lane head in a receipt is the ls-remote value plus its helper receipt verified_push_at",
+        "non-resolving worker SHAs stay listed as unverified worker text, not as candidates",
+        "byte counts name the tree they were measured on"
+      ],
+      "dependencies": [
+        "OPS-101"
+      ],
+      "evidence": [
+        ".git/rustwake-publication/rw_ui002-g1.json",
+        "work/releases/REL-009-g1.md"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": "Non-resolving worker SHAs recorded this batch: 4789d3a, 8396b6d, b902d8e4, 31f2126, 84a503f, 7a37363, 8f88b05. The values that do resolve are the ls-remote tips (a551794 main, 588c1fa ui002-g1, fb0dca0 belt001-g2, d84f69e art004-g1, 7f934cf art003-g1, 5eb4be6 belt001-g1) and the objects reachable from them, plus 78ef6ca and c42ee18 which are local-only merge commits with no remote ref at either read.",
+      "history": [
+        {
+          "at": "2026-11-07T09:15:00+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "seven worker-quoted SHAs failed git cat-file -t during REL-008-g1 and REL-009-g1; only ls-remote tips and the helper receipts resolved"
+        },
+        {
+          "at": "2026-11-07T09:15:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept as a process rule with a three-line acceptance list; it blocks nothing because the tips are readable"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "OPS-105",
+      "type": "operations",
+      "title": "Branch-push ci run 42305154790 for 6a25c97 failed at Run npm test with npm run build skipped",
+      "priority": "P3",
+      "owner": "operations",
+      "generation": 1,
+      "player_problem": "No player-visible effect: a red branch run leaves the lane without a byte measurement, so the candidate arrives at integration without its ceiling number.",
+      "hypothesis": "The failure is a branch-run state (one assertion in the then-current tip), not a main gate: re-running the lane on a green branch tip closes it, and main was never affected.",
+      "scope": [
+        ".github/workflows/ci.yml (read only)",
+        "work/releases/**"
+      ],
+      "non_goals": [
+        "No change to the main gate list",
+        "No rerun of the commissioning steps"
+      ],
+      "acceptance": [
+        "the failing step and run id are named in the ledger",
+        "a later green branch run for the same branch closes the row",
+        "main ci stays green for the integrated SHA throughout"
+      ],
+      "dependencies": [
+        "OPS-101"
+      ],
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42305154790",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42328207907"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "d84f69ec3c8c73e5b8adc752383b35a11c9407ff",
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": "Closed at branch. Run 42305154790 (run 92, conclusion failure, 2026-11-06T22:29:59Z) failed at step Run npm test with Run npm run build skipped, so the tip 6a25c97 had no entry byte count. The branch tip d84f69ec3c8c73e5b8adc752383b35a11c9407ff then produced branch ci run 42328207907 with conclusion success, which is the fix at branch level. The main gate for a551794 (ci run 42348495320) is green with npm test and npm run build both success.",
+      "history": [
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "observed while reading lane heads: branch-push run 42305154790 for 6a25c97 failed at Run npm test, build skipped; a branch run is not a main gate"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "release-engineer",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "named with its run id and step; no main impact, so it does not block integration"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "release-engineer",
+          "from_state": "triaged",
+          "to_state": "ready",
+          "reason": "closure condition written: a green branch ci run for the same branch"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "developer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "lane pushed d84f69e as the new tip of rw/art004-g1"
+        },
+        {
+          "at": "2026-11-07T02:14:09+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "branch ci run 42328207907 read from the API for that SHA with conclusion success"
+        },
+        {
+          "at": "2026-11-07T09:15:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "accepted as fixed-at-branch on the green run 42328207907; main gates were green for every integrated SHA throughout"
+        }
+      ],
+      "status": "accepted"
+    },
+    {
+      "id": "OPS-106",
+      "type": "defect",
+      "title": "Three-way merge of the belt and UI lanes breaks the i18n units assertion",
+      "priority": "P3",
+      "owner": "developer",
+      "generation": 1,
+      "player_problem": "No player-visible effect on the shipped artifact: tests/ui/i18n.test.tsx:301 asserts not.toContain(\"1 units\") while the belt lane makes Dismantle print \"+21 units\", and the two only collide in the merged tree.",
+      "hypothesis": "The two lanes are individually green, so the fix is the assertion pattern (not.toMatch(/(^|[^0-9])1 units\\b/)) rather than either implementation; it must be carried into the next three-way integration.",
+      "scope": [
+        "tests/ui/i18n.test.tsx"
+      ],
+      "non_goals": [
+        "No change to the printed strings",
+        "No change to the belt pricing"
+      ],
+      "acceptance": [
+        "the merged tree of main + belt + ui passes npx vitest run with 0 failures",
+        "the assertion still rejects a bare 1 units label and accepts 21 units",
+        "the two single-lane trees stay green"
+      ],
+      "dependencies": [
+        "UI-002"
+      ],
+      "evidence": [
+        "work/releases/REL-009-g1.md"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "disposition_reason": null,
+      "history": [
+        {
+          "at": "2026-11-07T08:20:00+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "observed only in the 3-way merge (1 failed / 301 passed): tests/ui/i18n.test.tsx:301 not.toContain(\"1 units\") against Dismantle +21 units; the a551794 two-parent tree is green at 287/28, so the collision is belt-plus-ui"
+        },
+        {
+          "at": "2026-11-07T08:20:00+00:00",
+          "actor": "qa",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "named with the file and line and a proposed regex; carried into the next integration rather than patched into a shipped merge"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "OPS-107",
+      "type": "operations",
+      "title": "Add .gitattributes so JSON evidence stops flipping line endings on every run",
+      "priority": "P3",
+      "owner": "operations",
+      "generation": 1,
+      "player_problem": "No player-visible effect: every harness run leaves work/feedback/belt001-harness.json dirty, so a lane cannot tell whether its own run changed content or only line endings.",
+      "hypothesis": "One .gitattributes line (*.json text eol=lf) removes the CRLF churn from the evidence files and makes the DEF-007 comparison noise rare enough to diagnose.",
+      "scope": [
+        ".gitattributes"
+      ],
+      "non_goals": [
+        "No repository-wide reformat",
+        "No change to the harness output itself"
+      ],
+      "acceptance": [
+        "a harness run leaves git status clean except for the intended files",
+        "the board --check step keeps the same verdict before and after",
+        "no diff noise in the evidence JSONs on a no-op rerun"
+      ],
+      "dependencies": [
+        "DEF-007"
+      ],
+      "evidence": [
+        "work/releases/REL-009-g1.md"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-07T08:20:00+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "work/feedback/belt001-harness.json is rewritten with different line endings by every run, alongside the DEF-007 CRLF staleness already on the ledger"
+        },
+        {
+          "at": "2026-11-07T08:20:00+00:00",
+          "actor": "qa",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "one-line fix named (*.json text eol=lf); kept separate from DEF-007 because that one is about the generator comparison, this one about the stored evidence"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "DEF-008",
+      "type": "defect",
+      "title": "Priced-route refund after a save round-trip is untested",
+      "priority": "P2",
+      "owner": "developer",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "A player who saves after paying for a long belt and reloads could be refunded a different amount on dismantle; nothing in the suite would notice.",
+      "hypothesis": "The refund sites compute from route.run?.length ?? 0, so any priced route stored without its run refunds 0 silently; the mechanism QA named (decodeRoute dropping run) does not reproduce at 5eb4be6, and the real gap is the missing assertion.",
+      "scope": [
+        "tests/simulation/belt.test.ts"
+      ],
+      "non_goals": [
+        "No engine change unless the new assertion fails"
+      ],
+      "acceptance": [
+        "one named case: refunds the same scrap for a priced link before and after a save round-trip",
+        "the decoded run equals the pre-save run and load is scrap-neutral",
+        "route.remove refunds round(beltCostPerTile x 3 x 90 %) = 3 and equals the in-session refund",
+        "a run-less route refunds 0 without throwing"
+      ],
+      "dependencies": [
+        "BELT-001"
+      ],
+      "evidence": [
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md",
+        "work/product/SPRINT-003-decisions-g1/probe-def007.mjs"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "qa",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "filed by QA as DEF-007; DEF-007 is already taken by the team-board CRLF defect, so the row is DEF-008. The probe prints AFTER_CONNECT run=[2,1,0] latency=6 paid=33, AFTER_LOAD run=[2,1,0] scrap=267, AFTER_REMOVE refund=3 expected=3"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept as a test-only defect with the exact assertion list in D-1"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "DEF-009",
+      "type": "defect",
+      "title": "The third pill prints Store900/900 with no separator",
+      "priority": "P3",
+      "owner": "ui-ux",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "The store chip reads Store900/900 at every recorded cell, so the label and the quantity run together and the player has to decode the number.",
+      "hypothesis": "One string key with a space between label and units/capacity fixes it in about 10 bytes, in the file the UI lane already touches.",
+      "scope": [
+        "src/game/content/strings.ts"
+      ],
+      "non_goals": [
+        "No new chip",
+        "No layout change"
+      ],
+      "acceptance": [
+        "the chip prints Store 900/900 in all four recorded cells at text scale 1 and 2",
+        "the fill percentages do not regress past the 42 % cap"
+      ],
+      "dependencies": [
+        "UI-002"
+      ],
+      "evidence": [
+        "work/development/UI-002-g1/measure-ui002.txt",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "measure-ui002.txt prints \"Store900/900\" in all four cells (D-3 rank 4)"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "one string key, cheapest item on the list, ranked behind the plate floor because it does not change the read of the screen"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "DEF-010",
+      "type": "defect",
+      "title": "An empty objective row renders as a lighter ellipsis box and eats the deepest-cell margin",
+      "priority": "P3",
+      "owner": "ui-ux",
+      "generation": 1,
+      "severity": "minor",
+      "player_problem": "At text scale 2 the deepest cell shows an empty lighter box under the objective list, and that cell is already at 41.8 % against the 42 % cap.",
+      "hypothesis": "Not rendering the empty node (no rows, no children, zero separations) recovers the 0.2 pp of margin and removes a decoration that names nothing.",
+      "scope": [
+        "src/ui/Hud.tsx",
+        "src/ui/Panels.tsx"
+      ],
+      "non_goals": [
+        "No change to the objective content"
+      ],
+      "acceptance": [
+        "no empty node in .objective__row at text scale 2",
+        "the deepest cell fill stays under 42 % with the margin printed"
+      ],
+      "dependencies": [
+        "UI-002"
+      ],
+      "evidence": [
+        "work/development/UI-002-g1/measure-ui002.txt",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md"
+      ],
+      "product_approved": null,
+      "review_verdict": null,
+      "candidate_sha": null,
+      "published_sha": null,
+      "deployed_sha": null,
+      "outcome": null,
+      "history": [
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": null,
+          "to_state": "inbox",
+          "reason": "the harness prints line3 sh0/ch0 with separations [0,0] at ts2 while the deepest cell sits at 41.8 % of the 42 % cap (D-3 rank 5)"
+        },
+        {
+          "at": "2026-11-07T05:05:00+00:00",
+          "actor": "product-owner",
+          "from_state": "inbox",
+          "to_state": "triaged",
+          "reason": "kept last on the list: least visible, but it protects the 0.2 pp margin the lane is living on"
+        }
+      ],
+      "status": "triaged"
+    },
+    {
+      "id": "RELEASE-009",
+      "type": "delivery",
+      "status": "measured",
+      "title": "Integrate and automatically deliver the UI-002 dock hierarchy and panel-row slice",
+      "priority": "P1",
+      "owner": "release-engineer",
+      "generation": 1,
+      "player_problem": "At phone size the dock row, the card tiers and the panel rows were still engineering-demo geometry, and the two lane checkpoints existed only as branch heads, so the live route served neither of them.",
+      "hypothesis": "Two non-ff merges on top of main (first the then-current tip b5940c8, then the newer 588c1fa), five gates on the integrated tree, one non-force push and the repository pipeline alone can take the accepted UI slice from branch head to served bytes without touching the host.",
+      "scope": [
+        "main integration (merge ce196c9 = 8d8d2ad + b5940c8, merge a551794 = ce196c9 + 588c1fa)",
+        "work/releases/REL-009-g1.md",
+        "work/backlog.json plus generated board",
+        "README status table"
+      ],
+      "non_goals": [
+        "No manual server promotion, no Portainer/mount/DNS edit, no commissioning rerun",
+        "No force push and no rewritten merge commit",
+        "No engine, price or save change"
+      ],
+      "acceptance": [
+        "both merges recorded with their parent SHAs and the per-file conflict resolution actually taken",
+        "the five gates re-run on the integrated tree with real exit codes and the entry bytes named against the 233000 B ceiling",
+        "one non-force push whose remote head is read back, with ci and delivery read from the API for that exact SHA",
+        "the served entry and companions compared to the local build by sha256, so a green build is never reported as a deployment",
+        "README, backlog and the generated board name the integrated and deployed revisions"
+      ],
+      "dependencies": [
+        "UI-002",
+        "BLD-001"
+      ],
+      "evidence": [
+        "work/releases/REL-009-g1.md",
+        "work/product/SPRINT-003-decisions-g1/DECISIONS.md",
+        "work/product/SPRINT-003-decisions-g1/measured-rows-g1.json",
+        "work/review/BELT-001-g1/QA.md",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42348495320",
+        "https://github.com/darkmatter2222/Rustwake/actions/runs/42348528636"
+      ],
+      "product_approved": true,
+      "review_verdict": "accept",
+      "candidate_sha": "588c1fa6ce6d0543828ec7562d1d6aae18f2ea15",
+      "published_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
+      "deployed_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
+      "outcome": "Integrated as a5517948046f1327cb92cf35a9a02be53345f72f = merge(ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea, 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15), on top of ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea = merge(8d8d2ad…, b5940c8…); the integrated tree is byte-identical to 588c1fa (git diff --stat prints nothing). typecheck exit 0; npx vitest run exit 0 (287 tests / 28 files / 0 failures); npm run validate exit 0 with the behaviour line firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 (identical to the pinned reading); npm run build exit 0 with entry assets/index-C_K4oMJ5.js 231262 B (1738 B headroom under the 233000 B ceiling), css index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B, worker 13406 B; node scripts/team-board.mjs --check exit 0. Pushed once (8d8d2ad..a551794) and read back; ci run 42348495320 success and delivery run 42348528636 success for that SHA. Over HTTPS the served index.html (200, 1262 B) names ./assets/index-C_K4oMJ5.js and all four hashed assets are sha256-equal to this lane build of the pushed SHA (entry 231262 B, css 7849 B, tables 9298 B, worker 13406 B); the previous pair index-CUnHr3Cs.js 231943 B and index-9FriNULu.css 7474 B still answers 200, so the rollback set is intact. Entry 231262 B is 1738 B under the unchanged 233000 B ceiling and 616 B below the 231878 B base.",
+      "history": [
+        {
+          "at": "2026-11-07T05:14:41+00:00",
+          "actor": "release-engineer",
+          "from_state": null,
+          "to_state": "ready",
+          "reason": "REL-009-g1 opened on the state REL-008-g1 left behind: main at 8d8d2ad…, the checkout in an in-progress merge with MERGE_HEAD b5940c8… and two UU paths, receipt work/releases/REL-008-g1.md"
+        },
+        {
+          "at": "2026-11-07T03:44:28+00:00",
+          "actor": "release-engineer",
+          "from_state": "ready",
+          "to_state": "implementing",
+          "reason": "sole release/deployment lease taken, origin fetched (ls-remote still b5940c8 at that read), the inherited merge finished by taking stage 3 for both conflicted paths (blobs 50f0b47 and 2f8a432) and committed as ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea"
+        },
+        {
+          "at": "2026-11-07T05:14:41+00:00",
+          "actor": "release-engineer",
+          "from_state": "implementing",
+          "to_state": "review",
+          "reason": "the lane tip had moved to 588c1fa… (helper receipt verified_push_at 2026-11-07T03:50:49Z), so a second merge went on top without rewriting the first: both conflicted paths again took stage 3 (d2dfc65 and 9b1a221) and the merged tree came out byte-identical to 588c1fa. The five gates were then run on that final tree only"
+        },
+        {
+          "at": "2026-11-07T06:46:52+00:00",
+          "actor": "release-engineer",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "gates on a5517948046f1327cb92cf35a9a02be53345f72f: typecheck 0, vitest 0 (287 tests / 28 files), validate 0 with the pinned behaviour line unchanged, build 0 with entry 231262 B inside the ceiling, board --check 0. Note the first pass of the suite on the intermediate tree had failed 4 tests in tests/simulation/fork.test.ts, which is what chose stage 3 in the second merge"
+        },
+        {
+          "at": "2026-11-07T06:46:52+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "git push origin main exit 0 printed 8d8d2ad..a551794 and ls-remote read the remote head back as a5517948046f1327cb92cf35a9a02be53345f72f"
+        },
+        {
+          "at": "2026-11-07T06:47:22+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "delivery run 42348528636 for that exact SHA completed success with the adapter promotion and sanitized receipt steps green"
+        },
+        {
+          "at": "2026-11-07T09:15:00+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "measured over HTTPS: 4/4 hashed assets sha256-equal to this lane build of a5517948046f1327cb92cf35a9a02be53345f72f (entry 5B9A9845…, css B4308206…, tables 28BED3B0…, worker 0C784F3E…) and the previous pair still served. Not measured by this lane: the browser four-cell harness (lane-reported), audio (decoded not played), real-device p95 and human first-feel"
         }
       ]
     }

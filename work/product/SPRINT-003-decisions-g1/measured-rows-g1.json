@@ -1,0 +1,125 @@
+{
+  "assignment": "PROD-ACC-g1",
+  "date": "2026-11-06",
+  "base": "b4e8321e782a4debc55e58a6c7b123e86dd1047a",
+  "origin_main": "12cc0e242bc2038be26ef7334ec1a945c3155181",
+  "heads_verified": {
+    "rw/belt001-g1": "5eb4be6f2c9c661789bf934efb1678202941a7a7",
+    "rw/ui002-g1": "b5940c8d95ac909c10f42cb897bf4c1ae2287930",
+    "rw/art003-g1": "7f934cfe5ce540b24710156037e011be5b2323f1",
+    "4789d3a": "not a valid object (unverified worker text)"
+  },
+  "entry_chunk_bytes": {
+    "base_b4e8321": 231878,
+    "deployed_12cc0e2": 231943,
+    "ceiling": 233000,
+    "belt_full_variant_qa": 232673,
+    "belt_full_variant_rev_worktree": 233175,
+    "belt_cost_only_variant_qa": 231076,
+    "ui002_candidate": 231353,
+    "art003_candidate": 232337,
+    "projected_merged_cost_only": 231010,
+    "projected_merged_full": 232607,
+    "note": "per-lane deltas summed over the base; must be re-measured from one clean build of the integrated SHA"
+  },
+  "decisions": [
+    {
+      "id": "D-1",
+      "lane": "BELT-001 g1",
+      "verdict": "revise",
+      "choice": "a",
+      "text": "integrate the beltCostPerTile-only variant as the g1 candidate; per-tile latency to g2; the 10% criterion is not revised",
+      "evidence": [
+        "B-5 12h bench 17.5% vs pre-armed ceiling 10% -> FAIL (kept on record)",
+        "cost-only variant +4.3% -> PASS",
+        "full variant headroom 327 B (232673) / 175 B over on the rev-worktree reading (233175); cost-only buys ~1990 B after the three lanes integrate",
+        "B-1/B-3 rows pass: prices 3/2/2/4/9 scrap per run length, removal 9 -> 8 at 90%, refusal {need 3, have 2, revisionMoved 0}, save eede3c4f + byteIdentical + 18 routes run-undefined at latency 5"
+      ],
+      "follow_ups": [
+        "DEF-008 priced-route refund after save round-trip untested (QA label DEF-007; DEF-007 is taken by the team-board CRLF defect)",
+        "new belt.test.ts case: run survives decode and equals pre-save run; load is scrap-neutral; route.remove refund equals refundOf(beltCost(3)) = 3 after load and matches the in-session refund; run-less route refunds 0 without throwing"
+      ],
+      "probe_rows": {
+        "AFTER_CONNECT": { "run": [2, 1, 0], "latency": 6, "scrap": 267, "paid": 33 },
+        "AFTER_LOAD": { "run": [2, 1, 0], "scrap": 267 },
+        "AFTER_REMOVE": { "ok": true, "refund": 3, "expected": 3 }
+      }
+    },
+    {
+      "id": "D-2",
+      "lane": "BELT-001 g1 / STRAT hypothesis",
+      "verdict": "negative result recorded",
+      "text": "pricing adds a money column without producing a second viable plan at the shipped tuning",
+      "evidence": [
+        "irregular pattern leaders: {creditsPer1000Batches: compact}, all other columns null",
+        "gaps inside MMG: batches 2324/2335, starvedMax 80/81, starvedMean 52/54, inputStallPct 134.9/134.8, powerLimitedRounds 394/339, minPowerRatio 0.615/0.615",
+        "only passing column: creditsPer1000Batches 7153.184 vs 6608.137 (+545, 7.6%)",
+        "gap6 (second pattern) shows spread taking inputStallPct 204 vs 100.1 - hint that extent, not price, carries the difference"
+      ],
+      "next_experiment": {
+        "runs": 4,
+        "change": "TUNING.beltCostPerTile in {0,1,2,4} only",
+        "pattern": "irregular (unchanged), same seed, same 7 columns, existing scripts/probe-belt.mjs",
+        "confirm": "a second leader appears on any column as the price rises",
+        "falsify": "leader set unchanged across all four costs, or only more connect refusals -> extent becomes a timing consequence in g2"
+      },
+      "dissent": "belt harness prints dropClause.fired=false and leads {compact:2, spread:1} by aggregating two patterns; the PO reading uses the primary pattern per the pre-armed clause"
+    },
+    {
+      "id": "D-3",
+      "lane": "ART-003 g1 + UI-002 g1",
+      "verdict": "revise (art), accept-with-follow-up (ui)",
+      "ordered_list": [
+        { "rank": 1, "item": "plate floor / dead-black band", "anchor": "bucket0 96.9% (was 96.4%), twoDarkestSharePct 97.5 (was 97.4), contactShadowPx 248->449" },
+        { "rank": 2, "item": "regenerate the silhouette after-matrix and lift machine ink (A3-1/A3-4)", "anchor": "matrix identical in all 15 pairs while the sheet PNG grew 9941->13503 B; machineBodySharePct 0.52->0.40; gridDotSharePct 0.53->0.01" },
+        { "rank": 3, "item": "gravel ink share below machine ink, printed per layer", "anchor": "GRAVEL.length 72->36 already pinned; no per-layer share row exists yet" },
+        { "rank": 4, "item": "pill separator Store 900/900", "anchor": "measure-ui002.txt chips in all four cells" },
+        { "rank": 5, "item": "empty .objective__row renders as a lighter ellipsis box", "anchor": "line3 sh0/ch0, separations [0,0] at ts2, deepest cell 41.8% vs 42% cap" },
+        { "rank": 6, "item": "keep the 233000 B ceiling; no raise this sprint (decision, not a task)", "anchor": "projected merged 231010 B with the cost-only variant" }
+      ],
+      "ui_rows_passing": {
+        "U-1_cells_pct": [13, 38.1, 9.9, 24.8, 41.8],
+        "U-2_tiers": 2,
+        "U-2_primary_over_secondary": 1.32,
+        "U-7_min_face_px": 46,
+        "page_scroll": false,
+        "pageerrors": 0
+      },
+      "open_rows": ["U-4 node-row probe printed rows 0 / lastRow null (inconclusive)", "U-6 is machine agreement, not human comprehension"],
+      "ready_queue": [
+        "R1 belt lane: cost-only variant + DEF-008 assertion + bench per variant",
+        "R2 art lane: ranks 1-3 in one pass, census regenerated",
+        "R3 ui lane: ranks 4-5 in one pass, then the U-1 five-cell harness re-run"
+      ]
+    },
+    {
+      "id": "D-4",
+      "lane": "sponsor intake",
+      "verdict": "satisfied",
+      "receipt": "SPONSOR-20261106141155404-3e33b40b",
+      "ticket": "OPS-101",
+      "also_linked": ["OPS-103", "BLD-001"],
+      "evidence": [
+        "origin refs: rw/belt001-g1 5eb4be6, rw/ui002-g1 b5940c8, rw/art003-g1 7f934cf, main 887b5bc..12cc0e2",
+        "ci run 42231570081 + delivery run 42231679008 success for 12cc0e2, served-byte check in work/releases/REL-007-g1.md"
+      ],
+      "housekeeping": "local SPONSOR_INBOX.md still shows the acknowledged line while the receipt records remaining_text \"\"; release lane reconciles without force"
+    }
+  ],
+  "requested_ledger_rows": [
+    { "id": "BELT-001", "action": "create", "type": "feature", "priority": "P1", "points": 5, "candidate_sha": "cost-only variant TBD", "review_verdict": "revise on 5eb4be6" },
+    { "id": "BELT-001", "action": "create-g2", "type": "feature", "points": 2, "depends": ["ART-003"] },
+    { "id": "ART-003", "action": "create", "type": "feature", "priority": "P1", "points": 5, "candidate_sha": "7f934cfe5ce540b24710156037e011be5b2323f1", "review_verdict": "revise" },
+    { "id": "UI-002", "action": "advance-to-review", "candidate_sha": "b5940c8d95ac909c10f42cb897bf4c1ae2287930", "review_verdict": "accept" },
+    { "id": "DEF-008", "action": "create", "type": "defect", "priority": "P2", "note": "filed by QA as DEF-007" },
+    { "id": "DEF-009", "action": "create", "type": "defect", "priority": "P3" },
+    { "id": "DEF-010", "action": "create", "type": "defect", "priority": "P3" },
+    { "id": "OPS-103", "action": "append-history", "note": "sponsor ask confirmed satisfied via branch/PR path" }
+  ],
+  "evidence_gaps": [
+    "no lane handoff committed: work/development/handoffs/{BELT-001-g1,UI-002-g1,ART-003-g1}.md absent from the object store",
+    "work/review/BELT-001-g1/QA.md absent from the object store; QA rows cited come from the coordinator-quoted reading plus the on-disk harness JSONs",
+    "three unreconciled entry-chunk readings for the belt lane (232673 / 233175 / 231076)",
+    "belt001-dev and art003-dev worktrees carry uncommitted modifications, so the immutable candidate is the commit, not the worktree"
+  ]
+}

@@ -3,7 +3,7 @@
 Generated from `work/backlog.json`; do not edit this view manually. This is a published snapshot, not proof of live sessions.
 
 **SPRINT-002: I choose a plan; my yard comes alive** — proposed
-Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-06T16:18:21+00:00.
+Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-07T09:15:00+00:00.
 
 [Visual board](board.html) · [Canonical JSON](backlog.json) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
 
@@ -40,22 +40,33 @@ Session cap: **6 total including coordinator**. Runtime: **observation-required*
 | OPS-103 | P1 | ready | product-owner | Incorporate sponsor priorities and maintain an estimated parallel-ready queue |
 | ART-002 | P1 | triaged | reviewer | Critique actual current scenes against a stunning game standard |
 | DEF-007 | P3 | triaged | developer | team-board --check reports the generated views stale on a CRLF working copy while CI passes the same step |
-| UI-002 | P2 | triaged | ui-ux | Name the shared power budget at rest, not only after a refusal |
+| UI-002 | P2 | deployed | ui-ux | Name the shared power budget at rest, not only after a refusal |
 | UI-003 | P3 | triaged | reviewer | Close the missing UI capture set: rest-state yard coverage, mature-cell boxes, phone interaction series |
+| BELT-001 | P1 | review | developer-economy | Price the belt by its extent: distance-dependent scrap cost, then per-tile transit time |
+| ART-003 | P1 | review | developer-art | Silhouette identity pass on the machinery sheet (bake 1: body, facets, grid, shadow) |
+| ART-004 | P1 | implementing | developer-art | Art lane continuation: furnace 22x16 body, joint furnace/lab parameter search, cell-normalised ink census |
+| OPS-104 | P2 | triaged | operations | Quote only ls-remote tips and helper receipts: worker-quoted SHAs do not resolve as objects |
+| OPS-105 | P3 | accepted | operations | Branch-push ci run 42305154790 for 6a25c97 failed at Run npm test with npm run build skipped |
+| OPS-106 | P3 | triaged | developer | Three-way merge of the belt and UI lanes breaks the i18n units assertion |
+| OPS-107 | P3 | triaged | operations | Add .gitattributes so JSON evidence stops flipping line endings on every run |
+| DEF-008 | P2 | triaged | developer | Priced-route refund after a save round-trip is untested |
+| DEF-009 | P3 | triaged | ui-ux | The third pill prints Store900/900 with no separator |
+| DEF-010 | P3 | triaged | ui-ux | An empty objective row renders as a lighter ellipsis box and eats the deepest-cell margin |
+| RELEASE-009 | P1 | measured | release-engineer | Integrate and automatically deliver the UI-002 dock hierarchy and panel-row slice |
 
 ## Team efficiency (last 24 hours)
 
-Published tickets: **8** · Deployed tickets: **8** · Prospectively estimated points published: **unknown**
-Median implementation-to-publication: **2.7 h** · Tickets returned to rework: **0**
+Published tickets: **4** · Deployed tickets: **4** · Prospectively estimated points published: **unknown**
+Median implementation-to-publication: **3 h** · Tickets returned to rework: **0**
 Observed child-slot utilization: **unknown** over 0 min sampled (0% window coverage). Runtime telemetry: **unknown / stale**.
-8 published ticket(s) have no valid pre-work estimate; no retrospective points are fabricated.
+4 published ticket(s) have no valid pre-work estimate; no retrospective points are fabricated.
 Published and deployed counts are distinct ticket transitions, not commits. Points count once at first publication only if estimated before implementation. Zero-duration/backfilled lifecycle pairs are excluded from cycle time. Utilization excludes unsampled gaps; no data is unknown.
 
 ## Release evidence
 
-Last inspected source: `12cc0e242bc2038be26ef7334ec1a945c3155181`.
-Last evidenced deployed source: `12cc0e242bc2038be26ef7334ec1a945c3155181`.
-[Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/releases/REL-007-g1.md)
-automatic Actions delivery for the pushed main SHA: ci run 42231570081 (run 89, push event) completed success 14:10:33-14:11:14Z with all 15 steps green including "node scripts/team-board.mjs --check"; the delivery run 42231679008 (run 19, workflow_run event) completed success 14:11:17-14:11:45Z, its packaging job 127938856751 building the immutable source and dashboard and its promotion job 127938993734 reporting "Validate and promote through host-owned adapter" and "Publish sanitized receipt" success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-CUnHr3Cs.js and all four hashed assets are sha256-equal to the local build of 12cc0e2 (entry 231943 B e369fe9bfe90913d..., css 7474 B d3a995b2c520590a..., tables 9298 B 28bed3b02f2f79cb..., worker 13406 B 0c784f3e68570923...); the previous entry index-DGy53fNu.js still serves 200 at 231878 B, so old clients keep their assets. Served index.html is 28 B shorter than the local file because the working copy is CRLF (core.autocrlf=true, 28 CR in 30 LF).
+Last inspected source: `a5517948046f1327cb92cf35a9a02be53345f72f`.
+Last evidenced deployed source: `a5517948046f1327cb92cf35a9a02be53345f72f`.
+[Play](https://home.darkmatter2222.com/rustwake/) · [Receipt](../work/releases/REL-009-g1.md)
+automatic Actions delivery for the pushed main SHA a5517948046f1327cb92cf35a9a02be53345f72f: ci run 42348495320 (push event) completed success with all 14 numbered steps green including node scripts/team-board.mjs --check, npm run typecheck, npm run validate, npm test and npm run build; the delivery run 42348528636 (workflow_run event) completed success, its package job 128331458500 building the immutable source plus dashboard and manifest and its self-hosted deploy job 128331520498 reporting Validate and promote through host-owned adapter, Publish sanitized receipt and Explain delivery outcome success. Independently re-read by this lane over HTTPS: the served index.html (200, 1262 B) names ./assets/index-C_K4oMJ5.js and all four hashed assets are sha256-equal to this lane build of a5517948046f1327cb92cf35a9a02be53345f72f (entry 231262 B 5B9A9845…, css 7849 B B4308206…, tables 9298 B 28BED3B0…, worker 13406 B 0C784F3E…); the previous pair index-CUnHr3Cs.js 231943 B (E369FE9B…) and index-9FriNULu.css 7474 B (D3A995B2…) still serves 200, so cached clients keep their assets. The entry chunk is 1738 B under the unchanged 233000 B ceiling.
 
 Every role can submit feedback. Product owns priority; PM owns scheduling; release engineer publishes. Acceptance, publication, deployment and measured outcomes remain distinct.
