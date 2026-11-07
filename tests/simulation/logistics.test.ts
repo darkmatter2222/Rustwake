@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { TUNING } from "../../src/game/content/defs";
 import { advance } from "../../src/game/simulation/engine";
-import { applyCommand, type Command, type CommandBody } from "../../src/game/simulation/commands";
+import {
+  applyCommand,
+  beltCost,
+  refundOf,
+  type Command,
+  type CommandBody,
+} from "../../src/game/simulation/commands";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 import { systemTotals, unitTotal, netRecipeUnits } from "../../src/game/simulation/invariants";
 
@@ -57,9 +63,13 @@ describe("route ledger", () => {
     advance(state, 150);
     const before = unitTotal(state);
     const routeId = state.routes[0].id;
+    const routePrice = beltCost(state.routes[0].run?.length ?? 0);
     expect(send(state, { type: "route.remove", routeId }).ok).toBe(true);
     const after = unitTotal(state);
-    expect(after).toBe(before);
+    // BELT-001: in-flight cargo returns exactly, and the priced belt additionally
+    // hands back `dismantleRefundPct` of what the connect charged.
+    expect(after).toBe(before + refundOf(routePrice));
+    expect(refundOf(routePrice)).toBe(2); // 90 % of a 2-tile (2-scrap) run, rounded
     expect(state.routes.find((r) => r.id === routeId)).toBeUndefined();
     expect(sorter.inRoutes.includes(routeId)).toBe(false);
   });
@@ -74,10 +84,12 @@ describe("route ledger", () => {
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
     advance(state, 60);
     const before = unitTotal(state);
+    const removedPrice = beltCost(state.routes[0].run?.length ?? 0);
     send(state, { type: "route.remove", routeId: state.routes[0].id });
     advance(state, 4);
     expect(state.overflow.length).toBeGreaterThanOrEqual(0);
-    expect(unitTotal(state)).toBe(before);
+    // The refund joins the ledger exactly once (BELT-001).
+    expect(unitTotal(state)).toBe(before + refundOf(removedPrice));
   });
 
   it("does not lose production when the store is full (spec 8.3)", () => {
@@ -146,7 +158,10 @@ describe("conservation", () => {
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
     send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "ferrous" });
     advance(state, 200);
-    const spent = TUNING.repairCostScrap + 20; // repair plus one sorter
+    const spent =
+      TUNING.repairCostScrap +
+      20 + // one sorter
+      state.routes.reduce((sum, route) => sum + beltCost(route.run?.length ?? 0), 0); // belts
     const expected =
       TUNING.manualSalvagePerPulse * state.wreck.pulses +
       state.drone.accumulated +

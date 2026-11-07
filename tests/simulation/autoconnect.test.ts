@@ -49,10 +49,14 @@ describe("connection plans (spec 10.1, B-23)", () => {
     const state = yard("furnace", { ferrous: 6, nonferrous: 1 });
     const furnace = state.machines[1];
     const plans = planConnections(state, furnace.id);
+    // BELT-001: each plan reports its tile run length so the dock can print the
+    // price without a second pass: tile 1 (furnace) beside the dock at tile 2 is a
+    // 2-tile Manhattan run.
     expect(plans).toContainEqual({
       from: state.machines[0].id,
       to: furnace.id,
       filter: "ferrous",
+      tiles: 2,
     });
     expect(plans.filter((plan) => plan.to === furnace.id)).toHaveLength(1);
   });
@@ -65,6 +69,7 @@ describe("connection plans (spec 10.1, B-23)", () => {
       from: 0,
       to: furnace.id,
       filter: "ferrous",
+      tiles: 2, // dock tile 2 -> furnace tile 1
     });
     // One link per material per direction: the store path replaces the producer
     // path instead of sitting next to it.
