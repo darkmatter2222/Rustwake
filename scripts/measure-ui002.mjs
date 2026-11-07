@@ -1,11 +1,17 @@
-// UI-002 g1: "the world outranks the text" - the chromium instrument for acceptance rows
+// UI-002 g3: "the world outranks the text" - the chromium instrument for acceptance rows
 // U-1..U-7. Modelled on `scripts/measure-chrm002.mjs` (which stays untouched as the base
 // instrument); every number below is the browser's own layout on the **built artifact**
 // served by `vite preview`, never a jsdom estimate.
 //
-// Five U-1 cells (360x640 / 390x844 at text scale 1.0 and 2.0, at 2- and 4-machine depth,
-// plus the 4-machine fork-open frame with one refused tap). Every row prints
+// Five U-1 cells at the **eight-machine** yard (360x640 / 390x844 at text scale 1.0 and 2.0,
+// plus the eight-machine fork-open frame with one refused tap): the deepest ladder the
+// tables carry, which is the frame the 42 % card cap has to survive. Every row prints
 // `hudContentBox.height` next to the card height and the ratio against the 42 % cap.
+//
+// The `stack` pass (U-5) is the two-layer overlay chain: the boot report underneath the
+// panel the player opened last. It prints the `.panel` count before and after every press,
+// for both ways of pressing (`Escape` and the painted target nearest the dock), plus the
+// canvas still inside `#root` and `body.scrollHeight == innerHeight` at the last step.
 //
 // The text-scale 2.0 cells prove their own scale three ways (the recorded
 // `work/review/dispatch-startup/captures/ds-measure.json` prints `textScale: 1` inside its
@@ -16,7 +22,7 @@
 //   npm run build
 //   npx vite preview --port 4173            (background)
 //   npx tsx scripts/measure-ui002.mjs
-//   UI002_PASS=rest|panel|research|dismiss|fork   (default: all)
+//   UI002_PASS=rest|panel|research|dismiss|stack|fork   (default: all)
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { chromium } from "playwright-core";
 import { BLUEPRINTS, TUNING } from "../src/game/content/defs";
@@ -39,7 +45,17 @@ const executablePath = [
   .filter(Boolean)
   .find((path) => existsSync(path));
 
-const FOUR = ["sorter", "furnace", "copperSeparator", "polymerRecycler"];
+/** The eight blueprints the tables carry, in yard order: the deepest ladder (UI-002 g3). */
+const EIGHT = [
+  "sorter",
+  "furnace",
+  "copperSeparator",
+  "polymerRecycler",
+  "wireMill",
+  "platePress",
+  "circuitAssembler",
+  "signalLab",
+];
 
 const firstFreeTile = (state) => {
   for (let tile = 0; tile < YARD_TILES; tile += 1) {
@@ -59,12 +75,22 @@ function yardFrame(depth, credits = 34, data = 0, tiles) {
       send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
     }
   };
-  const fund = (scrap, ferrous, nonferrous) => {
-    state.store = { ...state.store, scrap, ferrous };
-    if (nonferrous !== undefined) state.store.nonferrous = nonferrous;
+  /**
+   * One blueprint, funded at exactly its own build cost (UI-002 g3). The 4-machine fund
+   * named three resources; the deeper ladder buys with steel, copper, residue, polymer and
+   * wire too, so the cost table is read instead of a hand-copied triple - the same rule the
+   * faces print (`costSummary`).
+   */
+  const fund = (blueprint) => {
+    for (const item of BLUEPRINTS[blueprint].buildCost) {
+      state.store = {
+        ...state.store,
+        [item.resource]: Math.max(state.store[item.resource] ?? 0, item.qty),
+      };
+    }
     state.storeUnits = Object.values(state.store).reduce((total, qty) => total + qty, 0);
   };
-  const order = FOUR.slice(0, depth);
+  const order = EIGHT.slice(0, depth);
   state.tutorial = 9;
   for (let pass = 0; pass < 6; pass += 1) {
     send({ type: "manual.salvage" });
@@ -73,9 +99,7 @@ function yardFrame(depth, credits = 34, data = 0, tiles) {
   send({ type: "drone.repair" });
   advance(state, 262);
   order.forEach((blueprint, index) => {
-    const need = {};
-    for (const item of BLUEPRINTS[blueprint].buildCost) need[item.resource] = item.qty;
-    fund(60, 20, index >= 2 ? (need.nonferrous ?? 0) : undefined);
+    fund(blueprint);
     send({ type: "machine.build", blueprint, tile: tiles?.[index] ?? firstFreeTile(state) });
     connect(state.machines[state.machines.length - 1].id);
     advance(state, 300);
@@ -410,10 +434,10 @@ const readPersona = () => {
 };
 
 const CELLS = [
-  { label: "360x640 ts1 2-machine", width: 360, height: 640, textScale: 1, depth: 2 },
-  { label: "360x640 ts2 2-machine", width: 360, height: 640, textScale: 2, depth: 2 },
-  { label: "390x844 ts1 4-machine", width: 390, height: 844, textScale: 1, depth: 4 },
-  { label: "390x844 ts2 4-machine", width: 390, height: 844, textScale: 2, depth: 4 },
+  { label: "360x640 ts1 8-machine", width: 360, height: 640, textScale: 1, depth: 8 },
+  { label: "360x640 ts2 8-machine", width: 360, height: 640, textScale: 2, depth: 8 },
+  { label: "390x844 ts1 8-machine", width: 390, height: 844, textScale: 1, depth: 8 },
+  { label: "390x844 ts2 8-machine", width: 390, height: 844, textScale: 2, depth: 8 },
 ];
 
 /** One fresh context per cell; the engine writes the save, the app boots into it. */
@@ -450,17 +474,18 @@ async function withPage(browser, cell, body) {
   // A boot after an encoded absence paints the return report first, and it owns the single
   // panel slot until its own visible target retires it (U-5 row 0). Retire it here so the
   // cell under test starts on the plain resting screen; the report's own dismiss chain is
-  // printed from this same reading.
-  const report = await page.evaluate(() => {
+  // printed from this same reading. `keepReport: true` cells (the `stack` pass) leave the
+  // layer up, because the chain they measure *is* the two-layer stack.
+  const report = await page.evaluate((keep) => {
     const panels = document.querySelectorAll(".panel").length;
     const panel = document.querySelector(".panel");
     const button = panel ? panel.querySelector(".panel__head button") : null;
     const label = button ? (button.textContent ?? "").trim() : null;
     const height = button ? Math.round(button.getBoundingClientRect().height) : 0;
     const width = button ? Math.round(button.getBoundingClientRect().width) : 0;
-    if (button && /^Back to yard$/.test(label)) button.click();
-    return { label, heightPx: height, widthPx: width, panelsBefore: panels };
-  });
+    if (!keep && button && /^Back to yard$/.test(label)) button.click();
+    return { label, heightPx: height, widthPx: width, panelsBefore: panels, kept: keep };
+  }, cell.keepReport === true);
   await page.waitForTimeout(150);
   report.panelsAfter = await page.evaluate(() => document.querySelectorAll(".panel").length);
   const result = await body(page);
@@ -737,27 +762,27 @@ async function passRest(browser) {
 async function passPanel(browser) {
   const rows = [];
   for (const cell of [
-    { label: "360x640 ts1 store", width: 360, height: 640, textScale: 1, depth: 2, open: "Store" },
-    { label: "360x640 ts2 store", width: 360, height: 640, textScale: 2, depth: 2, open: "Store" },
+    { label: "360x640 ts1 store", width: 360, height: 640, textScale: 1, depth: 8, open: "Store" },
+    { label: "360x640 ts2 store", width: 360, height: 640, textScale: 2, depth: 8, open: "Store" },
     {
       // Row 4 carries the machines here: at text scale 2.0 the top rows sit under the
       // objective card, whose own box is a hit target, so a tile centre there is not a
-      // canvas tap. Row 4 paints its centre between the card bottom and the dock.
+      // canvas tap. Rows 4 and 5 paint their centres between the card bottom and the dock.
       label: "360x640 ts2 machine",
       width: 360,
       height: 640,
       textScale: 2,
-      depth: 4,
+      depth: 8,
       open: "machine",
       data: 12,
-      tiles: [24, 25, 27, 28],
+      tiles: [24, 25, 26, 27, 28, 29, 30, 31],
     },
     {
       label: "360x640 ts2 research",
       width: 360,
       height: 640,
       textScale: 2,
-      depth: 4,
+      depth: 8,
       open: "Research",
       data: 12,
     },
@@ -766,7 +791,7 @@ async function passPanel(browser) {
       width: 390,
       height: 844,
       textScale: 2,
-      depth: 4,
+      depth: 8,
       open: "Store",
       data: 12,
     },
@@ -775,10 +800,10 @@ async function passPanel(browser) {
       width: 390,
       height: 844,
       textScale: 1,
-      depth: 4,
+      depth: 8,
       open: "machine",
       data: 12,
-      tiles: [24, 25, 27, 28],
+      tiles: [24, 25, 26, 27, 28, 29, 30, 31],
     },
   ]) {
     const { result, pageErrors, envelope, report } = await withPage(browser, cell, async (page) => {
@@ -876,7 +901,7 @@ async function passDismiss(browser) {
     width: 360,
     height: 640,
     textScale: 2,
-    depth: 4,
+    depth: 8,
     data: 12,
   };
   const { result, pageErrors, report } = await withPage(browser, cell, async (page) => {
@@ -947,14 +972,166 @@ async function passDismiss(browser) {
   return result;
 }
 
+// ----------------------------------------- pass 3b: U-5 the two-layer overlay stack (g3)
+/**
+ * One reading of the overlay stack. `panelCount` is the number the criterion counts
+ * (`2 -> 1 -> 0`); `layers` says which layer owns which painted slot (`order`), how tall it
+ * is allowed to be (`max-height`), and whether its own dismiss target is inside the
+ * viewport; the rest is the yard behind it: the canvas inside `#root`, the card ratio and
+ * `body.scrollHeight` against `innerHeight` (the no-scroll gate, stated as equality).
+ */
+const readStack = () => {
+  const round = (n) => Math.round(n * 100) / 100;
+  const text = (node) => (node?.textContent ?? "").replace(/\s+/g, " ").trim();
+  const layers = [...document.querySelectorAll(".panel")].map((panel) => {
+    const dismiss = panel.querySelector(".panel__head button");
+    const r = dismiss?.getBoundingClientRect();
+    return {
+      title: text(panel.querySelector(".panel__title")),
+      order: getComputedStyle(panel).order,
+      maxHeight: getComputedStyle(panel).maxHeight,
+      dismiss: text(dismiss),
+      top: r ? round(r.top) : null,
+      bottom: r ? round(r.bottom) : null,
+      heightPx: r ? round(r.height) : null,
+      inView: r ? r.top >= 0 && r.bottom <= window.innerHeight + 0.5 && r.height >= 44 : null,
+    };
+  });
+  const card = document.querySelector(".objective");
+  const hud = document.querySelector(".hud");
+  const canvas = document.querySelector("#root canvas");
+  const canvasBox = canvas?.getBoundingClientRect();
+  return {
+    panelCount: layers.length,
+    layers,
+    cardHeightPx: card ? round(card.getBoundingClientRect().height) : null,
+    hudContentBoxHeight: hud ? hud.clientHeight : null,
+    canvasInRoot: !!canvas,
+    canvasBox: canvasBox
+      ? { w: round(canvasBox.width), h: round(canvasBox.height) }
+      : null,
+    bodyScrollHeight: document.body.scrollHeight,
+    innerHeight: window.innerHeight,
+    innerWidth: window.innerWidth,
+    bodyWidth: document.body.scrollWidth,
+  };
+};
+
+/** Clicks the painted layer nearest the dock (the greatest `order`), i.e. a thumb tap. */
+const tapPaintedTarget = (page) =>
+  page.evaluate(() => {
+    const nodes = [...document.querySelectorAll(".panel")];
+    const rank = (node) => Number(getComputedStyle(node).order || 0);
+    const top = nodes.reduce(
+      (best, node, index) =>
+        nodes.length === 0
+          ? null
+          : best === null || rank(node) >= rank(best.node)
+            ? { node, index }
+            : best,
+      null
+    );
+    const button = top?.node.querySelector(".panel__head button");
+    const label = button ? (button.textContent ?? "").trim() : null;
+    if (button) button.click();
+    return { label, order: top ? rank(top.node) : null };
+  });
+
+async function passStack(browser) {
+  const cells = [
+    { label: "360x640 ts2 store back=keys", width: 360, height: 640, textScale: 2, depth: 8, data: 12, open: "Store", via: "keys" },
+    { label: "360x640 ts2 store back=taps", width: 360, height: 640, textScale: 2, depth: 8, data: 12, open: "Store", via: "taps" },
+    { label: "390x844 ts1 yard back=keys", width: 390, height: 844, textScale: 1, depth: 8, data: 12, open: "Yard", via: "keys" },
+    { label: "390x844 ts1 yard back=taps", width: 390, height: 844, textScale: 1, depth: 8, data: 12, open: "Yard", via: "taps" },
+  ];
+  const rows = [];
+  for (const cell of cells) {
+    const { result, pageErrors, envelope, report } = await withPage(browser, { ...cell, keepReport: true }, async (page) => {
+      const steps = [];
+      const presses = [];
+      const step = async (label, press) => {
+        const s = await page.evaluate(readStack);
+        steps.push({ label, press: press ?? null, ...s });
+        return s;
+      };
+      const opened = await openPanel(page, cell.open);
+      await step(`after face "${cell.open}"`);
+      // The two-layer frame itself, captured before anything is retired: the deepest the
+      // column ever gets, which is the frame the 26 % budget is for.
+      if (process.env.UI002_SHOTS) {
+        await page.screenshot({
+          path: `${process.env.UI002_SHOTS}/ui002-${cell.label.replace(/ /g, "-")}-stacked.png`,
+        });
+      }
+      for (let press = 1; press <= 3; press += 1) {
+        let how = null;
+        if (cell.via === "keys") {
+          await page.keyboard.press("Escape");
+          how = "Escape";
+        } else {
+          how = (await tapPaintedTarget(page)).label;
+        }
+        await page.waitForTimeout(140);
+        const s = await step(`press ${press}`, how);
+        presses.push(s.panelCount);
+      }
+      // One more press on the plain yard must not remove the chrome or the canvas.
+      if (cell.via === "keys") await page.keyboard.press("Escape");
+      else await tapPaintedTarget(page);
+      await page.waitForTimeout(140);
+      await step("one press too many", "extra");
+      return { steps, presses, opened };
+    });
+    rows.push({ cell, ...result, pageErrors, envelope, report });
+  }
+  for (const row of rows) {
+    const deepest = Math.max(...row.steps.map((s) => s.panelCount));
+    console.log(
+      `\n[${row.cell.label}] purse 34 saved ${JSON.stringify(row.envelope)}` +
+        ` boot report "${row.report.label}" ${row.report.widthPx}x${row.report.heightPx}px` +
+        ` kept ${row.report.kept}` +
+        `; opened via face index ${row.opened.index ?? row.opened.attempts?.[0]?.index ?? -1}` +
+        `; deepest stack ${deepest} layer(s); pageerrors ${row.pageErrors.length}` +
+        `${row.pageErrors.length ? ": " + row.pageErrors.join(" | ") : ""}`
+    );
+    for (const s of row.steps) {
+      const ratio =
+        s.cardHeightPx !== null && s.hudContentBoxHeight
+          ? Math.round((s.cardHeightPx / s.hudContentBoxHeight) * 1000) / 10
+          : null;
+      console.log(
+        `  ${s.label}${s.press ? ` (${s.press})` : ""}: overlays ${s.panelCount}` +
+          ` [${s.layers
+            .map(
+              (l) =>
+                `"${l.title}" order ${l.order} cap ${l.maxHeight}` +
+                ` target "${l.dismiss}" ${l.heightPx}px top ${l.top}..${l.bottom} in-view ${l.inView}`
+            )
+            .join(" | ")}]`
+      );
+      console.log(
+        `      yard: .objective ${s.cardHeightPx}px / hudContentBox.height ${s.hudContentBoxHeight}` +
+          ` = ${ratio} % (cap 42 %); #root canvas ${JSON.stringify(s.canvasBox)}` +
+          ` present ${s.canvasInRoot}` +
+          `; body.scrollHeight ${s.bodyScrollHeight} == innerHeight ${s.innerHeight}` +
+          ` ${s.bodyScrollHeight === s.innerHeight ? "(no page scroll)" : "(SCROLLS)"}`
+      );
+    }
+    console.log(
+      `  chain ${row.steps.map((s) => s.panelCount).join(" -> ")}` +
+        ` (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)`
+    );
+  }
+}
+
 // ------------------------------------------------- pass 4: U-3 fork + U-1 cell with refusal
 async function passFork(browser) {
   const cell = {
-    label: "360x640 ts2 4-machine fork-open + refused tap",
+    label: "360x640 ts2 8-machine fork-open + refused tap",
     width: 360,
     height: 640,
     textScale: 2,
-    depth: 4,
+    depth: 8,
     purse: 30,
     live: true,
   };
@@ -1049,17 +1226,18 @@ function entryChunkBytes() {
 }
 
 const run = async () => {
-  const only = process.env.UI002_PASS ?? "rest,panel,dismiss,fork";
+  const only = process.env.UI002_PASS ?? "rest,panel,dismiss,stack,fork";
   const browser = await chromium.launch({ executablePath, headless: true });
   try {
     if (only.includes("rest")) await passRest(browser);
     if (only.includes("panel")) await passPanel(browser);
     if (only.includes("dismiss")) await passDismiss(browser);
+    if (only.includes("stack")) await passStack(browser);
     if (only.includes("fork")) await passFork(browser);
   } finally {
     await browser.close();
   }
-  console.log(`\nentry chunk ${JSON.stringify(entryChunkBytes())} (base 231878 B, ceiling 233000 B)`);
+  console.log(`\nentry chunk ${JSON.stringify(entryChunkBytes())} (base 231262 B, ceiling 233000 B)`);
 };
 
 await run();

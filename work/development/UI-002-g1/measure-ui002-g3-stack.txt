@@ -1,0 +1,54 @@
+﻿
+[360x640 ts2 store back=keys] purse 34 saved {"schemaVersion":1,"checksum":"74364f1a","textScale":2,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 119x71px kept true; opened via face index 0; deepest stack 2 layer(s); pageerrors 0
+  after face "Store": overlays 2 ["Yard store" order 3 cap 26% target "Close" 44px top 421.59..465.59 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 70.84px top 303.33..374.17 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 1 (Escape): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 70.84px top 327.56..398.41 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 2 (Escape): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 3 (Escape): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[360x640 ts2 store back=taps] purse 34 saved {"schemaVersion":1,"checksum":"1e84984a","textScale":2,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 119x71px kept true; opened via face index 0; deepest stack 2 layer(s); pageerrors 0
+  after face "Store": overlays 2 ["Yard store" order 3 cap 26% target "Close" 44px top 421.59..465.59 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 70.84px top 303.33..374.17 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 1 (Close): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 70.84px top 327.56..398.41 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 2 (Back to yard): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 3: overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[390x844 ts1 yard back=keys] purse 34 saved {"schemaVersion":1,"checksum":"df515114","textScale":1,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 96x44px kept true; opened via face index 1; deepest stack 2 layer(s); pageerrors 0
+  after face "Yard": overlays 2 ["Yard record" order 3 cap 26% target "Close" 44px top 577.55..621.55 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 44px top 250.75..294.75 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 1 (Escape): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 44px top 547.81..591.81 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 2 (Escape): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 3 (Escape): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[390x844 ts1 yard back=taps] purse 34 saved {"schemaVersion":1,"checksum":"af5bcad0","textScale":1,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 96x44px kept true; opened via face index 1; deepest stack 2 layer(s); pageerrors 0
+  after face "Yard": overlays 2 ["Yard record" order 3 cap 26% target "Close" 44px top 577.55..621.55 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 44px top 250.75..294.75 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 1 (Close): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 44px top 547.81..591.81 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 2 (Back to yard): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 3: overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+entry chunk [{"name":"index-JtFswdB-.js","bytes":231328}] (base 231262 B, ceiling 233000 B)
