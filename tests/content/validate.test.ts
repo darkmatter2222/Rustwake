@@ -83,10 +83,15 @@ describe("content validator (B-12)", () => {
     expect(violations).toEqual([]);
     // Same numbers the standalone driver publishes in docs/evidence (D-38), measured by a
     // second implementation, so the two cannot drift apart unnoticed.
-    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 5, batches: 1902, nodes: 3 });
-    expect(marks["firstDrone"]).toBe(268);
-    expect(marks["firstResearch"]).toBe(478);
-    expect(marks["credits"]).toBe(82);
+    // BELT-001 restated this table on the priced tree (before -> after):
+    // firstDrone 268 -> 379, firstResearch 478 -> 527, drones 5 -> 4,
+    // batches 1 902 -> 1 838, credits 82 -> 157; tick/machines/links/nodes unmoved.
+    // The price is the only new input: the clock is still `routeLatencyTicks` 5, so the
+    // drift is purse timing (links now take scrap) rather than a different cadence.
+    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 4, batches: 1838, nodes: 3 });
+    expect(marks["firstDrone"]).toBe(379);
+    expect(marks["firstResearch"]).toBe(527);
+    expect(marks["credits"]).toBe(157);
   });
 });
 

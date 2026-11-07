@@ -11,6 +11,7 @@ import {
 import { advance } from "../../src/game/simulation/engine";
 import {
   applyCommand,
+  beltCost,
   sellableAmount,
   upgradeCost,
   type Command,
@@ -86,6 +87,9 @@ function chainYard(): Yard4 {
     send(state, { type: "route.connect", from: 0, to: id, filter: source });
     send(state, { type: "route.connect", from: id, to: 0, filter: null });
   }
+  // BELT-001: the eight laid belts are spending too, `beltCostPerTile` per tile of
+  // their run; the ledger test reads this same `spent` figure.
+  for (const route of state.routes) spent += beltCost(route.run?.length ?? 0);
   return {
     state,
     sorter: ids.sorter,
