@@ -8,32 +8,181 @@
     ],
     "topColors": [
       "11,18,32 46%",
-      "34,56,74 37.8%",
+      "34,56,74 33%",
       "8,13,24 4.3%",
-      "44,66,87 2.5%",
-      "138,169,196 1.3%",
-      "127,159,187 1.2%",
+      "44,66,87 2.9%",
+      "138,169,196 2.5%",
+      "127,159,187 1.6%",
       "22,40,58 1.2%",
-      "16,27,40 1%",
-      "109,144,171 0.7%",
-      "53,86,107 0.4%",
-      "111,147,173 0.3%",
-      "14,23,36 0.3%"
+      "16,27,40 0.9%",
+      "111,147,173 0.8%",
+      "109,144,171 0.6%",
+      "14,23,38 0.5%",
+      "53,86,107 0.4%"
     ],
     "luminanceBuckets8": [
-      95.9,
-      0.4,
-      2.4,
-      1.4,
-      0.1,
+      92.5,
+      0.7,
+      3.2,
+      2.6,
+      0.7,
       0,
       0,
-      0
+      0.4
     ],
-    "twoDarkestSharePct": 96.2,
-    "twoTopColorsSharePct": 83.8,
+    "twoDarkestSharePct": 93.2,
+    "twoTopColorsSharePct": 79,
     "cells": {
-      "sorter8": {
+      "sorter0": {
+        "box": [
+          8,
+          205,
+          70,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7
+        ],
+        "inkPx": 2734,
+        "inkSharePct": 71.1,
+        "inkPctOfCellArea": 70.21,
+        "contactShadowPx": 108,
+        "horizonBandPx": 232
+      },
+      "furnace1": {
+        "box": [
+          70,
+          205,
+          133,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 2493,
+        "inkSharePct": 63.8,
+        "inkPctOfCellArea": 64.03,
+        "contactShadowPx": 87,
+        "horizonBandPx": 216
+      },
+      "polymerRecycler3": {
+        "box": [
+          195,
+          205,
+          257,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 2021,
+        "inkSharePct": 52.6,
+        "inkPctOfCellArea": 51.9,
+        "contactShadowPx": 104,
+        "horizonBandPx": 132
+      },
+      "copperSeparator4": {
+        "box": [
+          257,
+          205,
+          320,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1773,
+        "inkSharePct": 45.4,
+        "inkPctOfCellArea": 45.53,
+        "contactShadowPx": 108,
+        "horizonBandPx": 166
+      },
+      "wireMill5": {
+        "box": [
+          320,
+          205,
+          382,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7
+        ],
+        "inkPx": 2531,
+        "inkSharePct": 65.8,
+        "inkPctOfCellArea": 65,
+        "contactShadowPx": 123,
+        "horizonBandPx": 320
+      },
+      "platePress6": {
+        "box": [
+          8,
+          267,
+          70,
+          329
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1577,
+        "inkSharePct": 41,
+        "inkPctOfCellArea": 40.5,
+        "contactShadowPx": 95,
+        "horizonBandPx": 127
+      },
+      "circuitAssembler7": {
+        "box": [
+          70,
+          267,
+          133,
+          329
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1632,
+        "inkSharePct": 41.8,
+        "inkPctOfCellArea": 41.91,
+        "contactShadowPx": 81,
+        "horizonBandPx": 179
+      },
+      "signalLab8": {
         "box": [
           133,
           267,
@@ -41,29 +190,19 @@
           329
         ],
         "distinctBuckets": [
-          0
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
         ],
-        "inkPx": 25,
-        "inkSharePct": 0.7,
-        "inkPctOfCellArea": 0.64,
-        "contactShadowPx": 0,
-        "horizonBandPx": 0
-      },
-      "furnace14": {
-        "box": [
-          133,
-          329,
-          195,
-          392
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 20,
-        "inkSharePct": 0.5,
-        "inkPctOfCellArea": 0.51,
-        "contactShadowPx": 0,
-        "horizonBandPx": 0
+        "inkPx": 2467,
+        "inkSharePct": 64.2,
+        "inkPctOfCellArea": 63.36,
+        "contactShadowPx": 42,
+        "horizonBandPx": 140
       },
       "dock2": {
         "box": [
@@ -77,129 +216,15 @@
           1,
           2,
           3,
-          4
+          4,
+          5,
+          7
         ],
-        "inkPx": 2650,
-        "inkSharePct": 68.9,
-        "inkPctOfCellArea": 68.06,
-        "contactShadowPx": 165,
+        "inkPx": 2773,
+        "inkSharePct": 72.1,
+        "inkPctOfCellArea": 71.22,
+        "contactShadowPx": 121,
         "horizonBandPx": 24
-      },
-      "wireMill": {
-        "box": [
-          133,
-          392,
-          195,
-          454
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 707,
-        "inkSharePct": 18.4,
-        "inkPctOfCellArea": 18.16,
-        "contactShadowPx": 0,
-        "horizonBandPx": 124
-      },
-      "signalLab": {
-        "box": [
-          195,
-          392,
-          257,
-          454
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 636,
-        "inkSharePct": 16.5,
-        "inkPctOfCellArea": 16.33,
-        "contactShadowPx": 0,
-        "horizonBandPx": 329
-      },
-      "generic": {
-        "box": [
-          195,
-          454,
-          257,
-          517
-        ],
-        "distinctBuckets": [
-          0,
-          1,
-          2
-        ],
-        "inkPx": 615,
-        "inkSharePct": 15.7,
-        "inkPctOfCellArea": 15.79,
-        "contactShadowPx": 0,
-        "horizonBandPx": 162
-      },
-      "polymerRecycler": {
-        "box": [
-          195,
-          517,
-          257,
-          579
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 289,
-        "inkSharePct": 7.5,
-        "inkPctOfCellArea": 7.42,
-        "contactShadowPx": 0,
-        "horizonBandPx": 0
-      },
-      "copperSeparator": {
-        "box": [
-          195,
-          267,
-          257,
-          329
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 25,
-        "inkSharePct": 0.7,
-        "inkPctOfCellArea": 0.64,
-        "contactShadowPx": 0,
-        "horizonBandPx": 0
-      },
-      "platePress": {
-        "box": [
-          195,
-          329,
-          257,
-          392
-        ],
-        "distinctBuckets": [
-          0,
-          1,
-          2
-        ],
-        "inkPx": 606,
-        "inkSharePct": 15.5,
-        "inkPctOfCellArea": 15.56,
-        "contactShadowPx": 0,
-        "horizonBandPx": 162
-      },
-      "circuitAssembler": {
-        "box": [
-          133,
-          454,
-          195,
-          517
-        ],
-        "distinctBuckets": [
-          0
-        ],
-        "inkPx": 713,
-        "inkSharePct": 18.3,
-        "inkPctOfCellArea": 18.31,
-        "contactShadowPx": 0,
-        "horizonBandPx": 126
       },
       "wreck": {
         "box": [
@@ -213,13 +238,15 @@
           1,
           2,
           3,
-          4
+          4,
+          5,
+          7
         ],
         "inkPx": 5822,
         "inkSharePct": 99.9,
         "inkPctOfCellArea": 149.52,
         "contactShadowPx": 6,
-        "horizonBandPx": 287
+        "horizonBandPx": 284
       }
     },
     "machineRow": {
@@ -234,13 +261,15 @@
         1,
         2,
         3,
-        4
+        4,
+        5,
+        7
       ],
-      "inkPx": 2695,
-      "inkSharePct": 23.2,
-      "inkPctOfCellArea": 69.21,
-      "contactShadowPx": 165,
-      "horizonBandPx": 24
+      "inkPx": 5296,
+      "inkSharePct": 45.7,
+      "inkPctOfCellArea": 136.01,
+      "contactShadowPx": 163,
+      "horizonBandPx": 164
     },
     "bandFit": {
       "scale": 1.95,
@@ -298,15 +327,15 @@
         "horizonBandPx": 0
       }
     },
-    "steelLightPx": 1122,
-    "gridDotPx": 11,
-    "gridDotSharePct": 0,
-    "gridDotAlphaPx": 400,
+    "steelLightPx": 2591,
+    "gridDotPx": 112,
+    "gridDotSharePct": 0.03,
+    "gridDotAlphaPx": 403,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.12,
-    "machineBodyPx": 4403,
-    "machineBodySharePct": 1.34,
-    "contactShadowPx": 185
+    "gridInkSharePct": 0.16,
+    "machineBodyPx": 8189,
+    "machineBodySharePct": 2.49,
+    "contactShadowPx": 931
   },
   "sheet": {
     "roles": 11,
@@ -461,7 +490,7 @@
     "faces": [
       {
         "text": "Sound on",
-        "w": 53.3,
+        "w": 47.7,
         "h": 44
       },
       {
@@ -475,18 +504,33 @@
         "h": 44
       },
       {
+        "text": "Back to yard",
+        "w": 96,
+        "h": 44
+      },
+      {
         "text": "Store",
-        "w": 71.5,
+        "w": 50.1,
         "h": 46
       },
       {
-        "text": "Salvage",
-        "w": 216,
+        "text": "Yard",
+        "w": 44.8,
+        "h": 46
+      },
+      {
+        "text": "Sell 20 Ferrous+40 credits",
+        "w": 129.8,
         "h": 46
       },
       {
         "text": "Build",
-        "w": 70.5,
+        "w": 49,
+        "h": 46
+      },
+      {
+        "text": "Research",
+        "w": 72.4,
         "h": 46
       }
     ]

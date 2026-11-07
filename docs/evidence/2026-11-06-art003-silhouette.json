@@ -219,7 +219,7 @@
     "requirement": ">=3 luminance bands inside one machine box, contact shadow under every footprint, one light direction",
     "luminanceBucketsInsideMachineBoxes": {
       "sorter8": 8,
-      "furnace14": 6,
+      "furnace14": 7,
       "dock2": 5,
       "wreck": 6
     },
@@ -231,7 +231,7 @@
     },
     "contactShadowPx": {
       "base": 246,
-      "now": 462
+      "now": 452
     },
     "note": "base painted one flat fill per body (1 band); the ellipse row is tuple slot 5 in every static PARTS row plus the wreck path"
   },
@@ -239,15 +239,15 @@
     "requirement": "grid ink share falls versus base while machine ink rises; both printed",
     "gridInkSharePct": {
       "base": 0.53,
-      "now": 0.13
+      "now": 0.14
     },
     "machineRowInkPx": {
       "base": 6341,
-      "now": 7416
+      "now": 7290
     },
     "machineRowInkSharePct": {
       "base": 63.2,
-      "now": 64
+      "now": 62.9
     },
     "cellInkPctOfCellArea": {
       "base": {
@@ -257,8 +257,8 @@
         "wreck": 146.84
       },
       "now": {
-        "sorter8": 63.13,
-        "furnace14": 61.2,
+        "sorter8": 62.95,
+        "furnace14": 58.14,
         "dock2": 66.13,
         "wreck": 149.52
       },
@@ -274,11 +274,11 @@
     },
     "twoDarkestSharePct": {
       "base": 97.4,
-      "now": 95.3
+      "now": 95.4
     },
     "bucket0SharePct": {
       "base": 96.5,
-      "now": 94.8
+      "now": 94.9
     }
   },
   "a3_5": {

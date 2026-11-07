@@ -21,7 +21,7 @@
       "14,23,38 0.3%"
     ],
     "luminanceBuckets8": [
-      94.9,
+      94.8,
       0.5,
       2.5,
       1.6,
@@ -30,7 +30,7 @@
       0,
       0.2
     ],
-    "twoDarkestSharePct": 95.4,
+    "twoDarkestSharePct": 95.3,
     "twoTopColorsSharePct": 82.1,
     "cells": {
       "sorter8": {
@@ -50,11 +50,11 @@
           6,
           7
         ],
-        "inkPx": 2441,
-        "inkSharePct": 63.5,
-        "inkPctOfCellArea": 62.69,
-        "contactShadowPx": 47,
-        "horizonBandPx": 212
+        "inkPx": 2458,
+        "inkSharePct": 63.9,
+        "inkPctOfCellArea": 63.13,
+        "contactShadowPx": 49,
+        "horizonBandPx": 198
       },
       "furnace14": {
         "box": [
@@ -71,10 +71,10 @@
           4,
           7
         ],
-        "inkPx": 2264,
-        "inkSharePct": 58,
-        "inkPctOfCellArea": 58.14,
-        "contactShadowPx": 91,
+        "inkPx": 2381,
+        "inkSharePct": 61,
+        "inkPctOfCellArea": 61.15,
+        "contactShadowPx": 111,
         "horizonBandPx": 184
       },
       "dock2": {
@@ -136,11 +136,11 @@
         6,
         7
       ],
-      "inkPx": 7280,
-      "inkSharePct": 62.8,
-      "inkPctOfCellArea": 186.97,
-      "contactShadowPx": 261,
-      "horizonBandPx": 420
+      "inkPx": 7414,
+      "inkSharePct": 63.9,
+      "inkPctOfCellArea": 190.41,
+      "contactShadowPx": 283,
+      "horizonBandPx": 406
     },
     "bandFit": {
       "scale": 1.95,
@@ -198,15 +198,15 @@
         "horizonBandPx": 0
       }
     },
-    "steelLightPx": 1783,
+    "steelLightPx": 1767,
     "gridDotPx": 39,
     "gridDotSharePct": 0.01,
-    "gridDotAlphaPx": 407,
+    "gridDotAlphaPx": 404,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.14,
-    "machineBodyPx": 5153,
-    "machineBodySharePct": 1.57,
-    "contactShadowPx": 445
+    "gridInkSharePct": 0.13,
+    "machineBodyPx": 5186,
+    "machineBodySharePct": 1.58,
+    "contactShadowPx": 453
   },
   "sheet": {
     "roles": 11,

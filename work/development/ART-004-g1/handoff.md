@@ -162,3 +162,131 @@ frame) pass on the candidate.
    carry per-frame dynamic marks outside the cell box), so their op counts are unchanged.
 4. Screenshots are desktop-Chromium renders at phone viewport/dpr 2, not a device trace
    (BL-01 still stands).
+
+---
+
+# Addendum — QA rework list (`rev-art003-g1/work/review/ART-003-g1/QA.md`), rows 1–6
+
+Measured at the tree this addendum is published with. `npx vitest run` there: **28 files /
+294 tests passed, 0 failed** (exit 0), so the four failures QA reproduced at `6a25c97` close.
+
+## Row 1 — stale `SCALE` rows: already fixed by `d84f69e` / `3f911fee`
+
+| row | stale value | measured value (in force) |
+| --- | --- | --- |
+| `scene-draw.test.ts:114`, `silhouette.test.ts:24`, `:208` | `390 / (192 + 24)` = 1.8056 | `390 / (192 + 8)` = **1.95** |
+| `scene-draw.test.ts:834` (`expected 1.95 to be 1.8056`) | 1.8056 | 1.95 |
+| `scene-draw.test.ts:1079` (pulse row) | `[3.5, …]` | `[4, 4, 5, 5, 4, 4]` |
+| `silhouette.test.ts:216` (wreck ellipse `+0` vs `1`) | alpha `+0` | `1` |
+| `D-4` min painted feature (phone sweep row, scale 1.8056) | — | **5.4168 px** (3-unit marks); desktop 12 px |
+
+No witness deleted; every row is the re-measured value of the same instrument.
+
+## Row 2 — clip witness restored: already fixed by `3f911fee`
+
+`scripts/capture-clip.mjs` takes the box sizes off `mod.fitCamera(view, insets).scale`
+(line 112, `near(v, units, tol) => |v − units·S| ≤ tol`) instead of pinning 11×7 px at the old
+1.8056 fit, and the chrome band is null-guarded (`hudBox && dockBox && … : undefined`).
+Both clip files regenerate with exit 0 at this tip:
+
+| file | frames | distinct PNG hashes | distinct drone positions | step min/max/mean (CSS px) |
+| --- | --- | --- | --- | --- |
+| `docs/evidence/2026-11-04-clip-opening-250ms.json` | 26 | **26** | **26** | 0 / 117 / 82.9 |
+| `docs/evidence/2026-11-06-art003-clip.json` | 26 | **26** | **26** | 0 / 113.5 / 85.68 |
+
+26/26 rows carry a non-null `droneBodyCssPx` (the earlier run had 24 distinct positions; the
+atlas `drawImage` path lifted it to 26).
+
+## Row 3 — committed evidence regenerated at this SHA (chromium, my vite on 5177)
+
+`docs/evidence/2026-11-06-art003-census-after.json` (exit 0): `bandFit.scale` **1.95**, plate
+**204.6 … 641.4** CSS px, `gapAbove 148.6 / gapBelow 148.6`, `minFacePx 44`, `scrolls false`,
+`pageErrors 0`. Cell ink (`inkSharePct / inkPctOfCellArea`): sorter@8 63.9 / 63.13, furnace@14
+61 / 61.15, dock@2 67 / 66.13, wreck 99.9 / 149.52. `scripts/art003-silhouette.mjs` (needs
+`npx tsx`, not bare `node` — an extensionless import): `a3_1` unit grid min **48.2**, mean
+**57.83** (base 48.69); aligned 58×58 pixel sheet min **46**, mean **57.79**, max 69.6 (base min
+31.8 / mean 49.3); plate fit 1.95 / [204.6, 641.4] vs base 1.8056 / [219.78, 624.22].
+
+## Row 4 — `circuitAssembler` contact shadow: **fixed now**
+
+Bar moved `[-12, 12, 24, 3, 3] → [-12, 9, 24, 3, 3]` (mask row 7 → 6), so it no longer
+overpaints the ellipse in rows 12–14. Per-machine `contactShadowPx`, from the mature
+8-machine field (`CENSUS_FLEET=template` →
+`docs/evidence/2026-11-06-art003-census-afterfleet.json`):
+
+| machine | px | note |
+| --- | --- | --- |
+| sorter@0 | **108** | |
+| furnace@1 | **87** | |
+| polymerRecycler@3 | **104** | |
+| copperSeparator@4 | **108** | |
+| wireMill@5 | **123** | |
+| platePress@6 | **95** | |
+| **circuitAssembler@7** | **81** | was **0** |
+| signalLab@8 | **42** | lowest: its plinth bar covers the ellipse's middle |
+| dock@2 | **121** | QA's 113 |
+| wreck | **6** | its own 6-unit hull box (QA's 320 is the 24×16 box) |
+
+Nine of nine machine rows non-zero; field total 931 px.
+
+## Row 5 — D1 band row: **fixed now**, lever = horizon bands in the gutters (one lever)
+
+`SKY_NEAR` gained a far-bank tier (`path`, y −26) and a lit bank line (`steelLight`, y −18);
+`APRON_TOPS` gained three 2-unit `bodyLight` rails at y 236 / 248 / 260; the sheen group now
+fills at alpha 1 (was 0.9). World height untouched at 224 units. 8-band luminance histogram of
+the live canvas, same instrument:
+
+| run | b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| before (`d84f69e`, FS-1) | 96.4 | 0.5 | 2.2 | 0.4 | 0.3 | 0 | 0.1 | **0** |
+| after (FS-1) | 94.8 | 0.5 | 2.5 | 1.6 | 0.3 | 0 | 0 | **0.2** |
+| after (mature 8-machine field) | 92.5 | 0.7 | 3.2 | 2.6 | 0.7 | 0 | 0 | **0.4** |
+
+Both outer bands are non-zero on both fields and six bands are populated. The new
+`gutters.above` / `gutters.below` census rows read buckets `{0,2}` (4158 horizon px) and
+`{0,3}`; `steelLightPx 1767`. Flatness rows all moved the right way: `twoDarkestSharePct`
+96.9 → 95.3, `twoTopColorsSharePct` 84.6 → 82.1, `gridInkSharePct` 0.13. Ceilings after the
+extra rows: `D1/D3 rest 83 / build 86 / mature 230` (caps 84 / 96 / 231; `L-5` ratio 7.76,
+min 10.39 / max 80.65 over 12 cells).
+
+## Row 6 — entry bytes, re-printed after rows 4–5
+
+| tree | entry asset | bytes | Δ vs deployed 231943 |
+| --- | --- | --- | --- |
+| `d84f69e` (vector only) | `index-D0YBP7rj.js` | 232306 | +363 |
+| `e8abe4b` (+ pilot atlas page) | `index-CTxDTIY8.js` | 232922 | +979 |
+| **this tip** (atlas + QA-4 bar move + D1 rails) | `index-NaDxD6XG.js` | **232825** | **+882** |
+
+Ceiling 233000 B → **175 B headroom**. The `ATLAS_IDS` literal became `Object.keys(PARTS)`
+(−97 B) to pay for the D1 rows. `schemaVersion 1`, checksum `eede3c4f` and the behaviour line
+untouched (`npm run validate` exit 0: `firstDrone=268 firstResearch=478 tick=18298 machines=8
+links=18 drones=5 batches=1902 credits=82 nodes=3`).
+
+## Gate rows for this tip
+
+`npm run typecheck` 0 · `npx vitest run` **28 files / 294 tests, 0 failures** · `npm run
+validate` 0 · `npm run build` 0 with `index-NaDxD6XG.js` **232825 B**.
+Renderer witness rows: `A3-1 pairs=15 nowMean=57.83 min=48.2 baseMean=48.69`; `A3-4 machineInk
+total=3001 baseTotal=2752`; `D-4 minFeaturePhone 5.4168`; `G-1 minPairHamming=12
+latticeFamilyMinHamming=18`; `circuitAssembler` phone ink box 98×97.
+
+## Which rows were already fixed earlier
+
+* **Row 1** (stale `SCALE`, all four failing cases) — already fixed at `d84f69e` / `3f911fee`.
+* **Row 2** (scale-relative clip tolerance, chrome-band guard) — already fixed at `3f911fee`,
+  re-printed here.
+* **Row 3** — partly in `d02d985` (census-after, clip, stills); the silhouette json was missing
+  (`node` vs `npx tsx`), regenerated now.
+* **Row 4** (`circuitAssembler` 0 px) — **fixed in this pass**.
+* **Row 5** (D1 8-band, both outers non-zero) — **fixed in this pass**.
+* **Row 6** (byte re-print) — this pass.
+
+## Limitations added by this pass
+
+* Band 5 and band 6 stay at 0 % on both fields: with the world 224 units tall and the width
+  term maxed at 455 px the ramp only populates six steps, so the top two stay empty until the
+  plate gains a lighter body tone (next ink-budget item).
+* `scripts/art003-silhouette.mjs` must be run with `npx tsx` (extensionless import fails under
+  bare `node`) — noted here because that is how the file went stale.
+* `probe-catchup.mjs` (`103155 → 108136 ms`) still needs `vite preview` on 4173; not re-run.
+* `drawSpriteSheet`'s band scale is still the hard-coded 1.8056 (documented carry-over).

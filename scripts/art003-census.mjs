@@ -107,7 +107,8 @@ const CENSUS = (extra) => {
       return [Math.round(p.x - half), Math.round(p.y - half), Math.round(p.x + half), Math.round(p.y + half)];
     };
     const cells = {};
-    for (const [name, tile] of [["sorter8", 8], ["furnace14", 14], ["dock2", 2], ...(extra || [])]) {
+    const list = extra && extra.length ? extra : [["sorter8", 8], ["furnace14", 14], ["dock2", 2]];
+    for (const [name, tile] of list) {
       const b = box(tile);
       cells[name] = { box: b, ...region(...b) };
     }
@@ -308,19 +309,29 @@ const run = async () => {
   const env = JSON.parse(JSON.stringify(template));
   env.payload.sim.tick = 344;
   env.payload.sim.tutorial = 9;
-  // CENSUS_FLEET puts every machine blueprint on the field (one per row) so the per-box
-  // shadow counts QA-4 asks for exist for all nine rows, not only the FS-1 pair.
+  // CENSUS_FLEET=template keeps the mature template's eight-machine field (one row per
+  // blueprint, so the per-box shadow counts QA-4 asks for exist for all of them);
+  // CENSUS_FLEET=1 appends seven synthetic machines to the FS-1 pair instead.
+  const base3 = [["sorter8", 8], ["furnace14", 14], ["dock2", 2]];
   const fleet = [["wireMill", 20], ["signalLab", 21], ["generic", 27], ["polymerRecycler", 33], ["copperSeparator", 9], ["platePress", 15], ["circuitAssembler", 26]];
+  let extra = [];
   env.payload.sim.machines = [part(1, "sorter", 8, "running", 0), part(2, "furnace", 14, "outputFull", 1)];
-  if (process.env.CENSUS_FLEET) {
+  if (process.env.CENSUS_FLEET === "template") {
+    env.payload.sim.machines = template.payload.sim.machines;
+    env.payload.sim.routes = template.payload.sim.routes;
+    extra = [...template.payload.sim.machines.map((m) => [`${m.blueprint}${m.tile}`, m.tile]), ["dock2", 2]];
+  } else if (process.env.CENSUS_FLEET) {
     fleet.forEach(([bp, tile], i) => env.payload.sim.machines.push(part(3 + i, bp, tile, "running", 0)));
+    extra = [...base3, ...fleet.map(([bp, tile]) => [`${bp}${tile}`, tile])];
   }
-  env.payload.sim.routes = [
-    { id: 1, from: { kind: "store" }, to: { kind: "machine", id: 1 }, filter: "scrap",
-      capacity: 5, latency: 5, items: [{ resource: "scrap", qty: 1, arrive: 344 }], inFlight: 1 },
-    { id: 2, from: { kind: "machine", id: 1 }, to: { kind: "machine", id: 2 }, filter: "ferrous",
-      capacity: 5, latency: 5, items: [{ resource: "ferrous", qty: 1, arrive: 345 }], inFlight: 1 },
-  ];
+  if (process.env.CENSUS_FLEET !== "template") {
+    env.payload.sim.routes = [
+      { id: 1, from: { kind: "store" }, to: { kind: "machine", id: 1 }, filter: "scrap",
+        capacity: 5, latency: 5, items: [{ resource: "scrap", qty: 1, arrive: 344 }], inFlight: 1 },
+      { id: 2, from: { kind: "machine", id: 1 }, to: { kind: "machine", id: 2 }, filter: "ferrous",
+        capacity: 5, latency: 5, items: [{ resource: "ferrous", qty: 1, arrive: 345 }], inFlight: 1 },
+    ];
+  }
   env.payload.sim.store.data = 20;
   env.payload.sim.storeUnits = 770;
   env.payload.sim.storeCapacity = 900;
@@ -336,7 +347,7 @@ const run = async () => {
   await page.evaluate(() => {
     window.__art003 = import("/src/game/renderer/scene.ts");
   });
-  const scene = await page.evaluate(CENSUS, process.env.CENSUS_FLEET ? fleet : []);
+  const scene = await page.evaluate(CENSUS, extra);
   const witnesses = await page.evaluate(() => {
     const faces = [...document.querySelectorAll("button")].map((b) => {
       const r = b.getBoundingClientRect();
