@@ -1,6 +1,6 @@
 {
   "tag": "after",
-  "url": "http://localhost:5176/",
+  "url": "http://localhost:5177/",
   "scene": {
     "canvas": [
       390,
@@ -8,30 +8,30 @@
     ],
     "topColors": [
       "11,18,32 48.5%",
-      "34,56,74 36%",
+      "34,56,74 36.1%",
       "8,13,24 4.3%",
-      "44,66,87 2.2%",
+      "44,66,87 2.1%",
       "127,159,187 1.3%",
       "22,40,58 1.2%",
       "16,27,40 1%",
       "109,144,171 0.6%",
-      "138,169,196 0.5%",
       "53,86,107 0.4%",
       "14,23,38 0.3%",
+      "138,169,196 0.3%",
       "14,23,36 0.3%"
     ],
     "luminanceBuckets8": [
       96.4,
       0.5,
-      2,
-      0.6,
+      2.2,
+      0.4,
       0.3,
       0,
-      0.2,
+      0.1,
       0
     ],
-    "twoDarkestSharePct": 97,
-    "twoTopColorsSharePct": 84.5,
+    "twoDarkestSharePct": 96.9,
+    "twoTopColorsSharePct": 84.6,
     "cells": {
       "sorter8": {
         "box": [
@@ -50,9 +50,9 @@
           6,
           7
         ],
-        "inkPx": 2462,
-        "inkSharePct": 64,
-        "inkPctOfCellArea": 63.23
+        "inkPx": 2458,
+        "inkSharePct": 63.9,
+        "inkPctOfCellArea": 63.13
       },
       "furnace14": {
         "box": [
@@ -70,9 +70,9 @@
           6,
           7
         ],
-        "inkPx": 2490,
-        "inkSharePct": 63.7,
-        "inkPctOfCellArea": 63.95
+        "inkPx": 2383,
+        "inkSharePct": 61,
+        "inkPctOfCellArea": 61.2
       },
       "dock2": {
         "box": [
@@ -129,9 +129,9 @@
         6,
         7
       ],
-      "inkPx": 7527,
-      "inkSharePct": 64.9,
-      "inkPctOfCellArea": 193.31
+      "inkPx": 7416,
+      "inkSharePct": 64,
+      "inkPctOfCellArea": 190.46
     },
     "bandFit": {
       "scale": 1.95,
@@ -153,14 +153,14 @@
       "legacyGapAbove": 147.6,
       "legacyGapBelow": 149.6
     },
-    "gridDotPx": 74,
-    "gridDotSharePct": 0.02,
-    "gridDotAlphaPx": 405,
+    "gridDotPx": 39,
+    "gridDotSharePct": 0.01,
+    "gridDotAlphaPx": 404,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.15,
-    "machineBodyPx": 1692,
-    "machineBodySharePct": 0.51,
-    "contactShadowPx": 468
+    "gridInkSharePct": 0.13,
+    "machineBodyPx": 1075,
+    "machineBodySharePct": 0.33,
+    "contactShadowPx": 453
   },
   "sheet": {
     "roles": 11,
@@ -239,9 +239,9 @@
     "inkPx": {
       "dock": 9060,
       "sorter": 9348,
-      "furnace": 9088,
-      "wireMill": 8776,
-      "signalLab": 6420,
+      "furnace": 8380,
+      "wireMill": 8768,
+      "signalLab": 7484,
       "drone": 1378
     },
     "matrix": [
@@ -251,15 +251,15 @@
       ],
       [
         "dock/furnace",
-        60.7
+        62.5
       ],
       [
         "dock/wireMill",
-        65.7
+        68
       ],
       [
         "dock/signalLab",
-        67.1
+        66.9
       ],
       [
         "dock/drone",
@@ -267,15 +267,15 @@
       ],
       [
         "sorter/furnace",
-        35.3
+        56.8
       ],
       [
         "sorter/wireMill",
-        45.4
+        51.3
       ],
       [
         "sorter/signalLab",
-        49.1
+        59.2
       ],
       [
         "sorter/drone",
@@ -283,7 +283,7 @@
       ],
       [
         "furnace/wireMill",
-        40.1
+        63.7
       ],
       [
         "furnace/signalLab",
@@ -291,19 +291,19 @@
       ],
       [
         "furnace/drone",
-        55.6
+        50.9
       ],
       [
         "wireMill/signalLab",
-        45.3
+        58.1
       ],
       [
         "wireMill/drone",
-        54.3
+        54.6
       ],
       [
         "signalLab/drone",
-        39.1
+        45.5
       ]
     ]
   },

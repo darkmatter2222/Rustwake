@@ -1,0 +1,262 @@
+{
+  "task": "ART-003 g1 silhouette-first world pass",
+  "generatedBy": "scripts/art003-silhouette.mjs",
+  "instrumentNote": "unit grid = 32x32 gray-ramp cell grid over the shipped PARTS tables (tests/renderer/silhouette.test.ts A3-1); aligned sheet = 58x58 pixel window per role in the dpr1 grayscale sheet (scripts/art003-census.mjs)",
+  "a3_1": {
+    "requirement": "every pairwise differing-pixel fraction exceeds the base-measured value",
+    "unitGrid": {
+      "pairs": 15,
+      "meanNow": 56.41,
+      "meanBase": 48.69,
+      "minNow": 46.8,
+      "minBase": 28.9,
+      "pairsAboveBase": 14
+    },
+    "alignedPixelSheet": {
+      "roleWindowPx": [
+        58,
+        58
+      ],
+      "now": {
+        "pairs": 0,
+        "mean": null,
+        "min": null,
+        "max": null
+      },
+      "base": {
+        "pairs": 0,
+        "mean": null,
+        "min": null,
+        "max": null
+      },
+      "pairsImproved": 11
+    }
+  },
+  "a3_2": {
+    "requirement": "furnace / sorter / wire mill named from label-free 390 px crops",
+    "method": "two blind passes over docs/screenshots/naming-<n>.png, each crop named from the six opening role names with no label in view; pass A in file order, pass B in reverse order",
+    "limitation": "both passes are the same single model in different orders, not two independent human raters",
+    "passes": {
+      "A": {
+        "order": [
+          "naming-1.png",
+          "naming-2.png",
+          "naming-3.png"
+        ],
+        "results": [
+          {
+            "file": "naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "wide body, a dark reel hole on each side with a light stand under it, three-step diagonal arm into a rust tip above"
+          },
+          {
+            "file": "naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "tall frame with six dark roller discs in two rows of three, chutes along the bottom, one wedge in the select tone"
+          },
+          {
+            "file": "naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "squat chamber with two stacked intake slots on the left, chimney stub and rust cap bar proud of the cap line, rust vent foot"
+          }
+        ],
+        "correct": 3
+      },
+      "B": {
+        "order": [
+          "naming-3.png",
+          "naming-2.png",
+          "naming-1.png"
+        ],
+        "results": [
+          {
+            "file": "naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "two stacked dark slots inside a squat light chamber, chimney plus rust cap above it, rust foot below"
+          },
+          {
+            "file": "naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "2x3 grid of dark discs in a full-height frame plus a chute row - only role with six discs"
+          },
+          {
+            "file": "naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "paired reel holes and stands either side of the body, stepped tension arm - no chimney"
+          }
+        ],
+        "correct": 3
+      }
+    },
+    "agreement": 3,
+    "total": 3
+  },
+  "a3_3": {
+    "requirement": ">=3 luminance bands inside one machine box, contact shadow under every footprint, one light direction",
+    "luminanceBucketsInsideMachineBoxes": {
+      "sorter8": 8,
+      "furnace14": 7,
+      "dock2": 5,
+      "wreck": 6
+    },
+    "luminanceBucketsInsideMachineBoxesBase": {
+      "sorter8": 8,
+      "furnace14": 7,
+      "dock2": 5,
+      "wreck": 7
+    },
+    "contactShadowPx": {
+      "base": 246,
+      "now": 468
+    },
+    "note": "base painted one flat fill per body (1 band); the ellipse row is tuple slot 5 in every static PARTS row plus the wreck path"
+  },
+  "a3_4": {
+    "requirement": "grid ink share falls versus base while machine ink rises; both printed",
+    "gridInkSharePct": {
+      "base": 0.53,
+      "now": 0.15
+    },
+    "machineRowInkPx": {
+      "base": 6341,
+      "now": 7527
+    },
+    "machineRowInkSharePct": {
+      "base": 63.2,
+      "now": 64.9
+    },
+    "cellInkPctOfCellArea": {
+      "base": {
+        "sorter8": 64.73,
+        "furnace14": 57.66,
+        "dock2": 67.55,
+        "wreck": 146.84
+      },
+      "now": {
+        "sorter8": 63.23,
+        "furnace14": 63.95,
+        "dock2": 66.13,
+        "wreck": 149.52
+      },
+      "note": "normalised to the 32-unit cell area so the two fitted scales are comparable"
+    },
+    "sixRoleSolidInkUnits": {
+      "base": 2752,
+      "now": 2911
+    },
+    "gravelTicks": {
+      "base": 72,
+      "now": 36
+    },
+    "twoDarkestSharePct": {
+      "base": 97.4,
+      "now": 97
+    },
+    "bucket0SharePct": {
+      "base": 96.5,
+      "now": 96.4
+    }
+  },
+  "a3_5": {
+    "requirement": "the four existing witnesses still pass: no scroll, >=44 px faces, 26/26 distinct 250 ms frames, 0 pageerror",
+    "scrollHeight": {
+      "base": 844,
+      "now": 844
+    },
+    "innerHeight": {
+      "base": 844,
+      "now": 844
+    },
+    "scrolls": {
+      "base": false,
+      "now": false
+    },
+    "minFacePx": {
+      "base": 44,
+      "now": 44
+    },
+    "clip": {
+      "base": {
+        "frames": 26,
+        "distinctPngHashes": 26,
+        "distinctDronePositions": 26,
+        "stepCssPxMean": 76.38,
+        "stepCssPxMax": 102.5
+      },
+      "now": {
+        "frames": 26,
+        "distinctPngHashes": 26,
+        "distinctDronePositions": 26,
+        "stepCssPxMean": 83.66,
+        "stepCssPxMax": 117.5
+      }
+    },
+    "pageErrors": {
+      "base": 0,
+      "now": 0
+    }
+  },
+  "a3_6": {
+    "requirement": "validate behaviour line unchanged, schemaVersion 1, checksum eede3c4f, tests green, entry chunk <= 233000 B",
+    "entryChunkBytes": 232306,
+    "entryChunkCeiling": 233000,
+    "entryChunkBaseBytes": 231878,
+    "entryChunkDeltaBytes": 428
+  },
+  "plate": {
+    "requirement": "the plate must not float in the dead-black band",
+    "fit": {
+      "scale": 1.95,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        204.6,
+        641.4
+      ],
+      "gapAbove": 148.6,
+      "gapBelow": 148.6,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        203.6,
+        640.4
+      ],
+      "legacyGapAbove": 147.6,
+      "legacyGapBelow": 149.6
+    },
+    "fitBase": {
+      "scale": 1.8056,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        219.78,
+        624.22
+      ],
+      "gapAbove": 163.78,
+      "gapBelow": 165.78,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        218.78,
+        623.22
+      ],
+      "legacyGapAbove": 162.78,
+      "legacyGapBelow": 166.78
+    },
+    "bindingConstraint": "the phone fit is min(4, 390 / (WORLD_W + 8)); a zero-gutter fit is 224/192 * 390 = 455 px = 53.9 % of the 844 px viewport, so 60 % of the viewport is unreachable while the whole 224-unit-tall world must stay on screen"
+  }
+}
