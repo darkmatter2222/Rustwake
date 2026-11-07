@@ -1,0 +1,4715 @@
+{
+ "budgetSeconds": 180,
+ "cadenceMs": 1000,
+ "viewport": "390x844@2 isMobile hasTouch",
+ "url": "https://home.darkmatter2222.com/rustwake/",
+ "summary": {
+  "policy": "deliberate-v2",
+  "taps": 178,
+  "wallSec": 181,
+  "finalTick": 1810,
+  "simMinutes": 3,
+  "machines": 5,
+  "links": 10,
+  "batches": 52,
+  "credits": 8,
+  "storeUnits": 67,
+  "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+  "batchesPerSimHour": 1034,
+  "creditsPerSimHour": 159,
+  "batchesPerWallMin": 17.2,
+  "appliedCommands": 37,
+  "noopTaps": 142,
+  "noInputLabelTaps": 0,
+  "forkPicks": [
+   {
+    "tap": 100,
+    "picked": "Less power30 credits",
+    "price": 30,
+    "pct": 100
+   }
+  ],
+  "finalRow": [
+   "Cancel",
+   "Build Plate press35 scrap + 8 ferrous",
+   "Next"
+  ],
+  "finalObjective": "Build Plate press · 35 scrap + 8 ferrous",
+  "finalStatus": [
+   "Ghost on cell 4 · tap again to place",
+   "Drones 1 · Power 8 · 1 requested · 100 % · Last need 8 ferrous · have 3"
+  ]
+ },
+ "timeline": [
+  {
+   "n": 1,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 10,
+   "rev": 1,
+   "revDelta": null,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Keep salvaging: 1/6 pulses for the drone repair.",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 2,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 20,
+   "rev": 2,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Keep salvaging: 2/6 pulses for the drone repair.",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 3,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 30,
+   "rev": 3,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Keep salvaging: 3/6 pulses for the drone repair.",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 4,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 40,
+   "rev": 4,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 20,
+   "power": 1,
+   "levels": "",
+   "obj": "Keep salvaging: 4/6 pulses for the drone repair.",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 5,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 50,
+   "rev": 5,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 25,
+   "power": 1,
+   "levels": "",
+   "obj": "Keep salvaging: 5/6 pulses for the drone repair.",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 6,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 60,
+   "rev": 6,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 30,
+   "power": 1,
+   "levels": "",
+   "obj": "Repair your recovery drone · 30 scrap",
+   "status": [
+    "Tap Salvage until the drone repair is affordable.",
+    "Drones 0 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Repair drone30 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 7,
+   "label": "Repair drone30 scrap",
+   "why": "primary",
+   "tick": 70,
+   "rev": 7,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Your drone now works for you.",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 8,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 80,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Your drone now works for you.",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 9,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 90,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Your drone now works for you.",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0"
+   ],
+   "toast": "Need 20 scrap · have 0",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 10,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 100,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Your drone now works for you.",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 11,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 110,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Your drone now works for you.",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0"
+   ],
+   "toast": "Need 20 scrap · have 0",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 12,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 120,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 13,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 130,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": "Need 20 scrap · have 5",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 14,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 140,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 15,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 150,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": "Need 20 scrap · have 5",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 16,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 160,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 17,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 170,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": "Need 20 scrap · have 5",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 18,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 180,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 5"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 19,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 190,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 10"
+   ],
+   "toast": "Need 20 scrap · have 10",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 20,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 200,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 10"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 21,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 210,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 10"
+   ],
+   "toast": "Need 20 scrap · have 10",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 22,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 220,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 10"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 23,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 230,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": "Need 20 scrap · have 15",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 24,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 240,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 25,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 250,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": "Need 20 scrap · have 15",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 26,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 260,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 27,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 270,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 15,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Open Build and place the sorter on a lit cell.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": "Need 20 scrap · have 15",
+   "dock": [
+    "Store",
+    "Build Scrap sorter20 scrap",
+    "Build"
+   ]
+  },
+  {
+   "n": 28,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 280,
+   "rev": 7,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 0,
+   "links": 0,
+   "storeUnits": 20,
+   "power": 1,
+   "levels": "",
+   "obj": "Build a sorter · 20 scrap",
+   "status": [
+    "Ghost on cell 8 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Scrap sorter20 scrap",
+    "Next"
+   ]
+  },
+  {
+   "n": 29,
+   "label": "Build Scrap sorter20 scrap",
+   "why": "primary",
+   "tick": 290,
+   "rev": 8,
+   "revDelta": 1,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 0,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Connect the dock to the sorter.",
+   "status": [
+    "Draw the route so cargo has somewhere to go.",
+    "Drones 1 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Connect dock to sorter",
+    "Build"
+   ]
+  },
+  {
+   "n": 30,
+   "label": "Connect dock to sorter",
+   "why": "primary",
+   "tick": 300,
+   "rev": 10,
+   "revDelta": 2,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 31,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 310,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 32,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 320,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 0,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 0"
+   ],
+   "toast": "Need 10 scrap · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 33,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 330,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 34,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 340,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 5"
+   ],
+   "toast": "Need 10 scrap · have 5",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 35,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 350,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 5"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 36,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 360,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 5"
+   ],
+   "toast": "Need 10 scrap · have 5",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 37,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 370,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 5,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 5"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 38,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 380,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 39,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 390,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 40,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 400,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 41,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 410,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 42,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 420,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 0 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 43,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 430,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 44,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 440,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 45,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 450,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 46,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 460,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 0,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 47,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 470,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 1,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 10,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 48,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 480,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 1,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 49,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 490,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 1,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 50,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 500,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 1,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 51,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 510,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 2,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 12,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 52,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 520,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 2,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 53,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 530,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 2,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 19,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 54,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 550,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 3,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 17,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 55,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 560,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 3,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 19,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 56,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 570,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 3,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 19,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": "Need 5 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 57,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 580,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 3,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 24,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 58,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 590,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 4,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 22,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": "Need 5 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 59,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 600,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 4,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 24,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 60,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 610,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 4,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 24,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": "Need 5 ferrous · have 4",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 61,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 620,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 4,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 24,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 62,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 630,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 5,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 27,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": "Need 5 ferrous · have 4",
+   "dock": [
+    "Store",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 63,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 640,
+   "rev": 10,
+   "revDelta": 0,
+   "batches": 5,
+   "credits": 0,
+   "machines": 1,
+   "links": 2,
+   "storeUnits": 29,
+   "power": 1,
+   "levels": "sorter:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Ghost on cell 9 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Furnace10 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 64,
+   "label": "Build Furnace10 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 650,
+   "rev": 11,
+   "revDelta": 1,
+   "batches": 5,
+   "credits": 0,
+   "machines": 2,
+   "links": 2,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Connect sorter to furnace",
+    "Build"
+   ]
+  },
+  {
+   "n": 65,
+   "label": "Connect sorter to furnace",
+   "why": "primary",
+   "tick": 660,
+   "rev": 13,
+   "revDelta": 2,
+   "batches": 5,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 14,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 66,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 670,
+   "rev": 14,
+   "revDelta": 1,
+   "batches": 6,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 17,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 67,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 680,
+   "rev": 15,
+   "revDelta": 1,
+   "batches": 6,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 28,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 68,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 690,
+   "rev": 16,
+   "revDelta": 1,
+   "batches": 6,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 33,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 69,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 700,
+   "rev": 17,
+   "revDelta": 1,
+   "batches": 6,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 70,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 710,
+   "rev": 18,
+   "revDelta": 1,
+   "batches": 7,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 41,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 71,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 720,
+   "rev": 19,
+   "revDelta": 1,
+   "batches": 7,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 47,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 72,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 730,
+   "rev": 20,
+   "revDelta": 1,
+   "batches": 7,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 57,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 73,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 740,
+   "rev": 21,
+   "revDelta": 1,
+   "batches": 7,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 62,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 74,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 750,
+   "rev": 22,
+   "revDelta": 1,
+   "batches": 8,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 65,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Refine metal into trade goods · build a furnace",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Salvage",
+    "Build"
+   ]
+  },
+  {
+   "n": 75,
+   "label": "Salvage",
+   "why": "primary",
+   "tick": 760,
+   "rev": 23,
+   "revDelta": 1,
+   "batches": 9,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 72,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 76,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 770,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 9,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 72,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": "Need 3 steel · have 1",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 77,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 780,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 9,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 77,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 78,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 790,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 10,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 75,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": "Need 3 steel · have 1",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 79,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 800,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 10,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 76,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 80,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 810,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 10,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 76,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": "Need 3 steel · have 1",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 81,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 820,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 10,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 76,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 82,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 830,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 11,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 79,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": "Need 3 steel · have 1",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 83,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 840,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 12,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 81,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 84,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 850,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 12,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 81,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": "Need 3 steel · have 2",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 85,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 860,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 12,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 81,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 86,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 870,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 13,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 79,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": "Need 3 steel · have 2",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 87,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 880,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 13,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 85,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 88,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 890,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 13,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 85,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": "Need 3 steel · have 2",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 89,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 900,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 13,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 85,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "Pick a machine and upgrade its speed.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 90,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 910,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 14,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 83,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": "Need 3 steel · have 2",
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 91,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 920,
+   "rev": 23,
+   "revDelta": 0,
+   "batches": 15,
+   "credits": 0,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 85,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Sell your first steel · 3 steel for 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 steel · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Sell steel3 steel · 30 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 92,
+   "label": "Sell steel3 steel · 30 credits",
+   "why": "primary",
+   "tick": 930,
+   "rev": 24,
+   "revDelta": 1,
+   "batches": 15,
+   "credits": 30,
+   "machines": 2,
+   "links": 4,
+   "storeUnits": 87,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Connect Scrap sorter so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 93,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 940,
+   "rev": 25,
+   "revDelta": 1,
+   "batches": 15,
+   "credits": 30,
+   "machines": 2,
+   "links": 5,
+   "storeUnits": 87,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Build Polymer recycler · 25 scrap + 5 nonferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Build Polymer recycler25 scrap + 5 nonferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 94,
+   "label": "Build Polymer recycler25 scrap + 5 nonferrous",
+   "why": "primary",
+   "tick": 950,
+   "rev": 25,
+   "revDelta": 0,
+   "batches": 16,
+   "credits": 30,
+   "machines": 2,
+   "links": 5,
+   "storeUnits": 85,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1",
+   "obj": "Build Polymer recycler · 25 scrap + 5 nonferrous",
+   "status": [
+    "Ghost on cell 0 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Polymer recycler25 scrap + 5 nonferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 95,
+   "label": "Build Polymer recycler25 scrap + 5 nonferrous",
+   "why": "primary",
+   "tick": 960,
+   "rev": 26,
+   "revDelta": 1,
+   "batches": 16,
+   "credits": 30,
+   "machines": 3,
+   "links": 5,
+   "storeUnits": 56,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1 polymerRecycler:L1",
+   "obj": "Connect Polymer recycler so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 96,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 970,
+   "rev": 27,
+   "revDelta": 1,
+   "batches": 16,
+   "credits": 30,
+   "machines": 3,
+   "links": 6,
+   "storeUnits": 56,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1 polymerRecycler:L1",
+   "obj": "Build Wire mill · 30 scrap + 6 nonferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Build Wire mill30 scrap + 6 nonferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 97,
+   "label": "Build Wire mill30 scrap + 6 nonferrous",
+   "why": "primary",
+   "tick": 980,
+   "rev": 27,
+   "revDelta": 0,
+   "batches": 16,
+   "credits": 30,
+   "machines": 3,
+   "links": 6,
+   "storeUnits": 61,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1 polymerRecycler:L1",
+   "obj": "Build Wire mill · 30 scrap + 6 nonferrous",
+   "status": [
+    "Ghost on cell 1 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Wire mill30 scrap + 6 nonferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 98,
+   "label": "Build Wire mill30 scrap + 6 nonferrous",
+   "why": "primary",
+   "tick": 990,
+   "rev": 28,
+   "revDelta": 1,
+   "batches": 17,
+   "credits": 30,
+   "machines": 4,
+   "links": 6,
+   "storeUnits": 23,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Connect Wire mill so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 99,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 1000,
+   "rev": 29,
+   "revDelta": 1,
+   "batches": 18,
+   "credits": 30,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 25,
+   "power": 1,
+   "levels": "sorter:L1 furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Choose what improves on the Scrap sorter · 30 credits",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Less power30 credits",
+    "Faster batches40 credits"
+   ]
+  },
+  {
+   "n": 100,
+   "label": "Less power30 credits",
+   "why": "fork 100% power -> Less power30 credits @30",
+   "tick": 1010,
+   "rev": 30,
+   "revDelta": 1,
+   "batches": 18,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 25,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 101,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1020,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 18,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 25,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 102,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1030,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 19,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 28,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 103,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1040,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 19,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 29,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 104,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1050,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 19,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 29,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 25 scrap · have 24"
+   ],
+   "toast": "Need 25 scrap · have 24",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 105,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1060,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 19,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 29,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 25 scrap · have 24"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 106,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1070,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 20,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 27,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 25 scrap · have 24"
+   ],
+   "toast": "Need 25 scrap · have 24",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 107,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1080,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 21,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 34,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 25 scrap · have 24"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 108,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1090,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 21,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 34,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 109,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1100,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 21,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 34,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 110,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1110,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 22,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 32,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 111,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1120,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 22,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 33,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 112,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1130,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 22,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 113,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1140,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 22,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 114,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1150,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 23,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 36,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": "Need 5 ferrous · have 0",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 115,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1170,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 24,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 39,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 0"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 116,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1180,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 24,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 44,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 117,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1190,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 25,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 42,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 118,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1200,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 25,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 43,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 119,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1210,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 25,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 43,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 120,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1220,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 25,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 43,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 121,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1230,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 26,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 46,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 122,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1240,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 26,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 48,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": "Need 5 ferrous · have 1",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 123,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1250,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 26,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 48,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 1"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 124,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1260,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 26,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 48,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 125,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1270,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 27,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 46,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 126,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1280,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 27,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 52,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 127,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1290,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 27,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 52,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 128,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1300,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 27,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 52,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 129,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1310,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 28,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 50,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 130,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1320,
+   "rev": 30,
+   "revDelta": 0,
+   "batches": 29,
+   "credits": 0,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 53,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Sell 1 Nonferrous for 2 credits.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 2"
+   ],
+   "toast": "Need 5 ferrous · have 2",
+   "dock": [
+    "Store",
+    "Yard",
+    "Sell 1 Nonferrous+2 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 131,
+   "label": "Sell 1 Nonferrous+2 credits",
+   "why": "primary",
+   "tick": 1330,
+   "rev": 31,
+   "revDelta": 1,
+   "batches": 29,
+   "credits": 2,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 57,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 132,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1340,
+   "rev": 31,
+   "revDelta": 0,
+   "batches": 29,
+   "credits": 2,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 57,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 133,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1350,
+   "rev": 31,
+   "revDelta": 0,
+   "batches": 30,
+   "credits": 2,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 55,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Sell 1 Nonferrous for 2 credits.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": "Need 5 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Yard",
+    "Sell 1 Nonferrous+2 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 134,
+   "label": "Sell 1 Nonferrous+2 credits",
+   "why": "primary",
+   "tick": 1360,
+   "rev": 32,
+   "revDelta": 1,
+   "batches": 30,
+   "credits": 4,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 55,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 135,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1370,
+   "rev": 32,
+   "revDelta": 0,
+   "batches": 30,
+   "credits": 4,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 55,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 136,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1380,
+   "rev": 32,
+   "revDelta": 0,
+   "batches": 30,
+   "credits": 4,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 60,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": "Need 5 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 137,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1390,
+   "rev": 32,
+   "revDelta": 0,
+   "batches": 31,
+   "credits": 4,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 58,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Sell 1 Nonferrous for 2 credits.",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 3"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 138,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1400,
+   "rev": 32,
+   "revDelta": 0,
+   "batches": 31,
+   "credits": 4,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 60,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Sell 1 Nonferrous for 2 credits.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": "Need 5 ferrous · have 4",
+   "dock": [
+    "Store",
+    "Yard",
+    "Sell 1 Nonferrous+2 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 139,
+   "label": "Sell 1 Nonferrous+2 credits",
+   "why": "primary",
+   "tick": 1410,
+   "rev": 33,
+   "revDelta": 1,
+   "batches": 31,
+   "credits": 6,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 59,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 140,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1420,
+   "rev": 33,
+   "revDelta": 0,
+   "batches": 31,
+   "credits": 6,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 59,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 141,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1430,
+   "rev": 33,
+   "revDelta": 0,
+   "batches": 32,
+   "credits": 6,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 62,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Sell 1 Nonferrous for 2 credits.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": "Need 5 ferrous · have 4",
+   "dock": [
+    "Store",
+    "Yard",
+    "Sell 1 Nonferrous+2 credits",
+    "Build"
+   ]
+  },
+  {
+   "n": 142,
+   "label": "Sell 1 Nonferrous+2 credits",
+   "why": "primary",
+   "tick": 1440,
+   "rev": 34,
+   "revDelta": 1,
+   "batches": 32,
+   "credits": 8,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 62,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 143,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1450,
+   "rev": 34,
+   "revDelta": 0,
+   "batches": 32,
+   "credits": 8,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 62,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 144,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1460,
+   "rev": 34,
+   "revDelta": 0,
+   "batches": 32,
+   "credits": 8,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 62,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": "Need 5 ferrous · have 4",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 145,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1470,
+   "rev": 34,
+   "revDelta": 0,
+   "batches": 33,
+   "credits": 8,
+   "machines": 4,
+   "links": 7,
+   "storeUnits": 60,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1",
+   "obj": "Build Copper separator · 25 scrap + 5 ferrous",
+   "status": [
+    "Ghost on cell 3 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 5 ferrous · have 4"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 146,
+   "label": "Build Copper separator25 scrap + 5 ferrous",
+   "why": "primary",
+   "tick": 1480,
+   "rev": 35,
+   "revDelta": 1,
+   "batches": 34,
+   "credits": 8,
+   "machines": 5,
+   "links": 7,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Connect Polymer recycler so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 147,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 1490,
+   "rev": 36,
+   "revDelta": 1,
+   "batches": 34,
+   "credits": 8,
+   "machines": 5,
+   "links": 8,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Connect Wire mill so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 148,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 1500,
+   "rev": 37,
+   "revDelta": 1,
+   "batches": 34,
+   "credits": 8,
+   "machines": 5,
+   "links": 9,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Connect Copper separator so its cargo moves.",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Connect",
+    "Build"
+   ]
+  },
+  {
+   "n": 149,
+   "label": "Connect",
+   "why": "primary",
+   "tick": 1510,
+   "rev": 38,
+   "revDelta": 1,
+   "batches": 35,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 35,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 1 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 150,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1520,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 35,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 35,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 %"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 151,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1530,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 35,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 40,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 25"
+   ],
+   "toast": "Need 35 scrap · have 25",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 152,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1540,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 35,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 40,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 25"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 153,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1550,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 36,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 38,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 25"
+   ],
+   "toast": "Need 35 scrap · have 25",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 154,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1560,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 36,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 39,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 25"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 155,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1570,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 37,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 39,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 23"
+   ],
+   "toast": "Need 35 scrap · have 23",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 156,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1580,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 37,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 44,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 23"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 157,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1590,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 38,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 42,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 5 requested · 100 % · Last need 35 scrap · have 28"
+   ],
+   "toast": "Need 35 scrap · have 28",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 158,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1600,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 38,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 42,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 7 requested · 100 % · Last need 35 scrap · have 28"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 159,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1610,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 38,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 42,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 5 requested · 100 % · Last need 35 scrap · have 26"
+   ],
+   "toast": "Need 35 scrap · have 26",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 160,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1620,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 39,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 45,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 5 requested · 100 % · Last need 35 scrap · have 26"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 161,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1630,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 40,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 48,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 31"
+   ],
+   "toast": "Need 35 scrap · have 31",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 162,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1640,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 41,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 50,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 31"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 163,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1650,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 42,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 50,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 29"
+   ],
+   "toast": "Need 35 scrap · have 29",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 164,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1660,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 42,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 50,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 29"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 165,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1670,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 43,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 48,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 29"
+   ],
+   "toast": "Need 35 scrap · have 29",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 166,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1680,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 43,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 53,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 5 requested · 100 % · Last need 35 scrap · have 29"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 167,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1690,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 43,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 53,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 32"
+   ],
+   "toast": "Need 35 scrap · have 32",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 168,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1700,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 44,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 56,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 32"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 169,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1710,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 45,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 54,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 35 scrap · have 30"
+   ],
+   "toast": "Need 35 scrap · have 30",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 170,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1720,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 45,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 55,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 35 scrap · have 30"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 171,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1730,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 46,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 60,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 4 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "toast": "Need 8 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 172,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1740,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 46,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 60,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 4 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 173,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1750,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 47,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 58,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Sell a surplus, then fund the next processor or an upgrade.",
+    "Drones 1 · Power 8 · 8 requested · 100 % · Last need 35 scrap · have 33"
+   ],
+   "toast": "Need 35 scrap · have 33",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 174,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1760,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 47,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 58,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 8 requested · 100 % · Last need 35 scrap · have 33"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 175,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1780,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 48,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 66,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 6 requested · 100 % · Last need 35 scrap · have 33"
+   ],
+   "toast": "Need 35 scrap · have 33",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 176,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1790,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 49,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 64,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 6 requested · 100 % · Last need 35 scrap · have 33"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  },
+  {
+   "n": 177,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1800,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 51,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 67,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "A machine waits for input; check its empty side.",
+    "Drones 1 · Power 8 · 3 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "toast": "Need 8 ferrous · have 3",
+   "dock": [
+    "Store",
+    "Yard",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Build"
+   ]
+  },
+  {
+   "n": 178,
+   "label": "Build Plate press35 scrap + 8 ferrous",
+   "why": "primary",
+   "tick": 1810,
+   "rev": 38,
+   "revDelta": 0,
+   "batches": 52,
+   "credits": 8,
+   "machines": 5,
+   "links": 10,
+   "storeUnits": 67,
+   "power": 1,
+   "levels": "sorter:L2:draw furnace:L1 polymerRecycler:L1 wireMill:L1 copperSeparator:L1",
+   "obj": "Build Plate press · 35 scrap + 8 ferrous",
+   "status": [
+    "Ghost on cell 4 · tap again to place",
+    "Drones 1 · Power 8 · 1 requested · 100 % · Last need 8 ferrous · have 3"
+   ],
+   "toast": null,
+   "dock": [
+    "Cancel",
+    "Build Plate press35 scrap + 8 ferrous",
+    "Next"
+   ]
+  }
+ ]
+}

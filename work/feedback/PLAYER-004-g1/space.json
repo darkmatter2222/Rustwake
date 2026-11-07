@@ -1,0 +1,30 @@
+{
+ "url": "https://home.darkmatter2222.com/rustwake/",
+ "rest": {
+  "canvasCss": {
+   "w": 390,
+   "h": 844
+  },
+  "contentBoxCss": {
+   "x": 21,
+   "y": 197,
+   "w": 347,
+   "h": 422
+  },
+  "blankBandCss": {
+   "height": 224.5,
+   "fromY": 619.5
+  },
+  "objective": {
+   "y": 62,
+   "h": 80.8
+  },
+  "dock": {
+   "y": 790,
+   "h": 46
+  },
+  "panel": null,
+  "dpr": 2
+ },
+ "withPanel": null
+}
