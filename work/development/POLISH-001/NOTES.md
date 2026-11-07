@@ -71,3 +71,58 @@ the quoted base: `47fa9f4` → `1573ac1` added ledger rows to the same views.
 
 `node --test scripts/team-*.test.mjs …` (the CI step that covers these scripts — `npx vitest
 run` does not include `scripts/**`, its include list is `tests/**`): 59 pass, 0 fail, exit 0.
+
+## OPS-107 — `.gitattributes` for the generated evidence JSONs
+
+New file `.gitattributes` (3 comment lines + 2 rules):
+
+```
+*.json text eol=lf
+*.md text eol=lf
+```
+
+`*.md` is included because it keeps the diff quiet: all 188 tracked `.md`/`.json` blobs are
+already LF in the object store (`git cat-file blob HEAD:<f>` → 0 CR bytes in every one), so
+pinning the conversion reproduces the stored bytes instead of renormalising them, and the
+whole-tree `git status --short` after the change still lists only this lane's own files — no
+renormalisation flood.
+
+Named-in-assignment caveat: `scripts/probe-belt.mjs` / `work/feedback/belt001-harness.json`
+are **not in this tree** — they exist only on the BELT-001 lane (`git log --all -- …` →
+`5eb4be6`, `5d5238b`). The same-shaped in-tree harness `work/feedback/strat001-labels.mjs` →
+`work/feedback/strat001-labels.json` (same `*.json` class, also a from-scratch rewrite) is
+driven instead, three times in a row, by `run-ops107-checks.mjs`.
+
+Before (`gitattributes-before-OPS107.txt`, no `.gitattributes`, `text: unspecified`):
+
+```
+[1] after forced checkout : status "(clean)"   28988B CR=1601  blob=3074af38ac0f MATCHES
+[2] after run 1           : status " M work/feedback/strat001-labels.json"  diff "(empty)"  27387B CR=0  blob=3074af38ac0f MATCHES
+[3] after run 2 (no-op)   : status " M work/feedback/strat001-labels.json"  diff "(empty)"  27387B CR=0  …
+[4] after run 3 (no-op)   : status " M work/feedback/strat001-labels.json"  diff "(empty)"  27387B CR=0  …
+```
+
+The ` M` survives three consecutive runs and a repeated `git status` (it is not a one-shot
+stat-cache artefact), while `git diff` is empty and `git hash-object` equals the HEAD blob:
+a line-ending-only phantom modification (28988 → 27387 bytes = exactly the 1601 CR bytes),
+plus one `warning: … LF will be replaced by CRLF` line per run.
+
+After (`gitattributes-after-OPS107.txt`, `text: set`, `eol: lf`):
+
+```
+[1] after forced checkout : status "(clean)"   27387B CR=0
+[2] after run 1           : status "(clean)"   27387B CR=0  blob MATCHES
+[3] after run 2 (no-op)   : status "(clean)"   27387B CR=0  blob MATCHES
+[4] after run 3 (no-op)   : status "(clean)"   27387B CR=0  blob MATCHES
+```
+
+A fresh checkout now materialises LF, so the harness rewrite is byte-identical and every no-op
+rerun is clean; the autocrlf warning noise is gone too. Files that were already materialised
+before the attribute landed keep their CRLF bytes (72 CR in `work/BOARD.md`, 3519 in
+`work/backlog.json`) and stay clean through checkin normalisation.
+
+`node scripts/team-board.mjs --check` verdict is the **same on both sides of this change**:
+exit 0 (`Team board valid; generated views current`) before `.gitattributes` existed and after
+it exists — the DEF-007 comparison fix owns the CRLF case, so the two fixes do not shift the
+verdict. CI is unaffected: on an LF checkout the fold is the identity and the attribute asks
+for exactly the bytes CI already has.
