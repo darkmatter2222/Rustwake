@@ -127,6 +127,9 @@ const SNAP = () => {
     dock: faces.map((n, i) => ({
       i,
       text: n.textContent,
+      // The face's own lines, in paint order: label line, then each `.dock__cost` line.
+      label: n.firstChild ? (n.firstChild.textContent ?? "").replace(/\s+/g, " ").trim() : null,
+      costs: [...n.querySelectorAll(".dock__cost")].map((x) => x.textContent),
       primary: n.className.includes("--primary"),
       branch: n.className.includes("--branch"),
       rect: rect(n),

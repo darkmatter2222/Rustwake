@@ -1,0 +1,639 @@
+{
+ "budget": {
+  "cardCapPct": 42,
+  "faceFloorPx": 44
+ },
+ "rows": [
+  {
+   "artifact": "base",
+   "cell": "360x640 ts1",
+   "textScale": "1",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 586,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44.4,
+   "anyClipped": false,
+   "cardFillPct": 13,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 49.8,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "360x640 ts2",
+   "textScale": "2",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 59.4,
+   "dockTop": 572.6,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44,
+   "anyClipped": false,
+   "cardFillPct": 32.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 48.5,
+    "h": 59.4,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "390x844 ts1",
+   "textScale": "1",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 7.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.1,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "390x844 ts2",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 45,
+   "anyClipped": false,
+   "cardFillPct": 20.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 52.5,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "390x844 ts2 fork",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 24.8,
+   "primaryFace": {
+    "text": "Less power30 credits",
+    "lines": [
+     "30 credits"
+    ],
+    "w": 184,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Less power30 credits",
+    "Faster batches40 credits"
+   ],
+   "primaryLines": [
+    "30 credits"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "360x640 ts2 short",
+   "textScale": "2",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 59.4,
+   "dockTop": 572.6,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44,
+   "anyClipped": false,
+   "cardFillPct": 32.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 49.8,
+    "h": 59.4,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "390x844 ts2 short",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 20.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.5,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "base",
+   "cell": "390x844 ts1 short",
+   "textScale": "1",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 7.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.8,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrous",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "360x640 ts1",
+   "textScale": "1",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 50.9,
+   "dockTop": 581.1,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44.4,
+   "anyClipped": false,
+   "cardFillPct": 13,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 49.8,
+    "h": 50.9,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrouswaits 25 scrap · have 10",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous",
+    "waits 25 scrap · have 10"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "360x640 ts2",
+   "textScale": "2",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 75.9,
+   "dockTop": 556.1,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44,
+   "anyClipped": false,
+   "cardFillPct": 32.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 48.5,
+    "h": 75.9,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrouswaits 25 scrap · have 10",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous",
+    "waits 25 scrap · have 10"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "390x844 ts1",
+   "textScale": "1",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 50.9,
+   "dockTop": 785.1,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 47.8,
+   "anyClipped": false,
+   "cardFillPct": 7.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.1,
+    "h": 50.9,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrouswaits 25 scrap · have 10",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous",
+    "waits 25 scrap · have 10"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "390x844 ts2",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 55.5,
+   "dockTop": 780.5,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 45,
+   "anyClipped": false,
+   "cardFillPct": 20.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 52.5,
+    "h": 55.5,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Copper separator25 scrap + 5 ferrouswaits 25 scrap · have 10",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 ferrous",
+    "waits 25 scrap · have 10"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "390x844 ts2 fork",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 46,
+   "dockTop": 790,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 24.8,
+   "primaryFace": {
+    "text": "Less power30 credits",
+    "lines": [
+     "30 credits"
+    ],
+    "w": 184,
+    "h": 46,
+    "clipped": false
+   },
+   "facesText": [
+    "Less power30 credits",
+    "Faster batches40 credits"
+   ],
+   "primaryLines": [
+    "30 credits"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "360x640 ts2 short",
+   "textScale": "2",
+   "inner": {
+    "w": 360,
+    "h": 640
+   },
+   "scroll": {
+    "w": 360,
+    "h": 640
+   },
+   "noScroll": true,
+   "dockH": 75.9,
+   "dockTop": 556.1,
+   "canvasH": 640,
+   "hudClientH": 640,
+   "dockRows": 1,
+   "smallestFace": 44,
+   "anyClipped": false,
+   "cardFillPct": 32.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 49.8,
+    "h": 75.9,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrouswaits 25 scrap · have 6",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous",
+    "waits 25 scrap · have 6"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "390x844 ts2 short",
+   "textScale": "2",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 55.5,
+   "dockTop": 780.5,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 46,
+   "anyClipped": false,
+   "cardFillPct": 20.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.5,
+    "h": 55.5,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrouswaits 25 scrap · have 6",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous",
+    "waits 25 scrap · have 6"
+   ],
+   "pageErrors": 0
+  },
+  {
+   "artifact": "candidate",
+   "cell": "390x844 ts1 short",
+   "textScale": "1",
+   "inner": {
+    "w": 390,
+    "h": 844
+   },
+   "scroll": {
+    "w": 390,
+    "h": 844
+   },
+   "noScroll": true,
+   "dockH": 50.9,
+   "dockTop": 785.1,
+   "canvasH": 844,
+   "hudClientH": 844,
+   "dockRows": 1,
+   "smallestFace": 48.5,
+   "anyClipped": false,
+   "cardFillPct": 7.8,
+   "primaryFace": {
+    "text": "Store",
+    "lines": [],
+    "w": 53.8,
+    "h": 50.9,
+    "clipped": false
+   },
+   "facesText": [
+    "Store",
+    "Yard",
+    "Build Polymer recycler25 scrap + 5 nonferrouswaits 25 scrap · have 6",
+    "Build"
+   ],
+   "primaryLines": [
+    "25 scrap + 5 nonferrous",
+    "waits 25 scrap · have 6"
+   ],
+   "pageErrors": 0
+  }
+ ]
+}
