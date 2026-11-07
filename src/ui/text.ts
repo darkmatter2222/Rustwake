@@ -3,13 +3,14 @@ import { RESEARCH } from "../game/content/research";
 import {
   DOCK_TILE,
   YARD_TILES,
+  beltCost,
   droneAddCost,
   upgradeCost,
   branchPrice,
 } from "../game/simulation/commands";
 import { SELL_ORDER, nextYardStep, sellValue, stepForMachine, type YardStep } from "../game/simulation/plan";
 import type { ImportResult } from "../game/persistence/save";
-import type { SimState, UpgradeBranch } from "../game/simulation/types";
+import type { RouteState, SimState, UpgradeBranch } from "../game/simulation/types";
 import {
   HINT_KEYS,
   IMPORT_KEYS,
@@ -381,4 +382,18 @@ export function costSummary(def: {
 /** Plain-language sub-hints shown under the objective line (spec 4.4). */
 export function hintFor(key: string): string {
   return STRINGS[key] === undefined ? "" : t(key);
+}
+
+/**
+ * BELT-001 g4: the one line a connection's extent prints, on the world and in the machine
+ * panel alike. The price term comes from `beltCost`, the very function the connect tap
+ * charges from, so the printed number and the purse movement cannot drift apart. A link
+ * saved before the price existed carries no `run`, so it prints its stored latency instead
+ * ("5 ticks") and behaves exactly as it did before the extent was priced.
+ */
+export function beltExtentLine(route: RouteState): string {
+  const tiles = route.run?.length ?? 0;
+  return tiles > 0 ?
+    `${unit(tiles, "tile")}${t("value.dotSeparator")}${beltCost(tiles)} ${resourceWord("scrap")}` :
+    unit(route.latency, "tick");
 }

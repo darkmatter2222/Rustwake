@@ -180,7 +180,10 @@ describe("UI-002 panel rows and printed costs", () => {
     console.log("UI-002 machine panel actions", JSON.stringify({ labels }));
     // Upgrade, Move and Dismantle sit beside each other, each with its own number.
     expect(labels.some((line) => /^Upgrade · \d+ credits$/.test(line))).toBe(true);
-    expect(labels.some((line) => /^Move · cell \d+ · \d+ credits$/.test(line))).toBe(true);
+    // BELT-001 priced the relocation: `moveMachine` charges `movePenaltyPct` of the
+    // blueprint's own build cost, so this face prints that many units (the sorter's 20-scrap
+    // build at 50 % is 10 units), the same unit grammar the dismantle face already uses.
+    expect(labels.some((line) => /^Move · cell \d+ · \d+ units$/.test(line))).toBe(true);
     expect(labels.some((line) => /^Dismantle · \+\d+ units$/.test(line))).toBe(true);
     expect(actions.some((node) => node.matches(ACCENT_SELECTOR))).toBe(true);
     // Exactly one accent-filled primary in the row: only the first command face matches the

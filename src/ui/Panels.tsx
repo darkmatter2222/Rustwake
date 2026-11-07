@@ -10,7 +10,7 @@ import {
 import type { MachineState, SimState } from "../game/simulation/types";
 import { batchMilliFor, fleetUnits, inputCapacityOf, upgradeRanks } from "../game/simulation/types";
 import type { Command } from "../game/simulation/commands";
-import { sellableAmount, upgradeCost } from "../game/simulation/commands";
+import { beltCost, refundOf, sellableAmount, upgradeCost } from "../game/simulation/commands";
 import {
   planConnections,
   type ConnectionPlan,
@@ -29,6 +29,7 @@ import type { ReturnReport } from "../game/simulation/offline";
 import {
   RESOURCE_LABEL,
   STATUS_LABEL,
+  beltExtentLine,
   formatDuration,
   formatNumber,
   importNoteFor,
@@ -87,17 +88,25 @@ export function MachinePanel(props: {
   /** Where the `Move` face sends this machine: the first cell nobody holds (UI-002). */
   const moveTile = nextFreeTile(props.state);
   /**
-   * The credit charge the engine levies on each of these three commands, read the way the
-   * engine levies it. At this base `moveMachine` re-points the tile and deducts nothing,
-   * so its face prints 0 credits; `dismantleMachine` returns the build cost plus the tray
-   * and the input buffer, which is the unit figure its face prints. One source each, so a
-   * printed number can never disagree with the charge the same tap produces.
+   * BELT-001 g4: the three command faces each carry the arithmetic the engine itself
+   * applies to that tap, from the same exported helpers `commands.ts` uses, so a printed
+   * number cannot drift from what the tap charges: `moveMachine` takes `movePenaltyPct` of
+   * every build-cost line, `dismantleMachine` returns `refundOf` on those lines, the tray
+   * and buffer in full, and one belt refund per attached link. `links` is the same set the
+   * extent row below prints, and the store's endpoint id (0) never collides with a machine.
    */
-  const moveCharge = 0;
+  const links = props.state.routes.filter(
+    (route) => route.from.id === machine.id || route.to.id === machine.id
+  );
+  const moveCost = def.buildCost.reduce(
+    (sum, item) => sum + Math.round((item.qty * TUNING.movePenaltyPct) / 100),
+    0
+  );
   const refundUnits =
-    def.buildCost.reduce((total, item) => total + item.qty, 0) +
+    def.buildCost.reduce((total, item) => total + refundOf(item.qty), 0) +
     machine.trayUnits +
-    machine.inBufUnits;
+    machine.inBufUnits +
+    links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
 
   return (
     <div
@@ -162,6 +171,15 @@ export function MachinePanel(props: {
           />
           {plans.length > 0 ? (
             <Row label={t("row.nextLink")} value={describePlans(props.state, plans)} />
+          ) : null}
+          {/* BELT-001 g4: the extent of every link already on this machine, in the one
+              shape the world prints beside the line itself: "3 tiles · 3 scrap". A link
+              from before the price has no `run` and prints its stored latency instead. */}
+          {links.length > 0 ? (
+            <Row
+              label={t("row.links")}
+              value={links.map(beltExtentLine).join(t("value.comma"))}
+            />
           ) : null}
           {machine.status === "starved" ? (
             <Row label={t("row.needs")} value={describeInputs(recipe)} />
@@ -242,7 +260,7 @@ export function MachinePanel(props: {
             })
           }
         >
-          {t("btn.moveCost", { tile: moveTile, charge: unit(moveCharge, t("unit.credit")) })}
+          {t("btn.moveCost", { tile: moveTile, charge: unit(moveCost, t("unit.unit")) })}
         </button>
         <button
           className="icon-btn"
