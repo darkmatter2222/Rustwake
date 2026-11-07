@@ -1043,6 +1043,10 @@ async function passStack(browser) {
     { label: "360x640 ts2 store back=taps", width: 360, height: 640, textScale: 2, depth: 8, data: 12, open: "Store", via: "taps" },
     { label: "390x844 ts1 yard back=keys", width: 390, height: 844, textScale: 1, depth: 8, data: 12, open: "Yard", via: "keys" },
     { label: "390x844 ts1 yard back=taps", width: 390, height: 844, textScale: 1, depth: 8, data: 12, open: "Yard", via: "taps" },
+    // The wide gutter (>= 1200 px) puts the two layers in one column with their own `top`
+    // values, so it gets measured pixels rather than the declared ones (UI-002 g3).
+    { label: "1440x900 ts1 store back=keys", width: 1440, height: 900, textScale: 1, depth: 8, data: 12, open: "Store", via: "keys" },
+    { label: "1440x900 ts1 store back=taps", width: 1440, height: 900, textScale: 1, depth: 8, data: 12, open: "Store", via: "taps" },
   ];
   const rows = [];
   for (const cell of cells) {

@@ -220,6 +220,8 @@ Chromium, 8-machine yard, `RUSTWAKE_URL` served from this worktree's `dist`, 0 p
 | 360x640 ts2 store, painted taps | 2 | 1 | 0 | 0 | 0 | yes, every step | 640 == 640, every step |
 | 390x844 ts1 yard, `Escape` | 2 | 1 | 0 | 0 | 0 | yes, every step | 844 == 844, every step |
 | 390x844 ts1 yard, painted taps | 2 | 1 | 0 | 0 | 0 | yes, every step | 844 == 844, every step |
+| 1440x900 ts1 store, `Escape` | 2 | 1 | 0 | 0 | 0 | yes, every step | 900 == 900, every step |
+| 1440x900 ts1 store, painted taps | 2 | 1 | 0 | 0 | 0 | yes, every step | 900 == 900, every step |
 
 The target that answers is the one the player opened last: at 360x640 ts2 the store layer
 prints `order 3`, its `Close` face 44 px tall at top 421.59 (nearest the dock), while the
@@ -228,6 +230,11 @@ read `26 %` with two layers and back to `42 %` once one remains. The card measur
 175.38 px / 640 = 27.4 % with the stack up, so the yard keeps a visible band between the
 card and the dock (`captures/ui002-360x640-ts2-store-back=taps-stacked.png`,
 `...-390x844-ts1-yard-back=keys-stacked.png`).
+
+The wide gutter (1440x900, the `min-width: 1200px` branch) is measured rather than assumed:
+the report prints at top 83..127 and the store at 425..469 inside one 320 px column, each
+layer capped at 34 %, both dismiss faces 44 px and in-view, no overlap and no page scroll
+(`captures/ui002-1440x900-ts1-store-back=taps-stacked.png`).
 
 jsdom (`tests/ui/overlay-stack.test.tsx`, 4 cases, all passing): the same chain from the
 component (`[1, 2, 1, 0]`), the layer identities after each press, the build ghost retiring
@@ -265,9 +272,6 @@ keeps the 44 px face floor (smallest face 46 px) and prints its own scale three 
 - The stack is two deep in this build (one panel slot plus the report), so `2 -> 1 -> 0` is
   the full chain; a third layer would need `App.tsx`'s single `selected` slot to become a
   real stack - not requested here.
-- The ≥ 1200 px two-layer layout is stated from the declared `top`/`max-height` values, not
-  from a fresh desktop capture this pass; the phone sizes are the shipped target and are
-  captured.
 - The 26 % stacked budget makes each panel body scroll at ts 2.0 (the body is the declared
   scroller, `overflow: hidden auto`, and its own dismiss face stays put); the g1 "0 px inner
   scroll at 2.0" note therefore holds only for the single-layer case.
