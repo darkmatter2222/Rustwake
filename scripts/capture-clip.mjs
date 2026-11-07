@@ -92,12 +92,25 @@ const INIT = () => {
 };
 
 /** Reads the draws that the rAF loop painted since the previous sample. */
-const READ = () => {
+const READ = async () => {
   const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
   const ops = window.__ops ?? [];
   const start = window.__cursor ?? 0;
   window.__cursor = ops.length;
   const slice = ops.slice(start);
+  // ART-003: the box sizes are unit multiples of the *fitted* camera scale, so they are read
+  // from fitCamera instead of pinned to the base phone scale (6x4-unit body was 10.83x7.22 px
+  // at 1.8056 and is 11.7x7.8 px at 1.95; a 2-unit token was 3.61 px and is 3.9 px).
+  const mod = await import("/src/game/renderer/scene.ts");
+  const canvas = document.querySelector("canvas");
+  const hudBox = document.querySelector(".hud__top")?.getBoundingClientRect();
+  const dockBox = document.querySelector(".dock")?.getBoundingClientRect();
+  const view = { width: canvas.clientWidth, height: canvas.clientHeight };
+  const insets = hudBox && dockBox && hudBox.bottom > 0 && dockBox.top > 0
+    ? { top: hudBox.bottom, bottom: Math.max(0, view.height - dockBox.top) }
+    : undefined;
+  const S = mod.fitCamera(view, insets).scale;
+  const near = (v, units, tol) => Math.abs(v - units * S) <= tol;
   // One sky fillRect per drawScene call. Between two sky fills sits exactly one drawn
   // frame, so the trail is the drone centre as the painter really placed it, per frame.
   const trail = [];
@@ -119,13 +132,13 @@ const READ = () => {
       draw = { body: null };
     }
     if (!draw) continue;
-    if (style === "#5fd8e8" && Math.abs(h - 7) <= 0.6 && Math.abs(w - 11) <= 0.6) {
+    if (style === "#5fd8e8" && near(h, 4, 0.6) && near(w, 6, 0.6)) {
       draw.body = [x + w / 2, y + h / 2]; // the airborne unit's body centre, CSS px
     }
-    if (w === 3.5 && h === 3.5 && style === "#ffb765") gaugeAmber += 1;
-    if (w === 3.5 && h === 3.5 && style === "#0e1726") gaugeWells += 1;
-    if ((style === "#ffb765" || style === "#7f9fbb") && Math.abs(h - 5.5) <= 0.6) pod = style;
-    if (Math.abs(h - 3.5) <= 0.4 && Math.abs(w - 11) <= 0.6) accent = style;
+    if (near(w, 2, 0.6) && near(h, 2, 0.6) && style === "#ffb765") gaugeAmber += 1;
+    if (near(w, 2, 0.6) && near(h, 2, 0.6) && style === "#0e1726") gaugeWells += 1;
+    if ((style === "#ffb765" || style === "#7f9fbb") && near(h, 3, 0.6)) pod = style;
+    if (near(h, 2, 0.4) && near(w, 6, 0.6)) accent = style;
   }
   flush();
   const raw = localStorage.getItem("rustwake.save.v1");

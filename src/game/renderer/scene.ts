@@ -6,6 +6,7 @@ import {
   APRON_PROPS,
   APRON_SHADOWS,
   APRON_TOPS,
+  ATLAS_PLACE,
   COLOR_KEYS,
   FLOOR_KIT,
   FLOOR_POSTS,
@@ -435,6 +436,59 @@ function drawDock(
   if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(14 * s));
 }
 
+/**
+ * ART-004 A-1/A-2: the pilot atlas page. One offscreen canvas, 64 device px per role row
+ * (2 px per world unit inside the 32-unit cell box), baked once from the same PARTS rows
+ * the vector path paints; after that every machine costs one `drawImage` instead of its
+ * part loop. The page needs a real 2D context, so under the recording stub (jsdom has no
+ * canvas package) it stays unbuilt and the deterministic op-log witnesses keep the vector
+ * path byte for byte.
+ */
+const ATLAS_PX = 64;
+const ATLAS_IDS = [
+  "sorter",
+  "furnace",
+  "wireMill",
+  "signalLab",
+  "generic",
+  "polymerRecycler",
+  "copperSeparator",
+  "platePress",
+  "circuitAssembler",
+] as const;
+let atlasPage: HTMLCanvasElement | null | undefined;
+
+function atlasOf(): HTMLCanvasElement | null {
+  if (atlasPage === undefined) {
+    atlasPage = null;
+    if (typeof document !== "undefined") {
+      const page = document.createElement("canvas");
+      page.width = ATLAS_PX;
+      page.height = ATLAS_PX * ATLAS_IDS.length;
+      const buf = page.getContext("2d");
+      if (buf) {
+        buf.imageSmoothingEnabled = false;
+        ATLAS_IDS.forEach((id, i) =>
+          paintParts(buf, ATLAS_PX / 2, ATLAS_PX / 2 + i * ATLAS_PX, ATLAS_PX / 32, PARTS[id])
+        );
+        atlasPage = page;
+      }
+    }
+  }
+  return atlasPage;
+}
+
+/**
+ * ART-004 A-2: the baked version carried by one tile. The pilot has a single shared page,
+ * so no tile owns a version of its own and `null` is the answer for every machine - which
+ * is exactly what keeps the existing canvas witnesses (26 distinct hashes at 250 ms) in
+ * force: the frame is still produced by the one `drawScene` pass.
+ */
+export function spriteVersionAt(tile: number): number | null {
+  void tile; // one shared page: the index is not part of the answer
+  return null;
+}
+
 function drawMachine(
   ctx: CanvasRenderingContext2D,
   machine: MachineState,
@@ -450,7 +504,27 @@ function drawMachine(
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
-  paintParts(ctx, p.x, p.y, s, row);
+  // A-2: one drawImage from the pilot page when it exists, the part loop otherwise. The
+  // per-kind placement rides on both the box and its facet pair, so they stay aligned.
+  const page = atlasOf();
+  const cell = page ? ATLAS_IDS.indexOf(machine.blueprint as (typeof ATLAS_IDS)[number]) : -1;
+  const [dy, k] = (cell >= 0 && ATLAS_PLACE[machine.blueprint]) || [0, 1];
+  if (page && cell >= 0) {
+    const half = 16 * s * k;
+    ctx.drawImage(
+      page,
+      0,
+      cell * ATLAS_PX,
+      ATLAS_PX,
+      ATLAS_PX,
+      snap(p.x - half),
+      snap(p.y - half + dy * s),
+      snap(2 * half),
+      snap(2 * half)
+    );
+  } else {
+    paintParts(ctx, p.x, p.y, s, row);
+  }
   // ART-001/ART-003: one light direction for the whole sheet - upper left lit, lower
   // right dark. The lit pair (top edge + left column) rides in the `select` group, the
   // dark pair (underlying bottom + right column) in the `path` group: two grouped paths
@@ -459,13 +533,13 @@ function drawMachine(
   if (body) {
     const [bx, by, bw, bh] = body;
     const inset = bw >= 6 ? 1 : 0; // a 3-unit post keeps the whole width on its lit band
-    sheen.push([p.x + (bx + inset) * s, p.y + by * s, (bw - 2 * inset) * s, 2 * s]);
-    shade.push([p.x + (bx + inset) * s, p.y + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
+    sheen.push([p.x + (bx * k + inset) * s, p.y + (by * k + dy) * s, (bw - 2 * inset) * k * s, 2 * s]);
+    shade.push([p.x + (bx * k + inset) * s, p.y + (by * k + dy + bh - 2) * s, (bw - 2 * inset) * k * s, 2 * s]);
     // The side columns only exist on bodies that have a middle band to lighten/darken;
     // a 3-unit bar is one step already, so the top/bottom pair is the whole facet.
     if (bh >= 6 && bw >= 6) {
-      sheen.push([p.x + bx * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
-      shade.push([p.x + (bx + bw - 2) * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+      sheen.push([p.x + bx * k * s, p.y + (by * k + dy + 2) * s, 2 * s, (bh - 4) * k * s]);
+      shade.push([p.x + (bx + bw - 2) * k * s, p.y + (by * k + dy + 2) * s, 2 * s, (bh - 4) * k * s]);
     }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.

@@ -88,10 +88,13 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [-9, 5, 8, 3, 6], // S3 chute A
     [1, 5, 7, 3, 11], // S3 chute B, stepped split wedge (select tone)
   ],
+  // ART-004 A-3: the three rows that owned the weak pairs. Each body now carries its own
+  // gray step (sorter bodyLight / furnace + lab steelLight / mill bodyLight with dark
+  // reels), so no two silhouettes collapse onto the same ramp band.
   furnace: [
     [-11, 12, 22, 3, 15, 1], // F8 contact shadow ellipse (ART-003)
-    [-11, -8, 22, 16, 3], // F1 squat thermal chamber, 22x16 (A3-4: 352 units^2 of solid ink)
-    [2, -15, 5, 8, 3], // F2 chimney, proud of the cap line
+    [-11, -9, 22, 16, 16], // F1 squat thermal chamber, 22x16 on the steel step
+    [2, -15, 5, 8, 16], // F2 chimney, proud of the cap line
     [-3, -15, 10, 3, 9], // F2b chimney cap, T-step in rust (identity mark, own gray step)
     [-6, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
     [-6, -1, 8, 3, 6], // F3b second chamber slot, one row down
@@ -101,13 +104,13 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   wireMill: [
     [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
-    [-12, -4, 24, 16, 3], // body, one row lower than the sorter
-    [-15, -1, 6, 6, 3], // WM2 left reel ring
-    [-14, 0, 4, 4, 6], // WM2 left reel hole (ring, not block)
-    [9, -1, 6, 6, 3], // WM2 right reel ring
-    [10, 0, 4, 4, 6], // WM2 right reel hole
-    [-15, 6, 6, 3, 16], // reel stand, left (steelLight step)
-    [9, 6, 6, 3, 16], // reel stand, right (steelLight step)
+    [-10, -4, 20, 16, 3], // body, two units narrower than the sorter's frame
+    [-16, -3, 7, 7, 12], // WM2 left reel ring, dark, clear of the body edge
+    [-15, -2, 5, 5, 6], // WM2 left reel hole (ring, not block)
+    [9, -3, 7, 7, 12], // WM2 right reel ring, 18-unit pitch from the left one
+    [10, -2, 5, 5, 6], // WM2 right reel hole
+    [-16, 6, 7, 3, 16], // reel stand, left, one step under the ring
+    [9, 6, 7, 3, 16], // reel stand, right
     [-8, -15, 4, 3, 3], // WM3 tension arm, step 0 (D-4: 3 units tall)
     [-4, -15, 4, 3, 3], // WM3 tension arm, step 1
     [0, -12, 4, 3, 3], // WM3 tension arm, step 2 (diagonal)
@@ -115,13 +118,14 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   signalLab: [
     [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
-    [-6, -7, 12, 20, 3], // L1 narrow 12-unit tower body (A3-1: a third body width)
-    [-2, -15, 4, 8, 3], // L2 mast
-    [-11, -16, 21, 3, 8], // L3 scanner head, wider than the tower (cyan, identity mark)
+    [-7, -8, 14, 21, 16], // L1 14-unit tower body on the steel step, 21 units tall
+    [-2, -16, 4, 8, 16], // L2 mast, its tip two rows above the scanner head
+    [-11.5, -13, 21, 3, 8], // L3 scanner head one step down, wider than the tower
     [-5, -4, 6, 3, 6], // L4 visor slot on the body
     [-5, 2, 6, 3, 11], // L4b indicator strip, select tone
-    [-14, 6, 5, 3, 3], // L5 left foot, outboard of the tower
-    [9, 6, 5, 3, 3], // L5 right foot, outboard of the tower
+    [-14, 6, 7, 3, 16], // L5 left foot, outboard of the tower
+    [7, 6, 7, 3, 16], // L5 right foot, outboard of the tower
+    [-8, 9, 16, 3, 16], // L6 plinth, the base the two feet stand on
   ],
   generic: [
     // D-1: its own lattice (two bars, both posts) so it is no longer the sorter's copy.
@@ -169,6 +173,19 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [1, -3, 4, 2, 8],
     [-3, -2, 6, 4, 8], // DR1 body
   ],
+};
+
+/**
+ * ART-004 A-3: per-kind placement on the pilot atlas page, `[dyUnits, scale]`, applied to
+ * the drawn cell box (and to its facet pair, so the two stay welded together). `1` is the
+ * identity: the glyph keeps its 32-unit box. The two kinds that needed the column are the
+ * ones whose pairs owned the sub-threshold readings: the mill gains half a unit of stand
+ * under the reel pair so the two rings stop merging into the body line, the lab gains a
+ * unit of headroom so the mast tip clears the scanner head at the phone fit.
+ */
+export const ATLAS_PLACE: Readonly<Record<string, readonly [number, number]>> = {
+  wireMill: [0.5, 1.06],
+  signalLab: [-0.5, 1.06],
 };
 
 /** Wreck hull as a snapped pentagon path (world-unit offsets from its position). */
