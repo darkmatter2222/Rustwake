@@ -126,3 +126,33 @@ exit 0 (`Team board valid; generated views current`) before `.gitattributes` exi
 it exists — the DEF-007 comparison fix owns the CRLF case, so the two fixes do not shift the
 verdict. CI is unaffected: on an LF checkout the fold is the identity and the attribute asks
 for exactly the bytes CI already has.
+
+## Gates on the final SHA (all exit codes printed from the real processes)
+
+| step | exit | printed |
+|---|---|---|
+| `npm run typecheck` | 0 | (`gate-typecheck.txt`) |
+| `npx vitest run` | 0 | `Test Files 28 passed (28)` / `Tests 287 passed (287)` |
+| `npm run validate` | 0 | `content: 0 violation(s)`, `behaviour: … \| 0 violation(s)`, `validated: no violations` |
+| `npm run build` | 0 | `assets/index-C3IyXD3g.js 231.22 kB` |
+| `node scripts/team-board.mjs --check` | 0 | `Team board valid; generated views current` |
+| `node --test scripts/*.test.mjs … tools/team-supervisor/*.test.mjs` | 0 | `# tests 59 / # pass 59 / # fail 0` |
+
+Entry asset against the ceiling: **`index-C3IyXD3g.js` = 231263 B** vs **233000 B** → headroom
+**1737 B**. Growth versus the base build (`index-C_K4oMJ5.js`, 231262 B) is **+1 B**, which is
+exactly the one added space character in the string table; `.gitattributes` and the `scripts/**`
+checker are outside the bundle (0 B), and the asset hash changed because the string table is
+inlined in the entry chunk.
+
+Full instrument, all four passes (`measure-full-after-DEF009.txt`, exit 0, deepest cell
+included): `13 / 38.1 / 9.9 / 24.8 %` in the four `rest` cells and **41.8 %** in the fork-open
+cell — the deepest value the lane quoted, unchanged, still under the 42 % cap with 0.2 pp of
+margin. `Store 900/900` appears 4 times, `Store900/900` 0 times.
+
+## What stays unverified in this lane
+
+- Audio is decoded, not played: no listening pass on the decoded cues (no human ear in this run).
+- Real-device p95 frame timings unrun: the numbers above are desktop chromium at DPR 2 against the `vite preview` artifact.
+- Human second rater unrun: the 42 % card-fill verdict is the instrument's own ratio, not a second human rating.
+- `npx vitest run` prints 287 tests because `scripts/**` is outside its include list; the `.mjs` script tests only run under `node --test` (CI step 2), which is why the DEF-007 fix carries its own driver instead of a unit test in a file vitest never loads.
+- `work/backlog.json` / `work/BOARD.md` are release-owned and untouched, so the DEF-009 / DEF-007 / OPS-107 ledger rows still read their pre-integration state at these SHAs.
