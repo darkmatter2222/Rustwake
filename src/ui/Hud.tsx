@@ -119,25 +119,29 @@ export function HudTop(props: {
   );
 }
 
+/**
+ * The resting card in two weight tiers (UI-002). Tier one is the one thing the next tap
+ * does; tier two is one numeric readout line - the flying fleet, the shared power budget
+ * and, right after a refusal, the carried shortfall as two numbers. The old card printed
+ * four lines at nearly one size, so nothing led and the world lost a third of the screen
+ * to text at 360 x 640 scale 2.0. The five pips per machine are not repeated here at all:
+ * the tiles paint them, and the world outranks the text.
+ */
 export function ObjectiveCard(props: {
   text: string;
-  hint: string;
-  power?: string;
-  pips?: string;
+  phase?: string;
+  numbers: string;
 }) {
   return (
     <div className="objective">
-      <span>{props.text}</span>
-      {/* L-2: the hint is its own block, a sibling of the chip row, so the two
+      <span className="objective__primary">{props.text}</span>
+      {/* L-2: the guidance line is its own block, a sibling of the chip row, so the two
           "step the secondary row back" rules (large text scale, short viewport) -
           which now narrow to the chip row - cannot collapse it to zero height. */}
-      <span className="status-line">{props.hint}</span>
-      {/* A1-4: the shared power budget on the resting screen, in the same secondary
-          line style, so the throttled rounds are something the player can point at. */}
-      {props.power ? <span className="status-line">{props.power}</span> : null}
-      {/* PLAY-001 P-4: the same line style, one quantity named per machine, so a yard of
-          two machines separates without opening a panel. */}
-      {props.pips ? <span className="status-line">{props.pips}</span> : null}
+      {props.phase ? <span className="status-line">{props.phase}</span> : null}
+      {/* A1-4 / PLAY-002 2: one secondary line carries the fleet, the power budget and the
+          last shortfall, all from the same readout, so the card never grows a fourth row. */}
+      <span className="status-line">{props.numbers}</span>
       <div className="objective__row" />
     </div>
   );
@@ -190,9 +194,18 @@ export function DockButtons(props: {
       {props.primary.branches && props.primary.branches.length > 0 ? (
         /* The fork (A1-3): one price, three named outcomes, three equal thirds. Each
            button is the whole choice - one tap commits that branch and the row returns
-           to its usual targets - so no blind tap can pick an unnamed default. */
-        props.primary.branches.map((branch) => (
-          <button className="dock__btn" key={branch.id} onClick={branch.run}>
+           to its usual targets - so no blind tap can pick an unnamed default.
+           UI-002: the row is painted cheapest-first (`sortedBranchOptions`), so the
+           leftmost face - the one a blind thumb reaches - carries the single accent fill
+           and is the plan the current purse can pay. One accent-filled primary per row. */
+        props.primary.branches.map((branch, index) => (
+          <button
+            className={
+              index === 0 ? "dock__btn dock__btn--branch dock__btn--primary" : "dock__btn dock__btn--branch"
+            }
+            key={branch.id}
+            onClick={branch.run}
+          >
             {branch.label}
             {branch.cost ? <span className="dock__cost">{branch.cost}</span> : null}
           </button>
