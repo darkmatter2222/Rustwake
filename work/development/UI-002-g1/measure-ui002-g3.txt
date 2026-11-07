@@ -1,0 +1,278 @@
+﻿
+[360x640 ts1 8-machine] inner 360x640 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"c6e736fa","textScale":1,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 640; .objective 83.31px => 13 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 14.25px weight 600 leading 17.1px wrappedBoxes 2 glyph a10/d3 white 4.1 px ink 67..103.09 r310.66 sw290/cw290 sh35/ch34 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 105.19..120.19 r248.42 sw290/cw290 sh15/ch15 "A machine waits for input; check its empty side."
+    line2 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 123.75..138.75 r214.34 sw290/cw290 sh15/ch15 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw290/cw290 sh0/ch0 ""
+  legibility: element separations [4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["14.25/600","10.8/400"] => primary 14.25px / secondary 10.8px = 1.32x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 1 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face {"l":90.94,"bucket":2} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [167x46 top 586 font 13.2px w400] bg rgba(201, 113, 58, 0.65) img linear-gradient(rgba(255, 183, 101 L {"l":90.94,"bucket":2} "Less power30 credits"
+    face [167x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Ferrous112","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":10,"residue":10,"copper":26,"ferrous":112,"nonferrous":10,"steel":10,"wire":476,"polymer":62,"circuits":1,"plates":183},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1146,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":74,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[360x640 ts2 8-machine] inner 360x640 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"f8d12f24","textScale":2,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 640; .objective 243.75px => 38.1 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 119x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 28.5px weight 600 leading 34.2px wrappedBoxes 4 glyph a22/d7 white 5.2 px ink 114.91..255.47 r237.89 sw290/cw290 sh139/ch137 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 250.66..302.41 r270.78 sw290/cw290 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 298.16..349.91 r229.17 sw290/cw290 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["28.5/600","21.6/400"] => primary 28.5px / secondary 21.6px = 1.32x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 1 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face {"l":90.94,"bucket":2} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [169x46 top 586 font 18.6px w400] bg rgba(201, 113, 58, 0.65) img linear-gradient(rgba(255, 183, 101 L {"l":90.94,"bucket":2} "Less power30 credits"
+    face [169x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":10,"residue":10,"copper":26,"ferrous":112,"nonferrous":10,"steel":10,"wire":476,"polymer":62,"circuits":1,"plates":183},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1146,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":74,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[390x844 ts1 8-machine] inner 390x844 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"4270e5c1","textScale":1,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 844; .objective 83.31px => 9.9 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 14.25px weight 600 leading 17.1px wrappedBoxes 2 glyph a10/d3 white 4.1 px ink 67..103.09 r330.81 sw317/cw317 sh35/ch34 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 105.19..120.19 r248.42 sw317/cw317 sh15/ch15 "A machine waits for input; check its empty side."
+    line2 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 123.75..138.75 r214.34 sw317/cw317 sh15/ch15 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw317/cw317 sh0/ch0 ""
+  legibility: element separations [4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["14.25/600","10.8/400"] => primary 14.25px / secondary 10.8px = 1.32x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 1 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face {"l":90.94,"bucket":2} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [182x46 top 790 font 13.2px w400] bg rgba(201, 113, 58, 0.65) img linear-gradient(rgba(255, 183, 101 L {"l":90.94,"bucket":2} "Less power30 credits"
+    face [182x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Ferrous112","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":10,"residue":10,"copper":26,"ferrous":112,"nonferrous":10,"steel":10,"wire":476,"polymer":62,"circuits":1,"plates":183},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1146,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":74,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[390x844 ts2 8-machine] inner 390x844 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"f28a0962","textScale":2,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 844; .objective 209.56px => 24.8 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 130x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 28.5px weight 600 leading 34.2px wrappedBoxes 3 glyph a22/d7 white 5.2 px ink 114.91..221.28 r331.23 sw317/cw317 sh104/ch103 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 216.47..268.22 r330.91 sw317/cw317 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 263.97..315.72 r330.63 sw317/cw317 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["28.5/600","21.6/400"] => primary 28.5px / secondary 21.6px = 1.32x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 1 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face {"l":90.94,"bucket":2} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [184x46 top 790 font 18.6px w400] bg rgba(201, 113, 58, 0.65) img linear-gradient(rgba(255, 183, 101 L {"l":90.94,"bucket":2} "Less power30 credits"
+    face [184x46 top 790 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":10,"residue":10,"copper":26,"ferrous":112,"nonferrous":10,"steel":10,"wire":476,"polymer":62,"circuits":1,"plates":183},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1146,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":74,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[360x640 ts1 store] saved {"schemaVersion":1,"checksum":"6ea40c0a","textScale":1,"tick":434719,"machines":8,"credits":4} panels 1 hudContentBox.height 640 open attempts [{"how":"face","index":-1,"panels":0},{"how":"pay-cheapest-then-face","index":0,"panels":1}] faces ["Store","Yard","Sell 60 Ferrous+120 credits","Build"]
+  boot report overlay: "Back to yard" 96x44px -> panels 1 to 0
+  panel "Yard store" dismiss "Close"{"w":54.45,"h":44,"top":334.92,"bottom":378.92,"left":282.55,"right":337} in-view true rows 15 dl 1 alignment true body 314px cw / sh 283 ch 186 scrollable true scrollTop 0 lastRowInsideBody false (bottom 669.92) lastNodeInsideBody null (bottom null)
+    U-4 rows: widths [314,314,314,314,314,314,314,314,314,314,314,314,314,314,314] vs body clientWidth 314; dl overflow [0] dt overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] dd overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Scrap10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Residue10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Copper26"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Ferrous112"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Nonferrous10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Steel10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Wire476"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Polymer62"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Circuits1"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Plates183"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Capacity900/900"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "MeasuredPower 100% speed (0 of 8 units requested)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "MeasuredBusiest link 98% busy (3/24 in transit)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Measured6 machines waiting for input"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "SellOpens after the first steel contract"
+    printed values: capacity pair "900/900" repeated [] (empty = every value once)
+    after scroll-to-bottom "Yard store" scrollTop 97/283 ch 186 body 386.92..573 lastRowInsideBody true lastNodeInsideBody null (bottom null) dismiss in-view true
+  U-4 no page scroll: true (360x640 vs 360x640); node-card overflow [[]]; hudContentBox.height 640; pageerrors 0
+
+[360x640 ts2 store] saved {"schemaVersion":1,"checksum":"9f975894","textScale":2,"tick":434719,"machines":8,"credits":4} panels 1 hudContentBox.height 640 open attempts [{"how":"face","index":-1,"panels":0},{"how":"pay-cheapest-then-face","index":0,"panels":1}] faces ["Store","Yard","Sell 60 Ferrous+120 credits","Build"]
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  panel "Yard store" dismiss "Close"{"w":86.89,"h":44,"top":335.16,"bottom":379.16,"left":250.11,"right":337} in-view true rows 15 dl 1 alignment true body 314px cw / sh 742 ch 186 scrollable true scrollTop 0 lastRowInsideBody false (bottom 1129.72) lastNodeInsideBody null (bottom null)
+    U-4 rows: widths [314,314,314,314,314,314,314,314,314,314,314,314,314,314,314] vs body clientWidth 314; dl overflow [0] dt overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] dd overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Scrap10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Residue10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Copper26"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Ferrous112"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Nonferrous10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Steel10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Wire476"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Polymer62"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Circuits1"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Plates183"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Capacity900/900"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 3 "MeasuredPower 100% speed (0 of 8 units requested)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 3 "MeasuredBusiest link 98% busy (3/24 in transit)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Measured6 machines waiting for input"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "SellOpens after the first steel contract"
+    printed values: capacity pair "900/900" repeated [] (empty = every value once)
+    after scroll-to-bottom "Yard store" scrollTop 556/742 ch 186 body 387.39..573 lastRowInsideBody true lastNodeInsideBody null (bottom null) dismiss in-view true
+  U-4 no page scroll: true (360x640 vs 360x640); node-card overflow [[]]; hudContentBox.height 640; pageerrors 0
+
+[360x640 ts2 machine] saved {"schemaVersion":1,"checksum":"8d4b7556","textScale":2,"tick":434709,"machines":8,"credits":34} panels 1 hudContentBox.height 640 open attempts null faces []
+  machine panel {"title":"Scrap sorter","actions":["Upgrade ┬╖ 30 credits","Move ┬╖ cell 0 ┬╖ 0 credits","Dismantle ┬╖ +20 units","Recipe"],"actionsInRow":[44,44,44,44]} tapped [{"tile":24,"x":47,"y":373},{"tile":25,"x":100,"y":373},{"tile":26,"x":153,"y":373},{"tile":27,"x":207,"y":373},{"tile":28,"x":260,"y":373},{"tile":29,"x":313,"y":373},{"tile":30,"x":47,"y":427},{"tile":31,"x":100,"y":427}] (tile centres via the shipped fitCamera)
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  panel "Scrap sorter" dismiss "Close"{"w":86.89,"h":44,"top":365.89,"bottom":409.89,"left":250.11,"right":337} in-view true rows 10 dl 1 alignment true body 314px cw / sh 976 ch 155 scrollable true scrollTop 0 lastRowInsideBody false (bottom 1184.47) lastNodeInsideBody null (bottom null)
+    U-4 rows: widths [314,314,314,314,314,314,314,314,314,314] vs body clientWidth 314; dl overflow [0] dt overflow [0,0,0,0,0,0,0,0,0,0] dd overflow [0,0,0,0,0,0,0,0,0,0]
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "StatusNeeds input"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Batch0%"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Cycle4.00s"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Actual rate0.00 batches/s ┬╖ 60s window"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Max rate0.25 batches/s at full power"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Power1 unit"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 6 "MeasuredWorking 4% ┬╖ waiting for input 96% ┬╖ output waiting 0% ┬╖ link 1% busy ┬╖ power 100%"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 5 "Next stepStorage is full at 100%. Sell a surplus in the yard store to free room."
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Next upgrade4.00s ΓåÆ 3.64s ┬╖ 30 credits"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Needs2 Scrap"
+    printed values: capacity pair "null" repeated [{"value":"4.00s","count":2}] (empty = every value once)
+    after scroll-to-bottom "Scrap sorter" scrollTop 821/976 ch 155 body 418.13..573 lastRowInsideBody true lastNodeInsideBody null (bottom null) dismiss in-view true
+  U-4 no page scroll: true (360x640 vs 360x640); node-card overflow [[]]; hudContentBox.height 640; pageerrors 0
+
+[360x640 ts2 research] saved {"schemaVersion":1,"checksum":"1d4959fe","textScale":2,"tick":434709,"machines":8,"credits":34} panels 1 hudContentBox.height 640 open attempts [{"how":"face","index":4,"panels":1}] faces ["Store","Yard","Research Efficient Cutters4 Data","Build","Research"]
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  panel "Research" dismiss "Close"{"w":86.89,"h":44,"top":321.75,"bottom":365.75,"left":250.11,"right":337} in-view true rows 0 dl 0 alignment false body 314px cw / sh 723 ch 186 scrollable true scrollTop 0 lastRowInsideBody null (bottom null) lastNodeInsideBody false (bottom 1097.22)
+    U-4 rows: widths [] vs body clientWidth 314; dl overflow [] dt overflow [] dd overflow []
+    printed values: capacity pair "null" repeated [] (empty = every value once)
+      node "Efficient Cutters" card w 314 overflowX 0 name {"sw":204,"cw":204,"lines":1} effect {"sw":296,"cw":296,"lines":2} state {"sw":296,"cw":296,"lines":1} foot {"sw":296,"cw":296,"lines":4} rightMostInk 328 buy "Buy ┬╖ 4 Data"
+      node "Smart Buffers" card w 314 overflowX 0 name {"sw":176,"cw":176,"lines":1} effect {"sw":296,"cw":296,"lines":3} state {"sw":296,"cw":296,"lines":1} foot {"sw":296,"cw":296,"lines":4} rightMostInk 328 buy "Buy ┬╖ 8 Data"
+      node "Route Dispatch" card w 314 overflowX 0 name {"sw":192,"cw":192,"lines":1} effect {"sw":296,"cw":296,"lines":3} state {"sw":296,"cw":296,"lines":1} foot {"sw":296,"cw":296,"lines":4} rightMostInk 328 buy "Buy ┬╖ 12 Data"
+    after scroll-to-bottom "Research" scrollTop 537/723 ch 186 body 373.98..559.59 lastRowInsideBody null lastNodeInsideBody true (bottom 560.22) dismiss in-view true
+  U-4 no page scroll: true (360x640 vs 360x640); node-card overflow [[0,0,0]]; hudContentBox.height 640; pageerrors 0
+
+[390x844 ts2 store] saved {"schemaVersion":1,"checksum":"1015741a","textScale":2,"tick":434709,"machines":8,"credits":34} panels 1 hudContentBox.height 844 open attempts [{"how":"face","index":0,"panels":1}] faces ["Store","Yard","Research Efficient Cutters4 Data","Build","Research"]
+  boot report overlay: "Back to yard" 130x71px -> panels 1 to 0
+  panel "Yard store" dismiss "Close"{"w":86.89,"h":44,"top":440.08,"bottom":484.08,"left":280.11,"right":367} in-view true rows 16 dl 1 alignment true body 344px cw / sh 778 ch 271 scrollable true scrollTop 0 lastRowInsideBody false (bottom 1270.66) lastNodeInsideBody null (bottom null)
+    U-4 rows: widths [344,344,344,344,344,344,344,344,344,344,344,344,344,344,344,344] vs body clientWidth 344; dl overflow [0] dt overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] dd overflow [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Scrap10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Data12"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Residue10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Copper17"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Ferrous110"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Nonferrous10"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Steel18"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Wire488"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Polymer61"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Circuits1"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Plates163"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Capacity900/900"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 3 "MeasuredPower 100% speed (0 of 8 units requested)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 3 "MeasuredBusiest link 98% busy (5/24 in transit)"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Measured6 machines waiting for input"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "SellOpens after the first steel contract"
+    printed values: capacity pair "900/900" repeated [] (empty = every value once)
+    after scroll-to-bottom "Yard store" scrollTop 507/778 ch 271 body 492.31..763.59 lastRowInsideBody true lastNodeInsideBody null (bottom null) dismiss in-view true
+  U-4 no page scroll: true (390x844 vs 390x844); node-card overflow [[]]; hudContentBox.height 844; pageerrors 0
+
+[390x844 ts1 machine] saved {"schemaVersion":1,"checksum":"2cbf3c01","textScale":1,"tick":434709,"machines":8,"credits":34} panels 1 hudContentBox.height 844 open attempts null faces []
+  machine panel {"title":"Scrap sorter","actions":["Upgrade ┬╖ 30 credits","Move ┬╖ cell 0 ┬╖ 0 credits","Dismantle ┬╖ +20 units","Recipe"],"actionsInRow":[44,44,44,44]} tapped [{"tile":24,"x":51,"y":480},{"tile":25,"x":108,"y":480},{"tile":26,"x":166,"y":480},{"tile":27,"x":224,"y":480},{"tile":28,"x":282,"y":480},{"tile":29,"x":339,"y":480},{"tile":30,"x":51,"y":538},{"tile":31,"x":108,"y":538}] (tile centres via the shipped fitCamera)
+  boot report overlay: "Back to yard" 96x44px -> panels 1 to 0
+  panel "Scrap sorter" dismiss "Close"{"w":54.45,"h":44,"top":453.25,"bottom":497.25,"left":312.55,"right":367} in-view true rows 10 dl 1 alignment true body 344px cw / sh 328 ch 272 scrollable true scrollTop 0 lastRowInsideBody true (bottom 727.25) lastNodeInsideBody null (bottom null)
+    U-4 rows: widths [344,344,344,344,344,344,344,344,344,344] vs body clientWidth 344; dl overflow [0] dt overflow [0,0,0,0,0,0,0,0,0,0] dd overflow [0,0,0,0,0,0,0,0,0,0]
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "StatusNeeds input"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Batch0%"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Cycle4.00s"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Actual rate0.00 batches/s ┬╖ 60s window"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Max rate0.25 batches/s at full power"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Power1 unit"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "MeasuredWorking 4% ┬╖ waiting for input 96% ┬╖ output waiting 0% ┬╖ link 1% busy ┬╖ power 100%"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 2 "Next stepStorage is full at 100%. Sell a surplus in the yard store to free room."
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Next upgrade4.00s ΓåÆ 3.64s ┬╖ 30 credits"
+      row dTop 0 leftGap 8 sameLineBox true valueAfterLabel true ddLines 1 "Needs2 Scrap"
+    printed values: capacity pair "null" repeated [{"value":"4.00s","count":2}] (empty = every value once)
+    after scroll-to-bottom "Scrap sorter" scrollTop 56/328 ch 272 body 505.25..777 lastRowInsideBody true lastNodeInsideBody null (bottom null) dismiss in-view true
+  U-4 no page scroll: true (390x844 vs 390x844); node-card overflow [[]]; hudContentBox.height 844; pageerrors 0
+
+[360x640 ts2 dismiss] U-5 overlay dismiss chain (pageerrors 0); boot report "Back to yard" 119x71px -> panels 1 to 0
+  Store: opened 1 panel(s) (face index 0); visible target "Close" 87x44px top 322 in-view true -> 0 panel(s); reopen 1 (face index 0) -> Escape -> 0 panel(s)
+  Research: opened 1 panel(s) (face index 4); visible target "Close" 87x44px top 322 in-view true -> 0 panel(s); reopen 1 (face index 4) -> Escape -> 0 panel(s)
+  Yard: opened 1 panel(s) (face index 1); visible target "Close" 87x44px top 322 in-view true -> 0 panel(s); reopen 1 (face index 1) -> Escape -> 0 panel(s)
+  build mode (face index 3): ghost line "Ghost on cell 9 ┬╖ tap again to place" -> Escape -> "A machine waits for input; check its empty side." (0 panel(s))
+
+[360x640 ts2 store back=keys] purse 34 saved {"schemaVersion":1,"checksum":"59fdf263","textScale":2,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 119x71px kept true; opened via face index 0; deepest stack 2 layer(s); pageerrors 0
+  after face "Store": overlays 2 ["Yard store" order 3 cap 26% target "Close" 44px top 421.59..465.59 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 70.84px top 303.33..374.17 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 1 (Escape): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 70.84px top 327.56..398.41 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 2 (Escape): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 3 (Escape): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[360x640 ts2 store back=taps] purse 34 saved {"schemaVersion":1,"checksum":"d0e2a49f","textScale":2,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 119x71px kept true; opened via face index 0; deepest stack 2 layer(s); pageerrors 0
+  after face "Store": overlays 2 ["Yard store" order 3 cap 26% target "Close" 44px top 421.59..465.59 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 70.84px top 303.33..374.17 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 1 (Close): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 70.84px top 327.56..398.41 in-view true]
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 2 (Back to yard): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  press 3: overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 175.38px / hudContentBox.height 640 = 27.4 % (cap 42 %); #root canvas {"w":360,"h":640} present true; body.scrollHeight 640 == innerHeight 640 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[390x844 ts1 yard back=keys] purse 34 saved {"schemaVersion":1,"checksum":"4d6468d8","textScale":1,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 96x44px kept true; opened via face index 1; deepest stack 2 layer(s); pageerrors 0
+  after face "Yard": overlays 2 ["Yard record" order 3 cap 26% target "Close" 44px top 577.55..621.55 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 44px top 250.75..294.75 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 1 (Escape): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 44px top 547.81..591.81 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 2 (Escape): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 3 (Escape): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[390x844 ts1 yard back=taps] purse 34 saved {"schemaVersion":1,"checksum":"c6d9573c","textScale":1,"tick":434719,"machines":8,"credits":34} boot report "Back to yard" 96x44px kept true; opened via face index 1; deepest stack 2 layer(s); pageerrors 0
+  after face "Yard": overlays 2 ["Yard record" order 3 cap 26% target "Close" 44px top 577.55..621.55 in-view true | "While you were away" order 2 cap 26% target "Back to yard" 44px top 250.75..294.75 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 1 (Close): overlays 1 ["While you were away" order 2 cap 42% target "Back to yard" 44px top 547.81..591.81 in-view true]
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 2 (Back to yard): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  press 3: overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  one press too many (extra): overlays 0 []
+      yard: .objective 66.22px / hudContentBox.height 844 = 7.8 % (cap 42 %); #root canvas {"w":390,"h":844} present true; body.scrollHeight 844 == innerHeight 844 (no page scroll)
+  chain 2 -> 1 -> 0 -> 0 -> 0 (expected 2 -> 1 -> 0 -> 0 for a two-deep stack)
+
+[360x640 ts2 8-machine fork-open + refused tap] purse 30 saved {"schemaVersion":1,"checksum":"e709bb09","textScale":2,"tick":2716,"machines":8,"credits":0}
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  sim(app persisted) {"machineLevelSum":9,"machines":["sorter#0 L2","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":0,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":75,"step":"upgrade","forkPrices":["draw:35 credits","speed:45 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":30,"store":{"scrap":9,"residue":1,"copper":1},"storeUnits":11,"storeCapacity":900,"drones":1,"powerRequested":1,"powerCapacity":8,"powerRatioPct":100,"batchesDone":74,"step":"upgrade","forkPrices":["draw:30 credits","speed:40 credits"]}
+  accent-filled face index 0 of 2 (0:Less power30 credits | 1:Faster batches40 credits)
+  U-1 hudContentBox.height 640; .objective 267.5px => 41.8 % (cap 42 %)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 1 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30"
+    line0 font 28.5px w600 wrappedBoxes 4 sw290/cw290 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 font 21.6px w400 wrappedBoxes 2 sw290/cw290 "A machine waits for input; check its empty side."
+    line2 font 21.6px w400 wrappedBoxes 3 sw290/cw290 "Drones 1 ┬╖ Power 8 ┬╖ 1 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30"
+    line3 font 26.4px w400 wrappedBoxes 0 sw0/cw0 ""
+  refused tap printed: "Need 40 credits ┬╖ have 30" (toast now "Need 40 credits ┬╖ have 30")
+  persona before the refused tap {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":1,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 1 requested ┬╖ 100 %"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap9","Credits30","Store11/900"]}
+  persona after the refused tap {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":{"need":40,"word":"credits","have":30},"power":{"capacity":8,"requested":1,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 1 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap9","Credits30","Store11/900"]}
+    face [169x46 top 586 font 18.6px w400] bg rgba(201, 113, 58, 0.65) L {"l":90.94,"bucket":2} "Less power30 credits"
+    face [169x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  U-3 leftmost face before the tap "Less power30 credits" (accent-filled index 0) prices ["Less power30 credits","Faster batches40 credits"]; machine level sum 8 -> 9 after one leftmost tap; dock row after the paid tap ["Less power35 credits","Faster batches45 credits"]
+  U-7 smallest face 46px; page scroll 360x640 vs 360x640; pageerrors 0
+
+entry chunk [{"name":"index-JtFswdB-.js","bytes":231328}] (base 231262 B, ceiling 233000 B)
