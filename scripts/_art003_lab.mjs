@@ -1,7 +1,7 @@
-// Scratch: parameter search for the signalLab part row so that (a) the coarse 8x8 mask keeps
-// >= 12 of 64 cells apart from every other glyph (the pre-existing B2/D-1/G-1 assertion, which
-// must not be weakened), (b) the 32x32 gray-ramp pairwise minimum stays >= 32 % and the mean of
-// the 15 A3-1 pairs beats the base mean 48.69. Run: npx tsx scripts/_art003_lab.mjs
+// Scratch: joint parameter search over the furnace and signalLab part rows. Constraints:
+// (a) the pre-existing 8x8 mask assertion (>= 12 of 64 cells apart for all 45 role pairs),
+// (b) the 32x32 gray-ramp A3-1 minimum >= 32 % and the 15-pair mean above the base 48.69,
+// (c) the six-row solid-ink total above the base 2752 units^2. Run: npx tsx scripts/_art003_lab.mjs
 import { PARTS } from "../src/game/renderer/sprites";
 
 const mask8 = (parts) => {
@@ -33,57 +33,64 @@ const grayDiff = (a, b) => {
   for (let i = 0; i < a.length; i += 1) if (a[i] !== b[i]) d += 1;
   return +((100 * d) / a.length).toFixed(1);
 };
+const area = (row) => row.reduce((s, t) => (t[5] === 1 || t[4] === 15 ? s : s + t[2] * t[3]), 0);
 
+const roles = ["dock", "sorter", "furnace", "wireMill", "signalLab", "generic", "polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "drone"];
+const six = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"];
 const SHADOW = [-11, 12, 22, 3, 15, 1];
-const others = ["dock", "sorter", "furnace", "wireMill", "generic", "polymerRecycler", "copperSeparator", "platePress", "circuitAssembler", "drone"];
-const othersGray = new Map(others.map((id) => [id, grayGrid(PARTS[id])]));
-const othersMask = new Map(others.map((id) => [id, mask8(PARTS[id])]));
 
-const fiveIds = ["dock", "sorter", "furnace", "wireMill", "drone"];
+const labRow = (w, h, scanW) => [
+  SHADOW,
+  [-w / 2, -7, w, h, 3],
+  [-2, -15, 4, 8 - (h > 19 ? 1 : 0), 3],
+  [-(scanW / 2) - 1, -16, scanW, 3, 8],
+  [-5, -4, 6, 3, 6],
+  [-5, 2, 6, 3, 11],
+  [-14, 6, 5, 3, 3],
+  [9, 6, 5, 3, 3],
+];
+const furnaceRow = (w, h, y) => [
+  SHADOW,
+  [-w / 2, y, w, h, 3],
+  [2, -15, 5, 8, 3],
+  [-3, -15, 10, 3, 9],
+  [-6, -6, 8, 3, 6],
+  [-6, -1, 8, 3, 6],
+  [11, -2, 5, 8, 6],
+  [11, 8, 5, 3, 9],
+  [-15, 3, 4, 3, 6],
+];
 
-function evaluate(name, row) {
-  const m = mask8(row);
-  const g = grayGrid(row);
+function evaluate(label, furnace, lab) {
+  const rows = { ...Object.fromEntries(roles.map((r) => [r, PARTS[r]])), furnace, signalLab: lab };
+  const masks = new Map(roles.map((r) => [r, mask8(rows[r])]));
   let minH = 99;
-  let minHWith = "";
-  for (const id of others) {
-    const h = hamming(m, othersMask.get(id));
-    if (h < minH) { minH = h; minHWith = id; }
-  }
-  const five = ["dock", "sorter", "furnace", "wireMill", "drone"].map((id) => grayDiff(g, othersGray.get(id)));
-  const minGray = Math.min(...five);
-  // the ten pairs that do not involve signalLab are fixed; their sum comes from the live table
-  let fixedSum = 0;
-  for (let i = 0; i < 5; i += 1) {
-    for (let j = i + 1; j < 5; j += 1) {
-      const a = fiveIds[i];
-      const b = fiveIds[j];
-      fixedSum += grayDiff(othersGray.get(a), othersGray.get(b));
+  let worst = "";
+  for (let i = 0; i < roles.length; i += 1) {
+    for (let j = i + 1; j < roles.length; j += 1) {
+      const h = hamming(masks.get(roles[i]), masks.get(roles[j]));
+      if (h < minH) { minH = h; worst = `${roles[i]}/${roles[j]}`; }
     }
   }
-  const mean = +(((fixedSum + five.reduce((s, v) => s + v, 0)) / 15)).toFixed(2);
-  console.log(`${name}: minHamming=${minH}${minH < 12 ? " (" + minHWith + ")" : ""} minGray=${minGray} mean15=${mean} vs=${JSON.stringify(Object.fromEntries(["dock", "sorter", "furnace", "wireMill", "drone"].map((id, i) => [id, five[i]])))}`);
+  const grids = new Map(six.map((r) => [r, grayGrid(rows[r])]));
+  let minG = 99;
+  let sum = 0;
+  let n = 0;
+  let worstG = "";
+  for (let i = 0; i < six.length; i += 1) {
+    for (let j = i + 1; j < six.length; j += 1) {
+      const d = grayDiff(grids.get(six[i]), grids.get(six[j]));
+      sum += d;
+      n += 1;
+      if (d < minG) { minG = d; worstG = `${six[i]}/${six[j]}`; }
+    }
+  }
+  const ink = six.reduce((s, r) => s + area(rows[r]), 0);
+  console.log(`${label}: minHamming=${minH}${minH < 12 ? "!" : ""}(${worst}) minGray=${minG}(${worstG}) mean15=${(sum / n).toFixed(2)} ink6=${ink}${ink < 2752 ? " <2752!" : ""}`);
 }
 
-for (const bodyW of [12, 14, 16]) {
-  for (const bodyY of [-7, -8, -9]) {
-    for (const bodyH of [18, 19, 20]) {
-      for (const scanW of [13, 17, 21]) {
-        for (const tick of [true, false]) {
-          const row = [
-            SHADOW,
-            [-bodyW / 2, bodyY, bodyW, bodyH, 3],
-            [-2, -15, 4, 8, 3],
-            [-(scanW / 2) - 1, -16, scanW, 3, 8],
-            [-5, -4, 6, 3, 6],
-            [-5, 2, 6, 3, 11],
-            [-14, 6, 5, 3, 3],
-            [9, 6, 5, 3, 3],
-            ...(tick ? [[-14, -1, 5, 3, 3], [9, -1, 5, 3, 3]] : []),
-          ];
-          evaluate(`w${bodyW} y${bodyY} h${bodyH} scan${scanW} tick${tick ? 1 : 0}`, row);
-        }
-      }
-    }
+for (const [fw, fh, fy] of [[22, 14, -6], [24, 14, -6], [24, 17, -6], [22, 17, -6], [24, 18, -6], [26, 15, -6], [26, 16, -6]]) {
+  for (const [lw, lh, scan] of [[12, 20, 21], [14, 20, 21], [12, 19, 21], [14, 19, 25]]) {
+    evaluate(`fur${fw}x${fh}@${fy} lab${lw}x${lh}s${scan}`, furnaceRow(fw, fh, fy), labRow(lw, lh, scan));
   }
 }

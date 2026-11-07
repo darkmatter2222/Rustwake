@@ -21,7 +21,7 @@ import { DOCK_TILE } from "../../src/game/simulation/commands";
  */
 
 const VIEW = { width: 390, height: 844 };
-const SCALE = 390 / (192 + 24); // 1.8056, the phone fit the sheet band uses
+const SCALE = 390 / (192 + 8); // 1.95, the phone fit the sheet band uses (ART-003: was 390/(192+24))
 
 /** Unit-resolution gray-step grid (mirrors drawSpriteSheet's five-step ramp): cell value
  * = the ramp index of the last tuple covering it; background = 5. */

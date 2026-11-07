@@ -90,11 +90,11 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   furnace: [
     [-11, 12, 22, 3, 15, 1], // F8 contact shadow ellipse (ART-003)
-    [-10, -8, 20, 16, 3], // F1 squat thermal chamber (16-unit body)
+    [-11, -8, 22, 16, 3], // F1 squat thermal chamber, 22x16 (A3-4: 352 units^2 of solid ink)
     [2, -15, 5, 8, 3], // F2 chimney, proud of the cap line
     [-3, -15, 10, 3, 9], // F2b chimney cap, T-step in rust (identity mark, own gray step)
-    [-5, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
-    [-5, -1, 8, 3, 6], // F3b second chamber slot, one row down
+    [-6, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
+    [-6, -1, 8, 3, 6], // F3b second chamber slot, one row down
     [11, -2, 5, 8, 6], // vent stub, right column
     [11, 8, 5, 3, 9], // vent foot, right column (rust)
     [-15, 3, 4, 3, 6], // feed notch, left column

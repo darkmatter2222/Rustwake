@@ -55,7 +55,10 @@ const CENSUS = () => {
   const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12)
     .map(([k, v]) => `${k} ${+((100 * v) / total).toFixed(1)}%`);
   const bucketPct = buckets.map((v) => +((100 * v) / total).toFixed(1));
-  // Region census: distinct luminance buckets + ink share inside a device-px box.
+  // Region census: distinct luminance buckets + ink share inside a device-px box. The
+  // normalized share divides by the true 32-unit cell area at this scale, so the number is
+  // comparable across the two fitted scales (the rounded device box adds half-pixel floor).
+  const cellArea = () => (32 * cellScale) ** 2;
   const region = (x0, y0, x1, y1) => {
     const seen = new Set();
     let ink = 0;
@@ -68,8 +71,14 @@ const CENSUS = () => {
         n += 1;
       }
     }
-    return { distinctBuckets: [...seen].sort((a, b) => a - b), inkSharePct: +((100 * ink) / n).toFixed(1) };
+    return {
+      distinctBuckets: [...seen].sort((a, b) => a - b),
+      inkPx: ink,
+      inkSharePct: +((100 * ink) / n).toFixed(1),
+      inkPctOfCellArea: +((100 * ink) / cellArea()).toFixed(2),
+    };
   };
+  let cellScale = 1.8056;
   return window.__art003.then((m) => {
     const { fitCamera, tileToWorld, worldToScreen, WRECK_POSITION, WORLD_H } = m;
     const view = { width: canvas.clientWidth, height: canvas.clientHeight };
@@ -80,6 +89,7 @@ const CENSUS = () => {
       ? { top: hudBox.bottom, bottom: Math.max(0, view.height - dockBox.top) }
       : undefined;
     const camera = fitCamera(view, insets);
+    cellScale = camera.scale;
     const box = (tile) => {
       const c = tileToWorld(tile);
       const p = worldToScreen(camera, view, c.x, c.y);

@@ -21,7 +21,7 @@
       "14,23,38 0.3%"
     ],
     "luminanceBuckets8": [
-      96.4,
+      96.5,
       1,
       1.7,
       0.6,
@@ -50,7 +50,9 @@
           6,
           7
         ],
-        "inkSharePct": 65.4
+        "inkPx": 2161,
+        "inkSharePct": 65.4,
+        "inkPctOfCellArea": 64.73
       },
       "furnace14": {
         "box": [
@@ -68,7 +70,9 @@
           6,
           7
         ],
-        "inkSharePct": 57.2
+        "inkPx": 1925,
+        "inkSharePct": 57.2,
+        "inkPctOfCellArea": 57.66
       },
       "dock2": {
         "box": [
@@ -84,7 +88,9 @@
           3,
           4
         ],
-        "inkSharePct": 67
+        "inkPx": 2255,
+        "inkSharePct": 67,
+        "inkPctOfCellArea": 67.55
       },
       "wreck": {
         "box": [
@@ -102,7 +108,9 @@
           5,
           7
         ],
-        "inkSharePct": 100
+        "inkPx": 4902,
+        "inkSharePct": 100,
+        "inkPctOfCellArea": 146.84
       }
     },
     "machineRow": {
@@ -122,7 +130,9 @@
         6,
         7
       ],
-      "inkSharePct": 63.2
+      "inkPx": 6341,
+      "inkSharePct": 63.2,
+      "inkPctOfCellArea": 189.95
     },
     "bandFit": {
       "scale": 1.8056,
@@ -151,7 +161,7 @@
     "gridInkSharePct": 0.53,
     "machineBodyPx": 1723,
     "machineBodySharePct": 0.52,
-    "contactShadowPx": 265
+    "contactShadowPx": 246
   },
   "sheet": {
     "roles": 11,

@@ -111,7 +111,7 @@ const DIGIT_ASCENT_PX: Record<number, number> = { 7: 5, 11: 8, 23: 16, 24: 17 };
 const DIGIT_ASCENT_RATIO_MAX = 0.7273;
 
 const VIEW: ViewState = { width: 390, height: 844 };
-const SCALE = 390 / (192 + 24); // 1.8056, the phone scale the spec measures
+const SCALE = 390 / (192 + 8); // 1.95, the phone scale the spec measures (ART-003: was 390/(192+24) = 1.8056)
 
 function fs1(): SimState {
   const base = createInitialState();
@@ -205,7 +205,7 @@ describe("Q-002 renderer draws (3A/3B/3D)", () => {
       expect(stub.log.filter((r) => r.op === "stroke" && r.style === SELECT_STYLE).length).toBe(1);
       expect(stub.log.filter((r) => r.op === "stroke" && r.style === GRID_STYLE).length).toBe(0);
     }
-    expect(SCALE).toBeCloseTo(1.8056, 4);
+    expect(SCALE).toBeCloseTo(1.95, 4);
   });
 
   it("D1/D2: paint ceilings hold for rest, build and the mature seed (ART-003 restated)", () => {
@@ -831,7 +831,7 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
       gapBelow,
       gapBefore: [220 - phoneBand.from, phoneBand.to - 624],
     }));
-    expect(phone.camera.scale).toBe(390 / (WORLD_W + 24));
+    expect(phone.camera.scale).toBe(390 / (WORLD_W + 8));
     expect(phone.camera.x).toBe(WORLD_W / 2);
     expect(phone.camera.y).toBeCloseTo(
       WORLD_H / 2 + (CHROME.phone.view.height / 2 - (phoneBand.from + phoneBand.to) / 2) / phone.camera.scale,
@@ -853,7 +853,7 @@ describe("REV-LAYOUT-g1 3A: camera fit and glyph clearance", () => {
     expect(dBottom).toBeLessThanOrEqual(CHROME.desktop.dockTop);
     expect(desktop.s(WRECK_POSITION.y)).toBeLessThanOrEqual(CHROME.desktop.dockTop);
     // No insets at all still means the legacy fit.
-    expect(fitCamera(VIEW).scale).toBe(390 / (WORLD_W + 24));
+    expect(fitCamera(VIEW).scale).toBe(390 / (WORLD_W + 8));
     expect(fitCamera(VIEW).y).toBe(WORLD_H / 2);
   });
 
@@ -1075,7 +1075,7 @@ describe("REV-MOTION-C-g1 E rows", () => {
     expect(yardTop - insets.top).toBeCloseTo(6 * camera.scale, 1);
     // The other three cases keep the numbers L-1 accepted: 1.2034 (landscape ts1),
     // 1.8056 (phone, legacy) and 3.3644 (desktop ts1).
-    for (const [label, scale] of [["landscape", 284 / (WORLD_H + 12)], ["phone", 390 / (WORLD_W + 24)], ["desktop", 794 / (WORLD_H + 12)]] as [keyof typeof CHROME, number][]) {
+    for (const [label, scale] of [["landscape", 284 / (WORLD_H + 12)], ["phone", 390 / (WORLD_W + 8)], ["desktop", 794 / (WORLD_H + 12)]] as [keyof typeof CHROME, number][]) {
       expect(bandCase(label).camera.scale).toBeCloseTo(scale, 4);
     }
   });
@@ -1633,7 +1633,7 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(latticeMin).toBeGreaterThanOrEqual(18);
   });
 
-  it("L-5: the twelve empty mature cells carry kit - min 10.66 %, max/min 7.45, caps held", () => {
+  it("L-5: the twelve empty mature cells carry kit - min 10.39 %, max/min 7.76, caps held", () => {
     const { stub, camera } = draw(mature(), rest);
     const ink = cellInkPct(stub.log, camera);
     const families: Record<string, number[]> = {
