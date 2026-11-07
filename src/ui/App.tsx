@@ -26,10 +26,10 @@ import {
   REJECT_TEXT,
   costSummary,
   hintFor,
+  branchOptions,
   objectiveFor,
   primaryFor,
   restingLine,
-  sortedBranchOptions,
 } from "./text";
 import { resourceWord, t } from "../game/content/strings";
 import { nextYardStep, stepForMachine, type YardStep } from "../game/simulation/plan";
@@ -53,14 +53,7 @@ export interface PrimaryAction {
    * The three named outcomes of one paid level, present only at the fork
    * (STRAT-002/A1-3). Each is one tap: pressing it commits that branch.
    */
-  branches?: {
-    id: UpgradeBranch;
-    label: string;
-    cost?: string;
-    /** The same number `branchPrice` answered, kept for the paint-order sort (BLD-001). */
-    price?: number;
-    run: () => void;
-  }[];
+  branches?: { id: UpgradeBranch; label: string; cost?: string; run: () => void }[];
 }
 
 let commandSeq = 0;
@@ -603,9 +596,10 @@ function primaryForStep(
     run: () => runStep(state, step, dispatch, setBuildBlueprint, setGhostTile),
   };
   if (step.kind === "upgrade") {
-    // BLD-001: the paint order is cheapest-first, so the leftmost face is the plan the
-    // purse can pay; the ids and every printed number come straight from `branchOptions`.
-    const options = sortedBranchOptions(state, step.machineId);
+    // BLD-001 (already on `main`): `branchOptions` answers cheapest-first, so the leftmost
+    // face is the plan the purse can pay. UI-002 adds only the paint: that leftmost face
+    // carries the single accent fill of the row (`dock__btn--primary`).
+    const options = branchOptions(state, step.machineId);
     if (options.length > 0) {
       action.branches = options.map((option) => ({
         ...option,

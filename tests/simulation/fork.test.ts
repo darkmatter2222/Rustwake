@@ -465,9 +465,10 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
       text
     );
     // The dock that answers that save is the two-plan dock; the saved rank is still read.
+    // BLD-001: cheapest-first, so the 30-credit `draw` plan leads the row.
     expect(branchOptions(decoded.payload.sim, loaded.id).map((option) => option.id)).toEqual([
-      "speed",
       "draw",
+      "speed",
     ]);
   });
 
@@ -1005,13 +1006,44 @@ describe("STRAT-003 the two live plans carry their own prices", () => {
   it("keeps the unnamed ladder at the plain price beside the priced options", () => {
     const s = yard();
     const sorter = pick(s, "sorter");
-    // The two faces print their own prices at the level the dock is answering.
-    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["40 credits", "30 credits"]);
+    // The two faces print their own prices at the level the dock is answering, cheapest
+    // first (BLD-001): the plain-ladder `draw` plan leads, the premium `speed` plan follows.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["30 credits", "40 credits"]);
     const before = s.credits;
     expect(send(s, { type: "machine.upgrade", machineId: sorter.id })).toBe(true);
     expect(before - s.credits).toBe(upgradeCost(BLUEPRINTS.sorter.baseUpgradeCost, 1));
-    // One level up, the pair moves with the plain ladder: 35 + 10 over 35.
-    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["45 credits", "35 credits"]);
+    // One level up, the pair moves with the plain ladder: 35 under 35 + 10.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["35 credits", "45 credits"]);
+  });
+
+  /**
+   * BLD-001: the dock paints the two named plans by their own price ascending, so the
+   * leftmost face is always one the current purse can pay (QA note 6: at 30 credits the
+   * old row parked 31 leftmost taps at 0 commands). The `speed` premium is +10 at every
+   * rank, so the pair stays ordered all the way up; a tie would keep the declared order,
+   * because `Array#sort` has been stable since ES2019.
+   */
+  it("paints the two plans cheapest-first at every rank of the ladder (BLD-001)", () => {
+    const number = (cost: string): number => Number(cost.split(" ")[0]);
+    const s = yard();
+    const sorter = pick(s, "sorter");
+    for (let rank = 1; rank <= 4; rank += 1) {
+      const options = branchOptions(s, sorter.id);
+      const level = sorter.level;
+      expect(options.map((o) => o.id)).toEqual(["draw", "speed"]);
+      const prices = options.map((o) => number(o.cost));
+      for (let i = 1; i < prices.length; i += 1)
+        expect(prices[i]).toBeGreaterThanOrEqual(prices[i - 1]);
+      // Each printed number is the engine's own price for that plan at this rank.
+      expect(prices[0]).toBe(
+        branchPrice(BLUEPRINTS.sorter.baseUpgradeCost, level, options[0].id)
+      );
+      expect(prices[1]).toBe(
+        branchPrice(BLUEPRINTS.sorter.baseUpgradeCost, level, options[1].id)
+      );
+      expect(send(s, { type: "machine.upgrade", machineId: sorter.id, branch: "draw" })).toBe(true);
+      expect(sorter.level).toBe(level + 1);
+    }
   });
 
   it("decodes a save whose machine names all three plans", () => {
@@ -1033,11 +1065,11 @@ describe("STRAT-003 the two live plans carry their own prices", () => {
     expect(encodeSave(decoded.payload.sim, decoded.payload.lastSeenMs, decoded.payload.settings)).toBe(
       text
     );
-    // And the priced dock answers that save with its two live faces: the furnace's
-    // plain ladder at level 4 is 40 -> 47 -> 55 -> 64, so 64 + 10 over 64.
+    // And the priced dock answers that save with its two live faces, cheapest first: the
+    // furnace's plain ladder at level 4 is 40 -> 47 -> 55 -> 64, so 64 under 64 + 10.
     expect(branchOptions(decoded.payload.sim, loaded.id).map((o) => o.cost)).toEqual([
-      "74 credits",
       "64 credits",
+      "74 credits",
     ]);
   });
 });

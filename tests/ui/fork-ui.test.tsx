@@ -7,7 +7,7 @@ import { createStore, type GameStore } from "../../src/app/store";
 import { TUNING } from "../../src/game/content/defs";
 import { nextYardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
-import { branchOptions, sortedBranchOptions } from "../../src/ui/text";
+import { branchOptions } from "../../src/ui/text";
 
 /**
  * STRAT-002/A1 surfaces: the fork on the dock (A1-3), the power budget on the resting
@@ -103,27 +103,23 @@ describe("STRAT-002/A1 the fork on the dock", () => {
 
     // The drop executed (STRAT-002 g3 / A1-2v3): `buffer` leads no column under either
     // gap ladder, so the dock carries two names. STRAT-003: each name carries its own
-    // price. BLD-001 (riding inside UI-002): the *table* keeps its declared order and the
-    // dock paints it cheapest-first, so the leftmost face is the plain-price budget plan.
+    // price. BLD-001: the row is painted cheapest-first, so the plain-price budget plan is
+    // the leftmost face and the dearer throughput plan follows it.
     const machineId = store.getState().machines[0].id;
     expect(branchOptions(store.getState(), machineId).map((option) => option.id)).toEqual([
-      "speed",
       "draw",
+      "speed",
     ]);
     expect(branchOptions(store.getState(), machineId).map((option) => option.cost)).toEqual([
-      "40 credits",
       "30 credits",
-    ]);
-    expect(sortedBranchOptions(store.getState(), machineId).map((option) => option.id)).toEqual([
-      "draw",
-      "speed",
+      "40 credits",
     ]);
 
     const buttons = [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")];
     const labels = buttons.map((node) => (node.textContent ?? "").trim());
     expect(labels.length).toBe(2);
-    // Paint order, not just membership: the first face is the budget plan at the plain
-    // price, the last the batch clock at the plain ladder plus its 10-credit premium.
+    // Order, not just membership: the first face is the budget plan at the plain price,
+    // the last the batch clock at the plain ladder plus its 10-credit premium.
     expect(labels[0]).toMatch(/^Less power30 credits$/);
     expect(labels[1]).toMatch(/^Faster batches40 credits$/);
     expect(labels.join("|")).not.toContain("More input");
@@ -133,25 +129,23 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     for (const button of buttons) {
       expect(parseFloat(getComputedStyle(button).minHeight)).toBeGreaterThanOrEqual(44);
     }
-    // U-2: one accent-filled primary for the row, and it is the leftmost (cheapest) face.
+    // U-2 (UI-002): one accent-filled primary for the whole row, and it is the leftmost,
+    // cheapest face - the one a blind thumb reaches. Both faces keep the shared third-width
+    // grammar (`dock__btn--branch`), so the accent names a plan without moving any box.
     expect(buttons[0].className).toContain("dock__btn--primary");
     expect(buttons[1].className).not.toContain("dock__btn--primary");
-    // The two faces stay equal thirds beside each other (UI-002 U-7, one row).
     for (const button of buttons) expect(button.className).toContain("dock__btn--branch");
 
     // One tap on the *leftmost* face, no Build-then-Place pair: the chosen name is the
-    // recorded branch and the purse pays exactly the number that face printed.
-    const printed = Number((buttons[0].querySelector(".dock__cost")?.textContent ?? "0").split(" ")[0]);
+    // recorded branch, and the charge is exactly the number that face printed (34 - 30 = 4,
+    // the purse covers the plain price and not the premium).
+    const printed = Number(
+      (buttons[0].querySelector(".dock__cost")?.textContent ?? "0").split(" ")[0]
+    );
     const creditsBefore = store.getState().credits;
-    const levelSumBefore = store
-      .getState()
-      .machines.reduce((total, machine) => total + machine.level, 0);
     act(() => buttons[0].click());
     expect(printed).toBe(30);
     expect(store.getState().credits).toBe(creditsBefore - printed);
-    expect(
-      store.getState().machines.reduce((total, machine) => total + machine.level, 0)
-    ).toBe(levelSumBefore + 1);
     expect(store.getState().machines[0].branch).toEqual(["draw"]);
     expect(store.getState().machines[0].level).toBe(2);
     expect(store.getState().credits).toBe(4);

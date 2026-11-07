@@ -26,6 +26,7 @@ import { advance } from "../src/game/simulation/engine";
 import { nextYardStep } from "../src/game/simulation/plan";
 import { createInitialState } from "../src/game/simulation/types";
 import { encodeSave, decodeSave } from "../src/game/persistence/save";
+import { fitCamera, tileToWorld, worldToScreen } from "../src/game/renderer/scene";
 import { branchOptions } from "../src/ui/text";
 
 const url = process.env.RUSTWAKE_URL ?? "http://localhost:4173/";
@@ -49,7 +50,7 @@ const firstFreeTile = (state) => {
 };
 
 /** The jsdom boot cadence through the real engine, `depth` machines deep (measure-chrm002). */
-function yardFrame(depth, credits = 34, data = 0) {
+function yardFrame(depth, credits = 34, data = 0, tiles) {
   const state = createInitialState();
   let seq = 0;
   const send = (body) => applyCommand(state, { id: "s" + (seq += 1), ...body });
@@ -75,7 +76,7 @@ function yardFrame(depth, credits = 34, data = 0) {
     const need = {};
     for (const item of BLUEPRINTS[blueprint].buildCost) need[item.resource] = item.qty;
     fund(60, 20, index >= 2 ? (need.nonferrous ?? 0) : undefined);
-    send({ type: "machine.build", blueprint, tile: firstFreeTile(state) });
+    send({ type: "machine.build", blueprint, tile: tiles?.[index] ?? firstFreeTile(state) });
     connect(state.machines[state.machines.length - 1].id);
     advance(state, 300);
   });
@@ -232,6 +233,11 @@ const readCell = () => {
   };
   const panelRows = [...document.querySelectorAll(".panel")].map((panel) => {
     const body = panel.querySelector(".panel__body");
+    const overflow = (node) => (node ? node.scrollWidth - node.clientWidth : null);
+    const wholeWord = (node) =>
+      // A one-word column shows up as a box narrower than the text it holds, so the text
+      // breaks after every word; `scrollWidth == clientWidth` is the flat form of that.
+      node ? { sw: node.scrollWidth, cw: node.clientWidth, lines: lineBoxes(node).length } : null;
     const rows = [...panel.querySelectorAll(".panel__row")].map((row) => {
       const dt = row.querySelector("dt");
       const dd = row.querySelector("dd");
@@ -239,13 +245,51 @@ const readCell = () => {
       const bdd = dd ? box(dd.getBoundingClientRect()) : null;
       return {
         text: text(row),
+        ddText: dd ? text(dd) : null,
         dt: bdt,
         dd: bdd,
         sameLineBox: bdt && bdd ? Math.abs(bdt.top - bdd.top) <= 1 : null,
         valueAfterLabel: bdt && bdd ? bdd.left > bdt.right : null,
+        // The two numbers the criterion is stated in, printed rather than inferred.
+        topDelta: bdt && bdd ? round(bdd.top - bdt.top) : null,
+        leftGap: bdt && bdd ? round(bdd.left - bdt.right) : null,
         rowWidth: round(row.getBoundingClientRect().width),
+        dtOverflow: overflow(dt),
+        ddOverflow: overflow(dd),
+        ddWrapping: dd ? lineBoxes(dd).length : null,
       };
     });
+    /** The research cards, row by row: name, effect, state and buy target in one line box. */
+    const nodes = [...panel.querySelectorAll(".node")].map((node) => ({
+      name: text(node.querySelector(".node__name")),
+      effect: text(node.querySelector(".node__effect")),
+      state: text(node.querySelector(".node__state")),
+      width: round(node.getBoundingClientRect().width),
+      cardOverflowX: overflow(node),
+      nameBox: wholeWord(node.querySelector(".node__name")),
+      effectBox: wholeWord(node.querySelector(".node__effect")),
+      stateBox: wholeWord(node.querySelector(".node__state")),
+      footBox: wholeWord(node.querySelector(".node__foot")),
+      rightMostInk: round(
+        Math.max(
+          0,
+          ...[...node.querySelectorAll("*")].map((n) => n.getBoundingClientRect().right)
+        )
+      ),
+      bottom: round(node.getBoundingClientRect().bottom),
+      buy: [...node.querySelectorAll("button")].map((b) => text(b)).join(" | "),
+    }));
+    // Which printed *value* strings appear more than once in this panel — the `20/900`
+    // census (finding N-2): the capacity pair must be printed exactly once.
+    const panelText = text(panel);
+    const repeatedValues = rows
+      .map((r) => ({
+        value: r.ddText ?? "",
+        count: (r.ddText ?? "").length >= 4 ? panelText.split(r.ddText ?? "").length - 1 : 1,
+      }))
+      .filter((entry) => entry.count > 1);
+    const capacityPair =
+      rows.map((r) => r.ddText ?? "").find((value) => /^\d[\d,.]*\/\d[\d,.]*$/.test(value)) ?? null;
     const last = rows[rows.length - 1];
     const bodyBox = body ? box(body.getBoundingClientRect()) : null;
     const dismiss = panel.querySelector(".panel__head button");
@@ -263,18 +307,42 @@ const readCell = () => {
           : null,
       rows: rows.length,
       rowWidths: rows.map((r) => r.rowWidth),
+      dtOverflows: rows.map((r) => r.dtOverflow),
+      ddOverflows: rows.map((r) => r.ddOverflow),
+      capacityPair,
+      repeatedValues,
+      nodes,
+      nodeCardOverflow: nodes.map((n) => n.cardOverflowX),
+      nodeNameBoxes: nodes.map((n) => n.nameBox),
+      lastNodeBottom: nodes.length ? nodes[nodes.length - 1].bottom : null,
+      lastNodeInsideBody:
+        bodyBox && nodes.length ? nodes[nodes.length - 1].bottom <= bodyBox.bottom + 1 : null,
+      dlOverflowX: [...panel.querySelectorAll("dl")].map((dl) => dl.scrollWidth - dl.clientWidth),
       bodyClientWidth: body ? body.clientWidth : null,
       bodyScrollHeight: body ? body.scrollHeight : null,
       bodyClientHeight: body ? body.clientHeight : null,
       bodyScrollTop: body ? round(body.scrollTop) : null,
       bodyScrollable: body ? body.scrollHeight > body.clientHeight + 0.5 : null,
+      bodyBottom: bodyBox ? bodyBox.bottom : null,
+      bodyTop: bodyBox ? bodyBox.top : null,
       lastRowText: last ? last.text : null,
       lastRowBottom: last && last.dd ? last.dd.bottom : null,
       lastRowInsideBody:
-        last && last.dd && bodyBox ? last.dd.bottom <= bodyBox.bottom + 0.5 : null,
+        // 1 px tolerance, the same one the row criterion uses: `clientHeight` is an integer
+        // while the body's own rect is fractional, so a scroller at its maximum scrollTop
+        // lands the last line 0.63 px past the truncated edge in chromium.
+        last && last.dd && bodyBox ? last.dd.bottom <= bodyBox.bottom + 1 : null,
       dlCount: panel.querySelectorAll("dl").length,
       nodeRows: [...panel.querySelectorAll(".node__foot")].map((row) => accentCount(row)),
       firstRow: rows[0] ?? null,
+      rowDetails: rows.map((r) => ({
+        text: r.text,
+        topDelta: r.topDelta,
+        leftGap: r.leftGap,
+        sameLineBox: r.sameLineBox,
+        valueAfterLabel: r.valueAfterLabel,
+        ddWrapping: r.ddWrapping,
+      })),
       alignmentOk:
         rows.length > 0 &&
         rows.every((r) => r.dt && r.dd && r.sameLineBox && r.valueAfterLabel),
@@ -350,7 +418,7 @@ const CELLS = [
 
 /** One fresh context per cell; the engine writes the save, the app boots into it. */
 async function withPage(browser, cell, body) {
-  const state = yardFrame(cell.depth, cell.purse ?? 34, cell.data ?? 0);
+  const state = yardFrame(cell.depth, cell.purse ?? 34, cell.data ?? 0, cell.tiles);
   // `lastSeenMs: 10` is the base instrument's envelope, so the four U-1 cells reproduce the
   // numbers recorded in `ds-measure.json`. Cells that need a *specific* yard ladder step
   // (the fork row) ask for a live stamp instead, which makes the offline catch-up 0 ticks
@@ -437,6 +505,104 @@ const clickFaceExactly = (page, label) =>
     faces[index]?.click();
     return { want, index, faces: texts };
   }, label);
+
+/**
+ * The canvas box and the chrome band, read the same two ways `chromeInsets` in `App.tsx`
+ * reads them, so the tile centres this pass taps are the ones the renderer painted. The
+ * camera comes from the shipped `fitCamera` / `worldToScreen`, so no hand-copied constant.
+ */
+const readGeometry = () => {
+  const canvas = document.querySelector("canvas");
+  const parent = canvas ? canvas.parentElement : null;
+  if (!canvas || !parent) return null;
+  const rect = canvas.getBoundingClientRect();
+  const top = document.querySelector(".hud__top");
+  const dock = document.querySelector(".dock");
+  const topEdge = top ? top.getBoundingClientRect().bottom : 0;
+  const dockTop = dock ? dock.getBoundingClientRect().top : 0;
+  const cssHeight = parent.clientHeight;
+  return {
+    left: rect.left,
+    top: rect.top,
+    view: { width: parent.clientWidth, height: cssHeight },
+    insets:
+      topEdge > 0 && dockTop > 0
+        ? { top: topEdge, bottom: Math.max(0, cssHeight - dockTop) }
+        : undefined,
+  };
+};
+
+/** Viewport coordinates of the centre of each named tile, via the shipped camera maths. */
+async function tileTapPoints(page, tiles) {
+  const geometry = await page.evaluate(readGeometry);
+  if (!geometry) return [];
+  const camera = fitCamera(geometry.view, geometry.insets);
+  return tiles.map((tile) => {
+    const world = tileToWorld(tile);
+    const p = worldToScreen(camera, geometry.view, world.x, world.y);
+    return {
+      tile,
+      x: Math.round(p.x + geometry.left),
+      y: Math.round(p.y + geometry.top),
+      camera: { x: camera.x, y: camera.y, scale: Math.round(camera.scale * 1000) / 1000 },
+    };
+  });
+}
+
+/**
+ * Open one panel the way a thumb does. At the fork the dock carries only the two named
+ * plans (STRAT-002/A1-3), so the panel faces are not on the row yet: pay the cheapest plan
+ * once — the accent face, i.e. the plan the purse can reach — and the row returns to the
+ * plain ladder, where `Store` / `Yard` / `Research` live.
+ */
+async function openPanel(page, name) {
+  const attempts = [];
+  let clicked = await clickFaceExactly(page, name);
+  await page.waitForTimeout(150);
+  let panels = await page.evaluate(() => document.querySelectorAll(".panel").length);
+  attempts.push({ how: "face", index: clicked.index, panels });
+  for (let i = 0; panels === 0 && i < 3; i += 1) {
+    await page.evaluate(() => {
+      const faces = [...document.querySelectorAll(".dock .dock__btn")];
+      const accent =
+        faces.find(
+          (b) => (getComputedStyle(b).backgroundImage || "").indexOf("linear-gradient") === 0
+        ) ?? faces[0];
+      accent?.click();
+    });
+    await page.waitForTimeout(200);
+    clicked = await clickFaceExactly(page, name);
+    await page.waitForTimeout(150);
+    panels = await page.evaluate(() => document.querySelectorAll(".panel").length);
+    attempts.push({ how: "pay-cheapest-then-face", index: clicked.index, panels });
+  }
+  return { attempts, panels, faces: clicked.faces };
+}
+
+/** Tap the painted centre of each machine tile until the machine panel appears. */
+async function openMachinePanel(page, tiles) {
+  const points = await tileTapPoints(page, tiles);
+  for (const point of points) {
+    await page.mouse.click(point.x, point.y);
+    await page.waitForTimeout(140);
+    const panel = await page.evaluate(() => {
+      const node = document.querySelector(".panel");
+      return node
+        ? {
+            title: (node.querySelector(".panel__title")?.textContent ?? "").trim(),
+            actions: [...node.querySelectorAll(".panel__actions button")].map((b) =>
+              (b.textContent ?? "").replace(/\s+/g, " ").trim()
+            ),
+            actionsInRow: [...node.querySelectorAll(".panel__actions button")].map((b) =>
+              Math.round(b.getBoundingClientRect().height)
+            ),
+          }
+        : null;
+    });
+    if (panel) return { panel, point, points: points.map((p) => ({ tile: p.tile, x: p.x, y: p.y })) };
+  }
+  return { panel: null, points: points.map((p) => ({ tile: p.tile, x: p.x, y: p.y })) };
+}
 
 /** Scroll an open panel body to its own bottom; returns the new scrollTop. */
 const scrollPanelBody = (page) =>
@@ -574,6 +740,9 @@ async function passPanel(browser) {
     { label: "360x640 ts1 store", width: 360, height: 640, textScale: 1, depth: 2, open: "Store" },
     { label: "360x640 ts2 store", width: 360, height: 640, textScale: 2, depth: 2, open: "Store" },
     {
+      // Row 4 carries the machines here: at text scale 2.0 the top rows sit under the
+      // objective card, whose own box is a hit target, so a tile centre there is not a
+      // canvas tap. Row 4 paints its centre between the card bottom and the dock.
       label: "360x640 ts2 machine",
       width: 360,
       height: 640,
@@ -581,6 +750,7 @@ async function passPanel(browser) {
       depth: 4,
       open: "machine",
       data: 12,
+      tiles: [24, 25, 27, 28],
     },
     {
       label: "360x640 ts2 research",
@@ -591,47 +761,39 @@ async function passPanel(browser) {
       open: "Research",
       data: 12,
     },
+    {
+      label: "390x844 ts2 store",
+      width: 390,
+      height: 844,
+      textScale: 2,
+      depth: 4,
+      open: "Store",
+      data: 12,
+    },
+    {
+      label: "390x844 ts1 machine",
+      width: 390,
+      height: 844,
+      textScale: 1,
+      depth: 4,
+      open: "machine",
+      data: 12,
+      tiles: [24, 25, 27, 28],
+    },
   ]) {
     const { result, pageErrors, envelope, report } = await withPage(browser, cell, async (page) => {
-      const clicked =
-        cell.open === "machine" ? null : await clickFaceExactly(page, cell.open);
-      await page.waitForTimeout(150);
-      let machine = null;
-      if (cell.open === "machine") {
-        // The machine panel opens from a canvas tap on a machine tile: walk a coarse
-        // grid of real pointer taps until one panel appears (the fitted yard is centred).
-        const points = [
-          [0.5, 0.4],
-          [0.42, 0.45],
-          [0.58, 0.45],
-          [0.36, 0.5],
-          [0.64, 0.5],
-          [0.5, 0.55],
-        ];
-        for (const [fx, fy] of points) {
-          if (machine) break;
-          await page.mouse.click(Math.round(cell.width * fx), Math.round(cell.height * fy));
-          await page.waitForTimeout(120);
-          machine = await page.evaluate(() => {
-            const panel = document.querySelector(".panel");
-            return panel
-              ? {
-                  title: (panel.querySelector(".panel__title")?.textContent ?? "").trim(),
-                  actions: [...panel.querySelectorAll(".panel__actions button")].map((b) =>
-                    (b.textContent ?? "").replace(/\s+/g, " ").trim()
-                  ),
-                }
-              : null;
-          });
-        }
-      }
+      const tiles = yardFrame(cell.depth, cell.purse ?? 34, cell.data ?? 0, cell.tiles).machines.map(
+        (machine) => machine.tile
+      );
+      const machine = cell.open === "machine" ? await openMachinePanel(page, tiles) : null;
+      const opened = cell.open === "machine" ? null : await openPanel(page, cell.open);
       const measured = await page.evaluate(readCell);
       // "The panel body scrolls with a visible target": drive its own scroll to the bottom
       // and re-read, so the last painted line is proven reachable inside the body box.
       const scrolled = await scrollPanelBody(page);
       await page.waitForTimeout(80);
       const afterScroll = await page.evaluate(readCell);
-      return { measured, machine, clicked, scrolled, afterScroll };
+      return { measured, machine, opened, scrolled, afterScroll };
     });
     rows.push({ cell, ...result, pageErrors, envelope, report });
   }
@@ -639,9 +801,15 @@ async function passPanel(browser) {
     const m = row.measured;
     console.log(
       `\n[${row.cell.label}] saved ${JSON.stringify(row.envelope)} panels ${m.panelCount}` +
-        ` dock faces ${JSON.stringify(row.clicked?.faces ?? [])}` +
-        ` (clicked index ${row.clicked ? row.clicked.index : "canvas tap"})`
+        ` hudContentBox.height ${m.hudContentBoxHeight}` +
+        ` open attempts ${JSON.stringify(row.opened?.attempts ?? null)}` +
+        ` faces ${JSON.stringify(row.opened?.faces ?? [])}`
     );
+    if (row.machine)
+      console.log(
+        `  machine panel ${JSON.stringify(row.machine.panel)}` +
+          ` tapped ${JSON.stringify(row.machine.points)} (tile centres via the shipped fitCamera)`
+      );
     console.log(
       `  boot report overlay: "${row.report.label}" ${row.report.widthPx}x${row.report.heightPx}px` +
         ` -> panels ${row.report.panelsBefore} to ${row.report.panelsAfter}`
@@ -653,35 +821,49 @@ async function passPanel(browser) {
           ` dl ${panel.dlCount} alignment ${panel.alignmentOk}` +
           ` body ${panel.bodyClientWidth}px cw / sh ${panel.bodyScrollHeight} ch ${panel.bodyClientHeight}` +
           ` scrollable ${panel.bodyScrollable} scrollTop ${panel.bodyScrollTop}` +
-          ` lastRowInsideBody ${panel.lastRowInsideBody} (bottom ${panel.lastRowBottom})`
+          ` lastRowInsideBody ${panel.lastRowInsideBody} (bottom ${panel.lastRowBottom})` +
+          ` lastNodeInsideBody ${panel.lastNodeInsideBody} (bottom ${panel.lastNodeBottom})`
       );
-      console.log(`    rowWidths ${JSON.stringify(panel.rowWidths)}`);
-      console.log(`    firstRow ${JSON.stringify(panel.firstRow)}`);
-      console.log(`    lastRow "${panel.lastRowText}"`);
-      for (const node of panel.nodeRows)
-        console.log(`    node row: buttons ${node.buttons} accent-filled ${node.accentFilled} ${JSON.stringify(node.texts)}`);
-      if (panel.rows > 0) {
-        const widths = panel.rowWidths;
+      console.log(
+        `    U-4 rows: widths ${JSON.stringify(panel.rowWidths)}` +
+          ` vs body clientWidth ${panel.bodyClientWidth};` +
+          ` dl overflow ${JSON.stringify(panel.dlOverflowX)}` +
+          ` dt overflow ${JSON.stringify(panel.dtOverflows)} dd overflow ${JSON.stringify(panel.ddOverflows)}`
+      );
+      for (const detail of panel.rowDetails)
         console.log(
-          `    U-4 full-width rows: min ${Math.min(...widths)} vs body clientWidth ${panel.bodyClientWidth}` +
-            ` (a node/one-word column shows as a row far narrower than the body)`
+          `      row dTop ${detail.topDelta} leftGap ${detail.leftGap}` +
+            ` sameLineBox ${detail.sameLineBox} valueAfterLabel ${detail.valueAfterLabel}` +
+            ` ddLines ${detail.ddWrapping} "${detail.text}"`
         );
-      }
+      console.log(
+        `    printed values: capacity pair "${panel.capacityPair}"` +
+          ` repeated ${JSON.stringify(panel.repeatedValues)} (empty = every value once)`
+      );
+      for (const node of panel.nodes)
+        console.log(
+          `      node "${node.name}" card w ${node.width} overflowX ${node.cardOverflowX}` +
+            ` name ${JSON.stringify(node.nameBox)} effect ${JSON.stringify(node.effectBox)}` +
+            ` state ${JSON.stringify(node.stateBox)} foot ${JSON.stringify(node.footBox)}` +
+            ` rightMostInk ${node.rightMostInk} buy "${node.buy}"`
+        );
     }
     const tail = row.afterScroll?.panels ?? [];
     for (const panel of tail)
       console.log(
         `    after scroll-to-bottom "${panel.label}" scrollTop ${panel.bodyScrollTop}` +
-          `/${panel.bodyScrollHeight} lastRowInsideBody ${panel.lastRowInsideBody}` +
-          ` lastRow "${panel.lastRowText}" dismiss in-view ${panel.headDismissInView}`
+          `/${panel.bodyScrollHeight} ch ${panel.bodyClientHeight}` +
+          ` body ${panel.bodyTop}..${panel.bodyBottom}` +
+          ` lastRowInsideBody ${panel.lastRowInsideBody}` +
+          ` lastNodeInsideBody ${panel.lastNodeInsideBody} (bottom ${panel.lastNodeBottom})` +
+          ` dismiss in-view ${panel.headDismissInView}`
       );
-    if (row.machine) console.log(`  machine panel actions ${JSON.stringify(row.machine)}`);
     console.log(
       `  U-4 no page scroll: ${m.pageScroll.height <= m.inner.height && m.pageScroll.width <= m.inner.width}` +
         ` (${m.pageScroll.width}x${m.pageScroll.height} vs ${m.inner.width}x${m.inner.height})` +
-        `; node-row overflow ${JSON.stringify(
-          m.panels.flatMap((p) => p.nodeRows.map((r) => r.buttons))
-        )}; pageerrors ${row.pageErrors.length}`
+        `; node-card overflow ${JSON.stringify(m.panels.map((p) => p.nodeCardOverflow))}` +
+        `; hudContentBox.height ${m.hudContentBoxHeight}` +
+        `; pageerrors ${row.pageErrors.length}`
     );
   }
   return rows;
@@ -700,10 +882,8 @@ async function passDismiss(browser) {
   const { result, pageErrors, report } = await withPage(browser, cell, async (page) => {
     const log = [];
     const openBy = async (name) => {
-      const clicked = await clickFaceExactly(page, name);
-      await page.waitForTimeout(120);
-      const panels = await page.evaluate(() => document.querySelectorAll(".panel").length);
-      return { panels: clicked.index < 0 ? -1 : panels, faces: clicked.faces };
+      const opened = await openPanel(page, name);
+      return { panels: opened.panels, faces: opened.faces, attempts: opened.attempts };
     };
     for (const name of ["Store", "Research", "Yard"]) {
       const opened = await openBy(name);
@@ -742,7 +922,10 @@ async function passDismiss(browser) {
     const panelsAfterGhostEscape = await page.evaluate(
       () => document.querySelectorAll(".panel").length
     );
-    return { log, built, ghostLine, ghostAfterEscape, panelsAfterGhostEscape };
+    const hudHeight = await page.evaluate(
+      () => document.querySelector(".hud")?.clientHeight ?? null
+    );
+    return { log, built, ghostLine, ghostAfterEscape, panelsAfterGhostEscape, hudHeight };
   });
   console.log(
     `\n[${cell.label}] U-5 overlay dismiss chain (pageerrors ${pageErrors.length})` +
@@ -777,11 +960,13 @@ async function passFork(browser) {
   };
   const { result, pageErrors, envelope, report, sim } = await withPage(browser, cell, async (page) => {
     const before = await page.evaluate(readCell);
+    const personaBefore = await page.evaluate(readPersona);
     // One refused tap: the dearer face at a 30-credit purse.
     await tapFace(page, 1);
     await page.waitForTimeout(120);
     const refused = await page.evaluate(() => document.querySelector(".toast")?.textContent ?? null);
     const measured = await page.evaluate(readCell);
+    const persona = await page.evaluate(readPersona);
     const toast = await page.evaluate(() => document.querySelector(".toast")?.textContent ?? null);
     const levelSum = () =>
       page.evaluate(() => {
@@ -803,7 +988,7 @@ async function passFork(browser) {
       levelSumAfter = await levelSum();
     }
     const after = await page.evaluate(readCell);
-    return { before, refused, measured, toast, levelSumBefore, levelSumAfter, after };
+    return { before, personaBefore, refused, measured, persona, toast, levelSumBefore, levelSumAfter, after };
   });
   const m = result.measured;
   const ratio = Math.round((m.cardBox.h / m.hudContentBoxHeight) * 1000) / 10;
@@ -833,15 +1018,21 @@ async function passFork(browser) {
         ` sw${line.scrollWidth}/cw${line.clientWidth} "${line.text}"`
     );
   console.log(`  refused tap printed: "${result.refused}" (toast now "${result.toast}")`);
+  console.log(`  persona before the refused tap ${JSON.stringify(result.personaBefore)}`);
+  console.log(`  persona after the refused tap ${JSON.stringify(result.persona)}`);
   for (const face of m.faces)
     console.log(
       `    face [${face.box.w}x${face.box.h} top ${face.box.top} font ${face.fontSizePx}px w${face.fontWeight}]` +
         ` bg ${face.background} L ${JSON.stringify(face.luminance)} "${face.text}"`
     );
   console.log(
-    `  U-3 leftmost face "${result.after.faces[0]?.text}" prices` +
-      ` ${JSON.stringify(result.after.faces.map((f) => f.text))}` +
-      `; machine level sum ${result.levelSumBefore} -> ${result.levelSumAfter} after one leftmost tap`
+    `  U-3 leftmost face before the tap "${result.measured.faces[0]?.text}"` +
+      ` (accent-filled index ${result.measured.faces.findIndex(
+        (f) => (f.backgroundImage || "").indexOf("linear-gradient") === 0
+      )}) prices` +
+      ` ${JSON.stringify(result.measured.faces.map((f) => f.text))}` +
+      `; machine level sum ${result.levelSumBefore} -> ${result.levelSumAfter} after one leftmost tap` +
+      `; dock row after the paid tap ${JSON.stringify(result.after.faces.map((f) => f.text))}`
   );
   console.log(
     `  U-7 smallest face ${Math.round(m.faces.reduce((a, f) => Math.min(a, f.box.w, f.box.h), 999) * 10) / 10}px` +
