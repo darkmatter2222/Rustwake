@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-11-07T21:52:00+00:00",
+  "updated_at": "2026-11-07T21:59:33+00:00",
   "max_active_sessions": 6,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
@@ -10,11 +10,11 @@
     "plan": "work/product/SPRINT-002.md"
   },
   "publication": {
-    "inspected_head": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-    "deployed_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
+    "inspected_head": "d72213d1590b85af8e9af3b4278024157fda354f",
+    "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
     "url": "https://home.darkmatter2222.com/rustwake/",
     "receipt": "work/releases/REL-010-g1.md",
-    "verification": "Integrated and published source for the current slice: 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0 (tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f), reached by three zero-conflict non-ff merges on 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2: 24864e23f25486862b04f21d5375b919956407da adds 0daab63b2056ebc8733f46d42cb32cd122f7b56d (UI-002 g3), 0e5d24f842622c11625caf7959ed9c2b155a1b3d adds fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d (BELT-001 cost-only), c32e22c983e3bec94872f55b3c92937762299cdd adds 97f7f154b43d59116f0d2c8a99af1073c4dbb512 (POLISH-001), then the OPS-106 one-line fix. Gates on that tree, each re-run by the release lane: typecheck exit 0; npx vitest run exit 0 with 309 passed in 30 files; npm run validate exit 0, behaviour firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 with 0 violations; npm run build exit 0 with entry assets/index-CWtGNGYE.js 232365 B against the unchanged 233000 B ceiling (635 B spare), index-DbNBovuF.css 8091 B, tables-BB2NPvQ2.js 9298 B, catchup.worker-G_Jyr7uh.js 13406 B; node scripts/team-board.mjs --check exit 0. Served state at this snapshot: the last evidenced deployment is still a5517948046f1327cb92cf35a9a02be53345f72f (entry index-C_K4oMJ5.js 231262 B, index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B, catchup.worker-G_Jyr7uh.js 13406 B, all four sha256-equal to the local build in REL-009-g1). The ci and delivery runs for 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0 are triggered by this push and are read after it; a green build is not a deployment, so the deployed field only changes once the deploy job and the served bytes agree. Held for REL-011 with their own review: bcb3d1cdefdc9f84108b8bb91cd95e2736853618 (rw/belt001-g4, the priced-extent polyline plus printed price, remote tip appeared after the certified merge) and c30c07d15800ae2bec562fd7aa00795c24a6da66 (rw/art004-g1, own entry 232825 B; the reviewer measured the four-way merge at 233311 B, 311 B over the unchanged ceiling, so it cannot join a release without a byte decision). Unverified by this slice and named as such: audio is decoded-not-played, real-handset rAF is unmeasured (headless node only), there is no human second rater, and no fresh desktop 1440x900 organic session was captured for this SHA."
+    "verification": "automatic Actions delivery for the pushed main SHA d72213d1590b85af8e9af3b4278024157fda354f: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment). The ci job ran the board --check, the node script tests, the three host python tests, typecheck, validate, npm test and build, all success. Served proof over HTTPS: served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200; the sanitized dashboard at /rustwake/team/ answers 200 (7995 B, no-store) with snapshot 2026-11-07T21:52:00+00:00 and the aggregate rows (published 10, deployed 4, median cycle 6.58 h, rework 0, utilization unknown). The four hashed chunks are sha256-equal to this lane's own dist/assets. Browser visual quality, real-handset rAF and audio remain separately unverified."
   },
   "runtime": {
     "status": "observation-required",
@@ -2624,7 +2624,7 @@
       "type": "defect",
       "title": "team-board --check reports the generated views stale on a CRLF working copy while CI passes the same step",
       "priority": "P3",
-      "status": "published",
+      "status": "deployed",
       "owner": "developer",
       "generation": 1,
       "severity": "minor",
@@ -2647,7 +2647,7 @@
       "candidate_sha": "854bace3b4a3eae6273dce3f8dca2886e385da6b",
       "review_verdict": "accept",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "Closed by 854bace: --check compares content rather than bytes, so the local Windows check and CI agree. Measured again by the release lane on the integrated tree: node scripts/team-board.mjs --check exit 0.",
       "evidence": [
         "work/releases/REL-007-g1.md",
@@ -2703,6 +2703,13 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "integrated in c32e22c983e3bec94872f55b3c92937762299cdd (merge of 0e5d24f842622c11625caf7959ed9c2b155a1b3d and 97f7f154b43d59116f0d2c8a99af1073c4dbb512), then 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ]
     },
@@ -2711,7 +2718,7 @@
       "type": "delivery",
       "title": "Name the shared power budget at rest, not only after a refusal",
       "priority": "P2",
-      "status": "deployed",
+      "status": "measured",
       "owner": "ui-ux",
       "generation": 1,
       "severity": "minor",
@@ -2738,8 +2745,8 @@
       "candidate_sha": "588c1fa6ce6d0543828ec7562d1d6aae18f2ea15",
       "review_verdict": "accept",
       "published_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
-      "deployed_sha": "a5517948046f1327cb92cf35a9a02be53345f72f",
-      "outcome": "Integrated as a5517948046f1327cb92cf35a9a02be53345f72f (merge 2 of ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea + 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15; tree byte-identical to 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15). The UI lane reports from its own chromium instrument on this tip (lane-reported, not re-run by the release lane): U-1 hud content-box fill 13.0 / 38.1 / 9.9 / 24.8 / 41.8 %, all under the unchanged 42 % cap, with the control run reproducing the previously served artifact numbers exactly (16.7 / 40.8 / 10.6 / 31.0 / 44.6 %); U-2 two type tiers 14.25/600 and 10.8/400, ratio 1.32x; U-3 the leftmost face is \"Less power 30 credits\" and one tap raises the machine level sum 4 to 5 at a 30-credit purse; U-4 dTop 0, leftGap 8, zero overflow, the capacity pair printed once; U-5 every overlay closes by Close (87x44) and by Escape with 0 pageerror; U-7 dock face 46 px and command faces 44 px. Limitations carried from the lane: the deepest cell at 41.8 % leaves 0.2 pp of headroom; machine-panel cells build in yard row 4 at text scale 2; Move prints \"0 credits\" until BELT-001 lands. This lane proved the served artifact byte-identical to its own build (entry 231262 B, 4/4 hashed assets sha256-equal) but did not re-run the browser harness.",
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
+      "outcome": "Integrated as a5517948046f1327cb92cf35a9a02be53345f72f (merge 2 of ce196c99fbf85ef3d91b5dc7b65f4752bcee54ea + 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15; tree byte-identical to 588c1fa6ce6d0543828ec7562d1d6aae18f2ea15). The UI lane reports from its own chromium instrument on this tip (lane-reported, not re-run by the release lane): U-1 hud content-box fill 13.0 / 38.1 / 9.9 / 24.8 / 41.8 %, all under the unchanged 42 % cap, with the control run reproducing the previously served artifact numbers exactly (16.7 / 40.8 / 10.6 / 31.0 / 44.6 %); U-2 two type tiers 14.25/600 and 10.8/400, ratio 1.32x; U-3 the leftmost face is \"Less power 30 credits\" and one tap raises the machine level sum 4 to 5 at a 30-credit purse; U-4 dTop 0, leftGap 8, zero overflow, the capacity pair printed once; U-5 every overlay closes by Close (87x44) and by Escape with 0 pageerror; U-7 dock face 46 px and command faces 44 px. Limitations carried from the lane: the deepest cell at 41.8 % leaves 0.2 pp of headroom; machine-panel cells build in yard row 4 at text scale 2; Move prints \"0 credits\" until BELT-001 lands. This lane proved the served artifact byte-identical to its own build (entry 231262 B, 4/4 hashed assets sha256-equal) but did not re-run the browser harness. Measured at d72213d: the served entry is index-CWtGNGYE.js 232365 B sha256 a95687e7…, equal to this lane build of tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f, so the g3 overlay-stack continuation is on the live route; the browser census was not re-run on this pair.",
       "evidence": [
         "work/releases/REL-007-g1.md",
         "work/review/CHRM-002-g1-qa.md",
@@ -2808,6 +2815,13 @@
           "from_state": "published",
           "to_state": "deployed",
           "reason": "delivery run 42348528636 for the same SHA completed success: package job 128331458500 then the self-hosted deploy job 128331520498 with Validate and promote through host-owned adapter, Publish sanitized receipt and Explain delivery outcome all success"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "deployed",
+          "to_state": "measured",
+          "reason": "post-deploy technical measurement on the served artifact for the g3 continuation (0daab63): served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200. Not re-measured by this lane: the four-cell chrome census and the LIFO close in a real browser, which stay as the lane-reported readings at 588c1fa"
         }
       ]
     },
@@ -2909,7 +2923,7 @@
       "review_verdict": "accept",
       "candidate_sha": "fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "Certified cost-only state, published at 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0. Ladder: distances 2, 5, 6 tiles price 3, 6, 7 scrap and refund 3, 5, 6 scrap by round(price x 90 percent); a route whose run was dropped refunds 0; a refusal at price minus 1 leaves JSON.stringify(state) byte-identical. Every fresh link carries latency 5 (TUNING.routeLatencyTicks), so batch timing is unchanged for an old yard: the mature fixture replays to 1902 batches and 82 credits, checksum eede3c4f, 26114 B to 26114 B byte-identical round trip, 18 routes with 0 carrying run. Probe determinism: two probe-belt runs print the identical stdout, joined sha256 8EE8CFF80E50CDCF12A9636925C72AAA927E98459569F2F7B549156171526F5C, harness checksum 7fe91647. Entry bytes, each from its own clean build, never summed: 232914 B at the candidate fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d (reviewer and lane agree), 232364 B at the reviewers three-way tree 5e75e2e91a58bb74deb4bf87da78f4e4b70dcb94, 232365 B on the published five-parent tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f, which is the same build plus the one-space DEF-009 separator; 635 B spare under the unchanged 233000 B ceiling. Tests: 309 passed in 30 files after the OPS-106 one-liner (28 files and 301 tests on the belt tree alone, 287 in 28 files without it). Behaviour line on the published tree: firstDrone 379, firstResearch 527, tick 18298, machines 8, links 18, drones 4, batches 1838, credits 157, nodes 3, 0 violations; the old-save replay 1902 and 82 is the parity proof. The per-tile latency reading stays deferred (beltLatencyPerTile appears only in a comment). On the record as non-reproduced: the g1 full-variant bench reading 17.619 percent against the 10 percent ceiling; the g2/g4 readings are +3.4 percent (QA median) and +4.83 percent (lane) and the 17.619 percent figure is not carried into any accepted criterion.",
       "history": [
         {
@@ -2960,9 +2974,16 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "integrated by merge 0e5d24f842622c11625caf7959ed9c2b155a1b3d of 24864e23f25486862b04f21d5375b919956407da and fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d with zero conflicts, on top of merge 24864e23f25486862b04f21d5375b919956407da of 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2 and 0daab63b2056ebc8733f46d42cb32cd122f7b56d; this lane re-measured the merged entry at 232365 B against the same 233000 B ceiling and re-ran all five gates green"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ],
-      "status": "published"
+      "status": "deployed"
     },
     {
       "id": "ART-003",
@@ -3275,11 +3296,11 @@
         "work/releases/REL-009-g1.md"
       ],
       "product_approved": true,
-      "review_verdict": null,
+      "review_verdict": "accept",
       "candidate_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "published_sha": null,
-      "deployed_sha": null,
-      "outcome": null,
+      "published_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
+      "outcome": "The anchored assertion is on the served tree: tests/ui/i18n.test.tsx:301 uses not.toMatch(/(^|[^0-9])1 units\\b/) and pins Dismantle +21 units, so the belt price line and the plural table coexist. Verified independently by both QA lanes (work/review/BELT-001-g4/QA.md: the merged tree is 1 failed / 309 before the fix and 30 files / 309 passed after; work/review/ART-004-g1/QA.md section D: the same one line takes the four-way tree to 320/31).",
       "disposition_reason": null,
       "history": [
         {
@@ -3316,9 +3337,30 @@
           "from_state": "implementing",
           "to_state": "review",
           "reason": "carried into the integration as 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0: tests/ui/i18n.test.tsx line 301 uses not.toMatch for the anchored pattern and pins Dismantle +21 units"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "qa",
+          "from_state": "review",
+          "to_state": "accepted",
+          "reason": "the two independent QA prints agree on the same one-line fix and its green result on the merged trees, which is the acceptance evidence for a test-only change"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "accepted",
+          "to_state": "published",
+          "reason": "pushed as d72213d1590b85af8e9af3b4278024157fda354f in one non-force push, ls-remote read the same head back"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ],
-      "status": "review"
+      "status": "deployed"
     },
     {
       "id": "OPS-107",
@@ -3353,7 +3395,7 @@
       "review_verdict": "accept",
       "candidate_sha": "1034becfc58ce0c994417e00afebd3ec4ce2e023",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "Closed on the content criterion: after the harness rerun the normalised content is byte-identical (empty git diff, hash-object equal to the committed blob). Honest residual: git status still prints M for that path on this core.autocrlf=true checkout because the raw worktree bytes are CRLF while the object is LF; the diff is empty, so the noise is now one status line rather than a whole-file diff.",
       "history": [
         {
@@ -3404,9 +3446,16 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "integrated in c32e22c983e3bec94872f55b3c92937762299cdd (merge of 0e5d24f842622c11625caf7959ed9c2b155a1b3d and 97f7f154b43d59116f0d2c8a99af1073c4dbb512), then 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ],
-      "status": "published"
+      "status": "deployed"
     },
     {
       "id": "DEF-008",
@@ -3496,7 +3545,7 @@
       "review_verdict": "accept",
       "candidate_sha": "e8970422d70af47c670ca0fd91754c94cda2aab0",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "First clause met in the published tree: the Store chip prints one space between label and value. Second clause (two distinct Store-panel labels instead of a repeated Measured) is not met and keeps this row open for the next UI slice.",
       "history": [
         {
@@ -3547,9 +3596,16 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "integrated in c32e22c983e3bec94872f55b3c92937762299cdd (merge of 0e5d24f842622c11625caf7959ed9c2b155a1b3d and 97f7f154b43d59116f0d2c8a99af1073c4dbb512), then 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "the shipped chip reads Store 24/900 with the separator; the second clause (two Store-panel rows under one Measured label) stays open in the outcome row automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ],
-      "status": "published"
+      "status": "deployed"
     },
     {
       "id": "DEF-010",
@@ -4049,7 +4105,7 @@
       "type": "delivery",
       "title": "Ship the three one-line polish fixes: the chip separator, the board check on CRLF, and the LF pin",
       "priority": "P3",
-      "status": "published",
+      "status": "deployed",
       "owner": "developer",
       "generation": 1,
       "player_problem": "Three small irritations a phone player meets in the first minute: the Store chip runs its label and value together, the measured store facts share one label, and the lanes keep chasing a red board check that is only a line-ending artifact.",
@@ -4091,7 +4147,7 @@
       "review_verdict": "accept",
       "candidate_sha": "97f7f154b43d59116f0d2c8a99af1073c4dbb512",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "Published as one slice in 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0 through merge c32e22c983e3bec94872f55b3c92937762299cdd. Tips: e8970422d70af47c670ca0fd91754c94cda2aab0 (DEF-009 separator), 854bace3b4a3eae6273dce3f8dca2886e385da6b (DEF-007 content compare), 1034becfc58ce0c994417e00afebd3ec4ce2e023 (OPS-107 .gitattributes), plus the evidence commits 9d795edad132d0989d3f1eeb99ee2b30961670bb and 97f7f154b43d59116f0d2c8a99af1073c4dbb512. Cost on the artifact: the entry chunk grows by exactly 1 byte against the three-way tree (232364 B to 232365 B), which is the one space, and the css is unchanged at 8091 B. The DEF-009 second clause (two Store-panel labels instead of a repeated Measured) is deliberately not in this slice and stays open on DEF-009.",
       "history": [
         {
@@ -4142,6 +4198,13 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "integrated by merge c32e22c983e3bec94872f55b3c92937762299cdd of 0e5d24f842622c11625caf7959ed9c2b155a1b3d and 97f7f154b43d59116f0d2c8a99af1073c4dbb512, tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ]
     },
@@ -4261,7 +4324,7 @@
       "type": "delivery",
       "title": "Integrate and publish the priced belt, the UI-002 g3 stack and the polish slice",
       "priority": "P1",
-      "status": "published",
+      "status": "deployed",
       "owner": "release-engineer",
       "generation": 1,
       "player_problem": "The live route still served the pre-belt build, so the player could not see a priced connection, the two-layer overlay stack or the corrected chip spacing on the served artifact.",
@@ -4303,7 +4366,7 @@
       "review_verdict": "accept",
       "candidate_sha": "c32e22c983e3bec94872f55b3c92937762299cdd",
       "published_sha": "4bdd1de5866adcfd6bc0ae925872151bc69c8ed0",
-      "deployed_sha": null,
+      "deployed_sha": "d72213d1590b85af8e9af3b4278024157fda354f",
       "outcome": "Integrated on main as four commits on 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2: merge 24864e23f25486862b04f21d5375b919956407da (main plus 0daab63b2056ebc8733f46d42cb32cd122f7b56d), merge 0e5d24f842622c11625caf7959ed9c2b155a1b3d (plus fb0dca0f3acd81e1cd13eb5f4b89b1577baa4b4d), merge c32e22c983e3bec94872f55b3c92937762299cdd (plus 97f7f154b43d59116f0d2c8a99af1073c4dbb512) and the OPS-106 fix 4bdd1de5866adcfd6bc0ae925872151bc69c8ed0, tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f. Zero conflicted paths in all three merges. Gates on the final tree: typecheck exit 0, vitest exit 0 with 309 passed in 30 files, validate exit 0 with behaviour firstDrone 379 firstResearch 527 tick 18298 machines 8 links 18 drones 4 batches 1838 credits 157 nodes 3 and 0 violations, build exit 0 with entry assets/index-CWtGNGYE.js 232365 B against the unchanged 233000 B ceiling (635 B spare), css index-DbNBovuF.css 8091 B, tables-BB2NPvQ2.js 9298 B, catchup.worker-G_Jyr7uh.js 13406 B, and node scripts/team-board.mjs --check exit 0. The entry is 1 byte above the reviewers three-way reading of 232364 B, which is the DEF-009 separator space. Held for REL-011: bcb3d1cdefdc9f84108b8bb91cd95e2736853618 (the priced-extent polyline plus printed price) and c30c07d15800ae2bec562fd7aa00795c24a6da66 (ART-004, own entry 232825 B, four-way estimate 233311 B over the ceiling).",
       "history": [
         {
@@ -4354,6 +4417,13 @@
           "from_state": "accepted",
           "to_state": "published",
           "reason": "one non-force push; ci and delivery for this SHA are read from the API and named in the receipt"
+        },
+        {
+          "at": "2026-11-07T21:59:33+00:00",
+          "actor": "release-engineer",
+          "from_state": "published",
+          "to_state": "deployed",
+          "reason": "the package job built source d72213d1590b85af8e9af3b4278024157fda354f and the adapter promoted it with one atomic symlink switch; the entry bytes are identical to the 4bdd1de build because the docs commit changed no source, so the game-source SHA and the packaged source SHA agree on one tree 3eacdaf0e009db4c7edf7612a50f82235348aa9f automatic pair for d72213d: ci run 42417753041 (push, job build 128539409626, all 14 numbered steps success) and delivery run 42417809148 (package job 128539577586, deploy job 128539641658 on the databrick-rustwake environment); served proof, this lane, over HTTPS: the live index.html (200, 1262 B, Cache-Control no-store) names ./assets/index-CWtGNGYE.js and all three named hashed assets are sha256-equal to this lane build of the integrated tree (entry 232365 B a95687e7…, css 8091 B dcfaf118…, tables 9298 B 28bed3b0…); the worker chunk 13406 B is unchanged at 0c784f3e…; the retained previous pairs index-C_K4oMJ5.js 231262 B + index-B1FOV2xO.css 7849 B and index-CUnHr3Cs.js 231943 B + index-9FriNULu.css 7474 B still answer 200"
         }
       ]
     }
