@@ -119,13 +119,17 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   signalLab: [
     [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
     [-7, -8, 14, 21, 16], // L1 14-unit tower body on the steel step, 21 units tall
-    [-2, -16, 4, 8, 16], // L2 mast, its tip two rows above the scanner head
-    [-11.5, -13, 21, 3, 8], // L3 scanner head one step down, wider than the tower
+    [-2, -16, 4, 8, 16], // L2 mast, inside the cell, tip at the cap line
+    [-12, -14, 23, 3, 8], // L3 scanner head one step down, wider than the tower
     [-5, -4, 6, 3, 6], // L4 visor slot on the body
     [-5, 2, 6, 3, 11], // L4b indicator strip, select tone
+    [-14, -6, 6, 3, 8], // L7 left wing, outboard of the tower (A3-1: own outer column)
+    [8, -6, 6, 3, 8], // L7 right wing
+    [-14, 3, 6, 3, 8], // L8 left lower wing, outboard of the tower
+    [8, 3, 6, 3, 8], // L8 right lower wing
     [-14, 6, 7, 3, 16], // L5 left foot, outboard of the tower
     [7, 6, 7, 3, 16], // L5 right foot, outboard of the tower
-    [-8, 9, 16, 3, 16], // L6 plinth, the base the two feet stand on
+    [-10, 9, 20, 3, 16], // L6 plinth, the base the two feet stand on
   ],
   generic: [
     // D-1: its own lattice (two bars, both posts) so it is no longer the sorter's copy.
@@ -164,7 +168,8 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -15, 24, 3, 3], // bar at mask row 0
     [-12, -4, 24, 3, 3], // bar at mask row 3
-    [-12, 12, 24, 3, 3], // bar at mask row 7 (G-1: the outer box now clears copper's)
+    [-12, 9, 24, 3, 3], // bar at mask row 6 (ART-004 QA-4: one row up, so it no longer
+    // buries the contact ellipse in rows 12..14 - the 0 px shadow this row caused is gone)
     [-15, -11, 3, 22, 4], // left post
   ],
   drone: [
@@ -287,6 +292,11 @@ export const SKY_FAR: readonly PartTuple[] = [
   [180, -8, 10, 7, 13],
 ];
 
+// ART-004 D1 (band row): the two extra tuples are the horizon stack in the upper gutter -
+// a far bank tier in `path` (the group this table already paints) and one lit bank line in
+// `steelLight`, so the ~149 CSS px of dead night above the plate carries two readable bands
+// and the luminance histogram keeps a nonzero top band. No new hue, no new paint group
+// beyond the one `steelLight` line.
 export const SKY_NEAR: readonly PartTuple[] = [
   [10, -6, 18, 5, 12],
   [40, -7, 16, 6, 12],
@@ -295,6 +305,8 @@ export const SKY_NEAR: readonly PartTuple[] = [
   [118, -6, 20, 5, 12],
   [146, -7, 18, 6, 12],
   [168, -6, 22, 5, 12],
+  [0, -26, 192, 2, 12], // far bank tier, full pad width
+  [0, -18, 192, 2, 16], // lit bank line above it
 ];
 
 /** Lit kerb on the pad edge plus the two berm ticks; the apron below y = 192 is outside
@@ -313,12 +325,18 @@ export const APRON_PROPS: readonly PartTuple[] = [
   [150, 202, 6, 8, 4],
 ];
 
-/** Tops of the same props on the light side (light comes from the upper left). */
+/** Lit core of the apron props (light comes from the upper left). The last three rows are
+ *  ART-004 D1's horizon stack in the lower gutter: three 2-unit `bodyLight` rails across
+ *  the pad width, so the ~149 CSS px of dead night below the plate reads as ground the yard
+ *  continues into. Same colour index as the prop tops, so no new paint group. */
 export const APRON_TOPS: readonly PartTuple[] = [
   [6, 198, 12, 2, 3],
   [26, 200, 8, 2, 3],
   [164, 198, 10, 2, 3],
   [150, 202, 6, 2, 3],
+  [0, 236, 192, 2, 3],
+  [0, 248, 192, 2, 3],
+  [0, 260, 192, 2, 3],
 ];
 
 /** Contact shadows under the props, one step under the pad tone. */

@@ -279,7 +279,9 @@ export function drawScene(
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
-  groupFill(ctx, sheen, "select", 0.9);
+  // ART-004 D1: the lit band rides at full alpha, so the brightest tone in the frame is the
+  // facet edge itself (the top luminance bucket) instead of a 0.9 blend one step below it.
+  groupFill(ctx, sheen, "select", 1);
   groupFill(ctx, shade, "path");
   drawDrones(ctx, state, camera, view, options.reducedMotion, phase);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
@@ -445,30 +447,20 @@ function drawDock(
  * path byte for byte.
  */
 const ATLAS_PX = 64;
-const ATLAS_IDS = [
-  "sorter",
-  "furnace",
-  "wireMill",
-  "signalLab",
-  "generic",
-  "polymerRecycler",
-  "copperSeparator",
-  "platePress",
-  "circuitAssembler",
-] as const;
 let atlasPage: HTMLCanvasElement | null | undefined;
 
 function atlasOf(): HTMLCanvasElement | null {
   if (atlasPage === undefined) {
     atlasPage = null;
     if (typeof document !== "undefined") {
+      const ids = Object.keys(PARTS);
       const page = document.createElement("canvas");
       page.width = ATLAS_PX;
-      page.height = ATLAS_PX * ATLAS_IDS.length;
+      page.height = ATLAS_PX * ids.length;
       const buf = page.getContext("2d");
       if (buf) {
         buf.imageSmoothingEnabled = false;
-        ATLAS_IDS.forEach((id, i) =>
+        ids.forEach((id, i) =>
           paintParts(buf, ATLAS_PX / 2, ATLAS_PX / 2 + i * ATLAS_PX, ATLAS_PX / 32, PARTS[id])
         );
         atlasPage = page;
@@ -507,7 +499,7 @@ function drawMachine(
   // A-2: one drawImage from the pilot page when it exists, the part loop otherwise. The
   // per-kind placement rides on both the box and its facet pair, so they stay aligned.
   const page = atlasOf();
-  const cell = page ? ATLAS_IDS.indexOf(machine.blueprint as (typeof ATLAS_IDS)[number]) : -1;
+  const cell = page ? Object.keys(PARTS).indexOf(machine.blueprint) : -1;
   const [dy, k] = (cell >= 0 && ATLAS_PLACE[machine.blueprint]) || [0, 1];
   if (page && cell >= 0) {
     const half = 16 * s * k;

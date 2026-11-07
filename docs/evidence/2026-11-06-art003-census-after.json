@@ -7,31 +7,31 @@
       844
     ],
     "topColors": [
-      "11,18,32 48.5%",
+      "11,18,32 46%",
       "34,56,74 36.1%",
       "8,13,24 4.3%",
-      "44,66,87 2.1%",
+      "44,66,87 2.6%",
+      "138,169,196 1.6%",
       "127,159,187 1.3%",
       "22,40,58 1.2%",
       "16,27,40 1%",
       "109,144,171 0.6%",
+      "111,147,173 0.5%",
       "53,86,107 0.4%",
-      "14,23,38 0.3%",
-      "138,169,196 0.3%",
-      "14,23,36 0.3%"
+      "14,23,38 0.3%"
     ],
     "luminanceBuckets8": [
-      96.4,
+      94.9,
       0.5,
-      2.2,
-      0.4,
+      2.5,
+      1.6,
       0.3,
       0,
-      0.1,
-      0
+      0,
+      0.2
     ],
-    "twoDarkestSharePct": 96.9,
-    "twoTopColorsSharePct": 84.6,
+    "twoDarkestSharePct": 95.4,
+    "twoTopColorsSharePct": 82.1,
     "cells": {
       "sorter8": {
         "box": [
@@ -50,9 +50,11 @@
           6,
           7
         ],
-        "inkPx": 2458,
-        "inkSharePct": 63.9,
-        "inkPctOfCellArea": 63.13
+        "inkPx": 2441,
+        "inkSharePct": 63.5,
+        "inkPctOfCellArea": 62.69,
+        "contactShadowPx": 47,
+        "horizonBandPx": 212
       },
       "furnace14": {
         "box": [
@@ -67,12 +69,13 @@
           2,
           3,
           4,
-          6,
           7
         ],
-        "inkPx": 2383,
-        "inkSharePct": 61,
-        "inkPctOfCellArea": 61.2
+        "inkPx": 2264,
+        "inkSharePct": 58,
+        "inkPctOfCellArea": 58.14,
+        "contactShadowPx": 91,
+        "horizonBandPx": 184
       },
       "dock2": {
         "box": [
@@ -90,7 +93,9 @@
         ],
         "inkPx": 2575,
         "inkSharePct": 67,
-        "inkPctOfCellArea": 66.13
+        "inkPctOfCellArea": 66.13,
+        "contactShadowPx": 123,
+        "horizonBandPx": 24
       },
       "wreck": {
         "box": [
@@ -109,7 +114,9 @@
         ],
         "inkPx": 5822,
         "inkSharePct": 99.9,
-        "inkPctOfCellArea": 149.52
+        "inkPctOfCellArea": 149.52,
+        "contactShadowPx": 6,
+        "horizonBandPx": 287
       }
     },
     "machineRow": {
@@ -129,9 +136,11 @@
         6,
         7
       ],
-      "inkPx": 7416,
-      "inkSharePct": 64,
-      "inkPctOfCellArea": 190.46
+      "inkPx": 7280,
+      "inkSharePct": 62.8,
+      "inkPctOfCellArea": 186.97,
+      "contactShadowPx": 261,
+      "horizonBandPx": 420
     },
     "bandFit": {
       "scale": 1.95,
@@ -153,14 +162,51 @@
       "legacyGapAbove": 147.6,
       "legacyGapBelow": 149.6
     },
+    "gutters": {
+      "above": {
+        "box": [
+          0,
+          56,
+          390,
+          205
+        ],
+        "distinctBuckets": [
+          0,
+          2
+        ],
+        "inkPx": 58110,
+        "inkSharePct": 100,
+        "inkPctOfCellArea": 1492.39,
+        "contactShadowPx": 3,
+        "horizonBandPx": 4158
+      },
+      "below": {
+        "box": [
+          0,
+          641,
+          390,
+          790
+        ],
+        "distinctBuckets": [
+          0,
+          3
+        ],
+        "inkPx": 58110,
+        "inkSharePct": 100,
+        "inkPctOfCellArea": 1492.39,
+        "contactShadowPx": 0,
+        "horizonBandPx": 0
+      }
+    },
+    "steelLightPx": 1783,
     "gridDotPx": 39,
     "gridDotSharePct": 0.01,
-    "gridDotAlphaPx": 404,
+    "gridDotAlphaPx": 407,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.13,
-    "machineBodyPx": 1075,
-    "machineBodySharePct": 0.33,
-    "contactShadowPx": 453
+    "gridInkSharePct": 0.14,
+    "machineBodyPx": 5153,
+    "machineBodySharePct": 1.57,
+    "contactShadowPx": 445
   },
   "sheet": {
     "roles": 11,
@@ -241,7 +287,7 @@
       "sorter": 9348,
       "furnace": 8380,
       "wireMill": 8768,
-      "signalLab": 7484,
+      "signalLab": 8924,
       "drone": 1378
     },
     "matrix": [
@@ -259,7 +305,7 @@
       ],
       [
         "dock/signalLab",
-        66.9
+        69.6
       ],
       [
         "dock/drone",
@@ -275,7 +321,7 @@
       ],
       [
         "sorter/signalLab",
-        59.2
+        64.4
       ],
       [
         "sorter/drone",
@@ -287,7 +333,7 @@
       ],
       [
         "furnace/signalLab",
-        47.5
+        50.3
       ],
       [
         "furnace/drone",
@@ -295,7 +341,7 @@
       ],
       [
         "wireMill/signalLab",
-        58.1
+        63.1
       ],
       [
         "wireMill/drone",
@@ -303,7 +349,7 @@
       ],
       [
         "signalLab/drone",
-        45.5
+        54.7
       ]
     ]
   },

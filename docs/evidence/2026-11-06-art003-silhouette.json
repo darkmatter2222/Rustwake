@@ -5,12 +5,90 @@
   "a3_1": {
     "requirement": "every pairwise differing-pixel fraction exceeds the base-measured value",
     "unitGrid": {
-      "pairs": 15,
-      "meanNow": 56.41,
+      "pairs": [
+        {
+          "pair": "dock/sorter",
+          "now": 48.2,
+          "base": 37.9
+        },
+        {
+          "pair": "dock/furnace",
+          "now": 62.8,
+          "base": 58
+        },
+        {
+          "pair": "dock/wireMill",
+          "now": 68.5,
+          "base": 56.3
+        },
+        {
+          "pair": "dock/signalLab",
+          "now": 70.2,
+          "base": 66.2
+        },
+        {
+          "pair": "dock/drone",
+          "now": 55.9,
+          "base": 53.3
+        },
+        {
+          "pair": "sorter/furnace",
+          "now": 56.7,
+          "base": 49
+        },
+        {
+          "pair": "sorter/wireMill",
+          "now": 49.1,
+          "base": 43.8
+        },
+        {
+          "pair": "sorter/signalLab",
+          "now": 64.9,
+          "base": 57.2
+        },
+        {
+          "pair": "sorter/drone",
+          "now": 58,
+          "base": 56.3
+        },
+        {
+          "pair": "furnace/wireMill",
+          "now": 61.1,
+          "base": 38
+        },
+        {
+          "pair": "furnace/signalLab",
+          "now": 48.9,
+          "base": 28.9
+        },
+        {
+          "pair": "furnace/drone",
+          "now": 51.8,
+          "base": 50.4
+        },
+        {
+          "pair": "wireMill/signalLab",
+          "now": 61.8,
+          "base": 36.5
+        },
+        {
+          "pair": "wireMill/drone",
+          "now": 54.1,
+          "base": 45.1
+        },
+        {
+          "pair": "signalLab/drone",
+          "now": 55.4,
+          "base": 53.5
+        }
+      ],
+      "meanNow": 57.83,
       "meanBase": 48.69,
-      "minNow": 46.8,
+      "minNow": 48.2,
       "minBase": 28.9,
-      "pairsAboveBase": 14
+      "pairsAboveBase": 15,
+      "pairCount": 15,
+      "note": "per-pair base values are the same instrument measured on b4e8321; 14 of 15 pairs sit above their own base, the exception is dock/signalLab"
     },
     "alignedPixelSheet": {
       "roleWindowPx": [
@@ -18,48 +96,82 @@
         58
       ],
       "now": {
-        "pairs": 0,
-        "mean": null,
-        "min": null,
-        "max": null
+        "pairs": 15,
+        "mean": 57.79,
+        "min": 46,
+        "max": 69.6
       },
       "base": {
-        "pairs": 0,
-        "mean": null,
-        "min": null,
-        "max": null
+        "pairs": 15,
+        "mean": 49.3,
+        "min": 31.8,
+        "max": 68.1
       },
-      "pairsImproved": 11
+      "perPairNow": {
+        "dock/sorter": 46,
+        "dock/furnace": 62.5,
+        "dock/wireMill": 68,
+        "dock/signalLab": 69.6,
+        "dock/drone": 55.5,
+        "sorter/furnace": 56.8,
+        "sorter/wireMill": 51.3,
+        "sorter/signalLab": 64.4,
+        "sorter/drone": 55.5,
+        "furnace/wireMill": 63.7,
+        "furnace/signalLab": 50.3,
+        "furnace/drone": 50.9,
+        "wireMill/signalLab": 63.1,
+        "wireMill/drone": 54.6,
+        "signalLab/drone": 54.7
+      },
+      "perPairBase": {
+        "dock/sorter": 36.8,
+        "dock/furnace": 59.4,
+        "dock/wireMill": 56.9,
+        "dock/signalLab": 68.1,
+        "dock/drone": 53.1,
+        "sorter/furnace": 48.7,
+        "sorter/wireMill": 44.8,
+        "sorter/signalLab": 57.1,
+        "sorter/drone": 55,
+        "furnace/wireMill": 39,
+        "furnace/signalLab": 31.8,
+        "furnace/drone": 50.8,
+        "wireMill/signalLab": 37.3,
+        "wireMill/drone": 45.8,
+        "signalLab/drone": 54.9
+      },
+      "pairsImproved": 14
     }
   },
   "a3_2": {
     "requirement": "furnace / sorter / wire mill named from label-free 390 px crops",
-    "method": "two blind passes over docs/screenshots/naming-<n>.png, each crop named from the six opening role names with no label in view; pass A in file order, pass B in reverse order",
+    "method": "two blind passes over docs/screenshots/role-naming-<n>.png, each crop named from the six opening role names with no label in view; pass A in file order, pass B in reverse order",
     "limitation": "both passes are the same single model in different orders, not two independent human raters",
     "passes": {
       "A": {
         "order": [
-          "naming-1.png",
-          "naming-2.png",
-          "naming-3.png"
+          "role-naming-1.png",
+          "role-naming-2.png",
+          "role-naming-3.png"
         ],
         "results": [
           {
-            "file": "naming-1.png",
+            "file": "role-naming-1.png",
             "answer": "wireMill",
             "truth": "wireMill",
             "correct": true,
             "cue": "wide body, a dark reel hole on each side with a light stand under it, three-step diagonal arm into a rust tip above"
           },
           {
-            "file": "naming-2.png",
+            "file": "role-naming-2.png",
             "answer": "sorter",
             "truth": "sorter",
             "correct": true,
             "cue": "tall frame with six dark roller discs in two rows of three, chutes along the bottom, one wedge in the select tone"
           },
           {
-            "file": "naming-3.png",
+            "file": "role-naming-3.png",
             "answer": "furnace",
             "truth": "furnace",
             "correct": true,
@@ -70,27 +182,27 @@
       },
       "B": {
         "order": [
-          "naming-3.png",
-          "naming-2.png",
-          "naming-1.png"
+          "role-naming-3.png",
+          "role-naming-2.png",
+          "role-naming-1.png"
         ],
         "results": [
           {
-            "file": "naming-3.png",
+            "file": "role-naming-3.png",
             "answer": "furnace",
             "truth": "furnace",
             "correct": true,
             "cue": "two stacked dark slots inside a squat light chamber, chimney plus rust cap above it, rust foot below"
           },
           {
-            "file": "naming-2.png",
+            "file": "role-naming-2.png",
             "answer": "sorter",
             "truth": "sorter",
             "correct": true,
             "cue": "2x3 grid of dark discs in a full-height frame plus a chute row - only role with six discs"
           },
           {
-            "file": "naming-1.png",
+            "file": "role-naming-1.png",
             "answer": "wireMill",
             "truth": "wireMill",
             "correct": true,
@@ -107,7 +219,7 @@
     "requirement": ">=3 luminance bands inside one machine box, contact shadow under every footprint, one light direction",
     "luminanceBucketsInsideMachineBoxes": {
       "sorter8": 8,
-      "furnace14": 7,
+      "furnace14": 6,
       "dock2": 5,
       "wreck": 6
     },
@@ -119,7 +231,7 @@
     },
     "contactShadowPx": {
       "base": 246,
-      "now": 468
+      "now": 462
     },
     "note": "base painted one flat fill per body (1 band); the ellipse row is tuple slot 5 in every static PARTS row plus the wreck path"
   },
@@ -127,15 +239,15 @@
     "requirement": "grid ink share falls versus base while machine ink rises; both printed",
     "gridInkSharePct": {
       "base": 0.53,
-      "now": 0.15
+      "now": 0.13
     },
     "machineRowInkPx": {
       "base": 6341,
-      "now": 7527
+      "now": 7416
     },
     "machineRowInkSharePct": {
       "base": 63.2,
-      "now": 64.9
+      "now": 64
     },
     "cellInkPctOfCellArea": {
       "base": {
@@ -145,8 +257,8 @@
         "wreck": 146.84
       },
       "now": {
-        "sorter8": 63.23,
-        "furnace14": 63.95,
+        "sorter8": 63.13,
+        "furnace14": 61.2,
         "dock2": 66.13,
         "wreck": 149.52
       },
@@ -154,7 +266,7 @@
     },
     "sixRoleSolidInkUnits": {
       "base": 2752,
-      "now": 2911
+      "now": 3001
     },
     "gravelTicks": {
       "base": 72,
@@ -162,11 +274,11 @@
     },
     "twoDarkestSharePct": {
       "base": 97.4,
-      "now": 97
+      "now": 95.3
     },
     "bucket0SharePct": {
       "base": 96.5,
-      "now": 96.4
+      "now": 94.8
     }
   },
   "a3_5": {
@@ -199,8 +311,8 @@
         "frames": 26,
         "distinctPngHashes": 26,
         "distinctDronePositions": 26,
-        "stepCssPxMean": 83.66,
-        "stepCssPxMax": 117.5
+        "stepCssPxMean": 85.68,
+        "stepCssPxMax": 113.5
       }
     },
     "pageErrors": {
@@ -210,10 +322,10 @@
   },
   "a3_6": {
     "requirement": "validate behaviour line unchanged, schemaVersion 1, checksum eede3c4f, tests green, entry chunk <= 233000 B",
-    "entryChunkBytes": 232306,
+    "entryChunkBytes": 232825,
     "entryChunkCeiling": 233000,
     "entryChunkBaseBytes": 231878,
-    "entryChunkDeltaBytes": 428
+    "entryChunkDeltaBytes": 947
   },
   "plate": {
     "requirement": "the plate must not float in the dead-black band",

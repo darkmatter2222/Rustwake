@@ -26,7 +26,7 @@ const chromeCandidates = [
 ].filter(Boolean);
 const executablePath = chromeCandidates.find((path) => existsSync(path));
 
-const CENSUS = () => {
+const CENSUS = (extra) => {
   const canvas = document.querySelector("canvas");
   const ctx = canvas.getContext("2d");
   const w = canvas.width;
@@ -59,15 +59,23 @@ const CENSUS = () => {
   // normalized share divides by the true 32-unit cell area at this scale, so the number is
   // comparable across the two fitted scales (the rounded device box adds half-pixel floor).
   const cellArea = () => (32 * cellScale) ** 2;
+  // QA-4: the contact-shadow count per box, so a row whose own bar buries its ellipse reads
+  // as 0 px instead of passing on the global count.
+  const isShadow = (r, g, b) => Math.abs(r - 28) <= 3 && Math.abs(g - 46) <= 3 && Math.abs(b - 62) <= 3;
+  const isHorizon = (r, g, b) => Math.abs(r - 44) <= 2 && Math.abs(g - 66) <= 2 && Math.abs(b - 87) <= 2; // path
   const region = (x0, y0, x1, y1) => {
     const seen = new Set();
     let ink = 0;
+    let shadow = 0;
+    let horizon = 0;
     let n = 0;
     for (let py = Math.max(0, y0); py < Math.min(h, y1); py += 1) {
       for (let px = Math.max(0, x0); px < Math.min(w, x1); px += 1) {
         const [r, g, b] = rgbAt(px, py);
         seen.add(Math.min(7, Math.floor(lum(r, g, b) * 8)));
         if (Math.abs(r - 34) > 2 || Math.abs(g - 56) > 2 || Math.abs(b - 74) > 2) ink += 1; // != floor
+        if (isShadow(r, g, b)) shadow += 1;
+        if (isHorizon(r, g, b)) horizon += 1;
         n += 1;
       }
     }
@@ -76,6 +84,8 @@ const CENSUS = () => {
       inkPx: ink,
       inkSharePct: +((100 * ink) / n).toFixed(1),
       inkPctOfCellArea: +((100 * ink) / cellArea()).toFixed(2),
+      contactShadowPx: shadow,
+      horizonBandPx: horizon,
     };
   };
   let cellScale = 1.8056;
@@ -97,7 +107,7 @@ const CENSUS = () => {
       return [Math.round(p.x - half), Math.round(p.y - half), Math.round(p.x + half), Math.round(p.y + half)];
     };
     const cells = {};
-    for (const [name, tile] of [["sorter8", 8], ["furnace14", 14], ["dock2", 2]]) {
+    for (const [name, tile] of [["sorter8", 8], ["furnace14", 14], ["dock2", 2], ...(extra || [])]) {
       const b = box(tile);
       cells[name] = { box: b, ...region(...b) };
     }
@@ -107,6 +117,9 @@ const CENSUS = () => {
         Math.round(pw.x + 24 * camera.scale), Math.round(pw.y + 16 * camera.scale)],
     };
     cells.wreck = { ...cells.wreck, ...region(...cells.wreck.box) };
+    // ART-004 D1: the two gutters get their own census rows, so "both outer bands are 0 %" is
+    // measured on the same instrument that prints the 8-band histogram.
+    let gutters = null;
     // A3-4 band-fit witness: the plate's two ink edges against the two chrome edges, and
     // what the legacy canvas-centred fit of the same scale would have printed.
     let bandFit = null;
@@ -114,6 +127,10 @@ const CENSUS = () => {
       const plateTop = worldToScreen(camera, view, 0, 0).y;
       const plateBottom = worldToScreen(camera, view, 0, WORLD_H).y;
       const bandBottom = view.height - insets.bottom;
+      gutters = {
+        above: { box: [0, Math.round(insets.top), w, Math.round(plateTop)], ...region(0, Math.round(insets.top), w, Math.round(plateTop)) },
+        below: { box: [0, Math.round(plateBottom), w, Math.round(bandBottom)], ...region(0, Math.round(plateBottom), w, Math.round(bandBottom)) },
+      };
       const bandCentre = insets.top + (bandBottom - insets.top) / 2;
       // The old fit kept this exact scale and centred the world on the canvas instead.
       const shiftPx = (bandCentre - view.height / 2) / 1; // CSS px the band centre sits below the canvas centre
@@ -163,6 +180,8 @@ const CENSUS = () => {
       cells,
       machineRow,
       bandFit,
+      gutters,
+      steelLightPx: blendCount([111, 147, 173], 2), // the bank line + the steel-step bodies
       gridDotPx,
       gridDotSharePct: pct(gridDotPx),
       gridDotAlphaPx,
@@ -289,7 +308,13 @@ const run = async () => {
   const env = JSON.parse(JSON.stringify(template));
   env.payload.sim.tick = 344;
   env.payload.sim.tutorial = 9;
+  // CENSUS_FLEET puts every machine blueprint on the field (one per row) so the per-box
+  // shadow counts QA-4 asks for exist for all nine rows, not only the FS-1 pair.
+  const fleet = [["wireMill", 20], ["signalLab", 21], ["generic", 27], ["polymerRecycler", 33], ["copperSeparator", 9], ["platePress", 15], ["circuitAssembler", 26]];
   env.payload.sim.machines = [part(1, "sorter", 8, "running", 0), part(2, "furnace", 14, "outputFull", 1)];
+  if (process.env.CENSUS_FLEET) {
+    fleet.forEach(([bp, tile], i) => env.payload.sim.machines.push(part(3 + i, bp, tile, "running", 0)));
+  }
   env.payload.sim.routes = [
     { id: 1, from: { kind: "store" }, to: { kind: "machine", id: 1 }, filter: "scrap",
       capacity: 5, latency: 5, items: [{ resource: "scrap", qty: 1, arrive: 344 }], inFlight: 1 },
@@ -311,7 +336,7 @@ const run = async () => {
   await page.evaluate(() => {
     window.__art003 = import("/src/game/renderer/scene.ts");
   });
-  const scene = await page.evaluate(CENSUS);
+  const scene = await page.evaluate(CENSUS, process.env.CENSUS_FLEET ? fleet : []);
   const witnesses = await page.evaluate(() => {
     const faces = [...document.querySelectorAll("button")].map((b) => {
       const r = b.getBoundingClientRect();

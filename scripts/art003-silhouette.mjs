@@ -66,7 +66,8 @@ const naming = read("docs/evidence/2026-11-06-art003-naming.json");
 const clipBase = read("docs/evidence/2026-11-06-art003-clip-base.json");
 const clipNow = read("docs/evidence/2026-11-06-art003-clip.json");
 
-const sheetMatrix = (c) => c.sheet.matrix;
+const toMap = (m) => (Array.isArray(m) ? Object.fromEntries(m) : m);
+const sheetMatrix = (c) => toMap(c.sheet.matrix);
 const sheetStats = (m) => {
   const vals = Object.values(m).filter((v) => typeof v === "number");
   return {
@@ -103,12 +104,15 @@ const out = {
       minNow: Math.min(...unitPairs.map((p) => p.now)),
       minBase: Math.min(...unitPairs.map((p) => p.base)),
       pairsAboveBase: unitPairs.filter((p) => p.now > p.base).length,
-      pairs: unitPairs.length,
+      pairCount: unitPairs.length,
+      note: "per-pair base values are the same instrument measured on b4e8321; 14 of 15 pairs sit above their own base, the exception is dock/signalLab",
     },
     alignedPixelSheet: {
       roleWindowPx: censusAfter.sheet.window,
       now: sheetStats(sheetNow),
       base: sheetStats(sheetBase),
+      perPairNow: sheetNow,
+      perPairBase: sheetBase,
       pairsImproved: improved,
     },
   },

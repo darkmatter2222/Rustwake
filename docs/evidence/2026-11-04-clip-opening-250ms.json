@@ -9,16 +9,16 @@
     179.25
   ],
   "distinctPngHashes": 26,
-  "distinctDronePositions": 24,
-  "stepCssPxMax": 110.5,
-  "stepCssPxMean": 82.52,
+  "distinctDronePositions": 26,
+  "stepCssPxMax": 113.5,
+  "stepCssPxMean": 85.68,
   "rows": [
     {
       "frame": 1,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f01.png",
-      "pngSha256": "0759e70308fb2c06",
-      "pngMd5": "14b79e5faf",
-      "dataUrlLength": 68830,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f01.png",
+      "pngSha256": "83584f8ba02a3b3c",
+      "pngMd5": "406748d909",
+      "dataUrlLength": 69026,
       "canvasBackingPx": [
         780,
         1688
@@ -34,11 +34,7 @@
         ],
         [
           179.25,
-          300
-        ],
-        [
-          179.25,
-          300
+          235
         ],
         [
           179.25,
@@ -150,11 +146,11 @@
         ],
         [
           179.25,
-          304
+          304.5
         ],
         [
           179.25,
-          309.5
+          310
         ],
         [
           179.25,
@@ -162,11 +158,11 @@
         ],
         [
           179.25,
-          321
+          321.5
         ],
         [
           179.25,
-          326.5
+          327
         ],
         [
           179.25,
@@ -174,7 +170,7 @@
         ],
         [
           179.25,
-          338
+          338.5
         ],
         [
           179.25,
@@ -182,11 +178,11 @@
         ],
         [
           179.25,
-          349.5
+          350
         ],
         [
           179.25,
-          355.5
+          356
         ],
         [
           179.25,
@@ -194,19 +190,19 @@
         ],
         [
           179.25,
-          367
+          367.5
         ],
         [
           179.25,
-          373
+          373.5
         ],
         [
           179.25,
-          379
+          379.5
         ],
         [
           179.25,
-          385
+          385.5
         ],
         [
           179.25,
@@ -218,7 +214,7 @@
         ],
         [
           179.25,
-          403.5
+          404
         ],
         [
           179.25,
@@ -226,7 +222,7 @@
         ],
         [
           179.25,
-          416
+          416.5
         ],
         [
           179.25,
@@ -234,15 +230,15 @@
         ],
         [
           179.25,
-          428.5
+          429
         ],
         [
           179.25,
-          435
+          435.5
         ],
         [
           179.25,
-          441.5
+          442
         ],
         [
           179.25,
@@ -250,19 +246,19 @@
         ],
         [
           179.25,
-          454.5
+          455
         ],
         [
           179.25,
-          461
+          461.5
         ],
         [
           179.25,
-          467.5
+          468
         ],
         [
           179.25,
-          474
+          474.5
         ],
         [
           179.25,
@@ -270,20 +266,24 @@
         ],
         [
           179.25,
-          487.5
+          488
+        ],
+        [
+          179.25,
+          494.5
         ]
       ],
       "distinctTrailX": 1,
-      "distinctTrailY": 34,
+      "distinctTrailY": 35,
       "droneBodyCssPx": [
         179.25,
-        487.5
+        494.5
       ],
       "stepCssPx": 0,
       "cargoPod": "#ffb765",
       "storeGauge": {
-        "amber": 429,
-        "wells": 362
+        "amber": 431,
+        "wells": 358
       },
       "machineAccent": "#c9713a",
       "statuses": [
@@ -362,95 +362,99 @@
     },
     {
       "frame": 2,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f02.png",
-      "pngSha256": "c2922ccabc7eea44",
-      "pngMd5": "128a29fe89",
-      "dataUrlLength": 68834,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f02.png",
+      "pngSha256": "76089a45555574bc",
+      "pngMd5": "79a63a2136",
+      "dataUrlLength": 69150,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432344,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 77,
-      "framePhase": 0.8333,
+      "drawsInWindow": 17,
+      "drawIndexTotal": 78,
+      "framePhase": 0,
       "trail": [
         [
           179.25,
-          494
+          501.5
         ],
         [
           179.25,
-          501
+          508
         ],
         [
           179.25,
-          507.5
+          515
         ],
         [
           179.25,
-          514.5
+          522
         ],
         [
           179.25,
-          521.5
+          528.5
         ],
         [
           179.25,
-          528
+          535.5
         ],
         [
           179.25,
-          535
+          542.5
         ],
         [
           179.25,
-          542
+          549.5
         ],
         [
           179.25,
-          549
+          556.5
         ],
         [
           179.25,
-          556
+          563.5
         ],
         [
           179.25,
-          563
+          570.5
         ],
         [
           179.25,
-          570
+          577.5
         ],
         [
           179.25,
-          577
+          584.5
         ],
         [
           179.25,
-          584
+          591.5
         ],
         [
           179.25,
-          591
+          598.5
         ],
         [
           179.25,
-          598
+          605.5
+        ],
+        [
+          179.25,
+          607
         ]
       ],
       "distinctTrailX": 1,
-      "distinctTrailY": 16,
+      "distinctTrailY": 17,
       "droneBodyCssPx": [
         179.25,
-        598
+        607
       ],
-      "stepCssPx": 110.5,
+      "stepCssPx": 112.5,
       "cargoPod": "#ffb765",
       "storeGauge": {
-        "amber": 112,
-        "wells": 96
+        "amber": 119,
+        "wells": 102
       },
       "machineAccent": "#c9713a",
       "statuses": [
@@ -479,30 +483,27 @@
         null,
         null,
         null,
+        null,
         null
       ]
     },
     {
       "frame": 3,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f03.png",
-      "pngSha256": "1737510c96916d37",
-      "pngMd5": "570a10a1fe",
-      "dataUrlLength": 68546,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f03.png",
+      "pngSha256": "10627bfae38a796d",
+      "pngMd5": "1ac8d224ef",
+      "dataUrlLength": 68410,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432354,
       "drawsInWindow": 16,
-      "drawIndexTotal": 93,
-      "framePhase": 0.5,
+      "drawIndexTotal": 94,
+      "framePhase": 0.6667,
       "trail": [
         [
           179.25,
-          605
-        ],
-        [
-          179.25,
           607
         ],
         [
@@ -523,52 +524,56 @@
         ],
         [
           179.25,
-          607
+          602
         ],
         [
           179.25,
-          602.5
+          595
         ],
         [
           179.25,
-          595.5
+          588
         ],
         [
           179.25,
-          588.5
+          581
         ],
         [
           179.25,
-          581.5
+          574
         ],
         [
           179.25,
-          574.5
+          567
         ],
         [
           179.25,
-          567.5
+          560
         ],
         [
           179.25,
-          560.5
+          553
         ],
         [
           179.25,
-          553.5
+          546
         ],
         [
           179.25,
-          546.5
+          539
+        ],
+        [
+          179.25,
+          532
         ]
       ],
       "distinctTrailX": 1,
-      "distinctTrailY": 11,
+      "distinctTrailY": 12,
       "droneBodyCssPx": [
         179.25,
-        546.5
+        532
       ],
-      "stepCssPx": 51.5,
+      "stepCssPx": 75,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -606,38 +611,30 @@
     },
     {
       "frame": 4,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f04.png",
-      "pngSha256": "083bde67039c5476",
-      "pngMd5": "c242103d08",
-      "dataUrlLength": 68686,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f04.png",
+      "pngSha256": "a8d99c35eb6ae80a",
+      "pngMd5": "8bf126364f",
+      "dataUrlLength": 68758,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432354,
       "drawsInWindow": 16,
-      "drawIndexTotal": 109,
-      "framePhase": 0.1667,
+      "drawIndexTotal": 110,
+      "framePhase": 0.3333,
       "trail": [
-        [
-          179.25,
-          539.5
-        ],
-        [
-          179.25,
-          532.5
-        ],
         [
           179.25,
           525.5
         ],
         [
           179.25,
-          519
+          518.5
         ],
         [
           179.25,
-          512
+          511.5
         ],
         [
           179.25,
@@ -645,7 +642,7 @@
         ],
         [
           179.25,
-          498.5
+          498
         ],
         [
           179.25,
@@ -653,11 +650,11 @@
         ],
         [
           179.25,
-          485
+          484.5
         ],
         [
           179.25,
-          478.5
+          478
         ],
         [
           179.25,
@@ -665,32 +662,40 @@
         ],
         [
           179.25,
-          465
+          464.5
         ],
         [
           179.25,
-          458.5
+          458
         ],
         [
           179.25,
-          452
+          451.5
         ],
         [
           179.25,
-          445.5
+          445
         ],
         [
           179.25,
-          439
+          438.5
+        ],
+        [
+          179.25,
+          432.5
+        ],
+        [
+          179.25,
+          426
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 16,
       "droneBodyCssPx": [
         179.25,
-        439
+        426
       ],
-      "stepCssPx": 107.5,
+      "stepCssPx": 106,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -728,30 +733,22 @@
     },
     {
       "frame": 5,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f05.png",
-      "pngSha256": "47946038cf7527bb",
-      "pngMd5": "d521a09253",
-      "dataUrlLength": 68746,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f05.png",
+      "pngSha256": "ac968b99598882bf",
+      "pngMd5": "06f9f4c58d",
+      "dataUrlLength": 68626,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432354,
       "drawsInWindow": 16,
-      "drawIndexTotal": 125,
-      "framePhase": 0.8333,
+      "drawIndexTotal": 126,
+      "framePhase": 0,
       "trail": [
         [
           179.25,
-          432.5
-        ],
-        [
-          179.25,
-          426.5
-        ],
-        [
-          179.25,
-          420
+          419.5
         ],
         [
           179.25,
@@ -759,7 +756,7 @@
         ],
         [
           179.25,
-          407.5
+          407
         ],
         [
           179.25,
@@ -767,31 +764,31 @@
         ],
         [
           179.25,
-          395
+          394.5
         ],
         [
           179.25,
-          389
+          388.5
         ],
         [
           179.25,
-          383
+          382.5
         ],
         [
           179.25,
-          377
+          376.5
         ],
         [
           179.25,
-          371
+          370.5
         ],
         [
           179.25,
-          365
+          364.5
         ],
         [
           179.25,
-          359
+          358.5
         ],
         [
           179.25,
@@ -799,20 +796,28 @@
         ],
         [
           179.25,
-          347.5
+          347
         ],
         [
           179.25,
           341.5
+        ],
+        [
+          179.25,
+          335.5
+        ],
+        [
+          179.25,
+          330
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 16,
       "droneBodyCssPx": [
         179.25,
-        341.5
+        330
       ],
-      "stepCssPx": 97.5,
+      "stepCssPx": 96,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -850,38 +855,30 @@
     },
     {
       "frame": 6,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f06.png",
-      "pngSha256": "b722842b6c17cf0a",
-      "pngMd5": "bdaeba0a34",
-      "dataUrlLength": 68710,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f06.png",
+      "pngSha256": "d51ce578c977af11",
+      "pngMd5": "1eff993536",
+      "dataUrlLength": 69358,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432354,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 141,
-      "framePhase": 0.5,
+      "drawsInWindow": 17,
+      "drawIndexTotal": 143,
+      "framePhase": 0.8333,
       "trail": [
         [
           179.25,
-          336
+          324
         ],
         [
           179.25,
-          330
+          318.5
         ],
         [
           179.25,
-          324.5
-        ],
-        [
-          179.25,
-          319
-        ],
-        [
-          179.25,
-          313.5
+          313
         ],
         [
           179.25,
@@ -897,11 +894,11 @@
         ],
         [
           179.25,
-          291
+          290.5
         ],
         [
           179.25,
-          285.5
+          285
         ],
         [
           179.25,
@@ -917,28 +914,40 @@
         ],
         [
           179.25,
-          264
+          263.5
         ],
         [
           179.25,
-          258.5
+          258
         ],
         [
           179.25,
-          253
+          252.5
+        ],
+        [
+          179.25,
+          247.5
+        ],
+        [
+          179.25,
+          242
+        ],
+        [
+          179.25,
+          236.5
         ]
       ],
       "distinctTrailX": 1,
-      "distinctTrailY": 16,
+      "distinctTrailY": 17,
       "droneBodyCssPx": [
         179.25,
-        253
+        236.5
       ],
-      "stepCssPx": 88.5,
+      "stepCssPx": 93.5,
       "cargoPod": "#ffb765",
       "storeGauge": {
-        "amber": 112,
-        "wells": 96
+        "amber": 119,
+        "wells": 102
       },
       "machineAccent": "#c9713a",
       "statuses": [
@@ -967,36 +976,25 @@
         null,
         null,
         null,
+        null,
         null
       ]
     },
     {
       "frame": 7,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f07.png",
-      "pngSha256": "389e58aa08c6e866",
-      "pngMd5": "5a0bdf60e4",
-      "dataUrlLength": 69230,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f07.png",
+      "pngSha256": "d4bd634ea0a7568b",
+      "pngMd5": "3d3b6b4726",
+      "dataUrlLength": 69214,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432364,
       "drawsInWindow": 16,
-      "drawIndexTotal": 157,
-      "framePhase": 0.1667,
+      "drawIndexTotal": 159,
+      "framePhase": 0.5,
       "trail": [
-        [
-          179.25,
-          247.5
-        ],
-        [
-          179.25,
-          242
-        ],
-        [
-          179.25,
-          237
-        ],
         [
           179.25,
           236
@@ -1031,15 +1029,15 @@
         ],
         [
           179.25,
-          251
+          251.5
         ],
         [
           179.25,
-          256.5
+          257
         ],
         [
           179.25,
-          262
+          262.5
         ],
         [
           179.25,
@@ -1048,15 +1046,27 @@
         [
           179.25,
           273
+        ],
+        [
+          179.25,
+          278.5
+        ],
+        [
+          179.25,
+          284
+        ],
+        [
+          179.25,
+          289.5
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 11,
       "droneBodyCssPx": [
         179.25,
-        273
+        289.5
       ],
-      "stepCssPx": 20,
+      "stepCssPx": 53,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -1094,790 +1104,22 @@
     },
     {
       "frame": 8,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f08.png",
-      "pngSha256": "b232935d782b75f9",
-      "pngMd5": "b72bfbad40",
-      "dataUrlLength": 68830,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f08.png",
+      "pngSha256": "cd1b211cf59a8b2a",
+      "pngMd5": "2967b871d9",
+      "dataUrlLength": 68818,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432364,
       "drawsInWindow": 16,
-      "drawIndexTotal": 173,
-      "framePhase": 0.8333,
-      "trail": [
-        [
-          179.25,
-          278.5
-        ],
-        [
-          179.25,
-          283.5
-        ],
-        [
-          179.25,
-          289
-        ],
-        [
-          179.25,
-          294.5
-        ],
-        [
-          179.25,
-          300
-        ],
-        [
-          179.25,
-          306
-        ],
-        [
-          179.25,
-          311.5
-        ],
-        [
-          179.25,
-          317
-        ],
-        [
-          179.25,
-          322.5
-        ],
-        [
-          179.25,
-          328.5
-        ],
-        [
-          179.25,
-          334
-        ],
-        [
-          179.25,
-          339.5
-        ],
-        [
-          179.25,
-          345.5
-        ],
-        [
-          179.25,
-          351.5
-        ],
-        [
-          179.25,
-          357
-        ],
-        [
-          179.25,
-          363
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        363
-      ],
-      "stepCssPx": 90,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 9,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f09.png",
-      "pngSha256": "5e4b5ab209adb095",
-      "pngMd5": "df54ef863e",
-      "dataUrlLength": 68194,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432364,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 189,
-      "framePhase": 0.5,
-      "trail": [
-        [
-          179.25,
-          369
-        ],
-        [
-          179.25,
-          375
-        ],
-        [
-          179.25,
-          381
-        ],
-        [
-          179.25,
-          387
-        ],
-        [
-          179.25,
-          393
-        ],
-        [
-          179.25,
-          399
-        ],
-        [
-          179.25,
-          405.5
-        ],
-        [
-          179.25,
-          411.5
-        ],
-        [
-          179.25,
-          418
-        ],
-        [
-          179.25,
-          424
-        ],
-        [
-          179.25,
-          430.5
-        ],
-        [
-          179.25,
-          437
-        ],
-        [
-          179.25,
-          443.5
-        ],
-        [
-          179.25,
-          449.5
-        ],
-        [
-          179.25,
-          456
-        ],
-        [
-          179.25,
-          463
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        463
-      ],
-      "stepCssPx": 100,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 10,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f10.png",
-      "pngSha256": "7eece513f7b65139",
-      "pngMd5": "2859084dda",
-      "dataUrlLength": 68882,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432364,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 205,
+      "drawIndexTotal": 175,
       "framePhase": 0.1667,
       "trail": [
         [
           179.25,
-          469.5
-        ],
-        [
-          179.25,
-          476
-        ],
-        [
-          179.25,
-          482.5
-        ],
-        [
-          179.25,
-          489.5
-        ],
-        [
-          179.25,
-          496
-        ],
-        [
-          179.25,
-          503
-        ],
-        [
-          179.25,
-          509.5
-        ],
-        [
-          179.25,
-          516.5
-        ],
-        [
-          179.25,
-          523.5
-        ],
-        [
-          179.25,
-          530
-        ],
-        [
-          179.25,
-          537
-        ],
-        [
-          179.25,
-          544
-        ],
-        [
-          179.25,
-          551
-        ],
-        [
-          179.25,
-          558
-        ],
-        [
-          179.25,
-          565
-        ],
-        [
-          179.25,
-          572
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        572
-      ],
-      "stepCssPx": 109,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 11,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f11.png",
-      "pngSha256": "424bdc5cd2e89e36",
-      "pngMd5": "b52ad4b563",
-      "dataUrlLength": 68810,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432374,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 221,
-      "framePhase": 0.8333,
-      "trail": [
-        [
-          179.25,
-          579
-        ],
-        [
-          179.25,
-          586
-        ],
-        [
-          179.25,
-          593
-        ],
-        [
-          179.25,
-          600
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          600.5
-        ],
-        [
-          179.25,
-          593.5
-        ],
-        [
-          179.25,
-          586.5
-        ],
-        [
-          179.25,
-          579.5
-        ],
-        [
-          179.25,
-          572.5
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 10,
-      "droneBodyCssPx": [
-        179.25,
-        572.5
-      ],
-      "stepCssPx": 0.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 12,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f12.png",
-      "pngSha256": "a095d10179585a1f",
-      "pngMd5": "03c6ae2185",
-      "dataUrlLength": 68594,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432374,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 237,
-      "framePhase": 0.5,
-      "trail": [
-        [
-          179.25,
-          565.5
-        ],
-        [
-          179.25,
-          558.5
-        ],
-        [
-          179.25,
-          551.5
-        ],
-        [
-          179.25,
-          544.5
-        ],
-        [
-          179.25,
-          537.5
-        ],
-        [
-          179.25,
-          530.5
-        ],
-        [
-          179.25,
-          523.5
-        ],
-        [
-          179.25,
-          517
-        ],
-        [
-          179.25,
-          510
-        ],
-        [
-          179.25,
-          503
-        ],
-        [
-          179.25,
-          496.5
-        ],
-        [
-          179.25,
-          490
-        ],
-        [
-          179.25,
-          483
-        ],
-        [
-          179.25,
-          476.5
-        ],
-        [
-          179.25,
-          470
-        ],
-        [
-          179.25,
-          463
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        463
-      ],
-      "stepCssPx": 109.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 13,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f13.png",
-      "pngSha256": "3fe9a193f42bd40c",
-      "pngMd5": "5fe1f9ef0e",
-      "dataUrlLength": 68334,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432374,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 253,
-      "framePhase": 0.1667,
-      "trail": [
-        [
-          179.25,
-          456.5
-        ],
-        [
-          179.25,
-          450
-        ],
-        [
-          179.25,
-          443.5
-        ],
-        [
-          179.25,
-          437
-        ],
-        [
-          179.25,
-          431
-        ],
-        [
-          179.25,
-          424.5
-        ],
-        [
-          179.25,
-          418
-        ],
-        [
-          179.25,
-          412
-        ],
-        [
-          179.25,
-          405.5
-        ],
-        [
-          179.25,
-          399.5
-        ],
-        [
-          179.25,
-          393.5
-        ],
-        [
-          179.25,
-          387.5
-        ],
-        [
-          179.25,
-          381
-        ],
-        [
-          179.25,
-          375
-        ],
-        [
-          179.25,
-          369.5
-        ],
-        [
-          179.25,
-          363.5
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        363.5
-      ],
-      "stepCssPx": 99.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 14,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f14.png",
-      "pngSha256": "e882cfbdb18f84e6",
-      "pngMd5": "cc56780f39",
-      "dataUrlLength": 68994,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432384,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 269,
-      "framePhase": 0.8333,
-      "trail": [
-        [
-          179.25,
-          357.5
-        ],
-        [
-          179.25,
-          351.5
-        ],
-        [
-          179.25,
-          346
-        ],
-        [
-          179.25,
-          340
-        ],
-        [
-          179.25,
-          334.5
-        ],
-        [
-          179.25,
-          328.5
-        ],
-        [
-          179.25,
-          323
-        ],
-        [
-          179.25,
-          317.5
-        ],
-        [
-          179.25,
-          311.5
-        ],
-        [
-          179.25,
-          306
+          295
         ],
         [
           179.25,
@@ -1885,1011 +1127,66 @@
         ],
         [
           179.25,
-          295
+          306
         ],
         [
           179.25,
-          289.5
+          311.5
         ],
         [
           179.25,
-          284
+          317.5
         ],
         [
           179.25,
-          278.5
+          323
         ],
         [
           179.25,
-          273
+          328.5
+        ],
+        [
+          179.25,
+          334.5
+        ],
+        [
+          179.25,
+          340
+        ],
+        [
+          179.25,
+          346
+        ],
+        [
+          179.25,
+          351.5
+        ],
+        [
+          179.25,
+          357.5
+        ],
+        [
+          179.25,
+          363.5
+        ],
+        [
+          179.25,
+          369.5
+        ],
+        [
+          179.25,
+          375
+        ],
+        [
+          179.25,
+          381
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 16,
       "droneBodyCssPx": [
         179.25,
-        273
-      ],
-      "stepCssPx": 90.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 15,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f15.png",
-      "pngSha256": "43ecd8eb2dd80c1e",
-      "pngMd5": "ba201357a4",
-      "dataUrlLength": 67890,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432384,
-      "drawsInWindow": 17,
-      "drawIndexTotal": 286,
-      "framePhase": 0.6667,
-      "trail": [
-        [
-          179.25,
-          267.5
-        ],
-        [
-          179.25,
-          262.5
-        ],
-        [
-          179.25,
-          257
-        ],
-        [
-          179.25,
-          251.5
-        ],
-        [
-          179.25,
-          246
-        ],
-        [
-          179.25,
-          240.5
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236
-        ],
-        [
-          179.25,
-          236.5
-        ],
-        [
-          179.25,
-          242
-        ],
-        [
-          179.25,
-          247.5
-        ],
-        [
-          179.25,
-          252.5
-        ],
-        [
-          179.25,
-          258
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 12,
-      "droneBodyCssPx": [
-        179.25,
-        258
-      ],
-      "stepCssPx": 15,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 119,
-        "wells": 102
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 16,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f16.png",
-      "pngSha256": "f5a0fe1376b22830",
-      "pngMd5": "15ad6c065a",
-      "dataUrlLength": 68798,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432384,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 302,
-      "framePhase": 0.3333,
-      "trail": [
-        [
-          179.25,
-          263.5
-        ],
-        [
-          179.25,
-          269
-        ],
-        [
-          179.25,
-          274.5
-        ],
-        [
-          179.25,
-          280
-        ],
-        [
-          179.25,
-          285.5
-        ],
-        [
-          179.25,
-          290.5
-        ],
-        [
-          179.25,
-          296.5
-        ],
-        [
-          179.25,
-          302
-        ],
-        [
-          179.25,
-          307.5
-        ],
-        [
-          179.25,
-          313
-        ],
-        [
-          179.25,
-          318.5
-        ],
-        [
-          179.25,
-          324
-        ],
-        [
-          179.25,
-          330
-        ],
-        [
-          179.25,
-          335.5
-        ],
-        [
-          179.25,
-          341.5
-        ],
-        [
-          179.25,
-          347
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        347
-      ],
-      "stepCssPx": 89,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 17,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f17.png",
-      "pngSha256": "133348edda0e9f8a",
-      "pngMd5": "254655c37a",
-      "dataUrlLength": 68382,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432384,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 318,
-      "framePhase": 0,
-      "trail": [
-        [
-          179.25,
-          353
-        ],
-        [
-          179.25,
-          359
-        ],
-        [
-          179.25,
-          364.5
-        ],
-        [
-          179.25,
-          370.5
-        ],
-        [
-          179.25,
-          376.5
-        ],
-        [
-          179.25,
-          382.5
-        ],
-        [
-          179.25,
-          388.5
-        ],
-        [
-          179.25,
-          395
-        ],
-        [
-          179.25,
-          401
-        ],
-        [
-          179.25,
-          407
-        ],
-        [
-          179.25,
-          413.5
-        ],
-        [
-          179.25,
-          419.5
-        ],
-        [
-          179.25,
-          426
-        ],
-        [
-          179.25,
-          432.5
-        ],
-        [
-          179.25,
-          438.5
-        ],
-        [
-          179.25,
-          445
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        445
-      ],
-      "stepCssPx": 98,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 112,
-        "wells": 96
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 18,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f18.png",
-      "pngSha256": "0a903607696930b6",
-      "pngMd5": "5acde70d23",
-      "dataUrlLength": 68170,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432394,
-      "drawsInWindow": 15,
-      "drawIndexTotal": 333,
-      "framePhase": 0.5,
-      "trail": [
-        [
-          179.25,
-          451.5
-        ],
-        [
-          179.25,
-          458
-        ],
-        [
-          179.25,
-          464.5
-        ],
-        [
-          179.25,
-          471.5
-        ],
-        [
-          179.25,
-          478
-        ],
-        [
-          179.25,
-          484.5
-        ],
-        [
-          179.25,
-          491.5
-        ],
-        [
-          179.25,
-          498
-        ],
-        [
-          179.25,
-          505
-        ],
-        [
-          179.25,
-          511.5
-        ],
-        [
-          179.25,
-          518.5
-        ],
-        [
-          179.25,
-          525.5
-        ],
-        [
-          179.25,
-          532
-        ],
-        [
-          179.25,
-          539
-        ],
-        [
-          179.25,
-          546
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 15,
-      "droneBodyCssPx": [
-        179.25,
-        546
-      ],
-      "stepCssPx": 101,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 105,
-        "wells": 90
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 19,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f19.png",
-      "pngSha256": "d59297073815a50f",
-      "pngMd5": "94c55ae3ef",
-      "dataUrlLength": 68546,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432394,
-      "drawsInWindow": 17,
-      "drawIndexTotal": 350,
-      "framePhase": 0.3333,
-      "trail": [
-        [
-          179.25,
-          553
-        ],
-        [
-          179.25,
-          560
-        ],
-        [
-          179.25,
-          567
-        ],
-        [
-          179.25,
-          574
-        ],
-        [
-          179.25,
-          581
-        ],
-        [
-          179.25,
-          588
-        ],
-        [
-          179.25,
-          595
-        ],
-        [
-          179.25,
-          602
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          607
-        ],
-        [
-          179.25,
-          605.5
-        ],
-        [
-          179.25,
-          598.5
-        ],
-        [
-          179.25,
-          591.5
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 12,
-      "droneBodyCssPx": [
-        179.25,
-        591.5
-      ],
-      "stepCssPx": 45.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 119,
-        "wells": 102
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 20,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f20.png",
-      "pngSha256": "2e5c879da5e92ebf",
-      "pngMd5": "73294497a5",
-      "dataUrlLength": 68754,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432394,
-      "drawsInWindow": 15,
-      "drawIndexTotal": 365,
-      "framePhase": 0.8333,
-      "trail": [
-        [
-          179.25,
-          584.5
-        ],
-        [
-          179.25,
-          577
-        ],
-        [
-          179.25,
-          570.5
-        ],
-        [
-          179.25,
-          563.5
-        ],
-        [
-          179.25,
-          556.5
-        ],
-        [
-          179.25,
-          549.5
-        ],
-        [
-          179.25,
-          542.5
-        ],
-        [
-          179.25,
-          535.5
-        ],
-        [
-          179.25,
-          528.5
-        ],
-        [
-          179.25,
-          521.5
-        ],
-        [
-          179.25,
-          515
-        ],
-        [
-          179.25,
-          508
-        ],
-        [
-          179.25,
-          501.5
-        ],
-        [
-          179.25,
-          494.5
-        ],
-        [
-          179.25,
-          488
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 15,
-      "droneBodyCssPx": [
-        179.25,
-        488
-      ],
-      "stepCssPx": 103.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 105,
-        "wells": 90
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 21,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f21.png",
-      "pngSha256": "9fdbfa6b0206446b",
-      "pngMd5": "a482db870d",
-      "dataUrlLength": 68862,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432394,
-      "drawsInWindow": 17,
-      "drawIndexTotal": 382,
-      "framePhase": 0.6667,
-      "trail": [
-        [
-          179.25,
-          481
-        ],
-        [
-          179.25,
-          474.5
-        ],
-        [
-          179.25,
-          468
-        ],
-        [
-          179.25,
-          461.5
-        ],
-        [
-          179.25,
-          455
-        ],
-        [
-          179.25,
-          448
-        ],
-        [
-          179.25,
-          442
-        ],
-        [
-          179.25,
-          435.5
-        ],
-        [
-          179.25,
-          429
-        ],
-        [
-          179.25,
-          422.5
-        ],
-        [
-          179.25,
-          416.5
-        ],
-        [
-          179.25,
-          410
-        ],
-        [
-          179.25,
-          404
-        ],
-        [
-          179.25,
-          397.5
-        ],
-        [
-          179.25,
-          391.5
-        ],
-        [
-          179.25,
-          385.5
-        ],
-        [
-          179.25,
-          379.5
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 17,
-      "droneBodyCssPx": [
-        179.25,
-        379.5
-      ],
-      "stepCssPx": 108.5,
-      "cargoPod": "#ffb765",
-      "storeGauge": {
-        "amber": 119,
-        "wells": 102
-      },
-      "machineAccent": "#c9713a",
-      "statuses": [
-        "sorter:outputFull"
-      ],
-      "inFlight": {
-        "qty": 5,
-        "arrive": 18596
-      },
-      "deliveries": 370,
-      "storeUnits": 900,
-      "hud": "Scrap148Ferrous21Credits82Store900/900",
-      "legObserved": [
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
-    },
-    {
-      "frame": 22,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f22.png",
-      "pngSha256": "5266707e1ba5d30b",
-      "pngMd5": "f44971e93c",
-      "dataUrlLength": 68642,
-      "canvasBackingPx": [
-        780,
-        1688
-      ],
-      "tick": 432404,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 398,
-      "framePhase": 0.3333,
-      "trail": [
-        [
-          179.25,
-          373.5
-        ],
-        [
-          179.25,
-          367.5
-        ],
-        [
-          179.25,
-          361.5
-        ],
-        [
-          179.25,
-          356
-        ],
-        [
-          179.25,
-          350
-        ],
-        [
-          179.25,
-          344
-        ],
-        [
-          179.25,
-          338.5
-        ],
-        [
-          179.25,
-          332.5
-        ],
-        [
-          179.25,
-          327
-        ],
-        [
-          179.25,
-          321.5
-        ],
-        [
-          179.25,
-          315.5
-        ],
-        [
-          179.25,
-          310
-        ],
-        [
-          179.25,
-          304.5
-        ],
-        [
-          179.25,
-          299
-        ],
-        [
-          179.25,
-          293.5
-        ],
-        [
-          179.25,
-          288
-        ]
-      ],
-      "distinctTrailX": 1,
-      "distinctTrailY": 16,
-      "droneBodyCssPx": [
-        179.25,
-        288
+        381
       ],
       "stepCssPx": 91.5,
       "cargoPod": "#ffb765",
@@ -2928,88 +1225,1308 @@
       ]
     },
     {
-      "frame": 23,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f23.png",
-      "pngSha256": "e3b5fb5fad0647b3",
-      "pngMd5": "b694f52336",
-      "dataUrlLength": 69398,
+      "frame": 9,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f09.png",
+      "pngSha256": "bf73781cadc318ff",
+      "pngMd5": "2610e0397d",
+      "dataUrlLength": 69158,
       "canvasBackingPx": [
         780,
         1688
       ],
-      "tick": 432404,
-      "drawsInWindow": 15,
-      "drawIndexTotal": 413,
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 191,
       "framePhase": 0.8333,
       "trail": [
         [
           179.25,
-          282.5
+          387.5
         ],
         [
           179.25,
-          277
+          393.5
         ],
         [
           179.25,
-          271.5
+          399.5
         ],
         [
           179.25,
-          266
+          405.5
         ],
         [
           179.25,
-          261
+          412
         ],
         [
           179.25,
-          255.5
+          418
         ],
         [
           179.25,
-          250
+          424.5
         ],
         [
           179.25,
-          244.5
+          431
         ],
         [
           179.25,
-          239
+          437
         ],
         [
           179.25,
-          236
+          443.5
         ],
         [
           179.25,
-          236
+          450
         ],
         [
           179.25,
-          236
+          456.5
         ],
         [
           179.25,
-          236
+          463
         ],
         [
           179.25,
-          236
+          470
         ],
         [
           179.25,
-          236
+          476.5
+        ],
+        [
+          179.25,
+          483
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        483
+      ],
+      "stepCssPx": 102,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 10,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f10.png",
+      "pngSha256": "fa4da86d85d46f67",
+      "pngMd5": "725e6dbae6",
+      "dataUrlLength": 68638,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432364,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 207,
+      "framePhase": 0.5,
+      "trail": [
+        [
+          179.25,
+          490
+        ],
+        [
+          179.25,
+          496.5
+        ],
+        [
+          179.25,
+          503
+        ],
+        [
+          179.25,
+          510
+        ],
+        [
+          179.25,
+          517
+        ],
+        [
+          179.25,
+          524
+        ],
+        [
+          179.25,
+          530.5
+        ],
+        [
+          179.25,
+          537.5
+        ],
+        [
+          179.25,
+          544.5
+        ],
+        [
+          179.25,
+          551.5
+        ],
+        [
+          179.25,
+          558.5
+        ],
+        [
+          179.25,
+          565.5
+        ],
+        [
+          179.25,
+          572.5
+        ],
+        [
+          179.25,
+          579.5
+        ],
+        [
+          179.25,
+          586.5
+        ],
+        [
+          179.25,
+          593.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        593.5
+      ],
+      "stepCssPx": 110.5,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 11,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f11.png",
+      "pngSha256": "eec7b64df66a5594",
+      "pngMd5": "640c833df9",
+      "dataUrlLength": 68846,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 223,
+      "framePhase": 0.1667,
+      "trail": [
+        [
+          179.25,
+          600.5
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          600
+        ],
+        [
+          179.25,
+          593
+        ],
+        [
+          179.25,
+          586
+        ],
+        [
+          179.25,
+          579
+        ],
+        [
+          179.25,
+          572
+        ],
+        [
+          179.25,
+          565
+        ],
+        [
+          179.25,
+          558
+        ],
+        [
+          179.25,
+          551
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 10,
       "droneBodyCssPx": [
         179.25,
-        236
+        551
       ],
-      "stepCssPx": 52,
+      "stepCssPx": 42.5,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 12,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f12.png",
+      "pngSha256": "7776d89fdbe95aa0",
+      "pngMd5": "d326ae6747",
+      "dataUrlLength": 68670,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 239,
+      "framePhase": 0.8333,
+      "trail": [
+        [
+          179.25,
+          544
+        ],
+        [
+          179.25,
+          537
+        ],
+        [
+          179.25,
+          530
+        ],
+        [
+          179.25,
+          523.5
+        ],
+        [
+          179.25,
+          516.5
+        ],
+        [
+          179.25,
+          509.5
+        ],
+        [
+          179.25,
+          503
+        ],
+        [
+          179.25,
+          496
+        ],
+        [
+          179.25,
+          489.5
+        ],
+        [
+          179.25,
+          482.5
+        ],
+        [
+          179.25,
+          476
+        ],
+        [
+          179.25,
+          469.5
+        ],
+        [
+          179.25,
+          463
+        ],
+        [
+          179.25,
+          456
+        ],
+        [
+          179.25,
+          449.5
+        ],
+        [
+          179.25,
+          443.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        443.5
+      ],
+      "stepCssPx": 107.5,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 13,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f13.png",
+      "pngSha256": "1f9f8de6417a7cba",
+      "pngMd5": "371816c3c2",
+      "dataUrlLength": 68202,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432374,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 255,
+      "framePhase": 0.5,
+      "trail": [
+        [
+          179.25,
+          437
+        ],
+        [
+          179.25,
+          430.5
+        ],
+        [
+          179.25,
+          424
+        ],
+        [
+          179.25,
+          418
+        ],
+        [
+          179.25,
+          411.5
+        ],
+        [
+          179.25,
+          405.5
+        ],
+        [
+          179.25,
+          399
+        ],
+        [
+          179.25,
+          393
+        ],
+        [
+          179.25,
+          387
+        ],
+        [
+          179.25,
+          381
+        ],
+        [
+          179.25,
+          375
+        ],
+        [
+          179.25,
+          369
+        ],
+        [
+          179.25,
+          363
+        ],
+        [
+          179.25,
+          357
+        ],
+        [
+          179.25,
+          351.5
+        ],
+        [
+          179.25,
+          345.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        345.5
+      ],
+      "stepCssPx": 98,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 14,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f14.png",
+      "pngSha256": "9e94b94ca15190b3",
+      "pngMd5": "b7dd4ea7ca",
+      "dataUrlLength": 68770,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 271,
+      "framePhase": 0.1667,
+      "trail": [
+        [
+          179.25,
+          339.5
+        ],
+        [
+          179.25,
+          334
+        ],
+        [
+          179.25,
+          328
+        ],
+        [
+          179.25,
+          322.5
+        ],
+        [
+          179.25,
+          317
+        ],
+        [
+          179.25,
+          311.5
+        ],
+        [
+          179.25,
+          306
+        ],
+        [
+          179.25,
+          300
+        ],
+        [
+          179.25,
+          294.5
+        ],
+        [
+          179.25,
+          289
+        ],
+        [
+          179.25,
+          283.5
+        ],
+        [
+          179.25,
+          278.5
+        ],
+        [
+          179.25,
+          273
+        ],
+        [
+          179.25,
+          267.5
+        ],
+        [
+          179.25,
+          262
+        ],
+        [
+          179.25,
+          256.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        256.5
+      ],
+      "stepCssPx": 89,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 15,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f15.png",
+      "pngSha256": "5bf81cc5024a30de",
+      "pngMd5": "0ac4829233",
+      "dataUrlLength": 69314,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 287,
+      "framePhase": 0.8333,
+      "trail": [
+        [
+          179.25,
+          251
+        ],
+        [
+          179.25,
+          246
+        ],
+        [
+          179.25,
+          240.5
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          237
+        ],
+        [
+          179.25,
+          242
+        ],
+        [
+          179.25,
+          247.5
+        ],
+        [
+          179.25,
+          253
+        ],
+        [
+          179.25,
+          258.5
+        ],
+        [
+          179.25,
+          264
+        ],
+        [
+          179.25,
+          269
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 11,
+      "droneBodyCssPx": [
+        179.25,
+        269
+      ],
+      "stepCssPx": 12.5,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 16,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f16.png",
+      "pngSha256": "fa0ccc5d4d2ca58e",
+      "pngMd5": "27dc50fa1d",
+      "dataUrlLength": 68998,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 303,
+      "framePhase": 0.5,
+      "trail": [
+        [
+          179.25,
+          274.5
+        ],
+        [
+          179.25,
+          280
+        ],
+        [
+          179.25,
+          285.5
+        ],
+        [
+          179.25,
+          291
+        ],
+        [
+          179.25,
+          296.5
+        ],
+        [
+          179.25,
+          302
+        ],
+        [
+          179.25,
+          307.5
+        ],
+        [
+          179.25,
+          313.5
+        ],
+        [
+          179.25,
+          319
+        ],
+        [
+          179.25,
+          324.5
+        ],
+        [
+          179.25,
+          330
+        ],
+        [
+          179.25,
+          336
+        ],
+        [
+          179.25,
+          341.5
+        ],
+        [
+          179.25,
+          347.5
+        ],
+        [
+          179.25,
+          353
+        ],
+        [
+          179.25,
+          359
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        359
+      ],
+      "stepCssPx": 90,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 17,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f17.png",
+      "pngSha256": "189611545fb3094b",
+      "pngMd5": "9636e92202",
+      "dataUrlLength": 68494,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432384,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 319,
+      "framePhase": 0.1667,
+      "trail": [
+        [
+          179.25,
+          365
+        ],
+        [
+          179.25,
+          371
+        ],
+        [
+          179.25,
+          377
+        ],
+        [
+          179.25,
+          383
+        ],
+        [
+          179.25,
+          389
+        ],
+        [
+          179.25,
+          395
+        ],
+        [
+          179.25,
+          401.5
+        ],
+        [
+          179.25,
+          407.5
+        ],
+        [
+          179.25,
+          413.5
+        ],
+        [
+          179.25,
+          420
+        ],
+        [
+          179.25,
+          426.5
+        ],
+        [
+          179.25,
+          432.5
+        ],
+        [
+          179.25,
+          439
+        ],
+        [
+          179.25,
+          445.5
+        ],
+        [
+          179.25,
+          452
+        ],
+        [
+          179.25,
+          458.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        458.5
+      ],
+      "stepCssPx": 99.5,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 18,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f18.png",
+      "pngSha256": "5a6fc132755d138f",
+      "pngMd5": "1abdc1f0e0",
+      "dataUrlLength": 68870,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 335,
+      "framePhase": 0.8333,
+      "trail": [
+        [
+          179.25,
+          465
+        ],
+        [
+          179.25,
+          471.5
+        ],
+        [
+          179.25,
+          478.5
+        ],
+        [
+          179.25,
+          485
+        ],
+        [
+          179.25,
+          491.5
+        ],
+        [
+          179.25,
+          498.5
+        ],
+        [
+          179.25,
+          505
+        ],
+        [
+          179.25,
+          512
+        ],
+        [
+          179.25,
+          519
+        ],
+        [
+          179.25,
+          525.5
+        ],
+        [
+          179.25,
+          532.5
+        ],
+        [
+          179.25,
+          539.5
+        ],
+        [
+          179.25,
+          546.5
+        ],
+        [
+          179.25,
+          553.5
+        ],
+        [
+          179.25,
+          560.5
+        ],
+        [
+          179.25,
+          567.5
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        567.5
+      ],
+      "stepCssPx": 109,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 19,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f19.png",
+      "pngSha256": "9226e89fc8a5e94d",
+      "pngMd5": "0b20b1cb56",
+      "dataUrlLength": 68526,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 15,
+      "drawIndexTotal": 350,
+      "framePhase": 0.3333,
+      "trail": [
+        [
+          179.25,
+          574.5
+        ],
+        [
+          179.25,
+          581.5
+        ],
+        [
+          179.25,
+          588.5
+        ],
+        [
+          179.25,
+          595.5
+        ],
+        [
+          179.25,
+          602.5
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          607
+        ],
+        [
+          179.25,
+          605
+        ],
+        [
+          179.25,
+          598
+        ],
+        [
+          179.25,
+          591
+        ],
+        [
+          179.25,
+          584
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 10,
+      "droneBodyCssPx": [
+        179.25,
+        584
+      ],
+      "stepCssPx": 16.5,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 105,
@@ -3045,28 +2562,508 @@
       ]
     },
     {
-      "frame": 24,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f24.png",
-      "pngSha256": "b3aa892e681e7d32",
-      "pngMd5": "a7a570555e",
-      "dataUrlLength": 68698,
+      "frame": 20,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f20.png",
+      "pngSha256": "d741e45fdcfd5f7a",
+      "pngMd5": "07c22858a8",
+      "dataUrlLength": 69034,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 366,
+      "framePhase": 0,
+      "trail": [
+        [
+          179.25,
+          577
+        ],
+        [
+          179.25,
+          570
+        ],
+        [
+          179.25,
+          563
+        ],
+        [
+          179.25,
+          556
+        ],
+        [
+          179.25,
+          549
+        ],
+        [
+          179.25,
+          542
+        ],
+        [
+          179.25,
+          535
+        ],
+        [
+          179.25,
+          528
+        ],
+        [
+          179.25,
+          521.5
+        ],
+        [
+          179.25,
+          514.5
+        ],
+        [
+          179.25,
+          507.5
+        ],
+        [
+          179.25,
+          501
+        ],
+        [
+          179.25,
+          494
+        ],
+        [
+          179.25,
+          487.5
+        ],
+        [
+          179.25,
+          481
+        ],
+        [
+          179.25,
+          474
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        474
+      ],
+      "stepCssPx": 110,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 21,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f21.png",
+      "pngSha256": "a45f012339068ea1",
+      "pngMd5": "458a1502eb",
+      "dataUrlLength": 69118,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432394,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 382,
+      "framePhase": 0.6667,
+      "trail": [
+        [
+          179.25,
+          467.5
+        ],
+        [
+          179.25,
+          461
+        ],
+        [
+          179.25,
+          454.5
+        ],
+        [
+          179.25,
+          448
+        ],
+        [
+          179.25,
+          441.5
+        ],
+        [
+          179.25,
+          435
+        ],
+        [
+          179.25,
+          428.5
+        ],
+        [
+          179.25,
+          422.5
+        ],
+        [
+          179.25,
+          416
+        ],
+        [
+          179.25,
+          410
+        ],
+        [
+          179.25,
+          403.5
+        ],
+        [
+          179.25,
+          397.5
+        ],
+        [
+          179.25,
+          391
+        ],
+        [
+          179.25,
+          385
+        ],
+        [
+          179.25,
+          379
+        ],
+        [
+          179.25,
+          373
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        373
+      ],
+      "stepCssPx": 101,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 22,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f22.png",
+      "pngSha256": "b1b3584ec9ae567c",
+      "pngMd5": "4adb1d55d9",
+      "dataUrlLength": 68950,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432404,
       "drawsInWindow": 16,
-      "drawIndexTotal": 429,
-      "framePhase": 0.5,
+      "drawIndexTotal": 398,
+      "framePhase": 0.3333,
       "trail": [
         [
           179.25,
-          238
+          367
         ],
         [
           179.25,
-          243.5
+          361.5
         ],
+        [
+          179.25,
+          355.5
+        ],
+        [
+          179.25,
+          349.5
+        ],
+        [
+          179.25,
+          344
+        ],
+        [
+          179.25,
+          338
+        ],
+        [
+          179.25,
+          332.5
+        ],
+        [
+          179.25,
+          326.5
+        ],
+        [
+          179.25,
+          321
+        ],
+        [
+          179.25,
+          315.5
+        ],
+        [
+          179.25,
+          309.5
+        ],
+        [
+          179.25,
+          304
+        ],
+        [
+          179.25,
+          298.5
+        ],
+        [
+          179.25,
+          293
+        ],
+        [
+          179.25,
+          287.5
+        ],
+        [
+          179.25,
+          282
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 16,
+      "droneBodyCssPx": [
+        179.25,
+        282
+      ],
+      "stepCssPx": 91,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 23,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f23.png",
+      "pngSha256": "17ff002b064a45fc",
+      "pngMd5": "9b6922e740",
+      "dataUrlLength": 69250,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 414,
+      "framePhase": 0,
+      "trail": [
+        [
+          179.25,
+          276.5
+        ],
+        [
+          179.25,
+          271.5
+        ],
+        [
+          179.25,
+          266
+        ],
+        [
+          179.25,
+          260.5
+        ],
+        [
+          179.25,
+          255
+        ],
+        [
+          179.25,
+          249.5
+        ],
+        [
+          179.25,
+          244
+        ],
+        [
+          179.25,
+          239
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          236
+        ],
+        [
+          179.25,
+          238.5
+        ],
+        [
+          179.25,
+          244
+        ]
+      ],
+      "distinctTrailX": 1,
+      "distinctTrailY": 10,
+      "droneBodyCssPx": [
+        179.25,
+        244
+      ],
+      "stepCssPx": 38,
+      "cargoPod": "#ffb765",
+      "storeGauge": {
+        "amber": 112,
+        "wells": 96
+      },
+      "machineAccent": "#c9713a",
+      "statuses": [
+        "sorter:outputFull"
+      ],
+      "inFlight": {
+        "qty": 5,
+        "arrive": 18596
+      },
+      "deliveries": 370,
+      "storeUnits": 900,
+      "hud": "Scrap148Ferrous21Credits82Store900/900",
+      "legObserved": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "frame": 24,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f24.png",
+      "pngSha256": "df347edd6488141a",
+      "pngMd5": "762fec8d9b",
+      "dataUrlLength": 69326,
+      "canvasBackingPx": [
+        780,
+        1688
+      ],
+      "tick": 432404,
+      "drawsInWindow": 16,
+      "drawIndexTotal": 430,
+      "framePhase": 0.6667,
+      "trail": [
         [
           179.25,
           249
@@ -3077,15 +3074,15 @@
         ],
         [
           179.25,
-          259.5
+          260
         ],
         [
           179.25,
-          265
+          265.5
         ],
         [
           179.25,
-          270.5
+          271
         ],
         [
           179.25,
@@ -3113,24 +3110,32 @@
         ],
         [
           179.25,
-          309
+          309.5
         ],
         [
           179.25,
-          314.5
+          315
         ],
         [
           179.25,
-          320
+          320.5
+        ],
+        [
+          179.25,
+          326
+        ],
+        [
+          179.25,
+          332
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 16,
       "droneBodyCssPx": [
         179.25,
-        320
+        332
       ],
-      "stepCssPx": 84,
+      "stepCssPx": 88,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -3168,46 +3173,38 @@
     },
     {
       "frame": 25,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f25.png",
-      "pngSha256": "c73e4949cd84db8b",
-      "pngMd5": "430cc3c1a0",
-      "dataUrlLength": 68610,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f25.png",
+      "pngSha256": "05800503d62acb47",
+      "pngMd5": "6405404c07",
+      "dataUrlLength": 68618,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432404,
       "drawsInWindow": 16,
-      "drawIndexTotal": 445,
-      "framePhase": 0.1667,
+      "drawIndexTotal": 446,
+      "framePhase": 0.3333,
       "trail": [
         [
           179.25,
-          326
+          337.5
         ],
         [
           179.25,
-          331.5
+          343.5
         ],
         [
           179.25,
-          337
+          349
         ],
         [
           179.25,
-          343
+          355
         ],
         [
           179.25,
-          348.5
-        ],
-        [
-          179.25,
-          354.5
-        ],
-        [
-          179.25,
-          360.5
+          361
         ],
         [
           179.25,
@@ -3227,15 +3224,15 @@
         ],
         [
           179.25,
-          390.5
+          391
         ],
         [
           179.25,
-          396.5
+          397
         ],
         [
           179.25,
-          402.5
+          403
         ],
         [
           179.25,
@@ -3243,16 +3240,24 @@
         ],
         [
           179.25,
-          415
+          415.5
+        ],
+        [
+          179.25,
+          421.5
+        ],
+        [
+          179.25,
+          428
         ]
       ],
       "distinctTrailX": 1,
       "distinctTrailY": 16,
       "droneBodyCssPx": [
         179.25,
-        415
+        428
       ],
-      "stepCssPx": 95,
+      "stepCssPx": 96,
       "cargoPod": "#ffb765",
       "storeGauge": {
         "amber": 112,
@@ -3290,54 +3295,46 @@
     },
     {
       "frame": 26,
-      "png": "docs/evidence/candidate-e8abe4b-clip-250ms-f26.png",
-      "pngSha256": "6c280dcd158ac9d3",
-      "pngMd5": "1110d23359",
-      "dataUrlLength": 68834,
+      "png": "docs/evidence/candidate-art003-wings-clip-250ms-f26.png",
+      "pngSha256": "83d9f3dc58fd2877",
+      "pngMd5": "bbb2f937cc",
+      "dataUrlLength": 68490,
       "canvasBackingPx": [
         780,
         1688
       ],
       "tick": 432414,
-      "drawsInWindow": 16,
-      "drawIndexTotal": 461,
-      "framePhase": 0.8333,
+      "drawsInWindow": 17,
+      "drawIndexTotal": 463,
+      "framePhase": 0.1667,
       "trail": [
         [
           179.25,
-          421.5
+          434.5
         ],
         [
           179.25,
-          427.5
+          441
         ],
         [
           179.25,
-          434
+          447.5
         ],
         [
           179.25,
-          440.5
+          454
         ],
         [
           179.25,
-          447
+          460.5
         ],
         [
           179.25,
-          453.5
+          467
         ],
         [
           179.25,
-          460
-        ],
-        [
-          179.25,
-          466.5
-        ],
-        [
-          179.25,
-          473
+          473.5
         ],
         [
           179.25,
@@ -3345,40 +3342,52 @@
         ],
         [
           179.25,
-          486.5
+          487
         ],
         [
           179.25,
-          493
+          493.5
         ],
         [
           179.25,
-          500
+          500.5
         ],
         [
           179.25,
-          506.5
+          507
         ],
         [
           179.25,
-          513.5
+          514
         ],
         [
           179.25,
-          520.5
+          521
+        ],
+        [
+          179.25,
+          527.5
+        ],
+        [
+          179.25,
+          534.5
+        ],
+        [
+          179.25,
+          541.5
         ]
       ],
       "distinctTrailX": 1,
-      "distinctTrailY": 16,
+      "distinctTrailY": 17,
       "droneBodyCssPx": [
         179.25,
-        520.5
+        541.5
       ],
-      "stepCssPx": 105.5,
+      "stepCssPx": 113.5,
       "cargoPod": "#ffb765",
       "storeGauge": {
-        "amber": 112,
-        "wells": 96
+        "amber": 119,
+        "wells": 102
       },
       "machineAccent": "#c9713a",
       "statuses": [
@@ -3392,6 +3401,7 @@
       "storeUnits": 900,
       "hud": "Scrap148Ferrous21Credits82Store900/900",
       "legObserved": [
+        null,
         null,
         null,
         null,
