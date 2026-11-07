@@ -126,3 +126,35 @@ both policies, three stall readings, 12 stills at taps 33/40/48; `layout-witness
 `face-line-check.mjs` — the two derivations of the pending line agree on 8 engine-written frames;
 `baseline-census.mjs` — the PLAYER-004 g1 timeline re-printed in these buckets (63 / 68 / 10 of 141, stall 32);
 `inert-runs.mjs` — the per-run listing of the inert taps; `checks.txt` — gate exit codes and asset bytes.
+
+## 7. Integration note for the release engineer (measured at `965b304`)
+
+`git merge-base 1573ac1 bcb3d1cdefdc9f84108b8bb91cd95e2736853618` = `1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2`:
+this lane's base **is** the merge-base with `rw/belt001-g4` (`--is-ancestor` exit 0), so no rebase is required.
+
+Exact-match hunks of this branch, in base line numbers (`git diff -U3 1573ac1..HEAD`), all insert-only:
+
+| file | hunk | what it does |
+| --- | --- | --- |
+| `src/ui/text.ts` | `@@ -19,6 +19,7 @@` | `plural,` added to the `./strings` import braces (old 19-24) |
+| `src/ui/text.ts` | `@@ -77,6 +78,7 @@` | `rememberSpoken(state);` as first statement of `objectiveFor` (old 77-82) |
+| `src/ui/text.ts` | `@@ -146,6 +148,7 @@` | same, in `primaryFor` (old 146-151) |
+| `src/ui/text.ts` | `@@ -284,6 +287,7 @@` | same, in `restingLine` (old 284-289) |
+| `src/ui/text.ts` | `@@ -293,6 +297,131 @@` | the STRAT-004 block appended after `restingLine` (old 293-298) |
+| `src/ui/text.ts` | `@@ -331,6 +460,7 @@` | same `rememberSpoken`, in `visibleResources` (old 331-336) |
+| `src/ui/Hud.tsx` | `@@ -3,7 +3,7 @@`, `@@ -162,6 +162,8 @@`, `@@ -170,12 +172,15 @@`, `@@ -189,6 +194,12 @@`, `@@ -227,6 +238,7 @@` | import gains `pendingFromCost`; two third-line spans |
+
+`rw/belt001-g4` edits only two places in `text.ts` — `@@ -3,13 +3,14 @@` (`beltCost,` in the `commands` braces,
+`RouteState` in the `import type` line; old 3-15) and `@@ -382,3 +383,17 @@` (`beltExtentLine` appended at end of
+file; old 382-384) — and zero lines in `Hud.tsx`. Those old-side ranges are disjoint from every range above
+(tightest pair: belt ends at old 15, this lane starts at old 19), every hunk on both sides is insert-only, and
+no identifier is introduced twice (`beltExtentLine` vs `face.waits`/`spokenState`/`pendingForStep`/
+`pendingFromCost`/`shortfallForStep`/`heldAmount`/`faceWaitLine`).
+
+Mechanical check, no working-tree change: `git merge-tree --write-tree 965b304… bcb3d1c…` exits 0 with one tree,
+`3ad3b8844b0213d0af340abd26179081b88d7c59`, and no conflict section. That merged `text.ts` (493 lines) carries
+both sides — `"face.waits": "waits {need} · have {have}"`, `plural,`, `import type { RouteState, … }` and
+`export function beltExtentLine(route: RouteState)` — and the merged `Hud.tsx` carries all three
+`pendingFromCost` call sites plus both `dock__wait` spans. A straight 3-way merge or a rebase of `3cdc055` then
+`965b304` onto `bcb3d1c` therefore needs no manual resolution, and the entry-chunk figure in `checks.txt` stays
+valid because these two files are the only shipped-code edits on this lane.
