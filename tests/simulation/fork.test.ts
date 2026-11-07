@@ -716,28 +716,28 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
     const buffer = a12Row("buffer", "gap9");
     const draw = a12Row("draw", "gap9");
     const mmg = harnessJson.gaps.mmg;
-    // speed owns `batches` by >= 900: 2 157 over the best named rival 1 184 (973).
+    // speed owns `batches` by >= 900: 2 179 over the best named rival 1 191 (988).
     expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(
       mmg.batches.absolute
     );
-    // draw keeps the zero row, but buffer's 99 throttled rounds hold the rival value
+    // draw keeps the zero row, but buffer's 127 throttled rounds hold the rival value
     // under the 200-unit floor, so this column names no leader under the MMG.
     expect(draw.powerLimitedRounds).toBe(0);
-    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(99);
-    expect(99).toBeLessThan(mmg.powerLimitedRounds.absolute);
+    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(127);
+    expect(127).toBeLessThan(mmg.powerLimitedRounds.absolute);
     expect(draw.minPowerRatio - Math.max(speed.minPowerRatio, buffer.minPowerRatio)).toBeGreaterThanOrEqual(
       mmg.minPowerRatio.absolute
     );
-    // The mechanism columns (starved %) stay with speed: 84 - 80 and 59 - 54.
+    // The mechanism columns (starved %) stay with speed: 85 - 81 and 58 - 53.
     expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBeGreaterThanOrEqual(
       mmg.starvedMax.absolute
     );
     expect(Math.max(buffer.starvedMean, draw.starvedMean) - speed.starvedMean).toBeGreaterThanOrEqual(
       mmg.starvedMean.absolute
     );
-    // buffer's single A1-2v3 column, still not its: buffer 209.3 sits behind the
-    // best rival 120.7 (speed) - lead -88.6 points, well under the 3-point floor.
-    expect(buffer.inputStallPct).toBe(209.3);
+    // buffer's single A1-2v3 column, still not its: buffer 136.7 sits behind the
+    // best rival 93.5 (speed) - lead -43.2 points, well under the 3-point floor.
+    expect(buffer.inputStallPct).toBe(136.7);
     expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeLessThan(
       mmg.inputStallPct.absolute
     );

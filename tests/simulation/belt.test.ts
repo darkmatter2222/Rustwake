@@ -44,7 +44,10 @@ type LayoutRow = {
  *   corner exactly one next tile is legal); the store endpoint always counts as the
  *   dock tile, which is the single anchor every run is measured against;
  * - the price is `beltCostPerTile x run.length`, charged by `route.connect`;
- * - the latency is `beltLatencyPerTile x run.length`, so a longer belt is slower;
+ * - the latency is the shipped constant `routeLatencyTicks` (5) in this candidate, so the
+ *   extent moves the price and not yet the clock. The per-tile reading
+ *   `beltLatencyPerTile x run.length` (`beltLatencyPerTile` = 2, so 6 ticks for a 3-tile
+ *   run) is the deferred g2 item; both numbers are asserted below, never assumed.
  * - `route.remove` returns `dismantleRefundPct` of what that connect charged;
  * - `machine.move` charges `movePenaltyPct` of the blueprint's own build cost and
  *   re-walks the priced runs of the links touching that machine;
@@ -102,9 +105,17 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     // Same blueprint, same endpoints by kind, different tile distance: the far link
     // costs three times the near one, both paid from the same purse.
     expect(beltCost(farRun!.length)).toBe(3 * beltCost(nearRun!.length));
-    // And the latency follows the same extent: two ticks per tile.
-    expect(routeTo(near, 1).latency).toBe(TUNING.beltLatencyPerTile * 3);
-    expect(routeTo(far, 2).latency).toBe(TUNING.beltLatencyPerTile * 9);
+    // And the clock: in this candidate every fresh link pays the same shipped constant,
+    // so the extent is a price difference and not yet a timing one. Both the literal and
+    // the named constant are asserted, so neither can drift unnoticed.
+    expect(routeTo(near, 1).latency).toBe(5);
+    expect(routeTo(far, 2).latency).toBe(5);
+    expect(routeTo(near, 1).latency).toBe(TUNING.routeLatencyTicks);
+    // The deferred per-tile reading, asserted here so g2 starts from a printed number:
+    // `beltLatencyPerTile` is 2 ticks per tile, so this pair would read 6 and 18.
+    expect(TUNING.beltLatencyPerTile).toBe(2);
+    expect(TUNING.beltLatencyPerTile * nearRun!.length).toBe(6);
+    expect(TUNING.beltLatencyPerTile * farRun!.length).toBe(18);
     // The harness prints the same ladder of five distances for one dock pair.
     console.log(
       "B-1 same pair at five distances",
@@ -171,6 +182,61 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     expect(harnessJson.prices.refusal).toMatchObject({ ok: false, need: 3, have: 2, word: "scrap" });
   });
 
+  it("prices and refunds one link at three tile distances with exact integers", () => {
+    // The dock tile is the anchor, so the Manhattan distance is |row| + |column| and the
+    // run length is that distance plus the starting tile. Three sorters at distances
+    // 2 / 5 / 6 therefore run over 3 / 6 / 7 tiles and price at 3 / 6 / 7 scrap.
+    const state = createInitialState();
+    state.tutorial = 9;
+    state.store["scrap"] = 200;
+    state.storeUnits = 200;
+    const rows: { tile: number; distance: number; run: number[]; price: number; refund: number }[] = [];
+    for (const tile of [4, 27, 31]) {
+      expect(send(state, { type: "machine.build", blueprint: "sorter", tile })).toBe(true);
+      const id = state.machines[state.machines.length - 1]!.id;
+      const before = scrapOf(state);
+      expect(send(state, { type: "route.connect", from: 0, to: id, filter: "scrap" })).toBe(true);
+      const route = routeTo(state, id);
+      const distance =
+        Math.abs(Math.floor(tile / YARD_COLS) - Math.floor(DOCK_TILE / YARD_COLS)) +
+        Math.abs((tile % YARD_COLS) - (DOCK_TILE % YARD_COLS));
+      rows.push({
+        tile,
+        distance,
+        run: route.run!,
+        price: before - scrapOf(state),
+        refund: refundOf(beltCost(route.run!.length)),
+      });
+    }
+    console.log("B-1 exact price/refund ladder", JSON.stringify(rows));
+    // Every number is derived twice: once from the tile geometry and once as a literal,
+    // and the paid/refunded amounts are read off the purse, never from a helper's sum.
+    const table = [
+      { distance: 2, tiles: 3, price: 3, refund: 3 },
+      { distance: 5, tiles: 6, price: 6, refund: 5 }, // round(5.4)
+      { distance: 6, tiles: 7, price: 7, refund: 6 }, // round(6.3)
+    ];
+    for (const [i, expected] of table.entries()) {
+      const row = rows[i]!;
+      expect(row.distance).toBe(expected.distance);
+      expect(row.run).toHaveLength(expected.tiles);
+      expect(row.run).toHaveLength(expected.distance + 1);
+      expect(row.price).toBe(TUNING.beltCostPerTile * (expected.distance + 1));
+      expect(row.price).toBe(expected.price);
+      expect(row.refund).toBe(
+        Math.round((TUNING.dismantleRefundPct / 100) * TUNING.beltCostPerTile * expected.tiles)
+      );
+      expect(row.refund).toBe(expected.refund);
+    }
+    // The taps themselves return the same three integers, one link at a time.
+    for (const [i, expected] of table.entries()) {
+      const at = scrapOf(state);
+      expect(send(state, { type: "route.remove", routeId: i + 1 })).toBe(true);
+      expect(scrapOf(state) - at).toBe(expected.refund);
+    }
+    expect(state.routes).toHaveLength(0);
+  });
+
   it("charges the move penalty once and re-walks only the priced links it touches", () => {
     const state = createInitialState();
     state.tutorial = 9;
@@ -191,8 +257,15 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     expect(ferrousBefore - (state.store["ferrous"] ?? 0)).toBe(3);
     const moved = routeTo(state, 2);
     expect(moved.run).toEqual([0, 6, 12, 18, 24, 30, 31, 32, 33, 34, 35]);
-    expect(moved.latency).toBe(TUNING.beltLatencyPerTile * 11);
-    expect(routeTo(state, 1).latency).toBe(TUNING.beltLatencyPerTile * 3); // untouched
+    expect(moved.run).toHaveLength(11);
+    // The move re-walks the extent only: the clock is the shipped constant before and
+    // after, so a relocation changes what the next refund returns and nothing else.
+    expect(moved.latency).toBe(5);
+    expect(routeTo(state, 1).latency).toBe(5);
+    // The deferred per-tile reading for the same two links, printed as a number: the moved
+    // link would be 22 ticks (2 x 11) and its neighbour 6 (2 x 3) once g2 arms the clock.
+    expect(TUNING.beltLatencyPerTile * moved.run!.length).toBe(22);
+    expect(TUNING.beltLatencyPerTile * routeTo(state, 1).run!.length).toBe(6);
     expect(state.machines.find((m) => m.id === 2)!.tile).toBe(35);
   });
 
@@ -347,9 +420,12 @@ describe("B-2 two deliberate layouts on the scored columns", () => {
     }
     // Counted over both ladders, each layout is in front somewhere: that is the clause's
     // own test, so it did not fire and the price ships together with the two layouts.
-    // gap6: spread owns `inputStallPct` (100.1 against 204), compact owns
-    // `creditsPer1000Batches` (8 146.942 against 5 943.845); irregular adds one more
-    // `creditsPer1000Batches` lead to compact. Every other column is a miss or a tie.
+    // Cost-only variant readings: irregular gives spread `inputStallPct` (106 against 120,
+    // gap 14 over a 3-point floor) and compact `creditsPer1000Batches` (7256.444 against
+    // 6345.575); gap6 gives compact `creditsPer1000Batches` (7445.462 against 7199.040,
+    // gap 246.422 = 3.4 % over the 3 % / 100-unit floor). Every other column is a miss or
+    // a tie, i.e. 5 of 7 columns are inside noise on both patterns — the negative reading
+    // product records for B-2 stands: pricing alone moves money columns, not timing.
     expect(harnessJson.layouts.leads).toEqual({ compact: 2, spread: 1 });
     // The pre-armed clause did not fire, so the price change ships with the layouts.
     expect(harnessJson.layouts.dropClause).toEqual({
@@ -417,6 +493,82 @@ describe("B-3 an old save still runs on a priced model", () => {
     });
   });
 
+  it("refunds the same scrap for a priced link before and after a save round-trip (DEF-008)", () => {
+    // The product probe's fixture: sorter on tile 0, furnace on tile 8, one scrap link
+    // dock -> machine 1, so the run is [2,1,0], the link's own price is 3 of 300 scrap.
+    const pricedYard = () => {
+      const state = createInitialState();
+      state.tutorial = 9;
+      state.store["scrap"] = 300;
+      state.store["ferrous"] = 40;
+      state.store["nonferrous"] = 40;
+      state.storeUnits = 380;
+      send(state, { type: "machine.build", blueprint: "sorter", tile: 0 });
+      send(state, { type: "machine.build", blueprint: "furnace", tile: 8 });
+      expect(send(state, { type: "route.connect", from: 0, to: 1, filter: "scrap" })).toBe(true);
+      return state;
+    };
+    // In-session control: what the same tap returns with no save in between.
+    const control = pricedYard();
+    const controlBefore = scrapOf(control);
+    expect(send(control, { type: "route.remove", routeId: control.routes[0]!.id })).toBe(true);
+    const inSessionRefund = scrapOf(control) - controlBefore;
+
+    const pre = pricedYard();
+    const preSaveRun = pre.routes[0]!.run;
+    const scrapAtEncode = scrapOf(pre);
+    const raw = encodeSave(pre, 1_700_000_000_000, {
+      muted: false,
+      reducedMotion: false,
+      textScale: 2,
+    });
+    const back = decodeSave(raw);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    const loaded = back.payload.sim;
+    const route = loaded.routes[0]!;
+    // The optional `run` survives the envelope intact, and the load itself is neutral.
+    expect(preSaveRun).toEqual([2, 1, 0]);
+    expect(route.run).toBeDefined();
+    expect(route.run).toEqual(preSaveRun);
+    expect(route.run).toHaveLength(3);
+    // The clock is the shipped constant before and after the round-trip: a save neither
+    // re-derives nor loses it, and the per-tile reading stays deferred at 2 x 3 = 6.
+    expect(route.latency).toBe(5);
+    expect(route.latency).toBe(TUNING.routeLatencyTicks);
+    expect(TUNING.beltLatencyPerTile * route.run!.length).toBe(6);
+    expect(loaded.store["scrap"]).toBe(scrapAtEncode);
+    expect(loaded.store["scrap"]).toBe(267); // 300 - 20 sorter - 10 furnace - 3 link
+    // One tap after the load: the priced refund comes back, exactly as computed by hand
+    // and exactly as the in-session tap returned it.
+    const runLength = route.run!.length;
+    const beforeRemove = loaded.store["scrap"] ?? 0;
+    expect(send(loaded, { type: "route.remove", routeId: route.id })).toBe(true);
+    const afterLoadRefund = (loaded.store["scrap"] ?? 0) - beforeRemove;
+    expect(afterLoadRefund).toBe(
+      Math.round((TUNING.dismantleRefundPct / 100) * TUNING.beltCostPerTile * runLength)
+    );
+    expect(afterLoadRefund).toBe(3);
+    expect(afterLoadRefund).toBe(inSessionRefund);
+    expect(loaded.routes).toHaveLength(0);
+  });
+
+  it("returns 0 for a run-less pre-price route and never throws", () => {
+    // The documented fallback: a route stored before the price exists carries no `run`,
+    // so its refund is the integer 0 rather than an undefined arithmetic accident.
+    const decoded = decodeSave(fixtureRaw);
+    if (!decoded.ok) throw new Error("fixture refused: " + JSON.stringify(decoded));
+    const sim = decoded.payload.sim;
+    const route = sim.routes.find((each) => each.items.length === 0);
+    expect(route).toBeDefined();
+    if (!route) return;
+    expect(route.run).toBeUndefined();
+    const before = sim.store["scrap"] ?? 0;
+    expect(() => send(sim, { type: "route.remove", routeId: route.id })).not.toThrow();
+    expect((sim.store["scrap"] ?? 0) - before).toBe(0);
+    expect(refundOf(beltCost(route.run?.length ?? 0))).toBe(0);
+  });
+
   it("replays a pre-price save to the same batch counts as the pre-change tree", () => {
     const runs = [0, 1].map(() => {
       const decoded = decodeSave(fixtureRaw);
@@ -459,7 +611,7 @@ describe("B-4 the harness is reproducible", () => {
   it("prints one checksum for the stored body, twice read", () => {
     const hash = checksum(JSON.stringify(harnessJson));
     console.log("B-4 harness checksum", hash);
-    expect(hash).toBe("52a20c95");
+    expect(hash).toBe("7fe91647");
     expect(hash).toBe(checksum(JSON.stringify(harnessJson)));
     expect(harnessJson.generatedBy).toBe("scripts/probe-belt.mjs");
     expect(harnessJson.tuning).toEqual({

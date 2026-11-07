@@ -366,13 +366,14 @@ function moveMachine(s: SimState, machineId: number, tile: number): CommandResul
   if (!spendFromStore(s, cost)) return shortCost(s, cost);
   machine.tile = tile;
   // The machine's own tile moved, so every priced link touching it re-walks its run
-  // deterministically: a move can lengthen or shorten the belt it pays next time. A
-  // link that carries no `run` is a pre-price link and keeps its stored `latency`, so
-  // an old save replays unchanged until a new tap prices it.
+  // deterministically: a move can lengthen or shorten the belt it pays next time, and the
+  // next refund follows the new extent. Only the extent is re-walked here — `latency` is
+  // the shipped constant in this candidate, so a move cannot retime a link. A link that
+  // carries no `run` is a pre-price link and keeps its stored `latency`, so an old save
+  // replays unchanged until a new tap prices it.
   for (const route of s.routes) {
     if (route.run !== undefined && (route.from.id === machineId || route.to.id === machineId)) {
       route.run = beltRun(s, route.from.id, route.to.id);
-      route.latency = TUNING.beltLatencyPerTile * route.run.length;
     }
   }
   return commit(s, "move", tile);
@@ -397,8 +398,11 @@ function connectRoute(
     }
   }
   // BELT-001: the connection is a tile-running object with a price. The run is the
-  // deterministic Manhattan walk between the endpoint tiles, and both the scrap
-  // price and the latency grow with it, so a longer route is a decision to make.
+  // deterministic Manhattan walk between the endpoint tiles, and the scrap price grows
+  // with it, so a longer route is a decision to make. The timing stays the shipped
+  // constant in this candidate (`routeLatencyTicks`): the per-tile reading
+  // `beltLatencyPerTile x run.length` is the deferred g2 item, so the extent changes the
+  // price now and the clock later, and each step is attributable on its own.
   const run = beltRun(s, from, to);
   const cost: ItemStack[] = [{ resource: "scrap" as ResourceId, qty: beltCost(run.length) }];
   if (!spendFromStore(s, cost)) return shortCost(s, cost);
@@ -408,7 +412,7 @@ function connectRoute(
     to: { kind: to === 0 ? "store" : "machine", id: to },
     filter,
     capacity: TUNING.routeCapacity + researchBonus(s).routeCapacity,
-    latency: TUNING.beltLatencyPerTile * run.length,
+    latency: TUNING.routeLatencyTicks,
     items: [],
     inFlight: 0,
     busyTicks: 0,

@@ -205,8 +205,8 @@ describe("supply window (B-15, B-25)", () => {
       const run = runs.find((r) => r.floor === floor)!;
       expect(run.machines, `machines at floor ${floor}`).toBe(8);
       expect(run.research, `research at floor ${floor}`).toBe(3);
-      // The whole sweep sits inside ±10 % of the shipped floor: 2 109 / 1 932 / 1 886
-      // batches at floors 5 / 10 / 20 on the priced tree, against 1 364 with no
+      // The whole sweep sits inside ±10 % of the shipped floor: 1 978 / 1 838 / 1 752
+      // batches at floors 5 / 10 / 20 on the priced tree, against 1 363 with no
       // reserve at all (was ±7 % around 2 028 / 1 902 / 1 792 before the belt price).
       expect(run.totals, `batches at floor ${floor}`).toBeGreaterThanOrEqual(
         Math.round(full.totals * 0.9)
@@ -217,7 +217,7 @@ describe("supply window (B-15, B-25)", () => {
     }
     // 10 stays shipped: it is the middle value that clears every starter blueprint's
     // price with room left over, and it still leads the floors on the settled yard.
-    expect(full.totals).toBe(1932);
+    expect(full.totals).toBe(1838);
   });
 
   it("ships on every link while the young yard is filling (B-25)", () => {
