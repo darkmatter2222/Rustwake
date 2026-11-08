@@ -19,6 +19,7 @@ import {
   STRINGS,
   formatDuration,
   formatNumber,
+  plural,
   resourceName,
   resourceWord,
   t,
@@ -38,31 +39,27 @@ import {
 
 export { formatDuration, formatNumber };
 
+/** One lookup table over the shared string keys (STRAT-004 byte trim: the five maps below
+ *  printed the same `Object.fromEntries(...map(...))` shape five times, 5 × 18 B). */
+function labelTable(keys: readonly string[], say: (key: string) => string) {
+  return Object.fromEntries(keys.map((key) => [key, say(key)]));
+}
+
 /** Default lines of the tutorial objective card, in state order (spec 4.2). */
 export const OBJECTIVES: readonly string[] = OBJECTIVE_KEYS.map((key) => STRINGS[key] ?? key);
 
 /** Small line under the objective, keyed by the ids `suggestedAction()` returns. */
-export const HINT_LABELS: Record<string, string> = Object.fromEntries(
-  HINT_KEYS.map((key) => [key, STRINGS[key] ?? key]),
-);
+export const HINT_LABELS: Record<string, string> = labelTable(HINT_KEYS, (key) => STRINGS[key] ?? key);
 
-export const RESOURCE_LABEL: Record<string, string> = Object.fromEntries(
-  RESOURCES.map((id) => [id, resourceName(id)]),
-);
+export const RESOURCE_LABEL: Record<string, string> = labelTable(RESOURCES, resourceName);
 
-export const STATUS_LABEL: Record<string, string> = Object.fromEntries(
-  STATUS_KEYS.map((id) => [id, t(`status.${id}`)]),
-);
+export const STATUS_LABEL: Record<string, string> = labelTable(STATUS_KEYS, (id) => t(`status.${id}`));
 
 /** One shared table, so no surface can show a different reason text. */
-export const REJECT_TEXT: Record<string, string> = Object.fromEntries(
-  REJECT_KEYS.map((id) => [id, t(`reject.${id}`)]),
-);
+export const REJECT_TEXT: Record<string, string> = labelTable(REJECT_KEYS, (id) => t(`reject.${id}`));
 
 /** One bounded explanation per import failure (spec 22.2, spec 25.3 case 8). */
-export const IMPORT_TEXT: Record<string, string> = Object.fromEntries(
-  IMPORT_KEYS.map((id) => [id, t(`import.${id}`)]),
-);
+export const IMPORT_TEXT: Record<string, string> = labelTable(IMPORT_KEYS, (id) => t(`import.${id}`));
 
 /** The one-line note the Yard panel shows after an import attempt. */
 export function importNoteFor(result: ImportResult): string {
@@ -77,6 +74,7 @@ export function importNoteFor(result: ImportResult): string {
 
 /** Short concrete verbs first (spec 4.4). Keys keep later translation cheap. */
 export function objectiveFor(state: SimState, selected?: number | null): string {
+  rememberSpoken(state);
   if (state.tutorial >= 8) return describeStep(state, stepFor(state, selected));
   const index = Math.min(state.tutorial, OBJECTIVE_KEYS.length - 1);
   return t(OBJECTIVE_KEYS[index], tutorialParams(state));
@@ -116,7 +114,7 @@ export function describeStep(state: SimState, step: YardStep): string {
       return t("step.sell", {
         qty: step.qty,
         label: RESOURCE_LABEL[step.resource],
-        credits: unit(sellValue(step.resource, step.qty), t("unit.credit")),
+        credits: unit(sellValue(step.resource, step.qty), CREDIT),
       });
     case "research": {
       const def = RESEARCH[step.node];
@@ -127,16 +125,16 @@ export function describeStep(state: SimState, step: YardStep): string {
         : t("step.researchAny");
     }
     case "drone":
-      return t("step.drone", { cost: unit(droneAddCost(state), t("unit.credit")) });
+      return t("step.drone", { cost: unit(droneAddCost(state), CREDIT) });
     case "upgrade": {
-      const machine = state.machines.find((m) => m.id === step.machineId);
+      const machine = machineById(state, step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
-      if (!machine || !def) return t("step.upgrade", { machine: t("unit.machine") });
+      if (!machine || !def) return t("step.upgrade", { machine: MACHINE });
       // The fork: one price, three named outcomes, so the card names the choice and the
       // dock answers it with three one-tap targets (STRAT-002/A1-3).
       return t("step.fork", {
         machine: def.label,
-        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit")),
+        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), CREDIT),
       });
     }
     default:
@@ -146,6 +144,7 @@ export function describeStep(state: SimState, step: YardStep): string {
 
 /** Dock label and cost line for the same step, so both agree. */
 export function primaryFor(state: SimState, step: YardStep): { label: string; cost?: string } {
+  rememberSpoken(state);
   switch (step.kind) {
     case "connect":
       return { label: t("btn.connect") };
@@ -156,7 +155,7 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
     case "sell":
       return {
         label: t("btn.sellNamed", { qty: step.qty, label: RESOURCE_LABEL[step.resource] }),
-        cost: `+${unit(sellValue(step.resource, step.qty), t("unit.credit"))}`,
+        cost: `+${unit(sellValue(step.resource, step.qty), CREDIT)}`,
       };
     case "research": {
       const def = RESEARCH[step.node];
@@ -169,18 +168,18 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
     case "drone":
       return {
         label: t("btn.addDrone"),
-        cost: unit(droneAddCost(state), t("unit.credit")),
+        cost: unit(droneAddCost(state), CREDIT),
       };
     case "upgrade": {
-      const machine = state.machines.find((m) => m.id === step.machineId);
+      const machine = machineById(state, step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
-      if (!machine || !def) return { label: t("btn.upgrade") };
+      if (!machine || !def) return { label: BTN_UPGRADE };
       // The card above names the machine ("Upgrade the Scrap sorter."), so the button
       // carries the verb and the price only. Measured reason: at text scale 2.0 the
       // four-word label made the dock row 145 px tall, 21 % of a 360 × 640 viewport.
       return {
-        label: t("btn.upgrade"),
-        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit")),
+        label: BTN_UPGRADE,
+        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), CREDIT),
       };
     }
     default:
@@ -211,7 +210,7 @@ export function branchOptions(
   state: SimState,
   machineId: number
 ): { id: UpgradeBranch; label: string; cost: string }[] {
-  const machine = state.machines.find((m) => m.id === machineId);
+  const machine = machineById(state, machineId);
   const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
   if (!machine || !def) return [];
   const plans = [
@@ -238,7 +237,7 @@ export function branchOptions(
     .map((plan) => ({
       id: plan.id,
       label: plan.label,
-      cost: unit(plan.price, t("unit.credit")),
+      cost: unit(plan.price, CREDIT),
     }));
 }
 
@@ -284,13 +283,136 @@ export function powerLine(state: SimState): string {
  * two surfaces cannot state different numbers, and no second sentence table is needed.
  */
 export function restingLine(state: SimState, lastReject?: string | null): string {
+  rememberSpoken(state);
   const flying = (state.drone.repaired ? 1 : 0) + state.spares.length;
-  const base = `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
+  const base = `${t("hud.drones", { count: flying })}${DOT}${powerLine(state)}`;
   if (!lastReject) return base;
   // The one difference from the toast: the sentence continues this line, so its first
   // letter goes lowercase. Both figures still come from the rejected result itself.
   const detail = `${lastReject.charAt(0).toLowerCase()}${lastReject.slice(1)}`;
-  return `${base}${t("value.dotSeparator")}${t("hud.lastShortfall", { detail })}`;
+  return `${base}${DOT}${t("hud.lastShortfall", { detail })}`;
+}
+
+/* ------------------------------------------------------------------------- *
+ * STRAT-004 — the pressed face names its own pending number and its countdown
+ * ------------------------------------------------------------------------- */
+
+/** The sim object the sentence layer last answered from, for the dock's own readout. */
+let spoken: SimState | null = null;
+
+function rememberSpoken(state: SimState): void {
+  spoken = state;
+}
+
+/** The separators and units the HUD sentences use most, read once each (STRAT-004 byte trim:
+ *  one lookup per repeated fragment instead of one call per printed line, 12 call sites). */
+const DOT = t("value.dotSeparator");
+const CREDIT = t("unit.credit");
+const MACHINE = t("unit.machine");
+const BTN_UPGRADE = t("btn.upgrade");
+
+/** One machine, by the id every dock sentence already prints. */
+function machineById(state: SimState, id: number) {
+  return state.machines.find((m) => m.id === id);
+}
+
+/**
+ * The face's own line for one short quantity: `waits 5 ferrous · have 3`, and while a
+ * batch is mid-flight the whole seconds left on the nearest running one (`· in 2s`).
+ * The countdown is a read, not a second clock: `batchMilli` counts milli-ticks, 1000 of
+ * those is one tick, ten ticks is one second (hence `1e4`), so at the measured 1 tap/s
+ * cadence the digit steps down once per tap - the wait becomes countable on the face
+ * instead of looking like a tap that never registered.
+ */
+function faceWaitLine(need: number, word: string, have: number, state: SimState): string {
+  const running = state.machines.find((m) => m.progress > 0);
+  return `waits ${formatNumber(need)} ${word}${DOT}have ${formatNumber(have)}${running ? `${DOT}in ${Math.ceil((running.batchMilli - running.progress) / 1e4)}s` : ""}`;
+}
+
+/**
+ * The number the yard is still waiting for on one step, in the face's own short form:
+ * `waits 5 ferrous · have 3`. Both figures are read, never computed twice: `need` is the
+ * quantity the content table asks the step for, `have` is the same store or purse entry
+ * the Store panel and the `Last need …` tail print. Null when the step's price is already
+ * covered (or the step carries no price), so a covered face stays two lines tall. The W-3
+ * witnesses (`face-line-check.mjs`, `frame-probe.mjs`) read this as the second derivation;
+ * it is dead in the shipped graph, where `priceLine` is the only caller-side entry point.
+ */
+export function pendingForStep(state: SimState, step: YardStep): string | null {
+  rememberSpoken(state);
+  const short = shortfallForStep(state, step);
+  return short === null ? null : faceWaitLine(short.need, short.word, short.have, state);
+}
+
+/**
+ * The engine's own two numbers for one step, same shapes as `shortOf`/`shortCredits`.
+ */
+function shortfallForStep(
+  state: SimState,
+  step: YardStep
+): { need: number; have: number; word: string } | null {
+  switch (step.kind) {
+    case "build": {
+      const def = BLUEPRINTS[step.blueprint];
+      if (!def) return null;
+      for (const item of def.buildCost) {
+        const have = state.store[item.resource] ?? 0;
+        if (have < item.qty) {
+          return { need: item.qty, have, word: resourceWord(item.resource) };
+        }
+      }
+      return null;
+    }
+    case "research": {
+      const def = RESEARCH[step.node];
+      const have = state.store.data ?? 0;
+      if (!def || have >= def.cost) return null;
+      return { need: def.cost, have, word: resourceWord("data") };
+    }
+    case "drone":
+    case "upgrade": {
+      const need = step.kind === "drone" ? droneAddCost(state) : upgradePrice(state, step.machineId);
+      return state.credits < need ? { need, have: state.credits, word: plural(need, CREDIT) } : null;
+    }
+    default:
+      return null;
+  }
+}
+
+/** What the next level of one machine costs, or 0 when the machine is gone. */
+function upgradePrice(state: SimState, machineId: number): number {
+  const machine = machineById(state, machineId);
+  const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
+  return machine && def ? upgradeCost(def.baseUpgradeCost, machine.level) : 0;
+}
+
+/**
+ * The whole price line one face paints (STRAT-004): its own plain price, then the first
+ * item that price is still short of and what the yard holds (`· waits 5 ferrous · have 3`),
+ * then the batch countdown. One call per face, so both dock phases say the same thing, and
+ * the pending number always names the quantity the player can see on that face: the entry
+ * it is compared against is read straight off the state, the same `state.store` entry (or
+ * purse) the Store panel and the `Last need …` tail print. A `+N …` gain (a sale) is not a
+ * price and never blocks, and a covered price keeps its plain lines.
+ */
+export function priceLine(cost: string, state: SimState | null = spoken): string {
+  if (!state) return cost;
+  for (const group of cost.split(" + ")) {
+    // `"{qty} {label} · {credits} credits"` carries its own reward after the dot: the
+    // price is what comes before it. A `+N …` gain (a sale) fails the shape and blocks.
+    const parts = /^([\d.]+) ([a-z]+)$/.exec(group.split(DOT)[0]);
+    const word = parts?.[2] ?? "";
+    // Every `res.*` entry is the store id with a leading capital, so the printed word is
+    // the store key; `credit` is the purse, which is not a store entry.
+    const have = word.startsWith("credit") ? state.credits : state.store[word as ResourceId] ?? 0;
+    if (!parts || have >= +parts[1]) continue;
+    // Same three parts `faceWaitLine` prints: the quantity this price is short of, what the
+    // yard holds, and the whole seconds left on the nearest running batch (`batchMilli`
+    // counts milli-ticks, ten ticks a second, hence `1e4`).
+    const run = state.machines.find((m) => m.progress > 0);
+    return `${cost}${DOT}waits ${parts[1]} ${word}${DOT}have ${formatNumber(have)}${run ? `${DOT}in ${Math.ceil((run.batchMilli - run.progress) / 1e4)}s` : ""}`;
+  }
+  return cost;
 }
 
 /**
@@ -316,13 +438,13 @@ export function pipLine(state: SimState): string {
   const rest = state.machines.length - named.length;
   return t("hud.pips", {
     what: t("row.batch"),
-    detail: named.join(t("value.dotSeparator")) + (rest > 0 ? ` +${rest}` : ""),
+    detail: named.join(DOT) + (rest > 0 ? ` +${rest}` : ""),
   });
 }
 
 function machineLabel(state: SimState, machineId: number): string {
-  const machine = state.machines.find((m) => m.id === machineId);
-  return machine ? BLUEPRINTS[machine.blueprint].label : t("unit.machine");
+  const machine = machineById(state, machineId);
+  return machine ? BLUEPRINTS[machine.blueprint].label : MACHINE;
 }
 
 /**
@@ -331,6 +453,7 @@ function machineLabel(state: SimState, machineId: number): string {
  * the viewport width so the chip block stays two rows tall on a narrow phone.
  */
 export function visibleResources(state: SimState, max = 5): ResourceId[] {
+  rememberSpoken(state);
   const limit = Math.max(1, Math.floor(max));
   const shown: ResourceId[] = ["scrap"];
   for (const resource of SELL_ORDER) {

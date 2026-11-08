@@ -1,0 +1,125 @@
+STRAT-004 gates - generation 2 (2026-11-08, this worktree, one machine, real exit codes)
+
+Tree: branch rw/strat004-g1, base merge 4edb4f8 = merge(origin/main 6e0dce9, 6908e66), plus the g2
+      implementation, plus merge commit 5e5e35b = merge(origin/main 5610528, 96a5428); zero conflicted
+      paths on both merges.
+
+| command | exit | what it printed |
+| --- | --- | --- |
+| node scripts/team-board.mjs --check | 0 | Team board valid; generated views current |
+| node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs | 0 | # tests 59 / # pass 59 / # fail 0 (the stale six-session assertion is fixed on main, so the branch gate is green again) |
+| npm run typecheck | 0 | no output |
+| npm run validate | 0 | content: 0 violation(s); behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s) |
+| npm test (vitest) | 0 | 32 files / 325 tests passed (the two extra files are main's UI-004 lane) |
+| npm run build | 0 | see the asset table below |
+| npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs | 0 | both derivations agree on every frame (8 frames: build x3, sell, covered, upgrade, drone, salvage) |
+| npx tsx work/feedback/STRAT-004-g1/frame-probe.mjs | 0 | covered -> null; short -> "waits 25 scrap · have 6 · in 1s"; fork -> null (covered purse) |
+| node work/feedback/STRAT-004-g1/policy-census.mjs | 0 | four W-3 runs (base/candidate x blind/deliberate-v2), policy-census.json + 12 stills |
+| npx tsx work/feedback/STRAT-004-g1/layout-witness.mjs | 0 | 16 cells (8 x base/candidate), layout-witness.json + 16 stills |
+
+Not runnable on this Windows host (Linux-only, CI on ubuntu runs them; main is green at 6e0dce9):
+python scripts/deploy-artifact.test.py (no fcntl), python scripts/host-adapter.test.py
+(symlink privilege 1314), python scripts/commission-databrick.test.py (no termios),
+bash -n scripts/install-delivery-host.sh (CRLF in the working copy).
+
+Built assets of this tree (one clean `npm run build`, counted on disk, never summed):
+
+| chunk | bytes | note |
+| --- | --- | --- |
+| assets/index-CVKqHksh.js | 232990 | entry chunk at head `3e874c3`, ceiling 233000 -> **PASS, 10 B spare** |
+| assets/tables-C3W8xgzz.js | 9707 | from main 5610528 |
+| assets/index-CbtyNiLy.css | 8092 | from main 5610528 (this lane edits no css) |
+| assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
+
+Trim ladder on this branch, each number from its own clean `npm run build` on this machine:
+
+| step | entry chunk bytes | vs 233000 |
+| --- | --- | --- |
+| `9d8ff3d` three parts in one `dock__cost` span, separator read at each call site | 233418 (`index-DIzqhO3V.js`) | 418 over |
+| `5b91587` + trim 1: the three repeated `t("value.dotSeparator")` calls share the one `DOT` const | 233208 (`index-C77XDZxg.js`) | 208 over |
+| `4a19157` + trim 2: the dock's class fragments hoisted into shared consts (identical rendered `class` attributes) | 233145 (`index-BjqNquCb.js`) | 145 over |
+| `3e874c3` + trim 3: one `labelTable` helper behind the five string maps, countdown read hoisted in both writers | **232990** (`index-CVKqHksh.js`) | **PASS, 10 B spare** |
+| reference: both ui files at `origin/main 5610528` (no lane code) | 232792 (`index-BtXxU2Fb.js`) | 208 spare |
+
+So this lane's shipped delta over main is now **+198 B** for the whole three-part face; the countdown digit
+inside it is worth 113 B (measured at `9d8ff3d`, form B vs form A) and the tail without the digit measured
+233201 B at `5b91587`.
+
+**Ceiling: resolved inside this lane (measured, not projected).** After trim 3 the shipped form prints
+**232990 B**, i.e. **inside the pinned 233000 B ceiling with 10 B spare**, on the same tree that carries
+ART-004 (`origin/main 5610528`, whose own two ui files measure 232792 B). The intermediate ladder
+(233418 / 233208 / 233145 / 233201) is kept above because those are the numbers the earlier PR comments
+quote; the earlier "no form fits" conclusion was true at `4a19157` and is superseded at `3e874c3`. The
+rendered strings and rendered `class` attributes are identical at every step - `face-line-check.mjs` prints
+"both derivations agree on every frame" on this head and `frame-probe.mjs` prints
+`waits 25 scrap · have 6 · in 1s`.
+
+Witnesses, same instruments, this head (census and layout witness **re-run against the 232990 B artifact at
+`3e874c3`**, logs and 28 stills on disk; the printed face string is unchanged from `4a19157` - both
+cross-check scripts still print agreement, so the W-3 timeline moved only by the wall-clock drift below):
+- census (candidate, both policies): taps 178, wallSec 180.8, finalTick 1800, applied 37, no-ops 142,
+  buckets 13 inert-label / 69 refused-shortfall / 60 unknown (13+69+60 = 142 = no-ops), inert share
+  13/178 = **7.3 %**, longest identical-label stall **5** (label `Build Scrap sorter20 scrap · waits 20
+  scrap · have 0`, taps 8-13, 6/6 carrying the tail); suffix-independent 63/69/10 with inert 35.4 % and
+  stall 34; pressed-index stall 36; tail on the face 136/178 taps, countdown digit 102/178; smallest face
+  46 px, 1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %. Against the 7.9 % /
+  stall 4 that g2 printed: one tap crossed from `inert-label` into `unknown` and one tap joined the stall,
+  i.e. the +/-1 wall-clock drift of limitation 1; the two criteria keep 12.7 pp and 11 taps of margin.
+- census (base, both policies): taps 178, applied 37, no-ops 142, buckets 63/69/10, inert share 35.4 %,
+  stall 34, index stall 36, same aggregate row (47 batches, 8 credits, 5 machines).
+- the batches row, in one line: the simulation is unchanged (`schemaVersion 1`, fixture `eede3c4f`
+  byte-identical, `validate` behaviour line `tick=18298 machines=8 links=18 drones=4 batches=1838
+  credits=157` on both artifacts, no price file in this lane), and **47 is the in-window print of this
+  178-tap W-3 series on the post-BELT-001 baseline** - the deterministic total itself moved 1902 -> 1838
+  when BELT-001 landed (-3.4 %), this run banks 46-47 across the four runs with identical
+  applied/machines/credits, and the acceptance row's 51 is the pre-BELT print of the same protocol
+  (limitation 1 already recorded 47 and 51 for one and the same artifact). No early stop and no policy
+  step-count difference: both artifacts stop on the 180 s wall budget with `finalTick 1800` and 178 taps.
+  Prospectively the row should assert the tick-locked pair (`validate` 1838 plus the in-window 47 with a
+  stated +/-1 drift) instead of the 51.
+- layout witness (8 cells per artifact): clipped false everywhere, 1 dock row, no page scroll,
+  smallest face 44 px in the tail-carrying cells and 46 / 46.5 / 50.2 px in the rest, card fill
+  10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.
+- save: schemaVersion 1 and fixture eede3c4f untouched (no file under tests/ or
+  src/game/persistence/ is in this lane; tests/persistence/save.test.ts passes in the 325).
+
+STRAT-004 gates - generation 3 (2026-11-08, same worktree, after integrating origin/main)
+
+Tree: 5e5e35b4c20370777ee2fafb94af61d4795a8fc7 = merge(96a5428, origin/main 5610528), i.e. this lane on
+top of ART-004 (49d170b, whose build carries the 520 B atlas/table recovery: 232792 B) and UI-004
+(5610528). Shipped source in src/ui/text.ts + src/ui/Hud.tsx is byte-identical to 96a5428; only the
+main side moved. Zero conflicted paths.
+
+| command | exit | what it printed |
+| --- | --- | --- |
+| npm run typecheck | 0 | no output |
+| npm test (vitest) | 0 | 32 files / 325 tests passed (main gained two files in ART-004/UI-004) |
+| node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs | 0 | # tests 59 / # pass 59 / # fail 0 |
+| npm run validate | 0 | content: 0 violation(s); behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s) (identical to the g2 line) |
+| npm run build | 0 | entry assets/index-DIzqhO3V.js 233418 B |
+| npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs | 0 | "both derivations agree on every frame", 8 frames |
+| npx tsx work/feedback/STRAT-004-g1/frame-probe.mjs | 0 | short -> "waits 25 scrap · have 6 · in 1s"; covered -> null; fork -> null |
+
+Entry chunk on this merged tree (one clean build, counted on disk):
+
+| chunk | bytes | note |
+| --- | --- | --- |
+| assets/index-DIzqhO3V.js | 233418 | entry chunk, ceiling 233000 -> OVER by 418 B on the merged tree |
+| assets/tables-C3W8xgzz.js | 9707 | ART-004 table growth, not this lane |
+| assets/index-CbtyNiLy.css | 8092 | UI-004 |
+| assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
+
+Byte arithmetic, each figure from its own clean build on this machine, never summed:
+this lane's own price is +628 B over the 6e0dce9 it was written against (232365 -> 232993 at 4edb4f8);
+main 49d170b prints 232792 B and main 5610528 prints 233418 - 628 = 232790 B with this lane's two files
+removed from the count. The 418 B overage is therefore sum-of-lanes arithmetic against a ceiling main
+itself almost exhausts - the same call already recorded in section 10 - not a regression inside the lane.
+
+Witnesses on the merged tree, unchanged from g2 (committed artifacts, both artifacts 8 cells each):
+smallest face 44 px, 1 dock row, no page scroll in 16/16 cells, 0 pageerror, nothing clipped, card fill
+max 32.8 % against the 42 % cap. Census row (policy-census.json, candidate, both policies): 178 taps,
+142 no-ops = 69 refused-shortfall + 14 inert-label + 59 unknown, inert-label 14/178 = 7.9 % (<= 20.0 %),
+longest identical-label stall 4 (<= 16), applied 37, machines 5, batches 47, credits 8.
+Failing numbers on this tree: batches 47 against the >= 51 floor (limitation 5: stale baseline, the
+deterministic total moved 1902 -> 1838 with BELT-001 and both artifacts bank the identical 47), and
+entry 233418 B against the 233000 B ceiling. The PR therefore stays draft.
