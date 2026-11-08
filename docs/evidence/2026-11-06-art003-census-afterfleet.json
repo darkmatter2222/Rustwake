@@ -1,0 +1,539 @@
+{
+  "tag": "afterfleet",
+  "url": "http://localhost:5177/",
+  "scene": {
+    "canvas": [
+      390,
+      844
+    ],
+    "topColors": [
+      "11,18,32 46%",
+      "34,56,74 33%",
+      "8,13,24 4.3%",
+      "44,66,87 2.9%",
+      "138,169,196 2.5%",
+      "127,159,187 1.6%",
+      "22,40,58 1.2%",
+      "16,27,40 0.9%",
+      "111,147,173 0.8%",
+      "109,144,171 0.6%",
+      "14,23,38 0.5%",
+      "53,86,107 0.4%"
+    ],
+    "luminanceBuckets8": [
+      92.5,
+      0.7,
+      3.2,
+      2.6,
+      0.7,
+      0,
+      0,
+      0.4
+    ],
+    "twoDarkestSharePct": 93.2,
+    "twoTopColorsSharePct": 79,
+    "cells": {
+      "sorter0": {
+        "box": [
+          8,
+          205,
+          70,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7
+        ],
+        "inkPx": 2734,
+        "inkSharePct": 71.1,
+        "inkPctOfCellArea": 70.21,
+        "contactShadowPx": 108,
+        "horizonBandPx": 232
+      },
+      "furnace1": {
+        "box": [
+          70,
+          205,
+          133,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 2493,
+        "inkSharePct": 63.8,
+        "inkPctOfCellArea": 64.03,
+        "contactShadowPx": 87,
+        "horizonBandPx": 216
+      },
+      "polymerRecycler3": {
+        "box": [
+          195,
+          205,
+          257,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 2021,
+        "inkSharePct": 52.6,
+        "inkPctOfCellArea": 51.9,
+        "contactShadowPx": 104,
+        "horizonBandPx": 132
+      },
+      "copperSeparator4": {
+        "box": [
+          257,
+          205,
+          320,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1773,
+        "inkSharePct": 45.4,
+        "inkPctOfCellArea": 45.53,
+        "contactShadowPx": 108,
+        "horizonBandPx": 166
+      },
+      "wireMill5": {
+        "box": [
+          320,
+          205,
+          382,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          6,
+          7
+        ],
+        "inkPx": 2531,
+        "inkSharePct": 65.8,
+        "inkPctOfCellArea": 65,
+        "contactShadowPx": 123,
+        "horizonBandPx": 320
+      },
+      "platePress6": {
+        "box": [
+          8,
+          267,
+          70,
+          329
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1577,
+        "inkSharePct": 41,
+        "inkPctOfCellArea": 40.5,
+        "contactShadowPx": 95,
+        "horizonBandPx": 127
+      },
+      "circuitAssembler7": {
+        "box": [
+          70,
+          267,
+          133,
+          329
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "inkPx": 1632,
+        "inkSharePct": 41.8,
+        "inkPctOfCellArea": 41.91,
+        "contactShadowPx": 81,
+        "horizonBandPx": 179
+      },
+      "signalLab8": {
+        "box": [
+          133,
+          267,
+          195,
+          329
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
+        ],
+        "inkPx": 2467,
+        "inkSharePct": 64.2,
+        "inkPctOfCellArea": 63.36,
+        "contactShadowPx": 42,
+        "horizonBandPx": 140
+      },
+      "dock2": {
+        "box": [
+          133,
+          205,
+          195,
+          267
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
+        ],
+        "inkPx": 2773,
+        "inkSharePct": 72.1,
+        "inkPctOfCellArea": 71.22,
+        "contactShadowPx": 121,
+        "horizonBandPx": 24
+      },
+      "wreck": {
+        "box": [
+          117,
+          576,
+          211,
+          638
+        ],
+        "distinctBuckets": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
+        ],
+        "inkPx": 5822,
+        "inkSharePct": 99.9,
+        "inkPctOfCellArea": 149.52,
+        "contactShadowPx": 6,
+        "horizonBandPx": 284
+      }
+    },
+    "machineRow": {
+      "box": [
+        133,
+        205,
+        195,
+        392
+      ],
+      "distinctBuckets": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7
+      ],
+      "inkPx": 5296,
+      "inkSharePct": 45.7,
+      "inkPctOfCellArea": 136.01,
+      "contactShadowPx": 163,
+      "horizonBandPx": 164
+    },
+    "bandFit": {
+      "scale": 1.95,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        204.6,
+        641.4
+      ],
+      "gapAbove": 148.6,
+      "gapBelow": 148.6,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        203.6,
+        640.4
+      ],
+      "legacyGapAbove": 147.6,
+      "legacyGapBelow": 149.6
+    },
+    "gutters": {
+      "above": {
+        "box": [
+          0,
+          56,
+          390,
+          205
+        ],
+        "distinctBuckets": [
+          0,
+          2
+        ],
+        "inkPx": 58110,
+        "inkSharePct": 100,
+        "inkPctOfCellArea": 1492.39,
+        "contactShadowPx": 3,
+        "horizonBandPx": 4158
+      },
+      "below": {
+        "box": [
+          0,
+          641,
+          390,
+          790
+        ],
+        "distinctBuckets": [
+          0,
+          3
+        ],
+        "inkPx": 58110,
+        "inkSharePct": 100,
+        "inkPctOfCellArea": 1492.39,
+        "contactShadowPx": 0,
+        "horizonBandPx": 0
+      }
+    },
+    "steelLightPx": 2591,
+    "gridDotPx": 112,
+    "gridDotSharePct": 0.03,
+    "gridDotAlphaPx": 403,
+    "gridDotAlphaSharePct": 0.12,
+    "gridInkSharePct": 0.16,
+    "machineBodyPx": 8189,
+    "machineBodySharePct": 2.49,
+    "contactShadowPx": 931
+  },
+  "sheet": {
+    "roles": 11,
+    "window": [
+      58,
+      58
+    ],
+    "boxes": {
+      "dock": [
+        -2,
+        114,
+        128,
+        128
+      ],
+      "sorter": [
+        153,
+        114,
+        128,
+        128
+      ],
+      "furnace": [
+        308,
+        114,
+        128,
+        128
+      ],
+      "wireMill": [
+        464,
+        114,
+        128,
+        128
+      ],
+      "signalLab": [
+        619,
+        114,
+        128,
+        128
+      ],
+      "generic": [
+        774,
+        114,
+        128,
+        128
+      ],
+      "polymerRecycler": [
+        -2,
+        294,
+        128,
+        128
+      ],
+      "copperSeparator": [
+        192,
+        294,
+        128,
+        128
+      ],
+      "platePress": [
+        386,
+        294,
+        128,
+        128
+      ],
+      "circuitAssembler": [
+        580,
+        294,
+        128,
+        128
+      ],
+      "drone": [
+        774,
+        294,
+        128,
+        128
+      ]
+    },
+    "inkPx": {
+      "dock": 9060,
+      "sorter": 9348,
+      "furnace": 8380,
+      "wireMill": 8768,
+      "signalLab": 8924,
+      "drone": 1378
+    },
+    "matrix": [
+      [
+        "dock/sorter",
+        46
+      ],
+      [
+        "dock/furnace",
+        62.5
+      ],
+      [
+        "dock/wireMill",
+        68
+      ],
+      [
+        "dock/signalLab",
+        69.6
+      ],
+      [
+        "dock/drone",
+        55.5
+      ],
+      [
+        "sorter/furnace",
+        56.8
+      ],
+      [
+        "sorter/wireMill",
+        51.3
+      ],
+      [
+        "sorter/signalLab",
+        64.4
+      ],
+      [
+        "sorter/drone",
+        55.5
+      ],
+      [
+        "furnace/wireMill",
+        63.7
+      ],
+      [
+        "furnace/signalLab",
+        50.3
+      ],
+      [
+        "furnace/drone",
+        50.9
+      ],
+      [
+        "wireMill/signalLab",
+        63.1
+      ],
+      [
+        "wireMill/drone",
+        54.6
+      ],
+      [
+        "signalLab/drone",
+        54.7
+      ]
+    ]
+  },
+  "witnesses": {
+    "scrollHeight": 844,
+    "innerHeight": 844,
+    "scrolls": false,
+    "minFacePx": 44,
+    "faces": [
+      {
+        "text": "Sound on",
+        "w": 47.7,
+        "h": 44
+      },
+      {
+        "text": "Text size 1",
+        "w": 44,
+        "h": 44
+      },
+      {
+        "text": "Return to yard view",
+        "w": 44,
+        "h": 44
+      },
+      {
+        "text": "Back to yard",
+        "w": 96,
+        "h": 44
+      },
+      {
+        "text": "Store",
+        "w": 50.1,
+        "h": 46
+      },
+      {
+        "text": "Yard",
+        "w": 44.8,
+        "h": 46
+      },
+      {
+        "text": "Sell 20 Ferrous+40 credits",
+        "w": 129.8,
+        "h": 46
+      },
+      {
+        "text": "Build",
+        "w": 49,
+        "h": 46
+      },
+      {
+        "text": "Research",
+        "w": 72.4,
+        "h": 46
+      }
+    ]
+  },
+  "pageErrors": 0
+}
