@@ -1,0 +1,365 @@
+TAP version 13
+# Subtest: public snapshot contains no arbitrary private fields
+ok 1 - public snapshot contains no arbitrary private fields
+  ---
+  duration_ms: 1.599
+  type: 'test'
+  ...
+# Subtest: HTML escapes explicitly public text
+ok 2 - HTML escapes explicitly public text
+  ---
+  duration_ms: 0.3689
+  type: 'test'
+  ...
+# Subtest: invalid SHA and missing build fail closed
+ok 3 - invalid SHA and missing build fail closed
+  ---
+  duration_ms: 0.3656
+  type: 'test'
+  ...
+# Subtest: manifest covers app and dashboard without copying work files
+ok 4 - manifest covers app and dashboard without copying work files
+  ---
+  duration_ms: 16.8409
+  type: 'test'
+  ...
+# Subtest: feature publication verifies remote, isolates staged files and rejects main
+ok 5 - feature publication verifies remote, isolates staged files and rejects main
+  ---
+  duration_ms: 1056.7129
+  type: 'test'
+  ...
+# Subtest: release tasks outrank developer queue order without mutating queue
+ok 6 - release tasks outrank developer queue order without mutating queue
+  ---
+  duration_ms: 0.1403
+  type: 'test'
+  ...
+# Subtest: only registered separate rw feature worktrees can be developer directories
+ok 7 - only registered separate rw feature worktrees can be developer directories
+  ---
+  duration_ms: 360.3007
+  type: 'test'
+  ...
+# Subtest: snapshot leaves source untouched and acknowledgement preserves appended text
+ok 8 - snapshot leaves source untouched and acknowledgement preserves appended text
+  ---
+  duration_ms: 15.6225
+  type: 'test'
+  ...
+# Subtest: missing ticket mapping never removes request
+ok 9 - missing ticket mapping never removes request
+  ---
+  duration_ms: 7.0402
+  type: 'test'
+  ...
+# Subtest: edited captured text refuses acknowledgement
+ok 10 - edited captured text refuses acknowledgement
+  ---
+  duration_ms: 8.039
+  type: 'test'
+  ...
+# Subtest: completed acknowledgement is idempotent even if sponsor repeats text
+ok 11 - completed acknowledgement is idempotent even if sponsor repeats text
+  ---
+  duration_ms: 11.0007
+  type: 'test'
+  ...
+# Subtest: prepared crash recovery refuses a second deletion
+ok 12 - prepared crash recovery refuses a second deletion
+  ---
+  duration_ms: 8.2564
+  type: 'test'
+  ...
+# Subtest: deferred requests stay pending and cannot empty inbox
+ok 13 - deferred requests stay pending and cannot empty inbox
+  ---
+  duration_ms: 7.0559
+  type: 'test'
+  ...
+# Subtest: repeated heartbeat snapshots reuse exact pending receipt
+ok 14 - repeated heartbeat snapshots reuse exact pending receipt
+  ---
+  duration_ms: 4.4924
+  type: 'test'
+  ...
+# Subtest: snapshot redirects an exact prepared request to recovery
+ok 15 - snapshot redirects an exact prepared request to recovery
+  ---
+  duration_ms: 5.4799
+  type: 'test'
+  ...
+# Subtest: published seed passes and output is deterministic
+ok 16 - published seed passes and output is deterministic
+  ---
+  duration_ms: 7.7531
+  type: 'test'
+  ...
+# Subtest: sixth total session is rejected
+ok 17 - sixth total session is rejected
+  ---
+  duration_ms: 3.0446
+  type: 'test'
+  ...
+# Subtest: acceptance cannot skip evidence and legal lifecycle
+ok 18 - acceptance cannot skip evidence and legal lifecycle
+  ---
+  duration_ms: 2.9215
+  type: 'test'
+  ...
+# Subtest: dependency cycles are rejected
+ok 19 - dependency cycles are rejected
+  ---
+  duration_ms: 1.447
+  type: 'test'
+  ...
+# Subtest: feedback text cannot inject HTML
+ok 20 - feedback text cannot inject HTML
+  ---
+  duration_ms: 2.2742
+  type: 'test'
+  ...
+# Subtest: board shows honest metrics and refresh age
+ok 21 - board shows honest metrics and refresh age
+  ---
+  duration_ms: 1.6444
+  type: 'test'
+  ...
+# Subtest: stale observations cannot make guard claim runnable spare capacity
+ok 22 - stale observations cannot make guard claim runnable spare capacity
+  ---
+  duration_ms: 0.9265
+  type: 'test'
+  ...
+# Subtest: fresh host observation produces explicit no-work reason
+ok 23 - fresh host observation produces explicit no-work reason
+  ---
+  duration_ms: 0.6149
+  type: 'test'
+  ...
+# Subtest: missing assignment identity cannot be used as a runtime observation
+ok 24 - missing assignment identity cannot be used as a runtime observation
+  ---
+  duration_ms: 0.0921
+  type: 'test'
+  ...
+# Subtest: checkpoint carries scoped worker rows without local paths or session IDs
+ok 25 - checkpoint carries scoped worker rows without local paths or session IDs
+  ---
+  duration_ms: 0.1949
+  type: 'test'
+  ...
+# Subtest: no telemetry is unknown, not zero efficiency
+ok 26 - no telemetry is unknown, not zero efficiency
+  ---
+  duration_ms: 1.3447
+  type: 'test'
+  ...
+# Subtest: prospective points and cycle time count once
+ok 27 - prospective points and cycle time count once
+  ---
+  duration_ms: 0.2393
+  type: 'test'
+  ...
+# Subtest: retroactive points excluded
+ok 28 - retroactive points excluded
+  ---
+  duration_ms: 0.1346
+  type: 'test'
+  ...
+# Subtest: long sampling gaps are unknown
+ok 29 - long sampling gaps are unknown
+  ---
+  duration_ms: 0.1996
+  type: 'test'
+  ...
+# Subtest: valid sampled interval yields weighted child-slot usage
+ok 30 - valid sampled interval yields weighted child-slot usage
+  ---
+  duration_ms: 0.1942
+  type: 'test'
+  ...
+# Subtest: same-timestamp imported lifecycle does not claim instant delivery
+ok 31 - same-timestamp imported lifecycle does not claim instant delivery
+  ---
+  duration_ms: 0.1179
+  type: 'test'
+  ...
+# Subtest: five total sessions allow four useful workers including UI/UX
+ok 32 - five total sessions allow four useful workers including UI/UX
+  ---
+  duration_ms: 8.0841
+  type: 'test'
+  ...
+# Subtest: three independent developers fill three slots
+ok 33 - three independent developers fill three slots
+  ---
+  duration_ms: 0.1579
+  type: 'test'
+  ...
+# Subtest: active developer does not cause wait-all barrier
+ok 34 - active developer does not cause wait-all barrier
+  ---
+  duration_ms: 0.3073
+  type: 'test'
+  ...
+# Subtest: unknown ownership blocks unsafe parallel writes
+ok 35 - unknown ownership blocks unsafe parallel writes
+  ---
+  duration_ms: 0.1632
+  type: 'test'
+  ...
+# Subtest: stale state never means empty slots
+ok 36 - stale state never means empty slots
+  ---
+  duration_ms: 0.0762
+  type: 'test'
+  ...
+# Subtest: overdue release takes available slot
+ok 37 - overdue release takes available slot
+  ---
+  duration_ms: 0.1532
+  type: 'test'
+  ...
+# Subtest: conflicting developers not dispatched and dependencies honored
+ok 38 - conflicting developers not dispatched and dependencies honored
+  ---
+  duration_ms: 0.1084
+  type: 'test'
+  ...
+# Subtest: fresh start performs no local audit launches; coordinator queues real GitHub Issues
+ok 39 - fresh start performs no local audit launches; coordinator queues real GitHub Issues
+  ---
+  duration_ms: 13.7578
+  type: 'test'
+  ...
+# Subtest: five agents total means one coordinator and at most FOUR children
+ok 40 - five agents total means one coordinator and at most FOUR children
+  ---
+  duration_ms: 36.3069
+  type: 'test'
+  ...
+# Subtest: dispatch rejects missing or cross-repository Issue and unsafe path
+ok 41 - dispatch rejects missing or cross-repository Issue and unsafe path
+  ---
+  duration_ms: 0.4668
+  type: 'test'
+  ...
+# Subtest: GitHub verification failure leaves worker undispatched
+ok 42 - GitHub verification failure leaves worker undispatched
+  ---
+  duration_ms: 9.2904
+  type: 'test'
+  ...
+# Subtest: uncertain prompt failures reserve the slot rather than duplicate it
+ok 43 - uncertain prompt failures reserve the slot rather than duplicate it
+  ---
+  duration_ms: 14.4074
+  type: 'test'
+  ...
+# Subtest: stop interrupts known workers and blocks dispatch
+ok 44 - stop interrupts known workers and blocks dispatch
+  ---
+  duration_ms: 13.2904
+  type: 'test'
+  ...
+# Subtest: fresh restart archives old state and preserves dirty work
+ok 45 - fresh restart archives old state and preserves dirty work
+  ---
+  duration_ms: 19.7817
+  type: 'test'
+  ...
+# Subtest: release tasks are ranked ahead of developers but do not mutate queue
+ok 46 - release tasks are ranked ahead of developers but do not mutate queue
+  ---
+  duration_ms: 0.2391
+  type: 'test'
+  ...
+# Subtest: reject mapped blocking wait with fresh useful spare capacity
+ok 47 - reject mapped blocking wait with fresh useful spare capacity
+  ---
+  duration_ms: 1.1454
+  type: 'test'
+  ...
+# Subtest: stop, stale observations and unrelated tools never trap coordinator
+ok 48 - stop, stale observations and unrelated tools never trap coordinator
+  ---
+  duration_ms: 0.1196
+  type: 'test'
+  ...
+# Subtest: full or legitimately idle team can wait
+ok 49 - full or legitimately idle team can wait
+  ---
+  duration_ms: 0.2032
+  type: 'test'
+  ...
+# Subtest: failed start does not bind guard to an abandoned command session
+ok 50 - failed start does not bind guard to an abandoned command session
+  ---
+  duration_ms: 845.7287
+  type: 'test'
+  ...
+# Subtest: four observed workers display five model sessions
+ok 51 - four observed workers display five model sessions
+  ---
+  duration_ms: 0.4818
+  type: 'test'
+  ...
+# Subtest: startup failure remains visible when dispatcher is off
+ok 52 - startup failure remains visible when dispatcher is off
+  ---
+  duration_ms: 0.105
+  type: 'test'
+  ...
+# Subtest: bound status distinguishes capacity, workers and guard
+ok 53 - bound status distinguishes capacity, workers and guard
+  ---
+  duration_ms: 0.1155
+  type: 'test'
+  ...
+# Subtest: stale, future and unscoped observations cannot claim active workers
+ok 54 - stale, future and unscoped observations cannot claim active workers
+  ---
+  duration_ms: 0.201
+  type: 'test'
+  ...
+# Subtest: session isolation and missing observations
+ok 55 - session isolation and missing observations
+  ---
+  duration_ms: 0.1664
+  type: 'test'
+  ...
+# Subtest: empty template is not pending sponsor input
+ok 56 - empty template is not pending sponsor input
+  ---
+  duration_ms: 0.0949
+  type: 'test'
+  ...
+# Subtest: poll deduplicates and ignores old-session responses
+ok 57 - poll deduplicates and ignores old-session responses
+  ---
+  duration_ms: 0.5591
+  type: 'test'
+  ...
+# Subtest: poll reports RPC failure and recovers
+ok 58 - poll reports RPC failure and recovers
+  ---
+  duration_ms: 0.2287
+  type: 'test'
+  ...
+# Subtest: RPC reflects bind/stop, isolates workspaces and cleans up
+ok 59 - RPC reflects bind/stop, isolates workspaces and cleans up
+  ---
+  duration_ms: 823.2295
+  type: 'test'
+  ...
+1..59
+# tests 59
+# suites 0
+# pass 59
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1789.7364
+node --test exit=0
