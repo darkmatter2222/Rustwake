@@ -1,0 +1,43 @@
+﻿
+[A 1] --text-scale 1 text-large false root font 15px 390x844 dpr 2 | card fill 9.571 % (cap 42 %) | sweep 15 strings, min effective 5.77:1, min px 10.8
+
+[A 1.25] --text-scale 1.25 text-large false root font 18.75px 390x844 dpr 2 | card fill 11.378 % (cap 42 %) | sweep 15 strings, min effective 5.77:1, min px 13.5
+
+[A 1.5] --text-scale 1.5 text-large true root font 22.5px 390x844 dpr 2 | card fill 10.791 % (cap 42 %) | sweep 15 strings, min effective 5.77:1, min px 16.2
+
+census (A 1 | A 1.25 | A 1.5) - px / ratio / composited / effective
+  objective primary #0           px [14.25,17.81,21.38]      mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Build a sorter ┬╖ 20 scrap"
+  objective status line #0       px [10.8,13.5,16.2]         mono true   ratio [5.75,5.75,5.75]         comp [5.77,5.77,5.77]         eff [5.77,5.77,5.77]         aa true steps 3 clipped false "Ghost on cell 8 ┬╖ tap again to place"
+  objective status line #1       px [10.8,13.5,16.2]         mono true   ratio [5.75,5.75,5.75]         comp [5.77,5.77,5.77]         eff [5.77,5.77,5.77]         aa true steps 3 clipped false "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 % ┬╖ Las"
+  dock face label (plain fill) #0 px [13.2,16.5,16.65]        mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Cancel"
+  dock face label (plain fill) #1 px [13.2,16.5,16.65]        mono true   ratio [5.27,5.27,5.27]         comp [6.46,6.46,6.46]         eff [6.46,6.46,6.46]         aa true steps 3 clipped false "Build Scrap sorter20 scrap"
+  dock face label (plain fill) #2 px [13.2,16.5,16.65]        mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Next"
+  dock face label (amber fill) #0 px [13.2,16.5,16.65]        mono true   ratio [5.27,5.27,5.27]         comp [6.46,6.46,6.46]         eff [6.46,6.46,6.46]         aa true steps 3 clipped false "Build Scrap sorter20 scrap"
+  dock price (plain fill) #0     px [12,15,16.2]             mono true   ratio [5.27,5.27,5.27]         comp [6.46,6.46,6.46]         eff [6.46,6.46,6.46]         aa true costFloor true steps 3 clipped false "20 scrap"
+  dock price (amber fill) #0     px [12,15,16.2]             mono true   ratio [5.27,5.27,5.27]         comp [6.46,6.46,6.46]         eff [6.46,6.46,6.46]         aa true costFloor true steps 3 clipped false "20 scrap"
+  resource chip #0               px [12.6,15.75,18.9]        mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Scrap5"
+  resource chip #1               px [12.6,15.75,18.9]        mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Credits0"
+  resource chip #2               px [12.6,15.75,18.9]        mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Store 5/900"
+  cluster button #0              px [11.7,14.63,17.55]       mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Sound Γ£ô"
+  cluster button #1              px [11.7,14.63,17.55]       mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "A 1"
+  cluster button #2              px [11.7,14.63,17.55]       mono true   ratio [17.42,17.42,17.42]      comp [17.48,17.48,17.48]      eff [17.48,17.48,17.48]      aa true steps 3 clipped false "Home"
+
+[witness A 1] clipped [] sweepClipped [] | min tap 44 px (floor 44) | no page scroll true {"scrollWidth":390,"scrollHeight":844,"innerWidth":390,"innerHeight":844} | card fill 9.571 % | 1px overflow ["objective primary #0 +1px"]
+
+[witness A 1.25] clipped [] sweepClipped [] | min tap 44 px (floor 44) | no page scroll true {"scrollWidth":390,"scrollHeight":844,"innerWidth":390,"innerHeight":844} | card fill 11.378 % | 1px overflow ["objective primary #0 +1px"]
+
+[witness A 1.5] clipped [] sweepClipped [] | min tap 44 px (floor 44) | no page scroll true {"scrollWidth":390,"scrollHeight":844,"innerWidth":390,"innerHeight":844} | card fill 10.791 % | 1px overflow ["objective status line #0 +1px","objective status line #1 +1px","dock price (plain fill) #0 +1px","dock price (amber fill) #0 +1px","resource chip #0 +1px","resource chip #1 +1px","resource chip #2 +1px"]
+
+panel states
+  390x844 A 1 Store          strings 34   min effective 5.77  :1 min px 10.8   min tap 44 px (floor 44) card fill 7.845999999999999 % pageerrors 0 clipped []
+  390x844 A 1 Yard           strings 18   min effective 5.77  :1 min px 10.8   min tap 44 px (floor 44) card fill 7.845999999999999 % pageerrors 0 clipped []
+  390x844 A 1 Research       strings 37   min effective 4.87  :1 min px 10.8   min tap 44 px (floor 44) card fill 7.845999999999999 % pageerrors 0 clipped []
+  390x844 A 1.5 Store        strings 32   min effective 5.77  :1 min px 16.2   min tap 44 px (floor 44) card fill 13.828999999999999 % pageerrors 0 clipped []
+  390x844 A 1.5 Yard         strings 16   min effective 5.77  :1 min px 16.2   min tap 44 px (floor 44) card fill 13.828999999999999 % pageerrors 0 clipped []
+  390x844 A 1.5 Research     strings 35   min effective 4.87  :1 min px 16.2   min tap 44 px (floor 44) card fill 13.828999999999999 % pageerrors 0 clipped []
+
+sub-4.5 strings (opacity-aware): 0
+
+entry chunk [{"name":"index-DqPdBnot.js","bytes":232365}] (ceiling 233000 B)
+pageerrors {"ladder":[],"panels":0}
+non-monotonic named elements: 0

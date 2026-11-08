@@ -1,0 +1,1452 @@
+{
+ "ticket": "UI-004 g1",
+ "baseSha": "1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2",
+ "window": "W-3 (180 s wall, 1 tap/s, 390x844 dpr2, isMobile + hasTouch, fresh storage)",
+ "url": "http://localhost:4173/",
+ "columns": [
+  "A 1",
+  "A 1.25",
+  "A 1.5"
+ ],
+ "floors": {
+  "dockCostPx": 12,
+  "aaRatio": 4.5,
+  "tapTargetPx": 44,
+  "cardFillPct": 42
+ },
+ "census": [
+  {
+   "element": "objective primary #0",
+   "text": "Build a sorter · 20 scrap",
+   "px": [
+    14.25,
+    17.81,
+    21.38
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "objective status line #0",
+   "text": "Ghost on cell 8 · tap again to place",
+   "px": [
+    10.8,
+    13.5,
+    16.2
+   ],
+   "ratio": [
+    5.75,
+    5.75,
+    5.75
+   ],
+   "ratioComposited": [
+    5.77,
+    5.77,
+    5.77
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "objective status line #1",
+   "text": "Drones 1 · Power 8 · 0 requested · 100 % · Las",
+   "px": [
+    10.8,
+    13.5,
+    16.2
+   ],
+   "ratio": [
+    5.75,
+    5.75,
+    5.75
+   ],
+   "ratioComposited": [
+    5.77,
+    5.77,
+    5.77
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "dock face label (plain fill) #0",
+   "text": "Cancel",
+   "px": [
+    13.2,
+    16.5,
+    16.65
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "dock face label (plain fill) #1",
+   "text": "Build Scrap sorter20 scrap",
+   "px": [
+    13.2,
+    16.5,
+    16.65
+   ],
+   "ratio": [
+    5.27,
+    5.27,
+    5.27
+   ],
+   "ratioComposited": [
+    6.46,
+    6.46,
+    6.46
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "dock face label (plain fill) #2",
+   "text": "Next",
+   "px": [
+    13.2,
+    16.5,
+    16.65
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "dock face label (amber fill) #0",
+   "text": "Build Scrap sorter20 scrap",
+   "px": [
+    13.2,
+    16.5,
+    16.65
+   ],
+   "ratio": [
+    5.27,
+    5.27,
+    5.27
+   ],
+   "ratioComposited": [
+    6.46,
+    6.46,
+    6.46
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "dock price (plain fill) #0",
+   "text": "20 scrap",
+   "px": [
+    12,
+    15,
+    16.2
+   ],
+   "ratio": [
+    5.27,
+    5.27,
+    5.27
+   ],
+   "ratioComposited": [
+    6.46,
+    6.46,
+    6.46
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": true,
+   "aaPass": true
+  },
+  {
+   "element": "dock price (amber fill) #0",
+   "text": "20 scrap",
+   "px": [
+    12,
+    15,
+    16.2
+   ],
+   "ratio": [
+    5.27,
+    5.27,
+    5.27
+   ],
+   "ratioComposited": [
+    6.46,
+    6.46,
+    6.46
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": true,
+   "aaPass": true
+  },
+  {
+   "element": "resource chip #0",
+   "text": "Scrap5",
+   "px": [
+    12.6,
+    15.75,
+    18.9
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "resource chip #1",
+   "text": "Credits0",
+   "px": [
+    12.6,
+    15.75,
+    18.9
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "resource chip #2",
+   "text": "Store5/900",
+   "px": [
+    12.6,
+    15.75,
+    18.9
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "cluster button #0",
+   "text": "Sound ✓",
+   "px": [
+    11.7,
+    14.63,
+    17.55
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "cluster button #1",
+   "text": "A 1",
+   "px": [
+    11.7,
+    14.63,
+    17.55
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  },
+  {
+   "element": "cluster button #2",
+   "text": "Home",
+   "px": [
+    11.7,
+    14.63,
+    17.55
+   ],
+   "ratio": [
+    17.42,
+    17.42,
+    17.42
+   ],
+   "ratioComposited": [
+    17.48,
+    17.48,
+    17.48
+   ],
+   "monotonic": true,
+   "clipped": false,
+   "priceFloorPass": null,
+   "aaPass": true
+  }
+ ],
+ "witnesses": [
+  {
+   "label": "A 1",
+   "scale": "1",
+   "textLarge": false,
+   "rootFontPx": 15,
+   "clipped": [],
+   "verticalOverflow1pxRows": [
+    "objective primary #0 +1px"
+   ],
+   "minTargetPx": 44,
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 53.27
+    },
+    {
+     "text": "A 1",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 71.67
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 226.42
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 59.91
+    }
+   ],
+   "noPageScroll": true,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   },
+   "cardFillPct": 9.571
+  },
+  {
+   "label": "A 1.25",
+   "scale": "1.25",
+   "textLarge": false,
+   "rootFontPx": 18.75,
+   "clipped": [],
+   "verticalOverflow1pxRows": [
+    "objective primary #0 +1px"
+   ],
+   "minTargetPx": 44,
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 60.44
+    },
+    {
+     "text": "A 1.25",
+     "h": 44,
+     "w": 46.89
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 45.31
+    },
+    {
+     "text": "Cancel",
+     "h": 46.52,
+     "w": 76.22
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46.52,
+     "w": 220.28
+    },
+    {
+     "text": "Next",
+     "h": 46.52,
+     "w": 61.5
+    }
+   ],
+   "noPageScroll": true,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   },
+   "cardFillPct": 11.378
+  },
+  {
+   "label": "A 1.5",
+   "scale": "1.5",
+   "textLarge": true,
+   "rootFontPx": 22.5,
+   "clipped": [],
+   "verticalOverflow1pxRows": [
+    "objective status line #0 +1px",
+    "objective status line #1 +1px",
+    "dock price (plain fill) #0 +1px",
+    "dock price (amber fill) #0 +1px",
+    "resource chip #0 +1px",
+    "resource chip #1 +1px",
+    "resource chip #2 +1px"
+   ],
+   "minTargetPx": 44,
+   "targets": [
+    {
+     "text": "♪",
+     "h": 49.38,
+     "w": 44
+    },
+    {
+     "text": "A 1.5",
+     "h": 49.38,
+     "w": 49.14
+    },
+    {
+     "text": "Home",
+     "h": 49.38,
+     "w": 55.98
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 72.42
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 236.02
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 57.56
+    }
+   ],
+   "noPageScroll": true,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   },
+   "cardFillPct": 10.791
+  }
+ ],
+ "pageErrors": [],
+ "steps": [
+  {
+   "label": "A 1",
+   "scale": "1",
+   "inner": {
+    "width": 390,
+    "height": 844
+   },
+   "dpr": 2,
+   "rootFontPx": 15,
+   "textScaleProperty": "1",
+   "textLarge": false,
+   "rows": [
+    {
+     "label": "objective primary",
+     "index": 0,
+     "text": "Build a sorter · 20 scrap",
+     "px": 14.25,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 17.09,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "objective status line",
+     "index": 0,
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 10.8,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 14.56,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "objective status line",
+     "index": 1,
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · Las",
+     "px": 10.8,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 29.13,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 0,
+     "text": "Cancel",
+     "px": 13.2,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46,
+     "widthPx": 71.67,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 1,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 13.2,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46,
+     "widthPx": 226.42,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 2,
+     "text": "Next",
+     "px": 13.2,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46,
+     "widthPx": 59.91,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (amber fill)",
+     "index": 0,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 13.2,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46,
+     "widthPx": 226.42,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock price (plain fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 12,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 16.19,
+     "widthPx": 212.42,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock price (amber fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 12,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 16.19,
+     "widthPx": 212.42,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 0,
+     "text": "Scrap5",
+     "px": 12.6,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23,
+     "widthPx": 68.48,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 1,
+     "text": "Credits0",
+     "px": 12.6,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23,
+     "widthPx": 77.13,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 2,
+     "text": "Store5/900",
+     "px": 12.6,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23,
+     "widthPx": 77.53,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 0,
+     "text": "Sound ✓",
+     "px": 11.7,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 53.27,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 1,
+     "text": "A 1",
+     "px": 11.7,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 44,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 2,
+     "text": "Home",
+     "px": 11.7,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 44,
+     "clipped": false,
+     "overflowYpx": 0
+    }
+   ],
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 53.27
+    },
+    {
+     "text": "A 1",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 71.67
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 226.42
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 59.91
+    }
+   ],
+   "cardFillPct": 9.571,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   }
+  },
+  {
+   "label": "A 1.25",
+   "scale": "1.25",
+   "inner": {
+    "width": 390,
+    "height": 844
+   },
+   "dpr": 2,
+   "rootFontPx": 18.75,
+   "textScaleProperty": "1.25",
+   "textLarge": false,
+   "rows": [
+    {
+     "label": "objective primary",
+     "index": 0,
+     "text": "Build a sorter · 20 scrap",
+     "px": 17.81,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 21.38,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "objective status line",
+     "index": 0,
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 13.5,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 18.22,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "objective status line",
+     "index": 1,
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · Las",
+     "px": 13.5,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 36.44,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 0,
+     "text": "Cancel",
+     "px": 16.5,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46.52,
+     "widthPx": 76.22,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 1,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 16.5,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46.52,
+     "widthPx": 220.28,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 2,
+     "text": "Next",
+     "px": 16.5,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46.52,
+     "widthPx": 61.5,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (amber fill)",
+     "index": 0,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 16.5,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46.52,
+     "widthPx": 220.28,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock price (plain fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 15,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 20.25,
+     "widthPx": 206.28,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock price (amber fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 15,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 20.25,
+     "widthPx": 206.28,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 0,
+     "text": "Scrap5",
+     "px": 15.75,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 27.25,
+     "widthPx": 78.34,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 1,
+     "text": "Credits0",
+     "px": 15.75,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 27.25,
+     "widthPx": 89.16,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "resource chip",
+     "index": 2,
+     "text": "Store5/900",
+     "px": 15.75,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 27.25,
+     "widthPx": 93.41,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 0,
+     "text": "Sound ✓",
+     "px": 14.63,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 60.44,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 1,
+     "text": "A 1.25",
+     "px": 14.63,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 46.89,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 2,
+     "text": "Home",
+     "px": 14.63,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 44,
+     "widthPx": 45.31,
+     "clipped": false,
+     "overflowYpx": 0
+    }
+   ],
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 60.44
+    },
+    {
+     "text": "A 1.25",
+     "h": 44,
+     "w": 46.89
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 45.31
+    },
+    {
+     "text": "Cancel",
+     "h": 46.52,
+     "w": 76.22
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46.52,
+     "w": 220.28
+    },
+    {
+     "text": "Next",
+     "h": 46.52,
+     "w": 61.5
+    }
+   ],
+   "cardFillPct": 11.378,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   }
+  },
+  {
+   "label": "A 1.5",
+   "scale": "1.5",
+   "inner": {
+    "width": 390,
+    "height": 844
+   },
+   "dpr": 2,
+   "rootFontPx": 22.5,
+   "textScaleProperty": "1.5",
+   "textLarge": true,
+   "rows": [
+    {
+     "label": "objective primary",
+     "index": 0,
+     "text": "Build a sorter · 20 scrap",
+     "px": 21.38,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 25.64,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "objective status line",
+     "index": 0,
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 16.2,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 17.81,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "objective status line",
+     "index": 1,
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · Las",
+     "px": 16.2,
+     "ratio": 5.75,
+     "ratioComposited": 5.77,
+     "ratioCompositedTop": 5.77,
+     "ratioCompositedBottom": 5.77,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 35.63,
+     "widthPx": 317.39,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 0,
+     "text": "Cancel",
+     "px": 16.65,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46,
+     "widthPx": 72.42,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 1,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 16.65,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46,
+     "widthPx": 236.02,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (plain fill)",
+     "index": 2,
+     "text": "Next",
+     "px": 16.65,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 46,
+     "widthPx": 57.56,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock face label (amber fill)",
+     "index": 0,
+     "text": "Build Scrap sorter20 scrap",
+     "px": 16.65,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 46,
+     "widthPx": 236.02,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "dock price (plain fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 16.2,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 17.81,
+     "widthPx": 230.02,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "dock price (amber fill)",
+     "index": 0,
+     "text": "20 scrap",
+     "px": 16.2,
+     "ratio": 5.27,
+     "ratioComposited": 6.46,
+     "ratioCompositedTop": 6.46,
+     "ratioCompositedBottom": 6.75,
+     "color": "rgb(11, 18, 32)",
+     "bg": "rgb(201, 113, 58)",
+     "gradientStops": 2,
+     "heightPx": 17.81,
+     "widthPx": 230.02,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "resource chip",
+     "index": 0,
+     "text": "Scrap5",
+     "px": 18.9,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23.73,
+     "widthPx": 86.22,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "resource chip",
+     "index": 1,
+     "text": "Credits0",
+     "px": 18.9,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23.73,
+     "widthPx": 99.19,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "resource chip",
+     "index": 2,
+     "text": "Store5/900",
+     "px": 18.9,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 23.73,
+     "widthPx": 107.3,
+     "clipped": false,
+     "overflowYpx": 1
+    },
+    {
+     "label": "cluster button",
+     "index": 0,
+     "text": "♪",
+     "px": 17.55,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 49.38,
+     "widthPx": 44,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 1,
+     "text": "A 1.5",
+     "px": 17.55,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 49.38,
+     "widthPx": 49.14,
+     "clipped": false,
+     "overflowYpx": 0
+    },
+    {
+     "label": "cluster button",
+     "index": 2,
+     "text": "Home",
+     "px": 17.55,
+     "ratio": 17.42,
+     "ratioComposited": 17.48,
+     "ratioCompositedTop": 17.48,
+     "ratioCompositedBottom": 17.48,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "gradientStops": 0,
+     "heightPx": 49.38,
+     "widthPx": 55.98,
+     "clipped": false,
+     "overflowYpx": 0
+    }
+   ],
+   "targets": [
+    {
+     "text": "♪",
+     "h": 49.38,
+     "w": 44
+    },
+    {
+     "text": "A 1.5",
+     "h": 49.38,
+     "w": 49.14
+    },
+    {
+     "text": "Home",
+     "h": 49.38,
+     "w": 55.98
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 72.42
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 236.02
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 57.56
+    }
+   ],
+   "cardFillPct": 10.791,
+   "pageScroll": {
+    "scrollWidth": 390,
+    "scrollHeight": 844,
+    "innerWidth": 390,
+    "innerHeight": 844
+   }
+  }
+ ]
+}

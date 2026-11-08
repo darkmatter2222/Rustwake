@@ -264,24 +264,37 @@ body {
 .panel__actions > .icon-btn:first-child,
 .node__buy {
   border-color: rgba(255, 183, 101, 0.7);
-  background-color: rgba(201, 113, 58, 0.65);
+  background-color: rgb(201, 113, 58);
   background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.32), rgba(201, 113, 58, 0.18));
-  color: var(--paper);
+  /* UI-004: the ink steps down to the night token instead of lifting the light one. On the
+     fill rgb(201, 113, 58) (L 0.2454) a light colour caps at 3.55:1 — the ceiling of
+     `(#fff + 0.05) / (0.2454 + 0.05)` — so `--paper` measured 3.31:1 and could not reach the
+     4.5:1 AA floor at 13.2 px. Night `#0b1220` (L 0.00607) measures 5.27:1 by that arithmetic,
+     and the fill is opaque (`rgb`, alpha 1) so the composited reading agrees: 5.27:1 at the
+     gradient's bottom stop, 6.74:1 at its top. The census prints both columns. */
+  color: var(--night);
 }
 
-/* The price line on the accent fill takes the lighter amber step so it keeps a 4.5:1
-   ratio against that fill (measured 4.9:1), where the base `--furnace` would fall to 3.8. */
+/* The price line takes the same night ink for the same reason: #ffd9a8 measured 2.67:1 on
+   the accent fill, `--night` 5.27:1. Both columns are printed in the UI-004 census. */
 .dock__btn--primary .dock__cost {
-  color: #ffd9a8;
+  color: var(--night);
 }
 
 .dock__btn:disabled {
-  opacity: 0.55;
+  /* UI-004 g2: 0.55 dimmed the ink past the AA floor. The inert face's own opacity is part of
+     its contrast, so the effective pair is `--night` at alpha a over the composited amber fill:
+     a 0.55 measures 2.93:1, a 0.8 measures 4.84:1 (the instrument's `ratioEffective` column,
+     work/evidence/UI-004-g2/ui004-g2-census.json). 0.8 is the first tenth that clears 4.50 with
+     headroom, and the face is still visibly inert beside an active one at 1. */
+  opacity: 0.8;
 }
 
 .dock__cost {
   display: block;
-  font-size: 0.72rem;
+  /* UI-004 floor: 0.8rem = 12.0 px at scale 1 (the old 0.72rem measured 10.8 px, under the
+     12.0 px absolute floor for the number a tap decision turns on). */
+  font-size: 0.8rem;
   color: var(--furnace);
 }
 
@@ -300,16 +313,22 @@ body {
 
 .text-large .dock__btn {
   padding: 0 2px;
-  font-size: 0.62rem;
-  /* Two lines of a 0.62rem label plus a 0.5rem cost measure 35.6 px at this leading, so
-     the button stays at its 46 px floor instead of growing to 47.34 px. */
+  /* UI-004 monotonicity: the old 0.62rem measured 13.95 px at scale 1.5, *below* the 16.5 px
+     the base 0.88rem already reached at 1.25, so the one control meant to rescue the dock
+     shrank it. 0.74rem = 16.65 px at 1.5 (>= 16.5 px), still below the 22.5 px a 0.88rem
+     label would cost at this scale. */
+  font-size: 0.74rem;
+  /* Two lines of a 0.74rem label plus a 0.72rem cost measure 36.1 px at this leading, so the
+     button stays at its 46 px floor instead of growing past it. */
   line-height: 1.1;
 }
 
 /* The cost line is the second line of the two-line primary button; it steps down with the
-   label so that button still measures 46 px rather than growing past the row. */
+   label so that button still measures 46 px rather than growing past the row. UI-004: 0.72rem
+   = 16.2 px at scale 1.5, which clears the 12.0 px absolute floor and no longer falls below
+   the 15.0 px the base 0.8rem reaches at 1.25 (the old 0.5rem measured 11.25 px there). */
 .text-large .dock__cost {
-  font-size: 0.5rem;
+  font-size: 0.72rem;
 }
 
 /* In the .hud column so the panel always sits between the objective and the dock
@@ -552,7 +571,10 @@ body {
 /* A target the player cannot use yet stays on screen with its reason printed
    above it, dimmed rather than removed. */
 .icon-btn:disabled {
-  opacity: 0.55;
+  /* UI-004 g2: same floor as `.dock__btn:disabled` - the accent-filled `.node__buy` carries
+     `--night` ink, and at alpha 0.55 that pair measures 2.93:1 against the amber fill.
+     0.8 puts the worst printed row at 4.84:1 (see work/evidence/UI-004-g2). */
+  opacity: 0.8;
 }
 
 /* At a large scale the cards give back their own padding before the type does,
