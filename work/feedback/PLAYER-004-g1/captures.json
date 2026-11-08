@@ -1,0 +1,272 @@
+{
+ "url": "https://home.darkmatter2222.com/rustwake/",
+ "viewport": "390x844 dpr2 isMobile hasTouch",
+ "stills": [
+  "01-gate-rest.png",
+  "02-first-screen.png",
+  "03-after-drone-repair.png",
+  "04-priced-build-face.png",
+  "05-yard-with-machine.png",
+  "06-connect-face.png",
+  "07-store-panel.png"
+ ],
+ "notes": [],
+ "gate": {
+  "vw": 390,
+  "vh": 844,
+  "dpr": 2,
+  "docH": 844,
+  "canvas": {
+   "w": 780,
+   "h": 1688,
+   "cssW": 390,
+   "cssH": 844
+  },
+  "gate": "Begin recovery",
+  "objective": null,
+  "statusLines": [],
+  "chips": [],
+  "dock": [],
+  "toast": null,
+  "panel": null,
+  "sim": null
+ },
+ "storePanel": {
+  "title": "Yard store",
+  "rows": [
+   "Capacity0/900",
+   "MeasuredPower 100% speed (0 of 8 units requested)",
+   "Measured1 machine waiting for input",
+   "SellOpens after the first steel contract"
+  ],
+  "icons": [
+   "Close"
+  ]
+ },
+ "census": [
+  {
+   "cls": "STRONG",
+   "text": "0",
+   "font": "12.6px",
+   "px": 12.6,
+   "w": 7.5,
+   "h": 17,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "STRONG",
+   "text": "0",
+   "font": "12.6px",
+   "px": 12.6,
+   "w": 7.5,
+   "h": 17,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "resources__item",
+   "text": "Store0/900",
+   "font": "12.6px",
+   "px": 12.6,
+   "w": 77.5,
+   "h": 23,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "icon-btn",
+   "text": "Sound ✓",
+   "font": "11.7px",
+   "px": 11.7,
+   "w": 53.3,
+   "h": 44,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "icon-btn",
+   "text": "A 1",
+   "font": "11.7px",
+   "px": 11.7,
+   "w": 44,
+   "h": 44,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "icon-btn",
+   "text": "Home",
+   "font": "11.7px",
+   "px": 11.7,
+   "w": 44,
+   "h": 44,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "objective__primary",
+   "text": "Connect the dock to the sorter.",
+   "font": "14.25px",
+   "px": 14.25,
+   "w": 317.4,
+   "h": 17.1,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "status-line",
+   "text": "Draw the route so cargo has somewhere to go.",
+   "font": "10.8px",
+   "px": 10.8,
+   "w": 317.4,
+   "h": 14.6,
+   "color": "rgb(111, 147, 173)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "status-line",
+   "text": "Drones 1 · Power 8 · 0 requested · 100 %",
+   "font": "10.8px",
+   "px": 10.8,
+   "w": 317.4,
+   "h": 14.6,
+   "color": "rgb(111, 147, 173)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "dock__btn",
+   "text": "Store",
+   "font": "13.2px",
+   "px": 13.2,
+   "w": 59.9,
+   "h": 46,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "dock__btn dock__btn--primary",
+   "text": "Connect dock to sorter",
+   "font": "13.2px",
+   "px": 13.2,
+   "w": 239.2,
+   "h": 46,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  },
+  {
+   "cls": "dock__btn",
+   "text": "Build",
+   "font": "13.2px",
+   "px": 13.2,
+   "w": 58.9,
+   "h": 46,
+   "color": "rgb(244, 247, 251)",
+   "overflow": "ok"
+  }
+ ],
+ "canvas": {
+  "w": 780,
+  "h": 1688,
+  "cssW": 390,
+  "cssH": 844
+ },
+ "motion": [
+  {
+   "t": 33258.5,
+   "tick": 320,
+   "amber": 170,
+   "cx": 325.42,
+   "cy": 724.91,
+   "sdX": 3.02,
+   "sdY": 292.16
+  },
+  {
+   "t": 33489.60000002384,
+   "tick": 330,
+   "amber": 98,
+   "cx": 317,
+   "cy": 849.5,
+   "sdX": 7.28,
+   "sdY": 334.51
+  },
+  {
+   "t": 33704,
+   "tick": 330,
+   "amber": 98,
+   "cx": 317,
+   "cy": 849.5,
+   "sdX": 7.28,
+   "sdY": 334.51
+  },
+  {
+   "t": 33922.39999997616,
+   "tick": 330,
+   "amber": 98,
+   "cx": 317,
+   "cy": 849.5,
+   "sdX": 7.28,
+   "sdY": 334.51
+  },
+  {
+   "t": 34143.200000047684,
+   "tick": 330,
+   "amber": 98,
+   "cx": 317,
+   "cy": 849.5,
+   "sdX": 7.28,
+   "sdY": 334.51
+  },
+  {
+   "t": 34362.800000071526,
+   "tick": 340,
+   "amber": 98,
+   "cx": 317,
+   "cy": 849.5,
+   "sdX": 7.28,
+   "sdY": 334.51
+  }
+ ],
+ "motionDelta": [
+  {
+   "frame": 2,
+   "dMs": 231.1,
+   "dTick": 10,
+   "dCx": -8.42,
+   "dCy": 124.59,
+   "dAmber": -72
+  },
+  {
+   "frame": 3,
+   "dMs": 214.4,
+   "dTick": 0,
+   "dCx": 0,
+   "dCy": 0,
+   "dAmber": 0
+  },
+  {
+   "frame": 4,
+   "dMs": 218.4,
+   "dTick": 0,
+   "dCx": 0,
+   "dCy": 0,
+   "dAmber": 0
+  },
+  {
+   "frame": 5,
+   "dMs": 220.8,
+   "dTick": 0,
+   "dCx": 0,
+   "dCy": 0,
+   "dAmber": 0
+  },
+  {
+   "frame": 6,
+   "dMs": 219.6,
+   "dTick": 10,
+   "dCx": 0,
+   "dCy": 0,
+   "dAmber": 0
+  }
+ ]
+}

@@ -71,6 +71,15 @@ const pick = (s: SimState, blueprint: string): MachineState =>
 /* ---- A1-2v2/v3 instrument, mirrored from work/feedback/strat002-harness.mjs ---- */
 
 import harnessJson from "../../work/feedback/strat002-harness.json";
+import beltHarnessJson from "../../work/feedback/belt001-harness.json";
+
+/**
+ * BELT-001: the priced-connection tree re-ran the same mirror (scripts/probe-belt.mjs),
+ * so the in-test mirror below reconciles against `ladderRows` from that run. The
+ * strat002 file stays the untouched historical record of the pre-price readings.
+ */
+const beltTable = (pattern: "regular" | "irregular" | "gap6") =>
+  (beltHarnessJson as { ladderRows: Record<string, unknown[]> }).ladderRows[pattern] as unknown as StoredRow[];
 
 /** The two gap ladders, exact predicates: round % 9 < 5 and round % 6 < 3. */
 const GAP_SPECS = {
@@ -632,7 +641,8 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
       const twin = a12Row(null, ladder);
       // The unnamed ladder is the golden-line ladder: same boot, plain price, so
       // every stored scalar column and the kinds counters reproduce from the mirror.
-      const stored = storedTable(patternOf[ladder]).find(
+      // (BELT-001: the goldens are the priced-tree rows in belt001-harness.json.)
+      const stored = beltTable(patternOf[ladder]).find(
         (r) => r.policy === "naive (unnamed)"
       ) as StoredFull;
       expect(twin.batches).toBe(stored.batches);
@@ -699,35 +709,36 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
   });
 
   it("scores the 5-on/4-off ladder by the per-column MMG, not the retired disjunction", () => {
+    // BELT-001 restated on the priced tree (rows in belt001-harness.json). The
+    // column leaders are: speed owns `batches` and the starved pair, draw owns
+    // `minPowerRatio`, and `powerLimitedRounds` sits under its 200-unit floor -
+    // the same shape the g3 record shows for the period-6 ladder.
     const speed = a12Row("speed", "gap9");
     const buffer = a12Row("buffer", "gap9");
     const draw = a12Row("draw", "gap9");
     const mmg = harnessJson.gaps.mmg;
-    // The A1-2v3 per-column table replaces `>= 5 % relative OR >= 10 absolute`.
-    // speed owns `batches` by >= 900: measured gap 1076 over the best named rival
-    // (2267 vs 1191; 1095 before the price premium, both above the floor).
+    // speed owns `batches` by >= 900: 2 179 over the best named rival 1 191 (988).
     expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(
       mmg.batches.absolute
     );
-    // draw owns the power budget: 0 vs both others >= 200, minPowerRatio gap >= 0.25.
+    // draw keeps the zero row, but buffer's 127 throttled rounds hold the rival value
+    // under the 200-unit floor, so this column names no leader under the MMG.
     expect(draw.powerLimitedRounds).toBe(0);
-    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBeGreaterThanOrEqual(
-      mmg.powerLimitedRounds.absolute
-    );
+    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(127);
+    expect(127).toBeLessThan(mmg.powerLimitedRounds.absolute);
     expect(draw.minPowerRatio - Math.max(speed.minPowerRatio, buffer.minPowerRatio)).toBeGreaterThanOrEqual(
       mmg.minPowerRatio.absolute
     );
-    // The mechanism columns (starved %) still go to speed, now exactly at the
-    // 3-point floor (starvedMax 81 vs 84, starvedMean 54 vs 57).
+    // The mechanism columns (starved %) stay with speed: 85 - 81 and 58 - 53.
     expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBeGreaterThanOrEqual(
       mmg.starvedMax.absolute
     );
     expect(Math.max(buffer.starvedMean, draw.starvedMean) - speed.starvedMean).toBeGreaterThanOrEqual(
       mmg.starvedMean.absolute
     );
-    // buffer's single A1-2v3 column: inputStallPct, lower wins. The negative result
-    // stands: buffer 186.9 sits behind the best rival 128.8 (lead -58.1, MMG 3).
-    expect(buffer.inputStallPct).toBe(186.9);
+    // buffer's single A1-2v3 column, still not its: buffer 136.7 sits behind the
+    // best rival 93.5 (speed) - lead -43.2 points, well under the 3-point floor.
+    expect(buffer.inputStallPct).toBe(136.7);
     expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeLessThan(
       mmg.inputStallPct.absolute
     );
@@ -820,7 +831,7 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
         ["priced", "policy"],
       ] as [string, UpgradeBranch | null | "policy"][]) {
         const mirror = a12Row(branch, ladder);
-        const stored = storedTable(pattern).find((r) => r.policy === name);
+        const stored = beltTable(pattern).find((r) => r.policy === name);
         if (!stored) throw new Error("stored row missing for " + name);
         // The stored row's new pair equals the mirror's, tick for tick.
         const storedFull = stored as StoredRow & {

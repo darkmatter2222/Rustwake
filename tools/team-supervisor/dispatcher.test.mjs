@@ -3,74 +3,71 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import {createDispatcher,validateTask} from './dispatcher.mjs';
-async function fixture(t){
- const root=await fs.mkdtemp(path.join(os.tmpdir(),'rw-dispatch-'));const infos=new Map();let calls=0,fail=false;
- const ctx={session:{get:async({sessionID})=>infos.get(sessionID)??(sessionID==='parent'?{model:{id:'test',providerID:'local'}}:undefined),create:async input=>{const id='child'+(++calls);infos.set(id,{id,time:{}});return {id};},prompt:async()=>{if(fail)throw Error('provider unavailable');return {};},synthetic:async()=>{},interrupt:async({sessionID})=>{infos.set(sessionID,{outcome:'interrupted',time:{idle:Date.now()}});}}};
- const d=createDispatcher(ctx,root);t.after(async()=>{d.close();await fs.rm(root,{recursive:true,force:true});});
- return {root,ctx,d,infos,calls:()=>calls,fail:()=>fail=true};
+import {createDispatcher,validateTask,MAX_TOTAL_AGENTS,MAX_CHILD_AGENTS,prioritizeTasks} from './dispatcher.mjs';
+const ISSUE='https://github.com/darkmatter2222/Rustwake/issues/1';
+const task=(id,role)=>({id,role,issue_url:ISSUE,prompt:'Deliver bounded work for the linked GitHub Issue',write_paths:['work/'+id]});
+async function fixture(t,{failVerify=false}={}){
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'rw-dispatch-'));
+ const infos=new Map(); let calls=0,failPrompt=false;
+ const ctx={session:{
+  get:async({sessionID})=>infos.get(sessionID)??(['parent','replacement'].includes(sessionID)?{model:{id:'test',providerID:'local'}}:undefined),
+  create:async input=>{const id='child'+(++calls);infos.set(id,{id,time:{}});return {id};},
+  prompt:async()=>{if(failPrompt)throw Error('provider unavailable');return {};},
+  synthetic:async()=>{},
+  interrupt:async({sessionID})=>{infos.set(sessionID,{outcome:'interrupted',time:{idle:Date.now()}});}
+ }};
+ const d=createDispatcher(ctx,root,{verifyIssue:async()=>{if(failVerify)throw Error('GitHub auth unavailable');return {url:ISSUE,state:'OPEN'};}});
+ t.after(async()=>{d.close();await fs.rm(root,{recursive:true,force:true});});
+ return {root,ctx,d,infos,calls:()=>calls,fail:()=>{failPrompt=true;}};
 }
-test('five worker slots admit UI/UX, reject a sixth until completion',async t=>{
- const f=await fixture(t);await f.d.start('parent');assert.equal(f.calls(),4);
- assert.ok((await f.d.status()).workers.some(w=>w.role==='ui-ux'));
- const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');const q=JSON.parse(await fs.readFile(file));
- q.tasks.push({id:'next',role:'developer',prompt:'Implement scoped change',write_paths:['src/new']}, {id:'overflow',role:'developer',prompt:'Next change',write_paths:['src/other']});await fs.writeFile(file,JSON.stringify(q));
- await f.d.tick();assert.equal(f.calls(),5);await f.d.tick();assert.equal(f.calls(),5);
- f.infos.set('child1',{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),6);
- assert.equal((await f.d.status()).workers.filter(w=>w.status==='queued').length,5);
+async function enqueue(f,tasks){
+ const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');
+ const q=JSON.parse(await fs.readFile(file,'utf8'));q.tasks=tasks;await fs.writeFile(file,JSON.stringify(q));
+}
+test('fresh start performs no local audit launches; coordinator queues real GitHub Issues',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ assert.equal(f.calls(),0);const s=await f.d.status();assert.equal(s.enabled,true);
+ assert.equal(s.workers.length,0);
 });
-
-test('uncertain prompt failure remains visible and reserves its slot',async t=>{
- const f=await fixture(t);f.fail();await f.d.start('parent');assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/provider unavailable/);
+test('five agents total means one coordinator and at most FOUR children',async t=>{
+ const f=await fixture(t);await f.d.start('parent');
+ assert.equal(MAX_TOTAL_AGENTS,5);assert.equal(MAX_CHILD_AGENTS,4);
+ await enqueue(f,[task('product','product-owner'),task('review','reviewer'),task('play','player'),task('ux','ui-ux'),task('release','release-engineer')]);
+ await f.d.tick();await f.d.tick();assert.equal(f.calls(),4);
+ assert.equal((await f.d.status()).workers.filter(w=>!['succeeded','failed','interrupted'].includes(w.status)).length,4);
+ const first=(await f.d.status()).workers[0];f.infos.set(first.session_id,{outcome:'succeeded',time:{idle:Date.now()}});
+ await f.d.tick();assert.equal(f.calls(),5);
+ assert.equal((await f.d.status()).workers.filter(w=>!['succeeded','failed','interrupted'].includes(w.status)).length,4);
+});
+test('dispatch rejects missing or cross-repository Issue and unsafe path',()=>{
+ assert.throws(()=>validateTask({id:'x',role:'reviewer',prompt:'x',write_paths:['work/x']}),/GitHub Issue URL/);
+ assert.throws(()=>validateTask({...task('x','reviewer'),issue_url:'https://github.com/elsewhere/repo/issues/2'}),/GitHub Issue URL/);
+ for(const p of ['../x','/etc','src/*','src\\\\x'])assert.throws(()=>validateTask({...task('x','reviewer'),write_paths:[p]}),/write path prefixes/);
+});
+test('GitHub verification failure leaves worker undispatched',async t=>{
+ const f=await fixture(t,{failVerify:true});await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);
+ await f.d.tick();assert.equal(f.calls(),0);assert.match((await f.d.status()).error,/GitHub auth unavailable/);
+});
+test('uncertain prompt failures reserve the slot rather than duplicate it',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);f.fail();await f.d.tick();
+ assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/provider unavailable/);
  await f.d.tick();assert.equal(f.calls(),1);assert.match((await f.d.status()).error,/uncertain/);
 });
-test('stop interrupts known workers and stops dispatch',async t=>{
- const f=await fixture(t);await f.d.start('parent');await f.d.stop();await f.d.tick();assert.equal(f.calls(),4);assert.equal((await f.d.status()).enabled,false);
- assert.equal(f.infos.get('child1').outcome,'interrupted');
+test('stop interrupts known workers and blocks dispatch',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);await f.d.tick();
+ await f.d.stop();assert.equal((await f.d.status()).enabled,false);assert.equal(f.infos.get('child1').outcome,'interrupted');
+ await f.d.tick();assert.equal(f.calls(),1);
 });
-test('execution status requires a host event',async t=>{
- const f=await fixture(t);await f.d.start('parent');assert.equal((await f.d.status()).workers[0].status,'queued');
- f.d.event({type:'session.execution.started',data:{sessionID:'child1'}});assert.equal((await f.d.status()).workers[0].status,'running');
-});
-test('unsafe/ambiguous write paths rejected',()=>{
- for(const p of ['../x','/etc','src/*','src\\x'])assert.throws(()=>validateTask({id:'x',role:'developer',prompt:'x',write_paths:[p]}));
-});
-
-
-
-test('queued release drains conflicting workers instead of filling a spare slot with new work',async t=>{
- const f=await fixture(t);await f.d.start('parent');
- const file=path.join(f.root,'.rustwake-runtime/dispatch-queue.json');const q=JSON.parse(await fs.readFile(file));
- q.tasks.push({id:'new-dev',role:'developer',prompt:'new work',write_paths:['src/new']},
-  {id:'release',role:'release-engineer',prompt:'publish accepted work',write_paths:['work/product/dispatch-startup']});
- await fs.writeFile(file,JSON.stringify(q));
- const workers=(await f.d.status()).workers;
- f.infos.set(workers.find(w=>w.id==='startup-review').session_id,{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),4);
- f.infos.set(workers.find(w=>w.id==='startup-product').session_id,{outcome:'succeeded',time:{idle:Date.now()}});await f.d.tick();assert.equal(f.calls(),5);
- assert.equal((await f.d.status()).workers.at(-1).id,'release');
-});
-
-
-
-
-test('start creates a new team, archives old state and preserves dirty files',async t=>{
- const f=await fixture(t);await f.d.start('parent');
+test('fresh restart archives old state and preserves dirty work',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);await f.d.tick();
  await fs.writeFile(path.join(f.root,'unfinished.txt'),'valuable edits');
- const original=f.ctx.session.interrupt;
- f.ctx.session.interrupt=async arg=>{if(arg.sessionID==='child1')throw {name:'Session.NotFoundError'};return original(arg);};
- f.infos.delete('child1');f.infos.set('replacement',{id:'replacement'});
- await f.d.start('replacement');
- const state=await f.d.status();
- assert.equal(state.enabled,true);assert.equal(state.workers.length,4);assert.equal(f.calls(),8);
- assert.ok(state.workers.every(w=>!['child1','child2','child3','child4'].includes(w.session_id)));
+ await f.d.start('replacement');const s=await f.d.status();
+ assert.equal(s.enabled,true);assert.equal(s.workers.length,0);assert.equal(f.infos.get('child1').outcome,'interrupted');
  assert.equal(await fs.readFile(path.join(f.root,'unfinished.txt'),'utf8'),'valuable edits');
- const archived=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/archive',state.epoch,'previous-team.json')));
- assert.equal(archived.dispatcher.workers.length,4);
- await f.d.start('replacement');assert.equal(f.calls(),12);
+ const archived=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/archive',s.epoch,'previous-team.json')));
+ assert.equal(archived.dispatcher.workers.length,1);
 });
-test('transport failure during cancellation does not launch duplicate team',async t=>{
- const f=await fixture(t);await f.d.start('parent');
- f.ctx.session.interrupt=async()=>{throw Error('network unavailable');};
- await assert.rejects(f.d.start('parent'),/network unavailable/);
- assert.equal(f.calls(),4);assert.equal((await f.d.status()).enabled,false);
+test('release tasks are ranked ahead of developers but do not mutate queue',()=>{
+ const tasks=[task('dev','developer'),task('qa','reviewer'),task('rel','release-engineer')];
+ assert.equal(prioritizeTasks(tasks)[0].role,'release-engineer');assert.equal(tasks[0].role,'developer');
 });

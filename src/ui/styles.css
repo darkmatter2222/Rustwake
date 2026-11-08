@@ -352,6 +352,34 @@ body {
   pointer-events: auto;
 }
 
+/* U-5 (UI-002 g3): the painted order of the overlay stack. `.panel--stack` is the layer the
+   player opened last (store / research / yard record / machine), `.panel--report` the layer
+   the boot left behind. One `Back`/`Escape` press retires one layer, nearest first, so the
+   newest layer takes the slot nearest the dock - where the thumb already is - and the older
+   one sits above it; repeated presses then unwind the stack down to the yard instead of
+   jumping the thumb between two buttons. The dock keeps the last slot (order 4), so the
+   single-layer case paints exactly as it did before (all other `.hud` children stay 0). */
+.hud > .panel--report {
+  order: 2;
+}
+
+.hud > .panel--stack {
+  order: 3;
+}
+
+.hud > .dock {
+  order: 4;
+}
+
+/* Two layers are up: each spends half the single-layer budget, so the yard keeps its band
+   between the objective card and the dock and both panel heads stay inside the viewport.
+   The body of each panel is the declared scroller (`.panel__body`), so the rows a cap hides
+   are still reachable with one flick. `:has()` is the flat form of "a second `.panel`
+   follows this one", which is the stack being two deep. */
+.hud:has(.panel ~ .panel) > .panel {
+  max-height: 26%;
+}
+
 /* D-6/E-4 on the wide sizes: the desktop yard occupies x 397..1043 at the fitted scale, so
    the card takes its own column in the right gutter instead of sitting on the yard (the
    gutter carried no ink at all: 46.7 % of the width). `left` is the gutter start, `width`
@@ -362,6 +390,17 @@ body {
     left: 1104px;
     width: 320px;
     max-height: 70%;
+  }
+  /* Two absolute layers in one gutter would print on top of each other (no `top`, so both
+     take the same static position), so while the stack is two deep each gets its own slot
+     in the gutter: the older layer up top, the newest below it, matching the phone order. */
+  .hud:has(.panel ~ .panel) > .panel--report {
+    top: 8%;
+    max-height: 34%;
+  }
+  .hud:has(.panel ~ .panel) > .panel--stack {
+    top: 46%;
+    max-height: 34%;
   }
 }
 

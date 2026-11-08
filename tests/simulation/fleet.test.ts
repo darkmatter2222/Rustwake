@@ -229,7 +229,9 @@ describe("recovery drone fleet (B-28)", () => {
     );
     // D-35 measured four machines at this mark with one drone; the store now carries
     // enough surplus for two more blueprint prices inside the same 240 seconds.
-    expect(state.machines.length).toBeGreaterThanOrEqual(6);
+    // BELT-001 restated 6 -> 5 at this mark: the laid belts spend 1 scrap per tile
+    // from the same store, so the sixth blueprint price lands a few rounds later.
+    expect(state.machines.length).toBeGreaterThanOrEqual(5);
     expect(fleetDeliveries(state)).toBeGreaterThan(40);
     runLadder(state, 660); // 900 rounds in total
     console.log(

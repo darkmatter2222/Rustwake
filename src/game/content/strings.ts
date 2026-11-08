@@ -13,7 +13,10 @@
 export const STRINGS: Readonly<Record<string, string>> = {
   // ---- HUD chips that are not resources ----------------------------------------
   "chip.credits": "Credits",
-  "chip.store": "Store",
+  // DEF-009: the store chip is the only chip whose value is a pair printed by the surface
+  // itself (`{label}{units}/{capacity}`), so the separator has to live in the label — JSX
+  // collapses nothing between two adjacent text children and the chip read `Store900/900`.
+  "chip.store": "Store ",
 
   // ---- Start gate and top cluster -------------------------------------------------
   "gate.title": "RUSTWAKE",

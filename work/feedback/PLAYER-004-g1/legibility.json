@@ -1,0 +1,560 @@
+[
+ {
+  "label": "step1",
+  "m": {
+   "scaleClass": "default",
+   "cluster": "Sound ✓ | A 1 | Home",
+   "docH": 844,
+   "vh": 844,
+   "rows": [
+    {
+     "name": "objective",
+     "text": "Build a sorter · 20 scrap",
+     "px": 14.25,
+     "h": 17.1,
+     "w": 317.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 10.8,
+     "h": 14.6,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · L",
+     "px": 10.8,
+     "h": 29.1,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Cancel",
+     "px": 13.2,
+     "h": 46,
+     "w": 71.7,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Build Scrap sorter20 scrap",
+     "px": 13.2,
+     "h": 46,
+     "w": 226.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 3.31,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Next",
+     "px": 13.2,
+     "h": 46,
+     "w": 59.9,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock cost",
+     "text": "20 scrap",
+     "px": 10.8,
+     "h": 14.6,
+     "w": 212.4,
+     "color": "rgb(255, 217, 168)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 2.67,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Scrap5",
+     "px": 12.6,
+     "h": 23,
+     "w": 68.5,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Credits0",
+     "px": 12.6,
+     "h": 23,
+     "w": 77.1,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Store5/900",
+     "px": 12.6,
+     "h": 23,
+     "w": 77.5,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "Sound ✓",
+     "px": 11.7,
+     "h": 44,
+     "w": 53.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "A 1",
+     "px": 11.7,
+     "h": 44,
+     "w": 44,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "Home",
+     "px": 11.7,
+     "h": 44,
+     "w": 44,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    }
+   ],
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 53.3
+    },
+    {
+     "text": "A 1",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 44
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 71.7
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 226.4
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 59.9
+    }
+   ]
+  }
+ },
+ {
+  "label": "step2",
+  "m": {
+   "scaleClass": "default",
+   "cluster": "Sound ✓ | A 1.25 | Home",
+   "docH": 844,
+   "vh": 844,
+   "rows": [
+    {
+     "name": "objective",
+     "text": "Build a sorter · 20 scrap",
+     "px": 17.81,
+     "h": 21.4,
+     "w": 317.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 13.5,
+     "h": 18.2,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · L",
+     "px": 13.5,
+     "h": 36.4,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Cancel",
+     "px": 16.5,
+     "h": 46,
+     "w": 76.2,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Build Scrap sorter20 scrap",
+     "px": 16.5,
+     "h": 46,
+     "w": 220.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 3.31,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Next",
+     "px": 16.5,
+     "h": 46,
+     "w": 61.5,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock cost",
+     "text": "20 scrap",
+     "px": 13.5,
+     "h": 18.2,
+     "w": 206.3,
+     "color": "rgb(255, 217, 168)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 2.67,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Scrap5",
+     "px": 15.75,
+     "h": 27.3,
+     "w": 78.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Credits0",
+     "px": 15.75,
+     "h": 27.3,
+     "w": 89.2,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Store5/900",
+     "px": 15.75,
+     "h": 27.3,
+     "w": 93.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "Sound ✓",
+     "px": 14.63,
+     "h": 44,
+     "w": 60.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "A 1.25",
+     "px": 14.63,
+     "h": 44,
+     "w": 46.9,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "Home",
+     "px": 14.63,
+     "h": 44,
+     "w": 45.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    }
+   ],
+   "targets": [
+    {
+     "text": "Sound ✓",
+     "h": 44,
+     "w": 60.4
+    },
+    {
+     "text": "A 1.25",
+     "h": 44,
+     "w": 46.9
+    },
+    {
+     "text": "Home",
+     "h": 44,
+     "w": 45.3
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 76.2
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 220.3
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 61.5
+    }
+   ]
+  }
+ },
+ {
+  "label": "step3",
+  "m": {
+   "scaleClass": "large",
+   "cluster": "♪ | A 1.5 | Home",
+   "docH": 844,
+   "vh": 844,
+   "rows": [
+    {
+     "name": "objective",
+     "text": "Build a sorter · 20 scrap",
+     "px": 21.38,
+     "h": 25.6,
+     "w": 317.4,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Ghost on cell 8 · tap again to place",
+     "px": 16.2,
+     "h": 17.8,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "status-line",
+     "text": "Drones 1 · Power 8 · 0 requested · 100 % · L",
+     "px": 16.2,
+     "h": 35.6,
+     "w": 317.4,
+     "color": "rgb(111, 147, 173)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 5.75,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Cancel",
+     "px": 13.95,
+     "h": 46,
+     "w": 68.7,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Build Scrap sorter20 scrap",
+     "px": 13.95,
+     "h": 46,
+     "w": 241,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 3.31,
+     "clipped": false
+    },
+    {
+     "name": "dock btn",
+     "text": "Next",
+     "px": 13.95,
+     "h": 46,
+     "w": 56.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "dock cost",
+     "text": "20 scrap",
+     "px": 11.25,
+     "h": 12.4,
+     "w": 235,
+     "color": "rgb(255, 217, 168)",
+     "bg": "rgba(201, 113, 58, 0.65)",
+     "contrast": 2.67,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Scrap5",
+     "px": 18.9,
+     "h": 23.7,
+     "w": 86.2,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Credits0",
+     "px": 18.9,
+     "h": 23.7,
+     "w": 99.2,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "resource chip",
+     "text": "Store5/900",
+     "px": 18.9,
+     "h": 23.7,
+     "w": 107.3,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "♪",
+     "px": 17.55,
+     "h": 49.4,
+     "w": 44,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "A 1.5",
+     "px": 17.55,
+     "h": 49.4,
+     "w": 49.1,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    },
+    {
+     "name": "icon btn",
+     "text": "Home",
+     "px": 17.55,
+     "h": 49.4,
+     "w": 56,
+     "color": "rgb(244, 247, 251)",
+     "bg": "rgba(11, 18, 32, 0.92)",
+     "contrast": 17.42,
+     "clipped": false
+    }
+   ],
+   "targets": [
+    {
+     "text": "♪",
+     "h": 49.4,
+     "w": 44
+    },
+    {
+     "text": "A 1.5",
+     "h": 49.4,
+     "w": 49.1
+    },
+    {
+     "text": "Home",
+     "h": 49.4,
+     "w": 56
+    },
+    {
+     "text": "Cancel",
+     "h": 46,
+     "w": 68.7
+    },
+    {
+     "text": "Build Scrap sorter20 scrap",
+     "h": 46,
+     "w": 241
+    },
+    {
+     "text": "Next",
+     "h": 46,
+     "w": 56.3
+    }
+   ]
+  }
+ }
+]

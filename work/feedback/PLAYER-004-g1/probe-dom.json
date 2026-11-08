@@ -1,0 +1,1485 @@
+{
+ "loadedIn": 84,
+ "steps": [
+  {
+   "at": "load",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 300,
+     "h": 150,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": "Begin recovery",
+    "objective": null,
+    "statusLines": [],
+    "chips": [],
+    "dock": [],
+    "toast": null,
+    "panel": null,
+    "sim": null
+   }
+  },
+  {
+   "at": "begin",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Tap the highlighted wreck to salvage scrap.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": null
+   }
+  },
+  {
+   "at": "tap1",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Keep salvaging: 1/6 pulses for the drone repair.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap5",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store5/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 10,
+     "revision": 1,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 5,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 1,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap2",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Keep salvaging: 2/6 pulses for the drone repair.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap10",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store10/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 20,
+     "revision": 2,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 10,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 1,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap3",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Keep salvaging: 3/6 pulses for the drone repair.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap15",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store15/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 30,
+     "revision": 3,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 15,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 1,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap4",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Keep salvaging: 4/6 pulses for the drone repair.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap20",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store20/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 40,
+     "revision": 4,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 20,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 1,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap5",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Keep salvaging: 5/6 pulses for the drone repair.",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap25",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store25/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Salvage",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.5,
+       "y": 790,
+       "w": 216,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 309.5,
+       "y": 790,
+       "w": 70.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 50,
+     "revision": 5,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 25,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 1,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap6",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Repair your recovery drone · 30 scrap",
+    "statusLines": [
+     {
+      "text": "Tap Salvage until the drone repair is affordable.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 0 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap30",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store30/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 67.6,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Repair drone30 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 83.6,
+       "y": 790,
+       "w": 223.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 313.5,
+       "y": 790,
+       "w": 66.5,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 60,
+     "revision": 6,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 30,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 2,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap7",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Open Build and place the sorter on a lit cell.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 63.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 79.9,
+       "y": 790,
+       "w": 231.2,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 317.1,
+       "y": 790,
+       "w": 62.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 70,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap8",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Ghost on cell 8 · tap again to place",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 %",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Cancel",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.7,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.7,
+       "y": 790,
+       "w": 226.4,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Next",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 320.1,
+       "y": 790,
+       "w": 59.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 80,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap9",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Open Build and place the sorter on a lit cell.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 63.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 79.9,
+       "y": 790,
+       "w": 231.2,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 317.1,
+       "y": 790,
+       "w": 62.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": "Need 20 scrap · have 0",
+    "panel": null,
+    "sim": {
+     "tick": 90,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap10",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Ghost on cell 8 · tap again to place",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Cancel",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.7,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.7,
+       "y": 790,
+       "w": 226.4,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Next",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 320.1,
+       "y": 790,
+       "w": 59.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 100,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap11",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Open Build and place the sorter on a lit cell.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 63.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 79.9,
+       "y": 790,
+       "w": 231.2,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 317.1,
+       "y": 790,
+       "w": 62.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": "Need 20 scrap · have 0",
+    "panel": null,
+    "sim": {
+     "tick": 110,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap12",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Your drone now works for you.",
+    "statusLines": [
+     {
+      "text": "Ghost on cell 8 · tap again to place",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store0/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Cancel",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.7,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.7,
+       "y": 790,
+       "w": 226.4,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Next",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 320.1,
+       "y": 790,
+       "w": 59.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 120,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 0,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 3,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap13",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Build a sorter · 20 scrap",
+    "statusLines": [
+     {
+      "text": "Open Build and place the sorter on a lit cell.",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap5",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store5/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Store",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 63.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 79.9,
+       "y": 790,
+       "w": 231.2,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Build",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 317.1,
+       "y": 790,
+       "w": 62.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": "Need 20 scrap · have 0",
+    "panel": null,
+    "sim": {
+     "tick": 130,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 5,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 4,
+     "levels": ""
+    }
+   }
+  },
+  {
+   "at": "tap14",
+   "snap": {
+    "vw": 390,
+    "vh": 844,
+    "dpr": 2,
+    "docH": 844,
+    "canvas": {
+     "w": 780,
+     "h": 1688,
+     "cssW": 390,
+     "cssH": 844
+    },
+    "gate": null,
+    "objective": "Build a sorter · 20 scrap",
+    "statusLines": [
+     {
+      "text": "Ghost on cell 8 · tap again to place",
+      "font": "10.8px"
+     },
+     {
+      "text": "Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 0",
+      "font": "10.8px"
+     }
+    ],
+    "chips": [
+     {
+      "text": "Scrap5",
+      "font": "12.6px"
+     },
+     {
+      "text": "Credits0",
+      "font": "12.6px"
+     },
+     {
+      "text": "Store5/900",
+      "font": "12.6px"
+     }
+    ],
+    "dock": [
+     {
+      "i": 0,
+      "text": "Cancel",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 10,
+       "y": 790,
+       "w": 71.7,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 1,
+      "text": "Build Scrap sorter20 scrap",
+      "primary": true,
+      "branch": false,
+      "rect": {
+       "x": 87.7,
+       "y": 790,
+       "w": 226.4,
+       "h": 46
+      },
+      "font": "13.2px"
+     },
+     {
+      "i": 2,
+      "text": "Next",
+      "primary": false,
+      "branch": false,
+      "rect": {
+       "x": 320.1,
+       "y": 790,
+       "w": 59.9,
+       "h": 46
+      },
+      "font": "13.2px"
+     }
+    ],
+    "toast": null,
+    "panel": null,
+    "sim": {
+     "tick": 140,
+     "revision": 7,
+     "credits": 0,
+     "machines": 0,
+     "links": 0,
+     "drones": 1,
+     "batches": 0,
+     "storeUnits": 5,
+     "storeCapacity": 900,
+     "powerRatio": 1,
+     "tutorial": 4,
+     "levels": ""
+    }
+   }
+  }
+ ]
+}
