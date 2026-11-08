@@ -6,7 +6,7 @@
 
 [GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues) is the sole active backlog, assignment ledger, triage queue and defect tracker. [GitHub PRs](https://github.com/darkmatter2222/Rustwake/pulls) are the code review, revision and integration ledger. The checked-in `work/backlog.json`, `work/BOARD.md` and `work/board.html` are archived evidence only; DO NOT write new tickets, states or role assignments there. `.rustwake-runtime/dispatch-queue.json` is a temporary, ignored execution queue derived from open GitHub Issues, not a separate product board.
 
-All personas authenticate as the same GitHub account. GitHub assignee/reviewer account identity DOES NOT distinguish AI workers, and a self-review on that account is not a genuine independent GitHub approval. Use labels when supported and structured PR/issue comments for provenance:
+All personas authenticate as the same GitHub account. GitHub assignee/reviewer account identity DOES NOT distinguish AI workers, and a self-review on that account is not a genuine independent GitHub approval. Use labels when supported and structured PR/issue comments for provenance. The supervisor also validates each queued Issue URL by calling authenticated GitHub CLI before launching a worker:
 
 ```text
 Role: developer | Issue: #123 | Branch: rw/123-short-name | Head SHA: <full SHA>

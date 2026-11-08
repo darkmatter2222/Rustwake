@@ -13,7 +13,7 @@
    npm --prefix tools/team-supervisor run install:local
    ```
 
-   Fully restart OpenCode after installation, select **rustwake-coordinator**, then run `/rustwake-team bind`. If your launcher sets `OPENCODE_CONFIG`, register the companion in that active config using the existing local maintenance procedure; project config may be overridden. Keep MasterGoal and provider settings intact. An unknown command means the companion is not loaded. Use the CLI fallback while resolving loading; do not start another forever loop. Verify `/rustwake-team status`; the wait guard requires mapping the installed runtime's actual wait tools and passing its canary. See [TEAM_OPERATIONS](TEAM_OPERATIONS.md).
+   Fully restart OpenCode after installation, select **rustwake-coordinator**, then run `/rustwake-team start`. If your launcher sets `OPENCODE_CONFIG`, register the companion in that active config using the existing local maintenance procedure; project config may be overridden. Keep MasterGoal and provider settings intact. An unknown command means the companion is not loaded. Use the CLI fallback while resolving loading; do not start another forever loop. Verify `/rustwake-team status`; the wait guard requires mapping the installed runtime's actual wait tools and passing its canary. See [TEAM_OPERATIONS](TEAM_OPERATIONS.md).
 5. Run:
 
    ```text
@@ -39,6 +39,6 @@ Sponsor requests go in root SPONSOR_INBOX.md. Local team should complete OPS-101
 
 ## Sidebar telemetry upgrade
 
-Companion 0.2.0 exposes the OpenCode 2 TUI entrypoint. For an existing installation, stop/checkpoint, pull main, run `npm --prefix tools/team-supervisor ci --ignore-scripts` and `npm --prefix tools/team-supervisor run install:local`, then fully restart OpenCode and bind again. Look for **RUSTWAKE TEAM** alongside MasterGoal. See README for the fields and stale-state behavior. No separate TUI plugin registration is needed.
+Companion 0.2.0 exposes the OpenCode 2 TUI entrypoint. For an existing installation, stop/checkpoint, pull main, run `npm --prefix tools/team-supervisor ci --ignore-scripts` and `npm --prefix tools/team-supervisor run install:local`, then fully restart OpenCode and start a fresh coordinator again. Look for **RUSTWAKE TEAM** alongside MasterGoal. See README for the fields and stale-state behavior. No separate TUI plugin registration is needed.
 
 Coordinator runtime observations must include `coordinator_session_id` matching the bound coordinator. The checkpoint utility now includes sanitized worker role/task/state rows and capacity in the ignored supervisor observation. Read real runtime state before writing it; never turn an old board snapshot into fresh telemetry.
