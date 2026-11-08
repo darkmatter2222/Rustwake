@@ -51,14 +51,18 @@ revert to the g1 readings (29 % / stall 9). The overage is the sum of lanes agai
 almost exhausts (main alone is 208 B from it), not a regression inside one lane; the ceiling was last moved
 232800 -> 233000 by reviewer concurrence (rev-q002-g1 sec. 5).
 
-Witnesses, same instruments, this tree:
-- census (both policies): smallest face 46 px, 1 dock row, no page scroll, 0 pageerror,
-  no panel ever open, card fill 9.9 %.
-- layout witness (8 recorded cells): clipped false everywhere, 1 dock row, no page scroll,
-  smallest face 44 px in the three-part-face cells and 46 px elsewhere, card fill
+Witnesses, same instruments, this head (fresh runs, logs on disk):
+- census (candidate, both policies): taps 178, applied 37, no-ops 142, buckets 14 inert-label /
+  69 refused-shortfall / 59 unknown (sum 142 = no-ops), inert share 7.9 %, longest identical-label
+  stall 4; suffix-independent 63/69/10 with inert 35.4 % and stall 34; pressed-index stall 36;
+  smallest face 46 px, 1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %.
+- census (base, both policies): taps 177, applied 37, no-ops 141, buckets 62/69/10 and 63/68/10,
+  inert share 35.0 % / 35.6 %, stall 34, index stall 36, same aggregate row (47 batches, 8 credits).
+- layout witness (8 cells per artifact): clipped false everywhere, 1 dock row, no page scroll,
+  smallest face 44 px in the tail-carrying cells and 46 / 46.5 / 50.2 px in the rest, card fill
   10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.
 - save: schemaVersion 1 and fixture eede3c4f untouched (no file under tests/ or
-  src/game/persistence/ is in this lane; tests/persistence/save.test.ts passes in the 309).
+  src/game/persistence/ is in this lane; tests/persistence/save.test.ts passes in the 325).
 
 STRAT-004 gates - generation 3 (2026-11-08, same worktree, after integrating origin/main)
 

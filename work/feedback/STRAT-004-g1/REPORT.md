@@ -207,8 +207,8 @@ to the previous tap), `unknown`.
 
 | row | criterion | base | candidate | verdict |
 |---|---|---|---|---|
-| 1 | three named buckets on one denominator, summing to the total no-ops | 63 + 69 + 10 = **142** = `noopTaps` (178 taps) | 14 + 69 + 59 = **142** = `noopTaps` (178 taps), 7.9 % + 38.8 % + 33.1 % of taps | **pass** |
-| 2 | `inert-label` ≤ 20.0 % of `taps` | 63/178 = **35.4 %** (v2), 35.6 % (blind) | 14/178 = **7.9 %** — identical in both policies | **pass** |
+| 1 | three named buckets on one denominator, summing to the total no-ops | 62 + 69 + 10 = **141** = `noopTaps` (177 taps, blind); 63 + 68 + 10 = **141** (v2) | 14 + 69 + 59 = **142** = `noopTaps` (178 taps), 7.9 % + 38.8 % + 33.1 % of taps | **pass** |
+| 2 | `inert-label` ≤ 20.0 % of `taps` | 62/177 = **35.0 %** (blind), 63/177 = **35.6 %** (v2) | 14/178 = **7.9 %** — identical in both policies | **pass** |
 | 3 | longest identical-label stall ≤ 16 | **34** (35 taps, taps 34–68, 17 refusals, 0 commands) | **4** (5 taps, taps 8–12), **5/5** stall taps carry the tail | **pass** |
 | 4 | applied ≥ 37 · machines ≥ 5 · batches ≥ 51 · credits ≥ 8 | 37 · 5 · 47 · 8 | 37 · 5 · **47** · 8 | **partial** — batches 47, see limitation 5 |
 
@@ -216,23 +216,24 @@ Two honesty notes on rows 2 and 3, both printed in the json next to the passing 
 
 - The 7.9 % is a *string* result, and the mechanism is the countdown digit. Cut the tail and recount over the
   base's own strings (`bucketsSuffixIndependent`) and the candidate reproduces the base exactly:
-  63 / 69 / 10, inert **35.4 %**, stall **34**. `distinctPrimaryLabels` 103 vs
+  63 / 69 / 10, inert **35.4 %**, stall **34**. `distinctPrimaryLabels` 102 (blind) / 101 (v2) vs
   `distinctPrimaryLabelsWithoutSuffix` **14** says the same thing: more distinct strings, not more distinct
   outcomes. `stallByPressedIndex` is **36** taps on both artifacts — the engine still waits the same ~33 s.
 - `unknown` 59 is itself partitioned in `buckets.unknownSplit`: **49** taps differ only in the pending tail,
-  of which **38** differ only in the countdown digit; **0** non-shortfall toasts; **10** rest. No double
-  count: 49 + 10 = 59, and the 38 are a subset of the 49.
+  of which **37** (blind) / **39** (v2) differ only in the countdown digit; **0** non-shortfall toasts;
+  **10** rest. No double count: 49 + 10 = 59, and the digit-only taps are a subset of the 49.
 
-Per-tap coverage (same runs): the tail is on the pressed face for 136 (blind) / 135 (v2) of 178 taps; the
-countdown digit for 100 / 98. Aggregate no-op share is unchanged at **142/178 = 79.8 %** on both artifacts —
-a property of the 1 tap/s instrument, not of the face.
+Per-tap coverage (same runs): the tail is on the pressed face for **135** (blind) / **136** (v2) of the 178
+candidate taps; the countdown digit for **97** / **100**. Aggregate no-op share barely moves —
+**141/177 = 79.7 %** on the base, **142/178 = 79.8 %** on the candidate — which is the 1 tap/s instrument,
+not the face.
 
 ## 10. Witnesses and bytes (g2)
 
 | witness | candidate | limit |
 |---|---|---|
-| entry chunk | `index-B-e5fB1G.js` **232993 B** (base 232365 B, **+628 B**) | < 233000 B pass, 7 B headroom |
-| typecheck / validate / vitest / `node --test` / build | 0 / 0 / 0 (30 files, 309 tests) / 0 (59/59) / 0 | all 0 |
+| entry chunk | `index-DIzqhO3V.js` **233418 B** (main alone on this head 232792 B) | < 233000 B → **418 B over**, see the ceiling call below |
+| typecheck / validate / vitest / `node --test` / build | 0 / 0 / 0 (32 files, 325 tests) / 0 (59/59) / 0 | all 0 |
 | `validate` behaviour line | `firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s)` | identical on base and candidate: the sim did not move |
 | tap targets, 16 cells (`layout-witness.json`) | **44 px** in the four three-part-face cells, 46 px in the eight two-line cells and all fork cells | ≥ 44 px pass |
 | dock rows / page scroll / pageerror | 1 row everywhere; `scrollHeight == innerHeight` in all 16 cells (360x640 and 390x844, text scale 1 and 2, `isMobile` on and off); 0 | pass |
@@ -253,9 +254,14 @@ tail form is 233305 B (305 B over) and the shipped form is 233418 B (418 B over)
 back to the g1 readings (29 % / stall 9). The digit is what buys rows 2 and 3: it is 113 B, and it is the
 only part of the string that changes on 98–100 of the 178 taps.
 
-**Measured layout price of the third part:** dock row 46 px → 50.9 px at text scale 1, 46 → 55.5 px at text
-scale 2.0 (390x844), 59.4 → 75.9 px at 360x640 text scale 2.0 where labels already wrap. Same numbers as g1
-(the face is one line taller, not two), so the ART lane's `space.json` denominator moves by the same amount.
+**Measured layout price of the third part (16-cell witness, this head):** faces sit at 46 px in the plain
+cells; with the tail they are **46.5 px** at 360x640 text scale 2 and **50.2 px** at 390x844 text scale 2
+(and in the fork row, which shares the row height), while **text scale 1 stays at 46 px** — the tail fits the
+existing line there. In the seeded short-price cells, where the tail is definitely printed, the face is
+**44 px** on both artifacts, i.e. exactly on the floor. Card fill peaks at 32.8 % (cap 42 %), dock stays one
+row and `scrollHeight == innerHeight` in all 16 cells, so the world loses about 4 px of column at text
+scale 2 and nothing at text scale 1. The ART lane's `space.json` should be re-printed by whoever holds that
+lease after integration.
 
 ## 11. Limitations (g2)
 
@@ -271,8 +277,8 @@ scale 2.0 (390x844), 59.4 → 75.9 px at 360x640 text scale 2.0 where labels alr
    is the question the stall asks; a per-item arrival time would need a second scan and ~120 B this budget
    does not have.
 7. `in Ns` is only printed while a batch runs, so a tap in the gap between a completion and the next
-   assignment prints the two-part form; that is 78–80 of the 178 taps (178 − 100/98), which is why the inert
-   share lands at 7.9 % and not near 0.
+   assignment prints the two-part form; that is 78–81 of the 178 taps (178 − 100 and 178 − 97), which is why
+   the inert share lands at 7.9 % and not near 0.
 
 ## 12. Files added by g2
 
