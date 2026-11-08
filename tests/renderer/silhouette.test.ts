@@ -11,6 +11,8 @@ import {
 import { drawScene, fitCamera, tileToWorld, worldToScreen, WRECK_POSITION, type DrawOptions } from "../../src/game/renderer/scene";
 import { createInitialState, type MachineStatus, type SimState } from "../../src/game/simulation/types";
 import { DOCK_TILE } from "../../src/game/simulation/commands";
+import censusAfter from "../../docs/evidence/2026-11-06-art003-census-after.json";
+import censusBefore from "../../docs/evidence/2026-11-06-art003-census-before.json";
 
 /**
  * ART-003 g1 - silhouette-first witnesses (A3-1, A3-3, A3-4 and the named motion states).
@@ -326,6 +328,317 @@ describe("ART-003 named per-status motion states", () => {
     const building = makeCtx();
     drawScene(building.ctx, machineState("running"), fitCamera(VIEW), VIEW, { ...rest, buildMode: true, ghostTile: 20 });
     expect(building.log.filter((r) => r.op === "stroke" && r.style === GRID_STYLE).length).toBe(1);
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* ART-004 g2: A3-1 on the regenerated after-matrix, the joint         */
+/* furnace x signalLab search, and the per-layer ink census.           */
+/* ------------------------------------------------------------------ */
+
+/** A3-1's named separation threshold: percent of differing cells. */
+const A3_1_THRESHOLD = 32;
+const PARTNERS = ["dock", "sorter", "wireMill", "drone"] as const;
+const LATTICE = ["generic", "polymerRecycler", "copperSeparator", "platePress", "circuitAssembler"] as const;
+
+const rowInkUnits = (row: readonly PartTuple[]): number =>
+  row.reduce((sum, t) => (t[5] === 1 || t[4] === 15 ? sum : sum + t[2] * t[3]), 0);
+
+/** 8x8 ink mask, the same instrument as D-1/G-1 (64 cells, 4 units per cell). */
+function mask8Of(row: readonly PartTuple[]): number[] {
+  const m = new Array(64).fill(0);
+  for (const t of row) {
+    const x0 = Math.max(0, Math.floor((t[0] + 16) / 4));
+    const x1 = Math.min(7, Math.ceil((t[0] + 16 + t[2]) / 4) - 1);
+    const y0 = Math.max(0, Math.floor((t[1] + 16) / 4));
+    const y1 = Math.min(7, Math.ceil((t[1] + 16 + t[3]) / 4) - 1);
+    for (let y = y0; y <= y1; y += 1) for (let x = x0; x <= x1; x += 1) m[y * 8 + x] = 1;
+  }
+  return m;
+}
+
+const hamming = (a: number[], b: number[]): number => a.reduce((s, v, i) => s + (v !== b[i] ? 1 : 0), 0);
+
+/** B4/B6/D-4 geometry floor: inside the cell, >= 2 units tall, marks >= 3 units tall. */
+function featureLegal(row: readonly PartTuple[]): boolean {
+  const tallest = Math.max(...row.map((u) => u[3]));
+  return (
+    row.every((t) => t[1] >= -16 && t[0] >= -16 && t[0] + t[2] <= 16 && t[1] + t[3] <= 16 && t[3] >= 2) &&
+    row.filter((t) => t[4] !== 15 && t[3] < tallest).every((t) => t[3] >= 3)
+  );
+}
+
+/* The two builders of the joint search, mirrors of scripts/art003-census.mjs. */
+const SHADOW6: PartTuple = [-11, 12, 22, 3, 15, 1];
+type Params = Record<string, number>;
+const furnRow = (p: Params): PartTuple[] => [
+  SHADOW6,
+  [-p.bw / 2, p.by, p.bw, p.bh, p.ci],
+  [2, -15, 5, 8, p.ci],
+  [-3, -15, 10, 3, 9],
+  [-6, -6, 8, 3, 6],
+  [-6, -1, 8, 3, 6],
+  [11, -2, 5, 8, 6],
+  [11, 8, 5, 3, 9],
+  [-15, 3, 4, 3, 6],
+];
+const labRow = (p: Params): PartTuple[] => [
+  SHADOW6,
+  [-p.tw / 2, p.ty, p.tw, p.th, p.ci],
+  [-2, p.mastY, 4, p.mastH, p.ci],
+  [p.headX, -14, p.headW, 3, 8],
+  [-5, -4, 6, 3, 6],
+  [-5, 2, 6, 3, 11],
+  [-14, -6, p.wingW, 3, 8],
+  [14 - p.wingW, -6, p.wingW, 3, 8],
+  [-14, 3, p.wingW, 3, 8],
+  [14 - p.wingW, 3, p.wingW, 3, 8],
+  [-(p.footW + 7), 6, p.footW, 3, 16],
+  [7, 6, p.footW, 3, 16],
+  [-10, 9, 20, 3, 16],
+];
+/** The shipped rows expressed as the builders' parameter points. */
+const F0: Params = { bw: 22, by: -9, bh: 16, ci: 16 };
+const L0: Params = { tw: 14, ty: -8, th: 21, ci: 16, mastY: -16, mastH: 8, headX: -12, headW: 23, wingW: 6, footW: 7 };
+const F_SPEC: Record<string, readonly number[]> = { bw: [18, 20, 22], by: [-9, -8, -7], bh: [12, 14, 16, 18], ci: [3, 4, 5, 16] };
+const L_SPEC: Record<string, readonly number[]> = { tw: [12, 14, 16], ty: [-9, -8, -7], th: [19, 20, 21, 22], ci: [3, 4, 5, 16], mastY: [-16], mastH: [8], headX: [-13, -12, -11], headW: [21, 23, 25], wingW: [5, 6, 7], footW: [6, 7] };
+
+const product = (spec: Record<string, readonly number[]>): Params[] =>
+  Object.entries(spec).reduce<Params[]>((acc, [k, vals]) => acc.flatMap((x) => vals.map((v) => ({ ...x, [k]: v }))), [{}]);
+
+/** Mirror of the census instrument's joint furnace x signalLab enumeration. */
+function jointSearch() {
+  const grid4: Record<string, number[]> = {};
+  for (const r of PARTNERS) grid4[r] = grayUnit(PARTS[r]);
+  const constVals: number[] = [];
+  for (let i = 0; i < PARTNERS.length; i += 1) {
+    for (let j = i + 1; j < PARTNERS.length; j += 1) {
+      constVals.push(differingPct(grid4[PARTNERS[i]], grid4[PARTNERS[j]]));
+    }
+  }
+  const constMin = Math.min(...constVals);
+  const constSum = +constVals.reduce((a, b) => a + b, 0).toFixed(1);
+  const maskNames: string[] = [...PARTNERS, ...LATTICE];
+  const maskFixed: Record<string, number[]> = {};
+  for (const r of maskNames) maskFixed[r] = mask8Of(PARTS[r]);
+  let constMaskMin = 99;
+  for (let i = 0; i < maskNames.length; i += 1) {
+    for (let j = i + 1; j < maskNames.length; j += 1) {
+      constMaskMin = Math.min(constMaskMin, hamming(maskFixed[maskNames[i]], maskFixed[maskNames[j]]));
+    }
+  }
+  let latticeMin = 99;
+  for (let i = 0; i < LATTICE.length; i += 1) {
+    for (let j = i + 1; j < LATTICE.length; j += 1) {
+      latticeMin = Math.min(latticeMin, hamming(maskFixed[LATTICE[i]], maskFixed[LATTICE[j]]));
+    }
+  }
+  const variants = (spec: Record<string, readonly number[]>, build: (p: Params) => PartTuple[]) =>
+    product(spec).map((p) => {
+      const row = build(p);
+      const g = grayUnit(row);
+      const d4 = PARTNERS.map((r) => differingPct(g, grid4[r]));
+      const m = mask8Of(row);
+      return {
+        p,
+        g,
+        d4,
+        ink: rowInkUnits(row),
+        ok: featureLegal(row) && Math.min(...d4) >= constMin,
+        mMin: Math.min(...maskNames.map((r) => hamming(m, maskFixed[r]))),
+      };
+    });
+  const Fv = variants(F_SPEC, furnRow);
+  const Lv = variants(L_SPEC, labRow);
+  const inkBase = 2752;
+  const meanBase = 48.69;
+  const shippedMin = Math.min(...unitPairRows().map((r) => r[1]));
+  const shippedMean = +(unitPairRows().reduce((s, r) => s + r[1], 0) / 15).toFixed(2);
+  let best = { minPct: shippedMin, meanPct: shippedMean, furnace: F0, signalLab: L0 };
+  let enumerated = 0;
+  let gatePassing = 0;
+  for (const f of Fv) {
+    if (!f.ok) continue;
+    for (const l of Lv) {
+      enumerated += 1;
+      if (!l.ok) continue;
+      if (Math.min(f.mMin, l.mMin, constMaskMin) < 12 || latticeMin < 18) continue;
+      if (f.ink + l.ink + PARTNERS.reduce((s, r) => s + rowInkUnits(PARTS[r]), 0) <= inkBase) continue;
+      const nine = [...f.d4, differingPct(f.g, l.g), ...l.d4];
+      gatePassing += 1;
+      const minPct = Math.min(constMin, ...nine);
+      if (minPct < A3_1_THRESHOLD) continue;
+      const meanPct = +((constSum + nine.reduce((a, b) => a + b, 0)) / 15).toFixed(2);
+      if (meanPct <= meanBase) continue;
+      if (minPct > best.minPct || (minPct === best.minPct && meanPct > best.meanPct)) {
+        best = { minPct, meanPct, furnace: f.p, signalLab: l.p };
+      }
+    }
+  }
+  return {
+    shippedMin,
+    shippedMean,
+    best,
+    enumerated,
+    gatePassing,
+    constMin,
+    builderMatches: {
+      furnace: JSON.stringify(furnRow(F0)) === JSON.stringify(PARTS.furnace),
+      signalLab: JSON.stringify(labRow(L0)) === JSON.stringify(PARTS.signalLab),
+    },
+  };
+}
+
+/** The 15-pair unit-resolution matrix, as one array the rows below reuse. */
+function unitPairRows(): [string, number][] {
+  const sixIds = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"] as const;
+  const grids = sixIds.map((id) => grayUnit(PARTS[id]));
+  const rows: [string, number][] = [];
+  for (let i = 0; i < sixIds.length; i += 1) {
+    for (let j = i + 1; j < sixIds.length; j += 1) {
+      rows.push([`${sixIds[i]}/${sixIds[j]}`, differingPct(grids[i], grids[j])]);
+    }
+  }
+  return rows;
+}
+
+describe("ART-004 g2 A3-1 on the regenerated after-matrix", () => {
+  it("the after-matrix is a fresh run and its minimum sits above the named threshold", () => {
+    const before = censusBefore.sheet.matrix as unknown as [string, number][];
+    const after = censusAfter.sheet.matrix as unknown as [string, number][];
+    expect(after).toHaveLength(15);
+    // Regenerated, not a copy of the before sheet: the two 15-row arrays differ.
+    expect(JSON.stringify(after)).not.toEqual(JSON.stringify(before));
+    const min = Math.min(...after.map((r) => r[1]));
+    const mean = +(after.reduce((s, r) => s + r[1], 0) / after.length).toFixed(2);
+    expect(min).toBeGreaterThan(A3_1_THRESHOLD);
+    expect(min).toBeGreaterThan(Math.min(...before.map((r) => r[1])));
+    const aligned = censusAfter.sheet.a3_1.aligned as {
+      minPct: number;
+      meanPct: number;
+      minPair: string;
+      thresholdPct: number;
+      passes: boolean;
+    };
+    // The instrument's own summary agrees with the matrix it printed.
+    expect(aligned.minPct).toBe(min);
+    expect(aligned.meanPct).toBe(mean);
+    expect(aligned.thresholdPct).toBe(A3_1_THRESHOLD);
+    expect(aligned.passes).toBe(true);
+    console.log(
+      `A3-1 after-matrix ${JSON.stringify({ minPct: min, meanPct: mean, minPair: aligned.minPair, thresholdPct: A3_1_THRESHOLD, baseMinPct: Math.min(...before.map((r) => r[1])) })}`
+    );
+  });
+
+  it("the unit grid the same run prints agrees with this file, pair for pair", () => {
+    const rows = unitPairRows();
+    const printed = censusAfter.sheet.unitMatrix as unknown as [string, number][];
+    expect(printed).toEqual(rows);
+    expect(Math.min(...rows.map((r) => r[1]))).toBeGreaterThanOrEqual(A3_1_THRESHOLD);
+    console.log(`A3-1 unit min=${Math.min(...rows.map((r) => r[1]))} mean=${+(rows.reduce((s, r) => s + r[1], 0) / 15).toFixed(2)} threshold=${A3_1_THRESHOLD}`);
+  });
+});
+
+describe("ART-004 g2 A3-1 joint furnace x signalLab parameter search", () => {
+  const search = jointSearch();
+
+  it("the two builders reproduce the shipped rows exactly, so the space is the shipped table", () => {
+    expect(search.builderMatches).toEqual({ furnace: true, signalLab: true });
+  });
+
+  it("nothing in the joint grid beats the shipped minimum; the mean-optimum sits at 58.81 %", () => {
+    const printed = censusAfter.sheet.a3_1.jointSearch as unknown as {
+      best: { minPct: number; meanPct: number };
+      shipped: { minPct: number; meanPct: number };
+      enumeratedCombos: number;
+      gatePassingCombos: number;
+    };
+    // The min is capped by dock/sorter, a pair neither row of this search touches.
+    expect(search.constMin).toBe(48.2);
+    expect(search.shippedMin).toBe(48.2);
+    expect(search.best.minPct).toBe(search.constMin);
+    expect(search.best.meanPct).toBe(58.81);
+    expect(search.best.meanPct).toBeGreaterThan(search.shippedMean);
+    // Same instrument, same numbers as the committed artifact.
+    expect(search.best.minPct).toBe(printed.best.minPct);
+    expect(search.best.meanPct).toBe(printed.best.meanPct);
+    expect(search.enumerated).toBe(printed.enumeratedCombos);
+    expect(search.gatePassing).toBe(printed.gatePassingCombos);
+    console.log(
+      `A3-1 joint search ${JSON.stringify({ shipped: { min: search.shippedMin, mean: search.shippedMean }, best: search.best, enumerated: search.enumerated, gatePassing: search.gatePassing })}`
+    );
+  });
+});
+
+describe("ART-004 g2 A3-4 per-layer ink shares on one denominator", () => {
+  it("unit resolution: machinery, gravel and the dot grid share the 1024-unit cell", () => {
+    const cellArea = 32 * 32; // 1024 units^2, the same box every layer is normalised to
+    const gravelTickUnits = 2 * 2; // GRAVEL: one 2-unit tick per cell, alpha 0.28
+    const gravelSharePct = +((100 * gravelTickUnits) / cellArea).toFixed(2);
+    const sixIds = ["dock", "sorter", "furnace", "wireMill", "signalLab", "drone"] as const;
+    const machinery = Object.fromEntries(
+      sixIds.map((id) => [id, +((100 * rowInkUnits(PARTS[id])) / cellArea).toFixed(2)])
+    );
+    expect(gravelSharePct).toBe(0.39);
+    expect(machinery.sorter).toBe(67.68);
+    expect(machinery.furnace).toBe(52.44);
+    expect(machinery.signalLab).toBe(59.08);
+    expect(machinery.dock).toBe(55.47);
+    for (const id of ["dock", "sorter", "furnace", "wireMill", "signalLab"]) {
+      expect(machinery[id], id).toBeGreaterThanOrEqual(40);
+      expect(machinery[id] / gravelSharePct, id).toBeGreaterThanOrEqual(100);
+    }
+    // The dot grid is build-mode only, so at rest it carries no ink at all.
+    const stub = makeCtx();
+    drawScene(stub.ctx, machineState("running"), fitCamera(VIEW), VIEW, rest);
+    expect(stub.log.filter((r) => r.op === "stroke" && r.style === GRID_STYLE).length).toBe(0);
+    console.log(
+      "A3-4 perLayerUnits",
+      JSON.stringify({ cellArea, gravelSharePct, gridSharePctAtRest: 0, machinerySharePct: machinery })
+    );
+  });
+
+  it("device resolution: the census prints the same shares from the live frame", () => {
+    const compare = censusAfter.scene.inkComparison as unknown as {
+      boxDenominatorPx: number;
+      machineryShareOfBoxPct: number;
+      gravelShareOfBoxPct: number;
+      gridShareOfBoxPct: number;
+      contactShadowShareOfBoxPct: number;
+      machineryOverGravel: number;
+      canvasSharesPct: Record<string, number>;
+    };
+    const layers = censusAfter.scene.layers as unknown as {
+      totalPx: number;
+      distinctColors: number;
+      rows: { layer: string; rgb: string; tol: number; px: number; sharePct: number }[];
+      nightSharePct: number;
+      namedSharePct: number;
+      unaccountedPct: number;
+    };
+    expect(layers.totalPx).toBe(390 * 844);
+    // The census closes: night + every named layer + the antialias rims = the whole canvas.
+    expect(layers.nightSharePct + layers.namedSharePct + layers.unaccountedPct).toBeCloseTo(100, 1);
+    expect(compare.gridShareOfBoxPct).toBe(0); // the dot grid is not painted at rest
+    expect(compare.machineryShareOfBoxPct).toBeGreaterThan(40);
+    expect(compare.gravelShareOfBoxPct).toBeLessThan(1);
+    expect(compare.machineryOverGravel).toBeGreaterThanOrEqual(100);
+    expect(compare.contactShadowShareOfBoxPct).toBeGreaterThan(1);
+    expect(compare.canvasSharesPct.machinery).toBeGreaterThan(10 * compare.canvasSharesPct.gravel);
+    console.log(
+      "A3-4 perLayerDevice",
+      JSON.stringify({
+        canvasSharesPct: Object.fromEntries(layers.rows.map((r) => [r.layer, r.sharePct])),
+        box: compare,
+      })
+    );
+  });
+
+  it("the entry chunk recorded by the same run sits inside the 233000 B ceiling", () => {
+    const entry = censusAfter.entryChunk as unknown as { file: string; bytes: number; ceilingBytes: number };
+    expect(entry.bytes).toBeLessThanOrEqual(entry.ceilingBytes);
+    expect(entry.ceilingBytes).toBe(233000);
+    console.log("A3-6 entryChunk", JSON.stringify(entry));
   });
 });
 

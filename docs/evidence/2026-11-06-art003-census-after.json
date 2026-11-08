@@ -1,6 +1,6 @@
 {
   "tag": "after",
-  "url": "http://localhost:5177/",
+  "url": "http://localhost:5185/",
   "scene": {
     "canvas": [
       390,
@@ -8,10 +8,10 @@
     ],
     "topColors": [
       "11,18,32 46%",
-      "34,56,74 36.1%",
+      "34,56,74 36%",
       "8,13,24 4.3%",
       "44,66,87 2.6%",
-      "138,169,196 1.6%",
+      "138,169,196 1.5%",
       "127,159,187 1.3%",
       "22,40,58 1.2%",
       "16,27,40 1%",
@@ -21,7 +21,7 @@
       "14,23,38 0.3%"
     ],
     "luminanceBuckets8": [
-      94.8,
+      94.9,
       0.5,
       2.5,
       1.6,
@@ -30,7 +30,7 @@
       0,
       0.2
     ],
-    "twoDarkestSharePct": 95.3,
+    "twoDarkestSharePct": 95.4,
     "twoTopColorsSharePct": 82.1,
     "cells": {
       "sorter8": {
@@ -50,11 +50,156 @@
           6,
           7
         ],
-        "inkPx": 2458,
-        "inkSharePct": 63.9,
-        "inkPctOfCellArea": 63.13,
-        "contactShadowPx": 49,
-        "horizonBandPx": 198
+        "inkPx": 2476,
+        "inkSharePct": 64.4,
+        "inkPctOfCellArea": 63.59,
+        "contactShadowPx": 60,
+        "horizonBandPx": 198,
+        "layers": {
+          "totalPx": 3844,
+          "distinctColors": 98,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1368,
+              "sharePct": 35.59
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 598,
+              "sharePct": 15.56
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 358,
+              "sharePct": 9.31
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 198,
+              "sharePct": 5.15
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 564,
+              "sharePct": 14.67
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 7,
+              "sharePct": 0.18
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 20,
+              "sharePct": 0.52
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 134,
+              "sharePct": 3.49
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 11,
+              "sharePct": 0.29
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 60,
+              "sharePct": 1.56
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1883,
+          "machinerySharePct": 48.99,
+          "namedSharePct": 86.55,
+          "topUnmatched": [
+            "76,96,117 3.38%",
+            "91,118,141 1.2%",
+            "190,208,223 1.09%",
+            "164,179,193 0.88%",
+            "65,89,111 0.88%"
+          ],
+          "unaccountedPct": 13.45
+        }
       },
       "furnace14": {
         "box": [
@@ -71,11 +216,156 @@
           4,
           7
         ],
-        "inkPx": 2381,
-        "inkSharePct": 61,
-        "inkPctOfCellArea": 61.15,
-        "contactShadowPx": 111,
-        "horizonBandPx": 184
+        "inkPx": 2433,
+        "inkSharePct": 62.3,
+        "inkPctOfCellArea": 62.48,
+        "contactShadowPx": 99,
+        "horizonBandPx": 184,
+        "layers": {
+          "totalPx": 3906,
+          "distinctColors": 112,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1473,
+              "sharePct": 37.71
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 11,
+              "sharePct": 0.28
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 617,
+              "sharePct": 15.8
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 233,
+              "sharePct": 5.97
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 184,
+              "sharePct": 4.71
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 404,
+              "sharePct": 10.34
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 31,
+              "sharePct": 0.79
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 40,
+              "sharePct": 1.02
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 55,
+              "sharePct": 1.41
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 132,
+              "sharePct": 3.38
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 155,
+              "sharePct": 3.97
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 99,
+              "sharePct": 2.53
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1789,
+          "machinerySharePct": 45.8,
+          "namedSharePct": 88.15,
+          "topUnmatched": [
+            "78,107,130 1.64%",
+            "63,85,106 1.1%",
+            "24,38,54 0.92%",
+            "177,197,212 0.82%",
+            "144,119,87 0.51%"
+          ],
+          "unaccountedPct": 11.85
+        }
       },
       "dock2": {
         "box": [
@@ -95,7 +385,152 @@
         "inkSharePct": 67,
         "inkPctOfCellArea": 66.13,
         "contactShadowPx": 123,
-        "horizonBandPx": 24
+        "horizonBandPx": 24,
+        "layers": {
+          "totalPx": 3844,
+          "distinctColors": 63,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1269,
+              "sharePct": 33.01
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 66,
+              "sharePct": 1.72
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 1579,
+              "sharePct": 41.08
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 24,
+              "sharePct": 0.62
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 5,
+              "sharePct": 0.13
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 54,
+              "sharePct": 1.4
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 60,
+              "sharePct": 1.56
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 123,
+              "sharePct": 3.2
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1783,
+          "machinerySharePct": 46.38,
+          "namedSharePct": 82.96,
+          "topUnmatched": [
+            "16,27,40 5.2%",
+            "25,42,57 1.61%",
+            "80,107,130 1.46%",
+            "191,171,144 1.25%",
+            "133,164,192 1.14%"
+          ],
+          "unaccountedPct": 17.04
+        }
       },
       "wreck": {
         "box": [
@@ -116,7 +551,152 @@
         "inkSharePct": 99.9,
         "inkPctOfCellArea": 149.52,
         "contactShadowPx": 6,
-        "horizonBandPx": 287
+        "horizonBandPx": 287,
+        "layers": {
+          "totalPx": 5828,
+          "distinctColors": 412,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 6,
+              "sharePct": 0.1
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 1185,
+              "sharePct": 20.33
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 8,
+              "sharePct": 0.14
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 194,
+              "sharePct": 3.33
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 1990,
+              "sharePct": 34.15
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 16,
+              "sharePct": 0.27
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 287,
+              "sharePct": 4.92
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 242,
+              "sharePct": 4.15
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 69,
+              "sharePct": 1.18
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 134,
+              "sharePct": 2.3
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 278,
+              "sharePct": 4.77
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 6,
+              "sharePct": 0.1
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 3210,
+          "machinerySharePct": 55.08,
+          "namedSharePct": 75.75,
+          "topUnmatched": [
+            "11,17,30 5.13%",
+            "16,27,40 3.21%",
+            "56,76,95 1.3%",
+            "118,151,179 1.03%",
+            "77,103,125 0.82%"
+          ],
+          "unaccountedPct": 24.25
+        }
       }
     },
     "machineRow": {
@@ -136,11 +716,156 @@
         6,
         7
       ],
-      "inkPx": 7414,
-      "inkSharePct": 63.9,
-      "inkPctOfCellArea": 190.41,
-      "contactShadowPx": 283,
-      "horizonBandPx": 406
+      "inkPx": 7484,
+      "inkSharePct": 64.6,
+      "inkPctOfCellArea": 192.2,
+      "contactShadowPx": 282,
+      "horizonBandPx": 406,
+      "layers": {
+        "totalPx": 11594,
+        "distinctColors": 212,
+        "rows": [
+          {
+            "layer": "floor",
+            "rgb": "34,56,74",
+            "tol": 2,
+            "px": 4110,
+            "sharePct": 35.45
+          },
+          {
+            "layer": "plateNight",
+            "rgb": "8,13,24",
+            "tol": 0,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "gravelTick",
+            "rgb": "63,88,108",
+            "tol": 2,
+            "px": 29,
+            "sharePct": 0.25
+          },
+          {
+            "layer": "gridStroke",
+            "rgb": "51,76,96",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "bodyLight",
+            "rgb": "138,169,196",
+            "tol": 2,
+            "px": 673,
+            "sharePct": 5.8
+          },
+          {
+            "layer": "bodyMid",
+            "rgb": "127,159,187",
+            "tol": 2,
+            "px": 1579,
+            "sharePct": 13.62
+          },
+          {
+            "layer": "steelLight",
+            "rgb": "111,147,173",
+            "tol": 2,
+            "px": 617,
+            "sharePct": 5.32
+          },
+          {
+            "layer": "wreckTone",
+            "rgb": "109,144,171",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "facetLight",
+            "rgb": "244,247,251",
+            "tol": 2,
+            "px": 591,
+            "sharePct": 5.1
+          },
+          {
+            "layer": "facetDark",
+            "rgb": "44,66,87",
+            "tol": 2,
+            "px": 406,
+            "sharePct": 3.5
+          },
+          {
+            "layer": "slotWell",
+            "rgb": "14,23,38",
+            "tol": 2,
+            "px": 968,
+            "sharePct": 8.35
+          },
+          {
+            "layer": "kitDrain",
+            "rgb": "22,40,58",
+            "tol": 2,
+            "px": 38,
+            "sharePct": 0.33
+          },
+          {
+            "layer": "kitPuddle",
+            "rgb": "37,60,79",
+            "tol": 2,
+            "px": 45,
+            "sharePct": 0.39
+          },
+          {
+            "layer": "accentAmber",
+            "rgb": "255,183,101",
+            "tol": 2,
+            "px": 129,
+            "sharePct": 1.11
+          },
+          {
+            "layer": "accentCyan",
+            "rgb": "95,216,232",
+            "tol": 2,
+            "px": 326,
+            "sharePct": 2.81
+          },
+          {
+            "layer": "accentRust",
+            "rgb": "201,113,58",
+            "tol": 2,
+            "px": 166,
+            "sharePct": 1.43
+          },
+          {
+            "layer": "accentViolet",
+            "rgb": "138,122,216",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "contactShadow",
+            "rgb": "28,46,62",
+            "tol": 3,
+            "px": 282,
+            "sharePct": 2.43
+          }
+        ],
+        "nightPx": 0,
+        "nightSharePct": 0,
+        "machineryPx": 5455,
+        "machinerySharePct": 47.05,
+        "namedSharePct": 85.9,
+        "topUnmatched": [
+          "16,27,40 1.73%",
+          "76,96,117 1.12%",
+          "24,38,54 0.58%",
+          "78,107,130 0.55%",
+          "25,42,57 0.53%"
+        ],
+        "unaccountedPct": 14.1
+      }
     },
     "bandFit": {
       "scale": 1.95,
@@ -198,15 +923,184 @@
         "horizonBandPx": 0
       }
     },
-    "steelLightPx": 1767,
-    "gridDotPx": 39,
-    "gridDotSharePct": 0.01,
-    "gridDotAlphaPx": 404,
+    "layers": {
+      "totalPx": 329160,
+      "distinctColors": 681,
+      "rows": [
+        {
+          "layer": "floor",
+          "rgb": "34,56,74",
+          "tol": 2,
+          "px": 118652,
+          "sharePct": 36.05
+        },
+        {
+          "layer": "plateNight",
+          "rgb": "8,13,24",
+          "tol": 0,
+          "px": 14208,
+          "sharePct": 4.32
+        },
+        {
+          "layer": "gravelTick",
+          "rgb": "63,88,108",
+          "tol": 2,
+          "px": 407,
+          "sharePct": 0.12
+        },
+        {
+          "layer": "gridStroke",
+          "rgb": "51,76,96",
+          "tol": 2,
+          "px": 1,
+          "sharePct": 0
+        },
+        {
+          "layer": "bodyLight",
+          "rgb": "138,169,196",
+          "tol": 2,
+          "px": 5067,
+          "sharePct": 1.54
+        },
+        {
+          "layer": "bodyMid",
+          "rgb": "127,159,187",
+          "tol": 2,
+          "px": 4166,
+          "sharePct": 1.27
+        },
+        {
+          "layer": "steelLight",
+          "rgb": "111,147,173",
+          "tol": 2,
+          "px": 1739,
+          "sharePct": 0.53
+        },
+        {
+          "layer": "wreckTone",
+          "rgb": "109,144,171",
+          "tol": 2,
+          "px": 1990,
+          "sharePct": 0.6
+        },
+        {
+          "layer": "facetLight",
+          "rgb": "244,247,251",
+          "tol": 2,
+          "px": 628,
+          "sharePct": 0.19
+        },
+        {
+          "layer": "facetDark",
+          "rgb": "44,66,87",
+          "tol": 2,
+          "px": 8565,
+          "sharePct": 2.6
+        },
+        {
+          "layer": "slotWell",
+          "rgb": "14,23,38",
+          "tol": 2,
+          "px": 2075,
+          "sharePct": 0.63
+        },
+        {
+          "layer": "kitDrain",
+          "rgb": "22,40,58",
+          "tol": 2,
+          "px": 4009,
+          "sharePct": 1.22
+        },
+        {
+          "layer": "kitPuddle",
+          "rgb": "37,60,79",
+          "tol": 2,
+          "px": 676,
+          "sharePct": 0.21
+        },
+        {
+          "layer": "accentAmber",
+          "rgb": "255,183,101",
+          "tol": 2,
+          "px": 295,
+          "sharePct": 0.09
+        },
+        {
+          "layer": "accentCyan",
+          "rgb": "95,216,232",
+          "tol": 2,
+          "px": 688,
+          "sharePct": 0.21
+        },
+        {
+          "layer": "accentRust",
+          "rgb": "201,113,58",
+          "tol": 2,
+          "px": 520,
+          "sharePct": 0.16
+        },
+        {
+          "layer": "accentViolet",
+          "rgb": "138,122,216",
+          "tol": 2,
+          "px": 0,
+          "sharePct": 0
+        },
+        {
+          "layer": "contactShadow",
+          "rgb": "28,46,62",
+          "tol": 3,
+          "px": 435,
+          "sharePct": 0.13
+        }
+      ],
+      "nightPx": 151496,
+      "nightSharePct": 46.03,
+      "machineryPx": 25733,
+      "machinerySharePct": 7.82,
+      "namedSharePct": 49.86,
+      "topUnmatched": [
+        "16,27,40 0.98%",
+        "53,86,107 0.4%",
+        "75,93,114 0.23%",
+        "61,82,102 0.23%",
+        "28,48,66 0.23%"
+      ],
+      "unaccountedPct": 4.11
+    },
+    "inkComparison": {
+      "boxDenominatorPx": 11594,
+      "machineryShareOfBoxPct": 47.05,
+      "gravelShareOfBoxPct": 0.25,
+      "gridShareOfBoxPct": 0,
+      "contactShadowShareOfBoxPct": 2.43,
+      "machineryOverGravel": 188.2,
+      "canvasSharesPct": {
+        "machinery": 7.82,
+        "gravel": 0.12,
+        "grid": 0,
+        "floor": 36.05,
+        "plateNight": 4.32,
+        "contactShadow": 0.13
+      },
+      "perBodyToneCanvasPct": {
+        "bodyLight": 1.54,
+        "bodyMid": 1.27,
+        "steelLight": 0.53,
+        "facetLight": 0.19,
+        "facetDark": 2.6,
+        "slotWell": 0.63
+      }
+    },
+    "steelLightPx": 1739,
+    "gridDotPx": 52,
+    "gridDotSharePct": 0.02,
+    "gridDotAlphaPx": 407,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.13,
-    "machineBodyPx": 5186,
-    "machineBodySharePct": 1.58,
-    "contactShadowPx": 453
+    "gridInkSharePct": 0.14,
+    "machineBodyPx": 5067,
+    "machineBodySharePct": 1.54,
+    "contactShadowPx": 435
   },
   "sheet": {
     "roles": 11,
@@ -351,7 +1245,206 @@
         "signalLab/drone",
         54.7
       ]
-    ]
+    ],
+    "unitMatrix": [
+      [
+        "dock/sorter",
+        48.2
+      ],
+      [
+        "dock/furnace",
+        62.8
+      ],
+      [
+        "dock/wireMill",
+        68.5
+      ],
+      [
+        "dock/signalLab",
+        70.2
+      ],
+      [
+        "dock/drone",
+        55.9
+      ],
+      [
+        "sorter/furnace",
+        56.7
+      ],
+      [
+        "sorter/wireMill",
+        49.1
+      ],
+      [
+        "sorter/signalLab",
+        64.9
+      ],
+      [
+        "sorter/drone",
+        58
+      ],
+      [
+        "furnace/wireMill",
+        61.1
+      ],
+      [
+        "furnace/signalLab",
+        48.9
+      ],
+      [
+        "furnace/drone",
+        51.8
+      ],
+      [
+        "wireMill/signalLab",
+        61.8
+      ],
+      [
+        "wireMill/drone",
+        54.1
+      ],
+      [
+        "signalLab/drone",
+        55.4
+      ]
+    ],
+    "a3_1": {
+      "aligned": {
+        "pairs": 15,
+        "minPct": 46,
+        "meanPct": 57.79,
+        "minPair": "dock/sorter",
+        "thresholdPct": 32,
+        "passes": true
+      },
+      "unitGrid": {
+        "pairs": 15,
+        "minPct": 48.2,
+        "meanPct": 57.83,
+        "minPair": "dock/sorter",
+        "thresholdPct": 32,
+        "passes": true
+      },
+      "jointSearch": {
+        "objective": "maximise the weakest of the 15 unit-grid pairs, then the mean, with furnace and signalLab moving together",
+        "thresholdPct": 32,
+        "gates": {
+          "minMaskCells": 12,
+          "latticeMaskCells": 18,
+          "minPct": 32,
+          "meanPctAbove": 48.69,
+          "inkUnitsAbove": 2752
+        },
+        "builderMatchesShipped": {
+          "furnace": true,
+          "signalLab": true
+        },
+        "enumeratedCombos": 139968,
+        "gatePassingCombos": 36456,
+        "minPairOwnedBy": {
+          "pair": "dock/sorter",
+          "touchesFurnaceOrLab": false
+        },
+        "shipped": {
+          "minPct": 48.2,
+          "meanPct": 57.83,
+          "pairs": {
+            "dock/furnace": 62.8,
+            "dock/signalLab": 70.2,
+            "sorter/furnace": 56.7,
+            "sorter/signalLab": 64.9,
+            "furnace/wireMill": 61.1,
+            "furnace/signalLab": 48.9,
+            "furnace/drone": 51.8,
+            "wireMill/signalLab": 61.8,
+            "signalLab/drone": 55.4
+          },
+          "furnace": {
+            "bw": 22,
+            "by": -9,
+            "bh": 16,
+            "ci": 16
+          },
+          "signalLab": {
+            "tw": 14,
+            "ty": -8,
+            "th": 21,
+            "ci": 16,
+            "mastY": -16,
+            "mastH": 8,
+            "headX": -12,
+            "headW": 23,
+            "wingW": 6,
+            "footW": 7
+          },
+          "inkUnits": 3001
+        },
+        "best": {
+          "minPct": 48.2,
+          "meanPct": 58.81,
+          "furnace": {
+            "bw": 22,
+            "by": -9,
+            "bh": 14,
+            "ci": 16
+          },
+          "signalLab": {
+            "tw": 16,
+            "ty": -7,
+            "th": 22,
+            "ci": 16,
+            "mastY": -16,
+            "mastH": 8,
+            "headX": -13,
+            "headW": 25,
+            "wingW": 7,
+            "footW": 7
+          },
+          "pairs": {
+            "dock/furnace": 62.8,
+            "sorter/furnace": 56.7,
+            "furnace/wireMill": 61.3,
+            "furnace/signalLab": 56.3,
+            "furnace/drone": 49.4,
+            "dock/signalLab": 70.8,
+            "sorter/signalLab": 68.8,
+            "wireMill/signalLab": 65.1,
+            "signalLab/drone": 57.1
+          }
+        },
+        "shippedIsOptimum": false,
+        "weakestPairs": [
+          [
+            "dock/sorter",
+            48.2
+          ],
+          [
+            "furnace/signalLab",
+            48.9
+          ],
+          [
+            "sorter/wireMill",
+            49.1
+          ],
+          [
+            "furnace/drone",
+            51.8
+          ],
+          [
+            "wireMill/drone",
+            54.1
+          ]
+        ]
+      }
+    },
+    "sheetInkPx": {
+      "dock": 9060,
+      "sorter": 9348,
+      "furnace": 8380,
+      "wireMill": 8768,
+      "signalLab": 8924,
+      "drone": 1378
+    }
   },
   "witnesses": {
     "scrollHeight": 844,
@@ -406,5 +1499,10 @@
       }
     ]
   },
-  "pageErrors": 0
+  "pageErrors": 0,
+  "entryChunk": {
+    "file": "index-B6Mv3qHk.js",
+    "bytes": 232792,
+    "ceilingBytes": 233000
+  }
 }
