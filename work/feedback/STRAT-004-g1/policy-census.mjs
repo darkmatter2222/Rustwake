@@ -152,7 +152,13 @@ const SNAP = () => {
 };
 
 const shortfallToast = (s) => typeof s === "string" && /^Need \d+ .+ . have \d+/.test(s.trim());
-const pendingFaceLine = (s) => typeof s === "string" && /^waits \d+ [a-z]+ . have \d+$/.test(s.trim());
+// STRAT-004 g2: the face prints ONE price line that carries its own tail, so the matchers
+// are "contains" readings over that single line: `10 scrap + 5 ferrous · waits 10 scrap ·
+// have 5 · in 2s`.
+const pendingFaceLine = (s) => typeof s === "string" && /waits \d+ [a-z]+ · have \d+/.test(s);
+const countdownFaceLine = (s) => typeof s === "string" && /· in \d+s/.test(s);
+/** The price line with the per-second countdown cut off, for the tail-independent reading. */
+const stripCountdown = (s) => (typeof s === "string" ? s.replace(/ · in \d+s(?= |$)/, "") : s);
 
 async function runPolicy(browser, url, policy, artifact) {
   const context = await browser.newContext({
@@ -314,9 +320,14 @@ function stallByFaceIndex(timeline) {
   };
 }
 
-/** The face as the base artifact prints it: label line plus price line, no pending suffix. */
+/**
+ * The face as the base artifact prints it: label line plus the plain price. The candidate
+ * appends its pending tail to that same price line, so the tail is cut at the first
+ * separator to keep the two artifacts' strings comparable (STRAT-004 g2).
+ */
 function baseLabelOf(t) {
-  return [t.faceLabel, (t.faceCosts ?? [])[0]].filter(Boolean).join("");
+  const price = ((t.faceCosts ?? [])[0] ?? "").split(" · ")[0];
+  return [t.faceLabel, price].filter(Boolean).join("");
 }
 
 /** The three mechanism buckets DECISIONS row 1 names, for one label reading. */
@@ -325,6 +336,7 @@ function censusBuckets(timeline, labelOf) {
   let refusedShortfall = 0;
   let unknown = 0;
   let suffixOnly = 0;
+  let countdownOnly = 0;
   let withOtherToast = 0;
   let rest = 0;
   for (let i = 1; i < timeline.length; i++) {
@@ -339,8 +351,11 @@ function censusBuckets(timeline, labelOf) {
       continue;
     }
     unknown++;
-    if (!x.toast && baseLabelOf(x) === baseLabelOf(timeline[i - 1])) suffixOnly++;
-    else if (x.toast) withOtherToast++;
+    if (!x.toast && baseLabelOf(x) === baseLabelOf(timeline[i - 1])) {
+      suffixOnly++;
+      // Of those, the ones whose only difference is the per-second countdown digit.
+      if (stripCountdown(x.label) === stripCountdown(timeline[i - 1].label)) countdownOnly++;
+    } else if (x.toast) withOtherToast++;
     else rest++;
   }
   return {
@@ -350,6 +365,7 @@ function censusBuckets(timeline, labelOf) {
     sum: inertLabel + refusedShortfall + unknown,
     unknownSplit: {
       faceChangedOnlyInPendingSuffix: suffixOnly,
+      faceChangedOnlyInCountdownDigit: countdownOnly,
       toastNotShortfall: withOtherToast,
       rest,
     },
@@ -443,6 +459,7 @@ function summarise(r) {
       ...new Set(r.timeline.map(baseLabelOf).filter(Boolean)),
     ].length,
     pendingLineOnFaceTaps: r.timeline.filter((t) => (t.faceCosts ?? []).some(pendingFaceLine)).length,
+    countdownDigitOnFaceTaps: r.timeline.filter((t) => (t.faceCosts ?? []).some(countdownFaceLine)).length,
     lastFaceCosts: last.faceCosts,
     lastFaceText: last.faceText,
     lastObjective: last.obj,

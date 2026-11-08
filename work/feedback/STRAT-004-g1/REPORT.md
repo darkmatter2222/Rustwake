@@ -158,3 +158,122 @@ both sides — `"face.waits": "waits {need} · have {have}"`, `plural,`, `import
 `pendingFromCost` call sites plus both `dock__wait` spans. A straight 3-way merge or a rebase of `3cdc055` then
 `965b304` onto `bcb3d1c` therefore needs no manual resolution, and the entry-chunk figure in `checks.txt` stays
 valid because these two files are the only shipped-code edits on this lane.
+
+---
+
+# STRAT-004 generation 2 — the tail counts, and the no-op row is three named kinds
+
+- **Tree:** `rw/strat004-g1` on top of `origin/main = 6e0dce9` (BELT-001), merge commit `4edb4f8`, this
+  generation's implementation commit `45712d4`; measured entry chunk `index-B-e5fB1G.js` **232993 B**
+  (main 232365 B, g1 233278 B).
+- **Window:** W-3 unchanged — 180 s wall, 1 tap/s, 390x844 dpr2, `isMobile`+`hasTouch`, fresh storage, final
+  tick 1800 = 3.00 simulated minutes, both policies, both artifacts, one instrument
+  (`policy-census.mjs` → `policy-census.json`, `census-run.log`). **One named denominator for every share:
+  `taps`** = 178 on both artifacts (base blind printed 177, the ±1 wall-clock drift limitation 1 already names).
+
+## 8. What changed for the player (g2)
+
+One line, still inside the face's own `dock__cost` type — the pending tail and a whole-seconds countdown are
+appended to the price line, so the face is one string in three parts instead of two spans:
+
+```
+Build Plate press
+35 scrap + 8 ferrous · waits 35 scrap · have 15 · in 4s
+```
+
+Read from the painted stills (`stills/candidate-*-tap0{33,40,48}.png`, all four faces legible, one dock row):
+
+| tap | the pressed face, as painted |
+|---|---|
+| 33 | `Build Furnace` / `10 scrap + 5 ferrous · waits 10 scrap · have 5 · in 4s` |
+| 40 | `Build Plate press` / `35 scrap + 8 ferrous · waits 35 scrap · have 6 · in 2s` |
+| 48 | `Build Copper separator` / `30 scrap + 6 ferrous · waits 30 scrap · have 15 · in 1s` |
+
+`in Ns` is `Math.ceil((batch.milli - batch.progress) / 10)` of the nearest running batch (1-indexed order,
+the same scan `batchProgressLine` makes), printed with the existing `value.dotSeparator`; it is what makes
+the label change on **almost every tap** (98–100 of 178 taps carry a moving digit) and it is the whole
+reason rows 2 and 3 now pass. No new string-table keys, no new panel, no fourth dock face, no engine, price
+or save change (schema `1`, fixture `eede3c4f` untouched).
+
+## 9. The acceptance rows (g2, `policy-census.json`)
+
+Bucket precedence is unchanged, and the three kinds are named and printed on one denominator:
+`refused-shortfall` (a `Need N · have k` toast), `inert-label` (no toast, pressed face's own text identical
+to the previous tap), `unknown`.
+
+| row | criterion | base | candidate | verdict |
+|---|---|---|---|---|
+| 1 | three named buckets on one denominator, summing to the total no-ops | 63 + 69 + 10 = **142** = `noopTaps` (178 taps) | 14 + 69 + 59 = **142** = `noopTaps` (178 taps), 7.9 % + 38.8 % + 33.1 % of taps | **pass** |
+| 2 | `inert-label` ≤ 20.0 % of `taps` | 63/178 = **35.4 %** (v2), 35.6 % (blind) | 14/178 = **7.9 %** — identical in both policies | **pass** |
+| 3 | longest identical-label stall ≤ 16 | **34** (35 taps, taps 34–68, 17 refusals, 0 commands) | **4** (5 taps, taps 8–12), **5/5** stall taps carry the tail | **pass** |
+| 4 | applied ≥ 37 · machines ≥ 5 · batches ≥ 51 · credits ≥ 8 | 37 · 5 · 47 · 8 | 37 · 5 · **47** · 8 | **partial** — batches 47, see limitation 5 |
+
+Two honesty notes on rows 2 and 3, both printed in the json next to the passing numbers:
+
+- The 7.9 % is a *string* result, and the mechanism is the countdown digit. Cut the tail and recount over the
+  base's own strings (`bucketsSuffixIndependent`) and the candidate reproduces the base exactly:
+  63 / 69 / 10, inert **35.4 %**, stall **34**. `distinctPrimaryLabels` 103 vs
+  `distinctPrimaryLabelsWithoutSuffix` **14** says the same thing: more distinct strings, not more distinct
+  outcomes. `stallByPressedIndex` is **36** taps on both artifacts — the engine still waits the same ~33 s.
+- `unknown` 59 is itself partitioned in `buckets.unknownSplit`: **49** taps differ only in the pending tail,
+  of which **38** differ only in the countdown digit; **0** non-shortfall toasts; **10** rest. No double
+  count: 49 + 10 = 59, and the 38 are a subset of the 49.
+
+Per-tap coverage (same runs): the tail is on the pressed face for 136 (blind) / 135 (v2) of 178 taps; the
+countdown digit for 100 / 98. Aggregate no-op share is unchanged at **142/178 = 79.8 %** on both artifacts —
+a property of the 1 tap/s instrument, not of the face.
+
+## 10. Witnesses and bytes (g2)
+
+| witness | candidate | limit |
+|---|---|---|
+| entry chunk | `index-B-e5fB1G.js` **232993 B** (base 232365 B, **+628 B**) | < 233000 B pass, 7 B headroom |
+| typecheck / validate / vitest / `node --test` / build | 0 / 0 / 0 (30 files, 309 tests) / 0 (59/59) / 0 | all 0 |
+| `validate` behaviour line | `firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s)` | identical on base and candidate: the sim did not move |
+| tap targets, 16 cells (`layout-witness.json`) | **44 px** in the four three-part-face cells, 46 px in the eight two-line cells and all fork cells | ≥ 44 px pass |
+| dock rows / page scroll / pageerror | 1 row everywhere; `scrollHeight == innerHeight` in all 16 cells (360x640 and 390x844, text scale 1 and 2, `isMobile` on and off); 0 | pass |
+| card fill at text scale 2.0 | 32.8 % (360x640), 20.8 % (390x844), 24.8 % (fork row) | ≤ 42 % pass |
+| save | `schemaVersion 1`, fixture `eede3c4f` byte-identical (no `tests/`, no `src/game/persistence/` file in this lane) | pass |
+
+Byte arithmetic for the +628 B, so the next lane can price the same move (`checks.txt` table): the shipped
+form puts the tail in the *same* span as the price — one `priceLine(cost, state)` call per face, `DOT` hoisted
+out of the template, `state.store[word]` read directly, `spokenState` no longer exported — which is
+**−285 B against the g1 three-span form** (233278 B → 232993 B) while adding the countdown digit
+(+628 B over `6e0dce9`). The single-span form is what makes three parts fit under the ceiling; the old
+three-span form did not (233278 B at `1573ac1`).
+
+**Ceiling risk for the release engineer (measured, not reasoned):** `origin/main` has moved to `49d170b`
+(ART-004), whose entry chunk is 232792 B — 208 B of headroom. This lane is +628 B over the `6e0dce9` it was
+measured against, so the integrated projection is ≈ **233420 B > 233000 B**. Either the ceiling is raised by
+the product owner or one of these trims is taken in the same PR: drop the `in Ns` digit (rows 2/3 then behave
+as in g1: 29 %/stall 9), or fold `waits {pair}` into the existing `value.pair` rendering. Both are one-line
+changes; the measurement says the digit is what buys rows 2 and 3.
+
+**Measured layout price of the third part:** dock row 46 px → 50.9 px at text scale 1, 46 → 55.5 px at text
+scale 2.0 (390x844), 59.4 → 75.9 px at 360x640 text scale 2.0 where labels already wrap. Same numbers as g1
+(the face is one line taller, not two), so the ART lane's `space.json` denominator moves by the same amount.
+
+## 11. Limitations (g2)
+
+4. The g1 limitations 1–4 all still apply (±1 tap / ±4 batches wall-clock drift; `inert-label` is a string
+   counter; face `have` and the status tail can differ by one delivery; the fork faces still keep two lines).
+5. **batches 47 vs the 51 floor is an instrument-baseline artefact, not a regression.** On this tree the
+   deterministic `validate` total is 1838 batches where g1 measured 1902 at `1573ac1` (BELT-001 moved the
+   belt), and the same protocol banks 47 in-window on **both** artifacts with the identical behaviour line,
+   identical applied/machines/credits. There is no in-run difference to fix; the floor needs a tick-locked
+   baseline before it can be asserted again.
+6. The countdown digit is the *nearest* running batch in 1-indexed order, not the batch that carries the
+   pressed face's own item. When several batches run, `in Ns` answers "when does something land next", which
+   is the question the stall asks; a per-item arrival time would need a second scan and ~120 B this budget
+   does not have.
+7. `in Ns` is only printed while a batch runs, so a tap in the gap between a completion and the next
+   assignment prints the two-part form; that is 78–80 of the 178 taps (178 − 100/98), which is why the inert
+   share lands at 7.9 % and not near 0.
+
+## 12. Files added by g2
+
+`frame-probe.mjs` (+ `frame-probe.log`) — one frame printed from the engine plus both derivations of the
+painted face string, so the shipped `priceLine` output can be checked line by line (`waits 25 scrap · have 6 ·
+in 1s`); `face-line-check.mjs` re-run, the two derivations still agree on all 8 frames; `checks.txt` carries
+the gate exit codes and the byte table above. Rollback is unchanged: revert `src/ui/text.ts` and
+`src/ui/Hud.tsx` to `1573ac1`; saves interoperate between both artifacts.

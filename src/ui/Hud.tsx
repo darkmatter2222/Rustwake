@@ -3,7 +3,7 @@ import { BLUEPRINTS, TUNING } from "../game/content/defs";
 import { t } from "../game/content/strings";
 import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
-import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, pendingFromCost, visibleResources } from "./text";
+import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, priceLine, visibleResources } from "./text";
 
 import { PALETTE } from "../game/renderer/sprites";
 
@@ -162,8 +162,7 @@ export function DockButtons(props: {
 }) {
   const blueprintIds = props.unlocked.length > 0 ? props.unlocked : Object.keys(BLUEPRINTS);
   if (props.buildBlueprint !== null) {
-    const placeCost = costText(props.buildBlueprint);
-    const placeWait = pendingFromCost(placeCost);
+    const placeCost = priceLine(costText(props.buildBlueprint));
     return (
       <div className="dock">
         <button className="dock__btn" onClick={props.onCancelBuild}>
@@ -173,14 +172,14 @@ export function DockButtons(props: {
             carries through the phase flip - the same key and the same price the primary
             button printed a tap ago - so the row's face never alternates while the goal
             is unchanged. The phase itself is the `.status-line` under the objective.
-            STRAT-004 g1: the face now also carries the number that price is still short
-            of, so a blocked build is countable on the face itself. */}
+            STRAT-004: `priceLine` appends the face's own pending numbers to that price,
+            so one `dock__cost` line carries `10 scrap + 5 ferrous · waits 10 scrap ·
+            have 5 · in 2s` and a blocked build is countable on the face itself. */}
         <button className="dock__btn dock__btn--primary" onClick={props.onPlace}>
           {t("btn.buildNamed", {
             machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint,
           })}
           <span className="dock__cost">{placeCost}</span>
-          {placeWait ? <span className="dock__cost dock__wait">{placeWait}</span> : null}
         </button>
         <button
           className="dock__btn"
@@ -194,12 +193,11 @@ export function DockButtons(props: {
       </div>
     );
   }
-  // STRAT-004 g1: the pending number of the face the thumb is aimed at. One price per
-  // face, so the line is the same short sentence in both dock phases and changes as soon
-  // as a delivery lands - the stall is then countable on the face, not only in the
-  // `Last need …` tail. The two named fork faces keep their two lines (their prices are
-  // the whole comparison), so the row that already prints two numbers stays two numbers.
-  const primaryWait = pendingFromCost(props.primary.cost);
+  // STRAT-004: the price line of the face the thumb is aimed at carries its own pending
+  // numbers, so the same short sentence paints in both dock phases and moves as soon as a
+  // delivery lands or a batch closes - the stall is then countable on the face, not only in
+  // the `Last need …` tail. The two named fork faces keep their one price line each (their
+  // prices are the whole comparison), so the row that already prints two numbers stays two.
   return (
     <div className="dock">
       {props.primary.branches && props.primary.branches.length > 0 ? (
@@ -235,10 +233,7 @@ export function DockButtons(props: {
           ) : null}
           <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
             {props.primary.label}
-            {props.primary.cost ? (
-              <span className="dock__cost">{props.primary.cost}</span>
-            ) : null}
-            {primaryWait ? <span className="dock__cost dock__wait">{primaryWait}</span> : null}
+            {props.primary.cost ? <span className="dock__cost">{priceLine(props.primary.cost)}</span> : null}
           </button>
           <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
             {t("btn.build")}

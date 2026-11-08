@@ -51,9 +51,19 @@ function yardFrame(fork = false, short = false) {
   let seq = 0;
   const send = (body) => applyCommand(state, { id: "s" + (seq += 1), ...body });
   const connect = (machineId) => {
-    for (const plan of planConnections(state, machineId)) {
-      send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+    for (let pass = 0; pass < 4; pass += 1) {
+      // BELT-001 prices a link at 2 scrap, so the frame pays the way the yard does; the
+      // loop lets a machine whose first plan landed answer its next plan too, which is what
+      // puts the ladder on a `build` rung instead of a `connect` one (g2).
+      state.store = { ...state.store, scrap: 60 };
+      state.storeUnits = Object.values(state.store).reduce((total, qty) => total + qty, 0);
+      for (const m of state.machines) {
+        for (const plan of planConnections(state, m.id)) {
+          send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+        }
+      }
     }
+    void machineId;
   };
   state.tutorial = 9;
   for (let pass = 0; pass < 6; pass += 1) {
@@ -73,9 +83,11 @@ function yardFrame(fork = false, short = false) {
   advance(state, 300);
   state.credits = fork ? 34 : 12;
   if (short) {
-    // One rung short, so the pressed face carries its own pending line.
-    state.store = { ...state.store, scrap: 6, ferrous: 1 };
-    state.storeUnits = Object.values(state.store).reduce((total, qty) => total + qty, 0);
+    // Only the two priced items, one rung short of the next build price, and nothing else
+    // sellable: the ladder then rests on the `build` step, which is the three-part face
+    // (label, price, pending tail, countdown) the witnesses have to measure (g2).
+    state.store = { scrap: 6, ferrous: 1 };
+    state.storeUnits = 7;
   }
   advance(state, 1);
   return state;

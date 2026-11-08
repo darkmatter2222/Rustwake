@@ -1,7 +1,8 @@
-// STRAT-004 g1: the two derivations of the face's pending line must agree.
-// `pendingForStep` reads the content table plus the state; `pendingFromCost` reads the
-// price the face has just printed plus the same state. Both run here over engine-written
-// states (the same boot cadence as the jsdom cases), so a divergence is visible in CI.
+// STRAT-004 g2: the two derivations of the face's pending line must agree.
+// `pendingForStep` reads the content table plus the state; `priceLine` reads the price the
+// face has just printed plus the same state and appends that line. Both run here over
+// engine-written states (the same boot cadence as the jsdom cases), so a divergence is
+// visible in CI.
 //
 // Usage: npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs
 import { applyCommand, branchPrice, DOCK_TILE, YARD_TILES, upgradeCost } from "../../../src/game/simulation/commands";
@@ -9,7 +10,7 @@ import { planConnections } from "../../../src/game/simulation/autoconnect";
 import { advance } from "../../../src/game/simulation/engine";
 import { nextYardStep } from "../../../src/game/simulation/plan";
 import { createInitialState } from "../../../src/game/simulation/types";
-import { primaryFor, pendingForStep, pendingFromCost, costSummary } from "../../../src/ui/text";
+import { primaryFor, pendingForStep, priceLine, costSummary } from "../../../src/ui/text";
 import { BLUEPRINTS } from "../../../src/game/content/defs";
 
 const firstFreeTile = (state) => {
@@ -62,8 +63,11 @@ function boot({ sorter = true, furnace = true, ferrous = 4, scrap = 9, credits =
 const rows = [];
 const check = (name, state, step) => {
   const fromStep = pendingForStep(state, step);
-  const fromCost = pendingFromCost(primaryFor(state, step).cost, state);
-  rows.push({ name, step: step.kind, fromStep, fromCost, agree: fromStep === fromCost });
+  const price = primaryFor(state, step).cost ?? "";
+  const line = priceLine(price, state);
+  // The tail `priceLine` appends, with its own leading " · " (three characters) removed.
+  const fromCost = line === price ? null : line.slice(price.length + 3);
+  rows.push({ name, step: step.kind, price, fromStep, fromCost, agree: fromStep === fromCost });
 };
 
 // A build price the yard cannot cover yet (the recorded stall's shape), named directly.

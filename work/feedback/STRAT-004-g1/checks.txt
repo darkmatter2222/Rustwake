@@ -1,34 +1,56 @@
-STRAT-004-g1 — gate log (candidate branch rw/strat004-g1)
-=========================================================
-Run on the candidate worktree, 2026-11-07, after the app-code change and before this commit.
-Base for every comparison: main = 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2 (served game bytes
-= the a551794 build: index-C_K4oMJ5.js 231262 B).
+STRAT-004 gates - generation 2 (2026-11-08, this worktree, one machine, real exit codes)
 
-npm run typecheck   -> exit 0   (tsc --noEmit, no diagnostics)
-npx vitest run      -> exit 0   (Test Files 28 passed, Tests 287 passed, Duration 4.47 s)
-npm run validate    -> exit 0
-  tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes
-  content: 0 violation(s) in 3 ms
-  behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5
-             batches=1902 credits=82 nodes=3 | 0 violation(s)
-  validated: no violations
-  (the behaviour line is byte-identical to the pre-change line: the sim did not move)
-npm run build       -> exit 0
+Tree: branch rw/strat004-g1, base merge 4edb4f8f8ca0a3bf3c176c24c02f003efaca1c79 =
+      merge(origin/main 6e0dce90f6e21a2e0f6107437055aa42739ec77f, 6908e669fba8d68ac321e92e237dbc009fa6dc07),
+      zero conflicted paths, plus the g2 implementation in src/ui/text.ts + src/ui/Hud.tsx.
 
-dist/assets, this build (entry ceiling 233000 B):
-  index-Bzroy-nV.js          232175 B   <- entry chunk, 825 B of headroom
-  index-B1FOV2xO.css           7849 B   (unchanged, styles.css is not in this lane)
-  tables-BB2NPvQ2.js           9298 B   (unchanged)
-  catchup.worker-G_Jyr7uh.js  13406 B   (unchanged)
-Base entry chunk was index-C_K4oMJ5.js 231262 B, so the change costs 913 B.
+| command | exit | what it printed |
+| --- | --- | --- |
+| node scripts/team-board.mjs --check | 0 | Team board valid; generated views current |
+| node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs | 0 | # tests 59 / # pass 59 / # fail 0 (the stale six-session assertion is fixed on main, so the branch gate is green again) |
+| npm run typecheck | 0 | no output |
+| npm run validate | 0 | content: 0 violation(s); behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s) |
+| npm test (vitest) | 0 | 30 files / 309 tests passed |
+| npm run build | 0 | see the asset table below |
+| npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs | 0 | both derivations agree on every frame (8 frames: build x3, sell, covered, upgrade, drone, salvage) |
+| npx tsx work/feedback/STRAT-004-g1/frame-probe.mjs | 0 | covered -> null; short -> "waits 25 scrap · have 6 · in 1s"; fork -> null (covered purse) |
+| node work/feedback/STRAT-004-g1/policy-census.mjs | 0 | four W-3 runs (base/candidate x blind/deliberate-v2), policy-census.json + 12 stills |
+| npx tsx work/feedback/STRAT-004-g1/layout-witness.mjs | 0 | 16 cells (8 x base/candidate), layout-witness.json + 16 stills |
 
-Instrument scripts (all exit 0 on the candidate):
-  node work/feedback/STRAT-004-g1/policy-census.mjs      -> policy-census.json + stills/
-  node work/feedback/STRAT-004-g1/baseline-census.mjs    -> the PLAYER-004-g1 re-print
-  node work/feedback/STRAT-004-g1/inert-runs.mjs         -> the inert-label runs
-  npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs -> "both derivations agree on every frame"
-  npx tsx work/feedback/STRAT-004-g1/layout-witness.mjs  -> layout-witness.json + layout stills
+Not runnable on this Windows host (Linux-only, CI on ubuntu runs them; main is green at 6e0dce9):
+python scripts/deploy-artifact.test.py (no fcntl), python scripts/host-adapter.test.py
+(symlink privilege 1314), python scripts/commission-databrick.test.py (no termios),
+bash -n scripts/install-delivery-host.sh (CRLF in the working copy).
 
-Save compatibility: `schemaVersion 1` and the recorded fixture `eede3c4f` were not touched
-(no file under tests/ or src/game/persistence/ is in this lane's write paths) and the
-persistence suite passes unchanged in the 287-test run above.
+Built assets of this tree (one clean `npm run build`, counted on disk, never summed):
+
+| chunk | bytes | note |
+| --- | --- | --- |
+| assets/index-B-e5fB1G.js | 232993 | entry chunk, ceiling 233000 -> PASS, 7 B spare |
+| assets/tables-BB2NPvQ2.js | 9298 | unchanged from main 6e0dce9 |
+| assets/index-DbNBovuF.css | 8091 | unchanged from main 6e0dce9 (this lane edits no css) |
+| assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
+
+Entry arithmetic against the pinned 233000 B ceiling (each number from its own clean build):
+
+| tree | entry bytes | delta |
+| --- | --- | --- |
+| origin/main 6e0dce9 (the base column of the census run) | 232365 (index-CWtGNGYE.js) | - |
+| this lane at 4edb4f8 with the g1 two-span form | 233278 | +913 |
+| this lane at 4edb4f8 with the g2 joined price line + countdown | 232993 | +628 over main, -285 against g1 |
+
+Ceiling note for the release lane: origin/main moved to 49d170b (ART-004) after this merge;
+that build prints 232792 B (index-B6Mv3qHk.js), i.e. 208 B of headroom, so a plain integration
+of this lane (+628 B) projects ~233420 B, above the pinned 233000 B ceiling. The overage is the
+sum of lanes against a ceiling that main itself now almost exhausts, not a regression inside one
+lane; it is a reviewer/product budget call (the ceiling was last moved 232800 -> 233000 by
+reviewer concurrence, rev-q002-g1 sec. 5).
+
+Witnesses, same instruments, this tree:
+- census (both policies): smallest face 46 px, 1 dock row, no page scroll, 0 pageerror,
+  no panel ever open, card fill 9.9 %.
+- layout witness (8 recorded cells): clipped false everywhere, 1 dock row, no page scroll,
+  smallest face 44 px in the three-part-face cells and 46 px elsewhere, card fill
+  10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.
+- save: schemaVersion 1 and fixture eede3c4f untouched (no file under tests/ or
+  src/game/persistence/ is in this lane; tests/persistence/save.test.ts passes in the 309).
