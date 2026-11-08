@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_at": "2026-11-07T21:59:33+00:00",
-  "max_active_sessions": 6,
+  "max_active_sessions": 5,
   "session_scope": "including coordinator; static snapshot, not runtime liveness",
   "sprint": {
     "id": "SPRINT-002",

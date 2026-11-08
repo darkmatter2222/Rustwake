@@ -1,11 +1,11 @@
 # Rustwake team board
 
-Generated from `work/backlog.json`; do not edit this view manually. This is a published snapshot, not proof of live sessions.
+ARCHIVED LEGACY SNAPSHOT. Active work is tracked only in GitHub Issues, not here. Do not schedule from this file.
 
 **SPRINT-002: I choose a plan; my yard comes alive** — proposed
-Session cap: **6 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-07T21:59:33+00:00.
+Session cap: **5 total including coordinator**. Runtime: **observation-required**. Snapshot: 2026-11-07T21:59:33+00:00.
 
-[Visual board](board.html) · [Canonical JSON](backlog.json) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
+[Historical visual snapshot](board.html) · [Archived JSON](backlog.json) · [Live GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues) · [Legacy findings](BOARD-legacy.md) · [Sprint plan](product/SPRINT-002.md)
 
 | ID | Priority | State | Role | Player outcome |
 |---|---|---|---|---|

@@ -1,5 +1,8 @@
 # Rustwake
 
+**Current delivery workflow:** [GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues) → isolated `rw/` feature branch → [draft pull request](https://github.com/darkmatter2222/Rustwake/pulls) → independent QA/product verdict → release-engineer PR merge → main CI/CD. **Five model agents maximum, including coordinator (four children).** The old `work/` board is an archive, not an active Jira. [Binding policy](docs/GITHUB_WORKFLOW.md) · [Agent instructions](AGENTS.md). All personas share one GitHub account, distinguished by structured role comments.
+
+
 **Team plugin 0.7.0: fresh employees on each start.** Old runtime sessions and queues are archived, never resumed. Source and unfinished work are preserved. The first coordinator prompt after reopening OpenCode automatically starts the team. [Lifecycle details](docs/TEAM_DISPATCH.md).
 
 
@@ -8,7 +11,7 @@
 
 A mobile browser strategy-idle game about salvage, metals and automation. Built with React/TypeScript: a full-screen industrial pixel world, no page scrolling, and a factory that keeps carrying out your plans while you are away.
 
-**[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[Team board](work/BOARD.md)** · [Visual board file](work/board.html) · [Start the AI team](docs/START_TEAM.md)
+**[Play Rustwake](https://home.darkmatter2222.com/rustwake/)** · **[GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues)** · [Archived visual board](work/board.html) · [Start the AI team](docs/START_TEAM.md)
 
 ## Frequent feature publication (plugin 0.4.0)
 
@@ -22,7 +25,7 @@ The prior plugin was advisory and could report progress without launching worker
 
 Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
 
-Push reviewed changes to `main`; GitHub Actions runs CI, packages the game/dashboard, and deploys automatically. No routine server commands are needed. [Delivery runs](https://github.com/darkmatter2222/Rustwake/actions/workflows/delivery.yml) · [Live dashboard](https://home.darkmatter2222.com/rustwake/team/) · [Runbook](docs/AUTOMATED_DELIVERY.md).
+Merge reviewed PRs into `main`; GitHub Actions runs CI, packages the game/dashboard, and deploys automatically. No routine server commands are needed. [Delivery runs](https://github.com/darkmatter2222/Rustwake/actions/workflows/delivery.yml) · [Live dashboard](https://home.darkmatter2222.com/rustwake/team/) · [Runbook](docs/AUTOMATED_DELIVERY.md).
 
 ## Sponsor input and team operations
 
