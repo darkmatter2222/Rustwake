@@ -642,5 +642,239 @@ describe("ART-004 g2 A3-4 per-layer ink shares on one denominator", () => {
   });
 });
 
+/* ------------------------------------------------------------------ */
+/* ART-004 g2 reviewer items: (a) per-cell comparator, (b) full id      */
+/* list, (c) ART-006 settle bar, (d) ART-005 named ink shares.         */
+/* ------------------------------------------------------------------ */
+
+/** Half-pixel-lattice rasterizer over the recorded paint ops (ART-006: pixel evidence, so a
+ * rect that is fully covered by a later rect stops counting, unlike the logged arguments). */
+function rasterize(log: Rec[], lattice = 2): Map<string, string> {
+  const cells = new Map<string, string>();
+  const put = (x: number, y: number, w: number, h: number, style: string | number) => {
+    const x0 = Math.floor(x * lattice);
+    const x1 = Math.ceil((x + w) * lattice);
+    const y0 = Math.floor(y * lattice);
+    const y1 = Math.ceil((y + h) * lattice);
+    for (let iy = y0; iy < y1; iy += 1) for (let ix = x0; ix < x1; ix += 1) cells.set(`${ix},${iy}`, String(style));
+  };
+  for (const r of log) {
+    if (r.op === "fillRect" || r.op === "rect") put(r.args[0], r.args[1], r.args[2], r.args[3], r.style);
+  }
+  return cells;
+}
+
+/** Longest contiguous run of one colour along one rasterized row, in CSS px. */
+function longestRunPx(cells: Map<string, string>, style: string, iy: number, lattice = 2, width = 900): number {
+  let best = 0;
+  let cur = 0;
+  for (let ix = 0; ix < width * lattice; ix += 1) {
+    if (cells.get(`${ix},${iy}`) === style) {
+      cur += 1;
+      if (cur > best) best = cur;
+    } else cur = 0;
+  }
+  return +(best / lattice).toFixed(2);
+}
+
+const RUST_HEX = "#c9713a";
+const MACHINE8 = [
+  "sorter",
+  "furnace",
+  "wireMill",
+  "signalLab",
+  "polymerRecycler",
+  "copperSeparator",
+  "platePress",
+  "circuitAssembler",
+] as const;
+
+describe("ART-006 the output-blocked settle bar has visible amplitude", () => {
+  /** One paint per frame, measured on a rasterized row rather than the logged arguments. */
+  const barWitness = (phase: number, reducedMotion: boolean) => {
+    const stub = makeCtx();
+    drawScene(stub.ctx, machineState("outputFull"), fitCamera(VIEW), VIEW, {
+      ...rest,
+      reducedMotion,
+      framePhase: phase,
+    });
+    const cells = rasterize(stub.log);
+    const p = worldToScreen(fitCamera(VIEW), VIEW, tileToWorld(8).x, tileToWorld(8).y);
+    // The bar's snapped top edge in half-px steps, then the 8 steps its 2-unit height covers.
+    const iy0 = Math.round((p.y + 10 * SCALE) * 2);
+    let longest = 0;
+    for (let iy = iy0 - 2; iy <= iy0 + 8; iy += 1) {
+      longest = Math.max(longest, longestRunPx(cells, RUST_HEX, iy));
+    }
+    const paintOps = stub.log.filter((r) => r.op === "fillRect" && r.style === RUST_HEX).length;
+    return { longestRunPx: longest, paintOps };
+  };
+
+  it("one paint per frame carries the computed width (no covered second rect)", () => {
+    const paints: number[] = [];
+    for (let f = 0; f < 6; f += 1) paints.push(barWitness(f / 6, false).paintOps);
+    expect(paints).toEqual([1, 1, 1, 1, 1, 1]);
+    console.log("ART-006 paintOpsPerFrame", JSON.stringify(paints));
+  });
+
+  it("the rasterized bar row shows two distinct widths across the cycle", () => {
+    const widths = Array.from({ length: 6 }, (_, f) => barWitness(f / 6, false).longestRunPx);
+    const distinct = [...new Set(widths)];
+    expect(distinct).toHaveLength(2);
+    const hold = widths[0];
+    const settle = widths[2];
+    expect(settle).toBeLessThan(hold);
+    // 6 -> 4 units at the phone fit (scale 1.95): 11.5 px and 8 px on the half-px lattice.
+    expect(hold).toBeGreaterThanOrEqual(11);
+    expect(settle).toBeLessThanOrEqual(8.5);
+    expect(+(settle / hold).toFixed(2)).toBeCloseTo(4 / 6, 1);
+    console.log("ART-006 pixelRows", JSON.stringify({ widthsPx: widths, distinct, holdPx: hold, settlePx: settle, scale: SCALE }));
+  });
+
+  it("reduced motion keeps exactly one width for the whole cycle", () => {
+    const widths = Array.from({ length: 6 }, (_, f) => barWitness(f / 6, true).longestRunPx);
+    expect([...new Set(widths)]).toHaveLength(1);
+    // The 6-unit bar at the phone fit: 11.7 px, rasterized on the half-px lattice.
+    expect(widths[0]).toBeGreaterThanOrEqual(11);
+    expect(widths[0]).toBeLessThanOrEqual(12);
+    console.log("ART-006 reducedMotionWidths", JSON.stringify({ widthsPx: widths, barUnitPx: +(6 * SCALE).toFixed(2) }));
+  });
+
+  it("the same witness, measured on the real canvas, is recorded by the census run", () => {
+    const settle = censusAfter.settle as unknown as {
+      longestRunPx: number[];
+      reducedMotionLongestRunPx: number[];
+      distinctWidths: number;
+      reducedMotionDistinct: number;
+      scale: number;
+      rows: { blueprint: string; longestRunPx: number[]; reducedMotionLongestRunPx: number[]; distinctWidths: number; reducedMotionDistinct: number }[];
+    };
+    expect(settle.distinctWidths).toBe(2);
+    expect(settle.reducedMotionDistinct).toBe(1);
+    expect(settle.longestRunPx[0]).toBeGreaterThan(settle.longestRunPx[2]);
+    // Per painted row: both the plain row and the furnace (which also carries its 4-unit
+    // chimney band, the row pair Issue #32 measured as 326:11 / 327:11) keep two widths.
+    expect(settle.rows.map((r) => r.blueprint)).toEqual(["sorter", "furnace"]);
+    for (const row of settle.rows) {
+      expect(row.distinctWidths, row.blueprint).toBe(2);
+      expect(row.reducedMotionDistinct, row.blueprint).toBe(1);
+      expect(new Set(row.longestRunPx).size, row.blueprint).toBe(2);
+      expect(new Set(row.reducedMotionLongestRunPx).size, row.blueprint).toBe(1);
+      expect(Math.min(...row.longestRunPx)).toBeGreaterThan(0);
+    }
+    console.log(
+      "ART-006 censusPixelWitness",
+      JSON.stringify({
+        scale: settle.scale,
+        rows: settle.rows.map((r) => ({ blueprint: r.blueprint, px: r.longestRunPx, reducedPx: r.reducedMotionLongestRunPx })),
+      })
+    );
+  });
+});
+
+describe("ART-005 named ink shares on one denominator (gravel, dot grid, machine body)", () => {
+  it("the census emits the three shares and the machine body leads both texture rows", () => {
+    const shares = censusAfter.scene.inkSharesPct as unknown as {
+      denominator: string;
+      denominatorPx: number;
+      machineBody: number;
+      gravel: number;
+      dotGrid: number;
+      inMachineRowBox: { machineBody: number; gravel: number; dotGrid: number };
+    };
+    expect(shares.denominator).toBe("canvas");
+    expect(shares.denominatorPx).toBe(390 * 844);
+    // All three present, one denominator, and the ordering the reviewer asked for.
+    expect(shares.machineBody).toBeGreaterThan(0);
+    expect(shares.gravel).toBeGreaterThan(0);
+    expect(shares.machineBody).toBeGreaterThan(shares.gravel);
+    expect(shares.machineBody).toBeGreaterThan(shares.dotGrid);
+    // The same ordering inside the machine-row box, where the textures actually tile.
+    expect(shares.inMachineRowBox.machineBody).toBeGreaterThan(shares.inMachineRowBox.gravel);
+    expect(shares.inMachineRowBox.machineBody / Math.max(shares.inMachineRowBox.gravel, 1e-9)).toBeGreaterThanOrEqual(50);
+    // gravelSharePct also exists as a top-level key of the run.
+    const top = censusAfter.scene as unknown as { gravelSharePct: number; dotGridSharePct: number; machineBodySharePct: number };
+    expect(top.gravelSharePct).toBe(shares.gravel);
+    expect(top.dotGridSharePct).toBe(shares.dotGrid);
+    expect(top.machineBodySharePct).toBe(shares.machineBody);
+    console.log("ART-005 inkShares", JSON.stringify(shares));
+  });
+});
+
+describe("ART-004 g2 A3-1 across the whole role list plus the before/after comparator", () => {
+  it("every PARTS row is in the ids list, the eight blueprints and generic included", () => {
+    const aligned = censusAfter.sheet.alignedAll as unknown as {
+      ids: string[];
+      machineIds: string[];
+      totalCells: number;
+      summaryAll: { pairs: number; minPct: number; minPair: string; meanPct: number };
+      summaryMachines: { pairs: number; minPct: number; minPair: string; meanPct: number };
+      rows: { pair: string; diffCells: number; totalCells: number; pct: number }[];
+    };
+    expect(aligned.ids).toEqual(Object.keys(PARTS));
+    expect(aligned.machineIds).toEqual([...MACHINE8, "generic"]);
+    for (const id of [...MACHINE8, "generic"]) expect(aligned.ids).toContain(id);
+    expect(aligned.totalCells).toBe(3364);
+    expect(aligned.summaryMachines.pairs).toBe(36);
+    // Per-cell integers agree with the printed percentage on the same lattice.
+    for (const row of aligned.rows.slice(0, 6)) {
+      expect(+((100 * row.diffCells) / row.totalCells).toFixed(1)).toBe(row.pct);
+    }
+    console.log(
+      "A3-1 wholeSheet",
+      JSON.stringify({
+        ids: aligned.ids,
+        all: aligned.summaryAll,
+        machines: aligned.summaryMachines,
+        weakest: aligned.rows.slice().sort((a, b) => a.pct - b.pct).slice(0, 4),
+      })
+    );
+  });
+
+  it("the before and after matrices differ cell-wise on every pair and the minimum rose", () => {
+    const cmp = censusAfter.comparator as unknown as {
+      latticeCells: number;
+      pairs: number;
+      changedPairs: number;
+      identicalArrays: boolean;
+      minBeforePct: number;
+      minAfterPct: number;
+      maxDeltaPct: number;
+      rows: { pair: string; beforePct: number; afterPct: number; deltaPct: number; beforeCells: number; afterCells: number }[];
+    };
+    expect(cmp.pairs).toBe(15);
+    expect(cmp.identicalArrays).toBe(false);
+    expect(cmp.changedPairs).toBe(15); // every pair moved: the art really changed
+    expect(cmp.minAfterPct).toBeGreaterThan(cmp.minBeforePct);
+    for (const row of cmp.rows) {
+      expect(row.afterCells).not.toBe(row.beforeCells);
+      expect(row.afterCells).toBe(Math.round((row.afterPct * cmp.latticeCells) / 100));
+      expect(Math.abs(row.deltaPct)).toBeLessThanOrEqual(30);
+    }
+    // Every pair moved; the great majority rose, and both summary statistics did.
+    expect(cmp.rows.filter((r) => r.deltaPct > 0).length).toBeGreaterThanOrEqual(12);
+    const meanOf = (key: "beforePct" | "afterPct") =>
+      +(cmp.rows.reduce((s, r) => s + r[key], 0) / cmp.rows.length).toFixed(2);
+    expect(meanOf("afterPct")).toBeGreaterThan(meanOf("beforePct"));
+    console.log("A3-1 perCellComparator", JSON.stringify({ latticeCells: cmp.latticeCells, changedPairs: cmp.changedPairs, minBeforePct: cmp.minBeforePct, minAfterPct: cmp.minAfterPct, meanBeforePct: meanOf("beforePct"), meanAfterPct: meanOf("afterPct"), maxDeltaPct: cmp.maxDeltaPct, rows: cmp.rows.slice(0, 3) }));
+  });
+
+  it("the unit-grid lattice covers the same ids and prints its own minimum", () => {
+    const unitAll = censusAfter.sheet.unitAll as unknown as {
+      ids: string[];
+      totalCells: number;
+      summaryAll: { pairs: number; minPct: number; minPair: string; meanPct: number };
+      summaryMachines: { pairs: number; minPct: number; minPair: string; meanPct: number };
+    };
+    expect(unitAll.ids).toEqual(Object.keys(PARTS));
+    expect(unitAll.totalCells).toBe(1024);
+    expect(unitAll.summaryMachines.pairs).toBe(36);
+    // The named A3-1 gate (32 %) is the six-role matrix; the whole-sheet rows are printed
+    // for the lattice family, whose closest pair is the weakest reading in the build.
+    expect(unitAll.summaryAll.minPct).toBeGreaterThanOrEqual(20);
+    console.log("A3-1 unitWholeSheet", JSON.stringify({ all: unitAll.summaryAll, machines: unitAll.summaryMachines }));
+  });
+});
+
 void createElement;
 void DOCK_TILE;

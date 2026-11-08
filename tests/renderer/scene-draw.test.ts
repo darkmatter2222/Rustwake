@@ -359,10 +359,13 @@ function cellOf(tile: number): { x: number; y: number } {
 /** Status accent bar of one machine, found by cell geometry rather than log index. */
 function accentOf(log: Rec[], tile: number): string | null {
   const p = cellOf(tile);
+  // ART-006: the settle bar is ONE paint with the computed width, so the accent rect is
+  // BAR_W on the hold frames and SETTLE_W (4 units) on the two settle frames of the cycle.
+  const barWidths = [BAR_W, half(4 * S)];
   const hit = log.find(
     (r) =>
       r.op === "fillRect" &&
-      onGrid(r.args[2], BAR_W) &&
+      barWidths.some((w) => onGrid(r.args[2], w)) &&
       onGrid(r.args[3], BAR_H) &&
       onGrid(r.args[0], p.x - 9 * S) &&
       onGrid(r.args[1], p.y + 10 * S)

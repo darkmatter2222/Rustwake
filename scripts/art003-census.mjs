@@ -305,6 +305,9 @@ const CENSUS = (args) => {
         )
       ),
     };
+    const machineBodyPx = blendCount([138, 169, 196], 2); // the machine-body tone, 138,169,196
+    const gravelSharePct = pct(gridDotAlphaPx); // ART-005: the 36 resting gravel ticks
+    const dotGridSharePct = pct(gridDotPx); // ART-005: the build-mode lattice stroke (0 at rest)
     return {
       canvas: [w, h],
       topColors: top,
@@ -326,9 +329,28 @@ const CENSUS = (args) => {
       gridDotAlphaPx,
       gridDotAlphaSharePct: pct(gridDotAlphaPx),
       gridInkSharePct: pct(gridDotPx + gridDotAlphaPx), // the whole resting dot field
-      machineBodyPx: blendCount([138, 169, 196], 2),
-      machineBodySharePct: pct(blendCount([138, 169, 196], 2)),
+      machineBodyPx,
+      machineBodySharePct: pct(machineBodyPx),
       contactShadowPx: blendCount([28, 46, 62], 3), // 0.35*shadow over floor
+      // ART-005: the three ink shares as NAMED keys of one run, on one denominator (the whole
+      // canvas, w x h device px), so machinery / gravel / dot grid compare directly:
+      //   machineBody = the 138,169,196 body tone; gravel = the 36 resting dot-field ticks
+      //   (bodyLight at 0.28 over floor); dotGrid = the build-mode lattice stroke, 0 at rest.
+      inkSharesPct: {
+        denominator: "canvas",
+        denominatorPx: total,
+        machineBody: pct(machineBodyPx),
+        gravel: gravelSharePct,
+        dotGrid: dotGridSharePct,
+        // The same three, normalised inside the machine-row box, from the layer table.
+        inMachineRowBox: {
+          machineBody: boxRows.machinerySharePct,
+          gravel: at(boxRows, "gravelTick").sharePct,
+          dotGrid: at(boxRows, "gridStroke").sharePct,
+        },
+      },
+      gravelSharePct,
+      dotGridSharePct,
     };
   });
 };
@@ -440,6 +462,56 @@ const SHEET = async (args) => {
     };
   };
   const aligned = stats(matrix);
+  /* ---- ART-004 g2 item (b): the aligned comparator over the WHOLE role list ---------- */
+  // Per-cell, one lattice: every pair counted in integer differing cells of the same 58x58
+  // window (3364 cells), over all eleven PARTS rows - the eight production machine blueprints,
+  // `generic`, the dock and the drone - so the printed minimum belongs to the whole sheet,
+  // not only to the six-role pilot matrix the ART-003 rows used.
+  const CELLS = 58 * 58;
+  const MACHINE8 = [
+    "sorter",
+    "furnace",
+    "wireMill",
+    "signalLab",
+    "polymerRecycler",
+    "copperSeparator",
+    "platePress",
+    "circuitAssembler",
+    "generic",
+  ];
+  const winsAll = new Map(ids.map((id) => [id, window58(id)]));
+  const rowsAll = [];
+  for (let i = 0; i < ids.length; i += 1) {
+    for (let j = i + 1; j < ids.length; j += 1) {
+      const a = winsAll.get(ids[i]);
+      const b = winsAll.get(ids[j]);
+      let diff = 0;
+      for (let k = 0; k < CELLS; k += 1) if (a[k] !== b[k]) diff += 1;
+      rowsAll.push({
+        pair: `${ids[i]}/${ids[j]}`,
+        diffCells: diff,
+        totalCells: CELLS,
+        pct: +((100 * diff) / CELLS).toFixed(1),
+      });
+    }
+  }
+  const summaryOf = (rows) => ({
+    pairs: rows.length,
+    minPct: Math.min(...rows.map((r) => r.pct)),
+    minPair: rows.reduce((x, y) => (y.pct < x.pct ? y : x)).pair,
+    meanPct: +(rows.reduce((s, r) => s + r.pct, 0) / rows.length).toFixed(2),
+    thresholdPct: THRESHOLD,
+    passes: rows.every((r) => r.pct >= THRESHOLD),
+  });
+  const alignedAll = {
+    window: [58, 58],
+    totalCells: CELLS,
+    ids,
+    machineIds: MACHINE8,
+    summaryAll: summaryOf(rowsAll),
+    summaryMachines: summaryOf(rowsAll.filter((r) => r.pair.split("/").every((part) => MACHINE8.includes(part)))),
+    rows: rowsAll,
+  };
   /* ---- the 32x32 gray-ramp unit grid (the tests' instrument) ---------------------- */
   const grayGrid = (parts) => {
     const g = new Array(32 * 32).fill(5);
@@ -471,6 +543,26 @@ const SHEET = async (args) => {
     }
   }
   const unitGrid = stats(unitMatrix);
+  /** The same 32x32 per-cell instrument over the whole role list (ART-004 g2 item (b)). */
+  const unitAll = (() => {
+    const grids = new Map(ids.map((id) => [id, grayGrid(PARTS[id])]));
+    const rows = [];
+    for (let i = 0; i < ids.length; i += 1) {
+      for (let j = i + 1; j < ids.length; j += 1) {
+        const a = grids.get(ids[i]);
+        const b = grids.get(ids[j]);
+        rows.push({ pair: `${ids[i]}/${ids[j]}`, diffCells: hamming(a, b), totalCells: 1024, pct: diffPct(a, b) });
+      }
+    }
+    return {
+      cell: [32, 32],
+      totalCells: 1024,
+      ids,
+      summaryAll: summaryOf(rows),
+      summaryMachines: summaryOf(rows.filter((r) => r.pair.split("/").every((part) => MACHINE8.includes(part)))),
+      rows,
+    };
+  })();
   /* ---- ART-004 g2: the joint furnace x signalLab parameter search ------------------ */
   // Both rows move together: the tower/mast/head/wing/foot group of the lab and the chamber
   // box of the furnace share the gray step, so a single-row sweep hides the interaction.
@@ -640,9 +732,112 @@ const SHEET = async (args) => {
     inkPx,
     matrix,
     unitMatrix,
+    alignedAll,
+    unitAll,
     a3_1: { aligned, unitGrid, jointSearch: joint },
     sheetInkPx: inkPx,
   };
+};
+
+/**
+ * ART-006 witness: the settle bar measured as REAL pixel runs, not logged arguments.
+ * One machine, `outputFull`, drawn at the phone fit for all six quantised frames; the two
+ * device rows the 2-unit bar covers are scanned for the longest contiguous run of the rust
+ * accent. Two distinct run lengths across the cycle = the bar has visible amplitude; one
+ * length under reduced motion = the cycle still stops for the preference.
+ */
+const SETTLE = (args) => {
+  const { VIEW, RUST } = args;
+  return Promise.all([
+    import("/src/game/renderer/scene.ts"),
+    import("/src/game/simulation/types.ts"),
+  ]).then(([scene, types]) => {
+    const mk = (blueprint, tile) => ({
+      id: 1, blueprint, tile, orientation: 0, level: 1,
+      inBuf: {}, inBufUnits: 1, tray: [], trayUnits: 1, batch: [],
+      progress: 120, progressRem: 0, progressDen: 600, batchMilli: 600, batchPower: 2,
+      status: "outputFull", inRoutes: [], outRoute: null,
+      starvedTicks: 0, batchesDone: 0, ageTicks: 0, busyTicks: 0, fullTicks: 0,
+      rateAge: 0, rateFrom: 0, rateAgePrev: 0, rateFromPrev: 0,
+    });
+    const camera = scene.fitCamera(VIEW);
+    const scan = (reducedMotion, blueprint, tile) => {
+      const c = scene.tileToWorld(tile);
+      const p = scene.worldToScreen(camera, VIEW, c.x, c.y);
+      const yBar = Math.round(p.y + 10 * camera.scale);
+      const frames = [];
+      for (let f = 0; f < 6; f += 1) {
+        const canvas = document.createElement("canvas");
+        canvas.width = VIEW.width;
+        canvas.height = VIEW.height;
+        const ctx = canvas.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
+        scene.drawScene(ctx, { ...types.createInitialState(), tick: 344, machines: [mk(blueprint, tile)] }, camera, VIEW, {
+          reducedMotion,
+          buildMode: false,
+          ghostTile: null,
+          ghostValid: true,
+          selected: null,
+          framePhase: f / 6,
+        });
+        const img = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        const rows = [];
+        // The bar sits on the half-px lattice and the body's dark facet band is filled after
+        // it, so only part of its 2-unit height stays visible: scan the small row window the
+        // bar covers and take the longest contiguous rust run found in it.
+        for (let py = yBar - 3; py <= yBar + 2; py += 1) {
+          let run = 0;
+          let longest = 0;
+          let rustPx = 0;
+          for (let px = 0; px < canvas.width; px += 1) {
+            const i = (py * canvas.width + px) * 4;
+            if (`${img[i]},${img[i + 1]},${img[i + 2]}` === RUST) {
+              run += 1;
+              rustPx += 1;
+              if (run > longest) longest = run;
+            } else run = 0;
+          }
+          rows.push({ py, rustPx, longestRunPx: longest });
+        }
+        frames.push({ frame: f, phase: +(f / 6).toFixed(4), barRowY: yBar, barRows: rows });
+      }
+      return frames;
+    };
+    const widths = (frames) => frames.map((fr) => Math.max(...fr.barRows.map((r) => r.longestRunPx)));
+    const series = (blueprint, tile) => {
+      const motion = scan(false, blueprint, tile);
+      const reduced = scan(true, blueprint, tile);
+      return {
+        blueprint,
+        tile,
+        status: "outputFull",
+        frameCount: 6,
+        longestRunPx: widths(motion),
+        reducedMotionLongestRunPx: widths(reduced),
+        distinctWidths: [...new Set(widths(motion))].length,
+        reducedMotionDistinct: [...new Set(widths(reduced))].length,
+        frames: motion,
+        reducedFrames: reduced,
+      };
+    };
+    // Two rows: the plain `sorter` (one rust mark per machine) and the `furnace`, which also
+    // carries its 4-unit chimney band - the row pair Issue #32 measured at 326:11 / 327:11.
+    const rows = [series("sorter", 8), series("furnace", 14)];
+    return {
+      view: VIEW,
+      scale: +camera.scale.toFixed(4),
+      rustRgb: RUST,
+      status: "outputFull",
+      frameCount: 6,
+      longestRunPx: rows[0].longestRunPx,
+      reducedMotionLongestRunPx: rows[0].reducedMotionLongestRunPx,
+      distinctWidths: rows[0].distinctWidths,
+      reducedMotionDistinct: rows[0].reducedMotionDistinct,
+      frames: rows[0].frames,
+      reducedFrames: rows[0].reducedFrames,
+      rows,
+    };
+  });
 };
 
 /** The built entry chunk, from the last clean `npm run build` of this tree. */
@@ -652,6 +847,52 @@ const entryChunkBytes = () => {
   const files = readdirSync(dir).filter((f) => /^index-.*\.js$/.test(f));
   if (!files.length) return null;
   return { file: files[0], bytes: readFileSync(resolve(dir, files[0])).length, ceilingBytes: 233000 };
+};
+
+/**
+ * ART-004 g2 item (a): the per-cell aligned comparator between two census runs.
+ * Both sides come from the same instrument - one 58x58 lattice over each role's own box -
+ * so a changed cell count means the painted pixels really changed. The integer cell counts
+ * ride next to the percentages; `identical: false` is the "not a copied artifact" witness.
+ */
+const compareAligned = (before, after) => {
+  const LATTICE = 58 * 58;
+  const at = (art, key) => (art.sheet?.matrix ?? []).find((r) => r[0] === key)?.[1] ?? null;
+  const unitAt = (art, key) => (art.sheet?.unitMatrix ?? []).find((r) => r[0] === key)?.[1] ?? null;
+  const rows = (after.sheet?.matrix ?? []).map(([key]) => {
+    const b = at(before, key);
+    const a = at(after, key);
+    const cells = (pct) => Math.round((pct * LATTICE) / 100);
+    return {
+      pair: key,
+      beforePct: b,
+      afterPct: a,
+      deltaPct: +(a - b).toFixed(1),
+      beforeCells: cells(b),
+      afterCells: cells(a),
+      changedCells: Math.abs(cells(a) - cells(b)),
+      latticeCells: LATTICE,
+    };
+  });
+  const unitRows = (after.sheet?.unitMatrix ?? []).map(([key]) => {
+    const b = unitAt(before, key);
+    const a = unitAt(after, key);
+    return { pair: key, beforePct: b, afterPct: a, deltaPct: +(a - b).toFixed(1), latticeCells: 1024 };
+  });
+  const changed = rows.filter((r) => r.deltaPct !== 0).length;
+  return {
+    instrument: "aligned 58x58 per-cell differing count, one lattice for both runs",
+    latticeCells: LATTICE,
+    pairs: rows.length,
+    changedPairs: changed,
+    unchangedPairs: rows.length - changed,
+    maxDeltaPct: Math.max(...rows.map((r) => Math.abs(r.deltaPct))),
+    minBeforePct: Math.min(...rows.map((r) => r.beforePct)),
+    minAfterPct: Math.min(...rows.map((r) => r.afterPct)),
+    identicalArrays: JSON.stringify(before.sheet?.matrix) === JSON.stringify(after.sheet?.matrix),
+    rows,
+    unitRows,
+  };
 };
 
 const run = async () => {
@@ -733,6 +974,7 @@ const run = async () => {
       faces,
     };
   });
+  const settle = await page.evaluate(SETTLE, { VIEW: { width: 390, height: 844 }, RUST: "201,113,58" });
   await context.close();
   const other = await browser.newContext({ viewport: { width: 900, height: 420 }, deviceScaleFactor: 1 });
   const sheetPage = await other.newPage();
@@ -746,9 +988,16 @@ const run = async () => {
     scene,
     sheet,
     witnesses,
+    settle,
     pageErrors: errors.length,
     entryChunk: entryChunkBytes(),
+    comparator: null,
   };
+  // The before artifact of the same instrument, so the change is visible as integers.
+  const beforePath = resolve(root, "docs/evidence/2026-11-06-art003-census-before.json");
+  if (TAG !== "before" && existsSync(beforePath)) {
+    out.comparator = compareAligned(JSON.parse(readFileSync(beforePath, "utf8")), out);
+  }
   writeFileSync(resolve(root, `docs/evidence/2026-11-06-art003-census-${TAG}.json`), JSON.stringify(out, null, 2), "utf8");
   console.log(JSON.stringify(out, null, 1));
   // The four acceptance rows, one line each, off the same run.
@@ -758,6 +1007,17 @@ const run = async () => {
   console.log(`A3-1 joint search shipped ${JSON.stringify(sheet.a3_1.jointSearch.shipped)}`);
   console.log(`A3-1 joint search best ${JSON.stringify(sheet.a3_1.jointSearch.best)} shippedIsOptimum=${sheet.a3_1.jointSearch.shippedIsOptimum} enumerated=${sheet.a3_1.jointSearch.enumeratedCombos} gatePassing=${sheet.a3_1.jointSearch.gatePassingCombos} buildersMatch=${JSON.stringify(sheet.a3_1.jointSearch.builderMatchesShipped)}`);
   console.log(`A3-4 per-layer canvas shares % ${JSON.stringify(Object.fromEntries(scene.layers.rows.map((r) => [r.layer, r.sharePct])))}`);
+  // (a) the per-cell aligned comparator, before vs after, on one 58x58 lattice.
+  console.log(`A3-1 aligned full-sheet matrix ids=${JSON.stringify(sheet.alignedAll.ids)} ${JSON.stringify(sheet.alignedAll.summaryAll)}`);
+  console.log(`A3-1 aligned machine subset (8 blueprints + generic) ids=${JSON.stringify(sheet.alignedAll.machineIds)} ${JSON.stringify(sheet.alignedAll.summaryMachines)}`);
+  console.log(`A3-1 unit-grid full-sheet matrix (32x32, per-cell) ${JSON.stringify(sheet.unitAll.summaryAll)}`);
+  console.log(`A3-1 unit-grid machine subset (8 blueprints + generic) ${JSON.stringify(sheet.unitAll.summaryMachines)}`);
+  console.log(`A3-1 before/after per-cell comparator ${JSON.stringify(out.comparator)}`);
+  // (d) ART-005: machine body / gravel / dot-grid ink shares, one denominator, one run.
+  console.log(`ART-005 ink shares % ${JSON.stringify(scene.inkSharesPct)}`);
+  // (c) ART-006 / Issue #32: the settle bar as measured pixel rows, per quantised frame.
+  console.log(`A3-2/A3-3 settle block (Issue #32, ink pixel-row widths, not rect arguments) ART-006 ${JSON.stringify(out.settle)}`);
+  console.log(`A3-2/A3-3 settle widths px ${JSON.stringify(Object.fromEntries(out.settle.rows.map((r) => [r.blueprint, { outputFullPx: r.longestRunPx, reducedMotionPx: r.reducedMotionLongestRunPx, distinctWidths: r.distinctWidths, reducedMotionDistinct: r.reducedMotionDistinct }])))} scale=${out.settle.scale}`);
   console.log(`A3-4 ink comparison ${JSON.stringify(scene.inkComparison)}`);
   console.log(`A3-6 entry chunk ${JSON.stringify(out.entryChunk)}`);
 };
