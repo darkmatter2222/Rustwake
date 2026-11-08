@@ -118,7 +118,7 @@ export function describeStep(state: SimState, step: YardStep): string {
       return t("step.sell", {
         qty: step.qty,
         label: RESOURCE_LABEL[step.resource],
-        credits: unit(sellValue(step.resource, step.qty), t("unit.credit")),
+        credits: unit(sellValue(step.resource, step.qty), CREDIT),
       });
     case "research": {
       const def = RESEARCH[step.node];
@@ -129,16 +129,16 @@ export function describeStep(state: SimState, step: YardStep): string {
         : t("step.researchAny");
     }
     case "drone":
-      return t("step.drone", { cost: unit(droneAddCost(state), t("unit.credit")) });
+      return t("step.drone", { cost: unit(droneAddCost(state), CREDIT) });
     case "upgrade": {
       const machine = state.machines.find((m) => m.id === step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
-      if (!machine || !def) return t("step.upgrade", { machine: t("unit.machine") });
+      if (!machine || !def) return t("step.upgrade", { machine: MACHINE });
       // The fork: one price, three named outcomes, so the card names the choice and the
       // dock answers it with three one-tap targets (STRAT-002/A1-3).
       return t("step.fork", {
         machine: def.label,
-        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit")),
+        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), CREDIT),
       });
     }
     default:
@@ -159,7 +159,7 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
     case "sell":
       return {
         label: t("btn.sellNamed", { qty: step.qty, label: RESOURCE_LABEL[step.resource] }),
-        cost: `+${unit(sellValue(step.resource, step.qty), t("unit.credit"))}`,
+        cost: `+${unit(sellValue(step.resource, step.qty), CREDIT)}`,
       };
     case "research": {
       const def = RESEARCH[step.node];
@@ -172,18 +172,18 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
     case "drone":
       return {
         label: t("btn.addDrone"),
-        cost: unit(droneAddCost(state), t("unit.credit")),
+        cost: unit(droneAddCost(state), CREDIT),
       };
     case "upgrade": {
       const machine = state.machines.find((m) => m.id === step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
-      if (!machine || !def) return { label: t("btn.upgrade") };
+      if (!machine || !def) return { label: BTN_UPGRADE };
       // The card above names the machine ("Upgrade the Scrap sorter."), so the button
       // carries the verb and the price only. Measured reason: at text scale 2.0 the
       // four-word label made the dock row 145 px tall, 21 % of a 360 × 640 viewport.
       return {
-        label: t("btn.upgrade"),
-        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), t("unit.credit")),
+        label: BTN_UPGRADE,
+        cost: unit(upgradeCost(def.baseUpgradeCost, machine.level), CREDIT),
       };
     }
     default:
@@ -241,7 +241,7 @@ export function branchOptions(
     .map((plan) => ({
       id: plan.id,
       label: plan.label,
-      cost: unit(plan.price, t("unit.credit")),
+      cost: unit(plan.price, CREDIT),
     }));
 }
 
@@ -289,25 +289,17 @@ export function powerLine(state: SimState): string {
 export function restingLine(state: SimState, lastReject?: string | null): string {
   rememberSpoken(state);
   const flying = (state.drone.repaired ? 1 : 0) + state.spares.length;
-  const base = `${t("hud.drones", { count: flying })}${t("value.dotSeparator")}${powerLine(state)}`;
+  const base = `${t("hud.drones", { count: flying })}${DOT}${powerLine(state)}`;
   if (!lastReject) return base;
   // The one difference from the toast: the sentence continues this line, so its first
   // letter goes lowercase. Both figures still come from the rejected result itself.
   const detail = `${lastReject.charAt(0).toLowerCase()}${lastReject.slice(1)}`;
-  return `${base}${t("value.dotSeparator")}${t("hud.lastShortfall", { detail })}`;
+  return `${base}${DOT}${t("hud.lastShortfall", { detail })}`;
 }
 
 /* ------------------------------------------------------------------------- *
  * STRAT-004 — the pressed face names its own pending number and its countdown
  * ------------------------------------------------------------------------- */
-
-/**
- * The one line the dock's own faces add under their price, in `t()`'s `{slot}` form:
- * `waits 5 ferrous · have 3`. `strings.ts` is another lane's lease this sprint
- * (POLISH-001), so this key lives here for now with the same substitution mechanism;
- * moving it into `STRINGS` is one paste with no call-site change.
- */
-const FACE_WAITS = "waits {pair} · have {have}";
 
 /** The sim object the sentence layer last answered from, for the dock's own readout. */
 let spoken: SimState | null = null;
@@ -316,8 +308,12 @@ function rememberSpoken(state: SimState): void {
   spoken = state;
 }
 
-/** The one separator every HUD sentence uses, read once for the shipped call sites. */
+/** The separators and units the HUD sentences use most, read once each (STRAT-004 byte trim:
+ *  one lookup per repeated fragment instead of one call per printed line, 12 call sites). */
 const DOT = t("value.dotSeparator");
+const CREDIT = t("unit.credit");
+const MACHINE = t("unit.machine");
+const BTN_UPGRADE = t("btn.upgrade");
 
 /**
  * The face's own line for one short quantity: `waits 5 ferrous · have 3`, and while a
@@ -330,10 +326,7 @@ const DOT = t("value.dotSeparator");
 function faceWaitLine(need: number, word: string, have: number, state: SimState): string {
   const running = state.machines.find((m) => m.progress > 0);
   const secs = running ? Math.ceil((running.batchMilli - running.progress) / 1e4) : 0;
-  return (
-    FACE_WAITS.replace("{pair}", `${formatNumber(need)} ${word}`)
-      .replace("{have}", formatNumber(have)) + (secs ? `${DOT}in ${secs}s` : "")
-  );
+  return `waits ${formatNumber(need)} ${word}${DOT}have ${formatNumber(have)}${secs ? `${DOT}in ${secs}s` : ""}`;
 }
 
 /**
@@ -341,7 +334,9 @@ function faceWaitLine(need: number, word: string, have: number, state: SimState)
  * `waits 5 ferrous · have 3`. Both figures are read, never computed twice: `need` is the
  * quantity the content table asks the step for, `have` is the same store or purse entry
  * the Store panel and the `Last need …` tail print. Null when the step's price is already
- * covered (or the step carries no price), so a covered face stays two lines tall.
+ * covered (or the step carries no price), so a covered face stays two lines tall. The W-3
+ * witnesses (`face-line-check.mjs`, `frame-probe.mjs`) read this as the second derivation;
+ * it is dead in the shipped graph, where `priceLine` is the only caller-side entry point.
  */
 export function pendingForStep(state: SimState, step: YardStep): string | null {
   rememberSpoken(state);
@@ -349,7 +344,9 @@ export function pendingForStep(state: SimState, step: YardStep): string | null {
   return short === null ? null : faceWaitLine(short.need, short.word, short.have, state);
 }
 
-/** The engine's own two numbers for one step, same shapes as `shortOf`/`shortCredits`. */
+/**
+ * The engine's own two numbers for one step, same shapes as `shortOf`/`shortCredits`.
+ */
 function shortfallForStep(
   state: SimState,
   step: YardStep
@@ -375,7 +372,7 @@ function shortfallForStep(
     case "drone":
     case "upgrade": {
       const need = step.kind === "drone" ? droneAddCost(state) : upgradePrice(state, step.machineId);
-      return state.credits < need ? { need, have: state.credits, word: plural(need, t("unit.credit")) } : null;
+      return state.credits < need ? { need, have: state.credits, word: plural(need, CREDIT) } : null;
     }
     default:
       return null;
@@ -399,12 +396,11 @@ function upgradePrice(state: SimState, machineId: number): number {
  * price and never blocks, and a covered price keeps its plain lines.
  */
 export function priceLine(cost: string, state: SimState | null = spoken): string {
-  if (!cost || !state) return cost ?? "";
+  if (!state) return cost;
   for (const group of cost.split(" + ")) {
     // `"{qty} {label} · {credits} credits"` carries its own reward after the dot: the
     // price is what comes before it. A `+N …` gain (a sale) fails the shape and blocks.
-    const item = group.split(DOT)[0].trim();
-    const parts = /^([\d.]+) ([a-z]+)$/.exec(item);
+    const parts = /^([\d.]+) ([a-z]+)$/.exec(group.split(DOT)[0].trim());
     if (!parts) continue;
     const need = +parts[1];
     const word = parts[2];
@@ -441,13 +437,13 @@ export function pipLine(state: SimState): string {
   const rest = state.machines.length - named.length;
   return t("hud.pips", {
     what: t("row.batch"),
-    detail: named.join(t("value.dotSeparator")) + (rest > 0 ? ` +${rest}` : ""),
+    detail: named.join(DOT) + (rest > 0 ? ` +${rest}` : ""),
   });
 }
 
 function machineLabel(state: SimState, machineId: number): string {
   const machine = state.machines.find((m) => m.id === machineId);
-  return machine ? BLUEPRINTS[machine.blueprint].label : t("unit.machine");
+  return machine ? BLUEPRINTS[machine.blueprint].label : MACHINE;
 }
 
 /**
