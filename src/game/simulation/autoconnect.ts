@@ -1,10 +1,16 @@
 import { BLUEPRINTS, RECIPES, type ResourceId } from "../content/defs";
+import { beltRun } from "./commands";
 import type { SimState } from "./types";
 
 export interface ConnectionPlan {
   from: number;
   to: number;
   filter: ResourceId | null;
+  /**
+   * BELT-001: tile count of the run this connection would lay, so the UI can print
+   * the price (`beltCostPerTile * tiles`) later without a second pass.
+   */
+  tiles: number;
 }
 
 /**
@@ -23,7 +29,7 @@ export function planConnections(
   const machine = state.machines.find((m) => m.id === machineId);
   if (!machine) return [];
   const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
-  const plans: ConnectionPlan[] = [];
+  const plans: { from: number; to: number; filter: ResourceId | null }[] = [];
 
   // One link per material in each direction. An existing link already carries
   // the material whatever its other endpoint, so the yard never pays for a
@@ -53,7 +59,7 @@ export function planConnections(
     const consumer = findConsumer(state, machineId, output.resource);
     plans.push({ from: machineId, to: consumer ?? 0, filter: output.resource });
   }
-  return dedupe(plans);
+  return dedupe(plans.map((plan) => ({ ...plan, tiles: beltRun(state, plan.from, plan.to).length })));
 }
 
 /** The material already reaches this machine over some link, from any source. */

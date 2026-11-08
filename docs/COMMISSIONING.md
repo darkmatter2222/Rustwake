@@ -1,3 +1,5 @@
+> **Historical commissioning runbook; not the startup task list.** New team startup reads live GitHub Issues and PRs; no hardcoded startup audit. See [GITHUB_WORKFLOW](GITHUB_WORKFLOW.md). Cap: five agents total, coordinator + four children.
+
 # First-run commissioning sprint
 
 This is the first assignment after loading the revised goal. Complete it through the existing OPS-101/102/103 tickets, not a second competing backlog. Coordinator owns the result in `work/commissioning/RESULT.md`. Initial status: **not run**. Repository tests and prior async canaries do not establish that this installation works.

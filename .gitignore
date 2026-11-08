@@ -1,5 +1,7 @@
 node_modules/
 dist/
+dist-base/
+dist-after/
 coverage/
 .vite/
 *.log

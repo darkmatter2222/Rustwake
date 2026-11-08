@@ -10,10 +10,10 @@ export function pathsConflict(a,b){
  if(!a?.length||!b?.length)return true; // unknown ownership is not safe parallel ownership
  return a.some(x=>b.some(y=>{const p=prefix(x),q=prefix(y);return !p||!q||p===q||p.startsWith(q+'/')||q.startsWith(p+'/')||(x.includes('*')&&q.startsWith(p))||(y.includes('*')&&p.startsWith(q));}));
 }
-/** Pure advisory planner. It never launches sessions, frees a lease, or claims liveness. */
+/** Legacy snapshot advisory only. Actual assignments come from GitHub Issues and the OpenCode dispatcher, never this local backlog. */
 export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}={}){
  const observed=stamp(board.runtime?.observed_at),time=stamp(now);
- const cap=Math.max(0,Math.min(6,board.max_active_sessions??6)-1);
+ const cap=Math.max(0,Math.min(5,board.max_active_sessions??5)-1);
  const active=(board.runtime?.sessions??[]).filter(s=>!terminal.has(s.status));
  const warnings=[];
  if(time===null||observed===null||time-observed>staleAfterMs||observed>time){

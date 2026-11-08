@@ -71,6 +71,15 @@ const pick = (s: SimState, blueprint: string): MachineState =>
 /* ---- A1-2v2/v3 instrument, mirrored from work/feedback/strat002-harness.mjs ---- */
 
 import harnessJson from "../../work/feedback/strat002-harness.json";
+import beltHarnessJson from "../../work/feedback/belt001-harness.json";
+
+/**
+ * BELT-001: the priced-connection tree re-ran the same mirror (scripts/probe-belt.mjs),
+ * so the in-test mirror below reconciles against `ladderRows` from that run. The
+ * strat002 file stays the untouched historical record of the pre-price readings.
+ */
+const beltTable = (pattern: "regular" | "irregular" | "gap6") =>
+  (beltHarnessJson as { ladderRows: Record<string, unknown[]> }).ladderRows[pattern] as unknown as StoredRow[];
 
 /** The two gap ladders, exact predicates: round % 9 < 5 and round % 6 < 3. */
 const GAP_SPECS = {
@@ -465,9 +474,10 @@ describe("STRAT-002/A1 the named-outcome fork", () => {
       text
     );
     // The dock that answers that save is the two-plan dock; the saved rank is still read.
+    // BLD-001: cheapest-first, so the 30-credit `draw` plan leads the row.
     expect(branchOptions(decoded.payload.sim, loaded.id).map((option) => option.id)).toEqual([
-      "speed",
       "draw",
+      "speed",
     ]);
   });
 
@@ -631,7 +641,8 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
       const twin = a12Row(null, ladder);
       // The unnamed ladder is the golden-line ladder: same boot, plain price, so
       // every stored scalar column and the kinds counters reproduce from the mirror.
-      const stored = storedTable(patternOf[ladder]).find(
+      // (BELT-001: the goldens are the priced-tree rows in belt001-harness.json.)
+      const stored = beltTable(patternOf[ladder]).find(
         (r) => r.policy === "naive (unnamed)"
       ) as StoredFull;
       expect(twin.batches).toBe(stored.batches);
@@ -698,35 +709,36 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
   });
 
   it("scores the 5-on/4-off ladder by the per-column MMG, not the retired disjunction", () => {
+    // BELT-001 restated on the priced tree (rows in belt001-harness.json). The
+    // column leaders are: speed owns `batches` and the starved pair, draw owns
+    // `minPowerRatio`, and `powerLimitedRounds` sits under its 200-unit floor -
+    // the same shape the g3 record shows for the period-6 ladder.
     const speed = a12Row("speed", "gap9");
     const buffer = a12Row("buffer", "gap9");
     const draw = a12Row("draw", "gap9");
     const mmg = harnessJson.gaps.mmg;
-    // The A1-2v3 per-column table replaces `>= 5 % relative OR >= 10 absolute`.
-    // speed owns `batches` by >= 900: measured gap 1076 over the best named rival
-    // (2267 vs 1191; 1095 before the price premium, both above the floor).
+    // speed owns `batches` by >= 900: 2 179 over the best named rival 1 191 (988).
     expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(
       mmg.batches.absolute
     );
-    // draw owns the power budget: 0 vs both others >= 200, minPowerRatio gap >= 0.25.
+    // draw keeps the zero row, but buffer's 127 throttled rounds hold the rival value
+    // under the 200-unit floor, so this column names no leader under the MMG.
     expect(draw.powerLimitedRounds).toBe(0);
-    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBeGreaterThanOrEqual(
-      mmg.powerLimitedRounds.absolute
-    );
+    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(127);
+    expect(127).toBeLessThan(mmg.powerLimitedRounds.absolute);
     expect(draw.minPowerRatio - Math.max(speed.minPowerRatio, buffer.minPowerRatio)).toBeGreaterThanOrEqual(
       mmg.minPowerRatio.absolute
     );
-    // The mechanism columns (starved %) still go to speed, now exactly at the
-    // 3-point floor (starvedMax 81 vs 84, starvedMean 54 vs 57).
+    // The mechanism columns (starved %) stay with speed: 85 - 81 and 58 - 53.
     expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBeGreaterThanOrEqual(
       mmg.starvedMax.absolute
     );
     expect(Math.max(buffer.starvedMean, draw.starvedMean) - speed.starvedMean).toBeGreaterThanOrEqual(
       mmg.starvedMean.absolute
     );
-    // buffer's single A1-2v3 column: inputStallPct, lower wins. The negative result
-    // stands: buffer 186.9 sits behind the best rival 128.8 (lead -58.1, MMG 3).
-    expect(buffer.inputStallPct).toBe(186.9);
+    // buffer's single A1-2v3 column, still not its: buffer 136.7 sits behind the
+    // best rival 93.5 (speed) - lead -43.2 points, well under the 3-point floor.
+    expect(buffer.inputStallPct).toBe(136.7);
     expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeLessThan(
       mmg.inputStallPct.absolute
     );
@@ -819,7 +831,7 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
         ["priced", "policy"],
       ] as [string, UpgradeBranch | null | "policy"][]) {
         const mirror = a12Row(branch, ladder);
-        const stored = storedTable(pattern).find((r) => r.policy === name);
+        const stored = beltTable(pattern).find((r) => r.policy === name);
         if (!stored) throw new Error("stored row missing for " + name);
         // The stored row's new pair equals the mirror's, tick for tick.
         const storedFull = stored as StoredRow & {
@@ -1005,13 +1017,44 @@ describe("STRAT-003 the two live plans carry their own prices", () => {
   it("keeps the unnamed ladder at the plain price beside the priced options", () => {
     const s = yard();
     const sorter = pick(s, "sorter");
-    // The two faces print their own prices at the level the dock is answering.
-    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["40 credits", "30 credits"]);
+    // The two faces print their own prices at the level the dock is answering, cheapest
+    // first (BLD-001): the plain-ladder `draw` plan leads, the premium `speed` plan follows.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["30 credits", "40 credits"]);
     const before = s.credits;
     expect(send(s, { type: "machine.upgrade", machineId: sorter.id })).toBe(true);
     expect(before - s.credits).toBe(upgradeCost(BLUEPRINTS.sorter.baseUpgradeCost, 1));
-    // One level up, the pair moves with the plain ladder: 35 + 10 over 35.
-    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["45 credits", "35 credits"]);
+    // One level up, the pair moves with the plain ladder: 35 under 35 + 10.
+    expect(branchOptions(s, sorter.id).map((o) => o.cost)).toEqual(["35 credits", "45 credits"]);
+  });
+
+  /**
+   * BLD-001: the dock paints the two named plans by their own price ascending, so the
+   * leftmost face is always one the current purse can pay (QA note 6: at 30 credits the
+   * old row parked 31 leftmost taps at 0 commands). The `speed` premium is +10 at every
+   * rank, so the pair stays ordered all the way up; a tie would keep the declared order,
+   * because `Array#sort` has been stable since ES2019.
+   */
+  it("paints the two plans cheapest-first at every rank of the ladder (BLD-001)", () => {
+    const number = (cost: string): number => Number(cost.split(" ")[0]);
+    const s = yard();
+    const sorter = pick(s, "sorter");
+    for (let rank = 1; rank <= 4; rank += 1) {
+      const options = branchOptions(s, sorter.id);
+      const level = sorter.level;
+      expect(options.map((o) => o.id)).toEqual(["draw", "speed"]);
+      const prices = options.map((o) => number(o.cost));
+      for (let i = 1; i < prices.length; i += 1)
+        expect(prices[i]).toBeGreaterThanOrEqual(prices[i - 1]);
+      // Each printed number is the engine's own price for that plan at this rank.
+      expect(prices[0]).toBe(
+        branchPrice(BLUEPRINTS.sorter.baseUpgradeCost, level, options[0].id)
+      );
+      expect(prices[1]).toBe(
+        branchPrice(BLUEPRINTS.sorter.baseUpgradeCost, level, options[1].id)
+      );
+      expect(send(s, { type: "machine.upgrade", machineId: sorter.id, branch: "draw" })).toBe(true);
+      expect(sorter.level).toBe(level + 1);
+    }
   });
 
   it("decodes a save whose machine names all three plans", () => {
@@ -1033,11 +1076,11 @@ describe("STRAT-003 the two live plans carry their own prices", () => {
     expect(encodeSave(decoded.payload.sim, decoded.payload.lastSeenMs, decoded.payload.settings)).toBe(
       text
     );
-    // And the priced dock answers that save with its two live faces: the furnace's
-    // plain ladder at level 4 is 40 -> 47 -> 55 -> 64, so 64 + 10 over 64.
+    // And the priced dock answers that save with its two live faces, cheapest first: the
+    // furnace's plain ladder at level 4 is 40 -> 47 -> 55 -> 64, so 64 under 64 + 10.
     expect(branchOptions(decoded.payload.sim, loaded.id).map((o) => o.cost)).toEqual([
-      "74 credits",
       "64 credits",
+      "74 credits",
     ]);
   });
 });

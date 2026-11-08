@@ -4,6 +4,8 @@ import { act } from "react-dom/test-utils";
 import { App, labelForReject } from "../../src/ui/App";
 import { createStore, type GameStore } from "../../src/app/store";
 import { TUNING } from "../../src/game/content/defs";
+import { pipLine } from "../../src/ui/text";
+import stylesRaw from "../../src/ui/styles.css?raw";
 
 /**
  * PLAY-001 g1: the resting screen answers three questions without a tap.
@@ -55,6 +57,11 @@ function repairTheDrone(store: GameStore): void {
 describe("PLAY-001 the resting screen", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
+    // jsdom gets no cascade unless the sheet is in the document (vitest stubs the import),
+    // and the two-tier census below reads the shipped computed values.
+    const style = document.createElement("style");
+    style.textContent = stylesRaw;
+    document.head.appendChild(style);
   });
 
   /** P-1: the blocked tap states its shortfall, and nothing is charged for it. */
@@ -130,8 +137,8 @@ describe("PLAY-001 the resting screen", () => {
     expect(phases.has("Ghost on cell 8 · tap again to place")).toBe(true);
   });
 
-  /** P-4: the pip row is named on the resting screen, one number per machine. */
-  it("P-4 the pip legend names the counted quantity per machine", () => {
+  /** P-4: the pip readout is named, one number per machine, and the card stays at two tiers. */
+  it("P-4 the pip readout names the counted quantity per machine (pure line)", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     repairTheDrone(store);
@@ -142,23 +149,44 @@ describe("PLAY-001 the resting screen", () => {
     expect(store.getState().machines.length).toBe(1);
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(400));
-    const resting = document.querySelector(".objective")?.textContent ?? "";
-    expect(resting).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5/);
+    // UI-002: the legend is a pure readout now. The five marks per machine are painted on
+    // the tiles themselves, so the card no longer repeats them - the world outranks the
+    // text - and its own two lines carry the choice plus the numeric readout.
+    const legend = pipLine(store.getState());
+    expect(legend).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5/);
     // The lit count is over the five marks the tile paints, never over a buffer capacity.
-    expect(resting).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5( |$)/);
+    expect(legend).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5( |$)/);
     // The index inside the entry is the tile the renderer draws that machine on (CHRM-001),
     // the same number the build phase prints in `Ghost on cell {tile}`.
-    expect(resting).toContain(`Scrap sorter #${store.getState().machines[0].tile} `);
+    expect(legend).toContain(`Scrap sorter #${store.getState().machines[0].tile} `);
     // A second machine separates: the same row names both, in yard order.
     act(() => findButton("Build Furnace")?.click());
     act(() => findButton("Build Furnace")?.click());
     act(() => store.step(300));
     expect(store.getState().machines.length).toBe(2);
-    const both = document.querySelector(".objective")?.textContent ?? "";
+    const both = pipLine(store.getState());
     expect(both).toMatch(/Batch pips · Scrap sorter #\d+ \d\/5 · Furnace #\d+ \d\/5/);
     const [first, second] = store.getState().machines;
     expect(both).toContain(`Scrap sorter #${first.tile} `);
     expect(both).toContain(`Furnace #${second.tile} `);
+
+    // The card itself: two tiers, the pip legend no longer among the painted lines.
+    const card = document.querySelector(".objective");
+    const lines = [...(card?.children ?? [])]
+      .map((node) => (node.textContent ?? "").replace(/\s+/g, " ").trim())
+      .filter((line) => line.length > 0);
+    expect(lines.length).toBeLessThanOrEqual(3);
+    expect(lines.some((line) => line.startsWith("Batch pips"))).toBe(false);
+    const sizes = [
+      ...new Set(
+        [...(card?.children ?? [])]
+          .filter((node) => (node.textContent ?? "").trim().length > 0)
+          .map((node) => getComputedStyle(node as HTMLElement).fontSize)
+      ),
+    ];
+    expect(sizes).toHaveLength(2);
+    const [primaryPx, secondaryPx] = sizes.map((value) => parseFloat(value));
+    expect(Math.max(primaryPx, secondaryPx) / Math.min(primaryPx, secondaryPx)).toBeGreaterThanOrEqual(1.25);
   });
 
   /** P-5: the credits chip survives its own charge down to zero. */
@@ -233,9 +261,12 @@ describe("PLAY-001 the resting screen", () => {
       // Both figures of the shortfall survived, not just the word "Last".
       for (const digits of toast.match(/\d+/g) ?? []) expect(carried).toContain(digits);
       expect(carried).toMatch(/Last need \d+ \w+ · have \d+$/);
-      // The literal line at this frame: the copper separator's 25-scrap price, one drone,
-      // one running batch. Written out so a rewording cannot pass by accident.
-      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 25 scrap · have 0");
+      // The literal line at this frame. BELT-001 restated the number: with the
+      // connection priced, the first refused tap is now the 3-scrap belt price of
+      // the dock↔tile-0 run (the 25-scrap separator price still follows it), so the
+      // numbered shortfall names the priced connection. Written out so a rewording
+      // cannot pass by accident.
+      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 scrap · have 0");
     } finally {
       vi.useRealTimers();
     }
@@ -336,7 +367,7 @@ describe("PLAY-001 the resting screen", () => {
    * drawn on, and counts the rest in one `+n`. Two machines of one blueprint therefore read
    * apart, and the line keeps its two wrapped boxes at 360 × 640 text scale 2.0.
    */
-  it("CHRM-001 the pip legend caps at two tile-indexed entries plus a +n tail", () => {
+  it("CHRM-001 the pip readout caps at two tile-indexed entries plus a +n tail", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     repairTheDrone(store);
@@ -359,10 +390,9 @@ describe("PLAY-001 the resting screen", () => {
     act(() => store.step(20));
     expect(store.getState().machines.length).toBe(4);
 
-    const legend =
-      [...document.querySelectorAll<HTMLElement>(".status-line")]
-        .map((node) => node.textContent ?? "")
-        .find((text) => text.startsWith("Batch pips")) ?? "";
+    // UI-002: the same census on the pure line, which is what the machine panel and any
+    // later surface can print without the resting card spending a third of the screen.
+    const legend = pipLine(store.getState());
     expect(legend.startsWith("Batch pips · ")).toBe(true);
     // At most two entries, each with its tile index inside it.
     const entries = legend.match(/[A-Za-z][A-Za-z ]*#\d+ \d\/5/g) ?? [];

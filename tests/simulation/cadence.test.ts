@@ -240,8 +240,11 @@ describe("build-versus-upgrade cadence (B-21)", () => {
     expect(first.machines).toBe(8);
     expect(first.research).toBe(3);
     // The same number the probe prints, so the fixture and the evidence table cannot
-    // drift apart.
-    expect(first.totals).toBe(1902);
+    // drift apart. BELT-001 restated 1 902 -> 1 838 on the priced tree: the ladder's
+    // connections now charge `beltCostPerTile` per tile of their run, which moves the
+    // purse timing. The clock is untouched (`routeLatencyTicks` 5), so the pull cadence
+    // per tick is the pre-change one and only the purchase order shifted.
+    expect(first.totals).toBe(1838);
     // The fleet step is a real stage: the ladder bought spare drones in both orders,
     // which is what lifts the batch total above the one-drone 1 757 (B-28, D-38).
     expect(first.fleet).toBeGreaterThan(1);

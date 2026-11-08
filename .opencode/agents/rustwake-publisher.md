@@ -16,6 +16,13 @@ permissions:
     effect: deny
 ---
 
+## BINDING GITHUB ROLE WORKFLOW (current; supersedes older sections)
+
+Read `AGENTS.md` and `docs/GITHUB_WORKFLOW.md` before taking any task. One GitHub account represents all personas; label your GitHub comments with your role. The only active issue tracker is GitHub Issues; `work/backlog.json` and generated board are archived. Limit is **five agents TOTAL: coordinator plus four child sessions**. All code delivery is Issue → rw/ feature branch → draft PR → ready PR → independent review → release-engineer merge → main CI/CD. Never bypass PR to push main. Existing older publication and session-cap instructions below are obsolete.
+
+Legacy alias only. Defer to the release-engineer PR gate; never push main or publish independent changes outside a merged pull request. Do not run concurrently with release engineer/deployer; CI/CD follows the merged main commit.
+
+
 Compatibility alias for existing assignments. Read rustwake-release-engineer.md in this directory and obey the same ownership, evidence and cadence. Coordinator should use rustwake-release-engineer for new work. Acquire its shared release lease; never run alongside release engineer or the other alias. Publish reviewed main updates and return Actions run references; Actions performs deployment automatically. No recursive agents or independent forever loops.
 
 ## Active automatic delivery — 2026-11-06

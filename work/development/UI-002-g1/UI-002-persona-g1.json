@@ -1,0 +1,84 @@
+{
+  "ticket": "UI-002",
+  "generation": 1,
+  "label": "simulated persona (one AI role persona, not a human session)",
+  "persona": "first-session solo player, phone 360x640, large text (scale 2.0), no walkthrough, resting screen only",
+  "candidate_sha": "78ef6ca86026ead3d9326dcaf78e4b88b88c1120",
+  "measured_artifact": "dist/assets/index-C_K4oMJ5.js (231262 B), vite preview http://localhost:4173/, chromium deviceScaleFactor 2",
+  "cell": "360x640 ts2 4-machine fork-open + one refused tap",
+  "instrument": "scripts/measure-ui002.mjs (pass 'fork'), raw log work/development/UI-002-g1/measure-ui002.txt",
+  "read_from_the_screen_only": {
+    "card_lines": [
+      "Choose what improves on the Scrap sorter · 30 credits",
+      "A machine waits for input; check its empty side.",
+      "Drones 1 · Power 8 · 5 requested · 100 % · Last need 40 credits · have 30"
+    ],
+    "dock_faces": ["Less power30 credits", "Faster batches40 credits"],
+    "chips": ["Scrap9", "Credits30", "Store10/900"],
+    "toast_after_the_refused_tap": "Need 40 credits · have 30"
+  },
+  "answers_the_persona_gives": {
+    "what_the_next_tap_does": "the leftmost, accent-filled face is 'Less power 30 credits' -> the next tap buys the Less power plan on the Scrap sorter for 30 credits",
+    "last_shortfall_as_two_numbers": { "need": 40, "unit": "credits", "have": 30 },
+    "current_output_readout": {
+      "drones": 1,
+      "power_capacity": 8,
+      "power_requested": 5,
+      "power_percent": 100,
+      "store_units": 10,
+      "store_capacity": 900,
+      "credits": 30,
+      "scrap": 9
+    },
+    "card_line_count": 3,
+    "card_tiers": ["primary 28.5 px / weight 600", "secondary 21.6 px / weight 400"]
+  },
+  "same_build_sim_read": {
+    "node_frame": {
+      "machineLevelSum": 4,
+      "machines": ["sorter#0 L1", "furnace#1 L1", "copperSeparator#3 L1", "polymerRecycler#4 L1"],
+      "credits": 30,
+      "store": { "scrap": 9 },
+      "storeUnits": 9,
+      "storeCapacity": 900,
+      "drones": 1,
+      "powerRequested": 3,
+      "powerCapacity": 8,
+      "powerRatioPct": 100,
+      "batchesDone": 55,
+      "step": "upgrade",
+      "forkPrices": ["speed:40 credits", "draw:30 credits"]
+    },
+    "app_persisted_after_the_leftmost_tap": {
+      "machineLevelSum": 5,
+      "credits": 0,
+      "storeUnits": 10,
+      "powerRequested": 5,
+      "batchesDone": 56,
+      "step": "build"
+    },
+    "instrument_agreement_flags": {
+      "drones": true,
+      "powerCapacity": true,
+      "powerPercent": true,
+      "powerRequested": true,
+      "nextTapPriceMatchesTable": true
+    }
+  },
+  "agreement": {
+    "next_tap": "the printed 30 credits is the `draw` price the table answered (forkPrices draw:30 credits) and one leftmost tap moved the machine level sum 4 -> 5 with the purse paying exactly 30 -> agrees with the sim",
+    "shortfall": "need 40 / have 30 is the dearer `speed` plan against the 30-credit purse the frame holds -> agrees",
+    "fleet_and_power": "Drones 1 · Power 8 · 5 requested · 100 % equals the sim's drones=1, powerCapacity=8, powerRequested=5, powerRatioPct=100 -> agrees",
+    "store_units_note": "the chip prints 10/900 where the node frame holds 9 units: the app advanced one tick (batchesDone 55 -> 56) after the frame was encoded. Recorded as a one-tick difference, not a disagreement."
+  },
+  "control_run_same_instrument": {
+    "url": "https://home.darkmatter2222.com/rustwake/",
+    "served_files": ["assets/index-CUnHr3Cs.js", "assets/index-9FriNULu.css", "assets/tables-BB2NPvQ2.js"],
+    "css_byte_identical_to_base": true,
+    "card_line_count_in_the_same_cell": 4,
+    "card_text": "Choose what improves on the Scrap sorter · 30 creditsA machine waits for input; check its empty side.Drones 1 · Power 8 · 5 requested · 100 % · Last need 40 credits · have 30Batch pips · Scrap sorter #0 2/5 · Furnace #1 5/5 +2",
+    "ratio_pct": 44.6,
+    "difference": "the control spends one more line box (the pip legend is its own fourth line) and misses the 42 % cap by 2.6 pp; the candidate answers the same four questions in three lines at 41.8 %",
+    "limitations": "the live route already carries BLD-001 (its JS is index-CUnHr3Cs.js), so the fork paint order matches the candidate; the base fork order is recorded in work/releases/RELEASE-006.md (Faster batches led, 31 leftmost taps landed 0 commands)"
+  }
+}

@@ -1,3 +1,5 @@
+> **Active team policy:** GitHub Issues and PRs replaced the internal backlog/board. The static team dashboard below is a historical sanitized snapshot, NOT live task or session state. [GitHub workflow](GITHUB_WORKFLOW.md).
+
 # Automatic delivery on Databrick
 
 ## Verified status — 2026-11-06
@@ -14,7 +16,7 @@ The normal operation is to push reviewed work to main, then monitor CI and deliv
 4. The root-installed driver validates inventory/digests and holds the shared file lock. The adapter uses the job's short-lived read-only GitHub token to check current main and successful CI. No personal GitHub login or Portainer secret is copied into the runner. A superseded source fails closed; the newer green run takes over.
 5. A release is staged in `/srv/rustwake-delivery/releases/`. One atomic `current` symlink switch promotes it through the existing nginx service. Historical `/assets/` files remain available; different bytes under an existing asset filename are rejected. HTML/dashboard use `no-store`. No container restarts or DNS edits occur per release.
 6. Exact entry/dashboard/manifest and asset bytes are checked through loopback and HTTPS. Failure restores the previous symlink and verifies rollback. A durable pending record allows the next attempt to reconcile interrupted promotion. The driver uploads a sanitized receipt, even on failure. Job failure alone never proves rollback succeeded: inspect recovery state and receipt.
-7. The release engineer monitors run results asynchronously, imports sanitized evidence into `work/deployments/`, and updates README/board. Distinguish pushed, CI-passed, packaged, deployed and browser-reviewed. Dashboard-only byte-equivalent game updates preserve the recorded game-source SHA in server state. Every successful package has its own source SHA.
+7. The release engineer monitors run results asynchronously, imports sanitized evidence into `work/deployments/`, and updates README, GitHub Issues and PR release receipts. Distinguish pushed, CI-passed, packaged, deployed and browser-reviewed. Dashboard-only byte-equivalent game updates preserve the recorded game-source SHA in server state. Every successful package has its own source SHA.
 
 All production source changes on main are intended for automatic release after CI; there is no extra undocumented discretionary promotion gate. Product/visual approval belongs before main publication. These instructions supersede the earlier unimplemented Portainer-per-release adapter contract.
 
@@ -62,7 +64,7 @@ Use `C:\Users\ryans\source\repos\HomeAILab` and its current instructions/credent
 - `databrick-readiness` proves runner execution and file presence only, not successful delivery. Its failed first run is useful diagnostic evidence, not a broken runner installation.
 - External HTTP hash checks do not establish visual quality, audible sound or real-device performance. QA must still inspect/play/listen where supported and label unverified aspects honestly.
 
-## Public dashboard
+## Archived public team snapshot
 
 Intended URL: https://home.darkmatter2222.com/rustwake/team/ . First delivery verified by canary run 42144401481; browser visual review remains separate. Packaging exposes only allowlisted fields (ticket ID, stage, role, prospective points, approved public title and aggregate metrics). Never serve raw backlog, inbox, session IDs, credentials or host diagnostics. Dashboard snapshots refresh every 60 seconds and display age; they are not a direct live OpenCode feed.
 

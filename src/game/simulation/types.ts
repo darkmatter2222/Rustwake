@@ -114,6 +114,13 @@ export interface RouteState {
   filter: ResourceId | null;
   capacity: number;
   latency: number;
+  /**
+   * Ordered tile indices the belt crosses, from the source tile to the destination
+   * tile (BELT-001). The walk is the deterministic Manhattan path in `manhattanRun`.
+   * Optional and `undefined` on saves written before the price existed, where the
+   * stored `latency` keeps its constant meaning, so an old save behaves identically.
+   */
+  run?: number[];
   items: RouteItem[];
   inFlight: number;
   /** Measured utilisation: ticks with cargo in transit, over `ageTicks`. */
@@ -292,6 +299,23 @@ export function batchMilliFor(blueprint: string, level: number): number {
 
 export function powerFor(blueprint: string): number {
   return RECIPES[BLUEPRINTS[blueprint].recipeId].power;
+}
+
+/**
+ * The deterministic Manhattan walk between two grid tiles (BELT-001): the ordered tile
+ * indices from `fromTile` to `toTile`, closing the row difference first (row-major
+ * first, one whole row per step) and then the column difference, so at every corner
+ * exactly one next tile is legal and no tie ever needs breaking. Both endpoints are in
+ * the list, so two adjacent tiles run over 2 tiles.
+ */
+export function manhattanRun(fromTile: number, toTile: number, cols: number): number[] {
+  const rows = Math.floor(toTile / cols) - Math.floor(fromTile / cols);
+  const columns = (toTile % cols) - (fromTile % cols);
+  const run: number[] = [fromTile];
+  let tile = fromTile;
+  for (let i = 0; i < Math.abs(rows); i += 1) run.push((tile += rows > 0 ? cols : -cols));
+  for (let i = 0; i < Math.abs(columns); i += 1) run.push((tile += columns > 0 ? 1 : -1));
+  return run;
 }
 
 export { STORE_ENDPOINT };

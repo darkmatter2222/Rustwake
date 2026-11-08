@@ -1,0 +1,106 @@
+﻿
+[360x640 ts1 2-machine] inner 360x640 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"7dabccf6","textScale":1,"tick":432909,"machines":2,"credits":34}
+  U-1 hudContentBox.height 640; .objective 107.02px => 16.7 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"
+    line0 .span font 13.2px weight 400 leading 17.82px wrappedBoxes 2 glyph a10/d3 white 4.82 px ink 68..102.81 r294.44 sw0/cw0 sh0/ch0 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 106.63..122.63 r267.2 sw290/cw290 sh16/ch16 "A machine waits for input; check its empty side."
+    line2 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 126.42..142.42 r230.28 sw290/cw290 sh16/ch16 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 146.22..162.22 r270.17 sw290/cw290 sh16/ch16 "Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"
+    line4 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw290/cw290 sh0/ch0 ""
+  legibility: element separations [4.8,4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["13.2/400","11.7/400"] => primary 13.2px / secondary 11.7px = 1.13x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 0 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face null | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [157.25x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Less power30 credits"
+    face [176.75x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %","Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Ferrous10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":2,"machines":["sorter#0 L1","furnace#1 L1"],"credits":34,"store":{"scrap":10,"nonferrous":590,"ferrous":10,"steel":290},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":904,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  sim(node frame)    {"machineLevelSum":2,"machines":["sorter#0 L1","furnace#1 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":3,"powerCapacity":8,"powerRatioPct":100,"batchesDone":19,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[360x640 ts2 2-machine] inner 360x640 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"00eb14d4","textScale":2,"tick":432909,"machines":2,"credits":34}
+  U-1 hudContentBox.height 640; .objective 261.42px => 40.8 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 119x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"
+    line0 .span font 26.4px weight 400 leading 35.64px wrappedBoxes 3 glyph a19/d6 white 10.64 px ink 116.91..223.19 r293.58 sw0/cw0 sh0/ch0 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 220.83..272.58 r270.78 sw290/cw290 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 268.33..320.08 r229.17 sw290/cw290 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 315.83..367.58 r282.47 sw290/cw290 sh49/ch48 "Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"
+    line4 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0.6,0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["26.4/400","21.6/400"] => primary 26.4px / secondary 21.6px = 1.22x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 0 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face null | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [155.25x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Less power30 credits"
+    face [182.75x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %","Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":2,"machines":["sorter#0 L1","furnace#1 L1"],"credits":34,"store":{"scrap":10,"nonferrous":590,"ferrous":10,"steel":290},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":904,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  sim(node frame)    {"machineLevelSum":2,"machines":["sorter#0 L1","furnace#1 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":3,"powerCapacity":8,"powerRatioPct":100,"batchesDone":19,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[390x844 ts1 4-machine] inner 390x844 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"6c5d0953","textScale":1,"tick":433509,"machines":4,"credits":34}
+  U-1 hudContentBox.height 844; .objective 89.2px => 10.6 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"
+    line0 .span font 13.2px weight 400 leading 17.82px wrappedBoxes 1 glyph a10/d3 white 4.82 px ink 68..85 r336.69 sw0/cw0 sh0/ch0 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 88.81..104.81 r267.2 sw317/cw317 sh16/ch16 "A machine waits for input; check its empty side."
+    line2 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 108.61..124.61 r230.28 sw317/cw317 sh16/ch16 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .status-line font 11.7px weight 400 leading 15.8px wrappedBoxes 1 glyph a9/d3 white 3.8 px ink 128.41..144.41 r287.69 sw317/cw317 sh16/ch16 "Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"
+    line4 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw317/cw317 sh0/ch0 ""
+  legibility: element separations [4.8,4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["13.2/400","11.7/400"] => primary 13.2px / secondary 11.7px = 1.13x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 0 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face null | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [172.25x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Less power30 credits"
+    face [191.75x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %","Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Ferrous10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":4,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":34,"store":{"scrap":10,"ferrous":10,"steel":355,"nonferrous":122,"copper":298,"residue":10,"polymer":95},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1527,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  sim(node frame)    {"machineLevelSum":4,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":3,"powerCapacity":8,"powerRatioPct":100,"batchesDone":55,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[390x844 ts2 4-machine] inner 390x844 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"8691872c","textScale":2,"tick":433509,"machines":4,"credits":34}
+  U-1 hudContentBox.height 844; .objective 261.42px => 31 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 130x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"
+    line0 .span font 26.4px weight 400 leading 35.64px wrappedBoxes 3 glyph a19/d6 white 10.64 px ink 116.91..223.19 r325.69 sw0/cw0 sh0/ch0 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 220.83..272.58 r330.91 sw317/cw317 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 268.33..320.08 r330.63 sw317/cw317 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 315.83..367.58 r330.69 sw317/cw317 sh49/ch48 "Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"
+    line4 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0.6,0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["26.4/400","21.6/400"] => primary 26.4px / secondary 21.6px = 1.22x (floor 1.25x)
+    accent row .dock buttons 2 accent-filled 0 ["Less power30 credits","Faster batches40 credits"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face null | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [170.25x46 top 790 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Less power30 credits"
+    face [197.75x46 top 790 font 18.6px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  persona {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %","Batch pips ┬╖ Scrap sorter #0 0/5 ┬╖ Furnace #1 0/5 +2"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap10","Credits34","Store900/900"]}
+  sim(app persisted) {"machineLevelSum":4,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":34,"store":{"scrap":10,"ferrous":10,"steel":355,"nonferrous":122,"copper":298,"residue":10,"polymer":95},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":1527,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  sim(node frame)    {"machineLevelSum":4,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":3,"powerCapacity":8,"powerRatioPct":100,"batchesDone":55,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":true}
+
+[360x640 ts2 4-machine fork-open + refused tap] purse 30 saved {"schemaVersion":1,"checksum":"4198d86d","textScale":2,"tick":1516,"machines":4,"credits":0}
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  sim(app persisted) {"machineLevelSum":5,"machines":["sorter#0 L2","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":0,"store":{"scrap":9,"ferrous":1},"storeUnits":10,"storeCapacity":900,"drones":1,"powerRequested":5,"powerCapacity":8,"powerRatioPct":100,"batchesDone":56,"step":"build","forkPrices":["speed:45 credits","draw:35 credits"]}
+  sim(node frame)    {"machineLevelSum":4,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1"],"credits":30,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":3,"powerCapacity":8,"powerRatioPct":100,"batchesDone":55,"step":"upgrade","forkPrices":["speed:40 credits","draw:30 credits"]}
+  accent-filled face index -1 of 2 (0:Less power30 credits | 1:Faster batches40 credits)
+  U-1 hudContentBox.height 640; .objective 285.17px => 44.6 % (cap 42 %)
+  card: "Choose what improves on the Scrap sorter ┬╖ 30 creditsA machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 5 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30Batch pips ┬╖ Scrap sorter #0 2/5 ┬╖ Furnace #1 5/5 +2"
+    line0 font 26.4px w400 wrappedBoxes 3 sw0/cw0 "Choose what improves on the Scrap sorter ┬╖ 30 credits"
+    line1 font 21.6px w400 wrappedBoxes 2 sw290/cw290 "A machine waits for input; check its empty side."
+    line2 font 21.6px w400 wrappedBoxes 3 sw290/cw290 "Drones 1 ┬╖ Power 8 ┬╖ 5 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30"
+    line3 font 21.6px w400 wrappedBoxes 2 sw290/cw290 "Batch pips ┬╖ Scrap sorter #0 2/5 ┬╖ Furnace #1 5/5 +2"
+    line4 font 26.4px w400 wrappedBoxes 0 sw0/cw0 ""
+  refused tap printed: "Need 40 credits ┬╖ have 30" (toast now "Need 40 credits ┬╖ have 30")
+  persona before the refused tap {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":null,"power":{"capacity":8,"requested":5,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 5 requested ┬╖ 100 %","Batch pips ┬╖ Scrap sorter #0 2/5 ┬╖ Furnace #1 5/5 +2"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap9","Credits30","Store10/900"]}
+  persona after the refused tap {"nextTapFace":"Less power30 credits","leftmostFace":"Less power30 credits","shortfall":{"need":40,"word":"credits","have":30},"power":{"capacity":8,"requested":5,"percent":100},"drones":1,"cardLineCount":4,"cardLines":["Choose what improves on the Scrap sorter ┬╖ 30 credits","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 5 requested ┬╖ 100 % ┬╖ Last need 40 credits ┬╖ have 30","Batch pips ┬╖ Scrap sorter #0 2/5 ┬╖ Furnace #1 5/5 +2"],"faces":["Less power30 credits","Faster batches40 credits"],"chips":["Scrap9","Credits30","Store10/900"]}
+    face [155.25x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Less power30 credits"
+    face [182.75x46 top 586 font 18.6px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Faster batches40 credits"
+  U-3 leftmost face before the tap "Less power30 credits" (accent-filled index -1) prices ["Less power30 credits","Faster batches40 credits"]; machine level sum 4 -> 5 after one leftmost tap; dock row after the paid tap ["Store","Yard","Build Wire mill30 scrap + 6 nonferrous","Build"]
+  U-7 smallest face 46px; page scroll 360x640 vs 360x640; pageerrors 0
+
+entry chunk [{"name":"index-Cy798ZOB.js","bytes":231353}] (base 231878 B, ceiling 233000 B)

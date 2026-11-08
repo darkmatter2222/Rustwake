@@ -360,6 +360,14 @@ export const TUNING = {
   exportContractCredits: 30,
   routeCapacity: 24,
   routeLatencyTicks: 5,
+  /** BELT-001: scrap charged per tile a connection's run crosses (beltCostPerTile × run length). */
+  beltCostPerTile: 1,
+  /** BELT-001: ticks of latency per tile crossed, so a longer run is a slower link. */
+  beltLatencyPerTile: 2,
+  /** BELT-001: percent of the blueprint's build cost a `machine.move` charges. */
+  movePenaltyPct: 50,
+  /** BELT-001: percent returned by `route.remove` and by `machine.dismantle` on the build cost. */
+  dismantleRefundPct: 90,
   offlineCapTicks: 12 * 3600 * TICKS_PER_SECOND,
   activeBoostCapPercent: 10,
   /** Units of one resource the yard keeps back so routes and builds still work. */
