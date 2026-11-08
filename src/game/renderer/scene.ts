@@ -6,7 +6,6 @@ import {
   APRON_PROPS,
   APRON_SHADOWS,
   APRON_TOPS,
-  ATLAS_PLACE,
   COLOR_KEYS,
   FLOOR_KIT,
   FLOOR_POSTS,
@@ -438,49 +437,6 @@ function drawDock(
   if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(14 * s));
 }
 
-/**
- * ART-004 A-1/A-2: the pilot atlas page. One offscreen canvas, 64 device px per role row
- * (2 px per world unit inside the 32-unit cell box), baked once from the same PARTS rows
- * the vector path paints; after that every machine costs one `drawImage` instead of its
- * part loop. The page needs a real 2D context, so under the recording stub (jsdom has no
- * canvas package) it stays unbuilt and the deterministic op-log witnesses keep the vector
- * path byte for byte.
- */
-const ATLAS_PX = 64;
-let atlasPage: HTMLCanvasElement | null | undefined;
-
-function atlasOf(): HTMLCanvasElement | null {
-  if (atlasPage === undefined) {
-    atlasPage = null;
-    if (typeof document !== "undefined") {
-      const ids = Object.keys(PARTS);
-      const page = document.createElement("canvas");
-      page.width = ATLAS_PX;
-      page.height = ATLAS_PX * ids.length;
-      const buf = page.getContext("2d");
-      if (buf) {
-        buf.imageSmoothingEnabled = false;
-        ids.forEach((id, i) =>
-          paintParts(buf, ATLAS_PX / 2, ATLAS_PX / 2 + i * ATLAS_PX, ATLAS_PX / 32, PARTS[id])
-        );
-        atlasPage = page;
-      }
-    }
-  }
-  return atlasPage;
-}
-
-/**
- * ART-004 A-2: the baked version carried by one tile. The pilot has a single shared page,
- * so no tile owns a version of its own and `null` is the answer for every machine - which
- * is exactly what keeps the existing canvas witnesses (26 distinct hashes at 250 ms) in
- * force: the frame is still produced by the one `drawScene` pass.
- */
-export function spriteVersionAt(tile: number): number | null {
-  void tile; // one shared page: the index is not part of the answer
-  return null;
-}
-
 function drawMachine(
   ctx: CanvasRenderingContext2D,
   machine: MachineState,
@@ -496,27 +452,12 @@ function drawMachine(
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
-  // A-2: one drawImage from the pilot page when it exists, the part loop otherwise. The
-  // per-kind placement rides on both the box and its facet pair, so they stay aligned.
-  const page = atlasOf();
-  const cell = page ? Object.keys(PARTS).indexOf(machine.blueprint) : -1;
-  const [dy, k] = (cell >= 0 && ATLAS_PLACE[machine.blueprint]) || [0, 1];
-  if (page && cell >= 0) {
-    const half = 16 * s * k;
-    ctx.drawImage(
-      page,
-      0,
-      cell * ATLAS_PX,
-      ATLAS_PX,
-      ATLAS_PX,
-      snap(p.x - half),
-      snap(p.y - half + dy * s),
-      snap(2 * half),
-      snap(2 * half)
-    );
-  } else {
-    paintParts(ctx, p.x, p.y, s, row);
-  }
+  // ART-004 g2: the part loop is the one path that paints a machine. The A-2 pilot atlas page
+  // is dropped - the reviewer's own bench prices it at no measurable CPU gain (+616 B of
+  // entry chunk for a 12-hour yard at 40.60 ms versus 41.36 ms on main), and its per-kind
+  // scale/shift put different pixels on the live frame than the unit-resolution witnesses
+  // read, so the phone census and the op-log table disagreed by construction.
+  paintParts(ctx, p.x, p.y, s, row);
   // ART-001/ART-003: one light direction for the whole sheet - upper left lit, lower
   // right dark. The lit pair (top edge + left column) rides in the `select` group, the
   // dark pair (underlying bottom + right column) in the `path` group: two grouped paths
@@ -525,13 +466,13 @@ function drawMachine(
   if (body) {
     const [bx, by, bw, bh] = body;
     const inset = bw >= 6 ? 1 : 0; // a 3-unit post keeps the whole width on its lit band
-    sheen.push([p.x + (bx * k + inset) * s, p.y + (by * k + dy) * s, (bw - 2 * inset) * k * s, 2 * s]);
-    shade.push([p.x + (bx * k + inset) * s, p.y + (by * k + dy + bh - 2) * s, (bw - 2 * inset) * k * s, 2 * s]);
+    sheen.push([p.x + (bx + inset) * s, p.y + by * s, (bw - 2 * inset) * s, 2 * s]);
+    shade.push([p.x + (bx + inset) * s, p.y + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
     // The side columns only exist on bodies that have a middle band to lighten/darken;
     // a 3-unit bar is one step already, so the top/bottom pair is the whole facet.
     if (bh >= 6 && bw >= 6) {
-      sheen.push([p.x + bx * k * s, p.y + (by * k + dy + 2) * s, 2 * s, (bh - 4) * k * s]);
-      shade.push([p.x + (bx + bw - 2) * k * s, p.y + (by * k + dy + 2) * s, 2 * s, (bh - 4) * k * s]);
+      sheen.push([p.x + bx * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+      shade.push([p.x + (bx + bw - 2) * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
     }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
@@ -778,22 +719,31 @@ function outline(
  * steps of the same palette. The layout is derived from the view box so the ink
  * reaches all four edges (G-2: the shipped PNG used to fill only a quarter of it).
  */
+/**
+ * The silhouette sheet's layout and gray ramp, as one exported table (ART-004 g2) so the
+ * census instrument reads the same numbers the painter uses instead of mirroring them by
+ * hand: `left`/`top`/`bottom` are the outermost ink of a glyph box in world units, `margin`
+ * the sheet's own margin in CSS px, `phone`/`desktop` the two band scales. `gray` is the
+ * five-step ramp index of a colour index (B2/D-1 instrument).
+ */
+export const SHEET_LAYOUT = { left: 15, top: 16, bottom: 15, margin: 2, phone: 1.8056, desktop: 4 } as const;
+
+/** Gray-ramp step of a colour index: 0..4, the same five steps the sheet paints. */
+export const grayStepOf = (index: number): number => Math.min(4, Math.floor(index / 4));
+
 export function drawSpriteSheet(ctx: CanvasRenderingContext2D, view: ViewState): void {
   const ids = Object.keys(PARTS);
   const grays: PaletteKey[] = ["shadow", "well", "floor", "wreck", "select"];
   // Gray step by colour index (dark table entries -> light accents), no CSS filter.
-  const gray = (i: number): PaletteKey => grays[Math.min(4, Math.floor(i / 4))];
+  const gray = (i: number): PaletteKey => grays[grayStepOf(i)];
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
   // Outermost ink of the whole table, in units from the glyph centre.
-  const LEFT = 15;
-  const TOP = 16;
-  const BOTTOM = 15;
-  const MARGIN = 2;
+  const { left: LEFT, top: TOP, bottom: BOTTOM, margin: MARGIN } = SHEET_LAYOUT;
   const bands = [
-    { scale: 1.8056, from: 0, to: ids.length },
-    { scale: 4, from: 0, to: Math.ceil(ids.length / 2) },
-    { scale: 4, from: Math.ceil(ids.length / 2), to: ids.length },
+    { scale: SHEET_LAYOUT.phone, from: 0, to: ids.length },
+    { scale: SHEET_LAYOUT.desktop, from: 0, to: Math.ceil(ids.length / 2) },
+    { scale: SHEET_LAYOUT.desktop, from: Math.ceil(ids.length / 2), to: ids.length },
   ];
   const heights = bands.map((b) => (TOP + BOTTOM) * b.scale);
   const gap = (view.height - 2 * MARGIN - heights.reduce((a, b) => a + b, 0)) / (bands.length - 1);
