@@ -7,6 +7,14 @@ import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, priceLine, vis
 
 import { PALETTE } from "../game/renderer/sprites";
 
+/* STRAT-004 byte trim: the dock's class fragments are painted from one literal each
+   (11 call sites in this row), same rendered `class` attribute, one copy in the chunk. */
+const BTN = "dock__btn";
+const BTN_PRIMARY = "dock__btn dock__btn--primary";
+const BTN_BRANCH = "dock__btn dock__btn--branch";
+const BTN_BRANCH_PRIMARY = "dock__btn dock__btn--branch dock__btn--primary";
+const COST = "dock__cost";
+
 /* Q-002: the five hexes shared with the renderer read from the one PALETTE
    source; the rest are chip-only tints. */
 const DOT_COLORS: Record<string, string> = {
@@ -165,7 +173,7 @@ export function DockButtons(props: {
     const placeCost = priceLine(costText(props.buildBlueprint));
     return (
       <div className="dock">
-        <button className="dock__btn" onClick={props.onCancelBuild}>
+        <button className={BTN} onClick={props.onCancelBuild}>
           {t("btn.cancel")}
         </button>
         {/* PLAY-001 P-3: one committed choice, one label. The build step's own wording
@@ -175,14 +183,14 @@ export function DockButtons(props: {
             STRAT-004: `priceLine` appends the face's own pending numbers to that price,
             so one `dock__cost` line carries `10 scrap + 5 ferrous · waits 10 scrap ·
             have 5 · in 2s` and a blocked build is countable on the face itself. */}
-        <button className="dock__btn dock__btn--primary" onClick={props.onPlace}>
+        <button className={BTN_PRIMARY} onClick={props.onPlace}>
           {t("btn.buildNamed", {
             machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint,
           })}
-          <span className="dock__cost">{placeCost}</span>
+          <span className={COST}>{placeCost}</span>
         </button>
         <button
-          className="dock__btn"
+          className={BTN}
           onClick={() => {
             const index = blueprintIds.indexOf(props.buildBlueprint ?? blueprintIds[0]);
             props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
@@ -210,36 +218,36 @@ export function DockButtons(props: {
         props.primary.branches.map((branch, index) => (
           <button
             className={
-              index === 0 ? "dock__btn dock__btn--branch dock__btn--primary" : "dock__btn dock__btn--branch"
+              index === 0 ? BTN_BRANCH_PRIMARY : BTN_BRANCH
             }
             key={branch.id}
             onClick={branch.run}
           >
             {branch.label}
-            {branch.cost ? <span className="dock__cost">{branch.cost}</span> : null}
+            {branch.cost ? <span className={COST}>{branch.cost}</span> : null}
           </button>
         ))
       ) : (
         <>
-          <button className="dock__btn" onClick={props.onInventory}>
+          <button className={BTN} onClick={props.onInventory}>
             {t("btn.store")}
           </button>
           {/* The yard record and the save transfer, unlocked after the tutorial so the
               first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
           {props.yard ? (
-            <button className="dock__btn" onClick={props.onYard}>
+            <button className={BTN} onClick={props.onYard}>
               {t("btn.yard")}
             </button>
           ) : null}
-          <button className="dock__btn dock__btn--primary" onClick={props.primary.run}>
+          <button className={BTN_PRIMARY} onClick={props.primary.run}>
             {props.primary.label}
-            {props.primary.cost ? <span className="dock__cost">{priceLine(props.primary.cost)}</span> : null}
+            {props.primary.cost ? <span className={COST}>{priceLine(props.primary.cost)}</span> : null}
           </button>
-          <button className="dock__btn" onClick={() => props.onPickBlueprint(blueprintIds[0])}>
+          <button className={BTN} onClick={() => props.onPickBlueprint(blueprintIds[0])}>
             {t("btn.build")}
           </button>
           {props.research ? (
-            <button className="dock__btn" onClick={props.onResearch}>
+            <button className={BTN} onClick={props.onResearch}>
               {t("btn.research")}
             </button>
           ) : null}
