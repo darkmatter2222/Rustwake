@@ -219,7 +219,7 @@
     "requirement": ">=3 luminance bands inside one machine box, contact shadow under every footprint, one light direction",
     "luminanceBucketsInsideMachineBoxes": {
       "sorter8": 8,
-      "furnace14": 7,
+      "furnace14": 6,
       "dock2": 5,
       "wreck": 6
     },
@@ -231,7 +231,7 @@
     },
     "contactShadowPx": {
       "base": 246,
-      "now": 452
+      "now": 435
     },
     "note": "base painted one flat fill per body (1 band); the ellipse row is tuple slot 5 in every static PARTS row plus the wreck path"
   },
@@ -243,11 +243,11 @@
     },
     "machineRowInkPx": {
       "base": 6341,
-      "now": 7290
+      "now": 7484
     },
     "machineRowInkSharePct": {
       "base": 63.2,
-      "now": 62.9
+      "now": 64.6
     },
     "cellInkPctOfCellArea": {
       "base": {
@@ -257,8 +257,8 @@
         "wreck": 146.84
       },
       "now": {
-        "sorter8": 62.95,
-        "furnace14": 58.14,
+        "sorter8": 63.59,
+        "furnace14": 62.48,
         "dock2": 66.13,
         "wreck": 149.52
       },
@@ -322,10 +322,10 @@
   },
   "a3_6": {
     "requirement": "validate behaviour line unchanged, schemaVersion 1, checksum eede3c4f, tests green, entry chunk <= 233000 B",
-    "entryChunkBytes": 232825,
+    "entryChunkBytes": 232792,
     "entryChunkCeiling": 233000,
     "entryChunkBaseBytes": 231878,
-    "entryChunkDeltaBytes": 947
+    "entryChunkDeltaBytes": 914
   },
   "plate": {
     "requirement": "the plate must not float in the dead-black band",

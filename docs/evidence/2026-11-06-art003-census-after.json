@@ -1,6 +1,6 @@
 {
   "tag": "after",
-  "url": "http://localhost:5177/",
+  "url": "http://localhost:5185/",
   "scene": {
     "canvas": [
       390,
@@ -11,7 +11,7 @@
       "34,56,74 36.1%",
       "8,13,24 4.3%",
       "44,66,87 2.6%",
-      "138,169,196 1.6%",
+      "138,169,196 1.5%",
       "127,159,187 1.3%",
       "22,40,58 1.2%",
       "16,27,40 1%",
@@ -21,7 +21,7 @@
       "14,23,38 0.3%"
     ],
     "luminanceBuckets8": [
-      94.8,
+      94.9,
       0.5,
       2.5,
       1.6,
@@ -30,7 +30,7 @@
       0,
       0.2
     ],
-    "twoDarkestSharePct": 95.3,
+    "twoDarkestSharePct": 95.4,
     "twoTopColorsSharePct": 82.1,
     "cells": {
       "sorter8": {
@@ -50,11 +50,156 @@
           6,
           7
         ],
-        "inkPx": 2458,
-        "inkSharePct": 63.9,
-        "inkPctOfCellArea": 63.13,
-        "contactShadowPx": 49,
-        "horizonBandPx": 198
+        "inkPx": 2449,
+        "inkSharePct": 63.7,
+        "inkPctOfCellArea": 62.9,
+        "contactShadowPx": 51,
+        "horizonBandPx": 212,
+        "layers": {
+          "totalPx": 3844,
+          "distinctColors": 124,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1395,
+              "sharePct": 36.29
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 568,
+              "sharePct": 14.78
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 283,
+              "sharePct": 7.36
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 212,
+              "sharePct": 5.52
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 564,
+              "sharePct": 14.67
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 8,
+              "sharePct": 0.21
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 20,
+              "sharePct": 0.52
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 115,
+              "sharePct": 2.99
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 7,
+              "sharePct": 0.18
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 51,
+              "sharePct": 1.33
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1769,
+          "machinerySharePct": 46.02,
+          "namedSharePct": 84.08,
+          "topUnmatched": [
+            "76,96,117 3.38%",
+            "91,118,141 1.2%",
+            "190,208,223 1.09%",
+            "164,179,193 0.88%",
+            "65,89,111 0.88%"
+          ],
+          "unaccountedPct": 15.92
+        }
       },
       "furnace14": {
         "box": [
@@ -71,11 +216,156 @@
           4,
           7
         ],
-        "inkPx": 2381,
-        "inkSharePct": 61,
-        "inkPctOfCellArea": 61.15,
-        "contactShadowPx": 111,
-        "horizonBandPx": 184
+        "inkPx": 2309,
+        "inkSharePct": 59.1,
+        "inkPctOfCellArea": 59.3,
+        "contactShadowPx": 76,
+        "horizonBandPx": 184,
+        "layers": {
+          "totalPx": 3906,
+          "distinctColors": 68,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1597,
+              "sharePct": 40.89
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 11,
+              "sharePct": 0.28
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 633,
+              "sharePct": 16.21
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 230,
+              "sharePct": 5.89
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 184,
+              "sharePct": 4.71
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 395,
+              "sharePct": 10.11
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 31,
+              "sharePct": 0.79
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 40,
+              "sharePct": 1.02
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 61,
+              "sharePct": 1.56
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 85,
+              "sharePct": 2.18
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 161,
+              "sharePct": 4.12
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 76,
+              "sharePct": 1.95
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1758,
+          "machinerySharePct": 45.01,
+          "namedSharePct": 89.94,
+          "topUnmatched": [
+            "78,107,130 1.64%",
+            "63,85,106 1.1%",
+            "117,84,66 0.84%",
+            "177,197,212 0.82%",
+            "72,101,123 0.54%"
+          ],
+          "unaccountedPct": 10.06
+        }
       },
       "dock2": {
         "box": [
@@ -95,7 +385,152 @@
         "inkSharePct": 67,
         "inkPctOfCellArea": 66.13,
         "contactShadowPx": 123,
-        "horizonBandPx": 24
+        "horizonBandPx": 24,
+        "layers": {
+          "totalPx": 3844,
+          "distinctColors": 63,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 1269,
+              "sharePct": 33.01
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 9,
+              "sharePct": 0.23
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 66,
+              "sharePct": 1.72
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 1579,
+              "sharePct": 41.08
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 24,
+              "sharePct": 0.62
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 5,
+              "sharePct": 0.13
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 54,
+              "sharePct": 1.4
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 60,
+              "sharePct": 1.56
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 123,
+              "sharePct": 3.2
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 1783,
+          "machinerySharePct": 46.38,
+          "namedSharePct": 82.96,
+          "topUnmatched": [
+            "16,27,40 5.2%",
+            "25,42,57 1.61%",
+            "80,107,130 1.46%",
+            "191,171,144 1.25%",
+            "133,164,192 1.14%"
+          ],
+          "unaccountedPct": 17.04
+        }
       },
       "wreck": {
         "box": [
@@ -116,7 +551,152 @@
         "inkSharePct": 99.9,
         "inkPctOfCellArea": 149.52,
         "contactShadowPx": 6,
-        "horizonBandPx": 287
+        "horizonBandPx": 287,
+        "layers": {
+          "totalPx": 5828,
+          "distinctColors": 412,
+          "rows": [
+            {
+              "layer": "floor",
+              "rgb": "34,56,74",
+              "tol": 2,
+              "px": 6,
+              "sharePct": 0.1
+            },
+            {
+              "layer": "plateNight",
+              "rgb": "8,13,24",
+              "tol": 0,
+              "px": 1185,
+              "sharePct": 20.33
+            },
+            {
+              "layer": "gravelTick",
+              "rgb": "63,88,108",
+              "tol": 2,
+              "px": 8,
+              "sharePct": 0.14
+            },
+            {
+              "layer": "gridStroke",
+              "rgb": "51,76,96",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyLight",
+              "rgb": "138,169,196",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "bodyMid",
+              "rgb": "127,159,187",
+              "tol": 2,
+              "px": 194,
+              "sharePct": 3.33
+            },
+            {
+              "layer": "steelLight",
+              "rgb": "111,147,173",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "wreckTone",
+              "rgb": "109,144,171",
+              "tol": 2,
+              "px": 1990,
+              "sharePct": 34.15
+            },
+            {
+              "layer": "facetLight",
+              "rgb": "244,247,251",
+              "tol": 2,
+              "px": 16,
+              "sharePct": 0.27
+            },
+            {
+              "layer": "facetDark",
+              "rgb": "44,66,87",
+              "tol": 2,
+              "px": 287,
+              "sharePct": 4.92
+            },
+            {
+              "layer": "slotWell",
+              "rgb": "14,23,38",
+              "tol": 2,
+              "px": 242,
+              "sharePct": 4.15
+            },
+            {
+              "layer": "kitDrain",
+              "rgb": "22,40,58",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "kitPuddle",
+              "rgb": "37,60,79",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "accentAmber",
+              "rgb": "255,183,101",
+              "tol": 2,
+              "px": 69,
+              "sharePct": 1.18
+            },
+            {
+              "layer": "accentCyan",
+              "rgb": "95,216,232",
+              "tol": 2,
+              "px": 134,
+              "sharePct": 2.3
+            },
+            {
+              "layer": "accentRust",
+              "rgb": "201,113,58",
+              "tol": 2,
+              "px": 278,
+              "sharePct": 4.77
+            },
+            {
+              "layer": "accentViolet",
+              "rgb": "138,122,216",
+              "tol": 2,
+              "px": 0,
+              "sharePct": 0
+            },
+            {
+              "layer": "contactShadow",
+              "rgb": "28,46,62",
+              "tol": 3,
+              "px": 6,
+              "sharePct": 0.1
+            }
+          ],
+          "nightPx": 0,
+          "nightSharePct": 0,
+          "machineryPx": 3210,
+          "machinerySharePct": 55.08,
+          "namedSharePct": 75.75,
+          "topUnmatched": [
+            "11,17,30 5.13%",
+            "16,27,40 3.21%",
+            "56,76,95 1.3%",
+            "118,151,179 1.03%",
+            "77,103,125 0.82%"
+          ],
+          "unaccountedPct": 24.25
+        }
       }
     },
     "machineRow": {
@@ -136,11 +716,156 @@
         6,
         7
       ],
-      "inkPx": 7414,
-      "inkSharePct": 63.9,
-      "inkPctOfCellArea": 190.41,
-      "contactShadowPx": 283,
-      "horizonBandPx": 406
+      "inkPx": 7333,
+      "inkSharePct": 63.2,
+      "inkPctOfCellArea": 188.33,
+      "contactShadowPx": 250,
+      "horizonBandPx": 420,
+      "layers": {
+        "totalPx": 11594,
+        "distinctColors": 205,
+        "rows": [
+          {
+            "layer": "floor",
+            "rgb": "34,56,74",
+            "tol": 2,
+            "px": 4261,
+            "sharePct": 36.75
+          },
+          {
+            "layer": "plateNight",
+            "rgb": "8,13,24",
+            "tol": 0,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "gravelTick",
+            "rgb": "63,88,108",
+            "tol": 2,
+            "px": 29,
+            "sharePct": 0.25
+          },
+          {
+            "layer": "gridStroke",
+            "rgb": "51,76,96",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "bodyLight",
+            "rgb": "138,169,196",
+            "tol": 2,
+            "px": 643,
+            "sharePct": 5.55
+          },
+          {
+            "layer": "bodyMid",
+            "rgb": "127,159,187",
+            "tol": 2,
+            "px": 1579,
+            "sharePct": 13.62
+          },
+          {
+            "layer": "steelLight",
+            "rgb": "111,147,173",
+            "tol": 2,
+            "px": 633,
+            "sharePct": 5.46
+          },
+          {
+            "layer": "wreckTone",
+            "rgb": "109,144,171",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "facetLight",
+            "rgb": "244,247,251",
+            "tol": 2,
+            "px": 513,
+            "sharePct": 4.42
+          },
+          {
+            "layer": "facetDark",
+            "rgb": "44,66,87",
+            "tol": 2,
+            "px": 420,
+            "sharePct": 3.62
+          },
+          {
+            "layer": "slotWell",
+            "rgb": "14,23,38",
+            "tol": 2,
+            "px": 959,
+            "sharePct": 8.27
+          },
+          {
+            "layer": "kitDrain",
+            "rgb": "22,40,58",
+            "tol": 2,
+            "px": 39,
+            "sharePct": 0.34
+          },
+          {
+            "layer": "kitPuddle",
+            "rgb": "37,60,79",
+            "tol": 2,
+            "px": 45,
+            "sharePct": 0.39
+          },
+          {
+            "layer": "accentAmber",
+            "rgb": "255,183,101",
+            "tol": 2,
+            "px": 135,
+            "sharePct": 1.16
+          },
+          {
+            "layer": "accentCyan",
+            "rgb": "95,216,232",
+            "tol": 2,
+            "px": 260,
+            "sharePct": 2.24
+          },
+          {
+            "layer": "accentRust",
+            "rgb": "201,113,58",
+            "tol": 2,
+            "px": 168,
+            "sharePct": 1.45
+          },
+          {
+            "layer": "accentViolet",
+            "rgb": "138,122,216",
+            "tol": 2,
+            "px": 0,
+            "sharePct": 0
+          },
+          {
+            "layer": "contactShadow",
+            "rgb": "28,46,62",
+            "tol": 3,
+            "px": 250,
+            "sharePct": 2.16
+          }
+        ],
+        "nightPx": 0,
+        "nightSharePct": 0,
+        "machineryPx": 5310,
+        "machinerySharePct": 45.8,
+        "namedSharePct": 85.68,
+        "topUnmatched": [
+          "16,27,40 1.73%",
+          "76,96,117 1.12%",
+          "78,107,130 0.55%",
+          "25,42,57 0.53%",
+          "80,107,130 0.48%"
+        ],
+        "unaccountedPct": 14.32
+      }
     },
     "bandFit": {
       "scale": 1.95,
@@ -198,15 +923,198 @@
         "horizonBandPx": 0
       }
     },
-    "steelLightPx": 1767,
-    "gridDotPx": 39,
-    "gridDotSharePct": 0.01,
-    "gridDotAlphaPx": 404,
+    "layers": {
+      "totalPx": 329160,
+      "distinctColors": 674,
+      "rows": [
+        {
+          "layer": "floor",
+          "rgb": "34,56,74",
+          "tol": 2,
+          "px": 118710,
+          "sharePct": 36.06
+        },
+        {
+          "layer": "plateNight",
+          "rgb": "8,13,24",
+          "tol": 0,
+          "px": 14208,
+          "sharePct": 4.32
+        },
+        {
+          "layer": "gravelTick",
+          "rgb": "63,88,108",
+          "tol": 2,
+          "px": 407,
+          "sharePct": 0.12
+        },
+        {
+          "layer": "gridStroke",
+          "rgb": "51,76,96",
+          "tol": 2,
+          "px": 1,
+          "sharePct": 0
+        },
+        {
+          "layer": "bodyLight",
+          "rgb": "138,169,196",
+          "tol": 2,
+          "px": 5037,
+          "sharePct": 1.53
+        },
+        {
+          "layer": "bodyMid",
+          "rgb": "127,159,187",
+          "tol": 2,
+          "px": 4166,
+          "sharePct": 1.27
+        },
+        {
+          "layer": "steelLight",
+          "rgb": "111,147,173",
+          "tol": 2,
+          "px": 1755,
+          "sharePct": 0.53
+        },
+        {
+          "layer": "wreckTone",
+          "rgb": "109,144,171",
+          "tol": 2,
+          "px": 1990,
+          "sharePct": 0.6
+        },
+        {
+          "layer": "facetLight",
+          "rgb": "244,247,251",
+          "tol": 2,
+          "px": 556,
+          "sharePct": 0.17
+        },
+        {
+          "layer": "facetDark",
+          "rgb": "44,66,87",
+          "tol": 2,
+          "px": 8579,
+          "sharePct": 2.61
+        },
+        {
+          "layer": "slotWell",
+          "rgb": "14,23,38",
+          "tol": 2,
+          "px": 2066,
+          "sharePct": 0.63
+        },
+        {
+          "layer": "kitDrain",
+          "rgb": "22,40,58",
+          "tol": 2,
+          "px": 4010,
+          "sharePct": 1.22
+        },
+        {
+          "layer": "kitPuddle",
+          "rgb": "37,60,79",
+          "tol": 2,
+          "px": 676,
+          "sharePct": 0.21
+        },
+        {
+          "layer": "accentAmber",
+          "rgb": "255,183,101",
+          "tol": 2,
+          "px": 301,
+          "sharePct": 0.09
+        },
+        {
+          "layer": "accentCyan",
+          "rgb": "95,216,232",
+          "tol": 2,
+          "px": 656,
+          "sharePct": 0.2
+        },
+        {
+          "layer": "accentRust",
+          "rgb": "201,113,58",
+          "tol": 2,
+          "px": 522,
+          "sharePct": 0.16
+        },
+        {
+          "layer": "accentViolet",
+          "rgb": "138,122,216",
+          "tol": 2,
+          "px": 0,
+          "sharePct": 0
+        },
+        {
+          "layer": "contactShadow",
+          "rgb": "28,46,62",
+          "tol": 3,
+          "px": 428,
+          "sharePct": 0.13
+        }
+      ],
+      "nightPx": 151496,
+      "nightSharePct": 46.03,
+      "machineryPx": 25628,
+      "machinerySharePct": 7.79,
+      "namedSharePct": 49.84,
+      "topUnmatched": [
+        "16,27,40 0.98%",
+        "53,86,107 0.4%",
+        "75,93,114 0.23%",
+        "61,82,102 0.23%",
+        "28,48,66 0.23%"
+      ],
+      "unaccountedPct": 4.13
+    },
+    "inkComparison": {
+      "boxDenominatorPx": 11594,
+      "machineryShareOfBoxPct": 45.8,
+      "gravelShareOfBoxPct": 0.25,
+      "gridShareOfBoxPct": 0,
+      "contactShadowShareOfBoxPct": 2.16,
+      "machineryOverGravel": 183.2,
+      "canvasSharesPct": {
+        "machinery": 7.79,
+        "gravel": 0.12,
+        "grid": 0,
+        "floor": 36.06,
+        "plateNight": 4.32,
+        "contactShadow": 0.13
+      },
+      "perBodyToneCanvasPct": {
+        "bodyLight": 1.53,
+        "bodyMid": 1.27,
+        "steelLight": 0.53,
+        "facetLight": 0.17,
+        "facetDark": 2.61,
+        "slotWell": 0.63
+      }
+    },
+    "steelLightPx": 1755,
+    "gridDotPx": 52,
+    "gridDotSharePct": 0.02,
+    "gridDotAlphaPx": 407,
     "gridDotAlphaSharePct": 0.12,
-    "gridInkSharePct": 0.13,
-    "machineBodyPx": 5186,
-    "machineBodySharePct": 1.58,
-    "contactShadowPx": 453
+    "gridInkSharePct": 0.14,
+    "machineBodyPx": 5037,
+    "machineBodySharePct": 1.53,
+    "contactShadowPx": 428,
+    "inkSharesPct": {
+      "denominator": "canvas",
+      "denominatorPx": 329160,
+      "machineBody": 1.53,
+      "gravel": 0.12,
+      "dotGrid": 0.02,
+      "inMachineRowBox": {
+        "machineBody": 45.8,
+        "gravel": 0.25,
+        "dotGrid": 0
+      }
+    },
+    "gravelSharePct": 0.12,
+    "dotGridSharePct": 0.02
   },
   "sheet": {
     "roles": 11,
@@ -351,7 +1259,953 @@
         "signalLab/drone",
         54.7
       ]
-    ]
+    ],
+    "unitMatrix": [
+      [
+        "dock/sorter",
+        48.2
+      ],
+      [
+        "dock/furnace",
+        62.8
+      ],
+      [
+        "dock/wireMill",
+        68.5
+      ],
+      [
+        "dock/signalLab",
+        70.2
+      ],
+      [
+        "dock/drone",
+        55.9
+      ],
+      [
+        "sorter/furnace",
+        56.7
+      ],
+      [
+        "sorter/wireMill",
+        49.1
+      ],
+      [
+        "sorter/signalLab",
+        64.9
+      ],
+      [
+        "sorter/drone",
+        58
+      ],
+      [
+        "furnace/wireMill",
+        61.1
+      ],
+      [
+        "furnace/signalLab",
+        48.9
+      ],
+      [
+        "furnace/drone",
+        51.8
+      ],
+      [
+        "wireMill/signalLab",
+        61.8
+      ],
+      [
+        "wireMill/drone",
+        54.1
+      ],
+      [
+        "signalLab/drone",
+        55.4
+      ]
+    ],
+    "alignedAll": {
+      "window": [
+        58,
+        58
+      ],
+      "totalCells": 3364,
+      "ids": [
+        "dock",
+        "sorter",
+        "furnace",
+        "wireMill",
+        "signalLab",
+        "generic",
+        "polymerRecycler",
+        "copperSeparator",
+        "platePress",
+        "circuitAssembler",
+        "drone"
+      ],
+      "machineIds": [
+        "sorter",
+        "furnace",
+        "wireMill",
+        "signalLab",
+        "polymerRecycler",
+        "copperSeparator",
+        "platePress",
+        "circuitAssembler",
+        "generic"
+      ],
+      "summaryAll": {
+        "pairs": 55,
+        "minPct": 25.6,
+        "minPair": "generic/platePress",
+        "meanPct": 52.22,
+        "thresholdPct": 32,
+        "passes": false
+      },
+      "summaryMachines": {
+        "pairs": 36,
+        "minPct": 25.6,
+        "minPair": "generic/platePress",
+        "meanPct": 50.65,
+        "thresholdPct": 32,
+        "passes": false
+      },
+      "rows": [
+        {
+          "pair": "dock/sorter",
+          "diffCells": 1549,
+          "totalCells": 3364,
+          "pct": 46
+        },
+        {
+          "pair": "dock/furnace",
+          "diffCells": 2103,
+          "totalCells": 3364,
+          "pct": 62.5
+        },
+        {
+          "pair": "dock/wireMill",
+          "diffCells": 2289,
+          "totalCells": 3364,
+          "pct": 68
+        },
+        {
+          "pair": "dock/signalLab",
+          "diffCells": 2341,
+          "totalCells": 3364,
+          "pct": 69.6
+        },
+        {
+          "pair": "dock/generic",
+          "diffCells": 2233,
+          "totalCells": 3364,
+          "pct": 66.4
+        },
+        {
+          "pair": "dock/polymerRecycler",
+          "diffCells": 2170,
+          "totalCells": 3364,
+          "pct": 64.5
+        },
+        {
+          "pair": "dock/copperSeparator",
+          "diffCells": 2396,
+          "totalCells": 3364,
+          "pct": 71.2
+        },
+        {
+          "pair": "dock/platePress",
+          "diffCells": 2284,
+          "totalCells": 3364,
+          "pct": 67.9
+        },
+        {
+          "pair": "dock/circuitAssembler",
+          "diffCells": 2416,
+          "totalCells": 3364,
+          "pct": 71.8
+        },
+        {
+          "pair": "dock/drone",
+          "diffCells": 1866,
+          "totalCells": 3364,
+          "pct": 55.5
+        },
+        {
+          "pair": "sorter/furnace",
+          "diffCells": 1910,
+          "totalCells": 3364,
+          "pct": 56.8
+        },
+        {
+          "pair": "sorter/wireMill",
+          "diffCells": 1727,
+          "totalCells": 3364,
+          "pct": 51.3
+        },
+        {
+          "pair": "sorter/signalLab",
+          "diffCells": 2167,
+          "totalCells": 3364,
+          "pct": 64.4
+        },
+        {
+          "pair": "sorter/generic",
+          "diffCells": 1826,
+          "totalCells": 3364,
+          "pct": 54.3
+        },
+        {
+          "pair": "sorter/polymerRecycler",
+          "diffCells": 1415,
+          "totalCells": 3364,
+          "pct": 42.1
+        },
+        {
+          "pair": "sorter/copperSeparator",
+          "diffCells": 1885,
+          "totalCells": 3364,
+          "pct": 56
+        },
+        {
+          "pair": "sorter/platePress",
+          "diffCells": 1823,
+          "totalCells": 3364,
+          "pct": 54.2
+        },
+        {
+          "pair": "sorter/circuitAssembler",
+          "diffCells": 1976,
+          "totalCells": 3364,
+          "pct": 58.7
+        },
+        {
+          "pair": "sorter/drone",
+          "diffCells": 1867,
+          "totalCells": 3364,
+          "pct": 55.5
+        },
+        {
+          "pair": "furnace/wireMill",
+          "diffCells": 2142,
+          "totalCells": 3364,
+          "pct": 63.7
+        },
+        {
+          "pair": "furnace/signalLab",
+          "diffCells": 1693,
+          "totalCells": 3364,
+          "pct": 50.3
+        },
+        {
+          "pair": "furnace/generic",
+          "diffCells": 1801,
+          "totalCells": 3364,
+          "pct": 53.5
+        },
+        {
+          "pair": "furnace/polymerRecycler",
+          "diffCells": 1728,
+          "totalCells": 3364,
+          "pct": 51.4
+        },
+        {
+          "pair": "furnace/copperSeparator",
+          "diffCells": 1911,
+          "totalCells": 3364,
+          "pct": 56.8
+        },
+        {
+          "pair": "furnace/platePress",
+          "diffCells": 1895,
+          "totalCells": 3364,
+          "pct": 56.3
+        },
+        {
+          "pair": "furnace/circuitAssembler",
+          "diffCells": 2113,
+          "totalCells": 3364,
+          "pct": 62.8
+        },
+        {
+          "pair": "furnace/drone",
+          "diffCells": 1713,
+          "totalCells": 3364,
+          "pct": 50.9
+        },
+        {
+          "pair": "wireMill/signalLab",
+          "diffCells": 2122,
+          "totalCells": 3364,
+          "pct": 63.1
+        },
+        {
+          "pair": "wireMill/generic",
+          "diffCells": 1858,
+          "totalCells": 3364,
+          "pct": 55.2
+        },
+        {
+          "pair": "wireMill/polymerRecycler",
+          "diffCells": 1575,
+          "totalCells": 3364,
+          "pct": 46.8
+        },
+        {
+          "pair": "wireMill/copperSeparator",
+          "diffCells": 1835,
+          "totalCells": 3364,
+          "pct": 54.5
+        },
+        {
+          "pair": "wireMill/platePress",
+          "diffCells": 1823,
+          "totalCells": 3364,
+          "pct": 54.2
+        },
+        {
+          "pair": "wireMill/circuitAssembler",
+          "diffCells": 1506,
+          "totalCells": 3364,
+          "pct": 44.8
+        },
+        {
+          "pair": "wireMill/drone",
+          "diffCells": 1836,
+          "totalCells": 3364,
+          "pct": 54.6
+        },
+        {
+          "pair": "signalLab/generic",
+          "diffCells": 2123,
+          "totalCells": 3364,
+          "pct": 63.1
+        },
+        {
+          "pair": "signalLab/polymerRecycler",
+          "diffCells": 2137,
+          "totalCells": 3364,
+          "pct": 63.5
+        },
+        {
+          "pair": "signalLab/copperSeparator",
+          "diffCells": 2101,
+          "totalCells": 3364,
+          "pct": 62.5
+        },
+        {
+          "pair": "signalLab/platePress",
+          "diffCells": 2305,
+          "totalCells": 3364,
+          "pct": 68.5
+        },
+        {
+          "pair": "signalLab/circuitAssembler",
+          "diffCells": 2055,
+          "totalCells": 3364,
+          "pct": 61.1
+        },
+        {
+          "pair": "signalLab/drone",
+          "diffCells": 1839,
+          "totalCells": 3364,
+          "pct": 54.7
+        },
+        {
+          "pair": "generic/polymerRecycler",
+          "diffCells": 922,
+          "totalCells": 3364,
+          "pct": 27.4
+        },
+        {
+          "pair": "generic/copperSeparator",
+          "diffCells": 965,
+          "totalCells": 3364,
+          "pct": 28.7
+        },
+        {
+          "pair": "generic/platePress",
+          "diffCells": 860,
+          "totalCells": 3364,
+          "pct": 25.6
+        },
+        {
+          "pair": "generic/circuitAssembler",
+          "diffCells": 1395,
+          "totalCells": 3364,
+          "pct": 41.5
+        },
+        {
+          "pair": "generic/drone",
+          "diffCells": 1241,
+          "totalCells": 3364,
+          "pct": 36.9
+        },
+        {
+          "pair": "polymerRecycler/copperSeparator",
+          "diffCells": 1887,
+          "totalCells": 3364,
+          "pct": 56.1
+        },
+        {
+          "pair": "polymerRecycler/platePress",
+          "diffCells": 922,
+          "totalCells": 3364,
+          "pct": 27.4
+        },
+        {
+          "pair": "polymerRecycler/circuitAssembler",
+          "diffCells": 1371,
+          "totalCells": 3364,
+          "pct": 40.8
+        },
+        {
+          "pair": "polymerRecycler/drone",
+          "diffCells": 1195,
+          "totalCells": 3364,
+          "pct": 35.5
+        },
+        {
+          "pair": "copperSeparator/platePress",
+          "diffCells": 1223,
+          "totalCells": 3364,
+          "pct": 36.4
+        },
+        {
+          "pair": "copperSeparator/circuitAssembler",
+          "diffCells": 946,
+          "totalCells": 3364,
+          "pct": 28.1
+        },
+        {
+          "pair": "copperSeparator/drone",
+          "diffCells": 1343,
+          "totalCells": 3364,
+          "pct": 39.9
+        },
+        {
+          "pair": "platePress/circuitAssembler",
+          "diffCells": 1395,
+          "totalCells": 3364,
+          "pct": 41.5
+        },
+        {
+          "pair": "platePress/drone",
+          "diffCells": 1271,
+          "totalCells": 3364,
+          "pct": 37.8
+        },
+        {
+          "pair": "circuitAssembler/drone",
+          "diffCells": 1323,
+          "totalCells": 3364,
+          "pct": 39.3
+        }
+      ]
+    },
+    "unitAll": {
+      "cell": [
+        32,
+        32
+      ],
+      "totalCells": 1024,
+      "ids": [
+        "dock",
+        "sorter",
+        "furnace",
+        "wireMill",
+        "signalLab",
+        "generic",
+        "polymerRecycler",
+        "copperSeparator",
+        "platePress",
+        "circuitAssembler",
+        "drone"
+      ],
+      "summaryAll": {
+        "pairs": 55,
+        "minPct": 27.5,
+        "minPair": "generic/polymerRecycler",
+        "meanPct": 52.06,
+        "thresholdPct": 32,
+        "passes": false
+      },
+      "summaryMachines": {
+        "pairs": 36,
+        "minPct": 27.5,
+        "minPair": "generic/polymerRecycler",
+        "meanPct": 49.95,
+        "thresholdPct": 32,
+        "passes": false
+      },
+      "rows": [
+        {
+          "pair": "dock/sorter",
+          "diffCells": 494,
+          "totalCells": 1024,
+          "pct": 48.2
+        },
+        {
+          "pair": "dock/furnace",
+          "diffCells": 643,
+          "totalCells": 1024,
+          "pct": 62.8
+        },
+        {
+          "pair": "dock/wireMill",
+          "diffCells": 701,
+          "totalCells": 1024,
+          "pct": 68.5
+        },
+        {
+          "pair": "dock/signalLab",
+          "diffCells": 719,
+          "totalCells": 1024,
+          "pct": 70.2
+        },
+        {
+          "pair": "dock/generic",
+          "diffCells": 688,
+          "totalCells": 1024,
+          "pct": 67.2
+        },
+        {
+          "pair": "dock/polymerRecycler",
+          "diffCells": 681,
+          "totalCells": 1024,
+          "pct": 66.5
+        },
+        {
+          "pair": "dock/copperSeparator",
+          "diffCells": 733,
+          "totalCells": 1024,
+          "pct": 71.6
+        },
+        {
+          "pair": "dock/platePress",
+          "diffCells": 714,
+          "totalCells": 1024,
+          "pct": 69.7
+        },
+        {
+          "pair": "dock/circuitAssembler",
+          "diffCells": 737,
+          "totalCells": 1024,
+          "pct": 72
+        },
+        {
+          "pair": "dock/drone",
+          "diffCells": 572,
+          "totalCells": 1024,
+          "pct": 55.9
+        },
+        {
+          "pair": "sorter/furnace",
+          "diffCells": 581,
+          "totalCells": 1024,
+          "pct": 56.7
+        },
+        {
+          "pair": "sorter/wireMill",
+          "diffCells": 503,
+          "totalCells": 1024,
+          "pct": 49.1
+        },
+        {
+          "pair": "sorter/signalLab",
+          "diffCells": 665,
+          "totalCells": 1024,
+          "pct": 64.9
+        },
+        {
+          "pair": "sorter/generic",
+          "diffCells": 561,
+          "totalCells": 1024,
+          "pct": 54.8
+        },
+        {
+          "pair": "sorter/polymerRecycler",
+          "diffCells": 438,
+          "totalCells": 1024,
+          "pct": 42.8
+        },
+        {
+          "pair": "sorter/copperSeparator",
+          "diffCells": 582,
+          "totalCells": 1024,
+          "pct": 56.8
+        },
+        {
+          "pair": "sorter/platePress",
+          "diffCells": 546,
+          "totalCells": 1024,
+          "pct": 53.3
+        },
+        {
+          "pair": "sorter/circuitAssembler",
+          "diffCells": 600,
+          "totalCells": 1024,
+          "pct": 58.6
+        },
+        {
+          "pair": "sorter/drone",
+          "diffCells": 594,
+          "totalCells": 1024,
+          "pct": 58
+        },
+        {
+          "pair": "furnace/wireMill",
+          "diffCells": 626,
+          "totalCells": 1024,
+          "pct": 61.1
+        },
+        {
+          "pair": "furnace/signalLab",
+          "diffCells": 501,
+          "totalCells": 1024,
+          "pct": 48.9
+        },
+        {
+          "pair": "furnace/generic",
+          "diffCells": 529,
+          "totalCells": 1024,
+          "pct": 51.7
+        },
+        {
+          "pair": "furnace/polymerRecycler",
+          "diffCells": 520,
+          "totalCells": 1024,
+          "pct": 50.8
+        },
+        {
+          "pair": "furnace/copperSeparator",
+          "diffCells": 562,
+          "totalCells": 1024,
+          "pct": 54.9
+        },
+        {
+          "pair": "furnace/platePress",
+          "diffCells": 564,
+          "totalCells": 1024,
+          "pct": 55.1
+        },
+        {
+          "pair": "furnace/circuitAssembler",
+          "diffCells": 629,
+          "totalCells": 1024,
+          "pct": 61.4
+        },
+        {
+          "pair": "furnace/drone",
+          "diffCells": 530,
+          "totalCells": 1024,
+          "pct": 51.8
+        },
+        {
+          "pair": "wireMill/signalLab",
+          "diffCells": 633,
+          "totalCells": 1024,
+          "pct": 61.8
+        },
+        {
+          "pair": "wireMill/generic",
+          "diffCells": 544,
+          "totalCells": 1024,
+          "pct": 53.1
+        },
+        {
+          "pair": "wireMill/polymerRecycler",
+          "diffCells": 459,
+          "totalCells": 1024,
+          "pct": 44.8
+        },
+        {
+          "pair": "wireMill/copperSeparator",
+          "diffCells": 543,
+          "totalCells": 1024,
+          "pct": 53
+        },
+        {
+          "pair": "wireMill/platePress",
+          "diffCells": 528,
+          "totalCells": 1024,
+          "pct": 51.6
+        },
+        {
+          "pair": "wireMill/circuitAssembler",
+          "diffCells": 433,
+          "totalCells": 1024,
+          "pct": 42.3
+        },
+        {
+          "pair": "wireMill/drone",
+          "diffCells": 554,
+          "totalCells": 1024,
+          "pct": 54.1
+        },
+        {
+          "pair": "signalLab/generic",
+          "diffCells": 637,
+          "totalCells": 1024,
+          "pct": 62.2
+        },
+        {
+          "pair": "signalLab/polymerRecycler",
+          "diffCells": 649,
+          "totalCells": 1024,
+          "pct": 63.4
+        },
+        {
+          "pair": "signalLab/copperSeparator",
+          "diffCells": 629,
+          "totalCells": 1024,
+          "pct": 61.4
+        },
+        {
+          "pair": "signalLab/platePress",
+          "diffCells": 701,
+          "totalCells": 1024,
+          "pct": 68.5
+        },
+        {
+          "pair": "signalLab/circuitAssembler",
+          "diffCells": 619,
+          "totalCells": 1024,
+          "pct": 60.4
+        },
+        {
+          "pair": "signalLab/drone",
+          "diffCells": 567,
+          "totalCells": 1024,
+          "pct": 55.4
+        },
+        {
+          "pair": "generic/polymerRecycler",
+          "diffCells": 282,
+          "totalCells": 1024,
+          "pct": 27.5
+        },
+        {
+          "pair": "generic/copperSeparator",
+          "diffCells": 282,
+          "totalCells": 1024,
+          "pct": 27.5
+        },
+        {
+          "pair": "generic/platePress",
+          "diffCells": 288,
+          "totalCells": 1024,
+          "pct": 28.1
+        },
+        {
+          "pair": "generic/circuitAssembler",
+          "diffCells": 426,
+          "totalCells": 1024,
+          "pct": 41.6
+        },
+        {
+          "pair": "generic/drone",
+          "diffCells": 388,
+          "totalCells": 1024,
+          "pct": 37.9
+        },
+        {
+          "pair": "polymerRecycler/copperSeparator",
+          "diffCells": 564,
+          "totalCells": 1024,
+          "pct": 55.1
+        },
+        {
+          "pair": "polymerRecycler/platePress",
+          "diffCells": 282,
+          "totalCells": 1024,
+          "pct": 27.5
+        },
+        {
+          "pair": "polymerRecycler/circuitAssembler",
+          "diffCells": 420,
+          "totalCells": 1024,
+          "pct": 41
+        },
+        {
+          "pair": "polymerRecycler/drone",
+          "diffCells": 376,
+          "totalCells": 1024,
+          "pct": 36.7
+        },
+        {
+          "pair": "copperSeparator/platePress",
+          "diffCells": 378,
+          "totalCells": 1024,
+          "pct": 36.9
+        },
+        {
+          "pair": "copperSeparator/circuitAssembler",
+          "diffCells": 288,
+          "totalCells": 1024,
+          "pct": 28.1
+        },
+        {
+          "pair": "copperSeparator/drone",
+          "diffCells": 408,
+          "totalCells": 1024,
+          "pct": 39.8
+        },
+        {
+          "pair": "platePress/circuitAssembler",
+          "diffCells": 426,
+          "totalCells": 1024,
+          "pct": 41.6
+        },
+        {
+          "pair": "platePress/drone",
+          "diffCells": 400,
+          "totalCells": 1024,
+          "pct": 39.1
+        },
+        {
+          "pair": "circuitAssembler/drone",
+          "diffCells": 406,
+          "totalCells": 1024,
+          "pct": 39.6
+        }
+      ]
+    },
+    "a3_1": {
+      "aligned": {
+        "pairs": 15,
+        "minPct": 46,
+        "meanPct": 57.79,
+        "minPair": "dock/sorter",
+        "thresholdPct": 32,
+        "passes": true
+      },
+      "unitGrid": {
+        "pairs": 15,
+        "minPct": 48.2,
+        "meanPct": 57.83,
+        "minPair": "dock/sorter",
+        "thresholdPct": 32,
+        "passes": true
+      },
+      "jointSearch": {
+        "objective": "maximise the weakest of the 15 unit-grid pairs, then the mean, with furnace and signalLab moving together",
+        "thresholdPct": 32,
+        "gates": {
+          "minMaskCells": 12,
+          "latticeMaskCells": 18,
+          "minPct": 32,
+          "meanPctAbove": 48.69,
+          "inkUnitsAbove": 2752
+        },
+        "builderMatchesShipped": {
+          "furnace": true,
+          "signalLab": true
+        },
+        "enumeratedCombos": 139968,
+        "gatePassingCombos": 36456,
+        "minPairOwnedBy": {
+          "pair": "dock/sorter",
+          "touchesFurnaceOrLab": false
+        },
+        "shipped": {
+          "minPct": 48.2,
+          "meanPct": 57.83,
+          "pairs": {
+            "dock/furnace": 62.8,
+            "dock/signalLab": 70.2,
+            "sorter/furnace": 56.7,
+            "sorter/signalLab": 64.9,
+            "furnace/wireMill": 61.1,
+            "furnace/signalLab": 48.9,
+            "furnace/drone": 51.8,
+            "wireMill/signalLab": 61.8,
+            "signalLab/drone": 55.4
+          },
+          "furnace": {
+            "bw": 22,
+            "by": -9,
+            "bh": 16,
+            "ci": 16
+          },
+          "signalLab": {
+            "tw": 14,
+            "ty": -8,
+            "th": 21,
+            "ci": 16,
+            "mastY": -16,
+            "mastH": 8,
+            "headX": -12,
+            "headW": 23,
+            "wingW": 6,
+            "footW": 7
+          },
+          "inkUnits": 3001
+        },
+        "best": {
+          "minPct": 48.2,
+          "meanPct": 58.81,
+          "furnace": {
+            "bw": 22,
+            "by": -9,
+            "bh": 14,
+            "ci": 16
+          },
+          "signalLab": {
+            "tw": 16,
+            "ty": -7,
+            "th": 22,
+            "ci": 16,
+            "mastY": -16,
+            "mastH": 8,
+            "headX": -13,
+            "headW": 25,
+            "wingW": 7,
+            "footW": 7
+          },
+          "pairs": {
+            "dock/furnace": 62.8,
+            "sorter/furnace": 56.7,
+            "furnace/wireMill": 61.3,
+            "furnace/signalLab": 56.3,
+            "furnace/drone": 49.4,
+            "dock/signalLab": 70.8,
+            "sorter/signalLab": 68.8,
+            "wireMill/signalLab": 65.1,
+            "signalLab/drone": 57.1
+          }
+        },
+        "shippedIsOptimum": false,
+        "weakestPairs": [
+          [
+            "dock/sorter",
+            48.2
+          ],
+          [
+            "furnace/signalLab",
+            48.9
+          ],
+          [
+            "sorter/wireMill",
+            49.1
+          ],
+          [
+            "furnace/drone",
+            51.8
+          ],
+          [
+            "wireMill/drone",
+            54.1
+          ]
+        ]
+      }
+    },
+    "sheetInkPx": {
+      "dock": 9060,
+      "sorter": 9348,
+      "furnace": 8380,
+      "wireMill": 8768,
+      "signalLab": 8924,
+      "drone": 1378
+    }
   },
   "witnesses": {
     "scrollHeight": 844,
@@ -406,5 +2260,1702 @@
       }
     ]
   },
-  "pageErrors": 0
+  "settle": {
+    "view": {
+      "width": 390,
+      "height": 844
+    },
+    "scale": 1.95,
+    "rustRgb": "201,113,58",
+    "status": "outputFull",
+    "frameCount": 6,
+    "longestRunPx": [
+      11,
+      11,
+      7,
+      7,
+      11,
+      11
+    ],
+    "reducedMotionLongestRunPx": [
+      11,
+      11,
+      11,
+      11,
+      11,
+      11
+    ],
+    "distinctWidths": 2,
+    "reducedMotionDistinct": 1,
+    "frames": [
+      {
+        "frame": 0,
+        "phase": 0,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 1,
+        "phase": 0.1667,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 2,
+        "phase": 0.3333,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 7,
+            "longestRunPx": 7
+          }
+        ]
+      },
+      {
+        "frame": 3,
+        "phase": 0.5,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 7,
+            "longestRunPx": 7
+          }
+        ]
+      },
+      {
+        "frame": 4,
+        "phase": 0.6667,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 5,
+        "phase": 0.8333,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      }
+    ],
+    "reducedFrames": [
+      {
+        "frame": 0,
+        "phase": 0,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 1,
+        "phase": 0.1667,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 2,
+        "phase": 0.3333,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 3,
+        "phase": 0.5,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 4,
+        "phase": 0.6667,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      },
+      {
+        "frame": 5,
+        "phase": 0.8333,
+        "barRowY": 317,
+        "barRows": [
+          {
+            "py": 314,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 315,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 316,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 317,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 318,
+            "rustPx": 0,
+            "longestRunPx": 0
+          },
+          {
+            "py": 319,
+            "rustPx": 11,
+            "longestRunPx": 11
+          }
+        ]
+      }
+    ],
+    "rows": [
+      {
+        "blueprint": "sorter",
+        "tile": 8,
+        "status": "outputFull",
+        "frameCount": 6,
+        "longestRunPx": [
+          11,
+          11,
+          7,
+          7,
+          11,
+          11
+        ],
+        "reducedMotionLongestRunPx": [
+          11,
+          11,
+          11,
+          11,
+          11,
+          11
+        ],
+        "distinctWidths": 2,
+        "reducedMotionDistinct": 1,
+        "frames": [
+          {
+            "frame": 0,
+            "phase": 0,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 1,
+            "phase": 0.1667,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 2,
+            "phase": 0.3333,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 7,
+                "longestRunPx": 7
+              }
+            ]
+          },
+          {
+            "frame": 3,
+            "phase": 0.5,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 7,
+                "longestRunPx": 7
+              }
+            ]
+          },
+          {
+            "frame": 4,
+            "phase": 0.6667,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 5,
+            "phase": 0.8333,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          }
+        ],
+        "reducedFrames": [
+          {
+            "frame": 0,
+            "phase": 0,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 1,
+            "phase": 0.1667,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 2,
+            "phase": 0.3333,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 3,
+            "phase": 0.5,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 4,
+            "phase": 0.6667,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 5,
+            "phase": 0.8333,
+            "barRowY": 317,
+            "barRows": [
+              {
+                "py": 314,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 315,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 316,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 317,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 318,
+                "rustPx": 0,
+                "longestRunPx": 0
+              },
+              {
+                "py": 319,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "blueprint": "furnace",
+        "tile": 14,
+        "status": "outputFull",
+        "frameCount": 6,
+        "longestRunPx": [
+          11,
+          11,
+          9,
+          9,
+          11,
+          11
+        ],
+        "reducedMotionLongestRunPx": [
+          11,
+          11,
+          11,
+          11,
+          11,
+          11
+        ],
+        "distinctWidths": 2,
+        "reducedMotionDistinct": 1,
+        "frames": [
+          {
+            "frame": 0,
+            "phase": 0,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 1,
+            "phase": 0.1667,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 2,
+            "phase": 0.3333,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 16,
+                "longestRunPx": 9
+              },
+              {
+                "py": 380,
+                "rustPx": 16,
+                "longestRunPx": 9
+              },
+              {
+                "py": 381,
+                "rustPx": 7,
+                "longestRunPx": 7
+              }
+            ]
+          },
+          {
+            "frame": 3,
+            "phase": 0.5,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 16,
+                "longestRunPx": 9
+              },
+              {
+                "py": 380,
+                "rustPx": 16,
+                "longestRunPx": 9
+              },
+              {
+                "py": 381,
+                "rustPx": 7,
+                "longestRunPx": 7
+              }
+            ]
+          },
+          {
+            "frame": 4,
+            "phase": 0.6667,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 5,
+            "phase": 0.8333,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          }
+        ],
+        "reducedFrames": [
+          {
+            "frame": 0,
+            "phase": 0,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 1,
+            "phase": 0.1667,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 2,
+            "phase": 0.3333,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 3,
+            "phase": 0.5,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 4,
+            "phase": 0.6667,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          },
+          {
+            "frame": 5,
+            "phase": 0.8333,
+            "barRowY": 379,
+            "barRows": [
+              {
+                "py": 376,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 377,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 378,
+                "rustPx": 9,
+                "longestRunPx": 9
+              },
+              {
+                "py": 379,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 380,
+                "rustPx": 20,
+                "longestRunPx": 11
+              },
+              {
+                "py": 381,
+                "rustPx": 11,
+                "longestRunPx": 11
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "pageErrors": 0,
+  "entryChunk": {
+    "file": "index-DEtlDj_i.js",
+    "bytes": 232751,
+    "ceilingBytes": 233000
+  },
+  "comparator": {
+    "instrument": "aligned 58x58 per-cell differing count, one lattice for both runs",
+    "latticeCells": 3364,
+    "pairs": 15,
+    "changedPairs": 15,
+    "unchangedPairs": 0,
+    "maxDeltaPct": 25.8,
+    "minBeforePct": 31.8,
+    "minAfterPct": 46,
+    "identicalArrays": false,
+    "rows": [
+      {
+        "pair": "dock/sorter",
+        "beforePct": 36.8,
+        "afterPct": 46,
+        "deltaPct": 9.2,
+        "beforeCells": 1238,
+        "afterCells": 1547,
+        "changedCells": 309,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "dock/furnace",
+        "beforePct": 59.4,
+        "afterPct": 62.5,
+        "deltaPct": 3.1,
+        "beforeCells": 1998,
+        "afterCells": 2103,
+        "changedCells": 105,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "dock/wireMill",
+        "beforePct": 56.9,
+        "afterPct": 68,
+        "deltaPct": 11.1,
+        "beforeCells": 1914,
+        "afterCells": 2288,
+        "changedCells": 374,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "dock/signalLab",
+        "beforePct": 68.1,
+        "afterPct": 69.6,
+        "deltaPct": 1.5,
+        "beforeCells": 2291,
+        "afterCells": 2341,
+        "changedCells": 50,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "dock/drone",
+        "beforePct": 53.1,
+        "afterPct": 55.5,
+        "deltaPct": 2.4,
+        "beforeCells": 1786,
+        "afterCells": 1867,
+        "changedCells": 81,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "sorter/furnace",
+        "beforePct": 48.7,
+        "afterPct": 56.8,
+        "deltaPct": 8.1,
+        "beforeCells": 1638,
+        "afterCells": 1911,
+        "changedCells": 273,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "sorter/wireMill",
+        "beforePct": 44.8,
+        "afterPct": 51.3,
+        "deltaPct": 6.5,
+        "beforeCells": 1507,
+        "afterCells": 1726,
+        "changedCells": 219,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "sorter/signalLab",
+        "beforePct": 57.1,
+        "afterPct": 64.4,
+        "deltaPct": 7.3,
+        "beforeCells": 1921,
+        "afterCells": 2166,
+        "changedCells": 245,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "sorter/drone",
+        "beforePct": 55,
+        "afterPct": 55.5,
+        "deltaPct": 0.5,
+        "beforeCells": 1850,
+        "afterCells": 1867,
+        "changedCells": 17,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "furnace/wireMill",
+        "beforePct": 39,
+        "afterPct": 63.7,
+        "deltaPct": 24.7,
+        "beforeCells": 1312,
+        "afterCells": 2143,
+        "changedCells": 831,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "furnace/signalLab",
+        "beforePct": 31.8,
+        "afterPct": 50.3,
+        "deltaPct": 18.5,
+        "beforeCells": 1070,
+        "afterCells": 1692,
+        "changedCells": 622,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "furnace/drone",
+        "beforePct": 50.8,
+        "afterPct": 50.9,
+        "deltaPct": 0.1,
+        "beforeCells": 1709,
+        "afterCells": 1712,
+        "changedCells": 3,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "wireMill/signalLab",
+        "beforePct": 37.3,
+        "afterPct": 63.1,
+        "deltaPct": 25.8,
+        "beforeCells": 1255,
+        "afterCells": 2123,
+        "changedCells": 868,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "wireMill/drone",
+        "beforePct": 45.8,
+        "afterPct": 54.6,
+        "deltaPct": 8.8,
+        "beforeCells": 1541,
+        "afterCells": 1837,
+        "changedCells": 296,
+        "latticeCells": 3364
+      },
+      {
+        "pair": "signalLab/drone",
+        "beforePct": 54.9,
+        "afterPct": 54.7,
+        "deltaPct": -0.2,
+        "beforeCells": 1847,
+        "afterCells": 1840,
+        "changedCells": 7,
+        "latticeCells": 3364
+      }
+    ],
+    "unitRows": [
+      {
+        "pair": "dock/sorter",
+        "beforePct": null,
+        "afterPct": 48.2,
+        "deltaPct": 48.2,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "dock/furnace",
+        "beforePct": null,
+        "afterPct": 62.8,
+        "deltaPct": 62.8,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "dock/wireMill",
+        "beforePct": null,
+        "afterPct": 68.5,
+        "deltaPct": 68.5,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "dock/signalLab",
+        "beforePct": null,
+        "afterPct": 70.2,
+        "deltaPct": 70.2,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "dock/drone",
+        "beforePct": null,
+        "afterPct": 55.9,
+        "deltaPct": 55.9,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "sorter/furnace",
+        "beforePct": null,
+        "afterPct": 56.7,
+        "deltaPct": 56.7,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "sorter/wireMill",
+        "beforePct": null,
+        "afterPct": 49.1,
+        "deltaPct": 49.1,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "sorter/signalLab",
+        "beforePct": null,
+        "afterPct": 64.9,
+        "deltaPct": 64.9,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "sorter/drone",
+        "beforePct": null,
+        "afterPct": 58,
+        "deltaPct": 58,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "furnace/wireMill",
+        "beforePct": null,
+        "afterPct": 61.1,
+        "deltaPct": 61.1,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "furnace/signalLab",
+        "beforePct": null,
+        "afterPct": 48.9,
+        "deltaPct": 48.9,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "furnace/drone",
+        "beforePct": null,
+        "afterPct": 51.8,
+        "deltaPct": 51.8,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "wireMill/signalLab",
+        "beforePct": null,
+        "afterPct": 61.8,
+        "deltaPct": 61.8,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "wireMill/drone",
+        "beforePct": null,
+        "afterPct": 54.1,
+        "deltaPct": 54.1,
+        "latticeCells": 1024
+      },
+      {
+        "pair": "signalLab/drone",
+        "beforePct": null,
+        "afterPct": 55.4,
+        "deltaPct": 55.4,
+        "latticeCells": 1024
+      }
+    ]
+  }
 }

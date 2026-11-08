@@ -476,7 +476,19 @@ function drawMachine(
     }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
-  rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
+  // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
+  // quantised 6-frame step drives each: frames 1-2 of the cycle move, the rest hold.
+  // `working` = two-step amber core that swells one step per cycle; `starved` = the
+  // visibly quiet core (one dim square, frozen); `output-blocked` = the accent bar
+  // settling between its 6-unit and 4-unit widths. Reduced motion keeps step 0 only.
+  const q = reducedMotion ? 0 : Math.min(5, Math.floor(phase * 6));
+  const pulse = q === 2 || q === 3; // the single swell/settle frame pair of the cycle
+  // ART-006: the accent bar is ONE paint with the computed width. The unconditional 6-unit
+  // rect and the animated 4-unit rect used to be emitted separately in the same colour, so
+  // the 4-unit draw sat entirely under the 6-unit one and the settle had zero visible
+  // amplitude (measured rust rows: 11 px on all six quantised frames).
+  const barW = machine.status === "outputFull" && pulse ? 4 : 6;
+  rectOf(ctx, p.x - 9 * s, p.y + 10 * s, barW * s, 2 * s, statusColor(machine.status));
   if (machine.status === "powerLimited") {
     // D-3: the fifth hue alone is not separable at phone size, so `powerLimited` also
     // carries a shape mark - one short tick under the bar, in an existing colour index.
@@ -485,13 +497,6 @@ function drawMachine(
   if (machine.blueprint === "furnace" && machine.status === "outputFull") {
     rectOf(ctx, p.x + 5 * s, p.y - 14 * s, 4 * s, 2 * s, "rust");
   }
-  // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
-  // quantised 6-frame step drives each: frames 1-2 of the cycle move, the rest hold.
-  // `working` = two-step amber core that swells one step per cycle; `starved` = the
-  // visibly quiet core (one dim square, frozen); `output-blocked` = the accent bar
-  // settling between its 6-unit and 4-unit widths. Reduced motion keeps step 0 only.
-  const q = reducedMotion ? 0 : Math.min(5, Math.floor(phase * 6));
-  const pulse = q === 2 || q === 3; // the single swell/settle frame pair of the cycle
   if (machine.status === "running") {
     // Two-step amber core: a 4-unit glow (5 on the swell frames) plus the 2-unit inner.
     const r = pulse ? 2.5 * s : 2 * s;
@@ -502,9 +507,9 @@ function drawMachine(
     rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "amber");
   } else if (machine.status === "starved") {
     rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "bodyMid"); // quiet core, no pulse
-  } else if (machine.status === "outputFull") {
-    rectOf(ctx, p.x - 9 * s, p.y + 10 * s, (pulse ? 4 : 6) * s, 2 * s, statusColor(machine.status));
   }
+  // ART-006: `outputFull` needs no second bar - the single `barW` paint above already
+  // carries the settle, so the frame holds exactly one accent rect per machine.
   // S6 level pips: three 2x2 marks, digit from level 4 up (B5, never a ratio bar).
   groupFill(
     ctx,
