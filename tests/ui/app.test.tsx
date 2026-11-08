@@ -611,10 +611,10 @@ describe("REV-LAYOUT-g1 chrome rows", () => {
     expect(dockStyle?.gap).toBe("2px");
     for (const button of buttons) {
       expect(getComputedStyle(button).minHeight).toBe("46px");
-      expect(getComputedStyle(button).fontSize).toBe("0.62rem");
+      expect(getComputedStyle(button).fontSize).toBe("0.74rem");
     }
     expect(costs.length).toBeGreaterThan(0);
-    expect(costStyle?.fontSize).toBe("0.5rem");
+    expect(costStyle?.fontSize).toBe("0.72rem");
   });
 });
 

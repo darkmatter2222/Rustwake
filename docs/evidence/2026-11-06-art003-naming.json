@@ -1,0 +1,116 @@
+{
+  "task": "A3-2 blind naming",
+  "url": "http://localhost:5176/",
+  "viewport": "390x844",
+  "dpr": 2,
+  "note": "label-free crops of the three opening blueprints, crop order is a fixed permutation",
+  "crops": [
+    {
+      "file": "role-naming-1.png",
+      "blueprint": "wireMill",
+      "tile": 20,
+      "cssBox": [
+        133,
+        392,
+        62,
+        62
+      ],
+      "scale": 1.95
+    },
+    {
+      "file": "role-naming-2.png",
+      "blueprint": "sorter",
+      "tile": 8,
+      "cssBox": [
+        133,
+        267,
+        62,
+        62
+      ],
+      "scale": 1.95
+    },
+    {
+      "file": "role-naming-3.png",
+      "blueprint": "furnace",
+      "tile": 14,
+      "cssBox": [
+        133,
+        329,
+        62,
+        62
+      ],
+      "scale": 1.95
+    }
+  ],
+  "pageErrors": 0,
+  "rating": {
+    "method": "two blind passes over docs/screenshots/role-naming-<n>.png, each crop named from the six opening role names with no label in view; pass A in file order, pass B in reverse order",
+    "limitation": "both passes are the same single model in different orders, not two independent human raters",
+    "passes": {
+      "A": {
+        "order": [
+          "role-naming-1.png",
+          "role-naming-2.png",
+          "role-naming-3.png"
+        ],
+        "results": [
+          {
+            "file": "role-naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "wide body, a dark reel hole on each side with a light stand under it, three-step diagonal arm into a rust tip above"
+          },
+          {
+            "file": "role-naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "tall frame with six dark roller discs in two rows of three, chutes along the bottom, one wedge in the select tone"
+          },
+          {
+            "file": "role-naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "squat chamber with two stacked intake slots on the left, chimney stub and rust cap bar proud of the cap line, rust vent foot"
+          }
+        ],
+        "correct": 3
+      },
+      "B": {
+        "order": [
+          "role-naming-3.png",
+          "role-naming-2.png",
+          "role-naming-1.png"
+        ],
+        "results": [
+          {
+            "file": "role-naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "two stacked dark slots inside a squat light chamber, chimney plus rust cap above it, rust foot below"
+          },
+          {
+            "file": "role-naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "2x3 grid of dark discs in a full-height frame plus a chute row - only role with six discs"
+          },
+          {
+            "file": "role-naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "paired reel holes and stands either side of the body, stepped tension arm - no chimney"
+          }
+        ],
+        "correct": 3
+      }
+    },
+    "agreement": 3,
+    "total": 3
+  }
+}

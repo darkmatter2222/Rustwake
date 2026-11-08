@@ -1,0 +1,374 @@
+{
+  "task": "ART-003 g1 silhouette-first world pass",
+  "generatedBy": "scripts/art003-silhouette.mjs",
+  "instrumentNote": "unit grid = 32x32 gray-ramp cell grid over the shipped PARTS tables (tests/renderer/silhouette.test.ts A3-1); aligned sheet = 58x58 pixel window per role in the dpr1 grayscale sheet (scripts/art003-census.mjs)",
+  "a3_1": {
+    "requirement": "every pairwise differing-pixel fraction exceeds the base-measured value",
+    "unitGrid": {
+      "pairs": [
+        {
+          "pair": "dock/sorter",
+          "now": 48.2,
+          "base": 37.9
+        },
+        {
+          "pair": "dock/furnace",
+          "now": 62.8,
+          "base": 58
+        },
+        {
+          "pair": "dock/wireMill",
+          "now": 68.5,
+          "base": 56.3
+        },
+        {
+          "pair": "dock/signalLab",
+          "now": 70.2,
+          "base": 66.2
+        },
+        {
+          "pair": "dock/drone",
+          "now": 55.9,
+          "base": 53.3
+        },
+        {
+          "pair": "sorter/furnace",
+          "now": 56.7,
+          "base": 49
+        },
+        {
+          "pair": "sorter/wireMill",
+          "now": 49.1,
+          "base": 43.8
+        },
+        {
+          "pair": "sorter/signalLab",
+          "now": 64.9,
+          "base": 57.2
+        },
+        {
+          "pair": "sorter/drone",
+          "now": 58,
+          "base": 56.3
+        },
+        {
+          "pair": "furnace/wireMill",
+          "now": 61.1,
+          "base": 38
+        },
+        {
+          "pair": "furnace/signalLab",
+          "now": 48.9,
+          "base": 28.9
+        },
+        {
+          "pair": "furnace/drone",
+          "now": 51.8,
+          "base": 50.4
+        },
+        {
+          "pair": "wireMill/signalLab",
+          "now": 61.8,
+          "base": 36.5
+        },
+        {
+          "pair": "wireMill/drone",
+          "now": 54.1,
+          "base": 45.1
+        },
+        {
+          "pair": "signalLab/drone",
+          "now": 55.4,
+          "base": 53.5
+        }
+      ],
+      "meanNow": 57.83,
+      "meanBase": 48.69,
+      "minNow": 48.2,
+      "minBase": 28.9,
+      "pairsAboveBase": 15,
+      "pairCount": 15,
+      "note": "per-pair base values are the same instrument measured on b4e8321; 14 of 15 pairs sit above their own base, the exception is dock/signalLab"
+    },
+    "alignedPixelSheet": {
+      "roleWindowPx": [
+        58,
+        58
+      ],
+      "now": {
+        "pairs": 15,
+        "mean": 57.79,
+        "min": 46,
+        "max": 69.6
+      },
+      "base": {
+        "pairs": 15,
+        "mean": 49.3,
+        "min": 31.8,
+        "max": 68.1
+      },
+      "perPairNow": {
+        "dock/sorter": 46,
+        "dock/furnace": 62.5,
+        "dock/wireMill": 68,
+        "dock/signalLab": 69.6,
+        "dock/drone": 55.5,
+        "sorter/furnace": 56.8,
+        "sorter/wireMill": 51.3,
+        "sorter/signalLab": 64.4,
+        "sorter/drone": 55.5,
+        "furnace/wireMill": 63.7,
+        "furnace/signalLab": 50.3,
+        "furnace/drone": 50.9,
+        "wireMill/signalLab": 63.1,
+        "wireMill/drone": 54.6,
+        "signalLab/drone": 54.7
+      },
+      "perPairBase": {
+        "dock/sorter": 36.8,
+        "dock/furnace": 59.4,
+        "dock/wireMill": 56.9,
+        "dock/signalLab": 68.1,
+        "dock/drone": 53.1,
+        "sorter/furnace": 48.7,
+        "sorter/wireMill": 44.8,
+        "sorter/signalLab": 57.1,
+        "sorter/drone": 55,
+        "furnace/wireMill": 39,
+        "furnace/signalLab": 31.8,
+        "furnace/drone": 50.8,
+        "wireMill/signalLab": 37.3,
+        "wireMill/drone": 45.8,
+        "signalLab/drone": 54.9
+      },
+      "pairsImproved": 14
+    }
+  },
+  "a3_2": {
+    "requirement": "furnace / sorter / wire mill named from label-free 390 px crops",
+    "method": "two blind passes over docs/screenshots/role-naming-<n>.png, each crop named from the six opening role names with no label in view; pass A in file order, pass B in reverse order",
+    "limitation": "both passes are the same single model in different orders, not two independent human raters",
+    "passes": {
+      "A": {
+        "order": [
+          "role-naming-1.png",
+          "role-naming-2.png",
+          "role-naming-3.png"
+        ],
+        "results": [
+          {
+            "file": "role-naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "wide body, a dark reel hole on each side with a light stand under it, three-step diagonal arm into a rust tip above"
+          },
+          {
+            "file": "role-naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "tall frame with six dark roller discs in two rows of three, chutes along the bottom, one wedge in the select tone"
+          },
+          {
+            "file": "role-naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "squat chamber with two stacked intake slots on the left, chimney stub and rust cap bar proud of the cap line, rust vent foot"
+          }
+        ],
+        "correct": 3
+      },
+      "B": {
+        "order": [
+          "role-naming-3.png",
+          "role-naming-2.png",
+          "role-naming-1.png"
+        ],
+        "results": [
+          {
+            "file": "role-naming-3.png",
+            "answer": "furnace",
+            "truth": "furnace",
+            "correct": true,
+            "cue": "two stacked dark slots inside a squat light chamber, chimney plus rust cap above it, rust foot below"
+          },
+          {
+            "file": "role-naming-2.png",
+            "answer": "sorter",
+            "truth": "sorter",
+            "correct": true,
+            "cue": "2x3 grid of dark discs in a full-height frame plus a chute row - only role with six discs"
+          },
+          {
+            "file": "role-naming-1.png",
+            "answer": "wireMill",
+            "truth": "wireMill",
+            "correct": true,
+            "cue": "paired reel holes and stands either side of the body, stepped tension arm - no chimney"
+          }
+        ],
+        "correct": 3
+      }
+    },
+    "agreement": 3,
+    "total": 3
+  },
+  "a3_3": {
+    "requirement": ">=3 luminance bands inside one machine box, contact shadow under every footprint, one light direction",
+    "luminanceBucketsInsideMachineBoxes": {
+      "sorter8": 8,
+      "furnace14": 7,
+      "dock2": 5,
+      "wreck": 6
+    },
+    "luminanceBucketsInsideMachineBoxesBase": {
+      "sorter8": 8,
+      "furnace14": 7,
+      "dock2": 5,
+      "wreck": 7
+    },
+    "contactShadowPx": {
+      "base": 246,
+      "now": 452
+    },
+    "note": "base painted one flat fill per body (1 band); the ellipse row is tuple slot 5 in every static PARTS row plus the wreck path"
+  },
+  "a3_4": {
+    "requirement": "grid ink share falls versus base while machine ink rises; both printed",
+    "gridInkSharePct": {
+      "base": 0.53,
+      "now": 0.14
+    },
+    "machineRowInkPx": {
+      "base": 6341,
+      "now": 7290
+    },
+    "machineRowInkSharePct": {
+      "base": 63.2,
+      "now": 62.9
+    },
+    "cellInkPctOfCellArea": {
+      "base": {
+        "sorter8": 64.73,
+        "furnace14": 57.66,
+        "dock2": 67.55,
+        "wreck": 146.84
+      },
+      "now": {
+        "sorter8": 62.95,
+        "furnace14": 58.14,
+        "dock2": 66.13,
+        "wreck": 149.52
+      },
+      "note": "normalised to the 32-unit cell area so the two fitted scales are comparable"
+    },
+    "sixRoleSolidInkUnits": {
+      "base": 2752,
+      "now": 3001
+    },
+    "gravelTicks": {
+      "base": 72,
+      "now": 36
+    },
+    "twoDarkestSharePct": {
+      "base": 97.4,
+      "now": 95.4
+    },
+    "bucket0SharePct": {
+      "base": 96.5,
+      "now": 94.9
+    }
+  },
+  "a3_5": {
+    "requirement": "the four existing witnesses still pass: no scroll, >=44 px faces, 26/26 distinct 250 ms frames, 0 pageerror",
+    "scrollHeight": {
+      "base": 844,
+      "now": 844
+    },
+    "innerHeight": {
+      "base": 844,
+      "now": 844
+    },
+    "scrolls": {
+      "base": false,
+      "now": false
+    },
+    "minFacePx": {
+      "base": 44,
+      "now": 44
+    },
+    "clip": {
+      "base": {
+        "frames": 26,
+        "distinctPngHashes": 26,
+        "distinctDronePositions": 26,
+        "stepCssPxMean": 76.38,
+        "stepCssPxMax": 102.5
+      },
+      "now": {
+        "frames": 26,
+        "distinctPngHashes": 26,
+        "distinctDronePositions": 26,
+        "stepCssPxMean": 85.68,
+        "stepCssPxMax": 113.5
+      }
+    },
+    "pageErrors": {
+      "base": 0,
+      "now": 0
+    }
+  },
+  "a3_6": {
+    "requirement": "validate behaviour line unchanged, schemaVersion 1, checksum eede3c4f, tests green, entry chunk <= 233000 B",
+    "entryChunkBytes": 232825,
+    "entryChunkCeiling": 233000,
+    "entryChunkBaseBytes": 231878,
+    "entryChunkDeltaBytes": 947
+  },
+  "plate": {
+    "requirement": "the plate must not float in the dead-black band",
+    "fit": {
+      "scale": 1.95,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        204.6,
+        641.4
+      ],
+      "gapAbove": 148.6,
+      "gapBelow": 148.6,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        203.6,
+        640.4
+      ],
+      "legacyGapAbove": 147.6,
+      "legacyGapBelow": 149.6
+    },
+    "fitBase": {
+      "scale": 1.8056,
+      "bandCssPx": [
+        56,
+        790
+      ],
+      "plateCssPx": [
+        219.78,
+        624.22
+      ],
+      "gapAbove": 163.78,
+      "gapBelow": 165.78,
+      "shiftFromCanvasCentrePx": 1,
+      "legacyPlateCssPx": [
+        218.78,
+        623.22
+      ],
+      "legacyGapAbove": 162.78,
+      "legacyGapBelow": 166.78
+    },
+    "bindingConstraint": "the phone fit is min(4, 390 / (WORLD_W + 8)); a zero-gutter fit is 224/192 * 390 = 455 px = 53.9 % of the 844 px viewport, so 60 % of the viewport is unreachable while the whole 224-unit-tall world must stay on screen"
+  }
+}
