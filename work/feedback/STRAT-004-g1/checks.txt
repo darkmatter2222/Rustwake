@@ -26,38 +26,42 @@ Built assets of this tree (one clean `npm run build`, counted on disk, never sum
 
 | chunk | bytes | note |
 | --- | --- | --- |
-| assets/index-DIzqhO3V.js | 233418 | entry chunk, ceiling 233000 -> 418 B OVER (see the form table below) |
+| assets/index-BjqNquCb.js | 233145 | entry chunk at head `4a19157`, ceiling 233000 -> **145 B OVER** (form table below) |
 | assets/tables-C3W8xgzz.js | 9707 | from main 5610528 |
 | assets/index-CbtyNiLy.css | 8092 | from main 5610528 (this lane edits no css) |
 | assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
 
-Entry arithmetic against the pinned 233000 B ceiling, all three forms measured on one machine on this
-head (each is its own clean `npm run build`, counted on disk; the only difference between them is the two
-ui files):
+Trim ladder on this branch, each number from its own clean `npm run build` on this machine:
 
-| form on this head (merge 5e5e35b, origin/main 5610528) | entry chunk bytes | vs the 233000 ceiling |
+| step | entry chunk bytes | vs 233000 |
 | --- | --- | --- |
-| C - both ui files at origin/main (no lane code) | 232792 (`index-BtXxU2Fb.js`) | 208 B spare |
-| B - lane with the two-part tail, countdown digit removed | 233305 (`index-ymsgYEoC.js`) | **305 B over** |
-| A - shipped form: `price · waits N w · have k · in Ns` | 233418 (`index-DIzqhO3V.js`) | **418 B over** |
+| `9d8ff3d` three parts in one `dock__cost` span, separator read at each call site | 233418 (`index-DIzqhO3V.js`) | 418 over |
+| `5b91587` + trim 1: the three repeated `t("value.dotSeparator")` calls share the one `DOT` const | 233208 (`index-C77XDZxg.js`) | 208 over |
+| `4a19157` + trim 2: the dock's class fragments hoisted into shared consts (identical rendered `class` attributes) | **233145** (`index-BjqNquCb.js`) | **145 over** |
+| reference: both ui files at `origin/main 5610528` (no lane code) | 232792 (`index-BtXxU2Fb.js`) | 208 spare |
 
-So the countdown digit costs 113 B (A - B) and the tail itself costs 513 B (B - C). Same three-way relation
-at the previous merge `4edb4f8` (main 232365 -> g1 two-span form 233278 -> this single-span form 232993).
+So this lane's shipped delta over main is **+353 B** for the whole three-part face, the countdown digit inside
+it costs 113 B (measured at `9d8ff3d`, form B vs form A) and the tail without the digit measures 233201 B at
+`5b91587`.
 
-**Ceiling call for the reviewer / product owner (measured, not projected):** on today's main *no* form of
-the pending tail fits under the pinned 233000 B - the cheapest one is 305 B over. Either the ceiling moves
-(to 233500 B it would carry form A plus 82 B for the next lane), or the tail is dropped and W-3 rows 2 and 3
-revert to the g1 readings (29 % / stall 9). The overage is the sum of lanes against a ceiling main itself
-almost exhausts (main alone is 208 B from it), not a regression inside one lane; the ceiling was last moved
-232800 -> 233000 by reviewer concurrence (rev-q002-g1 sec. 5).
+**Ceiling call for the reviewer / product owner (all numbers measured, none projected):** main's own build on
+this merge is 232792 B, i.e. ART-004's atlas recovery is already inside that column (208 B of headroom), and
+*no* form of the pending tail fits under the pinned 233000 B on top of it: 233145 B shipped, 233201 B without
+the countdown digit, 232792 B only if the tail is dropped altogether. So the choice is (a) move the ceiling to
+233500 B, (b) land the E3 chunk-split (STATUS.md: cue/variant/part tables out of the main chunk) first, or
+(c) drop the tail and let W-3 rows 2 and 3 revert to the g1 readings (29 % / stall 9). The overage is the sum
+of lanes against a ceiling main itself almost exhausts, not a regression inside one lane; the ceiling was last
+moved 232800 -> 233000 by reviewer concurrence (rev-q002-g1 sec. 5).
 
-Witnesses, same instruments, this head (fresh runs, logs on disk):
+Witnesses, same instruments, this head (fresh runs against the 233145 B artifact, logs on disk):
 - census (candidate, both policies): taps 178, applied 37, no-ops 142, buckets 14 inert-label /
   69 refused-shortfall / 59 unknown (sum 142 = no-ops), inert share 7.9 %, longest identical-label
-  stall 4; suffix-independent 63/69/10 with inert 35.4 % and stall 34; pressed-index stall 36;
-  smallest face 46 px, 1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %.
-- census (base, both policies): taps 177, applied 37, no-ops 141, buckets 62/69/10 and 63/68/10,
-  inert share 35.0 % / 35.6 %, stall 34, index stall 36, same aggregate row (47 batches, 8 credits).
+  stall 4 (label `Build Scrap sorter20 scrap · waits 20 scrap · have 0`, taps 8-12, 5/5 carrying the
+  tail); suffix-independent 63/69/10 with inert 35.4 % and stall 34; pressed-index stall 36;
+  tail on the face 135/178 taps, countdown digit 98 (blind) / 99 (v2); smallest face 46 px,
+  1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %.
+- census (base, both policies): taps 178, applied 37, no-ops 142, buckets 63/69/10, inert share 35.4 %,
+  stall 34, index stall 36, same aggregate row (47 batches, 8 credits, 5 machines).
 - layout witness (8 cells per artifact): clipped false everywhere, 1 dock row, no page scroll,
   smallest face 44 px in the tail-carrying cells and 46 / 46.5 / 50.2 px in the rest, card fill
   10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.

@@ -14,6 +14,8 @@ const BTN_PRIMARY = "dock__btn dock__btn--primary";
 const BTN_BRANCH = "dock__btn dock__btn--branch";
 const BTN_BRANCH_PRIMARY = "dock__btn dock__btn--branch dock__btn--primary";
 const COST = "dock__cost";
+const SOUND_OFF = t("sound.off");
+const SOUND_ON = t("sound.on");
 
 /* Q-002: the five hexes shared with the renderer read from the one PALETTE
    source; the rest are chip-only tints. */
@@ -41,7 +43,7 @@ export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute:
         {t("gate.begin")}
       </button>
       <button className="icon-btn" onClick={props.onToggleMute}>
-        {props.muted ? t("sound.off") : t("sound.on")}
+        {props.muted ? SOUND_OFF : SOUND_ON}
       </button>
     </div>
   );
@@ -98,7 +100,7 @@ export function HudTop(props: {
         <button
           className="icon-btn"
           onClick={props.onToggleMute}
-          aria-label={props.muted ? t("sound.off") : t("sound.on")}
+          aria-label={props.muted ? SOUND_OFF : SOUND_ON}
         >
           {/* At a large scale the three cluster buttons share one row: the word "Sound"
               is 105 px at 30 px and would push the third button past the viewport. The

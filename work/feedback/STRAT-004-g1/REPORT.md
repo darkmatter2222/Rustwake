@@ -164,14 +164,15 @@ valid because these two files are the only shipped-code edits on this lane.
 # STRAT-004 generation 2 — the tail counts, and the no-op row is three named kinds
 
 - **Tree:** `rw/strat004-g1` on top of `origin/main`, merge commits `4edb4f8` (onto `6e0dce9`, BELT-001) and
-  `5e5e35b` (onto `5610528`, UI-004); implementation commit `96a542800c612cbcf8775b6dbb26de43a46c8308`, this
-  note and the witnesses land in the doc-only commit on top of it. Measured entry chunk on this head:
-  `index-DIzqhO3V.js` **233418 B** (main alone 232792 B, ceiling 233000 B — see sec. 10).
+  `5e5e35b` (onto `5610528`, UI-004); shipped code `96a5428`, byte trims `5b91587` (shared `DOT` const) and
+  `4a19157` (shared dock class consts); this note and the witnesses land in the doc-only commit on top.
+  Measured entry chunk on this head: `index-BjqNquCb.js` **233145 B** (main alone 232792 B, ceiling
+  233000 B — see sec. 10).
 - **Window:** W-3 unchanged — 180 s wall, 1 tap/s, 390x844 dpr2, `isMobile`+`hasTouch`, fresh storage, final
   tick 1800 = 3.00 simulated minutes, both policies, both artifacts, one instrument
   (`policy-census.mjs` → `policy-census.json`, `census-run.log`). **One named denominator for every share:
-  `taps`** = 177 on the base and 178 on the candidate (the ±1 wall-clock drift limitation 1 names); every
-  share below is over that artifact's own `taps`.
+  `taps`** = 178 on both artifacts in this run (the earlier run at `5e5e35b` printed 177 on the base, the ±1
+  wall-clock drift limitation 1 names); every share below is over that artifact's own `taps`.
 
 ## 8. What changed for the player (g2)
 
@@ -195,7 +196,7 @@ the `timeline` rows of `policy-census.json` carry the same strings per tap):
 
 `in Ns` is `Math.ceil((batch.milli - batch.progress) / 10)` of the nearest running batch (1-indexed order,
 the same scan `batchProgressLine` makes), printed with the existing `value.dotSeparator`; it is what makes
-the label change on **almost every tap** (97–100 of the 178 candidate taps carry a moving digit) and it is the
+the label change on **almost every tap** (98–99 of the 178 candidate taps carry a moving digit) and it is the
 whole reason rows 2 and 3 now pass. No new string-table keys, no new panel, no fourth dock face, no engine,
 price or save change (schema `1`, fixture `eede3c4f` untouched).
 
@@ -207,8 +208,8 @@ to the previous tap), `unknown`.
 
 | row | criterion | base | candidate | verdict |
 |---|---|---|---|---|
-| 1 | three named buckets on one denominator, summing to the total no-ops | 62 + 69 + 10 = **141** = `noopTaps` (177 taps, blind); 63 + 68 + 10 = **141** (v2) | 14 + 69 + 59 = **142** = `noopTaps` (178 taps), 7.9 % + 38.8 % + 33.1 % of taps | **pass** |
-| 2 | `inert-label` ≤ 20.0 % of `taps` | 62/177 = **35.0 %** (blind), 63/177 = **35.6 %** (v2) | 14/178 = **7.9 %** — identical in both policies | **pass** |
+| 1 | three named buckets on one denominator, summing to the total no-ops | 63 + 69 + 10 = **142** = `noopTaps` (178 taps, both policies) | 14 + 69 + 59 = **142** = `noopTaps` (178 taps), 7.9 % + 38.8 % + 33.1 % of taps | **pass** |
+| 2 | `inert-label` ≤ 20.0 % of `taps` | 63/178 = **35.4 %** (both policies) | 14/178 = **7.9 %** — identical in both policies | **pass** |
 | 3 | longest identical-label stall ≤ 16 | **34** (35 taps, taps 34–68, 17 refusals, 0 commands) | **4** (5 taps, taps 8–12), **5/5** stall taps carry the tail | **pass** |
 | 4 | applied ≥ 37 · machines ≥ 5 · batches ≥ 51 · credits ≥ 8 | 37 · 5 · 47 · 8 | 37 · 5 · **47** · 8 | **partial** — batches 47, see limitation 5 |
 
@@ -216,43 +217,45 @@ Two honesty notes on rows 2 and 3, both printed in the json next to the passing 
 
 - The 7.9 % is a *string* result, and the mechanism is the countdown digit. Cut the tail and recount over the
   base's own strings (`bucketsSuffixIndependent`) and the candidate reproduces the base exactly:
-  63 / 69 / 10, inert **35.4 %**, stall **34**. `distinctPrimaryLabels` 102 (blind) / 101 (v2) vs
+  63 / 69 / 10, inert **35.4 %**, stall **34**. `distinctPrimaryLabels` **102** in both policies vs
   `distinctPrimaryLabelsWithoutSuffix` **14** says the same thing: more distinct strings, not more distinct
   outcomes. `stallByPressedIndex` is **36** taps on both artifacts — the engine still waits the same ~33 s.
 - `unknown` 59 is itself partitioned in `buckets.unknownSplit`: **49** taps differ only in the pending tail,
-  of which **37** (blind) / **39** (v2) differ only in the countdown digit; **0** non-shortfall toasts;
+  of which **39** (blind) / **38** (v2) differ only in the countdown digit; **0** non-shortfall toasts;
   **10** rest. No double count: 49 + 10 = 59, and the digit-only taps are a subset of the 49.
 
-Per-tap coverage (same runs): the tail is on the pressed face for **135** (blind) / **136** (v2) of the 178
-candidate taps; the countdown digit for **97** / **100**. Aggregate no-op share barely moves —
-**141/177 = 79.7 %** on the base, **142/178 = 79.8 %** on the candidate — which is the 1 tap/s instrument,
-not the face.
+Per-tap coverage (same runs): the tail is on the pressed face for **135** of the 178 candidate taps in both
+policies; the countdown digit for **98** (blind) / **99** (v2). Aggregate no-op share barely moves —
+**142/178 = 79.8 %** on both artifacts — which is the 1 tap/s instrument, not the face.
 
 ## 10. Witnesses and bytes (g2)
 
 | witness | candidate | limit |
 |---|---|---|
-| entry chunk | `index-DIzqhO3V.js` **233418 B** (main alone on this head 232792 B) | < 233000 B → **418 B over**, see the ceiling call below |
+| entry chunk | `index-BjqNquCb.js` **233145 B** (main alone on this head 232792 B) | < 233000 B → **145 B over**, see the ceiling call below |
 | typecheck / validate / vitest / `node --test` / build | 0 / 0 / 0 (32 files, 325 tests) / 0 (59/59) / 0 | all 0 |
 | `validate` behaviour line | `firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s)` | identical on base and candidate: the sim did not move |
-| tap targets, 16 cells (`layout-witness.json`) | **44 px** in the four three-part-face cells, 46 px in the eight two-line cells and all fork cells | ≥ 44 px pass |
+| tap targets, 16 cells (`layout-witness.json`) | **44 px** in the six tail-carrying/short cells, 46 px at text scale 1, 46.5 px (360x640) and 50.2 px (390x844, and the fork row which shares its height) at text scale 2 | ≥ 44 px pass |
 | dock rows / page scroll / pageerror | 1 row everywhere; `scrollHeight == innerHeight` in all 16 cells (360x640 and 390x844, text scale 1 and 2, `isMobile` on and off); 0 | pass |
 | card fill at text scale 2.0 | 32.8 % (360x640), 20.8 % (390x844), 24.8 % (fork row) | ≤ 42 % pass |
 | save | `schemaVersion 1`, fixture `eede3c4f` byte-identical (no `tests/`, no `src/game/persistence/` file in this lane) | pass |
 
-Byte arithmetic for the +626 B, so the next lane can price the same move (`checks.txt` table, all three
-forms built on this head): main alone **232792 B**; this lane with the two-part tail and the countdown digit
-removed (form B) **233305 B**, i.e. the tail itself costs **+513 B**; the shipped three-part form with the
-digit (form A) **233418 B**, i.e. the digit costs **+113 B**. The single-span trick is what keeps the tail
-cheap: the same three pieces as three separate spans cost 233278 B at the previous merge against a 232365 B
-baseline (+913 B), so joining them into one `dock__cost` line is worth −285 B.
+Byte arithmetic for the **+353 B** this lane adds over main, so the next lane can price the same move
+(`checks.txt` carries every row; each number is its own clean `npm run build` on this machine): main's two ui
+files alone **232792 B**; this lane's shipped three-part face at `9d8ff3d` **233418 B**; after trim 1 (the
+three repeated `t("value.dotSeparator")` calls share one `DOT` const) **233208 B**; after trim 2 (the dock's
+class fragments hoisted into shared consts, rendered `class` attribute identical) **233145 B**. Inside the
+lane the countdown digit is worth 113 B (233418 → 233305 at `9d8ff3d`) and the tail without it measures
+233201 B; the tail lives in the *same* `dock__cost` span as the price, which is what saved 285 B against the
+g1 three-span form (233278 B → 232993 B at the previous merge).
 
-**Ceiling call for the reviewer / product owner (measured, not projected):** on today's main **no** form of
-the pending tail fits under the pinned 233000 B — main alone is 232792 B (208 B of headroom), the cheapest
-tail form is 233305 B (305 B over) and the shipped form is 233418 B (418 B over). Either the ceiling moves
-(233500 B would carry this form plus 82 B for the next lane) or the tail is dropped and W-3 rows 2 and 3 go
-back to the g1 readings (29 % / stall 9). The digit is what buys rows 2 and 3: it is 113 B, and it is the
-only part of the string that changes on 98–100 of the 178 taps.
+**Ceiling call for the reviewer / product owner (all measured):** main's own build on this merge is
+232792 B (208 B of headroom — ART-004's atlas recovery is already inside that column), and **no** form of the
+pending tail fits under the pinned 233000 B on top of it: 233145 B shipped, 233201 B with the digit dropped,
+232792 B only if the tail goes altogether. So the choice is (a) move the ceiling to 233500 B, (b) land the E3
+chunk-split first (STATUS.md: cue/variant/part tables out of the main chunk), or (c) drop the tail and let
+W-3 rows 2 and 3 revert to the g1 readings (29 % / stall 9). The digit is the cheap half of the feature and
+the only element that changes on 98–99 of the 178 taps.
 
 **Measured layout price of the third part (16-cell witness, this head):** faces sit at 46 px in the plain
 cells; with the tail they are **46.5 px** at 360x640 text scale 2 and **50.2 px** at 390x844 text scale 2
@@ -277,7 +280,7 @@ lease after integration.
    is the question the stall asks; a per-item arrival time would need a second scan and ~120 B this budget
    does not have.
 7. `in Ns` is only printed while a batch runs, so a tap in the gap between a completion and the next
-   assignment prints the two-part form; that is 78–81 of the 178 taps (178 − 100 and 178 − 97), which is why
+   assignment prints the two-part form; that is 79–80 of the 178 taps (178 − 99 and 178 − 98), which is why
    the inert share lands at 7.9 % and not near 0.
 
 ## 12. Files added by g2

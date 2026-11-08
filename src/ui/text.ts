@@ -131,7 +131,7 @@ export function describeStep(state: SimState, step: YardStep): string {
     case "drone":
       return t("step.drone", { cost: unit(droneAddCost(state), CREDIT) });
     case "upgrade": {
-      const machine = state.machines.find((m) => m.id === step.machineId);
+      const machine = machineById(state, step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
       if (!machine || !def) return t("step.upgrade", { machine: MACHINE });
       // The fork: one price, three named outcomes, so the card names the choice and the
@@ -175,7 +175,7 @@ export function primaryFor(state: SimState, step: YardStep): { label: string; co
         cost: unit(droneAddCost(state), CREDIT),
       };
     case "upgrade": {
-      const machine = state.machines.find((m) => m.id === step.machineId);
+      const machine = machineById(state, step.machineId);
       const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
       if (!machine || !def) return { label: BTN_UPGRADE };
       // The card above names the machine ("Upgrade the Scrap sorter."), so the button
@@ -214,7 +214,7 @@ export function branchOptions(
   state: SimState,
   machineId: number
 ): { id: UpgradeBranch; label: string; cost: string }[] {
-  const machine = state.machines.find((m) => m.id === machineId);
+  const machine = machineById(state, machineId);
   const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
   if (!machine || !def) return [];
   const plans = [
@@ -315,6 +315,11 @@ const CREDIT = t("unit.credit");
 const MACHINE = t("unit.machine");
 const BTN_UPGRADE = t("btn.upgrade");
 
+/** One machine, by the id every dock sentence already prints. */
+function machineById(state: SimState, id: number) {
+  return state.machines.find((m) => m.id === id);
+}
+
 /**
  * The face's own line for one short quantity: `waits 5 ferrous · have 3`, and while a
  * batch is mid-flight the whole seconds left on the nearest running one (`· in 2s`).
@@ -381,7 +386,7 @@ function shortfallForStep(
 
 /** What the next level of one machine costs, or 0 when the machine is gone. */
 function upgradePrice(state: SimState, machineId: number): number {
-  const machine = state.machines.find((m) => m.id === machineId);
+  const machine = machineById(state, machineId);
   const def = machine ? BLUEPRINTS[machine.blueprint] : undefined;
   return machine && def ? upgradeCost(def.baseUpgradeCost, machine.level) : 0;
 }
@@ -400,16 +405,19 @@ export function priceLine(cost: string, state: SimState | null = spoken): string
   for (const group of cost.split(" + ")) {
     // `"{qty} {label} · {credits} credits"` carries its own reward after the dot: the
     // price is what comes before it. A `+N …` gain (a sale) fails the shape and blocks.
-    const parts = /^([\d.]+) ([a-z]+)$/.exec(group.split(DOT)[0].trim());
+    const parts = /^([\d.]+) ([a-z]+)$/.exec(group.split(DOT)[0]);
     if (!parts) continue;
-    const need = +parts[1];
     const word = parts[2];
     // Every `res.*` entry is the store id with a leading capital, so the printed word is
     // the store key; `credit` is the purse, which is not a store entry.
     const have = word.startsWith("credit") ? state.credits : state.store[word as ResourceId] ?? 0;
-    if (have < need) {
-      return `${cost}${DOT}${faceWaitLine(need, word, have, state)}`;
-    }
+    if (have >= +parts[1]) continue;
+    // Same three parts `faceWaitLine` prints: the quantity this price is short of, what the
+    // yard holds, and the whole seconds left on the nearest running batch (`batchMilli`
+    // counts milli-ticks, ten ticks a second, hence `1e4`).
+    const run = state.machines.find((m) => m.progress > 0);
+    const secs = run ? Math.ceil((run.batchMilli - run.progress) / 1e4) : 0;
+    return `${cost}${DOT}waits ${parts[1]} ${word}${DOT}have ${formatNumber(have)}${secs ? `${DOT}in ${secs}s` : ""}`;
   }
   return cost;
 }
@@ -442,7 +450,7 @@ export function pipLine(state: SimState): string {
 }
 
 function machineLabel(state: SimState, machineId: number): string {
-  const machine = state.machines.find((m) => m.id === machineId);
+  const machine = machineById(state, machineId);
   return machine ? BLUEPRINTS[machine.blueprint].label : MACHINE;
 }
 
