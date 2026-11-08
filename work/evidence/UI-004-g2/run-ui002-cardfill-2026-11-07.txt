@@ -1,0 +1,111 @@
+﻿
+[360x640 ts1 8-machine] inner 360x640 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"ff6502b4","textScale":1,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 640; .objective 66.22px => 10.3 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 14.25px weight 600 leading 17.1px wrappedBoxes 1 glyph a10/d3 white 4.1 px ink 67..86 r291.08 sw290/cw290 sh18/ch17 "Connect Scrap sorter so its cargo moves."
+    line1 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 88.09..103.09 r248.42 sw290/cw290 sh15/ch15 "A machine waits for input; check its empty side."
+    line2 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 106.66..121.66 r214.34 sw290/cw290 sh15/ch15 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw290/cw290 sh0/ch0 ""
+  legibility: element separations [4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["14.25/600","10.8/400"] => primary 14.25px / secondary 10.8px = 1.32x (floor 1.25x)
+    accent row .dock buttons 4 accent-filled 1 ["Store","Yard","Connect","Build"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face {"l":133.04,"bucket":4} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [59.77x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Store"
+    face [54.44x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Yard"
+    face [149.11x46 top 586 font 13.2px w400] bg rgb(201, 113, 58) img linear-gradient(rgba(255, 183, 101 L {"l":133.04,"bucket":4} "Connect"
+    face [58.69x46 top 586 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Build"
+  persona {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap900","Credits34","Store 900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":900},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":false}
+
+[360x640 ts2 8-machine] inner 360x640 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"8fff6ff2","textScale":2,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 640; .objective 175.38px => 27.4 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 119x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 28.5px weight 600 leading 34.2px wrappedBoxes 2 glyph a22/d7 white 5.2 px ink 143.88..216.06 r299.2 sw290/cw290 sh70/ch68 "Connect Scrap sorter so its cargo moves."
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 211.25..263 r270.78 sw290/cw290 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 258.75..310.5 r229.17 sw290/cw290 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["28.5/600","21.6/400"] => primary 28.5px / secondary 21.6px = 1.32x (floor 1.25x)
+    accent row .dock buttons 4 accent-filled 1 ["Store","Yard","Connect","Build"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face {"l":133.04,"bucket":4} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 360x640 vs viewport 360x640 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [67.72x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Store"
+    face [58.73x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Yard"
+    face [141.66x46 top 586 font 22.2px w400] bg rgb(201, 113, 58) img linear-gradient(rgba(255, 183, 101 L {"l":133.04,"bucket":4} "Connect"
+    face [65.89x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Build"
+  persona {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap900","Credits34","Store 900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":900},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":false}
+
+[390x844 ts1 8-machine] inner 390x844 dpr 2 font 15px --text-scale 1 text-large false saved {"schemaVersion":1,"checksum":"9b7930a8","textScale":1,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 844; .objective 66.22px => 7.8 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 96x44px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 14.25px weight 600 leading 17.1px wrappedBoxes 1 glyph a10/d3 white 4.1 px ink 67..86 r291.08 sw317/cw317 sh18/ch17 "Connect Scrap sorter so its cargo moves."
+    line1 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 88.09..103.09 r248.42 sw317/cw317 sh15/ch15 "A machine waits for input; check its empty side."
+    line2 .status-line font 10.8px weight 400 leading 14.58px wrappedBoxes 1 glyph a8/d2 white 4.58 px ink 106.66..121.66 r214.34 sw317/cw317 sh15/ch15 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 13.2px weight 400 leading 17.82px wrappedBoxes 0 glyph a9/d0 white 8.82 px ink - sw317/cw317 sh0/ch0 ""
+  legibility: element separations [4,4] (min 4 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["14.25/600","10.8/400"] => primary 14.25px / secondary 10.8px = 1.32x (floor 1.25x)
+    accent row .dock buttons 4 accent-filled 1 ["Store","Yard","Connect","Build"]
+    luminance: pill {"l":17.12,"bucket":0} (font 12.6px) | primary face {"l":133.04,"bucket":4} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [63.09x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Store"
+    face [57.78x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Yard"
+    face [169.11x46 top 790 font 13.2px w400] bg rgb(201, 113, 58) img linear-gradient(rgba(255, 183, 101 L {"l":133.04,"bucket":4} "Connect"
+    face [62.02x46 top 790 font 13.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Build"
+  persona {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap900","Credits34","Store 900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":900},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":false}
+
+[390x844 ts2 8-machine] inner 390x844 dpr 2 font 30px --text-scale 2 text-large true saved {"schemaVersion":1,"checksum":"86ba7343","textScale":2,"tick":434709,"machines":8,"credits":34}
+  U-1 hudContentBox.height 844; .objective 175.38px => 20.8 % (cap 42 %)
+  boot report overlay: dismissed by "Back to yard" 130x71px -> panels 1 to 0 (retires one overlay per visible target)
+  card: "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 .objective__primary font 28.5px weight 600 leading 34.2px wrappedBoxes 2 glyph a22/d7 white 5.2 px ink 114.91..187.09 r337.2 sw317/cw317 sh70/ch68 "Connect Scrap sorter so its cargo moves."
+    line1 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 182.28..234.03 r330.91 sw317/cw317 sh49/ch48 "A machine waits for input; check its empty side."
+    line2 .status-line font 21.6px weight 400 leading 23.76px wrappedBoxes 2 glyph a17/d5 white 1.76 px ink 229.78..281.53 r330.63 sw317/cw317 sh49/ch48 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 .objective__row font 26.4px weight 400 leading 35.64px wrappedBoxes 0 glyph a18/d0 white 17.64 px ink - sw0/cw0 sh0/ch0 ""
+  legibility: element separations [0,0] (min 0 px), wrapped lines under 0.5 px white 0
+  U-2 tiers 2 ["28.5/600","21.6/400"] => primary 28.5px / secondary 21.6px = 1.32x (floor 1.25x)
+    accent row .dock buttons 4 accent-filled 1 ["Store","Yard","Connect","Build"]
+    luminance: pill {"l":17.12,"bucket":0} (font 25.2px) | primary face {"l":133.04,"bucket":4} | plain face {"l":17.12,"bucket":0}
+  U-7 smallest face 46px (floor 44 px); page scroll 390x844 vs viewport 390x844 => no page scroll (scrollHeight == innerHeight); pageerrors 0
+    face [71.05x46 top 790 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Store"
+    face [62.08x46 top 790 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Yard"
+    face [161.66x46 top 790 font 22.2px w400] bg rgb(201, 113, 58) img linear-gradient(rgba(255, 183, 101 L {"l":133.04,"bucket":4} "Connect"
+    face [69.22x46 top 790 font 22.2px w400] bg rgba(11, 18, 32, 0.92) img none L {"l":17.12,"bucket":0} "Build"
+  persona {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap900","Credits34","Store 900/900"]}
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":900},"storeUnits":900,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":34,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  persona/sim agreement {"drones":true,"powerCapacity":true,"powerPercent":true,"powerRequested":true,"nextTapPriceMatchesTable":false}
+
+[360x640 ts2 8-machine fork-open + refused tap] purse 30 saved {"schemaVersion":1,"checksum":"8ada72ea","textScale":2,"tick":2730,"machines":8,"credits":30}
+  boot report overlay: "Back to yard" 119x71px -> panels 1 to 0
+  sim(app persisted) {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":30,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  sim(node frame)    {"machineLevelSum":8,"machines":["sorter#0 L1","furnace#1 L1","copperSeparator#3 L1","polymerRecycler#4 L1","wireMill#5 L1","platePress#6 L1","circuitAssembler#7 L1","signalLab#8 L1"],"credits":30,"store":{"scrap":9},"storeUnits":9,"storeCapacity":900,"drones":1,"powerRequested":0,"powerCapacity":8,"powerRatioPct":100,"batchesDone":29,"step":"connect","forkPrices":["draw:30 credits","speed:40 credits"]}
+  accent-filled face index 2 of 4 (0:Store | 1:Yard | 2:Connect | 3:Build)
+  U-1 hudContentBox.height 640; .objective 175.38px => 27.4 % (cap 42 %)
+  card: "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line0 font 28.5px w600 wrappedBoxes 2 sw290/cw290 "Connect Scrap sorter so its cargo moves."
+    line1 font 21.6px w400 wrappedBoxes 2 sw290/cw290 "A machine waits for input; check its empty side."
+    line2 font 21.6px w400 wrappedBoxes 2 sw290/cw290 "Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"
+    line3 font 26.4px w400 wrappedBoxes 0 sw0/cw0 ""
+  refused tap printed: "null" (toast now "null")
+  persona before the refused tap {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap9","Credits30","Store 9/900"]}
+  persona after the refused tap {"nextTapFace":"Connect","leftmostFace":"Store","shortfall":null,"power":{"capacity":8,"requested":0,"percent":100},"drones":1,"cardLineCount":3,"cardLines":["Connect Scrap sorter so its cargo moves.","A machine waits for input; check its empty side.","Drones 1 ┬╖ Power 8 ┬╖ 0 requested ┬╖ 100 %"],"faces":["Store","Yard","Connect","Build"],"chips":["Scrap9","Credits30","Store 9/900"]}
+    face [67.72x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Store"
+    face [58.73x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Yard"
+    face [141.66x46 top 586 font 22.2px w400] bg rgb(201, 113, 58) L {"l":133.04,"bucket":4} "Connect"
+    face [65.89x46 top 586 font 22.2px w400] bg rgba(11, 18, 32, 0.92) L {"l":17.12,"bucket":0} "Build"
+  U-3 leftmost face before the tap "Store" (accent-filled index 2) prices ["Store","Yard","Connect","Build"]; machine level sum 8 -> 8 after one leftmost tap; dock row after the paid tap ["Store","Yard","Connect","Build"]
+  U-7 smallest face 46px; page scroll 360x640 vs 360x640; pageerrors 0
+
+entry chunk [{"name":"index-DqPdBnot.js","bytes":232365}] (base 231262 B, ceiling 233000 B)

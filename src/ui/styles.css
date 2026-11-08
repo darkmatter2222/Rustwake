@@ -282,7 +282,12 @@ body {
 }
 
 .dock__btn:disabled {
-  opacity: 0.55;
+  /* UI-004 g2: 0.55 dimmed the ink past the AA floor. The inert face's own opacity is part of
+     its contrast, so the effective pair is `--night` at alpha a over the composited amber fill:
+     a 0.55 measures 2.93:1, a 0.8 measures 4.84:1 (the instrument's `ratioEffective` column,
+     work/evidence/UI-004-g2/ui004-g2-census.json). 0.8 is the first tenth that clears 4.50 with
+     headroom, and the face is still visibly inert beside an active one at 1. */
+  opacity: 0.8;
 }
 
 .dock__cost {
@@ -566,7 +571,10 @@ body {
 /* A target the player cannot use yet stays on screen with its reason printed
    above it, dimmed rather than removed. */
 .icon-btn:disabled {
-  opacity: 0.55;
+  /* UI-004 g2: same floor as `.dock__btn:disabled` - the accent-filled `.node__buy` carries
+     `--night` ink, and at alpha 0.55 that pair measures 2.93:1 against the amber fill.
+     0.8 puts the worst printed row at 4.84:1 (see work/evidence/UI-004-g2). */
+  opacity: 0.8;
 }
 
 /* At a large scale the cards give back their own padding before the type does,
