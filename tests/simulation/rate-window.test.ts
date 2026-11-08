@@ -20,7 +20,10 @@ function send(state: SimState, command: CommandBody, id?: string) {
   return applyCommand(state, { ...command, id: key } as Command);
 }
 
-/** One sorter fed from the dock, with its outputs shipped back to the dock. */
+/** One sorter fed from the dock, with its outputs shipped back to the dock.
+ * BELT-001: the seed moved 40 -> 45 because the three laid belts now pay 1 scrap
+ * per tile of their run out of the same store (9 scrap in all), and the reserve
+ * floor leaves the sorter's own batches inside what the purse can still pull. */
 function yard(scrap: number): SimState {
   const state = createInitialState();
   state.tutorial = 9;
@@ -57,7 +60,7 @@ function sorter(state: SimState): MachineState {
 
 describe("measured rate window (spec 9.4, B-17)", () => {
   it("uses all available time while the machine is younger than one window", () => {
-    const state = yard(40);
+    const state = yard(45);
     advance(state, 300); // 30 s
     const machine = sorter(state);
     const reading = rateReading(machine);
@@ -70,7 +73,7 @@ describe("measured rate window (spec 9.4, B-17)", () => {
   });
 
   it("switches to the fixed 60 s window once one window is complete", () => {
-    const state = yard(40);
+    const state = yard(45);
     advance(state, 601);
     const machine = sorter(state);
     const reading = rateReading(machine);
@@ -83,7 +86,7 @@ describe("measured rate window (spec 9.4, B-17)", () => {
   });
 
   it("reads the recent window, not the lifetime average, after the line stops", () => {
-    const state = yard(40); // ~15 batches, then the reserve floor starves it
+    const state = yard(45); // ~15 batches, then the reserve floor starves it
     advance(state, 1800);
     const machine = sorter(state);
     const reading = rateReading(machine);
@@ -95,8 +98,8 @@ describe("measured rate window (spec 9.4, B-17)", () => {
   });
 
   it("keeps the same samples under tick-by-tick and event-jump advance", () => {
-    const ticking = yard(40);
-    const jumping = yard(40);
+    const ticking = yard(45);
+    const jumping = yard(45);
     advance(ticking, 1200);
     advanceTo(jumping, jumping.tick + 1200);
     expect(JSON.stringify(jumping.machines)).toBe(
@@ -106,7 +109,7 @@ describe("measured rate window (spec 9.4, B-17)", () => {
   });
 
   it("loads a save written before the window existed as a finite reading", () => {
-    const built = yard(40);
+    const built = yard(45);
     advance(built, 900);
     const machine = sorter(built);
     const plain = JSON.parse(JSON.stringify(machine)) as Record<

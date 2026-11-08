@@ -261,9 +261,12 @@ describe("PLAY-001 the resting screen", () => {
       // Both figures of the shortfall survived, not just the word "Last".
       for (const digits of toast.match(/\d+/g) ?? []) expect(carried).toContain(digits);
       expect(carried).toMatch(/Last need \d+ \w+ · have \d+$/);
-      // The literal line at this frame: the copper separator's 25-scrap price, one drone,
-      // one running batch. Written out so a rewording cannot pass by accident.
-      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 25 scrap · have 0");
+      // The literal line at this frame. BELT-001 restated the number: with the
+      // connection priced, the first refused tap is now the 3-scrap belt price of
+      // the dock↔tile-0 run (the 25-scrap separator price still follows it), so the
+      // numbered shortfall names the priced connection. Written out so a rewording
+      // cannot pass by accident.
+      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 scrap · have 0");
     } finally {
       vi.useRealTimers();
     }

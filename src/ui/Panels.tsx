@@ -64,6 +64,15 @@ function Row(props: { label: string; value: ReactNode; children?: ReactNode }) {
   );
 }
 
+/**
+ * U-5 (UI-002 g3): which layer a press retires. Two of these can be on the screen at
+ * once - the return report the boot left behind, plus the panel the player opened last -
+ * and one `Back`/`Escape` press retires exactly one of them, nearest first (LIFO). The
+ * markers let the sheet state that order without a second source of truth: the layer the
+ * player opened last owns the target nearest the dock (where the thumb already is), the
+ * older one sits above it in the column, so repeated presses unwind the stack down to the
+ * yard instead of jumping between two buttons.
+ */
 export function MachinePanel(props: {
   state: SimState;
   machine: MachineState;
@@ -101,7 +110,7 @@ export function MachinePanel(props: {
 
   return (
     <div
-      className="panel"
+      className="panel panel--stack"
       role="group"
       aria-label={t("aria.machineDetails", { machine: def.label })}
     >
@@ -284,7 +293,7 @@ export function StorePanel(props: {
   )}`;
   const summaryLines = yardSummary(props.state).filter((line) => !line.includes(capacityFact));
   return (
-    <div className="panel" role="group" aria-label={t("aria.storeContents")}>
+    <div className="panel panel--stack" role="group" aria-label={t("aria.storeContents")}>
       <div className="panel__head">
         <h2 className="panel__title">{t("title.store")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
@@ -362,7 +371,7 @@ export function ResearchPanel(props: {
 }) {
   const owned = props.state.research;
   return (
-    <div className="panel panel--research" role="group" aria-label={t("aria.research")}>
+    <div className="panel panel--research panel--stack" role="group" aria-label={t("aria.research")}>
       <div className="panel__head">
         <h2 className="panel__title">{t("title.research")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
@@ -463,7 +472,7 @@ export function YardPanel(props: {
   };
 
   return (
-    <div className="panel" role="group" aria-label={t("aria.yardRecord")}>
+    <div className="panel panel--stack" role="group" aria-label={t("aria.yardRecord")}>
       <div className="panel__head">
         <h2 className="panel__title">{t("title.yard")}</h2>
         <button className="icon-btn" onClick={props.onClose}>
@@ -550,7 +559,7 @@ export function ReturnReportPanel(props: {
       : t("report.worked", { duration: formatDuration(report.creditedTicks) }),
   ];
   return (
-    <div className="panel" role="group" aria-label={t("aria.returnReport")}>
+    <div className="panel panel--report" role="group" aria-label={t("aria.returnReport")}>
       <div className="panel__head">
         <h2 className="panel__title">{t("title.report")}</h2>
         <button className="icon-btn" onClick={props.onClose}>

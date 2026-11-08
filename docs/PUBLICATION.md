@@ -1,3 +1,13 @@
+# GitHub Issues and PR delivery contract (authoritative from 2026-11-07)
+
+GitHub [Issues](https://github.com/darkmatter2222/Rustwake/issues) is the ONLY active work board. `work/backlog.json`, `work/BOARD.md` and `work/board.html` are historical snapshots, not scheduling inputs; do not keep updating them as a parallel Jira. Use real GitHub issue URLs, issue comments, labels and linked PRs for role handoffs. All personas use the SAME GitHub login: role identity is recorded in a structured comment/labels and dispatch metadata, NOT fake GitHub assignees or self-approval.
+
+Cap model concurrency at **5 active agents total, including coordinator**. This means at most **4 child agents**. Existing running workers must be reconciled before launching a replacement. The runtime dispatcher also enforces the cap.
+
+An implementation begins with an open Issue, gets an isolated `rw/` branch/worktree and a **draft PR** on its first published checkpoint. Every PR targets `main` and references `Closes #<issue-number>`. Developer moves PR to ready after tests; independent reviewer records ACCEPT/REWORK at exact head SHA; product signs off on outcome; release engineer verifies the PR diff and CI, requests rework or merges the PR. **No persona directly pushes to main**, including release engineer. CI/CD deploys only the merged main SHA. The one-time migration commit installing this policy is an explicit sponsor-authorized exception. See `docs/GITHUB_WORKFLOW.md` for CLI commands, role comment format, blockers and migration/recovery.
+
+This section supersedes ALL older six-session/five-worker limits, `work/backlog.json` canonical-ledger language, local-only ticket transitions, direct-main publication steps, and historical branch-only handoff guidance in other files.
+
 # Frequent visible delivery
 
 This contract supersedes older blanket developer no-push rules. Running agents are not shipped outcomes. The sponsor's 2026-11-06 checkpoint followed about nine hours without published commits; it changed 79 files and no src/ files. Treat that as a publication and product-delivery incident, not a successful night of implementation.
