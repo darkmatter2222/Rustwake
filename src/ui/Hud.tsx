@@ -69,7 +69,11 @@ export function ResourceStrip({ state }: { state: SimState }) {
       </span>
       <span className="resources__item">
         {t("chip.store")}
-        {formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}
+        {/* UI-006: the value is an element, not a bare text node, so it becomes a second flex
+            item and inherits this chip's own `gap: 4px` - the same separation `• Scrap 5` and
+            `• Credits 0` already get. Two adjacent text nodes share no gap, which is why the
+            chip read `Store900/900` at 390 px while its neighbours read spaced. */}
+        <strong>{formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}</strong>
       </span>
     </div>
   );

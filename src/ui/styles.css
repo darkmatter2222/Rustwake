@@ -94,6 +94,13 @@ body {
   border: 1px solid rgba(111, 147, 173, 0.35);
   font-size: 0.84rem;
   letter-spacing: 0.02em;
+  /* UI-006: one chip, one line box. The chip is a shrinkable flex item, so at 390 px its
+     content could break into two line boxes while its neighbours stayed at one, and the row
+     came out with unequal chip heights. `flex: 0 0 auto` keeps the measured content width
+     (`.resources` still wraps between chips, so the row budget in `hudChipLimit` holds), and
+     `nowrap` keeps the label and its value on the single line the box is sized for. */
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .resources__dot {
@@ -111,6 +118,13 @@ body {
 .cluster .icon-btn {
   padding: 0 5px;
   font-size: 0.78rem;
+  /* UI-006: same one-line rule as the chips, for the face that motivated it: at 390 px the
+     cluster shares its row with the chip block, so a shrunk button broke "Sound ✓" into two
+     line boxes (`Sound` over `✓`) beside one-line neighbours at the same 44 px min-height.
+     `flex: 0 0 auto` keeps each face at its measured content width; the row still fits, the
+     `min-width: 44px` of `.icon-btn` still carries the target. */
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .icon-btn {
