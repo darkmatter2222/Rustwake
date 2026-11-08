@@ -13,6 +13,7 @@ import { createInitialState, type MachineStatus, type SimState } from "../../src
 import { DOCK_TILE } from "../../src/game/simulation/commands";
 import censusAfter from "../../docs/evidence/2026-11-06-art003-census-after.json";
 import censusBefore from "../../docs/evidence/2026-11-06-art003-census-before.json";
+import censusArt007 from "../../work/evidence/ART-007-g1/census-art007.json";
 
 /**
  * ART-003 g1 - silhouette-first witnesses (A3-1, A3-3, A3-4 and the named motion states).
@@ -381,6 +382,7 @@ const furnRow = (p: Params): PartTuple[] => [
   [11, -2, 5, 8, 6],
   [11, 8, 5, 3, 9],
   [-15, 3, 4, 3, 6],
+  [-1, -16, 2, 3, 16], // ART-007 mast tip above the cap line
 ];
 const labRow = (p: Params): PartTuple[] => [
   SHADOW6,
@@ -532,7 +534,9 @@ describe("ART-004 g2 A3-1 on the regenerated after-matrix", () => {
 
   it("the unit grid the same run prints agrees with this file, pair for pair", () => {
     const rows = unitPairRows();
-    const printed = censusAfter.sheet.unitMatrix as unknown as [string, number][];
+    // ART-007 g1: the quartet rows changed, so the agreement runs against this lane's
+    // own census artifact (the ART-004 after-file stays as the historical baseline).
+    const printed = censusArt007.sheet.unitMatrix as unknown as [string, number][];
     expect(printed).toEqual(rows);
     expect(Math.min(...rows.map((r) => r[1]))).toBeGreaterThanOrEqual(A3_1_THRESHOLD);
     console.log(`A3-1 unit min=${Math.min(...rows.map((r) => r[1]))} mean=${+(rows.reduce((s, r) => s + r[1], 0) / 15).toFixed(2)} threshold=${A3_1_THRESHOLD}`);
@@ -546,18 +550,19 @@ describe("ART-004 g2 A3-1 joint furnace x signalLab parameter search", () => {
     expect(search.builderMatches).toEqual({ furnace: true, signalLab: true });
   });
 
-  it("nothing in the joint grid beats the shipped minimum; the mean-optimum sits at 58.81 %", () => {
-    const printed = censusAfter.sheet.a3_1.jointSearch as unknown as {
+  it("nothing in the joint grid beats the const minimum; the mean-optimum sits at the printed best", () => {
+    const printed = censusArt007.sheet.a3_1.jointSearch as unknown as {
       best: { minPct: number; meanPct: number };
       shipped: { minPct: number; meanPct: number };
       enumeratedCombos: number;
       gatePassingCombos: number;
     };
-    // The min is capped by dock/sorter, a pair neither row of this search touches.
-    expect(search.constMin).toBe(48.2);
-    expect(search.shippedMin).toBe(48.2);
+    // ART-007 g1: with the sorter's side post the weakest partner pair is 51.7 (was 48.2,
+    // dock/sorter); the shipped 15-pair min is now the furnace x signalLab seam at 48.7.
+    expect(search.constMin).toBe(51.7);
+    expect(search.shippedMin).toBe(48.7);
     expect(search.best.minPct).toBe(search.constMin);
-    expect(search.best.meanPct).toBe(58.81);
+    expect(search.best.meanPct).toBe(60.23);
     expect(search.best.meanPct).toBeGreaterThan(search.shippedMean);
     // Same instrument, same numbers as the committed artifact.
     expect(search.best.minPct).toBe(printed.best.minPct);
@@ -580,8 +585,8 @@ describe("ART-004 g2 A3-4 per-layer ink shares on one denominator", () => {
       sixIds.map((id) => [id, +((100 * rowInkUnits(PARTS[id])) / cellArea).toFixed(2)])
     );
     expect(gravelSharePct).toBe(0.39);
-    expect(machinery.sorter).toBe(67.68);
-    expect(machinery.furnace).toBe(52.44);
+    expect(machinery.sorter).toBe(74.12); // ART-007: +66 u (side post), was 67.68
+    expect(machinery.furnace).toBe(53.03); // ART-007: +6 u (mast tip), was 52.44
     expect(machinery.signalLab).toBe(59.08);
     expect(machinery.dock).toBe(55.47);
     for (const id of ["dock", "sorter", "furnace", "wireMill", "signalLab"]) {
@@ -873,6 +878,84 @@ describe("ART-004 g2 A3-1 across the whole role list plus the before/after compa
     // for the lattice family, whose closest pair is the weakest reading in the build.
     expect(unitAll.summaryAll.minPct).toBeGreaterThanOrEqual(20);
     console.log("A3-1 unitWholeSheet", JSON.stringify({ all: unitAll.summaryAll, machines: unitAll.summaryMachines }));
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/* ART-007 g1: the grey-box quartet - named pair readings and the four */
+/* distinct outer elements (Issue #36 acceptance).                      */
+/* ------------------------------------------------------------------ */
+
+describe("ART-007 grey-box quartet named pairs and distinct outer elements", () => {
+  const NAMED = ["furnace/circuitAssembler", "sorter/copperSeparator"] as const;
+  const QUARTET = ["sorter", "furnace", "copperSeparator", "circuitAssembler"] as const;
+
+  /** Inked-cell signature of the four outer bands of the 32x32 unit grid: the outer
+   *  silhouette only (first/last two grid rows and columns), not the whole cell. */
+  function outerSignature(id: string): { top: string; bottom: string; left: string; right: string } {
+    const g = grayUnit(PARTS[id]);
+    const band = (test: (x: number, y: number) => boolean) =>
+      g.map((v, i) => (test(i % 32, Math.floor(i / 32)) && v !== 5 ? 1 : 0)).join("");
+    return {
+      top: band((_x, y) => y < 2),
+      bottom: band((_x, y) => y >= 30),
+      left: band((x) => x < 2),
+      right: band((x) => x >= 30),
+    };
+  }
+
+  it("the two named pairs each sit above the aggregate-min threshold, not just the min", () => {
+    const unitRows = censusArt007.sheet.unitAll.rows as unknown as { pair: string; pct: number }[];
+    const art = censusArt007.sheet.art007 as unknown as {
+      thresholdPct: number;
+      pairs: { pair: string; unitPct: number; alignedPct: number; unitPasses: boolean; alignedPasses: boolean }[];
+      passes: boolean;
+    };
+    expect(art.thresholdPct).toBe(A3_1_THRESHOLD);
+    const measured: Record<string, number> = {};
+    for (const pair of NAMED) {
+      const [a, b] = pair.split("/");
+      const pct = differingPct(grayUnit(PARTS[a]), grayUnit(PARTS[b]));
+      const printed = unitRows.find((r) => r.pair === pair)?.pct;
+      expect(printed, `${pair} printed row`).toBe(pct); // the artifact agrees with the table
+      expect(pct, pair).toBeGreaterThanOrEqual(A3_1_THRESHOLD); // each named pair on its own
+      measured[pair] = pct;
+    }
+    // One aggregate pass cannot hide these pairs: the named values print beside the min.
+    const aggregateMin = censusArt007.sheet.unitAll.summaryMachines.minPct as number;
+    expect(Math.min(...Object.values(measured))).toBeGreaterThanOrEqual(Math.min(aggregateMin, A3_1_THRESHOLD));
+    expect(art.pairs.map((p) => [p.pair, p.unitPct])).toEqual(NAMED.map((pair) => [pair, measured[pair]]));
+    expect(art.pairs.every((p) => p.unitPasses && p.alignedPasses)).toBe(true);
+    expect(art.passes).toBe(true);
+    console.log(
+      "ART-007 namedPairs",
+      JSON.stringify({ measured, aggregateUnitMinPct: aggregateMin, thresholdPct: A3_1_THRESHOLD, passes: art.passes })
+    );
+  });
+
+  it("the four buildables carry four distinct outer-band ink signatures", () => {
+    const sigs = Object.fromEntries(QUARTET.map((id) => [id, outerSignature(id)]));
+    const distinct = new Set(Object.values(sigs).map((s) => JSON.stringify(s)));
+    // Every one of the four outer bands carries ink (an outer element exists)...
+    for (const id of QUARTET) {
+      const s = sigs[id];
+      const inked = (v: string) => v.split("").reduce((sum, c) => sum + Number(c), 0);
+      expect(inked(s.top) + inked(s.bottom) + inked(s.left) + inked(s.right), id).toBeGreaterThan(0);
+    }
+    // ...and the four signatures are pairwise different (outer silhouette, not slit rows).
+    expect(distinct.size).toBe(4);
+    // The census run carries the same signature table from the shipped rows.
+    const artSignatures = (censusArt007.sheet.art007 as unknown as {
+      outerSignatures: Record<string, { top: string; bottom: string; left: string; right: string }>;
+    }).outerSignatures;
+    expect(artSignatures).toEqual(sigs);
+    console.log(
+      "ART-007 outerSignatures",
+      JSON.stringify(Object.fromEntries(Object.entries(sigs).map(([k, s]) => [k, {
+        top: s.top.replace(/0/g, ".").replace(/1/g, "#"),
+        right: s.right.replace(/0/g, ".").replace(/1/g, "#"),
+      }])))
+    );
   });
 });
 
