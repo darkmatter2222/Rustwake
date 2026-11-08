@@ -23,7 +23,11 @@ The prior plugin was advisory and could report progress without launching worker
 
 ## Automatic deployment is enabled
 
-Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
+**Deployed build:** `main` at `5610528` (full `56105287bc9468a95cdd15d54bc9aa4fccdae415`), carried by `ci` run [42468347121](https://github.com/darkmatter2222/Rustwake/actions/runs/42468347121) and `delivery` run [42468399072](https://github.com/darkmatter2222/Rustwake/actions/runs/42468399072) (package job 128693167841, deploy job 128693253890, both success).
+
+**Player-visible outcomes in this build:** each machine keeps a distinct **machinery silhouette identity** (ART-004) and the amber strings read at **>= 4.5:1 with monotonic text scaling** (UI-004).
+
+**Open follow-ups:** [#18](https://github.com/darkmatter2222/Rustwake/issues/18) the pressed face names its next tap · [#24](https://github.com/darkmatter2222/Rustwake/issues/24) legacy belt reconciliation · [#30](https://github.com/darkmatter2222/Rustwake/issues/30) chip row spacing and equal heights · [#31](https://github.com/darkmatter2222/Rustwake/issues/31) census gravel share · [#32](https://github.com/darkmatter2222/Rustwake/issues/32) visible output-blocked settle.
 
 Merge reviewed PRs into `main`; GitHub Actions runs CI, packages the game/dashboard, and deploys automatically. No routine server commands are needed. [Delivery runs](https://github.com/darkmatter2222/Rustwake/actions/workflows/delivery.yml) · [Live dashboard](https://home.darkmatter2222.com/rustwake/team/) · [Runbook](docs/AUTOMATED_DELIVERY.md).
 
