@@ -1,0 +1,29 @@
+﻿steps [["A 1","1",false,15],["A 1.25","1.25",false,18.75],["A 1.5","1.5",true,22.5],["A 2","2",true,30]]
+
+price string per step (plain + amber):
+  A 1     px [12]         effective [6.46]         card fill 9.571 % (cap 42 %) min tap 44 px no page scroll true
+  A 1.25  px [15]         effective [6.46]         card fill 11.378 % (cap 42 %) min tap 44 px no page scroll true
+  A 1.5   px [16.2]       effective [6.46]         card fill 10.791 % (cap 42 %) min tap 44 px no page scroll true
+  A 2     px [21.6]       effective [6.46]         card fill 19.541999999999998 % (cap 42 %) min tap 44 px no page scroll true
+
+per-chip heights (Issue #30 before-state):
+  [A 1] root font 15px distinct heights [23]
+    "Scrap5" h 23      w 68.48   top 8      px 12.6   leading 17.01px scroll/client 21/21 runs [":7x7@16","5:17x7.5@11"]
+    "Credits0" h 23      w 77.13   top 8      px 12.6   leading 17.01px scroll/client 21/21 runs [":7x7@16","0:17x7.5@11"]
+    "Store 5/900" h 23      w 81.23   top 33     px 12.6   leading 17.01px scroll/client 21/21 runs []
+  [A 1.25] root font 18.75px distinct heights [27.25]
+    "Scrap5" h 27.25   w 78.34   top 8      px 15.75  leading 21.2625px scroll/client 25/25 runs [":7x7@18.13","5:21.25x9.38@11"]
+    "Credits0" h 27.25   w 89.16   top 8      px 15.75  leading 21.2625px scroll/client 25/25 runs [":7x7@18.13","0:21.25x9.38@11"]
+    "Store 5/900" h 27.25   w 98.03   top 37.25  px 15.75  leading 21.2625px scroll/client 25/25 runs []
+  [A 1.5] root font 22.5px distinct heights [23.73]
+    "Scrap5" h 23.73   w 86.22   top 8      px 18.9   leading 21.735px scroll/client 23/22 runs [":7x7@16.36","5:21.73x11.25@9"]
+    "Credits0" h 23.73   w 99.19   top 8      px 18.9   leading 21.735px scroll/client 23/22 runs [":7x7@16.36","0:21.73x11.25@9"]
+    "Store 5/900" h 23.73   w 112.84  top 33.73  px 18.9   leading 21.735px scroll/client 23/22 runs []
+  [A 2] root font 30px distinct heights [30.97]
+    "Scrap5" h 30.97   w 105.95  top 8      px 25.2   leading 28.98px scroll/client 30/29 runs [":7x7@19.98","5:28.97x15@9"]
+    "Credits0" h 30.97   w 123.25  top 40.97  px 25.2   leading 28.98px scroll/client 30/29 runs [":7x7@52.95","0:28.97x15@41.97"]
+    "Store 5/900" h 30.97   w 146.44  top 73.94  px 25.2   leading 28.98px scroll/client 30/29 runs []
+
+A 2.0 price rows [{"text":"20 scrap","px":21.6,"weight":"400","ratio":5.27,"ratioComposited":6.46,"ratioEffective":6.46,"opacity":1,"color":"rgb(11, 18, 32)","bg":"rgb(201,113,58)","heightPx":23.75,"widthPx":219.67,"topPx":811.25,"bottomPx":835,"lineHeight":"23.76px","scrollHeightPx":25,"clientHeightPx":24,"clipped":false,"runs":[]}]
+non-decreasing ladder violations at four steps: 0
+pageerrors 0

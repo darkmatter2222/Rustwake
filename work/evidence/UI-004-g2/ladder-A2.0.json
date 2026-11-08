@@ -1,0 +1,823 @@
+{
+ "ticket": "UI-004 g2 addendum (A 2.0 step + per-chip heights, Issue #30 before-state)",
+ "issue": "https://github.com/darkmatter2222/Rustwake/issues/19",
+ "alsoServes": "https://github.com/darkmatter2222/Rustwake/issues/30",
+ "headSha": "26e2d2df4a8a9153ef5b337365192a9877a3e025",
+ "window": "W-3 (390x844 dpr2, isMobile + hasTouch, fresh storage, 12 taps at 1/s, A pressed 3x)",
+ "url": "http://localhost:4191/",
+ "columns": [
+  "A 1",
+  "A 1.25",
+  "A 1.5",
+  "A 2"
+ ],
+ "census": [
+  {
+   "element": "objective primary #0",
+   "text": "Build a sorter · 20 scrap",
+   "px": [
+    14.25,
+    17.81,
+    21.38,
+    28.5
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "objective status line #0",
+   "text": "Ghost on cell 8 · tap again to place",
+   "px": [
+    10.8,
+    13.5,
+    16.2,
+    21.6
+   ],
+   "ratioEffective": [
+    5.77,
+    5.77,
+    5.77,
+    5.77
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "objective status line #1",
+   "text": "Drones 1 · Power 8 · 0 requested · 100 %",
+   "px": [
+    10.8,
+    13.5,
+    16.2,
+    21.6
+   ],
+   "ratioEffective": [
+    5.77,
+    5.77,
+    5.77,
+    5.77
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock face label (plain fill) #0",
+   "text": "Cancel",
+   "px": [
+    13.2,
+    16.5,
+    16.65,
+    22.2
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock face label (plain fill) #1",
+   "text": "Build Scrap sorter20 scrap",
+   "px": [
+    13.2,
+    16.5,
+    16.65,
+    22.2
+   ],
+   "ratioEffective": [
+    6.46,
+    6.46,
+    6.46,
+    6.46
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock face label (plain fill) #2",
+   "text": "Next",
+   "px": [
+    13.2,
+    16.5,
+    16.65,
+    22.2
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock face label (amber fill) #0",
+   "text": "Build Scrap sorter20 scrap",
+   "px": [
+    13.2,
+    16.5,
+    16.65,
+    22.2
+   ],
+   "ratioEffective": [
+    6.46,
+    6.46,
+    6.46,
+    6.46
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock price (plain fill) #0",
+   "text": "20 scrap",
+   "px": [
+    12,
+    15,
+    16.2,
+    21.6
+   ],
+   "ratioEffective": [
+    6.46,
+    6.46,
+    6.46,
+    6.46
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "dock price (amber fill) #0",
+   "text": "20 scrap",
+   "px": [
+    12,
+    15,
+    16.2,
+    21.6
+   ],
+   "ratioEffective": [
+    6.46,
+    6.46,
+    6.46,
+    6.46
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "resource chip #0",
+   "text": "Scrap5",
+   "px": [
+    12.6,
+    15.75,
+    18.9,
+    25.2
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "resource chip #1",
+   "text": "Credits0",
+   "px": [
+    12.6,
+    15.75,
+    18.9,
+    25.2
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "resource chip #2",
+   "text": "Store 5/900",
+   "px": [
+    12.6,
+    15.75,
+    18.9,
+    25.2
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "cluster button #0",
+   "text": "Sound ✓",
+   "px": [
+    11.7,
+    14.63,
+    17.55,
+    23.4
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "cluster button #1",
+   "text": "A 1",
+   "px": [
+    11.7,
+    14.63,
+    17.55,
+    23.4
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  },
+  {
+   "element": "cluster button #2",
+   "text": "Home",
+   "px": [
+    11.7,
+    14.63,
+    17.55,
+    23.4
+   ],
+   "ratioEffective": [
+    17.48,
+    17.48,
+    17.48,
+    17.48
+   ],
+   "steps": 4,
+   "monotonic": true
+  }
+ ],
+ "nonMonotonic": [],
+ "chipHeightsByStep": [
+  {
+   "label": "A 1",
+   "rootFontPx": 15,
+   "chips": [
+    {
+     "text": "Scrap5",
+     "heightPx": 23,
+     "widthPx": 68.48,
+     "topPx": 8,
+     "px": 12.6,
+     "lineHeight": "17.01px",
+     "scrollHeightPx": 21,
+     "clientHeightPx": 21,
+     "runs": [
+      {
+       "text": "",
+       "px": 12.6,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 16
+      },
+      {
+       "text": "5",
+       "px": 12.6,
+       "heightPx": 17,
+       "widthPx": 7.5,
+       "topPx": 11
+      }
+     ]
+    },
+    {
+     "text": "Credits0",
+     "heightPx": 23,
+     "widthPx": 77.13,
+     "topPx": 8,
+     "px": 12.6,
+     "lineHeight": "17.01px",
+     "scrollHeightPx": 21,
+     "clientHeightPx": 21,
+     "runs": [
+      {
+       "text": "",
+       "px": 12.6,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 16
+      },
+      {
+       "text": "0",
+       "px": 12.6,
+       "heightPx": 17,
+       "widthPx": 7.5,
+       "topPx": 11
+      }
+     ]
+    },
+    {
+     "text": "Store 5/900",
+     "heightPx": 23,
+     "widthPx": 81.23,
+     "topPx": 33,
+     "px": 12.6,
+     "lineHeight": "17.01px",
+     "scrollHeightPx": 21,
+     "clientHeightPx": 21,
+     "runs": []
+    }
+   ],
+   "distinctChipHeightsPx": [
+    23
+   ]
+  },
+  {
+   "label": "A 1.25",
+   "rootFontPx": 18.75,
+   "chips": [
+    {
+     "text": "Scrap5",
+     "heightPx": 27.25,
+     "widthPx": 78.34,
+     "topPx": 8,
+     "px": 15.75,
+     "lineHeight": "21.2625px",
+     "scrollHeightPx": 25,
+     "clientHeightPx": 25,
+     "runs": [
+      {
+       "text": "",
+       "px": 15.75,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 18.13
+      },
+      {
+       "text": "5",
+       "px": 15.75,
+       "heightPx": 21.25,
+       "widthPx": 9.38,
+       "topPx": 11
+      }
+     ]
+    },
+    {
+     "text": "Credits0",
+     "heightPx": 27.25,
+     "widthPx": 89.16,
+     "topPx": 8,
+     "px": 15.75,
+     "lineHeight": "21.2625px",
+     "scrollHeightPx": 25,
+     "clientHeightPx": 25,
+     "runs": [
+      {
+       "text": "",
+       "px": 15.75,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 18.13
+      },
+      {
+       "text": "0",
+       "px": 15.75,
+       "heightPx": 21.25,
+       "widthPx": 9.38,
+       "topPx": 11
+      }
+     ]
+    },
+    {
+     "text": "Store 5/900",
+     "heightPx": 27.25,
+     "widthPx": 98.03,
+     "topPx": 37.25,
+     "px": 15.75,
+     "lineHeight": "21.2625px",
+     "scrollHeightPx": 25,
+     "clientHeightPx": 25,
+     "runs": []
+    }
+   ],
+   "distinctChipHeightsPx": [
+    27.25
+   ]
+  },
+  {
+   "label": "A 1.5",
+   "rootFontPx": 22.5,
+   "chips": [
+    {
+     "text": "Scrap5",
+     "heightPx": 23.73,
+     "widthPx": 86.22,
+     "topPx": 8,
+     "px": 18.9,
+     "lineHeight": "21.735px",
+     "scrollHeightPx": 23,
+     "clientHeightPx": 22,
+     "runs": [
+      {
+       "text": "",
+       "px": 18.9,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 16.36
+      },
+      {
+       "text": "5",
+       "px": 18.9,
+       "heightPx": 21.73,
+       "widthPx": 11.25,
+       "topPx": 9
+      }
+     ]
+    },
+    {
+     "text": "Credits0",
+     "heightPx": 23.73,
+     "widthPx": 99.19,
+     "topPx": 8,
+     "px": 18.9,
+     "lineHeight": "21.735px",
+     "scrollHeightPx": 23,
+     "clientHeightPx": 22,
+     "runs": [
+      {
+       "text": "",
+       "px": 18.9,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 16.36
+      },
+      {
+       "text": "0",
+       "px": 18.9,
+       "heightPx": 21.73,
+       "widthPx": 11.25,
+       "topPx": 9
+      }
+     ]
+    },
+    {
+     "text": "Store 5/900",
+     "heightPx": 23.73,
+     "widthPx": 112.84,
+     "topPx": 33.73,
+     "px": 18.9,
+     "lineHeight": "21.735px",
+     "scrollHeightPx": 23,
+     "clientHeightPx": 22,
+     "runs": []
+    }
+   ],
+   "distinctChipHeightsPx": [
+    23.73
+   ]
+  },
+  {
+   "label": "A 2",
+   "rootFontPx": 30,
+   "chips": [
+    {
+     "text": "Scrap5",
+     "heightPx": 30.97,
+     "widthPx": 105.95,
+     "topPx": 8,
+     "px": 25.2,
+     "lineHeight": "28.98px",
+     "scrollHeightPx": 30,
+     "clientHeightPx": 29,
+     "runs": [
+      {
+       "text": "",
+       "px": 25.2,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 19.98
+      },
+      {
+       "text": "5",
+       "px": 25.2,
+       "heightPx": 28.97,
+       "widthPx": 15,
+       "topPx": 9
+      }
+     ]
+    },
+    {
+     "text": "Credits0",
+     "heightPx": 30.97,
+     "widthPx": 123.25,
+     "topPx": 40.97,
+     "px": 25.2,
+     "lineHeight": "28.98px",
+     "scrollHeightPx": 30,
+     "clientHeightPx": 29,
+     "runs": [
+      {
+       "text": "",
+       "px": 25.2,
+       "heightPx": 7,
+       "widthPx": 7,
+       "topPx": 52.95
+      },
+      {
+       "text": "0",
+       "px": 25.2,
+       "heightPx": 28.97,
+       "widthPx": 15,
+       "topPx": 41.97
+      }
+     ]
+    },
+    {
+     "text": "Store 5/900",
+     "heightPx": 30.97,
+     "widthPx": 146.44,
+     "topPx": 73.94,
+     "px": 25.2,
+     "lineHeight": "28.98px",
+     "scrollHeightPx": 30,
+     "clientHeightPx": 29,
+     "runs": []
+    }
+   ],
+   "distinctChipHeightsPx": [
+    30.97
+   ]
+  }
+ ],
+ "a2Step": {
+  "label": "A 2",
+  "textScaleProperty": "2",
+  "textLarge": true,
+  "rootFontPx": 30,
+  "price": [
+   {
+    "text": "20 scrap",
+    "px": 21.6,
+    "weight": "400",
+    "ratio": 5.27,
+    "ratioComposited": 6.46,
+    "ratioEffective": 6.46,
+    "opacity": 1,
+    "color": "rgb(11, 18, 32)",
+    "bg": "rgb(201,113,58)",
+    "heightPx": 23.75,
+    "widthPx": 219.67,
+    "topPx": 811.25,
+    "bottomPx": 835,
+    "lineHeight": "23.76px",
+    "scrollHeightPx": 25,
+    "clientHeightPx": 24,
+    "clipped": false,
+    "runs": []
+   }
+  ],
+  "chips": [
+   {
+    "text": "Scrap5",
+    "px": 25.2,
+    "weight": "400",
+    "ratio": 17.42,
+    "ratioComposited": 17.48,
+    "ratioEffective": 17.48,
+    "opacity": 1,
+    "color": "rgb(244, 247, 251)",
+    "bg": "rgb(11,18,32)",
+    "heightPx": 30.97,
+    "widthPx": 105.95,
+    "topPx": 8,
+    "bottomPx": 38.97,
+    "lineHeight": "28.98px",
+    "scrollHeightPx": 30,
+    "clientHeightPx": 29,
+    "clipped": false,
+    "runs": [
+     {
+      "text": "",
+      "px": 25.2,
+      "heightPx": 7,
+      "widthPx": 7,
+      "topPx": 19.98
+     },
+     {
+      "text": "5",
+      "px": 25.2,
+      "heightPx": 28.97,
+      "widthPx": 15,
+      "topPx": 9
+     }
+    ]
+   },
+   {
+    "text": "Credits0",
+    "px": 25.2,
+    "weight": "400",
+    "ratio": 17.42,
+    "ratioComposited": 17.48,
+    "ratioEffective": 17.48,
+    "opacity": 1,
+    "color": "rgb(244, 247, 251)",
+    "bg": "rgb(11,18,32)",
+    "heightPx": 30.97,
+    "widthPx": 123.25,
+    "topPx": 40.97,
+    "bottomPx": 71.94,
+    "lineHeight": "28.98px",
+    "scrollHeightPx": 30,
+    "clientHeightPx": 29,
+    "clipped": false,
+    "runs": [
+     {
+      "text": "",
+      "px": 25.2,
+      "heightPx": 7,
+      "widthPx": 7,
+      "topPx": 52.95
+     },
+     {
+      "text": "0",
+      "px": 25.2,
+      "heightPx": 28.97,
+      "widthPx": 15,
+      "topPx": 41.97
+     }
+    ]
+   },
+   {
+    "text": "Store 5/900",
+    "px": 25.2,
+    "weight": "400",
+    "ratio": 17.42,
+    "ratioComposited": 17.48,
+    "ratioEffective": 17.48,
+    "opacity": 1,
+    "color": "rgb(244, 247, 251)",
+    "bg": "rgb(11,18,32)",
+    "heightPx": 30.97,
+    "widthPx": 146.44,
+    "topPx": 73.94,
+    "bottomPx": 104.91,
+    "lineHeight": "28.98px",
+    "scrollHeightPx": 30,
+    "clientHeightPx": 29,
+    "clipped": false,
+    "runs": []
+   }
+  ],
+  "cardFillPct": 19.541999999999998,
+  "minTargetPx": 44,
+  "targets": [
+   {
+    "text": "♪",
+    "h": 65.19,
+    "w": 44
+   },
+   {
+    "text": "A 2",
+    "h": 65.19,
+    "w": 46.73
+   },
+   {
+    "text": "Home",
+    "h": 65.19,
+    "w": 74.8
+   },
+   {
+    "text": "Cancel",
+    "h": 50.17,
+    "w": 80.06
+   },
+   {
+    "text": "Build Scrap sorter20 scrap",
+    "h": 50.17,
+    "w": 225.67
+   },
+   {
+    "text": "Next",
+    "h": 50.17,
+    "w": 60.27
+   }
+  ],
+  "noPageScroll": true,
+  "pageScroll": {
+   "scrollWidth": 390,
+   "scrollHeight": 844,
+   "innerWidth": 390,
+   "innerHeight": 844
+  },
+  "clipped": [],
+  "still": "work/evidence/UI-004-g2/captures/ladder-A2-390x844-dpr2.png"
+ },
+ "allSteps": [
+  {
+   "label": "A 1",
+   "scale": "1",
+   "textLarge": false,
+   "rootFontPx": 15,
+   "cardFillPct": 9.571,
+   "minTargetPx": 44,
+   "noPageScroll": true,
+   "pricePx": [
+    12
+   ],
+   "priceRatioEffective": [
+    6.46
+   ],
+   "chipHeightsPx": [
+    23,
+    23,
+    23
+   ]
+  },
+  {
+   "label": "A 1.25",
+   "scale": "1.25",
+   "textLarge": false,
+   "rootFontPx": 18.75,
+   "cardFillPct": 11.378,
+   "minTargetPx": 44,
+   "noPageScroll": true,
+   "pricePx": [
+    15
+   ],
+   "priceRatioEffective": [
+    6.46
+   ],
+   "chipHeightsPx": [
+    27.25,
+    27.25,
+    27.25
+   ]
+  },
+  {
+   "label": "A 1.5",
+   "scale": "1.5",
+   "textLarge": true,
+   "rootFontPx": 22.5,
+   "cardFillPct": 10.791,
+   "minTargetPx": 44,
+   "noPageScroll": true,
+   "pricePx": [
+    16.2
+   ],
+   "priceRatioEffective": [
+    6.46
+   ],
+   "chipHeightsPx": [
+    23.73,
+    23.73,
+    23.73
+   ]
+  },
+  {
+   "label": "A 2",
+   "scale": "2",
+   "textLarge": true,
+   "rootFontPx": 30,
+   "cardFillPct": 19.541999999999998,
+   "minTargetPx": 44,
+   "noPageScroll": true,
+   "pricePx": [
+    21.6
+   ],
+   "priceRatioEffective": [
+    6.46
+   ],
+   "chipHeightsPx": [
+    30.97,
+    30.97,
+    30.97
+   ]
+  }
+ ],
+ "pageErrors": []
+}
