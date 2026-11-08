@@ -164,10 +164,10 @@ valid because these two files are the only shipped-code edits on this lane.
 # STRAT-004 generation 2 — the tail counts, and the no-op row is three named kinds
 
 - **Tree:** `rw/strat004-g1` on top of `origin/main`, merge commits `4edb4f8` (onto `6e0dce9`, BELT-001) and
-  `5e5e35b` (onto `5610528`, UI-004); shipped code `96a5428`, byte trims `5b91587` (shared `DOT` const) and
-  `4a19157` (shared dock class consts); this note and the witnesses land in the doc-only commit on top.
-  Measured entry chunk on this head: `index-BjqNquCb.js` **233145 B** (main alone 232792 B, ceiling
-  233000 B — see sec. 10).
+  `5e5e35b` (onto `5610528`, UI-004); shipped code `96a5428`, byte trims `5b91587` (shared `DOT` const),
+  `4a19157` (shared dock class consts) and `3e874c3` (`labelTable` helper + hoisted countdown reads); this note
+  and the witnesses land in the doc-only commit on top. Measured entry chunk on this head:
+  `index-CVKqHksh.js` **232990 B** (main alone 232792 B, ceiling 233000 B → **pass, 10 B spare**, sec. 10).
 - **Window:** W-3 unchanged — 180 s wall, 1 tap/s, 390x844 dpr2, `isMobile`+`hasTouch`, fresh storage, final
   tick 1800 = 3.00 simulated minutes, both policies, both artifacts, one instrument
   (`policy-census.mjs` → `policy-census.json`, `census-run.log`). **One named denominator for every share:
@@ -232,7 +232,7 @@ policies; the countdown digit for **98** (blind) / **99** (v2). Aggregate no-op 
 
 | witness | candidate | limit |
 |---|---|---|
-| entry chunk | `index-BjqNquCb.js` **233145 B** (main alone on this head 232792 B) | < 233000 B → **145 B over**, see the ceiling call below |
+| entry chunk | `index-CVKqHksh.js` **232990 B** at `3e874c3` (main alone on this head 232792 B) | < 233000 B → **pass, 10 B spare** |
 | typecheck / validate / vitest / `node --test` / build | 0 / 0 / 0 (32 files, 325 tests) / 0 (59/59) / 0 | all 0 |
 | `validate` behaviour line | `firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s)` | identical on base and candidate: the sim did not move |
 | tap targets, 16 cells (`layout-witness.json`) | **44 px** in the six tail-carrying/short cells, 46 px at text scale 1, 46.5 px (360x640) and 50.2 px (390x844, and the fork row which shares its height) at text scale 2 | ≥ 44 px pass |
@@ -240,22 +240,23 @@ policies; the countdown digit for **98** (blind) / **99** (v2). Aggregate no-op 
 | card fill at text scale 2.0 | 32.8 % (360x640), 20.8 % (390x844), 24.8 % (fork row) | ≤ 42 % pass |
 | save | `schemaVersion 1`, fixture `eede3c4f` byte-identical (no `tests/`, no `src/game/persistence/` file in this lane) | pass |
 
-Byte arithmetic for the **+353 B** this lane adds over main, so the next lane can price the same move
+Byte arithmetic for the **+198 B** this lane adds over main, so the next lane can price the same move
 (`checks.txt` carries every row; each number is its own clean `npm run build` on this machine): main's two ui
 files alone **232792 B**; this lane's shipped three-part face at `9d8ff3d` **233418 B**; after trim 1 (the
 three repeated `t("value.dotSeparator")` calls share one `DOT` const) **233208 B**; after trim 2 (the dock's
-class fragments hoisted into shared consts, rendered `class` attribute identical) **233145 B**. Inside the
-lane the countdown digit is worth 113 B (233418 → 233305 at `9d8ff3d`) and the tail without it measures
-233201 B; the tail lives in the *same* `dock__cost` span as the price, which is what saved 285 B against the
-g1 three-span form (233278 B → 232993 B at the previous merge).
+class fragments hoisted into shared consts, rendered `class` attribute identical) **233145 B**; after trim 3
+(one `labelTable` helper behind the five string maps plus the countdown read hoisted in both writers)
+**232990 B**. Inside the lane the countdown digit is worth 113 B (233418 → 233305 at `9d8ff3d`) and the tail
+without it measured 233201 B at `5b91587`; the tail lives in the *same* `dock__cost` span as the price, which
+is what saved 285 B against the g1 three-span form (233278 B → 232993 B at the previous merge).
 
-**Ceiling call for the reviewer / product owner (all measured):** main's own build on this merge is
-232792 B (208 B of headroom — ART-004's atlas recovery is already inside that column), and **no** form of the
-pending tail fits under the pinned 233000 B on top of it: 233145 B shipped, 233201 B with the digit dropped,
-232792 B only if the tail goes altogether. So the choice is (a) move the ceiling to 233500 B, (b) land the E3
-chunk-split first (STATUS.md: cue/variant/part tables out of the main chunk), or (c) drop the tail and let
-W-3 rows 2 and 3 revert to the g1 readings (29 % / stall 9). The digit is the cheap half of the feature and
-the only element that changes on 98–99 of the 178 taps.
+**Ceiling: resolved inside this lane.** On the tree that carries ART-004 (`origin/main 5610528`, whose own two
+ui files measure 232792 B) the shipped form prints **232990 B**, i.e. **inside the pinned 233000 B ceiling
+with 10 B spare** — no ceiling move and no chunk-split is needed for this lane. The intermediate figures
+(233418 / 233208 / 233145 / 233201) are kept because the earlier PR comments quote them; the "no form fits"
+reading was true at `4a19157` and is superseded at `3e874c3`. Rendered strings and rendered `class` attributes
+are identical at every step: `face-line-check.mjs` prints "both derivations agree on every frame" on this head
+and `frame-probe.mjs` prints `waits 25 scrap · have 6 · in 1s`.
 
 **Measured layout price of the third part (16-cell witness, this head):** faces sit at 46 px in the plain
 cells; with the tail they are **46.5 px** at 360x640 text scale 2 and **50.2 px** at 390x844 text scale 2

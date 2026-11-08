@@ -26,7 +26,7 @@ Built assets of this tree (one clean `npm run build`, counted on disk, never sum
 
 | chunk | bytes | note |
 | --- | --- | --- |
-| assets/index-BjqNquCb.js | 233145 | entry chunk at head `4a19157`, ceiling 233000 -> **145 B OVER** (form table below) |
+| assets/index-CVKqHksh.js | 232990 | entry chunk at head `3e874c3`, ceiling 233000 -> **PASS, 10 B spare** |
 | assets/tables-C3W8xgzz.js | 9707 | from main 5610528 |
 | assets/index-CbtyNiLy.css | 8092 | from main 5610528 (this lane edits no css) |
 | assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
@@ -37,31 +37,46 @@ Trim ladder on this branch, each number from its own clean `npm run build` on th
 | --- | --- | --- |
 | `9d8ff3d` three parts in one `dock__cost` span, separator read at each call site | 233418 (`index-DIzqhO3V.js`) | 418 over |
 | `5b91587` + trim 1: the three repeated `t("value.dotSeparator")` calls share the one `DOT` const | 233208 (`index-C77XDZxg.js`) | 208 over |
-| `4a19157` + trim 2: the dock's class fragments hoisted into shared consts (identical rendered `class` attributes) | **233145** (`index-BjqNquCb.js`) | **145 over** |
+| `4a19157` + trim 2: the dock's class fragments hoisted into shared consts (identical rendered `class` attributes) | 233145 (`index-BjqNquCb.js`) | 145 over |
+| `3e874c3` + trim 3: one `labelTable` helper behind the five string maps, countdown read hoisted in both writers | **232990** (`index-CVKqHksh.js`) | **PASS, 10 B spare** |
 | reference: both ui files at `origin/main 5610528` (no lane code) | 232792 (`index-BtXxU2Fb.js`) | 208 spare |
 
-So this lane's shipped delta over main is **+353 B** for the whole three-part face, the countdown digit inside
-it costs 113 B (measured at `9d8ff3d`, form B vs form A) and the tail without the digit measures 233201 B at
-`5b91587`.
+So this lane's shipped delta over main is now **+198 B** for the whole three-part face; the countdown digit
+inside it is worth 113 B (measured at `9d8ff3d`, form B vs form A) and the tail without the digit measured
+233201 B at `5b91587`.
 
-**Ceiling call for the reviewer / product owner (all numbers measured, none projected):** main's own build on
-this merge is 232792 B, i.e. ART-004's atlas recovery is already inside that column (208 B of headroom), and
-*no* form of the pending tail fits under the pinned 233000 B on top of it: 233145 B shipped, 233201 B without
-the countdown digit, 232792 B only if the tail is dropped altogether. So the choice is (a) move the ceiling to
-233500 B, (b) land the E3 chunk-split (STATUS.md: cue/variant/part tables out of the main chunk) first, or
-(c) drop the tail and let W-3 rows 2 and 3 revert to the g1 readings (29 % / stall 9). The overage is the sum
-of lanes against a ceiling main itself almost exhausts, not a regression inside one lane; the ceiling was last
-moved 232800 -> 233000 by reviewer concurrence (rev-q002-g1 sec. 5).
+**Ceiling: resolved inside this lane (measured, not projected).** After trim 3 the shipped form prints
+**232990 B**, i.e. **inside the pinned 233000 B ceiling with 10 B spare**, on the same tree that carries
+ART-004 (`origin/main 5610528`, whose own two ui files measure 232792 B). The intermediate ladder
+(233418 / 233208 / 233145 / 233201) is kept above because those are the numbers the earlier PR comments
+quote; the earlier "no form fits" conclusion was true at `4a19157` and is superseded at `3e874c3`. The
+rendered strings and rendered `class` attributes are identical at every step - `face-line-check.mjs` prints
+"both derivations agree on every frame" on this head and `frame-probe.mjs` prints
+`waits 25 scrap · have 6 · in 1s`.
 
-Witnesses, same instruments, this head (fresh runs against the 233145 B artifact, logs on disk):
-- census (candidate, both policies): taps 178, applied 37, no-ops 142, buckets 14 inert-label /
-  69 refused-shortfall / 59 unknown (sum 142 = no-ops), inert share 7.9 %, longest identical-label
-  stall 4 (label `Build Scrap sorter20 scrap · waits 20 scrap · have 0`, taps 8-12, 5/5 carrying the
-  tail); suffix-independent 63/69/10 with inert 35.4 % and stall 34; pressed-index stall 36;
-  tail on the face 135/178 taps, countdown digit 98 (blind) / 99 (v2); smallest face 46 px,
-  1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %.
+Witnesses, same instruments, this head (census and layout witness **re-run against the 232990 B artifact at
+`3e874c3`**, logs and 28 stills on disk; the printed face string is unchanged from `4a19157` - both
+cross-check scripts still print agreement, so the W-3 timeline moved only by the wall-clock drift below):
+- census (candidate, both policies): taps 178, wallSec 180.8, finalTick 1800, applied 37, no-ops 142,
+  buckets 13 inert-label / 69 refused-shortfall / 60 unknown (13+69+60 = 142 = no-ops), inert share
+  13/178 = **7.3 %**, longest identical-label stall **5** (label `Build Scrap sorter20 scrap · waits 20
+  scrap · have 0`, taps 8-13, 6/6 carrying the tail); suffix-independent 63/69/10 with inert 35.4 % and
+  stall 34; pressed-index stall 36; tail on the face 136/178 taps, countdown digit 102/178; smallest face
+  46 px, 1 dock row, no page scroll, 0 pageerror, no panel ever open, fill 9.9 %. Against the 7.9 % /
+  stall 4 that g2 printed: one tap crossed from `inert-label` into `unknown` and one tap joined the stall,
+  i.e. the +/-1 wall-clock drift of limitation 1; the two criteria keep 12.7 pp and 11 taps of margin.
 - census (base, both policies): taps 178, applied 37, no-ops 142, buckets 63/69/10, inert share 35.4 %,
   stall 34, index stall 36, same aggregate row (47 batches, 8 credits, 5 machines).
+- the batches row, in one line: the simulation is unchanged (`schemaVersion 1`, fixture `eede3c4f`
+  byte-identical, `validate` behaviour line `tick=18298 machines=8 links=18 drones=4 batches=1838
+  credits=157` on both artifacts, no price file in this lane), and **47 is the in-window print of this
+  178-tap W-3 series on the post-BELT-001 baseline** - the deterministic total itself moved 1902 -> 1838
+  when BELT-001 landed (-3.4 %), this run banks 46-47 across the four runs with identical
+  applied/machines/credits, and the acceptance row's 51 is the pre-BELT print of the same protocol
+  (limitation 1 already recorded 47 and 51 for one and the same artifact). No early stop and no policy
+  step-count difference: both artifacts stop on the 180 s wall budget with `finalTick 1800` and 178 taps.
+  Prospectively the row should assert the tick-locked pair (`validate` 1838 plus the in-window 47 with a
+  stated +/-1 drift) instead of the 51.
 - layout witness (8 cells per artifact): clipped false everywhere, 1 dock row, no page scroll,
   smallest face 44 px in the tail-carrying cells and 46 / 46.5 / 50.2 px in the rest, card fill
   10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.
