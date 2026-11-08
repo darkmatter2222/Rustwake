@@ -39,31 +39,27 @@ import {
 
 export { formatDuration, formatNumber };
 
+/** One lookup table over the shared string keys (STRAT-004 byte trim: the five maps below
+ *  printed the same `Object.fromEntries(...map(...))` shape five times, 5 × 18 B). */
+function labelTable(keys: readonly string[], say: (key: string) => string) {
+  return Object.fromEntries(keys.map((key) => [key, say(key)]));
+}
+
 /** Default lines of the tutorial objective card, in state order (spec 4.2). */
 export const OBJECTIVES: readonly string[] = OBJECTIVE_KEYS.map((key) => STRINGS[key] ?? key);
 
 /** Small line under the objective, keyed by the ids `suggestedAction()` returns. */
-export const HINT_LABELS: Record<string, string> = Object.fromEntries(
-  HINT_KEYS.map((key) => [key, STRINGS[key] ?? key]),
-);
+export const HINT_LABELS: Record<string, string> = labelTable(HINT_KEYS, (key) => STRINGS[key] ?? key);
 
-export const RESOURCE_LABEL: Record<string, string> = Object.fromEntries(
-  RESOURCES.map((id) => [id, resourceName(id)]),
-);
+export const RESOURCE_LABEL: Record<string, string> = labelTable(RESOURCES, resourceName);
 
-export const STATUS_LABEL: Record<string, string> = Object.fromEntries(
-  STATUS_KEYS.map((id) => [id, t(`status.${id}`)]),
-);
+export const STATUS_LABEL: Record<string, string> = labelTable(STATUS_KEYS, (id) => t(`status.${id}`));
 
 /** One shared table, so no surface can show a different reason text. */
-export const REJECT_TEXT: Record<string, string> = Object.fromEntries(
-  REJECT_KEYS.map((id) => [id, t(`reject.${id}`)]),
-);
+export const REJECT_TEXT: Record<string, string> = labelTable(REJECT_KEYS, (id) => t(`reject.${id}`));
 
 /** One bounded explanation per import failure (spec 22.2, spec 25.3 case 8). */
-export const IMPORT_TEXT: Record<string, string> = Object.fromEntries(
-  IMPORT_KEYS.map((id) => [id, t(`import.${id}`)]),
-);
+export const IMPORT_TEXT: Record<string, string> = labelTable(IMPORT_KEYS, (id) => t(`import.${id}`));
 
 /** The one-line note the Yard panel shows after an import attempt. */
 export function importNoteFor(result: ImportResult): string {
@@ -330,8 +326,7 @@ function machineById(state: SimState, id: number) {
  */
 function faceWaitLine(need: number, word: string, have: number, state: SimState): string {
   const running = state.machines.find((m) => m.progress > 0);
-  const secs = running ? Math.ceil((running.batchMilli - running.progress) / 1e4) : 0;
-  return `waits ${formatNumber(need)} ${word}${DOT}have ${formatNumber(have)}${secs ? `${DOT}in ${secs}s` : ""}`;
+  return `waits ${formatNumber(need)} ${word}${DOT}have ${formatNumber(have)}${running ? `${DOT}in ${Math.ceil((running.batchMilli - running.progress) / 1e4)}s` : ""}`;
 }
 
 /**
@@ -406,18 +401,16 @@ export function priceLine(cost: string, state: SimState | null = spoken): string
     // `"{qty} {label} · {credits} credits"` carries its own reward after the dot: the
     // price is what comes before it. A `+N …` gain (a sale) fails the shape and blocks.
     const parts = /^([\d.]+) ([a-z]+)$/.exec(group.split(DOT)[0]);
-    if (!parts) continue;
-    const word = parts[2];
+    const word = parts?.[2] ?? "";
     // Every `res.*` entry is the store id with a leading capital, so the printed word is
     // the store key; `credit` is the purse, which is not a store entry.
     const have = word.startsWith("credit") ? state.credits : state.store[word as ResourceId] ?? 0;
-    if (have >= +parts[1]) continue;
+    if (!parts || have >= +parts[1]) continue;
     // Same three parts `faceWaitLine` prints: the quantity this price is short of, what the
     // yard holds, and the whole seconds left on the nearest running batch (`batchMilli`
     // counts milli-ticks, ten ticks a second, hence `1e4`).
     const run = state.machines.find((m) => m.progress > 0);
-    const secs = run ? Math.ceil((run.batchMilli - run.progress) / 1e4) : 0;
-    return `${cost}${DOT}waits ${parts[1]} ${word}${DOT}have ${formatNumber(have)}${secs ? `${DOT}in ${secs}s` : ""}`;
+    return `${cost}${DOT}waits ${parts[1]} ${word}${DOT}have ${formatNumber(have)}${run ? `${DOT}in ${Math.ceil((run.batchMilli - run.progress) / 1e4)}s` : ""}`;
   }
   return cost;
 }
