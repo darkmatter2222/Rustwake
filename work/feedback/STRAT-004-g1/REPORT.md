@@ -318,3 +318,40 @@ the gate exit codes and the byte table above. Rollback is unchanged: revert `src
   `batches 47` against the ≥ 51 floor (limitation 5: the deterministic total itself moved 1902 → 1838 with
   BELT-001 and base and candidate bank the identical 47 in-window) and `entry 233418 B` against 233000 B
   (a ceiling decision, with the trim options priced above).
+
+## 14. g4 — the byte-trim pass closes the ceiling; the census re-run on the trimmed artifact (2026-11-08)
+
+- **Tree:** `3e874c3ae172307193e23846f2c67927a5535fcd` (`9d8ff3d` → `5b91587` → `4a19157` → `3e874c3`), the
+  same two shipped files, no behaviour change: `face-line-check.mjs` still prints agreement on 8/8 frames
+  and `frame-probe.mjs` still prints `waits 25 scrap · have 6 · in 1s`, so the player-visible string is
+  byte-identical to the g2 artifact and the rendered `class` attributes are identical too.
+- **Trim ladder, one clean `npm run build` per step** (details in `checks.txt`): 233418 → 233208 (shared
+  `DOT`) → 233145 (dock class fragments into consts) → 233099 (tail inlined, the step-layer writers
+  tree-shaken out) → **232990 B** (`labelTable` behind the five string maps + one hoisted countdown read).
+  Against the pinned ceiling that is **pass with 10 B spare**, so no ceiling move is needed and the
+  countdown digit — the thing that buys rows 2 and 3 — stayed in. Order of trimming was: shared literals
+  first, then the dead two-line-face branches, then the redundant intermediates.
+- **Census re-run on the trimmed artifact** (`policy-census.json`, 4 runs, 12 stills, exit 0): every run
+  178 taps, wallSec 180.8, `finalTick 1800`, machines 5, credits 8, applied 37, no-ops 142.
+  Candidate, both policies: **13 inert-label + 69 refused-shortfall + 60 unknown = 142**, inert-label
+  **13/178 = 7.3 %** (≤ 20.0 %), longest identical-label stall **5** (≤ 16); base 63 + 69 + 10 = 142 with
+  inert 35.4 % and stall 34. Versus the g2 print (14/69/59, 7.9 %, stall 4) one tap crossed from
+  `inert-label` into `unknown` and one tap joined the stall — the ±1 wall-clock drift of limitation 1, with
+  12.7 pp and 11 taps of margin left on the two criteria.
+- **The batches row, plainly:** the simulation is unchanged (`schemaVersion 1`, fixture `eede3c4f`
+  byte-identical, `validate` behaviour line identical on both artifacts, no price file in this lane), and
+  **47 is what the current 178-tap W-3 series banks on the post-BELT-001 baseline**: the deterministic
+  batch total itself moved 1902 → 1838 when BELT-001 landed (−3.4 %), the four runs here print 46–47 with
+  identical applied/machines/credits, and the acceptance row's 51 is the *pre*-BELT print of the same
+  protocol (limitation 1 already shows 47 and 51 from one and the same artifact). It is not an early stop
+  and not a policy step-count difference: both artifacts stop on the 180 s wall budget at `finalTick 1800`
+  with 178 taps. Prospectively the row should assert the tick-locked pair — `validate` 1838 plus the
+  in-window 47 with a stated ±1 drift — rather than the 51.
+- **Witnesses after the trim** (`layout-witness.json`, re-run): smallest face **44 px** in the tail-carrying
+  cells (46 / 46.5 / 50.2 px elsewhere), 1 dock row, no page scroll in 16/16 cells, **0 pageerror**, nothing
+  clipped, card fill max 32.8 %; census witnesses per run: face 46 px, 1 row, no scroll, 0 pageerror, no
+  panel opened, fill 9.9 %.
+- **State of the acceptance rows at `3e874c3`:** rows 1–3 and the entry-chunk witness and the four
+  no-regression witnesses pass; the single literal that still differs from the printed acceptance row is
+  `batches 47` against `≥ 51`, which section 14 states as a baseline re-pin rather than a regression. The
+  PR therefore stays draft pending the product owner's word on that floor.
