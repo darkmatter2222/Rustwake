@@ -1,8 +1,8 @@
 STRAT-004 gates - generation 2 (2026-11-08, this worktree, one machine, real exit codes)
 
-Tree: branch rw/strat004-g1, base merge 4edb4f8f8ca0a3bf3c176c24c02f003efaca1c79 =
-      merge(origin/main 6e0dce90f6e21a2e0f6107437055aa42739ec77f, 6908e669fba8d68ac321e92e237dbc009fa6dc07),
-      zero conflicted paths, plus the g2 implementation in src/ui/text.ts + src/ui/Hud.tsx.
+Tree: branch rw/strat004-g1, base merge 4edb4f8 = merge(origin/main 6e0dce9, 6908e66), plus the g2
+      implementation, plus merge commit 5e5e35b = merge(origin/main 5610528, 96a5428); zero conflicted
+      paths on both merges.
 
 | command | exit | what it printed |
 | --- | --- | --- |
@@ -10,7 +10,7 @@ Tree: branch rw/strat004-g1, base merge 4edb4f8f8ca0a3bf3c176c24c02f003efaca1c79
 | node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs | 0 | # tests 59 / # pass 59 / # fail 0 (the stale six-session assertion is fixed on main, so the branch gate is green again) |
 | npm run typecheck | 0 | no output |
 | npm run validate | 0 | content: 0 violation(s); behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s) |
-| npm test (vitest) | 0 | 30 files / 309 tests passed |
+| npm test (vitest) | 0 | 32 files / 325 tests passed (the two extra files are main's UI-004 lane) |
 | npm run build | 0 | see the asset table below |
 | npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs | 0 | both derivations agree on every frame (8 frames: build x3, sell, covered, upgrade, drone, salvage) |
 | npx tsx work/feedback/STRAT-004-g1/frame-probe.mjs | 0 | covered -> null; short -> "waits 25 scrap · have 6 · in 1s"; fork -> null (covered purse) |
@@ -26,25 +26,30 @@ Built assets of this tree (one clean `npm run build`, counted on disk, never sum
 
 | chunk | bytes | note |
 | --- | --- | --- |
-| assets/index-B-e5fB1G.js | 232993 | entry chunk, ceiling 233000 -> PASS, 7 B spare |
-| assets/tables-BB2NPvQ2.js | 9298 | unchanged from main 6e0dce9 |
-| assets/index-DbNBovuF.css | 8091 | unchanged from main 6e0dce9 (this lane edits no css) |
+| assets/index-DIzqhO3V.js | 233418 | entry chunk, ceiling 233000 -> 418 B OVER (see the form table below) |
+| assets/tables-C3W8xgzz.js | 9707 | from main 5610528 |
+| assets/index-CbtyNiLy.css | 8092 | from main 5610528 (this lane edits no css) |
 | assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
 
-Entry arithmetic against the pinned 233000 B ceiling (each number from its own clean build):
+Entry arithmetic against the pinned 233000 B ceiling, all three forms measured on one machine on this
+head (each is its own clean `npm run build`, counted on disk; the only difference between them is the two
+ui files):
 
-| tree | entry bytes | delta |
+| form on this head (merge 5e5e35b, origin/main 5610528) | entry chunk bytes | vs the 233000 ceiling |
 | --- | --- | --- |
-| origin/main 6e0dce9 (the base column of the census run) | 232365 (index-CWtGNGYE.js) | - |
-| this lane at 4edb4f8 with the g1 two-span form | 233278 | +913 |
-| this lane at 4edb4f8 with the g2 joined price line + countdown | 232993 | +628 over main, -285 against g1 |
+| C - both ui files at origin/main (no lane code) | 232792 (`index-BtXxU2Fb.js`) | 208 B spare |
+| B - lane with the two-part tail, countdown digit removed | 233305 (`index-ymsgYEoC.js`) | **305 B over** |
+| A - shipped form: `price · waits N w · have k · in Ns` | 233418 (`index-DIzqhO3V.js`) | **418 B over** |
 
-Ceiling note for the release lane: origin/main moved to 49d170b (ART-004) after this merge;
-that build prints 232792 B (index-B6Mv3qHk.js), i.e. 208 B of headroom, so a plain integration
-of this lane (+628 B) projects ~233420 B, above the pinned 233000 B ceiling. The overage is the
-sum of lanes against a ceiling that main itself now almost exhausts, not a regression inside one
-lane; it is a reviewer/product budget call (the ceiling was last moved 232800 -> 233000 by
-reviewer concurrence, rev-q002-g1 sec. 5).
+So the countdown digit costs 113 B (A - B) and the tail itself costs 513 B (B - C). Same three-way relation
+at the previous merge `4edb4f8` (main 232365 -> g1 two-span form 233278 -> this single-span form 232993).
+
+**Ceiling call for the reviewer / product owner (measured, not projected):** on today's main *no* form of
+the pending tail fits under the pinned 233000 B - the cheapest one is 305 B over. Either the ceiling moves
+(to 233500 B it would carry form A plus 82 B for the next lane), or the tail is dropped and W-3 rows 2 and 3
+revert to the g1 readings (29 % / stall 9). The overage is the sum of lanes against a ceiling main itself
+almost exhausts (main alone is 208 B from it), not a regression inside one lane; the ceiling was last moved
+232800 -> 233000 by reviewer concurrence (rev-q002-g1 sec. 5).
 
 Witnesses, same instruments, this tree:
 - census (both policies): smallest face 46 px, 1 dock row, no page scroll, 0 pageerror,
@@ -54,3 +59,44 @@ Witnesses, same instruments, this tree:
   10.3 / 27.4 / 7.8 / 20.8 / 24.8 / 32.8 / 20.8 / 7.8 % against the 42 % cap.
 - save: schemaVersion 1 and fixture eede3c4f untouched (no file under tests/ or
   src/game/persistence/ is in this lane; tests/persistence/save.test.ts passes in the 309).
+
+STRAT-004 gates - generation 3 (2026-11-08, same worktree, after integrating origin/main)
+
+Tree: 5e5e35b4c20370777ee2fafb94af61d4795a8fc7 = merge(96a5428, origin/main 5610528), i.e. this lane on
+top of ART-004 (49d170b, whose build carries the 520 B atlas/table recovery: 232792 B) and UI-004
+(5610528). Shipped source in src/ui/text.ts + src/ui/Hud.tsx is byte-identical to 96a5428; only the
+main side moved. Zero conflicted paths.
+
+| command | exit | what it printed |
+| --- | --- | --- |
+| npm run typecheck | 0 | no output |
+| npm test (vitest) | 0 | 32 files / 325 tests passed (main gained two files in ART-004/UI-004) |
+| node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs | 0 | # tests 59 / # pass 59 / # fail 0 |
+| npm run validate | 0 | content: 0 violation(s); behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 \| 0 violation(s) (identical to the g2 line) |
+| npm run build | 0 | entry assets/index-DIzqhO3V.js 233418 B |
+| npx tsx work/feedback/STRAT-004-g1/face-line-check.mjs | 0 | "both derivations agree on every frame", 8 frames |
+| npx tsx work/feedback/STRAT-004-g1/frame-probe.mjs | 0 | short -> "waits 25 scrap · have 6 · in 1s"; covered -> null; fork -> null |
+
+Entry chunk on this merged tree (one clean build, counted on disk):
+
+| chunk | bytes | note |
+| --- | --- | --- |
+| assets/index-DIzqhO3V.js | 233418 | entry chunk, ceiling 233000 -> OVER by 418 B on the merged tree |
+| assets/tables-C3W8xgzz.js | 9707 | ART-004 table growth, not this lane |
+| assets/index-CbtyNiLy.css | 8092 | UI-004 |
+| assets/catchup.worker-G_Jyr7uh.js | 13406 | unchanged |
+
+Byte arithmetic, each figure from its own clean build on this machine, never summed:
+this lane's own price is +628 B over the 6e0dce9 it was written against (232365 -> 232993 at 4edb4f8);
+main 49d170b prints 232792 B and main 5610528 prints 233418 - 628 = 232790 B with this lane's two files
+removed from the count. The 418 B overage is therefore sum-of-lanes arithmetic against a ceiling main
+itself almost exhausts - the same call already recorded in section 10 - not a regression inside the lane.
+
+Witnesses on the merged tree, unchanged from g2 (committed artifacts, both artifacts 8 cells each):
+smallest face 44 px, 1 dock row, no page scroll in 16/16 cells, 0 pageerror, nothing clipped, card fill
+max 32.8 % against the 42 % cap. Census row (policy-census.json, candidate, both policies): 178 taps,
+142 no-ops = 69 refused-shortfall + 14 inert-label + 59 unknown, inert-label 14/178 = 7.9 % (<= 20.0 %),
+longest identical-label stall 4 (<= 16), applied 37, machines 5, batches 47, credits 8.
+Failing numbers on this tree: batches 47 against the >= 51 floor (limitation 5: stale baseline, the
+deterministic total moved 1902 -> 1838 with BELT-001 and both artifacts bank the identical 47), and
+entry 233418 B against the 233000 B ceiling. The PR therefore stays draft.

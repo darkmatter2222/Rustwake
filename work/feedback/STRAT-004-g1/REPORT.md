@@ -163,13 +163,15 @@ valid because these two files are the only shipped-code edits on this lane.
 
 # STRAT-004 generation 2 — the tail counts, and the no-op row is three named kinds
 
-- **Tree:** `rw/strat004-g1` on top of `origin/main = 6e0dce9` (BELT-001), merge commit `4edb4f8`, this
-  generation's implementation commit `45712d4`; measured entry chunk `index-B-e5fB1G.js` **232993 B**
-  (main 232365 B, g1 233278 B).
+- **Tree:** `rw/strat004-g1` on top of `origin/main`, merge commits `4edb4f8` (onto `6e0dce9`, BELT-001) and
+  `5e5e35b` (onto `5610528`, UI-004); implementation commit `96a542800c612cbcf8775b6dbb26de43a46c8308`, this
+  note and the witnesses land in the doc-only commit on top of it. Measured entry chunk on this head:
+  `index-DIzqhO3V.js` **233418 B** (main alone 232792 B, ceiling 233000 B — see sec. 10).
 - **Window:** W-3 unchanged — 180 s wall, 1 tap/s, 390x844 dpr2, `isMobile`+`hasTouch`, fresh storage, final
   tick 1800 = 3.00 simulated minutes, both policies, both artifacts, one instrument
   (`policy-census.mjs` → `policy-census.json`, `census-run.log`). **One named denominator for every share:
-  `taps`** = 178 on both artifacts (base blind printed 177, the ±1 wall-clock drift limitation 1 already names).
+  `taps`** = 177 on the base and 178 on the candidate (the ±1 wall-clock drift limitation 1 names); every
+  share below is over that artifact's own `taps`.
 
 ## 8. What changed for the player (g2)
 
@@ -181,19 +183,21 @@ Build Plate press
 35 scrap + 8 ferrous · waits 35 scrap · have 15 · in 4s
 ```
 
-Read from the painted stills (`stills/candidate-*-tap0{33,40,48}.png`, all four faces legible, one dock row):
+Read from the painted stills (`stills/candidate-*-tap0{33,40,48}.png`, all four faces legible, one dock row;
+the `timeline` rows of `policy-census.json` carry the same strings per tap):
 
-| tap | the pressed face, as painted |
-|---|---|
-| 33 | `Build Furnace` / `10 scrap + 5 ferrous · waits 10 scrap · have 5 · in 4s` |
-| 40 | `Build Plate press` / `35 scrap + 8 ferrous · waits 35 scrap · have 6 · in 2s` |
-| 48 | `Build Copper separator` / `30 scrap + 6 ferrous · waits 30 scrap · have 15 · in 1s` |
+| tap | the pressed face, as painted | what it shows |
+|---|---|---|
+| 33 | `Connect dock to sorter` / — | a covered step: no price, so no tail, still two lines tall |
+| 40 | `Build Furnace` / `10 scrap + 5 ferrous · waits 10 scrap · have 6` | short on the first item, no batch in flight → no digit (limitation 7) |
+| 48 | `Build Furnace` / `10 scrap + 5 ferrous · waits 5 ferrous · have 0 · in 4s` | scrap landed, now short on the second item, and the yard's next delivery is 4 s out |
+| 178 | `Build Plate press` / `35 scrap + 8 ferrous · waits 35 scrap · have 13 · in 4s` | all three parts on one line, 46 px face |
 
 `in Ns` is `Math.ceil((batch.milli - batch.progress) / 10)` of the nearest running batch (1-indexed order,
 the same scan `batchProgressLine` makes), printed with the existing `value.dotSeparator`; it is what makes
-the label change on **almost every tap** (98–100 of 178 taps carry a moving digit) and it is the whole
-reason rows 2 and 3 now pass. No new string-table keys, no new panel, no fourth dock face, no engine, price
-or save change (schema `1`, fixture `eede3c4f` untouched).
+the label change on **almost every tap** (97–100 of the 178 candidate taps carry a moving digit) and it is the
+whole reason rows 2 and 3 now pass. No new string-table keys, no new panel, no fourth dock face, no engine,
+price or save change (schema `1`, fixture `eede3c4f` untouched).
 
 ## 9. The acceptance rows (g2, `policy-census.json`)
 
@@ -235,19 +239,19 @@ a property of the 1 tap/s instrument, not of the face.
 | card fill at text scale 2.0 | 32.8 % (360x640), 20.8 % (390x844), 24.8 % (fork row) | ≤ 42 % pass |
 | save | `schemaVersion 1`, fixture `eede3c4f` byte-identical (no `tests/`, no `src/game/persistence/` file in this lane) | pass |
 
-Byte arithmetic for the +628 B, so the next lane can price the same move (`checks.txt` table): the shipped
-form puts the tail in the *same* span as the price — one `priceLine(cost, state)` call per face, `DOT` hoisted
-out of the template, `state.store[word]` read directly, `spokenState` no longer exported — which is
-**−285 B against the g1 three-span form** (233278 B → 232993 B) while adding the countdown digit
-(+628 B over `6e0dce9`). The single-span form is what makes three parts fit under the ceiling; the old
-three-span form did not (233278 B at `1573ac1`).
+Byte arithmetic for the +626 B, so the next lane can price the same move (`checks.txt` table, all three
+forms built on this head): main alone **232792 B**; this lane with the two-part tail and the countdown digit
+removed (form B) **233305 B**, i.e. the tail itself costs **+513 B**; the shipped three-part form with the
+digit (form A) **233418 B**, i.e. the digit costs **+113 B**. The single-span trick is what keeps the tail
+cheap: the same three pieces as three separate spans cost 233278 B at the previous merge against a 232365 B
+baseline (+913 B), so joining them into one `dock__cost` line is worth −285 B.
 
-**Ceiling risk for the release engineer (measured, not reasoned):** `origin/main` has moved to `49d170b`
-(ART-004), whose entry chunk is 232792 B — 208 B of headroom. This lane is +628 B over the `6e0dce9` it was
-measured against, so the integrated projection is ≈ **233420 B > 233000 B**. Either the ceiling is raised by
-the product owner or one of these trims is taken in the same PR: drop the `in Ns` digit (rows 2/3 then behave
-as in g1: 29 %/stall 9), or fold `waits {pair}` into the existing `value.pair` rendering. Both are one-line
-changes; the measurement says the digit is what buys rows 2 and 3.
+**Ceiling call for the reviewer / product owner (measured, not projected):** on today's main **no** form of
+the pending tail fits under the pinned 233000 B — main alone is 232792 B (208 B of headroom), the cheapest
+tail form is 233305 B (305 B over) and the shipped form is 233418 B (418 B over). Either the ceiling moves
+(233500 B would carry this form plus 82 B for the next lane) or the tail is dropped and W-3 rows 2 and 3 go
+back to the g1 readings (29 % / stall 9). The digit is what buys rows 2 and 3: it is 113 B, and it is the
+only part of the string that changes on 98–100 of the 178 taps.
 
 **Measured layout price of the third part:** dock row 46 px → 50.9 px at text scale 1, 46 → 55.5 px at text
 scale 2.0 (390x844), 59.4 → 75.9 px at 360x640 text scale 2.0 where labels already wrap. Same numbers as g1
@@ -277,3 +281,30 @@ painted face string, so the shipped `priceLine` output can be checked line by li
 in 1s`); `face-line-check.mjs` re-run, the two derivations still agree on all 8 frames; `checks.txt` carries
 the gate exit codes and the byte table above. Rollback is unchanged: revert `src/ui/text.ts` and
 `src/ui/Hud.tsx` to `1573ac1`; saves interoperate between both artifacts.
+
+## 13. g3 — the same two files re-measured on the integrated tree (2026-11-08)
+
+- **Tree:** `5e5e35b4c20370777ee2fafb94af61d4795a8fc7` = `merge(96a5428, origin/main 5610528)`, so this lane
+  now sits on top of ART-004 (`49d170b`, whose build already carries the 520 B atlas/table recovery and
+  prints 232792 B) and UI-004 (`5610528`). Zero conflicted paths; `src/ui/text.ts` and `src/ui/Hud.tsx` are
+  byte-identical to `96a5428`, so the shipped face is exactly the artifact the g2 census measured.
+- **Gates on this merged tree, one clean run each:** typecheck exit 0; `npm test` **32 files / 325 tests**
+  passed (main gained two files, this lane adds none); the script suite 59/59; validate exit 0 with the
+  behaviour line still `firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4
+  batches=1838 credits=157 nodes=3 | 0 violation(s)`; build exit 0; `face-line-check.mjs` 8/8 frames agree;
+  `frame-probe.mjs` prints `waits 25 scrap · have 6 · in 1s` for the short frame.
+- **Entry chunk on this merged tree: `assets/index-DIzqhO3V.js` 233418 B** against the pinned 233000 B
+  ceiling → **over by 418 B**. The lane's own price is still the measured +628 B (232365 → 232993 at
+  `4edb4f8`); main 5610528 leaves 233418 − 628 = 232790 B, i.e. 210 B of headroom, so the overage is
+  sum-of-lanes arithmetic against a nearly exhausted ceiling — the call already written in section 10 —
+  and not a second regression inside this lane. Trims available if the product owner keeps the ceiling:
+  drop `in Ns` (−113 B, measured 233305 B, but rows 2 and 3 fall back to the g1 shape 29 %/stall 9).
+- **Witnesses unchanged** (committed `layout-witness.json` / `policy-census.json`, 16 cells + 4 census runs):
+  smallest face **44 px** (≥ 44), no page scroll in 16/16 cells, **0 pageerror**, nothing clipped, 1 dock
+  row, card fill max 32.8 % (≤ 42 %); census candidate row on both policies: 178 taps, 142 no-ops =
+  **69 refused-shortfall + 14 inert-label + 59 unknown**, inert-label **14/178 = 7.9 %** (≤ 20.0 %), longest
+  identical-label stall **4** (≤ 16), applied **37**, machines **5**, credits **8**.
+- **Two numbers do not meet the Issue #18 acceptance rows on this tree**, so the PR stays draft:
+  `batches 47` against the ≥ 51 floor (limitation 5: the deterministic total itself moved 1902 → 1838 with
+  BELT-001 and base and candidate bank the identical 47 in-window) and `entry 233418 B` against 233000 B
+  (a ceiling decision, with the trim options priced above).

@@ -368,19 +368,19 @@
     "h": 640
    },
    "noScroll": true,
-   "dockH": 46,
-   "dockTop": 586,
+   "dockH": 74.6,
+   "dockTop": 557.4,
    "canvasH": 640,
    "hudClientH": 640,
    "dockRows": 1,
-   "smallestFace": 46,
+   "smallestFace": 46.5,
    "anyClipped": false,
    "cardFillPct": 27.4,
    "primaryFace": {
     "text": "Store",
     "lines": [],
-    "w": 53.5,
-    "h": 46,
+    "w": 54.8,
+    "h": 74.6,
     "clipped": false
    },
    "facesText": [
@@ -446,19 +446,19 @@
     "h": 844
    },
    "noScroll": true,
-   "dockH": 46,
-   "dockTop": 790,
+   "dockH": 50.2,
+   "dockTop": 785.8,
    "canvasH": 844,
    "hudClientH": 844,
    "dockRows": 1,
-   "smallestFace": 46,
+   "smallestFace": 50.2,
    "anyClipped": false,
    "cardFillPct": 20.8,
    "primaryFace": {
     "text": "Store",
     "lines": [],
-    "w": 56.8,
-    "h": 46,
+    "w": 59.4,
+    "h": 50.2,
     "clipped": false
    },
    "facesText": [
@@ -485,12 +485,12 @@
     "h": 844
    },
    "noScroll": true,
-   "dockH": 46,
-   "dockTop": 790,
+   "dockH": 50.2,
+   "dockTop": 785.8,
    "canvasH": 844,
    "hudClientH": 844,
    "dockRows": 1,
-   "smallestFace": 46,
+   "smallestFace": 50.2,
    "anyClipped": false,
    "cardFillPct": 24.8,
    "primaryFace": {
@@ -499,7 +499,7 @@
      "30 credits"
     ],
     "w": 184,
-    "h": 46,
+    "h": 50.2,
     "clipped": false
    },
    "facesText": [
@@ -524,8 +524,8 @@
     "h": 640
    },
    "noScroll": true,
-   "dockH": 75.9,
-   "dockTop": 556.1,
+   "dockH": 122.1,
+   "dockTop": 509.9,
    "canvasH": 640,
    "hudClientH": 640,
    "dockRows": 1,
@@ -536,7 +536,7 @@
     "text": "Store",
     "lines": [],
     "w": 44,
-    "h": 75.9,
+    "h": 122.1,
     "clipped": false
    },
    "facesText": [
@@ -563,8 +563,8 @@
     "h": 844
    },
    "noScroll": true,
-   "dockH": 55.5,
-   "dockTop": 780.5,
+   "dockH": 98.3,
+   "dockTop": 737.7,
    "canvasH": 844,
    "hudClientH": 844,
    "dockRows": 1,
@@ -575,7 +575,7 @@
     "text": "Store",
     "lines": [],
     "w": 44,
-    "h": 55.5,
+    "h": 98.3,
     "clipped": false
    },
    "facesText": [
@@ -602,8 +602,8 @@
     "h": 844
    },
    "noScroll": true,
-   "dockH": 50.9,
-   "dockTop": 785.1,
+   "dockH": 54.2,
+   "dockTop": 781.8,
    "canvasH": 844,
    "hudClientH": 844,
    "dockRows": 1,
@@ -614,7 +614,7 @@
     "text": "Store",
     "lines": [],
     "w": 44,
-    "h": 50.9,
+    "h": 54.2,
     "clipped": false
    },
    "facesText": [
