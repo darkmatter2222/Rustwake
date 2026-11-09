@@ -19,7 +19,7 @@
 //          built entry-chunk bytes against the 233000 B ceiling.
 // Usage: RUSTWAKE_URL=http://localhost:5175/ CENSUS_TAG=after node scripts/art003-census.mjs
 import { chromium } from "playwright-core";
-import { existsSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -595,6 +595,7 @@ const SHEET = async (args) => {
     [11, -2, 5, 8, 6], // vent stub
     [11, 8, 5, 3, 9], // vent foot
     [-15, 3, 4, 3, 6], // feed notch
+    [-1, -16, 2, 3, 16], // ART-007 mast tip above the cap line
   ];
   const labCand = ({ tw, ty, th, ci, mastY, mastH, headX, headW, wingW, footW }) => [
     SHADOW6,
@@ -710,6 +711,47 @@ const SHEET = async (args) => {
       .filter(([k]) => k.split("/").some((p) => p === "furnace" || p === "signalLab"))
       .map(([k, v]) => [k, v])
   );
+  /* ---- ART-007 g1: named per-pair readings for the grey-box quartet ------------------ */
+  // One aggregate min can hide a failing pair, so the two pairs the Issue names print
+  // their own value on both instruments (unit 32x32 and aligned 58x58), each with a
+  // pass flag against the same threshold, next to the unchanged aggregate minima.
+  const NAMED4 = ["furnace/circuitAssembler", "sorter/copperSeparator"];
+  const pickPct = (rows, pair) => rows.find((r) => r.pair === pair)?.pct ?? null;
+  const art007 = {
+    thresholdPct: THRESHOLD,
+    pairs: NAMED4.map((pair) => {
+      const unitPct = pickPct(unitAll.rows, pair);
+      const alignedPct = pickPct(rowsAll, pair);
+      return {
+        pair,
+        unitPct,
+        alignedPct,
+        unitPasses: unitPct !== null && unitPct >= THRESHOLD,
+        alignedPasses: alignedPct !== null && alignedPct >= THRESHOLD,
+      };
+    }),
+    aggregateUnitMinPct: { all: unitAll.summaryAll.minPct, machines: unitAll.summaryMachines.minPct },
+    aggregateAlignedMinPct: { all: alignedAll.summaryAll.minPct, machines: alignedAll.summaryMachines.minPct },
+    outerSignatures: Object.fromEntries(
+      ["sorter", "furnace", "copperSeparator", "circuitAssembler"].map((id) => {
+        // Inked-cell signature of the four outer bands (first/last two grid rows/cols):
+        // the outer silhouette only, not the whole cell.
+        const g = grayGrid(PARTS[id]);
+        const band = (test) => g.map((v, i) => (test(i % 32, Math.floor(i / 32)) && v !== 5 ? 1 : 0)).join("");
+        return [
+          id,
+          {
+            top: band((_x, y) => y < 2),
+            bottom: band((_x, y) => y >= 30),
+            left: band((x) => x < 2),
+            right: band((x) => x >= 30),
+          },
+        ];
+      })
+    ),
+    passes: NAMED4.every((pair) => (pickPct(unitAll.rows, pair) ?? 0) >= THRESHOLD
+      && (pickPct(rowsAll, pair) ?? 0) >= THRESHOLD),
+  };
   const joint = {
     objective: "maximise the weakest of the 15 unit-grid pairs, then the mean, with furnace and signalLab moving together",
     thresholdPct: THRESHOLD,
@@ -736,6 +778,7 @@ const SHEET = async (args) => {
     unitAll,
     a3_1: { aligned, unitGrid, jointSearch: joint },
     sheetInkPx: inkPx,
+    art007,
   };
 };
 
@@ -975,6 +1018,38 @@ const run = async () => {
     };
   });
   const settle = await page.evaluate(SETTLE, { VIEW: { width: 390, height: 844 }, RUST: "201,113,58" });
+  // ART-007 g1: the evidence stills, same save at dpr 2 - one full 390x844 frame with all
+  // four quartet members in view, plus the 2x strip over the union of their cell boxes
+  // (clip is CSS px; the 2x resolution comes from deviceScaleFactor).
+  if (process.env.CENSUS_SHOTS === "1") {
+    const shotCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+    await shotCtx.addInitScript((t) => localStorage.setItem("rustwake.save.v1", t), JSON.stringify({ ...env, checksum: fnv1a(text) }));
+    const shotPage = await shotCtx.newPage();
+    await shotPage.goto(url, { waitUntil: "networkidle" });
+    await shotPage.waitForSelector("text=Begin recovery");
+    await shotPage.click("text=Begin recovery");
+    await shotPage.waitForTimeout(250);
+    const outDir = resolve(root, "work/evidence/ART-007-g1");
+    mkdirSync(outDir, { recursive: true });
+    await shotPage.screenshot({ path: resolve(outDir, "shot-390x844-dpr2-quartet.png") });
+    const quartet = ["sorter8", "furnace14", "copperSeparator9", "circuitAssembler26"]
+      .map((k) => scene.cells[k]?.box)
+      .filter((b) => Array.isArray(b) && b.length === 4);
+    if (quartet.length === 4) {
+      const x0 = Math.min(...quartet.map((b) => b[0])) - 2;
+      const y0 = Math.min(...quartet.map((b) => b[1])) - 2;
+      await shotPage.screenshot({
+        path: resolve(outDir, "strip-2x-quartet.png"),
+        clip: {
+          x: x0,
+          y: y0,
+          width: Math.max(...quartet.map((b) => b[2])) - Math.min(...quartet.map((b) => b[0])) + 4,
+          height: Math.max(...quartet.map((b) => b[3])) - Math.min(...quartet.map((b) => b[1])) + 4,
+        },
+      });
+    }
+    await shotCtx.close();
+  }
   await context.close();
   const other = await browser.newContext({ viewport: { width: 900, height: 420 }, deviceScaleFactor: 1 });
   const sheetPage = await other.newPage();
@@ -1006,6 +1081,9 @@ const run = async () => {
   console.log(`A3-1 unit min=${sheet.a3_1.unitGrid.minPct}% (${sheet.a3_1.unitGrid.minPair}) mean=${sheet.a3_1.unitGrid.meanPct}% passes=${sheet.a3_1.unitGrid.passes}`);
   console.log(`A3-1 joint search shipped ${JSON.stringify(sheet.a3_1.jointSearch.shipped)}`);
   console.log(`A3-1 joint search best ${JSON.stringify(sheet.a3_1.jointSearch.best)} shippedIsOptimum=${sheet.a3_1.jointSearch.shippedIsOptimum} enumerated=${sheet.a3_1.jointSearch.enumeratedCombos} gatePassing=${sheet.a3_1.jointSearch.gatePassingCombos} buildersMatch=${JSON.stringify(sheet.a3_1.jointSearch.builderMatchesShipped)}`);
+  // ART-007 g1: the two named quartet pairs explicitly, beside the aggregate minima, so
+  // an aggregate pass cannot hide a failing pair.
+  console.log(`ART-007 named pairs (threshold ${A3_1_THRESHOLD_PCT} %): ${sheet.art007.pairs.map((p) => `${p.pair} unit=${p.unitPct}% aligned=${p.alignedPct}% passes=${p.unitPasses && p.alignedPasses}`).join(" | ")}; aggregate unit min ${JSON.stringify(sheet.art007.aggregateUnitMinPct)} aligned min ${JSON.stringify(sheet.art007.aggregateAlignedMinPct)} passes=${sheet.art007.passes}`);
   console.log(`A3-4 per-layer canvas shares % ${JSON.stringify(Object.fromEntries(scene.layers.rows.map((r) => [r.layer, r.sharePct])))}`);
   // (a) the per-cell aligned comparator, before vs after, on one 58x58 lattice.
   console.log(`A3-1 aligned full-sheet matrix ids=${JSON.stringify(sheet.alignedAll.ids)} ${JSON.stringify(sheet.alignedAll.summaryAll)}`);

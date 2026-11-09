@@ -226,8 +226,10 @@ describe("Q-002 renderer draws (3A/3B/3D)", () => {
     const { stub } = draw(mature(), rest);
     const paints = stub.log.filter((r) => PAINT_OPS.has(r.op)).length;
     // 12 ops/machine + the shared-row shadow ellipse (+1/machine) and amber core pair
-    // (running rows only); routes, drones and the fixed scene block unchanged.
-    expect(paints).toBeLessThanOrEqual(40 + 8 * 14 + 18 * 3 + 5 * 5);
+    // (running rows only); routes, drones and the fixed scene block unchanged. ART-007:
+    // one outer-element tuple per quartet row adds one fillRect per painted machine
+    // (the mature seed carries both sorters and both furnaces), four ops in all.
+    expect(paints).toBeLessThanOrEqual(40 + 8 * 14 + 18 * 3 + 5 * 5 + 4);
   });
 
   it("D4: two consecutive calls on the frozen state are element-wise identical", () => {
@@ -1625,11 +1627,11 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     expect(boxes["platePress@1.8056"]).toEqual(boxes["generic@1.8056"]);
     expect(boxes["platePress@4"]).toEqual(boxes["generic@4"]);
     expect(Math.abs(boxes["platePress@1.8056"].w - 108)).toBeLessThanOrEqual(1);
-    expect(boxes["copperSeparator@1.8056"].h).toBe(93);
+    expect(boxes["copperSeparator@1.8056"].h).toBe(97);
     expect(boxes["circuitAssembler@1.8056"].h).toBeGreaterThanOrEqual(boxes["copperSeparator@1.8056"].h + 4);
     expect(boxes["platePress@4"].w).toBe(240);
-    expect(boxes["copperSeparator@4"].w).toBe(216);
-    expect(boxes["circuitAssembler@4"].w).toBe(216);
+    expect(boxes["copperSeparator@4"].w).toBe(256); // ART-007: ring collar spans the full cell, was 216
+    expect(boxes["circuitAssembler@4"].w).toBe(248); // ART-007: the notch reaches x = 16, was 216
     expect(boxes["circuitAssembler@4"].h - boxes["copperSeparator@4"].h).toBeGreaterThanOrEqual(4);
     expect(distances.length).toBe(45);
     expect(min).toBeGreaterThanOrEqual(12);
@@ -1705,7 +1707,8 @@ describe("REV-COMPOSITION-D-g1 rows", () => {
     // ART-003 restatement: base 199 measured under the 215 ceiling; the shadow ellipse
     // per machine footprint and the working-state core pair raise the measured count to
     // 222 (printed as maturePaints), still inside the per-entity formula above (231).
-    expect(stub.paints()).toBeLessThanOrEqual(231);
+    // ART-007: the four outer-element tuples put it at 232, inside the +4 formula bound.
+    expect(stub.paints()).toBeLessThanOrEqual(235);
     expect(amberOps).toBeLessThanOrEqual(12);
     expect(gridStrokes).toBe(0);
     expect(minFeaturePx).toBeGreaterThanOrEqual(3.5);

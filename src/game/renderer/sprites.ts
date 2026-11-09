@@ -87,6 +87,9 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [3, 0, 5, 4, 6], // S2 roller disc 6
     [-9, 5, 8, 3, 6], // S3 chute A
     [1, 5, 7, 3, 11], // S3 chute B, stepped split wedge (select tone)
+    // ART-007: one outer element - the side post, full column right of the frame, the
+    // sorter's own silhouette mark (the quartet needs outer-shape cues at 390 px).
+    [13, -11, 3, 22, 4],
   ],
   // ART-004 A-3: the three rows that owned the weak pairs. Each body now carries its own
   // gray step (sorter bodyLight / furnace + lab steelLight / mill bodyLight with dark
@@ -101,6 +104,8 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [11, -2, 5, 8, 6], // vent stub, right column
     [11, 8, 5, 3, 9], // vent foot, right column (rust)
     [-15, 3, 4, 3, 6], // feed notch, left column
+    // ART-007: one outer element - the mast tip, one 2-unit spine above the T-cap line.
+    [-1, -16, 2, 3, 16], // ART-007 mast tip: 2 wide, 3 tall (D-4 mark floor), above the cap
   ],
   wireMill: [
     [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
@@ -154,6 +159,12 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [-12, -8, 24, 3, 3], // bar at mask row 2
     [-12, 1, 24, 3, 3], // bar at mask row 4 (ART-003: one row lower than copper's old pair)
     [-15, -11, 3, 22, 4], // left post
+    // ART-007: one outer element - the two-ring collar at the cap line (the mill's ring
+    // grammar, own corners), drawn last so the rings own the outer rows.
+    [-16, -16, 7, 7, 12], // collar ring, left
+    [-15, -15, 5, 5, 6], // collar ring hole, left
+    [9, -16, 7, 7, 12], // collar ring, right
+    [10, -15, 5, 5, 6], // collar ring hole, right
   ],
   platePress: [
     // D-1: two wide plattens between both posts.
@@ -171,6 +182,9 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [-12, 9, 24, 3, 3], // bar at mask row 6 (ART-004 QA-4: one row up, so it no longer
     // buries the contact ellipse in rows 12..14 - the 0 px shadow this row caused is gone)
     [-15, -11, 3, 22, 4], // left post
+    // ART-007: one outer element - the corner notch, one step proud of the top bar's
+    // right end, above the cap line.
+    [9, -16, 7, 3, 16],
   ],
   drone: [
     [-5, 3, 10, 4, 15, 1], // DR5 shadow ellipse (alpha 0.35)
