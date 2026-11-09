@@ -30,16 +30,25 @@ const terminal = new Set(['succeeded','failed','interrupted']);
 export const MAX_TOTAL_AGENTS = 5;
 export const MAX_CHILD_AGENTS = MAX_TOTAL_AGENTS - 1;
 const ISSUE_URL = /^https:\/\/github\.com\/darkmatter2222\/Rustwake\/issues\/[1-9]\d*$/;
+export function assertDispatchableIssue(issue,role){
+ if(!Array.isArray(issue.labels))throw Error('GitHub issue labels are required before dispatch');
+ const blocked=new Set(['status:blocked','status:deferred','status:superseded']);
+ const names=issue.labels.map(label=>typeof label==='string'?label:label.name);
+ if(names.some(label=>blocked.has(label)))throw Error('GitHub issue is blocked, deferred or superseded; coordinator must resolve it before dispatch');
+ const allowed=role==='product-owner'?['status:triage','status:ready','status:doing','status:rework','status:review','status:accepted']:role==='release-engineer'?['status:accepted','status:ready','status:doing']:role==='reviewer'||role==='player'?['status:review','status:ready','status:doing','status:rework']:['status:ready','status:doing','status:rework'];
+ if(!names.some(name=>allowed.includes(name)))throw Error('GitHub issue has no eligible status for role '+role);
+}
 export async function verifyIssueWithGh(root, task){
   let issue;
   try {
     const number = task.issue_url.split('/').at(-1);
-    const {stdout}=await exec('gh',['issue','view',number,'--repo','darkmatter2222/Rustwake','--json','url,state,title'],{cwd:root,timeout:20000});
+    const {stdout}=await exec('gh',['issue','view',number,'--repo','darkmatter2222/Rustwake','--json','url,state,title,labels'],{cwd:root,timeout:20000});
     issue=JSON.parse(stdout);
   } catch(e) {
     throw Error('Cannot read GitHub Issue '+task.issue_url+'. Install/authenticate GitHub CLI (gh auth status). '+hostError(e));
   }
   if(issue.url!==task.issue_url||issue.state!=='OPEN')throw Error('GitHub Issue must exist and be OPEN before dispatch: '+task.issue_url);
+  assertDispatchableIssue(issue,task.role);
   return issue;
 }
 
@@ -96,7 +105,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
       metadata:{rustwake_dispatch_id:t.id}});
     w.session_id=child.id;w.status='created';await save();
     await ctx.session.prompt({sessionID:child.id,resume:true,text:
-      `Bounded Rustwake assignment ${t.id} for open GitHub Issue ${t.issue_url}. FIRST read AGENTS.md, docs/GITHUB_WORKFLOW.md and your persona file. The only active work tracker is GitHub Issues; do not update historical work/backlog.json. Use the same GitHub account, distinguish each persona in GitHub comments with Role: ${t.role}. Five total agents including coordinator, maximum four children. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit peer files. Developer: only in registered rw/ worktree, push with node scripts/publish-feature.mjs --issue ${t.issue_url} "commit message" <owned paths>; it MUST open/reuse a linked draft PR. After verification mark PR ready, include head SHA and evidence; do not push main. Reviewer: inspect linked PR and comment ACCEPT/REWORK at exact head SHA. Release engineer: inspect independent review, product decision and CI; request rework or gh pr merge approved PR; NEVER push main directly. No role may merge unreviewed code. Return issue/PR URLs and evidence for the bounded assignment, not a new local board.\n${t.prompt}`});
+      `Bounded Rustwake assignment ${t.id} for open GitHub Issue ${t.issue_url}. FIRST read AGENTS.md, docs/GITHUB_WORKFLOW.md, docs/GITHUB_PROJECT.md and your persona file. The only active work tracker is GitHub Issues; do not update historical work/backlog.json. Use the same GitHub account, distinguish each persona in GitHub comments with Role: ${t.role}. Five total agents including coordinator, maximum four children. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit peer files. Developer: only in registered rw/ worktree, push with node scripts/publish-feature.mjs --issue ${t.issue_url} "commit message" <owned paths>; it MUST open/reuse a linked draft PR. After verification mark PR ready, include head SHA and evidence; do not push main. Reviewer: inspect linked PR and comment ACCEPT/REWORK at exact head SHA. Release engineer: inspect independent review, product decision and CI; request rework or gh pr merge approved PR; NEVER push main directly. No role may merge unreviewed code. Return issue/PR URLs and evidence for the bounded assignment, not a new local board.\n${t.prompt}`});
     if(w.status==='created')w.status='queued';await save();
    }
    state.error=null;
@@ -164,6 +173,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
   close(){state.enabled=false;clearInterval(timer);},
  };
 }
+
 
 
 

@@ -22,3 +22,12 @@ What changed, why it meets the Issue's acceptance criteria, and what remains out
 - [ ] Release engineer inspected this diff and checks
 
 **Policy:** only release engineer merges; a PR may be returned to its developer for rework. All personas share one GitHub login; role-stamped comments are evidence, not formal independent GitHub account approvals.
+
+
+## Project and release traceability
+- Project item: https://github.com/users/darkmatter2222/projects/1
+- Parent goal and blocking issues:
+- Milestone (match linked issue):
+- [ ] Project membership and issue labels reconciled
+- [ ] No competing local backlog/board updates
+- Release work only: draft/published Release URL, tag/full SHA, CI/deployment/rollback evidence:

@@ -57,7 +57,6 @@ export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}
  return {status:'advisory-plan',capacity_children:cap,active_children:active.length,assignments,idle_reasons:free?[...warnings,'No further explicitly scoped, dependency-ready independent assignment. PM must split useful work or record the blocker; do not invent busywork.']:warnings};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const file=process.argv[2];if(!file)throw new Error('Usage: node scripts/team-scheduler.mjs <fresh-runtime-board.json>');
- console.log(JSON.stringify(planAssignments(JSON.parse(fs.readFileSync(file,'utf8')),{now:new Date().toISOString()}),null,2));
+ console.error('Retired local-board command. Use live GitHub Issues and https://github.com/users/darkmatter2222/projects/1; see docs/GITHUB_PROJECT.md.');
+ process.exitCode=1;
 }
-

@@ -1,3 +1,5 @@
+> Current planning authority: [GitHub Project and release operations](GITHUB_PROJECT.md). All historical local-board scheduling/publication directions below are retired. Use GitHub Issues/Project/PRs/milestones/Releases; five sessions total. Evidence files and runtime leases are not work boards. Do not run legacy team-scheduler or team-checkpoint for assignments.
+
 # Executive sponsor intake
 
 Write free-form requests in the root `SPONSOR_INBOX.md` below its marker. Save locally in the canonical coordinator checkout, or edit/commit it on GitHub. The coordinator fetches remote updates and reconciles local uncommitted sponsor edits without reset/overwrite. Local edits are visible to the local team; remote edits are visible after fetch/reconciliation.
@@ -26,3 +28,4 @@ Commands share `.rustwake-runtime/sponsor-intake.lock`; cooperating agents must 
 An interrupted operation leaves `status: prepared`, original request and before/after hashes in the receipt. A retry **refuses to delete again**. Release engineer compares current inbox and Git history with the recorded hashes/remaining text, restores any missing sponsor text if uncertain, and records a recovery decision before finalizing the receipt. Never steal a live lock based on age alone. A completed acknowledgement is idempotent and cannot consume a newly repeated request. New repeated requests get a new snapshot ID.
 
 Do not include secrets in the inbox: its contents and acknowledgement history are repository content. If a request is ambiguous, use the existing objective to make a reversible interpretation, record it and continue; only genuinely unresolved portions remain pending. Do not repeatedly ask Ryan for routine prioritization.
+

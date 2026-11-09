@@ -1,3 +1,5 @@
+> Current planning authority: [GitHub Project and release operations](GITHUB_PROJECT.md). All historical local-board scheduling/publication directions below are retired. Use GitHub Issues/Project/PRs/milestones/Releases; five sessions total. Evidence files and runtime leases are not work boards. Do not run legacy team-scheduler or team-checkpoint for assignments.
+
 > **Current authority:** [GITHUB_WORKFLOW.md](GITHUB_WORKFLOW.md). GitHub Issues/PRs replaced the local board; maximum five agents total (coordinator + four children). All older six-session and direct-main guidance below is historical. Never use historical backlog.json as a live queue.
 
 # Sponsor-driven autonomous delivery
@@ -59,4 +61,5 @@ This installer preserves provider and MasterGoal config, backs up the project Op
 Reload OpenCode, select coordinator, `/rustwake-team bind`, then `/goal forever goal.md`. Check `/rustwake-team status`. After host restart binding is lost intentionally; rebind after reconciliation. `/goal stop` remains authoritative; `/rustwake-team stop` clears the guard. No timers or automatic prompts are installed by this companion. If plugin loading fails, continue via scheduler/checkpoint CLI and record runtime incompatibility; do not install arbitrary community plugins blindly.
 
 The team is authorized to perform this local setup and the CI/CD setup using existing HomeAILab procedures. This cloud update cannot install on Ryan's PC or register a server runner; publish an activation receipt when the local team actually does so.
+
 

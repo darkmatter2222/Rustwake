@@ -1,3 +1,5 @@
+> Current planning authority: [GitHub Project and release operations](GITHUB_PROJECT.md). All historical local-board scheduling/publication directions below are retired. Use GitHub Issues/Project/PRs/milestones/Releases; five sessions total. Evidence files and runtime leases are not work boards. Do not run legacy team-scheduler or team-checkpoint for assignments.
+
 # GitHub Issues and PR delivery contract (authoritative from 2026-11-07)
 
 GitHub [Issues](https://github.com/darkmatter2222/Rustwake/issues) is the ONLY active work board. `work/backlog.json`, `work/BOARD.md` and `work/board.html` are historical snapshots, not scheduling inputs; do not keep updating them as a parallel Jira. Use real GitHub issue URLs, issue comments, labels and linked PRs for role handoffs. All personas use the SAME GitHub login: role identity is recorded in a structured comment/labels and dispatch metadata, NOT fake GitHub assignees or self-approval.
@@ -51,3 +53,4 @@ At each coordinator pass, inspect these measurements and each handoff. Record fi
 ## First pass after this update
 
 Reconcile existing workers and preserve their output. Read the uploaded startup findings once. Choose a small player-visible implementation, prepare its feature worktree and queue it. Queue a release engineer for any already-approved ready work. Stop extending startup reports indefinitely. Keep at most three child sessions. Upgrade the local plugin to load dispatcher/worktree/telemetry changes; fetching code does not hot-reload an already running plugin.
+
