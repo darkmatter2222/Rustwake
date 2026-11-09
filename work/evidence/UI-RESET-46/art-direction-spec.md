@@ -70,10 +70,13 @@ Scenarios, both plain save envelopes so every sheet replays the same yard:
 `captures/captures-46.json` carries, per file, the painted text it actually shows (chips line,
 objective card, panel head line, dock labels, `data-afford` classifications) plus the composition
 readout (ink box, cover %, faces under 44 px), so a claim can be checked against the image itself.
-56 further PNGs in `captures/` sit under a second naming scheme from the same harness
-(`a-p390-*`, `a-d1920-*`, `a-d2560-*`, `a-land844-*` and their `b-` twins: gate, rest, inventory,
-machine fork, unaffordable at 390×844, 1920×1080, 2560×1440 and 844×390 — 88 PNGs in the folder in
-total). They are not part of the 32-file receipt list, so nothing below depends on them.
+Twelve further PNGs in `captures/` come from `capture-extra-46.mjs` in the same naming scheme and
+carry the extra cells: 844×390 and 2560×1440 mature rest/store plus the credits-0 unaffordable
+frame at 390×844 and 1920×1080 for both sheets (`b-` twins) — they are receipted in
+`captures-extra-46.json` (12 entries), so the folder holds 44 PNGs in total across the two receipts.
+`captures/captures-46.json` is a stale intermediate receipt from an earlier run of the same harness
+(56 entries, older filenames); it is superseded by `captures-46.json` + `captures-extra-46.json` and
+nothing below depends on it.
 
 ## 3. Rules the implementation has to keep (direction A)
 
