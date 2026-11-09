@@ -165,3 +165,10 @@ test('failed fresh start preserves persisted unknown creation leases',async t=>{
  const saved=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/dispatcher.json'),'utf8'));
  assert.equal(saved.workers[0].id,'p');assert.equal(saved.workers[0].session_id,null);assert.equal(saved.enabled,false);
 });
+test('new plugin preserves previous leases when initial coordinator read fails',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);await f.d.tick();f.d.close();
+ f.ctx.session.get=async()=>{throw Error('host offline');};const reloaded=createDispatcher(f.ctx,f.root);t.after(()=>reloaded.close());
+ await assert.rejects(reloaded.start('replacement'),/host offline/);
+ const saved=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/dispatcher.json'),'utf8'));
+ assert.equal(saved.workers[0].session_id,'child1');assert.equal(saved.coordinator,'parent');assert.equal(saved.enabled,false);
+});

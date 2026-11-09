@@ -157,12 +157,12 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,request
  return {
   async start(id){
    if(starting)throw Error('Fresh team startup is already in progress');
-   starting=true;clearInterval(timer);
+   starting=true;clearInterval(timer);let restored=false;
    try{
    while(busy)await new Promise(r=>setTimeout(r,25));
-   if(!await host('get',{sessionID:id}))throw Error('Current coordinator session is unavailable');
    const previous=await read('dispatcher.json');
-   if(previous)state={...previous,enabled:false};
+   if(previous)state={...previous,enabled:false};restored=true;
+   if(!await host('get',{sessionID:id}))throw Error('Current coordinator session is unavailable');
    const oldQueue=await read('dispatch-queue.json');
    if((previous?.workers??[]).some(w=>!terminal.has(w.status)&&!w.session_id))throw Error('Previous creation outcome unknown; reconcile its session ID before a fresh start');
    const epoch=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
@@ -188,7 +188,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,request
    }
    }catch(e){
     state.error='Fresh start blocked: '+hostError(e);state.enabled=false;
-    state.recovery_pending=null;await save();throw e;
+    state.recovery_pending=null;if(restored)await save();throw e;
    }
    finally{starting=false;}
    await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();
