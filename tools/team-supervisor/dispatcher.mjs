@@ -162,6 +162,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,request
    while(busy)await new Promise(r=>setTimeout(r,25));
    if(!await host('get',{sessionID:id}))throw Error('Current coordinator session is unavailable');
    const previous=await read('dispatcher.json');
+   if(previous)state={...previous,enabled:false};
    const oldQueue=await read('dispatch-queue.json');
    if((previous?.workers??[]).some(w=>!terminal.has(w.status)&&!w.session_id))throw Error('Previous creation outcome unknown; reconcile its session ID before a fresh start');
    const epoch=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
@@ -209,6 +210,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,request
     uncertainEvents.delete(id);
     if(info.parentID!==state.coordinator)throw Error('Session is not a child of the bound coordinator: '+id);
     let w=state.workers.find(w=>w.session_id===id);
+    if(!w&&info.metadata?.rustwake_dispatch_id){w=state.workers.find(w=>!w.session_id&&w.id===info.metadata.rustwake_dispatch_id);if(w){w.session_id=id;w.unmanaged=true;w.status='unknown';changed();}}
     if(!w){w={id:'unmanaged-'+id,session_id:id,role:info.agent??'unknown',status:'unknown',unmanaged:true,write_paths:[],created_at:iso()};state.workers.push(w);changed();}
     if(terminal.has(info.outcome)&&info.time?.idle&&(!w.unmanaged||w.execution_started_at)&&info.time.idle>=Date.parse(w.execution_started_at??w.created_at))finish(w,info.outcome);
    }

@@ -152,3 +152,16 @@ test('out-of-band restart of a completed child reopens an unmanaged lease',async
  await f.d.event({type:'session.execution.started',created:finished+1,data:{sessionID:'child1'}});
  await f.d.tick();const s=await f.d.status();assert.equal(s.workers[0].status,'running');assert.equal(s.workers[0].unmanaged,true);assert.match(s.error,/Unmanaged/);
 });
+test('explicit reconciliation resolves an ambiguous create intent by host metadata',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);
+ f.ctx.session.create=async()=>{throw Error('create response lost');};await f.d.tick();
+ f.infos.set('late',{parentID:'parent',metadata:{rustwake_dispatch_id:'p'}});
+ await f.d.reconcile(['late']);const s=await f.d.status();assert.equal(s.workers.length,1);assert.equal(s.workers[0].session_id,'late');assert.equal(s.workers[0].unmanaged,true);
+});
+test('failed fresh start preserves persisted unknown creation leases',async t=>{
+ const f=await fixture(t);await f.d.start('parent');await enqueue(f,[task('p','product-owner')]);
+ f.ctx.session.create=async()=>{throw Error('create unknown');};await f.d.tick();
+ await assert.rejects(f.d.start('replacement'),/creation outcome unknown/);
+ const saved=JSON.parse(await fs.readFile(path.join(f.root,'.rustwake-runtime/dispatcher.json'),'utf8'));
+ assert.equal(saved.workers[0].id,'p');assert.equal(saved.workers[0].session_id,null);assert.equal(saved.enabled,false);
+});
