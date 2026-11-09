@@ -107,3 +107,60 @@ Rules that go with the table:
 - the dock keeps a 44 px target floor (measured: 0 faces under 44 px in any frame) and a centred column of 468-560 px, so it never spans a wide screen;
 - the guidance card is capped by band (300/400 px) so it lands in the left dead margin beside the stage instead of over it.
 
+
+## 6. State coverage in the selected direction
+
+| state | painted cue (A) | evidence |
+|---|---|---|
+| empty store | plate prints Capacity 0/900 plus the two Measured lines, one Close face | `a-390x844-fresh-store.png`, `a-1920x1080-fresh-store.png` |
+| rest, nothing built | 3 chips, one objective line plus one numeric line, three dock faces | `a-390x844-fresh-rest.png`, `a-1920x1080-fresh-rest.png` |
+| build catalogue | hairline Cancel/Next, one filled Build face carrying its own price line, ghost on a cell | `a-390x844-fresh-build.png`, `a-1920x1080-mature-build.png` |
+| selected machine | the world keeps its bright selection square, the plate opens beside/above it, the dock swaps to the fork pair | `a-390x844-mature-machine.png`, `a-1920x1080-mature-machine.png` |
+| unaffordable (credits 0) | dashed border **and** a printed shortfall on the cost line of the face - two signals, not opacity | `a-390x844-mature-unaffordable.png`, `a-1920x1080-mature-unaffordable.png` |
+| payable | solid hairline, green edge on the face that can be bought now | same two frames (`affordFaces` in the JSON) |
+| full storage 900/900 | chip reads Store 900/900, plate lists the nine materials and the sell faces | `a-390x844-mature-store.png`, `a-2560x1440-mature-store.png` |
+| bottleneck | one secondary line in the card, the plate keeps Next step above the fold on desktop | `a-1920x1080-mature-machine.png` |
+| locked research node | dashed border, inert face (no painted instance exists in either baseline, as in #45) | carried to #58 |
+| reduced motion | all state transitions `none` | `direction-a.css` media block |
+
+## 7. Implementation boundaries
+
+- `src/ui/styles.css`: the `:root` token block takes the A values; the per-band media blocks (380-460, max-height 460, 1200-1499, 1500-2099, 2100+) and the chip ladder are appended in the same file. The 42 %/26 % plate caps, the 44 px face floor, the `panel__body` scroller and the Escape stack stay exactly as they are.
+- `src/ui/App.tsx`: one line - stamp `data-afford="ok|short"` on a priced face from its own price against the purse (#65 owns it). The sheets already paint both states; without that line the dashed/short cue simply does not appear.
+- `src/game/renderer/scene.ts` and `sprites.ts`: untouched (world art is #60). Save shape, checksum and simulation untouched; no migration.
+- Owner map for the follow-up slices: #48 tokens, #51 HUD hierarchy, #52 build catalogue, #53 placement, #54 inspector, #55 fork, #56 store, #58 research, #65 feedback, #66 accessibility, #47 navigation.
+
+
+## 8. Reproduce and check
+
+```text
+npm ci
+node node_modules/vite/bin/vite.js build
+node node_modules/vite/bin/vite.js preview --port 4177 --strictPort     (shell 1)
+node work/evidence/UI-RESET-46/measure-46.mjs                          -> measures-46.json
+node work/evidence/UI-RESET-46/capture-46.mjs                           -> 32 PNGs + captures-46.json
+node work/evidence/UI-RESET-46/capture-extra-46.mjs                     -> 12 PNGs + captures-extra-46.json
+node work/evidence/UI-RESET-46/inspect-46.mjs                           -> _m.txt + _c.txt
+node work/evidence/UI-RESET-46/_x.mjs                                   -> _x.txt
+```
+
+Expected values a reviewer can check in one pass (`_m.txt`, `_x.txt`):
+
+1. `rows=1` in all five bands for both sheets, `rowTops` a single value, and chips 3 / 3 / 4 / 5 / 7 across 390x844, 844x390, 1366, 1920, 2560.
+2. `u44=0` everywhere: no face under 44 px.
+3. A: `cover` 4.6 at 1920 and 0 at 2560 in the rest frame; 4.6 with a plate open. B: 17.3 and 14.1 with a plate open.
+4. A: plate rect starts at 1580 (1920) and 2190 (2560), i.e. right of the measured ink; B keeps 1104.
+5. `affordFaces`: three `short` (222, 222, 232 credits) and one `ok` (Move, 0 credits) against `Credits 0`.
+6. `price` census still counts `"222 credits": 4` in all three sheets - the dedupe is #54/#55 work, not this layer.
+
+## 9. What is not verified here (stated, not smoothed over)
+
+- **No real device run, no screen reader pass (NVDA/VoiceOver), no listening test** for the sound face. Every number is headless Chromium at the listed viewports.
+- Pinch-zoom and drag-pan were not exercised (mouse only). Machine selection is a 20 px tap grid inside the measured ink bbox, because the canvas has no DOM hit targets - reachability is proven, pixel-exactness is not.
+- The ink bbox includes the banner glyphs, so its top/bottom figures are an upper bound (the same caveat the #45 audit carries); the side figures are exact to 1 px.
+- The landscape band is still the weakest: with the store open the plate covers 64.1 % of a 230 px-wide ink column. The fitted rect itself is the limit, so the remaining work is a per-band slot in #50/#51, not a token tweak.
+- The type floor in A is 10.8 px (B reaches 11.7 px); the 12 px floor is a ladder change owned by #66 and is deliberately not smuggled in here.
+- The price census is unchanged (4 prints) for the reason in section 8.
+- `data-afford` is stamped by the harness (`probe-46.mjs`, `applyAfford`) as the stand-in for the one-line `App.tsx` assignment; the dashed/short cue in the captures depends on that stamp existing.
+- The locked research row is still unpaintable in both baselines, and the entry gate frame was not re-shot for these two sheets (only rest, store, machine, build and unaffordable).
+
