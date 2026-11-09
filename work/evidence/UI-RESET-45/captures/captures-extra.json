@@ -1,0 +1,292 @@
+{
+  "task": "UI-RESET-45-extra",
+  "headSha": "1367a2c610133433cf0ce78c4441205b1c6006ea",
+  "captures": [
+    {
+      "file": "29-desktop1920-fresh-gate.png",
+      "note": "1920x1080 entry gate, no save yet",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "30-desktop1920-fresh-rest.png",
+      "note": "1920x1080 fresh yard at rest, tutorial step 1",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "31-desktop1920-fresh-store-empty.png",
+      "note": "empty StorePanel inside the 1200px gutter column",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)SellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "32-desktop1920-fresh-build.png",
+      "note": "1920x1080 build phase, ghost on a cell",
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Keep salvaging: 3/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 15",
+        "Next"
+      ],
+      "tick": 21,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "33-desktop1366-fresh-rest.png",
+      "note": "1366x768 laptop, fresh yard at rest",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ]
+    },
+    {
+      "file": "34-desktop1366-fresh-store-empty.png",
+      "note": "1366x768 empty StorePanel",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)SellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ]
+    },
+    {
+      "file": "35-desktop1366-fresh-build.png",
+      "note": "1366x768 build phase, ghost on a cell",
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Keep salvaging: 3/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 15",
+        "Next"
+      ],
+      "tick": 20,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ]
+    },
+    {
+      "file": "36-landscape-mature-store.png",
+      "note": "844x390 StorePanel over the world",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "37-landscape-mature-research.png",
+      "note": "844x390 ResearchPanel",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "ResearchCloseData102Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "38-landscape-mature-machine.png",
+      "note": "844x390 inspector plus fork faces in landscape",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Choose what improves on the Polymer recycler · 229 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Polymer recyclerCloseStatusNeeds inputBatch0%Cycle3.00sActual rate0.00 batches/s · 60s windowMax rate0.33 batches/s at full powerPower1 unitMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade3.00s → 2.86s · 229 creditsNeeds3 ResidueUpgrade · 229 creditsMove · cell 9 · 0 creditsDismantle · +52 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 229 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +52 units",
+        "Recipe",
+        "Less power229 credits",
+        "Faster batches239 credits"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "39-desktop2560-store-full.png",
+      "note": "2560x1440 full store: 320px gutter panel beside a 766px world",
+      "chips": "Scrap10Ferrous21Nonferrous10Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 2 Ferrous for 4 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous10Ferrous21Sell 2 · +4Steel10Copper10Polymer10Wire16Sell 6 · +24Plates109Sell 60 · +900Circuits40Sell 22 · +660Data76Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 97% busy (3/24 in transit)Measured8 machines waiting for inputSell floor10 units kept per materialOverflow hold35",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 2 · +4",
+        "Sell 6 · +24",
+        "Sell 60 · +900",
+        "Sell 22 · +660",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 2 Ferrous+4 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    }
+  ]
+}

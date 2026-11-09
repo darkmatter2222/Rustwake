@@ -1,0 +1,102 @@
+{
+  "task": "UI-RESET-45-extra2",
+  "headSha": "1367a2c610133433cf0ce78c4441205b1c6006ea",
+  "captures": [
+    {
+      "file": "40-phone-fresh-rest-step1.png",
+      "note": "fresh rest: three nav faces (Store, Salvage, Build)",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "41-phone-fresh-dock-after-place.png",
+      "note": "fresh dock face set after the first placement",
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Keep salvaging: 3/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "reconcile": null,
+      "toast": "Need 20 scrap · have 15",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "42-phone-fresh-research.png",
+      "note": "ResearchPanel on a fresh save, reachable=false",
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Keep salvaging: 3/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "reconcile": null,
+      "toast": "Need 20 scrap · have 15",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "43-phone-fresh-yard.png",
+      "note": "YardPanel on a fresh save, reachable=false",
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Keep salvaging: 3/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "reconcile": null,
+      "toast": "Need 20 scrap · have 15",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    }
+  ]
+}

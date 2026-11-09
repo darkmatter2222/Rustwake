@@ -1,0 +1,763 @@
+{
+  "task": "UI-RESET-AUDIT #45",
+  "headSha": "1367a2c610133433cf0ce78c4441205b1c6006ea",
+  "tool": "playwright-core plus local Chrome/Edge, vite preview on 4173",
+  "seed": "docs/evidence/yard-mature.json (tick 18298, tutorial 9, 8 machines, 18 routes, all 3 nodes known)",
+  "syntheticEdits": {
+    "20-phone-mature-store-full": "payload.sim.storeUnits=900 plus one overflow entry",
+    "21-phone-mature-unaffordable": "payload.sim.credits=0"
+  },
+  "captures": [
+    {
+      "file": "01-phone-fresh-gate.png",
+      "note": "entry gate at 390x844 dpr2, no save yet",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "02-phone-fresh-rest.png",
+      "note": "fresh rest: objective card, dock, empty yard",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "03-phone-fresh-store-empty.png",
+      "note": "StorePanel with an empty store",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)SellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "04-phone-fresh-repair-face.png",
+      "note": "salvage counted, repair face with its price",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "05-phone-fresh-build-ghost.png",
+      "note": "build phase: Cancel / Build X / Next plus ghost on a cell",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 % · Last cutting pulse recharging",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap",
+        "Next"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "06-phone-fresh-placed.png",
+      "note": "after the placing tap: dock back to its resting faces",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "07-phone-fresh-machine.png",
+      "note": "MachinePanel status page over the world",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 1s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "08-phone-fresh-machine-recipe.png",
+      "note": "MachinePanel recipe page",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": "Scrap sorterCloseInputs2 ScrapOutputs1 Ferrous, 1 NonferrousLevel1In buffer0/12Tray0/12ConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsStatus",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Status",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "09-phone-fresh-after-tap.png",
+      "note": "one more primary tap: toast or resting line",
+      "chips": "Scrap5Credits0Store 5/900",
+      "objective": "Keep salvaging: 5/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 51,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "10-phone360-fresh-text2.png",
+      "note": "360x640 with the text size cycled to A 2",
+      "chips": "Scrap10Credits0Store 10/900",
+      "objective": "Keep salvaging: 2/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "♪",
+        "A 2",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 13,
+      "docScroll": [
+        360,
+        360,
+        640,
+        640
+      ]
+    },
+    {
+      "file": "11-landscape-mature-rest.png",
+      "note": "844x390 landscape with the seeded mature yard",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 124h 24mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "12-phone-mature-reconciling.png",
+      "note": "offline catch-up still in flight",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 124h 24mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450298,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "13-phone-mature-return-report.png",
+      "note": "ReturnReportPanel after a long capped absence",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 124h 24mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "14-phone-mature-rest.png",
+      "note": "mature yard at rest at 390x844",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "15-phone-mature-store.png",
+      "note": "StorePanel: stock, capacity, sell rows, summary",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "16-phone-mature-research.png",
+      "note": "ResearchPanel with every node known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "ResearchCloseData102Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "17-phone-mature-yard-export.png",
+      "note": "YardPanel record page: stats, export field, Copy/Import",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard recordCloseTick450330Machines8Drones5Links18Credits82Save27839 charactersSaved yard{\"schemaVersion\":1,\"checksum\":\"7c048008\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":1458,\"tick\":450330,\"store\":{\"scrap\":10,\"nonferrous\":239,\"ferrous\":54,\"steel\":10,\"copper\":10,\"polymer\":10,\"wire\":72,\"plates\":348,\"circuits\":45,\"data\":102},\"storeUnits\":900,\"storeCapacity\":900,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":14,\"inBuf\":{\"scrap\":0},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":17392,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[1],\"outRoute\":4,\"starvedTicks\":425597,\"batchesDone\":1089,\"ageTicks\":450032,\"busyTicks\":24435,\"fullTicks\":0,\"rateAge\":450000,\"rateFrom\":1089,\"rateAgePrev\":449400,\"rateFromPrev\":1089},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":13,\"inBuf\":{\"ferrous\":1},\"inBufUnits\":1,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":18182,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[4],\"outRoute\":5,\"starvedTicks\":441896,\"batchesDone\":333,\"ageTicks\":449722,\"busyTicks\":7826,\"fullTicks\":0,\"rateAge\":449400,\"rateFrom\":333,\"rateAgePrev\":448800,\"rateFromPrev\":333},{\"id\":3,\"blueprint\":\"polymerRecycler\",\"tile\":3,\"orientation\":0,\"level\":11,\"inBuf\":{\"residue\":1,\"copper\":21},\"inBufUnits\":22,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":30000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[7],\"outRoute\":6,\"starvedTicks\":444177,\"batchesDone\":131,\"ageTicks\":449432,\"busyTicks\":5255,\"fullTicks\":0,\"rateAge\":449400,\"rateFrom\":131,\"rateAgePrev\":448800,\"rateFromPrev\":131},{\"id\":4,\"blueprint\":\"copperSeparator\",\"tile\":4,\"orientation\":0,\"level\":12,\"inBuf\":{\"nonferrous\":10},\"inBufUnits\":10,\"tray\":[{\"resource\":\"residue\",\"qty\":1}],\"trayUnits\":1,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":23810,\"batchPower\":2,\"status\":\"outputFull\",\"inRoutes\":[8],\"outRoute\":9,\"starvedTicks\":5699,\"batchesDone\":407,\"ageTicks\":448982,\"busyTicks\":13645,\"fullTicks\":429638,\"rateAge\":448800,\"rateFrom\":407,\"rateAgePrev\":448200,\"rateFromPrev\":407},{\"id\":5,\"blueprint\":\"wireMill\",\"tile\":5,\"orientation\":0,\"level\":11,\"inBuf\":{\"copper\":0},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":9,\"batchMilli\":20000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[10],\"outRoute\":11,\"starvedTicks\":437904,\"batchesDone\":364,\"ageTicks\":448382,\"busyTicks\":10478,\"fullTicks\":0,\"rateAge\":448200,\"rateFrom\":364,\"rateAgePrev\":447600,\"rateFromPrev\":364},{\"id\":6,\"blueprint\":\"platePress\",\"tile\":6,\"orientation\":0,\"level\":10,\"inBuf\":{\"steel\":0},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":26316,\"batchPower\":3,\"status\":\"starved\",\"inRoutes\":[12],\"outRoute\":13,\"starvedTicks\":442405,\"batchesDone\":158,\"ageTicks\":447682,\"busyTicks\":5277,\"fullTicks\":0,\"rateAge\":447600,\"rateFrom\":158,\"rateAgePrev\":447000,\"rateFromPrev\":158},{\"id\":7,\"blueprint\":\"circuitAssembler\",\"tile\":7,\"orientation\":0,\"level\":10,\"inBuf\":{\"wire\":10,\"polymer\":0},\"inBufUnits\":10,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":42106,\"batchPower\":3,\"status\":\"starved\",\"inRoutes\":[14,15],\"outRoute\":17,\"starvedTicks\":440074,\"batchesDone\":121,\"ageTicks\":447182,\"busyTicks\":7108,\"fullTicks\":0,\"rateAge\":447000,\"rateFrom\":121,\"rateAgePrev\":446400,\"rateFromPrev\":121},{\"id\":8,\"blueprint\":\"signalLab\",\"tile\":8,\"orientation\":0,\"level\":10,\"inBuf\":{\"circuits\":0},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":10,\"batchMilli\":78948,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[17],\"outRoute\":18,\"starvedTicks\":439499,\"batchesDone\":64,\"ageTicks\":446532,\"busyTicks\":7033,\"fullTicks\":0,\"rateAge\":446400,\"rateFrom\":64,\"rateAgePrev\":445800,\"rateFromPrev\":64}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5385,\"ageTicks\":450022},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":24968},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":24986},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25004},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25022},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25040},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25058},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25076},{\"resource\":\"nonferrous\",\"qty\":1,\"arrive\":25094}],\"inFlight\":8,\"busyTicks\":432914,\"ageTicks\":450022},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"nonferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":4282,\"ageTicks\":450022},{\"id\":4,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":3661,\"ageTicks\":449712},{\"id\":5,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[{\"resource\":\"steel\",\"qty\":1,\"arrive\":24992},{\"resource\":\"steel\",\"qty\":1,\"arrive\":25028},{\"resource\":\"steel\",\"qty\":1,\"arrive\":25064},{\"resource\":\"steel\",\"qty\":1,\"arrive\":25100}],\"inFlight\":4,\"busyTicks\":429322,\"ageTicks\":449712},{\"id\":6,\"from\":{\"kind\":\"machine\",\"id\":3},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"polymer\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":723,\"ageTicks\":449422},{\"id\":7,\"from\":{\"kind\":\"machine\",\"id\":4},\"to\":{\"kind\":\"machine\",\"id\":3},\"filter\":\"residue\",\"capacity\":24,\"latency\":5,\"items\":[{\"resource\":\"residue\",\"qty\":1,\"arrive\":20263},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20320},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20320},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20355},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20355},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20380},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20380},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20427},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20427},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20463},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20463},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20487},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20487},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20535},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20535},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20559},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20559},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20589},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20589},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20625},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20625},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20661},{\"resource\":\"residue\",\"qty\":1,\"arrive\":20661},{\"resource\":\"copper\",\"qty\":1,\"arrive\":20697}],\"inFlight\":24,\"busyTicks\":432092,\"ageTicks\":448972},{\"id\":8,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":4},\"filter\":\"nonferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":4063,\"ageTicks\":448962},{\"id\":9,\"from\":{\"kind\":\"machine\",\"id\":4},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"copper\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":1885,\"ageTicks\":448962},{\"id\":10,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":5},\"filter\":\"copper\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":1820,\"ageTicks\":448372},{\"id\":11,\"from\":{\"kind\":\"machine\",\"id\":5},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"wire\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":1841,\"ageTicks\":448372},{\"id\":12,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":6},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":1591,\"ageTicks\":447672},{\"id\":13,\"from\":{\"kind\":\"machine\",\"id\":6},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"plates\",\"capacity\":24,\"latency\":5,\"items\":[{\"resource\":\"plates\",\"qty\":1,\"arrive\":24966},{\"resource\":\"plates\",\"qty\":3,\"arrive\":25002}],\"inFlight\":4,\"busyTicks\":429032,\"ageTicks\":447672},{\"id\":14,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":7},\"filter\":\"wire\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":626,\"ageTicks\":447172},{\"id\":15,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":7},\"filter\":\"polymer\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":605,\"ageTicks\":447172},{\"id\":16,\"from\":{\"kind\":\"machine\",\"id\":7},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"circuits\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":285,\"ageTicks\":447172},{\"id\":17,\"from\":{\"kind\":\"machine\",\"id\":7},\"to\":{\"kind\":\"machine\",\"id\":8},\"filter\":\"circuits\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":320,\"ageTicks\":446522},{\"id\":18,\"from\":{\"kind\":\"machine\",\"id\":8},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"data\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":405,\"ageTicks\":446522}],\"wreck\":{\"remaining\":5,\"generation\":229,\"pulses\":6,\"nextPulseTick\":36},\"drone\":{\"repaired\":true,\"accumulated\":2080,\"nextDeliveryTick\":24872,\"deliveries\":514,\"inFlight\":{\"qty\":3,\"arrive\":24832}},\"spares\":[{\"repaired\":true,\"accumulated\":1660,\"nextDeliveryTick\":20498,\"deliveries\":338,\"inFlight\":{\"qty\":5,\"arrive\":20458}},{\"repaired\":true,\"accumulated\":1390,\"nextDeliveryTick\":19488,\"deliveries\":277,\"inFlight\":{\"qty\":5,\"arrive\":19448}},{\"repaired\":true,\"accumulated\":1065,\"nextDeliveryTick\":19528,\"deliveries\":212,\"inFlight\":{\"qty\":5,\"arrive\":19488}},{\"repaired\":true,\"accumulated\":640,\"nextDeliveryTick\":19498,\"deliveries\":127,\"inFlight\":{\"qty\":5,\"arrive\":19458}}],\"credits\":82,\"exportSteelDelivered\":3,\"exportClaimed\":true,\"tutorial\":9,\"nextMachineId\":9,\"nextRouteId\":19,\"machineCursor\":2,\"routeCursor\":1,\"powerRatio\":1,\"log\":[{\"tick\":18058,\"key\":\"sell\",\"value\":5},{\"tick\":18068,\"key\":\"sell\",\"value\":5},{\"tick\":18078,\"key\":\"sell\",\"value\":3},{\"tick\":18088,\"key\":\"sell\",\"value\":12},{\"tick\":18098,\"key\":\"sell\",\"value\":11},{\"tick\":18108,\"key\":\"sell\",\"value\":1},{\"tick\":18118,\"key\":\"sell\",\"value\":7},{\"tick\":18128,\"key\":\"sell\",\"value\":3},{\"tick\":18138,\"key\":\"sell\",\"value\":3},{\"tick\":18148,\"key\":\"sell\",\"value\":8},{\"tick\":18158,\"key\":\"sell\",\"value\":5},{\"tick\":18168,\"key\":\"sell\",\"value\":3},{\"tick\":18178,\"key\":\"sell\",\"value\":1},{\"tick\":18188,\"key\":\"upgrade\",\"value\":13},{\"tick\":18198,\"key\":\"sell\",\"value\":13},{\"tick\":18208,\"key\":\"sell\",\"value\":3},{\"tick\":18218,\"key\":\"sell\",\"value\":5},{\"tick\":18228,\"key\":\"sell\",\"value\":3},{\"tick\":18238,\"key\":\"sell\",\"value\":7},{\"tick\":18248,\"key\":\"sell\",\"value\":11},{\"tick\":18258,\"key\":\"sell\",\"value\":1},{\"tick\":18268,\"key\":\"sell\",\"value\":7},{\"tick\":18278,\"key\":\"sell\",\"value\":1},{\"tick\":18288,\"key\":\"sell\",\"value\":3}],\"seenCommands\":{\"p1\":1,\"p2\":2,\"p3\":3,\"p4\":4,\"p5\":5,\"p6\":6,\"p7\":7,\"p8\":8,\"p9\":9,\"p10\":10,\"p11\":11,\"p41\":12,\"p42\":13,\"p43\":14,\"p71\":15,\"p72\":16,\"p75\":17,\"p76\":18,\"p92\":19,\"p96\":20,\"p100\":21,\"p103\":22,\"p107\":23,\"p111\":24,\"p114\":25,\"p117\":26,\"p118\":27,\"p119\":28,\"p120\":29,\"p178\":30,\"p179\":31,\"p180\":32,\"p214\":33,\"p218\":34,\"p229\":35,\"p233\":36,\"p236\":37,\"p247\":38,\"p249\":39,\"p250\":40,\"p251\":41,\"p267\":42,\"p281\":43,\"p282\":44,\"p289\":45,\"p296\":46,\"p300\":47,\"p301\":48,\"p302\":49,\"p303\":50,\"p313\":51,\"p314\":52,\"p321\":53,\"p322\":54,\"p328\":55,\"p335\":56,\"p337\":57,\"p338\":58,\"p342\":59,\"p343\":60,\"p350\":61,\"p357\":62,\"p364\":63,\"p365\":64,\"p367\":65,\"p368\":66,\"p369\":67,\"p372\":68,\"p377\":69,\"p378\":70,\"p379\":71,\"p382\":72,\"p383\":73,\"p385\":74,\"p386\":75,\"p387\":76,\"p388\":77,\"p391\":78,\"p392\":79,\"p393\":80,\"p397\":81,\"p398\":82,\"p399\":83,\"p400\":84,\"p401\":85,\"p402\":86,\"p403\":87,\"p404\":88,\"p408\":89,\"p409\":90,\"p410\":91,\"p412\":92,\"p413\":93,\"p416\":94,\"p417\":95,\"p418\":96,\"p422\":97,\"p423\":98,\"p424\":99,\"p425\":100,\"p427\":101,\"p428\":102,\"p429\":103,\"p430\":104,\"p431\":105,\"p432\":106,\"p433\":107,\"p435\":108,\"p437\":109,\"p438\":110,\"p440\":111,\"p442\":112,\"p443\":113,\"p446\":114,\"p447\":115,\"p448\":116,\"p452\":117,\"p453\":118,\"p454\":119,\"p455\":120,\"p456\":121,\"p457\":122,\"p458\":123,\"p459\":124,\"p460\":125,\"p461\":126,\"p462\":127,\"p463\":128,\"p465\":129,\"p466\":130,\"p468\":131,\"p469\":132,\"p470\":133,\"p471\":134,\"p472\":135,\"p473\":136,\"p474\":137,\"p475\":138,\"p477\":139,\"p478\":140,\"p479\":141,\"p480\":142,\"p482\":143,\"p483\":144,\"p484\":145,\"p485\":146,\"p486\":147,\"p487\":148,\"p488\":149,\"p492\":150,\"p493\":151,\"p494\":152,\"p495\":153,\"p496\":154,\"p497\":155,\"p498\":156,\"p499\":157,\"p500\":158,\"p501\":159,\"p502\":160,\"p503\":161,\"p504\":162,\"p505\":163,\"p506\":164,\"p507\":165,\"p508\":166,\"p509\":167,\"p510\":168,\"p511\":169,\"p512\":170,\"p513\":171,\"p514\":172,\"p515\":173,\"p517\":174,\"p518\":175,\"p519\":176,\"p520\":177,\"p521\":178,\"p522\":179,\"p523\":180,\"p524\":181,\"p525\":182,\"p526\":183,\"p527\":184,\"p528\":185,\"p530\":186,\"p532\":187,\"p533\":188,\"p534\":189,\"p535\":190,\"p536\":191,\"p537\":192,\"p538\":193,\"p539\":194,\"p540\":195,\"p541\":196,\"p542\":197,\"p543\":198,\"p544\":199,\"p545\":200,\"p547\":201,\"p548\":202,\"p549\":203,\"p550\":204,\"p552\":205,\"p553\":206,\"p554\":207,\"p555\":208,\"p556\":209,\"p557\":210,\"p558\":211,\"p559\":212,\"p560\":213,\"p561\":214,\"p562\":215,\"p563\":216,\"p564\":217,\"p565\":218,\"p566\":219,\"p567\":220,\"p568\":221,\"p569\":222,\"p570\":223,\"p571\":224,\"p572\":225,\"p573\":226,\"p574\":227,\"p575\":228,\"p576\":229,\"p577\":230,\"p578\":231,\"p579\":232,\"p580\":233,\"p581\":234,\"p582\":235,\"p583\":236,\"p584\":237,\"p585\":238,\"p586\":239,\"p587\":240,\"p588\":241,\"p589\":242,\"p590\":243,\"p591\":244,\"p592\":245,\"p593\":246,\"p594\":247,\"p595\":248,\"p596\":249,\"p597\":250,\"p598\":251,\"p599\":252,\"p600\":253,\"p601\":254,\"p602\":255,\"p603\":256,\"p604\":257,\"p605\":258,\"p606\":259,\"p607\":260,\"p608\":261,\"p609\":262,\"p610\":263,\"p611\":264,\"p612\":265,\"p613\":266,\"p614\":267,\"p615\":268,\"p616\":269,\"p617\":270,\"p618\":271,\"p619\":272,\"p620\":273,\"p621\":274,\"p622\":275,\"p623\":276,\"p624\":277,\"p625\":278,\"p626\":279,\"p627\":280,\"p628\":281,\"p629\":282,\"p630\":283,\"p631\":284,\"p634\":285,\"p636\":286,\"p637\":287,\"p638\":288,\"p639\":289,\"p640\":290,\"p641\":291,\"p642\":292,\"p643\":293,\"p644\":294,\"p645\":295,\"p647\":296,\"p648\":297,\"p649\":298,\"p650\":299,\"p652\":300,\"p653\":301,\"p654\":302,\"p655\":303,\"p657\":304,\"p658\":305,\"p659\":306,\"p660\":307,\"p661\":308,\"p662\":309,\"p663\":310,\"p664\":311,\"p665\":312,\"p666\":313,\"p667\":314,\"p668\":315,\"p669\":316,\"p670\":317,\"p671\":318,\"p673\":319,\"p674\":320,\"p675\":321,\"p677\":322,\"p678\":323,\"p679\":324,\"p680\":325,\"p681\":326,\"p682\":327,\"p683\":328,\"p684\":329,\"p685\":330,\"p686\":331,\"p687\":332,\"p688\":333,\"p689\":334,\"p690\":335,\"p691\":336,\"p692\":337,\"p693\":338,\"p694\":339,\"p695\":340,\"p696\":341,\"p697\":342,\"p698\":343,\"p699\":344,\"p700\":345,\"p701\":346,\"p702\":347,\"p703\":348,\"p704\":349,\"p705\":350,\"p706\":351,\"p707\":352,\"p708\":353,\"p709\":354,\"p710\":355,\"p711\":356,\"p712\":357,\"p713\":358,\"p714\":359,\"p715\":360,\"p716\":361,\"p717\":362,\"p718\":363,\"p719\":364,\"p720\":365,\"p721\":366,\"p722\":367,\"p723\":368,\"p724\":369,\"p725\":370,\"p726\":371,\"p727\":372,\"p728\":373,\"p729\":374,\"p730\":375,\"p731\":376,\"p732\":377,\"p733\":378,\"p734\":379,\"p735\":380,\"p736\":381,\"p737\":382,\"p738\":383,\"p739\":384,\"p740\":385,\"p741\":386,\"p742\":387,\"p743\":388,\"p744\":389,\"p745\":390,\"p746\":391,\"p747\":392,\"p748\":393,\"p749\":394,\"p750\":395,\"p751\":396,\"p752\":397,\"p753\":398,\"p754\":399,\"p755\":400,\"p756\":401,\"p757\":402,\"p758\":403,\"p759\":404,\"p760\":405,\"p761\":406,\"p762\":407,\"p763\":408,\"p764\":409,\"p765\":410,\"p766\":411,\"p767\":412,\"p768\":413,\"p769\":414,\"p770\":415,\"p771\":416,\"p773\":417,\"p774\":418,\"p775\":419,\"p776\":420,\"p777\":421,\"p778\":422,\"p779\":423,\"p780\":424,\"p781\":425,\"p782\":426,\"p783\":427,\"p784\":428,\"p785\":429,\"p787\":430,\"p788\":431,\"p789\":432,\"p790\":433,\"p792\":434,\"p793\":435,\"p794\":436,\"p795\":437,\"p796\":438,\"p797\":439,\"p798\":440,\"p799\":441,\"p800\":442,\"p801\":443,\"p802\":444,\"p803\":445,\"p804\":446,\"p805\":447,\"p806\":448,\"p807\":449,\"p808\":450,\"p809\":451,\"p810\":452,\"p811\":453,\"p812\":454,\"p813\":455,\"p814\":456,\"p815\":457,\"p816\":458,\"p817\":459,\"p818\":460,\"p819\":461,\"p820\":462,\"p821\":463,\"p822\":464,\"p823\":465,\"p824\":466,\"p825\":467,\"p826\":468,\"p827\":469,\"p828\":470,\"p829\":471,\"p830\":472,\"p831\":473,\"p832\":474,\"p833\":475,\"p834\":476,\"p835\":477,\"p836\":478,\"p837\":479,\"p838\":480,\"p839\":481,\"p840\":482,\"p841\":483,\"p842\":484,\"p843\":485,\"p844\":486,\"p845\":487,\"p846\":488,\"p847\":489,\"p848\":490,\"p849\":491,\"p850\":492,\"p851\":493,\"p852\":494,\"p853\":495,\"p854\":496,\"p855\":497,\"p856\":498,\"p857\":499,\"p858\":500,\"p859\":501,\"p860\":502,\"p861\":503,\"p862\":504,\"p863\":505,\"p864\":506,\"p865\":507,\"p866\":508,\"p867\":509,\"p868\":510,\"p869\":511,\"p870\":512,\"p871\":513,\"p872\":514,\"p873\":515,\"p874\":516,\"p875\":517,\"p876\":518,\"p877\":519,\"p878\":520,\"p879\":521,\"p880\":522,\"p882\":523,\"p883\":524,\"p884\":525,\"p885\":526,\"p886\":527,\"p887\":528,\"p888\":529,\"p889\":530,\"p890\":531,\"p891\":532,\"p892\":533,\"p893\":534,\"p894\":535,\"p895\":536,\"p896\":537,\"p897\":538,\"p898\":539,\"p899\":540,\"p900\":541,\"p901\":542,\"p902\":543,\"p903\":544,\"p904\":545,\"p905\":546,\"p906\":547,\"p907\":548,\"p908\":549,\"p909\":550,\"p910\":551,\"p911\":552,\"p912\":553,\"p913\":554,\"p914\":555,\"p915\":556,\"p916\":557,\"p917\":558,\"p918\":559,\"p919\":560,\"p920\":561,\"p921\":562,\"p922\":563,\"p923\":564,\"p924\":565,\"p925\":566,\"p926\":567,\"p927\":568,\"p928\":569,\"p929\":570,\"p930\":571,\"p931\":572,\"p932\":573,\"p933\":574,\"p934\":575,\"p935\":576,\"p936\":577,\"p937\":578,\"p938\":579,\"p939\":580,\"p940\":581,\"p941\":582,\"p942\":583,\"p943\":584,\"p944\":585,\"p945\":586,\"p946\":587,\"p947\":588,\"p948\":589,\"p949\":590,\"p950\":591,\"p951\":592,\"p952\":593,\"p953\":594,\"p954\":595,\"p955\":596,\"p956\":597,\"p957\":598,\"p958\":599,\"p959\":600,\"p960\":601,\"p961\":602,\"p962\":603,\"p963\":604,\"p964\":605,\"p965\":606,\"p966\":607,\"p967\":608,\"p968\":609,\"p969\":610,\"p970\":611,\"p971\":612,\"p972\":613,\"p973\":614,\"p974\":615,\"p975\":616,\"p976\":617,\"p977\":618,\"p978\":619,\"p979\":620,\"p980\":621,\"p981\":622,\"p982\":623,\"p983\":624,\"p984\":625,\"p985\":626,\"p986\":627,\"p987\":628,\"p988\":629,\"p989\":630,\"p990\":631,\"p991\":632,\"p992\":633,\"p993\":634,\"p994\":635,\"p995\":636,\"p996\":637,\"p997\":638,\"p998\":639,\"p999\":640,\"p1000\":641,\"p1001\":642,\"p1002\":643,\"p1003\":644,\"p1004\":645,\"p1005\":646,\"p1006\":647,\"p1007\":648,\"p1008\":649,\"p1009\":650,\"p1010\":651,\"p1011\":652,\"p1012\":653,\"p1013\":654,\"p1014\":655,\"p1015\":656,\"p1016\":657,\"p1017\":658,\"p1018\":659,\"p1019\":660,\"p1020\":661,\"p1021\":662,\"p1022\":663,\"p1023\":664,\"p1024\":665,\"p1025\":666,\"p1026\":667,\"p1027\":668,\"p1028\":669,\"p1029\":670,\"p1030\":671,\"p1031\":672,\"p1032\":673,\"p1033\":674,\"p1034\":675,\"p1035\":676,\"p1036\":677,\"p1037\":678,\"p1038\":679,\"p1039\":680,\"p1040\":681,\"p1041\":682,\"p1042\":683,\"p1043\":684,\"p1044\":685,\"p1045\":686,\"p1046\":687,\"p1047\":688,\"p1048\":689,\"p1049\":690,\"p1050\":691,\"p1051\":692,\"p1052\":693,\"p1053\":694,\"p1054\":695,\"p1055\":696,\"p1056\":697,\"p1057\":698,\"p1058\":699,\"p1059\":700,\"p1060\":701,\"p1061\":702,\"p1062\":703,\"p1063\":704,\"p1064\":705,\"p1065\":706,\"p1066\":707,\"p1067\":708,\"p1068\":709,\"p1069\":710,\"p1070\":711,\"p1071\":712,\"p1072\":713,\"p1073\":714,\"p1074\":715,\"p1075\":716,\"p1076\":717,\"p1077\":718,\"p1078\":719,\"p1079\":720,\"p1080\":721,\"p1081\":722,\"p1082\":723,\"p1083\":724,\"p1084\":725,\"p1085\":726,\"p1086\":727,\"p1087\":728,\"p1088\":729,\"p1089\":730,\"p1090\":731,\"p1091\":732,\"p1092\":733,\"p1093\":734,\"p1094\":735,\"p1095\":736,\"p1096\":737,\"p1097\":738,\"p1098\":739,\"p1099\":740,\"p1100\":741,\"p1101\":742,\"p1102\":743,\"p1103\":744,\"p1104\":745,\"p1105\":746,\"p1106\":747,\"p1107\":748,\"p1108\":749,\"p1109\":750,\"p1110\":751,\"p1111\":752,\"p1112\":753,\"p1113\":754,\"p1114\":755,\"p1115\":756,\"p1116\":757,\"p1117\":758,\"p1118\":759,\"p1119\":760,\"p1120\":761,\"p1121\":762,\"p1122\":763,\"p1123\":764,\"p1124\":765,\"p1125\":766,\"p1126\":767,\"p1127\":768,\"p1128\":769,\"p1129\":770,\"p1130\":771,\"p1131\":772,\"p1132\":773,\"p1133\":774,\"p1134\":775,\"p1135\":776,\"p1136\":777,\"p1137\":778,\"p1138\":779,\"p1139\":780,\"p1140\":781,\"p1141\":782,\"p1142\":783,\"p1143\":784,\"p1144\":785,\"p1145\":786,\"p1146\":787,\"p1147\":788,\"p1148\":789,\"p1149\":790,\"p1150\":791,\"p1151\":792,\"p1152\":793,\"p1153\":794,\"p1154\":795,\"p1155\":796,\"p1156\":797,\"p1157\":798,\"p1158\":799,\"p1159\":800,\"p1160\":801,\"p1161\":802,\"p1162\":803,\"p1163\":804,\"p1164\":805,\"p1165\":806,\"p1166\":807,\"p1167\":808,\"p1168\":809,\"p1169\":810,\"p1170\":811,\"p1171\":812,\"p1172\":813,\"p1173\":814,\"p1174\":815,\"p1175\":816,\"p1176\":817,\"p1177\":818,\"p1178\":819,\"p1179\":820,\"p1180\":821,\"p1181\":822,\"p1182\":823,\"p1183\":824,\"p1184\":825,\"p1185\":826,\"p1186\":827,\"p1187\":828,\"p1188\":829,\"p1189\":830,\"p1190\":831,\"p1191\":832,\"p1192\":833,\"p1193\":834,\"p1194\":835,\"p1195\":836,\"p1196\":837,\"p1197\":838,\"p1198\":839,\"p1199\":840,\"p1200\":841,\"p1201\":842,\"p1202\":843,\"p1203\":844,\"p1204\":845,\"p1205\":846,\"p1206\":847,\"p1207\":848,\"p1208\":849,\"p1209\":850,\"p1210\":851,\"p1211\":852,\"p1212\":853,\"p1213\":854,\"p1214\":855,\"p1215\":856,\"p1216\":857,\"p1217\":858,\"p1218\":859,\"p1219\":860,\"p1220\":861,\"p1221\":862,\"p1222\":863,\"p1223\":864,\"p1224\":865,\"p1225\":866,\"p1226\":867,\"p1227\":868,\"p1228\":869,\"p1229\":870,\"p1230\":871,\"p1231\":872,\"p1232\":873,\"p1233\":874,\"p1234\":875,\"p1235\":876,\"p1236\":877,\"p1237\":878,\"p1238\":879,\"p1239\":880,\"p1240\":881,\"p1241\":882,\"p1242\":883,\"p1243\":884,\"p1244\":885,\"p1245\":886,\"p1246\":887,\"p1247\":888,\"p1248\":889,\"p1249\":890,\"p1250\":891,\"p1251\":892,\"p1252\":893,\"p1253\":894,\"p1254\":895,\"p1255\":896,\"p1256\":897,\"p1257\":898,\"p1258\":899,\"p1259\":900,\"p1260\":901,\"p1261\":902,\"p1262\":903,\"p1263\":904,\"p1264\":905,\"p1265\":906,\"p1266\":907,\"p1267\":908,\"p1268\":909,\"p1269\":910,\"p1270\":911,\"p1271\":912,\"p1272\":913,\"p1273\":914,\"p1274\":915,\"p1275\":916,\"p1276\":917,\"p1277\":918,\"p1278\":919,\"p1279\":920,\"p1280\":921,\"p1281\":922,\"p1282\":923,\"p1283\":924,\"p1284\":925,\"p1285\":926,\"p1286\":927,\"p1287\":928,\"p1288\":929,\"p1289\":930,\"p1290\":931,\"p1291\":932,\"p1292\":933,\"p1293\":934,\"p1294\":935,\"p1295\":936,\"p1296\":937,\"p1297\":938,\"p1298\":939,\"p1299\":940,\"p1300\":941,\"p1301\":942,\"p1302\":943,\"p1303\":944,\"p1304\":945,\"p1305\":946,\"p1306\":947,\"p1307\":948,\"p1308\":949,\"p1309\":950,\"p1310\":951,\"p1311\":952,\"p1312\":953,\"p1313\":954,\"p1314\":955,\"p1315\":956,\"p1316\":957,\"p1317\":958,\"p1318\":959,\"p1319\":960,\"p1320\":961,\"p1321\":962,\"p1322\":963,\"p1323\":964,\"p1324\":965,\"p1325\":966,\"p1326\":967,\"p1327\":968,\"p1328\":969,\"p1329\":970,\"p1330\":971,\"p1331\":972,\"p1332\":973,\"p1333\":974,\"p1334\":975,\"p1335\":976,\"p1336\":977,\"p1337\":978,\"p1338\":979,\"p1339\":980,\"p1340\":981,\"p1341\":982,\"p1342\":983,\"p1343\":984,\"p1344\":985,\"p1345\":986,\"p1346\":987,\"p1347\":988,\"p1348\":989,\"p1349\":990,\"p1350\":991,\"p1351\":992,\"p1352\":993,\"p1353\":994,\"p1354\":995,\"p1355\":996,\"p1356\":997,\"p1357\":998,\"p1358\":999,\"p1359\":1000,\"p1360\":1001,\"p1361\":1002,\"p1362\":1003,\"p1363\":1004,\"p1364\":1005,\"p1365\":1006,\"p1366\":1007,\"p1367\":1008,\"p1368\":1009,\"p1369\":1010,\"p1370\":1011,\"p1371\":1012,\"p1372\":1013,\"p1373\":1014,\"p1374\":1015,\"p1375\":1016,\"p1376\":1017,\"p1377\":1018,\"p1378\":1019,\"p1379\":1020,\"p1380\":1021,\"p1381\":1022,\"p1382\":1023,\"p1383\":1024,\"p1384\":1025,\"p1385\":1026,\"p1386\":1027,\"p1387\":1028,\"p1388\":1029,\"p1389\":1030,\"p1390\":1031,\"p1391\":1032,\"p1392\":1033,\"p1393\":1034,\"p1394\":1035,\"p1395\":1036,\"p1396\":1037,\"p1397\":1038,\"p1398\":1039,\"p1399\":1040,\"p1400\":1041,\"p1401\":1042,\"p1402\":1043,\"p1403\":1044,\"p1404\":1045,\"p1405\":1046,\"p1406\":1047,\"p1407\":1048,\"p1408\":1049,\"p1409\":1050,\"p1410\":1051,\"p1411\":1052,\"p1412\":1053,\"p1413\":1054,\"p1414\":1055,\"p1415\":1056,\"p1416\":1057,\"p1417\":1058,\"p1418\":1059,\"p1419\":1060,\"p1420\":1061,\"p1421\":1062,\"p1422\":1063,\"p1423\":1064,\"p1424\":1065,\"p1425\":1066,\"p1426\":1067,\"p1427\":1068,\"p1428\":1069,\"p1429\":1070,\"p1430\":1071,\"p1431\":1072,\"p1432\":1073,\"p1433\":1074,\"p1434\":1075,\"p1435\":1076,\"p1436\":1077,\"p1437\":1078,\"p1438\":1079,\"p1439\":1080,\"p1440\":1081,\"p1441\":1082,\"p1442\":1083,\"p1443\":1084,\"p1444\":1085,\"p1445\":1086,\"p1446\":1087,\"p1447\":1088,\"p1448\":1089,\"p1449\":1090,\"p1450\":1091,\"p1451\":1092,\"p1452\":1093,\"p1453\":1094,\"p1454\":1095,\"p1455\":1096,\"p1456\":1097,\"p1457\":1098,\"p1458\":1099,\"p1459\":1100,\"p1460\":1101,\"p1461\":1102,\"p1462\":1103,\"p1463\":1104,\"p1464\":1105,\"p1465\":1106,\"p1466\":1107,\"p1467\":1108,\"p1468\":1109,\"p1469\":1110,\"p1470\":1111,\"p1471\":1112,\"p1472\":1113,\"p1473\":1114,\"p1474\":1115,\"p1475\":1116,\"p1476\":1117,\"p1477\":1118,\"p1478\":1119,\"p1479\":1120,\"p1480\":1121,\"p1481\":1122,\"p1482\":1123,\"p1483\":1124,\"p1484\":1125,\"p1485\":1126,\"p1486\":1127,\"p1487\":1128,\"p1488\":1129,\"p1489\":1130,\"p1490\":1131,\"p1491\":1132,\"p1492\":1133,\"p1493\":1134,\"p1494\":1135,\"p1495\":1136,\"p1496\":1137,\"p1497\":1138,\"p1498\":1139,\"p1499\":1140,\"p1500\":1141,\"p1501\":1142,\"p1502\":1143,\"p1503\":1144,\"p1504\":1145,\"p1505\":1146,\"p1506\":1147,\"p1507\":1148,\"p1508\":1149,\"p1509\":1150,\"p1510\":1151,\"p1511\":1152,\"p1512\":1153,\"p1513\":1154,\"p1514\":1155,\"p1515\":1156,\"p1516\":1157,\"p1517\":1158,\"p1518\":1159,\"p1519\":1160,\"p1520\":1161,\"p1521\":1162,\"p1522\":1163,\"p1523\":1164,\"p1524\":1165,\"p1525\":1166,\"p1526\":1167,\"p1527\":1168,\"p1528\":1169,\"p1529\":1170,\"p1530\":1171,\"p1531\":1172,\"p1532\":1173,\"p1533\":1174,\"p1534\":1175,\"p1535\":1176,\"p1536\":1177,\"p1537\":1178,\"p1538\":1179,\"p1539\":1180,\"p1540\":1181,\"p1541\":1182,\"p1542\":1183,\"p1543\":1184,\"p1544\":1185,\"p1545\":1186,\"p1546\":1187,\"p1547\":1188,\"p1548\":1189,\"p1549\":1190,\"p1550\":1191,\"p1551\":1192,\"p1552\":1193,\"p1553\":1194,\"p1554\":1195,\"p1555\":1196,\"p1556\":1197,\"p1557\":1198,\"p1558\":1199,\"p1559\":1200,\"p1560\":1201,\"p1561\":1202,\"p1562\":1203,\"p1563\":1204,\"p1564\":1205,\"p1565\":1206,\"p1566\":1207,\"p1567\":1208,\"p1568\":1209,\"p1569\":1210,\"p1570\":1211,\"p1571\":1212,\"p1572\":1213,\"p1573\":1214,\"p1574\":1215,\"p1575\":1216,\"p1576\":1217,\"p1577\":1218,\"p1578\":1219,\"p1579\":1220,\"p1580\":1221,\"p1581\":1222,\"p1582\":1223,\"p1583\":1224,\"p1584\":1225,\"p1585\":1226,\"p1586\":1227,\"p1587\":1228,\"p1588\":1229,\"p1589\":1230,\"p1590\":1231,\"p1591\":1232,\"p1592\":1233,\"p1593\":1234,\"p1594\":1235,\"p1595\":1236,\"p1596\":1237,\"p1597\":1238,\"p1598\":1239,\"p1599\":1240,\"p1600\":1241,\"p1601\":1242,\"p1602\":1243,\"p1603\":1244,\"p1604\":1245,\"p1605\":1246,\"p1606\":1247,\"p1607\":1248,\"p1608\":1249,\"p1609\":1250,\"p1610\":1251,\"p1611\":1252,\"p1612\":1253,\"p1613\":1254,\"p1614\":1255,\"p1615\":1256,\"p1616\":1257,\"p1617\":1258,\"p1618\":1259,\"p1619\":1260,\"p1620\":1261,\"p1621\":1262,\"p1622\":1263,\"p1623\":1264,\"p1624\":1265,\"p1625\":1266,\"p1626\":1267,\"p1627\":1268,\"p1628\":1269,\"p1629\":1270,\"p1630\":1271,\"p1631\":1272,\"p1632\":1273,\"p1633\":1274,\"p1634\":1275,\"p1635\":1276,\"p1636\":1277,\"p1637\":1278,\"p1638\":1279,\"p1639\":1280,\"p1640\":1281,\"p1641\":1282,\"p1642\":1283,\"p1643\":1284,\"p1644\":1285,\"p1645\":1286,\"p1646\":1287,\"p1647\":1288,\"p1648\":1289,\"p1649\":1290,\"p1650\":1291,\"p1651\":1292,\"p1652\":1293,\"p1653\":1294,\"p1654\":1295,\"p1655\":1296,\"p1656\":1297,\"p1657\":1298,\"p1658\":1299,\"p1659\":1300,\"p1660\":1301,\"p1661\":1302,\"p1662\":1303,\"p1663\":1304,\"p1664\":1305,\"p1665\":1306,\"p1666\":1307,\"p1667\":1308,\"p1668\":1309,\"p1669\":1310,\"p1670\":1311,\"p1671\":1312,\"p1672\":1313,\"p1673\":1314,\"p1674\":1315,\"p1675\":1316,\"p1676\":1317,\"p1677\":1318,\"p1678\":1319,\"p1679\":1320,\"p1680\":1321,\"p1681\":1322,\"p1682\":1323,\"p1683\":1324,\"p1684\":1325,\"p1685\":1326,\"p1686\":1327,\"p1687\":1328,\"p1688\":1329,\"p1689\":1330,\"p1690\":1331,\"p1691\":1332,\"p1692\":1333,\"p1693\":1334,\"p1694\":1335,\"p1695\":1336,\"p1696\":1337,\"p1697\":1338,\"p1698\":1339,\"p1699\":1340,\"p1700\":1341,\"p1701\":1342,\"p1702\":1343,\"p1703\":1344,\"p1704\":1345,\"p1705\":1346,\"p1706\":1347,\"p1707\":1348,\"p1708\":1349,\"p1709\":1350,\"p1710\":1351,\"p1711\":1352,\"p1712\":1353,\"p1713\":1354,\"p1714\":1355,\"p1715\":1356,\"p1716\":1357,\"p1717\":1358,\"p1718\":1359,\"p1719\":1360,\"p1720\":1361,\"p1721\":1362,\"p1722\":1363,\"p1723\":1364,\"p1724\":1365,\"p1725\":1366,\"p1726\":1367,\"p1727\":1368,\"p1728\":1369,\"p1729\":1370,\"p1730\":1371,\"p1731\":1372,\"p1732\":1373,\"p1733\":1374,\"p1734\":1375,\"p1735\":1376,\"p1736\":1377,\"p1737\":1378,\"p1738\":1379,\"p1739\":1380,\"p1740\":1381,\"p1741\":1382,\"p1742\":1383,\"p1743\":1384,\"p1744\":1385,\"p1745\":1386,\"p1746\":1387,\"p1747\":1388,\"p1748\":1389,\"p1749\":1390,\"p1750\":1391,\"p1751\":1392,\"p1752\":1393,\"p1753\":1394,\"p1754\":1395,\"p1755\":1396,\"p1756\":1397,\"p1757\":1398,\"p1758\":1399,\"p1759\":1400,\"p1760\":1401,\"p1761\":1402,\"p1762\":1403,\"p1763\":1404,\"p1764\":1405,\"p1765\":1406,\"p1766\":1407,\"p1767\":1408,\"p1768\":1409,\"p1769\":1410,\"p1770\":1411,\"p1771\":1412,\"p1772\":1413,\"p1773\":1414,\"p1774\":1415,\"p1775\":1416,\"p1776\":1417,\"p1777\":1418,\"p1778\":1419,\"p1779\":1420,\"p1780\":1421,\"p1781\":1422,\"p1782\":1423,\"p1783\":1424,\"p1784\":1425,\"p1785\":1426,\"p1786\":1427,\"p1787\":1428,\"p1788\":1429,\"p1789\":1430,\"p1790\":1431,\"p1791\":1432,\"p1792\":1433,\"p1793\":1434,\"p1794\":1435,\"p1795\":1436,\"p1796\":1437,\"p1797\":1438,\"p1798\":1439,\"p1799\":1440,\"p1800\":1441,\"p1801\":1442,\"p1802\":1443,\"p1803\":1444,\"p1804\":1445,\"p1805\":1446,\"p1806\":1447,\"p1807\":1448,\"p1808\":1449,\"p1809\":1450,\"p1810\":1451,\"p1811\":1452,\"p1812\":1453,\"p1813\":1454,\"p1814\":1455,\"p1815\":1456,\"p1816\":1457,\"p1817\":1458},\"research\":{\"cutters\":1,\"buffers\":1,\"dispatch\":1}},\"lastSeenMs\":1794196592525,\"settings\":{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}}}CopyImportCopy this text, or open Import to paste one.",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Copy",
+        "Import",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "18-phone-mature-import-failure.png",
+      "note": "YardPanel import page after a malformed paste",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard recordClosePaste a saved yard, then Apply.Pasted text{not a rustwake envelopeApplyBackNot a Rustwake file",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Apply",
+        "Back",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "19-phone-mature-machine-fork.png",
+      "note": "MachinePanel plus the named branch faces in the dock",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450338,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "20-phone-mature-store-full.png",
+      "note": "StorePanel at 900/900 with an overflow hold row",
+      "chips": "Scrap10Ferrous21Credits82Store 900/900",
+      "objective": "Sell 2 Ferrous for 4 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous10Ferrous21Sell 2 · +4Steel10Copper10Polymer10Wire16Sell 6 · +24Plates109Sell 60 · +900Circuits40Sell 22 · +660Data76Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 97% busy (3/24 in transit)Measured8 machines waiting for inputSell floor10 units kept per materialOverflow hold35",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 2 · +4",
+        "Sell 6 · +24",
+        "Sell 60 · +900",
+        "Sell 22 · +660",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 2 Ferrous+4 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "21-phone-mature-unaffordable.png",
+      "note": "credits 0: priced faces print their shortfall",
+      "chips": "Scrap10Ferrous54Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "22-desktop1920-report.png",
+      "note": "1920x1080 with the return report as the boot layer",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 124h 24mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "23-desktop1920-rest.png",
+      "note": "1920x1080 mature yard at rest",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "24-desktop1920-machine.png",
+      "note": "1920x1080 inspector in the right gutter",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Plate press · 238 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Plate pressCloseStatusNeeds inputBatch0%Cycle2.63sActual rate0.00 batches/s · 60s windowMax rate0.38 batches/s at full powerPower3 unitsMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade2.63s → 2.50s · 238 creditsNeeds2 SteelUpgrade · 238 creditsMove · cell 9 · 0 creditsDismantle · +43 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 238 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +43 units",
+        "Recipe",
+        "Less power238 credits",
+        "Faster batches248 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "25-desktop1920-research.png",
+      "note": "1920x1080 research list in the gutter column",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "ResearchCloseData102Efficient CuttersOne cutting pulse gives 7 scrap instead of 5.Known4 DataSmart BuffersEvery machine holds 6 more units of input, so short gaps do not halt it.Known8 DataRoute DispatchA newly connected link carries 8 more units at once.Known12 Data",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "26-desktop1366-report.png",
+      "note": "1366x768 laptop with the boot layer",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 124h 24mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ]
+    },
+    {
+      "file": "27-desktop1366-machine.png",
+      "note": "1366x768 inspector over the world column",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Plate press · 238 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Plate pressCloseStatusNeeds inputBatch0%Cycle2.63sActual rate0.00 batches/s · 60s windowMax rate0.38 batches/s at full powerPower3 unitsMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade2.63s → 2.50s · 238 creditsNeeds2 SteelUpgrade · 238 creditsMove · cell 9 · 0 creditsDismantle · +43 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 238 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +43 units",
+        "Recipe",
+        "Less power238 credits",
+        "Faster batches248 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ]
+    },
+    {
+      "file": "28-phone-reader-tab.png",
+      "note": "second tab in one context: follower role and Take over face",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Following the other tabThis tab mirrors the yard exactly as the first tab writes it.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Take over",
+        "Build",
+        "Research"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    }
+  ]
+}
