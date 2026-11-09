@@ -1,0 +1,5874 @@
+{
+  "headSha": "1367a2c610133433cf0ce78c4441205b1c6006ea",
+  "seed": "docs/evidence/yard-mature.json",
+  "out": {
+    "phone-390x844-dpr2": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "world": {
+          "cssX": 8,
+          "cssY": 154,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 157760
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 317.4,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 50.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 129.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 115.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 49,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 72.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "world": {
+          "cssX": 8,
+          "cssY": 154,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 157784
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 317.4,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 305.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 161.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 190.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 309.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 295,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 291,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 198.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 192,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 183.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 198.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 288.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 280.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 280.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 280.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 287,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 50.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 129.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 115.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 49,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 72.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "world": {
+          "cssX": 8,
+          "cssY": 154,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 157749
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 317.4,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 317.4,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 322,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 322,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 322,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 50.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 129.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 115.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 49,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 72.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    },
+    "phone-360x640-dpr3": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "world": {
+          "cssX": 7,
+          "cssY": 85,
+          "cssW": 345,
+          "cssH": 518,
+          "inkSamples": 133978
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 289.8,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 46.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 110.3,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 96.3,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 45.7,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 324,
+            "w": 340,
+            "h": 262
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "world": {
+          "cssX": 7,
+          "cssY": 85,
+          "cssW": 345,
+          "cssH": 518,
+          "inkSamples": 134045
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 289.8,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 275.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 131.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 160.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 279.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 265,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 261,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 168.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 162,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 153.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 168.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 258.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 250.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 250.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 250.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 257,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 46.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 110.3,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 96.3,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 45.7,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 324,
+            "w": 340,
+            "h": 262
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "world": {
+          "cssX": 7,
+          "cssY": 85,
+          "cssW": 345,
+          "cssH": 518,
+          "inkSamples": 133970
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 289.8,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 289.8,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 292,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 292,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 292,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 46.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 44,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 110.3,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 96.3,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 45.7,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    },
+    "landscape-844x390": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "world": {
+          "cssX": 307,
+          "cssY": 28,
+          "cssW": 230,
+          "cssH": 346,
+          "inkSamples": 60246
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 377,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 65.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 59.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 219.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 205.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 64,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 87.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": {
+            "x": 142,
+            "y": 179,
+            "w": 560,
+            "h": 157
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "world": {
+          "cssX": 307,
+          "cssY": 28,
+          "cssW": 230,
+          "cssH": 346,
+          "inkSamples": 60259
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 377,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 495.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 351.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 380.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 499.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 485,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 481,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 388.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 382,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 373.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 388.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 478.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 470.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 470.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 470.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 477,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 65.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 59.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 219.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 205.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 64,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 87.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": {
+            "x": 142,
+            "y": 124,
+            "w": 560,
+            "h": 212
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "world": {
+          "cssX": 307,
+          "cssY": 28,
+          "cssW": 230,
+          "cssH": 346,
+          "inkSamples": 60244
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 377,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 377,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 516,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 516,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 516,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 65.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 59.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 219.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 205.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 64,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 87.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    },
+    "desktop-1920x1080": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "world": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 766,
+          "cssH": 1022,
+          "inkSamples": 161095
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "world": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 766,
+          "cssH": 1022,
+          "inkSamples": 161149
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 255.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 111.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 140.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 259.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 245,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 241,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 142,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 133.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 238.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 34,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 237,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "world": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 766,
+          "cssH": 1022,
+          "inkSamples": 161085
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    },
+    "desktop-1366x768": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "world": {
+          "cssX": 414,
+          "cssY": 0,
+          "cssW": 536,
+          "cssH": 766,
+          "inkSamples": 80154
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "world": {
+          "cssX": 414,
+          "cssY": 0,
+          "cssW": 536,
+          "cssH": 766,
+          "inkSamples": 80167
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 255.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 111.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 140.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 259.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 245,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 241,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 142,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 133.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 238.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 34,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 237,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "world": {
+          "cssX": 414,
+          "cssY": 0,
+          "cssW": 536,
+          "cssH": 766,
+          "inkSamples": 80155
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    },
+    "desktop-2560x1440": {
+      "closed": true,
+      "rest": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "world": {
+          "cssX": 896,
+          "cssY": 168,
+          "cssW": 766,
+          "cssH": 1150,
+          "inkSamples": 165703
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withStore": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "world": {
+          "cssX": 896,
+          "cssY": 168,
+          "cssW": 766,
+          "cssH": 1150,
+          "inkSamples": 165726
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 30.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 255.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 63.1,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 111.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41.4,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 140.6,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 26.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 259.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 41,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 245,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 45,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 241,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 32.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 142,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 40.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 133.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 25.9,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 148.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 47.3,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 238.7,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 34,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 55.2,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 230.8,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 49,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "",
+            "px": 12.6,
+            "w": 237,
+            "h": 17,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "world": {
+          "cssX": 896,
+          "cssY": 168,
+          "cssW": 766,
+          "cssH": 1150,
+          "inkSamples": 165643
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "fonts": [
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 76,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 87.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 117.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 72.1,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 86.5,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 84.6,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "resources__item",
+            "px": 12.6,
+            "w": 99,
+            "h": 23,
+            "clipped": false
+          },
+          {
+            "cls": "objective__primary",
+            "px": 14.25,
+            "w": 397,
+            "h": 17.1,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "status-line",
+            "px": 10.8,
+            "w": 397,
+            "h": 14.6,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 47.6,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "node__title",
+            "px": 13.5,
+            "w": 272,
+            "h": 18.2,
+            "clipped": false
+          },
+          {
+            "cls": "node__cost",
+            "px": 11.7,
+            "w": 53.9,
+            "h": 19.8,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 69.1,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 63.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn dock__btn--primary",
+            "px": 13.2,
+            "w": 243.8,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__cost",
+            "px": 12,
+            "w": 229.8,
+            "h": 16.2,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 68,
+            "h": 46,
+            "clipped": false
+          },
+          {
+            "cls": "dock__btn",
+            "px": 13.2,
+            "w": 91.4,
+            "h": 46,
+            "clipped": false
+          }
+        ],
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false
+          }
+        ]
+      }
+    }
+  }
+}
