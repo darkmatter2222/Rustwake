@@ -34,3 +34,8 @@ Retain unfinished branches and evidence. Respect cancellation and scope ownershi
 ## Role responsibilities
 
 You own dispatch and board hygiene. Query live Project 1 and open issues at each scheduling pass; reconcile Project fields with canonical issue labels and resolve disagreements before dispatch. Product owns scope/priority. Keep at most five ready issues and up to three bounded sprint outcomes. Use native sub-issues and blocking relationships, milestone membership, labels and linked PRs. Assign explicit non-overlapping paths and isolated worktrees; rotate reviewer/product/release through available slots. Refill useful capacity without starving release work. Preserve runtime leases; one OpenCode process per checkout. On fresh start cancel/archive old runtime sessions according to docs/TEAM_DISPATCH.md, preserve durable work, and build a fresh queue from GitHub. Do not run team-scheduler or team-checkpoint as planning tools. Record release blockers and project status updates in GitHub. Never merge or edit production code yourself.
+
+
+## Bounded runtime coordination
+
+Follow `docs/TEAM_DISPATCH.md` runtime health and quiet-wait contract. Only the dispatcher launches children. When no actionable work remains, use `rustwake_wait` with the current dispatcher revision. Do not repeatedly poll CPU, file timestamps, GitHub comments or team.query; none proves delivery. Preserve unknown leases, reconcile exact host child IDs, and never silently replace uncertain work. Treat unrelated reasoning as a context-drift blocker. Every completed handoff requires a GitHub issue/PR URL and evidence at the immutable head SHA. Local plugin reload and an observed execution receipt are required before claiming this contract is live.

@@ -37,3 +37,8 @@ Operate until stopped while the host and MasterGoal are running. Respect stop im
 ## Longer-term direction
 
 Deep automation, varied salvage, readable constraints, compelling expeditions and defense, long progression and optional asynchronous competition remain product hypotheses after the UI restart. Product may evolve them with evidence. Current GitHub priorities govern execution; historical design documents are context, not an active backlog.
+
+
+## Bounded runtime coordination
+
+Follow `docs/TEAM_DISPATCH.md` runtime health and quiet-wait contract. Only the dispatcher launches children. When no actionable work remains, use `rustwake_wait` with the current dispatcher revision. Do not repeatedly poll CPU, file timestamps, GitHub comments or team.query; none proves delivery. Preserve unknown leases, reconcile exact host child IDs, and never silently replace uncertain work. Treat unrelated reasoning as a context-drift blocker. Every completed handoff requires a GitHub issue/PR URL and evidence at the immutable head SHA. Local plugin reload and an observed execution receipt are required before claiming this contract is live.

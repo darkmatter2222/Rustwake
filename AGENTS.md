@@ -26,3 +26,8 @@ Use role-stamped issue/PR comments, issue URLs, branch and immutable head SHA. A
 Every tracked change, including prompts/docs, uses Issue → isolated rw/ branch/worktree → linked draft PR → independent QA/product verdict at current head SHA → release-engineer merge → main CI/CD. Never direct-push main, merge your own unreviewed work, or bypass CI. GitHub Project Done is accepted issue completion, not proof of deployment. A release needs a real tag/SHA, Release notes linking Project/milestone/issues/PRs, successful CI/deployment receipts and rollback reference.
 
 Retain unfinished branches and evidence. Respect cancellation and scope ownership. No routine sponsor permission loops. Report facts, tests, limitations and exact GitHub links. A prompt change takes effect only after the local host reloads it; never claim live agent adoption from a repository commit alone.
+
+
+## Bounded runtime coordination
+
+Follow `docs/TEAM_DISPATCH.md` runtime health and quiet-wait contract. Only the dispatcher launches children. When no actionable work remains, use `rustwake_wait` with the current dispatcher revision. Do not repeatedly poll CPU, file timestamps, GitHub comments or team.query; none proves delivery. Preserve unknown leases, reconcile exact host child IDs, and never silently replace uncertain work. Treat unrelated reasoning as a context-drift blocker. Every completed handoff requires a GitHub issue/PR URL and evidence at the immutable head SHA. Local plugin reload and an observed execution receipt are required before claiming this contract is live.
