@@ -1,0 +1,1614 @@
+{
+  "task": "UI-RESET/ARTDIR #46",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/46",
+  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "tool": "playwright-core plus local Chrome/Edge, vite preview (RUSTWAKE_URL=http://localhost:4177/)",
+  "sheets": {
+    "a": "direction-a.css",
+    "b": "direction-b.css"
+  },
+  "scenarios": {
+    "fresh": "work/evidence/UI-RESET-46/scenario-opening.json (dumped from a no-save boot at this head)",
+    "mature": "work/evidence/UI-RESET-46/scenario-mature.json (docs/evidence/yard-mature.json, tick 18298)"
+  },
+  "captures": [
+    {
+      "file": "a-390x844-fresh-rest.png",
+      "note": "opening scenario: no research, one starter machine | yard at rest, chips + objective + dock",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 79986,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 143,
+            "h": 20
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 370,
+            "h": 60
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 159212,
+          "fillOfFramePct": 48.4
+        },
+        "inkCoverPct": 0,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          }
+        },
+        "chips": 2,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap0",
+          "Store 0/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 0,
+      "reportDismissed": true,
+      "sheet": "direction-a.css",
+      "band": "390x844",
+      "state": "fresh"
+    },
+    {
+      "file": "a-390x844-fresh-store.png",
+      "note": "Store plate (inventory) | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 79996,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-390x844-fresh-machine.png",
+      "note": "machine inspector over the world | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 60s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next ste",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 79996,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-390x844-fresh-build.png",
+      "note": "build catalog with a cell ghost | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 1 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+        "Next"
+      ],
+      "tick": 80006,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-1920x1080-fresh-rest.png",
+      "note": "opening scenario: no research, one starter machine | yard at rest, chips + objective + dock",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80030,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 215,
+            "h": 20
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 400,
+            "h": 60
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 768,
+          "cssH": 1022,
+          "inkSamples": 162952,
+          "fillOfFramePct": 31.4
+        },
+        "inkCoverPct": 4.6,
+        "overlap": {
+          "top": {
+            "overlapPx": 24576,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          }
+        },
+        "chips": 3,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap0",
+          "Credits0",
+          "Store 0/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 0,
+      "reportDismissed": true,
+      "sheet": "direction-a.css",
+      "band": "1920x1080",
+      "state": "fresh"
+    },
+    {
+      "file": "a-1920x1080-fresh-store.png",
+      "note": "Store plate (inventory) | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80040,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-1920x1080-fresh-machine.png",
+      "note": "machine inspector over the world | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 60s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next ste",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80040,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-1920x1080-fresh-build.png",
+      "note": "build catalog with a cell ghost | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 1 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+        "Next"
+      ],
+      "tick": 80050,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "a-390x844-mature-rest.png",
+      "note": "mature scenario: 8 machines, 18 routes, all nodes known | yard at rest, chips + objective + dock",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 244,
+            "h": 20
+          },
+          "cluster": {
+            "x": 262,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 370,
+            "h": 60
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 158091,
+          "fillOfFramePct": 48
+        },
+        "inkCoverPct": 0,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          }
+        },
+        "chips": 3,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Credits82",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "70 credits": 1,
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 1,
+      "reportDismissed": true,
+      "sheet": "direction-a.css",
+      "band": "390x844",
+      "state": "mature"
+    },
+    {
+      "file": "a-390x844-mature-store.png",
+      "note": "Store plate (inventory) | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% spe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [
+        "ok:Sell 35 Ferrous+70 credits"
+      ]
+    },
+    {
+      "file": "a-390x844-mature-machine.png",
+      "note": "machine inspector over the world | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · powe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "a-390x844-mature-build.png",
+      "note": "build catalog with a cell ghost | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.Ghost on cell 9 · tap again to placeDrones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "tick": 450328,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "a-1920x1080-mature-rest.png",
+      "note": "mature scenario: 8 machines, 18 routes, all nodes known | yard at rest, chips + objective + dock",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 436,
+            "h": 20
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 400,
+            "h": 60
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 768,
+          "cssH": 1022,
+          "inkSamples": 161828,
+          "fillOfFramePct": 31.2
+        },
+        "inkCoverPct": 4.6,
+        "overlap": {
+          "top": {
+            "overlapPx": 24576,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          }
+        },
+        "chips": 5,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Nonferrous239",
+          "Credits82",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "70 credits": 1,
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 1,
+      "reportDismissed": true,
+      "sheet": "direction-a.css",
+      "band": "1920x1080",
+      "state": "mature"
+    },
+    {
+      "file": "a-1920x1080-mature-store.png",
+      "note": "Store plate (inventory) | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% spe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [
+        "ok:Sell 35 Ferrous+70 credits"
+      ]
+    },
+    {
+      "file": "a-1920x1080-mature-machine.png",
+      "note": "machine inspector over the world | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · powe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "a-1920x1080-mature-build.png",
+      "note": "build catalog with a cell ghost | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.Ghost on cell 9 · tap again to placeDrones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "tick": 450328,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "b-390x844-fresh-rest.png",
+      "note": "opening scenario: no research, one starter machine | yard at rest, chips + objective + dock",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80162,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 169,
+            "h": 25
+          },
+          "cluster": {
+            "x": 213,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 60,
+            "w": 370,
+            "h": 76
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 159212,
+          "fillOfFramePct": 48.4
+        },
+        "inkCoverPct": 0,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          }
+        },
+        "chips": 2,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap0",
+          "Store 0/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 0,
+      "reportDismissed": true,
+      "sheet": "direction-b.css",
+      "band": "390x844",
+      "state": "fresh"
+    },
+    {
+      "file": "b-390x844-fresh-store.png",
+      "note": "Store plate (inventory) | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80172,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-390x844-fresh-machine.png",
+      "note": "machine inspector over the world | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 60s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next ste",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80172,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-390x844-fresh-build.png",
+      "note": "build catalog with a cell ghost | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 1 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+        "Next"
+      ],
+      "tick": 80182,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-1920x1080-fresh-rest.png",
+      "note": "opening scenario: no research, one starter machine | yard at rest, chips + objective + dock",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80205,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 256,
+            "h": 25
+          },
+          "cluster": {
+            "x": 1743,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 60,
+            "w": 440,
+            "h": 76
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 768,
+          "cssH": 1022,
+          "inkSamples": 162952,
+          "fillOfFramePct": 31.4
+        },
+        "inkCoverPct": 4.6,
+        "overlap": {
+          "top": {
+            "overlapPx": 24576,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          }
+        },
+        "chips": 3,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap0",
+          "Credits0",
+          "Store 0/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 0,
+      "reportDismissed": true,
+      "sheet": "direction-b.css",
+      "band": "1920x1080",
+      "state": "fresh"
+    },
+    {
+      "file": "b-1920x1080-fresh-store.png",
+      "note": "Store plate (inventory) | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80215,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-1920x1080-fresh-machine.png",
+      "note": "machine inspector over the world | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 60s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next ste",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 80215,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-1920x1080-fresh-build.png",
+      "note": "build catalog with a cell ghost | opening scenario: no research, one starter machine",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 1 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 0",
+        "Next"
+      ],
+      "tick": 80225,
+      "machines": 1,
+      "tutorial": 1,
+      "afford": []
+    },
+    {
+      "file": "b-390x844-mature-rest.png",
+      "note": "mature scenario: 8 machines, 18 routes, all nodes known | yard at rest, chips + objective + dock",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 288,
+            "h": 25
+          },
+          "cluster": {
+            "x": 306,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 60,
+            "w": 370,
+            "h": 76
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 158102,
+          "fillOfFramePct": 48
+        },
+        "inkCoverPct": 0,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          }
+        },
+        "chips": 3,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Credits82",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "70 credits": 1,
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 1,
+      "reportDismissed": true,
+      "sheet": "direction-b.css",
+      "band": "390x844",
+      "state": "mature"
+    },
+    {
+      "file": "b-390x844-mature-store.png",
+      "note": "Store plate (inventory) | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% spe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [
+        "ok:Sell 35 Ferrous+70 credits"
+      ]
+    },
+    {
+      "file": "b-390x844-mature-machine.png",
+      "note": "machine inspector over the world | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · powe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "b-390x844-mature-build.png",
+      "note": "build catalog with a cell ghost | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.Ghost on cell 9 · tap again to placeDrones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "tick": 450328,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "b-1920x1080-mature-rest.png",
+      "note": "mature scenario: 8 machines, 18 routes, all nodes known | yard at rest, chips + objective + dock",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [],
+      "composition": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 514,
+            "h": 25
+          },
+          "cluster": {
+            "x": 1743,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 60,
+            "w": 440,
+            "h": 76
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 768,
+          "cssH": 1022,
+          "inkSamples": 161852,
+          "fillOfFramePct": 31.2
+        },
+        "inkCoverPct": 4.6,
+        "overlap": {
+          "top": {
+            "overlapPx": 24576,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          }
+        },
+        "chips": 5,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Nonferrous239",
+          "Credits82",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Cancel",
+          "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+          "Next"
+        ],
+        "panelScroll": null,
+        "facesUnder44": 0,
+        "pricePrints": {
+          "70 credits": 1,
+          "20 scrap": 2
+        }
+      },
+      "affordFaces": 1,
+      "reportDismissed": true,
+      "sheet": "direction-b.css",
+      "band": "1920x1080",
+      "state": "mature"
+    },
+    {
+      "file": "b-1920x1080-mature-store.png",
+      "note": "Store plate (inventory) | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% spe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": [
+        "ok:Sell 35 Ferrous+70 credits"
+      ]
+    },
+    {
+      "file": "b-1920x1080-mature-machine.png",
+      "note": "machine inspector over the world | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · powe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    },
+    {
+      "file": "b-1920x1080-mature-build.png",
+      "note": "build catalog with a cell ghost | mature scenario: 8 machines, 18 routes, all nodes known",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.Ghost on cell 9 · tap again to placeDrones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "tick": 450328,
+      "machines": 8,
+      "tutorial": 9,
+      "afford": []
+    }
+  ]
+}

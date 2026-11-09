@@ -1,0 +1,2560 @@
+{
+  "task": "UI-RESET/ARTDIR #46",
+  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "build": "vite build at head 224e22a (PR #74 base), served by vite preview on 4177",
+  "tool": "playwright-core + local Chrome/Edge",
+  "seed": "docs/evidence/yard-mature.json",
+  "syntheticEdits": {
+    "unaffordable": "payload.sim.credits=0"
+  },
+  "sheets": {
+    "A": "direction-a.css",
+    "B": "direction-b.css"
+  },
+  "captures": [
+    {
+      "file": "a-p390-open-1-gate.png",
+      "note": "opening: entry gate at 390x844",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-open-2-rest.png",
+      "note": "opening: world + HUD at rest, nothing built",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-open-3-build-catalog.png",
+      "note": "opening: build catalogue face with its price and the ghost on a cell",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap",
+        "Next"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-open-4-store-empty.png",
+      "note": "opening: inventory, empty state",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-open-5-machine.png",
+      "note": "opening: machine inspector page 1 over the world",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 1s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 0,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 30 credits",
+            "need": 30,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 1 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          }
+        ]
+      }
+    },
+    {
+      "file": "a-p390-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 28mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "a-p390-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "a-p390-mature-5-unaffordable.png",
+      "note": "mature: credits 0, every priced face carries the short signal",
+      "chips": "Scrap10Ferrous54Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          }
+        ]
+      },
+      "frame": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 42
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 370,
+            "h": 77
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 157831,
+          "fillOfFramePct": 47.9
+        },
+        "inkCoverPct": 47.9,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "panel": {
+            "overlapPx": 100270,
+            "overlapPctOfInk": 47.8
+          }
+        },
+        "chips": 4,
+        "chipRows": 2,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Credits0",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8,
+          30
+        ],
+        "dockLabels": [
+          "Less power222 credits",
+          "Faster batches232 credits"
+        ],
+        "panelScroll": {
+          "clientH": 276,
+          "scrollH": 328,
+          "innerScrollPx": 52
+        },
+        "facesUnder44": 0,
+        "pricePrints": {
+          "222 credits": 4,
+          "0 credits": 1,
+          "232 credits": 1
+        }
+      }
+    },
+    {
+      "file": "a-d1920-open-1-gate.png",
+      "note": "opening: entry gate at 1920x1080",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-open-2-rest.png",
+      "note": "opening: world + HUD at rest, nothing built",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-open-3-build-catalog.png",
+      "note": "opening: build catalogue face with its price and the ghost on a cell",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap",
+        "Next"
+      ],
+      "tick": 30,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-open-4-store-empty.png",
+      "note": "opening: inventory, empty state",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 33,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-open-5-machine.png",
+      "note": "opening: machine inspector page 1 over the world",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 1s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 0,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 30 credits",
+            "need": 30,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 1 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          }
+        ]
+      }
+    },
+    {
+      "file": "a-d1920-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 28mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "a-d1920-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "a-d1920-mature-5-unaffordable.png",
+      "note": "mature: credits 0, every priced face carries the short signal",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          }
+        ]
+      },
+      "frame": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 579,
+            "h": 20
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 56,
+            "w": 400,
+            "h": 60
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1580,
+            "y": 8,
+            "w": 330,
+            "h": 452
+          },
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 766,
+          "cssH": 1022,
+          "inkSamples": 161087,
+          "fillOfFramePct": 31.1
+        },
+        "inkCoverPct": 4.6,
+        "overlap": {
+          "top": {
+            "overlapPx": 24512,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 104,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          },
+          "panel": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          }
+        },
+        "chips": 7,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Nonferrous239",
+          "Steel10",
+          "Copper10",
+          "Credits0",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Less power222 credits",
+          "Faster batches232 credits"
+        ],
+        "panelScroll": {
+          "clientH": 380,
+          "scrollH": 380,
+          "innerScrollPx": 0
+        },
+        "facesUnder44": 0,
+        "pricePrints": {
+          "222 credits": 4,
+          "0 credits": 1,
+          "232 credits": 1
+        }
+      }
+    },
+    {
+      "file": "a-land844-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 28mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "a-land844-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "a-land844-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "a-land844-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "a-d2560-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 28mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "a-d2560-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "a-d2560-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "a-d2560-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-p390-open-1-gate.png",
+      "note": "opening: entry gate at 390x844",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-open-2-rest.png",
+      "note": "opening: world + HUD at rest, nothing built",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-open-3-build-catalog.png",
+      "note": "opening: build catalogue face with its price and the ghost on a cell",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap",
+        "Next"
+      ],
+      "tick": 30,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-open-4-store-empty.png",
+      "note": "opening: inventory, empty state",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 32,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-open-5-machine.png",
+      "note": "opening: machine inspector page 1 over the world",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 1s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 0,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 30 credits",
+            "need": 30,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 1 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-p390-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 28mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ]
+    },
+    {
+      "file": "b-p390-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-p390-mature-5-unaffordable.png",
+      "note": "mature: credits 0, every priced face carries the short signal",
+      "chips": "Scrap10Ferrous54Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          }
+        ]
+      },
+      "frame": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 55
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 195,
+            "h": 55
+          },
+          "cluster": {
+            "x": 213,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 71,
+            "w": 370,
+            "h": 94
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "ink": {
+          "cssX": 8,
+          "cssY": 152,
+          "cssW": 374,
+          "cssH": 561,
+          "inkSamples": 157810,
+          "fillOfFramePct": 47.9
+        },
+        "inkCoverPct": 50.3,
+        "overlap": {
+          "top": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "chips": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 4810,
+            "overlapPctOfInk": 2.3
+          },
+          "dock": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "panel": {
+            "overlapPx": 100270,
+            "overlapPctOfInk": 47.8
+          }
+        },
+        "chips": 4,
+        "chipRows": 2,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Credits0",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8,
+          37
+        ],
+        "dockLabels": [
+          "Less power222 credits",
+          "Faster batches232 credits"
+        ],
+        "panelScroll": {
+          "clientH": 268,
+          "scrollH": 380,
+          "innerScrollPx": 112
+        },
+        "facesUnder44": 0,
+        "pricePrints": {
+          "222 credits": 4,
+          "0 credits": 1,
+          "232 credits": 1
+        }
+      }
+    },
+    {
+      "file": "b-d1920-open-1-gate.png",
+      "note": "opening: entry gate at 1920x1080",
+      "chips": null,
+      "objective": null,
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Begin recovery",
+        "Sound on"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-open-2-rest.png",
+      "note": "opening: world + HUD at rest, nothing built",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": null,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-open-3-build-catalog.png",
+      "note": "opening: build catalogue face with its price and the ghost on a cell",
+      "chips": "Scrap20Credits0Store 20/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Ghost on cell 0 · tap again to placeDrones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap",
+        "Next"
+      ],
+      "tick": 30,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-open-4-store-empty.png",
+      "note": "opening: inventory, empty state",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseCapacity0/900MeasuredPower 100% speed (0 of 8 units requested)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 33,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-open-5-machine.png",
+      "note": "opening: machine inspector page 1 over the world",
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Keep salvaging: 4/6 pulses for the drone repair.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 1s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 1 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 1 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "tick": 40,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 0,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 30 credits",
+            "need": 30,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 1 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-d1920-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 29mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ]
+    },
+    {
+      "file": "b-d1920-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-d1920-mature-5-unaffordable.png",
+      "note": "mature: credits 0, every priced face carries the short signal",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 0
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 0,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 0,
+            "short": true
+          }
+        ]
+      },
+      "frame": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 685,
+            "h": 25
+          },
+          "cluster": {
+            "x": 1743,
+            "y": 8,
+            "w": 167,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 60,
+            "w": 440,
+            "h": 76
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 340,
+            "h": 460
+          },
+          "toast": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "ink": {
+          "cssX": 576,
+          "cssY": 20,
+          "cssW": 766,
+          "cssH": 1022,
+          "inkSamples": 161087,
+          "fillOfFramePct": 31.1
+        },
+        "inkCoverPct": 17.3,
+        "overlap": {
+          "top": {
+            "overlapPx": 24512,
+            "overlapPctOfInk": 3.1
+          },
+          "chips": {
+            "overlapPx": 1547,
+            "overlapPctOfInk": 0.2
+          },
+          "cluster": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "objective": {
+            "overlapPx": 0,
+            "overlapPctOfInk": 0
+          },
+          "dock": {
+            "overlapPx": 8960,
+            "overlapPctOfInk": 1.1
+          },
+          "panel": {
+            "overlapPx": 106624,
+            "overlapPctOfInk": 13.6
+          }
+        },
+        "chips": 7,
+        "chipRows": 1,
+        "chipLabels": [
+          "Scrap10",
+          "Ferrous54",
+          "Nonferrous239",
+          "Steel10",
+          "Copper10",
+          "Credits0",
+          "Store 900/900"
+        ],
+        "chipRowTops": [
+          8
+        ],
+        "dockLabels": [
+          "Less power222 credits",
+          "Faster batches232 credits"
+        ],
+        "panelScroll": {
+          "clientH": 380,
+          "scrollH": 380,
+          "innerScrollPx": 0
+        },
+        "facesUnder44": 0,
+        "pricePrints": {
+          "222 credits": 4,
+          "0 credits": 1,
+          "232 credits": 1
+        }
+      }
+    },
+    {
+      "file": "b-land844-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 29mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "b-land844-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "b-land844-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ]
+    },
+    {
+      "file": "b-land844-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Choose what improves on the Polymer recycler · 229 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Polymer recyclerCloseStatusNeeds inputBatch0%Cycle3.00sActual rate0.00 batches/s · 60s windowMax rate0.33 batches/s at full powerPower1 unitMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade3.00s → 2.86s · 229 creditsNeeds3 ResidueUpgrade · 229 creditsMove · cell 9 · 0 creditsDismantle · +52 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 229 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +52 units",
+        "Recipe",
+        "Less power229 credits",
+        "Faster batches239 credits"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 229 credits",
+            "need": 229,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power229 credits",
+            "need": 229,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches239 credits",
+            "need": 239,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    },
+    {
+      "file": "b-d2560-mature-1-report.png",
+      "note": "mature: return report over the stage",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "While you were awayBack to yardTimeAway 137h 29mTimeYour operation worked for 12h 0m (capped)Nonferrous+229Ferrous+33Wire+59Plates+245Deliveries250Batches765BottleneckStorage full",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450308,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "b-d2560-mature-2-rest.png",
+      "note": "mature: seeded yard at rest (8 machines, 18 links)",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "b-d2560-mature-3-inventory.png",
+      "note": "mature: inventory at 900/900 with the sell faces",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "tick": 450318,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ]
+    },
+    {
+      "file": "b-d2560-mature-4-machine-fork.png",
+      "note": "mature: machine inspector plus the priced fork pair",
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "reconcile": null,
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "tick": 450328,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ],
+      "machineOpened": true,
+      "afford": {
+        "purse": {
+          "scrap": 10,
+          "ferrous": 54,
+          "nonferrous": 239,
+          "steel": 10,
+          "copper": 10,
+          "credits": 82
+        },
+        "faces": [
+          {
+            "label": "Upgrade · 222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Move · cell 9 · 0 credits",
+            "need": 0,
+            "unit": "credits",
+            "have": 82,
+            "short": false
+          },
+          {
+            "label": "Less power222 credits",
+            "need": 222,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          },
+          {
+            "label": "Faster batches232 credits",
+            "need": 232,
+            "unit": "credits",
+            "have": 82,
+            "short": true
+          }
+        ]
+      }
+    }
+  ]
+}

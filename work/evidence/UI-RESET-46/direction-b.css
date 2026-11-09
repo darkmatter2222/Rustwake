@@ -1,0 +1,266 @@
+/* UI-RESET/ARTDIR (#46) - DIRECTION B "Plated console" (fallback, not a parallel track).
+ * Every readout sits on its own opaque plate: heavier material, boxed rails, no accent
+ * fills at all - the primary is a plate with a double rule over it. Three-step type with
+ * a wider lead, violet = structure, steel-light = secondary text, amber = numbers.
+ * Same cascade rule as direction A: same selectors, declared after the built sheet.
+ */
+
+:root {
+  --night: #0b1220;
+  --night-deep: #080d18;
+  --steel: #38556b;
+  --steel-light: #a8c3d6;
+  --furnace: #ffc98a;
+  --cyan: #5fd8e8;
+  --violet: #8a7ad8;
+  --paper: #f4f7fb;
+  --panel: rgba(14, 23, 38, 1); /* opaque plate, not a wash */
+  --radius: 10px;
+  --b-rule: rgba(168, 195, 214, 0.55);
+  --b-quiet: rgba(168, 195, 214, 0.3);
+}
+
+/* ---- chip band: boxed plates with a visible foot ---- */
+.resources {
+  max-width: 64%;
+  gap: 4px 3px;
+}
+
+.resources__item {
+  padding: 3px 8px;
+  border: 1px solid var(--b-quiet);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: inset 0 -2px 0 rgba(56, 85, 107, 0.9);
+  font-size: 0.86rem;
+  letter-spacing: 0.03em;
+}
+
+.resources__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+/* ---- guidance card: a full plate, boxed on four sides ---- */
+.objective {
+  max-width: min(100%, 440px);
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--b-quiet);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: inset 0 -2px 0 rgba(56, 85, 107, 0.9);
+  font-size: 0.9rem;
+}
+
+.objective__primary {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.status-line {
+  margin-top: 4px;
+  color: var(--steel-light);
+  font-size: 0.78rem;
+}
+
+.reconcile {
+  border: 1px solid var(--b-quiet);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--violet);
+}
+
+/* ---- faces: plate geometry, no fills, uppercase labels ---- */
+.icon-btn {
+  border-radius: 10px;
+  border: 1px solid var(--b-quiet);
+  background: var(--panel);
+  box-shadow: inset 0 -2px 0 rgba(56, 85, 107, 0.9);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.icon-btn:active {
+  background: rgba(138, 122, 216, 0.2);
+}
+
+.dock {
+  gap: 8px;
+}
+
+.dock__btn {
+  border-radius: 10px;
+  border: 1px solid var(--b-quiet);
+  background: var(--panel);
+  box-shadow: inset 0 -2px 0 rgba(56, 85, 107, 0.9);
+  font-size: 0.86rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* the primary is the same plate with a double rule over it - no fill anywhere */
+.dock__btn--primary,
+.panel__actions > .icon-btn:first-child,
+.node__buy {
+  border: 1px solid var(--b-rule);
+  border-top: 3px solid var(--furnace);
+  background-color: var(--panel);
+  background-image: none;
+  color: var(--paper);
+}
+
+.dock__btn--primary .dock__cost {
+  color: var(--furnace);
+}
+
+.dock__cost {
+  color: var(--furnace);
+}
+
+.dock__btn[data-afford="ok"],
+.panel .icon-btn[data-afford="ok"] {
+  border-color: rgba(138, 122, 216, 0.85);
+}
+
+.dock__btn[data-afford="short"],
+.panel .icon-btn[data-afford="short"] {
+  border-color: rgba(168, 195, 214, 0.25);
+}
+
+/* ---- plates ---- */
+.panel {
+  padding: 12px 14px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--b-quiet);
+  background: var(--panel);
+  box-shadow: inset 0 -3px 0 rgba(56, 85, 107, 0.9);
+}
+
+.panel__title {
+  color: var(--violet);
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel dt {
+  color: var(--steel-light);
+}
+
+.node {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--b-quiet);
+  background: rgba(16, 27, 44, 1);
+  font-size: 0.88rem;
+}
+
+.node__cost {
+  padding: 2px 8px;
+  border: 1px solid var(--b-rule);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--furnace);
+}
+
+.node[data-state="known"] {
+  border-color: rgba(95, 216, 232, 0.6);
+}
+
+.node[data-state="known"] .node__state {
+  color: var(--cyan);
+}
+
+.node[data-state="open"] {
+  border-color: var(--b-rule);
+}
+
+.node[data-state="locked"] {
+  border-style: dashed;
+  border-color: var(--b-quiet);
+}
+
+.toast {
+  border-radius: 10px;
+  border: 1px solid var(--b-rule);
+  background: var(--panel);
+}
+
+.gate {
+  background: radial-gradient(circle at 50% 42%, #16263c, var(--night-deep));
+}
+
+.gate__btn {
+  border-radius: 12px;
+  border: 1px solid var(--b-rule);
+  border-top: 3px solid var(--furnace);
+  background: var(--panel);
+  color: var(--paper);
+}
+
+/* ---- animation rule: same 200 ms clock, smooth instead of stepped ---- */
+.dock__btn,
+.icon-btn,
+.node,
+.toast,
+.objective {
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock__btn,
+  .icon-btn,
+  .node,
+  .toast,
+  .objective {
+    transition: none;
+  }
+}
+
+/* ---- per-band composition: #45's measured insets, plate widths only ---- */
+@media (min-width: 380px) and (max-width: 460px) {
+  .dock {
+    max-width: min(100%, 374px);
+  }
+}
+
+@media (max-height: 460px) {
+  .objective {
+    max-width: min(100%, 420px);
+  }
+  .dock {
+    max-width: min(100%, 540px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .panel {
+    width: 340px;
+    max-height: 70%;
+  }
+}
+
+/* ---- chip priority ladder, fixed from the #45 measurements (the same yard reported 3 / 4 / 5 / 7 chips and a 23 / 48 / 73 px row across the five bands). One row always; the currency, the purse and the capacity stay, the contract materials join as the measured rail width allows. DOM order is Scrap, materials, Credits, Store. ---- */
+.resources { flex-wrap: nowrap; max-width: none; }
+.resources__item:nth-child(2) { display: none; }
+@media (max-height: 460px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3) { display: none; }
+}
+@media (min-width: 1200px) and (max-width: 1499px) {
+  .resources__item:nth-child(2) { display: inline-flex; }
+  .resources__item:nth-child(3), .resources__item:nth-child(4), .resources__item:nth-child(5) { display: none; }
+}
+@media (min-width: 1500px) and (max-width: 2099px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3) { display: inline-flex; }
+  .resources__item:nth-child(4), .resources__item:nth-child(5) { display: none; }
+}
+@media (min-width: 2100px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3), .resources__item:nth-child(4), .resources__item:nth-child(5) { display: inline-flex; }
+}
+
