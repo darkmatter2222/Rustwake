@@ -61,21 +61,44 @@ export function validateTask(t){
  return t;
 }
 
-export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
+export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,requestTimeoutMs=30000,now=Date.now}={}){
  const dir=path.join(root,'.rustwake-runtime');
  let state={version:1,coordinator:null,enabled:false,workers:[],error:null},busy=false,timer;
  let notifyNeeded=false,starting=false;
- const save=async()=>{await fs.mkdir(dir,{recursive:true});const p=path.join(dir,'dispatcher.json');await fs.writeFile(p+'.tmp',JSON.stringify(state,null,2));await fs.rename(p+'.tmp',p);};
+ let deliveredToWait=false;let revision=0;const waiters=new Set(),pending=new Map();
+ let streamError=null;const uncertainEvents=new Set();let saving=Promise.resolve();
+ const iso=()=>new Date(now()).toISOString();
+ const changed=()=>{if(waiters.size)deliveredToWait=true;revision++;for(const wake of waiters)wake();};
+ async function bounded(key,fn){
+  if(pending.has(key))throw Error('Host request still unresolved: '+key);
+  const request=Promise.resolve().then(fn);pending.set(key,request);
+  request.finally(()=>pending.delete(key)).catch(()=>{});
+  let timer;try{return await Promise.race([request,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('Host request timed out: '+key+'; outcome unknown, lease retained')),requestTimeoutMs);})]);}finally{clearTimeout(timer);}
+ }
+ const host=(method,input)=>bounded(method+':'+(input.sessionID??input.metadata?.rustwake_dispatch_id??''),()=>ctx.session[method](input));
+ function finish(w,outcome){if(terminal.has(w.status))return;w.status=outcome;w.finished_at=iso();notifyNeeded=true;changed();}
+ function health(w){
+  if(terminal.has(w.status))return w.status;
+  if(w.unmanaged)return 'unmanaged: reconcile before dispatch';
+  const since=now()-Date.parse(w.last_progress_at??w.created_at);
+  if(w.status!=='running'&&since>=120000)return 'start unconfirmed';
+  if(since>=600000)return 'no progress evidence for 10m';
+  return w.last_progress_at?'host activity observed':'awaiting execution evidence';
+ }
+ const save=()=>{const snapshot=JSON.stringify(state,null,2);const next=saving.catch(()=>{}).then(async()=>{await fs.mkdir(dir,{recursive:true});const p=path.join(dir,'dispatcher.json');await fs.writeFile(p+'.tmp',snapshot);await fs.rename(p+'.tmp',p);});saving=next;return next;};
  const read=async name=>{try{return JSON.parse(await fs.readFile(path.join(dir,name),'utf8'));}catch(e){if(e.code==='ENOENT')return null;throw e;}};
  const active=()=>state.workers.filter(w=>!terminal.has(w.status));
  async function observe(){
   for(const w of active()){
    if(!w.session_id)throw Error('Unresolved dispatch intent '+w.id+'; reconcile before launching replacements');
    let info;
-   try{info=await ctx.session.get({sessionID:w.session_id});}
+   try{info=await host('get',{sessionID:w.session_id});}
    catch(e){throw Error('Cannot reconcile '+w.id+' ('+w.session_id+'): '+hostError(e));}
    if(!info)throw Error('Host returned no session for '+w.id+' ('+w.session_id+'); preserve lease and inspect the host');
-   if(terminal.has(info.outcome)&&info.time?.idle){w.status=info.outcome;w.finished_at=new Date().toISOString();notifyNeeded=true;}
+   w.last_checked_at=iso();
+   const fingerprint=JSON.stringify([info.tokens?.output,info.tokens?.reasoning,info.time?.updated]);
+   if(w.observation_fingerprint!==fingerprint){if(w.observation_fingerprint!==undefined)w.last_progress_at=iso();w.observation_fingerprint=fingerprint;}
+   if(terminal.has(info.outcome)&&info.time?.idle&&(!w.unmanaged||w.execution_started_at)&&info.time.idle>=Date.parse(w.execution_started_at??w.created_at))finish(w,info.outcome);
    else if(w.status==='created')throw Error('Prompt acceptance uncertain for '+w.id+'; inspect child before retry');
   }
  }
@@ -84,6 +107,12 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
   busy=true;
   try{
    await observe();
+   if(uncertainEvents.size)throw Error('Host child reconciliation uncertain: '+[...uncertainEvents].join(', '));
+   if(streamError)throw Error('Event stream unavailable: '+streamError);
+   if(active().some(w=>w.unmanaged))throw Error('Unmanaged host child detected; reconcile its lease before launching work');
+   const warnings=active().map(w=>[w,health(w)]).filter(([,h])=>h==='start unconfirmed'||h==='no progress evidence for 10m');
+   for(const [w,h] of warnings){if(w.health_alert!==h){w.health_alert=h;notifyNeeded=true;changed();}}
+   if(warnings.length)throw Error(warnings.map(([w,h])=>w.id+': '+h).join('; '));
    const queue=await read('dispatch-queue.json');
    if(queue && queue.coordinator_session_id!==state.coordinator)throw Error('Dispatch queue belongs to another coordinator');
    const tasks=prioritizeTasks((queue?.tasks??[]).map(validateTask));
@@ -96,35 +125,46 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
     if(releasePending&&t.role!=='release-engineer')continue;
     await verifyIssue(root,t);
     const directory=await taskDirectory(root,t);
+    if(!state.enabled)break;
     // Persist intent before creation: ambiguous failures never silently retry/create duplicates.
-    const w={...t,status:'creating',session_id:null,created_at:new Date().toISOString()};
+    const w={...t,status:'creating',session_id:null,created_at:iso()};
     state.workers.push(w);await save();
-    const parent=await ctx.session.get({sessionID:state.coordinator});
-    const child=await ctx.session.create({parentID:state.coordinator,agent:'rustwake-'+t.role,
+    const parent=await host('get',{sessionID:state.coordinator});
+    const child=await host('create',{parentID:state.coordinator,agent:'rustwake-'+t.role,
       ...(parent.model?{model:parent.model}:{}),location:{directory},title:'Rustwake '+t.id,
       metadata:{rustwake_dispatch_id:t.id}});
-    w.session_id=child.id;w.status='created';await save();
-    await ctx.session.prompt({sessionID:child.id,resume:true,text:
+    w.session_id=child.id;if(w.status==='creating')w.status='created';await save();
+    if(!state.enabled){await host('interrupt',{sessionID:child.id});break;}
+    await host('prompt',{sessionID:child.id,resume:true,text:
       `Bounded Rustwake assignment ${t.id} for open GitHub Issue ${t.issue_url}. FIRST read AGENTS.md, docs/GITHUB_WORKFLOW.md, docs/GITHUB_PROJECT.md and your persona file. The only active work tracker is GitHub Issues; do not update historical work/backlog.json. Use the same GitHub account, distinguish each persona in GitHub comments with Role: ${t.role}. Five total agents including coordinator, maximum four children. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit peer files. Developer: only in registered rw/ worktree, push with node scripts/publish-feature.mjs --issue ${t.issue_url} "commit message" <owned paths>; it MUST open/reuse a linked draft PR. After verification mark PR ready, include head SHA and evidence; do not push main. Reviewer: inspect linked PR and comment ACCEPT/REWORK at exact head SHA. Release engineer: inspect independent review, product decision and CI; request rework or gh pr merge approved PR; NEVER push main directly. No role may merge unreviewed code. Return issue/PR URLs and evidence for the bounded assignment, not a new local board.\n${t.prompt}`});
     if(w.status==='created')w.status='queued';await save();
    }
    state.error=null;
-   if(notifyNeeded){
-    await ctx.session.synthetic({sessionID:state.coordinator,resume:true,text:'Rustwake dispatcher: worker completion recorded in .rustwake-runtime/dispatcher.json. Read child outputs using host tools, integrate results, and append new uniquely identified scoped assignments to dispatch-queue.json. Plugin owns dispatch; do not spawn duplicate workers.'});
-    notifyNeeded=false;
-   }
-  }catch(e){state.error=e.message;}
-  finally{state.checked_at=new Date().toISOString();try{await save();}finally{busy=false;}}
+  }catch(e){if(state.error!==e.message){changed();notifyNeeded=true;}state.error=e.message;}
+
+  finally{
+   state.checked_at=iso();
+   try{
+    if(notifyNeeded&&state.enabled){
+     // One attempt per transition: a timed-out delivery may already have resumed the model.
+     notifyNeeded=false;
+     if(!deliveredToWait&&!waiters.size){try{await host('synthetic',{sessionID:state.coordinator,resume:true,text:'Rustwake team transition: inspect /rustwake-team status and exact child IDs. Completion or health changed. Do not infer progress from CPU/file timestamps or spawn manually.'});}catch(e){state.notification_error=hostError(e);}}
+    }
+    deliveredToWait=false;await save();
+   }finally{busy=false;}
+  }
  }
  return {
   async start(id){
    if(starting)throw Error('Fresh team startup is already in progress');
-   starting=true;clearInterval(timer);
+   starting=true;clearInterval(timer);let restored=false;
    try{
    while(busy)await new Promise(r=>setTimeout(r,25));
-   if(!await ctx.session.get({sessionID:id}))throw Error('Current coordinator session is unavailable');
    const previous=await read('dispatcher.json');
+   if(previous)state={...previous,enabled:false};restored=true;
+   if(!await host('get',{sessionID:id}))throw Error('Current coordinator session is unavailable');
    const oldQueue=await read('dispatch-queue.json');
+   if((previous?.workers??[]).some(w=>!terminal.has(w.status)&&!w.session_id))throw Error('Previous creation outcome unknown; reconcile its session ID before a fresh start');
    const epoch=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
    const archive=path.join(dir,'archive',epoch);
    await fs.mkdir(archive,{recursive:true});
@@ -133,7 +173,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
    const oldIds=[...(previous?.workers??[]).filter(w=>!terminal.has(w.status)).map(w=>w.session_id),
      previous?.coordinator!==id?previous?.coordinator:null].filter(Boolean);
    for(const sessionID of new Set(oldIds)){
-    try{await ctx.session.interrupt({sessionID});}
+    try{await host('interrupt',{sessionID});}
     catch(e){if(!/Session.NotFoundError|session.*not found/i.test(hostError(e)))throw Error('Cannot stop previous execution: '+hostError(e));}
    }
    const retired=[...(previous?.retired_coordinators??[]),...oldIds].filter(x=>x!==id);
@@ -148,7 +188,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
    }
    }catch(e){
     state.error='Fresh start blocked: '+hostError(e);state.enabled=false;
-    state.recovery_pending=null;await save();throw e;
+    state.recovery_pending=null;if(restored)await save();throw e;
    }
    finally{starting=false;}
    await tick();timer=setInterval(()=>{void tick().catch(()=>{});},5000);timer.unref?.();
@@ -156,23 +196,69 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh}={}){
   },
   async stop(){
    while(starting)await new Promise(r=>setTimeout(r,25));
-   state.enabled=false;state.recovery_pending=null;clearInterval(timer);
+   state.enabled=false;changed();state.recovery_pending=null;clearInterval(timer);
    // A stop may arrive during a host request. Do not launch more work; retain unknown leases.
    while(busy)await new Promise(r=>setTimeout(r,25));
-   for(const w of active())if(w.session_id){try{await ctx.session.interrupt({sessionID:w.session_id});}catch(e){state.error=e.message;}}
+   for(const w of active())if(w.session_id){try{await host('interrupt',{sessionID:w.session_id});}catch(e){state.error=e.message;}}
    await save();return state;
   },
-  async status(){return {...state,workers:state.workers.map(({prompt,...w})=>w)};},
-  async recordError(message){state.error=String(message);await save();},
-  event(e){const w=state.workers.find(w=>w.session_id===e.data?.sessionID);if(!w)return;
-   if(e.type==='session.execution.started')w.status='running';
-   const outcome=e.type?.replace('session.execution.','');
-   if(terminal.has(outcome)){w.status=outcome;w.finished_at=new Date().toISOString();notifyNeeded=true;}
+  async reconcile(ids){
+   for(const id of ids){
+    if(typeof id!=='string'||!/^[-a-zA-Z0-9_]+$/.test(id))throw Error('Invalid host session ID');
+    const info=await host('get',{sessionID:id});
+    if(!info)throw Error('Host returned no session: '+id);
+    uncertainEvents.delete(id);
+    if(info.parentID!==state.coordinator)throw Error('Session is not a child of the bound coordinator: '+id);
+    let w=state.workers.find(w=>w.session_id===id);
+    if(!w&&info.metadata?.rustwake_dispatch_id){w=state.workers.find(w=>!w.session_id&&w.id===info.metadata.rustwake_dispatch_id);if(w){w.session_id=id;w.unmanaged=true;w.status='unknown';changed();}}
+    if(!w){w={id:'unmanaged-'+id,session_id:id,role:info.agent??'unknown',status:'unknown',unmanaged:true,write_paths:[],created_at:iso()};state.workers.push(w);changed();}
+    if(terminal.has(info.outcome)&&info.time?.idle&&(!w.unmanaged||w.execution_started_at)&&info.time.idle>=Date.parse(w.execution_started_at??w.created_at))finish(w,info.outcome);
+   }
+   await save();await tick();
   },
+  async status(){return {...state,revision,event_stream_error:streamError,coverage:'dispatcher leases plus observed host events; pre-existing untracked sessions are unknown',workers:state.workers.map(({prompt,...w})=>({...w,health:health(w)}))};},
+  async recordError(message){state.error=String(message);await save();},
+  async event(e){
+   const id=e.data?.sessionID;if(!id||id===state.coordinator||!state.enabled)return;
+   let w=state.workers.find(w=>w.session_id===id);
+   if(!w&&e.type?.startsWith('session.execution.')){
+    let info;try{info=await host('get',{sessionID:id});uncertainEvents.delete(id);}catch(error){uncertainEvents.add(id);state.error='Child lookup uncertain: '+id+': '+hostError(error);notifyNeeded=true;changed();return;}
+    if(info?.parentID!==state.coordinator)return;
+    // Creation may race its execution event. Match our persisted dispatch intent first.
+    w=state.workers.find(w=>w.id===info.metadata?.rustwake_dispatch_id);
+    if(w)w.session_id=id;
+    else{w={id:'unmanaged-'+id,session_id:id,role:info.agent??'unknown',status:'unknown',unmanaged:true,write_paths:[],created_at:iso()};state.workers.push(w);notifyNeeded=true;changed();}
+   }
+   if(!w)return;
+   if(e.type==='session.execution.started'){
+    if(terminal.has(w.status)){
+     if(e.created&&e.created<=Date.parse(w.finished_at))return;
+     w.unmanaged=true;notifyNeeded=true;changed();
+    }
+    w.status='running';w.execution_started_at=new Date(e.created??now()).toISOString();w.last_progress_at=iso();
+   }
+   const outcome=e.type?.replace('session.execution.','');
+   if(terminal.has(outcome)){if(e.created&&w.execution_started_at&&e.created<Date.parse(w.execution_started_at))return;w.last_error=e.data?.error?.message;finish(w,outcome);}
+  },
+  activity(id,detail){const w=active().find(w=>w.session_id===id);if(w){w.last_progress_at=iso();w.last_activity=detail;w.health_alert=null;}},
+  streamFailure(error){streamError=hostError(error);changed();notifyNeeded=true;},
+  async waitForChange(since,signal,timeoutMs=300000){
+   if(since!==revision||!state.enabled)return {revision,reason:'changed'};
+   if(signal?.aborted)return {revision,reason:'cancelled'};
+   return new Promise(resolve=>{
+    let timer;
+    const done=reason=>{clearTimeout(timer);waiters.delete(wake);signal?.removeEventListener('abort',abort);resolve({revision,reason});};
+    const wake=()=>done('changed'),abort=()=>done('cancelled');
+    waiters.add(wake);signal?.addEventListener('abort',abort,{once:true});
+    timer=setTimeout(()=>done('health-check deadline'),Math.min(300000,Math.max(1,timeoutMs)));
+   });
+  },
+  host,
   tick,
-  close(){state.enabled=false;clearInterval(timer);},
+  close(){state.enabled=false;changed();clearInterval(timer);},
  };
 }
+
 
 
 

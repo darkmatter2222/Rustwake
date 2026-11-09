@@ -18,7 +18,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  if(pub){
   lines.push('Feature push: '+label(age(pub.feature_push?.verified_push_at,now)));
   lines.push('Latest commit: '+label(age(pub.latest_commit?.[1],now)));
-  lines.push('Unpublished commits: '+(pub.unpublished_commit_count??'unknown')+' (vs cached origin refs)');
+  lines.push('Local commits absent from cached origin refs: '+(pub.unpublished_commit_count??'unknown')+' (not verified unpushed)' );
   lines.push('Dirty checkout entries: '+(pub.dirty_checkout_entries??'unknown'));
   lines.push('Last deploy: '+(pub.deployment?clean(pub.deployment.headSha,8)+' · '+label(age(pub.deployment.updatedAt,now)):'unknown'));
   if(pub.actions_error)lines.push(pub.actions_error);
@@ -29,8 +29,12 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
   if(d.epoch)lines.push('Fresh team · '+clean(d.epoch,32));
   lines.push('Checked: '+label(age(d.checked_at,now)));
   const workers=(d.workers??[]).filter(w=>!['succeeded','failed','interrupted'].includes(w.status));
-  lines.push(`Reserved child slots: ${workers.length}/4 (total agents ${workers.length+1}/5 including coordinator)`);
-  for(const w of workers)lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);
+  lines.push(`Reserved child slots: ${workers.length}/4 (tracked agents ${workers.length+1}/5 including coordinator)`);
+  lines.push('Coverage: tracked leases + observed events; untracked pre-existing sessions unknown.');
+  if(d.event_stream_error)lines.push('EVENT STREAM FAILED: '+clean(d.event_stream_error,140));
+  if(d.notification_error)lines.push('NOTIFICATION UNKNOWN: '+clean(d.notification_error,140));
+  lines.push('Quiet wait: rustwake_wait (completion/health events, 5m maximum)');
+  for(const w of workers){lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);lines.push('  '+clean(w.health??'health unknown',80)+' · progress '+label(age(w.last_progress_at,now)));if(w.last_error)lines.push('  Error: '+clean(w.last_error,120));}
   if(d.error)lines.push('BLOCKED: '+clean(d.error,200));
   lines.push('Queued is not running; running requires a host execution event.');
   return lines.join('\n');
@@ -58,6 +62,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+
 
 
 
