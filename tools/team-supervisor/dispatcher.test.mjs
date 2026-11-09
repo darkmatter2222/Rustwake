@@ -71,3 +71,9 @@ test('release tasks are ranked ahead of developers but do not mutate queue',()=>
  const tasks=[task('dev','developer'),task('qa','reviewer'),task('rel','release-engineer')];
  assert.equal(prioritizeTasks(tasks)[0].role,'release-engineer');assert.equal(tasks[0].role,'developer');
 });
+
+
+import {assertDispatchableIssue} from './dispatcher.mjs';
+test('live GitHub labels veto dispatch even when an issue is open',()=>{for(const label of ['status:blocked','status:deferred','status:superseded'])assert.throws(()=>assertDispatchableIssue({state:'OPEN',labels:[{name:label}]}));assert.throws(()=>assertDispatchableIssue({state:'OPEN'}));assert.doesNotThrow(()=>assertDispatchableIssue({labels:[{name:'status:ready'}]}));});
+
+test('dispatch readiness is explicit and role-aware',()=>{assert.throws(()=>assertDispatchableIssue({labels:[]},'developer'));assert.throws(()=>assertDispatchableIssue({labels:[{name:'status:triage'}]},'developer'));assert.doesNotThrow(()=>assertDispatchableIssue({labels:[{name:'status:triage'}]},'product-owner'));assert.doesNotThrow(()=>assertDispatchableIssue({labels:[{name:'status:review'}]},'reviewer'));assert.throws(()=>assertDispatchableIssue({labels:[{name:'status:review'}]},'developer'));assert.doesNotThrow(()=>assertDispatchableIssue({labels:[{name:'status:accepted'}]},'release-engineer'));});

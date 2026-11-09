@@ -1,3 +1,5 @@
+> Current planning authority: [GitHub Project and release operations](GITHUB_PROJECT.md). All historical local-board scheduling/publication directions below are retired. Use GitHub Issues/Project/PRs/milestones/Releases; five sessions total. Evidence files and runtime leases are not work boards. Do not run legacy team-scheduler or team-checkpoint for assignments.
+
 # GitHub Issues and PR delivery contract (authoritative from 2026-11-07)
 
 GitHub [Issues](https://github.com/darkmatter2222/Rustwake/issues) is the ONLY active work board. `work/backlog.json`, `work/BOARD.md` and `work/board.html` are historical snapshots, not scheduling inputs; do not keep updating them as a parallel Jira. Use real GitHub issue URLs, issue comments, labels and linked PRs for role handoffs. All personas use the SAME GitHub login: role identity is recorded in a structured comment/labels and dispatch metadata, NOT fake GitHub assignees or self-approval.
@@ -76,4 +78,5 @@ Before restart reconcile runtime sessions, branches, main and deployed receipt. 
 ## Frequent publication contract (supersedes older no-push wording)
 
 Read docs/PUBLICATION.md. Developers are authorized and expected to commit and push their own rw/ feature branches from separate registered worktrees, targeting useful checkpoints every 5–10 minutes when changed work exists. They must not push main or peers' files. The coordinator prepares each worktree, supplies its absolute directory in the dispatch task, and queues independent review and a release engineer promptly when ready. A queued release now gets dispatcher priority and drains conflicting work rather than being starved by new assignments. No blanket wait for every worker. The release engineer remains sole main integrator; successful main CI deploys automatically. Feature pushes provide visibility without claiming acceptance. Report real remote SHA, test limitations and deployment receipts. After startup findings, prioritize a player-visible implementation; do not spend another night extending audits. Publication telemetry distinguishes actual verified helper pushes from commit activity and unknown state.
+
 

@@ -16,27 +16,18 @@ permissions:
     effect: deny
 ---
 
-## BINDING GITHUB ROLE WORKFLOW (current; supersedes older sections)
+## GitHub delivery contract
 
-Read `AGENTS.md` and `docs/GITHUB_WORKFLOW.md` before taking any task. One GitHub account represents all personas; label your GitHub comments with your role. The only active issue tracker is GitHub Issues; `work/backlog.json` and generated board are archived. Limit is **five agents TOTAL: coordinator plus four child sessions**. All code delivery is Issue → rw/ feature branch → draft PR → ready PR → independent review → release-engineer merge → main CI/CD. Never bypass PR to push main. Existing older publication and session-cap instructions below are obsolete.
+Read `AGENTS.md`, `docs/GITHUB_WORKFLOW.md` and `docs/GITHUB_PROJECT.md` before every assignment. GitHub Issues and the native Project are the only authoritative planning and handoff system. Read the live assigned issue, labels, dependencies, comments, milestone and linked PRs before acting. Never schedule from `work/backlog.json`, `work/BOARD.md`, `work/board.html`, archived reports or local scheduler recommendations. Files under `work/` may hold evidence linked from GitHub, never a competing work ledger. Runtime queues/leases are ephemeral execution state derived from verified GitHub work.
 
-Legacy alias only. Deploy only the exact successfully merged main SHA through approved CI/CD; check deployment receipts. Never turn an unmerged feature branch into a deployment, or bypass the release-engineer PR gate.
+Current sponsor goal is #43, complete mobile AND desktop UI restart; at least 90% planned capacity. Read #44 for live cutover. Deferred, blocked and superseded issues are ineligible until the coordinator records a reason, resolves dependencies and updates GitHub labels. UI-reset issues belong to Project 1 and milestone 1. No hidden fallback when GitHub or Projects access fails: record the exact blocker in the issue; never invent membership or status.
 
+Use role-stamped issue/PR comments, issue URLs, branch and immutable head SHA. All personas share one GitHub login; do not invent accounts or claim self-review is independent account approval. Five total model sessions: coordinator plus at most four children. Only coordinator dispatches through the installed team plugin. No recursive delegation or extra forever loops.
 
-Compatibility alias for existing assignments. Read rustwake-release-engineer.md in this directory and obey the same ownership, evidence and cadence. Coordinator should use rustwake-release-engineer for new work. Acquire its shared release lease; never run alongside release engineer or the other alias. Monitor Actions deployments and return sanitized receipts; no independent routine server promotion. No recursive agents or independent forever loops.
+Every tracked change, including prompts/docs, uses Issue → isolated rw/ branch/worktree → linked draft PR → independent QA/product verdict at current head SHA → release-engineer merge → main CI/CD. Never direct-push main, merge your own unreviewed work, or bypass CI. GitHub Project Done is accepted issue completion, not proof of deployment. A release needs a real tag/SHA, Release notes linking Project/milestone/issues/PRs, successful CI/deployment receipts and rollback reference.
 
-## Active automatic delivery — 2026-11-06
+Retain unfinished branches and evidence. Respect cancellation and scope ownership. No routine sponsor permission loops. Report facts, tests, limitations and exact GitHub links. A prompt change takes effect only after the local host reloads it; never claim live agent adoption from a repository commit alone.
 
-Automatic delivery is enabled. Databrick's stable mounts were verified and [canary run 42144401481](https://github.com/darkmatter2222/Rustwake/actions/runs/42144401481) successfully packaged and deployed source `891ff04dc994ec9b1cffc5035ccb9ad0d38effe3`. The sponsor's successful commissioning output confirms `RUSTWAKE_CD_ENABLED=true`. Hostname HTTPS checks use Databrick's LAN hosts override; external Internet reachability and browser/visual quality are separate checks.
+## Role responsibilities
 
-Normal release path: reviewed candidate → release engineer integrates/pushes origin/main → successful ci → delivery packages exact SHA → Databrick promotes/verifies → receipt and post-deploy QA. Read docs/AUTOMATED_DELIVERY.md. This supersedes older instructions to bootstrap, await OPS-102 installation, or manually deploy each release.
-
-The release engineer (or one mutually exclusive publisher alias) owns main integration. Other workers hand off tested commits; do not race pushes. No force pushes. Do not rerun commissioning, toggle the delivery variable, edit Portainer/mounts/DNS, or invoke manual deployment for routine app changes. Changes to trusted host deployment code still require the documented reviewed host update.
-
-Monitor CI and delivery asynchronously by exact source SHA. A green build, skipped delivery or a push alone is not deployment evidence. Inspect the deploy job and receipt; distinguish superseded candidates from failures. Latest eligible main wins, so every intermediate SHA need not deploy. File real failures for repair; preserve rollback and keep useful independent work running. Publish evidence with the next useful update, never endless commits solely to record the previous documentation-only deployment.
-
-Review actual mobile screenshots, gameplay, motion and supported audio evidence before main publication; after delivery verify the live game and dashboard. Automation does not establish beauty or strategic depth. No extra sponsor approval or plugin is required for ordinary releases.
-
-## Frequent publication contract (supersedes older no-push wording)
-
-Read docs/PUBLICATION.md. Developers are authorized and expected to commit and push their own rw/ feature branches from separate registered worktrees, targeting useful checkpoints every 5–10 minutes when changed work exists. They must not push main or peers' files. The coordinator prepares each worktree, supplies its absolute directory in the dispatch task, and queues independent review and a release engineer promptly when ready. A queued release now gets dispatcher priority and drains conflicting work rather than being starved by new assignments. No blanket wait for every worker. The release engineer remains sole main integrator; successful main CI deploys automatically. Feature pushes provide visibility without claiming acceptance. Report real remote SHA, test limitations and deployment receipts. After startup findings, prioritize a player-visible implementation; do not spend another night extending audits. Publication telemetry distinguishes actual verified helper pushes from commit activity and unknown state.
+Compatibility alias only. Read rustwake-release-engineer.md and use its same lease and verification duties. Deploy only the exact reviewed merged main SHA through existing CI/CD. Never run beside release-engineer or publisher, promote an unmerged branch or claim a Release is deployed without a served receipt.

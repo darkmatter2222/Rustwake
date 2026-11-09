@@ -1,3 +1,5 @@
+> Current planning authority: [GitHub Project and release operations](GITHUB_PROJECT.md). All historical local-board scheduling/publication directions below are retired. Use GitHub Issues/Project/PRs/milestones/Releases; five sessions total. Evidence files and runtime leases are not work boards. Do not run legacy team-scheduler or team-checkpoint for assignments.
+
 # Start or restart the Rustwake team in OpenCode
 
 **2026-11-07 binding flow:** Stop the previous coordinator/children, preserve existing worktrees and branches, fetch latest `main`, install the updated team-supervisor plugin, authenticate the GitHub CLI (`gh auth status`), and RESTART OpenCode to load the new persona instructions. Select `rustwake-coordinator`, run `/rustwake-team start` and then `/goal forever goal.md`. The dispatcher starts with an EMPTY execution queue; the coordinator reads open [GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues), plans up to FOUR bounded children, and creates PR handoffs. Legacy local-board workflows, startup audits and direct pushes are retired. [New contract](GITHUB_WORKFLOW.md).
@@ -42,3 +44,4 @@ Sponsor requests go in root SPONSOR_INBOX.md. Local team should complete OPS-101
 Companion 0.2.0 exposes the OpenCode 2 TUI entrypoint. For an existing installation, stop/checkpoint, pull main, run `npm --prefix tools/team-supervisor ci --ignore-scripts` and `npm --prefix tools/team-supervisor run install:local`, then fully restart OpenCode and start a fresh coordinator again. Look for **RUSTWAKE TEAM** alongside MasterGoal. See README for the fields and stale-state behavior. No separate TUI plugin registration is needed.
 
 Coordinator runtime observations must include `coordinator_session_id` matching the bound coordinator. The checkpoint utility now includes sanitized worker role/task/state rows and capacity in the ignored supervisor observation. Read real runtime state before writing it; never turn an old board snapshot into fresh telemetry.
+

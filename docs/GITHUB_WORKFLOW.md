@@ -4,7 +4,7 @@
 
 ## Source of truth and identities
 
-[GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues) is the sole active backlog, assignment ledger, triage queue and defect tracker. [GitHub PRs](https://github.com/darkmatter2222/Rustwake/pulls) are the code review, revision and integration ledger. The checked-in `work/backlog.json`, `work/BOARD.md` and `work/board.html` are archived evidence only; DO NOT write new tickets, states or role assignments there. `.rustwake-runtime/dispatch-queue.json` is a temporary, ignored execution queue derived from open GitHub Issues, not a separate product board.
+[GitHub Issues](https://github.com/darkmatter2222/Rustwake/issues) and [Project 1](https://github.com/users/darkmatter2222/projects/1) are the sole active planning and handoff system. Read [Project and release operations](GITHUB_PROJECT.md) for field authority, milestone membership, hierarchy and release linkage. [GitHub PRs](https://github.com/darkmatter2222/Rustwake/pulls) are the code review, revision and integration ledger. The checked-in `work/backlog.json`, `work/BOARD.md` and `work/board.html` are archived evidence only; DO NOT write new tickets, states or role assignments there. `.rustwake-runtime/dispatch-queue.json` is a temporary, ignored execution queue derived from open GitHub Issues, not a separate product board.
 
 All personas authenticate as the same GitHub account. GitHub assignee/reviewer account identity DOES NOT distinguish AI workers, and a self-review on that account is not a genuine independent GitHub approval. Use labels when supported and structured PR/issue comments for provenance. The supervisor also validates each queued Issue URL by calling authenticated GitHub CLI before launching a worker:
 
@@ -42,6 +42,6 @@ The hard ceiling is **5 concurrent agents inclusive of coordinator**, regardless
 
 Keep any existing `rw/` branch with commits not in `main`; open a **draft PR** and link the matching Issue. Reviewer/release engineer inspect divergence, conflicts, superseded changes and the current CI; rebase or supersede via a fresh branch when appropriate. Do not auto-merge these branches. Branches with zero commits ahead of main are historical and need no PR. Preserve evidence and never force-delete unfinished work.
 
-## Bootstrap exception
+## No standing bootstrap exception
 
-The initial sponsor-authorized GitHub-native policy implementation may be committed directly to main to install these instructions. **Thereafter every tracked change uses a PR**, including agent prompt edits and operational documents. Do not use the bootstrap exception as a standing permission.
+The historical migration exception is exhausted. All changes, including these instructions, use reviewed PRs. Never push main directly.
