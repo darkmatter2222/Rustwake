@@ -46,6 +46,7 @@ for (let a = 0; a < 4; a += 1) {
   if (c) { await c.click(); await page.waitForTimeout(100); }
 }
 A.probes = probes;
+A.firstInsp = insp.slice(0, 220);
 A.presses = presses;
 let prod = A.rateAtFirstMachine;
 for (let i = 0; i < 16; i += 1) {
@@ -65,23 +66,23 @@ await p2.goto("file:///" + resolve(outDir, "prototype-nav.html").replaceAll("\\"
 await p2.waitForSelector("#action-primary");
 let n = 0;
 for (let i = 0; i < 40; i += 1) {
-  const st = await p2.evaluate(() => { const b = document.getElementById("action-primary"); const s = window.RW47.state(); return { disabled: b.disabled, label: b.textContent.trim(), machines: s.machines }; });
+  const st = await p2.evaluate(() => { const b = document.getElementById("action-primary"); const s = window.RW47.state(); return { disabled: b.disabled, label: b.textContent.trim(), machines: s.data.machines }; });
   if (st.machines.length && !st.machines[0].rate.startsWith("0.00")) { B.productionAtPress = n; break; }
   if (st.disabled) break;
-  await p2.evaluate(() => window.RW47.tap(document.getElementById("action-primary")));
+  await p2.evaluate(() => window.RW47.tap("action-primary"));
   await p2.waitForTimeout(120);
   n += 1;
   B.steps.push({ press: n, label: st.label });
 }
-B.machinePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (e.m === "place" && a === null ? e.n : a), null));
-B.storePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (e.m === "nav:Store" && a === null ? e.n : a), null));
+B.machinePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (a === null && e.id === "action-primary" && e.label.indexOf("Build") === 0 ? e.n : a), null));
+B.storePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (a === null && e.id === "nav-store" ? e.n : a), null));
 B.productionReading = await p2.evaluate(() => { const m = /Actual rate:?\s*(\d+\.\d+ batches\/s[^M]*?window)/.exec((document.querySelector(".panel") || document.querySelector("#insp-body")) ? (document.querySelector(".panel") || document.querySelector("#insp-body")).textContent : ""); return m ? m[1] : ""; });
 B.pressed = await p2.evaluate(() => window.RW47.pressed());
-B.machines = await p2.evaluate(() => window.RW47.state().machines);
+B.machines = await p2.evaluate(() => window.RW47.state().data.machines);
 await p2.screenshot({ path: resolve(captures, "62-tbudget-proto-machine.png") });
 await p2.evaluate(() => window.RW47.boot("mature"));
 await p2.waitForTimeout(150);
-await p2.evaluate(() => window.RW47.tap(document.getElementById("nav-store")));
+await p2.evaluate(() => window.RW47.tap("nav-store"));
 await p2.waitForTimeout(150);
 B.storeRows = await p2.evaluate(() => Array.from(document.querySelectorAll(".panel button, #insp-body button")).slice(0, 2).map((b) => b.textContent.trim().replace(/\s+/g, " ")));
 await p2.screenshot({ path: resolve(captures, "63-tbudget-proto-store.png") });
