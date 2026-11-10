@@ -1,0 +1,9 @@
+| C4 | chip row width by stage 3/4/7 chips; face-height bands 23/48/73 px | fixed bands, rows never grow, every face at least 44 px |
+| C5 | top toast shares top:8 with the A face | toast is its own band, outside the camera inset |
+| C6 | unaffordable faces: disabled:false, opacity:1 | real disabled plus de-emphasis, reason printed |
+| C7 | budget 16 presses for J1 at 0.00 batches/s (46 idle polls) | target to beat: 16 total, and 9 of those were navigation |
+| C8 | nav faces are role=button tabindex=0; #rustwake-root still role=presentation | nav stays tabbable, aria-current marks the destination |
+| C9 | 18 aria-label attributes on 8 visible faces in one frame | one label per face, printed text is the label source |
+| C10 | one 1600 px container at 2560x1440 | prototype uses three proportional columns (measured 2116 px world at 2560x1440); the cap stays an open item for #48 |
+| C11 | 1 of 14 commands has a sublabel (5x36->2x25) | sublabel rule: quantity line only |
+| C12 | 94 nodes at first paint, 15-23 mutations per batch | 5 nav cells + 1 action row + 1 card + 1 toast is within budget |
