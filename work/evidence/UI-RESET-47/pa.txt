@@ -1,9 +1,0 @@
-# Issue #47 - UI-RESET/NAV: navigation and information architecture spec, coded prototype, painted captures
-Parent #43, gate G1, milestone 1, Project 1. Stack base: PR #74 (head 224e22aa57a68215a2eddfe606ef50462b4d0b5e). Measured inputs reused from the #45 audit in this stack (coverage-matrix.md, journey-map.md). Nothing is re-derived from work/ archives.
-Artifacts: prototype-nav.html (self-contained coded prototype: inline CSS and JS, no build step, no save writes), capture-proto-47.mjs (Playwright harness, 19 painted frames over 9 viewports/states, writes captures/captures-proto.json), measures-from-captures.mjs (derives measures.json), captures/30..48-proto-*.png, measures.json.
-## 0. Measured constraints from #45 that this spec must satisfy
-| ID | measured fact (#45) | consequence |
-|---|---|---|
-| C1 | fresh dock = 3 faces (Sound, A, MOTION); no Yard/Build/Storage/Research/Menu | permanent 5-slot dock introduced as inert faces with printed reasons |
-| C2 | two non-equivalent exits (Close glyph, Escape): after Close the card is gone and Escape no longer works | exactly one close/back/Escape semantic, idempotent |
-| C3 | two command formats coexist (30 / 4 / 1 and 5x36->2x25 20 scrap); 35 of 86 chip texts carry price; 12 of 48 chips change per batch | one printed command format, one price per command per frame |
