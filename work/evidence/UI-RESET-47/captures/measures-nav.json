@@ -1,0 +1,2803 @@
+{
+  "task": "UI-RESET/NAV #47 band rects",
+  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "note": "same probe shape as #45 measures.json",
+  "out": {
+    "phone-390x844-dpr2": {
+      "rest": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 390,
+          "h": 844,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 390,
+          "clientW": 390,
+          "scrollH": 844,
+          "clientH": 844
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 48
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 208,
+            "h": 48
+          },
+          "cluster": {
+            "x": 226,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 62,
+            "w": 340,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 442,
+            "w": 370,
+            "h": 348
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 50,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 45,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 130,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 49,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 72,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    },
+    "phone-360x640-dpr3": {
+      "rest": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 324,
+            "w": 340,
+            "h": 262
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 360,
+          "h": 640,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 360,
+          "clientW": 360,
+          "scrollH": 640,
+          "clientH": 640
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 340,
+            "h": 73
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 178,
+            "h": 73
+          },
+          "cluster": {
+            "x": 196,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 87,
+            "w": 313,
+            "h": 66
+          },
+          "dock": {
+            "x": 10,
+            "y": 586,
+            "w": 340,
+            "h": 46
+          },
+          "panel": {
+            "x": 10,
+            "y": 324,
+            "w": 340,
+            "h": 262
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 360,
+            "h": 640
+          }
+        },
+        "chips": 4,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 47,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 44,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 110,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 46,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    },
+    "landscape-844x390": {
+      "rest": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": {
+            "x": 142,
+            "y": 179,
+            "w": 560,
+            "h": 157
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 844,
+          "h": 390,
+          "dpr": 2
+        },
+        "docScroll": {
+          "scrollW": 844,
+          "clientW": 844,
+          "scrollH": 390,
+          "clientH": 390
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 824,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 472,
+            "h": 23
+          },
+          "cluster": {
+            "x": 680,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 400,
+            "h": 66
+          },
+          "dock": {
+            "x": 162,
+            "y": 336,
+            "w": 520,
+            "h": 46
+          },
+          "panel": {
+            "x": 142,
+            "y": 124,
+            "w": 560,
+            "h": 212
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 844,
+            "h": 390
+          }
+        },
+        "chips": 5,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 65,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 60,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 220,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 87,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    },
+    "desktop-1366x768": {
+      "rest": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 1366,
+          "h": 768,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1366,
+          "clientW": 1366,
+          "scrollH": 768,
+          "clientH": 768
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1346,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1202,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 403,
+            "y": 714,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1366,
+            "h": 768
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    },
+    "desktop-1920x1080": {
+      "rest": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 1920,
+          "clientW": 1920,
+          "scrollH": 1080,
+          "clientH": 1080
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 1900,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 1756,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 680,
+            "y": 1026,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 1920,
+            "h": 1080
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    },
+    "desktop-2560x1440": {
+      "rest": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": null,
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 8
+      },
+      "withStore": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 538
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Sell 60 · +120",
+          "Sell 35 · +70",
+          "Sell 60 · +240",
+          "Sell 60 · +900",
+          "Sell 27 · +810",
+          "Sell 60 · +300",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +120",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 · +70",
+            "w": 96,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +240",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +900",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 27 · +810",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 60 · +300",
+            "w": 103,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 15
+      },
+      "withResearch": {
+        "viewport": {
+          "w": 2560,
+          "h": 1440,
+          "dpr": 1
+        },
+        "docScroll": {
+          "scrollW": 2560,
+          "clientW": 2560,
+          "scrollH": 1440,
+          "clientH": 1440
+        },
+        "rects": {
+          "top": {
+            "x": 10,
+            "y": 8,
+            "w": 2540,
+            "h": 44
+          },
+          "chips": {
+            "x": 10,
+            "y": 8,
+            "w": 628,
+            "h": 23
+          },
+          "cluster": {
+            "x": 2396,
+            "y": 8,
+            "w": 154,
+            "h": 44
+          },
+          "objective": {
+            "x": 10,
+            "y": 58,
+            "w": 420,
+            "h": 66
+          },
+          "dock": {
+            "x": 1000,
+            "y": 1386,
+            "w": 560,
+            "h": 46
+          },
+          "panel": {
+            "x": 1104,
+            "y": 8,
+            "w": 320,
+            "h": 445
+          },
+          "canvas": {
+            "x": 0,
+            "y": 0,
+            "w": 2560,
+            "h": 1440
+          }
+        },
+        "chips": 7,
+        "dockLabels": [
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "printed": [
+          "Sound ✓",
+          "A 1",
+          "Home",
+          "Close",
+          "Store",
+          "Yard",
+          "Sell 35 Ferrous+70 credits",
+          "Build",
+          "Research"
+        ],
+        "navCount": 1,
+        "targets": [
+          {
+            "label": "Sound ✓",
+            "w": 60,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "A 1",
+            "w": 44,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Home",
+            "w": 45,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Close",
+            "w": 54,
+            "h": 44,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Store",
+            "w": 69,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Yard",
+            "w": 64,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Sell 35 Ferrous+70 credits",
+            "w": 244,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Build",
+            "w": 68,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          },
+          {
+            "label": "Research",
+            "w": 91,
+            "h": 46,
+            "under44": false,
+            "disabled": false
+          }
+        ],
+        "buttons": 9
+      }
+    }
+  }
+}
