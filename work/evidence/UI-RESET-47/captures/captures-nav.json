@@ -1,0 +1,66 @@
+{
+  "task": "UI-RESET/NAV #47",
+  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "captures": [
+    {
+      "file": "01-app-fresh-rest.png",
+      "note": "real build, fresh save at rest after the gate"
+    },
+    {
+      "file": "02-app-fresh-machine.png",
+      "note": "real build, machine panel over the world at the first placed machine"
+    },
+    {
+      "file": "03-app-fresh-producing.png",
+      "note": "real build, after the first non-zero Actual rate"
+    },
+    {
+      "file": "04-app-mature-two-formats.png",
+      "note": "real build, dock and store face print the same sell command in two formats"
+    },
+    {
+      "file": "05-proto-fresh-rest.png",
+      "note": "prototype, fresh rest: five nav slots painted, research locked, one primary"
+    },
+    {
+      "file": "06-proto-fresh-machine.png",
+      "note": "prototype, machine sheet after the ladder: first two rows are Next step and Next upgrade"
+    },
+    {
+      "file": "07-proto-mature-rest.png",
+      "note": "prototype, mature rest: one primary Sell Ferrous plus five quiet nav slots"
+    },
+    {
+      "file": "08-proto-mature-machine.png",
+      "note": "prototype, machine sheet plus the fork pair, one accent"
+    },
+    {
+      "file": "09-proto-mature-store.png",
+      "note": "prototype, store with one CF sell face per material"
+    },
+    {
+      "file": "10-proto-band-phone-390x844.png",
+      "note": "prototype band rects at 390x844 mature"
+    },
+    {
+      "file": "10-proto-band-phone-360x640.png",
+      "note": "prototype band rects at 360x640 mature"
+    },
+    {
+      "file": "10-proto-band-landscape-844x390.png",
+      "note": "prototype band rects at 844x390 mature"
+    },
+    {
+      "file": "10-proto-band-desktop-1366x768.png",
+      "note": "prototype band rects at 1366x768 mature"
+    },
+    {
+      "file": "10-proto-band-desktop-1920x1080.png",
+      "note": "prototype band rects at 1920x1080 mature"
+    },
+    {
+      "file": "10-proto-band-desktop-2560x1440.png",
+      "note": "prototype band rects at 2560x1440 mature"
+    }
+  ]
+}
