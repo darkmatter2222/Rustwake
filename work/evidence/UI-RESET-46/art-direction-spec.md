@@ -67,7 +67,7 @@ Scenarios, both plain save envelopes so every sheet replays the same yard:
   three research nodes known, tick 450308–450328, chips at 390 `Scrap 10 / Ferrous 54 / Credits 82 /
   Store 900/900`, at 1920 seven chips including `Nonferrous 239`, `Steel 10`, `Copper 10`.
 
-`captures/captures-46.json` carries, per file, the painted text it actually shows (chips line,
+`captures-46.json` carries, per file, the painted text it actually shows (chips line,
 objective card, panel head line, dock labels, `data-afford` classifications) plus the composition
 readout (ink box, cover %, faces under 44 px), so a claim can be checked against the image itself.
 Twelve further PNGs in `captures/` come from `capture-extra-46.mjs` in the same naming scheme and
@@ -155,7 +155,8 @@ node node_modules/vite/bin/vite.js build
 node node_modules/vite/bin/vite.js preview --port 4186 --strictPort     # separate shell
 $env:RUSTWAKE_URL = "http://localhost:4186/"
 node work/evidence/UI-RESET-46/measure-46.mjs    # -> measures-46.json
-node work/evidence/UI-RESET-46/capture-46.mjs    # -> captures/*.png + captures-46.json
+node work/evidence/UI-RESET-46/capture-46.mjs    # -> captures/*.png + captures-46.json (32)
+node work/evidence/UI-RESET-46/capture-extra-46.mjs   # -> 12 supplementary PNGs + captures-extra-46.json
 node work/evidence/UI-RESET-46/inspect-46.mjs    # -> _m.txt / _c.txt digests
 npm test                                          # 32 files / 340 tests passed, 16.99 s at this head
 ```
