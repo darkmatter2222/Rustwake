@@ -1,0 +1,15 @@
+390x844 | before | ink=8,154,374,561 | cover=0 | chips=4 | rows=2 | rowTops=[8,33] | u44=0
+390x844 | A | ink=8,152,374,561 | cover=0 | chips=3 | rows=1 | rowTops=[8] | u44=0
+390x844 | B | ink=8,147,374,560 | cover=0 | chips=3 | rows=1 | rowTops=[8] | u44=0
+844x390 | before | ink=307,28,230,346 | cover=27.7 | chips=5 | rows=1 | rowTops=[8] | u44=0
+844x390 | A | ink=307,28,230,346 | cover=19.3 | chips=3 | rows=1 | rowTops=[8] | u44=0
+844x390 | B | ink=307,28,230,346 | cover=30.9 | chips=3 | rows=1 | rowTops=[8] | u44=0
+1366x768 | before | ink=414,0,536,766 | cover=12.5 | chips=7 | rows=1 | rowTops=[8] | u44=0
+1366x768 | A | ink=414,0,536,766 | cover=12.2 | chips=4 | rows=1 | rowTops=[8] | u44=0
+1366x768 | B | ink=414,0,536,766 | cover=13 | chips=4 | rows=1 | rowTops=[8] | u44=0
+1920x1080 | before | ink=576,20,766,1022 | cover=4.6 | chips=7 | rows=1 | rowTops=[8] | u44=0
+1920x1080 | A | ink=576,20,766,1022 | cover=4.6 | chips=5 | rows=1 | rowTops=[8] | u44=0
+1920x1080 | B | ink=576,20,766,1022 | cover=4.6 | chips=5 | rows=1 | rowTops=[8] | u44=0
+2560x1440 | before | ink=896,168,766,1150 | cover=0 | chips=7 | rows=1 | rowTops=[8] | u44=0
+2560x1440 | A | ink=896,168,766,1150 | cover=0 | chips=7 | rows=1 | rowTops=[8] | u44=0
+2560x1440 | B | ink=896,168,766,1150 | cover=0 | chips=7 | rows=1 | rowTops=[8] | u44=0

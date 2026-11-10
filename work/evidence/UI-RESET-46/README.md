@@ -1,0 +1,8 @@
+# UI-RESET/ARTDIR (#46) evidence — selected industrial art direction
+
+Two documents, one per job. `art-direction-spec.md` is the decision: direction A ("Salvage ledger") selected with its rationale, the composed-state table for 390×844 and 1920×1080 in the fresh and mature scenarios, the typography/palette/material/icon/border/animation rules, the verified numbers and the unverified list. `design-spec-46.md` is the implementation-ready layout and state spec: the measured per-band table (ink rect, rail, objective, plate, dock for all five bands), the chip-priority ladder, the state-coverage table, the implementation boundaries with owner issues and the acceptance checks a reviewer can run in one pass.
+`captures-46.json` is the 32-entry receipt and `captures-extra-46.json` the 12-entry supplement (44 PNGs in `captures/`) (2 directions × 2 scenarios × 2 bands × 4 surfaces) with the painted text and composition readout per PNG; the images live in `captures/`, and `measures-46.json` holds the before/A/B instrument runs for all five bands.
+Scripts: `capture-46.mjs` (32 PNGs + receipt), `capture-extra-46.mjs` (12 supplementary PNGs + receipt: 844×390, 2560×1440 and the credits-0 unaffordable state), `measure-46.mjs` (`measures-46.json`), `probe-46.mjs` (shared harness and per-band reference geometry), plus `inspect-46.mjs` and `_x.mjs` for the `_m.txt`/`_c.txt`/`_x.txt` digests; directions are the two injected sheets `direction-a.css` and `direction-b.css`, and the two replayed yards are `scenario-opening.json` and `scenario-mature.json`.
+Reproduce and issue links are in the spec's last section; Issue: https://github.com/darkmatter2222/Rustwake/issues/46, head SHA `224e22aa57a68215a2eddfe606ef50462b4d0b5e`.
+
+
