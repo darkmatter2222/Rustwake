@@ -15,6 +15,22 @@ const server = createServer((req, res) => {
   catch { res.writeHead(404); res.end("not found"); }
 });
 await new Promise((r) => server.listen(4175, "127.0.0.1", r));
+const exe = ["C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"].find((e) => { try { readFileSync(e); return true; } catch { return false; } });
+const browser = await chromium.launch({ executablePath: exe });
+function rateFrom(t) { const m = /Actual rate:?\s*(\d+\.\d+ batches\/s[^M]*?window)/.exec(t); return m ? m[1] : String(t).slice(0, 90); }
+const txt = (page) => page.evaluate(() => ((document.querySelector(".panel") || document.querySelector("#insp-body")) ? (document.querySelector(".panel") || document.querySelector("#insp-body")).textContent : ""));
+const A = { steps: [] };
+const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
+await page.goto("http://127.0.0.1:4175/", { waitUntil: "load" });
+await page.waitForSelector("canvas");
+let presses = 0;
+const click = async (sel) => { await page.click(sel); presses += 1; await page.waitForTimeout(650); };
+const face = async (sel) => (await page.evaluate((s) => { const e = document.querySelector(s); return e ? e.textContent : ""; }, sel) || "").trim().replace(/\s+/g, " ");
+await click("text=Begin recovery");
+A.steps.push({ press: presses, face: "rest " + JSON.stringify(await page.evaluate(() => Array.from(document.querySelectorAll(".dock__btn")).map((b) => b.textContent.trim().replace(/\s+/g, " ")))) });
+await click("button:text-is(\"Store\")");
+A.steps.push({ press: presses, face: "store " + JSON.stringify(await page.evaluate(() => Array.from(document.querySelectorAll(".panel button, #insp-body button")).map((b) => b.textContent.trim().replace(/\s+/g, " ")))) });
+await click("button:text-is(\"Close\")");
 for (let i = 0; i < 10; i += 1) { if ((await face(".dock__btn--primary")).startsWith("Build Scrap sorter")) break; await click(".dock__btn--primary"); }
 A.firstMachineFace = await face(".dock__btn--primary");
 await click(".dock__btn--primary");
@@ -26,7 +42,7 @@ let insp = "";
 for (let a = 0; a < 4; a += 1) {
   for (let x = 60; x <= 330 && !insp.includes("Actual rate"); x += 20) for (let y = 150; y <= 640; y += 20) { probes += 1; await page.mouse.click(x, y); await page.waitForTimeout(70); insp = await txt(page); if (insp.includes("Actual rate")) break; }
   if (insp.includes("Actual rate")) break;
-  const c = await page.$("#insp-close");
+  const c = await page.$("button:text-is(\"Close\")");
   if (c) { await c.click(); await page.waitForTimeout(100); }
 }
 A.probes = probes;
@@ -36,7 +52,7 @@ for (let i = 0; i < 16; i += 1) {
   const r = rateFrom(await txt(page));
   if (r && !r.startsWith("0.00")) { prod = r; break; }
   await page.click(".dock__btn--primary"); presses += 1; await page.waitForTimeout(650);
-  if (!(await page.$("#insp-close"))) { for (let x = 60; x <= 330; x += 20) for (let y = 150; y <= 640; y += 20) { probes += 1; await page.mouse.click(x, y); await page.waitForTimeout(60); const s2 = await txt(page); if (s2.includes("Actual rate")) { prod = rateFrom(s2); break; } } }
+  if (!(await page.$("button:text-is(\"Close\")"))) { for (let x = 60; x <= 330; x += 20) for (let y = 150; y <= 640; y += 20) { probes += 1; await page.mouse.click(x, y); await page.waitForTimeout(60); const s2 = await txt(page); if (s2.includes("Actual rate")) { prod = rateFrom(s2); break; } } }
 }
 A.productionReading = prod;
 A.pressProduction = presses;
@@ -59,7 +75,7 @@ for (let i = 0; i < 40; i += 1) {
 }
 B.machinePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (e.m === "place" && a === null ? e.n : a), null));
 B.storePress = await p2.evaluate(() => window.RW47.log().reduce((a, e) => (e.m === "nav:Store" && a === null ? e.n : a), null));
-B.productionReading = await p2.evaluate(() => { const m = /Actual rate:\s*(\d+\.\d+ batches\/s[^M]*?window)/.exec(document.querySelector("#insp-body") ? document.querySelector("#insp-body").textContent : ""); return m ? m[1] : ""; });
+B.productionReading = await p2.evaluate(() => { const m = /Actual rate:?\s*(\d+\.\d+ batches\/s[^M]*?window)/.exec((document.querySelector(".panel") || document.querySelector("#insp-body")) ? (document.querySelector(".panel") || document.querySelector("#insp-body")).textContent : ""); return m ? m[1] : ""; });
 B.pressed = await p2.evaluate(() => window.RW47.pressed());
 B.machines = await p2.evaluate(() => window.RW47.state().machines);
 await p2.screenshot({ path: resolve(captures, "62-tbudget-proto-machine.png") });
@@ -67,7 +83,7 @@ await p2.evaluate(() => window.RW47.boot("mature"));
 await p2.waitForTimeout(150);
 await p2.evaluate(() => window.RW47.tap(document.getElementById("nav-store")));
 await p2.waitForTimeout(150);
-B.storeRows = await p2.evaluate(() => Array.from(document.querySelectorAll("#insp-body button")).slice(0, 2).map((b) => b.textContent.trim().replace(/\s+/g, " ")));
+B.storeRows = await p2.evaluate(() => Array.from(document.querySelectorAll(".panel button, #insp-body button")).slice(0, 2).map((b) => b.textContent.trim().replace(/\s+/g, " ")));
 await p2.screenshot({ path: resolve(captures, "63-tbudget-proto-store.png") });
 await p2.close();
 writeFileSync(resolve(outDir, "tap-budget.json"), JSON.stringify({ audit: { presses: 16, reading: "0.00 batches/s - 1s window", source: "work/evidence/UI-RESET-45/journey-map.md J1" }, app: A, prototype: B }, null, 2));
