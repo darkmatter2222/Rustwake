@@ -5,7 +5,7 @@
 - Build under test: `vite build` at head `224e22a`, served by `vite preview` on 4177. Painted by headless Chromium (playwright-core + local Chrome), 44 real frames in `captures/`.
 - A direction is one author sheet (`direction-a.css`, `direction-b.css`) injected after the built sheet. Same selectors, later in the cascade - exactly the cascade a token rewrite in `src/ui/styles.css` produces. No game code, no save shape, no simulation touched.
 
-## 1. What was measured (before = built sheet, A = direction A, B = direction B)
+Companion document: `art-direction-spec.md` carries the direction decision and the rule set; this file is the layout and state specification.$nl$nl## 1. What was measured (before = built sheet, A = direction A, B = direction B)
 
 Rest frame per band. `ink` is the painted-pixel bbox of the canvas (same instrument as #45), `cover` is the share of that bbox hidden behind chrome boxes, `chips/rows` are the visible resource chips and their line count.
 
@@ -163,4 +163,5 @@ Expected values a reviewer can check in one pass (`_m.txt`, `_x.txt`):
 - The price census is unchanged (4 prints) for the reason in section 8.
 - `data-afford` is stamped by the harness (`probe-46.mjs`, `applyAfford`) as the stand-in for the one-line `App.tsx` assignment; the dashed/short cue in the captures depends on that stamp existing.
 - The locked research row is still unpaintable in both baselines, and the entry gate frame was not re-shot for these two sheets (only rest, store, machine, build and unaffordable).
+
 

@@ -6,7 +6,7 @@ Built revision under test: `vite build` in this worktree (`dist/assets/index-BB8
 Reference geometry: `work/evidence/UI-RESET-45/measures.json` and `work/evidence/UI-RESET-45/coverage-matrix.md` (#45, read-only).
 Own instrument: `measures-46.json` (same probe, three runs per band: `before` = built sheet only, `A`, `B`).
 
-## 1. Selected direction: A — "Salvage ledger" (`direction-a.css`)
+Companion document: `design-spec-46.md` carries the measured per-band inset table, the chip-priority ladder, the state-coverage table, the implementation boundaries and the acceptance checks. This file carries the direction decision and why.$nl$nl## 1. Selected direction: A — "Salvage ledger" (`direction-a.css`)
 
 A is one author-token sheet injected after the built sheet — the exact cascade a token rewrite in
 `src/ui/styles.css` produces. No game code is touched. Four reasons it is selected:
@@ -74,9 +74,9 @@ Twelve further PNGs in `captures/` come from `capture-extra-46.mjs` in the same 
 carry the extra cells: 844×390 and 2560×1440 mature rest/store plus the credits-0 unaffordable
 frame at 390×844 and 1920×1080 for both sheets (`b-` twins) — they are receipted in
 `captures-extra-46.json` (12 entries), so the folder holds 44 PNGs in total across the two receipts.
-`captures/captures-46.json` is a stale intermediate receipt from an earlier run of the same harness
-(56 entries, older filenames); it is superseded by `captures-46.json` + `captures-extra-46.json` and
-nothing below depends on it.
+The 56-entry intermediate receipt `captures/captures-46.json`, the scratch probes `_dbg.mjs` and `_dbg2.mjs` and `composition-table.txt` were removed at this head:
+`captures-46.json` plus `captures-extra-46.json` are the only two receipts, and
+nothing below depends on the removed files.
 
 ## 3. Rules the implementation has to keep (direction A)
 
@@ -157,5 +157,6 @@ $env:RUSTWAKE_URL = "http://localhost:4186/"
 node work/evidence/UI-RESET-46/measure-46.mjs    # -> measures-46.json
 node work/evidence/UI-RESET-46/capture-46.mjs    # -> captures/*.png + captures-46.json
 node work/evidence/UI-RESET-46/inspect-46.mjs    # -> _m.txt / _c.txt digests
-npm test                                          # 32 files / 340 tests, 16.81 s
+npm test                                          # 32 files / 340 tests passed, 16.99 s at this head
 ```
+
