@@ -1,0 +1,251 @@
+{
+  "task": "UI-RESET-95 DOM-identity verdict (main vs branch)",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/95",
+  "measuredAt": "2026-11-11T20:52:57.494Z",
+  "baseline": {
+    "worktree": "C:\\Users\\ryans\\AppData\\Local\\Temp\\opencode\\dev95-base",
+    "headSha": "c896a7c21cb5e15d16183a327944ce5f32a13ab3",
+    "measuredAt": "2026-11-11T20:52:30.620Z"
+  },
+  "branch": {
+    "worktree": "C:\\Users\\ryans\\AppData\\Local\\Temp\\opencode\\dev95",
+    "headSha": "f832639a3d622387ec8d207e54f214d603128bfc",
+    "measuredAt": "2026-11-11T20:52:23.558Z"
+  },
+  "harnessScriptSha256": {
+    "before": "97da580561c423209b322235dda7c65cbcf5c355966e7453f7b68f5f9bbf9837",
+    "after": "97da580561c423209b322235dda7c65cbcf5c355966e7453f7b68f5f9bbf9837",
+    "identical": true
+  },
+  "seedStateSha256": {
+    "before": "143f4a4a9b24adf43a832787ed342387ff298d611239e70c874bacd67635fe98",
+    "after": "143f4a4a9b24adf43a832787ed342387ff298d611239e70c874bacd67635fe98",
+    "identical": true
+  },
+  "commandIdSequence": {
+    "count": 24,
+    "sha256": {
+      "before": "50554a6ecdb62e3e35c3163b19eec31fb5cfece7684c4ddd639e7b2dab92776c",
+      "after": "50554a6ecdb62e3e35c3163b19eec31fb5cfece7684c4ddd639e7b2dab92776c",
+      "identical": true
+    },
+    "ids": [
+      "r1",
+      "u2",
+      "m3",
+      "d4",
+      "r5",
+      "r6",
+      "u7",
+      "m8",
+      "d9",
+      "s10",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s15",
+      "s16",
+      "s17",
+      "s18",
+      "s19",
+      "s20",
+      "s21",
+      "s22",
+      "s23",
+      "k24"
+    ]
+  },
+  "importCalls": {
+    "identical": true,
+    "calls": [
+      "pasted-save-text-UI-RESET-95"
+    ]
+  },
+  "captures": [
+    {
+      "panel": "MachinePanel",
+      "label": "sorter-page0",
+      "bytes": 1524,
+      "rawSha256": {
+        "before": "e4280ed2be0649e44f663f49ec3e538586062de860dc115c2310d9f2581755d3",
+        "after": "e4280ed2be0649e44f663f49ec3e538586062de860dc115c2310d9f2581755d3",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "e4280ed2be0649e44f663f49ec3e538586062de860dc115c2310d9f2581755d3",
+        "after": "e4280ed2be0649e44f663f49ec3e538586062de860dc115c2310d9f2581755d3",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "MachinePanel",
+      "label": "sorter-page1",
+      "bytes": 829,
+      "rawSha256": {
+        "before": "d8490f1870775a6421ae1672adc8be99714c2ce5f55a50faab9c05293400dd2f",
+        "after": "d8490f1870775a6421ae1672adc8be99714c2ce5f55a50faab9c05293400dd2f",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "d8490f1870775a6421ae1672adc8be99714c2ce5f55a50faab9c05293400dd2f",
+        "after": "d8490f1870775a6421ae1672adc8be99714c2ce5f55a50faab9c05293400dd2f",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "MachinePanel",
+      "label": "furnace-powerLimited-page0",
+      "bytes": 1391,
+      "rawSha256": {
+        "before": "c611416f96a08a887e76a2a6fc9b1b6fed9dd102be1b0eac66f020132ed5c38a",
+        "after": "c611416f96a08a887e76a2a6fc9b1b6fed9dd102be1b0eac66f020132ed5c38a",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "c611416f96a08a887e76a2a6fc9b1b6fed9dd102be1b0eac66f020132ed5c38a",
+        "after": "c611416f96a08a887e76a2a6fc9b1b6fed9dd102be1b0eac66f020132ed5c38a",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "StorePanel",
+      "label": "store",
+      "bytes": 2246,
+      "rawSha256": {
+        "before": "fcb943c8a7f056d4d39dd1830997a4ee3d6e34a067ccaa68379d54a67d5944ac",
+        "after": "fcb943c8a7f056d4d39dd1830997a4ee3d6e34a067ccaa68379d54a67d5944ac",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "fcb943c8a7f056d4d39dd1830997a4ee3d6e34a067ccaa68379d54a67d5944ac",
+        "after": "fcb943c8a7f056d4d39dd1830997a4ee3d6e34a067ccaa68379d54a67d5944ac",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "ResearchPanel",
+      "label": "research",
+      "bytes": 1510,
+      "rawSha256": {
+        "before": "11c869529ca0435eb0c36e8cce4f523492656a9060c787112c645d63e3c81bed",
+        "after": "11c869529ca0435eb0c36e8cce4f523492656a9060c787112c645d63e3c81bed",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "11c869529ca0435eb0c36e8cce4f523492656a9060c787112c645d63e3c81bed",
+        "after": "11c869529ca0435eb0c36e8cce4f523492656a9060c787112c645d63e3c81bed",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "YardPanel",
+      "label": "yard-page0",
+      "bytes": 941,
+      "rawSha256": {
+        "before": "f859b60ba432dd3275d3bc61ea8d4149dc74303fd9b46a7c6d67c8a430e134e0",
+        "after": "f859b60ba432dd3275d3bc61ea8d4149dc74303fd9b46a7c6d67c8a430e134e0",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "f859b60ba432dd3275d3bc61ea8d4149dc74303fd9b46a7c6d67c8a430e134e0",
+        "after": "f859b60ba432dd3275d3bc61ea8d4149dc74303fd9b46a7c6d67c8a430e134e0",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "YardPanel",
+      "label": "yard-page0-copyManual",
+      "bytes": 924,
+      "rawSha256": {
+        "before": "6f81703853eb4c545821a69bcc700b3291be14f8ff8623a39686cdc269752790",
+        "after": "6f81703853eb4c545821a69bcc700b3291be14f8ff8623a39686cdc269752790",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "6f81703853eb4c545821a69bcc700b3291be14f8ff8623a39686cdc269752790",
+        "after": "6f81703853eb4c545821a69bcc700b3291be14f8ff8623a39686cdc269752790",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "YardPanel",
+      "label": "yard-page1",
+      "bytes": 582,
+      "rawSha256": {
+        "before": "686d34d7c3ecced0aee6e096702c30e998f0d49d565dc764aff8edb2cd534b8b",
+        "after": "686d34d7c3ecced0aee6e096702c30e998f0d49d565dc764aff8edb2cd534b8b",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "686d34d7c3ecced0aee6e096702c30e998f0d49d565dc764aff8edb2cd534b8b",
+        "after": "686d34d7c3ecced0aee6e096702c30e998f0d49d565dc764aff8edb2cd534b8b",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "YardPanel",
+      "label": "yard-page1-applied",
+      "bytes": 614,
+      "rawSha256": {
+        "before": "6707b85ac32fa10fa0dbd806fd006e28aeea48f486910aaab761250b76c382b6",
+        "after": "6707b85ac32fa10fa0dbd806fd006e28aeea48f486910aaab761250b76c382b6",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "6707b85ac32fa10fa0dbd806fd006e28aeea48f486910aaab761250b76c382b6",
+        "after": "6707b85ac32fa10fa0dbd806fd006e28aeea48f486910aaab761250b76c382b6",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "YardPanel",
+      "label": "yard-page0-back",
+      "bytes": 928,
+      "rawSha256": {
+        "before": "bed64cba6ba7fa0ffa344575d05e12bad3ed4c884c5934168534f55c721477f7",
+        "after": "bed64cba6ba7fa0ffa344575d05e12bad3ed4c884c5934168534f55c721477f7",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "bed64cba6ba7fa0ffa344575d05e12bad3ed4c884c5934168534f55c721477f7",
+        "after": "bed64cba6ba7fa0ffa344575d05e12bad3ed4c884c5934168534f55c721477f7",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    },
+    {
+      "panel": "ReturnReportPanel",
+      "label": "return-report",
+      "bytes": 813,
+      "rawSha256": {
+        "before": "16445a03edf1c2ecaa9b944fe3843593f425f72b6a3509ad0617652b9588a694",
+        "after": "16445a03edf1c2ecaa9b944fe3843593f425f72b6a3509ad0617652b9588a694",
+        "identical": true
+      },
+      "normalizedSha256": {
+        "before": "16445a03edf1c2ecaa9b944fe3843593f425f72b6a3509ad0617652b9588a694",
+        "after": "16445a03edf1c2ecaa9b944fe3843593f425f72b6a3509ad0617652b9588a694",
+        "identical": true
+      },
+      "normalizedDomIdentical": true
+    }
+  ],
+  "summary": {
+    "panels": 5,
+    "captures": 11,
+    "allCapturesIdentical": true,
+    "failures": 0,
+    "pass": true
+  },
+  "failures": []
+}

@@ -1,0 +1,298 @@
+{
+  "task": "UI-RESET-95: mechanical split of src/ui/Panels.tsx into src/ui/panels/* (pure re-export facade)",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/95",
+  "branch": "rw/95-panels-split-g2",
+  "codeHeadSha": "f832639a3d622387ec8d207e54f214d603128bfc",
+  "baselineSha": "c896a7c21cb5e15d16183a327944ce5f32a13ab3",
+  "measuredAt": "2026-11-11T21:03:33.557Z",
+  "scope": {
+    "changedFiles": [
+      "src/ui/Panels.tsx (now a pure re-export facade, 5 export names preserved)",
+      "src/ui/panels/MachinePanel.tsx (new, verbatim)",
+      "src/ui/panels/StorePanel.tsx (new, verbatim)",
+      "src/ui/panels/ResearchPanel.tsx (new, verbatim)",
+      "src/ui/panels/YardPanel.tsx (new, verbatim)",
+      "src/ui/panels/ReturnReportPanel.tsx (new, verbatim)",
+      "src/ui/panels/shared.tsx (new: Row grammar + the ONE shared nextId counter)"
+    ],
+    "forbiddenPathsTouched": false,
+    "newDependencies": false,
+    "importersUnchanged": "App.tsx and the four panel test files keep importing ./Panels; the facade preserves every export name and prop signature",
+    "sharedCounterInvariant": "module-level `let seq = 0` + nextId stays a single counter in panels/shared.tsx, so command-id sequences are unchanged (proven by the 24-command log identity below)"
+  },
+  "ladder": {
+    "typecheck": {
+      "command": "pnpm run typecheck (tsc --noEmit, strict + noUnusedLocals/noUnusedParameters)",
+      "branch": "pass",
+      "baseline": "pass"
+    },
+    "lint": {
+      "note": "no separate lint script or eslint config exists in this repo; tsc --noEmit strict is the lint equivalent and is the CI gate"
+    },
+    "validate": {
+      "command": "pnpm run validate",
+      "branch": "pass (0 violations)",
+      "baseline": "pass (0 violations)"
+    },
+    "tests": {
+      "command": "pnpm test (vitest run)",
+      "branch": {
+        "files": 37,
+        "tests": 396,
+        "passed": 396,
+        "failed": 0
+      },
+      "baseline": {
+        "files": 37,
+        "tests": 396,
+        "passed": 396,
+        "failed": 0
+      },
+      "parity": true
+    },
+    "build": {
+      "command": "pnpm run build",
+      "branch": "pass",
+      "baseline": "pass"
+    }
+  },
+  "entryBytes": {
+    "ceilingBytes": 233000,
+    "before": {
+      "name": "index-CKIGfy5Q.js",
+      "bytes": 89365,
+      "underCeiling": true
+    },
+    "after": {
+      "name": "index-DFIPngEk.js",
+      "bytes": 89365,
+      "underCeiling": true,
+      "headroomBytes": 143635
+    },
+    "deltaBytes": 0,
+    "identicalChunks": {
+      "vendor": true,
+      "tables": true,
+      "css": true,
+      "worker": true
+    },
+    "allAssetLinksRelative": true
+  },
+  "domIdentity": {
+    "harness": "work/evidence/UI-RESET-95/dom-identity-95.mts run from EACH worktree cwd (same script, same seed ladder, per-worktree module resolution, single React instance)",
+    "seedStateSha256": {
+      "before": "143f4a4a9b24adf43a832787ed342387ff298d611239e70c874bacd67635fe98",
+      "after": "143f4a4a9b24adf43a832787ed342387ff298d611239e70c874bacd67635fe98",
+      "identical": true
+    },
+    "commandIdSequence": {
+      "count": 24,
+      "sha256": {
+        "before": "50554a6ecdb62e3e35c3163b19eec31fb5cfece7684c4ddd639e7b2dab92776c",
+        "after": "50554a6ecdb62e3e35c3163b19eec31fb5cfece7684c4ddd639e7b2dab92776c",
+        "identical": true
+      },
+      "ids": [
+        "r1",
+        "u2",
+        "m3",
+        "d4",
+        "r5",
+        "r6",
+        "u7",
+        "m8",
+        "d9",
+        "s10",
+        "s11",
+        "s12",
+        "s13",
+        "s14",
+        "s15",
+        "s16",
+        "s17",
+        "s18",
+        "s19",
+        "s20",
+        "s21",
+        "s22",
+        "s23",
+        "k24"
+      ]
+    },
+    "importCalls": {
+      "identical": true,
+      "calls": [
+        "pasted-save-text-UI-RESET-95"
+      ]
+    },
+    "panels": {
+      "MachinePanel": {
+        "captures": 3,
+        "allIdentical": true,
+        "normalizedSha256": {
+          "sorter-page0": "e4280ed2be0649e44f663f49ec3e538586062de860dc115c2310d9f2581755d3",
+          "sorter-page1": "d8490f1870775a6421ae1672adc8be99714c2ce5f55a50faab9c05293400dd2f",
+          "furnace-powerLimited-page0": "c611416f96a08a887e76a2a6fc9b1b6fed9dd102be1b0eac66f020132ed5c38a"
+        }
+      },
+      "StorePanel": {
+        "captures": 1,
+        "allIdentical": true,
+        "normalizedSha256": {
+          "store": "fcb943c8a7f056d4d39dd1830997a4ee3d6e34a067ccaa68379d54a67d5944ac"
+        }
+      },
+      "ResearchPanel": {
+        "captures": 1,
+        "allIdentical": true,
+        "normalizedSha256": {
+          "research": "11c869529ca0435eb0c36e8cce4f523492656a9060c787112c645d63e3c81bed"
+        }
+      },
+      "YardPanel": {
+        "captures": 5,
+        "allIdentical": true,
+        "normalizedSha256": {
+          "yard-page0": "f859b60ba432dd3275d3bc61ea8d4149dc74303fd9b46a7c6d67c8a430e134e0",
+          "yard-page0-copyManual": "6f81703853eb4c545821a69bcc700b3291be14f8ff8623a39686cdc269752790",
+          "yard-page1": "686d34d7c3ecced0aee6e096702c30e998f0d49d565dc764aff8edb2cd534b8b",
+          "yard-page1-applied": "6707b85ac32fa10fa0dbd806fd006e28aeea48f486910aaab761250b76c382b6",
+          "yard-page0-back": "bed64cba6ba7fa0ffa344575d05e12bad3ed4c884c5934168534f55c721477f7"
+        }
+      },
+      "ReturnReportPanel": {
+        "captures": 1,
+        "allIdentical": true,
+        "normalizedSha256": {
+          "return-report": "16445a03edf1c2ecaa9b944fe3843593f425f72b6a3509ad0617652b9588a694"
+        }
+      }
+    },
+    "summary": {
+      "panels": 5,
+      "captures": 11,
+      "allCapturesIdentical": true,
+      "failures": 0,
+      "pass": true
+    },
+    "receipts": {
+      "before": "dom-identity-before.json",
+      "after": "dom-identity-after.json",
+      "comparison": "dom-identity-comparison.json"
+    }
+  },
+  "bootProbe": {
+    "tool": "playwright-core + local Chrome/Edge headless, vite preview; DOM/console/resource probes only (no visual inspection)",
+    "before": {
+      "url": "http://localhost:4206/",
+      "summary": {
+        "contexts": 3,
+        "failures": 0,
+        "pass": true
+      },
+      "contexts": [
+        {
+          "context": "fresh-desk1280",
+          "viewport": [
+            1280,
+            800
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": false
+          }
+        },
+        {
+          "context": "mature-desk1280-worker",
+          "viewport": [
+            1280,
+            800
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": true
+          }
+        },
+        {
+          "context": "fresh-phone390",
+          "viewport": [
+            390,
+            844
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": false
+          }
+        }
+      ]
+    },
+    "after": {
+      "url": "http://localhost:4205/",
+      "summary": {
+        "contexts": 3,
+        "failures": 0,
+        "pass": true
+      },
+      "contexts": [
+        {
+          "context": "fresh-desk1280",
+          "viewport": [
+            1280,
+            800
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": false
+          }
+        },
+        {
+          "context": "mature-desk1280-worker",
+          "viewport": [
+            1280,
+            800
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": true
+          }
+        },
+        {
+          "context": "fresh-phone390",
+          "viewport": [
+            390,
+            844
+          ],
+          "chunkCheck": {
+            "entryLoaded": true,
+            "tablesLoaded": true,
+            "vendorLoaded": true,
+            "workerFetched": false
+          }
+        }
+      ]
+    },
+    "panelCoverage": "StorePanel (rail + dock), ResearchPanel (rail), YardPanel (rail + menu row), ReturnReportPanel (catch-up); MachinePanel covered by app tests + DOM-identity harness",
+    "previewServing": "vite preview --strictPort started FROM each worktree cwd; served index.html entry hash verified against each worktree's own dist build (4205 -> branch index-DFIPngEk.js, 4206 -> baseline index-CKIGfy5Q.js)",
+    "receipts": {
+      "before": "boot-probe-before.json",
+      "after": "boot-probe-after.json"
+    }
+  },
+  "limitations": [
+    "No separate lint script/eslint config exists; tsc --noEmit strict is the lint gate (same as CI).",
+    "MachinePanel in-app mounting is proven by the existing app tests (396-test ladder) and the DOM-identity harness, not by canvas picking in the boot probe (camera-dependent, out of scope for a module move).",
+    "DOM/console/resource probes only; no visual inspection was performed or claimed.",
+    "Entry chunk content hash changes (module graph renumbering from the facade) while its byte size is identical (89365 B before and after); vendor/tables/css/worker chunks are byte-identical."
+  ],
+  "pass": true
+}
