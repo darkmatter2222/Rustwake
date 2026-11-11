@@ -14,10 +14,10 @@ A removed request means **the product owner incorporated it into existing strate
 4. Release engineer validates the proposed product decision/backlog, then runs:
 
    ```sh
-   node scripts/sponsor-inbox.mjs ack work/sponsor/intake/SPONSOR-ID.json work/product/DECISION.md TICKET-ID
+   node scripts/sponsor-inbox.mjs ack work/sponsor/intake/SPONSOR-ID.json work/product/DECISION.md 43 62
    ```
 
-   List all incorporated ticket IDs after the decision path. The command verifies they exist and link the receipt; deferred/rejected tickets cannot trigger consumption. Mixed requests must have every actionable clause accounted for before acknowledging the snapshot. The script verifies references, not semantic completeness; product owner and PM must inspect the actual decision.
+   List all incorporated GitHub issue numbers after the decision path. The command validates them against GitHub Issues in darkmatter2222/Rustwake via authenticated `gh`: each issue must exist (pull requests are rejected) and link the receipt ID or receipt path in its body or comments; issues labeled `status:deferred`/`status:rejected` cannot trigger consumption. If `gh` is unavailable or unauthenticated the acknowledgement fails closed; the archived `work/backlog.json` is never consulted. Mixed requests must have every actionable clause accounted for before acknowledging the snapshot. The script verifies references, not semantic completeness; product owner and PM must inspect the actual decision.
 5. The script writes a durable prepared receipt first, removes only the exact captured prefix, preserves appended new requests, then marks the receipt incorporated. Commit the receipt, decision, backlog, generated board and inbox removal **together**. On GitHub, disappearance is the public acknowledgement. A failed push leaves a local incorporation only: reconcile remote sponsor edits without force, then publish the complete transaction. Do not separately push an empty inbox without its traceability.
 6. PM links the acknowledgement on the board. Implementation/review/publication/deployment follow normal gates. Never equate acknowledgement with shipping or use a placeholder task with no interpreted outcome just to empty the inbox.
 
