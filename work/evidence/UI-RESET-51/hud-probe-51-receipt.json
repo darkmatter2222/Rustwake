@@ -1,0 +1,1782 @@
+{
+  "task": "UI-RESET-51",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/51",
+  "headSha": "1b0330236358c54ab316ab12d9aa9b2398fde8db",
+  "url": "http://localhost:4190/",
+  "measuredAt": "2026-11-11T20:30:44.561Z",
+  "tool": "playwright-core headless Chromium; DOM/ARIA/computed-style/geometry probes only (no visual inspection)",
+  "seedSource": "docs/evidence/yard-mature.json (mutated in memory; FNV-1a checksum recomputed; lastSeenMs=Date.now() skips catch-up)",
+  "contexts": [
+    {
+      "name": "A-fresh-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": null,
+      "checks": [
+        {
+          "name": "fresh chips pinned: Scrap0 / Credits0 / Store 0/900",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "every chip has icon svg + value strong",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "store chip pressure ok at 0/900",
+          "pass": true,
+          "detail": {
+            "text": "Store 0/900",
+            "svg": 1,
+            "strong": 1,
+            "pressure": "ok",
+            "cue": null
+          }
+        },
+        {
+          "name": "no power/production cues on healthy fresh yard",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "no storage alert on fresh yard",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "cluster keeps Home last, adds All resources toggle",
+          "pass": true,
+          "detail": [
+            {
+              "label": "Sound on",
+              "expanded": null,
+              "controls": null
+            },
+            {
+              "label": "Text size 1",
+              "expanded": null,
+              "controls": null
+            },
+            {
+              "label": "All resources",
+              "expanded": "false",
+              "controls": "hud-all-resources"
+            },
+            {
+              "label": "Return to yard view",
+              "expanded": null,
+              "controls": null
+            }
+          ]
+        },
+        {
+          "name": "all-resources drawer: 15 rows, glyph+label+value, aria wired",
+          "pass": true,
+          "detail": {
+            "toggle": "true",
+            "drawer": {
+              "role": "group",
+              "label": "All resources",
+              "rows": [
+                {
+                  "svg": 1,
+                  "label": "Scrap",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Ferrous",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Nonferrous",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Residue",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Copper",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Polymer",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Wire",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Plates",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Steel",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Circuits",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Motors",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Battery",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Alloy",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Data",
+                  "value": "0"
+                },
+                {
+                  "svg": 1,
+                  "label": "Chassis",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "all-resources drawer closes",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "objective full: <=3 text lines, 2 font sizes ratio >= 1.25",
+          "pass": true,
+          "detail": {
+            "className": "objective",
+            "lineCount": 3,
+            "fontSizes": [
+              "14.25px",
+              "10.8px"
+            ],
+            "ratio": 1.3194444444444444,
+            "controls": [
+              {
+                "label": "Collapse objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              },
+              {
+                "label": "Dismiss objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              }
+            ]
+          }
+        },
+        {
+          "name": "objective controls svg-only, >= 44px",
+          "pass": true,
+          "detail": [
+            {
+              "label": "Collapse objective",
+              "text": "",
+              "svg": 1,
+              "minHeight": 44
+            },
+            {
+              "label": "Dismiss objective",
+              "text": "",
+              "svg": 1,
+              "minHeight": 44
+            }
+          ]
+        },
+        {
+          "name": "objective collapses to concise",
+          "pass": true,
+          "detail": {
+            "className": "objective objective--concise",
+            "lineCount": 1,
+            "fontSizes": [
+              "14.25px"
+            ],
+            "ratio": null,
+            "controls": [
+              {
+                "label": "Expand objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              },
+              {
+                "label": "Dismiss objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              }
+            ]
+          }
+        },
+        {
+          "name": "objective expands back to full",
+          "pass": true,
+          "detail": {
+            "className": "objective",
+            "lineCount": 3,
+            "fontSizes": [
+              "14.25px",
+              "10.8px"
+            ],
+            "ratio": 1.3194444444444444,
+            "controls": [
+              {
+                "label": "Collapse objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              },
+              {
+                "label": "Dismiss objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              }
+            ]
+          }
+        },
+        {
+          "name": "objective dismisses to restore-only control",
+          "pass": true,
+          "detail": {
+            "className": "objective objective--dismissed",
+            "lineCount": 0,
+            "fontSizes": [],
+            "ratio": null,
+            "controls": [
+              {
+                "label": "Show objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              }
+            ]
+          }
+        },
+        {
+          "name": "objective restores",
+          "pass": true,
+          "detail": {
+            "className": "objective",
+            "lineCount": 3,
+            "fontSizes": [
+              "14.25px",
+              "10.8px"
+            ],
+            "ratio": 1.3194444444444444,
+            "controls": [
+              {
+                "label": "Collapse objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              },
+              {
+                "label": "Dismiss objective",
+                "text": "",
+                "svg": 1,
+                "minHeight": 44
+              }
+            ]
+          }
+        },
+        {
+          "name": "phone shell: menu face present, no rail",
+          "pass": true,
+          "detail": {
+            "rail": null,
+            "menuFace": true
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 10,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 16,
+            "leaks": []
+          }
+        },
+        {
+          "name": "fresh phone: layout stable across ticks",
+          "pass": true,
+          "detail": {
+            "tickBefore": null,
+            "tickAfter": 20,
+            "before": {
+              ".hud__top": [
+                [
+                  10,
+                  8,
+                  380,
+                  81
+                ]
+              ],
+              ".resources": [
+                [
+                  10,
+                  8,
+                  218.36,
+                  81
+                ]
+              ],
+              ".resources__item": [
+                [
+                  10,
+                  8,
+                  118.27,
+                  31
+                ],
+                [
+                  10,
+                  33,
+                  126.91,
+                  56
+                ],
+                [
+                  10,
+                  58,
+                  123.69,
+                  81
+                ]
+              ],
+              ".objective": [
+                [
+                  10,
+                  87,
+                  350.39,
+                  170.31
+                ]
+              ],
+              ".dock": [
+                [
+                  10,
+                  738,
+                  380,
+                  836
+                ]
+              ],
+              ".hud-alert": []
+            },
+            "after": {
+              ".hud__top": [
+                [
+                  10,
+                  8,
+                  380,
+                  81
+                ]
+              ],
+              ".resources": [
+                [
+                  10,
+                  8,
+                  218.36,
+                  81
+                ]
+              ],
+              ".resources__item": [
+                [
+                  10,
+                  8,
+                  118.27,
+                  31
+                ],
+                [
+                  10,
+                  33,
+                  126.91,
+                  56
+                ],
+                [
+                  10,
+                  58,
+                  123.69,
+                  81
+                ]
+              ],
+              ".objective": [
+                [
+                  10,
+                  87,
+                  350.39,
+                  170.31
+                ]
+              ],
+              ".dock": [
+                [
+                  10,
+                  738,
+                  380,
+                  836
+                ]
+              ],
+              ".hud-alert": []
+            }
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": null,
+            "end": 20
+          }
+        }
+      ],
+      "screenshots": [
+        "A-fresh-phone390-yard.png",
+        "A-fresh-phone390-all-resources.png",
+        "A-fresh-phone390-objective-dismissed.png"
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@d0bebf5571c92828bf923db8948ce5fc"
+      },
+      "simTickStart": null,
+      "simTickEnd": 20
+    },
+    {
+      "name": "B-fresh-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": null,
+      "checks": [
+        {
+          "name": "fresh desktop chips pinned",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "every chip has icon svg + value strong",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "no alert/cues on healthy desktop yard",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "desktop rail: 5 destination slots painted",
+          "pass": true,
+          "detail": {
+            "rail": {
+              "slots": [
+                "yard",
+                "build",
+                "store",
+                "research",
+                "menu"
+              ],
+              "width": 96
+            },
+            "menuFace": false
+          }
+        },
+        {
+          "name": "all-resources drawer works in rail mode",
+          "pass": true,
+          "detail": 15
+        },
+        {
+          "name": "entry chunk < 233000 B ceiling",
+          "pass": true,
+          "detail": {
+            "entry": {
+              "name": "index-SyVOebvu.js",
+              "decodedBodySize": 96618,
+              "transferSize": 29840
+            },
+            "chunks": [
+              {
+                "name": "index-SyVOebvu.js",
+                "decodedBodySize": 96618,
+                "transferSize": 29840
+              },
+              {
+                "name": "index-Mo3hbWZg.css",
+                "decodedBodySize": 23771,
+                "transferSize": 5304
+              },
+              {
+                "name": "tables-BMoz1KUD.js",
+                "decodedBodySize": 26519,
+                "transferSize": 10012
+              },
+              {
+                "name": "vendor-Bt4lNSbZ.js",
+                "decodedBodySize": 141658,
+                "transferSize": 45674
+              }
+            ]
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 15,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 28,
+            "leaks": []
+          }
+        },
+        {
+          "name": "fresh desktop: layout stable across ticks",
+          "pass": true,
+          "detail": {
+            "tickBefore": null,
+            "tickAfter": 20,
+            "before": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  52
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  450.86,
+                  31
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  336.17,
+                  31
+                ],
+                [
+                  337.17,
+                  8,
+                  450.86,
+                  31
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  58,
+                  670,
+                  124.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": []
+            },
+            "after": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  52
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  450.86,
+                  31
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  336.17,
+                  31
+                ],
+                [
+                  337.17,
+                  8,
+                  450.86,
+                  31
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  58,
+                  670,
+                  124.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": []
+            }
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": null,
+            "end": 20
+          }
+        }
+      ],
+      "screenshots": [
+        "B-fresh-desk1280-yard.png"
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@a90c3d0a70db1de7800ea1c28df62ebe"
+      },
+      "simTickStart": null,
+      "simTickEnd": 20
+    },
+    {
+      "name": "C-full-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": {
+        "storeUnits": 900,
+        "storeCapacity": 900,
+        "overflow": 40,
+        "machines": 0,
+        "exportClaimed": true,
+        "lastSeenMs": "now (no catch-up)"
+      },
+      "checks": [
+        {
+          "name": "full alert: role=status, exact recovery copy",
+          "pass": true,
+          "detail": {
+            "text": "Store full · 900/900 · 40 held outside · sell to free space",
+            "tier": "full",
+            "role": "status",
+            "svg": 1,
+            "action": "Open store",
+            "rect": [
+              10,
+              684,
+              380,
+              738
+            ]
+          }
+        },
+        {
+          "name": "store chip reads 900/900 at full pressure with warn glyph",
+          "pass": true,
+          "detail": {
+            "text": "Store 900/900",
+            "svg": 2,
+            "strong": 1,
+            "pressure": "full",
+            "cue": null
+          }
+        },
+        {
+          "name": "full store phone: layout stable across ticks",
+          "pass": true,
+          "detail": {
+            "tickBefore": 18300,
+            "tickAfter": 18320,
+            "before": {
+              ".hud__top": [
+                [
+                  10,
+                  8,
+                  380,
+                  106
+                ]
+              ],
+              ".resources": [
+                [
+                  10,
+                  8,
+                  218.36,
+                  106
+                ]
+              ],
+              ".resources__item": [
+                [
+                  10,
+                  8,
+                  118.27,
+                  31
+                ],
+                [
+                  10,
+                  33,
+                  120.53,
+                  56
+                ],
+                [
+                  10,
+                  58,
+                  126.91,
+                  81
+                ],
+                [
+                  10,
+                  83,
+                  141.81,
+                  106
+                ]
+              ],
+              ".objective": [
+                [
+                  10,
+                  112,
+                  350.39,
+                  178.22
+                ]
+              ],
+              ".dock": [
+                [
+                  10,
+                  738,
+                  380,
+                  836
+                ]
+              ],
+              ".hud-alert": [
+                [
+                  10,
+                  684,
+                  380,
+                  738
+                ]
+              ]
+            },
+            "after": {
+              ".hud__top": [
+                [
+                  10,
+                  8,
+                  380,
+                  106
+                ]
+              ],
+              ".resources": [
+                [
+                  10,
+                  8,
+                  218.36,
+                  106
+                ]
+              ],
+              ".resources__item": [
+                [
+                  10,
+                  8,
+                  118.27,
+                  31
+                ],
+                [
+                  10,
+                  33,
+                  120.53,
+                  56
+                ],
+                [
+                  10,
+                  58,
+                  126.91,
+                  81
+                ],
+                [
+                  10,
+                  83,
+                  141.81,
+                  106
+                ]
+              ],
+              ".objective": [
+                [
+                  10,
+                  112,
+                  350.39,
+                  178.22
+                ]
+              ],
+              ".dock": [
+                [
+                  10,
+                  738,
+                  380,
+                  836
+                ]
+              ],
+              ".hud-alert": [
+                [
+                  10,
+                  684,
+                  380,
+                  738
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "name": "alert action opens Yard store with sell recovery",
+          "pass": true,
+          "detail": {
+            "title": "Yard store",
+            "sellButtons": [
+              "Sell 60 · +900",
+              "Sell 10 · +10"
+            ],
+            "locked": false
+          }
+        },
+        {
+          "name": "selling frees space: alert clears, pressure returns to ok",
+          "pass": true,
+          "detail": {
+            "sells": 3,
+            "afterAlert": null,
+            "afterStore": {
+              "text": "Store 760/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          }
+        },
+        {
+          "name": "credits ledger consistent with sales",
+          "pass": true,
+          "detail": {
+            "creditsBefore": "Credits82",
+            "after": "Credits2782",
+            "sells": 3
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 16,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 47,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 18300,
+            "end": 18332
+          }
+        }
+      ],
+      "screenshots": [
+        "C-full-phone390-alert.png",
+        "C-full-phone390-store-panel.png",
+        "C-full-phone390-recovered.png"
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@ebb6882955446a68a389c10ef76c5a29"
+      },
+      "simTickStart": 18300,
+      "simTickEnd": 18332
+    },
+    {
+      "name": "D-power-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": {
+        "machines": 8,
+        "batchPowerEach": 10,
+        "requested": 80,
+        "capacity": 8,
+        "lastSeenMs": "now (no catch-up)"
+      },
+      "checks": [
+        {
+          "name": "power cue: meaningful text + non-color warn glyph",
+          "pass": true,
+          "detail": {
+            "text": "Power 10 % · 8 limited",
+            "svg": 2,
+            "strong": 0,
+            "pressure": null,
+            "cue": "power"
+          }
+        },
+        {
+          "name": "no production cue when all machines power-limited",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap23",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Ferrous21",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Nonferrous10",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Steel10",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Copper10",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits82",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 316/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            },
+            {
+              "text": "Power 10 % · 8 limited",
+              "svg": 2,
+              "strong": 0,
+              "pressure": null,
+              "cue": "power"
+            }
+          ]
+        },
+        {
+          "name": "no storage alert at 312/900",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "power cue desktop: layout stable across ticks",
+          "pass": true,
+          "detail": {
+            "tickBefore": 18301,
+            "tickAfter": 18311,
+            "before": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  56
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  830.44,
+                  56
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  338.69,
+                  31
+                ],
+                [
+                  339.69,
+                  8,
+                  481.59,
+                  31
+                ],
+                [
+                  482.59,
+                  8,
+                  586.94,
+                  31
+                ],
+                [
+                  587.94,
+                  8,
+                  706.7,
+                  31
+                ],
+                [
+                  707.7,
+                  8,
+                  824.61,
+                  31
+                ],
+                [
+                  110,
+                  33,
+                  223.81,
+                  56
+                ],
+                [
+                  224.81,
+                  33,
+                  398.17,
+                  56
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  62,
+                  670,
+                  128.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": []
+            },
+            "after": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  56
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  830.44,
+                  56
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  338.69,
+                  31
+                ],
+                [
+                  339.69,
+                  8,
+                  481.59,
+                  31
+                ],
+                [
+                  482.59,
+                  8,
+                  586.94,
+                  31
+                ],
+                [
+                  587.94,
+                  8,
+                  706.7,
+                  31
+                ],
+                [
+                  707.7,
+                  8,
+                  824.61,
+                  31
+                ],
+                [
+                  110,
+                  33,
+                  223.81,
+                  56
+                ],
+                [
+                  224.81,
+                  33,
+                  398.17,
+                  56
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  62,
+                  670,
+                  128.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": []
+            }
+          }
+        },
+        {
+          "name": "camera fit reproduced for canvas tap",
+          "pass": true,
+          "detail": {
+            "x": 322.65042372881356,
+            "y": 190.68988347457628,
+            "scale": 2.5668697033898304,
+            "insets": {
+              "top": 134.21875,
+              "bottom": 60,
+              "left": 110,
+              "right": 334
+            }
+          }
+        },
+        {
+          "name": "selected-machine panel Status matches authoritative sim",
+          "pass": true,
+          "detail": {
+            "panel": {
+              "label": "Scrap sorter details",
+              "title": "Scrap sorter",
+              "status": "Power limited",
+              "hasNaN": false
+            },
+            "authoritative": {
+              "id": 1,
+              "blueprint": "sorter",
+              "status": "powerLimited",
+              "tile": 0
+            }
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 18,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 52,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 18301,
+            "end": 18311
+          }
+        }
+      ],
+      "screenshots": [
+        "D-power-desk1280-power-cue.png",
+        "D-power-desk1280-machine-panel.png"
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@6e2bea09e969ce28c133115c953dfdd1"
+      },
+      "simTickStart": 18301,
+      "simTickEnd": 18311
+    },
+    {
+      "name": "E-full-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": {
+        "storeUnits": 900,
+        "storeCapacity": 900,
+        "overflow": 40,
+        "machines": 0,
+        "exportClaimed": true,
+        "lastSeenMs": "now (no catch-up)"
+      },
+      "checks": [
+        {
+          "name": "rail-mode alert sits in reserved band, clear of rail/dock/objective",
+          "pass": true,
+          "detail": {
+            "alert": {
+              "left": 110,
+              "top": 634,
+              "right": 946,
+              "bottom": 688,
+              "width": 836,
+              "height": 54
+            },
+            "rail": {
+              "left": 8,
+              "top": 8,
+              "right": 104,
+              "bottom": 792,
+              "width": 96,
+              "height": 784
+            },
+            "dock": {
+              "left": 110,
+              "top": 746,
+              "right": 946,
+              "bottom": 792,
+              "width": 836,
+              "height": 46
+            },
+            "objective": {
+              "left": 110,
+              "top": 58,
+              "right": 670,
+              "bottom": 124.21875,
+              "width": 560,
+              "height": 66.21875
+            },
+            "viewport": {
+              "w": 1280,
+              "h": 800
+            }
+          }
+        },
+        {
+          "name": "rail-mode alert keeps full recovery copy",
+          "pass": true,
+          "detail": {
+            "text": "Store full · 900/900 · 40 held outside · sell to free space",
+            "tier": "full",
+            "role": "status",
+            "svg": 1,
+            "action": "Open store",
+            "rect": [
+              110,
+              634,
+              946,
+              688
+            ]
+          }
+        },
+        {
+          "name": "full store desktop: layout stable across ticks",
+          "pass": true,
+          "detail": {
+            "tickBefore": 18300,
+            "tickAfter": 18320,
+            "before": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  52
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  580.52,
+                  31
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  329.8,
+                  31
+                ],
+                [
+                  330.8,
+                  8,
+                  447.7,
+                  31
+                ],
+                [
+                  448.7,
+                  8,
+                  580.52,
+                  31
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  58,
+                  670,
+                  124.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": [
+                [
+                  110,
+                  634,
+                  946,
+                  688
+                ]
+              ]
+            },
+            "after": {
+              ".hud__top": [
+                [
+                  110,
+                  8,
+                  1272,
+                  52
+                ]
+              ],
+              ".resources": [
+                [
+                  110,
+                  8,
+                  580.52,
+                  31
+                ]
+              ],
+              ".resources__item": [
+                [
+                  110,
+                  8,
+                  218.27,
+                  31
+                ],
+                [
+                  219.27,
+                  8,
+                  329.8,
+                  31
+                ],
+                [
+                  330.8,
+                  8,
+                  447.7,
+                  31
+                ],
+                [
+                  448.7,
+                  8,
+                  580.52,
+                  31
+                ]
+              ],
+              ".objective": [
+                [
+                  110,
+                  58,
+                  670,
+                  124.22
+                ]
+              ],
+              ".dock": [
+                [
+                  110,
+                  746,
+                  946,
+                  792
+                ]
+              ],
+              ".hud-alert": [
+                [
+                  110,
+                  634,
+                  946,
+                  688
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 19,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 45,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 18300,
+            "end": 18320
+          }
+        }
+      ],
+      "screenshots": [
+        "E-full-desk1280-rail-alert.png"
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@c61fd578c7bafed5f21236db9c03bd05"
+      },
+      "simTickStart": 18300,
+      "simTickEnd": 18320
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "contexts": 5,
+    "checks": 58,
+    "failed": 0
+  },
+  "failures": []
+}
