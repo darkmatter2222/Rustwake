@@ -20,7 +20,21 @@ import {
   worldToTile,
   type Camera,
   type CameraInsets,
+  type ViewState,
 } from "../game/renderer/scene";
+import {
+  panCamera,
+  refitCamera,
+  zoomAtPoint,
+  zoomStep,
+  ZOOM_STEP,
+} from "../game/renderer/camera";
+import {
+  applyGesture,
+  idleGesture,
+  type GestureOutput,
+  type GestureState,
+} from "../game/renderer/gestures";
 import { createAudio, onVisibility, type AudioApi, type CueName } from "../game/audio/audio";
 import {
   REJECT_TEXT,
@@ -45,12 +59,13 @@ import {
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
-import { MenuSheet, ShellMenuFace, ShellRail, useRailMode } from "./shell/Shell";
+import { MenuSheet, ShellMenuFace, ShellRail, ShellZoom, useRailMode } from "./shell/Shell";
 import {
   SHELL_GUTTER_PX,
   SHELL_INSPECTOR_TOP_PX,
   SHELL_RIGHT_GUTTER_PX,
   SHELL_SLOTS,
+  SHELL_ZOOM_GUTTER_PX,
   type ShellSlot,
 } from "./shell/layout";
 
@@ -68,7 +83,6 @@ export interface PrimaryAction {
 
 let commandSeq = 0;
 const nextCommandId = (): string => `c${++commandSeq}`;
-const TAP_THRESHOLD = 8;
 
 /**
  * L-1 / UI-RESET-49 G2: the chrome band the world is fitted into, read from the
@@ -102,7 +116,10 @@ function chromeInsets(cssHeight: number): ShellInsets | undefined {
     top: topEdge + 6,
     bottom: Math.max(0, cssHeight - dockTop) + 6,
     left: railActive ? railBox.right + 6 : 0,
-    right: railActive ? SHELL_RIGHT_GUTTER_PX : 0,
+    // UI-RESET-50: rail mode reserves the inspector gutter; phone/column
+    // reserve the zoom stack's right gutter instead, so the visible camera
+    // controls never cover a yard cell the player must tap or build on.
+    right: railActive ? SHELL_RIGHT_GUTTER_PX : SHELL_ZOOM_GUTTER_PX,
   };
 }
 
@@ -133,8 +150,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const audioRef = useRef<AudioApi | null>(audioApi ?? null);
   const cueStateRef = useRef<SimState>(store.getState());
   const insetsRef = useRef<ShellInsets | undefined>(undefined);
-  const pointers = useRef(new Map<number, { x: number; y: number }>());
-  const drag = useRef({ moved: 0, lastX: 0, lastY: 0, pinch: 0 });
+  /**
+   * UI-RESET-50: the gesture machine owns tap/drag/pinch/cancel separation;
+   * `viewRef`/`fittedRef` are the render loop's latest view and shell fit, and
+   * `intentRef` records that the player steered the camera themselves, so a
+   * resize or an opening inspector refits around their intent instead of
+   * throwing it away. Session state only — the save shape is untouched.
+   */
+  const gestureRef = useRef<GestureState>(idleGesture());
+  const viewRef = useRef<ViewState>({ width: 360, height: 640 });
+  const fittedRef = useRef<Camera>(cameraRef.current);
+  const intentRef = useRef(false);
 
   const [started, setStarted] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
@@ -381,33 +407,40 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         return;
       }
       const camera = cameraRef.current;
-      const step = 16 / camera.scale;
+      const view = viewRef.current;
+      const fitted = fittedRef.current;
       switch (event.key) {
         case "ArrowLeft":
           event.preventDefault();
-          cameraRef.current = { ...camera, x: clampAxis(camera.x - step, 192) };
+          cameraRef.current = panCamera(camera, view, 16, 0, fitted);
+          intentRef.current = true;
           return;
         case "ArrowRight":
           event.preventDefault();
-          cameraRef.current = { ...camera, x: clampAxis(camera.x + step, 192) };
+          cameraRef.current = panCamera(camera, view, -16, 0, fitted);
+          intentRef.current = true;
           return;
         case "ArrowUp":
           event.preventDefault();
-          cameraRef.current = { ...camera, y: clampAxis(camera.y - step, 224) };
+          cameraRef.current = panCamera(camera, view, 0, 16, fitted);
+          intentRef.current = true;
           return;
         case "ArrowDown":
           event.preventDefault();
-          cameraRef.current = { ...camera, y: clampAxis(camera.y + step, 224) };
+          cameraRef.current = panCamera(camera, view, 0, -16, fitted);
+          intentRef.current = true;
           return;
         case "+":
         case "=":
           event.preventDefault();
-          cameraRef.current = { ...camera, scale: Math.min(6, camera.scale * 1.2) };
+          cameraRef.current = zoomStep(camera, view, 1, fitted);
+          intentRef.current = true;
           return;
         case "-":
         case "_":
           event.preventDefault();
-          cameraRef.current = { ...camera, scale: Math.max(1.2, camera.scale / 1.2) };
+          cameraRef.current = zoomStep(camera, view, -1, fitted);
+          intentRef.current = true;
           return;
         case "n":
         case "N":
@@ -435,6 +468,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
       const w = Math.round(cssWidth * dpr);
       const h = Math.round(cssHeight * dpr);
+      viewRef.current = { width: cssWidth, height: cssHeight };
       const insets = chromeInsets(cssHeight);
       // L-1 / G2: the chrome band changes with the text scale, with an open panel
       // and with the shell mode (the rail and inspector reserve horizontal edges),
@@ -448,8 +482,27 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         canvas.width = w;
         canvas.height = h;
         insetsRef.current = insets;
-        cameraRef.current = fitToShell(cssWidth, cssHeight);
+        // UI-RESET-50: a layout change refits around the player's intent —
+        // their zoom and centre survive (clamped into the new view) instead
+        // of snapping back to the fit every time an inspector opens.
+        const fitted = fitToShell(cssWidth, cssHeight);
+        fittedRef.current = fitted;
+        cameraRef.current = refitCamera(
+          cameraRef.current,
+          fitted,
+          viewRef.current,
+          intentRef.current
+        );
+        // The zoom stack clears the measured dock at every text scale.
+        const rootStyle = document.documentElement.style;
+        if (insets) rootStyle.setProperty("--shell-zoom-clear", `${Math.round(insets.bottom + 2)}px`);
+        else rootStyle.removeProperty("--shell-zoom-clear");
       }
+      // One stamped attribute the headless probes and jsdom tests read as the
+      // camera's paint truth; written only when the camera actually moved.
+      const cam = cameraRef.current;
+      const stamp = `${cam.x.toFixed(2)},${cam.y.toFixed(2)},${cam.scale.toFixed(3)}`;
+      if (canvas.dataset.cam !== stamp) canvas.dataset.cam = stamp;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // Q-004 B1: one state read per rendered frame, shared by the canvas, the ghost
       // validity check and the cue diff, so both surfaces describe the same tick.
@@ -489,62 +542,43 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     return () => cancelAnimationFrame(raf);
   }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio]);
 
-  const pinchDistance = (): number => {
-    const list = [...pointers.current.values()];
-    if (list.length < 2) return 0;
-    return Math.hypot(list[0].x - list[1].x, list[0].y - list[1].y);
-  };
-
-  const onPointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    drag.current = { moved: 0, lastX: event.clientX, lastY: event.clientY, pinch: pinchDistance() };
-    event.currentTarget.setPointerCapture(event.pointerId);
-  };
-
-  const onPointerMove = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    if (!pointers.current.has(event.pointerId)) return;
-    const dx = event.clientX - drag.current.lastX;
-    const dy = event.clientY - drag.current.lastY;
-    pointers.current.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    if (pointers.current.size >= 2) {
-      const next = pinchDistance();
-      const previous = drag.current.pinch;
-      if (previous > 4 && next > 4) {
-        const scale = Math.min(6, Math.max(1.2, cameraRef.current.scale * (next / previous)));
-        cameraRef.current = { ...cameraRef.current, scale };
-      }
-      drag.current.pinch = next;
-      return;
+  /**
+   * UI-RESET-50: apply one gesture-machine output. Pan and pinch steer the
+   * same clamped camera math the wheel and keys use; only a cleared `tap`
+   * may select, salvage or set the build ghost — a drag, a pinch or a cancel
+   * cannot reach that branch by construction.
+   */
+  const applyGestureOutput = (out: GestureOutput) => {
+    gestureRef.current = out.state;
+    const view = viewRef.current;
+    const fitted = fittedRef.current;
+    if (out.pan) {
+      cameraRef.current = panCamera(cameraRef.current, view, out.pan.dx, out.pan.dy, fitted);
+      intentRef.current = true;
     }
-    drag.current.moved += Math.abs(dx) + Math.abs(dy);
-    if (drag.current.moved > TAP_THRESHOLD) {
-      const scale = cameraRef.current.scale;
-      cameraRef.current = {
-        ...cameraRef.current,
-        x: clampAxis(cameraRef.current.x - dx / scale, 192),
-        y: clampAxis(cameraRef.current.y - dy / scale, 224),
-      };
+    if (out.pinch) {
+      cameraRef.current = zoomAtPoint(
+        cameraRef.current,
+        view,
+        out.pinch.factor,
+        out.pinch.x,
+        out.pinch.y,
+        fitted
+      );
+      intentRef.current = true;
     }
-    drag.current.lastX = event.clientX;
-    drag.current.lastY = event.clientY;
-    if (buildBlueprint !== null) {
-      const world = worldAt(canvasRef.current, cameraRef.current, event);
-      setGhostTile(world === null ? null : worldToTile(world.x, world.y));
+    if (out.ghost && buildBlueprint !== null) {
+      const world = screenToWorld(cameraRef.current, view, out.ghost.x, out.ghost.y);
+      setGhostTile(worldToTile(world.x, world.y));
     }
-  };
-
-  const onPointerUp = (event: ReactPointerEvent<HTMLCanvasElement>) => {
-    const isTap = drag.current.moved <= TAP_THRESHOLD && pointers.current.size === 1;
-    pointers.current.delete(event.pointerId);
-    if (!isTap) return;
-    const world = worldAt(canvasRef.current, cameraRef.current, event);
-    if (world === null) return;
-    const hit = pickTarget(store.getState(), world.x, world.y);
+    if (!out.tap) return;
+    const world = screenToWorld(cameraRef.current, view, out.tap.x, out.tap.y);
     if (buildBlueprint !== null) {
       const tile = worldToTile(world.x, world.y);
       if (tile !== null) setGhostTile(tile);
       return;
     }
+    const hit = pickTarget(store.getState(), world.x, world.y);
     if (hit === null) {
       setSelected(null);
       return;
@@ -554,6 +588,94 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       dispatch({ id: nextCommandId(), type: "manual.salvage" });
     }
   };
+
+  const localPoint = (event: ReactPointerEvent<HTMLCanvasElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+  };
+
+  const onPointerDown = (event: ReactPointerEvent<HTMLCanvasElement>) => {
+    const p = localPoint(event);
+    applyGestureOutput(
+      applyGesture(gestureRef.current, { type: "down", id: event.pointerId, x: p.x, y: p.y })
+    );
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // jsdom has no pointer capture; the gesture machine does not need it.
+    }
+  };
+
+  const onPointerMove = (event: ReactPointerEvent<HTMLCanvasElement>) => {
+    const p = localPoint(event);
+    applyGestureOutput(
+      applyGesture(gestureRef.current, { type: "move", id: event.pointerId, x: p.x, y: p.y })
+    );
+  };
+
+  const onPointerUp = (event: ReactPointerEvent<HTMLCanvasElement>) => {
+    const p = localPoint(event);
+    applyGestureOutput(
+      applyGesture(gestureRef.current, { type: "up", id: event.pointerId, x: p.x, y: p.y })
+    );
+  };
+
+  // A cancelled pointer spoils the whole gesture: no lift of any remaining
+  // pointer may tap, so an interrupted touch can never salvage or place.
+  const onPointerCancel = (event: ReactPointerEvent<HTMLCanvasElement>) => {
+    applyGestureOutput(
+      applyGesture(gestureRef.current, { type: "cancel", id: event.pointerId })
+    );
+  };
+
+  const zoomBy = useCallback((factor: number) => {
+    const view = viewRef.current;
+    cameraRef.current = zoomAtPoint(
+      cameraRef.current,
+      view,
+      factor,
+      view.width / 2,
+      view.height / 2,
+      fittedRef.current
+    );
+    intentRef.current = true;
+  }, []);
+
+  /** Home / Reset view: the fresh shell fit wins and the intent is retired. */
+  const resetCamera = useCallback(() => {
+    const parent = canvasRef.current?.parentElement;
+    const width = parent?.clientWidth || window.innerWidth;
+    const height = parent?.clientHeight || window.innerHeight;
+    const fitted = fitToShell(width, height);
+    fittedRef.current = fitted;
+    cameraRef.current = fitted;
+    intentRef.current = false;
+  }, []);
+
+  useEffect(() => {
+    // Wheel zoom: a native non-passive listener (React roots wheel passive),
+    // anchored at the cursor, so the page's own scroll/zoom never fights the
+    // camera. One shared clamp range with pinch, keys and the controls.
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const delta = event.deltaMode === 1 ? event.deltaY * 16 : event.deltaY;
+      const factor = Math.min(2, Math.max(0.5, Math.exp(-delta * 0.0015)));
+      cameraRef.current = zoomAtPoint(
+        cameraRef.current,
+        viewRef.current,
+        factor,
+        event.clientX - rect.left,
+        event.clientY - rect.top,
+        fittedRef.current
+      );
+      intentRef.current = true;
+    };
+    canvas.addEventListener("wheel", onWheel, { passive: false });
+    return () => canvas.removeEventListener("wheel", onWheel);
+  }, [started]);
 
   const role = store.getRole();
   const primary: PrimaryAction =
@@ -613,7 +735,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+        onPointerCancel={onPointerCancel}
       />
       <div
         className={
@@ -643,7 +765,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             onCycleText={cycleTextScale}
             onToggleMute={toggleMute}
             onHome={() => {
-              cameraRef.current = fitToShell(window.innerWidth, window.innerHeight);
+              resetCamera();
               setSelected(null);
             }}
           />
@@ -703,7 +825,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           <MenuSheet
             onClose={closeMenu}
             onHome={() => {
-              cameraRef.current = fitToShell(window.innerWidth, window.innerHeight);
+              resetCamera();
               setSelected(null);
               closeMenu();
             }}
@@ -761,24 +883,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         {/* G2: the Menu face — thumb zone on phones, the corner Home left in the
             column band; rail mode hides it because slot 5 owns the menu there. */}
         <ShellMenuFace ref={menuFaceRef} open={menuOpen} onToggle={toggleMenu} />
+        {/* G2 #50: visible zoom + reset controls. Positioned by shell.css per
+            band; the camera fit reserves their gutter so they never cover
+            yard cells. */}
+        <ShellZoom
+          onZoomIn={() => zoomBy(ZOOM_STEP)}
+          onZoomOut={() => zoomBy(1 / ZOOM_STEP)}
+          onReset={resetCamera}
+        />
       </div>
     </div>
   );
-}
-
-function clampAxis(value: number, span: number): number {
-  const half = span / 2;
-  return Math.min(span - half, Math.max(half, value));
-}
-
-function worldAt(
-  canvas: HTMLCanvasElement | null,
-  camera: Camera,
-  event: ReactPointerEvent<HTMLCanvasElement>
-): { x: number; y: number } | null {
-  if (!canvas) return null;
-  const rect = canvas.getBoundingClientRect();
-  return screenToWorld(camera, { width: rect.width, height: rect.height }, event.clientX - rect.left, event.clientY - rect.top);
 }
 
 export function pickTarget(state: ReturnType<GameStore["getState"]>, x: number, y: number): number | null {

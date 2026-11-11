@@ -1,0 +1,1596 @@
+{
+  "task": "UI-RESET-50 camera framing + touch/mouse interaction probe",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/50",
+  "headSha": "2e0a9dded90943f90e9f174a50dd1fea21455716",
+  "url": "http://localhost:4180/",
+  "measuredAt": "2026-11-11T20:24:15.200Z",
+  "tool": "playwright-core + local Chrome/Edge headless, vite preview; DOM/console/geometry probes + CDP touch only (no visual inspection)",
+  "seed": "docs/evidence/yard-mature.json (tick 18298, 8 machines, tutorial 9, drone repaired); payload.sim.store.scrap=200 + payload.lastSeenMs=install time via envelope mutation + fnv checksum recompute: funds the 20-scrap sorter placement and credits no offline catch-up window (sim price validation unchanged)",
+  "cameraTruth": "canvas.dataset.cam paint stamp (x,y to 0.01; scale to 0.001); fit recomputed from painted chrome boxes",
+  "contexts": [
+    {
+      "context": "desk1280",
+      "viewport": [
+        1280,
+        800
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "badResponses": [],
+      "requestFailures": [],
+      "restFit": true,
+      "fit": {
+        "x": 139.3466919489571,
+        "y": 98.4118280120945,
+        "scale": 2.5838188559322033,
+        "insets": {
+          "top": 130.21875,
+          "bottom": 60,
+          "left": 110,
+          "right": 334
+        },
+        "usableH": 609.78125
+      },
+      "restCam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 2.584,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "ink": {
+        "samples": 4288,
+        "diff": 1104,
+        "ratio": 0.2575
+      },
+      "edgeSelect": {
+        "tile": 0,
+        "at": {
+          "x": 321.2636,
+          "y": 187.05256
+        },
+        "title": "Scrap sorter"
+      },
+      "zoomMax": 6,
+      "zoomMin": 1.2,
+      "resetFit": true,
+      "wheel": {
+        "before": {
+          "x": 139.35,
+          "y": 99.08,
+          "scale": 6,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 800
+          },
+          "view": {
+            "w": 1280,
+            "h": 800
+          }
+        },
+        "after": {
+          "x": 139.35,
+          "y": 99.08,
+          "scale": 5.012,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 800
+          },
+          "view": {
+            "w": 1280,
+            "h": 800
+          }
+        },
+        "wBefore": {
+          "x": 150.01666666666665,
+          "y": 99.08
+        },
+        "wAfter": {
+          "x": 152.11935355147645,
+          "y": 99.08
+        },
+        "expectScale": 5.011621268467632
+      },
+      "pan": {
+        "before": {
+          "x": 139.35,
+          "y": 99.08,
+          "scale": 6,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 800
+          },
+          "view": {
+            "w": 1280,
+            "h": 800
+          }
+        },
+        "after": {
+          "x": 139.35,
+          "y": 109.08,
+          "scale": 6,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1280,
+            "h": 800
+          },
+          "view": {
+            "w": 1280,
+            "h": 800
+          }
+        },
+        "expect": {
+          "x": 139.3466919489571,
+          "y": 109.08,
+          "scale": 6
+        }
+      },
+      "dragReturnNoTap": {
+        "before": [],
+        "after": []
+      },
+      "tapAfterDrag": "Signal lab",
+      "buildEntered": true,
+      "ghost": {
+        "at": {
+          "x": 734.7036,
+          "y": 600.49256
+        },
+        "objective": "Sell 60 Scrap for 60 credits.Ghost on cell 35 · tap again to placeDrones 5 · Power 8 · 13 requested · 62 %"
+      },
+      "placement": {
+        "placed": true,
+        "tilesBefore": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "tilesAfter": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          35
+        ],
+        "revision": [
+          1458,
+          1459
+        ]
+      },
+      "inspectorKeepsCamera": true,
+      "resizeIntent": {
+        "scaleBefore": 5.047,
+        "scaleAfter": 5.047,
+        "title": "Scrap sorter"
+      },
+      "resetRetiresIntent": true,
+      "sim": {
+        "tick1": 18428,
+        "tick2": 18438,
+        "tutorial": 9,
+        "machines": 9
+      },
+      "routesStable": true
+    },
+    {
+      "context": "phone390",
+      "viewport": [
+        390,
+        844
+      ],
+      "consoleErrors": [],
+      "pageErrors": [],
+      "badResponses": [],
+      "requestFailures": [],
+      "restFit": true,
+      "fit": {
+        "x": 114.18181818181819,
+        "y": 105.26704545454545,
+        "scale": 1.65,
+        "insets": {
+          "top": 134.21875,
+          "bottom": 112,
+          "left": 0,
+          "right": 60
+        },
+        "usableH": 597.78125
+      },
+      "restCam": {
+        "x": 114.18,
+        "y": 105.27,
+        "scale": 1.65,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "ink": {
+        "samples": 4225,
+        "diff": 1382,
+        "ratio": 0.3271
+      },
+      "edgeSelect": {
+        "tile": 5,
+        "at": {
+          "x": 297.003,
+          "y": 274.70450000000005
+        },
+        "title": "Wire mill"
+      },
+      "touchPan": {
+        "before": {
+          "x": 97.45,
+          "y": 105.27,
+          "scale": 4.028,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        },
+        "after": {
+          "x": 82.56,
+          "y": 115.2,
+          "scale": 4.028,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        },
+        "expect": {
+          "x": 82.55427010923535,
+          "y": 115.2004865938431,
+          "scale": 4.028
+        }
+      },
+      "pinchSpread": {
+        "before": {
+          "x": 82.56,
+          "y": 115.2,
+          "scale": 4.028,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        },
+        "after": {
+          "x": 82.56,
+          "y": 115.2,
+          "scale": 6,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        }
+      },
+      "pinchClose": {
+        "before": {
+          "x": 82.56,
+          "y": 115.2,
+          "scale": 6,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        },
+        "after": {
+          "x": 82.56,
+          "y": 105.27,
+          "scale": 3,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 390,
+            "h": 844
+          },
+          "view": {
+            "w": 390,
+            "h": 844
+          }
+        },
+        "expect": {
+          "x": 82.56,
+          "y": 105.26704545454545,
+          "scale": 3
+        }
+      },
+      "cancelNoTap": {
+        "before": [],
+        "after": []
+      },
+      "freshTapAfterCancel": "Signal lab",
+      "touchDragReturnNoTap": {
+        "before": [],
+        "after": []
+      },
+      "buildEntered": true,
+      "ghost": {
+        "at": {
+          "x": 297.003,
+          "y": 538.7045
+        },
+        "objective": "Sell 60 Scrap for 60 credits.Ghost on cell 35 · tap again to placeDrones 5 · Power 8 · 13 requested · 62 %"
+      },
+      "placement": {
+        "placed": true,
+        "tilesBefore": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "tilesAfter": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          35
+        ],
+        "revision": [
+          1458,
+          1459
+        ]
+      },
+      "zoomMax": 6,
+      "zoomMin": 1.2,
+      "resetFit": true,
+      "inspectorKeepsCamera": true,
+      "inspectorTitle": "Signal lab",
+      "resizeIntent": {
+        "scaleBefore": 2.578,
+        "scaleAfter": 2.578,
+        "title": "Signal lab"
+      },
+      "resetRetiresIntent": true,
+      "sim": {
+        "tick1": 18448,
+        "tick2": 18458,
+        "tutorial": 9,
+        "machines": 9
+      },
+      "routesStable": true
+    }
+  ],
+  "frames": [
+    {
+      "file": "01-desk-rest.png",
+      "context": "desk1280",
+      "note": "mature rest: camera fits the rail/inspector band",
+      "cam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 2.584,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 3 requested · 100 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Sell 60 Scrap+60 credits",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 110,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 160,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 210,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 110,
+            "y": 8,
+            "w": 1162,
+            "h": 116.21875,
+            "right": 1272,
+            "bottom": 124.21875
+          },
+          "dock": {
+            "x": 110,
+            "y": 746,
+            "w": 836,
+            "h": 46,
+            "right": 946,
+            "bottom": 792
+          },
+          "rail": {
+            "x": 8,
+            "y": 8,
+            "w": 96,
+            "h": 784,
+            "right": 104,
+            "bottom": 792
+          },
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18328,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "02-desk-edge-select.png",
+      "context": "desk1280",
+      "note": "corner cell 0 selected: Scrap sorter inspector",
+      "cam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 2.584,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "state": {
+        "panelTitles": [
+          "Scrap sorter"
+        ],
+        "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 4 requested · 100 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Less power222 credits",
+          "Faster batches232 credits"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 110,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 160,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 210,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 110,
+            "y": 8,
+            "w": 1162,
+            "h": 116.21875,
+            "right": 1272,
+            "bottom": 124.21875
+          },
+          "dock": {
+            "x": 110,
+            "y": 746,
+            "w": 836,
+            "h": 46,
+            "right": 946,
+            "bottom": 792
+          },
+          "rail": {
+            "x": 8,
+            "y": 8,
+            "w": 96,
+            "h": 784,
+            "right": 104,
+            "bottom": 792
+          },
+          "panel": {
+            "x": 952,
+            "y": 131,
+            "w": 320,
+            "h": 661,
+            "right": 1272,
+            "bottom": 792
+          }
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18328,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "03-desk-zoom-min.png",
+      "context": "desk1280",
+      "note": "zoomed out to the 1.2 floor",
+      "cam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 1.2,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 10 requested · 80 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Sell 60 Scrap+60 credits",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 110,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 160,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 210,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 110,
+            "y": 8,
+            "w": 1162,
+            "h": 116.21875,
+            "right": 1272,
+            "bottom": 124.21875
+          },
+          "dock": {
+            "x": 110,
+            "y": 746,
+            "w": 836,
+            "h": 46,
+            "right": 946,
+            "bottom": 792
+          },
+          "rail": {
+            "x": 8,
+            "y": 8,
+            "w": 96,
+            "h": 784,
+            "right": 104,
+            "bottom": 792
+          },
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18338,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "04-desk-ghost-35.png",
+      "context": "desk1280",
+      "note": "build ghost on corner cell 35 before placing",
+      "cam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 2.584,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.Ghost on cell 35 · tap again to placeDrones 5 · Power 8 · 13 requested · 62 %",
+        "buildMode": true,
+        "dockFaces": [
+          "Cancel",
+          "Build Scrap sorter20 scrap",
+          "Next"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 110,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 160,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 210,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 110,
+            "y": 8,
+            "w": 1162,
+            "h": 116.21875,
+            "right": 1272,
+            "bottom": 124.21875
+          },
+          "dock": {
+            "x": 110,
+            "y": 746,
+            "w": 836,
+            "h": 46,
+            "right": 946,
+            "bottom": 792
+          },
+          "rail": {
+            "x": 8,
+            "y": 8,
+            "w": 96,
+            "h": 784,
+            "right": 104,
+            "bottom": 792
+          },
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18378,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "05-desk-placed-35.png",
+      "context": "desk1280",
+      "note": "machine built on corner cell 35",
+      "cam": {
+        "x": 139.35,
+        "y": 98.41,
+        "scale": 2.584,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 800
+        },
+        "view": {
+          "w": 1280,
+          "h": 800
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 5 · Power 8 · 13 requested · 62 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Connect",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 110,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 160,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 210,
+            "y": 694,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 110,
+            "y": 8,
+            "w": 1162,
+            "h": 116.21875,
+            "right": 1272,
+            "bottom": 124.21875
+          },
+          "dock": {
+            "x": 110,
+            "y": 746,
+            "w": 836,
+            "h": 46,
+            "right": 946,
+            "bottom": 792
+          },
+          "rail": {
+            "x": 8,
+            "y": 8,
+            "w": 96,
+            "h": 784,
+            "right": 104,
+            "bottom": 792
+          },
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18385,
+          "revision": 1459,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            35
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8],[9,\"sorter\",35]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "06-desk-resize-intent.png",
+      "context": "desk1280",
+      "note": "1024x768 column: zoom intent + selection survive",
+      "cam": {
+        "x": 108.34,
+        "y": 144.74,
+        "scale": 5.047,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 1024,
+          "h": 768
+        },
+        "view": {
+          "w": 1024,
+          "h": 768
+        }
+      },
+      "state": {
+        "panelTitles": [
+          "Scrap sorter"
+        ],
+        "objective": "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 5 · Power 8 · 13 requested · 62 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Connect",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 970,
+            "y": 76,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 970,
+            "y": 126,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 970,
+            "y": 176,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 1004,
+            "h": 120.21875,
+            "right": 1014,
+            "bottom": 128.21875
+          },
+          "dock": {
+            "x": 232,
+            "y": 714,
+            "w": 560,
+            "h": 46,
+            "right": 792,
+            "bottom": 760
+          },
+          "rail": null,
+          "panel": {
+            "x": 232,
+            "y": 398.171875,
+            "w": 560,
+            "h": 315.828125,
+            "right": 792,
+            "bottom": 714
+          }
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18398,
+          "revision": 1459,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            35
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8],[9,\"sorter\",35]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "07-phone-rest.png",
+      "context": "phone390",
+      "note": "mature rest at 390x844: fit reserves the zoom gutter",
+      "cam": {
+        "x": 114.18,
+        "y": 105.27,
+        "scale": 1.65,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 3 requested · 100 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Sell 60 Scrap+60 credits",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 336,
+            "y": 586,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 336,
+            "y": 636,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 336,
+            "y": 686,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 120.21875,
+            "right": 380,
+            "bottom": 128.21875
+          },
+          "dock": {
+            "x": 10,
+            "y": 738,
+            "w": 370,
+            "h": 98,
+            "right": 380,
+            "bottom": 836
+          },
+          "rail": null,
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18328,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "08-phone-edge-select.png",
+      "context": "phone390",
+      "note": "corner cell 5 selected by touch tap",
+      "cam": {
+        "x": 114.18,
+        "y": 84.33,
+        "scale": 1.65,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "state": {
+        "panelTitles": [
+          "Wire mill"
+        ],
+        "objective": "Choose what improves on the Wire mill · 250 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 4 requested · 100 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Less power250 credits",
+          "Faster batches260 credits"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 336,
+            "y": 624,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 336,
+            "y": 674,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 336,
+            "y": 724,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 137.3125,
+            "right": 380,
+            "bottom": 145.3125
+          },
+          "dock": {
+            "x": 10,
+            "y": 790,
+            "w": 370,
+            "h": 46,
+            "right": 380,
+            "bottom": 836
+          },
+          "rail": null,
+          "panel": {
+            "x": 10,
+            "y": 442.25,
+            "w": 370,
+            "h": 347.75,
+            "right": 380,
+            "bottom": 790
+          }
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18328,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "09-phone-pinch.png",
+      "context": "phone390",
+      "note": "after pinch spread to 6 and close to 3",
+      "cam": {
+        "x": 82.56,
+        "y": 105.27,
+        "scale": 3,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 10 requested · 80 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Sell 60 Scrap+60 credits",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 336,
+            "y": 586,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 336,
+            "y": 636,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 336,
+            "y": 686,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 120.21875,
+            "right": 380,
+            "bottom": 128.21875
+          },
+          "dock": {
+            "x": 10,
+            "y": 738,
+            "w": 370,
+            "h": 98,
+            "right": 380,
+            "bottom": 836
+          },
+          "rail": null,
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18348,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "10-phone-ghost-35.png",
+      "context": "phone390",
+      "note": "touch ghost on corner cell 35",
+      "cam": {
+        "x": 114.18,
+        "y": 105.27,
+        "scale": 1.65,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Sell 60 Scrap for 60 credits.Ghost on cell 35 · tap again to placeDrones 5 · Power 8 · 13 requested · 62 %",
+        "buildMode": true,
+        "dockFaces": [
+          "Cancel",
+          "Build Scrap sorter20 scrap",
+          "Next"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 336,
+            "y": 586,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 336,
+            "y": 636,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 336,
+            "y": 686,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 120.21875,
+            "right": 380,
+            "bottom": 128.21875
+          },
+          "dock": {
+            "x": 10,
+            "y": 738,
+            "w": 370,
+            "h": 98,
+            "right": 380,
+            "bottom": 836
+          },
+          "rail": null,
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18388,
+          "revision": 1458,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "11-phone-placed-35.png",
+      "context": "phone390",
+      "note": "machine built on corner cell 35 by touch flow",
+      "cam": {
+        "x": 114.18,
+        "y": 105.27,
+        "scale": 1.65,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "view": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "state": {
+        "panelTitles": [],
+        "objective": "Connect Scrap sorter so its cargo moves.A machine waits for input; check its empty side.Drones 5 · Power 8 · 13 requested · 62 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Store",
+          "Yard",
+          "Connect",
+          "Build",
+          "Research"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 336,
+            "y": 586,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 336,
+            "y": 636,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 336,
+            "y": 686,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 370,
+            "h": 120.21875,
+            "right": 380,
+            "bottom": 128.21875
+          },
+          "dock": {
+            "x": 10,
+            "y": 738,
+            "w": 370,
+            "h": 98,
+            "right": 380,
+            "bottom": 836
+          },
+          "rail": null,
+          "panel": null
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18393,
+          "revision": 1459,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            35
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8],[9,\"sorter\",35]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    },
+    {
+      "file": "12-phone-resize-intent.png",
+      "context": "phone390",
+      "note": "412x915: zoom intent + selection survive",
+      "cam": {
+        "x": 80,
+        "y": 86.06,
+        "scale": 2.578,
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "w": 412,
+          "h": 915
+        },
+        "view": {
+          "w": 412,
+          "h": 915
+        }
+      },
+      "state": {
+        "panelTitles": [
+          "Signal lab"
+        ],
+        "objective": "Choose what improves on the Signal lab · 290 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 6 requested · 100 %",
+        "buildMode": false,
+        "dockFaces": [
+          "Less power290 credits",
+          "Faster batches300 credits"
+        ],
+        "zoom": [
+          {
+            "label": "Zoom in",
+            "x": 358,
+            "y": 695,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Zoom out",
+            "x": 358,
+            "y": 745,
+            "w": 44,
+            "h": 44
+          },
+          {
+            "label": "Reset view",
+            "x": 358,
+            "y": 795,
+            "w": 44,
+            "h": 44
+          }
+        ],
+        "boxes": {
+          "lead": {
+            "x": 10,
+            "y": 8,
+            "w": 392,
+            "h": 137.3125,
+            "right": 402,
+            "bottom": 145.3125
+          },
+          "dock": {
+            "x": 10,
+            "y": 861,
+            "w": 392,
+            "h": 46,
+            "right": 402,
+            "bottom": 907
+          },
+          "rail": null,
+          "panel": {
+            "x": 10,
+            "y": 483.421875,
+            "w": 392,
+            "h": 377.578125,
+            "right": 402,
+            "bottom": 861
+          }
+        },
+        "toast": null,
+        "sim": {
+          "tick": 18418,
+          "revision": 1459,
+          "tutorial": 9,
+          "machineTiles": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            35
+          ],
+          "fingerprint": "[[[1,\"sorter\",0],[2,\"furnace\",1],[3,\"polymerRecycler\",3],[4,\"copperSeparator\",4],[5,\"wireMill\",5],[6,\"platePress\",6],[7,\"circuitAssembler\",7],[8,\"signalLab\",8],[9,\"sorter\",35]],[[1,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":1},\"scrap\"],[2,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"ferrous\"],[3,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"store\",\"id\":0},\"nonferrous\"],[4,{\"kind\":\"machine\",\"id\":1},{\"kind\":\"machine\",\"id\":2},\"ferrous\"],[5,{\"kind\":\"machine\",\"id\":2},{\"kind\":\"store\",\"id\":0},\"steel\"],[6,{\"kind\":\"machine\",\"id\":3},{\"kind\":\"store\",\"id\":0},\"polymer\"],[7,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"machine\",\"id\":3},\"residue\"],[8,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":4},\"nonferrous\"],[9,{\"kind\":\"machine\",\"id\":4},{\"kind\":\"store\",\"id\":0},\"copper\"],[10,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":5},\"copper\"],[11,{\"kind\":\"machine\",\"id\":5},{\"kind\":\"store\",\"id\":0},\"wire\"],[12,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":6},\"steel\"],[13,{\"kind\":\"machine\",\"id\":6},{\"kind\":\"store\",\"id\":0},\"plates\"],[14,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"wire\"],[15,{\"kind\":\"store\",\"id\":0},{\"kind\":\"machine\",\"id\":7},\"polymer\"],[16,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"store\",\"id\":0},\"circuits\"],[17,{\"kind\":\"machine\",\"id\":7},{\"kind\":\"machine\",\"id\":8},\"circuits\"],[18,{\"kind\":\"machine\",\"id\":8},{\"kind\":\"store\",\"id\":0},\"data\"]],9]"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "contexts": 2,
+    "frames": 12,
+    "failures": 0,
+    "pass": true
+  },
+  "failures": []
+}

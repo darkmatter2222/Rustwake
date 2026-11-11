@@ -26,6 +26,16 @@ export const SHELL_INSPECTOR_TOP_PX = 104;
 export const SHELL_MENU_FACE_PX = 66;
 export const SHELL_MENU_ZONE_PX = SHELL_MENU_FACE_PX + SHELL_GUTTER_PX;
 
+/**
+ * UI-RESET-50: the visible zoom/reset controls. Each face keeps the shell's
+ * 44 px target floor; phone/column modes reserve the stack's right gutter in
+ * the camera fit so no yard cell ever sits under a control, and rail mode
+ * paints the row above the primary band instead (the inspector owns the
+ * right gutter there).
+ */
+export const SHELL_ZOOM_FACE_PX = 44;
+export const SHELL_ZOOM_GUTTER_PX = SHELL_ZOOM_FACE_PX + 10 + SHELL_GUTTER_PX;
+
 /** Rail mode: wide desktops, and any landscape short enough to need the width. */
 export const SHELL_RAIL_MIN_WIDTH_PX = 1200;
 export const SHELL_LANDSCAPE_MIN_WIDTH_PX = 600;
