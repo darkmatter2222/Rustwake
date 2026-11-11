@@ -1,0 +1,36 @@
+BELT-001 g4 12 h bench - candidate bcb3d1cdefdc9f84108b8bb91cd95e2736853618 on control 6b39b21 (= origin/main 1573ac1 + rw/belt001-g2 tip fb0dca0)
+
+== work/development/BELT-001-g2/bench-variants.mjs (forward)
+12 h bench, 432000 ticks, median of 5, built yard identical, order forward
+A cost-only (shipped: run carried, latency = routeLatencyTicks)
+  149.30 ms  samples [150.81,149.36,149.3,143.75,148.98]  tick 432006 batches 6 links 6 latencySum 30 hash 73703d31
+B per-tile latency (deferred: 2 x run.length)
+  144.21 ms  samples [150.19,148.08,144.21,143.67,142.71]  tick 432006 batches 6 links 6 latencySum 36 hash 9069c21e
+C no-run (latency 5, run array absent)
+  150.51 ms  samples [154.47,150.51,153.47,149.44,149.44]  tick 432006 batches 6 links 6 latencySum 30 hash 54e26a05
+D null control (4 machines, no routes)
+  32.52 ms  samples [40.58,32.19,32.24,32.53,32.52]  tick 432006 batches 4 links 0 latencySum 0 hash be19e05f
+delta vs A: B per-tile latency (deferred: 2 x run.length) -3.41 %
+delta vs A: C no-run (latency 5, run array absent) 0.81 %
+delta vs A: D null control (4 machines, no routes) -78.22 %
+shipped tuning {"beltCostPerTile":1,"beltLatencyPerTile":2,"routeLatencyTicks":5}
+
+== same script, --reverse
+12 h bench, 432000 ticks, median of 5, built yard identical, order reversed
+D null control (4 machines, no routes)
+  34.98 ms  samples [36.7,37.45,34.98,33.14,34.59]  tick 432006 batches 4 links 0 latencySum 0 hash be19e05f
+C no-run (latency 5, run array absent)
+  154.34 ms  samples [154.34,161.27,154.77,152.78,149.13]  tick 432006 batches 6 links 6 latencySum 30 hash 54e26a05
+B per-tile latency (deferred: 2 x run.length)
+  154.23 ms  samples [154.23,148.83,151.71,154.93,156.45]  tick 432006 batches 6 links 6 latencySum 36 hash 9069c21e
+A cost-only (shipped: run carried, latency = routeLatencyTicks)
+  148.81 ms  samples [158.45,153.27,148.78,148.51,148.81]  tick 432006 batches 6 links 6 latencySum 30 hash 73703d31
+delta vs A: D null control (4 machines, no routes) -76.49 %
+delta vs A: C no-run (latency 5, run array absent) 3.72 %
+delta vs A: B per-tile latency (deferred: 2 x run.length) 3.65 %
+shipped tuning {"beltCostPerTile":1,"beltLatencyPerTile":2,"routeLatencyTicks":5}
+
+== tests/perf/bench.test.ts matched pairs, one file per run
+pair 1  control 6b39b21 44.65 ms | candidate 44.53 ms  delta -0.27 %
+pair 2  control 6b39b21 41.94 ms | candidate 43.98 ms  delta +4.86 %
+vs deployed base 1573ac1: pair 1 base 43.74 | cand 43.31 (-0.98 %), pair 2 base 43.20 | cand 40.91 (-5.30 %), full-suite pair base 79.55 | cand 65.75 (-17.3 %)

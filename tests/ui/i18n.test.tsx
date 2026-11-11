@@ -298,10 +298,13 @@ describe("string table (B-10)", () => {
     const machineText = machinePanel.textContent ?? "";
     // One power unit and one batch are singular; the measured line is the assistant's.
     expect(machineText).toContain("1 unit");
-    // OPS-106: a digit-prefixed total ("21 units") is correctly pluralised and must
+    // OPS-106: a digit-prefixed total ("23 units") is correctly pluralised and must
     // not trip the bare "1 units" check, so anchor it to a word boundary only.
     expect(machineText).not.toMatch(/(^|[^0-9])1 units\b/);
-    expect(machineText).toContain("Dismantle · +21 units");
+    // BELT-001 g4 merge resolution: the face is engine-derived — refundOf(20)=18 build
+    // refund + 1 input-buffer unit + refundOf(beltCost(2))=2 per each of the two links
+    // = 23, exactly what the dismantle tap returns (main's pre-g4 face printed 21).
+    expect(machineText).toContain("Dismantle · +23 units");
     expect(machineText).toContain("Working ");
     expect(machineText).toContain("batches/s");
     expect(machinePanel.querySelector("[aria-label]")?.getAttribute("aria-label")).toBe(

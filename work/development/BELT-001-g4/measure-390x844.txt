@@ -1,0 +1,28 @@
+BELT-001 g4 phone pass · http://localhost:4179/ · 390x844 dsf2 isMobile+hasTouch · dock tile 2, cols 6, beltCostPerTile 1
+expected lines ["3 tiles · 3 scrap","7 tiles · 7 scrap"] (charged 3/7)
+
+[390x844-ts1-rest] panels 0 · scale 1.95 · view 390x844 · live tick 432046 storeUnits 338 scrap 338
+  machines [[1,4,"sorter"],[2,31,"sorter"]]
+  {"id":1,"tiles":3,"vertices":[[164,236],[226,236],[289,236]],"corners":0,"box":{"w":125,"h":0},"ink":"8/9/12@0.11px","chordInk":"4/4/6@0px","labelLightPixels":99,"classCount":4060,"canvasSize":[780,1688],"line":"3 tiles · 3 scrap","selected":false}
+  {"id":2,"tiles":7,"vertices":[[164,236],[164,298],[164,361],[164,423],[164,485],[164,548],[101,548]],"corners":1,"box":{"w":62,"h":312},"ink":"32/32/36@0px","chordInk":"0/0/6@0px","labelLightPixels":8,"classCount":4060,"canvasSize":[780,1688],"line":"7 tiles · 7 scrap","selected":false}
+  decode null · save links [{"id":1,"run":3,"latency":5},{"id":2,"run":7,"latency":5}]
+  tick 432046 · machines [[1,4,null],[2,31,null]]
+  pageerror 0
+
+[390x844-ts1-panel-7-tiles] panels 1 · scale 1.95 · view 390x844 · live tick 432046 storeUnits 338 scrap 338
+  machines [[1,4,"sorter"],[2,31,"sorter"]]
+  {"id":1,"tiles":3,"vertices":[[164,236],[226,236],[289,236]],"corners":0,"box":{"w":125,"h":0},"ink":"8/9/12@0.11px","chordInk":"4/4/6@0px","labelLightPixels":99,"classCount":4056,"canvasSize":[780,1688],"line":"3 tiles · 3 scrap","selected":true}
+  {"id":2,"tiles":7,"vertices":[[164,236],[164,298],[164,361],[164,423],[164,485],[164,548],[101,548]],"corners":1,"box":{"w":62,"h":312},"ink":"32/32/36@0px","chordInk":"0/0/6@0px","labelLightPixels":65,"classCount":4056,"canvasSize":[780,1688],"line":"7 tiles · 7 scrap","selected":true}
+  tap {"title":"Scrap sorter","linksRow":"7 tiles · 7 scrap","rows":11}
+  decode null · save links [{"id":1,"run":3,"latency":5},{"id":2,"run":7,"latency":5}]
+  tick 432046 · machines [[1,4,null],[2,31,null]]
+  pageerror 0
+
+[390x844-ts1-label-3-tiles] panels 1 · scale 1.95 · view 390x844 · live tick 432046 storeUnits 338 scrap 338
+  machines [[1,4,"sorter"],[2,31,"sorter"]]
+  {"id":1,"tiles":3,"vertices":[[164,236],[226,236],[289,236]],"corners":0,"box":{"w":125,"h":0},"ink":"8/9/12@0.11px","chordInk":"4/4/6@0px","labelLightPixels":149,"classCount":4044,"canvasSize":[780,1688],"line":"3 tiles · 3 scrap","selected":true}
+  {"id":2,"tiles":7,"vertices":[[164,236],[164,298],[164,361],[164,423],[164,485],[164,548],[101,548]],"corners":1,"box":{"w":62,"h":312},"ink":"32/32/36@0px","chordInk":"0/0/6@0px","labelLightPixels":8,"classCount":4044,"canvasSize":[780,1688],"line":"7 tiles · 7 scrap","selected":true}
+  tap {"title":"Scrap sorter","linksRow":"3 tiles · 3 scrap","rows":11}
+  decode null · save links [{"id":1,"run":3,"latency":5},{"id":2,"run":7,"latency":5}]
+  tick 432046 · machines [[1,4,null],[2,31,null]]
+  pageerror 0

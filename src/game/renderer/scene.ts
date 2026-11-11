@@ -1,6 +1,7 @@
 import { TUNING } from "../content/defs";
 import { DOCK_TILE, YARD_COLS, YARD_ROWS } from "../simulation/commands";
-import type { DroneState, MachineState, SimState } from "../simulation/types";
+import { beltExtentLine } from "../../ui/text";
+import type { DroneState, Endpoint, MachineState, SimState } from "../simulation/types";
 import {
   APRON_EDGE,
   APRON_PROPS,
@@ -268,7 +269,7 @@ export function drawScene(
   drawFloorKit(ctx, camera, view, s);
   drawForeground(ctx, camera, view, s);
   if (options.buildMode) drawGrid(ctx, camera, view);
-  drawRoutes(ctx, state, camera, view, phase);
+  drawRoutes(ctx, state, camera, view, phase, options.selected);
   drawWreck(ctx, state, camera, view, options.selected === -1);
   drawDock(ctx, state, camera, view, options.selected === -2);
   const sheen: [number, number, number, number][] = [];
@@ -570,33 +571,70 @@ function drawRoutes(
   state: SimState,
   camera: Camera,
   view: ViewState,
-  phase: number
+  phase: number,
+  selected: number | null
 ): void {
   const s = camera.scale;
   ctx.strokeStyle = "rgba(95,216,232,0.5)";
   ctx.lineWidth = 2;
+  // The same small glyph size the level digit uses; a fractional px size is valid CSS.
+  ctx.font = `${6 * s}px system-ui, sans-serif`;
+  ctx.textAlign = "center";
   for (const route of state.routes) {
-    const a = endpointPosition(route.from.kind === "store" ? DOCK_TILE : machineTile(state, route.from.id));
-    const b = endpointPosition(route.to.kind === "store" ? DOCK_TILE : machineTile(state, route.to.id));
-    const pa = worldToScreen(camera, view, a.x, a.y);
-    const pb = worldToScreen(camera, view, b.x, b.y);
+    // BELT-001 g4: the drawn extent *is* the priced extent. `run` is the tile list the
+    // connect tap charged `beltCost` from, so this orthogonal polyline is that number's
+    // silhouette: a 3-tile link and a 7-tile link no longer share one chord. A pre-price
+    // link carries no `run` and keeps the old single segment, vertex for vertex.
+    const run = route.run;
+    const pts =
+      run !== undefined && run.length > 1 ?
+        run.map(tileToWorld) :
+        [endpointOf(state, route.from), endpointOf(state, route.to)];
+    const path = pts.map((p) => worldToScreen(camera, view, p.x, p.y));
+    const legs = path.length - 1;
     ctx.beginPath();
-    ctx.moveTo(snap(pa.x), snap(pa.y));
-    ctx.lineTo(snap(pb.x), snap(pb.y));
+    path.forEach((p, i) => (i === 0 ? ctx.moveTo : ctx.lineTo).call(ctx, snap(p.x), snap(p.y)));
     ctx.stroke();
+    // g4: the price the extent stands for, on the world itself, for the machine the player
+    // has open: one line, mid-path, from the same `beltCost` as the panel row.
+    if (run !== undefined && (selected === route.from.id || selected === route.to.id)) {
+      const at = pathAt(path, legs, 0.5);
+      ctx.fillStyle = PALETTE.bodyLight;
+      ctx.fillText(beltExtentLine(route), at.x, at.y - 4 * s);
+    }
     for (const item of route.items) {
       // 3x3 amber token per in-transit item, snapped, scaled with the camera.
-      // A9: the same sub-tick phase as the drone, over the 5-tick latency window.
-      const depart = item.arrive - route.latency;
+      // A9: the same sub-tick phase as the drone, over the 5-tick latency window. Only the
+      // geometry it walks changed: the token covers the polyline leg by leg, so `t = 1` is
+      // still the destination tile on `item.arrive` - the same tick, the same arrival.
       const t =
         route.latency === 0 ?
           1 :
-          Math.min(1, Math.max(0, (state.tick + phase - depart) / route.latency));
-      const x = pa.x + (pb.x - pa.x) * t;
-      const y = pa.y + (pb.y - pa.y) * t;
-      rectOf(ctx, x - 1.5 * s, y - 1.5 * s, 3 * s, 3 * s, "amber");
+          Math.min(1, Math.max(0, (state.tick + phase - (item.arrive - route.latency)) / route.latency));
+      const at = pathAt(path, legs, t);
+      rectOf(ctx, at.x - 1.5 * s, at.y - 1.5 * s, 3 * s, 3 * s, "amber");
     }
   }
+}
+
+/**
+ * The point at fraction `t` along a route's polyline. Every `manhattanRun` step crosses
+ * exactly one cell, so all legs share one length and `t` picks the leg directly; `t = 1`
+ * lands on the last vertex exactly, which is what keeps the cargo's arrival tick intact.
+ */
+function pathAt(path: { x: number; y: number }[], legs: number, t: number) {
+  const step = t * legs; // both callers pass `t` in [0, 1]
+  const i = Math.floor(step);
+  const a = path[i];
+  const b = path[i + 1] ?? a;
+  const f = step - i;
+  return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+}
+
+/** The world centre of one endpoint: a machine's own tile, the dock for the store (id 0,
+ * which no machine ever holds, so `machineTile` answers the dock for it). */
+function endpointOf(state: SimState, endpoint: Endpoint): { x: number; y: number } {
+  return tileToWorld(machineTile(state, endpoint.id));
 }
 
 /**
@@ -774,8 +812,4 @@ function centerOf(tile: number): [number, number] {
 function machineTile(state: SimState, id: number): number {
   for (const m of state.machines) if (m.id === id) return m.tile;
   return DOCK_TILE;
-}
-
-function endpointPosition(tile: number): { x: number; y: number } {
-  return tileToWorld(tile);
 }
