@@ -1,0 +1,174 @@
+/* UI-RESET-56 (issue #56): the rebuilt yard store.
+ *
+ * Component-local sheet, the same pattern `src/ui/hud/hud.css` uses: the shared
+ * styles.css is read-only for this wave, so every new surface here carries its own
+ * `store-` prefixed rules and derives its palette from the existing :root tokens.
+ * The preserved row grammar (.panel dl / .panel__row) is untouched — the inventory
+ * and diagnostics rows reuse it verbatim; only the trade desk is new structure. */
+
+/* The panel body stays the one declared scroller; give it a visible, on-palette
+   scrollbar so the grouped inventory reads as reachable, not clipped. */
+.panel--store .panel__body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--steel) var(--well);
+}
+.panel--store .panel__body::-webkit-scrollbar {
+  width: 8px;
+}
+.panel--store .panel__body::-webkit-scrollbar-track {
+  background: var(--well);
+  border-radius: 4px;
+}
+.panel--store .panel__body::-webkit-scrollbar-thumb {
+  background: var(--steel);
+  border-radius: 4px;
+}
+.panel--store .panel__body::-webkit-scrollbar-thumb:hover {
+  background: var(--steel-light);
+}
+
+.store-section {
+  margin: 0 0 10px;
+}
+.store-section__title {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+.store-section--trade .store-section__title {
+  color: var(--furnace);
+}
+.store-note {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--body-light);
+}
+
+/* ---- Trade desk: one card per sellable resource, dearest first -------------- */
+
+.store-trade {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(201, 113, 58, 0.35);
+  border-left: 3px solid var(--rust);
+  border-radius: var(--radius);
+  background: var(--well);
+}
+.store-trade__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.store-trade__head svg {
+  flex: 0 0 auto;
+}
+.store-trade__name {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  color: var(--paper);
+}
+.store-trade__price {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  color: var(--furnace);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.store-trade__facts {
+  margin: 4px 0 6px;
+  font-size: 0.8rem;
+  color: var(--body-light);
+  font-variant-numeric: tabular-nums;
+}
+.store-trade__controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.store-trade__qty {
+  width: 64px;
+  min-height: 44px;
+  padding: 0 6px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.store-trade__preset {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 10px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: transparent;
+  color: var(--steel-light);
+  font: inherit;
+  font-size: 0.8rem;
+}
+.store-trade__preset:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+.store-trade__preview {
+  margin: 6px 0;
+  font-size: 0.84rem;
+  color: var(--cyan);
+  font-variant-numeric: tabular-nums;
+}
+.store-trade__preview[data-valid="false"] {
+  color: var(--furnace);
+}
+.store-trade .icon-btn:disabled,
+.store-trade__preset:disabled {
+  opacity: 0.55;
+}
+.store-trade__sell {
+  border-color: rgba(255, 183, 101, 0.55);
+  color: var(--furnace);
+}
+
+/* ---- Grouped inventory: raw / intermediate / finished ----------------------- */
+
+.store-group--raw .store-section__title {
+  color: var(--steel-light);
+}
+.store-group--intermediate .store-section__title {
+  color: var(--cyan);
+}
+.store-group--finished .store-section__title {
+  color: var(--violet);
+}
+.store-row dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.store-row dt svg {
+  flex: 0 0 auto;
+}
+.store-row__share {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  color: var(--body-mid);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.store-row__cue {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--body-mid);
+  overflow-wrap: anywhere;
+}
+.store-row[data-stock="0"] dt,
+.store-row[data-stock="0"] dd {
+  opacity: 0.6;
+}

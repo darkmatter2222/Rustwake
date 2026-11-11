@@ -1,0 +1,2617 @@
+{
+  "task": "UI-RESET-56",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/56",
+  "headSha": "74a30786e5f7b4be8e34783a58e665777ff184cb",
+  "url": "http://localhost:4240/",
+  "measuredAt": "2026-11-11T23:07:08.968Z",
+  "tool": "playwright-core headless Chromium; DOM/ARIA/computed-style/geometry probes only (no visual inspection)",
+  "seedSource": "docs/evidence/yard-mature.json (mutated in memory; FNV-1a checksum recomputed; lastSeenMs=Date.now() skips catch-up)",
+  "fixtureRules": {
+    "mutation": "probe code only, in-memory seed clone; src/ untouched",
+    "documented": "seed shape recorded per context in this receipt",
+    "simValidation": "save checksum recomputed with the game's own FNV-1a; the app boots, validates and ticks the seed",
+    "actionPath": "every sell/stepper/preset/alert/dock/rail action is a real UI click through the app's dispatch; no state injection",
+    "persistence": "localStorage reads poll up to 6-8 s to tolerate the ~1 s PERSIST_MS save cadence"
+  },
+  "entryBudget": {
+    "bytes": 106615,
+    "baseMainBytes": 100254,
+    "delta": 6361,
+    "ceiling": 233000
+  },
+  "contexts": [
+    {
+      "name": "A-fresh-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": null,
+      "checks": [
+        {
+          "name": "fresh phone chips pinned",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "phone boot: menu face present, no rail",
+          "pass": true,
+          "detail": {
+            "rail": null,
+            "menuFace": true
+          }
+        },
+        {
+          "name": "camera controls present (wave-2 regression)",
+          "pass": true,
+          "detail": {
+            "role": "group",
+            "label": "Camera zoom",
+            "faces": [
+              "Zoom in",
+              "Zoom out",
+              "Reset view"
+            ],
+            "visible": true
+          }
+        },
+        {
+          "name": "HUD markers present (wave-2 regression)",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "fragments": 2
+          }
+        },
+        {
+          "name": "no storage alert on fresh yard",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "A locked note + no faces",
+          "pass": true,
+          "detail": {
+            "title": "Yard store",
+            "cards": 0,
+            "note": "Finish the first steel contract to open selling."
+          }
+        },
+        {
+          "name": "A locked Sell row",
+          "pass": true,
+          "detail": [
+            {
+              "dt": "Capacity",
+              "dd": "0/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Measured",
+              "dd": "Power 100% speed (0 of 8 units requested)",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Sell",
+              "dd": "Opens after the first steel contract",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "A capacity once at 0/900",
+          "pass": true,
+          "detail": {
+            "pair": "0/900",
+            "occurrences": 1
+          }
+        },
+        {
+          "name": "A zero-stock rows honest",
+          "pass": true,
+          "detail": {
+            "count": 15,
+            "sample": {
+              "resource": "scrap",
+              "stock": "0",
+              "dt": "Scrap",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "plates": {
+              "resource": "plates",
+              "stock": "0",
+              "dt": "Plates",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "A grouped inventory 15 rows",
+          "pass": true,
+          "detail": {
+            "raw": [
+              "scrap"
+            ],
+            "mid": 11,
+            "fin": [
+              "alloy",
+              "data",
+              "chassis"
+            ]
+          }
+        },
+        {
+          "name": "A row grammar preserved",
+          "pass": true,
+          "detail": {
+            "dls": [
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ]
+            ],
+            "sample": {
+              "resource": "scrap",
+              "stock": "0",
+              "dt": "Scrap",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "A body is the one scroller",
+          "pass": true,
+          "detail": {
+            "body": {
+              "overflowY": "auto",
+              "scrollHeight": 541,
+              "clientHeight": 272
+            },
+            "scrollers": [
+              "panel__body"
+            ]
+          }
+        },
+        {
+          "name": "A phone: all 15 inventory rows reachable by scrolling",
+          "pass": true,
+          "detail": [
+            {
+              "resource": "scrap",
+              "ok": true,
+              "y": 524,
+              "bottom": 543
+            },
+            {
+              "resource": "ferrous",
+              "ok": true,
+              "y": 575,
+              "bottom": 594
+            },
+            {
+              "resource": "nonferrous",
+              "ok": true,
+              "y": 596,
+              "bottom": 615
+            },
+            {
+              "resource": "residue",
+              "ok": true,
+              "y": 617,
+              "bottom": 636
+            },
+            {
+              "resource": "copper",
+              "ok": true,
+              "y": 638,
+              "bottom": 657
+            },
+            {
+              "resource": "polymer",
+              "ok": true,
+              "y": 659,
+              "bottom": 678
+            },
+            {
+              "resource": "wire",
+              "ok": true,
+              "y": 680,
+              "bottom": 699
+            },
+            {
+              "resource": "plates",
+              "ok": true,
+              "y": 701,
+              "bottom": 720
+            },
+            {
+              "resource": "steel",
+              "ok": true,
+              "y": 706,
+              "bottom": 725
+            },
+            {
+              "resource": "circuits",
+              "ok": true,
+              "y": 579,
+              "bottom": 598
+            },
+            {
+              "resource": "motors",
+              "ok": true,
+              "y": 600,
+              "bottom": 619
+            },
+            {
+              "resource": "battery",
+              "ok": true,
+              "y": 621,
+              "bottom": 640
+            },
+            {
+              "resource": "alloy",
+              "ok": true,
+              "y": 672,
+              "bottom": 691
+            },
+            {
+              "resource": "data",
+              "ok": true,
+              "y": 693,
+              "bottom": 712
+            },
+            {
+              "resource": "chassis",
+              "ok": true,
+              "y": 706,
+              "bottom": 725
+            }
+          ]
+        },
+        {
+          "name": "panel visible buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 1,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted",
+          "pass": true,
+          "detail": {
+            "hudScan": {
+              "scanned": true,
+              "textNodes": 93,
+              "leaks": []
+            },
+            "panelScan": {
+              "scanned": true,
+              "textNodes": 74,
+              "leaks": []
+            }
+          }
+        },
+        {
+          "name": "never '1 units'",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "panel has no NaN/undefined/Infinity",
+          "pass": true,
+          "detail": false
+        },
+        {
+          "name": "A close button dismisses the panel",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": null,
+            "end": 10
+          }
+        }
+      ],
+      "screenshots": [
+        "A-fresh-phone390-yard.png",
+        "A-fresh-phone390-store-locked.png"
+      ],
+      "frames": [
+        {
+          "file": "A-fresh-phone390-yard.png",
+          "claims": [
+            "fresh phone chips pinned",
+            "phone boot: menu face present, no rail",
+            "camera controls present (wave-2 regression)",
+            "HUD markers present (wave-2 regression)",
+            "no storage alert on fresh yard"
+          ]
+        },
+        {
+          "file": "A-fresh-phone390-store-locked.png",
+          "claims": [
+            "A locked note + no faces",
+            "A locked Sell row",
+            "A capacity once at 0/900",
+            "A zero-stock rows honest",
+            "A grouped inventory 15 rows",
+            "A row grammar preserved",
+            "A body is the one scroller"
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@de7afabbc1a9a6936068abebfd1cdce2"
+      },
+      "simTickStart": null,
+      "simTickEnd": 10
+    },
+    {
+      "name": "B-fresh-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": null,
+      "checks": [
+        {
+          "name": "fresh desktop chips pinned",
+          "pass": true,
+          "detail": [
+            {
+              "text": "Scrap0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Credits0",
+              "svg": 1,
+              "strong": 1,
+              "pressure": null,
+              "cue": null
+            },
+            {
+              "text": "Store 0/900",
+              "svg": 1,
+              "strong": 1,
+              "pressure": "ok",
+              "cue": null
+            }
+          ]
+        },
+        {
+          "name": "desktop boot: rail paints 5 destination slots",
+          "pass": true,
+          "detail": {
+            "rail": {
+              "slots": [
+                "yard",
+                "build",
+                "store",
+                "research",
+                "menu"
+              ],
+              "width": 96
+            },
+            "menuFace": false
+          }
+        },
+        {
+          "name": "camera controls present (wave-2 regression)",
+          "pass": true,
+          "detail": {
+            "role": "group",
+            "label": "Camera zoom",
+            "faces": [
+              "Zoom in",
+              "Zoom out",
+              "Reset view"
+            ],
+            "visible": true
+          }
+        },
+        {
+          "name": "HUD markers present (wave-2 regression)",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "fragments": 2
+          }
+        },
+        {
+          "name": "no storage alert on fresh desktop yard",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "entry chunk < 233000 B ceiling",
+          "pass": true,
+          "detail": {
+            "entry": {
+              "name": "index-D3LFFGgm.js",
+              "decodedBodySize": 106615,
+              "transferSize": 32988
+            },
+            "chunks": [
+              {
+                "name": "index-D3LFFGgm.js",
+                "decodedBodySize": 106615,
+                "transferSize": 32988
+              },
+              {
+                "name": "tables-BMoz1KUD.js",
+                "decodedBodySize": 26519,
+                "transferSize": 10012
+              },
+              {
+                "name": "vendor-Bt4lNSbZ.js",
+                "decodedBodySize": 141658,
+                "transferSize": 45674
+              },
+              {
+                "name": "index-BMotrEEL.css",
+                "decodedBodySize": 27807,
+                "transferSize": 5915
+              }
+            ]
+          }
+        },
+        {
+          "name": "wave-2 camera markers in entry bytes (pinch/zoom/wheel)",
+          "pass": true,
+          "detail": {
+            "name": "index-D3LFFGgm.js",
+            "chars": 106596,
+            "pinch": true,
+            "zoom": true,
+            "wheel": true,
+            "inspectorTop": true
+          }
+        },
+        {
+          "name": "wave-2 shell marker --shell-inspector-top in entry CSS",
+          "pass": true,
+          "detail": {
+            "name": "index-BMotrEEL.css",
+            "chars": 27807,
+            "pinch": false,
+            "zoom": true,
+            "wheel": false,
+            "inspectorTop": true
+          }
+        },
+        {
+          "name": "B rail store slot opens panel and stays pressed",
+          "pass": true,
+          "detail": "true"
+        },
+        {
+          "name": "B locked note + no faces",
+          "pass": true,
+          "detail": {
+            "title": "Yard store",
+            "cards": 0,
+            "note": "Finish the first steel contract to open selling."
+          }
+        },
+        {
+          "name": "B locked Sell row",
+          "pass": true,
+          "detail": [
+            {
+              "dt": "Capacity",
+              "dd": "0/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Measured",
+              "dd": "Power 100% speed (0 of 8 units requested)",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Sell",
+              "dd": "Opens after the first steel contract",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "B capacity once at 0/900",
+          "pass": true,
+          "detail": {
+            "pair": "0/900",
+            "occurrences": 1
+          }
+        },
+        {
+          "name": "B zero-stock rows honest",
+          "pass": true,
+          "detail": {
+            "count": 15,
+            "sample": {
+              "resource": "scrap",
+              "stock": "0",
+              "dt": "Scrap",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "plates": {
+              "resource": "plates",
+              "stock": "0",
+              "dt": "Plates",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "B grouped inventory 15 rows",
+          "pass": true,
+          "detail": {
+            "raw": [
+              "scrap"
+            ],
+            "mid": 11,
+            "fin": [
+              "alloy",
+              "data",
+              "chassis"
+            ]
+          }
+        },
+        {
+          "name": "B row grammar preserved",
+          "pass": true,
+          "detail": {
+            "dls": [
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ]
+            ],
+            "sample": {
+              "resource": "scrap",
+              "stock": "0",
+              "dt": "Scrap",
+              "dd": "0",
+              "share": "0% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "0.6",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "B body is the one scroller",
+          "pass": true,
+          "detail": {
+            "body": {
+              "overflowY": "auto",
+              "scrollHeight": 616,
+              "clientHeight": 585
+            },
+            "scrollers": [
+              "panel__body"
+            ]
+          }
+        },
+        {
+          "name": "B desktop: all 15 inventory rows reachable by scrolling",
+          "pass": true,
+          "detail": [
+            {
+              "resource": "scrap",
+              "ok": true,
+              "y": 265,
+              "bottom": 298
+            },
+            {
+              "resource": "ferrous",
+              "ok": true,
+              "y": 330,
+              "bottom": 349
+            },
+            {
+              "resource": "nonferrous",
+              "ok": true,
+              "y": 351,
+              "bottom": 385
+            },
+            {
+              "resource": "residue",
+              "ok": true,
+              "y": 387,
+              "bottom": 420
+            },
+            {
+              "resource": "copper",
+              "ok": true,
+              "y": 422,
+              "bottom": 441
+            },
+            {
+              "resource": "polymer",
+              "ok": true,
+              "y": 443,
+              "bottom": 477
+            },
+            {
+              "resource": "wire",
+              "ok": true,
+              "y": 479,
+              "bottom": 498
+            },
+            {
+              "resource": "plates",
+              "ok": true,
+              "y": 500,
+              "bottom": 519
+            },
+            {
+              "resource": "steel",
+              "ok": true,
+              "y": 521,
+              "bottom": 540
+            },
+            {
+              "resource": "circuits",
+              "ok": true,
+              "y": 542,
+              "bottom": 561
+            },
+            {
+              "resource": "motors",
+              "ok": true,
+              "y": 563,
+              "bottom": 582
+            },
+            {
+              "resource": "battery",
+              "ok": true,
+              "y": 584,
+              "bottom": 603
+            },
+            {
+              "resource": "alloy",
+              "ok": true,
+              "y": 635,
+              "bottom": 654
+            },
+            {
+              "resource": "data",
+              "ok": true,
+              "y": 656,
+              "bottom": 675
+            },
+            {
+              "resource": "chassis",
+              "ok": true,
+              "y": 677,
+              "bottom": 696
+            }
+          ]
+        },
+        {
+          "name": "panel visible buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 1,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted",
+          "pass": true,
+          "detail": {
+            "hudScan": {
+              "scanned": true,
+              "textNodes": 105,
+              "leaks": []
+            },
+            "panelScan": {
+              "scanned": true,
+              "textNodes": 74,
+              "leaks": []
+            }
+          }
+        },
+        {
+          "name": "never '1 units'",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "panel has no NaN/undefined/Infinity",
+          "pass": true,
+          "detail": false
+        },
+        {
+          "name": "B close unpresses the rail slot",
+          "pass": true,
+          "detail": "false"
+        },
+        {
+          "name": "B rail slot reopens the locked store",
+          "pass": true,
+          "detail": "Finish the first steel contract to open selling."
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": null,
+            "end": 10
+          }
+        }
+      ],
+      "screenshots": [
+        "B-fresh-desk1280-yard.png",
+        "B-fresh-desk1280-store-locked.png"
+      ],
+      "frames": [
+        {
+          "file": "B-fresh-desk1280-yard.png",
+          "claims": [
+            "fresh desktop chips pinned",
+            "desktop boot: rail paints 5 destination slots",
+            "camera controls present (wave-2 regression)",
+            "HUD markers present (wave-2 regression)",
+            "no storage alert on fresh desktop yard"
+          ]
+        },
+        {
+          "file": "B-fresh-desk1280-store-locked.png",
+          "claims": [
+            "B locked note + no faces",
+            "B locked Sell row",
+            "B capacity once at 0/900",
+            "B zero-stock rows honest",
+            "B grouped inventory 15 rows",
+            "B row grammar preserved",
+            "B body is the one scroller",
+            "B rail store slot opens panel and stays pressed"
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@51b0fa5157c2b26303aa2164a8694336"
+      },
+      "simTickStart": null,
+      "entryBytes": 106615,
+      "simTickEnd": 10
+    },
+    {
+      "name": "C-full-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": {
+        "storeUnits": 900,
+        "storeCapacity": 900,
+        "store": {
+          "plates": 880,
+          "scrap": 20
+        },
+        "overflow": 40,
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": true,
+        "tutorial": 9,
+        "lastSeenMs": "now (no catch-up)"
+      },
+      "checks": [
+        {
+          "name": "C full alert: role=status, exact recovery copy",
+          "pass": true,
+          "detail": {
+            "text": "Store full · 900/900 · 40 held outside · sell to free space",
+            "tier": "full",
+            "role": "status",
+            "svg": 1,
+            "action": "Open store",
+            "rect": [
+              10,
+              684,
+              380,
+              738
+            ]
+          }
+        },
+        {
+          "name": "C panel surfaces",
+          "pass": true,
+          "detail": {
+            "title": "Yard store",
+            "trade": "Trade desk",
+            "groups": [
+              "Raw materials",
+              "Intermediate materials",
+              "Finished goods"
+            ],
+            "diagRows": 7
+          }
+        },
+        {
+          "name": "C trade cards dearest first",
+          "pass": true,
+          "detail": [
+            "plates",
+            "scrap"
+          ]
+        },
+        {
+          "name": "C plates card exact",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C scrap card exact",
+          "pass": true,
+          "detail": {
+            "resource": "scrap",
+            "name": "Scrap",
+            "price": "1 credit per unit",
+            "facts": "Stock 20 · Sellable 10",
+            "preview": "10 × 1 = 10 credits",
+            "previewValid": "true",
+            "qty": "10",
+            "sellText": "Sell 10 · +10",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C grouped inventory 15 rows",
+          "pass": true,
+          "detail": {
+            "raw": [
+              "scrap"
+            ],
+            "mid": 11,
+            "fin": [
+              "alloy",
+              "data",
+              "chassis"
+            ],
+            "plates": {
+              "resource": "plates",
+              "stock": "880",
+              "dt": "Plates",
+              "dd": "880",
+              "share": "98% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "scrap": {
+              "resource": "scrap",
+              "stock": "20",
+              "dt": "Scrap",
+              "dd": "20",
+              "share": "2% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "C row grammar preserved",
+          "pass": true,
+          "detail": {
+            "dls": [
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ]
+            ],
+            "sample": {
+              "resource": "scrap",
+              "stock": "20",
+              "dt": "Scrap",
+              "dd": "20",
+              "share": "2% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "diagSample": {
+              "dt": "Capacity",
+              "dd": "900/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          }
+        },
+        {
+          "name": "C diagnostics exact",
+          "pass": true,
+          "detail": [
+            {
+              "dt": "Capacity",
+              "dd": "900/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Measured",
+              "dd": "Power 100% speed (0 of 8 units requested)",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Sell floor",
+              "dd": "10 units kept per material",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Overflow hold",
+              "dd": "40",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Storage cause",
+              "dd": "Storage is full at 100%. Sell a surplus in the yard store to free room.",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Largest holds",
+              "dd": "Plates 880 · Scrap 20",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Recovery",
+              "dd": "Sell a tranche in the trade desk · 40 units held outside return as space frees",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "C body is the one scroller",
+          "pass": true,
+          "detail": {
+            "body": {
+              "overflowY": "auto",
+              "scrollHeight": 1004,
+              "clientHeight": 139
+            },
+            "scrollers": [
+              "panel__body"
+            ]
+          }
+        },
+        {
+          "name": "C phone: all 15 inventory rows reachable by scrolling",
+          "pass": true,
+          "detail": [
+            {
+              "resource": "scrap",
+              "ok": true,
+              "y": 551,
+              "bottom": 570
+            },
+            {
+              "resource": "ferrous",
+              "ok": true,
+              "y": 602,
+              "bottom": 621
+            },
+            {
+              "resource": "nonferrous",
+              "ok": true,
+              "y": 611,
+              "bottom": 630
+            },
+            {
+              "resource": "residue",
+              "ok": true,
+              "y": 551,
+              "bottom": 570
+            },
+            {
+              "resource": "copper",
+              "ok": true,
+              "y": 572,
+              "bottom": 591
+            },
+            {
+              "resource": "polymer",
+              "ok": true,
+              "y": 593,
+              "bottom": 612
+            },
+            {
+              "resource": "wire",
+              "ok": true,
+              "y": 611,
+              "bottom": 630
+            },
+            {
+              "resource": "plates",
+              "ok": true,
+              "y": 551,
+              "bottom": 571
+            },
+            {
+              "resource": "steel",
+              "ok": true,
+              "y": 573,
+              "bottom": 592
+            },
+            {
+              "resource": "circuits",
+              "ok": true,
+              "y": 594,
+              "bottom": 613
+            },
+            {
+              "resource": "motors",
+              "ok": true,
+              "y": 612,
+              "bottom": 631
+            },
+            {
+              "resource": "battery",
+              "ok": true,
+              "y": 552,
+              "bottom": 571
+            },
+            {
+              "resource": "alloy",
+              "ok": true,
+              "y": 603,
+              "bottom": 622
+            },
+            {
+              "resource": "data",
+              "ok": true,
+              "y": 612,
+              "bottom": 631
+            },
+            {
+              "resource": "chassis",
+              "ok": true,
+              "y": 552,
+              "bottom": 571
+            }
+          ]
+        },
+        {
+          "name": "C diagnostics section scrolled into view",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "C qty 7 preview exact",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "7 × 15 = 105 credits",
+            "previewValid": "true",
+            "qty": "7",
+            "sellText": "Sell 7 · +105",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": false,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C invalid qty case 0 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "0",
+            "preview": "Enter a whole number from 1 to 60.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid qty case 1 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "abc",
+            "preview": "Enter a whole number from 1 to 60.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid qty case 2 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "",
+            "preview": "Enter a whole number from 1 to 60.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid qty case 3 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "3.5",
+            "preview": "Enter a whole number from 1 to 60.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid qty case 4 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "-4",
+            "preview": "Enter a whole number from 1 to 60.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid qty case 5 blocked",
+          "pass": true,
+          "detail": {
+            "raw": "999",
+            "preview": "Only 60 units sellable above the reserve.",
+            "valid": "false",
+            "disabled": true
+          }
+        },
+        {
+          "name": "C invalid entries dispatch nothing",
+          "pass": true,
+          "detail": {
+            "credits": 82,
+            "plates": 880
+          }
+        },
+        {
+          "name": "C Half preset = 30 with exact proceeds",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "30 × 15 = 450 credits",
+            "previewValid": "true",
+            "qty": "30",
+            "sellText": "Sell 30 · +450",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": false,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C Max preset = 60, increase disabled at ceiling",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C stepper decrease 60 -> 59",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "59 × 15 = 885 credits",
+            "previewValid": "true",
+            "qty": "59",
+            "sellText": "Sell 59 · +885",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": false,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C stepper increase 59 -> 60",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C persistence live before sell",
+          "pass": true,
+          "detail": {
+            "tick": 18311,
+            "seedTick": 18298,
+            "credits": 82
+          }
+        },
+        {
+          "name": "C sell 7 updates card facts",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 873 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "C credits chip 82 -> 187",
+          "pass": true,
+          "detail": "Credits187"
+        },
+        {
+          "name": "C sell committed: revision+1, tick advances, exact ledger",
+          "pass": true,
+          "detail": {
+            "before": {
+              "rev": 1458,
+              "tick": 18311
+            },
+            "after": {
+              "rev": 1459,
+              "tick": 18320,
+              "credits": 187,
+              "plates": 873
+            }
+          }
+        },
+        {
+          "name": "C overflow returns as space frees (7 scrap)",
+          "pass": true,
+          "detail": {
+            "scrap": 27,
+            "units": 900,
+            "overflow": [
+              {
+                "resource": "scrap",
+                "qty": 33
+              }
+            ]
+          }
+        },
+        {
+          "name": "C panel reflects drain; alert stays full while overflow remains",
+          "pass": true,
+          "detail": {
+            "overflowRow": {
+              "dt": "Overflow hold",
+              "dd": "33",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            "capacity": {
+              "dt": "Capacity",
+              "dd": "900/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            "scrapRow": "27",
+            "alert": {
+              "text": "Store full · 900/900 · 33 held outside · sell to free space",
+              "tier": "full",
+              "role": "status",
+              "svg": 1,
+              "action": "Open store",
+              "rect": [
+                10,
+                684,
+                380,
+                738
+              ]
+            }
+          }
+        },
+        {
+          "name": "C rapid taps: 15 tranches, no oversell, no double-pay",
+          "pass": true,
+          "detail": {
+            "taps": 15,
+            "plates": 10,
+            "credits": 13132,
+            "scrap": 60,
+            "units": 70,
+            "overflow": 0
+          }
+        },
+        {
+          "name": "C plates face retires at floor; scrap tranche honest",
+          "pass": true,
+          "detail": {
+            "cards": [
+              {
+                "resource": "scrap",
+                "name": "Scrap",
+                "price": "1 credit per unit",
+                "facts": "Stock 60 · Sellable 50",
+                "preview": "50 × 1 = 50 credits",
+                "previewValid": "true",
+                "qty": "50",
+                "sellText": "Sell 50 · +50",
+                "sellDisabled": false,
+                "decDisabled": false,
+                "incDisabled": true,
+                "glyph": 1
+              }
+            ],
+            "platesRow": {
+              "resource": "plates",
+              "stock": "10",
+              "dt": "Plates",
+              "dd": "10",
+              "share": "1% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "C zero-sellable honesty: note, retired faces, alert clears",
+          "pass": true,
+          "detail": {
+            "credits": 13182,
+            "scrap": 10,
+            "units": 20,
+            "cards": 0,
+            "note": "Nothing is sellable right now: stock sits at or below the reserve the yard keeps.",
+            "alert": null
+          }
+        },
+        {
+          "name": "panel visible buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 1,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted",
+          "pass": true,
+          "detail": {
+            "hudScan": {
+              "scanned": true,
+              "textNodes": 110,
+              "leaks": []
+            },
+            "panelScan": {
+              "scanned": true,
+              "textNodes": 74,
+              "leaks": []
+            }
+          }
+        },
+        {
+          "name": "never '1 units'",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "panel has no NaN/undefined/Infinity",
+          "pass": true,
+          "detail": false
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 18301,
+            "end": 18328
+          }
+        }
+      ],
+      "screenshots": [
+        "C-full-phone390-alert.png",
+        "C-full-phone390-store-full.png",
+        "C-full-phone390-store-diagnostics.png",
+        "C-full-phone390-qty-7.png",
+        "C-full-phone390-invalid-qty.png",
+        "C-full-phone390-after-sell-7.png",
+        "C-full-phone390-nothing-sellable.png"
+      ],
+      "frames": [
+        {
+          "file": "C-full-phone390-alert.png",
+          "claims": [
+            "C full alert: role=status, exact recovery copy"
+          ]
+        },
+        {
+          "file": "C-full-phone390-store-full.png",
+          "claims": [
+            "C panel surfaces",
+            "C trade cards dearest first",
+            "C plates card exact",
+            "C scrap card exact",
+            "C grouped inventory 15 rows",
+            "C row grammar preserved",
+            "C diagnostics exact",
+            "C body is the one scroller"
+          ]
+        },
+        {
+          "file": "C-full-phone390-store-diagnostics.png",
+          "claims": [
+            "C diagnostics exact",
+            "C diagnostics section scrolled into view"
+          ]
+        },
+        {
+          "file": "C-full-phone390-qty-7.png",
+          "claims": [
+            "C qty 7 preview exact"
+          ]
+        },
+        {
+          "file": "C-full-phone390-invalid-qty.png",
+          "claims": [
+            "C invalid qty case 5 blocked",
+            "C invalid entries dispatch nothing"
+          ]
+        },
+        {
+          "file": "C-full-phone390-after-sell-7.png",
+          "claims": [
+            "C sell 7 updates card facts",
+            "C credits chip 82 -> 187",
+            "C sell committed: revision+1, tick advances, exact ledger",
+            "C overflow returns as space frees (7 scrap)",
+            "C panel reflects drain; alert stays full while overflow remains"
+          ]
+        },
+        {
+          "file": "C-full-phone390-nothing-sellable.png",
+          "claims": [
+            "C zero-sellable honesty: note, retired faces, alert clears"
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@784d668fd1a02c49bfb1d989f36903fa"
+      },
+      "simTickStart": 18301,
+      "simTickEnd": 18328
+    },
+    {
+      "name": "D-full-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": {
+        "storeUnits": 900,
+        "storeCapacity": 900,
+        "store": {
+          "plates": 880,
+          "scrap": 20
+        },
+        "overflow": 40,
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": true,
+        "tutorial": 9,
+        "lastSeenMs": "now (no catch-up)"
+      },
+      "checks": [
+        {
+          "name": "D rail-mode alert sits in reserved band, clear of rail/dock/objective",
+          "pass": true,
+          "detail": {
+            "alert": {
+              "left": 110,
+              "top": 634,
+              "right": 946,
+              "bottom": 688,
+              "width": 836,
+              "height": 54
+            },
+            "rail": {
+              "left": 8,
+              "top": 8,
+              "right": 104,
+              "bottom": 792,
+              "width": 96,
+              "height": 784
+            },
+            "dock": {
+              "left": 110,
+              "top": 746,
+              "right": 946,
+              "bottom": 792,
+              "width": 836,
+              "height": 46
+            },
+            "objective": {
+              "left": 110,
+              "top": 58,
+              "right": 670,
+              "bottom": 124.21875,
+              "width": 560,
+              "height": 66.21875
+            },
+            "viewport": {
+              "w": 1280,
+              "h": 800
+            }
+          }
+        },
+        {
+          "name": "D rail-mode alert keeps full recovery copy",
+          "pass": true,
+          "detail": {
+            "text": "Store full · 900/900 · 40 held outside · sell to free space",
+            "tier": "full",
+            "role": "status",
+            "svg": 1,
+            "action": "Open store",
+            "rect": [
+              110,
+              634,
+              946,
+              688
+            ]
+          }
+        },
+        {
+          "name": "D panel surfaces",
+          "pass": true,
+          "detail": {
+            "title": "Yard store",
+            "trade": "Trade desk",
+            "groups": [
+              "Raw materials",
+              "Intermediate materials",
+              "Finished goods"
+            ],
+            "diagRows": 7
+          }
+        },
+        {
+          "name": "D trade cards dearest first",
+          "pass": true,
+          "detail": [
+            "plates",
+            "scrap"
+          ]
+        },
+        {
+          "name": "D plates card exact",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 880 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "D scrap card exact",
+          "pass": true,
+          "detail": {
+            "resource": "scrap",
+            "name": "Scrap",
+            "price": "1 credit per unit",
+            "facts": "Stock 20 · Sellable 10",
+            "preview": "10 × 1 = 10 credits",
+            "previewValid": "true",
+            "qty": "10",
+            "sellText": "Sell 10 · +10",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "D grouped inventory 15 rows",
+          "pass": true,
+          "detail": {
+            "raw": [
+              "scrap"
+            ],
+            "mid": 11,
+            "fin": [
+              "alloy",
+              "data",
+              "chassis"
+            ],
+            "plates": {
+              "resource": "plates",
+              "stock": "880",
+              "dt": "Plates",
+              "dd": "880",
+              "share": "98% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "scrap": {
+              "resource": "scrap",
+              "stock": "20",
+              "dt": "Scrap",
+              "dd": "20",
+              "share": "2% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "D row grammar preserved",
+          "pass": true,
+          "detail": {
+            "dls": [
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ],
+              [
+                "grid",
+                1
+              ]
+            ],
+            "sample": {
+              "resource": "scrap",
+              "stock": "20",
+              "dt": "Scrap",
+              "dd": "20",
+              "share": "2% of capacity",
+              "cue": "salvage + drones · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            },
+            "diagSample": {
+              "dt": "Capacity",
+              "dd": "900/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          }
+        },
+        {
+          "name": "D diagnostics exact",
+          "pass": true,
+          "detail": [
+            {
+              "dt": "Capacity",
+              "dd": "900/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Measured",
+              "dd": "Power 100% speed (0 of 8 units requested)",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Sell floor",
+              "dd": "10 units kept per material",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Overflow hold",
+              "dd": "40",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Storage cause",
+              "dd": "Storage is full at 100%. Sell a surplus in the yard store to free room.",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Largest holds",
+              "dd": "Plates 880 · Scrap 20",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            {
+              "dt": "Recovery",
+              "dd": "Sell a tranche in the trade desk · 40 units held outside return as space frees",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "D body is the one scroller",
+          "pass": true,
+          "detail": {
+            "body": {
+              "overflowY": "auto",
+              "scrollHeight": 1094,
+              "clientHeight": 316
+            },
+            "scrollers": [
+              "panel__body"
+            ]
+          }
+        },
+        {
+          "name": "D desktop: all 15 inventory rows reachable by scrolling",
+          "pass": true,
+          "detail": [
+            {
+              "resource": "scrap",
+              "ok": true,
+              "y": 604,
+              "bottom": 638
+            },
+            {
+              "resource": "ferrous",
+              "ok": true,
+              "y": 669,
+              "bottom": 688
+            },
+            {
+              "resource": "nonferrous",
+              "ok": true,
+              "y": 690,
+              "bottom": 724
+            },
+            {
+              "resource": "residue",
+              "ok": true,
+              "y": 726,
+              "bottom": 760
+            },
+            {
+              "resource": "copper",
+              "ok": true,
+              "y": 760,
+              "bottom": 779
+            },
+            {
+              "resource": "polymer",
+              "ok": true,
+              "y": 604,
+              "bottom": 637
+            },
+            {
+              "resource": "wire",
+              "ok": true,
+              "y": 639,
+              "bottom": 658
+            },
+            {
+              "resource": "plates",
+              "ok": true,
+              "y": 660,
+              "bottom": 694
+            },
+            {
+              "resource": "steel",
+              "ok": true,
+              "y": 696,
+              "bottom": 715
+            },
+            {
+              "resource": "circuits",
+              "ok": true,
+              "y": 717,
+              "bottom": 736
+            },
+            {
+              "resource": "motors",
+              "ok": true,
+              "y": 738,
+              "bottom": 757
+            },
+            {
+              "resource": "battery",
+              "ok": true,
+              "y": 759,
+              "bottom": 778
+            },
+            {
+              "resource": "alloy",
+              "ok": true,
+              "y": 611,
+              "bottom": 630
+            },
+            {
+              "resource": "data",
+              "ok": true,
+              "y": 632,
+              "bottom": 651
+            },
+            {
+              "resource": "chassis",
+              "ok": true,
+              "y": 653,
+              "bottom": 672
+            }
+          ]
+        },
+        {
+          "name": "D persistence live before sell",
+          "pass": true,
+          "detail": {
+            "tick": 18311,
+            "seedTick": 18298,
+            "credits": 82
+          }
+        },
+        {
+          "name": "D sell 60 updates card facts",
+          "pass": true,
+          "detail": {
+            "resource": "plates",
+            "name": "Plates",
+            "price": "15 credits per unit",
+            "facts": "Stock 820 · Sellable 60",
+            "preview": "60 × 15 = 900 credits",
+            "previewValid": "true",
+            "qty": "60",
+            "sellText": "Sell 60 · +900",
+            "sellDisabled": false,
+            "decDisabled": false,
+            "incDisabled": true,
+            "glyph": 1
+          }
+        },
+        {
+          "name": "D credits chip 82 -> 982",
+          "pass": true,
+          "detail": "Credits982"
+        },
+        {
+          "name": "D sell committed: revision+1, tick advances, exact ledger",
+          "pass": true,
+          "detail": {
+            "before": {
+              "rev": 1458,
+              "tick": 18311
+            },
+            "after": {
+              "rev": 1459,
+              "tick": 18315,
+              "credits": 982,
+              "plates": 820
+            }
+          }
+        },
+        {
+          "name": "D overflow fully returns as space frees (40 scrap)",
+          "pass": true,
+          "detail": {
+            "scrap": 60,
+            "units": 880,
+            "overflow": 0
+          }
+        },
+        {
+          "name": "D diagnostics shed full-only rows; alert demotes to high",
+          "pass": true,
+          "detail": {
+            "diag": [
+              {
+                "dt": "Capacity",
+                "dd": "880/900",
+                "firstTwo": [
+                  "DT",
+                  "DD"
+                ]
+              },
+              {
+                "dt": "Measured",
+                "dd": "Power 100% speed (0 of 8 units requested)",
+                "firstTwo": [
+                  "DT",
+                  "DD"
+                ]
+              },
+              {
+                "dt": "Sell floor",
+                "dd": "10 units kept per material",
+                "firstTwo": [
+                  "DT",
+                  "DD"
+                ]
+              }
+            ],
+            "alert": {
+              "text": "Store nearly full · 880/900",
+              "tier": "high",
+              "role": null,
+              "svg": 1,
+              "action": "Open store",
+              "rect": [
+                110,
+                634,
+                946,
+                688
+              ]
+            }
+          }
+        },
+        {
+          "name": "D rapid taps: 14 tranches, no oversell, no double-pay",
+          "pass": true,
+          "detail": {
+            "taps": 14,
+            "plates": 10,
+            "credits": 13132,
+            "scrap": 60,
+            "units": 70,
+            "overflow": 0
+          }
+        },
+        {
+          "name": "D plates face retires at floor; scrap tranche honest",
+          "pass": true,
+          "detail": {
+            "cards": [
+              {
+                "resource": "scrap",
+                "name": "Scrap",
+                "price": "1 credit per unit",
+                "facts": "Stock 60 · Sellable 50",
+                "preview": "50 × 1 = 50 credits",
+                "previewValid": "true",
+                "qty": "50",
+                "sellText": "Sell 50 · +50",
+                "sellDisabled": false,
+                "decDisabled": false,
+                "incDisabled": true,
+                "glyph": 1
+              }
+            ],
+            "platesRow": {
+              "resource": "plates",
+              "stock": "10",
+              "dt": "Plates",
+              "dd": "10",
+              "share": "1% of capacity",
+              "cue": "not made yet · not used yet",
+              "glyph": 1,
+              "dtOpacity": "1",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ],
+              "rowDisplay": "flex",
+              "rowAlign": "baseline"
+            }
+          }
+        },
+        {
+          "name": "D zero-sellable honesty: note, retired faces, alert clears",
+          "pass": true,
+          "detail": {
+            "credits": 13182,
+            "scrap": 10,
+            "units": 20,
+            "cards": 0,
+            "note": "Nothing is sellable right now: stock sits at or below the reserve the yard keeps.",
+            "alert": null
+          }
+        },
+        {
+          "name": "D close unpresses the rail slot",
+          "pass": true,
+          "detail": "false"
+        },
+        {
+          "name": "D rail reopen preserves sold-out state",
+          "pass": true,
+          "detail": {
+            "pressed": "true",
+            "cards": 0,
+            "note": "Nothing is sellable right now: stock sits at or below the reserve the yard keeps.",
+            "capacity": {
+              "dt": "Capacity",
+              "dd": "20/900",
+              "firstTwo": [
+                "DT",
+                "DD"
+              ]
+            },
+            "alert": null
+          }
+        },
+        {
+          "name": "panel visible buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 1,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted",
+          "pass": true,
+          "detail": {
+            "hudScan": {
+              "scanned": true,
+              "textNodes": 120,
+              "leaks": []
+            },
+            "panelScan": {
+              "scanned": true,
+              "textNodes": 74,
+              "leaks": []
+            }
+          }
+        },
+        {
+          "name": "never '1 units'",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "panel has no NaN/undefined/Infinity",
+          "pass": true,
+          "detail": false
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 18301,
+            "end": 18331
+          }
+        }
+      ],
+      "screenshots": [
+        "D-full-desk1280-rail-alert.png",
+        "D-full-desk1280-store-full.png",
+        "D-full-desk1280-reopened.png"
+      ],
+      "frames": [
+        {
+          "file": "D-full-desk1280-rail-alert.png",
+          "claims": [
+            "D rail-mode alert sits in reserved band, clear of rail/dock/objective",
+            "D rail-mode alert keeps full recovery copy"
+          ]
+        },
+        {
+          "file": "D-full-desk1280-store-full.png",
+          "claims": [
+            "D panel surfaces",
+            "D trade cards dearest first",
+            "D plates card exact",
+            "D scrap card exact",
+            "D grouped inventory 15 rows",
+            "D row grammar preserved",
+            "D diagnostics exact",
+            "D body is the one scroller"
+          ]
+        },
+        {
+          "file": "D-full-desk1280-reopened.png",
+          "claims": [
+            "D rail reopen preserves sold-out state"
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "page": {
+        "_type": "Page",
+        "_guid": "page@0f35902410434a4a9bb1a006995ea0cb"
+      },
+      "simTickStart": 18301,
+      "simTickEnd": 18331
+    }
+  ],
+  "frameAudit": {
+    "frames": 14,
+    "allProven": true,
+    "unproven": [],
+    "detail": [
+      {
+        "context": "A-fresh-phone390",
+        "file": "A-fresh-phone390-yard.png",
+        "claims": [
+          "fresh phone chips pinned",
+          "phone boot: menu face present, no rail",
+          "camera controls present (wave-2 regression)",
+          "HUD markers present (wave-2 regression)",
+          "no storage alert on fresh yard"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "A-fresh-phone390",
+        "file": "A-fresh-phone390-store-locked.png",
+        "claims": [
+          "A locked note + no faces",
+          "A locked Sell row",
+          "A capacity once at 0/900",
+          "A zero-stock rows honest",
+          "A grouped inventory 15 rows",
+          "A row grammar preserved",
+          "A body is the one scroller"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "B-fresh-desk1280",
+        "file": "B-fresh-desk1280-yard.png",
+        "claims": [
+          "fresh desktop chips pinned",
+          "desktop boot: rail paints 5 destination slots",
+          "camera controls present (wave-2 regression)",
+          "HUD markers present (wave-2 regression)",
+          "no storage alert on fresh desktop yard"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "B-fresh-desk1280",
+        "file": "B-fresh-desk1280-store-locked.png",
+        "claims": [
+          "B locked note + no faces",
+          "B locked Sell row",
+          "B capacity once at 0/900",
+          "B zero-stock rows honest",
+          "B grouped inventory 15 rows",
+          "B row grammar preserved",
+          "B body is the one scroller",
+          "B rail store slot opens panel and stays pressed"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-alert.png",
+        "claims": [
+          "C full alert: role=status, exact recovery copy"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-store-full.png",
+        "claims": [
+          "C panel surfaces",
+          "C trade cards dearest first",
+          "C plates card exact",
+          "C scrap card exact",
+          "C grouped inventory 15 rows",
+          "C row grammar preserved",
+          "C diagnostics exact",
+          "C body is the one scroller"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-store-diagnostics.png",
+        "claims": [
+          "C diagnostics exact",
+          "C diagnostics section scrolled into view"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-qty-7.png",
+        "claims": [
+          "C qty 7 preview exact"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-invalid-qty.png",
+        "claims": [
+          "C invalid qty case 5 blocked",
+          "C invalid entries dispatch nothing"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-after-sell-7.png",
+        "claims": [
+          "C sell 7 updates card facts",
+          "C credits chip 82 -> 187",
+          "C sell committed: revision+1, tick advances, exact ledger",
+          "C overflow returns as space frees (7 scrap)",
+          "C panel reflects drain; alert stays full while overflow remains"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "C-full-phone390",
+        "file": "C-full-phone390-nothing-sellable.png",
+        "claims": [
+          "C zero-sellable honesty: note, retired faces, alert clears"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "D-full-desk1280",
+        "file": "D-full-desk1280-rail-alert.png",
+        "claims": [
+          "D rail-mode alert sits in reserved band, clear of rail/dock/objective",
+          "D rail-mode alert keeps full recovery copy"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "D-full-desk1280",
+        "file": "D-full-desk1280-store-full.png",
+        "claims": [
+          "D panel surfaces",
+          "D trade cards dearest first",
+          "D plates card exact",
+          "D scrap card exact",
+          "D grouped inventory 15 rows",
+          "D row grammar preserved",
+          "D diagnostics exact",
+          "D body is the one scroller"
+        ],
+        "proven": true,
+        "missing": []
+      },
+      {
+        "context": "D-full-desk1280",
+        "file": "D-full-desk1280-reopened.png",
+        "claims": [
+          "D rail reopen preserves sold-out state"
+        ],
+        "proven": true,
+        "missing": []
+      }
+    ]
+  },
+  "summary": {
+    "pass": true,
+    "contexts": 4,
+    "checks": 111,
+    "failed": 0
+  },
+  "failures": []
+}
