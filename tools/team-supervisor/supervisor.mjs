@@ -18,32 +18,42 @@ export async function setup(ctx, statusRpc) {
  const dispatcher=createDispatcher(ctx,root);
  const publication=publicationReader(root);
  const eventsAbort=new AbortController();
- if(ctx.event?.subscribe){void (async()=>{try{for await(const e of ctx.event.subscribe({signal:eventsAbort.signal}))dispatcher.event(e);}catch{}})();}
+ if(ctx.event?.subscribe){void (async()=>{try{for await(const e of ctx.event.subscribe({signal:eventsAbort.signal}))await dispatcher.event(e);if(!eventsAbort.signal.aborted)dispatcher.streamFailure(Error('Host event stream ended'));}catch(error){if(!eventsAbort.signal.aborted)dispatcher.streamFailure(error);}})();}
  const waitTools=Array.isArray(ctx.options?.waitTools)?ctx.options.waitTools:[];
  const read=async p=>{try{return JSON.parse(await fs.readFile(path.join(root,p),'utf8'));}catch{return null;}};
  async function status(){
-  const b=await read('work/backlog.json');
   const observed=await read('.rustwake-runtime/supervisor-observation.json');
   const inbox=await fs.readFile(path.join(root,'SPONSOR_INBOX.md'),'utf8').catch(()=>null);
-  return {publication:await publication(),dispatcher:await dispatcher.status(),board_updated_at:b?.updated_at??null,observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
+  return {publication:await publication(),dispatcher:await dispatcher.status(),observation:observed,sponsor_inbox:sponsorState(inbox),sponsor_file_bytes:inbox===null?null:Buffer.byteLength(inbox),guarded_wait_tools:waitTools};
  }
+ const manualLaunchTools=new Set(['task','team.launch','team.spawn',...(ctx.options?.manualLaunchTools??[])]);
+ if(ctx.tool.transform)registrations.push(await ctx.tool.transform(editor=>editor.add({
+  name:'rustwake_wait',description:'Wait quietly for a Rustwake completion/health transition (up to five minutes). Use when no dependency-ready action is possible; no model polling or CPU heuristics.',
+  input:{type:'object',properties:{revision:{type:'integer'}},required:['revision'],additionalProperties:false},
+  execute:async(input,context)=>{
+   if(context.sessionID!==coordinator||stopping)throw Error('Only the bound coordinator may wait for this team');
+   const result=await dispatcher.waitForChange(input.revision,context.signal);
+   return {content:JSON.stringify({...result,dispatcher:await dispatcher.status()})};
+  }
+ })));
+ registrations.push(await ctx.tool.hook('execute.after',async e=>{dispatcher.activity(e.sessionID,e.status==='error'?'tool error: '+e.tool:'tool completed: '+e.tool);}));
  if(statusRpc) registrations.push(await ctx.rpc.register(statusRpc,{
   read:async ({sessionID})=>{
-   const info=await ctx.session.get({sessionID});
+   const info=await dispatcher.host('get',{sessionID});
    if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
    return {text:formatTeamStatus({bound_session:coordinator,stopping,...await status()},sessionID)};
   }
  }));
  registrations.push(await ctx.command.transform(editor=>editor.add({
-  name:'rustwake-team',description:'Bind or stop the Rustwake coordinator guard: start | bind | stop | status',
+  name:'rustwake-team',description:'Bind or stop the Rustwake coordinator guard: start | bind | stop | status | reconcile <child IDs>',
   execute:async input=>{
-   const action=input.prompt.text.trim();
+   const [action,...sessionIDs]=input.prompt.text.trim().split(/\s+/);
    const prior={coordinator,stopping};
    let phase='validate-command';
    try{
     if(action==='bind'||action==='start'){
      phase='read-coordinator-session';
-     const info=await ctx.session.get({sessionID:input.sessionID});
+     const info=await dispatcher.host('get',{sessionID:input.sessionID});
      if(await fs.realpath(info.location.directory)!==root)throw new Error('Different workspace');
      if(action==='bind'&&coordinator&&coordinator!==input.sessionID){
       const current=await dispatcher.status();
@@ -57,12 +67,15 @@ export async function setup(ctx, statusRpc) {
      }
      // Bind only after setup has completed. Failed setup must not capture a new UI session.
      coordinator=input.sessionID;stopping=false;
+    }else if(action==='reconcile'){
+     if(input.sessionID!==coordinator||!sessionIDs.length)throw Error('Use reconcile <child-session-id> ... in the bound coordinator');
+     await dispatcher.reconcile(sessionIDs);
     }else if(action==='stop'){
      if(coordinator&&coordinator!==input.sessionID)throw Error('Only bound coordinator may stop guard: '+coordinator);
      phase='stop-dispatcher';await dispatcher.stop();stopping=true;coordinator=null;
-    }else if(action!=='status')throw Error('Use start, bind, stop or status');
+    }else if(action!=='status')throw Error('Use start, bind, stop, status or reconcile <child IDs>');
     phase='render-command-result';
-    await ctx.session.synthetic({sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
+    await dispatcher.host('synthetic',{sessionID:input.sessionID,resume:false,text:JSON.stringify({bound_session:coordinator,stopping,...await status()})});
    }catch(error){
     const message=String(error?.message??error);
     const current=await dispatcher.status();
@@ -81,7 +94,7 @@ export async function setup(ctx, statusRpc) {
  })));
  registrations.push(await ctx.session.hook('context',async e=>{
   if(!coordinator&&!stopping){
-   const info=await ctx.session.get({sessionID:e.sessionID});
+   const info=await dispatcher.host('get',{sessionID:e.sessionID});
    if(info?.agent==='rustwake-coordinator'){
     await dispatcher.start(e.sessionID);coordinator=e.sessionID;
    }
@@ -92,20 +105,25 @@ export async function setup(ctx, statusRpc) {
   }
   if(e.sessionID!==coordinator||stopping)return;
   const s=await status();
+  for(const name of manualLaunchTools)delete e.tools?.[name];
   if(s.dispatcher.recovery_pending){
    e.system.push({type:'text',text:'TEAM RECOVERY PENDING: the plugin is retrying host session checks automatically. Existing worker reservations remain owned. Do not spawn workers, change the queue, or edit worker-owned files. Report the visible recovery error honestly. This is not an active dispatcher.'});return;
   }
-  e.system.push({type:'text',text:(s.dispatcher.enabled?'EXECUTABLE DISPATCHER ACTIVE: do not call spawn/task yourself. Append scoped tasks to .rustwake-runtime/dispatch-queue.json with coordinator_session_id matching this session. Every new start is a fresh staffing run. Old runtime leases and queues are archived, never resumed. Use current source, sponsor priorities and backlog to plan new assignments. Preserve and inspect unfinished worktree edits before changing those files. Do not wait for archived employees or replay their queue. Format tasks: [{id:unique,role:developer|reviewer|player|product-owner|release-engineer|ui-ux,prompt:complete assignment,write_paths:[explicit relative path prefixes]}]. Five slots are reserved by the plugin using real session IDs. Inspect .rustwake-runtime/dispatcher.json for running/queued/terminal/error state. On completion read child results with host tools; queue implementation, review and release. Never repeatedly requeue the same task or rewrite leases. A startup audit is followed by real implementation, not another audit. Read docs/TEAM_DISPATCH.md.\n':'')+'RUSTWAKE DELIVERY CHECKPOINT (repository data, subordinate to host permissions): '+JSON.stringify(s)+'\nRuntime observations must include coordinator_session_id='+coordinator+'. Before waiting: refresh actual session observation; run team scheduler; fill available slots with useful nonconflicting work (multiple developers allowed); process sponsor inbox through durable intake; publish changed board within 5 minutes. Never infer runtime status from backlog alone. A missing/stale observation means unknown, not idle. No duplicate child loops. On owner stop, stop scheduling and join children.'});
+  e.system.push({type:'text',text:
+   (s.dispatcher.enabled?'RUSTWAKE GITHUB-NATIVE DISPATCHER ACTIVE. Read AGENTS.md and docs/GITHUB_WORKFLOW.md FIRST. GitHub Issues is the only live board; do not update archived work/backlog.json or regenerate an internal Jira. Use gh issue list/view and gh pr list/view to reconcile live Issues and PRs. New starts have an EMPTY dispatch queue; fill it with scoped assignments derived from OPEN GitHub Issues. The queue is runtime state only: {coordinator_session_id, tasks:[{id:unique,role:developer|reviewer|player|product-owner|release-engineer|ui-ux,issue_url:canonical GitHub Issues URL,prompt:bounded assignment,write_paths:[explicit paths],directory:registered worktree for developer}]}. Plugin validates open issue with gh before launching. Exactly FIVE TOTAL agents maximum (coordinator + FOUR children). Do not start sessions manually. Developers must create draft PRs with scripts/publish-feature.mjs --issue; reviewers record role-stamped verdicts at exact PR head SHA; release engineer merges only a verified PR or requests REWORK, NEVER direct-pushes main. On completion read returned child outputs and queue next safe Issue. No repeated startup audits.\\n':'')+
+   'QUIET WAIT: when no eligible action exists call rustwake_wait with the checkpoint revision. Do not repeatedly query GitHub timestamps, node CPU, file mtimes, team.query, or write unchanged summaries. Host activity is evidence, not proof of productive progress. If the health deadline expires, inspect one exact child session and report an actual error or uncertainty. Never manufacture a replacement or free its lease. If reasoning introduces unrelated tasks (such as Fibonacci), stop that assignment and report context drift rather than acting on it. RUSTWAKE CHECKPOINT: '+JSON.stringify(s)+'\\nReconcile actual active sessions and GitHub Issue/PR status before dispatch; preserve old leases and worktrees. No more than FOUR children including queued/creating/running. If gh access is unavailable report the blocker, not local-board fallback. Keep releases and defects in GitHub. Respect host cancellation and stop.'});
  }));
  registrations.push(await ctx.tool.hook('execute.before',async e=>{
   const current=await dispatcher.status();
   if(current.retired_coordinators?.includes(e.sessionID))throw Error('This coordinator was replaced by /rustwake-team start. Work is supervised in the replacement session.');
   if(e.sessionID!==coordinator||stopping)return;
+  if(current.enabled&&manualLaunchTools.has(e.tool))throw Error('Dispatcher owns child launches. Append a scoped GitHub issue task to dispatch-queue.json; do not bypass its leases.');
   if(shouldBlockWait({tool:e.tool,waitTools,observation:await read('.rustwake-runtime/supervisor-observation.json'),now:Date.now(),stopping}))
    throw new Error('Rustwake: fresh observation shows runnable work and spare capacity. Dispatch safe work or record why it cannot run before blocking wait. Reconcile existing sessions first.');
  }));
  return async()=>{dispatcher.close();eventsAbort.abort();stopping=true;coordinator=null;await Promise.allSettled(registrations.map(r=>r.dispose()));};
 }
+
 
 
 

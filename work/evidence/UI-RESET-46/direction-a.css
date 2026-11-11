@@ -1,0 +1,294 @@
+/* UI-RESET/ARTDIR (#46) - DIRECTION A "Salvage ledger" (selected).
+ * Ink-first hairline chrome: the world owns the frame, the HUD owns only the rows it
+ * measured. One accent-filled primary per frame, cyan = structure/available, amber =
+ * flow and prices, green = satisfied; orange is the single primary and nothing else.
+ * This is the exact cascade a token rewrite in src/ui/styles.css produces: same
+ * selectors, declared after the built sheet, no game code touched.
+ */
+
+:root {
+  --night: #0a1118;
+  --night-deep: #070d13;
+  --steel: #3a5568;
+  --steel-light: #93b4c9;
+  --rust: #c9713a;
+  --furnace: #ffb765;
+  --cyan: #5fd8e8;
+  --paper: #eef4f8;
+  --panel: rgba(7, 13, 19, 0.84);
+  --radius: 3px;
+  /* role split, one job per hue */
+  --a-avail: #5fd8e8; /* structure, titles, available */
+  --a-flow: #ffb765; /* numbers in flight, prices */
+  --a-ok: #7fdc8f; /* satisfied condition, settled */
+  --a-primary: #ff8f3f; /* the one primary fill, nothing else */
+  --a-hair: rgba(147, 180, 201, 0.28);
+  --a-step: 200ms;
+}
+
+/* ---- chip band: one row of readouts, not four boxes ---- */
+.resources {
+  max-width: 58%;
+  gap: 2px 2px;
+}
+
+.resources__item {
+  padding: 1px 5px;
+  border: 1px solid var(--a-hair);
+  border-radius: 2px;
+  background: var(--panel);
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+}
+
+.resources__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+}
+
+/* ---- guidance card: a rule, not a plate ---- */
+.objective {
+  max-width: min(100%, 400px);
+  margin-top: 4px;
+  padding: 5px 8px;
+  border: 0;
+  border-left: 2px solid var(--a-avail);
+  border-radius: 0 2px 2px 0;
+  background: var(--panel);
+  font-size: 0.84rem;
+}
+
+.objective__primary {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+}
+
+.status-line {
+  margin-top: 2px;
+  color: var(--steel-light);
+  font-size: 0.72rem;
+}
+
+.reconcile {
+  border-left: 2px solid var(--a-flow);
+  border-radius: 0 2px 2px 0;
+  background: var(--panel);
+  color: var(--a-flow);
+}
+
+/* ---- icon cluster and panel faces: flat, hairline, 44 px floor kept ---- */
+.icon-btn {
+  border-radius: 2px;
+  border: 1px solid var(--a-hair);
+  background: var(--panel);
+}
+
+.icon-btn:active {
+  background: rgba(95, 216, 232, 0.14);
+}
+
+/* ---- dock: one row, one filled primary, hairline everywhere else ---- */
+.dock {
+  gap: 3px;
+}
+
+.dock__btn {
+  border-radius: 2px;
+  border: 1px solid var(--a-hair);
+  background: var(--panel);
+  font-size: 0.84rem;
+}
+
+/* the single accent-filled face per frame */
+.dock__btn--primary,
+.panel__actions > .icon-btn:first-child,
+.node__buy {
+  border-color: rgba(255, 143, 63, 0.75);
+  background-color: var(--a-primary);
+  background-image: linear-gradient(180deg, rgba(255, 143, 63, 0.34), rgba(201, 113, 58, 0.2));
+  color: var(--night);
+}
+
+.dock__btn--primary .dock__cost {
+  color: var(--night);
+}
+
+.dock__cost {
+  color: var(--a-flow);
+}
+
+/* the harness classification (#45 J2) paints here: green = payable, rust = short */
+.dock__btn[data-afford="ok"],
+.panel .icon-btn[data-afford="ok"] {
+  border-color: rgba(127, 220, 143, 0.8);
+}
+
+.dock__btn[data-afford="short"],
+.panel .icon-btn[data-afford="short"] {
+  border-color: rgba(201, 113, 58, 0.9);
+}
+
+/* ---- plates: same boxes, hairline edge, tighter type ladder 0.95 / 0.84 / 0.72 ---- */
+.panel {
+  padding: 8px 10px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--a-hair);
+  background: var(--panel);
+}
+
+.panel__title {
+  color: var(--a-avail);
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel dt {
+  color: var(--steel-light);
+}
+
+.node {
+  padding: 6px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--a-hair);
+  background: rgba(7, 13, 19, 0.7);
+  font-size: 0.84rem;
+}
+
+.node__cost {
+  padding: 1px 5px;
+  border: 1px solid rgba(255, 183, 101, 0.55);
+  border-radius: 2px;
+  background: rgba(255, 183, 101, 0.08);
+  color: var(--a-flow);
+}
+
+/* research states: green = known (settled), amber = open (flowing), rust dashed = locked */
+.node[data-state="known"] {
+  border-color: rgba(127, 220, 143, 0.7);
+}
+
+.node[data-state="known"] .node__state {
+  color: var(--a-ok);
+}
+
+.node[data-state="open"] {
+  border-color: rgba(255, 183, 101, 0.6);
+}
+
+.node[data-state="locked"] {
+  border-style: dashed;
+  border-color: var(--a-hair);
+}
+
+.toast {
+  border-radius: 2px;
+  border: 1px solid rgba(95, 216, 232, 0.4);
+  background: var(--panel);
+}
+
+.gate {
+  background: radial-gradient(circle at 50% 38%, #10202f, var(--night-deep));
+}
+
+.gate__title {
+  letter-spacing: 0.28em;
+}
+
+.gate__btn {
+  border-radius: 2px;
+  border: 1px solid rgba(255, 143, 63, 0.8);
+  background-color: var(--a-primary);
+  color: var(--night);
+}
+
+/* ---- animation rule: one 200 ms stepped move, no per-frame drift ---- */
+.dock__btn,
+.icon-btn,
+.node,
+.toast,
+.objective {
+  transition:
+    background-color 200ms steps(4, end),
+    border-color 200ms steps(4, end),
+    opacity 200ms steps(4, end);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock__btn,
+  .icon-btn,
+  .node,
+  .toast,
+  .objective {
+    transition: none;
+  }
+}
+
+/* ---- per-band composition: the insets #45 measured (UI-RESET-45/measures.json) ---- */
+
+/* phone portrait 390x844 - ink 8,154 374x561 already owns 64 % of the frame */
+@media (min-width: 380px) and (max-width: 460px) {
+  .dock {
+    max-width: min(100%, 372px);
+  }
+}
+
+/* phone landscape 844x390 - ink was 230 px of 844 (27 %): give the world the width
+   by pulling every top-left box in, so the fitted rect is not squeezed by chrome */
+@media (max-height: 460px) {
+  .resources {
+    max-width: 52%;
+  }
+  .objective {
+    max-width: min(100%, 300px);
+  }
+  .dock {
+    max-width: min(100%, 468px);
+  }
+}
+
+/* desktop 1366/1920/2560 - the plate goes flush right so it never lands on the ink
+   (at 1920 ink ends x 1342 and the plate pinned at left 1104 sat inside it) */
+@media (min-width: 1200px) {
+  .panel {
+    left: auto;
+    right: max(10px, env(safe-area-inset-right));
+    width: 330px;
+    max-height: 74%;
+  }
+  .hud:has(.panel ~ .panel) > .panel--report {
+    top: 8%;
+    max-height: 36%;
+  }
+  .hud:has(.panel ~ .panel) > .panel--stack {
+    top: 48%;
+    max-height: 36%;
+  }
+}
+
+@media (min-width: 2400px) {
+  .panel {
+    width: 360px;
+  }
+}
+
+/* ---- chip priority ladder, fixed from the #45 measurements (the same yard reported 3 / 4 / 5 / 7 chips and a 23 / 48 / 73 px row across the five bands). One row always; the currency, the purse and the capacity stay, the contract materials join as the measured rail width allows. DOM order is Scrap, materials, Credits, Store. ---- */
+.resources { flex-wrap: nowrap; max-width: none; }
+.resources__item:nth-child(2) { display: none; }
+@media (max-height: 460px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3) { display: none; }
+}
+@media (min-width: 1200px) and (max-width: 1499px) {
+  .resources__item:nth-child(2) { display: inline-flex; }
+  .resources__item:nth-child(3), .resources__item:nth-child(4), .resources__item:nth-child(5) { display: none; }
+}
+@media (min-width: 1500px) and (max-width: 2099px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3) { display: inline-flex; }
+  .resources__item:nth-child(4), .resources__item:nth-child(5) { display: none; }
+}
+@media (min-width: 2100px) {
+  .resources__item:nth-child(2), .resources__item:nth-child(3), .resources__item:nth-child(4), .resources__item:nth-child(5) { display: inline-flex; }
+}
+

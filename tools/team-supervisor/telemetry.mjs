@@ -18,7 +18,7 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  if(pub){
   lines.push('Feature push: '+label(age(pub.feature_push?.verified_push_at,now)));
   lines.push('Latest commit: '+label(age(pub.latest_commit?.[1],now)));
-  lines.push('Unpublished commits: '+(pub.unpublished_commit_count??'unknown')+' (vs cached origin refs)');
+  lines.push('Local commits absent from cached origin refs: '+(pub.unpublished_commit_count??'unknown')+' (not verified unpushed)' );
   lines.push('Dirty checkout entries: '+(pub.dirty_checkout_entries??'unknown'));
   lines.push('Last deploy: '+(pub.deployment?clean(pub.deployment.headSha,8)+' · '+label(age(pub.deployment.updatedAt,now)):'unknown'));
   if(pub.actions_error)lines.push(pub.actions_error);
@@ -29,8 +29,12 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
   if(d.epoch)lines.push('Fresh team · '+clean(d.epoch,32));
   lines.push('Checked: '+label(age(d.checked_at,now)));
   const workers=(d.workers??[]).filter(w=>!['succeeded','failed','interrupted'].includes(w.status));
-  lines.push(`Reserved slots: ${workers.length}/5`);
-  for(const w of workers)lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);
+  lines.push(`Reserved child slots: ${workers.length}/4 (tracked agents ${workers.length+1}/5 including coordinator)`);
+  lines.push('Coverage: tracked leases + observed events; untracked pre-existing sessions unknown.');
+  if(d.event_stream_error)lines.push('EVENT STREAM FAILED: '+clean(d.event_stream_error,140));
+  if(d.notification_error)lines.push('NOTIFICATION UNKNOWN: '+clean(d.notification_error,140));
+  lines.push('Quiet wait: rustwake_wait (completion/health events, 5m maximum)');
+  for(const w of workers){lines.push(`${clean(w.id,30)} · ${clean(w.status,16)} · ${clean(w.session_id??'no session ID',30)}`);lines.push('  '+clean(w.health??'health unknown',80)+' · progress '+label(age(w.last_progress_at,now)));if(w.last_error)lines.push('  Error: '+clean(w.last_error,120));}
   if(d.error)lines.push('BLOCKED: '+clean(d.error,200));
   lines.push('Queued is not running; running requires a host execution event.');
   return lines.join('\n');
@@ -43,22 +47,22 @@ export function formatTeamStatus(s,sessionID,now=Date.now()){
  const fresh=scoped&&seconds!==null&&seconds<=120;
  lines.push(`Observation: ${!o?'missing':!scoped?'unscoped / previous session':seconds===null?'invalid timestamp':fresh?'fresh':'STALE'} (${label(seconds)})`);
  const capacity=o?.capacity_children;const active=o?.active_children;
- const valid=Number.isInteger(capacity)&&capacity>=0&&capacity<=5&&Number.isInteger(active)&&active>=0;
+ const valid=Number.isInteger(capacity)&&capacity>=0&&capacity<=4&&Number.isInteger(active)&&active>=0;
  lines.push(`Workers: ${fresh&&valid?`${active}/${capacity} child slots${active>capacity?' · OVER CAPACITY':''}`:'unknown'}`);
  if(fresh&&valid){
   lines.push(`Model sessions: ${active+1}/${capacity+1} incl. coordinator`);
   const workers=Array.isArray(o.workers)?o.workers:[];
-  for(const w of workers.slice(0,5))lines.push(`${clean(w.role,20)} · ${clean(w.task_id,24)} · ${clean(w.status,18)}`);
-  if(workers.length>5)lines.push(`+${workers.length-5} additional records`);
+  for(const w of workers.slice(0,4))lines.push(`${clean(w.role,20)} · ${clean(w.task_id,24)} · ${clean(w.status,18)}`);
+  if(workers.length>4)lines.push(`+${workers.length-4} additional records`);
   lines.push(`Ready assignments: ${Array.isArray(o.runnable_task_ids)?o.runnable_task_ids.length:'unknown'}`);
   if(active<capacity&&o.idle_reasons?.length)lines.push(`Idle: ${clean(o.idle_reasons[0],90)}`);
  }
  lines.push(`Sponsor inbox: ${s.sponsor_inbox??'unknown'}`);
- const boardAge=age(s.board_updated_at,now);
- lines.push(`Board: ${label(boardAge)}${boardAge!==null&&boardAge>600?' · STALE':''}`);
+ lines.push('Active board: GitHub Issues (live status requires gh query; not inferred from local snapshot)');
  lines.push('Observed state, not a live worker guarantee.');
  return lines.join('\n');
 }
+
 
 
 

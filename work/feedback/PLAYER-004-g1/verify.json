@@ -1,0 +1,88 @@
+{
+ "base": "https://home.darkmatter2222.com/rustwake/",
+ "servedAssetNames": [
+  "index-C_K4oMJ5.js",
+  "tables-BB2NPvQ2.js",
+  "index-B1FOV2xO.css"
+ ],
+ "rows": [
+  {
+   "asset": "index-C_K4oMJ5.js",
+   "remote": {
+    "name": "assets/index-C_K4oMJ5.js",
+    "status": 200,
+    "cl": "231262",
+    "bytes": 231262,
+    "sha256": "5b9a984530a7f65d2a472fddeba131d2e02105b6e61b639a6a4b765aca7c0095",
+    "fnv": "7cceed69"
+   },
+   "local": {
+    "name": "assets/index-C_K4oMJ5.js",
+    "bytes": 231262,
+    "sha256": "5b9a984530a7f65d2a472fddeba131d2e02105b6e61b639a6a4b765aca7c0095",
+    "fnv": "7cceed69"
+   },
+   "sameSize": true,
+   "sameSha256": true
+  },
+  {
+   "asset": "tables-BB2NPvQ2.js",
+   "remote": {
+    "name": "assets/tables-BB2NPvQ2.js",
+    "status": 200,
+    "cl": "9298",
+    "bytes": 9298,
+    "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968",
+    "fnv": "a484020a"
+   },
+   "local": {
+    "name": "assets/tables-BB2NPvQ2.js",
+    "bytes": 9298,
+    "sha256": "28bed3b02f2f79cb557105e2514f73a9bc9e86e27506d6eabebee20592c5f968",
+    "fnv": "a484020a"
+   },
+   "sameSize": true,
+   "sameSha256": true
+  },
+  {
+   "asset": "index-B1FOV2xO.css",
+   "remote": {
+    "name": "assets/index-B1FOV2xO.css",
+    "status": 200,
+    "cl": "7849",
+    "bytes": 7849,
+    "sha256": "b4308206ea32834e108b1f41a6d673eae4df1235692e1a4900408a0ab055f715",
+    "fnv": "7afbb066"
+   },
+   "local": {
+    "name": "assets/index-B1FOV2xO.css",
+    "bytes": 7849,
+    "sha256": "b4308206ea32834e108b1f41a6d673eae4df1235692e1a4900408a0ab055f715",
+    "fnv": "7afbb066"
+   },
+   "sameSize": true,
+   "sameSha256": true
+  }
+ ],
+ "extra": [
+  {
+   "asset": "assets/catchup.worker-G_Jyr7uh.js",
+   "remote": {
+    "name": "assets/catchup.worker-G_Jyr7uh.js",
+    "status": 200,
+    "cl": "13406",
+    "bytes": 13406,
+    "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50",
+    "fnv": "1f51bd9f"
+   },
+   "local": {
+    "name": "assets/catchup.worker-G_Jyr7uh.js",
+    "bytes": 13406,
+    "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50",
+    "fnv": "1f51bd9f"
+   },
+   "sameSize": true,
+   "sameSha256": true
+  }
+ ]
+}

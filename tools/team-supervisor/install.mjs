@@ -15,4 +15,5 @@ if(!entries.some(x=>x===spec||x?.package===spec))entries.push({package:spec,opti
 let after=applyEdits(before,modify(before,['plugins'],entries,{formattingOptions:{insertSpaces:true,tabSize:2}}));
 if(config.plugin!==undefined)after=applyEdits(after,modify(after,['plugin'],undefined,{}));
 if(after!==before){await fs.writeFile(file+'.rustwake-team.bak',before,{flag:'wx'});await fs.writeFile(file+'.rustwake-team.tmp',after);await fs.rename(file+'.rustwake-team.tmp',file);}
-console.log('Configured local companion plugin. Reload OpenCode, select coordinator, /rustwake-team bind, then /goal forever goal.md. Map verified wait tool names before relying on the wait guard.');
+console.log('Configured local companion plugin. Reload OpenCode, select coordinator, /rustwake-team start, then /goal forever goal.md. Use rustwake_wait when idle; verify tracked child IDs and execution events.');
+

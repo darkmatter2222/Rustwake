@@ -1,0 +1,5 @@
+# OPS-107: the generated evidence views are LF in the object store. Pinning the conversion
+# on both sides keeps a `core.autocrlf=true` checkout, a harness rewrite and `git status`
+# agreeing on one byte sequence, so a no-op rerun is no longer reported as a change.
+*.json text eol=lf
+*.md text eol=lf

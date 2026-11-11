@@ -67,7 +67,7 @@ export const COLOR_KEYS = Object.keys(PALETTE) as PaletteKey[];
 /** Row of parts per sprite id; painted in order, all coords inside +/- 16 units (B6). */
 export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   dock: [
-    [-13, 9, 26, 2, 15], // D5 pad shadow
+    [-13, 9, 26, 3, 15, 1], // D5 pad contact shadow (ellipse, alpha 0.35)
     [-13, -10, 26, 20, 4], // D1 pad
     [-13, -10, 3, 2, 8], // D2 corner ticks (4)
     [10, -10, 3, 2, 8],
@@ -77,42 +77,68 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [8, 6, 4, 2, 3], // D3 foot
   ],
   sorter: [
-    [-12, 11, 24, 2, 15],
-    [-12, -11, 24, 22, 3], // S1 body
-    [-9, -6, 18, 3, 6], // S2 rollers (identity mark, D-4: 3 units tall)
-    [-9, -2, 18, 3, 6],
-    [-9, 2, 18, 3, 6],
-    [-9, 7, 8, 3, 6], // S3 split chutes
-    [2, 7, 8, 3, 6],
+    [-11, 12, 22, 3, 15, 1], // S5 contact shadow ellipse (ART-003)
+    [-12, -11, 24, 22, 3], // S1 full-height frame body (22-unit, D-4 pinned)
+    [-9, -6, 5, 4, 6], // S2 roller disc 1 (dark discs read against the lit body)
+    [-3, -6, 5, 4, 6], // S2 roller disc 2
+    [3, -6, 5, 4, 6], // S2 roller disc 3
+    [-9, 0, 5, 4, 6], // S2 roller disc 4
+    [-3, 0, 5, 4, 6], // S2 roller disc 5
+    [3, 0, 5, 4, 6], // S2 roller disc 6
+    [-9, 5, 8, 3, 6], // S3 chute A
+    [1, 5, 7, 3, 11], // S3 chute B, stepped split wedge (select tone)
+    // ART-007: one outer element - the side post, full column right of the frame, the
+    // sorter's own silhouette mark (the quartet needs outer-shape cues at 390 px).
+    [13, -11, 3, 22, 4],
   ],
+  // ART-004 A-3: the three rows that owned the weak pairs. Each body now carries its own
+  // gray step (sorter bodyLight / furnace + lab steelLight / mill bodyLight with dark
+  // reels), so no two silhouettes collapse onto the same ramp band.
   furnace: [
-    [-10, 13, 20, 2, 15],
-    [-10, -8, 20, 16, 3], // F1 chamber
-    [5, -14, 4, 6, 3], // F2 chimney (identity mark)
-    [-5, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
-    [-10, 10, 20, 2, 15], // base band
+    [-11, 12, 22, 3, 15, 1], // F8 contact shadow ellipse (ART-003)
+    [-11, -9, 22, 16, 16], // F1 squat thermal chamber, 22x16 on the steel step
+    [2, -15, 5, 8, 16], // F2 chimney, proud of the cap line
+    [-3, -15, 10, 3, 9], // F2b chimney cap, T-step in rust (identity mark, own gray step)
+    [-6, -6, 8, 3, 6], // F3 intake slot (D-4: 3 units tall)
+    [-6, -1, 8, 3, 6], // F3b second chamber slot, one row down
     [11, -2, 5, 8, 6], // vent stub, right column
-    [11, 8, 5, 4, 6], // vent base, right column
-    [-15, 3, 4, 8, 6], // feed notch, left column
+    [11, 8, 5, 3, 9], // vent foot, right column (rust)
+    [-15, 3, 4, 3, 6], // feed notch, left column
+    // ART-007: one outer element - the mast tip, one 2-unit spine above the T-cap line.
+    [-1, -16, 2, 3, 16], // ART-007 mast tip: 2 wide, 3 tall (D-4 mark floor), above the cap
   ],
   wireMill: [
-    [-12, 11, 24, 2, 15],
-    [-12, -4, 24, 16, 3], // body, one row lower than the sorter
-    [-14, 0, 6, 6, 6], // paired reels overhanging left
-    [10, 0, 6, 6, 6], // paired reels overhanging right
-    [-3, -15, 6, 3, 6], // tension arm, top row (D-4: 3 units tall)
+    [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
+    [-10, -4, 20, 16, 3], // body, two units narrower than the sorter's frame
+    [-16, -3, 7, 7, 12], // WM2 left reel ring, dark, clear of the body edge
+    [-15, -2, 5, 5, 6], // WM2 left reel hole (ring, not block)
+    [9, -3, 7, 7, 12], // WM2 right reel ring, 18-unit pitch from the left one
+    [10, -2, 5, 5, 6], // WM2 right reel hole
+    [-16, 6, 7, 3, 16], // reel stand, left, one step under the ring
+    [9, 6, 7, 3, 16], // reel stand, right
+    [-8, -15, 4, 3, 3], // WM3 tension arm, step 0 (D-4: 3 units tall)
+    [-4, -15, 4, 3, 3], // WM3 tension arm, step 1
+    [0, -12, 4, 3, 3], // WM3 tension arm, step 2 (diagonal)
+    [4, -9, 4, 3, 9], // WM3 tension arm, step 3 into the body (rust tip)
   ],
   signalLab: [
-    [-10, 13, 20, 2, 15],
-    [-10, 10, 20, 2, 15], // base band
-    [-10, -6, 20, 16, 3], // body
-    [-2, -14, 4, 8, 3], // tall mast (identity mark)
-    [-15, -16, 28, 3, 8], // scanner bar across the top row (D-4: 3 units tall)
-    [-15, 3, 4, 4, 6], // left leg
-    [11, 5, 5, 4, 6], // right leg
+    [-11, 12, 22, 3, 15, 1], // contact shadow ellipse (ART-003)
+    [-7, -8, 14, 21, 16], // L1 14-unit tower body on the steel step, 21 units tall
+    [-2, -16, 4, 8, 16], // L2 mast, inside the cell, tip at the cap line
+    [-12, -14, 23, 3, 8], // L3 scanner head one step down, wider than the tower
+    [-5, -4, 6, 3, 6], // L4 visor slot on the body
+    [-5, 2, 6, 3, 11], // L4b indicator strip, select tone
+    [-14, -6, 6, 3, 8], // L7 left wing, outboard of the tower (A3-1: own outer column)
+    [8, -6, 6, 3, 8], // L7 right wing
+    [-14, 3, 6, 3, 8], // L8 left lower wing, outboard of the tower
+    [8, 3, 6, 3, 8], // L8 right lower wing
+    [-14, 6, 7, 3, 16], // L5 left foot, outboard of the tower
+    [7, 6, 7, 3, 16], // L5 right foot, outboard of the tower
+    [-10, 9, 20, 3, 16], // L6 plinth, the base the two feet stand on
   ],
   generic: [
     // D-1: its own lattice (two bars, both posts) so it is no longer the sorter's copy.
+    [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -8, 24, 3, 3], // bar at mask row 2
     [-12, 4, 24, 3, 3], // bar at mask row 5
     [-15, -11, 3, 22, 4], // left post
@@ -120,6 +146,7 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   polymerRecycler: [
     // D-1: drum stack - three bars with the right-hand post, no shared silhouette.
+    [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -11, 24, 3, 3], // bar at mask row 1
     [-12, -4, 24, 3, 3], // bar at mask row 3
     [-12, 4, 24, 3, 3], // bar at mask row 5
@@ -127,13 +154,21 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   copperSeparator: [
     // D-1: three bars one row higher, left-hand post.
+    [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -15, 24, 3, 3], // bar at mask row 0
     [-12, -8, 24, 3, 3], // bar at mask row 2
-    [-12, -1, 24, 3, 3], // bar at mask rows 3-4
+    [-12, 1, 24, 3, 3], // bar at mask row 4 (ART-003: one row lower than copper's old pair)
     [-15, -11, 3, 22, 4], // left post
+    // ART-007: one outer element - the two-ring collar at the cap line (the mill's ring
+    // grammar, own corners), drawn last so the rings own the outer rows.
+    [-16, -16, 7, 7, 12], // collar ring, left
+    [-15, -15, 5, 5, 6], // collar ring hole, left
+    [9, -16, 7, 7, 12], // collar ring, right
+    [10, -15, 5, 5, 6], // collar ring hole, right
   ],
   platePress: [
     // D-1: two wide plattens between both posts.
+    [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -11, 24, 3, 3], // bar at mask row 1
     [-12, -1, 24, 3, 3], // bar at mask rows 3-4
     [-15, -11, 3, 22, 4], // left post
@@ -141,10 +176,15 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
   ],
   circuitAssembler: [
     // D-1: three sparse bars, the top one flush with the frame, left-hand post.
+    [-11, 12, 22, 3, 15, 1], // ART-003 contact shadow ellipse
     [-12, -15, 24, 3, 3], // bar at mask row 0
     [-12, -4, 24, 3, 3], // bar at mask row 3
-    [-12, 12, 24, 3, 3], // bar at mask row 7 (G-1: the outer box now clears copper's)
+    [-12, 9, 24, 3, 3], // bar at mask row 6 (ART-004 QA-4: one row up, so it no longer
+    // buries the contact ellipse in rows 12..14 - the 0 px shadow this row caused is gone)
     [-15, -11, 3, 22, 4], // left post
+    // ART-007: one outer element - the corner notch, one step proud of the top bar's
+    // right end, above the cap line.
+    [9, -16, 7, 3, 16],
   ],
   drone: [
     [-5, 3, 10, 4, 15, 1], // DR5 shadow ellipse (alpha 0.35)
@@ -152,6 +192,19 @@ export const PARTS: Readonly<Record<string, readonly PartTuple[]>> = {
     [1, -3, 4, 2, 8],
     [-3, -2, 6, 4, 8], // DR1 body
   ],
+};
+
+/**
+ * ART-004 A-3: per-kind placement on the pilot atlas page, `[dyUnits, scale]`, applied to
+ * the drawn cell box (and to its facet pair, so the two stay welded together). `1` is the
+ * identity: the glyph keeps its 32-unit box. The two kinds that needed the column are the
+ * ones whose pairs owned the sub-threshold readings: the mill gains half a unit of stand
+ * under the reel pair so the two rings stop merging into the body line, the lab gains a
+ * unit of headroom so the mast tip clears the scanner head at the phone fit.
+ */
+export const ATLAS_PLACE: Readonly<Record<string, readonly [number, number]>> = {
+  wireMill: [0.5, 1.06],
+  signalLab: [-0.5, 1.06],
 };
 
 /** Wreck hull as a snapped pentagon path (world-unit offsets from its position). */
@@ -253,6 +306,11 @@ export const SKY_FAR: readonly PartTuple[] = [
   [180, -8, 10, 7, 13],
 ];
 
+// ART-004 D1 (band row): the two extra tuples are the horizon stack in the upper gutter -
+// a far bank tier in `path` (the group this table already paints) and one lit bank line in
+// `steelLight`, so the ~149 CSS px of dead night above the plate carries two readable bands
+// and the luminance histogram keeps a nonzero top band. No new hue, no new paint group
+// beyond the one `steelLight` line.
 export const SKY_NEAR: readonly PartTuple[] = [
   [10, -6, 18, 5, 12],
   [40, -7, 16, 6, 12],
@@ -261,6 +319,8 @@ export const SKY_NEAR: readonly PartTuple[] = [
   [118, -6, 20, 5, 12],
   [146, -7, 18, 6, 12],
   [168, -6, 22, 5, 12],
+  [0, -26, 192, 2, 12], // far bank tier, full pad width
+  [0, -18, 192, 2, 16], // lit bank line above it
 ];
 
 /** Lit kerb on the pad edge plus the two berm ticks; the apron below y = 192 is outside
@@ -279,12 +339,18 @@ export const APRON_PROPS: readonly PartTuple[] = [
   [150, 202, 6, 8, 4],
 ];
 
-/** Tops of the same props on the light side (light comes from the upper left). */
+/** Lit core of the apron props (light comes from the upper left). The last three rows are
+ *  ART-004 D1's horizon stack in the lower gutter: three 2-unit `bodyLight` rails across
+ *  the pad width, so the ~149 CSS px of dead night below the plate reads as ground the yard
+ *  continues into. Same colour index as the prop tops, so no new paint group. */
 export const APRON_TOPS: readonly PartTuple[] = [
   [6, 198, 12, 2, 3],
   [26, 200, 8, 2, 3],
   [164, 198, 10, 2, 3],
   [150, 202, 6, 2, 3],
+  [0, 236, 192, 2, 3],
+  [0, 248, 192, 2, 3],
+  [0, 260, 192, 2, 3],
 ];
 
 /** Contact shadows under the props, one step under the pad tone. */
@@ -339,6 +405,12 @@ export const PUDDLES: readonly (readonly [number, number])[] = [
   [150, 198],
 ];
 
+/**
+ * ART-003 A3-4: the resting dot field drops from two lit ticks per cell to one dark tick.
+ * The painter dims it further (alpha 0.28), so at rest the machines, not the construction
+ * dots, carry the brightest pixels. One tick per cell keeps the tiles reading as measured
+ * ground without competing with the silhouettes.
+ */
 export const GRAVEL: readonly (readonly [number, number])[] = (() => {
   const ticks: (readonly [number, number])[] = [];
   for (let tile = 0; tile < 36; tile += 1) {
@@ -346,7 +418,7 @@ export const GRAVEL: readonly (readonly [number, number])[] = (() => {
     const row = Math.floor(tile / 6);
     const cx = col * 32 + 16;
     const cy = row * 32 + 16;
-    ticks.push([cx + 11, cy + 11], [cx - 14, cy - 14]);
+    ticks.push([cx + 11, cy + 11]);
   }
   return ticks;
 })();

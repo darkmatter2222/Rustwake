@@ -10,10 +10,10 @@ export function pathsConflict(a,b){
  if(!a?.length||!b?.length)return true; // unknown ownership is not safe parallel ownership
  return a.some(x=>b.some(y=>{const p=prefix(x),q=prefix(y);return !p||!q||p===q||p.startsWith(q+'/')||q.startsWith(p+'/')||(x.includes('*')&&q.startsWith(p))||(y.includes('*')&&p.startsWith(q));}));
 }
-/** Pure advisory planner. It never launches sessions, frees a lease, or claims liveness. */
+/** Legacy snapshot advisory only. Actual assignments come from GitHub Issues and the OpenCode dispatcher, never this local backlog. */
 export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}={}){
  const observed=stamp(board.runtime?.observed_at),time=stamp(now);
- const cap=Math.max(0,Math.min(6,board.max_active_sessions??6)-1);
+ const cap=Math.max(0,Math.min(5,board.max_active_sessions??5)-1);
  const active=(board.runtime?.sessions??[]).filter(s=>!terminal.has(s.status));
  const warnings=[];
  if(time===null||observed===null||time-observed>staleAfterMs||observed>time){
@@ -57,7 +57,6 @@ export function planAssignments(board,{now=board.updated_at,staleAfterMs=120000}
  return {status:'advisory-plan',capacity_children:cap,active_children:active.length,assignments,idle_reasons:free?[...warnings,'No further explicitly scoped, dependency-ready independent assignment. PM must split useful work or record the blocker; do not invent busywork.']:warnings};
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const file=process.argv[2];if(!file)throw new Error('Usage: node scripts/team-scheduler.mjs <fresh-runtime-board.json>');
- console.log(JSON.stringify(planAssignments(JSON.parse(fs.readFileSync(file,'utf8')),{now:new Date().toISOString()}),null,2));
+ console.error('Retired local-board command. Use live GitHub Issues and https://github.com/users/darkmatter2222/projects/1; see docs/GITHUB_PROJECT.md.');
+ process.exitCode=1;
 }
-

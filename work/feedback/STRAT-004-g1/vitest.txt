@@ -1,0 +1,8 @@
+VITEST_EXIT=0
+[2m Test Files [22m [1m[32m28 passed[39m[22m[90m (28)[39m
+[2m   Duration [22m 4.47s[2m (transform 2.70s, setup 0ms, collect 9.83s, tests 9.17s, environment 29.04s, prepare 5.02s)[22m
+VALIDATE_EXIT=0
+tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes
+content: 0 violation(s) in 3 ms
+behaviour: firstDrone=268 firstResearch=478 tick=18298 machines=8 links=18 drones=5 batches=1902 credits=82 nodes=3 | 0 violation(s)
+validated: no violations

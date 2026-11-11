@@ -65,18 +65,33 @@ export interface CameraInsets {
 const BAND_MIN_SCALE = 1.1;
 
 /**
+ * ART-001/ART-003 width term: `WORLD_W + 8` is the pad plus a 4-unit gutter on each side.
+ * It was `+ 24` (a 12-unit gutter) at the base, which wasted 21 CSS px per side at 390 px and
+ * held the plate at 404 of 844 px tall; at 8 the same fit prints 437 px (47.9 % -> 51.8 % of
+ * the viewport height, gutters 21 -> 8 px). The arithmetic ceiling of the world itself is
+ * 224/192 * 390 = 455 px (53.9 %), reached at a zero gutter, so a taller plate is not
+ * obtainable from this term alone - stated in the handoff as the binding constraint.
+ */
+/**
  * A width-only fit cannot show a 224-unit-tall world in a 390 px-tall landscape
  * viewport, so the dock and the wreck left the screen (L-1). With a measured band the
  * world is fitted to whichever term binds and the band itself becomes the centre.
+ *
+ * ART-003 A3-4 (plate-still-floats): the band centre is used for **both** terms, not only
+ * the binding one. At 390x844 the width term binds, so the old code returned the legacy
+ * canvas-centred camera and the pad sat off the middle of the clear column the chrome
+ * actually leaves. The scale expression keeps both original terms exactly, only the y
+ * origin moves, so every footprint, ink box and the tap mapping (`screenToWorld` inverts
+ * the same camera) keep their geometry.
  */
 export function fitCamera(view: ViewState, insets?: CameraInsets): Camera {
-  const legacy = () => ({ x: WORLD_W / 2, y: WORLD_H / 2, scale: Math.max(1.4, Math.min(4, view.width / (WORLD_W + 24))) });
+  const raw = Math.min(4, view.width / (WORLD_W + 8)); // the un-floored width term (ART-003: 24 -> 8)
+  const legacy = () => ({ x: WORLD_W / 2, y: WORLD_H / 2, scale: Math.max(1.4, raw) });
   const usableH = insets ? view.height - insets.top - insets.bottom : 0;
   if (!insets || usableH <= 0) return legacy();
   const bandScale = usableH / (WORLD_H + 12);
-  const widthScale = Math.min(4, view.width / (WORLD_W + 24));
-  if (bandScale >= widthScale) return legacy(); // the band is not binding: unchanged fit
-  const scale = Math.max(BAND_MIN_SCALE, Math.min(widthScale, bandScale));
+  // One scale expression for both branches, identical to the two original terms.
+  const scale = bandScale >= raw ? Math.max(1.4, raw) : Math.max(BAND_MIN_SCALE, Math.min(raw, bandScale));
   // The band centre, not the canvas centre, is where the world's middle goes.
   const bandCentre = insets.top + usableH / 2;
   return { x: WORLD_W / 2, y: WORLD_H / 2 + (view.height / 2 - bandCentre) / scale, scale };
@@ -260,11 +275,13 @@ export function drawScene(
   const sheen: [number, number, number, number][] = [];
   const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, options.reducedMotion, phase);
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
-  groupFill(ctx, sheen, "select", 0.9);
+  // ART-004 D1: the lit band rides at full alpha, so the brightest tone in the frame is the
+  // facet edge itself (the top luminance bucket) instead of a 0.9 blend one step below it.
+  groupFill(ctx, sheen, "select", 1);
   groupFill(ctx, shade, "path");
   drawDrones(ctx, state, camera, view, options.reducedMotion, phase);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
@@ -327,11 +344,14 @@ function drawFloorKit(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewS
   }
   ctx.fill();
   ctx.globalAlpha = 1;
+  // ART-003 A3-4: one 2-unit tick per cell at alpha 0.28 - the resting dot field is a
+  // measured ground texture now, one step under the floor ink, so the machines carry
+  // the brightest pixels instead of the grid.
   groupFill(
     ctx,
-    GRAVEL.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 3 * s, 3 * s] as [number, number, number, number]),
+    GRAVEL.map(([x, y]) => [ox.x + x * s, ox.y + y * s, 2 * s, 2 * s] as [number, number, number, number]),
     "bodyLight",
-    0.5
+    0.28
   );
 }
 
@@ -364,7 +384,14 @@ function drawWreck(
 ): void {
   const p = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
   const s = camera.scale;
-  rectOf(ctx, p.x - 12 * s, p.y + 13 * s, 24 * s, 2 * s, "well"); // W4 shadow
+  // W4/ART-003: the hulk sits on a contact shadow ellipse, one step under the floor,
+  // the same 0.35 ellipse every other static footprint carries.
+  ctx.fillStyle = PALETTE.shadow;
+  ctx.globalAlpha = 0.35;
+  ctx.beginPath();
+  ctx.ellipse(snap(p.x), snap(p.y + 14 * s), snap(14 * s), snap(2 * s), 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
   ctx.fillStyle = PALETTE.wreck;
   ctx.beginPath(); // W1 pentagon hull
   WRECK_HULL.forEach(([dx, dy], i) => {
@@ -418,22 +445,51 @@ function drawMachine(
   view: ViewState,
   selected: boolean,
   sheen: [number, number, number, number][],
-  shade: [number, number, number, number][]
+  shade: [number, number, number, number][],
+  reducedMotion: boolean,
+  phase: number
 ): void {
   const c = tileToWorld(machine.tile);
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
+  // ART-004 g2: the part loop is the one path that paints a machine. The A-2 pilot atlas page
+  // is dropped - the reviewer's own bench prices it at no measurable CPU gain (+616 B of
+  // entry chunk for a 12-hour yard at 40.60 ms versus 41.36 ms on main), and its per-kind
+  // scale/shift put different pixels on the live frame than the unit-resolution witnesses
+  // read, so the phone census and the op-log table disagreed by construction.
   paintParts(ctx, p.x, p.y, s, row);
-  // ART-001: one bevel pair per body, inset inside its own box so the union ink of the
-  // cell is unchanged: a lit top edge and a shaded underside, light from the upper left.
+  // ART-001/ART-003: one light direction for the whole sheet - upper left lit, lower
+  // right dark. The lit pair (top edge + left column) rides in the `select` group, the
+  // dark pair (underlying bottom + right column) in the `path` group: two grouped paths
+  // for the row, but now a real 2-step facet on every body, not just an edge line.
   const body = bodyRowOf(row);
   if (body) {
-    sheen.push([(p.x + (body[0] + 1) * s), p.y + body[1] * s, (body[2] - 2) * s, 2 * s]);
-    shade.push([p.x + (body[0] + 1) * s, p.y + (body[1] + body[3] - 2) * s, (body[2] - 2) * s, 2 * s]);
+    const [bx, by, bw, bh] = body;
+    const inset = bw >= 6 ? 1 : 0; // a 3-unit post keeps the whole width on its lit band
+    sheen.push([p.x + (bx + inset) * s, p.y + by * s, (bw - 2 * inset) * s, 2 * s]);
+    shade.push([p.x + (bx + inset) * s, p.y + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
+    // The side columns only exist on bodies that have a middle band to lighten/darken;
+    // a 3-unit bar is one step already, so the top/bottom pair is the whole facet.
+    if (bh >= 6 && bw >= 6) {
+      sheen.push([p.x + bx * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+      shade.push([p.x + (bx + bw - 2) * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
+    }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
-  rectOf(ctx, p.x - 9 * s, p.y + 10 * s, 6 * s, 2 * s, statusColor(machine.status));
+  // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
+  // quantised 6-frame step drives each: frames 1-2 of the cycle move, the rest hold.
+  // `working` = two-step amber core that swells one step per cycle; `starved` = the
+  // visibly quiet core (one dim square, frozen); `output-blocked` = the accent bar
+  // settling between its 6-unit and 4-unit widths. Reduced motion keeps step 0 only.
+  const q = reducedMotion ? 0 : Math.min(5, Math.floor(phase * 6));
+  const pulse = q === 2 || q === 3; // the single swell/settle frame pair of the cycle
+  // ART-006: the accent bar is ONE paint with the computed width. The unconditional 6-unit
+  // rect and the animated 4-unit rect used to be emitted separately in the same colour, so
+  // the 4-unit draw sat entirely under the 6-unit one and the settle had zero visible
+  // amplitude (measured rust rows: 11 px on all six quantised frames).
+  const barW = machine.status === "outputFull" && pulse ? 4 : 6;
+  rectOf(ctx, p.x - 9 * s, p.y + 10 * s, barW * s, 2 * s, statusColor(machine.status));
   if (machine.status === "powerLimited") {
     // D-3: the fifth hue alone is not separable at phone size, so `powerLimited` also
     // carries a shape mark - one short tick under the bar, in an existing colour index.
@@ -442,13 +498,19 @@ function drawMachine(
   if (machine.blueprint === "furnace" && machine.status === "outputFull") {
     rectOf(ctx, p.x + 5 * s, p.y - 14 * s, 4 * s, 2 * s, "rust");
   }
-  if (machine.blueprint === "furnace" && machine.status === "running") {
-    // F4 amber glow circle, diameter 4, only while running.
+  if (machine.status === "running") {
+    // Two-step amber core: a 4-unit glow (5 on the swell frames) plus the 2-unit inner.
+    const r = pulse ? 2.5 * s : 2 * s;
     ctx.fillStyle = PALETTE.amber;
     ctx.beginPath();
-    ctx.ellipse(snap(p.x + 0 * s), snap(p.y + 2 * s), snap(2 * s), snap(2 * s), 0, 0, Math.PI * 2);
+    ctx.ellipse(snap(p.x), snap(p.y + 2 * s), snap(r), snap(r), 0, 0, Math.PI * 2);
     ctx.fill();
+    rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "amber");
+  } else if (machine.status === "starved") {
+    rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "bodyMid"); // quiet core, no pulse
   }
+  // ART-006: `outputFull` needs no second bar - the single `barW` paint above already
+  // carries the settle, so the frame holds exactly one accent rect per machine.
   // S6 level pips: three 2x2 marks, digit from level 4 up (B5, never a ratio bar).
   groupFill(
     ctx,
@@ -700,22 +762,31 @@ function outline(
  * steps of the same palette. The layout is derived from the view box so the ink
  * reaches all four edges (G-2: the shipped PNG used to fill only a quarter of it).
  */
+/**
+ * The silhouette sheet's layout and gray ramp, as one exported table (ART-004 g2) so the
+ * census instrument reads the same numbers the painter uses instead of mirroring them by
+ * hand: `left`/`top`/`bottom` are the outermost ink of a glyph box in world units, `margin`
+ * the sheet's own margin in CSS px, `phone`/`desktop` the two band scales. `gray` is the
+ * five-step ramp index of a colour index (B2/D-1 instrument).
+ */
+export const SHEET_LAYOUT = { left: 15, top: 16, bottom: 15, margin: 2, phone: 1.8056, desktop: 4 } as const;
+
+/** Gray-ramp step of a colour index: 0..4, the same five steps the sheet paints. */
+export const grayStepOf = (index: number): number => Math.min(4, Math.floor(index / 4));
+
 export function drawSpriteSheet(ctx: CanvasRenderingContext2D, view: ViewState): void {
   const ids = Object.keys(PARTS);
   const grays: PaletteKey[] = ["shadow", "well", "floor", "wreck", "select"];
   // Gray step by colour index (dark table entries -> light accents), no CSS filter.
-  const gray = (i: number): PaletteKey => grays[Math.min(4, Math.floor(i / 4))];
+  const gray = (i: number): PaletteKey => grays[grayStepOf(i)];
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
   // Outermost ink of the whole table, in units from the glyph centre.
-  const LEFT = 15;
-  const TOP = 16;
-  const BOTTOM = 15;
-  const MARGIN = 2;
+  const { left: LEFT, top: TOP, bottom: BOTTOM, margin: MARGIN } = SHEET_LAYOUT;
   const bands = [
-    { scale: 1.8056, from: 0, to: ids.length },
-    { scale: 4, from: 0, to: Math.ceil(ids.length / 2) },
-    { scale: 4, from: Math.ceil(ids.length / 2), to: ids.length },
+    { scale: SHEET_LAYOUT.phone, from: 0, to: ids.length },
+    { scale: SHEET_LAYOUT.desktop, from: 0, to: Math.ceil(ids.length / 2) },
+    { scale: SHEET_LAYOUT.desktop, from: Math.ceil(ids.length / 2), to: ids.length },
   ];
   const heights = bands.map((b) => (TOP + BOTTOM) * b.scale);
   const gap = (view.height - 2 * MARGIN - heights.reduce((a, b) => a + b, 0)) / (bands.length - 1);

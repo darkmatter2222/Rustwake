@@ -1,0 +1,219 @@
+[
+  {
+    "id": "STRAT-004",
+    "type": "experiment",
+    "title": "Make the pressed face name what its next tap does, and print the no-op census by mechanism",
+    "priority": "P1",
+    "status": "ready",
+    "owner": "developer",
+    "generation": 1,
+    "player_problem": "On the deployed build a blind 1 tap/s run spends 141 of 177 taps (79.7 % recomputed; the lane printed 80.1 % on a 176 denominator) with no state change, and one face, Build Furnace10 scrap + 5 ferrous, holds the identical words for 32 consecutive taps with 0 commands applied, so the player cannot tell 'the yard is waiting for a 5-unit drone delivery' from 'my tap did not register'.",
+    "hypothesis": "The stall is two mechanisms wearing one number: an inert middle face while the ghost is on a cell, plus numbered affordability refusals while the drone is in transit. Printing the pending need on the face itself and letting the middle face carry the verb of the next tap shortens the perceptible stall without touching the engine; the falsifier is a stall that stays above 16 taps after both changes.",
+    "scope": [
+      "src/ui/text.ts",
+      "src/ui/Hud.tsx",
+      "work/feedback/STRAT-004-g1/"
+    ],
+    "non_goals": [
+      "No new panel, currency, machine or fourth dock face",
+      "No dock component rewrite; the existing primary/secondary/branch slots stay",
+      "No simulation, price or save change (schemaVersion 1 and fixture eede3c4f stay byte-identical)",
+      "No re-scoring of the STRAT-002 A1-* rows or the 30-sim-minute harness"
+    ],
+    "acceptance": [
+      "window W-3 (180 s wall, 1 tap/s, 390x844 dpr2, fresh storage, final tick 1800-1810 = 3.00-3.02 sim min) on the artifact built from the integrated SHA, same protocol as PLAYER-004-g1: the no-op census prints three named buckets - inert-label (same label, revDelta 0, no toast), refused-shortfall (revDelta 0 with a 'Need N · have k' toast), unknown - and the three sum to the total no-ops",
+      "inert-label <= 20.0 % of taps (today's derived component is 73 of 177 = 41.2 %, computed as 141 minus 68 because the prior report printed no cross-tab; this lane prints it directly) and exactly one denominator is used for every share in the table",
+      "longest identical-label stall <= 16 taps (baseline 32 taps with 0 commands, label 'Build Furnace10 scrap + 5 ferrous'), and while stalled the primary face's own second line carries the pending number in the form 'waits 5 ferrous · have 3'",
+      "no output regression in the same W-3 window: applied commands >= 37, machines >= 5, batches >= 51, credits >= 8 (the deliberate-v2 baseline row), with the four witnesses unchanged: faces >= 44 px, no page scroll, 0 pageerror, entry chunk under 233000 B"
+    ],
+    "dependencies": [
+      "UI-002",
+      "BLD-001"
+    ],
+    "evidence": [
+      "work/feedback/PLAYER-004-g1/REPORT.md sections 1 and 2 and 5 (P1)",
+      "work/feedback/PLAYER-004-g1/policies.json and work/feedback/PLAYER-004-g1/policy-v2.json (the tap-by-tap labels, stall census and refusal census)",
+      "work/product/PROD-TRIAGE-004/DECISIONS.md row 1",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383452046",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383503917",
+      "deployed identity (coordinator-verified 2026-11-07): main 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2; served game bytes = the a5517948046f1327cb92cf35a9a02be53345f72f build (index-C_K4oMJ5.js 231262 B, index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B); ci 42383452046 + delivery 42383503917, deploy job 128435987488 on databrick-rustwake; the 891ff04d value inside the PLAYER-004-g1 report is the older canary, not the measured artifact"
+    ],
+    "product_approved": true,
+    "review_verdict": null,
+    "candidate_sha": null,
+    "published_sha": null,
+    "deployed_sha": null,
+    "outcome": null,
+    "history": [
+      {
+        "at": "2026-11-07T11:10:00+00:00",
+        "actor": "product-owner",
+        "from_state": null,
+        "to_state": "ready",
+        "reason": "triaged from PLAYER-004-g1 finding 1: the aggregate 80 % no-op share is demoted (three mechanisms, unstable denominator 176 vs 178) and the player-perceptible stall becomes the criterion; the 32-tap baseline and the 79.7 %/80.1 % pair stay on the record unchanged, and the new numbers are judged only on the W-3 (3.00 sim min) window"
+      }
+    ]
+  },
+  {
+    "id": "UI-004",
+    "type": "defect",
+    "title": "The price line fails AA contrast and the A control shrinks the two amber strings",
+    "priority": "P1",
+    "status": "ready",
+    "owner": "ui-ux",
+    "generation": 1,
+    "severity": "minor",
+    "player_problem": "The number that decides tap-now-or-wait is the weakest text on the phone screen: .dock__cost measures 10.8 px at 2.67:1 and the primary face label on the amber fill 13.2 px at 3.31:1 (against the objective's 14.25 px at 17.42:1), and pressing A twice - the control the player reaches for exactly then - takes the dock label to 13.95 px and the price to 11.25 px, i.e. smaller than they started.",
+    "hypothesis": "The .text-large block declares 0.62 rem for .dock__btn and 0.5 rem for .dock__cost, both below their own base rules, so the largest-text setting is non-monotonic for the two strings the player must read to act; lifting the amber strings to a >= 4.5:1 pair and a >= 12 px floor at every step fixes the read without costing layout, because the 46 px face already holds both lines.",
+    "scope": [
+      "src/ui/styles.css",
+      "work/evidence/"
+    ],
+    "non_goals": [
+      "No change to the objective/status tiers (UI-002's recorded 14.25/600 and 10.8/400, ratio 1.32x, stands as recorded and is not re-scored)",
+      "No new line, panel or face; the two-tier face structure from UI-002 stays",
+      "No card-cap work: this row does not touch the 42 % criterion (D-1 owns it)"
+    ],
+    "acceptance": [
+      "window W-3, 390x844 dpr2, live artifact built from the integrated SHA, at all three A steps (default, 1.25, 1.5): .dock__cost >= 12.0 px with contrast >= 4.50:1 at every step (baseline as recorded and unchanged: 10.8 / 13.5 / 11.25 px at 2.67:1 = FAIL)",
+      "the primary face label on the amber fill reaches contrast >= 4.50:1 (baseline 3.31:1 at 13.2 px) and every visible string in the census prints >= 4.50:1",
+      "monotonicity: for every element named in the census, px at A 1.25 >= px at default and px at A 1.5 >= px at A 1.25 (the two recorded regressions - dock label 13.2 -> 16.5 -> 13.95 and price 10.8 -> 13.5 -> 11.25 - must be gone, printed per element)",
+      "no witness regresses: clipped false on every row, tap targets >= 44 px (faces 46 px), scrollHeight == innerHeight, the five recorded cells stay <= 42 % card fill at text scale 2.0, 0 pageerror, entry chunk under 233000 B"
+    ],
+    "dependencies": [
+      "UI-002"
+    ],
+    "evidence": [
+      "work/feedback/PLAYER-004-g1/legibility.json and work/feedback/PLAYER-004-g1/REPORT.md section 3 (the three-step census with per-row px, colour, background and contrast)",
+      "work/feedback/PLAYER-004-g1/11-legibility-step1.png, 11-legibility-step2.png, 11-legibility-step3.png",
+      "src/ui/styles.css (.dock__cost, .text-large .dock__btn, .text-large .dock__cost are the named rules)",
+      "work/product/PROD-TRIAGE-004/DECISIONS.md row 3",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383452046",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383503917",
+      "deployed identity (coordinator-verified 2026-11-07): main 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2; served game bytes = the a5517948046f1327cb92cf35a9a02be53345f72f build (index-C_K4oMJ5.js 231262 B, index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B); ci 42383452046 + delivery 42383503917, deploy job 128435987488 on databrick-rustwake; the 891ff04d value inside the PLAYER-004-g1 report is the older canary, not the measured artifact"
+    ],
+    "product_approved": true,
+    "review_verdict": null,
+    "candidate_sha": null,
+    "published_sha": null,
+    "deployed_sha": null,
+    "outcome": null,
+    "history": [
+      {
+        "at": "2026-11-07T11:10:00+00:00",
+        "actor": "product-owner",
+        "from_state": null,
+        "to_state": "ready",
+        "reason": "triaged from PLAYER-004-g1 finding 3 and ranked first for the sprint: the price is the decision-critical string, it is the only AA-failing row at the default size, and the accessibility control currently shrinks it; the failed px/contrast readings are carried unchanged and the new floor is judged on the W-3 window across all three A steps"
+      }
+    ]
+  },
+  {
+    "id": "UI-005",
+    "type": "feature",
+    "title": "Print the store's working ceiling next to the capacity so sell-vs-hold is decidable from the chip",
+    "priority": "P2",
+    "status": "ready",
+    "owner": "ui-ux",
+    "generation": 1,
+    "severity": "minor",
+    "player_problem": "The only outcome-moving decision in the first minutes is sell or hold, and the one number printed for it is x/900: the observed range this session was 67 to 164 units, so the chip read 7-18 % for the whole run and a rule-following player held every sale - that arm ended with 2 machines, 48 batches and 0 credits while the sell arm reached 5 machines, 52 batches and 8 credits (159 credits per sim-hour).",
+    "hypothesis": "The 900 capacity is a specification constant, not a gauge: printing the working ceiling (the next stage's printed requirement) beside the current units puts a number the player can act on twice into the existing chip, so the sell rule becomes reachable from the resting screen; the falsifier is a chip-only sell rule that still fails to reach 5 machines inside the same window.",
+    "scope": [
+      "src/game/content/strings.ts",
+      "src/ui/Hud.tsx",
+      "work/evidence/"
+    ],
+    "non_goals": [
+      "No new panel, row or second gauge",
+      "No engine, price or capacity change (TUNING.dockCapacity stays 900 and the validate.ts 15-minutes guard stays)",
+      "No re-run of the 30-sim-minute (W-30) strategy pair; the recorded +16.5 % and +44 %/hour rows stand unchanged"
+    ],
+    "acceptance": [
+      "window W-3, 390x844 dpr2: the chip prints 'Store <units>/<capacity> · next <required>' on one line with one space between label and value (the DEF-009 separator), both integers read from the same state the Store panel prints, no arithmetic added in the UI layer",
+      "a machine sell rule that reads only the printed chip string reproduces the deliberate-v2 outcome inside the same 180 s window: >= 5 machines by tap 178 and credits >= 8 (the /900-only rule reached 2 machines and 0 credits at 48 batches, so the two arms stay printed side by side)",
+      "the chip's units column changes value at least 20 times in the window, which is the proof that the printed number tracks the state rather than being a constant",
+      "witnesses unmoved: the five recorded cells stay <= 42 % card fill at text scale 2.0, faces >= 44 px, scrollHeight == innerHeight, 0 pageerror, entry chunk under 233000 B"
+    ],
+    "dependencies": [
+      "UI-004",
+      "DEF-009",
+      "STRAT-004"
+    ],
+    "evidence": [
+      "work/feedback/PLAYER-004-g1/REPORT.md section 2 (the hold/sell pair, divergence at tap 76 / tick 770) and section 5 (P2)",
+      "work/feedback/PLAYER-004-g1/policy-v2.json summary (5 machines, 52 batches, 8 credits, 1034 batches per sim-hour, 159 credits per sim-hour) and work/feedback/PLAYER-004-g1/policies.json (the hold arm and the 67/164 unit readings)",
+      "work/product/PROD-TRIAGE-004/DECISIONS.md rows 2 and 5",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383452046",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383503917",
+      "deployed identity (coordinator-verified 2026-11-07): main 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2; served game bytes = the a5517948046f1327cb92cf35a9a02be53345f72f build (index-C_K4oMJ5.js 231262 B, index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B); ci 42383452046 + delivery 42383503917, deploy job 128435987488 on databrick-rustwake; the 891ff04d value inside the PLAYER-004-g1 report is the older canary, not the measured artifact"
+    ],
+    "product_approved": true,
+    "review_verdict": null,
+    "candidate_sha": null,
+    "published_sha": null,
+    "deployed_sha": null,
+    "outcome": null,
+    "history": [
+      {
+        "at": "2026-11-07T11:10:00+00:00",
+        "actor": "product-owner",
+        "from_state": null,
+        "to_state": "ready",
+        "reason": "triaged from PLAYER-004-g1 finding 2: the printed capacity (900) does not describe the working range (67-164, i.e. 7-18 %), and the hold arm's 0 credits / 2 machines is the consequence; scheduled behind UI-004 and DEF-009 because it edits the same chip string and file"
+      }
+    ]
+  },
+  {
+    "id": "DEF-011",
+    "type": "defect",
+    "title": "A single 224.5 px dead band sits between the yard and the dock at rest",
+    "priority": "P3",
+    "status": "ready",
+    "owner": "developer-art",
+    "generation": 1,
+    "severity": "cosmetic",
+    "player_problem": "At rest on 390x844 the lit content box is 347 x 422 (y 197-619) and one continuous black band of 224.5 px runs from y 619.5 to the document bottom, with the dock at y 790 h 46 - about a fifth of the phone column is black between the yard and the controls, which reads as a picture that stopped loading.",
+    "hypothesis": "Filling the letterbox band into the yard column (taller content box, same authored footprints) raises the felt density of the screen without a single new element; the two numbers must be printed separately because 224.5 px is band-to-bottom (it includes the 46 px dock row) while the gap from content bottom to dock top is 170.5 px.",
+    "scope": [
+      "src/game/renderer/",
+      "src/ui/styles.css",
+      "work/evidence/"
+    ],
+    "non_goals": [
+      "No new sheet, sprite or authored asset",
+      "No change to the machine footprints or the silhouette pass (ART-003 owns those)",
+      "No change to the 42 % card cap, the >= 44 px floor or the 233000 B ceiling"
+    ],
+    "acceptance": [
+      "window W-3, 390x844 dpr2, rest state, same probe as PLAYER-004-g1 (space.mjs): blankBandCss.height <= 120 px and contentBoxCss.h >= 520 px, both printed side by side with the dock's y and h, as against the recorded baseline band 224.5 px from y 619.5 and content box 347 x 422",
+      "the gap from content-box bottom to dock top is printed as its own number (baseline 790 - 619.5 = 170.5 px) so the two denominators can never be conflated again",
+      "the ART-003 per-layer ink shares and the yard-coverage denominator are re-printed on the same capture, with the 42 % cap, >= 44 px faces, no scroll and 0 pageerror unchanged"
+    ],
+    "dependencies": [
+      "ART-003"
+    ],
+    "evidence": [
+      "work/feedback/PLAYER-004-g1/space.json and work/feedback/PLAYER-004-g1/12-space-rest.png",
+      "work/product/PROD-TRIAGE-004/DECISIONS.md row 4 (deferred out of this sprint, with the >= 150 px revisit trigger)",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383452046",
+      "https://github.com/darkmatter2222/Rustwake/actions/runs/42383503917",
+      "deployed identity (coordinator-verified 2026-11-07): main 1573ac107acc3c9c0bed8e9eafffbd1b9ea3bca2; served game bytes = the a5517948046f1327cb92cf35a9a02be53345f72f build (index-C_K4oMJ5.js 231262 B, index-B1FOV2xO.css 7849 B, tables-BB2NPvQ2.js 9298 B); ci 42383452046 + delivery 42383503917, deploy job 128435987488 on databrick-rustwake; the 891ff04d value inside the PLAYER-004-g1 report is the older canary, not the measured artifact"
+    ],
+    "product_approved": true,
+    "review_verdict": null,
+    "candidate_sha": null,
+    "published_sha": null,
+    "deployed_sha": null,
+    "outcome": null,
+    "history": [
+      {
+        "at": "2026-11-07T11:10:00+00:00",
+        "actor": "product-owner",
+        "from_state": null,
+        "to_state": "ready",
+        "reason": "triaged from PLAYER-004-g1 finding 4: filed ready but deliberately not in this sprint - it shares the scene.ts/renderer lease with ART-003 and re-bases the yard-coverage witnesses; promote to P2 if the first post-ART-003-g2 space print still shows a band >= 150 px"
+      }
+    ]
+  }
+]

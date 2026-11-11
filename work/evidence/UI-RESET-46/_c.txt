@@ -1,0 +1,34 @@
+a-390x844-fresh-rest.png | tick=79986 | mach=1 | tut=1 | ink=8,152,374,561 | cover=0 | u44=0 | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+a-390x844-fresh-store.png | tick=79996 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Yard storeCloseCapacity0/900MeasuredPower 10 | aff=0
+a-390x844-fresh-machine.png | tick=79996 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+a-390x844-fresh-build.png | tick=80006 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+a-1920x1080-fresh-rest.png | tick=80030 | mach=1 | tut=1 | ink=576,20,768,1022 | cover=4.6 | u44=0 | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+a-1920x1080-fresh-store.png | tick=80040 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Yard storeCloseCapacity0/900MeasuredPower 10 | aff=0
+a-1920x1080-fresh-machine.png | tick=80040 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+a-1920x1080-fresh-build.png | tick=80050 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+a-390x844-mature-rest.png | tick=450308 | mach=8 | tut=9 | ink=8,152,374,561 | cover=0 | u44=0 | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=- | aff=0
+a-390x844-mature-store.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=Yard storeCloseScrap10Nonferrous239Sell 60 · | aff=1
+a-390x844-mature-machine.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+a-390x844-mature-build.png | tick=450328 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=- | aff=0
+a-1920x1080-mature-rest.png | tick=450308 | mach=8 | tut=9 | ink=576,20,768,1022 | cover=4.6 | u44=0 | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=- | aff=0
+a-1920x1080-mature-store.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=Yard storeCloseScrap10Nonferrous239Sell 60 · | aff=1
+a-1920x1080-mature-machine.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+a-1920x1080-mature-build.png | tick=450328 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=- | aff=0
+b-390x844-fresh-rest.png | tick=80162 | mach=1 | tut=1 | ink=8,152,374,561 | cover=0 | u44=0 | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+b-390x844-fresh-store.png | tick=80172 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Yard storeCloseCapacity0/900MeasuredPower 10 | aff=0
+b-390x844-fresh-machine.png | tick=80172 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+b-390x844-fresh-build.png | tick=80182 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+b-1920x1080-fresh-rest.png | tick=80205 | mach=1 | tut=1 | ink=576,20,768,1022 | cover=4.6 | u44=0 | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+b-1920x1080-fresh-store.png | tick=80215 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Yard storeCloseCapacity0/900MeasuredPower 10 | aff=0
+b-1920x1080-fresh-machine.png | tick=80215 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+b-1920x1080-fresh-build.png | tick=80225 | mach=1 | tut=1 | ink=- | cover=- | u44=- | chips=Scrap0Credits0Store 0/900 | panel=- | aff=0
+b-390x844-mature-rest.png | tick=450308 | mach=8 | tut=9 | ink=8,152,374,561 | cover=0 | u44=0 | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=- | aff=0
+b-390x844-mature-store.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=Yard storeCloseScrap10Nonferrous239Sell 60 · | aff=1
+b-390x844-mature-machine.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+b-390x844-mature-build.png | tick=450328 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Credits82Store 900/900 | panel=- | aff=0
+b-1920x1080-mature-rest.png | tick=450308 | mach=8 | tut=9 | ink=576,20,768,1022 | cover=4.6 | u44=0 | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=- | aff=0
+b-1920x1080-mature-store.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=Yard storeCloseScrap10Nonferrous239Sell 60 · | aff=1
+b-1920x1080-mature-machine.png | tick=450318 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=Scrap sorterCloseStatusNeeds inputBatch0%Cyc | aff=0
+b-1920x1080-mature-build.png | tick=450328 | mach=8 | tut=9 | ink=- | cover=- | u44=- | chips=Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store | panel=- | aff=0
+PNGCOUNT=44
+PNGS=a-1920x1080-fresh-build.png,a-1920x1080-fresh-machine.png,a-1920x1080-fresh-rest.png,a-1920x1080-fresh-store.png,a-1920x1080-mature-build.png,a-1920x1080-mature-machine.png,a-1920x1080-mature-rest.png,a-1920x1080-mature-store.png,a-1920x1080-mature-unaffordable.png,a-2560x1440-mature-rest.png,a-2560x1440-mature-store.png,a-390x844-fresh-build.png,a-390x844-fresh-machine.png,a-390x844-fresh-rest.png,a-390x844-fresh-store.png,a-390x844-mature-build.png,a-390x844-mature-machine.png,a-390x844-mature-rest.png,a-390x844-mature-store.png,a-390x844-mature-unaffordable.png,a-844x390-mature-rest.png,a-844x390-mature-store.png,b-1920x1080-fresh-build.png,b-1920x1080-fresh-machine.png,b-1920x1080-fresh-rest.png,b-1920x1080-fresh-store.png,b-1920x1080-mature-build.png,b-1920x1080-mature-machine.png,b-1920x1080-mature-rest.png,b-1920x1080-mature-store.png,b-1920x1080-mature-unaffordable.png,b-2560x1440-mature-rest.png,b-2560x1440-mature-store.png,b-390x844-fresh-build.png,b-390x844-fresh-machine.png,b-390x844-fresh-rest.png,b-390x844-fresh-store.png,b-390x844-mature-build.png,b-390x844-mature-machine.png,b-390x844-mature-rest.png,b-390x844-mature-store.png,b-390x844-mature-unaffordable.png,b-844x390-mature-rest.png,b-844x390-mature-store.png
