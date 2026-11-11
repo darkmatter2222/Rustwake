@@ -456,7 +456,7 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     expect(printed).not.toBeNull();
     const refund = Number(printed?.[1]);
     // The printed refund is the engine's own arithmetic: build refund + tray + buffer +
-    // one belt refund per attached link.
+    // the in-progress batch + one belt refund per attached link.
     const links = state.routes.filter(
       (route) => route.from.id === machine.id || route.to.id === machine.id,
     );
@@ -464,8 +464,38 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
       BLUEPRINTS.sorter.buildCost.reduce((total, item) => total + refundOf(item.qty), 0) +
       machine.trayUnits +
       machine.inBufUnits +
+      machine.batch.reduce((total, item) => total + item.qty, 0) +
       links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
     expect(refund).toBe(expected);
+    const unitsBefore = state.storeUnits;
+    act(() => face?.click());
+    expect(state.machines.length).toBe(0);
+    expect(state.storeUnits - unitsBefore).toBe(refund);
+  });
+
+  it("Dismantle prints the in-progress batch units the engine also returns", () => {
+    const state = yardWithASorter();
+    const machine = state.machines[0];
+    // The idle fixture holds no batch; reserve inputs the way a running batch does
+    // (test-only mutation) so the face must count them, exactly as `dismantleMachine`
+    // returns `machine.batch` to the store on top of the build/tray/buffer/belt parts.
+    machine.batch = [{ resource: "scrap", qty: 2 }];
+    machine.progress = 4000;
+    machine.status = "running";
+    const host = mountPanel(state, machine);
+    const face = actionFaces(host).find((item) => item.textContent?.startsWith("Dismantle"));
+    const printed = /^Dismantle · \+(\d+) units$/.exec(face?.textContent ?? "");
+    expect(printed).not.toBeNull();
+    const refund = Number(printed?.[1]);
+    const links = state.routes.filter(
+      (route) => route.from.id === machine.id || route.to.id === machine.id,
+    );
+    const idleExpected =
+      BLUEPRINTS.sorter.buildCost.reduce((total, item) => total + refundOf(item.qty), 0) +
+      machine.trayUnits +
+      machine.inBufUnits +
+      links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
+    expect(refund).toBe(idleExpected + 2);
     const unitsBefore = state.storeUnits;
     act(() => face?.click());
     expect(state.machines.length).toBe(0);

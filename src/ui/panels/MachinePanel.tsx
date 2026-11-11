@@ -85,9 +85,10 @@ export function MachinePanel(props: {
    * BELT-001 g4: the three command faces each carry the arithmetic the engine itself
    * applies to that tap, from the same exported helpers `commands.ts` uses, so a printed
    * number cannot drift from what the tap charges: `moveMachine` takes `movePenaltyPct` of
-   * every build-cost line, `dismantleMachine` returns `refundOf` on those lines, the tray
-   * and buffer in full, and one belt refund per attached link. `links` is the same set the
-   * extent row below prints, and the store's endpoint id (0) never collides with a machine.
+   * every build-cost line, `dismantleMachine` returns `refundOf` on those lines, the tray,
+   * the buffer and the in-progress batch in full, and one belt refund per attached link.
+   * `links` is the same set the extent row below prints, and the store's endpoint id (0)
+   * never collides with a machine.
    */
   const links = props.state.routes.filter(
     (route) => route.from.id === machine.id || route.to.id === machine.id
@@ -96,10 +97,13 @@ export function MachinePanel(props: {
     (sum, item) => sum + Math.round((item.qty * TUNING.movePenaltyPct) / 100),
     0
   );
+  // `dismantleMachine` also returns the inputs reserved by the active batch, so the face
+  // counts them: a running machine refunds more than an idle one with the same buffer.
   const refundUnits =
     def.buildCost.reduce((total, item) => total + refundOf(item.qty), 0) +
     machine.trayUnits +
     machine.inBufUnits +
+    machine.batch.reduce((total, item) => total + item.qty, 0) +
     links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
   const batchPercent = Math.min(
     100,
