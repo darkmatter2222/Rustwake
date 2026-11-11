@@ -117,6 +117,49 @@ export const ShellMenuFace = forwardRef<
 });
 
 /**
+ * UI-RESET-50: the visible camera controls — zoom in, zoom out, reset view.
+ * Plain buttons with real camera state behind them (App steers the same
+ * clamped math the wheel and pinch use). Phone mode stacks them in the right
+ * gutter above the dock/Menu face, column mode below the Menu face, rail mode
+ * paints a row above the primary band. Every face keeps the 44 px floor, and
+ * the camera fit reserves their gutter, so no yard cell hides under a control.
+ */
+export function ShellZoom(props: {
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onReset: () => void;
+}) {
+  return (
+    <div className="shell-zoom" role="group" aria-label="Camera zoom">
+      <button
+        type="button"
+        className="shell-zoom__face"
+        aria-label="Zoom in"
+        onClick={props.onZoomIn}
+      >
+        +
+      </button>
+      <button
+        type="button"
+        className="shell-zoom__face"
+        aria-label="Zoom out"
+        onClick={props.onZoomOut}
+      >
+        &minus;
+      </button>
+      <button
+        type="button"
+        className="shell-zoom__face shell-zoom__face--reset"
+        aria-label="Reset view"
+        onClick={props.onReset}
+      >
+        Fit
+      </button>
+    </div>
+  );
+}
+
+/**
  * E3/E5: the one bounded Menu sheet. `role="dialog"`, focus moves in on open
  * and returns to the opener on close (App owns the restore). It is deliberately
  * NOT a `.panel`: the overlay-stack census counts `.panel` siblings, and the

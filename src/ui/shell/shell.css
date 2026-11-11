@@ -176,6 +176,68 @@
   color: var(--steel-light);
 }
 
+/* ---- Zoom controls (UI-RESET-50): visible in every mode, 44 px faces ---- */
+/* Hidden until a mode places the stack; the faces keep their target floor in
+   the base rule so the jsdom reachability census reads it without @media. */
+.shell-zoom {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.shell-zoom__face {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.72);
+  color: var(--paper);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  pointer-events: auto;
+}
+
+.shell-zoom__face:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+
+.shell-zoom__face--reset {
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+}
+
+/* The bounded scrollers (inspector bodies, the Menu sheet) get a thin themed
+   scrollbar instead of the platform default, on both engines that ship here. */
+.panel__body,
+.shell-menu__body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+}
+
+.panel__body::-webkit-scrollbar,
+.shell-menu__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel__body::-webkit-scrollbar-thumb,
+.shell-menu__body::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(111, 147, 173, 0.55);
+}
+
+.panel__body::-webkit-scrollbar-track,
+.shell-menu__body::-webkit-scrollbar-track {
+  background: rgba(9, 15, 26, 0.4);
+}
+
 /* ---- Phone mode: the Menu face owns the dock's reserved thumb zone ---- */
 @media (max-width: 599px) {
   .shell-menu-face {
@@ -183,6 +245,14 @@
     right: max(10px, env(safe-area-inset-right));
     bottom: max(8px, env(safe-area-inset-bottom));
     width: 66px;
+  }
+  /* The stack clears the dock (App measures it into --shell-zoom-clear) and
+     the Menu face (8 px edge + 46 px face + gutter); the camera fit reserves
+     this same right gutter, so the stack never covers a yard cell. */
+  .shell-zoom {
+    display: flex;
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(76px, calc(var(--shell-zoom-clear, 76px) + env(safe-area-inset-bottom)));
   }
 }
 
@@ -198,6 +268,13 @@
      reserve grows with it — same value as the styles.css column block. */
   .hud__top {
     padding-right: calc(24px + 38px * var(--text-scale, 1));
+  }
+  /* Below the corner Menu face (8 px edge + 46 px face + gutter), in the
+     right gutter the camera fit reserves for the stack. */
+  .shell-zoom {
+    display: flex;
+    top: 76px;
+    right: max(10px, env(safe-area-inset-right));
   }
 }
 
@@ -242,5 +319,15 @@
        844x390 the content is taller than the gap and the sheet spilled over the
        lead, y=56). Stretch makes top/bottom own the height, like every panel. */
     align-self: stretch;
+  }
+  /* The zoom row sits above the primary band, at the world region's left
+     edge — the inspector owns the right gutter here. --shell-zoom-clear is
+     the measured dock clearance, so the row lifts with the band at large
+     text scales instead of overlapping it. */
+  .shell-zoom {
+    display: flex;
+    flex-direction: row;
+    left: 110px;
+    bottom: max(62px, calc(var(--shell-zoom-clear, 62px) + env(safe-area-inset-bottom)));
   }
 }
