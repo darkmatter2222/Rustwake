@@ -13,7 +13,10 @@ function json(file,value){atomic(file,JSON.stringify(value,null,2)+'\n');}
 function split(text){const at=text.indexOf(marker);if(at<0)throw Error('Inbox marker missing; refuse to consume');const end=at+marker.length;return {header:text.slice(0,end),body:text.slice(end)};}
 function within(root,relative){if(typeof relative!=='string'||path.isAbsolute(relative)||relative.split(/[\\/]/).includes('..'))throw Error('Expected repository-relative path');return path.join(root,relative);}
 function lock(root,fn){const dir=path.join(root,'.rustwake-runtime');fs.mkdirSync(dir,{recursive:true});const f=path.join(dir,'sponsor-intake.lock');let fd;try{fd=fs.openSync(f,'wx');fs.writeFileSync(fd,JSON.stringify({pid:process.pid,at:new Date().toISOString()}));}catch(e){throw Error('Sponsor intake already locked; reconcile owner before retrying: '+e.message);}try{return fn();}finally{fs.closeSync(fd);fs.unlinkSync(f);}}
-export function snapshot(root=rootDefault){return lock(root,()=>{
+// makeId is an injection seam for deterministic offline tests; the default keeps the
+// timestamp+random-hex format used in production.
+const defaultReceiptId=()=>'SPONSOR-'+new Date().toISOString().replace(/[-:.TZ]/g,'')+'-'+crypto.randomBytes(4).toString('hex');
+export function snapshot(root=rootDefault,makeId=defaultReceiptId){return lock(root,()=>{
  const inbox=fs.readFileSync(path.join(root,'SPONSOR_INBOX.md'),'utf8');const {body}=split(inbox);if(!body.trim())return {status:'empty'};
  const dir=path.join(root,'work/sponsor/intake');
  if(fs.existsSync(dir)){
@@ -25,7 +28,7 @@ export function snapshot(root=rootDefault){return lock(root,()=>{
    }
   }
  }
- const id='SPONSOR-'+new Date().toISOString().replace(/[-:.TZ]/g,'')+'-'+crypto.randomBytes(4).toString('hex');
+ const id=makeId();
  const relative=`work/sponsor/intake/${id}.json`;
  const receipt={schema_version:1,id,status:'pending',captured_at:new Date().toISOString(),source:'SPONSOR_INBOX.md',request:body,request_sha256:hash(body),inbox_sha256:hash(inbox),ticket_ids:[],decision:null};
  json(path.join(root,relative),receipt);return {status:'pending',id,receipt:relative,request_sha256:receipt.request_sha256};
@@ -66,7 +69,13 @@ export function acknowledge(root,relative,decision,ticketIds,validateTickets=git
  if(!/^work\/product\/.+\.md$/.test(decision))throw Error('Decision must be a tracked work/product Markdown file');
  const decisionText=fs.readFileSync(within(root,decision),'utf8');
  if(!decisionText.includes(receipt.id))throw Error('Decision must identify sponsor receipt');
- for(const id of ids){if(!decisionText.includes(id))throw Error('Decision must explain ticket '+id);}
+ // Whole-token mention check: ticket digits embedded in a longer number ("1430") or in the
+ // receipt ID ("SPONSOR-<timestamp>-<hex>") must not count; "#43", "43," and "(43)" do.
+ // IDs are validated as numeric above, so no regex escaping is needed. Hyphens are excluded
+ // from token boundaries so no segment of a hyphen-joined receipt ID can satisfy the check,
+ // even an 8-digit ticket equal to the whole hex suffix.
+ const mentions=id=>new RegExp('(?<![\\w-])'+id+'(?![\\w-])').test(decisionText);
+ for(const id of ids){if(!mentions(id))throw Error('Decision must explain ticket '+id);}
  const issues=validateTickets(ids,receipt.id,relative);
  if(!Array.isArray(issues)||issues.length!==ids.length)throw Error('Ticket validator returned an invalid result');
  const inboxFile=path.join(root,'SPONSOR_INBOX.md');const before=fs.readFileSync(inboxFile,'utf8');const {header,body}=split(before);
