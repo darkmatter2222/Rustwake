@@ -1,11 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BLUEPRINTS, TUNING } from "../game/content/defs";
 import { t } from "../game/content/strings";
 import type { SimState } from "../game/simulation/types";
 import type { PrimaryAction } from "./App";
-import { RESOURCE_LABEL, costSummary, formatNumber, hudChipLimit, priceLine, visibleResources } from "./text";
-
-import { PALETTE } from "../game/renderer/sprites";
+import { RESOURCE_LABEL, costSummary, hudChipLimit, priceLine, visibleResources } from "./text";
+import { ALL_RESOURCES_ID, AllResources } from "./hud/AllResources";
+import { publishHudState } from "./hud/bridge";
+import { COPY } from "./hud/copy";
+import { capacityText, hudNumber } from "./hud/format";
+import {
+  BoltIcon,
+  BoxIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CloseIcon,
+  CoinIcon,
+  EyeIcon,
+  GearIcon,
+  GridIcon,
+  ResourceGlyph,
+  WarnIcon,
+} from "./hud/Icons";
+import { powerCue, productionCue, storagePressure } from "./hud/pressure";
+import { StorageAlert } from "./hud/StorageAlert";
+import "./hud/hud.css";
 
 /* STRAT-004 byte trim: the dock's class fragments are painted from one literal each
    (11 call sites in this row), same rendered `class` attribute, one copy in the chunk. */
@@ -16,23 +34,6 @@ const BTN_BRANCH_PRIMARY = "dock__btn dock__btn--branch dock__btn--primary";
 const COST = "dock__cost";
 const SOUND_OFF = t("sound.off");
 const SOUND_ON = t("sound.on");
-
-/* Q-002: the five hexes shared with the renderer read from the one PALETTE
-   source; the rest are chip-only tints. */
-const DOT_COLORS: Record<string, string> = {
-  scrap: PALETTE.rust,
-  credits: PALETTE.amber,
-  ferrous: PALETTE.steelLight,
-  nonferrous: PALETTE.violet,
-  residue: "#7b8a99",
-  steel: PALETTE.cyan,
-  copper: "#e0975b",
-  polymer: "#c9b45d",
-  wire: "#9fd0d8",
-  plates: "#a9b6c4",
-  circuits: "#b39ddb",
-  data: "#7fd6c2",
-};
 
 export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute: () => void }) {
   return (
@@ -49,42 +50,70 @@ export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute:
   );
 }
 
-export function ResourceStrip({ state }: { state: SimState }) {
+export function ResourceStrip({ state, expanded }: { state: SimState; expanded: boolean }) {
   // Spec 5.4: a small number of chips, four on a portrait phone and seven on a wide
   // screen. The credits and Store status chips share that budget, so the pinned
   // resource list gets what is left. Measured reason: docs/evidence/2026-11-03-hud-share.md.
   // PLAY-001 P-5: the credits chip is there at 0 too, so the charge that bought a level
   // leaves its receipt on the screen - the row is two chips in every state.
   const shown = visibleResources(state, hudChipLimit() - 2);
+  // UI-RESET-51: pressure and critical-state reads are pure derivations of the same
+  // authoritative state. The cue chips below only exist while a condition is live, so
+  // a healthy yard paints exactly the chips it always did.
+  const pressure = storagePressure(state);
+  const power = powerCue(state);
+  const production = productionCue(state);
   return (
     <div className="resources" aria-label="Resources">
       <span className="resources__item" key="scrap">
-        <span className="resources__dot" style={{ background: DOT_COLORS["scrap"] }} />
+        <ResourceGlyph id="scrap" className="resources__icon" />
         {RESOURCE_LABEL["scrap"]}
-        <strong>{formatNumber(state.store["scrap"] ?? 0)}</strong>
+        <strong>{hudNumber(state.store["scrap"] ?? 0)}</strong>
       </span>
       {shown
         .filter((key) => key !== "scrap")
         .map((key) => (
           <span className="resources__item" key={key}>
-            <span className="resources__dot" style={{ background: DOT_COLORS[key] ?? "#6f93ad" }} />
+            <ResourceGlyph id={key} className="resources__icon" />
             {RESOURCE_LABEL[key] ?? key}
-            <strong>{formatNumber(state.store[key] ?? 0)}</strong>
+            <strong>{hudNumber(state.store[key] ?? 0)}</strong>
           </span>
         ))}
-      <span className="resources__item">
-        <span className="resources__dot" style={{ background: DOT_COLORS["credits"] }} />
+      <span className="resources__item resources__item--credits">
+        <CoinIcon className="resources__icon" />
         {t("chip.credits")}
-        <strong>{formatNumber(state.credits)}</strong>
+        <strong>{hudNumber(state.credits)}</strong>
       </span>
-      <span className="resources__item">
+      <span className="resources__item resources__item--store" data-pressure={pressure.tier}>
+        <BoxIcon className="resources__icon" />
         {t("chip.store")}
         {/* UI-006: the value is an element, not a bare text node, so it becomes a second flex
             item and inherits this chip's own `gap: 4px` - the same separation `• Scrap 5` and
             `• Credits 0` already get. Two adjacent text nodes share no gap, which is why the
             chip read `Store900/900` at 390 px while its neighbours read spaced. */}
-        <strong>{formatNumber(state.storeUnits)}/{formatNumber(state.storeCapacity)}</strong>
+        <strong>{capacityText(state.storeUnits, state.storeCapacity)}</strong>
+        {pressure.tier !== "ok" ? <WarnIcon className="resources__warn" /> : null}
       </span>
+      {power ? (
+        <span className="resources__item resources__item--cue" data-cue="power">
+          <BoltIcon className="resources__icon" />
+          {`${COPY.power} ${power.percent} %${power.limited > 0 ? ` · ${power.limited} ${COPY.limited}` : ""}`}
+          {power.percent < 100 ? <WarnIcon className="resources__warn" /> : null}
+        </span>
+      ) : null}
+      {production ? (
+        <span className="resources__item resources__item--cue" data-cue="production">
+          <GearIcon className="resources__icon" />
+          {[
+            production.starved > 0 ? `${production.starved} ${COPY.needInput}` : null,
+            production.outputFull > 0 ? `${production.outputFull} ${COPY.cargoFull}` : null,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+          {production.outputFull > 0 ? <WarnIcon className="resources__warn" /> : null}
+        </span>
+      ) : null}
+      {expanded ? <AllResources state={state} /> : null}
     </div>
   );
 }
@@ -97,9 +126,14 @@ export function HudTop(props: {
   onToggleMute: () => void;
   onHome: () => void;
 }) {
+  // UI-RESET-51: the all-resource drawer is a local toggle; the chip budget is unchanged.
+  const [expanded, setExpanded] = useState(false);
+  // Publish the state this pass renders so the dock's StorageAlert (which receives no
+  // state prop) can read it. HudTop renders before DockButtons in the same App pass.
+  publishHudState(props.state);
   return (
     <div className="hud__top">
-      <ResourceStrip state={props.state} />
+      <ResourceStrip state={props.state} expanded={expanded} />
       <div className="cluster">
         <button
           className="icon-btn"
@@ -125,6 +159,18 @@ export function HudTop(props: {
         >
           {t("btn.textScale", { scale: props.textScale })}
         </button>
+        {/* UI-RESET-51: the all-resource escape hatch. Inserted BEFORE Home so Home stays
+            the cluster's last child (styles.css hides `.cluster .icon-btn:last-child`).
+            Icon-only face; the accessible name carries the meaning. */}
+        <button
+          className="icon-btn"
+          onClick={() => setExpanded((v) => !v)}
+          aria-label={COPY.allResources}
+          aria-expanded={expanded}
+          aria-controls={ALL_RESOURCES_ID}
+        >
+          <GridIcon className="cluster__glyph" size={16} />
+        </button>
         <button className="icon-btn" onClick={props.onHome} aria-label={t("aria.home")}>
           {t("btn.home")}
         </button>
@@ -140,23 +186,74 @@ export function HudTop(props: {
  * four lines at nearly one size, so nothing led and the world lost a third of the screen
  * to text at 360 x 640 scale 2.0. The five pips per machine are not repeated here at all:
  * the tiles paint them, and the world outranks the text.
+ *
+ * UI-RESET-51: the guidance is optional. Three modes - full (the exact card above),
+ * concise (the lead line only) and dismissed (a single restore face) - let the player
+ * shrink or hide the objective so it never consumes the whole world. The controls are
+ * icon-only (no text), so the resting-screen line/tier census is unchanged, and the
+ * default mode paints the original DOM verbatim.
  */
 export function ObjectiveCard(props: {
   text: string;
   phase?: string;
   numbers: string;
 }) {
+  const [mode, setMode] = useState<"full" | "concise" | "dismissed">("full");
+  const dismissed = mode === "dismissed";
+  const className =
+    mode === "full" ? "objective" : `objective objective--${mode}`;
   return (
-    <div className="objective">
-      <span className="objective__primary">{props.text}</span>
+    <div className={className}>
+      {!dismissed ? <span className="objective__primary">{props.text}</span> : null}
       {/* L-2: the guidance line is its own block, a sibling of the chip row, so the two
           "step the secondary row back" rules (large text scale, short viewport) -
           which now narrow to the chip row - cannot collapse it to zero height. */}
-      {props.phase ? <span className="status-line">{props.phase}</span> : null}
+      {mode === "full" && props.phase ? <span className="status-line">{props.phase}</span> : null}
       {/* A1-4 / PLAY-002 2: one secondary line carries the fleet, the power budget and the
           last shortfall, all from the same readout, so the card never grows a fourth row. */}
-      <span className="status-line">{props.numbers}</span>
+      {mode === "full" ? <span className="status-line">{props.numbers}</span> : null}
       <div className="objective__row" />
+      <div className="objective__controls">
+        {mode === "full" ? (
+          <button
+            type="button"
+            className="objective__btn"
+            aria-label={COPY.collapse}
+            onClick={() => setMode("concise")}
+          >
+            <ChevronUpIcon size={16} />
+          </button>
+        ) : null}
+        {mode === "concise" ? (
+          <button
+            type="button"
+            className="objective__btn"
+            aria-label={COPY.expand}
+            onClick={() => setMode("full")}
+          >
+            <ChevronDownIcon size={16} />
+          </button>
+        ) : null}
+        {dismissed ? (
+          <button
+            type="button"
+            className="objective__btn"
+            aria-label={COPY.restore}
+            onClick={() => setMode("full")}
+          >
+            <EyeIcon size={16} />
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="objective__btn"
+            aria-label={COPY.dismiss}
+            onClick={() => setMode("dismissed")}
+          >
+            <CloseIcon size={16} />
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -178,33 +275,39 @@ export function DockButtons(props: {
   if (props.buildBlueprint !== null) {
     const placeCost = priceLine(costText(props.buildBlueprint));
     return (
-      <div className="dock">
-        <button className={BTN} onClick={props.onCancelBuild}>
-          {t("btn.cancel")}
-        </button>
-        {/* PLAY-001 P-3: one committed choice, one label. The build step's own wording
-            carries through the phase flip - the same key and the same price the primary
-            button printed a tap ago - so the row's face never alternates while the goal
-            is unchanged. The phase itself is the `.status-line` under the objective.
-            STRAT-004: `priceLine` appends the face's own pending numbers to that price,
-            so one `dock__cost` line carries `10 scrap + 5 ferrous · waits 10 scrap ·
-            have 5 · in 2s` and a blocked build is countable on the face itself. */}
-        <button className={BTN_PRIMARY} onClick={props.onPlace}>
-          {t("btn.buildNamed", {
-            machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint,
-          })}
-          <span className={COST}>{placeCost}</span>
-        </button>
-        <button
-          className={BTN}
-          onClick={() => {
-            const index = blueprintIds.indexOf(props.buildBlueprint ?? blueprintIds[0]);
-            props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
-          }}
-        >
-          {t("btn.next")}
-        </button>
-      </div>
+      <>
+        {/* UI-RESET-51: the storage alert leads to recovery in both dock phases. It is a
+            sibling of the dock, not a dock face, so the pinned face counts and exact-match
+            taps are untouched. */}
+        <StorageAlert onInventory={props.onInventory} />
+        <div className="dock">
+          <button className={BTN} onClick={props.onCancelBuild}>
+            {t("btn.cancel")}
+          </button>
+          {/* PLAY-001 P-3: one committed choice, one label. The build step's own wording
+              carries through the phase flip - the same key and the same price the primary
+              button printed a tap ago - so the row's face never alternates while the goal
+              is unchanged. The phase itself is the `.status-line` under the objective.
+              STRAT-004: `priceLine` appends the face's own pending numbers to that price,
+              so one `dock__cost` line carries `10 scrap + 5 ferrous · waits 10 scrap ·
+              have 5 · in 2s` and a blocked build is countable on the face itself. */}
+          <button className={BTN_PRIMARY} onClick={props.onPlace}>
+            {t("btn.buildNamed", {
+              machine: BLUEPRINTS[props.buildBlueprint]?.label ?? props.buildBlueprint,
+            })}
+            <span className={COST}>{placeCost}</span>
+          </button>
+          <button
+            className={BTN}
+            onClick={() => {
+              const index = blueprintIds.indexOf(props.buildBlueprint ?? blueprintIds[0]);
+              props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
+            }}
+          >
+            {t("btn.next")}
+          </button>
+        </div>
+      </>
     );
   }
   // STRAT-004: the price line of the face the thumb is aimed at carries its own pending
@@ -213,53 +316,56 @@ export function DockButtons(props: {
   // the `Last need …` tail. The two named fork faces keep their one price line each (their
   // prices are the whole comparison), so the row that already prints two numbers stays two.
   return (
-    <div className="dock">
-      {props.primary.branches && props.primary.branches.length > 0 ? (
-        /* The fork (A1-3): one price, three named outcomes, three equal thirds. Each
-           button is the whole choice - one tap commits that branch and the row returns
-           to its usual targets - so no blind tap can pick an unnamed default.
-           UI-002: the row is painted cheapest-first (`sortedBranchOptions`), so the
-           leftmost face - the one a blind thumb reaches - carries the single accent fill
-           and is the plan the current purse can pay. One accent-filled primary per row. */
-        props.primary.branches.map((branch, index) => (
-          <button
-            className={
-              index === 0 ? BTN_BRANCH_PRIMARY : BTN_BRANCH
-            }
-            key={branch.id}
-            onClick={branch.run}
-          >
-            {branch.label}
-            {branch.cost ? <span className={COST}>{branch.cost}</span> : null}
-          </button>
-        ))
-      ) : (
-        <>
-          <button className={BTN} onClick={props.onInventory}>
-            {t("btn.store")}
-          </button>
-          {/* The yard record and the save transfer, unlocked after the tutorial so the
-              first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
-          {props.yard ? (
-            <button className={BTN} onClick={props.onYard}>
-              {t("btn.yard")}
+    <>
+      <StorageAlert onInventory={props.onInventory} />
+      <div className="dock">
+        {props.primary.branches && props.primary.branches.length > 0 ? (
+          /* The fork (A1-3): one price, three named outcomes, three equal thirds. Each
+             button is the whole choice - one tap commits that branch and the row returns
+             to its usual targets - so no blind tap can pick an unnamed default.
+             UI-002: the row is painted cheapest-first (`sortedBranchOptions`), so the
+             leftmost face - the one a blind thumb reaches - carries the single accent fill
+             and is the plan the current purse can pay. One accent-filled primary per row. */
+          props.primary.branches.map((branch, index) => (
+            <button
+              className={
+                index === 0 ? BTN_BRANCH_PRIMARY : BTN_BRANCH
+              }
+              key={branch.id}
+              onClick={branch.run}
+            >
+              {branch.label}
+              {branch.cost ? <span className={COST}>{branch.cost}</span> : null}
             </button>
-          ) : null}
-          <button className={BTN_PRIMARY} onClick={props.primary.run}>
-            {props.primary.label}
-            {props.primary.cost ? <span className={COST}>{priceLine(props.primary.cost)}</span> : null}
-          </button>
-          <button className={BTN} onClick={() => props.onPickBlueprint(blueprintIds[0])}>
-            {t("btn.build")}
-          </button>
-          {props.research ? (
-            <button className={BTN} onClick={props.onResearch}>
-              {t("btn.research")}
+          ))
+        ) : (
+          <>
+            <button className={BTN} onClick={props.onInventory}>
+              {t("btn.store")}
             </button>
-          ) : null}
-        </>
-      )}
-    </div>
+            {/* The yard record and the save transfer, unlocked after the tutorial so the
+                first ten minutes keep three targets (spec 5.5 caps a narrow dock at five). */}
+            {props.yard ? (
+              <button className={BTN} onClick={props.onYard}>
+                {t("btn.yard")}
+              </button>
+            ) : null}
+            <button className={BTN_PRIMARY} onClick={props.primary.run}>
+              {props.primary.label}
+              {props.primary.cost ? <span className={COST}>{priceLine(props.primary.cost)}</span> : null}
+            </button>
+            <button className={BTN} onClick={() => props.onPickBlueprint(blueprintIds[0])}>
+              {t("btn.build")}
+            </button>
+            {props.research ? (
+              <button className={BTN} onClick={props.onResearch}>
+                {t("btn.research")}
+              </button>
+            ) : null}
+          </>
+        )}
+      </div>
+    </>
   );
 }
 

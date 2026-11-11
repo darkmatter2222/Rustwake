@@ -1,0 +1,238 @@
+/* UI-RESET-51 — HUD rebuild styles.
+   Owned by src/ui/hud/** and imported from Hud.tsx (never appended to styles.css).
+   Loads after styles.css, so the few overrides below (dock order, objective box)
+   win at equal specificity. Colors reuse the palette custom properties declared
+   in styles.css :root; fallbacks keep the sheet readable if a token is absent. */
+
+/* --- Resource chips: shape glyph + reserved numeric width ------------------ */
+
+/* The glyph replaces the old color-only dot. Shape carries identity; color is a
+   redundant second channel, so the chip survives grayscale. */
+.resources__icon {
+  width: 0.72rem;
+  height: 0.72rem;
+  flex: 0 0 auto;
+  color: var(--steel-light, #6f93ad);
+}
+
+/* Tabular digits + a fixed ch budget: a value growing 0 -> 900 -> 1.00K never
+   resizes its chip, so the row does not jitter tick to tick. Six characters is
+   the widest the compact ladder prints; the capacity readout reserves seven. */
+.resources__item strong {
+  min-width: 6ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.resources__item--store strong {
+  min-width: 7ch;
+}
+
+/* Capacity pressure on the store chip: a dashed/solid border + the warn glyph are
+   the non-color cue; the hue only reinforces it. */
+.resources__item[data-pressure="high"] {
+  border: 1px dashed var(--furnace, #ffb765);
+}
+.resources__item[data-pressure="full"] {
+  border: 1px solid var(--rust, #c9713a);
+  border-left-width: 3px;
+}
+.resources__warn {
+  width: 0.8rem;
+  height: 0.8rem;
+  flex: 0 0 auto;
+  color: var(--furnace, #ffb765);
+}
+
+/* Critical power / production chips only exist while the condition is live. */
+.resources__item--cue {
+  border: 1px dashed var(--steel-light, #6f93ad);
+}
+
+/* --- All-resource drawer --------------------------------------------------- */
+
+/* Bounded, scrollable, on its own wrapped row inside .resources: the escape hatch
+   to every resource never floats over the world. Custom scrollbar in-palette. */
+.hud-all {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px 10px;
+  max-height: 9.5rem;
+  overflow-y: auto;
+  touch-action: pan-y;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid var(--steel, #38556b);
+  border-radius: 6px;
+  background: var(--panel, rgba(11, 18, 32, 0.92));
+  pointer-events: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--steel-light, #6f93ad) var(--night, #0b1220);
+}
+.hud-all::-webkit-scrollbar {
+  width: 8px;
+}
+.hud-all::-webkit-scrollbar-track {
+  background: var(--night, #0b1220);
+  border-radius: 4px;
+}
+.hud-all::-webkit-scrollbar-thumb {
+  background: var(--steel, #38556b);
+  border-radius: 4px;
+}
+.hud-all::-webkit-scrollbar-thumb:hover {
+  background: var(--steel-light, #6f93ad);
+}
+.hud-all__row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 0.78rem;
+}
+.hud-all__icon {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: 0 0 auto;
+  color: var(--steel-light, #6f93ad);
+}
+.hud-all__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hud-all__value {
+  margin-left: auto;
+  min-width: 4ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Storage alert --------------------------------------------------------- */
+
+/* Sits directly above the dock. order 4 + margin-top:auto pins it to the bottom
+   band; the dock moves to order 5 (overriding styles.css order 4 at equal
+   specificity, later in the cascade). Not a .panel, so the overlay-stack census
+   keeps counting inspectors only. */
+.hud-alert {
+  order: 4;
+  margin-top: auto;
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border: 1px solid var(--furnace, #ffb765);
+  border-left-width: 4px;
+  border-radius: 6px;
+  background: var(--panel, rgba(11, 18, 32, 0.92));
+  font-size: 0.84rem;
+  pointer-events: auto;
+}
+.hud-alert[data-tier="full"] {
+  border-color: var(--rust, #c9713a);
+  border-style: solid;
+}
+.hud-alert[data-tier="high"] {
+  border-style: dashed;
+}
+.hud-alert__icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  color: var(--furnace, #ffb765);
+}
+.hud-alert[data-tier="full"] .hud-alert__icon {
+  color: var(--rust, #c9713a);
+}
+.hud-alert__text {
+  min-width: 0;
+}
+.hud-alert__action {
+  margin-left: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.hud > .dock {
+  order: 5;
+}
+
+/* --- Objective card controls ---------------------------------------------- */
+
+/* Icon-only faces in a reserved top-right corner. The card keeps a 44px floor and
+   the lead line reserves room so the controls never overlap the text. The controls
+   div has no text, so the resting-screen line/tier census is unchanged. */
+.objective {
+  position: relative;
+  min-height: 44px;
+}
+.objective__primary {
+  padding-right: 76px;
+}
+.objective__controls {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: flex;
+  gap: 2px;
+}
+.objective__controls .objective__btn {
+  width: 36px;
+  min-width: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.objective--dismissed {
+  padding: 0;
+  min-height: 44px;
+  max-width: none;
+  background: transparent;
+  border-left-color: transparent;
+}
+.objective--dismissed .objective__controls {
+  position: static;
+}
+
+/* Cluster glyph (the all-resources toggle) sized to the icon-btn face. */
+.cluster__glyph {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* --- Rail mode (wide desktop + short landscape) --------------------------- */
+
+/* Mirror the styles.css rail breakpoint. The dock is absolute here, so the alert
+   anchors to the same band, stacked above the dock and clear of the toast. */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .hud-alert {
+    position: absolute;
+    left: 110px;
+    right: 334px;
+    bottom: calc(112px + env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+    align-self: auto;
+    margin-top: 0;
+  }
+  .hud-all {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* --- Large text ------------------------------------------------------------ */
+
+.text-large .hud-alert {
+  font-size: 0.74rem;
+  gap: 4px;
+  padding: 2px 4px;
+}
+.text-large .hud-all {
+  max-height: 8rem;
+}
+.text-large .objective__primary {
+  padding-right: 72px;
+}
