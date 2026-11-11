@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "SPONSOR-20261111131443053-3b51aa2a",
+  "status": "pending",
+  "captured_at": "2026-11-11T13:14:43.053Z",
+  "source": "SPONSOR_INBOX.md",
+  "request": "\r\nplease add a \"reset game\" button under the menu. and please from a UI UX perspective, elts reinvent all UI elements.  High Prio\r\n",
+  "request_sha256": "ce4977e43f6f8b47057b2a7f7128fdd0cea8a6576a2d4fc3f25fe24f47a2c7bc",
+  "inbox_sha256": "291e9dda511f238bb05df68d4d26f360d3d4c726f06f0780838a0eadc0538dad",
+  "ticket_ids": [],
+  "decision": null
+}
