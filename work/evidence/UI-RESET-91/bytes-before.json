@@ -1,0 +1,51 @@
+{
+  "task": "UI-RESET-91 vendor chunk split",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/91",
+  "measuredAt": "2026-11-11T18:55:16.550Z",
+  "ceilingBytes": 233000,
+  "minHeadroomBytes": 0,
+  "entry": {
+    "name": "index-Dy6evZge.js",
+    "bytes": 231409,
+    "headroomBytes": 1591,
+    "underCeiling": true
+  },
+  "vendor": null,
+  "tables": {
+    "name": "tables-BMoz1KUD.js",
+    "bytes": 26519
+  },
+  "css": {
+    "name": "index-A5G1B1x_.css",
+    "bytes": 20538
+  },
+  "worker": {
+    "name": "catchup.worker-G_Jyr7uh.js",
+    "bytes": 13406
+  },
+  "indexHtmlBytes": 1290,
+  "assetLinks": [
+    "./assets/index-Dy6evZge.js",
+    "./assets/tables-BMoz1KUD.js",
+    "./assets/index-A5G1B1x_.css"
+  ],
+  "allAssetLinksRelative": true,
+  "files": [
+    {
+      "name": "catchup.worker-G_Jyr7uh.js",
+      "bytes": 13406
+    },
+    {
+      "name": "index-A5G1B1x_.css",
+      "bytes": 20538
+    },
+    {
+      "name": "index-Dy6evZge.js",
+      "bytes": 231409
+    },
+    {
+      "name": "tables-BMoz1KUD.js",
+      "bytes": 26519
+    }
+  ]
+}
