@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 prototype path",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "b721912c4ffd55ab645fdea040a83eeac10b7727",
+  "headSha": "05499b9bc470363cec38b836f509e0e091e6b566",
   "tool": "playwright-core plus local Chrome/Edge, vite preview, one painted read per PNG",
   "seed": "docs/evidence/yard-mature.json plus the #45 synthetic patches",
   "pressConvention": "one press = one painted face activated once; a canvas selection scan counts as one press (#45 J1 convention); settleWaits/settleMs are auto-settle frame steps, never presses",
