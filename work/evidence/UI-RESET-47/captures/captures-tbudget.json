@@ -1,0 +1,55 @@
+{
+  "task": "UI-RESET/NAV #47 tap-budget frames (#81)",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
+  "headSha": "pending-stamp",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
+  "tool": "tap-budget-47.mjs",
+  "note": "one entry per PNG; presses = shipped-shell painted-face activations, pressed = prototype own counter",
+  "captures": [
+    {
+      "file": "60-tbudget-app-machine.png",
+      "note": "shipped shell, first machine placed, inspector open on the canvas tap grid",
+      "presses": 12,
+      "settleWaits": 41,
+      "settleMs": 20500,
+      "probes": 107,
+      "sim": {
+        "tick": 290,
+        "tutorial": 5,
+        "machines": 1,
+        "credits": 0,
+        "scrap": 0,
+        "batches": 0
+      }
+    },
+    {
+      "file": "61-tbudget-app-production.png",
+      "note": "shipped shell, first non-zero Actual rate (or the last reading if none landed)",
+      "presses": 28,
+      "settleWaits": 41,
+      "settleMs": 20500,
+      "probes": 107,
+      "sim": {
+        "tick": 480,
+        "tutorial": 6,
+        "machines": 1,
+        "credits": 0,
+        "scrap": 12,
+        "batches": 0
+      }
+    },
+    {
+      "file": "62-tbudget-proto-machine.png",
+      "note": "prototype, fresh ladder end: machine inspector from the Yard list, one press, no canvas hunt",
+      "pressed": 14,
+      "machinePress": 12,
+      "productionReading": "0.00 batches/s · 60s window"
+    },
+    {
+      "file": "63-tbudget-proto-store.png",
+      "note": "prototype, mature Store: rest to store rows in one press, the shortest loop",
+      "pressed": 1,
+      "storePress": 1
+    }
+  ]
+}

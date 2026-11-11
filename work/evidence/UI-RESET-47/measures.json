@@ -1,5 +1,7 @@
 {
  "source": "captures/captures-proto.json (capture-proto-47.mjs)",
+ "headSha": "pending-stamp",
+ "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
  "frames": {
   "30-proto-phone-gate.png": {
    "pressed": 0,
@@ -42,7 +44,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 11,
+   "facesUnder44": 1
   },
   "31-proto-phone-rest-step0.png": {
    "pressed": 1,
@@ -85,7 +92,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 11,
+   "facesUnder44": 1
   },
   "32-proto-phone-salvage.png": {
    "pressed": 7,
@@ -128,7 +140,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 11,
+   "facesUnder44": 1
   },
   "33-proto-phone-repaired.png": {
    "pressed": 8,
@@ -171,7 +188,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 11,
+   "facesUnder44": 1
   },
   "34-proto-phone-build-catalog.png": {
    "pressed": 9,
@@ -214,7 +236,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 15,
+   "facesUnder44": 1
   },
   "35-proto-phone-build-chosen.png": {
    "pressed": 10,
@@ -257,7 +284,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 17,
+   "facesUnder44": 1
   },
   "36-proto-phone-placed.png": {
    "pressed": 11,
@@ -300,7 +332,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 17,
+   "facesUnder44": 1
   },
   "37-proto-phone-machine.png": {
    "pressed": 12,
@@ -343,7 +380,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 13,
+   "facesUnder44": 1
   },
   "38-proto-phone-store.png": {
    "pressed": 13,
@@ -386,7 +428,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 14,
+   "facesUnder44": 1
   },
   "39-proto-phone-import-error.png": {
    "pressed": 16,
@@ -429,7 +476,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 19,
+   "facesUnder44": 1
   },
   "40-proto-phone-back.png": {
    "pressed": 18,
@@ -472,7 +524,12 @@
      "x": 8,
      "y": 740
     }
-   }
+   },
+   "viewportWidth": 390,
+   "clusterRight": 382,
+   "clipOK": true,
+   "faces": 13,
+   "facesUnder44": 1
   },
   "41-proto-phone360-scale.png": {
    "pressed": 2,
@@ -515,7 +572,12 @@
      "x": 8,
      "y": 536
     }
-   }
+   },
+   "viewportWidth": 360,
+   "clusterRight": 352,
+   "clipOK": false,
+   "faces": 11,
+   "facesUnder44": 0
   },
   "42-proto-phone360-menu.png": {
    "pressed": 3,
@@ -542,15 +604,15 @@
     },
     "insp": {
      "w": 344,
-     "h": 348,
+     "h": 294,
      "x": 8,
      "y": 130
     },
     "world": {
      "w": 344,
-     "h": 46,
+     "h": 100,
      "x": 8,
-     "y": 484
+     "y": 430
     },
     "action": {
      "w": 344,
@@ -558,7 +620,12 @@
      "x": 8,
      "y": 536
     }
-   }
+   },
+   "viewportWidth": 360,
+   "clusterRight": 352,
+   "clipOK": false,
+   "faces": 15,
+   "facesUnder44": 0
   },
   "43-proto-landscape844-store.png": {
    "pressed": 2,
@@ -601,7 +668,12 @@
      "x": 110,
      "y": 336
     }
-   }
+   },
+   "viewportWidth": 844,
+   "clusterRight": 836,
+   "clipOK": true,
+   "faces": 15,
+   "facesUnder44": 1
   },
   "44-proto-landscape844-fork.png": {
    "pressed": 5,
@@ -644,7 +716,12 @@
      "x": 110,
      "y": 336
     }
-   }
+   },
+   "viewportWidth": 844,
+   "clusterRight": 836,
+   "clipOK": true,
+   "faces": 18,
+   "facesUnder44": 1
   },
   "45-proto-desktop1366-store.png": {
    "pressed": 2,
@@ -687,7 +764,12 @@
      "x": 110,
      "y": 714
     }
-   }
+   },
+   "viewportWidth": 1366,
+   "clusterRight": 1358,
+   "clipOK": true,
+   "faces": 15,
+   "facesUnder44": 1
   },
   "46-proto-desktop1920-machine.png": {
    "pressed": 3,
@@ -697,40 +779,45 @@
     "nav": {
      "w": 96,
      "h": 1064,
-     "x": 8,
+     "x": 168,
      "y": 8
     },
     "band": {
-     "w": 1802,
+     "w": 1482,
      "h": 44,
-     "x": 110,
+     "x": 270,
      "y": 8
     },
     "card": {
-     "w": 1802,
+     "w": 1482,
      "h": 40,
-     "x": 110,
+     "x": 270,
      "y": 58
     },
     "insp": {
      "w": 320,
      "h": 968,
-     "x": 1592,
+     "x": 1432,
      "y": 104
     },
     "world": {
-     "w": 1476,
+     "w": 1156,
      "h": 916,
-     "x": 110,
+     "x": 270,
      "y": 104
     },
     "action": {
-     "w": 1476,
+     "w": 1156,
      "h": 46,
-     "x": 110,
+     "x": 270,
      "y": 1026
     }
-   }
+   },
+   "viewportWidth": 1920,
+   "clusterRight": 1752,
+   "clipOK": true,
+   "faces": 18,
+   "facesUnder44": 1
   },
   "47-proto-desktop1920-research.png": {
    "pressed": 4,
@@ -740,40 +827,45 @@
     "nav": {
      "w": 96,
      "h": 1064,
-     "x": 8,
+     "x": 168,
      "y": 8
     },
     "band": {
-     "w": 1802,
+     "w": 1482,
      "h": 44,
-     "x": 110,
+     "x": 270,
      "y": 8
     },
     "card": {
-     "w": 1802,
+     "w": 1482,
      "h": 40,
-     "x": 110,
+     "x": 270,
      "y": 58
     },
     "insp": {
      "w": 320,
      "h": 968,
-     "x": 1592,
+     "x": 1432,
      "y": 104
     },
     "world": {
-     "w": 1476,
+     "w": 1156,
      "h": 916,
-     "x": 110,
+     "x": 270,
      "y": 104
     },
     "action": {
-     "w": 1476,
+     "w": 1156,
      "h": 46,
-     "x": 110,
+     "x": 270,
      "y": 1026
     }
-   }
+   },
+   "viewportWidth": 1920,
+   "clusterRight": 1752,
+   "clipOK": true,
+   "faces": 12,
+   "facesUnder44": 1
   },
   "48-proto-desktop2560-menu.png": {
    "pressed": 2,
@@ -783,41 +875,52 @@
     "nav": {
      "w": 96,
      "h": 1424,
-     "x": 8,
+     "x": 488,
      "y": 8
     },
     "band": {
-     "w": 2442,
+     "w": 1482,
      "h": 44,
-     "x": 110,
+     "x": 590,
      "y": 8
     },
     "card": {
-     "w": 2442,
+     "w": 1482,
      "h": 40,
-     "x": 110,
+     "x": 590,
      "y": 58
     },
     "insp": {
      "w": 320,
      "h": 1328,
-     "x": 2232,
+     "x": 1752,
      "y": 104
     },
     "world": {
-     "w": 2116,
+     "w": 1156,
      "h": 1276,
-     "x": 110,
+     "x": 590,
      "y": 104
     },
     "action": {
-     "w": 2116,
+     "w": 1156,
      "h": 46,
-     "x": 110,
+     "x": 590,
      "y": 1386
     }
-   }
+   },
+   "viewportWidth": 2560,
+   "clusterRight": 2072,
+   "clipOK": true,
+   "faces": 15,
+   "facesUnder44": 1
   }
  },
- "overlaps": []
+ "overlaps": [],
+ "summary": {
+  "frames": 19,
+  "clipOK": 17,
+  "facesUnder44": 17,
+  "overlaps": 0
+ }
 }

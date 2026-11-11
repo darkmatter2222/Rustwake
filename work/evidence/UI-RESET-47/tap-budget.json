@@ -1,0 +1,142 @@
+{
+  "task": "UI-RESET/NAV #47 instrumented press budget (#81)",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
+  "headSha": "pending-stamp",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
+  "tool": "playwright-core plus local Chrome/Edge; dist served by this harness on 127.0.0.1:4175; prototype over file://",
+  "audit": {
+    "presses": 16,
+    "reading": "0.00 batches/s - 1s window",
+    "source": "work/evidence/UI-RESET-45/journey-map.md J1"
+  },
+  "decomposition": {
+    "source": "captures/captures-nav.json session A",
+    "presses": 39,
+    "autoSettle": {
+      "waits": 34,
+      "ms": 17000,
+      "note": "500 ms sim frame steps while the primary reads waits; not presses"
+    },
+    "note": "the full shipped ladder of capture-nav-47.mjs; presses are painted-face activations, autoSettle waits are sim frame steps"
+  },
+  "app": {
+    "steps": [
+      {
+        "press": 1,
+        "face": "rest [\"Store\",\"Salvage\",\"Build\"]"
+      },
+      {
+        "press": 2,
+        "face": "store [\"Close\"]"
+      }
+    ],
+    "presses": 28,
+    "settleWaits": 41,
+    "settleMs": 20500,
+    "machinePress": 12,
+    "simAtMachine": {
+      "tick": 290,
+      "tutorial": 5,
+      "machines": 1,
+      "credits": 0,
+      "scrap": 0,
+      "batches": 0
+    },
+    "firstMachineFace": "Connect dock to sorter",
+    "probes": 107,
+    "rateAtFirstMachine": "0.00 batches/s · 9s window",
+    "productionReading": "0.00 batches/s · 9s window",
+    "pressProduction": 28,
+    "simAtProduction": {
+      "tick": 480,
+      "tutorial": 6,
+      "machines": 1,
+      "credits": 0,
+      "scrap": 12,
+      "batches": 0
+    },
+    "tick": 480
+  },
+  "prototype": {
+    "steps": [
+      {
+        "press": 1,
+        "label": "Salvage"
+      },
+      {
+        "press": 2,
+        "label": "Salvage"
+      },
+      {
+        "press": 3,
+        "label": "Salvage"
+      },
+      {
+        "press": 4,
+        "label": "Salvage"
+      },
+      {
+        "press": 5,
+        "label": "Salvage"
+      },
+      {
+        "press": 6,
+        "label": "Salvage"
+      },
+      {
+        "press": 7,
+        "label": "Repair drone30 scrap"
+      },
+      {
+        "press": 8,
+        "label": "Salvage"
+      },
+      {
+        "press": 9,
+        "label": "Salvage"
+      },
+      {
+        "press": 10,
+        "label": "Salvage"
+      },
+      {
+        "press": 11,
+        "label": "Salvage"
+      },
+      {
+        "press": 12,
+        "label": "Build Scrap sorter20 scrap"
+      },
+      {
+        "press": 13,
+        "label": "Connect sorter to the dock"
+      }
+    ],
+    "machinePress": 12,
+    "freshPressed": 13,
+    "machines": [
+      {
+        "id": 1,
+        "n": "Scrap sorter",
+        "tile": 8,
+        "lvl": 1,
+        "cyc": "4.00s",
+        "rate": "0.00",
+        "max": "0.25",
+        "pw": "1 unit",
+        "need": "2 Scrap",
+        "next": "Needs 2 scrap, which nothing in the yard",
+        "up": "4.00s → 3.80s",
+        "price": 30
+      }
+    ],
+    "productionReading": "0.00 batches/s · 60s window",
+    "modelNote": "prototype-nav.html is a static painted model: it has no sim tick, so the placed machine rate stays 0.00 and productionAtPress is null by construction, not by measurement failure",
+    "storePress": 1,
+    "storeRows": [
+      "Close",
+      "Sell Nonferrous60 units · +120 credits",
+      "Sell Ferrous35 units · +70 credits"
+    ]
+  }
+}

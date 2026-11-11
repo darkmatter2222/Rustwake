@@ -1,66 +1,999 @@
 {
-  "task": "UI-RESET/NAV #47",
-  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "task": "UI-RESET/NAV #47 prototype path",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
+  "headSha": "pending-stamp",
+  "tool": "playwright-core plus local Chrome/Edge, vite preview, one painted read per PNG",
+  "seed": "docs/evidence/yard-mature.json plus the #45 synthetic patches",
+  "pressConvention": "one press = one painted face activated once; a canvas selection scan counts as one press (#45 J1 convention); settleWaits/settleMs are auto-settle frame steps, never presses",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
+  "baseline": {
+    "firstSessionJ1Presses": 16,
+    "batchesPerSecondAtThatPoint": "0.00"
+  },
+  "sessions": [
+    {
+      "session": "A fresh 390x844",
+      "presses": 39,
+      "autoSettle": {
+        "waits": 34,
+        "ms": 17000,
+        "note": "500 ms sim frame steps while the primary reads waits; not presses"
+      },
+      "inspectorFirstTry": null,
+      "inspectorSecondTry": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual ra",
+      "fork": [
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1",
+        "Build"
+      ]
+    },
+    {
+      "session": "B full store, phone 390x844",
+      "presses": 2,
+      "soldFirstSellFace": true,
+      "note": "rest to sell face, the shortest loop"
+    },
+    {
+      "session": "C mature rest, phone 390x844",
+      "presses": 5,
+      "tour": [
+        "Store=true",
+        "Yard=true",
+        "Build=true",
+        "Research=false"
+      ],
+      "note": "every destination costs an open and a Close"
+    }
+  ],
   "captures": [
     {
-      "file": "01-app-fresh-rest.png",
-      "note": "real build, fresh save at rest after the gate"
+      "file": "01-nav-phone-rest-step0.png",
+      "note": "rest at tutorial 0: three dock faces, Store / Salvage / Build",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": null
     },
     {
-      "file": "02-app-fresh-machine.png",
-      "note": "real build, machine panel over the world at the first placed machine"
+      "file": "02-nav-phone-salvage-counted.png",
+      "note": "salvage counted, the priced repair face has taken the primary slot",
+      "presses": 12,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap30Credits0Store 30/900",
+      "objective": "Repair your recovery drone · 30 scrapTap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "toast": "Cutting pulse recharging",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Repair drone30 scrap",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 43,
+        "tutorial": 1,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 30,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "03-app-fresh-producing.png",
-      "note": "real build, after the first non-zero Actual rate"
+      "file": "03-nav-phone-repair-priced.png",
+      "note": "the drone repair just committed",
+      "presses": 13,
+      "settleWaits": 30,
+      "settleMs": 15000,
+      "chips": "Scrap10Credits0Store 10/900",
+      "objective": "Build a sorter · 20 scrapOpen Build and place the sorter on a lit cell.Drones 1 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 200,
+        "tutorial": 4,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 10,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "04-app-mature-two-formats.png",
-      "note": "real build, dock and store face print the same sell command in two formats"
+      "file": "04-nav-phone-build-ghost.png",
+      "note": "build phase: Cancel / Build Scrap sorter / Next",
+      "presses": 14,
+      "settleWaits": 30,
+      "settleMs": 15000,
+      "chips": "Scrap10Credits0Store 10/900",
+      "objective": "Build a sorter · 20 scrapGhost on cell 8 · tap again to placeDrones 1 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 200,
+        "tutorial": 4,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 10,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "05-proto-fresh-rest.png",
-      "note": "prototype, fresh rest: five nav slots painted, research locked, one primary"
+      "file": "05-nav-phone-placed.png",
+      "note": "after the placing press: the dock is back to its resting faces",
+      "presses": 15,
+      "settleWaits": 30,
+      "settleMs": 15000,
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Build a sorter · 20 scrapOpen Build and place the sorter on a lit cell.Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "toast": "Need 20 scrap · have 15",
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 15",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 210,
+        "tutorial": 4,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 15,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "06-proto-fresh-machine.png",
-      "note": "prototype, machine sheet after the ladder: first two rows are Next step and Next upgrade"
+      "file": "06-nav-phone-inspect.png",
+      "note": "machine inspector over the world, 20 px canvas grid",
+      "presses": 15,
+      "settleWaits": 30,
+      "settleMs": 15000,
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Build a sorter · 20 scrapOpen Build and place the sorter on a lit cell.Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 15",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 220,
+        "tutorial": 4,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 15,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "07-proto-mature-rest.png",
-      "note": "prototype, mature rest: one primary Sell Ferrous plus five quiet nav slots"
+      "file": "07-nav-phone-connected.png",
+      "note": "the connect step committed from the primary slot",
+      "presses": 15,
+      "settleWaits": 30,
+      "settleMs": 15000,
+      "chips": "Scrap15Credits0Store 15/900",
+      "objective": "Build a sorter · 20 scrapOpen Build and place the sorter on a lit cell.Drones 1 · Power 8 · 0 requested · 100 % · Last need 20 scrap · have 15",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 15",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 230,
+        "tutorial": 4,
+        "machines": 0,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 15,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "08-proto-mature-machine.png",
-      "note": "prototype, machine sheet plus the fork pair, one accent"
+      "file": "08-nav-phone-furnace-placed.png",
+      "note": "furnace placed from the same two-press build step",
+      "presses": 18,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Connect the dock to the sorter.Draw the route so cargo has somewhere to go.Drones 1 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Connect dock to sorter",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 260,
+        "tutorial": 4,
+        "machines": 1,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 0,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "09-proto-mature-store.png",
-      "note": "prototype, store with one CF sell face per material"
+      "file": "09-nav-phone-two-machines.png",
+      "note": "inspector painted on the phone at the first machine, ladder head moved on",
+      "presses": 22,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Connect the dock to the sorter.Draw the route so cargo has somewhere to go.Drones 1 · Power 8 · 0 requested · 100 % · Last need 2 scrap · have 0",
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 3s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 0 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 0 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Connect dock to sorter",
+        "Build"
+      ],
+      "buttons": 12,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 280,
+        "tutorial": 5,
+        "machines": 1,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 0,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-phone-390x844.png",
-      "note": "prototype band rects at 390x844 mature"
+      "file": "10-nav-phone-first-sale.png",
+      "note": "the first sale landed, the credits chip changes",
+      "presses": 22,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Connect the dock to the sorter.Draw the route so cargo has somewhere to go.Drones 1 · Power 8 · 0 requested · 100 % · Last need 2 scrap · have 0",
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 3s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · power 100%Next stepNeeds 2 scrap, which nothing in the yard makes yet. Build the machine that outputs it, then connect.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries Ferrous; scrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 0 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 0 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Connect dock to sorter",
+        "Build"
+      ],
+      "buttons": 12,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 290,
+        "tutorial": 5,
+        "machines": 1,
+        "routes": 0,
+        "credits": 0,
+        "scrap": 0,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-phone-360x640.png",
-      "note": "prototype band rects at 360x640 mature"
+      "file": "11-nav-phone-fork.png",
+      "note": "the upgrade fork: two priced faces, one accented, dock Store / Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1 / Build",
+      "presses": 34,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap1Credits0Store 1/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle4.00sActual rate0.00 batches/s · 8s windowMax rate0.25 batches/s at full powerPower1 unitMeasuredWorking 0% · waiting for input 100% · output waiting 0% · link 0% busy · power 100%Next stepWaits for input 100% of the time because the dock is empty. One salvage pulse tops it up; no purchase needed.Next upgrade4.00s → 3.64s · 30 creditsNext linkscrap sorter to dock carries NonferrousNeeds2 ScrapConnectUpgrade · 30 creditsMove · cell 0 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 0 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1",
+        "Build"
+      ],
+      "buttons": 12,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 330,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 1,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-landscape-844x390.png",
-      "note": "prototype band rects at 844x390 mature"
+      "file": "12-nav-phone-store-rows.png",
+      "note": "store rows with their sell faces",
+      "presses": 35,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap1Credits0Store 1/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": "Yard storeCloseScrap1Capacity1/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 0% busy (0/24 in transit)Measured1 machine waiting for inputSellOpens after the first steel contract",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1",
+        "Build"
+      ],
+      "buttons": 7,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 340,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 1,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-desktop-1366x768.png",
-      "note": "prototype band rects at 1366x768 mature"
+      "file": "13-nav-phone-record-copy.png",
+      "note": "yard record page with Copy and Import, reachable=false",
+      "presses": 36,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap1Credits0Store 1/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 340,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 1,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-desktop-1920x1080.png",
-      "note": "prototype band rects at 1920x1080 mature"
+      "file": "17-nav-phone-import-failure.png",
+      "note": "error state: malformed paste, reason line, Apply and Back",
+      "presses": 37,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap1Credits0Store 1/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 350,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 1,
+        "data": 0,
+        "batches": 0
+      }
     },
     {
-      "file": "10-proto-band-desktop-2560x1440.png",
-      "note": "prototype band rects at 2560x1440 mature"
+      "file": "14-nav-phone-text-scale-2.png",
+      "note": "settings face pressed once: the text scale steps to A 1.25",
+      "presses": 38,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap6Credits0Store 6/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1.25",
+        "Home",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 6",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 360,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 6,
+        "data": 0,
+        "batches": 0
+      }
+    },
+    {
+      "file": "15-nav-phone-muted.png",
+      "note": "the second settings face: sound muted, the label flips to Sound X",
+      "presses": 39,
+      "settleWaits": 34,
+      "settleMs": 17000,
+      "chips": "Scrap6Credits0Store 6/900",
+      "objective": "Refine metal into trade goods · build a furnaceA machine waits for input; check its empty side.Drones 1 · Power 8 · 0 requested · 100 % · Last need 10 scrap · have 1",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✕",
+        "A 1.25",
+        "Home",
+        "Store",
+        "Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 6",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 364,
+        "tutorial": 6,
+        "machines": 1,
+        "routes": 2,
+        "credits": 0,
+        "scrap": 6,
+        "data": 0,
+        "batches": 0
+      }
+    },
+    {
+      "file": "16-nav-phone-store-full.png",
+      "note": "full state: 900/900 plus the overflow hold row",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous21Credits82Store 900/900",
+      "objective": "Sell 2 Ferrous for 4 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous10Ferrous21Sell 2 · +4Steel10Copper10Polymer10Wire16Sell 6 · +24Plates109Sell 60 · +900Circuits40Sell 22 · +660Data76Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 97% busy (3/24 in transit)Measured8 machines waiting for inputSell floor10 units kept per materialOverflow hold35",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 2 · +4",
+        "Sell 6 · +24",
+        "Sell 60 · +900",
+        "Sell 22 · +660",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 2 Ferrous+4 credits",
+        "Build",
+        "Research"
+      ],
+      "buttons": 14,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 76,
+        "batches": 0
+      }
+    },
+    {
+      "file": "18-nav-phone-unaffordable.png",
+      "note": "disabled state to paint: credits 0, the priced faces still read enabled",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Credits0Store 900/900",
+      "objective": "Choose what improves on the Scrap sorter · 222 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Scrap sorterCloseStatusNeeds inputBatch0%Cycle1.74sActual rate0.00 batches/s · 60s windowMax rate0.57 batches/s at full powerPower1 unitMeasuredWorking 5% · waiting for input 95% · output waiting 0% · link 1% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade1.74s → 1.67s · 222 creditsNeeds2 ScrapUpgrade · 222 creditsMove · cell 9 · 0 creditsDismantle · +20 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 222 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +20 units",
+        "Recipe",
+        "Less power222 credits",
+        "Faster batches232 credits"
+      ],
+      "buttons": 10,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 0,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
+    },
+    {
+      "file": "25-nav-phone-mature-research.png",
+      "note": "the research sheet at the mature stage, one Close face",
+      "presses": 5,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.Ghost on cell 9 · tap again to placeDrones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Cancel",
+        "Build Scrap sorter20 scrap · waits 20 scrap · have 10",
+        "Next"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": {
+        "tick": 450338,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
+    },
+    {
+      "file": "19-nav-phone-research-absent.png",
+      "note": "disabled state to paint: the Research destination has no face at this stage",
+      "presses": 0,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap0Credits0Store 0/900",
+      "objective": "Tap the highlighted wreck to salvage scrap.Tap Salvage until the drone repair is affordable.Drones 0 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": null,
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "buttons": 6,
+      "docScroll": [
+        390,
+        390,
+        844,
+        844
+      ],
+      "sim": null
+    },
+    {
+      "file": "20-nav-desktop1920-inspect.png",
+      "note": "1920x1080 inspector in the right gutter, five dock faces behind it",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Choose what improves on the Plate press · 238 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Plate pressCloseStatusNeeds inputBatch0%Cycle2.63sActual rate0.00 batches/s · 60s windowMax rate0.38 batches/s at full powerPower3 unitsMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade2.63s → 2.50s · 238 creditsNeeds2 SteelUpgrade · 238 creditsMove · cell 9 · 0 creditsDismantle · +43 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 238 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +43 units",
+        "Recipe",
+        "Less power238 credits",
+        "Faster batches248 credits"
+      ],
+      "buttons": 10,
+      "docScroll": [
+        1920,
+        1920,
+        1080,
+        1080
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
+    },
+    {
+      "file": "21-nav-desktop1366-store.png",
+      "note": "1366x768 narrow laptop: the store sheet is the gutter column at x 1104",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Nonferrous239Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "buttons": 15,
+      "docScroll": [
+        1366,
+        1366,
+        768,
+        768
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
+    },
+    {
+      "file": "22-nav-desktop2560-store.png",
+      "note": "2560x1440: the sheet at x 1104 lands inside the 896..1662 ink (finding 3)",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous21Nonferrous10Steel10Copper10Credits82Store 900/900",
+      "objective": "Sell 2 Ferrous for 4 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous10Ferrous21Sell 2 · +4Steel10Copper10Polymer10Wire16Sell 6 · +24Plates109Sell 60 · +900Circuits40Sell 22 · +660Data76Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 97% busy (3/24 in transit)Measured8 machines waiting for inputSell floor10 units kept per materialOverflow hold35",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 2 · +4",
+        "Sell 6 · +24",
+        "Sell 60 · +900",
+        "Sell 22 · +660",
+        "Sell 60 · +300",
+        "Store",
+        "Yard",
+        "Sell 2 Ferrous+4 credits",
+        "Build",
+        "Research"
+      ],
+      "buttons": 14,
+      "docScroll": [
+        2560,
+        2560,
+        1440,
+        1440
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 76,
+        "batches": 0
+      }
+    },
+    {
+      "file": "23-nav-landscape844-store.png",
+      "note": "844x390 landscape: sheet 560x157 over a 230 px ink column",
+      "presses": 1,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Sell 35 Ferrous for 70 credits.A machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Yard storeCloseScrap10Nonferrous239Sell 60 · +120Ferrous54Sell 35 · +70Steel10Copper10Polymer10Wire72Sell 60 · +240Plates348Sell 60 · +900Circuits45Sell 27 · +810Data102Sell 60 · +300Capacity900/900MeasuredPower 100% speed (0 of 8 units requested)MeasuredBusiest link 96% busy (8/24 in transit)Measured7 machines waiting for inputSell floor10 units kept per material",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Sell 60 · +120",
+        "Sell 35 · +70",
+        "Sell 60 · +240",
+        "Sell 60 · +900",
+        "Sell 27 · +810",
+        "Sell 60 · +300",
+        "Back to yard",
+        "Store",
+        "Yard",
+        "Sell 35 Ferrous+70 credits",
+        "Build",
+        "Research"
+      ],
+      "buttons": 16,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ],
+      "sim": {
+        "tick": 450318,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
+    },
+    {
+      "file": "24-nav-landscape844-inspect.png",
+      "note": "844x390 landscape: inspector plus the fork inside a 46 px row band",
+      "presses": 3,
+      "settleWaits": 0,
+      "settleMs": 0,
+      "chips": "Scrap10Ferrous54Nonferrous239Credits82Store 900/900",
+      "objective": "Choose what improves on the Polymer recycler · 229 creditsA machine waits for input; check its empty side.Drones 5 · Power 8 · 0 requested · 100 %",
+      "toast": null,
+      "panel": "Polymer recyclerCloseStatusNeeds inputBatch0%Cycle3.00sActual rate0.00 batches/s · 60s windowMax rate0.33 batches/s at full powerPower1 unitMeasuredWorking 1% · waiting for input 99% · output waiting 0% · link 96% busy · power 100%Next stepStorage is full at 100%. Sell a surplus in the yard store to free room.Next upgrade3.00s → 2.86s · 229 creditsNeeds3 ResidueUpgrade · 229 creditsMove · cell 9 · 0 creditsDismantle · +52 unitsRecipe",
+      "dock": [
+        "Sound ✓",
+        "A 1",
+        "Home",
+        "Close",
+        "Upgrade · 229 credits",
+        "Move · cell 9 · 0 credits",
+        "Dismantle · +52 units",
+        "Recipe",
+        "Back to yard",
+        "Less power229 credits",
+        "Faster batches239 credits"
+      ],
+      "buttons": 11,
+      "docScroll": [
+        844,
+        844,
+        390,
+        390
+      ],
+      "sim": {
+        "tick": 450338,
+        "tutorial": 9,
+        "machines": 8,
+        "routes": 18,
+        "credits": 82,
+        "scrap": 10,
+        "data": 102,
+        "batches": 0
+      }
     }
   ]
 }

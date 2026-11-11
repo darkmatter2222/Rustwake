@@ -1,9 +1,10 @@
 {
   "task": "UI-RESET/NAV #47 prototype path",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "headSha": "pending-stamp",
   "tool": "playwright-core plus local Chrome/Edge, the self-contained prototype over file://",
   "note": "the press column is the prototype own counter (S.pressed): one press per painted face",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "captures": [
     {
       "file": "30-proto-phone-gate.png",
@@ -35,6 +36,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -60,6 +67,86 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 72,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -101,6 +188,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -126,6 +219,86 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 72,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -167,6 +340,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -192,6 +371,86 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 113,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -233,6 +492,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -258,6 +523,86 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 72,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -299,6 +644,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -324,6 +675,114 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "bp-sorter",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-furnace",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-wire",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 72,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -365,6 +824,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -390,6 +855,128 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "bp-sorter",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-furnace",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-wire",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -431,6 +1018,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -456,6 +1049,128 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "bp-sorter",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-furnace",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "bp-wire",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -497,6 +1212,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -522,6 +1243,100 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -563,6 +1378,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -588,6 +1409,107 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -629,6 +1551,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -654,6 +1582,142 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-copy",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-import",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-report",
+          "w": 360,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "imp-apply",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "imp-back",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -695,6 +1759,12 @@
           "w": 374,
           "h": 44
         },
+        "cluster": {
+          "x": 197,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -720,6 +1790,100 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 89,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 47,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "build-cancel",
+          "w": 63,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "build-next",
+          "w": 47,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         390,
         390,
@@ -761,6 +1925,12 @@
           "w": 344,
           "h": 44
         },
+        "cluster": {
+          "x": 102,
+          "y": 8,
+          "w": 250,
+          "h": 45
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -786,6 +1956,86 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 66,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 66,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 90,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 76,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 76,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 76,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 76,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 86,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 0,
       "docScroll": [
         370,
         360,
@@ -827,6 +2077,12 @@
           "w": 344,
           "h": 44
         },
+        "cluster": {
+          "x": 102,
+          "y": 8,
+          "w": 250,
+          "h": 45
+        },
         "card": {
           "x": 8,
           "y": 58,
@@ -837,13 +2093,13 @@
           "x": 8,
           "y": 130,
           "w": 344,
-          "h": 348
+          "h": 294
         },
         "world": {
           "x": 8,
-          "y": 484,
+          "y": 430,
           "w": 344,
-          "h": 46
+          "h": 100
         },
         "action": {
           "x": 8,
@@ -852,6 +2108,114 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 66,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 66,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "nav-menu",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 90,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 76,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 76,
+          "h": 45,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 66,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-copy",
+          "w": 163,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-import",
+          "w": 163,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-report",
+          "w": 330,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 76,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 76,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 86,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 0,
       "docScroll": [
         370,
         360,
@@ -893,6 +2257,12 @@
           "w": 726,
           "h": 44
         },
+        "cluster": {
+          "x": 651,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 110,
           "y": 58,
@@ -918,10 +2288,118 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "row-sell-Nonferrous",
+          "w": 99,
+          "h": 68,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "row-sell-Ferrous",
+          "w": 99,
+          "h": 68,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "store-all",
+          "w": 306,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 159,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         844,
         844,
-        432,
+        390,
         390
       ]
     },
@@ -959,6 +2437,12 @@
           "w": 726,
           "h": 44
         },
+        "cluster": {
+          "x": 651,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 110,
           "y": 58,
@@ -984,10 +2468,139 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 151,
+          "h": 54,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-upgrade",
+          "w": 151,
+          "h": 54,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "m-move",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-dismantle",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-links",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-branches",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "fork-draw",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "fork-speed",
+          "w": 195,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         844,
         844,
-        482,
+        390,
         390
       ]
     },
@@ -1025,6 +2638,12 @@
           "w": 1248,
           "h": 44
         },
+        "cluster": {
+          "x": 1173,
+          "y": 8,
+          "w": 185,
+          "h": 44
+        },
         "card": {
           "x": 110,
           "y": 58,
@@ -1050,6 +2669,114 @@
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "row-sell-Nonferrous",
+          "w": 99,
+          "h": 68,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "row-sell-Ferrous",
+          "w": 99,
+          "h": 68,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "store-all",
+          "w": 306,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 159,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         1366,
         1366,
@@ -1074,48 +2801,183 @@
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
-          "x": 0,
+          "x": 160,
           "y": 0,
-          "w": 1920,
+          "w": 1600,
           "h": 1080
         },
         "nav": {
-          "x": 8,
+          "x": 168,
           "y": 8,
           "w": 96,
           "h": 1064
         },
         "band": {
-          "x": 110,
+          "x": 270,
           "y": 8,
-          "w": 1802,
+          "w": 1482,
+          "h": 44
+        },
+        "cluster": {
+          "x": 1567,
+          "y": 8,
+          "w": 185,
           "h": 44
         },
         "card": {
-          "x": 110,
+          "x": 270,
           "y": 58,
-          "w": 1802,
+          "w": 1482,
           "h": 40
         },
         "insp": {
-          "x": 1592,
+          "x": 1432,
           "y": 104,
           "w": 320,
           "h": 968
         },
         "world": {
-          "x": 110,
+          "x": 270,
           "y": 104,
-          "w": 1476,
+          "w": 1156,
           "h": 916
         },
         "action": {
-          "x": 110,
+          "x": 270,
           "y": 1026,
-          "w": 1476,
+          "w": 1156,
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 151,
+          "h": 54,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-upgrade",
+          "w": 151,
+          "h": 54,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "m-move",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-dismantle",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-links",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-branches",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "fork-draw",
+          "w": 162,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "fork-speed",
+          "w": 195,
+          "h": 46,
+          "under44": false,
+          "disabled": true
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         1920,
         1920,
@@ -1140,48 +3002,141 @@
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
-          "x": 0,
+          "x": 160,
           "y": 0,
-          "w": 1920,
+          "w": 1600,
           "h": 1080
         },
         "nav": {
-          "x": 8,
+          "x": 168,
           "y": 8,
           "w": 96,
           "h": 1064
         },
         "band": {
-          "x": 110,
+          "x": 270,
           "y": 8,
-          "w": 1802,
+          "w": 1482,
+          "h": 44
+        },
+        "cluster": {
+          "x": 1567,
+          "y": 8,
+          "w": 185,
           "h": 44
         },
         "card": {
-          "x": 110,
+          "x": 270,
           "y": 58,
-          "w": 1802,
+          "w": 1482,
           "h": 40
         },
         "insp": {
-          "x": 1592,
+          "x": 1432,
           "y": 104,
           "w": 320,
           "h": 968
         },
         "world": {
-          "x": 110,
+          "x": 270,
           "y": 104,
-          "w": 1476,
+          "w": 1156,
           "h": 916
         },
         "action": {
-          "x": 110,
+          "x": 270,
           "y": 1026,
-          "w": 1476,
+          "w": 1156,
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 159,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         1920,
         1920,
@@ -1206,48 +3161,162 @@
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
-          "x": 0,
+          "x": 480,
           "y": 0,
-          "w": 2560,
+          "w": 1600,
           "h": 1440
         },
         "nav": {
-          "x": 8,
+          "x": 488,
           "y": 8,
           "w": 96,
           "h": 1424
         },
         "band": {
-          "x": 110,
+          "x": 590,
           "y": 8,
-          "w": 2442,
+          "w": 1482,
+          "h": 44
+        },
+        "cluster": {
+          "x": 1887,
+          "y": 8,
+          "w": 185,
           "h": 44
         },
         "card": {
-          "x": 110,
+          "x": 590,
           "y": 58,
-          "w": 2442,
+          "w": 1482,
           "h": 40
         },
         "insp": {
-          "x": 2232,
+          "x": 1752,
           "y": 104,
           "w": 320,
           "h": 1328
         },
         "world": {
-          "x": 110,
+          "x": 590,
           "y": 104,
-          "w": 2116,
+          "w": 1156,
           "h": 1276
         },
         "action": {
-          "x": 110,
+          "x": 590,
           "y": 1386,
-          "w": 2116,
+          "w": 1156,
           "h": 46
         }
       },
+      "faces": [
+        {
+          "id": "nav-yard",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-build",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-store",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-research",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "nav-menu",
+          "w": 96,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-sound",
+          "w": 75,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "tgl-scale",
+          "w": 39,
+          "h": 44,
+          "under44": true,
+          "disabled": false
+        },
+        {
+          "id": "tgl-motion",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "insp-close",
+          "w": 55,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-copy",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-import",
+          "w": 151,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "menu-report",
+          "w": 306,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-out",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "zoom-in",
+          "w": 63,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "action-primary",
+          "w": 159,
+          "h": 46,
+          "under44": false,
+          "disabled": false
+        }
+      ],
+      "facesUnder44": 1,
       "docScroll": [
         2560,
         2560,

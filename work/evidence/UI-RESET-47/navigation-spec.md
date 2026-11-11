@@ -1,9 +1,11 @@
 # UI-RESET/NAV (#47) - navigation and information architecture spec
 
-- Issue: https://github.com/darkmatter2222/Rustwake/issues/47 | Parent goal: https://github.com/darkmatter2222/Rustwake/issues/43 | Project 1, milestone 1
-- Branch `rw/47-nav-g1` | Base SHA `224e22aa57a68215a2eddfe606ef50462b4d0b5e` | Role: ui-ux | Gate G1
+- Issue: https://github.com/darkmatter2222/Rustwake/issues/47 | Follow-up: https://github.com/darkmatter2222/Rustwake/issues/81 | Parent goal: https://github.com/darkmatter2222/Rustwake/issues/43 | Project 1, milestone 1
+- Branch `rw/81-nav-parity-g1` | Base SHA `a365c192926087796bd6ba25a263816a53804418` | Role: ui-ux | Gate G1
+- This is the **single** spec file for the issue. The earlier `nav-spec.md` and the broken `prototype.html` / `prototype.js` entry point were deleted in #81; `prototype-nav.html` is the one painted entry point and `README.md` indexes every committed file.
 - Predecessor evidence (read, not re-derived): `work/evidence/UI-RESET-45/measures.json` (head `1367a2c610133433cf0ce78c4441205b1c6006ea`), `coverage-matrix.md`, `journey-map.md`
-- Prototype of the path in this spec: `work/evidence/UI-RESET-47/captures/` (PNG + `captures-nav.json`), scripts `capture-nav-47.mjs`, `measure-nav-47.mjs`
+- Receipts behind every number here: `captures/captures-nav.json` (shipped spec path), `captures/captures-proto.json` (design path), `tap-budget.json` + `captures/captures-tbudget.json` (instrumented press-budget run), `captures/measures-nav.json` (shipped band geometry), `measures.json` (prototype geometry, clip and tap-target inventory), `captures/parity.json` (PNG/receipt parity). Harnesses: `capture-nav-47.mjs`, `capture-proto-47.mjs`, `measure-nav-47.mjs`, `tap-budget-47.mjs`, `measures-from-captures.mjs`, `parity-47.mjs`, `dom-shim-47.mjs`, `stamp-headsha-47.mjs`.
+- headSha convention: every receipt is stamped to the captures commit by `stamp-headsha-47.mjs`; the final PR head is the metadata-only stamp commit, so `headSha = head^`. See `README.md`. Section 9 is the consolidated numeric table, every row tagged measured (with its source file) or specified.
 
 ## 0. How to read this spec
 
@@ -14,6 +16,8 @@
 | **predicted** | arithmetic on measured rects, to be confirmed by the implementation captures | section 3 |
 
 The prototype in section 7 runs against the shipped build, so its numbers are measured on the pre-restart shell and are the comparison base, not the target.
+
+Rule labels are unique across this one file: `C1`-`C8` command format (2.2), `P1`-`P4` primary-action invariants (2.3), `LP1`-`LP4` portrait layout (3.1), `L1`-`L5` landscape (3.2), `D1`-`D6` desktop (3.3), `N1`-`N4` narrow laptop (3.4), `R1`-`R3` painted corrections (3.6), `E1`-`E9` stack semantics (4). Section 9 gathers the load-bearing numbers into one table, each row tagged **measured** with its source receipt or **specified** with its section.
 
 ## 1. Destination table per tutorial stage
 
@@ -117,10 +121,10 @@ Every band is anchored to the viewport, never to the flowing content above it. T
 | B4 primary row | 1 face, 46 px, full width, bottom-anchored above B5 | 10,736 370x46 (predicted) | 10,532 340x46 (predicted) |
 | B5 nav row | 5 faces, 46 px, fixed slot order Yard Build Store Research Menu, y unchanged | 10,790 370x46 (measured) | 10,586 340x46 (measured) |
 
-- **P1** the nav row keeps the measured dock geometry exactly (`10,790 370x46` and `10,586 340x46`), so the five 44 px targets keep their measured widths: at 390 Store 50, Yard 45, Build 49, Research 72, Menu 57 = 273 px plus four 4 px gaps inside the measured 370 px box.
-- **P2** the primary row costs 54 px of camera band (46 px face plus an 8 px gap). The fitted band is objective bottom to B4 top: 390x844 gives 128 -> 736 = 608 px (measured 662), 360x640 gives 153 -> 532 = 379 px (measured 433).
-- **P3** a sheet never resizes when the destination changes: 348 px at 390, 262 px at 360 (the measured heights of the store and research panels). Its content scrolls inside, which is already how the store behaves.
-- **P4** no face in any band is under 44 px; the measured set already passes and the specified widths above are the measured widths of the shipped faces.
+- **LP1** the nav row keeps the measured dock geometry exactly (`10,790 370x46` and `10,586 340x46`), so the five 44 px targets keep their measured widths: at 390 Store 50, Yard 45, Build 49, Research 72, Menu 57 = 273 px plus four 4 px gaps inside the measured 370 px box.
+- **LP2** the primary row costs 54 px of camera band (46 px face plus an 8 px gap). The fitted band is objective bottom to B4 top: 390x844 gives 128 -> 736 = 608 px (measured 662), 360x640 gives 153 -> 532 = 379 px (measured 433).
+- **LP3** a sheet never resizes when the destination changes: 348 px at 390, 262 px at 360 (the measured heights of the store and research panels). Its content scrolls inside, which is already how the store behaves.
+- **LP4** no shipped face in any band is under 44 px; the measured shipped set passes (`captures/measures-nav.json`, `targets`) and the specified widths above are the measured widths of the shipped faces. The painted prototype has one exception, `tgl-scale` at 39 px wide, recorded as a measured deviation in 3.7.
 
 ### 3.2 Landscape phone 844x390 - one row, six faces
 
@@ -191,16 +195,24 @@ The 2560 row changes most against the shipped build: the chrome moves from the v
 | 360x640 dpr3 | 8,588 344x44 | 8,8 344x44 | 8,58 344x66 | 8,130 344x52 rest, x348 menu | 8,188 344x342 | 8,536 344x46 |
 | 844x390 | 8,8 96x374 | 110,8 726x44 | 110,58 726x30 | 516,94 320x288 | 110,94 400x236 | 110,336 400x46 |
 | 1366x768 | 8,8 96x752 | 110,8 1248x44 | 110,58 1248x40 | 1038,104 320x656 | 110,104 922x604 | 110,714 922x46 |
-| 1920x1080 | 8,8 96x1064 | 110,8 1802x44 | 110,58 1802x40 | 1592,104 320x968 | 110,104 1476x916 | 110,1026 1476x46 |
-| 2560x1440 | 8,8 96x1424 | 110,8 2442x44 | 110,58 2442x40 | 2232,104 320x1328 | 110,104 2116x1276 | 110,1386 2116x46 |
+| 1920x1080 | 168,8 96x1064 | 270,8 1482x44 | 270,58 1482x40 | 1432,104 320x968 | 270,104 1156x916 | 270,1026 1156x46 |
+| 2560x1440 | 488,8 96x1424 | 590,8 1482x44 | 590,58 1482x40 | 1752,104 320x1328 | 590,104 1156x1276 | 590,1386 1156x46 |
 
 Three corrections, each because the painted result disagreed with the predicted figure:
 
 - **R1 the rail is 96 px, not 56 px.** The label under the glyph needs it; at 96 px the five slots still leave 400 px of world at 844x390 and 922 px at 1366x768.
 - **R2 the three-column layout starts at 600 px, not 1200 px.** The shipped breakpoint (`styles.css` line 406) leaves 844x390 landscape in the phone stack, which is exactly why that band paints 230 px of ink in an 844 px frame. The prototype paints the rail, a 400 px world and the 320 px inspector side by side in the same frame, so **landscape stops being a second-class band** and one 46 px primary row is enough.
-- **R3 the inspector is pinned to the right edge of the viewport instead of a capped frame.** `right: 8px` reproduces 1592 at 1920 and 2232 at 2560 with the world column taking the remainder, which removes the 1104 overlap of finding 3 without leaving 896 px of empty margin at 2560.
+- **R3 the inspector is pinned to the right edge of the centred 1600 px capped frame (D1), not to the shipped fixed `left: 1104px` (`styles.css` line 409) and not to the viewport edge.** The painted x is **1432 at 1920 and 1752 at 2560** (right edge 1752 and 2072; `captures/captures-proto.json` frames 46-48 `rects.insp`), with the world column taking the remainder inside the frame. This removes the 1104 overlap of finding 3 and keeps the chrome inside the frame margin instead of stranding it at the viewport edges. The earlier draft of this row quoted 1592/2232 from a pre-cap capture; the regenerated receipt supersedes it.
 
 Everything else in 3.1 to 3.5 holds as written: the two portrait bands keep the measured heights (46 px primary, 44 px nav), the sheet keeps its measured height and only the world column absorbs a new band, and the card, chip band and cluster keep their measured boxes.
+
+### 3.7 Measured deviations in the painted prototype (source `measures.json`)
+
+`measures-from-captures.mjs` derives `measures.json` from `captures/captures-proto.json` and adds a per-frame clip check and a tap-target inventory. Two deviations are measured, not assumed away:
+
+- **Tap target.** One painted face is under 44 px on **17 of 19** prototype frames: `tgl-scale`, the text-scale toggle, **39 px wide** (44 px tall). The two 360x640 frames after a scale step (`41`, `42`) measure 0 under-44 because the toggle widens at that scale. `measures.json` `summary.facesUnder44 = 17`. This is a prototype deviation from LP4; the shipped faces pass (`captures/measures-nav.json`). The implementation (#49) must widen `tgl-scale` to at least 44 px.
+- **Clip.** `summary.clipOK = 17` of 19. The status cluster stays inside the viewport on every band (phone right edge **382 of 390**). The two failures are the 360x640 scaled frames `41`/`42`: **10 px horizontal document overflow** (scrollWidth 370 > clientWidth 360), not a cluster clip. Scaling up fixes the tap target but overflows the document - a real trade-off the implementation must resolve (fit the scaled cluster without widening the document).
+- Band overlaps: `summary.overlaps = 0`. The shipped cluster right edge is **380 of 390** with no overflow (`captures/measures-nav.json`, phone-390 rest).
 
 ## 4. Stack semantics: close, back, Escape, persistence, focus, exclusivity, browser back
 
@@ -283,6 +295,8 @@ The shortcut list is printed as plain lines inside the Menu sheet, so nothing de
 
 The measured first-session budget is **16 scripted presses to reach one machine with 0 batches done, 0.00 batches/s, sim tick 51** (`journey-map.md` J1, captures 01 to 09, phone 390x844). The design target is the same milestone in fewer presses, with a machine that actually produced.
 
+Sources for the table below: the measured shipped column is `captures/captures-nav.json` (session A); the measured design column is `captures/captures-proto.json` (`pressed`); the dedicated instrumented run is `tap-budget.json` (app `machinePress = 12`, model `machinePress = 12`, model `freshPressed = 13`, model `storePress = 1`). The target column is specified by this issue, not measured.
+
 | milestone, one continuous session on phone 390x844 | shipped build, measured this run | target this spec designs to | against the J1 budget of 16 |
 |---|---|---|---|
 | M0 gate cleared | 1 | 1 | 1 of 16 |
@@ -299,9 +313,9 @@ Where each saving comes from, one rule per line:
 - **the destination row is stable** (section 1): no press is spent rediscovering where Research went, and Research is present-with-a-reason instead of absent (finding 12).
 - **the price is printed once** (C5): the reading load of the fork frame drops from four number strings to one, which is the difference between 19 presses and the same 19 presses spent comparing numbers.
 
-### 6.1 Measured session log, phone 390x844, shipped build, head 224e22a
+### 6.1 Measured session log, phone 390x844, shipped build (source `captures/captures-nav.json`, session A; headSha stamped to the captures commit, see README.md)
 
-Cumulative presses at each painted frame of `captures/captures-nav.json` (session A, fresh save, one continuous session):
+Cumulative presses at each painted frame of `captures/captures-nav.json` (session A, fresh save, one continuous session). Session A totals **39 presses + 34 auto-settle waits (17000 ms)**; the waits are 500 ms sim frame steps while the primary reads `waits`, counted separately and never as presses:
 
 | capture | presses | painted sim |
 |---|---|---|
@@ -311,15 +325,15 @@ Cumulative presses at each painted frame of `captures/captures-nav.json` (sessio
 | 04 build phase, ghost up | 14 | tick 200 |
 | 05 after the first placing press | 15 | tick 210, machines 0, the face still reads `waits 20 scrap` |
 | 06 canvas grid, no panel yet | 15 | tick 220 |
-| 08 the furnace build step, still waiting | 18 | tick 260, tutorial 5, **machines 1**, scrap 0 |
+| 08 the furnace build step, still waiting | 18 | tick 260, tutorial 4, **machines 1**, scrap 0 |
 | 09 inspector painted on the phone | 22 | tick 280, 1 machine, inspector opens at this press |
 | 10 ladder head before any credit lands | 22 | credits 0 |
 | 11 still the second build, `waits 10 scrap · have 1` | 34 | tick 330, tutorial 6, routes 2, credits 0 |
-| 12 store rows | 35 | one scrap row, no sell face yet |
+| 12 store rows | 35 | tick 340, tutorial 6, one scrap row, no sell face yet |
 | 13 record page, `Yard` face absent | 36 | `reachable=false`, tutorial 6 |
 | 17 import error state | 37 | reason line under a title that still reads Yard record |
 | 14 text scale after one press | 38 | cluster reads A 1.25 |
-| 15 sound muted after one press | 39 | cluster reads Sound X |
+| 15 sound muted after one press | 39 | tick 364, machines 1, credits 0, scrap 6, cluster reads Sound X |
 
 Session B, the same rest-to-sell loop at the mature stage: **2 presses** (Store, then the first sell face), the shortest loop in the game. Session C, the destination tour from the mature rest frame: **5 presses for 3 destinations** - Store, Yard and Build each cost an open plus a Close, and after the Build face the row is replaced by Cancel, Build and Next, so the **Research face is not painted at all** inside that phase and the fourth destination costs a sixth press. At the mature stage every band measures 8 faces at rest, 15 with the store open and 9 with the research list open, all at 44 px or more (`captures/measures-nav.json`).
 
@@ -421,3 +435,65 @@ The 22 planned rows of section 7 and this index differ in three places, all of t
 - The `844x390`, `1920x1080` and `2560x1440` ink figures are the painted-pixel bounding box of #45, which includes the banner glyphs (its section 6 note), so the top-overlap arithmetic is an upper bound and the side figures are exact to 1 px.
 - The camera band arithmetic of section 3 is arithmetic on measured rects, not a re-measurement; the implementation captures of #50 replace it.
 - Machine selection inside the harness still needs the 20 px tap grid on the canvas, because the `M` key of section 5 does not exist yet; that is why the measured press counts in section 6 sit above the target column.
+
+## 9. Consolidated numeric table (every row tagged)
+
+One **press** = one painted face activated once, or one key. `presses` = shipped-shell painted-face activations; `pressed` = the prototype's own counter `S.pressed`. Auto-settle waits and canvas selection probes are counted separately and are never presses. Every measured row names the committed receipt it comes from; every specified row names the section that sets it. headSha in each receipt is stamped to the captures commit (README.md).
+
+### 9.1 Press budgets
+
+| figure | value | kind | source |
+|---|---|---|---|
+| #45 reference budget to one machine | 16 presses, 0.00 batches/s, tick 51 | measured | `work/evidence/UI-RESET-45/journey-map.md` J1 |
+| shipped gate cleared | 1 press | measured | `captures/captures-nav.json` frame 01 |
+| shipped first machine placed | 18 presses | measured | `captures/captures-nav.json` frame 08 |
+| shipped machine inspected | 22 presses | measured | `captures/captures-nav.json` frame 09 |
+| shipped store rows open | 35 presses | measured | `captures/captures-nav.json` frame 12 |
+| shipped whole path end | 39 presses | measured | `captures/captures-nav.json` frame 15 |
+| shipped session A auto-settle | 34 waits / 17000 ms | measured | `captures/captures-nav.json` session A `autoSettle` |
+| shipped rest-to-sell loop (mature) | 2 presses | measured | `captures/captures-nav.json` session B / frame 16 |
+| shipped destination tour (mature) | 5 presses for 3 destinations | measured | `captures/captures-nav.json` session C |
+| design gate | 0 pressed | measured | `captures/captures-proto.json` frame 30 |
+| design machine inspected from Yard list | 12 pressed | measured | `captures/captures-proto.json` frame 37 |
+| design whole path end | 18 pressed | measured | `captures/captures-proto.json` frame 40 |
+| tap-budget app first machine placed | 12 presses | measured | `tap-budget.json` `app.machinePress` |
+| tap-budget app total / auto-settle / probes | 28 presses / 41 waits (20500 ms) / 107 probes | measured | `tap-budget.json` `app` |
+| tap-budget app production reading | 0.00 batches/s · 9s window, tick 480 | measured | `tap-budget.json` `app.productionReading` / `app.tick` |
+| tap-budget model fresh ladder to disabled primary | 13 pressed | measured | `tap-budget.json` `prototype.freshPressed` |
+| tap-budget model machine place press | 12 pressed | measured | `tap-budget.json` `prototype.machinePress` |
+| tap-budget model rest-to-Store (mature) | 1 press | measured | `tap-budget.json` `prototype.storePress` |
+| tap-budget model rate (static, no sim tick) | 0.00 batches/s · 60s window | measured | `tap-budget.json` `prototype.productionReading` / `modelNote` |
+| target machine inspected | 13 presses | specified | section 6 target column |
+| target first sale | 16 presses | specified | section 6 target column |
+| target first upgrade | 19 presses | specified | section 6 target column |
+| target settings and save read | 22 presses | specified | section 6 target column |
+
+### 9.2 Layout, tap targets and clip
+
+| figure | value | kind | source |
+|---|---|---|---|
+| shipped phone-390 cluster right edge | 380 of 390, no overflow | measured | `captures/measures-nav.json` phone-390 rest `rects.cluster` |
+| shipped rest faces per band | 8 (15 store open, 9 research open) | measured | `captures/measures-nav.json` `buttons` |
+| shipped phone nav row box | 10,790 370x46 | measured | `captures/measures-nav.json` phone-390 rest `rects.dock` |
+| prototype phone-390 cluster right edge | 382 of 390 | measured | `measures.json` frames 31-40 `clusterRight` |
+| prototype faces under 44 px | 17 of 19 frames; `tgl-scale` 39 px wide | measured | `measures.json` `summary.facesUnder44` |
+| prototype clipOK | 17 of 19; frames 41/42 overflow 10 px (370 > 360) | measured | `measures.json` `summary.clipOK` |
+| prototype band overlaps | 0 | measured | `measures.json` `summary.overlaps` |
+| prototype rail width | 96 px | measured | `captures/captures-proto.json` `rects.nav` (R1) |
+| prototype three-column breakpoint | 600 px | measured | `captures/captures-proto.json` landscape rects (R2) |
+| prototype inspector pin | right edge of centred 1600 px frame (x 1432 at 1920, 1752 at 2560) | measured | `captures/captures-proto.json` `rects.insp` (R3) |
+| minimum tap target | 44 px | specified | section 3.1 LP4 |
+| visible button cap per frame | 8 | specified | section 2.3 P3 |
+| fixed nav slot count | 5 (Yard Build Store Research Menu) | specified | section 1 |
+| accented faces per frame | 1 (fork band excepted) | specified | section 2.3 P1 / P2 |
+| desktop frame cap | 1600 px, centred | specified | section 3.3 D1 |
+
+### 9.3 Integrity checks (this follow-up, #81)
+
+| figure | value | kind | source |
+|---|---|---|---|
+| prototype entry points that paint | 1 (`prototype-nav.html`) | measured | `dom-shim-47.mjs` run |
+| DOM-shim painted root length | fresh 1825, mature 3101 chars; every destination body non-empty | measured | `dom-shim-47.mjs` run (node v22.18.0) |
+| PNG / receipt parity | 48 PNGs = 48 entries; both diffs empty; no duplicates; all press fields present | measured | `captures/parity.json` (`parity-47.mjs`) |
+| spec files | 1 (`navigation-spec.md`) | measured | this folder (`nav-spec.md` deleted) |
+| test suite at final state | 32 files / 342 tests passed | measured | `npm test` (vitest) |

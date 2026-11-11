@@ -15,8 +15,10 @@ const exe = [process.env.CHROME_PATH, "C:\\\\Program Files\\\\Google\\\\Chrome\\
 const receipt = [];
 const info = (page) => page.evaluate(() => {
   const box = (id) => { const n = document.getElementById(id); if (!n) return null; const r = n.getBoundingClientRect(); return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) }; };
+  const qbox = (sel) => { const n = document.querySelector(sel); if (!n) return null; const r = n.getBoundingClientRect(); return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) }; };
   const txt = (id) => { const n = document.getElementById(id); return n ? (n.textContent ?? "").trim() : null; };
-  return { pressed: window.RW47 ? window.RW47.pressed() : null, last: window.RW47 ? window.RW47.log().slice(-1)[0] ?? null : null, nav: txt("nav"), band: txt("band"), card: txt("card"), insp: txt("insp"), action: txt("action"), zoom: txt("zr"), rects: { shell: box("shell"), nav: box("nav"), band: box("band"), card: box("card"), insp: box("insp"), world: box("world"), action: box("action") }, docScroll: [document.documentElement.scrollWidth, document.documentElement.clientWidth, document.documentElement.scrollHeight, document.documentElement.clientHeight] };
+  const faces = [...document.querySelectorAll("button, [aria-disabled]")].map((n) => { const r = n.getBoundingClientRect(); return { id: n.id, w: Math.round(r.width), h: Math.round(r.height), under44: r.width < 44 || r.height < 44, disabled: !!n.disabled || n.getAttribute("aria-disabled") === "true" }; });
+  return { pressed: window.RW47 ? window.RW47.pressed() : null, last: window.RW47 ? window.RW47.log().slice(-1)[0] ?? null : null, nav: txt("nav"), band: txt("band"), card: txt("card"), insp: txt("insp"), action: txt("action"), zoom: txt("zr"), rects: { shell: box("shell"), nav: box("nav"), band: box("band"), cluster: qbox(".cluster"), card: box("card"), insp: box("insp"), world: box("world"), action: box("action") }, faces, facesUnder44: faces.filter((f) => f.under44).length, docScroll: [document.documentElement.scrollWidth, document.documentElement.clientWidth, document.documentElement.scrollHeight, document.documentElement.clientHeight] };
 });
 const shot = async (page, name, note) => { const s = await info(page); await page.screenshot({ path: resolve(out, name + ".png") }); receipt.push(Object.assign({ file: name + ".png", note }, s)); console.log(name + ".png - " + note + " [pressed " + s.pressed + "]"); };
 const tapId = (page, id) => page.evaluate((i) => { if (window.RW47) window.RW47.tap(i); }, id);
@@ -78,7 +80,7 @@ try {
     await tapId(p, "gate-begin"); await tapId(p, "nav-menu");
     await shot(p, "48-proto-desktop2560-menu", "2560x1440: the capped frame, the Menu sheet in the right column, the ink beside it");
     await c.close(); }
-  writeFileSync(resolve(out, "captures-proto.json"), JSON.stringify({ task: "UI-RESET/NAV #47 prototype path", issue: "https://github.com/darkmatter2222/Rustwake/issues/47", headSha: process.env.RUSTWAKE_SHA ?? "224e22aa57a68215a2eddfe606ef50462b4d0b5e", tool: "playwright-core plus local Chrome/Edge, the self-contained prototype over file://", note: "the press column is the prototype own counter (S.pressed): one press per painted face", captures: receipt }, null, 2) + String.fromCharCode(10));
+  writeFileSync(resolve(out, "captures-proto.json"), JSON.stringify({ task: "UI-RESET/NAV #47 prototype path", issue: "https://github.com/darkmatter2222/Rustwake/issues/47", headSha: process.env.RUSTWAKE_SHA ?? "pending-stamp", tool: "playwright-core plus local Chrome/Edge, the self-contained prototype over file://", note: "the press column is the prototype own counter (S.pressed): one press per painted face", headShaConvention: "stamped by stamp-headsha-47.mjs to the captures commit; see README.md", captures: receipt }, null, 2) + String.fromCharCode(10));
   console.log("wrote " + receipt.length + " prototype captures");
 } finally {
   await browser.close();
