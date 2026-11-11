@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "SPONSOR-20261111131443053-3b51aa2a",
+  "status": "incorporated",
+  "captured_at": "2026-11-11T13:14:43.053Z",
+  "source": "SPONSOR_INBOX.md",
+  "request": "\r\nplease add a \"reset game\" button under the menu. and please from a UI UX perspective, elts reinvent all UI elements.  High Prio\r\n",
+  "request_sha256": "ce4977e43f6f8b47057b2a7f7128fdd0cea8a6576a2d4fc3f25fe24f47a2c7bc",
+  "inbox_sha256": "291e9dda511f238bb05df68d4d26f360d3d4c726f06f0780838a0eadc0538dad",
+  "ticket_ids": [
+    "43",
+    "62"
+  ],
+  "decision": "work/product/SPONSOR-20261111131443053-3b51aa2a/DECISION.md",
+  "decision_sha256": "ac8172a71f378e82949d80c0716e604bc18f617904cf935e7dbdfea3d54e5d03",
+  "github_issues": [
+    {
+      "number": 43,
+      "url": "https://github.com/darkmatter2222/Rustwake/issues/43",
+      "state": "open",
+      "labels": [
+        "priority:P0",
+        "role:coordinator",
+        "status:ready",
+        "major-ui",
+        "ui-reset"
+      ]
+    },
+    {
+      "number": 62,
+      "url": "https://github.com/darkmatter2222/Rustwake/issues/62",
+      "state": "open",
+      "labels": [
+        "priority:P1",
+        "role:developer",
+        "major-ui",
+        "ui-reset",
+        "status:blocked",
+        "gate:G3"
+      ]
+    }
+  ],
+  "prepared_at": "2026-11-11T13:54:05.839Z",
+  "inbox_before_sha256": "291e9dda511f238bb05df68d4d26f360d3d4c726f06f0780838a0eadc0538dad",
+  "inbox_after_sha256": "7acdf43c56618fc427513eef3c195e4ac80b06ccaae14fbeca7f50c79b9c8e32",
+  "remaining_text": "",
+  "incorporated_at": "2026-11-11T13:54:05.841Z"
+}
