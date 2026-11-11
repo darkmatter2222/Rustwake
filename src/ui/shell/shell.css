@@ -1,0 +1,238 @@
+/*
+ * UI-RESET-49 (G2): styles for the shell's own faces only (.shell-*).
+ * Overrides of the legacy classes (.dock, .panel, .hud__lead, ...) live at the
+ * END of styles.css so they win the cascade in the browser; the unit census
+ * injects styles.css alone, and jsdom ignores @media, so the pinned base
+ * contract is untouched by every mode below.
+ *
+ * Modes (spec §3.6):
+ *   column  — base, 600..1199 px: the existing HUD column, Menu face top-right.
+ *   phone   — <= 599 px: split primary band + nav row, Menu face in thumb zone.
+ *   rail    — >= 1200 px, or >= 600 px and <= 460 px tall: 96 px destination
+ *             rail left, primary band bottom, 320 px inspector right.
+ */
+
+/* ---- Rail (R1): hidden until rail mode paints it ---- */
+.shell-rail {
+  display: none;
+}
+
+.shell-rail__slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 2px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.55);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  pointer-events: auto;
+}
+
+.shell-rail__slot:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+
+/* The active destination reads by its cyan edge, not by the amber accent:
+   one accent-filled primary per screen stays the dock's alone (P1). */
+.shell-rail__slot[aria-pressed="true"] {
+  border-color: var(--cyan);
+  background: rgba(95, 216, 232, 0.12);
+}
+
+.shell-rail__slot:disabled {
+  opacity: 0.8;
+}
+
+.shell-rail__reason {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  color: var(--steel-light);
+}
+
+.shell-rail__key {
+  font-size: 0.6rem;
+  line-height: 1;
+  color: var(--steel-light);
+  opacity: 0.75;
+}
+
+/* ---- Menu face: hidden until a mode places it ---- */
+.shell-menu-face {
+  display: none;
+  position: absolute;
+  z-index: 6;
+  min-width: 44px;
+  min-height: 46px;
+  padding: 0 8px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  pointer-events: auto;
+}
+
+.shell-menu-face:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+
+.shell-menu-face--open {
+  border-color: var(--cyan);
+}
+
+/* ---- Menu sheet (E3/E5): one bounded sheet, never a .panel ---- */
+.shell-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  order: 3;
+  z-index: 30;
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
+  margin-top: auto;
+  max-height: 42%;
+  min-height: 0;
+  padding: 10px 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  pointer-events: auto;
+}
+
+/* E3: one sheet at a time. The panels yield their painted slot while the menu
+   is up; the selection state underneath is untouched (E4), so closing the menu
+   restores the same context. Higher specificity than `.panel`, so file order
+   against styles.css does not matter. */
+.hud--menu > .panel {
+  display: none;
+}
+
+.shell-menu__head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shell-menu__title {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--cyan);
+}
+
+.shell-menu__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  /* Longhands, not the `hidden auto` shorthand: jsdom's style engine drops the
+     two-value form, and the bounded-scroller contract is asserted in jsdom. */
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+
+.shell-menu__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.55);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.88rem;
+  text-align: left;
+  pointer-events: auto;
+}
+
+.shell-menu__row:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+
+.shell-menu__row:disabled {
+  opacity: 0.8;
+}
+
+.shell-menu__hint {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--steel-light);
+}
+
+/* ---- Phone mode: the Menu face owns the dock's reserved thumb zone ---- */
+@media (max-width: 599px) {
+  .shell-menu-face {
+    display: block;
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 66px;
+  }
+}
+
+/* ---- Column mode: the Menu face takes the corner Home (E2) left behind ---- */
+@media (min-width: 600px) and (max-width: 1199px) {
+  .shell-menu-face {
+    display: block;
+    top: max(8px, env(safe-area-inset-top));
+    right: max(10px, env(safe-area-inset-right));
+  }
+  /* Keep the cluster clear of the face at every text scale. */
+  .hud__top {
+    padding-right: 56px;
+  }
+}
+
+/* ---- Rail mode: rail left, primary band bottom, inspector right ---- */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .shell-rail {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: absolute;
+    z-index: 5;
+    left: max(8px, env(safe-area-inset-left));
+    top: max(8px, env(safe-area-inset-top));
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 96px;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid rgba(111, 147, 173, 0.35);
+    background: var(--panel);
+    pointer-events: auto;
+  }
+  /* Slot 5 owns the menu here; the floating face stands down. */
+  .shell-menu-face {
+    display: none;
+  }
+  /* The menu takes the inspector slot, bounded like every other sheet, with
+     the same measured top floor the panels use (App lifts it past 104 px
+     when the lead block grows at large text scales). */
+  .shell-menu {
+    position: absolute;
+    left: auto;
+    right: max(8px, env(safe-area-inset-right));
+    top: var(--shell-inspector-top, 104px);
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 320px;
+    max-width: 320px;
+    max-height: none;
+    margin-top: 0;
+  }
+}

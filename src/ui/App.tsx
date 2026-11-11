@@ -45,6 +45,14 @@ import {
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
+import { MenuSheet, ShellMenuFace, ShellRail, useRailMode } from "./shell/Shell";
+import {
+  SHELL_GUTTER_PX,
+  SHELL_INSPECTOR_TOP_PX,
+  SHELL_RIGHT_GUTTER_PX,
+  SHELL_SLOTS,
+  type ShellSlot,
+} from "./shell/layout";
 
 export interface PrimaryAction {
   label: string;
@@ -63,20 +71,57 @@ const nextCommandId = (): string => `c${++commandSeq}`;
 const TAP_THRESHOLD = 8;
 
 /**
- * L-1: the chrome band the world is fitted into, read from the boxes the layout
- * actually paints - the bottom edge of the top cluster and the gap under the dock.
- * The canvas covers the viewport, so both are already in the canvas' own CSS-px space.
+ * L-1 / UI-RESET-49 G2: the chrome band the world is fitted into, read from the
+ * boxes the layout actually paints — the bottom edge of the lead block (chips +
+ * objective) and the gap above the dock. In rail mode the painted rail box also
+ * reserves the left edge and the inspector gutter reserves the right, so the
+ * world fits the region between them instead of the whole canvas. The canvas
+ * covers the viewport, so every box is already in the canvas' own CSS-px space.
  * An empty measurement (a jsdom box of 0) yields no band and the legacy fit.
  */
-function chromeInsets(cssHeight: number): CameraInsets | undefined {
+interface ShellInsets extends CameraInsets {
+  left: number;
+  right: number;
+}
+
+function chromeInsets(cssHeight: number): ShellInsets | undefined {
   if (cssHeight <= 0) return undefined;
-  const top = document.querySelector(".hud__top");
+  const lead = document.querySelector(".hud__lead") ?? document.querySelector(".hud__top");
   const dock = document.querySelector(".dock");
-  if (!top || !dock) return undefined;
-  const topEdge = top.getBoundingClientRect().bottom;
+  if (!lead || !dock) return undefined;
+  const topEdge = lead.getBoundingClientRect().bottom;
   const dockTop = dock.getBoundingClientRect().top;
   if (!(topEdge > 0) || !(dockTop > 0)) return undefined;
-  return { top: topEdge, bottom: Math.max(0, cssHeight - dockTop) };
+  // Paint truth, not a second matchMedia: the rail reserves the left edge only
+  // while its box is actually on screen (rail mode), so the camera and the CSS
+  // can never disagree about which mode the viewport is in.
+  const rail = document.querySelector(".shell-rail");
+  const railBox = rail ? rail.getBoundingClientRect() : null;
+  const railActive = railBox !== null && railBox.width > 0;
+  return {
+    top: topEdge + 6,
+    bottom: Math.max(0, cssHeight - dockTop) + 6,
+    left: railActive ? railBox.right + 6 : 0,
+    right: railActive ? SHELL_RIGHT_GUTTER_PX : 0,
+  };
+}
+
+/**
+ * Fit the world into the shell's world region. `fitCamera` (scene.ts, frozen)
+ * centres on the view it is given, so it is handed the region's own width and
+ * the camera is then shifted by the region centre's offset from the canvas
+ * centre — the yard lands between the rail and the inspector, not under them.
+ */
+function fitToShell(cssWidth: number, cssHeight: number): Camera {
+  const insets = chromeInsets(cssHeight);
+  const left = insets?.left ?? 0;
+  const right = insets?.right ?? 0;
+  const regionWidth = Math.max(1, cssWidth - left - right);
+  const camera = fitCamera({ width: regionWidth, height: cssHeight }, insets);
+  if (left > 0 || right > 0) {
+    camera.x += (cssWidth / 2 - (left + regionWidth / 2)) / camera.scale;
+  }
+  return camera;
 }
 
 export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi }) {
@@ -87,7 +132,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const cameraRef = useRef<Camera>(fitCamera({ width: 360, height: 640 }));
   const audioRef = useRef<AudioApi | null>(audioApi ?? null);
   const cueStateRef = useRef<SimState>(store.getState());
-  const insetsRef = useRef<CameraInsets | undefined>(undefined);
+  const insetsRef = useRef<ShellInsets | undefined>(undefined);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const drag = useRef({ moved: 0, lastX: 0, lastY: 0, pinch: 0 });
 
@@ -103,6 +148,15 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
    */
   const [lastReject, setLastReject] = useState<string | null>(null);
   const [reportOpen, setReportOpen] = useState(true);
+  /**
+   * G2 (E3): the one bounded Menu sheet. Navigation state only — opening,
+   * closing or switching a destination never issues a game command, and the
+   * selection underneath survives the sheet (E4).
+   */
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuOpenerRef = useRef<HTMLElement | null>(null);
+  const menuFaceRef = useRef<HTMLButtonElement | null>(null);
+  const railMode = useRailMode();
 
   const audio = useCallback((): AudioApi => {
     if (!audioRef.current) audioRef.current = createAudio(store.getSettings().muted);
@@ -140,6 +194,33 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   }, [settings.textScale]);
 
   useEffect(() => {
+    // G2: the inspector/menu top is the spec's 104 px at scale 1, but the lead
+    // block (chips + objective) grows with the text scale and would overlap a
+    // fixed top in rail mode. Measure the painted lead and lift the floor to
+    // its bottom edge + gutter — the same paint-truth the camera insets read.
+    // The variable is only consumed by the rail media block, so phone/column
+    // (in-flow panels) are untouched. jsdom has no ResizeObserver; the one-shot
+    // measurement still runs and the 104 px floor holds.
+    const root = document.documentElement;
+    if (!railMode) {
+      root.style.removeProperty("--shell-inspector-top");
+      return;
+    }
+    const lead = document.querySelector<HTMLElement>(".hud__lead");
+    if (!lead) return;
+    const measure = () => {
+      const bottom = lead.getBoundingClientRect().bottom;
+      const top = Math.max(SHELL_INSPECTOR_TOP_PX, Math.ceil(bottom + SHELL_GUTTER_PX));
+      root.style.setProperty("--shell-inspector-top", `${top}px`);
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(lead);
+    return () => observer.disconnect();
+  }, [railMode, settings.textScale, state.tutorial]);
+
+  useEffect(() => {
     // Q-005 S-17: the store is the one source of truth for mute. An import or a
     // leader/follower adopt replaces `settings` wholesale, and this write keeps the
     // audio object equal to the stored value, so the glyph and the mix agree.
@@ -168,13 +249,94 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     store.setSettings({ textScale: steps[(index + 1) % steps.length] });
   }, [settings.textScale, store]);
 
+  const toggleMute = useCallback(() => {
+    const next = !store.getSettings().muted;
+    store.setSettings({ muted: next });
+    audio().setMuted(next);
+  }, [store, audio]);
+
+  const openMenu = useCallback(() => {
+    menuOpenerRef.current = (document.activeElement as HTMLElement | null) ?? null;
+    setMenuOpen(true);
+  }, []);
+
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    // E5: focus returns to the face that opened the sheet. Restored synchronously,
+    // before React unmounts the dialog, so focus never drops to the body; a
+    // keyboard-opened menu (no focused opener) lands on the Menu face itself.
+    const opener = menuOpenerRef.current;
+    const target = opener && opener !== document.body ? opener : menuFaceRef.current;
+    if (target && typeof target.focus === "function") target.focus();
+  }, []);
+
+  const toggleMenu = useCallback(() => {
+    if (menuOpen) closeMenu();
+    else openMenu();
+  }, [menuOpen, openMenu, closeMenu]);
+
+  /**
+   * The five destinations (spec §3.1), shared by the rail, the Menu face's
+   * sheet and keys 1–5. Each reads the freshest state from the store; disabled
+   * destinations are inert here too, so a key press can never bypass the rail's
+   * printed reason (E8). Opening a context closes the menu (E3) but never
+   * clears another context's selection.
+   */
+  const onSlot = useCallback(
+    (slot: ShellSlot) => {
+      const snapshot = store.getState();
+      switch (slot) {
+        case "yard":
+          if (snapshot.tutorial >= 9) {
+            setSelected(-4);
+            setMenuOpen(false);
+          }
+          return;
+        case "build": {
+          if (buildBlueprint !== null) {
+            setBuildBlueprint(null);
+            setGhostTile(null);
+            return;
+          }
+          const unlocked = unlockedBlueprints(snapshot.tutorial);
+          const ids = unlocked.length > 0 ? unlocked : Object.keys(BLUEPRINTS);
+          setBuildBlueprint(ids[0]);
+          setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(snapshot)));
+          setSelected(null);
+          setMenuOpen(false);
+          return;
+        }
+        case "store":
+          setSelected(-2);
+          setMenuOpen(false);
+          return;
+        case "research":
+          if (showResearch(snapshot)) {
+            setSelected(-3);
+            setMenuOpen(false);
+          }
+          return;
+        case "menu":
+          if (menuOpen) closeMenu();
+          else openMenu();
+          return;
+      }
+    },
+    [store, buildBlueprint, menuOpen, openMenu, closeMenu]
+  );
+
   useEffect(() => {
-    // Spec 5.5 / UI-002 U-5: Escape closes the *nearest* context first - the panel the
-    // player just opened, then the build ghost, and only then the return report, which is
-    // the oldest overlay on the screen. One press, one overlay retired, so no press can
-    // clear the whole stack at once and no pile-up can survive a thumb.
+    // Spec 5.5 / UI-002 U-5: Escape closes the *nearest* context first - the menu
+    // sheet (the newest layer), then the panel the player just opened, then the
+    // build ghost, and only then the return report, which is the oldest overlay
+    // on the screen. One press, one overlay retired, so no press can clear the
+    // whole stack at once and no pile-up can survive a thumb.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
+      if (menuOpen) {
+        closeMenu();
+        return;
+      }
       if (selected !== null) {
         setSelected(null);
         return;
@@ -190,7 +352,71 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [reportOpen, selected, buildBlueprint, store]);
+  }, [reportOpen, selected, buildBlueprint, menuOpen, closeMenu, store]);
+
+  useEffect(() => {
+    // Spec §5: keys 1–5 reach the five destinations, arrows pan, +/- zoom and N
+    // cycles the build ghost. Text fields keep their own keys — a save code
+    // typed into the yard record must never steer the shell.
+    const onKey = (event: KeyboardEvent) => {
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      const digit = Number(event.key);
+      if (Number.isInteger(digit) && digit >= 1 && digit <= SHELL_SLOTS.length) {
+        event.preventDefault();
+        onSlot(SHELL_SLOTS[digit - 1]);
+        return;
+      }
+      const camera = cameraRef.current;
+      const step = 16 / camera.scale;
+      switch (event.key) {
+        case "ArrowLeft":
+          event.preventDefault();
+          cameraRef.current = { ...camera, x: clampAxis(camera.x - step, 192) };
+          return;
+        case "ArrowRight":
+          event.preventDefault();
+          cameraRef.current = { ...camera, x: clampAxis(camera.x + step, 192) };
+          return;
+        case "ArrowUp":
+          event.preventDefault();
+          cameraRef.current = { ...camera, y: clampAxis(camera.y - step, 224) };
+          return;
+        case "ArrowDown":
+          event.preventDefault();
+          cameraRef.current = { ...camera, y: clampAxis(camera.y + step, 224) };
+          return;
+        case "+":
+        case "=":
+          event.preventDefault();
+          cameraRef.current = { ...camera, scale: Math.min(6, camera.scale * 1.2) };
+          return;
+        case "-":
+        case "_":
+          event.preventDefault();
+          cameraRef.current = { ...camera, scale: Math.max(1.2, camera.scale / 1.2) };
+          return;
+        case "n":
+        case "N":
+          if (buildBlueprint !== null) {
+            event.preventDefault();
+            setGhostTile((tile) => cycleGhostTile(store.getState(), tile));
+          }
+          return;
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onSlot, buildBlueprint, store]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -206,16 +432,19 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       const w = Math.round(cssWidth * dpr);
       const h = Math.round(cssHeight * dpr);
       const insets = chromeInsets(cssHeight);
-      // L-1: the chrome band changes with the text scale and with an open panel, so the
-      // fit is redone whenever either the canvas box or the band moved.
+      // L-1 / G2: the chrome band changes with the text scale, with an open panel
+      // and with the shell mode (the rail and inspector reserve horizontal edges),
+      // so the fit is redone whenever the canvas box or any band edge moved.
       const moved =
         (insets?.top ?? -1) !== (insetsRef.current?.top ?? -1) ||
-        (insets?.bottom ?? -1) !== (insetsRef.current?.bottom ?? -1);
+        (insets?.bottom ?? -1) !== (insetsRef.current?.bottom ?? -1) ||
+        (insets?.left ?? -1) !== (insetsRef.current?.left ?? -1) ||
+        (insets?.right ?? -1) !== (insetsRef.current?.right ?? -1);
       if (canvas.width !== w || canvas.height !== h || moved) {
         canvas.width = w;
         canvas.height = h;
         insetsRef.current = insets;
-        cameraRef.current = fitCamera({ width: cssWidth, height: cssHeight }, insets);
+        cameraRef.current = fitToShell(cssWidth, cssHeight);
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       // Q-004 B1: one state read per rendered frame, shared by the canvas, the ghost
@@ -382,20 +611,35 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       />
-      <div className="hud">
-        <div>
+      <div
+        className={
+          "hud" +
+          (buildBlueprint !== null ? " hud--build" : "") +
+          (menuOpen ? " hud--menu" : "")
+        }
+      >
+        {/* G2 R1: the destination rail, rendered exactly where it is painted
+            (wide desktops and short landscape). Phone/column modes keep their
+            destinations in the dock row plus the Menu face — no hidden copies. */}
+        {railMode ? (
+          <ShellRail
+            tutorial={state.tutorial}
+            research={showResearch(state)}
+            selected={selected}
+            buildActive={buildBlueprint !== null}
+            menuOpen={menuOpen}
+            onSlot={onSlot}
+          />
+        ) : null}
+        <div className="hud__lead">
           <HudTop
             state={state}
             muted={settings.muted}
             textScale={settings.textScale}
             onCycleText={cycleTextScale}
-            onToggleMute={() => {
-              const next = !settings.muted;
-              store.setSettings({ muted: next });
-              audio().setMuted(next);
-            }}
+            onToggleMute={toggleMute}
             onHome={() => {
-              cameraRef.current = fitCamera({ width: window.innerWidth, height: window.innerHeight });
+              cameraRef.current = fitToShell(window.innerWidth, window.innerHeight);
               setSelected(null);
             }}
           />
@@ -447,6 +691,34 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           />
         ) : null}
         {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
+        {/* G2 E3: the one bounded Menu sheet. While it is up the panels yield
+            their slot, but `selected` is untouched (E4) — closing it restores
+            the same context. It is not a `.panel`, so the overlay-stack census
+            keeps counting inspectors only. */}
+        {menuOpen ? (
+          <MenuSheet
+            onClose={closeMenu}
+            onHome={() => {
+              cameraRef.current = fitToShell(window.innerWidth, window.innerHeight);
+              setSelected(null);
+              closeMenu();
+            }}
+            onYard={() => {
+              setSelected(-4);
+              setMenuOpen(false);
+            }}
+            yardEnabled={state.tutorial >= 9}
+            onReport={() => {
+              setReportOpen(true);
+              setMenuOpen(false);
+            }}
+            reportAvailable={store.getReturnReport() !== null}
+            muted={settings.muted}
+            onToggleMute={toggleMute}
+            textScale={settings.textScale}
+            onCycleText={cycleTextScale}
+          />
+        ) : null}
         <DockButtons
           primary={primary}
           buildBlueprint={buildBlueprint}
@@ -455,6 +727,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             setBuildBlueprint(id);
             setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(store.getState())));
             setSelected(null);
+            setMenuOpen(false);
           }}
           onPlace={() => {
             if (buildBlueprint === null || ghostTile === null) return;
@@ -466,12 +739,24 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             setBuildBlueprint(null);
             setGhostTile(null);
           }}
-          onInventory={() => setSelected(-2)}
+          onInventory={() => {
+            setSelected(-2);
+            setMenuOpen(false);
+          }}
           research={showResearch(state)}
-          onResearch={() => setSelected(-3)}
+          onResearch={() => {
+            setSelected(-3);
+            setMenuOpen(false);
+          }}
           yard={state.tutorial >= 9}
-          onYard={() => setSelected(-4)}
+          onYard={() => {
+            setSelected(-4);
+            setMenuOpen(false);
+          }}
         />
+        {/* G2: the Menu face — thumb zone on phones, the corner Home left in the
+            column band; rail mode hides it because slot 5 owns the menu there. */}
+        <ShellMenuFace ref={menuFaceRef} open={menuOpen} onToggle={toggleMenu} />
       </div>
     </div>
   );
@@ -668,6 +953,17 @@ function runStep(
     default:
       dispatch({ id: nextCommandId(), type: "manual.salvage" });
   }
+}
+
+/** N (spec §5): the next unoccupied cell after the ghost, wrapping past the dock. */
+function cycleGhostTile(state: SimState, current: number | null): number {
+  const start = current === null ? -1 : current;
+  for (let i = 1; i <= YARD_TILES; i += 1) {
+    const tile = (start + i + YARD_TILES) % YARD_TILES;
+    if (tile === DOCK_TILE) continue;
+    if (!state.machines.some((m) => m.tile === tile)) return tile;
+  }
+  return firstFreeTile(state);
 }
 
 /** First unoccupied yard cell, so a new machine never lands on the dock tile. */

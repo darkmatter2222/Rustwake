@@ -399,29 +399,9 @@ body {
   max-height: 26%;
 }
 
-/* D-6/E-4 on the wide sizes: the desktop yard occupies x 397..1043 at the fitted scale, so
-   the card takes its own column in the right gutter instead of sitting on the yard (the
-   gutter carried no ink at all: 46.7 % of the width). `left` is the gutter start, `width`
-   the 320 px the widest row needs, and the column is tall enough for the research list. */
-@media (min-width: 1200px) {
-  .panel {
-    position: absolute;
-    left: 1104px;
-    width: 320px;
-    max-height: 70%;
-  }
-  /* Two absolute layers in one gutter would print on top of each other (no `top`, so both
-     take the same static position), so while the stack is two deep each gets its own slot
-     in the gutter: the older layer up top, the newest below it, matching the phone order. */
-  .hud:has(.panel ~ .panel) > .panel--report {
-    top: 8%;
-    max-height: 34%;
-  }
-  .hud:has(.panel ~ .panel) > .panel--stack {
-    top: 46%;
-    max-height: 34%;
-  }
-}
+/* D-6/E-4 on the wide sizes: the inspector column now lives in the G2 rail-mode
+   block at the end of this file (UI-RESET-49 §3.6: right 8, width 320, top 104),
+   so the old fixed `left: 1104px` gutter — correct only at 1440 px — is retired. */
 
 .panel__head {
   display: flex;
@@ -793,5 +773,118 @@ body {
   .text-large .node {
     gap: 2px;
     padding: 4px 8px;
+  }
+}
+
+/* ===========================================================================
+   UI-RESET-49 (G2): the shell modes, from navigation-spec §3.6.
+   Layout-only overrides of the legacy classes — no census selector
+   (.objective__primary, .status-line, .dock__btn, .dock__cost,
+   .resources__item, .icon-btn) redeclares its type or target floor here, so
+   the legibility census and every jsdom contract (which ignores @media) keep
+   reading the pinned base rules above. The shell's own faces (.shell-*) are
+   styled in shell/shell.css.
+   =========================================================================== */
+
+/* E2: the Home face leaves the cluster; Home lives in the Menu sheet, so the
+   cluster keeps two faces at every width and the corner goes to navigation. */
+.cluster .icon-btn:last-child {
+  display: none;
+}
+
+/* Phone mode (<= 599 px): the primary action takes a full-width band above the
+   nav row, both inside the thumb zone. The dock reserves 72 px on the right for
+   the Menu face (66 px + 6 px gutter, painted in shell.css); the primary's
+   negative margin spends that reserve so its band spans the full width while
+   the nav faces share the row beside the Menu face. Declared after the
+   `.text-large .dock` rule on purpose: at scale 2 on a real phone the split
+   band still wraps (jsdom ignores this block, so the L-3 census keeps its
+   single-row `nowrap` measurement). */
+@media (max-width: 599px) {
+  .dock {
+    flex-wrap: wrap;
+    max-width: none;
+    padding-right: 72px;
+  }
+  .dock__btn--primary:not(.dock__btn--branch) {
+    order: -1;
+    flex: 1 1 100%;
+    margin-right: -72px;
+  }
+  .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch) {
+    flex: 1 1 0;
+  }
+}
+
+/* Column mode (600..1199 px): the Menu face takes the top-right corner the
+   deleted Home face left behind; the lead block keeps clear of it. */
+@media (min-width: 600px) and (max-width: 1199px) {
+  .hud__top {
+    padding-right: 56px;
+  }
+}
+
+/* Rail mode (>= 1200 px, or >= 600 px and <= 460 px tall): the painted boxes of
+   spec §3.6 — rail x8 w96, lead x110 y8, primary band x110..(sheet left - 6)
+   at the bottom, inspector right 8 w320 top 104 bottom 8. The world region
+   between them is what the camera fits (App reads these same boxes). */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .hud__lead {
+    position: absolute;
+    left: 110px;
+    right: 8px;
+    top: max(8px, env(safe-area-inset-top));
+  }
+  .hud__top {
+    padding-right: 0;
+  }
+  .objective {
+    max-width: min(100%, 560px);
+  }
+  /* The primary band: one action wide, between the rail and the inspector.
+     The dock's nav faces stand down here — the rail owns the destinations —
+     but build mode keeps its Cancel / Build / Next row in the same band. */
+  .dock {
+    position: absolute;
+    left: 110px;
+    right: 334px;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: auto;
+    max-width: none;
+  }
+  .hud:not(.hud--build) .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch) {
+    display: none;
+  }
+  /* The inspector column: every panel takes the right gutter, bounded by the
+     viewport instead of a percentage cap, with its own declared scroller.
+     The top is the spec's 104 px at scale 1; at larger text the lead block
+     grows past it, so App measures the painted lead and lifts the floor via
+     --shell-inspector-top (the same paint-truth the camera insets read). */
+  .panel {
+    position: absolute;
+    left: auto;
+    right: max(8px, env(safe-area-inset-right));
+    top: var(--shell-inspector-top, 104px);
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 320px;
+    max-width: 320px;
+    max-height: none;
+    margin-top: 0;
+  }
+  /* Two layers share the gutter vertically: the older report up top, the
+     newest context below it, matching the phone's nearest-first order. */
+  .hud:has(.panel ~ .panel) > .panel--report {
+    top: var(--shell-inspector-top, 104px);
+    bottom: 50%;
+    max-height: none;
+  }
+  .hud:has(.panel ~ .panel) > .panel--stack {
+    top: 50%;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    max-height: none;
+  }
+  /* The toast clears the 46 px band + 8 px edge instead of the phone's stack. */
+  .toast {
+    bottom: calc(62px + env(safe-area-inset-bottom));
   }
 }
