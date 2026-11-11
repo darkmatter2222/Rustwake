@@ -57,6 +57,7 @@ import {
   YardPanel,
 } from "./Panels";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
+import { BuildCatalog } from "./build/BuildCatalog";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
 import { MenuSheet, ShellMenuFace, ShellRail, ShellZoom, useRailMode } from "./shell/Shell";
@@ -166,6 +167,14 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const [selected, setSelected] = useState<number | null>(null);
   const [buildBlueprint, setBuildBlueprint] = useState<string | null>(null);
   const [ghostTile, setGhostTile] = useState<number | null>(null);
+  /**
+   * UI-RESET-52: the build catalog is its own overlay, not a `.panel` — the
+   * report/stack/dock census and the camera's chrome insets never see it.
+   * While it is open the ghost stays armed underneath, so closing it (Place,
+   * Close or Cancel) lands in the explicit placement preview, and Escape
+   * retires catalog and ghost together as the one build layer.
+   */
+  const [catalogOpen, setCatalogOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   /**
    * PLAY-002 2 (TST-001, QA D-3): the last rejected command, kept after the 1.8 s toast
@@ -306,6 +315,26 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   }, [menuOpen, openMenu, closeMenu]);
 
   /**
+   * UI-RESET-52: opening the catalog arms the same ghost the old Build face
+   * armed (first unlocked machine, first free tile) so the yard keeps a live
+   * preview underneath, then lifts the catalog over it. Picking a card inside
+   * the catalog re-aims that ghost; nothing is spent until the dock's Build
+   * face (or a placement tap) commits `machine.build`.
+   */
+  const openCatalog = useCallback(() => {
+    const snapshot = store.getState();
+    if (buildBlueprint === null) {
+      const unlocked = unlockedBlueprints(snapshot.tutorial);
+      const ids = unlocked.length > 0 ? unlocked : Object.keys(BLUEPRINTS);
+      setBuildBlueprint(ids[0]);
+      setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(snapshot)));
+    }
+    setCatalogOpen(true);
+    setSelected(null);
+    setMenuOpen(false);
+  }, [store, buildBlueprint]);
+
+  /**
    * The five destinations (spec §3.1), shared by the rail, the Menu face's
    * sheet and keys 1–5. Each reads the freshest state from the store; disabled
    * destinations are inert here too, so a key press can never bypass the rail's
@@ -320,30 +349,29 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           if (snapshot.tutorial >= 9) {
             setSelected(-4);
             setMenuOpen(false);
+            setCatalogOpen(false);
           }
           return;
         case "build": {
           if (buildBlueprint !== null) {
             setBuildBlueprint(null);
             setGhostTile(null);
+            setCatalogOpen(false);
             return;
           }
-          const unlocked = unlockedBlueprints(snapshot.tutorial);
-          const ids = unlocked.length > 0 ? unlocked : Object.keys(BLUEPRINTS);
-          setBuildBlueprint(ids[0]);
-          setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(snapshot)));
-          setSelected(null);
-          setMenuOpen(false);
+          openCatalog();
           return;
         }
         case "store":
           setSelected(-2);
           setMenuOpen(false);
+          setCatalogOpen(false);
           return;
         case "research":
           if (showResearch(snapshot)) {
             setSelected(-3);
             setMenuOpen(false);
+            setCatalogOpen(false);
           }
           return;
         case "menu":
@@ -352,7 +380,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           return;
       }
     },
-    [store, buildBlueprint, menuOpen, openMenu, closeMenu]
+    [store, buildBlueprint, menuOpen, openMenu, closeMenu, openCatalog]
   );
 
   useEffect(() => {
@@ -374,6 +402,9 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       if (buildBlueprint !== null) {
         setBuildBlueprint(null);
         setGhostTile(null);
+        // UI-RESET-52: the catalog is part of the one build layer, so the press
+        // that drops the ghost retires it too — the report underneath survives.
+        setCatalogOpen(false);
         return;
       }
       if (reportOpen && store.getReturnReport()) {
@@ -817,6 +848,29 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           />
         ) : null}
         {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
+        {/* UI-RESET-52: the build catalog. Not a `.panel`: it never joins the
+            overlay-stack census, and the camera's chrome insets never measure
+            it. Selecting a card re-aims the ghost; Place closes the catalog
+            into the explicit placement preview; Cancel comes back here. */}
+        {catalogOpen ? (
+          <BuildCatalog
+            state={state}
+            selected={buildBlueprint}
+            onSelect={(id) => {
+              setBuildBlueprint(id);
+              setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(store.getState())));
+              setSelected(null);
+            }}
+            onPlace={() => setCatalogOpen(false)}
+            onClose={() => setCatalogOpen(false)}
+            onSalvage={() => dispatch({ id: nextCommandId(), type: "manual.salvage" })}
+            onStore={() => {
+              setSelected(-2);
+              setCatalogOpen(false);
+              setMenuOpen(false);
+            }}
+          />
+        ) : null}
         {/* G2 E3: the one bounded Menu sheet. While it is up the panels yield
             their slot, but `selected` is untouched (E4) — closing it restores
             the same context. It is not a `.panel`, so the overlay-stack census
@@ -848,36 +902,35 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         <DockButtons
           primary={primary}
           buildBlueprint={buildBlueprint}
-          unlocked={unlockedBlueprints(state.tutorial)}
-          onPickBlueprint={(id) => {
-            setBuildBlueprint(id);
-            setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(store.getState())));
-            setSelected(null);
-            setMenuOpen(false);
-          }}
+          onOpenCatalog={openCatalog}
           onPlace={() => {
             if (buildBlueprint === null || ghostTile === null) return;
             dispatch({ id: nextCommandId(), type: "machine.build", blueprint: buildBlueprint, tile: ghostTile });
             setBuildBlueprint(null);
             setGhostTile(null);
+            setCatalogOpen(false);
           }}
           onCancelBuild={() => {
-            setBuildBlueprint(null);
-            setGhostTile(null);
+            // UI-RESET-52: Cancel returns to the catalog with the choice and the
+            // ghost intact — planning again, never a spend and never a dead end.
+            setCatalogOpen(true);
           }}
           onInventory={() => {
             setSelected(-2);
             setMenuOpen(false);
+            setCatalogOpen(false);
           }}
           research={showResearch(state)}
           onResearch={() => {
             setSelected(-3);
             setMenuOpen(false);
+            setCatalogOpen(false);
           }}
           yard={state.tutorial >= 9}
           onYard={() => {
             setSelected(-4);
             setMenuOpen(false);
+            setCatalogOpen(false);
           }}
         />
         {/* G2: the Menu face — thumb zone on phones, the corner Home left in the

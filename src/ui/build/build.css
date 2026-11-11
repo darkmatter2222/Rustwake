@@ -1,0 +1,323 @@
+/* UI-RESET-52: the build catalog's own sheet. The catalog is a HUD-column
+   overlay, deliberately NOT a `.panel`: the report/stack/dock census, the
+   paired-layer budget and the camera's chrome insets all keep reading the
+   inspectors only. The layout grammar is the panel's (same fill, border,
+   radius, 560 px cap, margin-top auto, declared internal scroller) so the two
+   surfaces speak one visual language, and the rail-mode block mirrors the
+   inspector gutter exactly (right 8, width 320, top --shell-inspector-top). */
+
+.catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
+  /* Hug the dock like a panel does; order 3 keeps it above the report (2)
+     and below the dock (4) in the painted stack. */
+  margin-top: auto;
+  order: 3;
+  /* The single-layer panel budget: the yard keeps its band underneath. */
+  max-height: 42%;
+  min-height: 0;
+  padding: 10px 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  pointer-events: auto;
+}
+
+/* A report (or any inspector) still up: each surface spends half the column,
+   the same paired budget two panels share, so the yard band survives. */
+.hud:has(.panel) > .catalog {
+  max-height: 26%;
+}
+.hud:has(.catalog) > .panel {
+  max-height: 26%;
+}
+
+/* E3: the Menu sheet owns the screen while it is up; the catalog yields its
+   slot exactly like the panels do, and the build state underneath survives. */
+.hud--menu > .catalog {
+  display: none;
+}
+
+.catalog__head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.catalog__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--paper);
+}
+
+.catalog__close {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.5);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.catalog__lead {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: rgba(244, 247, 251, 0.72);
+}
+
+/* The declared scroller: the card list is bounded by the catalog box, never
+   by the page. Custom scrollbar in the shipped palette (both engines). */
+.catalog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  touch-action: pan-y;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+}
+.catalog__body::-webkit-scrollbar {
+  width: 8px;
+}
+.catalog__body::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(111, 147, 173, 0.55);
+}
+.catalog__body::-webkit-scrollbar-track {
+  background: rgba(9, 15, 26, 0.4);
+}
+
+.catalog__group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.catalog__group-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+/* One card = one machine: silhouette, name, function, recipe, price, and the
+   gate or the shortfall. The whole card is the pick target (44 px floor). */
+.catalog__card {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 2px 10px;
+  align-items: start;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  text-align: left;
+  border-radius: 10px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.5);
+  color: var(--paper);
+  font: inherit;
+}
+
+.catalog__icon {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.catalog__name,
+.catalog__function,
+.catalog__recipe,
+.catalog__cost,
+.catalog__lock,
+.catalog__shortfall,
+.catalog__ready,
+.catalog__selected {
+  grid-column: 2;
+}
+
+.catalog__name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.catalog__function {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: rgba(244, 247, 251, 0.72);
+}
+
+.catalog__recipe {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+.catalog__meta {
+  color: rgba(244, 247, 251, 0.6);
+}
+
+/* The price is the number the tap decision turns on: the UI-004 0.8rem floor
+   and the dock's own furnace ink. */
+.catalog__cost {
+  font-size: 0.8rem;
+  color: var(--furnace);
+}
+
+.catalog__lock {
+  font-size: 0.8rem;
+  color: rgba(244, 247, 251, 0.6);
+}
+
+.catalog__shortfall {
+  font-size: 0.8rem;
+  color: var(--furnace);
+}
+
+.catalog__ready {
+  font-size: 0.8rem;
+  color: var(--cyan);
+}
+
+.catalog__selected {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cyan);
+}
+
+/* The one committed choice: the same amber border voice the dock's primary
+   face uses, so "selected" reads identically on both surfaces. */
+.catalog__card--selected {
+  border-color: rgba(255, 183, 101, 0.7);
+  background: rgba(201, 113, 58, 0.16);
+}
+
+/* Locked cards stay readable (the requirement is the point) but visibly
+   inert: the dock's own 0.8 disabled opacity, never below the AA floor. */
+.catalog__card--locked {
+  opacity: 0.8;
+}
+.catalog__card:disabled {
+  cursor: default;
+}
+
+/* The recovery row: Salvage and Store stay one tap away while planning, and
+   Place is the explicit step into the placement preview. One accent-filled
+   primary per row, the dock's own grammar. */
+.catalog__foot {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.catalog__salvage,
+.catalog__store,
+.catalog__place {
+  flex: 1 1 auto;
+  min-width: 44px;
+  min-height: 46px;
+  padding: 0 8px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+.catalog__place {
+  flex: 2 1 auto;
+  border-color: rgba(255, 183, 101, 0.7);
+  background-color: rgb(201, 113, 58);
+  background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.32), rgba(201, 113, 58, 0.18));
+  color: var(--night);
+}
+
+.catalog__place:disabled {
+  opacity: 0.8;
+}
+
+.catalog__hint {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: rgba(244, 247, 251, 0.6);
+}
+
+/* Large text: the labels step down with the dock's own L-3 grammar so the
+   footer row keeps one line at 360 px, while every target keeps its floor. */
+.text-large .catalog__card {
+  padding: 6px 8px;
+}
+.text-large .catalog__name {
+  font-size: 0.84rem;
+}
+.text-large .catalog__function,
+.text-large .catalog__recipe,
+.text-large .catalog__cost,
+.text-large .catalog__lock,
+.text-large .catalog__shortfall,
+.text-large .catalog__ready,
+.text-large .catalog__selected,
+.text-large .catalog__lead,
+.text-large .catalog__hint {
+  font-size: 0.72rem;
+}
+.text-large .catalog__foot {
+  gap: 2px;
+}
+.text-large .catalog__salvage,
+.text-large .catalog__store,
+.text-large .catalog__place {
+  padding: 0 2px;
+  font-size: 0.74rem;
+  line-height: 1.1;
+}
+
+/* Rail mode: the catalog takes the inspector gutter, bounded by the viewport
+   instead of a percentage cap, with the same paint-truth top the panels read.
+   The camera never measures it (chromeInsets reads lead/dock/rail only). */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .catalog {
+    position: absolute;
+    left: auto;
+    right: max(8px, env(safe-area-inset-right));
+    top: var(--shell-inspector-top, 104px);
+    bottom: max(8px, env(safe-area-inset-bottom));
+    width: 320px;
+    max-width: 320px;
+    max-height: none;
+    margin-top: 0;
+    align-self: stretch;
+  }
+  /* Report still up: the older layer keeps the top half, the catalog the
+     bottom half — the same vertical split two panels use. */
+  .hud:has(.catalog) > .panel--report {
+    top: var(--shell-inspector-top, 104px);
+    bottom: 50%;
+    max-height: none;
+  }
+  .hud:has(.panel--report) > .catalog {
+    top: 50%;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    max-height: none;
+  }
+}

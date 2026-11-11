@@ -1,0 +1,2320 @@
+{
+  "task": "UI-RESET-52",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/52",
+  "headSha": "c216d9fc9ef6ac5fd3c195328f47f124b490661c",
+  "url": "http://127.0.0.1:4230/",
+  "measuredAt": "2026-11-11T22:44:48.262Z",
+  "tool": "playwright-core headless Chromium; DOM/ARIA/computed-style/geometry/persisted-sim probes only (no visual inspection)",
+  "seedSource": "make-fixtures-52.ts via the real engine + encodeSave (fresh.json, mature.json; documented funding +60 scrap/+30 ferrous, mature writtenAt=now-60s). Probe-side mutation: settings.textScale=2 re-encode with FNV-1a checksum for the 200% text context. Seeds validated by the app's own decodeSave; every action under test is a real UI click.",
+  "frameAudit": "every frame's claimed state is asserted in the DOM before capture; assertions recorded per frame below",
+  "entryChunk": {
+    "file": "index-Csj_jI1s.js",
+    "bytes": 104916,
+    "baseBytes": 100254,
+    "delta": 4662,
+    "ceiling": 233000,
+    "underCeiling": true
+  },
+  "contexts": [
+    {
+      "name": "fresh-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": "fresh.json: real-engine createInitialState + 1 tick, tutorial 0, empty store, writtenAt=now (no catch-up)",
+      "checks": [
+        {
+          "name": "phone boot markers: hud/top/resources/dock/menu-face/zoom/canvas",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 3,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": false,
+            "railVisible": false,
+            "slots": [],
+            "menuFace": true,
+            "menuFaceVisible": true,
+            "inspectorTop": null,
+            "canvas": true
+          }
+        },
+        {
+          "name": "phone band: no rail",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 3,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": false,
+            "railVisible": false,
+            "slots": [],
+            "menuFace": true,
+            "menuFaceVisible": true,
+            "inspectorTop": null,
+            "canvas": true
+          }
+        },
+        {
+          "name": "dock Build face opens the catalog",
+          "pass": true,
+          "detail": [
+            {
+              "face": "Cancel",
+              "full": "Cancel"
+            },
+            {
+              "face": "Build Scrap sorter",
+              "full": "Build Scrap sorter20 scrap · waits 20 scrap · have 0"
+            },
+            {
+              "face": "Next",
+              "full": "Next"
+            }
+          ]
+        },
+        {
+          "name": "catalog is a named dialog, not a panel",
+          "pass": true,
+          "detail": {
+            "present": true,
+            "role": "dialog",
+            "ariaLabel": "Build catalog",
+            "isPanel": false,
+            "groups": [
+              "Separation",
+              "Refining",
+              "Assembly"
+            ],
+            "cards": [
+              {
+                "id": "sorter",
+                "locked": "false",
+                "affordable": "false",
+                "pressed": "true",
+                "disabled": false,
+                "name": "Scrap sorter",
+                "fn": "Splits scrap into ferrous and nonferrous metal.",
+                "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+                "cost": "20 scrap",
+                "lock": null,
+                "shortfalls": [
+                  "Need 20 scrap · have 0"
+                ],
+                "ready": false,
+                "selected": true,
+                "iconParts": 11
+              },
+              {
+                "id": "copperSeparator",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Copper separator",
+                "fn": "Pulls copper and residue from nonferrous metal.",
+                "recipe": "Inputs: 2 nonferrousOutputs: 1 copper + 1 residuePower 2 · 5.00 s",
+                "cost": "25 scrap + 5 ferrous",
+                "lock": "Unlocks at step 7",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 9
+              },
+              {
+                "id": "polymerRecycler",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Polymer recycler",
+                "fn": "Presses residue into polymer.",
+                "recipe": "Inputs: 3 residueOutputs: 1 polymerPower 1 · 6.00 s",
+                "cost": "25 scrap + 5 nonferrous",
+                "lock": "Unlocks at step 7",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 5
+              },
+              {
+                "id": "furnace",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Furnace",
+                "fn": "Smelts ferrous metal into steel.",
+                "recipe": "Inputs: 2 ferrousOutputs: 1 steelPower 2 · 4.00 s",
+                "cost": "10 scrap + 5 ferrous",
+                "lock": "Unlocks at step 6",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 10
+              },
+              {
+                "id": "wireMill",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Wire mill",
+                "fn": "Draws copper into wire.",
+                "recipe": "Inputs: 1 copperOutputs: 3 wirePower 2 · 4.00 s",
+                "cost": "30 scrap + 6 nonferrous",
+                "lock": "Unlocks at step 8",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 12
+              },
+              {
+                "id": "platePress",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Plate press",
+                "fn": "Presses steel into plates.",
+                "recipe": "Inputs: 2 steelOutputs: 3 platesPower 3 · 5.00 s",
+                "cost": "35 scrap + 8 ferrous",
+                "lock": "Unlocks at step 8",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 5
+              },
+              {
+                "id": "circuitAssembler",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Circuit assembler",
+                "fn": "Combines wire and polymer into circuits.",
+                "recipe": "Inputs: 2 wire + 1 polymerOutputs: 1 circuitsPower 3 · 8.00 s",
+                "cost": "40 scrap + 10 ferrous",
+                "lock": "Unlocks at step 9",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 6
+              },
+              {
+                "id": "signalLab",
+                "locked": "true",
+                "affordable": "false",
+                "pressed": "false",
+                "disabled": true,
+                "name": "Signal lab",
+                "fn": "Reads circuits into data.",
+                "recipe": "Inputs: 1 circuitsOutputs: 2 dataPower 2 · 15.00 s",
+                "cost": "50 scrap + 12 ferrous",
+                "lock": "Unlocks at step 9",
+                "shortfalls": [],
+                "ready": false,
+                "selected": false,
+                "iconParts": 13
+              }
+            ],
+            "salvage": {
+              "label": "Salvage",
+              "disabled": false
+            },
+            "store": {
+              "label": "Store",
+              "disabled": false
+            },
+            "place": {
+              "label": "Place Scrap sorter",
+              "disabled": true
+            },
+            "hint": "Salvage the wreck for scrap, or sell stock at the store."
+          }
+        },
+        {
+          "name": "three categories in table order",
+          "pass": true,
+          "detail": [
+            "Separation",
+            "Refining",
+            "Assembly"
+          ]
+        },
+        {
+          "name": "all eight machines present",
+          "pass": true,
+          "detail": [
+            "sorter",
+            "copperSeparator",
+            "polymerRecycler",
+            "furnace",
+            "wireMill",
+            "platePress",
+            "circuitAssembler",
+            "signalLab"
+          ]
+        },
+        {
+          "name": "fresh gate: only the sorter unlocked",
+          "pass": true,
+          "detail": {
+            "id": "sorter",
+            "locked": "false",
+            "affordable": "false",
+            "pressed": "true",
+            "disabled": false,
+            "name": "Scrap sorter",
+            "fn": "Splits scrap into ferrous and nonferrous metal.",
+            "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+            "cost": "20 scrap",
+            "lock": null,
+            "shortfalls": [
+              "Need 20 scrap · have 0"
+            ],
+            "ready": false,
+            "selected": true,
+            "iconParts": 11
+          }
+        },
+        {
+          "name": "locked cards print the table's own unlockAt, disabled",
+          "pass": true,
+          "detail": [
+            {
+              "id": "copperSeparator",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Copper separator",
+              "fn": "Pulls copper and residue from nonferrous metal.",
+              "recipe": "Inputs: 2 nonferrousOutputs: 1 copper + 1 residuePower 2 · 5.00 s",
+              "cost": "25 scrap + 5 ferrous",
+              "lock": "Unlocks at step 7",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 9
+            },
+            {
+              "id": "polymerRecycler",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Polymer recycler",
+              "fn": "Presses residue into polymer.",
+              "recipe": "Inputs: 3 residueOutputs: 1 polymerPower 1 · 6.00 s",
+              "cost": "25 scrap + 5 nonferrous",
+              "lock": "Unlocks at step 7",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 5
+            },
+            {
+              "id": "furnace",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Furnace",
+              "fn": "Smelts ferrous metal into steel.",
+              "recipe": "Inputs: 2 ferrousOutputs: 1 steelPower 2 · 4.00 s",
+              "cost": "10 scrap + 5 ferrous",
+              "lock": "Unlocks at step 6",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 10
+            },
+            {
+              "id": "wireMill",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Wire mill",
+              "fn": "Draws copper into wire.",
+              "recipe": "Inputs: 1 copperOutputs: 3 wirePower 2 · 4.00 s",
+              "cost": "30 scrap + 6 nonferrous",
+              "lock": "Unlocks at step 8",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 12
+            },
+            {
+              "id": "platePress",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Plate press",
+              "fn": "Presses steel into plates.",
+              "recipe": "Inputs: 2 steelOutputs: 3 platesPower 3 · 5.00 s",
+              "cost": "35 scrap + 8 ferrous",
+              "lock": "Unlocks at step 8",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 5
+            },
+            {
+              "id": "circuitAssembler",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Circuit assembler",
+              "fn": "Combines wire and polymer into circuits.",
+              "recipe": "Inputs: 2 wire + 1 polymerOutputs: 1 circuitsPower 3 · 8.00 s",
+              "cost": "40 scrap + 10 ferrous",
+              "lock": "Unlocks at step 9",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 6
+            },
+            {
+              "id": "signalLab",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Signal lab",
+              "fn": "Reads circuits into data.",
+              "recipe": "Inputs: 1 circuitsOutputs: 2 dataPower 2 · 15.00 s",
+              "cost": "50 scrap + 12 ferrous",
+              "lock": "Unlocks at step 9",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 13
+            }
+          ]
+        },
+        {
+          "name": "every card: silhouette parts, name, function, recipe I/O, cost",
+          "pass": true,
+          "detail": [
+            {
+              "id": "sorter",
+              "locked": "false",
+              "affordable": "false",
+              "pressed": "true",
+              "disabled": false,
+              "name": "Scrap sorter",
+              "fn": "Splits scrap into ferrous and nonferrous metal.",
+              "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+              "cost": "20 scrap",
+              "lock": null,
+              "shortfalls": [
+                "Need 20 scrap · have 0"
+              ],
+              "ready": false,
+              "selected": true,
+              "iconParts": 11
+            },
+            {
+              "id": "copperSeparator",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Copper separator",
+              "fn": "Pulls copper and residue from nonferrous metal.",
+              "recipe": "Inputs: 2 nonferrousOutputs: 1 copper + 1 residuePower 2 · 5.00 s",
+              "cost": "25 scrap + 5 ferrous",
+              "lock": "Unlocks at step 7",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 9
+            },
+            {
+              "id": "polymerRecycler",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Polymer recycler",
+              "fn": "Presses residue into polymer.",
+              "recipe": "Inputs: 3 residueOutputs: 1 polymerPower 1 · 6.00 s",
+              "cost": "25 scrap + 5 nonferrous",
+              "lock": "Unlocks at step 7",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 5
+            },
+            {
+              "id": "furnace",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Furnace",
+              "fn": "Smelts ferrous metal into steel.",
+              "recipe": "Inputs: 2 ferrousOutputs: 1 steelPower 2 · 4.00 s",
+              "cost": "10 scrap + 5 ferrous",
+              "lock": "Unlocks at step 6",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 10
+            },
+            {
+              "id": "wireMill",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Wire mill",
+              "fn": "Draws copper into wire.",
+              "recipe": "Inputs: 1 copperOutputs: 3 wirePower 2 · 4.00 s",
+              "cost": "30 scrap + 6 nonferrous",
+              "lock": "Unlocks at step 8",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 12
+            },
+            {
+              "id": "platePress",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Plate press",
+              "fn": "Presses steel into plates.",
+              "recipe": "Inputs: 2 steelOutputs: 3 platesPower 3 · 5.00 s",
+              "cost": "35 scrap + 8 ferrous",
+              "lock": "Unlocks at step 8",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 5
+            },
+            {
+              "id": "circuitAssembler",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Circuit assembler",
+              "fn": "Combines wire and polymer into circuits.",
+              "recipe": "Inputs: 2 wire + 1 polymerOutputs: 1 circuitsPower 3 · 8.00 s",
+              "cost": "40 scrap + 10 ferrous",
+              "lock": "Unlocks at step 9",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 6
+            },
+            {
+              "id": "signalLab",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Signal lab",
+              "fn": "Reads circuits into data.",
+              "recipe": "Inputs: 1 circuitsOutputs: 2 dataPower 2 · 15.00 s",
+              "cost": "50 scrap + 12 ferrous",
+              "lock": "Unlocks at step 9",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 13
+            }
+          ]
+        },
+        {
+          "name": "unaffordable sorter prints have/need",
+          "pass": true,
+          "detail": {
+            "id": "sorter",
+            "locked": "false",
+            "affordable": "false",
+            "pressed": "true",
+            "disabled": false,
+            "name": "Scrap sorter",
+            "fn": "Splits scrap into ferrous and nonferrous metal.",
+            "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+            "cost": "20 scrap",
+            "lock": null,
+            "shortfalls": [
+              "Need 20 scrap · have 0"
+            ],
+            "ready": false,
+            "selected": true,
+            "iconParts": 11
+          }
+        },
+        {
+          "name": "Place disabled while unaffordable",
+          "pass": true,
+          "detail": {
+            "label": "Place Scrap sorter",
+            "disabled": true
+          }
+        },
+        {
+          "name": "Salvage and Store reachable in the footer",
+          "pass": true,
+          "detail": {
+            "salvage": {
+              "label": "Salvage",
+              "disabled": false
+            },
+            "store": {
+              "label": "Store",
+              "disabled": false
+            }
+          }
+        },
+        {
+          "name": "frame catalog-fresh: catalog dialog painted",
+          "pass": true,
+          "detail": "Build catalog"
+        },
+        {
+          "name": "frame catalog-fresh: 8 cards painted",
+          "pass": true,
+          "detail": 8
+        },
+        {
+          "name": "frame catalog-fresh: 7 locked cards painted",
+          "pass": true,
+          "detail": [
+            "copperSeparator",
+            "polymerRecycler",
+            "furnace",
+            "wireMill",
+            "platePress",
+            "circuitAssembler",
+            "signalLab"
+          ]
+        },
+        {
+          "name": "frame catalog-fresh: have/need painted on sorter",
+          "pass": true,
+          "detail": "Need 20 scrap · have 0"
+        },
+        {
+          "name": "frame catalog-fresh: group titles painted",
+          "pass": true,
+          "detail": [
+            "Separation",
+            "Refining",
+            "Assembly"
+          ]
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 26,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 161,
+            "leaks": []
+          }
+        },
+        {
+          "name": "footer Salvage click dispatched",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "manual.salvage credited 5 scrap (real command, persisted sim)",
+          "pass": true,
+          "detail": {
+            "before": 0,
+            "after": 5
+          }
+        },
+        {
+          "name": "card re-reads the store: have 5, catalog still open",
+          "pass": true,
+          "detail": {
+            "id": "sorter",
+            "locked": "false",
+            "affordable": "false",
+            "pressed": "true",
+            "disabled": false,
+            "name": "Scrap sorter",
+            "fn": "Splits scrap into ferrous and nonferrous metal.",
+            "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+            "cost": "20 scrap",
+            "lock": null,
+            "shortfalls": [
+              "Need 20 scrap · have 5"
+            ],
+            "ready": false,
+            "selected": true,
+            "iconParts": 11
+          }
+        },
+        {
+          "name": "frame recovery-fresh: catalog still painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame recovery-fresh: have 5 painted",
+          "pass": true,
+          "detail": "Need 20 scrap · have 5"
+        },
+        {
+          "name": "locked furnace stays disabled and unselected",
+          "pass": true,
+          "detail": {
+            "furnace": {
+              "id": "furnace",
+              "locked": "true",
+              "affordable": "false",
+              "pressed": "false",
+              "disabled": true,
+              "name": "Furnace",
+              "fn": "Smelts ferrous metal into steel.",
+              "recipe": "Inputs: 2 ferrousOutputs: 1 steelPower 2 · 4.00 s",
+              "cost": "10 scrap + 5 ferrous",
+              "lock": "Unlocks at step 6",
+              "shortfalls": [],
+              "ready": false,
+              "selected": false,
+              "iconParts": 10
+            },
+            "sorter": {
+              "id": "sorter",
+              "locked": "false",
+              "affordable": "false",
+              "pressed": "true",
+              "disabled": false,
+              "name": "Scrap sorter",
+              "fn": "Splits scrap into ferrous and nonferrous metal.",
+              "recipe": "Inputs: 2 scrapOutputs: 1 ferrous + 1 nonferrousPower 1 · 4.00 s",
+              "cost": "20 scrap",
+              "lock": null,
+              "shortfalls": [
+                "Need 20 scrap · have 5"
+              ],
+              "ready": false,
+              "selected": true,
+              "iconParts": 11
+            }
+          }
+        },
+        {
+          "name": "header Close clicked",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Close keeps the build preview (hud--build + ghost)",
+          "pass": true,
+          "detail": {
+            "hudClass": "hud hud--build",
+            "status": "Ghost on cell 0 · tap again to place"
+          }
+        },
+        {
+          "name": "frame preview-fresh: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame preview-fresh: hud--build painted",
+          "pass": true,
+          "detail": "hud hud--build"
+        },
+        {
+          "name": "frame preview-fresh: ghost status painted",
+          "pass": true,
+          "detail": "Ghost on cell 0 · tap again to place"
+        },
+        {
+          "name": "Escape retires catalog layer and ghost together",
+          "pass": true,
+          "detail": {
+            "catalog": false,
+            "hud": "hud",
+            "status": "Tap Salvage until the drone repair is affordable."
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 2951,
+            "end": 2971
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "fresh-phone390-catalog-fresh.png",
+          "claimedState": "fresh catalog: 8 cards, sorter only unlocked, have/need on every card",
+          "assertions": [
+            {
+              "name": "catalog dialog painted",
+              "pass": true,
+              "detail": "Build catalog"
+            },
+            {
+              "name": "8 cards painted",
+              "pass": true,
+              "detail": 8
+            },
+            {
+              "name": "7 locked cards painted",
+              "pass": true,
+              "detail": [
+                "copperSeparator",
+                "polymerRecycler",
+                "furnace",
+                "wireMill",
+                "platePress",
+                "circuitAssembler",
+                "signalLab"
+              ]
+            },
+            {
+              "name": "have/need painted on sorter",
+              "pass": true,
+              "detail": "Need 20 scrap · have 0"
+            },
+            {
+              "name": "group titles painted",
+              "pass": true,
+              "detail": [
+                "Separation",
+                "Refining",
+                "Assembly"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "fresh-phone390-recovery-fresh.png",
+          "claimedState": "after one real Salvage: sorter card shows have 5, catalog still open",
+          "assertions": [
+            {
+              "name": "catalog still painted",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "have 5 painted",
+              "pass": true,
+              "detail": "Need 20 scrap · have 5"
+            }
+          ]
+        },
+        {
+          "file": "fresh-phone390-preview-fresh.png",
+          "claimedState": "catalog closed via header, ghost preview still armed",
+          "assertions": [
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "hud--build painted",
+              "pass": true,
+              "detail": "hud hud--build"
+            },
+            {
+              "name": "ghost status painted",
+              "pass": true,
+              "detail": "Ghost on cell 0 · tap again to place"
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "simTickStart": {
+        "tick": 2951,
+        "revision": 0,
+        "tutorial": 0,
+        "machines": 0,
+        "last": null,
+        "scrap": 0,
+        "ferrous": 0,
+        "storeUnits": 0
+      },
+      "simTickEnd": {
+        "tick": 2971,
+        "revision": 1,
+        "tutorial": 1,
+        "machines": 0,
+        "last": null,
+        "scrap": 5,
+        "ferrous": 0,
+        "storeUnits": 5
+      }
+    },
+    {
+      "name": "mature-phone390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "seed": "mature.json: real-engine yard(8) walk (all 8 machines built+connected), tutorial 9, +60 scrap/+30 ferrous documented funding, writtenAt=now-60s (inline return report)",
+      "checks": [
+        {
+          "name": "phone boot markers intact on the mature yard",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 5,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": false,
+            "railVisible": false,
+            "slots": [],
+            "menuFace": true,
+            "menuFaceVisible": true,
+            "inspectorTop": null,
+            "canvas": true
+          }
+        },
+        {
+          "name": "return report up after the seeded absence",
+          "pass": true,
+          "detail": [
+            {
+              "title": "While you were away",
+              "cls": "panel panel--report"
+            }
+          ]
+        },
+        {
+          "name": "dock Build opens the mature catalog",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "mature catalog: all eight unlocked, none locked",
+          "pass": true,
+          "detail": [
+            {
+              "id": "sorter",
+              "locked": "false"
+            },
+            {
+              "id": "copperSeparator",
+              "locked": "false"
+            },
+            {
+              "id": "polymerRecycler",
+              "locked": "false"
+            },
+            {
+              "id": "furnace",
+              "locked": "false"
+            },
+            {
+              "id": "wireMill",
+              "locked": "false"
+            },
+            {
+              "id": "platePress",
+              "locked": "false"
+            },
+            {
+              "id": "circuitAssembler",
+              "locked": "false"
+            },
+            {
+              "id": "signalLab",
+              "locked": "false"
+            }
+          ]
+        },
+        {
+          "name": "paired budget: catalog 26% at order 3 while the report is up",
+          "pass": true,
+          "detail": {
+            "maxHeight": "26%",
+            "order": "3",
+            "position": "static",
+            "width": 370,
+            "top": 522.73,
+            "bottom": 738,
+            "right": 380,
+            "bodyOverflowY": "auto",
+            "footFontRem": 0.88,
+            "viewport": {
+              "w": 390,
+              "h": 844
+            }
+          }
+        },
+        {
+          "name": "report survives the catalog (not a panel, no census change)",
+          "pass": true,
+          "detail": [
+            {
+              "title": "While you were away",
+              "cls": "panel panel--report"
+            }
+          ]
+        },
+        {
+          "name": "frame catalog-mature-phone: catalog painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame catalog-mature-phone: 8 unlocked cards painted",
+          "pass": true,
+          "detail": 8
+        },
+        {
+          "name": "frame catalog-mature-phone: report panel painted",
+          "pass": true,
+          "detail": [
+            "While you were away"
+          ]
+        },
+        {
+          "name": "frame catalog-mature-phone: icons painted on every card",
+          "pass": true,
+          "detail": [
+            11,
+            9,
+            5,
+            10,
+            12,
+            5,
+            6,
+            13
+          ]
+        },
+        {
+          "name": "furnace card selected",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "selection marked on card and dock primary",
+          "pass": true,
+          "detail": {
+            "dock": [
+              {
+                "face": "Cancel",
+                "full": "Cancel"
+              },
+              {
+                "face": "Build Furnace",
+                "full": "Build Furnace10 scrap + 5 ferrous"
+              },
+              {
+                "face": "Next",
+                "full": "Next"
+              }
+            ],
+            "pressed": [
+              "furnace"
+            ]
+          }
+        },
+        {
+          "name": "Place Furnace clicked",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Place enters the explicit preview: hud--build, ghost, 3 pinned faces",
+          "pass": true,
+          "detail": {
+            "preview": {
+              "hud": "hud hud--build",
+              "status": "Ghost on cell 9 · tap again to place",
+              "catalog": false
+            },
+            "dock": [
+              {
+                "face": "Cancel",
+                "full": "Cancel"
+              },
+              {
+                "face": "Build Furnace",
+                "full": "Build Furnace10 scrap + 5 ferrous"
+              },
+              {
+                "face": "Next",
+                "full": "Next"
+              }
+            ]
+          }
+        },
+        {
+          "name": "preview spends nothing: machines/revision/store unchanged",
+          "pass": true,
+          "detail": {
+            "sim0": {
+              "tick": 6282,
+              "revision": 15,
+              "tutorial": 9,
+              "machines": 8,
+              "last": {
+                "blueprint": "signalLab",
+                "tile": 8
+              },
+              "scrap": 445,
+              "ferrous": 30,
+              "storeUnits": 487
+            },
+            "sim1": {
+              "tick": 6282,
+              "revision": 15,
+              "tutorial": 9,
+              "machines": 8,
+              "last": {
+                "blueprint": "signalLab",
+                "tile": 8
+              },
+              "scrap": 445,
+              "ferrous": 30,
+              "storeUnits": 487
+            }
+          }
+        },
+        {
+          "name": "frame preview-mature-phone: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame preview-mature-phone: 3 build faces painted",
+          "pass": true,
+          "detail": [
+            "Cancel",
+            "Build Furnace",
+            "Next"
+          ]
+        },
+        {
+          "name": "frame preview-mature-phone: ghost status painted",
+          "pass": true,
+          "detail": "Ghost on cell 9 · tap again to place"
+        },
+        {
+          "name": "frame preview-mature-phone: hud--build painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "canvas tap keeps the ghost (camera contract), builds nothing",
+          "pass": true,
+          "detail": {
+            "cellBefore": 9,
+            "cellAfter": 27,
+            "statusTap": "Ghost on cell 27 · tap again to place",
+            "machines": 8
+          }
+        },
+        {
+          "name": "dock Build Furnace clicked",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "machine.build landed: +1 furnace on the ghost tile, revision up",
+          "pass": true,
+          "detail": {
+            "ghost": 27,
+            "pre": {
+              "tick": 6282,
+              "revision": 15,
+              "tutorial": 9,
+              "machines": 8,
+              "last": {
+                "blueprint": "signalLab",
+                "tile": 8
+              },
+              "scrap": 445,
+              "ferrous": 30,
+              "storeUnits": 487
+            },
+            "post": {
+              "tick": 6290,
+              "revision": 16,
+              "tutorial": 9,
+              "machines": 9,
+              "last": {
+                "blueprint": "furnace",
+                "tile": 27
+              },
+              "scrap": 435,
+              "ferrous": 25,
+              "storeUnits": 472
+            }
+          }
+        },
+        {
+          "name": "real cost charged: scrap -10 exact, ferrous -5 (±2 live-production drift recorded)",
+          "pass": true,
+          "detail": {
+            "scrapDelta": 10,
+            "ferrousDelta": 5,
+            "ferrousDrift": 0
+          }
+        },
+        {
+          "name": "phase over: resting 5-face dock, catalog closed, no hud--build",
+          "pass": true,
+          "detail": {
+            "dock": [
+              {
+                "face": "Store",
+                "full": "Store"
+              },
+              {
+                "face": "Yard",
+                "full": "Yard"
+              },
+              {
+                "face": "Connect",
+                "full": "Connect"
+              },
+              {
+                "face": "Build",
+                "full": "Build"
+              },
+              {
+                "face": "Research",
+                "full": "Research"
+              }
+            ],
+            "hudRest": "hud"
+          }
+        },
+        {
+          "name": "frame placed-mature-phone: 5 resting faces painted",
+          "pass": true,
+          "detail": [
+            "Store",
+            "Yard",
+            "Connect",
+            "Build",
+            "Research"
+          ]
+        },
+        {
+          "name": "frame placed-mature-phone: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame placed-mature-phone: build phase cleared",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "reopen catalog",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "reselect furnace",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Place again",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "dock Cancel clicked",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Cancel returns to the catalog, furnace still selected",
+          "pass": true,
+          "detail": {
+            "present": true,
+            "pressed": [
+              "furnace"
+            ]
+          }
+        },
+        {
+          "name": "Cancel dispatched nothing: revision/machines/store unchanged",
+          "pass": true,
+          "detail": {
+            "pre": {
+              "tick": 6290,
+              "revision": 16,
+              "tutorial": 9,
+              "machines": 9,
+              "last": {
+                "blueprint": "furnace",
+                "tile": 27
+              },
+              "scrap": 435,
+              "ferrous": 25,
+              "storeUnits": 472
+            },
+            "post": {
+              "tick": 6290,
+              "revision": 16,
+              "tutorial": 9,
+              "machines": 9,
+              "last": {
+                "blueprint": "furnace",
+                "tile": 27
+              },
+              "scrap": 435,
+              "ferrous": 25,
+              "storeUnits": 472
+            }
+          }
+        },
+        {
+          "name": "frame cancel-mature-phone: catalog painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame cancel-mature-phone: furnace selected painted",
+          "pass": true,
+          "detail": "true"
+        },
+        {
+          "name": "frame cancel-mature-phone: report still painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "one Escape retires catalog+ghost, report survives",
+          "pass": true,
+          "detail": {
+            "catalog": false,
+            "hud": "hud",
+            "status": "Draw the route so cargo has somewhere to go.",
+            "panels": [
+              "While you were away"
+            ]
+          }
+        },
+        {
+          "name": "frame report-mature-phone: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame report-mature-phone: report painted",
+          "pass": true,
+          "detail": [
+            "While you were away"
+          ]
+        },
+        {
+          "name": "frame report-mature-phone: dock painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "second Escape retires the report: plain yard",
+          "pass": true,
+          "detail": {
+            "panels": 0,
+            "dock": true
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 15,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 24,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 6282,
+            "end": 6302
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "mature-phone390-catalog-mature-phone.png",
+          "claimedState": "mature catalog over the return report: 8 unlocked cards, paired 26% budget",
+          "assertions": [
+            {
+              "name": "catalog painted",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "8 unlocked cards painted",
+              "pass": true,
+              "detail": 8
+            },
+            {
+              "name": "report panel painted",
+              "pass": true,
+              "detail": [
+                "While you were away"
+              ]
+            },
+            {
+              "name": "icons painted on every card",
+              "pass": true,
+              "detail": [
+                11,
+                9,
+                5,
+                10,
+                12,
+                5,
+                6,
+                13
+              ]
+            }
+          ]
+        },
+        {
+          "file": "mature-phone390-preview-mature-phone.png",
+          "claimedState": "placement preview: catalog closed, ghost armed, dock Cancel/Build Furnace/Next",
+          "assertions": [
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "3 build faces painted",
+              "pass": true,
+              "detail": [
+                "Cancel",
+                "Build Furnace",
+                "Next"
+              ]
+            },
+            {
+              "name": "ghost status painted",
+              "pass": true,
+              "detail": "Ghost on cell 9 · tap again to place"
+            },
+            {
+              "name": "hud--build painted",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        },
+        {
+          "file": "mature-phone390-placed-mature-phone.png",
+          "claimedState": "furnace placed through the real dock command: resting 5-face dock",
+          "assertions": [
+            {
+              "name": "5 resting faces painted",
+              "pass": true,
+              "detail": [
+                "Store",
+                "Yard",
+                "Connect",
+                "Build",
+                "Research"
+              ]
+            },
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "build phase cleared",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        },
+        {
+          "file": "mature-phone390-cancel-mature-phone.png",
+          "claimedState": "Cancel brought the catalog back with furnace selected, no spend",
+          "assertions": [
+            {
+              "name": "catalog painted",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "furnace selected painted",
+              "pass": true,
+              "detail": "true"
+            },
+            {
+              "name": "report still painted",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        },
+        {
+          "file": "mature-phone390-report-mature-phone.png",
+          "claimedState": "after one Escape: only the return report remains",
+          "assertions": [
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "report painted",
+              "pass": true,
+              "detail": [
+                "While you were away"
+              ]
+            },
+            {
+              "name": "dock painted",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "simTickStart": {
+        "tick": 6282,
+        "revision": 15,
+        "tutorial": 9,
+        "machines": 8,
+        "last": {
+          "blueprint": "signalLab",
+          "tile": 8
+        },
+        "scrap": 445,
+        "ferrous": 30,
+        "storeUnits": 487
+      },
+      "simTickEnd": {
+        "tick": 6302,
+        "revision": 16,
+        "tutorial": 9,
+        "machines": 9,
+        "last": {
+          "blueprint": "furnace",
+          "tile": 27
+        },
+        "scrap": 440,
+        "ferrous": 25,
+        "storeUnits": 477
+      }
+    },
+    {
+      "name": "mature-desk1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "seed": "mature.json: real-engine yard(8) walk (all 8 machines built+connected), tutorial 9, +60 scrap/+30 ferrous documented funding, writtenAt=now-60s (inline return report)",
+      "checks": [
+        {
+          "name": "desktop boot markers: rail + 5 slots + inspector-top + zoom + dock + hud",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 5,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": true,
+            "railVisible": true,
+            "slots": [
+              "yard",
+              "build",
+              "store",
+              "research",
+              "menu"
+            ],
+            "menuFace": true,
+            "menuFaceVisible": false,
+            "inspectorTop": "131px",
+            "canvas": true
+          }
+        },
+        {
+          "name": "rail band: phone menu face hidden",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 5,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": true,
+            "railVisible": true,
+            "slots": [
+              "yard",
+              "build",
+              "store",
+              "research",
+              "menu"
+            ],
+            "menuFace": true,
+            "menuFaceVisible": false,
+            "inspectorTop": "131px",
+            "canvas": true
+          }
+        },
+        {
+          "name": "dock Build opens the catalog in rail mode",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "catalog owns the inspector gutter: width 320, right edge 8px, bottom 8px",
+          "pass": true,
+          "detail": {
+            "maxHeight": "none",
+            "order": "3",
+            "position": "absolute",
+            "width": 320,
+            "top": 400,
+            "bottom": 792,
+            "right": 1272,
+            "bodyOverflowY": "auto",
+            "footFontRem": 0.88,
+            "viewport": {
+              "w": 1280,
+              "h": 800
+            }
+          }
+        },
+        {
+          "name": "report/catalog vertical split: report top half, catalog bottom half",
+          "pass": true,
+          "detail": {
+            "report": {
+              "title": "While you were away",
+              "top": 131,
+              "bottom": 400
+            },
+            "style": {
+              "maxHeight": "none",
+              "order": "3",
+              "position": "absolute",
+              "width": 320,
+              "top": 400,
+              "bottom": 792,
+              "right": 1272,
+              "bodyOverflowY": "auto",
+              "footFontRem": 0.88,
+              "viewport": {
+                "w": 1280,
+                "h": 800
+              }
+            },
+            "inspectorTop": 131,
+            "half": 400
+          }
+        },
+        {
+          "name": "mature catalog complete in rail mode",
+          "pass": true,
+          "detail": [
+            "sorter",
+            "copperSeparator",
+            "polymerRecycler",
+            "furnace",
+            "wireMill",
+            "platePress",
+            "circuitAssembler",
+            "signalLab"
+          ]
+        },
+        {
+          "name": "frame catalog-mature-desk: catalog painted at 320px",
+          "pass": true,
+          "detail": {
+            "width": 320,
+            "right": 1272,
+            "top": 400,
+            "bottom": 792
+          }
+        },
+        {
+          "name": "frame catalog-mature-desk: 8 unlocked cards painted",
+          "pass": true,
+          "detail": 8
+        },
+        {
+          "name": "frame catalog-mature-desk: report painted above",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame catalog-mature-desk: rail painted",
+          "pass": true,
+          "detail": [
+            "yard",
+            "build",
+            "store",
+            "research",
+            "menu"
+          ]
+        },
+        {
+          "name": "furnace selected",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Place Furnace",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "desktop preview: 3 pinned faces + ghost",
+          "pass": true,
+          "detail": {
+            "dock": [
+              {
+                "face": "Cancel",
+                "full": "Cancel"
+              },
+              {
+                "face": "Build Furnace",
+                "full": "Build Furnace10 scrap + 5 ferrous"
+              },
+              {
+                "face": "Next",
+                "full": "Next"
+              }
+            ],
+            "ghost": 9
+          }
+        },
+        {
+          "name": "desktop canvas tap keeps ghost, builds nothing",
+          "pass": true,
+          "detail": {
+            "ghostAfter": 19,
+            "machines": 8
+          }
+        },
+        {
+          "name": "dock Build Furnace",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "desktop placement: +1 furnace on the ghost tile, revision up, scrap -10",
+          "pass": true,
+          "detail": {
+            "ghost": 19,
+            "pre": {
+              "tick": 6319,
+              "revision": 15,
+              "tutorial": 9,
+              "machines": 8,
+              "last": {
+                "blueprint": "signalLab",
+                "tile": 8
+              },
+              "scrap": 450,
+              "ferrous": 30,
+              "storeUnits": 492
+            },
+            "post": {
+              "tick": 6326,
+              "revision": 16,
+              "tutorial": 9,
+              "machines": 9,
+              "last": {
+                "blueprint": "furnace",
+                "tile": 19
+              },
+              "scrap": 440,
+              "ferrous": 25,
+              "storeUnits": 477
+            }
+          }
+        },
+        {
+          "name": "frame placed-mature-desk: 5 resting faces painted",
+          "pass": true,
+          "detail": [
+            "Store",
+            "Yard",
+            "Connect",
+            "Build",
+            "Research"
+          ]
+        },
+        {
+          "name": "frame placed-mature-desk: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame placed-mature-desk: rail still painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "zoom control live after the catalog flow",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 5,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": true,
+            "railVisible": true,
+            "slots": [
+              "yard",
+              "build",
+              "store",
+              "research",
+              "menu"
+            ],
+            "menuFace": true,
+            "menuFaceVisible": false,
+            "inspectorTop": "131px",
+            "canvas": true
+          }
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 21,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 50,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 6319,
+            "end": 6339
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "mature-desk1280-catalog-mature-desk.png",
+          "claimedState": "rail-mode catalog in the inspector gutter, report split above",
+          "assertions": [
+            {
+              "name": "catalog painted at 320px",
+              "pass": true,
+              "detail": {
+                "width": 320,
+                "right": 1272,
+                "top": 400,
+                "bottom": 792
+              }
+            },
+            {
+              "name": "8 unlocked cards painted",
+              "pass": true,
+              "detail": 8
+            },
+            {
+              "name": "report painted above",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "rail painted",
+              "pass": true,
+              "detail": [
+                "yard",
+                "build",
+                "store",
+                "research",
+                "menu"
+              ]
+            }
+          ]
+        },
+        {
+          "file": "mature-desk1280-placed-mature-desk.png",
+          "claimedState": "desktop after the real placement: resting dock, rail intact",
+          "assertions": [
+            {
+              "name": "5 resting faces painted",
+              "pass": true,
+              "detail": [
+                "Store",
+                "Yard",
+                "Connect",
+                "Build",
+                "Research"
+              ]
+            },
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "rail still painted",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "simTickStart": {
+        "tick": 6319,
+        "revision": 15,
+        "tutorial": 9,
+        "machines": 8,
+        "last": {
+          "blueprint": "signalLab",
+          "tile": 8
+        },
+        "scrap": 450,
+        "ferrous": 30,
+        "storeUnits": 492
+      },
+      "simTickEnd": {
+        "tick": 6339,
+        "revision": 16,
+        "tutorial": 9,
+        "machines": 9,
+        "last": {
+          "blueprint": "furnace",
+          "tile": 19
+        },
+        "scrap": 440,
+        "ferrous": 25,
+        "storeUnits": 477
+      }
+    },
+    {
+      "name": "narrow-ts2-360",
+      "viewport": {
+        "width": 360,
+        "height": 740
+      },
+      "seed": "mature.json re-encode with payload.settings.textScale=2 (FNV-1a checksum recomputed); no sim mutation",
+      "checks": [
+        {
+          "name": "narrow phone boot markers intact at 200% text",
+          "pass": true,
+          "detail": {
+            "hud": true,
+            "hudTop": true,
+            "resources": true,
+            "dock": true,
+            "dockFaces": 5,
+            "zoomGroup": true,
+            "zoomFaces": 3,
+            "railPresent": false,
+            "railVisible": false,
+            "slots": [],
+            "menuFace": true,
+            "menuFaceVisible": true,
+            "inspectorTop": null,
+            "canvas": true
+          }
+        },
+        {
+          "name": "200% text scale applied (.text-large)",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "dock Build opens the catalog at 360px/200%",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "every visible HUD target keeps the 44px floor at 200% text",
+          "pass": true,
+          "detail": {
+            "count": 26,
+            "small": []
+          }
+        },
+        {
+          "name": "page stays flat: overflow hidden, scrollHeight <= innerHeight+1",
+          "pass": true,
+          "detail": {
+            "bodyOverflow": "hidden",
+            "htmlOverflow": "hidden",
+            "scrollHeight": 740,
+            "innerHeight": 740
+          }
+        },
+        {
+          "name": "catalog body is the declared scroller; paired 26% budget",
+          "pass": true,
+          "detail": {
+            "maxHeight": "26%",
+            "order": "3",
+            "position": "static",
+            "width": 340,
+            "top": 493.59,
+            "bottom": 681.83,
+            "right": 350,
+            "bodyOverflowY": "auto",
+            "footFontRem": 0.74,
+            "viewport": {
+              "w": 360,
+              "h": 740
+            }
+          }
+        },
+        {
+          "name": "footer steps down to the dock's 0.74rem L-3 grammar",
+          "pass": true,
+          "detail": {
+            "maxHeight": "26%",
+            "order": "3",
+            "position": "static",
+            "width": 340,
+            "top": 493.59,
+            "bottom": 681.83,
+            "right": 350,
+            "bodyOverflowY": "auto",
+            "footFontRem": 0.74,
+            "viewport": {
+              "w": 360,
+              "h": 740
+            }
+          }
+        },
+        {
+          "name": "frame catalog-narrow-ts2: catalog painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "frame catalog-narrow-ts2: 8 cards painted",
+          "pass": true,
+          "detail": 8
+        },
+        {
+          "name": "frame catalog-narrow-ts2: all visible targets >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 25,
+            "min": 44
+          }
+        },
+        {
+          "name": "frame catalog-narrow-ts2: page flat",
+          "pass": true,
+          "detail": {
+            "scrollHeight": 740,
+            "innerHeight": 740
+          }
+        },
+        {
+          "name": "frame catalog-narrow-ts2: report painted",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "furnace selected",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "Place Furnace",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "preview faces pinned at 200% text",
+          "pass": true,
+          "detail": [
+            {
+              "face": "Cancel",
+              "full": "Cancel"
+            },
+            {
+              "face": "Build Furnace",
+              "full": "Build Furnace10 scrap + 5 ferrous"
+            },
+            {
+              "face": "Next",
+              "full": "Next"
+            }
+          ]
+        },
+        {
+          "name": "preview keeps 44px floors and a flat page",
+          "pass": true,
+          "detail": {
+            "small": [],
+            "scroll": {
+              "bodyOverflow": "hidden",
+              "htmlOverflow": "hidden",
+              "scrollHeight": 740,
+              "innerHeight": 740
+            }
+          }
+        },
+        {
+          "name": "frame preview-narrow-ts2: 3 build faces painted",
+          "pass": true,
+          "detail": [
+            "Cancel",
+            "Build Furnace",
+            "Next"
+          ]
+        },
+        {
+          "name": "frame preview-narrow-ts2: ghost status painted",
+          "pass": true,
+          "detail": "Ghost on cell 9 · tap again to place"
+        },
+        {
+          "name": "frame preview-narrow-ts2: catalog gone",
+          "pass": true,
+          "detail": null
+        },
+        {
+          "name": "all visible .hud buttons min-height >= 44px",
+          "pass": true,
+          "detail": {
+            "count": 14,
+            "small": []
+          }
+        },
+        {
+          "name": "no untranslated i18n keys painted in HUD",
+          "pass": true,
+          "detail": {
+            "scanned": true,
+            "textNodes": 35,
+            "leaks": []
+          }
+        },
+        {
+          "name": "zero console/page/network errors",
+          "pass": true,
+          "detail": {
+            "console": [],
+            "page": [],
+            "responses": [],
+            "requests": []
+          }
+        },
+        {
+          "name": "sim ticks advanced during probe",
+          "pass": true,
+          "detail": {
+            "start": 6354,
+            "end": 6374
+          }
+        }
+      ],
+      "screenshots": [
+        {
+          "file": "narrow-ts2-360-catalog-narrow-ts2.png",
+          "claimedState": "360px at 200% text: catalog open over the report, flat page, 44px floors",
+          "assertions": [
+            {
+              "name": "catalog painted",
+              "pass": true,
+              "detail": null
+            },
+            {
+              "name": "8 cards painted",
+              "pass": true,
+              "detail": 8
+            },
+            {
+              "name": "all visible targets >= 44px",
+              "pass": true,
+              "detail": {
+                "count": 25,
+                "min": 44
+              }
+            },
+            {
+              "name": "page flat",
+              "pass": true,
+              "detail": {
+                "scrollHeight": 740,
+                "innerHeight": 740
+              }
+            },
+            {
+              "name": "report painted",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        },
+        {
+          "file": "narrow-ts2-360-preview-narrow-ts2.png",
+          "claimedState": "360px at 200% text: placement preview with the 3 pinned faces",
+          "assertions": [
+            {
+              "name": "3 build faces painted",
+              "pass": true,
+              "detail": [
+                "Cancel",
+                "Build Furnace",
+                "Next"
+              ]
+            },
+            {
+              "name": "ghost status painted",
+              "pass": true,
+              "detail": "Ghost on cell 9 · tap again to place"
+            },
+            {
+              "name": "catalog gone",
+              "pass": true,
+              "detail": null
+            }
+          ]
+        }
+      ],
+      "errors": {
+        "console": [],
+        "page": [],
+        "responses": [],
+        "requests": []
+      },
+      "simTickStart": {
+        "tick": 6354,
+        "revision": 15,
+        "tutorial": 9,
+        "machines": 8,
+        "last": {
+          "blueprint": "signalLab",
+          "tile": 8
+        },
+        "scrap": 455,
+        "ferrous": 30,
+        "storeUnits": 497
+      },
+      "simTickEnd": {
+        "tick": 6374,
+        "revision": 15,
+        "tutorial": 9,
+        "machines": 8,
+        "last": {
+          "blueprint": "signalLab",
+          "tile": 8
+        },
+        "scrap": 455,
+        "ferrous": 30,
+        "storeUnits": 497
+      }
+    }
+  ],
+  "summary": {
+    "pass": true,
+    "contexts": 4,
+    "checks": 125,
+    "frames": 12,
+    "failed": 0
+  },
+  "failures": []
+}
