@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET-91 vendor chunk split boot probe",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/91",
-  "headSha": "pending-stamp",
+  "headSha": "97b3743d7765ef70193956f08c43b2acf4485568",
   "url": "http://localhost:4175/",
   "expectVendor": false,
   "measuredAt": "2026-11-11T18:56:21.427Z",
@@ -119,5 +119,6 @@
     "failures": 0,
     "pass": true
   },
-  "failures": []
+  "failures": [],
+  "headShaNote": "vite.config.ts state under test (WIP commit); the publication head SHA is recorded in the issue/PR checkpoint comments"
 }
