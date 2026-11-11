@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   BLUEPRINTS,
   RECIPES,
@@ -35,15 +34,31 @@ import {
   wholePercent,
 } from "../../game/content/strings";
 import { Row, nextId } from "./shared";
+import { COPY } from "../inspector/copy";
+import { ContextPanes } from "../inspector/ContextPanes";
+import { constraintNotes, primaryActionNote, recipeFlow } from "../inspector/model";
+import "../inspector/inspector.css";
 
 /**
- * U-5 (UI-002 g3): which layer a press retires. Two of these can be on the screen at
- * once - the return report the boot left behind, plus the panel the player opened last -
- * and one `Back`/`Escape` press retires exactly one of them, nearest first (LIFO). The
- * markers let the sheet state that order without a second source of truth: the layer the
- * player opened last owns the target nearest the dock (where the thumb already is), the
- * older one sits above it in the column, so repeated presses unwind the stack down to the
- * yard instead of jumping between two buttons.
+ * UI-RESET-54 (G2 wave 3): the machine inspector. The old two-page text dump becomes
+ * one scrollable sheet of named sections — identity/status, the input → output recipe,
+ * production with actual-vs-potential rates, the measured bottleneck with plain-language
+ * constraint explanations, transport, and in-panel recovery context — above the same
+ * command faces. The preserved contracts are deliberate:
+ *
+ * - the root keeps `panel panel--stack` and the first `aria-label` ("{machine} details"),
+ *   so the shell docks it and the stack/Escape order is unchanged;
+ * - the Status row keeps the exact `row.status` label and the engine's STATUS_LABEL value;
+ * - the Measured / Next step / Actual rate rows keep the engine's diagnosis and window;
+ * - the Links row keeps one `.panel__row` per machine with every extent joined by the
+ *   table's comma, exactly as the belt-extent contract reads it;
+ * - `.panel__actions` keeps its direct `.icon-btn` children in Connect → Upgrade → Move →
+ *   Dismantle order, so the first-child accent names the primary and every face still
+ *   prints the number its command charges (the arithmetic is the engine's own helpers).
+ *
+ * Recovery context opens in-panel (see ContextPanes): the App contract has no selection
+ * callback, and the acceptance forbids losing the machine selection, so Storage/Routes/
+ * Power are local panes that dispatch nothing.
  */
 export function MachinePanel(props: {
   state: SimState;
@@ -64,7 +79,6 @@ export function MachinePanel(props: {
     batchMilliFor(machine.blueprint, machine.level + 1) / 10000;
   const plans = planConnections(props.state, machine.id);
   const diagnosis = diagnoseMachine(props.state, machine);
-  const [page, setPage] = useState(0);
   /** Where the `Move` face sends this machine: the first cell nobody holds (UI-002). */
   const moveTile = nextFreeTile(props.state);
   /**
@@ -87,6 +101,11 @@ export function MachinePanel(props: {
     machine.trayUnits +
     machine.inBufUnits +
     links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
+  const batchPercent = Math.min(
+    100,
+    Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
+  );
+  const constraints = constraintNotes(props.state, machine, props.powerRatio);
 
   return (
     <div
@@ -101,163 +120,215 @@ export function MachinePanel(props: {
         </button>
       </div>
       <div className="panel__body">
-      {page === 0 ? (
-        <dl>
-          <Row label={t("row.status")} value={STATUS_LABEL[machine.status] ?? machine.status} />
-          <Row
-            label={t("row.batch")}
-            value={t("value.percent", {
-              percent: Math.min(
-                100,
-                Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
-              ),
-            })}
-          />
-          <Row
-            label={t("row.cycle")}
-            value={t("value.seconds", { seconds: formatSeconds(effectiveSeconds) })}
-          />
-          <Row
-            label={t("row.actualRate")}
-            value={t("value.actualRate", {
-              rate: formatRate(reading.rate),
-              window: formatWholeSeconds(reading.windowSeconds),
-            })}
-          />
-          <Row label={t("row.maxRate")} value={t("value.maxRate", { rate: formatRate(maxRate) })} />
-          <Row
-            label={t("row.power")}
-            value={
-              <>
-                {t("value.powerUnits", {
-                  count: machine.batchPower,
-                  units: plural(machine.batchPower, t("unit.unit")),
-                })}
-                {props.powerRatio < 0.999
-                  ? t("value.powerLimited", { percent: wholePercent(props.powerRatio) })
-                  : ""}
-              </>
-            }
-          />
-          <Row label={t("row.measured")} value={diagnosis.evidence} />
-          <Row label={t("row.nextStep")} value={diagnosis.advice} />
-          <Row
-            label={t("row.nextUpgrade")}
-            value={t("value.nextUpgrade", {
-              from: formatSeconds(effectiveSeconds),
-              to: formatSeconds(nextSeconds),
-              cost: unit(cost, t("unit.credit")),
-            })}
-          />
-          {plans.length > 0 ? (
-            <Row label={t("row.nextLink")} value={describePlans(props.state, plans)} />
-          ) : null}
-          {/* BELT-001 g4: the extent of every link already on this machine, in the one
-              shape the world prints beside the line itself: "3 tiles · 3 scrap". A link
-              from before the price has no `run` and prints its stored latency instead. */}
-          {links.length > 0 ? (
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.identity}</h3>
+          <dl>
+            <Row label={t("row.status")} value={STATUS_LABEL[machine.status] ?? machine.status} />
+            <Row label={t("row.level")} value={machine.level} />
+            <Row label={COPY.rows.cell} value={machine.tile} />
+            {machine.branch !== undefined ? (
+              <Row
+                label={t("row.branches")}
+                value={(() => {
+                  const ranks = upgradeRanks(machine);
+                  return t("value.branches", {
+                    speed: ranks.speed,
+                    buffer: ranks.buffer,
+                    draw: ranks.draw,
+                  });
+                })()}
+              />
+            ) : null}
+          </dl>
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.recipe}</h3>
+          <p className="inspector-flow">{recipeFlow(machine)}</p>
+          <dl>
+            <Row label={t("row.inputs")} value={describeInputs(recipe)} />
+            <Row label={t("row.outputs")} value={describeOutputs(recipe)} />
             <Row
-              label={t("row.links")}
-              value={links.map(beltExtentLine).join(t("value.comma"))}
+              label={t("row.cycle")}
+              value={t("value.seconds", { seconds: formatSeconds(effectiveSeconds) })}
             />
-          ) : null}
-          {machine.status === "starved" ? (
-            <Row label={t("row.needs")} value={describeInputs(recipe)} />
-          ) : null}
-        </dl>
-      ) : (
-        <dl>
-          <Row label={t("row.inputs")} value={describeInputs(recipe)} />
-          <Row label={t("row.outputs")} value={describeOutputs(recipe)} />
-          <Row label={t("row.level")} value={machine.level} />
-          {machine.branch !== undefined ? (
-            <Row
-              label={t("row.branches")}
-              value={(() => {
-                const ranks = upgradeRanks(machine);
-                return t("value.branches", {
-                  speed: ranks.speed,
-                  buffer: ranks.buffer,
-                  draw: ranks.draw,
-                });
-              })()}
-            />
-          ) : null}
-          <Row
-            label={t("row.inBuffer")}
-            value={`${formatNumber(machine.inBufUnits)}/${inputCapacityOf(
-              machine,
-              researchBonus(props.state).inputBuffer
-            )}`}
-          />
-          <Row label={t("row.tray")} value={`${formatNumber(machine.trayUnits)}/${def.outputBuffer}`} />
-        </dl>
-      )}
-      <div className="panel__actions">
-        {plans.length > 0 ? (
-          <button
-            className="icon-btn"
-            onClick={() => {
-              for (const plan of plans) {
-                props.dispatch({
-                  id: nextId("r"),
-                  type: "route.connect",
-                  from: plan.from,
-                  to: plan.to,
-                  filter: plan.filter,
-                });
-              }
-            }}
+          </dl>
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.production}</h3>
+          <div
+            className="inspector-progress"
+            role="progressbar"
+            aria-valuenow={batchPercent}
+            aria-valuemin={0}
+            aria-valuemax={100}
           >
-            {t("btn.connect")}
-          </button>
-        ) : null}
-        <button
-          className="icon-btn"
-          onClick={() =>
-            props.dispatch({
-              id: nextId("u"),
-              type: "machine.upgrade",
-              machineId: machine.id,
-            })
-          }
-        >
-          {t("btn.upgradeCost", { cost: unit(cost, t("unit.credit")) })}
-        </button>
-        {/* UI-002: the same machine, one cell over. `moveMachine` re-points the existing
-            machine (its id, level, branch and both route ids survive), and the destination
-            is the first free cell the yard offers - the ladder `firstFreeTile` uses. Every
-            command face prints the number the engine charges it: the upgrade its credits,
-            the move its own charge, the dismantle the units it returns. */}
-        <button
-          className="icon-btn"
-          onClick={() =>
-            props.dispatch({
-              id: nextId("m"),
-              type: "machine.move",
-              machineId: machine.id,
-              tile: moveTile,
-            })
-          }
-        >
-          {t("btn.moveCost", { tile: moveTile, charge: unit(moveCost, t("unit.unit")) })}
-        </button>
-        <button
-          className="icon-btn"
-          onClick={() =>
-            props.dispatch({
-              id: nextId("d"),
-              type: "machine.dismantle",
-              machineId: machine.id,
-            })
-          }
-        >
-          {t("btn.dismantleRefund", { refund: unit(refundUnits, t("unit.unit")) })}
-        </button>
-        <button className="icon-btn" onClick={() => setPage(page === 0 ? 1 : 0)}>
-          {page === 0 ? t("btn.recipe") : t("btn.statusPage")}
-        </button>
-      </div>
+            <div className="inspector-progress__fill" style={{ width: `${batchPercent}%` }} />
+          </div>
+          <dl>
+            <Row label={t("row.batch")} value={t("value.percent", { percent: batchPercent })} />
+            <Row
+              label={t("row.actualRate")}
+              value={t("value.actualRate", {
+                rate: formatRate(reading.rate),
+                window: formatWholeSeconds(reading.windowSeconds),
+              })}
+            />
+            <Row label={t("row.maxRate")} value={t("value.maxRate", { rate: formatRate(maxRate) })} />
+            {props.powerRatio < 0.999 ? (
+              <Row
+                label={COPY.rows.powerCappedRate}
+                value={`${formatRate(maxRate * props.powerRatio)} batches/s`}
+              />
+            ) : null}
+            <Row
+              label={t("row.power")}
+              value={
+                <>
+                  {t("value.powerUnits", {
+                    count: machine.batchPower,
+                    units: plural(machine.batchPower, t("unit.unit")),
+                  })}
+                  {props.powerRatio < 0.999
+                    ? t("value.powerLimited", { percent: wholePercent(props.powerRatio) })
+                    : ""}
+                </>
+              }
+            />
+            <Row
+              label={t("row.inBuffer")}
+              value={`${formatNumber(machine.inBufUnits)}/${inputCapacityOf(
+                machine,
+                researchBonus(props.state).inputBuffer
+              )}`}
+            />
+            <Row label={t("row.tray")} value={`${formatNumber(machine.trayUnits)}/${def.outputBuffer}`} />
+          </dl>
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.bottleneck}</h3>
+          <dl>
+            <Row label={t("row.measured")} value={diagnosis.evidence} />
+            <Row label={t("row.nextStep")} value={diagnosis.advice} />
+            {machine.status === "starved" ? (
+              <Row label={t("row.needs")} value={describeInputs(recipe)} />
+            ) : null}
+          </dl>
+          {constraints.map((note) => (
+            <p key={note} className="inspector-note inspector-note--constraint">
+              {note}
+            </p>
+          ))}
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.transport}</h3>
+          {plans.length > 0 || links.length > 0 ? (
+            <dl>
+              {plans.length > 0 ? (
+                <Row label={t("row.nextLink")} value={describePlans(props.state, plans)} />
+              ) : null}
+              {/* BELT-001 g4: the extent of every link already on this machine, in the one
+                  shape the world prints beside the line itself: "3 tiles · 3 scrap". A link
+                  from before the price has no `run` and prints its stored latency instead. */}
+              {links.length > 0 ? (
+                <Row
+                  label={t("row.links")}
+                  value={links.map(beltExtentLine).join(t("value.comma"))}
+                />
+              ) : null}
+            </dl>
+          ) : (
+            <p className="inspector-note">{COPY.context.noLinks}</p>
+          )}
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.recovery}</h3>
+          <ContextPanes state={props.state} machine={machine} powerRatio={props.powerRatio} />
+        </section>
+
+        <section className="inspector-section">
+          <h3 className="inspector-section__title">{COPY.sections.actions}</h3>
+          <dl>
+            <Row
+              label={t("row.nextUpgrade")}
+              value={t("value.nextUpgrade", {
+                from: formatSeconds(effectiveSeconds),
+                to: formatSeconds(nextSeconds),
+                cost: unit(cost, t("unit.credit")),
+              })}
+            />
+          </dl>
+          <div className="panel__actions">
+            {plans.length > 0 ? (
+              <button
+                className="icon-btn"
+                onClick={() => {
+                  for (const plan of plans) {
+                    props.dispatch({
+                      id: nextId("r"),
+                      type: "route.connect",
+                      from: plan.from,
+                      to: plan.to,
+                      filter: plan.filter,
+                    });
+                  }
+                }}
+              >
+                {t("btn.connect")}
+              </button>
+            ) : null}
+            <button
+              className="icon-btn"
+              onClick={() =>
+                props.dispatch({
+                  id: nextId("u"),
+                  type: "machine.upgrade",
+                  machineId: machine.id,
+                })
+              }
+            >
+              {t("btn.upgradeCost", { cost: unit(cost, t("unit.credit")) })}
+            </button>
+            {/* UI-002: the same machine, one cell over. `moveMachine` re-points the existing
+                machine (its id, level, branch and both route ids survive), and the destination
+                is the first free cell the yard offers - the ladder `firstFreeTile` uses. Every
+                command face prints the number the engine charges it: the upgrade its credits,
+                the move its own charge, the dismantle the units it returns. */}
+            <button
+              className="icon-btn"
+              onClick={() =>
+                props.dispatch({
+                  id: nextId("m"),
+                  type: "machine.move",
+                  machineId: machine.id,
+                  tile: moveTile,
+                })
+              }
+            >
+              {t("btn.moveCost", { tile: moveTile, charge: unit(moveCost, t("unit.unit")) })}
+            </button>
+            <button
+              className="icon-btn"
+              onClick={() =>
+                props.dispatch({
+                  id: nextId("d"),
+                  type: "machine.dismantle",
+                  machineId: machine.id,
+                })
+              }
+            >
+              {t("btn.dismantleRefund", { refund: unit(refundUnits, t("unit.unit")) })}
+            </button>
+          </div>
+          <p className="inspector-actions-note">{primaryActionNote(plans)}</p>
+          <p className="inspector-actions-note inspector-actions-note--secondary">
+            {COPY.actions.secondary}
+          </p>
+        </section>
       </div>
     </div>
   );
