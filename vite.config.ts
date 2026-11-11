@@ -13,13 +13,21 @@ export default defineConfig({
     outDir: "dist",
     rollupOptions: {
       output: {
-        // E3: the two static data-table modules (audio cue/variant tables plus the
-        // authored sprite part table) move to their own `tables` chunk, which keeps the
-        // entry chunk under its pinned byte ceiling. Same module graph, no new runtime
-        // dependency, and `base: "./"` still emits relative ./assets/... links for the
-        // subpath-safe worker import as well.
+        // E3: the static data-table modules (audio cue/variant tables, the authored sprite
+        // part table and the three pure-data content tables: the string table, the tuning/
+        // blueprint table and the research tree) move to their own `tables` chunk, which
+        // keeps the entry chunk under its pinned byte ceiling. Same module graph, no new
+        // runtime dependency - every one of them is still a static import of the entry
+        // graph, so Rollup just emits one extra preloaded sibling - and `base: "./"` still
+        // emits relative ./assets/... links for the subpath-safe worker import as well.
         manualChunks(id: string): string | null {
-          if (id.includes("/game/audio/audio.") || id.includes("/game/renderer/sprites.")) {
+          if (
+            id.includes("/game/audio/audio.") ||
+            id.includes("/game/renderer/sprites.") ||
+            id.includes("/game/content/strings.") ||
+            id.includes("/game/content/defs.") ||
+            id.includes("/game/content/research.")
+          ) {
             return "tables";
           }
           return null;
