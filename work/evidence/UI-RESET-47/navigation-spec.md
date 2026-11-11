@@ -65,7 +65,7 @@ In one frame at 390x844 the same command is printed twice in two shapes: the doc
 
 ```text
 {Verb} {name} · {number} {unit}        cost   ->  Upgrade · 222 credits
-{Verb} {name} · +{number} {unit}       gain   ->  Sell 35 Ferrous · +70 credits
+{Verb} {name} {number} {unit} · +{number} {unit}   gain   ->  Sell Ferrous 35 units · +70 credits
 ```
 
 - **C1** one face, one sentence: verb, then the object name, then ` · `, then the numbers.
@@ -84,7 +84,7 @@ In one frame at 390x844 the same command is printed twice in two shapes: the doc
 | build | `Build Scrap sorter · 20 scrap` |
 | place the ghost | `Build Scrap sorter · 20 scrap` (unchanged across the phase flip) |
 | connect | `Connect dock to sorter`, `Connect sorter to furnace` |
-| sell from the ladder or a store row | `Sell 35 Ferrous · +70 credits` |
+| sell from the ladder or a store row | `Sell Ferrous 35 units · +70 credits` |
 | first steel contract | `Sell steel · 3 steel · 30 credits` |
 | upgrade, plain | `Upgrade · 222 credits` |
 | upgrade fork | `Faster batches · 232 credits`, `Less power · 222 credits` |
@@ -181,6 +181,27 @@ Measured: chips 10,8 628x23 (7 in one row), cluster 1202,8 154x44, objective 10,
 
 The 2560 row changes most against the shipped build: the chrome moves from the viewport edges into the capped 1600 px frame, so the measured 896 px and 898 px of empty side gutters become the frame margin and the 896..1662 ink sits beside the inspector instead of under it. Note that `measures.json` records `dpr: 2` for the label `phone-360x640-dpr3` because the probe clamps `Math.min(2, devicePixelRatio)` (`measure-baseline-45.mjs` line 16), which is the same clamp the renderer uses.
 
+### 3.6 As painted by the prototype, and the three figures it corrected
+
+`prototype-nav.html` is the specified shell painted at the six bands (`captures/30-` to `48-`, geometry in `captures/captures-proto.json`). Its measured boxes are now the authoritative figures and supersede the predicted ones above.
+
+| band | nav | chip band | card | sheet | world | primary row |
+|---|---|---|---|---|---|---|
+| 390x844 dpr2 | 8,792 374x44 | 8,8 374x44 | 8,58 374x54 | 8,118 374x29 rest, x129 store, x457 import | 8,153 374x581 | 8,740 374x46 |
+| 360x640 dpr3 | 8,588 344x44 | 8,8 344x44 | 8,58 344x66 | 8,130 344x52 rest, x348 menu | 8,188 344x342 | 8,536 344x46 |
+| 844x390 | 8,8 96x374 | 110,8 726x44 | 110,58 726x30 | 516,94 320x288 | 110,94 400x236 | 110,336 400x46 |
+| 1366x768 | 8,8 96x752 | 110,8 1248x44 | 110,58 1248x40 | 1038,104 320x656 | 110,104 922x604 | 110,714 922x46 |
+| 1920x1080 | 8,8 96x1064 | 110,8 1802x44 | 110,58 1802x40 | 1592,104 320x968 | 110,104 1476x916 | 110,1026 1476x46 |
+| 2560x1440 | 8,8 96x1424 | 110,8 2442x44 | 110,58 2442x40 | 2232,104 320x1328 | 110,104 2116x1276 | 110,1386 2116x46 |
+
+Three corrections, each because the painted result disagreed with the predicted figure:
+
+- **R1 the rail is 96 px, not 56 px.** The label under the glyph needs it; at 96 px the five slots still leave 400 px of world at 844x390 and 922 px at 1366x768.
+- **R2 the three-column layout starts at 600 px, not 1200 px.** The shipped breakpoint (`styles.css` line 406) leaves 844x390 landscape in the phone stack, which is exactly why that band paints 230 px of ink in an 844 px frame. The prototype paints the rail, a 400 px world and the 320 px inspector side by side in the same frame, so **landscape stops being a second-class band** and one 46 px primary row is enough.
+- **R3 the inspector is pinned to the right edge of the viewport instead of a capped frame.** `right: 8px` reproduces 1592 at 1920 and 2232 at 2560 with the world column taking the remainder, which removes the 1104 overlap of finding 3 without leaving 896 px of empty margin at 2560.
+
+Everything else in 3.1 to 3.5 holds as written: the two portrait bands keep the measured heights (46 px primary, 44 px nav), the sheet keeps its measured height and only the world column absorbs a new band, and the card, chip band and cluster keep their measured boxes.
+
 ## 4. Stack semantics: close, back, Escape, persistence, focus, exclusivity, browser back
 
 The shipped shell already keeps one panel value (`selected`: `null`, `-2` store, `-3` research, `-4` record, positive machine id) and an Escape handler that retires one layer per press (`App.tsx` 169 to 191). Both are kept; the gaps are the inner page, focus, the second exit and history.
@@ -224,7 +245,7 @@ Every face painted by the shipped build (`Hud.tsx`, `Panels.tsx`, `App.tsx`, key
 | next blueprint / step the ghost cell | `btn.next` | secondary face in the primary band, plus the `N` key | 2 |
 | cancel build | `btn.cancel` | secondary face in the primary band, plus Escape | 1 |
 | connect | `btn.connect`, `tut.connectSorter`, `tut.connectFurnace` | primary row when the ladder head is that connect | 1 |
-| sell (ladder or row) | `btn.sellNamed`, `value.sellButton` | primary row when it is the ladder head, otherwise the row face inside nav slot 3 | 1 or 2 |
+| sell, one string for both faces | `Sell Ferrous 35 units · +70 credits`, painted as two elements (`Sell Ferrous` then `35 units · +70 credits`, 4 px gap, C6) | primary row when it is the ladder head, otherwise the row face inside nav slot 3 | 1 or 2 |
 | first steel contract | `tut.sellSteel` | primary row | 1 |
 | upgrade, plain | `btn.upgradeCost` | primary row | 1 after selection |
 | upgrade fork | `btn.branchSpeed`, `btn.branchDraw` | the primary band, two faces, cheapest accented; nav row stays painted | 1 after selection |
@@ -242,3 +263,161 @@ Every face painted by the shipped build (`Hud.tsx`, `Panels.tsx`, `App.tsx`, key
 | close a sheet | `btn.close` | one face per sheet, layer 4 | 1 to open, 1 to close |
 
 No hover-only or gesture-only essential function (specified):
+
+The shipped shell registers exactly two listeners: `visibilitychange` and one `keydown` for Escape (`App.tsx` 151 and 189), and no `tabIndex` anywhere. That leaves four essential functions reachable only through pointer gestures. The specification gives each one a key equivalent as well:
+
+| essential function | shipped input | specified key equivalent |
+|---|---|---|
+| open a destination | tap the dock face | `1` `2` `3` `4` `5` for Yard, Build, Store, Research, Menu |
+| commit the accented action | tap the primary face | `Enter` or `Space` |
+| retire the top layer | tap Close, or Escape | `Escape` (unchanged) |
+| select a machine | canvas tap only; the harness needed a 20 px tap grid because there is no DOM hit target (`journey-map.md` J2 defect 1) | `M` next machine, `Shift+M` previous, in machine id order |
+| pan the camera | pointer drag | Arrow keys |
+| zoom | pinch only - there is no wheel listener, so a mouse-only desktop cannot zoom at all | `+` and `-`, one step each |
+| choose the ghost cell | pointer position while the ghost is up | `N` steps the cell one tile; the cell also follows a plain tap |
+| cycle the blueprint | tap `Next` | `N` with the ghost already placed |
+
+The shortcut list is printed as plain lines inside the Menu sheet, so nothing depends on a tooltip or a hover state.
+
+## 6. Press-count comparison
+
+The measured first-session budget is **16 scripted presses to reach one machine with 0 batches done, 0.00 batches/s, sim tick 51** (`journey-map.md` J1, captures 01 to 09, phone 390x844). The design target is the same milestone in fewer presses, with a machine that actually produced.
+
+| milestone, one continuous session on phone 390x844 | shipped build, measured this run | target this spec designs to | against the J1 budget of 16 |
+|---|---|---|---|
+| M0 gate cleared | 1 | 1 | 1 of 16 |
+| M1 first machine placed and inspected | 18 placed, 22 inspected | 13 | -3 |
+| M2 first sale landed | not reached in 39 | 16 | 0 |
+| M3 first upgrade committed | not painted in 39 | 19 | +3 beyond M2 |
+| M4 settings and save read, Menu then record then Copy | 39 with the record face absent | 22 | +3 beyond M3 |
+| destination tour from rest, all five destinations at one press each | 5 for 3 of 4 | 5 | 5 |
+| bottleneck check, rest to store rows and back to rest | 2 | 2 | measured 2 in J3 |
+
+Where each saving comes from, one rule per line:
+- **the Close round trip disappears** (E3): a nav press replaces the sheet, so the five-destination tour costs 5 presses where the shipped build spends an open plus a Close each, and J1 itself spends 2 of its 16 on the Store round trip.
+- **selection survives closing** (E4): J1 spends one press to select and loses the selection at Close, so a second look at the same machine is another hunt through a 20 px grid.
+- **the destination row is stable** (section 1): no press is spent rediscovering where Research went, and Research is present-with-a-reason instead of absent (finding 12).
+- **the price is printed once** (C5): the reading load of the fork frame drops from four number strings to one, which is the difference between 19 presses and the same 19 presses spent comparing numbers.
+
+### 6.1 Measured session log, phone 390x844, shipped build, head 224e22a
+
+Cumulative presses at each painted frame of `captures/captures-nav.json` (session A, fresh save, one continuous session):
+
+| capture | presses | painted sim |
+|---|---|---|
+| 01 rest, step 0 | 1 | no save yet |
+| 02 salvage counted, the repair face in the primary slot | 12 | tick 43, tutorial 1, scrap 30, machines 0 |
+| 03 the repair committed | 13 | tick 200, tutorial 4, scrap 10, machines 0 |
+| 04 build phase, ghost up | 14 | tick 200 |
+| 05 after the first placing press | 15 | tick 210, machines 0, the face still reads `waits 20 scrap` |
+| 06 canvas grid, no panel yet | 15 | tick 220 |
+| 08 the furnace build step, still waiting | 18 | tick 260, tutorial 5, **machines 1**, scrap 0 |
+| 09 inspector painted on the phone | 22 | tick 280, 1 machine, inspector opens at this press |
+| 10 ladder head before any credit lands | 22 | credits 0 |
+| 11 still the second build, `waits 10 scrap · have 1` | 34 | tick 330, tutorial 6, routes 2, credits 0 |
+| 12 store rows | 35 | one scrap row, no sell face yet |
+| 13 record page, `Yard` face absent | 36 | `reachable=false`, tutorial 6 |
+| 17 import error state | 37 | reason line under a title that still reads Yard record |
+| 14 text scale after one press | 38 | cluster reads A 1.25 |
+| 15 sound muted after one press | 39 | cluster reads Sound X |
+
+Session B, the same rest-to-sell loop at the mature stage: **2 presses** (Store, then the first sell face), the shortest loop in the game. Session C, the destination tour from the mature rest frame: **5 presses for 3 destinations** - Store, Yard and Build each cost an open plus a Close, and after the Build face the row is replaced by Cancel, Build and Next, so the **Research face is not painted at all** inside that phase and the fourth destination costs a sixth press. At the mature stage every band measures 8 faces at rest, 15 with the store open and 9 with the research list open, all at 44 px or more (`captures/measures-nav.json`).
+
+The three facts the implementation has to beat: **18 presses for one machine**, **39 presses without ever printing a fork or a credit**, and **a destination row that loses faces when a phase starts**. The target column above is what section 1 to 5 deliver: 13 presses for one machine inspected, one accented face per frame, five stable slots and the same price printed once.
+
+### 6.2 The same path inside the prototype, counted by the prototype itself
+
+`prototype-nav.html` counts every painted face it presses (`S.pressed`), so the design is measured rather than estimated (`captures/captures-proto.json`).
+
+| frame | presses | the same frame on the shipped build |
+|---|---|---|
+| 30 gate | 0 | 1 (the gate itself) |
+| 31 rest at step 0 | 1 | 1 |
+| 32 salvage counted | 7 | 12 |
+| 33 repaired, build step in the primary band | 8 | 13 |
+| 34 Build destination open, nav unchanged | 9 | 14 |
+| 35 blueprint chosen | 10 | - |
+| 36 one machine placed | 11 | 15 |
+| 37 **machine inspected from the Yard list** | **12** | 22 |
+| 38 Store with the one command format | 13 | 35 |
+| 39 Menu import error | 16 | 37 |
+| 40 two Escape presses back to rest | 18 | 39 |
+
+So the same journey is **12 presses to an inspected machine in the prototype against 22 on the shipped shell and the J1 budget of 16**, and **18 presses for the whole path including the settings faces and the save record against 39**. The three rules that pay: the destination row never changes slots, so no press is spent finding it again; the Yard list carries one face per machine, so selection is a face and not a canvas hunt; and a sheet replaces a sheet, so a tour of five destinations costs five presses instead of an open-and-Close pair each.
+
+The prototype also holds the two states the shipped build does not paint at all: the locked Research slot with its reason ("Needs 1 Data", capture 31) and the unaffordable priced faces inside the fork (capture 44).
+## 7. The prototype path and its states
+
+`capture-nav-47.mjs` drives one continuous session through **salvage, build, inspect, sell, upgrade** and then the settings and save faces, in the harness style already committed for #45 (`info()` reads the painted DOM in the same frame as the PNG, `install()` patches the seed envelope and recomputes its FNV-1a checksum, `byText()` clicks by painted label, `shot()` writes one PNG plus one JSON entry). `measure-nav-47.mjs` records the band rects and every button that is under 44 px for the same path.
+
+| # | press | frame captured, phone 390x844 | state class |
+|---|---|---|---|
+| 1 | `Begin recovery` | 01-nav-phone-rest-step0 | rest, fresh, 3 dock faces |
+| 2..7 | `Salvage` repeated | 02-nav-phone-salvage-counted | ladder step, repeated face |
+| 8 | `Repair drone` | 03-nav-phone-repair-priced | priced primary |
+| 9 | `Build` | 04-nav-phone-build-ghost | build phase, 3 faces |
+| 10 | place | 05-nav-phone-placed | rest, 4 faces |
+| 11 | select the machine | 06-nav-phone-inspect | sheet over the world |
+| 12 | `Connect dock to sorter` | 07-nav-phone-connected | ladder step |
+| 13 | `Build` then place the furnace | 08-nav-phone-furnace-placed | build phase |
+| 14 | `Connect sorter to furnace` | 09-nav-phone-two-machines | ladder step |
+| 15 | `Sell steel` | 10-nav-phone-first-sale | M2, credits change |
+| 16 | select a machine, then a fork face | 11-nav-phone-fork | 2 priced faces, 1 accented |
+| 17 | `Store` | 12-nav-phone-store-rows | 12, 6 sell faces plus Close |
+| 18 | `Yard` then `Copy` | 13-nav-phone-record-copy | save read |
+| 19 | `A 1` then `Sound` | 14-nav-phone-text-scale-2 | settings faces |
+
+Additional painted states from the same harness, one synthetic patch each:
+
+| capture | state | how it is painted |
+|---|---|---|
+| 15-nav-phone-store-full | store 900/900 plus an overflow hold | seed patch `storeUnits: 900` plus one overflow entry |
+| 16-nav-phone-unaffordable | credits 0, priced faces with no shortfall signal | seed patch `credits: 0` |
+| 17-nav-phone-import-failure | malformed paste, reason line, Apply and Back | typed into the import field |
+| 18-nav-phone-research-absent | the destination that has no face at this stage | fresh seed, no data |
+| 19-nav-desktop1920-inspect | desktop inspector at 1920x1080 | mature seed |
+| 20-nav-desktop1366-store | narrow laptop, store beside the world | mature seed |
+| 21-nav-desktop2560-store | superwide, sheet over ink | mature seed |
+| 22-nav-landscape844-store | landscape sheet | mature seed |
+
+Explicit state list the path must show, all painted above: **rest**, **ladder step**, **priced primary**, **build phase**, **sheet open**, **fork**, **disabled for want of data** (research before the first data unit), **disabled for want of credits** (unaffordable), **empty** (store before the first contract, which prints "Sell Opens after the first steel contract"), **full** (900/900 plus overflow), **error** (import failure), **settings** (text scale, sound), **save** (record with Copy), **mirror** (reader tab, `Take over`).
+
+### 7.1 Painted index as produced, with the press count each frame cost
+
+| file | presses from its session start | note |
+|---|---|---|
+| 01-nav-phone-rest-step0 | 1 | rest at tutorial 0: three dock faces, Store / Salvage / Build |
+| 02-nav-phone-salvage-counted | 12 | salvage counted, the priced repair face has taken the primary slot |
+| 03-nav-phone-repair-priced | 13 | the drone repair just committed |
+| 04-nav-phone-build-ghost | 14 | build phase: Cancel / Build Scrap sorter / Next |
+| 05-nav-phone-placed | 15 | after the placing press: the dock is back to its resting faces |
+| 06-nav-phone-inspect | 15 | machine inspector over the world, 20 px canvas grid |
+| 07-nav-phone-connected | 15 | the connect step committed from the primary slot |
+| 08-nav-phone-furnace-placed | 18 | furnace placed from the same two-press build step |
+| 09-nav-phone-two-machines | 22 | inspector painted on the phone at the first machine, ladder head moved on |
+| 10-nav-phone-first-sale | 22 | the first sale landed, the credits chip changes |
+| 11-nav-phone-fork | 34 | the upgrade fork: two priced faces, one accented, dock Store / Build Furnace10 scrap + 5 ferrous ┬╖ waits 10 scrap ┬╖ have 1 / Build |
+| 12-nav-phone-store-rows | 35 | store rows with their sell faces |
+| 13-nav-phone-record-copy | 36 | yard record page with Copy and Import, reachable=false |
+| 17-nav-phone-import-failure | 37 | error state: malformed paste, reason line, Apply and Back |
+| 14-nav-phone-text-scale-2 | 38 | settings face pressed once: the text scale steps to A 1.25 |
+| 15-nav-phone-muted | 39 | the second settings face: sound muted, the label flips to Sound X |
+| 16-nav-phone-store-full | 1 | full state: 900/900 plus the overflow hold row |
+| 18-nav-phone-unaffordable | 1 | disabled state to paint: credits 0, the priced faces still read enabled |
+| 25-nav-phone-mature-research | 5 | the research sheet at the mature stage, one Close face |
+| 19-nav-phone-research-absent | 0 | disabled state to paint: the Research destination has no face at this stage |
+| 20-nav-desktop1920-inspect | 1 | 1920x1080 inspector in the right gutter, five dock faces behind it |
+| 21-nav-desktop1366-store | 1 | 1366x768 narrow laptop: the store sheet is the gutter column at x 1104 |
+| 22-nav-desktop2560-store | 1 | 2560x1440: the sheet at x 1104 lands inside the 896..1662 ink (finding 3) |
+| 23-nav-landscape844-store | 1 | 844x390 landscape: sheet 560x157 over a 230 px ink column |
+| 24-nav-landscape844-inspect | 3 | 844x390 landscape: inspector plus the fork inside a 46 px row band |
+
+The 22 planned rows of section 7 and this index differ in three places, all of them real: the muted settings frame is `15-nav-phone-muted`, the landscape pair is `23` and `24`, and the mature research sheet is `25-nav-phone-mature-research`. `10-nav-phone-first-sale` was painted while the credits chip still read 0 because the fresh ladder had not closed a contract yet, which is why section 6 lists M2 as not reached inside 39 presses.
+
+## 8. Limits of this evidence
+
+- No real-device run, no screen-reader pass (NVDA or VoiceOver), no listening test; every number is headless Chromium at the six listed viewports, the same tool set as #45.
+- The prototype presses are counted on the shipped pre-restart shell, because this issue specifies the navigation and the implementation issues (#49, #50, #51) paint it. The target column of section 6 is therefore a design figure, and the measured column is the comparison it has to beat.
+- The `844x390`, `1920x1080` and `2560x1440` ink figures are the painted-pixel bounding box of #45, which includes the banner glyphs (its section 6 note), so the top-overlap arithmetic is an upper bound and the side figures are exact to 1 px.
+- The camera band arithmetic of section 3 is arithmetic on measured rects, not a re-measurement; the implementation captures of #50 replace it.
+- Machine selection inside the harness still needs the 20 px tap grid on the canvas, because the `M` key of section 5 does not exist yet; that is why the measured press counts in section 6 sit above the target column.
