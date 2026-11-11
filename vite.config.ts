@@ -30,6 +30,27 @@ export default defineConfig({
           ) {
             return "tables";
           }
+          // UI-RESET-91 (G2 enabler): react, react-dom and scheduler move to
+          // their own `vendor` chunk, the same E3 pattern as the tables split
+          // above. The G2 shell left the entry 1591 B under its pinned 233000 B
+          // ceiling with the whole React runtime inside it; wave-2 HUD/camera
+          // code cannot fit without this headroom. All three packages share one
+          // chunk because react-dom imports scheduler - splitting them apart
+          // would create a circular chunk dependency. Same module graph, no new
+          // runtime dependency: Rollup emits one more preloaded sibling, and
+          // the vendor chunk is immutable-cached across game releases. Both the
+          // pnpm store paths and plain node_modules paths are matched so the
+          // split survives the install layout.
+          if (
+            id.includes("/node_modules/.pnpm/react@") ||
+            id.includes("/node_modules/.pnpm/react-dom@") ||
+            id.includes("/node_modules/.pnpm/scheduler@") ||
+            id.includes("/node_modules/react/") ||
+            id.includes("/node_modules/react-dom/") ||
+            id.includes("/node_modules/scheduler/")
+          ) {
+            return "vendor";
+          }
           return null;
         },
       },
