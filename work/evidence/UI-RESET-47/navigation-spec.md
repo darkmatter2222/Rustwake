@@ -191,8 +191,8 @@ The 2560 row changes most against the shipped build: the chrome moves from the v
 
 | band | nav | chip band | card | sheet | world | primary row |
 |---|---|---|---|---|---|---|
-| 390x844 dpr2 | 8,792 374x44 | 8,8 374x44 | 8,58 374x54 | 8,118 374x29 rest, x129 store, x457 import | 8,153 374x581 | 8,740 374x46 |
-| 360x640 dpr3 | 8,588 344x44 | 8,8 344x44 | 8,58 344x66 | 8,130 344x52 rest, x348 menu | 8,188 344x342 | 8,536 344x46 |
+| 390x844 dpr2 | 8,792 374x44 | 8,8 374x44 | 8,58 374x40 rest, x54 chosen | 8,104 374x29 rest, x129 store, x472 import | 8,139 374x595 rest | 8,740 374x46 |
+| 360x640 dpr3 | 8,588 344x44 | 8,8 344x44 | 8,58 344x66 | 8,130 344x52 rest, x294 menu | 8,188 344x342 | 8,536 344x46 |
 | 844x390 | 8,8 96x374 | 110,8 726x44 | 110,58 726x30 | 516,94 320x288 | 110,94 400x236 | 110,336 400x46 |
 | 1366x768 | 8,8 96x752 | 110,8 1248x44 | 110,58 1248x40 | 1038,104 320x656 | 110,104 922x604 | 110,714 922x46 |
 | 1920x1080 | 168,8 96x1064 | 270,8 1482x44 | 270,58 1482x40 | 1432,104 320x968 | 270,104 1156x916 | 270,1026 1156x46 |
@@ -234,7 +234,7 @@ The shipped shell already keeps one panel value (`selected`: `null`, `-2` store,
 - **E6 browser back.** One history entry per layer push (`pushState`), so Back retires exactly one layer and equals Escape; the last Back leaves the page as it does today. The save is written per command and is unchanged by this, so no Back press can lose a yard.
 - **E7 reader tab.** With `role === "reader"` the only mutating face is `Take over`; the Store, Build and Research sheets open read-only and every mutating face inside them is `disabled` with the reason "This tab follows the other tab". Yard and Menu stay live. This closes measured finding 15 (four mutating faces beside a card that says the tab mirrors the other one, capture 28).
 - **E8 disabled states are explicit.** An unaffordable face keeps its label, prints its shortfall line (C8) and is `disabled`; the shipped probe shows every face at `disabled:false` with `opacity:1` at `credits: 0` (`probe-afford-45.mjs`, capture 21), so today the only signal is a number inside the label.
-- **E9 error states are explicit.** A failed import prints the reason line plus the expected shape and keeps the pasted text, with `Apply` disabled until the text parses; the shipped state is a bare "Not a Rustwake file" under a title that still says "Yard record" (capture 18).
+- **E9 error states are explicit.** A failed import prints the reason line plus the expected shape and keeps the pasted text, with `Apply` disabled until the text parses; the shipped state is a bare "Not a Rustwake file" under a title that still says "Yard record" (capture 17).
 
 ## 5. A documented destination for every existing action
 
@@ -330,12 +330,12 @@ Cumulative presses at each painted frame of `captures/captures-nav.json` (sessio
 | 10 ladder head before any credit lands | 22 | credits 0 |
 | 11 still the second build, `waits 10 scrap · have 1` | 34 | tick 330, tutorial 6, routes 2, credits 0 |
 | 12 store rows | 35 | tick 340, tutorial 6, one scrap row, no sell face yet |
-| 13 record page, `Yard` face absent | 36 | `reachable=false`, tutorial 6 |
+| 13 rest dock, `Yard` face absent | 36 | `reachable=false`, tutorial 6, panel null: no record page painted |
 | 17 import error state | 37 | reason line under a title that still reads Yard record |
 | 14 text scale after one press | 38 | cluster reads A 1.25 |
 | 15 sound muted after one press | 39 | tick 364, machines 1, credits 0, scrap 6, cluster reads Sound X |
 
-Session B, the same rest-to-sell loop at the mature stage: **2 presses** (Store, then the first sell face), the shortest loop in the game. Session C, the destination tour from the mature rest frame: **5 presses for 3 destinations** - Store, Yard and Build each cost an open plus a Close, and after the Build face the row is replaced by Cancel, Build and Next, so the **Research face is not painted at all** inside that phase and the fourth destination costs a sixth press. At the mature stage every band measures 8 faces at rest, 15 with the store open and 9 with the research list open, all at 44 px or more (`captures/measures-nav.json`).
+Session B, the same rest-to-sell loop at the mature stage: **2 presses** (Store, then the first sell face), the shortest loop in the game. Session C, the destination tour from the mature rest frame: **5 presses for 3 destinations** - Store and Yard each cost an open plus a Close (4 presses), the Build open is the fifth and starts the build phase, after which the row is replaced by Cancel, Build and Next with **no Close face**, so the Build Close and both Research presses find nothing painted and count zero - the **Research face is not painted at all** inside that phase (probe-verified: the dock still reads Cancel / Build / Next after the Build Close and Research presses). At the mature stage every band measures 8 faces at rest, 15 with the store open and 9 with the research list open, all at 44 px or more (`captures/measures-nav.json`).
 
 The three facts the implementation has to beat: **18 presses for one machine**, **39 presses without ever printing a fork or a credit**, and **a destination row that loses faces when a phase starts**. The target column above is what section 1 to 5 design to: 13 presses for one machine inspected (the primary-band place at 12 plus one Yard-list press), one accented face per frame, five stable slots and the same price printed once. The painted prototype's Build-destination route measures **16** to that same inspected machine (§6.2) - 3 above the 13 target, the catalog detour, recorded not hidden - and the dedicated primary-band model run places at **12** (`tap-budget.json` `prototype.machinePress`).
 
@@ -380,21 +380,21 @@ The prototype also holds the two states the shipped build does not paint at all:
 | 15 | `Sell steel` | 10-nav-phone-first-sale | M2, credits change |
 | 16 | select a machine, then a fork face | 11-nav-phone-fork | 2 priced faces, 1 accented |
 | 17 | `Store` | 12-nav-phone-store-rows | 12, 6 sell faces plus Close |
-| 18 | `Yard` then `Copy` | 13-nav-phone-record-copy | save read |
+| 18 | `Yard` then `Copy` | 13-nav-phone-record-copy | `Yard` absent at this dock: rest frame painted, no save read |
 | 19 | `A 1` then `Sound` | 14-nav-phone-text-scale-2 | settings faces |
 
 Additional painted states from the same harness, one synthetic patch each:
 
 | capture | state | how it is painted |
 |---|---|---|
-| 15-nav-phone-store-full | store 900/900 plus an overflow hold | seed patch `storeUnits: 900` plus one overflow entry |
-| 16-nav-phone-unaffordable | credits 0, priced faces with no shortfall signal | seed patch `credits: 0` |
+| 16-nav-phone-store-full | store 900/900 plus an overflow hold | seed patch `storeUnits: 900` plus one overflow entry |
+| 18-nav-phone-unaffordable | credits 0, priced faces with no shortfall signal | seed patch `credits: 0` |
 | 17-nav-phone-import-failure | malformed paste, reason line, Apply and Back | typed into the import field |
-| 18-nav-phone-research-absent | the destination that has no face at this stage | fresh seed, no data |
-| 19-nav-desktop1920-inspect | desktop inspector at 1920x1080 | mature seed |
-| 20-nav-desktop1366-store | narrow laptop, store beside the world | mature seed |
-| 21-nav-desktop2560-store | superwide, sheet over ink | mature seed |
-| 22-nav-landscape844-store | landscape sheet | mature seed |
+| 19-nav-phone-research-absent | the destination that has no face at this stage | fresh seed, no data |
+| 20-nav-desktop1920-inspect | desktop inspector at 1920x1080 | mature seed |
+| 21-nav-desktop1366-store | narrow laptop, store beside the world | mature seed |
+| 22-nav-desktop2560-store | superwide, sheet over ink | mature seed |
+| 23-nav-landscape844-store | landscape sheet | mature seed |
 
 Explicit state list the path must show, all painted above: **rest**, **ladder step**, **priced primary**, **build phase**, **sheet open**, **fork**, **disabled for want of data** (research before the first data unit), **disabled for want of credits** (unaffordable), **empty** (store before the first contract, which prints "Sell Opens after the first steel contract"), **full** (900/900 plus overflow), **error** (import failure), **settings** (text scale, sound), **save** (record with Copy), **mirror** (reader tab, `Take over`).
 
@@ -412,15 +412,15 @@ Explicit state list the path must show, all painted above: **rest**, **ladder st
 | 08-nav-phone-furnace-placed | 18 | furnace placed from the same two-press build step |
 | 09-nav-phone-two-machines | 22 | inspector painted on the phone at the first machine, ladder head moved on |
 | 10-nav-phone-first-sale | 22 | the first sale landed, the credits chip changes |
-| 11-nav-phone-fork | 34 | the upgrade fork: two priced faces, one accented, dock Store / Build Furnace10 scrap + 5 ferrous ┬╖ waits 10 scrap ┬╖ have 1 / Build |
+| 11-nav-phone-fork | 34 | the upgrade fork: two priced faces, one accented, dock Store / Build Furnace10 scrap + 5 ferrous · waits 10 scrap · have 1 / Build |
 | 12-nav-phone-store-rows | 35 | store rows with their sell faces |
-| 13-nav-phone-record-copy | 36 | yard record page with Copy and Import, reachable=false |
+| 13-nav-phone-record-copy | 36 | rest dock, panel null: the `Yard` face is absent so no record page, Copy or Import paints, reachable=false |
 | 17-nav-phone-import-failure | 37 | error state: malformed paste, reason line, Apply and Back |
 | 14-nav-phone-text-scale-2 | 38 | settings face pressed once: the text scale steps to A 1.25 |
 | 15-nav-phone-muted | 39 | the second settings face: sound muted, the label flips to Sound X |
 | 16-nav-phone-store-full | 1 | full state: 900/900 plus the overflow hold row |
 | 18-nav-phone-unaffordable | 1 | disabled state to paint: credits 0, the priced faces still read enabled |
-| 25-nav-phone-mature-research | 5 | the research sheet at the mature stage, one Close face |
+| 25-nav-phone-mature-research | 5 | build-phase ghost at the mature stage: panel null, dock Cancel / Build Scrap sorter / Next, no research sheet and no Close face painted |
 | 19-nav-phone-research-absent | 0 | disabled state to paint: the Research destination has no face at this stage |
 | 20-nav-desktop1920-inspect | 1 | 1920x1080 inspector in the right gutter, five dock faces behind it |
 | 21-nav-desktop1366-store | 1 | 1366x768 narrow laptop: the store sheet is the gutter column at x 1104 |
@@ -428,7 +428,7 @@ Explicit state list the path must show, all painted above: **rest**, **ladder st
 | 23-nav-landscape844-store | 1 | 844x390 landscape: sheet 560x157 over a 230 px ink column |
 | 24-nav-landscape844-inspect | 3 | 844x390 landscape: inspector plus the fork inside a 46 px row band |
 
-The 22 planned rows of section 7 and this index differ in three places, all of them real: the muted settings frame is `15-nav-phone-muted`, the landscape pair is `23` and `24`, and the mature research sheet is `25-nav-phone-mature-research`. `10-nav-phone-first-sale` was painted while the credits chip still read 0 because the fresh ladder had not closed a contract yet, which is why section 6 lists M2 as not reached inside 39 presses.
+The 22 planned rows of section 7 and this index differ in three places, all of them real: the muted settings frame is `15-nav-phone-muted`, the landscape pair is `23` and `24`, and the mature-stage frame is `25-nav-phone-mature-research`, which paints the build-phase ghost (panel null, Cancel / Build Scrap sorter / Next) rather than a research sheet. `10-nav-phone-first-sale` was painted while the credits chip still read 0 because the fresh ladder had not closed a contract yet, which is why section 6 lists M2 as not reached inside 39 presses.
 
 ## 8. Limits of this evidence
 
@@ -437,6 +437,7 @@ The 22 planned rows of section 7 and this index differ in three places, all of t
 - The `844x390`, `1920x1080` and `2560x1440` ink figures are the painted-pixel bounding box of #45, which includes the banner glyphs (its section 6 note), so the top-overlap arithmetic is an upper bound and the side figures are exact to 1 px.
 - The camera band arithmetic of section 3 is arithmetic on measured rects, not a re-measurement; the implementation captures of #50 replace it.
 - Machine selection inside the harness still needs the 20 px tap grid on the canvas, because the `M` key of section 5 does not exist yet; that is why the measured press counts in section 6 sit above the target column.
+- Carried-forward receipt-note overclaims, corrected in the citations above but left unchanged in the frozen `captures-nav.json`: frame 13 (`13-nav-phone-record-copy`) paints the rest dock with panel null (the `Yard` face is absent, so no record page, Copy or Import paints), not the "yard record page with Copy and Import" its note claims; frame 25 (`25-nav-phone-mature-research`) paints the build-phase ghost (panel null, Cancel / Build Scrap sorter / Next), not "the research sheet ... one Close face". Both painted states were verified by headless DOM probe against the committed receipt. Frame 17 (`17-nav-phone-import-failure`) likewise paints panel null because the shipped harness pastes a brace-leading string the import handler suppresses, so its "reason line, Apply and Back" note is a known carried-forward limitation flagged for #49+ and outside this PR's scope; the prototype frame 39 import error is fixed and probe-verified in this rework (paste no longer brace-leading, `importError` non-null, reason text painted).
 
 ## 9. Consolidated numeric table (every row tagged)
 
@@ -459,7 +460,7 @@ One **press** = one painted face activated once, or one key. `presses` = shipped
 | design machine inspected from Yard list | 16 pressed | measured | `captures/captures-proto.json` frame 37 |
 | design whole path end | 22 pressed | measured | `captures/captures-proto.json` frame 40 |
 | tap-budget app first machine placed | 12 presses | measured | `tap-budget.json` `app.machinePress` |
-| tap-budget app total / auto-settle / probes | 28 presses / 40 waits (20000 ms) / 107 probes | measured | `tap-budget.json` `app` (re-run; settleWaits is sim-timing dependent, committed run 41/20500, see tap-budget.md §2) |
+| tap-budget app total / auto-settle / probes | 28 presses / 40 waits (20000 ms) / 107 probes | measured | `tap-budget.json` `app` (official re-run reproduced 40/20000 exactly; settleWaits is sim-timing dependent, an earlier run measured 41/20500, see tap-budget.md §2) |
 | tap-budget app production reading | 0.00 batches/s · 9s window, tick 480 | measured | `tap-budget.json` `app.productionReading` / `app.tick` |
 | tap-budget model fresh ladder to disabled primary | 13 pressed | measured | `tap-budget.json` `prototype.freshPressed` |
 | tap-budget model machine place press | 12 pressed | measured | `tap-budget.json` `prototype.machinePress` |

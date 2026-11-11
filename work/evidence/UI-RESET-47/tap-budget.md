@@ -17,17 +17,17 @@ Session A summary in the receipt: **39 presses + 34 auto-settle waits (17000 ms)
 |---|---|---|---|
 | gate cleared | 1 | `01-nav-phone-rest-step0` | no save yet, dock reads Store / Salvage / Build |
 | salvage counted, repair face in the primary slot | 12 | `02-nav-phone-salvage-counted` | tick 43, tutorial 1, scrap 30, machines 0 |
-| drone repaired | 13 | `03-nav-phone-repaired` | tick 200, tutorial 4, scrap 10 |
+| drone repaired | 13 | `03-nav-phone-repair-priced` | tick 200, tutorial 4, scrap 10 |
 | build phase, ghost up | 14 | `04-nav-phone-build-ghost` | tick 200, tutorial 4, Cancel / Build Scrap sorter / Next |
 | first machine placed | 18 | `08-nav-phone-furnace-placed` | tick 260, tutorial 4, **machines 1**, scrap 0 |
 | machine inspected | 22 | `09-nav-phone-two-machines` | tick 280, tutorial 5, inspector painted, 20 px canvas grid still needed |
 | store rows open | 35 | `12-nav-phone-store-rows` | tick 340, tutorial 6, credits 0 |
-| save record read | 36 | `13-nav-phone-record-copy` | tick 340, `Yard` face absent, `reachable=false` |
+| rest dock, no save read | 36 | `13-nav-phone-record-copy` | tick 340, panel null, `Yard` face absent, `reachable=false` |
 | import error state | 37 | `17-nav-phone-import-failure` | tick 350, reason line, title still Yard record |
 | text scale one step | 38 | `14-nav-phone-text-scale-2` | tick 360, cluster reads A 1.25 |
 | whole path end | 39 | `15-nav-phone-muted` | tick 364, machines 1, credits 0, scrap 6, **batches 0** |
 
-The 18 / 22 / 35 / 39 figures above are the `presses` field of frames `08`, `09`, `12`, `15` in `captures/captures-nav.json`. Two extra instrumented loops on the mature seed: rest to a sell face **2 presses** (`16-nav-phone-store-full`, session B), and the destination tour Store, Yard, Build with a Close each **5 presses for 3 destinations**, with the Research face never painted because the build phase replaces the row (`25-nav-phone-mature-research`, session C `Research=false`).
+The 18 / 22 / 35 / 39 figures above are the `presses` field of frames `08`, `09`, `12`, `15` in `captures/captures-nav.json`. Two extra instrumented loops on the mature seed: rest to a sell face **2 presses** (`16-nav-phone-store-full`, session B), and the destination tour Store, Yard, Build **5 presses for 3 destinations** - Store and Yard each cost an open plus a Close (4), the Build open is the fifth and starts the build phase, after which the row is Cancel / Build / Next with no Close face, so the Build Close and both Research presses find nothing painted and count zero (`25-nav-phone-mature-research` paints that build-phase ghost, panel null; session C `Research=false`).
 
 ## 2. Dedicated press-budget run - source `tap-budget.json` (tap-budget-47.mjs)
 
@@ -47,7 +47,7 @@ App path (`app`), fresh save, Begin -> Store round trip -> ladder to the first p
 
 Honest finding: the first machine is placed but **does not produce** inside this run - the Scrap sorter needs 2 scrap input that nothing in the yard supplies yet, so the rate stays 0.00 even though the sim ran to tick 480. Frames `60-tbudget-app-machine`, `61-tbudget-app-production`.
 
-Timing note (#81 rework re-run): `settleWaits` is sim-timing dependent, not scripted - the committed run measured 41 waits (20500 ms), this re-run measured 40 (20000 ms); the presses (28 / 12), probes (107) and tick (480) reproduced exactly. The receipt carries the re-run's actual values.
+Timing note (#81 rework re-run): `settleWaits` is sim-timing dependent, not scripted - an earlier run measured 41 waits (20500 ms); the committed receipt and this official re-run both measured **40 (20000 ms)**, and the presses (28 / 12), probes (107) and tick (480) reproduced exactly. The re-run's `tap-budget.json` and `captures-tbudget.json` differ from the committed receipts only in `headSha` (re-stamped to the captures commit); every number and per-frame entry is byte-identical. The app frames `60`/`61` drift by a few real-time sim pixels between runs while their painted state and all receipt numbers reproduce, so those two PNGs are kept at their committed bytes; the prototype frames `62`/`63` are byte-identical (static model, no sim).
 
 Model path (`prototype`), the prototype's own counter:
 

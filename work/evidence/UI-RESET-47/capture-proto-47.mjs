@@ -61,7 +61,11 @@ try {
     await tapId(p, "nav-store");
     await shot(p, "38-proto-phone-store", "Store destination: one command format on every face");
     await tapId(p, "nav-menu"); await tapIf(p, "menu-import");
-    await p.evaluate(() => window.RW47.field("{not a rustwake envelope")); await tapIf(p, "imp-apply");
+    // #81 round 3: the paste must NOT start with "{": the Apply handler treats a
+    // leading brace as a candidate envelope and suppresses the error, which painted
+    // the idle prompt instead of the reason line. A brace-less malformed string
+    // genuinely sets S.importError, so frame 39 paints the error it claims.
+    await p.evaluate(() => window.RW47.field("not a rustwake envelope")); await tapIf(p, "imp-apply");
     await shot(p, "39-proto-phone-import-error", "error state: the reason line and the expected shape inside Menu");
     await p.keyboard.press("Escape"); await p.keyboard.press("Escape");
     await shot(p, "40-proto-phone-back", "two Escape presses: the import page then the sheet, back at the rest frame");

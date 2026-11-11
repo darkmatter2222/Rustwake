@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 prototype path",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "b721912c4ffd55ab645fdea040a83eeac10b7727",
+  "headSha": "pending-stamp",
   "tool": "playwright-core plus local Chrome/Edge, the self-contained prototype over file://",
   "note": "the press column is the prototype own counter (S.pressed): one press per painted face activated once; absent, disabled and locked faces are ignored, never counted (#81 rework)",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
@@ -1473,7 +1473,7 @@
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
       "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
-      "insp": "MenuCloseSoundonText sizeA 1MotionfullTick0Machines1Links0Credits0Save27839 charactersCopyImportLast away reportPaste a saved yard, then Apply.{not a rustwake envelopeApplyBack",
+      "insp": "MenuCloseSoundonText sizeA 1MotionfullTick0Machines1Links0Credits0Save27839 charactersCopyImportLast away reportNot a Rustwake file · expected { schemaVersion 1, payload, checksum }not a rustwake envelopeApplyBack",
       "action": "Connect sorter to the dock",
       "zoom": "Zoom -Zoom +",
       "rects": {
@@ -1511,13 +1511,13 @@
           "x": 8,
           "y": 104,
           "w": 374,
-          "h": 457
+          "h": 472
         },
         "world": {
           "x": 8,
-          "y": 567,
+          "y": 582,
           "w": 374,
-          "h": 167
+          "h": 152
         },
         "action": {
           "x": 8,

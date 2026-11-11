@@ -1,6 +1,6 @@
 {
  "source": "captures/captures-proto.json (capture-proto-47.mjs)",
- "headSha": "b721912c4ffd55ab645fdea040a83eeac10b7727",
+ "headSha": "pending-stamp",
  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
  "frames": {
   "30-proto-phone-gate.png": {
@@ -454,15 +454,15 @@
     },
     "insp": {
      "w": 374,
-     "h": 457,
+     "h": 472,
      "x": 8,
      "y": 104
     },
     "world": {
      "w": 374,
-     "h": 167,
+     "h": 152,
      "x": 8,
-     "y": 567
+     "y": 582
     },
     "action": {
      "w": 374,
