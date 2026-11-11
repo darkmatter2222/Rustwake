@@ -1,0 +1,6 @@
+fixture bytes (utf8): 26114
+envelope.schemaVersion (sim): 1
+envelope.checksum: eede3c4f
+checksum(JSON.stringify(payload)): eede3c4f
+round trip byte-identical: true
+exit=0

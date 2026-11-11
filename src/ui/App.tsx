@@ -43,6 +43,8 @@ import {
   YardPanel,
 } from "./Panels";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
+import { Primitives48 } from "./primitives";
+import { bandFor } from "./tokens";
 
 export interface PrimaryAction {
   label: string;
@@ -337,6 +339,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const machine =
     selected !== null && selected > 0 ? state.machines.find((m) => m.id === selected) : undefined;
   const report = reportOpen ? store.getReturnReport() : null;
+
+  // UI-RESET/TOKENS (#48): `?ui48` paints the shared primitive slice inside the shipped shell,
+  // so the captures and the unit tests read exactly one cascade. Without the flag every line
+  // below runs exactly as before, and the sim, the save and the camera are untouched.
+  if (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("ui48")) {
+    return (
+      <div className="wk-root">
+        <Primitives48 band={bandFor(window.innerWidth, window.innerHeight) ?? "390x844"} />
+      </div>
+    );
+  }
 
   if (!started) {
     return (

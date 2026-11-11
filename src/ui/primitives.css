@@ -1,0 +1,535 @@
+/*
+ * UI-RESET/TOKENS (#48) - the shared token block and the state sheet for the primitives in
+ * src/ui/primitives.tsx. Declared after src/ui/styles.css in the module graph, so the same
+ * cascade the #46 author sheet was injected with is what the shipped build now paints.
+ *
+ * Every literal here is the JS-side value in src/ui/tokens.ts; tests/ui/tokens.test.ts
+ * compares this file against tokenDeclarations() so the two cannot drift apart.
+ */
+
+:root {
+  --wk-night: #0a1118;
+  --wk-night-deep: #070d13;
+  --wk-panel: rgba(7, 13, 19, 0.84);
+  --wk-paper: #eef4f8;
+  --wk-steel: #93b4c9;
+  --wk-avail: #5fd8e8;
+  --wk-flow: #ffb765;
+  --wk-ok: #7fdc8f;
+  --wk-primary: #ff8f3f;
+  --wk-hair: rgba(147, 180, 201, 0.28);
+  --wk-font-ui: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --wk-font-data: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --wk-step: 200ms;
+  --wk-step-timing: steps(4, end);
+  --wk-gap-face: 4px;
+  --wk-gap-row: 6px;
+  --wk-gap-band: 8px;
+  --wk-radius-face: 2px;
+  --wk-radius-plate: 3px;
+  --wk-touch-min: 44px;
+  --wk-face-h: 46px;
+  --wk-rail-w: 56px;
+  --wk-inspector-w: 320px;
+  --wk-frame-cap: 1600px;
+  --wk-z-chrome: 5;
+  --wk-z-feedback: 20;
+  --wk-z-sheet: 30;
+  --wk-z-dialog: 40;
+  --wk-chip-h-1: 23px;
+  --wk-chip-h-2: 48px;
+  --wk-chip-h-3: 73px;
+}
+
+/* ---- the one clock: 200 ms, quantised, three properties, no transform on the column ---- */
+.wk-face,
+.wk-nav__face,
+.wk-sheet,
+.wk-dialog,
+.wk-inspector__section,
+.wk-amount,
+.wk-help,
+.wk-toast {
+  transition:
+    background-color var(--wk-step) var(--wk-step-timing),
+    border-color var(--wk-step) var(--wk-step-timing),
+    opacity var(--wk-step) var(--wk-step-timing);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-face,
+  .wk-nav__face,
+  .wk-sheet,
+  .wk-dialog,
+  .wk-inspector__section,
+  .wk-amount,
+  .wk-help,
+  .wk-toast {
+    transition: none;
+  }
+}
+
+/* ---- tabular figures: every numeric node, one font for both readouts ---- */
+.wk-data,
+.wk-face__price,
+.wk-amount__value,
+.wk-inspector__value,
+.wk-inspector__row dd {
+  font-family: var(--wk-font-data);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* ---- face: the one button of the interface ---- */
+.wk-face {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--wk-gap-face);
+  min-height: var(--wk-face-h);
+  min-width: var(--wk-touch-min);
+  padding: 2px 6px;
+  margin: 0;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-face);
+  background: var(--wk-panel);
+  color: var(--wk-paper);
+  font-family: var(--wk-font-ui);
+  font-size: 0.84rem;
+  line-height: 1.2;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* the single accented fill of a frame (P1); at the fork only the cheapest branch has it (P2) */
+.wk-face--primary {
+  border-color: rgba(255, 143, 63, 0.75);
+  background-color: var(--wk-primary);
+  background-image: linear-gradient(180deg, rgba(255, 143, 63, 0.34), rgba(201, 113, 58, 0.2));
+  color: var(--wk-night);
+}
+
+.wk-face--primary .wk-face__price {
+  color: var(--wk-night);
+}
+
+.wk-face__label {
+  flex: 0 1 auto;
+  overflow-wrap: anywhere;
+}
+
+/* C6: label and price are two children, so `Ferrous+70` cannot paint. */
+.wk-face__price {
+  flex: 0 0 auto;
+  color: var(--wk-flow);
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+/* C8: the reason is a printed second line in the 10.8 px status style. */
+.wk-face__reason,
+.wk-nav__reason,
+.wk-amount__reason {
+  flex: 1 0 100%;
+  color: var(--wk-steel);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+  text-transform: none;
+  overflow-wrap: anywhere;
+}
+
+/* the seven states, each painted by its own attribute as well as the pseudo-class */
+.wk-face[data-state="hover"],
+.wk-face:hover {
+  border-color: var(--wk-avail);
+}
+
+.wk-face[data-state="focus"],
+.wk-face:focus-visible {
+  outline: 2px solid var(--wk-avail);
+  outline-offset: 1px;
+  border-color: var(--wk-avail);
+}
+
+.wk-face:focus {
+  outline: 2px solid var(--wk-avail);
+  outline-offset: 1px;
+}
+
+.wk-face[data-state="pressed"],
+.wk-face:active {
+  background-color: rgba(95, 216, 232, 0.14);
+  border-color: var(--wk-avail);
+}
+
+.wk-face[data-state="disabled"],
+.wk-face:disabled {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+/* loading keeps the fill and prints its own wait line: never a spinner alone */
+.wk-face[data-state="loading"] {
+  border-style: dotted;
+}
+
+/* error: a 2 px rule on the leading edge, a shape and not only a hue */
+.wk-face[data-state="error"] {
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--wk-flow);
+}
+
+/* unaffordable is a non-colour signal: dashed edge + the printed shortfall line (E8) */
+.wk-face[data-afford="short"] {
+  border-style: dashed;
+  border-width: 1px;
+}
+
+.wk-face[data-afford="ok"] {
+  border-color: rgba(127, 220, 143, 0.8);
+}
+
+/* ---- navigation row: five fixed slots at the measured 46 px ---- */
+.wk-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-gap-face);
+  align-items: stretch;
+  min-height: var(--wk-face-h);
+  z-index: var(--wk-z-chrome);
+}
+
+.wk-nav__face {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  min-height: var(--wk-face-h);
+  min-width: var(--wk-touch-min);
+  padding: 2px 4px;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-face);
+  background: var(--wk-panel);
+  color: var(--wk-paper);
+  font-family: var(--wk-font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.wk-nav__face[data-state="pressed"] {
+  border-color: var(--wk-avail);
+  color: var(--wk-avail);
+}
+
+.wk-nav__face[data-state="hover"],
+.wk-nav__face:hover {
+  border-color: var(--wk-avail);
+}
+
+.wk-nav__face[data-state="focus"],
+.wk-nav__face:focus-visible {
+  outline: 2px solid var(--wk-avail);
+  outline-offset: 1px;
+}
+
+/* a locked slot keeps its place, dashed edge plus its own printed reason (R-2) */
+.wk-nav__face[data-state="disabled"] {
+  border-style: dashed;
+  opacity: 0.8;
+}
+
+.wk-nav__glyph {
+  font-size: 0.84rem;
+  line-height: 1;
+}
+
+/* ---- sheet and dialog ---- */
+.wk-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-gap-row);
+  width: 100%;
+  max-width: var(--wk-inspector-w);
+  padding: 8px 10px 10px;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-plate);
+  background: var(--wk-panel);
+  box-shadow: 0 1px 0 rgba(7, 13, 19, 0.75);
+  z-index: var(--wk-z-sheet);
+}
+
+.wk-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wk-gap-face);
+}
+
+.wk-sheet__title,
+.wk-dialog__title,
+.wk-inspector__heading {
+  margin: 0;
+  color: var(--wk-avail);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* the body is the scroller, so a sheet keeps its measured height and never moves the band */
+.wk-sheet__body,
+.wk-dialog__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-gap-row);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.wk-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-gap-row);
+  padding: 8px 10px 10px;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-plate);
+  background: var(--wk-panel);
+  box-shadow: 0 1px 0 rgba(7, 13, 19, 0.75);
+  z-index: var(--wk-z-dialog);
+}
+
+.wk-dialog__foot {
+  display: flex;
+  gap: var(--wk-gap-face);
+}
+
+/* ---- inspector section ---- */
+.wk-inspector__section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--wk-gap-face);
+  padding: 6px 8px;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-face);
+  background: rgba(7, 13, 19, 0.7);
+}
+
+.wk-inspector__heading {
+  flex: 1 1 auto;
+  overflow-wrap: anywhere;
+}
+
+.wk-inspector__value {
+  color: var(--wk-flow);
+  font-size: 0.84rem;
+}
+
+.wk-inspector__status {
+  color: var(--wk-steel);
+  font-size: 0.72rem;
+}
+
+.wk-inspector__rows {
+  flex: 1 0 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.wk-inspector__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--wk-gap-face);
+  font-size: 0.84rem;
+}
+
+.wk-inspector__row dt {
+  color: var(--wk-steel);
+}
+
+.wk-inspector__row dd {
+  margin: 0;
+  color: var(--wk-paper);
+}
+
+.wk-inspector__faces {
+  flex: 1 0 100%;
+  display: flex;
+  gap: var(--wk-gap-face);
+}
+
+.wk-inspector__section[data-state="disabled"] {
+  border-style: dashed;
+}
+
+.wk-inspector__section[data-state="loading"] {
+  border-style: dotted;
+}
+
+.wk-inspector__section[data-state="error"] {
+  border-width: 2px;
+  border-color: var(--wk-flow);
+}
+
+/* ---- resource amount, help, feedback lane ---- */
+.wk-amount {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--wk-gap-face);
+  min-height: 20px;
+  padding: 1px 5px;
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-face);
+  background: var(--wk-panel);
+  font-size: 0.84rem;
+}
+
+.wk-amount__label {
+  color: var(--wk-steel);
+}
+
+.wk-amount__value {
+  color: var(--wk-paper);
+  white-space: nowrap;
+}
+
+.wk-amount__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+}
+
+.wk-amount[data-state="error"] {
+  border-width: 2px;
+  border-color: var(--wk-flow);
+}
+
+.wk-amount[data-state="disabled"] {
+  border-style: dashed;
+}
+
+.wk-help {
+  display: block;
+  color: var(--wk-steel);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.wk-help[data-state="error"] {
+  color: var(--wk-flow);
+  border-left: 2px solid var(--wk-flow);
+  padding-left: 4px;
+}
+
+.wk-toast-lane {
+  display: flex;
+  z-index: var(--wk-z-feedback);
+}
+
+.wk-toast {
+  margin: 0;
+  padding: 3px 6px;
+  border: 1px solid rgba(95, 216, 232, 0.4);
+  border-radius: var(--wk-radius-face);
+  background: var(--wk-panel);
+  color: var(--wk-paper);
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
+}
+
+.wk-toast-lane[data-state="error"] .wk-toast {
+  border-style: dashed;
+  border-color: var(--wk-flow);
+}
+
+/* the gallery root: the same 15 px x scale root the shipped sheet sets, one scroller */
+.wk-root {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  background: var(--wk-night-deep);
+  color: var(--wk-paper);
+  font-family: var(--wk-font-ui);
+  font-size: calc(15px * var(--text-scale, 1));
+  line-height: 1.35;
+}
+
+/* the gallery frame: a 1600 px capped column, the same bands the game paints */
+.wk-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-gap-row);
+  width: 100%;
+  max-width: var(--wk-frame-cap);
+  margin: 0 auto;
+  padding: var(--wk-gap-band) max(10px, env(safe-area-inset-right)) var(--wk-gap-band)
+    max(10px, env(safe-area-inset-left));
+  color: var(--wk-paper);
+  font-family: var(--wk-font-ui);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.wk-gallery__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-gap-face);
+  padding: var(--wk-gap-row);
+  border: 1px solid var(--wk-hair);
+  border-radius: var(--wk-radius-plate);
+  background: var(--wk-panel);
+}
+
+.wk-gallery__heading {
+  margin: 0;
+  color: var(--wk-avail);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---- responsive band rules: every number here is a measured box, see tokens.ts ---- */
+
+/* phone portrait 360x640 and 390x844: one column, chip band pinned per measured row count */
+@media (max-width: 359px) {
+  .wk-gallery {
+    --wk-chip-band: var(--wk-chip-h-3);
+  }
+}
+
+@media (min-width: 380px) and (max-width: 460px) {
+  .wk-nav {
+    max-width: 370px;
+  }
+}
+
+/* landscape phone: one row, the primary face joins the nav row (L1) */
+@media (max-height: 460px) {
+  .wk-sheet,
+  .wk-dialog {
+    max-width: 560px;
+  }
+}
+
+/* desktop: the rail, the capped frame, the 320 px inspector column (D1 to D4) */
+@media (min-width: 600px) {
+  .wk-nav {
+    flex-direction: column;
+    width: var(--wk-rail-w);
+  }
+  .wk-nav__face {
+    width: var(--wk-rail-w);
+  }
+  .wk-gallery {
+    max-width: var(--wk-frame-cap);
+  }
+}
