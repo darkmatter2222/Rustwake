@@ -47,13 +47,13 @@ function mount(store: GameStore): HTMLDivElement {
   return host;
 }
 
-function start(store: GameStore): void {
+function start(): void {
   act(() => findButton("Begin recovery")?.click());
 }
 
 /** The proven tutorial walk: six pulses, repaired drone, one connected sorter. */
 function walkToSorter(store: GameStore): void {
-  start(store);
+  start();
   for (let i = 0; i < 6; i += 1) {
     act(() => findButton("Salvage")?.click());
     act(() => store.step(TUNING.manualPulseTicks));
@@ -100,7 +100,7 @@ describe("UI-RESET-51 resource grouping and all-resource access", () => {
   it("groups credits, store and resources with shape icons, labels and hierarchy", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
 
     const chips = [...host.querySelectorAll<HTMLElement>(".resources__item")];
     // Every chip carries a shape glyph (non-color identity) and a label + value pair.
@@ -125,7 +125,7 @@ describe("UI-RESET-51 resource grouping and all-resource access", () => {
   it("offers all-resource access through a labeled toggle with authoritative counts", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     // Seed a couple of counts so the drawer proves it reads the store, not a constant.
     const state = store.getState();
     state.store.copper = 12;
@@ -167,7 +167,7 @@ describe("UI-RESET-51 resource grouping and all-resource access", () => {
   it("keeps Home the cluster's last child so the rail's hide rule still applies", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     const cluster = [...host.querySelectorAll<HTMLElement>(".cluster .icon-btn")];
     expect(cluster.length).toBe(4);
     expect(cluster[cluster.length - 1].getAttribute("aria-label")).toBe("Return to yard view");
@@ -179,7 +179,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
   it("marks the store chip and raises a live full alert naming the recovery", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     fillStoreFull(store);
 
     const storeChip = host.querySelector<HTMLElement>(".resources__item--store");
@@ -208,7 +208,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
   it("names the contract-first recovery before the first steel contract", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     fillStoreFull(store, false);
 
     expect(host.querySelector(".hud-alert__text")?.textContent).toBe(
@@ -224,7 +224,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
   it("warns statically in the high band and names overflow held outside at capacity", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     const state = store.getState();
     state.store.scrap = 850;
     state.storeUnits = 850;
@@ -259,7 +259,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
   it("leads from the alert to the store panel and clears as selling frees space", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     fillStoreFull(store);
 
     act(() => findButton("Open store")?.click());
@@ -346,7 +346,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
   it("holds chip text stable across ticks and bounds large values without jitter", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     const state = store.getState();
     state.credits = 1_234_567;
     state.store.plates = 99_995;
@@ -392,7 +392,7 @@ describe("UI-RESET-51 optional objective", () => {
   it("collapses, expands, dismisses and restores without breaking the census", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
 
     const card = host.querySelector<HTMLElement>(".objective");
     expect(card).not.toBeNull();
@@ -439,7 +439,7 @@ describe("UI-RESET-51 optional objective", () => {
   it("keeps the dock face counts unchanged while the alert is on screen", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
-    start(store);
+    start();
     const state = store.getState();
     state.tutorial = 9;
     state.exportClaimed = true;
