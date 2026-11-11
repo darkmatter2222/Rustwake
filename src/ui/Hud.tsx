@@ -261,17 +261,18 @@ export function ObjectiveCard(props: {
 export function DockButtons(props: {
   primary: PrimaryAction;
   buildBlueprint: string | null;
-  unlocked: string[];
   research: boolean;
   yard: boolean;
-  onPickBlueprint: (id: string) => void;
+  /** UI-RESET-52: the dock no longer cycles blueprints. Both the resting Build
+      face and the build phase's third face open the catalog, where every machine
+      is named, priced and explained before one is chosen. */
+  onOpenCatalog: () => void;
   onPlace: () => void;
   onCancelBuild: () => void;
   onInventory: () => void;
   onResearch: () => void;
   onYard: () => void;
 }) {
-  const blueprintIds = props.unlocked.length > 0 ? props.unlocked : Object.keys(BLUEPRINTS);
   if (props.buildBlueprint !== null) {
     const placeCost = priceLine(costText(props.buildBlueprint));
     return (
@@ -297,13 +298,10 @@ export function DockButtons(props: {
             })}
             <span className={COST}>{placeCost}</span>
           </button>
-          <button
-            className={BTN}
-            onClick={() => {
-              const index = blueprintIds.indexOf(props.buildBlueprint ?? blueprintIds[0]);
-              props.onPickBlueprint(blueprintIds[(index + 1) % blueprintIds.length]);
-            }}
-          >
+          {/* UI-RESET-52: the third face keeps its pinned label and slot (the shell's
+              build-phase census reads exactly Cancel / Build {machine} / Next) but its
+              verb is now the catalog, not a blind cycle through the unlock list. */}
+          <button className={BTN} onClick={props.onOpenCatalog}>
             {t("btn.next")}
           </button>
         </div>
@@ -354,7 +352,7 @@ export function DockButtons(props: {
               {props.primary.label}
               {props.primary.cost ? <span className={COST}>{priceLine(props.primary.cost)}</span> : null}
             </button>
-            <button className={BTN} onClick={() => props.onPickBlueprint(blueprintIds[0])}>
+            <button className={BTN} onClick={props.onOpenCatalog}>
               {t("btn.build")}
             </button>
             {props.research ? (
