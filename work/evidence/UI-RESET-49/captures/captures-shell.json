@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET-49 G2 app shell",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/49",
-  "headSha": "pending-stamp",
+  "headSha": "c032ac0739b7833bd47bd5b8d34cd94def8e013a",
   "tool": "playwright-core plus local Chrome/Edge, vite preview; one painted DOM+pixel probe per PNG, every frame checked",
   "seed": "docs/evidence/yard-mature.json (tick 18298, 8 machines); ts2 via payload.settings.textScale=2 with recomputed checksum",
   "viewports": [
