@@ -337,27 +337,29 @@ Cumulative presses at each painted frame of `captures/captures-nav.json` (sessio
 
 Session B, the same rest-to-sell loop at the mature stage: **2 presses** (Store, then the first sell face), the shortest loop in the game. Session C, the destination tour from the mature rest frame: **5 presses for 3 destinations** - Store, Yard and Build each cost an open plus a Close, and after the Build face the row is replaced by Cancel, Build and Next, so the **Research face is not painted at all** inside that phase and the fourth destination costs a sixth press. At the mature stage every band measures 8 faces at rest, 15 with the store open and 9 with the research list open, all at 44 px or more (`captures/measures-nav.json`).
 
-The three facts the implementation has to beat: **18 presses for one machine**, **39 presses without ever printing a fork or a credit**, and **a destination row that loses faces when a phase starts**. The target column above is what section 1 to 5 deliver: 13 presses for one machine inspected, one accented face per frame, five stable slots and the same price printed once.
+The three facts the implementation has to beat: **18 presses for one machine**, **39 presses without ever printing a fork or a credit**, and **a destination row that loses faces when a phase starts**. The target column above is what section 1 to 5 design to: 13 presses for one machine inspected (the primary-band place at 12 plus one Yard-list press), one accented face per frame, five stable slots and the same price printed once. The painted prototype's Build-destination route measures **16** to that same inspected machine (§6.2) - 3 above the 13 target, the catalog detour, recorded not hidden - and the dedicated primary-band model run places at **12** (`tap-budget.json` `prototype.machinePress`).
 
 ### 6.2 The same path inside the prototype, counted by the prototype itself
 
-`prototype-nav.html` counts every painted face it presses (`S.pressed`), so the design is measured rather than estimated (`captures/captures-proto.json`).
+`prototype-nav.html` counts every painted face it presses (`S.pressed`), so the design is measured rather than estimated (`captures/captures-proto.json`). One press is one painted face activated once, or one key: the prototype enforces this (#81 rework) - `tap()` ignores absent, disabled and locked faces, so they are never counted and run no handler.
 
 | frame | presses | the same frame on the shipped build |
 |---|---|---|
 | 30 gate | 0 | 1 (the gate itself) |
 | 31 rest at step 0 | 1 | 1 |
 | 32 salvage counted | 7 | 12 |
-| 33 repaired, build step in the primary band | 8 | 13 |
-| 34 Build destination open, nav unchanged | 9 | 14 |
-| 35 blueprint chosen | 10 | - |
-| 36 one machine placed | 11 | 15 |
-| 37 **machine inspected from the Yard list** | **12** | 22 |
-| 38 Store with the one command format | 13 | 35 |
-| 39 Menu import error | 16 | 37 |
-| 40 two Escape presses back to rest | 18 | 39 |
+| 33 repaired, primary back to Salvage | 8 | 13 |
+| 34 Build destination open, nav unchanged | 13 | 14 |
+| 35 blueprint chosen | 14 | - |
+| 36 one machine placed | 15 | 15 |
+| 37 **machine inspected from the Yard list** | **16** | 22 |
+| 38 Store with the one command format | 17 | 35 |
+| 39 Menu import error | 20 | 37 |
+| 40 two Escape presses back to rest | 22 | 39 |
 
-So the same journey is **12 presses to an inspected machine in the prototype against 22 on the shipped shell and the J1 budget of 16**, and **18 presses for the whole path including the settings faces and the save record against 39**. The three rules that pay: the destination row never changes slots, so no press is spent finding it again; the Yard list carries one face per machine, so selection is a face and not a canvas hunt; and a sheet replaces a sheet, so a tour of five destinations costs five presses instead of an open-and-Close pair each.
+Presses 9-12 are four `Salvage` presses: the repair at press 8 consumed all 30 scrap, so the primary band returns to `Salvage` (frame 33) and Place would be disabled at 0 scrap. The four refills bring scrap back to the 20-scrap place price, the primary then reads `Build Scrap sorter`, and press 13 opens the Build destination. Every press in the ladder is on an enabled painted face - the disabled `Place` at 0 scrap is never pressed and never counted (#81 rework). Frame 36 paints `machines 1` with the primary back to `Connect sorter to the dock`; frame 37 is one `row-machine-1` press from the Yard list and paints the inspector `Scrap sorter · level 1` with the fork's 30/40-credit faces disabled at 0 credits.
+
+So the same journey is **16 presses to an inspected machine in the prototype against 22 on the shipped shell and the J1 budget of 16** - it ties the audit budget and beats the shipped shell by 6 - and **22 presses for the whole path including the settings faces and the save record against 39**. The dedicated primary-band model run places at 12 (`tap-budget.json`); the painted Build-destination route spends 3 more presses on the catalog detour (nav-build, bp-sorter, Place) and 1 more inspecting from the Yard list, 12 + 3 + 1 = 16 measured. The three rules that pay: the destination row never changes slots, so no press is spent finding it again; the Yard list carries one face per machine, so selection is a face and not a canvas hunt; and a sheet replaces a sheet, so a tour of five destinations costs five presses instead of an open-and-Close pair each.
 
 The prototype also holds the two states the shipped build does not paint at all: the locked Research slot with its reason ("Needs 1 Data", capture 31) and the unaffordable priced faces inside the fork (capture 44).
 ## 7. The prototype path and its states
@@ -438,7 +440,7 @@ The 22 planned rows of section 7 and this index differ in three places, all of t
 
 ## 9. Consolidated numeric table (every row tagged)
 
-One **press** = one painted face activated once, or one key. `presses` = shipped-shell painted-face activations; `pressed` = the prototype's own counter `S.pressed`. Auto-settle waits and canvas selection probes are counted separately and are never presses. Every measured row names the committed receipt it comes from; every specified row names the section that sets it. headSha in each receipt is stamped to the captures commit (README.md).
+One **press** = one painted face activated once, or one key. `presses` = shipped-shell painted-face activations; `pressed` = the prototype's own counter `S.pressed`. The prototype enforces this (#81 rework): `tap()` ignores absent, disabled and locked faces, so they are never counted and run no handler. Auto-settle waits and canvas selection probes are counted separately and are never presses. Every measured row names the committed receipt it comes from; every specified row names the section that sets it. headSha in each receipt is stamped to the captures commit (README.md).
 
 ### 9.1 Press budgets
 
@@ -454,10 +456,10 @@ One **press** = one painted face activated once, or one key. `presses` = shipped
 | shipped rest-to-sell loop (mature) | 2 presses | measured | `captures/captures-nav.json` session B / frame 16 |
 | shipped destination tour (mature) | 5 presses for 3 destinations | measured | `captures/captures-nav.json` session C |
 | design gate | 0 pressed | measured | `captures/captures-proto.json` frame 30 |
-| design machine inspected from Yard list | 12 pressed | measured | `captures/captures-proto.json` frame 37 |
-| design whole path end | 18 pressed | measured | `captures/captures-proto.json` frame 40 |
+| design machine inspected from Yard list | 16 pressed | measured | `captures/captures-proto.json` frame 37 |
+| design whole path end | 22 pressed | measured | `captures/captures-proto.json` frame 40 |
 | tap-budget app first machine placed | 12 presses | measured | `tap-budget.json` `app.machinePress` |
-| tap-budget app total / auto-settle / probes | 28 presses / 41 waits (20500 ms) / 107 probes | measured | `tap-budget.json` `app` |
+| tap-budget app total / auto-settle / probes | 28 presses / 40 waits (20000 ms) / 107 probes | measured | `tap-budget.json` `app` (re-run; settleWaits is sim-timing dependent, committed run 41/20500, see tap-budget.md §2) |
 | tap-budget app production reading | 0.00 batches/s · 9s window, tick 480 | measured | `tap-budget.json` `app.productionReading` / `app.tick` |
 | tap-budget model fresh ladder to disabled primary | 13 pressed | measured | `tap-budget.json` `prototype.freshPressed` |
 | tap-budget model machine place press | 12 pressed | measured | `tap-budget.json` `prototype.machinePress` |
@@ -495,5 +497,6 @@ One **press** = one painted face activated once, or one key. `presses` = shipped
 | prototype entry points that paint | 1 (`prototype-nav.html`) | measured | `dom-shim-47.mjs` run |
 | DOM-shim painted root length | fresh 1825, mature 3101 chars; every destination body non-empty | measured | `dom-shim-47.mjs` run (node v22.18.0) |
 | PNG / receipt parity | 48 PNGs = 48 entries; both diffs empty; no duplicates; all press fields present | measured | `captures/parity.json` (`parity-47.mjs`) |
+| prototype disabled / locked / absent taps counted | 0 - `tap()` returns early on absent, `disabled` or `aria-disabled` faces (no count, no handler); the fresh ladder never presses `Place` at 0 scrap, it refills via four `Salvage` presses (9-12) and places enabled at 15 | measured | `prototype-nav.html` `tap()`; `captures/captures-proto.json` frames 33-36 (#81 rework) |
 | spec files | 1 (`navigation-spec.md`) | measured | this folder (`nav-spec.md` deleted) |
 | test suite at final state | 32 files / 342 tests passed | measured | `npm test` (vitest) |

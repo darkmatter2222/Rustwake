@@ -7,6 +7,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 // six measured bands. The prototype is self-contained, so no preview server is needed:
 //   node work/evidence/UI-RESET-47/capture-proto-47.mjs
 // The prototype counts every press itself (S.pressed), so the press column is its own log.
+// #81 rework: tap() ignores absent, disabled and locked faces, so a press is always one
+// painted face activated once; the fresh ladder salvages after the repair so Place is
+// genuinely enabled and frame 36/37 paint a placed, inspected machine.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const out = resolve(root, "work/evidence/UI-RESET-47/captures");
 mkdirSync(out, { recursive: true });
@@ -30,21 +33,30 @@ const tapIf = async (p, id) => { if (await label(p, id) !== "") { await tapId(p,
 
 const browser = await chromium.launch({ executablePath: exe });
 try {
-  { const { c, p } = await make(browser, 390, 844, 2, true, "fresh");
+  // #81 rework: seed=gate boots with started=false so frame 30 paints the real entry
+  // gate (Begin recovery + sound toggle, no nav row) and the gate press is a real
+  // painted-face activation. seed=fresh boots started, which painted no gate at all.
+  { const { c, p } = await make(browser, 390, 844, 2, true, "gate");
     await shot(p, "30-proto-phone-gate", "entry gate: one accented face, the sound toggle beside it");
     await tapId(p, "gate-begin");
     await shot(p, "31-proto-phone-rest-step0", "rest at step 0: five nav slots, Research locked with its reason, one accented face above them");
     await pressWhile(p, "Salvage", 8);
     await shot(p, "32-proto-phone-salvage", "salvage counted, the same slot order");
     await pressWhile(p, "Repair", 2);
-    await shot(p, "33-proto-phone-repaired", "the repair price line then the build step, still one accented face");
+    await shot(p, "33-proto-phone-repaired", "the repair committed at 30 scrap, the primary back to Salvage to refill the place price");
+    // #81 rework: the repair consumed all 30 scrap, so Place would be disabled at 0.
+    // Four Salvage presses (9-12) refill the 20-scrap place price; the primary then
+    // reads "Build Scrap sorter" and the loop stops. Every press below is enabled.
+    await pressWhile(p, "Salvage", 4);
     await tapId(p, "nav-build");
     await shot(p, "34-proto-phone-build-catalog", "Build destination: the catalog over the world, the nav row unchanged");
     await tapId(p, "bp-sorter");
     await shot(p, "35-proto-phone-build-chosen", "the chosen blueprint, place is the only accented face");
     await tapId(p, "action-primary");
-    await shot(p, "36-proto-phone-placed", "one machine placed, no slot moved");
-    await tapIf(p, "nav-yard"); await tapIf(p, "row-machine-1");
+    await shot(p, "36-proto-phone-placed", "one machine placed at 20 scrap, back at the Yard, no slot moved");
+    // place() returns to the Yard with the machine row painted, so the inspector is
+    // exactly one press away; no redundant nav-yard press (#81 rework).
+    await tapIf(p, "row-machine-1");
     await shot(p, "37-proto-phone-machine", "inspector from the Yard list, one press, no canvas hunting");
     await tapId(p, "nav-store");
     await shot(p, "38-proto-phone-store", "Store destination: one command format on every face");
@@ -54,33 +66,35 @@ try {
     await p.keyboard.press("Escape"); await p.keyboard.press("Escape");
     await shot(p, "40-proto-phone-back", "two Escape presses: the import page then the sheet, back at the rest frame");
     await c.close(); }
+  // The remaining contexts boot started (fresh/mature): no gate is painted, so no
+  // gate press belongs in their counts (#81 rework; tap() now ignores absent faces).
   { const { c, p } = await make(browser, 360, 640, 3, true, "fresh");
-    await tapId(p, "gate-begin"); await tapIf(p, "tgl-scale");
+    await tapIf(p, "tgl-scale");
     await shot(p, "41-proto-phone360-scale", "360x640 one text-scale step up: the same two bottom bands");
     await tapId(p, "nav-menu");
     await shot(p, "42-proto-phone360-menu", "360x640 Menu sheet: sound, scale, reduced motion, the record and the import");
     await c.close(); }
   { const { c, p } = await make(browser, 844, 390, 2, true, "mature");
-    await tapId(p, "gate-begin"); await tapId(p, "nav-store");
+    await tapId(p, "nav-store");
     await shot(p, "43-proto-landscape844-store", "844x390: one row carrying the five slots and the primary, sheet above it");
     await tapIf(p, "insp-close"); await tapIf(p, "nav-yard"); await tapIf(p, "row-machine-1");
     await shot(p, "44-proto-landscape844-fork", "844x390: inspector with the two priced fork faces beside the world");
     await c.close(); }
   { const { c, p } = await make(browser, 1366, 768, 1, false, "mature");
-    await tapId(p, "gate-begin"); await tapId(p, "nav-store");
+    await tapId(p, "nav-store");
     await shot(p, "45-proto-desktop1366-store", "1366x768: rail, world column, inspector beside it, primary row under the world");
     await c.close(); }
   { const { c, p } = await make(browser, 1920, 1080, 1, false, "mature");
-    await tapId(p, "gate-begin"); await tapId(p, "nav-yard"); await tapIf(p, "row-machine-1");
+    await tapId(p, "nav-yard"); await tapIf(p, "row-machine-1");
     await shot(p, "46-proto-desktop1920-machine", "1920x1080: the machine inspector in its own column, the price printed once");
     await tapId(p, "nav-research");
     await shot(p, "47-proto-desktop1920-research", "1920x1080: the research list in the same column, one Close face");
     await c.close(); }
   { const { c, p } = await make(browser, 2560, 1440, 1, false, "mature");
-    await tapId(p, "gate-begin"); await tapId(p, "nav-menu");
+    await tapId(p, "nav-menu");
     await shot(p, "48-proto-desktop2560-menu", "2560x1440: the capped frame, the Menu sheet in the right column, the ink beside it");
     await c.close(); }
-  writeFileSync(resolve(out, "captures-proto.json"), JSON.stringify({ task: "UI-RESET/NAV #47 prototype path", issue: "https://github.com/darkmatter2222/Rustwake/issues/47", headSha: process.env.RUSTWAKE_SHA ?? "pending-stamp", tool: "playwright-core plus local Chrome/Edge, the self-contained prototype over file://", note: "the press column is the prototype own counter (S.pressed): one press per painted face", headShaConvention: "stamped by stamp-headsha-47.mjs to the captures commit; see README.md", captures: receipt }, null, 2) + String.fromCharCode(10));
+  writeFileSync(resolve(out, "captures-proto.json"), JSON.stringify({ task: "UI-RESET/NAV #47 prototype path", issue: "https://github.com/darkmatter2222/Rustwake/issues/47", headSha: process.env.RUSTWAKE_SHA ?? "pending-stamp", tool: "playwright-core plus local Chrome/Edge, the self-contained prototype over file://", note: "the press column is the prototype own counter (S.pressed): one press per painted face activated once; absent, disabled and locked faces are ignored, never counted (#81 rework)", headShaConvention: "stamped by stamp-headsha-47.mjs to the captures commit; see README.md", captures: receipt }, null, 2) + String.fromCharCode(10));
   console.log("wrote " + receipt.length + " prototype captures");
 } finally {
   await browser.close();

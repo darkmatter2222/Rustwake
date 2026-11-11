@@ -1,9 +1,9 @@
 {
   "task": "UI-RESET/NAV #47 prototype path",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
+  "headSha": "pending-stamp",
   "tool": "playwright-core plus local Chrome/Edge, the self-contained prototype over file://",
-  "note": "the press column is the prototype own counter (S.pressed): one press per painted face",
+  "note": "the press column is the prototype own counter (S.pressed): one press per painted face activated once; absent, disabled and locked faces are ignored, never counted (#81 rework)",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "captures": [
     {
@@ -11,12 +11,12 @@
       "note": "entry gate: one accented face, the sound toggle beside it",
       "pressed": 0,
       "last": null,
-      "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
+      "nav": "",
       "band": "Scrap 0Credits 0Store 0/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 0 · Power 8 · 0 of 8 units requested · 100 %",
-      "insp": "Empty yard · the first salvage prints here.",
-      "action": "Salvage",
-      "zoom": "Zoom -Zoom +",
+      "card": "",
+      "insp": "",
+      "action": "Begin recoverySound ✓",
+      "zoom": "",
       "rects": {
         "shell": {
           "x": 0,
@@ -46,19 +46,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 40
+          "h": 8
         },
         "insp": {
           "x": 8,
-          "y": 104,
+          "y": 72,
           "w": 374,
-          "h": 29
+          "h": 0
         },
         "world": {
           "x": 8,
-          "y": 139,
+          "y": 78,
           "w": 374,
-          "h": 595
+          "h": 656
         },
         "action": {
           "x": 8,
@@ -68,41 +68,6 @@
         }
       },
       "faces": [
-        {
-          "id": "nav-yard",
-          "w": 47,
-          "h": 44,
-          "under44": false,
-          "disabled": false
-        },
-        {
-          "id": "nav-build",
-          "w": 55,
-          "h": 44,
-          "under44": false,
-          "disabled": false
-        },
-        {
-          "id": "nav-store",
-          "w": 55,
-          "h": 44,
-          "under44": false,
-          "disabled": false
-        },
-        {
-          "id": "nav-research",
-          "w": 89,
-          "h": 44,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "nav-menu",
-          "w": 47,
-          "h": 44,
-          "under44": false,
-          "disabled": false
-        },
         {
           "id": "tgl-sound",
           "w": 75,
@@ -125,22 +90,15 @@
           "disabled": false
         },
         {
-          "id": "zoom-out",
-          "w": 63,
-          "h": 44,
+          "id": "gate-begin",
+          "w": 129,
+          "h": 46,
           "under44": false,
           "disabled": false
         },
         {
-          "id": "zoom-in",
-          "w": 63,
-          "h": 44,
-          "under44": false,
-          "disabled": false
-        },
-        {
-          "id": "action-primary",
-          "w": 72,
+          "id": "tgl-sound-g",
+          "w": 75,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -161,7 +119,7 @@
       "last": {
         "n": 1,
         "id": "gate-begin",
-        "label": "gate-begin"
+        "label": "Begin recovery"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 0/900Sound ✓A 1MOTIONoff",
@@ -460,7 +418,7 @@
     },
     {
       "file": "33-proto-phone-repaired.png",
-      "note": "the repair price line then the build step, still one accented face",
+      "note": "the repair committed at 30 scrap, the primary back to Salvage to refill the place price",
       "pressed": 8,
       "last": {
         "n": 8,
@@ -613,17 +571,17 @@
     {
       "file": "34-proto-phone-build-catalog.png",
       "note": "Build destination: the catalog over the world, the nav row unchanged",
-      "pressed": 9,
+      "pressed": 13,
       "last": {
-        "n": 9,
+        "n": 13,
         "id": "nav-build",
         "label": "Build"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
-      "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
+      "band": "Scrap 20Credits 0Store 50/900Sound ✓A 1MOTIONoff",
+      "card": "Next: Build Scrap sorterDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
       "insp": "BuildCloseBuild Scrap sorter20 scrapBuild Furnace20 scrap · 5 ferrousBuild Wire mill20 scrap · 5 wireCells free12Selectednone",
-      "action": "Salvage",
+      "action": "Build Scrap sorter20 scrap",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -744,7 +702,7 @@
           "w": 178,
           "h": 44,
           "under44": false,
-          "disabled": true
+          "disabled": false
         },
         {
           "id": "bp-furnace",
@@ -776,7 +734,7 @@
         },
         {
           "id": "action-primary",
-          "w": 72,
+          "w": 162,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -793,15 +751,15 @@
     {
       "file": "35-proto-phone-build-chosen.png",
       "note": "the chosen blueprint, place is the only accented face",
-      "pressed": 10,
+      "pressed": 14,
       "last": {
-        "n": 10,
+        "n": 14,
         "id": "bp-sorter",
         "label": "Build Scrap sorter20 scrap"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
-      "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
+      "band": "Scrap 20Credits 0Store 50/900Sound ✓A 1MOTIONoff",
+      "card": "Next: Build Scrap sorterDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 20",
       "insp": "BuildCloseBuild Scrap sorter20 scrapBuild Furnace20 scrap · 5 ferrousBuild Wire mill20 scrap · 5 wireCells free12SelectedScrap sorter",
       "action": "CancelPlace Scrap sorter20 scrapNext",
       "zoom": "Zoom -Zoom +",
@@ -924,7 +882,7 @@
           "w": 178,
           "h": 44,
           "under44": false,
-          "disabled": true
+          "disabled": false
         },
         {
           "id": "bp-furnace",
@@ -966,7 +924,7 @@
           "w": 162,
           "h": 46,
           "under44": false,
-          "disabled": true
+          "disabled": false
         },
         {
           "id": "build-next",
@@ -986,18 +944,18 @@
     },
     {
       "file": "36-proto-phone-placed.png",
-      "note": "one machine placed, no slot moved",
-      "pressed": 11,
+      "note": "one machine placed at 20 scrap, back at the Yard, no slot moved",
+      "pressed": 15,
       "last": {
-        "n": 11,
+        "n": 15,
         "id": "action-primary",
         "label": "Place Scrap sorter20 scrap"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
-      "insp": "BuildCloseBuild Scrap sorter20 scrapBuild Furnace20 scrap · 5 ferrousBuild Wire mill20 scrap · 5 wireCells free12SelectedScrap sorter",
-      "action": "CancelPlace Scrap sorter20 scrapNext",
+      "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
+      "insp": "YardPower0 of 8 units requestedBusy0% busy (0/24 in transit)Drones5Scrap sortercell 8",
+      "action": "Connect sorter to the dock",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -1028,19 +986,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 54
+          "h": 40
         },
         "insp": {
           "x": 8,
-          "y": 118,
+          "y": 104,
           "w": 374,
-          "h": 204
+          "h": 129
         },
         "world": {
           "x": 8,
-          "y": 328,
+          "y": 239,
           "w": 374,
-          "h": 406
+          "h": 495
         },
         "action": {
           "x": 8,
@@ -1107,32 +1065,11 @@
           "disabled": false
         },
         {
-          "id": "insp-close",
-          "w": 55,
+          "id": "row-machine-1",
+          "w": 178,
           "h": 44,
           "under44": false,
           "disabled": false
-        },
-        {
-          "id": "bp-sorter",
-          "w": 178,
-          "h": 44,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "bp-furnace",
-          "w": 178,
-          "h": 44,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "bp-wire",
-          "w": 178,
-          "h": 44,
-          "under44": false,
-          "disabled": true
         },
         {
           "id": "zoom-out",
@@ -1149,22 +1086,8 @@
           "disabled": false
         },
         {
-          "id": "build-cancel",
-          "w": 63,
-          "h": 46,
-          "under44": false,
-          "disabled": false
-        },
-        {
           "id": "action-primary",
-          "w": 162,
-          "h": 46,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "build-next",
-          "w": 47,
+          "w": 228,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -1181,17 +1104,17 @@
     {
       "file": "37-proto-phone-machine.png",
       "note": "inspector from the Yard list, one press, no canvas hunting",
-      "pressed": 12,
+      "pressed": 16,
       "last": {
-        "n": 12,
-        "id": "nav-yard",
-        "label": "Yard"
+        "n": 16,
+        "id": "row-machine-1",
+        "label": "Scrap sortercell 8"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
-      "insp": "Empty yard · the first salvage prints here.",
-      "action": "CancelPlace Scrap sorter20 scrapNext",
+      "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
+      "insp": "Scrap sorter · level 1StatusNeeds inputCycle4.00sActual rate0.00 batches/s · 60s windowMax rate0.25 batches/s at full powerPower1 unitNeeds2 ScrapNext stepNeeds 2 scrap, which nothing in the yardNext upgrade4.00s → 3.80sRecipe in2 ScrapRecipe out1 Ferrous, 1 NonferrousCloseUpgrade Less power30 creditsMove to cell 90 creditsDismantle+20 unitsLinks2Branches",
+      "action": "Upgrade Less power30 creditsUpgrade Faster batches40 credits",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -1222,19 +1145,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 54
+          "h": 40
         },
         "insp": {
           "x": 8,
-          "y": 118,
+          "y": 104,
           "w": 374,
-          "h": 29
+          "h": 363
         },
         "world": {
           "x": 8,
-          "y": 153,
+          "y": 473,
           "w": 374,
-          "h": 581
+          "h": 261
         },
         "action": {
           "x": 8,
@@ -1301,6 +1224,48 @@
           "disabled": false
         },
         {
+          "id": "insp-close",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-upgrade",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": true
+        },
+        {
+          "id": "m-move",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-dismantle",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-links",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
+          "id": "m-branches",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
           "id": "zoom-out",
           "w": 63,
           "h": 44,
@@ -1315,25 +1280,18 @@
           "disabled": false
         },
         {
-          "id": "build-cancel",
-          "w": 63,
-          "h": 46,
-          "under44": false,
-          "disabled": false
-        },
-        {
-          "id": "action-primary",
+          "id": "fork-draw",
           "w": 162,
           "h": 46,
           "under44": false,
           "disabled": true
         },
         {
-          "id": "build-next",
-          "w": 47,
+          "id": "fork-speed",
+          "w": 195,
           "h": 46,
           "under44": false,
-          "disabled": false
+          "disabled": true
         }
       ],
       "facesUnder44": 1,
@@ -1347,17 +1305,17 @@
     {
       "file": "38-proto-phone-store.png",
       "note": "Store destination: one command format on every face",
-      "pressed": 13,
+      "pressed": 17,
       "last": {
-        "n": 13,
+        "n": 17,
         "id": "nav-store",
         "label": "Store"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
+      "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
       "insp": "Yard storeCloseCapacity30/900Power0 of 8 units requestedBusiest link0% busy (0/24 in transit)",
-      "action": "CancelPlace Scrap sorter20 scrapNext",
+      "action": "Connect sorter to the dock",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -1388,19 +1346,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 54
+          "h": 40
         },
         "insp": {
           "x": 8,
-          "y": 118,
+          "y": 104,
           "w": 374,
           "h": 129
         },
         "world": {
           "x": 8,
-          "y": 253,
+          "y": 239,
           "w": 374,
-          "h": 481
+          "h": 495
         },
         "action": {
           "x": 8,
@@ -1488,22 +1446,8 @@
           "disabled": false
         },
         {
-          "id": "build-cancel",
-          "w": 63,
-          "h": 46,
-          "under44": false,
-          "disabled": false
-        },
-        {
           "id": "action-primary",
-          "w": 162,
-          "h": 46,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "build-next",
-          "w": 47,
+          "w": 228,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -1520,17 +1464,17 @@
     {
       "file": "39-proto-phone-import-error.png",
       "note": "error state: the reason line and the expected shape inside Menu",
-      "pressed": 16,
+      "pressed": 20,
       "last": {
-        "n": 16,
+        "n": 20,
         "id": "imp-apply",
         "label": "Apply"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
-      "insp": "MenuCloseSoundonText sizeA 1MotionfullTick0Machines0Links0Credits0Save27839 charactersCopyImportLast away reportPaste a saved yard, then Apply.{not a rustwake envelopeApplyBack",
-      "action": "CancelPlace Scrap sorter20 scrapNext",
+      "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
+      "insp": "MenuCloseSoundonText sizeA 1MotionfullTick0Machines1Links0Credits0Save27839 charactersCopyImportLast away reportPaste a saved yard, then Apply.{not a rustwake envelopeApplyBack",
+      "action": "Connect sorter to the dock",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -1561,19 +1505,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 54
+          "h": 40
         },
         "insp": {
           "x": 8,
-          "y": 118,
+          "y": 104,
           "w": 374,
           "h": 457
         },
         "world": {
           "x": 8,
-          "y": 581,
+          "y": 567,
           "w": 374,
-          "h": 153
+          "h": 167
         },
         "action": {
           "x": 8,
@@ -1696,22 +1640,8 @@
           "disabled": false
         },
         {
-          "id": "build-cancel",
-          "w": 63,
-          "h": 46,
-          "under44": false,
-          "disabled": false
-        },
-        {
           "id": "action-primary",
-          "w": 162,
-          "h": 46,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "build-next",
-          "w": 47,
+          "w": 228,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -1728,17 +1658,17 @@
     {
       "file": "40-proto-phone-back.png",
       "note": "two Escape presses: the import page then the sheet, back at the rest frame",
-      "pressed": 18,
+      "pressed": 22,
       "last": {
-        "n": 18,
+        "n": 22,
         "id": "key-Escape",
         "label": "Escape"
       },
       "nav": "YardBuildStoreResearchNeeds 1 DataMenu",
       "band": "Scrap 0Credits 0Store 30/900Sound ✓A 1MOTIONoff",
-      "card": "Next: SalvageDrones 5 · Power 8 · 0 of 8 units requested · 100 % · waits 20 scrap · have 0",
-      "insp": "Empty yard · the first salvage prints here.",
-      "action": "CancelPlace Scrap sorter20 scrapNext",
+      "card": "Next: Connect sorter to the dockDrones 5 · Power 8 · 0 of 8 units requested · 100 %",
+      "insp": "YardPower0 of 8 units requestedBusy0% busy (0/24 in transit)Drones5Scrap sortercell 8",
+      "action": "Connect sorter to the dock",
       "zoom": "Zoom -Zoom +",
       "rects": {
         "shell": {
@@ -1769,19 +1699,19 @@
           "x": 8,
           "y": 58,
           "w": 374,
-          "h": 54
+          "h": 40
         },
         "insp": {
           "x": 8,
-          "y": 118,
+          "y": 104,
           "w": 374,
-          "h": 29
+          "h": 129
         },
         "world": {
           "x": 8,
-          "y": 153,
+          "y": 239,
           "w": 374,
-          "h": 581
+          "h": 495
         },
         "action": {
           "x": 8,
@@ -1848,6 +1778,13 @@
           "disabled": false
         },
         {
+          "id": "row-machine-1",
+          "w": 178,
+          "h": 44,
+          "under44": false,
+          "disabled": false
+        },
+        {
           "id": "zoom-out",
           "w": 63,
           "h": 44,
@@ -1862,22 +1799,8 @@
           "disabled": false
         },
         {
-          "id": "build-cancel",
-          "w": 63,
-          "h": 46,
-          "under44": false,
-          "disabled": false
-        },
-        {
           "id": "action-primary",
-          "w": 162,
-          "h": 46,
-          "under44": false,
-          "disabled": true
-        },
-        {
-          "id": "build-next",
-          "w": 47,
+          "w": 228,
           "h": 46,
           "under44": false,
           "disabled": false
@@ -1894,9 +1817,9 @@
     {
       "file": "41-proto-phone360-scale.png",
       "note": "360x640 one text-scale step up: the same two bottom bands",
-      "pressed": 2,
+      "pressed": 1,
       "last": {
-        "n": 2,
+        "n": 1,
         "id": "tgl-scale",
         "label": "A 1"
       },
@@ -2046,9 +1969,9 @@
     {
       "file": "42-proto-phone360-menu.png",
       "note": "360x640 Menu sheet: sound, scale, reduced motion, the record and the import",
-      "pressed": 3,
+      "pressed": 2,
       "last": {
-        "n": 3,
+        "n": 2,
         "id": "nav-menu",
         "label": "Menu"
       },
@@ -2226,9 +2149,9 @@
     {
       "file": "43-proto-landscape844-store.png",
       "note": "844x390: one row carrying the five slots and the primary, sheet above it",
-      "pressed": 2,
+      "pressed": 1,
       "last": {
-        "n": 2,
+        "n": 1,
         "id": "nav-store",
         "label": "Store"
       },
@@ -2406,9 +2329,9 @@
     {
       "file": "44-proto-landscape844-fork.png",
       "note": "844x390: inspector with the two priced fork faces beside the world",
-      "pressed": 5,
+      "pressed": 4,
       "last": {
-        "n": 5,
+        "n": 4,
         "id": "row-machine-1",
         "label": "Scrap sortercell 0"
       },
@@ -2607,9 +2530,9 @@
     {
       "file": "45-proto-desktop1366-store.png",
       "note": "1366x768: rail, world column, inspector beside it, primary row under the world",
-      "pressed": 2,
+      "pressed": 1,
       "last": {
-        "n": 2,
+        "n": 1,
         "id": "nav-store",
         "label": "Store"
       },
@@ -2787,9 +2710,9 @@
     {
       "file": "46-proto-desktop1920-machine.png",
       "note": "1920x1080: the machine inspector in its own column, the price printed once",
-      "pressed": 3,
+      "pressed": 2,
       "last": {
-        "n": 3,
+        "n": 2,
         "id": "row-machine-1",
         "label": "Scrap sortercell 0"
       },
@@ -2988,9 +2911,9 @@
     {
       "file": "47-proto-desktop1920-research.png",
       "note": "1920x1080: the research list in the same column, one Close face",
-      "pressed": 4,
+      "pressed": 3,
       "last": {
-        "n": 4,
+        "n": 3,
         "id": "nav-research",
         "label": "Research"
       },
@@ -3147,9 +3070,9 @@
     {
       "file": "48-proto-desktop2560-menu.png",
       "note": "2560x1440: the capped frame, the Menu sheet in the right column, the ink beside it",
-      "pressed": 2,
+      "pressed": 1,
       "last": {
-        "n": 2,
+        "n": 1,
         "id": "nav-menu",
         "label": "Menu"
       },

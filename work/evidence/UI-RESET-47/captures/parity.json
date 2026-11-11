@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 PNG/receipt parity (#81 P0-3)",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
+  "headSha": "pending-stamp",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "tool": "parity-47.mjs",
   "receipts": [

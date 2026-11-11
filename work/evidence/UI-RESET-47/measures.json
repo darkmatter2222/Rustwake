@@ -1,6 +1,6 @@
 {
  "source": "captures/captures-proto.json (capture-proto-47.mjs)",
- "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
+ "headSha": "pending-stamp",
  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
  "frames": {
   "30-proto-phone-gate.png": {
@@ -22,21 +22,15 @@
     },
     "card": {
      "w": 374,
-     "h": 40,
+     "h": 8,
      "x": 8,
      "y": 58
     },
-    "insp": {
-     "w": 374,
-     "h": 29,
-     "x": 8,
-     "y": 104
-    },
     "world": {
      "w": 374,
-     "h": 595,
+     "h": 656,
      "x": 8,
-     "y": 139
+     "y": 78
     },
     "action": {
      "w": 374,
@@ -48,7 +42,7 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 11,
+   "faces": 5,
    "facesUnder44": 1
   },
   "31-proto-phone-rest-step0.png": {
@@ -150,7 +144,7 @@
   "33-proto-phone-repaired.png": {
    "pressed": 8,
    "last": "action-primary",
-   "note": "the repair price line then the build step, still one accented face",
+   "note": "the repair committed at 30 scrap, the primary back to Salvage to refill the place price",
    "bands": {
     "nav": {
      "w": 374,
@@ -196,7 +190,7 @@
    "facesUnder44": 1
   },
   "34-proto-phone-build-catalog.png": {
-   "pressed": 9,
+   "pressed": 13,
    "last": "nav-build",
    "note": "Build destination: the catalog over the world, the nav row unchanged",
    "bands": {
@@ -244,7 +238,7 @@
    "facesUnder44": 1
   },
   "35-proto-phone-build-chosen.png": {
-   "pressed": 10,
+   "pressed": 14,
    "last": "bp-sorter",
    "note": "the chosen blueprint, place is the only accented face",
    "bands": {
@@ -292,9 +286,9 @@
    "facesUnder44": 1
   },
   "36-proto-phone-placed.png": {
-   "pressed": 11,
+   "pressed": 15,
    "last": "action-primary",
-   "note": "one machine placed, no slot moved",
+   "note": "one machine placed at 20 scrap, back at the Yard, no slot moved",
    "bands": {
     "nav": {
      "w": 374,
@@ -310,21 +304,21 @@
     },
     "card": {
      "w": 374,
-     "h": 54,
+     "h": 40,
      "x": 8,
      "y": 58
     },
     "insp": {
      "w": 374,
-     "h": 204,
+     "h": 129,
      "x": 8,
-     "y": 118
+     "y": 104
     },
     "world": {
      "w": 374,
-     "h": 406,
+     "h": 495,
      "x": 8,
-     "y": 328
+     "y": 239
     },
     "action": {
      "w": 374,
@@ -336,12 +330,12 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 17,
+   "faces": 12,
    "facesUnder44": 1
   },
   "37-proto-phone-machine.png": {
-   "pressed": 12,
-   "last": "nav-yard",
+   "pressed": 16,
+   "last": "row-machine-1",
    "note": "inspector from the Yard list, one press, no canvas hunting",
    "bands": {
     "nav": {
@@ -358,21 +352,21 @@
     },
     "card": {
      "w": 374,
-     "h": 54,
+     "h": 40,
      "x": 8,
      "y": 58
     },
     "insp": {
      "w": 374,
-     "h": 29,
+     "h": 363,
      "x": 8,
-     "y": 118
+     "y": 104
     },
     "world": {
      "w": 374,
-     "h": 581,
+     "h": 261,
      "x": 8,
-     "y": 153
+     "y": 473
     },
     "action": {
      "w": 374,
@@ -384,11 +378,11 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 13,
+   "faces": 18,
    "facesUnder44": 1
   },
   "38-proto-phone-store.png": {
-   "pressed": 13,
+   "pressed": 17,
    "last": "nav-store",
    "note": "Store destination: one command format on every face",
    "bands": {
@@ -406,7 +400,7 @@
     },
     "card": {
      "w": 374,
-     "h": 54,
+     "h": 40,
      "x": 8,
      "y": 58
     },
@@ -414,13 +408,13 @@
      "w": 374,
      "h": 129,
      "x": 8,
-     "y": 118
+     "y": 104
     },
     "world": {
      "w": 374,
-     "h": 481,
+     "h": 495,
      "x": 8,
-     "y": 253
+     "y": 239
     },
     "action": {
      "w": 374,
@@ -432,11 +426,11 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 14,
+   "faces": 12,
    "facesUnder44": 1
   },
   "39-proto-phone-import-error.png": {
-   "pressed": 16,
+   "pressed": 20,
    "last": "imp-apply",
    "note": "error state: the reason line and the expected shape inside Menu",
    "bands": {
@@ -454,7 +448,7 @@
     },
     "card": {
      "w": 374,
-     "h": 54,
+     "h": 40,
      "x": 8,
      "y": 58
     },
@@ -462,13 +456,13 @@
      "w": 374,
      "h": 457,
      "x": 8,
-     "y": 118
+     "y": 104
     },
     "world": {
      "w": 374,
-     "h": 153,
+     "h": 167,
      "x": 8,
-     "y": 581
+     "y": 567
     },
     "action": {
      "w": 374,
@@ -480,11 +474,11 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 19,
+   "faces": 17,
    "facesUnder44": 1
   },
   "40-proto-phone-back.png": {
-   "pressed": 18,
+   "pressed": 22,
    "last": "key-Escape",
    "note": "two Escape presses: the import page then the sheet, back at the rest frame",
    "bands": {
@@ -502,21 +496,21 @@
     },
     "card": {
      "w": 374,
-     "h": 54,
+     "h": 40,
      "x": 8,
      "y": 58
     },
     "insp": {
      "w": 374,
-     "h": 29,
+     "h": 129,
      "x": 8,
-     "y": 118
+     "y": 104
     },
     "world": {
      "w": 374,
-     "h": 581,
+     "h": 495,
      "x": 8,
-     "y": 153
+     "y": 239
     },
     "action": {
      "w": 374,
@@ -528,11 +522,11 @@
    "viewportWidth": 390,
    "clusterRight": 382,
    "clipOK": true,
-   "faces": 13,
+   "faces": 12,
    "facesUnder44": 1
   },
   "41-proto-phone360-scale.png": {
-   "pressed": 2,
+   "pressed": 1,
    "last": "tgl-scale",
    "note": "360x640 one text-scale step up: the same two bottom bands",
    "bands": {
@@ -580,7 +574,7 @@
    "facesUnder44": 0
   },
   "42-proto-phone360-menu.png": {
-   "pressed": 3,
+   "pressed": 2,
    "last": "nav-menu",
    "note": "360x640 Menu sheet: sound, scale, reduced motion, the record and the import",
    "bands": {
@@ -628,7 +622,7 @@
    "facesUnder44": 0
   },
   "43-proto-landscape844-store.png": {
-   "pressed": 2,
+   "pressed": 1,
    "last": "nav-store",
    "note": "844x390: one row carrying the five slots and the primary, sheet above it",
    "bands": {
@@ -676,7 +670,7 @@
    "facesUnder44": 1
   },
   "44-proto-landscape844-fork.png": {
-   "pressed": 5,
+   "pressed": 4,
    "last": "row-machine-1",
    "note": "844x390: inspector with the two priced fork faces beside the world",
    "bands": {
@@ -724,7 +718,7 @@
    "facesUnder44": 1
   },
   "45-proto-desktop1366-store.png": {
-   "pressed": 2,
+   "pressed": 1,
    "last": "nav-store",
    "note": "1366x768: rail, world column, inspector beside it, primary row under the world",
    "bands": {
@@ -772,7 +766,7 @@
    "facesUnder44": 1
   },
   "46-proto-desktop1920-machine.png": {
-   "pressed": 3,
+   "pressed": 2,
    "last": "row-machine-1",
    "note": "1920x1080: the machine inspector in its own column, the price printed once",
    "bands": {
@@ -820,7 +814,7 @@
    "facesUnder44": 1
   },
   "47-proto-desktop1920-research.png": {
-   "pressed": 4,
+   "pressed": 3,
    "last": "nav-research",
    "note": "1920x1080: the research list in the same column, one Close face",
    "bands": {
@@ -868,7 +862,7 @@
    "facesUnder44": 1
   },
   "48-proto-desktop2560-menu.png": {
-   "pressed": 2,
+   "pressed": 1,
    "last": "nav-menu",
    "note": "2560x1440: the capped frame, the Menu sheet in the right column, the ink beside it",
    "bands": {

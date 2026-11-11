@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 instrumented press budget (#81)",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
+  "headSha": "pending-stamp",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "tool": "playwright-core plus local Chrome/Edge; dist served by this harness on 127.0.0.1:4175; prototype over file://",
   "audit": {
@@ -31,12 +31,12 @@
       }
     ],
     "presses": 28,
-    "settleWaits": 41,
-    "settleMs": 20500,
+    "settleWaits": 40,
+    "settleMs": 20000,
     "machinePress": 12,
     "simAtMachine": {
-      "tick": 290,
-      "tutorial": 5,
+      "tick": 282,
+      "tutorial": 4,
       "machines": 1,
       "credits": 0,
       "scrap": 0,

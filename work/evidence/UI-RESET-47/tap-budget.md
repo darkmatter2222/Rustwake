@@ -1,7 +1,7 @@
 # UI-RESET/NAV (#47) - instrumented press budget
 
 - Issue: https://github.com/darkmatter2222/Rustwake/issues/47 | Follow-up: https://github.com/darkmatter2222/Rustwake/issues/81 | Goal: https://github.com/darkmatter2222/Rustwake/issues/43 | Branch `rw/81-nav-parity-g1` | Role: ui-ux
-- One **press** = one painted face activated once, or one key. Counted, not hand-traced. Three committed receipts carry the numbers, each produced by an instrumented harness:
+- One **press** = one painted face activated once, or one key. Counted, not hand-traced. The prototype enforces this (#81 rework): `tap()` ignores absent, disabled and locked faces, so they are never counted and run no handler. Three committed receipts carry the numbers, each produced by an instrumented harness:
   - shipped shell spec path: `capture-nav-47.mjs` -> `captures/captures-nav.json`, field `presses` (plus `settleWaits`/`settleMs` for auto-settle);
   - dedicated press-budget run, app and model: `tap-budget-47.mjs` -> `tap-budget.json` and `captures/captures-tbudget.json`;
   - specified design path: `capture-proto-47.mjs` -> `captures/captures-proto.json`, field `pressed` (the prototype's own counter `S.pressed`).
@@ -39,13 +39,15 @@ App path (`app`), fresh save, Begin -> Store round trip -> ladder to the first p
 |---|---|---|
 | presses to first placed machine | 12 | `app.machinePress` |
 | total presses (incl. production hunt) | 28 | `app.presses` / `app.pressProduction` |
-| auto-settle waits / ms | 41 / 20500 | `app.settleWaits` / `app.settleMs` |
+| auto-settle waits / ms | 40 / 20000 | `app.settleWaits` / `app.settleMs` |
 | canvas selection probes | 107 | `app.probes` |
 | Actual rate at first machine | 0.00 batches/s · 9s window | `app.rateAtFirstMachine` |
 | production reading | 0.00 batches/s · 9s window | `app.productionReading` |
 | sim tick at production reading | 480 | `app.tick` |
 
 Honest finding: the first machine is placed but **does not produce** inside this run - the Scrap sorter needs 2 scrap input that nothing in the yard supplies yet, so the rate stays 0.00 even though the sim ran to tick 480. Frames `60-tbudget-app-machine`, `61-tbudget-app-production`.
+
+Timing note (#81 rework re-run): `settleWaits` is sim-timing dependent, not scripted - the committed run measured 41 waits (20500 ms), this re-run measured 40 (20000 ms); the presses (28 / 12), probes (107) and tick (480) reproduced exactly. The receipt carries the re-run's actual values.
 
 Model path (`prototype`), the prototype's own counter:
 
@@ -62,22 +64,24 @@ The model rate is 0.00 **by construction**: `prototype-nav.html` is a static pai
 
 | frame | pressed | painted frame | last log id |
 |---|---|---|---|
-| gate | 0 | `30-proto-phone-gate` | - |
+| gate (seed=gate, nav not painted) | 0 | `30-proto-phone-gate` | - |
 | rest at step 0, five slots | 1 | `31-proto-phone-rest-step0` | gate-begin |
 | salvage counted | 7 | `32-proto-phone-salvage` | action-primary |
-| repaired, build step in the primary band | 8 | `33-proto-phone-repaired` | action-primary |
-| Build destination open | 9 | `34-proto-phone-build-catalog` | nav-build |
-| blueprint chosen | 10 | `35-proto-phone-build-chosen` | bp-sorter |
-| one machine placed | 11 | `36-proto-phone-placed` | action-primary |
-| **machine inspected from the Yard list** | **12** | `37-proto-phone-machine` | nav-yard |
-| Store with the one command format | 13 | `38-proto-phone-store` | nav-store |
-| Menu import error | 16 | `39-proto-phone-import-error` | imp-apply |
-| two Escape presses back to rest | 18 | `40-proto-phone-back` | key-Escape |
+| repaired at 30 scrap, primary back to Salvage | 8 | `33-proto-phone-repaired` | action-primary |
+| Build destination open | 13 | `34-proto-phone-build-catalog` | nav-build |
+| blueprint chosen | 14 | `35-proto-phone-build-chosen` | bp-sorter |
+| one machine placed | 15 | `36-proto-phone-placed` | action-primary |
+| **machine inspected from the Yard list** | **16** | `37-proto-phone-machine` | row-machine-1 |
+| Store with the one command format | 17 | `38-proto-phone-store` | nav-store |
+| Menu import error | 20 | `39-proto-phone-import-error` | imp-apply |
+| two Escape presses back to rest | 22 | `40-proto-phone-back` | key-Escape |
+
+Presses 9-12 have no frame: they are the four Salvage presses between frames 33 and 34 that refill the 20-scrap place price the repair consumed (#81 rework - before it, Place was pressed at 0 scrap while disabled, and frames 36/37 painted no machine). The count jumps 8 -> 13 at the Build frame. Every press in the ladder is now an enabled painted face: Place reads `disabled:false` at press 15, frame 36 paints `machines 1` with the Yard row `Scrap sorter · cell 8`, and frame 37's inspector reads `Scrap sorter · level 1` with the fork faces painted disabled at 0 credits.
 
 ## 4. Reading
 
-- To an inspected machine: **12 presses in the design (`37-proto-phone-machine`), 22 in the shipped shell (`09-nav-phone-two-machines`), 16 in the #45 budget**. The design beats the audit budget by 4 presses and the shipped shell by 10. The dedicated model run agrees: `tap-budget.json` `prototype.machinePress = 12`.
-- Whole path including the settings faces and the save record: **18 presses in the design (`40-proto-phone-back`) against 39 in the shipped shell (`15-nav-phone-muted`)**, and the shipped shell does not reach the upgrade fork inside 39 (`11-nav-phone-fork` still prints a build face).
+- To an inspected machine: **16 presses in the design (`37-proto-phone-machine`), 22 in the shipped shell (`09-nav-phone-two-machines`), 16 in the #45 budget**. The design ties the audit budget and beats the shipped shell by 6. The dedicated model run places at **12** (`tap-budget.json` `prototype.machinePress = 12`) because it presses only the primary band, whose `Build Scrap sorter` step places directly; the design's Build-destination route spends 3 more presses painting the catalog and the chosen blueprint (nav-build, bp-sorter, Place) and 1 more inspecting from the Yard list - 12 + 3 + 1 = 16, measured, not estimated. The section 6 target of 13 is the primary-band place (12) plus one Yard-list press; the painted Build-destination route sits 3 above that target and the gap is the catalog detour, recorded not hidden.
+- Whole path including the settings faces and the save record: **22 presses in the design (`40-proto-phone-back`) against 39 in the shipped shell (`15-nav-phone-muted`)**, and the shipped shell does not reach the upgrade fork inside 39 (`11-nav-phone-fork` still prints a build face).
 - The three rules that pay are the ones in `navigation-spec.md`: a destination row that never changes slots (section 1), a Yard list whose machine faces are real buttons (E4, section 5) and one sheet replaced by the next instead of an open plus a Close pair (E3).
 
 ## 5. Measured layout caveats - source `measures.json` (measures-from-captures.mjs)
