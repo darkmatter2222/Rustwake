@@ -1,6 +1,6 @@
 {
  "source": "captures/captures-proto.json (capture-proto-47.mjs)",
- "headSha": "pending-stamp",
+ "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
  "frames": {
   "30-proto-phone-gate.png": {

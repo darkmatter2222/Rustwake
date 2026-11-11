@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 prototype path",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "pending-stamp",
+  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
   "tool": "playwright-core plus local Chrome/Edge, the self-contained prototype over file://",
   "note": "the press column is the prototype own counter (S.pressed): one press per painted face",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",

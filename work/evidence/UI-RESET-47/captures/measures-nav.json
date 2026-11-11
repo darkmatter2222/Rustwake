@@ -1,6 +1,6 @@
 {
   "task": "UI-RESET/NAV #47 band rects",
-  "headSha": "pending-stamp",
+  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "note": "same probe shape as #45 measures.json",
   "out": {

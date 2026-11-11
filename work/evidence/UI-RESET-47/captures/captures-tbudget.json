@@ -1,7 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 tap-budget frames (#81)",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
-  "headSha": "pending-stamp",
+  "headSha": "1468b6194d3cd960533c249479824b7f7c832751",
   "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "tool": "tap-budget-47.mjs",
   "note": "one entry per PNG; presses = shipped-shell painted-face activations, pressed = prototype own counter",
