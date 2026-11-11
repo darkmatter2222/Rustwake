@@ -57,17 +57,43 @@ const probe = (page) => page.evaluate(() => {
   const de = document.documentElement;
   const raw = localStorage.getItem("rustwake.save.v1");
   const sim = raw ? JSON.parse(raw).payload.sim : null;
+  // getBoundingClientRect ignores ancestor clipping: a row scrolled below the
+  // fold of `.panel__body` / `.shell-menu__body` still reports its layout box.
+  // Intersect with every clipping ancestor so `visible` and `reach` judge the
+  // painted pixels, not the layout geometry (the phone-band reach failures in
+  // the first capture pass were all clipped scroller rows, not painted overflow).
+  const paintedRect = (n, r) => {
+    let rect = { x: r.x, y: r.y, w: r.width, h: r.height };
+    for (let a = n.parentElement; a; a = a.parentElement) {
+      const cs = getComputedStyle(a);
+      if (cs.overflowX === "visible" && cs.overflowY === "visible") continue;
+      const ar = a.getBoundingClientRect();
+      const x = Math.max(rect.x, ar.x), y = Math.max(rect.y, ar.y);
+      const right = Math.min(rect.x + rect.w, ar.x + ar.width);
+      const bottom = Math.min(rect.y + rect.h, ar.y + ar.height);
+      rect = { x, y, w: Math.max(0, right - x), h: Math.max(0, bottom - y) };
+      if (rect.w === 0 || rect.h === 0) break;
+    }
+    return rect;
+  };
   const buttons = [...document.querySelectorAll(".hud button")].map((n) => {
     const r = n.getBoundingClientRect();
     const cs = getComputedStyle(n);
+    const painted = paintedRect(n, r);
     return {
       label: (n.getAttribute("aria-label") ?? n.textContent ?? "").trim().slice(0, 44),
-      visible: cs.display !== "none" && cs.visibility !== "hidden" && r.width > 0,
+      visible: cs.display !== "none" && cs.visibility !== "hidden" && painted.w > 0 && painted.h > 0,
       x: r.x, y: r.y, w: r.width, h: r.height,
+      px: painted.x, py: painted.y, pw: painted.w, ph: painted.h,
       minH: Number.parseFloat(cs.minHeight) || 0,
       disabled: n.disabled,
     };
   });
+  // The column lead reserves its top-right corner for the Menu face via
+  // padding-right; the box overlap test needs the measured reserve to tell a
+  // reserved-zone paint (contract) from a real collision (defect).
+  const leadTop = document.querySelector(".hud__top") ?? document.querySelector(".hud__lead");
+  const leadPadRight = leadTop ? Number.parseFloat(getComputedStyle(leadTop).paddingRight) || 0 : 0;
   const rail = document.querySelector(".shell-rail");
   const railOn = !!rail && getComputedStyle(rail).display !== "none";
   // Canvas ink: one read, strided sample against the corner background pixel.
@@ -103,6 +129,7 @@ const probe = (page) => page.evaluate(() => {
       face: box(".shell-menu-face"),
     },
     inspectorTop: getComputedStyle(de).getPropertyValue("--shell-inspector-top").trim() || null,
+    leadPadRight,
     panelTitles: [...document.querySelectorAll(".panel__title")].map((n) => (n.textContent ?? "").trim()),
     menuOpen: !!document.querySelector('.shell-menu[role="dialog"]'),
     railSlots: [...document.querySelectorAll(".shell-rail [data-slot]")].map((n) => ({
@@ -253,7 +280,8 @@ function checks(p, expect) {
   c.bodyHidden = p.bodyOverflow === "hidden";
   const visible = p.buttons.filter((b) => b.visible);
   c.visibleTargets = visible.length;
-  c.reach = visible.every((b) => b.x >= -0.5 && b.y >= -0.5 && b.x + b.w <= p.viewport[0] + 0.5 && b.y + b.h <= p.viewport[1] + 0.5);
+  // Reach judges the painted rect: clipped scroller rows are not painted targets.
+  c.reach = visible.every((b) => b.px >= -0.5 && b.py >= -0.5 && b.px + b.pw <= p.viewport[0] + 0.5 && b.py + b.ph <= p.viewport[1] + 0.5);
   c.floors = visible.every((b) => b.minH >= 44);
   c.ink = p.ink ? p.ink.ratio > 0.02 : false;
   const entries = Object.entries(p.boxes).filter(([, v]) => v);
@@ -263,6 +291,12 @@ function checks(p, expect) {
       const [ka, a] = entries[i], [kb, b] = entries[j];
       // The phone Menu face sits in the dock's reserved 72 px padding zone.
       if ((ka === "dock" && kb === "face") || (ka === "face" && kb === "dock")) continue;
+      // The column Menu face sits in the lead's measured padding-right reserve;
+      // an overlap confined to that reserve is the contract, not a collision.
+      if ((ka === "lead" && kb === "face") || (ka === "face" && kb === "lead")) {
+        const l = p.boxes.lead, f = p.boxes.face;
+        if (f.x >= l.right - p.leadPadRight - 0.5) continue;
+      }
       const ix = Math.min(a.right, b.right) - Math.max(a.x, b.x);
       const iy = Math.min(a.bottom, b.bottom) - Math.max(a.y, b.y);
       if (ix > 1 && iy > 1) overlaps.push(`${ka}/${kb}`);
@@ -278,6 +312,11 @@ function checks(p, expect) {
     const r = p.boxes.rail;
     c.railBox = !!r && Math.abs(r.x - 8) <= 1 && Math.abs(r.w - 96) <= 1;
     c.dockBand = !!p.boxes.dock && Math.abs(p.boxes.dock.x - 110) <= 1;
+    // Bug-1 regression: after Begin, App must have measured the lead and lifted
+    // --shell-inspector-top past it (ceil(bottom + 6)); null meant the effect
+    // never re-ran once the gate cleared and the sheets fell back to 104 px.
+    const top = Number.parseFloat(p.inspectorTop ?? "");
+    c.inspectorTopSet = Number.isFinite(top) && (!p.boxes.lead || top >= p.boxes.lead.bottom + 5);
     const sheet = p.boxes.menu ?? p.boxes.panel;
     if (sheet) {
       c.sheetBox = Math.abs(sheet.right - (p.viewport[0] - 8)) <= 1 && Math.abs(sheet.w - 320) <= 1 && sheet.y >= 103;

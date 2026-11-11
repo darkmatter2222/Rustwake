@@ -817,10 +817,14 @@ body {
 }
 
 /* Column mode (600..1199 px): the Menu face takes the top-right corner the
-   deleted Home face left behind; the lead block keeps clear of it. */
+   deleted Home face left behind; the lead block keeps clear of it. The reserve
+   scales with the text: the face's rem label measured 52.1 px at scale 1 but
+   86.2 px at scale 2 (768x1024 captures 19/23), and a fixed 56 px reserve let
+   the face paint over the Text-size button at scale 2. 24 + 38*scale clears the
+   measured face (16 px padding + ~36 px label per scale) plus a gutter. */
 @media (min-width: 600px) and (max-width: 1199px) {
   .hud__top {
-    padding-right: 56px;
+    padding-right: calc(24px + 38px * var(--text-scale, 1));
   }
 }
 
@@ -870,6 +874,12 @@ body {
     max-width: 320px;
     max-height: none;
     margin-top: 0;
+    /* Measured (UI-RESET-49 captures 27/28, 844x390): the base `align-self:
+       center` survives into the absolute box, so Chrome sized the panel to its
+       content and centred it between the insets — a tall machine card landed at
+       y=0 and spilled past the viewport bottom. Stretch lets top/bottom own the
+       height; `.panel__body` stays the declared scroller inside it. */
+    align-self: stretch;
   }
   /* Two layers share the gutter vertically: the older report up top, the
      newest context below it, matching the phone's nearest-first order. */

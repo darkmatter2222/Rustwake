@@ -1,4 +1,8 @@
-// Temporary geometry debugger for UI-RESET-49 (deleted before publish).
+// Geometry probe for UI-RESET-49: dumps the painted menu/panel boxes per mode.
+// The first revision clicked the rail menu slot at every viewport, so the phone
+// band reported menu:null (the rail is not rendered there) — a script artifact,
+// not a paint defect. This revision opens the menu through the mode's own face
+// and then opens the store panel, so both sheets are measured where they paint.
 import { chromium } from "playwright-core";
 import { existsSync, readFileSync } from "node:fs";
 const exe = ["C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"].find((p) => existsSync(p));
@@ -13,7 +17,14 @@ for (const vp of [{ w: 844, h: 390, m: true }, { w: 1280, h: 800, m: false }, { 
   await p.waitForTimeout(2500);
   await p.evaluate(() => { const back = [...document.querySelectorAll("button")].find((x) => (x.textContent || "").trim().startsWith("Back to yard")); back?.click(); });
   await p.waitForTimeout(500);
-  await p.evaluate(() => document.querySelector('.shell-rail [data-slot="menu"]')?.click());
+  const mode = await p.evaluate(() => {
+    const rail = document.querySelector(".shell-rail");
+    return rail && getComputedStyle(rail).display !== "none" ? "rail" : (innerWidth <= 599 ? "phone" : "column");
+  });
+  await p.evaluate((m) => {
+    const n = m === "rail" ? document.querySelector('.shell-rail [data-slot="menu"]') : document.querySelector(".shell-menu-face");
+    n?.click();
+  }, mode);
   await p.waitForTimeout(400);
   const info = await p.evaluate(() => {
     const de = document.documentElement;
@@ -37,12 +48,15 @@ for (const vp of [{ w: 844, h: 390, m: true }, { w: 1280, h: 800, m: false }, { 
       panel: pcs ? { top: pcs.top, bottom: pcs.bottom, maxHeight: pcs.maxHeight, height: pcs.height, display: pcs.display, overflow: pcs.overflow } : null,
       panelBody: bcs ? { overflow: bcs.overflow, overflowY: bcs.overflowY, flex: bcs.flex, minHeight: bcs.minHeight } : null,
       leadBottom: document.querySelector(".hud__lead")?.getBoundingClientRect().bottom,
+      faceRect: document.querySelector(".shell-menu-face")?.getBoundingClientRect().toJSON() ?? null,
       mq: matchMedia("(min-width: 1200px), (min-width: 600px) and (max-height: 460px)").matches,
       inner: [innerWidth, innerHeight],
     };
   });
-  console.log(vp.w + "x" + vp.h, JSON.stringify(info, null, 1));
+  console.log(vp.w + "x" + vp.h, "mode=" + mode, JSON.stringify(info, null, 1));
   if (vp.w === 1280) {
+    // While the menu is still open: which inset/alignment combination owns the
+    // height. Escape below unmounts the sheet, so these probes must run first.
     const steps = await p.evaluate(() => {
       const m = document.querySelector(".shell-menu");
       const out = [];
@@ -61,6 +75,29 @@ for (const vp of [{ w: 844, h: 390, m: true }, { w: 1280, h: 800, m: false }, { 
     });
     console.log("STEPS", JSON.stringify(steps, null, 1));
   }
+  // Then the store panel: proves the panel paints in the phone/column bands too.
+  await p.keyboard.press("Escape");
+  await p.waitForTimeout(300);
+  await p.evaluate((m) => {
+    if (m === "rail") document.querySelector('.shell-rail [data-slot="store"]')?.click();
+    else [...document.querySelectorAll("button")].find((x) => (x.textContent || "").trim().startsWith("Store"))?.click();
+  }, mode);
+  await p.waitForTimeout(400);
+  const panelInfo = await p.evaluate((m) => {
+    const panel = document.querySelector(".panel");
+    const cs = panel ? getComputedStyle(panel) : null;
+    return {
+      mode: m,
+      title: (document.querySelector(".panel__title")?.textContent || "").trim() || null,
+      rect: panel?.getBoundingClientRect().toJSON() ?? null,
+      display: cs?.display ?? null,
+      alignSelf: cs?.alignSelf ?? null,
+      top: cs?.top ?? null,
+      rootVar: getComputedStyle(document.documentElement).getPropertyValue("--shell-inspector-top"),
+      leadBottom: document.querySelector(".hud__lead")?.getBoundingClientRect().bottom,
+    };
+  }, mode);
+  console.log(vp.w + "x" + vp.h, "PANEL", JSON.stringify(panelInfo, null, 1));
   await c.close();
 }
 await b.close();

@@ -218,7 +218,11 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     const observer = new ResizeObserver(measure);
     observer.observe(lead);
     return () => observer.disconnect();
-  }, [railMode, settings.textScale, state.tutorial]);
+    // `started` is load-bearing: at mount the gate is still up and `.hud__lead`
+    // does not exist, so the first run bails. Without it in the deps the effect
+    // never re-ran once the yard painted and --shell-inspector-top stayed unset
+    // (the rail sheets fell back to 104 px and overlapped the lead block).
+  }, [railMode, started, settings.textScale, state.tutorial]);
 
   useEffect(() => {
     // Q-005 S-17: the store is the one source of truth for mute. An import or a

@@ -155,6 +155,9 @@ function stubMedia(rail: boolean) {
 
 beforeEach(() => {
   document.body.innerHTML = "";
+  // The inspector-top variable lives on documentElement, which survives the
+  // body reset; a prior rail test would otherwise leak its measured value in.
+  document.documentElement.style.removeProperty("--shell-inspector-top");
   for (const raw of [stylesRaw, shellRaw]) {
     const style = document.createElement("style");
     style.textContent = raw;
@@ -430,5 +433,45 @@ describe("G2 reachability and scroll", () => {
     const body = document.querySelector<HTMLElement>(".shell-menu__body");
     expect(getComputedStyle(body!).overflowY).toBe("auto");
     expect(getComputedStyle(menuSheet()!).maxHeight).toBe("42%");
+  });
+});
+
+describe("G2 inspector top paint-truth (capture bug regressions)", () => {
+  it("measures the lead once the gate clears and sets --shell-inspector-top in rail mode", () => {
+    stubMedia(true);
+    const store = matureStore();
+    mount(store);
+    // The gate is up: `.hud__lead` does not exist yet, so nothing is measured.
+    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("");
+    begin();
+    // Regression: the effect's deps must include `started`, or this never runs
+    // after the gate clears. jsdom rects are zero, so the one-shot measurement
+    // lands on the 104 px floor; the chromium pass proves the lifted values
+    // (ceil(lead.bottom + 6)) at every rail viewport and text scale.
+    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("104px");
+  });
+
+  it("keeps the variable unset outside rail mode, where the panels stay in flow", () => {
+    stubMedia(false);
+    const store = matureStore();
+    mount(store);
+    begin();
+    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("");
+  });
+
+  it("pins the rail stretch and the scaling column reserve in both sheets", () => {
+    // The base cascade centers absolutely-positioned sheets between their
+    // insets; without `align-self: stretch` in the rail blocks Chrome
+    // content-sizes them (measured: menu y=281 at 1280x800, panel y=0 spilling
+    // past the 844x390 viewport). Both rail blocks must carry the override.
+    const railOnward = (raw: string) => raw.slice(raw.indexOf(`@media ${RAIL_MEDIA}`));
+    expect(railOnward(stylesRaw)).toContain("align-self: stretch");
+    expect(railOnward(shellRaw)).toContain("align-self: stretch");
+    // The column lead's corner reserve scales with the text: the Menu face's
+    // rem label measured 52.1 px at scale 1 and 86.2 px at scale 2, so a fixed
+    // 56 px reserve let the face paint over the Text-size button at scale 2.
+    const reserve = "padding-right: calc(24px + 38px * var(--text-scale, 1))";
+    expect(stylesRaw).toContain(reserve);
+    expect(shellRaw).toContain(reserve);
   });
 });

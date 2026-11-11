@@ -193,9 +193,11 @@
     top: max(8px, env(safe-area-inset-top));
     right: max(10px, env(safe-area-inset-right));
   }
-  /* Keep the cluster clear of the face at every text scale. */
+  /* Keep the cluster clear of the face at every text scale. The face's rem
+     label grows with the scale (measured 52.1 px at 1, 86.2 px at 2), so the
+     reserve grows with it — same value as the styles.css column block. */
   .hud__top {
-    padding-right: 56px;
+    padding-right: calc(24px + 38px * var(--text-scale, 1));
   }
 }
 
@@ -234,5 +236,11 @@
     max-width: 320px;
     max-height: none;
     margin-top: 0;
+    /* Measured (debug-geometry STEPS, 1280x800): the base `align-self: center`
+       survives into the absolute box — Chrome then sizes it to its content and
+       centres it between the insets (y=281 instead of filling 104..792; at
+       844x390 the content is taller than the gap and the sheet spilled over the
+       lead, y=56). Stretch makes top/bottom own the height, like every panel. */
+    align-self: stretch;
   }
 }
