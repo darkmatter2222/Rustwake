@@ -1,0 +1,59 @@
+{
+  "task": "UI-RESET-95 Panels.tsx mechanical split",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/95",
+  "headSha": "f832639a3d622387ec8d207e54f214d603128bfc",
+  "measuredAt": "2026-11-11T21:00:27.685Z",
+  "ceilingBytes": 233000,
+  "entry": {
+    "name": "index-DFIPngEk.js",
+    "bytes": 89365,
+    "headroomBytes": 143635,
+    "underCeiling": true
+  },
+  "vendor": {
+    "name": "vendor-Bt4lNSbZ.js",
+    "bytes": 141658
+  },
+  "tables": {
+    "name": "tables-BMoz1KUD.js",
+    "bytes": 26519
+  },
+  "css": {
+    "name": "index-A5G1B1x_.css",
+    "bytes": 20538
+  },
+  "worker": {
+    "name": "catchup.worker-G_Jyr7uh.js",
+    "bytes": 13406
+  },
+  "indexHtmlBytes": 1368,
+  "assetLinks": [
+    "./assets/index-DFIPngEk.js",
+    "./assets/vendor-Bt4lNSbZ.js",
+    "./assets/tables-BMoz1KUD.js",
+    "./assets/index-A5G1B1x_.css"
+  ],
+  "allAssetLinksRelative": true,
+  "files": [
+    {
+      "name": "catchup.worker-G_Jyr7uh.js",
+      "bytes": 13406
+    },
+    {
+      "name": "index-A5G1B1x_.css",
+      "bytes": 20538
+    },
+    {
+      "name": "index-DFIPngEk.js",
+      "bytes": 89365
+    },
+    {
+      "name": "tables-BMoz1KUD.js",
+      "bytes": 26519
+    },
+    {
+      "name": "vendor-Bt4lNSbZ.js",
+      "bytes": 141658
+    }
+  ]
+}

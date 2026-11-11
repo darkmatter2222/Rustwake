@@ -1,0 +1,190 @@
+{
+  "task": "UI-RESET-95 Panels.tsx mechanical split boot probe",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/95",
+  "headSha": "f832639a3d622387ec8d207e54f214d603128bfc",
+  "url": "http://localhost:4205/",
+  "measuredAt": "2026-11-11T21:01:26.152Z",
+  "tool": "playwright-core + local Chrome/Edge headless, vite preview; DOM/console/resource probes only (no visual inspection)",
+  "seed": "docs/evidence/yard-mature.json (tick 18298, tutorial 9, stale lastSeenMs forces the catch-up worker)",
+  "panelCoverage": "StorePanel (rail + dock), ResearchPanel (rail), YardPanel (rail + menu row), ReturnReportPanel (catch-up); MachinePanel covered by app tests + DOM-identity harness",
+  "indexHtml": {
+    "assetLinks": [
+      "./assets/index-DFIPngEk.js",
+      "./assets/vendor-Bt4lNSbZ.js",
+      "./assets/tables-BMoz1KUD.js",
+      "./assets/index-A5G1B1x_.css"
+    ],
+    "allRelative": true
+  },
+  "contexts": [
+    {
+      "context": "fresh-desk1280",
+      "viewport": [
+        1280,
+        800
+      ],
+      "gateSeen": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "badResponses": [],
+      "requestFailures": [],
+      "chunks": [
+        "http://localhost:4205/assets/index-DFIPngEk.js",
+        "http://localhost:4205/assets/index-A5G1B1x_.css",
+        "http://localhost:4205/assets/tables-BMoz1KUD.js",
+        "http://localhost:4205/assets/vendor-Bt4lNSbZ.js"
+      ],
+      "chunkCheck": {
+        "entryLoaded": true,
+        "tablesLoaded": true,
+        "vendorLoaded": true,
+        "workerFetched": false
+      },
+      "gateCleared": true,
+      "tick1": 10,
+      "tick2": 20,
+      "ticking": true,
+      "ink": {
+        "samples": 4288,
+        "diff": 1115,
+        "ratio": 0.26
+      },
+      "markers": {
+        "panels": [],
+        "railPresent": true,
+        "railVisible": true,
+        "slots": [
+          "yard",
+          "build",
+          "store",
+          "research",
+          "menu"
+        ],
+        "dockPresent": true,
+        "menuFacePresent": true,
+        "menuDialogOpen": false
+      },
+      "storePanel": {
+        "classes": "panel panel--stack",
+        "aria": "Store contents",
+        "title": "Yard store"
+      },
+      "storeClosed": true,
+      "menuOpen": true,
+      "menuClosed": true
+    },
+    {
+      "context": "mature-desk1280-worker",
+      "viewport": [
+        1280,
+        800
+      ],
+      "gateSeen": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "badResponses": [],
+      "requestFailures": [],
+      "chunks": [
+        "http://localhost:4205/assets/index-DFIPngEk.js",
+        "http://localhost:4205/assets/index-A5G1B1x_.css",
+        "http://localhost:4205/assets/tables-BMoz1KUD.js",
+        "http://localhost:4205/assets/vendor-Bt4lNSbZ.js",
+        "http://localhost:4205/assets/catchup.worker-G_Jyr7uh.js"
+      ],
+      "chunkCheck": {
+        "entryLoaded": true,
+        "tablesLoaded": true,
+        "vendorLoaded": true,
+        "workerFetched": true
+      },
+      "reportPanel": {
+        "classes": "panel panel--report",
+        "aria": "Return report",
+        "title": "While you were away"
+      },
+      "backSeen": true,
+      "ink": {
+        "samples": 4288,
+        "diff": 1105,
+        "ratio": 0.2577
+      },
+      "tickAfterCatchup": 450298,
+      "yardPanel": {
+        "classes": "panel panel--stack",
+        "aria": "Yard record",
+        "title": "Yard record"
+      },
+      "yardExport": {
+        "present": true,
+        "length": 27839
+      },
+      "researchPanel": {
+        "classes": "panel panel--research panel--stack",
+        "aria": "Research",
+        "title": "Research"
+      },
+      "storePanel": {
+        "classes": "panel panel--stack",
+        "aria": "Store contents",
+        "title": "Yard store"
+      },
+      "yardViaMenu": {
+        "classes": "panel panel--stack",
+        "aria": "Yard record",
+        "title": "Yard record"
+      }
+    },
+    {
+      "context": "fresh-phone390",
+      "viewport": [
+        390,
+        844
+      ],
+      "gateSeen": true,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "badResponses": [],
+      "requestFailures": [],
+      "chunks": [
+        "http://localhost:4205/assets/index-DFIPngEk.js",
+        "http://localhost:4205/assets/tables-BMoz1KUD.js",
+        "http://localhost:4205/assets/vendor-Bt4lNSbZ.js",
+        "http://localhost:4205/assets/index-A5G1B1x_.css"
+      ],
+      "chunkCheck": {
+        "entryLoaded": true,
+        "tablesLoaded": true,
+        "vendorLoaded": true,
+        "workerFetched": false
+      },
+      "ink": {
+        "samples": 4225,
+        "diff": 2059,
+        "ratio": 0.4873
+      },
+      "markers": {
+        "panels": [],
+        "railPresent": false,
+        "railVisible": false,
+        "slots": [],
+        "dockPresent": true,
+        "menuFacePresent": true,
+        "menuDialogOpen": false
+      },
+      "storePanel": {
+        "classes": "panel panel--stack",
+        "aria": "Store contents",
+        "title": "Yard store"
+      },
+      "storeClosed": true,
+      "menuOpen": true,
+      "menuClosed": true
+    }
+  ],
+  "summary": {
+    "contexts": 3,
+    "failures": 0,
+    "pass": true
+  },
+  "failures": []
+}
