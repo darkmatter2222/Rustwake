@@ -1,6 +1,7 @@
 {
   "task": "UI-RESET/NAV #47 band rects",
-  "headSha": "224e22aa57a68215a2eddfe606ef50462b4d0b5e",
+  "headSha": "05499b9bc470363cec38b836f509e0e091e6b566",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
   "note": "same probe shape as #45 measures.json",
   "out": {
     "phone-390x844-dpr2": {

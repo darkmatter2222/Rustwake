@@ -1,0 +1,35 @@
+{
+  "task": "UI-RESET/NAV #47 PNG/receipt parity (#81 P0-3)",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/47",
+  "headSha": "05499b9bc470363cec38b836f509e0e091e6b566",
+  "headShaConvention": "stamped by stamp-headsha-47.mjs to the captures commit; see README.md",
+  "tool": "parity-47.mjs",
+  "receipts": [
+    {
+      "file": "captures/captures-nav.json",
+      "entries": 25,
+      "pressField": "presses"
+    },
+    {
+      "file": "captures/captures-proto.json",
+      "entries": 19,
+      "pressField": "pressed"
+    },
+    {
+      "file": "captures/captures-tbudget.json",
+      "entries": 4,
+      "pressField": "presses|pressed"
+    }
+  ],
+  "pngCount": 48,
+  "entryCount": 48,
+  "pressFieldCounts": {
+    "presses": 27,
+    "pressed": 21
+  },
+  "pngsWithoutEntry": [],
+  "entriesWithoutPng": [],
+  "duplicateEntries": [],
+  "missingPress": [],
+  "ok": true
+}

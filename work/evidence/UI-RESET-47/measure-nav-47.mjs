@@ -58,5 +58,5 @@ const browser = await chromium.launch({ executablePath: exe });
 const bands = [["phone-390x844-dpr2", 390, 844, 2, true], ["phone-360x640-dpr3", 360, 640, 3, true], ["landscape-844x390", 844, 390, 2, true], ["desktop-1366x768", 1366, 768, 1, false], ["desktop-1920x1080", 1920, 1080, 1, false], ["desktop-2560x1440", 2560, 1440, 1, false]];
 const result = {};
 for (const [name, w, h, dpr, mobile] of bands) { result[name] = await run(browser, w, h, dpr, mobile, name); console.log(name + ": rest buttons " + result[name].rest.buttons + ", dock " + result[name].rest.dockLabels.join(" / ")); }
-writeFileSync(resolve(out, "measures-nav.json"), JSON.stringify({ task: "UI-RESET/NAV #47 band rects", headSha: process.env.RUSTWAKE_SHA ?? "224e22aa57a68215a2eddfe606ef50462b4d0b5e", note: "same probe shape as #45 measures.json", out: result }, null, 2) + String.fromCharCode(10));
+writeFileSync(resolve(out, "measures-nav.json"), JSON.stringify({ task: "UI-RESET/NAV #47 band rects", headSha: process.env.RUSTWAKE_SHA ?? "pending-stamp", headShaConvention: "stamped by stamp-headsha-47.mjs to the captures commit; see README.md", note: "same probe shape as #45 measures.json", out: result }, null, 2) + String.fromCharCode(10));
 await browser.close();
