@@ -1,0 +1,1639 @@
+{
+  "issue": 61,
+  "role": "developer",
+  "buildSha": "ab3f67aa3fbada898c0e19d5b9d11ccc1f5da6d4",
+  "baseUrl": "http://127.0.0.1:5161/",
+  "branch": "rw/61-return",
+  "generatedAt": "2026-11-12T12:53:36.184Z",
+  "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+  "method": "headless Chrome DOM + geometry + canvas-pixel + persisted-state mirror only; no vision. Screenshots are hashed mirrors, not inspected visually. Report parity anchored to the game's OWN catchUp oracle on a seed clone at the DOM's exact awayTicks.",
+  "fixtureScrutiny": {
+    "a": "Only setup seeding mutates state: fixtures are docs/evidence/yard-mature.json payload.sim VERBATIM (cap/long/short/large) or createInitialState() (zero), re-encoded with the game's OWN encodeSave and lastSeenMs=Date.now()-gap in the past. No sim field edited. A probe-only 'rw61.seeded' marker writes the seed once per context so reloads read the game's own persisted save. Every action is a real UI click/tap/key/scroll/reload.",
+    "b": "Documented in this probe header, the FIXTURES table and results.json.",
+    "c": "Every seeded envelope passes the game's full decodeSave/repairRegistration/validateSim (asserted). Boot steps assert the loaded mirror kept the seed's machines/routes/tutorial. Report gains/credits/deliveries/batches/bottleneck are compared to the game's OWN catchUp run on a seed clone at the DOM's awayTicks — exact, not hand-written. No invariant weakened.",
+    "d": "No action faked by injection; localStorage read only as the game's own persistence mirror. Clipboard success uses a real granted permission; refusal/missing-API branches are unit-covered (return-61.test.tsx), not faked here."
+  },
+  "fixtures": {
+    "cap": {
+      "source": "docs/evidence/yard-mature.json payload.sim verbatim",
+      "gapMs": 46800000,
+      "expectedAway": 468000,
+      "textScale": 1,
+      "machines": 8,
+      "routes": 18,
+      "decodeOk": true,
+      "workerPath": true
+    },
+    "long": {
+      "source": "docs/evidence/yard-mature.json payload.sim verbatim",
+      "gapMs": 259200000,
+      "expectedAway": 2592000,
+      "textScale": 1,
+      "machines": 8,
+      "routes": 18,
+      "decodeOk": true,
+      "workerPath": true
+    },
+    "zero": {
+      "source": "createInitialState()",
+      "gapMs": 600000,
+      "expectedAway": 6000,
+      "textScale": 1,
+      "machines": 0,
+      "routes": 0,
+      "decodeOk": true,
+      "workerPath": false
+    },
+    "short": {
+      "source": "docs/evidence/yard-mature.json payload.sim verbatim",
+      "gapMs": 60000,
+      "expectedAway": 600,
+      "textScale": 1,
+      "machines": 8,
+      "routes": 18,
+      "decodeOk": true,
+      "workerPath": false
+    },
+    "large": {
+      "source": "docs/evidence/yard-mature.json payload.sim verbatim",
+      "gapMs": 46800000,
+      "expectedAway": 468000,
+      "textScale": 2,
+      "machines": 8,
+      "routes": 18,
+      "decodeOk": true,
+      "workerPath": true
+    }
+  },
+  "counts": {
+    "frames": 37,
+    "totalFrameBytes": 5347854,
+    "steps": 17,
+    "checks": 174,
+    "failedChecks": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "blockers": 0
+  },
+  "frameAudit": {
+    "ok": true,
+    "distinctFramesPerForm": {
+      "desktop-short": true,
+      "phone-cap": true,
+      "phone-landscape-long": true,
+      "phone-large": true,
+      "phone-zero": true
+    },
+    "totalFrameBytes": 5347854,
+    "frames": [
+      {
+        "frame": "desktop-short/00-boot-after.png",
+        "bytes": 102450,
+        "width": 1920,
+        "height": 1080,
+        "sha256": "866fdb4d2562bf7167396ca6172f7fbef2da9be7d1194048763fe469e691ea2d",
+        "ok": true
+      },
+      {
+        "frame": "desktop-short/00-boot-before.png",
+        "bytes": 102205,
+        "width": 1920,
+        "height": 1080,
+        "sha256": "cc76600deaa79ae812e67f8a6eb0cfd14a7544afa6e39a00b16a786832e14d9c",
+        "ok": true
+      },
+      {
+        "frame": "desktop-short/01-close-focus-after.png",
+        "bytes": 61211,
+        "width": 1920,
+        "height": 1080,
+        "sha256": "8e4f1c665644259f6472ed31a80f9a96f46f1e7e6646a2ce4259496d81132acc",
+        "ok": true
+      },
+      {
+        "frame": "desktop-short/01-close-focus-before.png",
+        "bytes": 102508,
+        "width": 1920,
+        "height": 1080,
+        "sha256": "bfe902a0e4fde8a2457bd794affc9414ff1942c866dd888c65d2cb438cae68d6",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/00-boot-after.png",
+        "bytes": 152379,
+        "width": 780,
+        "height": 1688,
+        "sha256": "8a947bba573fe3e0443d20f15be38fed068471e170af43842268355201c3851d",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/00-boot-before.png",
+        "bytes": 152223,
+        "width": 780,
+        "height": 1688,
+        "sha256": "96e397de03ae3ad4cf2c673c0ee6c2c247c52ae8dda5e588b8dc432789ec73f9",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/01-scroll-recovery-after.png",
+        "bytes": 164263,
+        "width": 780,
+        "height": 1688,
+        "sha256": "7fe9cde16c21ec4855793a2a1662ff469e17dbb1dda43d04ce2678c89174aebe",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/01-scroll-recovery-before.png",
+        "bytes": 152348,
+        "width": 780,
+        "height": 1688,
+        "sha256": "b409d34d12fba1b40c6406d050b71503eb1bdd5a9e4ec796bd9684ef2a35f05e",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/02-copy-report-after.png",
+        "bytes": 164284,
+        "width": 780,
+        "height": 1688,
+        "sha256": "8743bf57137517367a35a3d5bccb0466f9efd36b693675fc31e9bbefebdc7fd8",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/02-copy-report-before.png",
+        "bytes": 164309,
+        "width": 780,
+        "height": 1688,
+        "sha256": "5f813629f141c89c64503da23d762316484ee082587ef5ba2c6d4c19ee971cb2",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/03-close-focus-after.png",
+        "bytes": 104754,
+        "width": 780,
+        "height": 1688,
+        "sha256": "7ee4fb9a2991c317eb2ec2e8f3b9ae1111845e80d6cafec5ff5e161285a8bec6",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/03-close-focus-before.png",
+        "bytes": 164898,
+        "width": 780,
+        "height": 1688,
+        "sha256": "a1b7225e99c5d0dc29e9f3c51088f56cc83d83e7b396db5457bb866a64beda45",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/04-menu-reopen-after.png",
+        "bytes": 151654,
+        "width": 780,
+        "height": 1688,
+        "sha256": "492c2e9cb95469e21c7d78b1f482533467cb0d4814c3c8dc9bdc4ed3639ab306",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/04-menu-reopen-before.png",
+        "bytes": 104830,
+        "width": 780,
+        "height": 1688,
+        "sha256": "9339283ebb5b5482f581608bfee89857674f2eff1bcc253c87b9457f644ba64c",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/05-escape-focus-after.png",
+        "bytes": 106491,
+        "width": 780,
+        "height": 1688,
+        "sha256": "57c0f29269110ae4fad21a1d7697228f8bc118942b809ca8907214a5a0ec2c18",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/05-escape-focus-before.png",
+        "bytes": 151740,
+        "width": 780,
+        "height": 1688,
+        "sha256": "ea6fc46e62f19f914ae3943c1023ecf082cf36973c5af049521487173784c1e5",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/06-reload-no-double-apply-after.png",
+        "bytes": 167092,
+        "width": 780,
+        "height": 1688,
+        "sha256": "7cfb16cfc84ea7932a1e98c26d636b7fc43cc8ec6a4bcc8daeefec5cb59a293f",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/06-reload-no-double-apply-before.png",
+        "bytes": 106777,
+        "width": 780,
+        "height": 1688,
+        "sha256": "7ea5144ce76081ae815e7b6f2385f6f61f3bfcbd8a8adb004f44b4cee5139e8f",
+        "ok": true
+      },
+      {
+        "frame": "phone-cap/reconcile.png",
+        "bytes": 93535,
+        "width": 780,
+        "height": 1688,
+        "sha256": "c9ea055883f93a504b725185184a5d46c5e710c4b260433eec27b0ee814fa912",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/00-boot-after.png",
+        "bytes": 148094,
+        "width": 1688,
+        "height": 780,
+        "sha256": "8eeb8649f01654e8fcfc80a9230c83f62765534585414b4e37a6693349b1e0c2",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/00-boot-before.png",
+        "bytes": 147990,
+        "width": 1688,
+        "height": 780,
+        "sha256": "8f76f4d33dbdbe58b1100f79144a7a0df6003218845eb84b29fb0bfa93b955af",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/01-scroll-recovery-after.png",
+        "bytes": 149032,
+        "width": 1688,
+        "height": 780,
+        "sha256": "635d170669cbceb1ca3fc58bdbabd55bffa72aa91c2da4ec665d7af9e640dbaa",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/01-scroll-recovery-before.png",
+        "bytes": 148248,
+        "width": 1688,
+        "height": 780,
+        "sha256": "fc24ea4356f6303725df53eebe6640801855639dfc9c2edf1791cd44279cb944",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/02-close-focus-after.png",
+        "bytes": 103284,
+        "width": 1688,
+        "height": 780,
+        "sha256": "afb370c5cc8755e0e133af9a674b8707f7c456776c317aeca01a2eacefa0dc40",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/02-close-focus-before.png",
+        "bytes": 149043,
+        "width": 1688,
+        "height": 780,
+        "sha256": "123dcc1ff0f3cf46886203d66a91debc948fbeaf655146fa42f031aae6d2b91d",
+        "ok": true
+      },
+      {
+        "frame": "phone-landscape-long/reconcile.png",
+        "bytes": 87547,
+        "width": 1688,
+        "height": 780,
+        "sha256": "f83a1e76c2c8151798618cb98f5c9bfe3bf110d64c55c8eb6356edb74dabf78f",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/00-boot-after.png",
+        "bytes": 221734,
+        "width": 780,
+        "height": 1688,
+        "sha256": "ac8ab005d1bde7d276b13c4b8d066e9a0c9b3fd0608f7044d77fc375276b198a",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/00-boot-before.png",
+        "bytes": 221404,
+        "width": 780,
+        "height": 1688,
+        "sha256": "4c419cfcaf32d47dbf30ba310d92f10d82223014e515312c38d2f9ce3eee9577",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/01-scroll-tail-after.png",
+        "bytes": 215364,
+        "width": 780,
+        "height": 1688,
+        "sha256": "28437dd9f0d32851c3e5f90bd71cd826d54f527d6e5873d1500cadc1c3aae3a1",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/01-scroll-tail-before.png",
+        "bytes": 221675,
+        "width": 780,
+        "height": 1688,
+        "sha256": "11744b686e2cf142ce619c785f49f5c64ab7539862504f6d33d3195db4cd5186",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/02-close-focus-after.png",
+        "bytes": 156921,
+        "width": 780,
+        "height": 1688,
+        "sha256": "3aec7b665c8b71541d65361de6af9ae7af4d8f2ab114063524aedd7d9d317413",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/02-close-focus-before.png",
+        "bytes": 215195,
+        "width": 780,
+        "height": 1688,
+        "sha256": "9b5d10996dd6c33521040b45d83fdcbe95e0031e5e85d07d5311b59274f82206",
+        "ok": true
+      },
+      {
+        "frame": "phone-large/reconcile.png",
+        "bytes": 140428,
+        "width": 780,
+        "height": 1688,
+        "sha256": "271fa111ae76e497bfa0bb2c0596d5cfa4395552c8f10526d60ded7db4eae2dd",
+        "ok": true
+      },
+      {
+        "frame": "phone-zero/00-boot-after.png",
+        "bytes": 138708,
+        "width": 780,
+        "height": 1688,
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
+        "ok": true
+      },
+      {
+        "frame": "phone-zero/00-boot-before.png",
+        "bytes": 138708,
+        "width": 780,
+        "height": 1688,
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
+        "ok": true
+      },
+      {
+        "frame": "phone-zero/01-reload-byte-equal-after.png",
+        "bytes": 135820,
+        "width": 780,
+        "height": 1688,
+        "sha256": "6aafcd7e3f6112ce8c01acae9fd5f2b82d333e05c1e017b9ce838f4d72835907",
+        "ok": true
+      },
+      {
+        "frame": "phone-zero/01-reload-byte-equal-before.png",
+        "bytes": 138708,
+        "width": 780,
+        "height": 1688,
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
+        "ok": true
+      }
+    ]
+  },
+  "findings": [
+    {
+      "id": "report-is-a-receipt-not-a-claim",
+      "verdict": "by-design-61",
+      "detail": "adoptCatchUp credits an absence exactly once and moves lastSeenMs to nowMs before the panel mounts. The redesign has one resume action and no claim/dispatch; dismiss, Menu re-open, Escape and reload all leave the ledger unchanged (proven by 03/04/05/06 and the byte-equal idle reload).",
+      "source": "src/app/store.ts adoptCatchUp/creditAbsence; src/ui/panels/ReturnReportPanel.tsx"
+    },
+    {
+      "id": "loading-line-owned-by-app",
+      "verdict": "existing-design-not-changed-by-61",
+      "detail": "The catch-up loading moment is App.tsx's single `.reconcile` role=status line ('Catching your yard up'), painted only while isReconciling() and never as a dialog. #61 does not edit App.tsx; the probe records it via a pre-script MutationObserver and asserts no [role=dialog] appears.",
+      "source": "src/ui/App.tsx:991-996; src/game/workers/catchup.ts"
+    },
+    {
+      "id": "clipboard-refusal-unit-covered",
+      "verdict": "graceful-degradation",
+      "detail": "The live probe exercises the clipboard SUCCESS path with a real granted permission. The refusal and missing-API branches (copyFailed note) are covered deterministically in return-61.test.tsx via configurable navigator.clipboard stubs; they are not faked in the live probe.",
+      "source": "tests/ui/return-61.test.tsx recovery block; src/ui/panels/ReturnReportPanel.tsx copyReport"
+    },
+    {
+      "id": "reload-gap-is-real-not-zero",
+      "verdict": "lease-semantics",
+      "detail": "A reload after the steps have run measures a small real gap (lastSeen moved to now at adoption), so a tiny inline report may reappear; awayTicks collapses below the drift bound and the store never jumps by a second cap's gains. LEASE_TTL_MS=1500 makes a 60s-gap reload a legitimate writer re-claim, not a double credit.",
+      "source": "src/game/persistence/lease.ts; src/app/store.ts reconcile/creditAbsence"
+    }
+  ],
+  "checks": [
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "seed envelope passes full decodeSave/validateSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "seed loaded intact (machines/routes/tutorial preserved)",
+      "ok": true,
+      "detail": "mirror machines=8 routes=18 tutorial=9 tick=450298 seedTick=18298"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "panel mount contract (class/role/aria/title)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "data attrs mirror the settled report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "awayTicks within seed gap + drift bound",
+      "ok": true,
+      "detail": "away=468003 expected=468000..469200"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
+      "ok": true,
+      "detail": "dom=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5 oracle=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "credits line matches oracle (or absent when zero)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "headline derives from oracle totals",
+      "ok": true,
+      "detail": "dom=\"+597 units across 6 resources\" expected=\"+597 units across 6 resources\""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "state chip matches oracle kind/state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "away hero shows day-precision label",
+      "ok": true,
+      "detail": "dom=\"13h 0m\" expected=\"13h 0m\""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "applied status is role=status and says already-applied",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "limits match oracle (long-absence and/or cap, else none)",
+      "ok": true,
+      "detail": "limits=[\"cap\"] long=false capped=true"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "bottleneck resolved label + advice match oracle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
+      "ok": true,
+      "detail": "rows=[\"Away 13h 0m\",\"Your operation worked for 12h 0m (capped)\",\"250\",\"765\",\"Storage full\"]"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "exactly one resume action, no claim, no dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "focus lands on the resume action at mount",
+      "ok": true,
+      "detail": "active=icon-btn return-resume"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "no raw i18n keys leak into the report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "recovery footer present with copy action, no note yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": "panel={\"top\":269.734375,\"left\":10,\"right\":380,\"bottom\":617.484375,\"width\":370,\"height\":347.75} vp={\"w\":390,\"h\":844} docW=390"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "resume + copy keep the 44px tap floor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "summary/detail type stays readable at this scale",
+      "ok": true,
+      "detail": "away=22.5 headline=14.25 applied=11.7 detail=11.7 floors={\"away\":22,\"headline\":14,\"applied\":11,\"detail\":11,\"gain\":12,\"copy\":12}"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "phone panel sits above the dock",
+      "ok": true,
+      "detail": "panel={\"top\":269.734375,\"left\":10,\"right\":380,\"bottom\":617.484375,\"width\":370,\"height\":347.75} dock={\"top\":738,\"left\":10,\"right\":380,\"bottom\":836,\"width\":370,\"height\":98}"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "body is the declared scroller",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "yard canvas is painted (distinct colors + lit fraction)",
+      "ok": true,
+      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":53,\"litFraction\":0.3383929141058631,\"sampled\":188092}"
+    },
+    {
+      "form": "phone-cap",
+      "step": "00-boot",
+      "name": "catch-up loading line painted once as role=status (no dialog)",
+      "ok": true,
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487982535}] live=false"
+    },
+    {
+      "form": "phone-cap",
+      "step": "01-scroll-recovery",
+      "name": "sticky summary stays pinned while detail scrolls (or whole panel fits)",
+      "ok": true,
+      "detail": "scrollH=619 clientH=272 summaryH=115.875 scrollTop=347 summaryOffset=0"
+    },
+    {
+      "form": "phone-cap",
+      "step": "01-scroll-recovery",
+      "name": "recovery copy reachable inside the scroller and viewport",
+      "ok": true,
+      "detail": "copy={\"top\":560.84375,\"left\":23,\"right\":115.5625,\"bottom\":604.84375,\"width\":92.5625,\"height\":44} body={\"top\":332.734375,\"left\":23,\"right\":367,\"bottom\":604.484375,\"width\":344,\"height\":271.75}"
+    },
+    {
+      "form": "phone-cap",
+      "step": "01-scroll-recovery",
+      "name": "scrolling shrinks no type",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "02-copy-report",
+      "name": "copy note confirms clipboard success (role=status)",
+      "ok": true,
+      "detail": "note={\"text\":\"Copied to the clipboard\",\"role\":\"status\"}"
+    },
+    {
+      "form": "phone-cap",
+      "step": "02-copy-report",
+      "name": "clipboard holds the deterministic report text",
+      "ok": true,
+      "detail": "clipLen=245 firstLine=Rustwake return report\r"
+    },
+    {
+      "form": "phone-cap",
+      "step": "03-close-focus",
+      "name": "report unmounts on the one resume action",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "03-close-focus",
+      "name": "focus restores to a connected visible shell control (never body)",
+      "ok": true,
+      "detail": "active=BUTTON.shell-menu-face menuFace=true railMenu=false inDock=false"
+    },
+    {
+      "form": "phone-cap",
+      "step": "03-close-focus",
+      "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
+      "ok": true,
+      "detail": "credits 82->82 storeTotal 900->900"
+    },
+    {
+      "form": "phone-cap",
+      "step": "04-menu-reopen",
+      "name": "report re-opens from the Menu with the SAME frozen receipt",
+      "ok": true,
+      "detail": "away=468003 boot=468003"
+    },
+    {
+      "form": "phone-cap",
+      "step": "04-menu-reopen",
+      "name": "re-open focuses the resume action again",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "04-menu-reopen",
+      "name": "re-open applies no new gains (store/credits stable)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "05-escape-focus",
+      "name": "Escape closes the report (App-owned priority chain)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "05-escape-focus",
+      "name": "Escape unmount restores focus to a shell control",
+      "ok": true,
+      "detail": "active=BUTTON.shell-menu-face"
+    },
+    {
+      "form": "phone-cap",
+      "step": "06-reload-no-double-apply",
+      "name": "reload reads the game's persisted save (lastSeen moves forward, no reseed)",
+      "ok": true,
+      "detail": "lastSeen 1794487991611 -> 1794487994851"
+    },
+    {
+      "form": "phone-cap",
+      "step": "06-reload-no-double-apply",
+      "name": "no second cap credit: awayTicks collapses to the real reload gap",
+      "ok": true,
+      "detail": "reloadAway=22 (must be < 1200, not 468003)"
+    },
+    {
+      "form": "phone-cap",
+      "step": "06-reload-no-double-apply",
+      "name": "reload report is not capped again",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-cap",
+      "step": "06-reload-no-double-apply",
+      "name": "store did not jump by a second cap's gains",
+      "ok": true,
+      "detail": "storeTotal 900->900 capGains=597"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "seed envelope passes full decodeSave/validateSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "seed loaded intact (machines/routes/tutorial preserved)",
+      "ok": true,
+      "detail": "mirror machines=8 routes=18 tutorial=9 tick=450298 seedTick=18298"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "panel mount contract (class/role/aria/title)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "data attrs mirror the settled report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "awayTicks within seed gap + drift bound",
+      "ok": true,
+      "detail": "away=2592133 expected=2592000..2593200"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
+      "ok": true,
+      "detail": "dom=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5 oracle=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "credits line matches oracle (or absent when zero)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "headline derives from oracle totals",
+      "ok": true,
+      "detail": "dom=\"+597 units across 6 resources\" expected=\"+597 units across 6 resources\""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "state chip matches oracle kind/state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "away hero shows day-precision label",
+      "ok": true,
+      "detail": "dom=\"3d 0h\" expected=\"3d 0h\""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "applied status is role=status and says already-applied",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "limits match oracle (long-absence and/or cap, else none)",
+      "ok": true,
+      "detail": "limits=[\"long-absence\",\"cap\"] long=true capped=true"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "bottleneck resolved label + advice match oracle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
+      "ok": true,
+      "detail": "rows=[\"Away 72h 0m\",\"Your operation worked for 12h 0m (capped)\",\"250\",\"765\",\"Storage full\"]"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "exactly one resume action, no claim, no dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "focus lands on the resume action at mount",
+      "ok": true,
+      "detail": "active=icon-btn return-resume"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "no raw i18n keys leak into the report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "recovery footer present with copy action, no note yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": "panel={\"top\":135,\"left\":516,\"right\":836,\"bottom\":382,\"width\":320,\"height\":247} vp={\"w\":844,\"h\":390} docW=844"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "resume + copy keep the 44px tap floor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "summary/detail type stays readable at this scale",
+      "ok": true,
+      "detail": "away=17.25 headline=13.2 applied=10.8 detail=11.7 floors={\"away\":17,\"headline\":13,\"applied\":10,\"detail\":11,\"gain\":12,\"copy\":12}"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "rail gutter: width ~320, right inset ~8",
+      "ok": true,
+      "detail": "panel={\"top\":135,\"left\":516,\"right\":836,\"bottom\":382,\"width\":320,\"height\":247} dock={\"top\":336,\"left\":110,\"right\":510,\"bottom\":382,\"width\":400,\"height\":46}"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "body is the declared scroller",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "yard canvas is painted (distinct colors + lit fraction)",
+      "ok": true,
+      "detail": "canvas={\"ok\":true,\"w\":1688,\"h\":780,\"distinct\":43,\"litFraction\":0.14796482572358208,\"sampled\":188092}"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "catch-up loading line painted once as role=status (no dialog)",
+      "ok": true,
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487995443}] live=false"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "long absence reads day precision (3d)",
+      "ok": true,
+      "detail": "away=\"3d 0h\""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "long absence shows BOTH limits (long-absence + cap)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "state chip is Long absence (precedence over Capped)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "legacy detail keeps the hour-capped away exact (72h)",
+      "ok": true,
+      "detail": "rows=[\"Away 72h 0m\",\"Your operation worked for 12h 0m (capped)\",\"250\",\"765\",\"Storage full\"]"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "00-boot",
+      "name": "landscape is rail mode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "01-scroll-recovery",
+      "name": "sticky summary stays pinned while detail scrolls (or whole panel fits)",
+      "ok": true,
+      "detail": "scrollH=626 clientH=171 summaryH=104.90625 scrollTop=455 summaryOffset=0"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "01-scroll-recovery",
+      "name": "recovery copy reachable inside the scroller and viewport",
+      "ok": true,
+      "detail": "copy={\"top\":324.734375,\"left\":529,\"right\":621.5625,\"bottom\":368.734375,\"width\":92.5625,\"height\":44} body={\"top\":198,\"left\":529,\"right\":823,\"bottom\":369,\"width\":294,\"height\":171}"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "01-scroll-recovery",
+      "name": "scrolling shrinks no type",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "02-close-focus",
+      "name": "report unmounts on the one resume action",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "02-close-focus",
+      "name": "focus restores to a connected visible shell control (never body)",
+      "ok": true,
+      "detail": "active=BUTTON.shell-rail__slot menuFace=false railMenu=true inDock=false"
+    },
+    {
+      "form": "phone-landscape-long",
+      "step": "02-close-focus",
+      "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
+      "ok": true,
+      "detail": "credits 82->82 storeTotal 900->900"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "seed envelope passes full decodeSave/validateSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "seed loaded intact (machines/routes/tutorial preserved)",
+      "ok": true,
+      "detail": "mirror machines=0 routes=0 tutorial=0 tick=6206 seedTick=0"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "panel mount contract (class/role/aria/title)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "data attrs mirror the settled report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "awayTicks within seed gap + drift bound",
+      "ok": true,
+      "detail": "away=6206 expected=6000..7200"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
+      "ok": true,
+      "detail": "dom= oracle="
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "credits line matches oracle (or absent when zero)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "headline derives from oracle totals",
+      "ok": true,
+      "detail": "dom=\"No new resources\" expected=\"No new resources\""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "state chip matches oracle kind/state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "away hero shows day-precision label",
+      "ok": true,
+      "detail": "dom=\"10m 21s\" expected=\"10m 21s\""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "applied status is role=status and says already-applied",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "limits match oracle (long-absence and/or cap, else none)",
+      "ok": true,
+      "detail": "limits=null long=false capped=false"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "bottleneck resolved label + advice match oracle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
+      "ok": true,
+      "detail": "rows=[\"Away 10m 21s\",\"Your operation worked for 10m 21s\",\"0\",\"0\"]"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "exactly one resume action, no claim, no dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "focus lands on the resume action at mount",
+      "ok": true,
+      "detail": "active=icon-btn return-resume"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "no raw i18n keys leak into the report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "recovery footer present with copy action, no note yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": "panel={\"top\":390.25,\"left\":10,\"right\":380,\"bottom\":738,\"width\":370,\"height\":347.75} vp={\"w\":390,\"h\":844} docW=390"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "resume + copy keep the 44px tap floor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "summary/detail type stays readable at this scale",
+      "ok": true,
+      "detail": "away=22.5 headline=14.25 applied=11.7 detail=11.7 floors={\"away\":22,\"headline\":14,\"applied\":11,\"detail\":11,\"gain\":12,\"copy\":12}"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "phone panel sits above the dock",
+      "ok": true,
+      "detail": "panel={\"top\":390.25,\"left\":10,\"right\":380,\"bottom\":738,\"width\":370,\"height\":347.75} dock={\"top\":738,\"left\":10,\"right\":380,\"bottom\":836,\"width\":370,\"height\":98}"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "body is the declared scroller",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "yard canvas is painted (distinct colors + lit fraction)",
+      "ok": true,
+      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":35,\"litFraction\":0.3398177487612445,\"sampled\":188092}"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "inline path: no intrusive loading dialog",
+      "ok": true,
+      "detail": "reconcileHistory=[] live=false"
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "zero-gain kind, no gains list, no limits",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "zero headline + body explain nothing reached storage",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "00-boot",
+      "name": "idle yard reports no bottleneck",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "01-reload-byte-equal",
+      "name": "idle yard store is byte-equal across reload (no double apply)",
+      "ok": true,
+      "detail": "store {} -> {}"
+    },
+    {
+      "form": "phone-zero",
+      "step": "01-reload-byte-equal",
+      "name": "credits unchanged across reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-zero",
+      "step": "01-reload-byte-equal",
+      "name": "reload gap is tiny, not the seeded absence",
+      "ok": true,
+      "detail": "reloadAway=17"
+    },
+    {
+      "form": "phone-zero",
+      "step": "01-reload-byte-equal",
+      "name": "lastSeen moves forward (persisted save, no reseed)",
+      "ok": true,
+      "detail": "lastSeen 1794488002572 -> 1794488006359"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "seed envelope passes full decodeSave/validateSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "seed loaded intact (machines/routes/tutorial preserved)",
+      "ok": true,
+      "detail": "mirror machines=8 routes=18 tutorial=9 tick=19146 seedTick=18298"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "panel mount contract (class/role/aria/title)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "data attrs mirror the settled report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "awayTicks within seed gap + drift bound",
+      "ok": true,
+      "detail": "away=848 expected=600..1800"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
+      "ok": true,
+      "detail": "dom=scrap+332,wire+52,ferrous+24,plates+15,data+8,circuits+4 oracle=scrap+332,wire+52,ferrous+24,plates+15,data+8,circuits+4"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "credits line matches oracle (or absent when zero)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "headline derives from oracle totals",
+      "ok": true,
+      "detail": "dom=\"+435 units across 6 resources\" expected=\"+435 units across 6 resources\""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "state chip matches oracle kind/state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "away hero shows day-precision label",
+      "ok": true,
+      "detail": "dom=\"1m 25s\" expected=\"1m 25s\""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "applied status is role=status and says already-applied",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "limits match oracle (long-absence and/or cap, else none)",
+      "ok": true,
+      "detail": "limits=null long=false capped=false"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "bottleneck resolved label + advice match oracle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
+      "ok": true,
+      "detail": "rows=[\"Away 1m 25s\",\"Your operation worked for 1m 25s\",\"84\",\"122\",\"Waiting for input\"]"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "exactly one resume action, no claim, no dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "focus lands on the resume action at mount",
+      "ok": true,
+      "detail": "active=icon-btn return-resume"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "no raw i18n keys leak into the report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "recovery footer present with copy action, no note yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": "panel={\"top\":131,\"left\":1592,\"right\":1912,\"bottom\":1072,\"width\":320,\"height\":941} vp={\"w\":1920,\"h\":1080} docW=1920"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "resume + copy keep the 44px tap floor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "summary/detail type stays readable at this scale",
+      "ok": true,
+      "detail": "away=22.5 headline=14.25 applied=11.7 detail=11.7 floors={\"away\":22,\"headline\":14,\"applied\":11,\"detail\":11,\"gain\":12,\"copy\":12}"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "rail gutter: width ~320, right inset ~8",
+      "ok": true,
+      "detail": "panel={\"top\":131,\"left\":1592,\"right\":1912,\"bottom\":1072,\"width\":320,\"height\":941} dock={\"top\":1026,\"left\":110,\"right\":1586,\"bottom\":1072,\"width\":1476,\"height\":46}"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "body is the declared scroller",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "yard canvas is painted (distinct colors + lit fraction)",
+      "ok": true,
+      "detail": "canvas={\"ok\":true,\"w\":1920,\"h\":1080,\"distinct\":72,\"litFraction\":0.2756651104382083,\"sampled\":296229}"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "inline path: no intrusive loading dialog",
+      "ok": true,
+      "detail": "reconcileHistory=[] live=false"
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "short absence is earned, not capped, no limits",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "00-boot",
+      "name": "desktop is rail mode",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "01-close-focus",
+      "name": "report unmounts on the one resume action",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "desktop-short",
+      "step": "01-close-focus",
+      "name": "focus restores to a connected visible shell control (never body)",
+      "ok": true,
+      "detail": "active=BUTTON.shell-rail__slot menuFace=false railMenu=true inDock=false"
+    },
+    {
+      "form": "desktop-short",
+      "step": "01-close-focus",
+      "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
+      "ok": true,
+      "detail": "credits 82->82 storeTotal 746->756"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "seed envelope passes full decodeSave/validateSim",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "seed loaded intact (machines/routes/tutorial preserved)",
+      "ok": true,
+      "detail": "mirror machines=8 routes=18 tutorial=9 tick=450298 seedTick=18298"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "panel mount contract (class/role/aria/title)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "data attrs mirror the settled report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "awayTicks within seed gap + drift bound",
+      "ok": true,
+      "detail": "away=468267 expected=468000..469200"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
+      "ok": true,
+      "detail": "dom=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5 oracle=plates+245,nonferrous+229,wire+59,ferrous+33,data+26,circuits+5"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "credits line matches oracle (or absent when zero)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "headline derives from oracle totals",
+      "ok": true,
+      "detail": "dom=\"+597 units across 6 resources\" expected=\"+597 units across 6 resources\""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "state chip matches oracle kind/state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "away hero shows day-precision label",
+      "ok": true,
+      "detail": "dom=\"13h 0m\" expected=\"13h 0m\""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "applied status is role=status and says already-applied",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "limits match oracle (long-absence and/or cap, else none)",
+      "ok": true,
+      "detail": "limits=[\"cap\"] long=false capped=true"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "bottleneck resolved label + advice match oracle",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
+      "ok": true,
+      "detail": "rows=[\"Away 13h 0m\",\"Your operation worked for 12h 0m (capped)\",\"250\",\"765\",\"Storage full\"]"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "exactly one resume action, no claim, no dialog",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "focus lands on the resume action at mount",
+      "ok": true,
+      "detail": "active=icon-btn return-resume"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "no raw i18n keys leak into the report",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "recovery footer present with copy action, no note yet",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": "panel={\"top\":330.71875,\"left\":10,\"right\":380,\"bottom\":678.46875,\"width\":370,\"height\":347.75} vp={\"w\":390,\"h\":844} docW=390"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "resume + copy keep the 44px tap floor",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "summary/detail type stays readable at this scale",
+      "ok": true,
+      "detail": "away=37.5 headline=28.5 applied=23.4 detail=21.6 floors={\"away\":37,\"headline\":28,\"applied\":23,\"detail\":21,\"gain\":25,\"copy\":25}"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "phone panel sits above the dock",
+      "ok": true,
+      "detail": "panel={\"top\":330.71875,\"left\":10,\"right\":380,\"bottom\":678.46875,\"width\":370,\"height\":347.75} dock={\"top\":785.828125,\"left\":10,\"right\":380,\"bottom\":836,\"width\":370,\"height\":50.171875}"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "body is the declared scroller",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "yard canvas is painted (distinct colors + lit fraction)",
+      "ok": true,
+      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":50,\"litFraction\":0.33816961912255705,\"sampled\":188092}"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "catch-up loading line painted once as role=status (no dialog)",
+      "ok": true,
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794488008826}] live=false"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "text scale 2 engages .text-large and 30px root",
+      "ok": true,
+      "detail": "textLarge=true root=30"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "hero stays >= 37px at scale 2 (type never shrunk for room)",
+      "ok": true,
+      "detail": "awayFont=37.5"
+    },
+    {
+      "form": "phone-large",
+      "step": "00-boot",
+      "name": "cap receipt still correct at large text",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "01-scroll-tail",
+      "name": "sticky summary stays pinned while detail scrolls (or whole panel fits)",
+      "ok": true,
+      "detail": "scrollH=1248 clientH=233 summaryH=270.8125 scrollTop=1015 summaryOffset=-38.109375"
+    },
+    {
+      "form": "phone-large",
+      "step": "01-scroll-tail",
+      "name": "recovery copy reachable inside the scroller and viewport",
+      "ok": true,
+      "detail": "copy={\"top\":617.34375,\"left\":23,\"right\":182.109375,\"bottom\":665.359375,\"width\":159.109375,\"height\":48.015625} body={\"top\":432.65625,\"left\":23,\"right\":367,\"bottom\":665.46875,\"width\":344,\"height\":232.8125}"
+    },
+    {
+      "form": "phone-large",
+      "step": "01-scroll-tail",
+      "name": "scrolling shrinks no type",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "02-close-focus",
+      "name": "report unmounts on the one resume action",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "form": "phone-large",
+      "step": "02-close-focus",
+      "name": "focus restores to a connected visible shell control (never body)",
+      "ok": true,
+      "detail": "active=BUTTON.shell-menu-face menuFace=true railMenu=false inDock=false"
+    },
+    {
+      "form": "phone-large",
+      "step": "02-close-focus",
+      "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
+      "ok": true,
+      "detail": "credits 82->82 storeTotal 900->900"
+    }
+  ],
+  "failedChecks": [],
+  "blockers": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "fullResults": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-coord\\UI-RESET-61\\results.json",
+  "framesDir": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-coord\\UI-RESET-61\\frames"
+}
