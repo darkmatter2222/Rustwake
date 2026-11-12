@@ -50,6 +50,14 @@ export function YardPanel(props: {
   const exportId = "rustwake-save-export";
   const importId = "rustwake-save-import";
   const summary = summarizeYard(props.state);
+  // The status line lives INSIDE each page so the rail rule that hides it on
+  // the record page (.save-page--record .status-line) actually matches; as a
+  // sibling of the pages it was always visible and ate the rail budget.
+  const statusLine = (
+    <p className="status-line" role="status">
+      {note}
+    </p>
+  );
 
   const copyExport = () => {
     void copySaveText(props.exportText).then((ok) =>
@@ -129,6 +137,7 @@ export function YardPanel(props: {
                 {t("btn.import")}
               </button>
             </div>
+            {statusLine}
           </div>
         ) : page === 1 ? (
           <div className="save-page save-page--backup">
@@ -154,6 +163,7 @@ export function YardPanel(props: {
                 {t("btn.back")}
               </button>
             </div>
+            {statusLine}
           </div>
         ) : (
           <div className="save-page save-page--replace">
@@ -176,11 +186,9 @@ export function YardPanel(props: {
                 {t("btn.back")}
               </button>
             </div>
+            {statusLine}
           </div>
         )}
-        <p className="status-line" role="status">
-          {note}
-        </p>
       </div>
       {preview !== null ? (
         <ImportConfirm

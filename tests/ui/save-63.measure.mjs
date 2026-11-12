@@ -134,8 +134,19 @@ async function measure(name, viewport, dsf, isMobile, scale) {
 
   const pageHeights = () =>
     page.evaluate((sel) => {
-      const body = document.querySelector(sel + " .panel__body");
-      return { scrollHeight: body.scrollHeight, clientHeight: body.clientHeight, overflow: body.scrollHeight - body.clientHeight };
+      const panel = document.querySelector(sel);
+      const body = panel.querySelector(".panel__body");
+      const heights = (selector) => [...panel.querySelectorAll(selector)].map((n) => ({
+        cls: n.className, text: (n.textContent || "").trim().slice(0, 24), h: Math.round(n.getBoundingClientRect().height * 100) / 100,
+      }));
+      return {
+        scrollHeight: body.scrollHeight, clientHeight: body.clientHeight, overflow: body.scrollHeight - body.clientHeight,
+        elements: {
+          headings: heights(".save-heading"), labels: heights(".panel__field"), hints: heights(".save-hint"),
+          codes: heights(".save-code"), actions: heights(".panel__actions"), buttons: heights(".panel__actions button"),
+          status: heights(".status-line"), stats: heights(".save-stat"),
+        },
+      };
     }, PANEL);
   const clickPanel = (label) =>
     page.evaluate(({ sel, label }) => {

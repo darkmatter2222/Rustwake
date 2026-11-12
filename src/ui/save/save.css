@@ -48,10 +48,31 @@
   margin-top: 6px;
 }
 
+/* The status note is a <p>; the browser's trailing 1 em paragraph margin is
+   wasted space inside a tight panel body. Retire it (the leading margin is
+   already governed by .status-line / .text-large .status-line). */
+.save-page .status-line {
+  margin-bottom: 0;
+}
+
+/* The save body fills the panel's flex band instead of shrinking to content.
+   In the rail (definite top/bottom height) this gives the body the whole band;
+   the 1 px bottom slack absorbs the scrollHeight(ceil)/clientHeight(floor)
+   rounding of a shrink-to-fit box so a page that genuinely fits never reads as
+   a 1 px inner scroll. Scoped through .save-page so no other panel is touched. */
+.panel:has(.save-page) .panel__body {
+  flex: 1 1 auto;
+  padding-bottom: 1px;
+}
+
 /* The transfer textareas keep the shared .panel__code face (monospace, own
    scroll, 44 px floor) at a shorter fixed height, so a whole page fits the
-   panel body at the 2.0 text scale without inner panel scroll. */
-.save-code {
+   panel body at the 2.0 text scale without inner panel scroll. The compound
+   selector outranks the global `.panel__code { height: 4.6em }`: styles.css
+   loads after this sheet, so a bare `.save-code` (equal specificity) lost the
+   cascade and the textarea stayed at 4.6 em — the measured cause of the
+   transfer-page overflow. */
+.panel__code.save-code {
   height: 3em;
 }
 
@@ -201,7 +222,11 @@
   margin-top: 4px;
 }
 
+/* At a large text scale the dock panel cannot afford the guidance line; the
+   heading and field label still name the act (same precedent as the rail).
+   The hint stays in the DOM (its text is asserted) — only its box is retired. */
 .text-large .save-hint {
+  display: none;
   margin-top: 0;
 }
 
@@ -228,16 +253,29 @@
     display: none;
   }
 
-  .save-code {
+  .save-heading {
+    font-size: 0.72rem;
+    line-height: 1.1;
+  }
+
+  .panel__code.save-code {
     height: 2.4em;
+    /* The 44 px floor is a touch-target rule for buttons; a paste/export field
+       is not a button, so the rail lets it take its 2.4 em line box. */
+    min-height: 0;
+  }
+
+  .save-page .panel__code {
+    margin-top: 2px;
   }
 
   .save-page .panel__actions {
-    margin-top: 4px;
+    margin-top: 0;
   }
 
   .save-page .panel__field {
-    margin-top: 4px;
+    margin-top: 0;
+    line-height: 1.1;
   }
 
   /* The record page's idle guidance is the one line the rail cannot afford;
