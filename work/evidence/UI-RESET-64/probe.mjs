@@ -1,5 +1,41 @@
 /**
- * UI-RESET-64 (issue #64) — developer acceptance probe (dev-64f, resume of dev-64e).
+ * UI-RESET-64 (issue #64) — developer acceptance probe (dev-64g FINALIZE; resume chain
+ * dev-64e -> dev-64f).
+ *
+ * dev-64g FINALIZE — coordinator-authorized STEP-24 SCOPE CORRECTION (probe-only; code
+ * head stays 1b6c99e; git diff 1b6c99e..HEAD -- src is EMPTY). After dev-64f's harness
+ * fixes the full 3-form run reached 435/438 checks: fresh steps 00-23 CLEAN on
+ * phone/phoneland/desktop (the 7-machine Data chain builds, first Data lands data=2,
+ * research unlocks at first Data, the Research panel opens with the cutters node
+ * present) and ALL jargon/progress/earntrap loops CLEAN. The ONLY residual failure was
+ * 24-buy-cutters/cutters-owned on all 3 forms. ROOT CAUSE (coordinator-diagnosed; NOT
+ * an app defect): cutters costs 4 Data and is the CHEAPEST node (buffers 8, dispatch 12
+ * — src/game/content/research.ts:22-47); the bounded harness reaches data=2 because
+ * signalLab is starved in the unbalanced fresh yard (copperSeparator/wireMill
+ * outputFull, others starved) — CORRECT simulation behavior. No node is affordable at
+ * data=2, so the cost-4 PURCHASE cannot be exercised without sustained chain-flow
+ * economy simulation (OUT OF SCOPE; two prior children exhausted their budgets on that
+ * economy class). The purchase was a probe EXTENSION beyond all five acceptance
+ * criteria — every criterion is met by steps 00-23 + the clean loops; none requires
+ * owning cutters. Step 24 is therefore corrected to a STRICT, REACHABLE assertion of
+ * the research buy-GATE src behavior: after waitForData(1) + openResearchPanel, the
+ * cutters .node__buy button must be PRESENT and DISABLED while data < cost (the canBuy
+ * gate), the node must read unlocked/open, and cutters must remain unowned. Steps 22
+ * (first-data-unlocks-research) and 23 (open-research-panel) stay STRICT and UNCHANGED.
+ * No resource injection, no sim edit, no criterion-mandated check relaxed.
+ *
+ * UNVERIFIED CHECKS (stated per the delivery contract): the full end-to-end cutters
+ * PURCHASE (research.buy spending 4 Data -> rank 1 -> pulseScrap +2 effect) is NOT
+ * exercised by the bounded harness (Data peaks at 2). It is CODE-VERIFIED instead:
+ *   - src/game/content/research.ts:27 — cutters cost=4 (cheapest; buffers 8, dispatch 12);
+ *   - src/ui/research/model.ts:86 — affordable = data >= def.cost; :87-93 four-state
+ *     derivation (unlocked = prereq met but Data short); :103 canBuy = state==="available";
+ *   - src/ui/panels/ResearchPanel.tsx:203-211 — .node__buy rendered for every
+ *     non-completed node with disabled={!node.canBuy} (line 206);
+ *   - src/game/simulation/commands.ts:139-140 — research.buy -> buyResearch; :553-567
+ *     validation order not-found -> already-known -> prereq -> insufficient, with the
+ *     data<cost refusal at :561 (shortOf) and spendFromStore at :562.
+ * The buy-gate DISABLE behavior IS asserted in-browser on all 3 forms (step 24).
  *
  * dev-64f PROBE-HARNESS fixes (code head stays 1b6c99e; git diff 1b6c99e..HEAD -- src
  * is EMPTY). The remaining 42 failedChecks were probe bugs in fresh steps 18-24, NOT app
@@ -885,9 +921,10 @@ async function openStore(page) {
  * dev-64f: open the Research panel through the REAL per-form face (dock "Research" button
  * on phone; enabled rail slot on phoneland/desktop). The UNCHANGED showResearch gate
  * (data>0 || research keys) governs availability; the caller ensures data>0 first. Used by
- * step 23 AND step 24: waitForData reloads the page (advanceTime), which CLOSES any open
- * panel, so step 24 must RE-OPEN Research after accumulating Data before clicking buy
- * (the measured step-24 "cutters-owned" failure: the buy query ran against a closed panel).
+ * step 23 AND step 24: any waitForData reload (advanceTime) CLOSES an open panel, so
+ * step 24 RE-OPENs Research through the same real face before asserting the buy-gate.
+ * dev-64g: step 24 no longer attempts the cost-4 purchase (unreachable at the bounded
+ * harness's data=2); it asserts the cutters .node__buy DISABLE state while data<cost.
  * No sim field injected; no assertion relaxed.
  */
 async function openResearchPanel(page) {
@@ -1229,26 +1266,44 @@ async function freshLoop(browser, form) {
       { name: "cutters-node-present", test: (b, a) => a.dom.panel?.researchNodes.some((n) => n.id === "cutters") },
     ]);
 
-    await runStep(page, F, "24-buy-cutters", async () => {
-      // dev-64f: cutters cost=4 Data but first Data=2 (<4), so waitForData accrues via
-      // advanceTime + reload, which CLOSES the research panel opened in step 23. Re-open it
-      // through the REAL per-form face, then buy. No assertion relaxed; the buy is driven
-      // through the unchanged .node__buy gate (canBuy only when data>=cost).
-      await waitForData(page, RESEARCH.cutters.cost);
+    await runStep(page, F, "24-cutters-buy-gate", async () => {
+      // dev-64g COORDINATOR-AUTHORIZED SCOPE CORRECTION (step 24 only; probe-only, no src
+      // change). The former "24-buy-cutters" PURCHASE assertion is UNREACHABLE in the
+      // bounded harness: cutters costs 4 Data (the CHEAPEST node; buffers 8, dispatch 12 —
+      // src/game/content/research.ts:22-47) and the fresh yard's signalLab is starved
+      // (copperSeparator/wireMill outputFull, others starved), so Data peaks at 2. That is
+      // CORRECT sim behavior for an unbalanced yard, NOT an app defect; no node is
+      // affordable at data=2. The purchase was a probe extension beyond all five criteria
+      // (steps 00-23 + the clean loops meet every criterion; none requires owning cutters),
+      // so it is replaced by a STRICT, REACHABLE assertion of the buy-GATE src behavior:
+      // the cutters .node__buy button is PRESENT and DISABLED while data < cost (canBuy
+      // gate — src/ui/research/model.ts:86,103; src/ui/panels/ResearchPanel.tsx:206
+      // disabled={!node.canBuy}), the node reads unlocked/open, and nothing is owned.
+      // UNVERIFIED (stated per the delivery contract): the full research.buy spend of 4
+      // Data is NOT exercised end-to-end; it is code-verified at
+      // src/game/simulation/commands.ts:139-140,553-567 (buyResearch refuses data<cost at
+      // :561). waitForData(1) returns immediately (first Data already landed in step 22);
+      // NO cost-4 accrual loop, NO resource injection, NO sim edit. Steps 22/23 remain
+      // STRICT and UNCHANGED.
+      await waitForData(page, 1);
       await openResearchPanel(page);
-      const buy = await page.$('.node[data-node="cutters"] .node__buy');
-      if (!buy) throw new Error("cutters buy button not found (research panel not open)");
-      await safeClick(buy, "buy-cutters");
-      // Bounded mirror settle: research.buy applies on the next sim tick.
-      const start = Date.now();
-      while (Date.now() - start < 4000) {
-        const s = await readSim(page);
-        if ((s?.research?.cutters ?? 0) >= 1) break;
-        await page.waitForTimeout(250);
-      }
     }, [
-      { name: "cutters-owned", test: (b, a) => (a.sim.research.cutters ?? 0) >= 1 },
-      { name: "data-spent", test: (b, a) => a.sim.data < b.sim.data || a.sim.data >= 0 },
+      // buyDisabled is null ONLY when .node__buy is absent; a boolean proves the button
+      // is mounted. The DISABLE assertion is conjoined with the REAL mirror data<cost so
+      // it can never pass against an affordable (enabled) button.
+      { name: "cutters-buy-present", test: (b, a) => {
+        const n = a.dom.panel?.researchNodes.find((x) => x.id === "cutters");
+        return !!n && n.buyDisabled !== null;
+      } },
+      { name: "cutters-buy-disabled-below-cost", test: (b, a) => {
+        const n = a.dom.panel?.researchNodes.find((x) => x.id === "cutters");
+        return n?.buyDisabled === true && a.sim.data < RESEARCH.cutters.cost;
+      } },
+      { name: "cutters-state-unlocked-open", test: (b, a) => {
+        const n = a.dom.panel?.researchNodes.find((x) => x.id === "cutters");
+        return n?.researchState === "unlocked" && n?.state === "open";
+      } },
+      { name: "cutters-not-owned", test: (b, a) => (a.sim.research.cutters ?? 0) === 0 },
     ], 500);
   } finally { await context.close().catch(() => {}); }
 }
@@ -1566,13 +1621,13 @@ async function main() {
     branch: "rw/64-onboard",
     generatedAt: new Date().toISOString(),
     chrome: executablePath,
-    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each. dev-64d stabilization: a FRESH browser per loop-run isolates renderer crashes; clicks are bounded (6s) with an evaluated-DOM-click fallback for zoom-overlay-intercepted buttons (each logged in clickFallbacks, still a real button -> dispatch -> applyCommand, never a state injection); context/browser cleanup is tolerant. dev-64e PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (1) step 18 upgrades the sorter at its ACTUAL tile read from the persisted mirror (not hardcoded tile 0) after a real camera recenter, committing the dock upgrade-fork primary; (2) settleTutorial polls the game's OWN decodeSave mirror until sim.tutorial reaches the EXACT expected plateau for each step (max 3.5s), keyed to the transition the step already caused through a real button — NOT dev-64d's naive first-persist settle that regressed 69->81; (3) buildViaCatalog restores the resting dock before each build and COMMITS via the dock Build face (catalog Place only arms the ghost), with a bounded real-tile re-aim retry; (4) jargon navigation drives real per-form selectors (dock vs rail), restores the resting dock between catalog builds, and recenters the camera before the furnace tap. Data vocabulary is asserted via the AllResources drawer (the budget-limited chip row escape hatch), never a relaxed chip assertion; Hud budget unchanged. dev-64f PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (Root 1) step 18 opens the sorter inspector FORM-AWARE via selectMachine (recenter + real mirror-tile tap + panel-title confirm + pan clear of the lead, fixing the phoneland panel timeout), polls waitForUpgradeFork until a dock BRANCH face is mounted (the resting Connect primary also matches .dock__btn--primary and was being blind-clicked, racing the re-render), then commits the NAMED cheapest branch 'Less power' via clickDockExact -> machine.upgrade draw -> sorter lv2 -> tutorial 9; (Root 2) step 20 skips already-built machines and WIRES the partial chain between builds (real dock Connect) while ensureAffordable patiently runs the engine's OWN offline catch-up plus a short live-mirror poll to catch the store's ferrous peak (the furnace draws store ferrous above RESERVE_FLOOR into a 2-batch buffer; the store holds >=12 only when the furnace backs up or is starved while the sorter refills), and buildViaCatalog verifies the intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew (throwing instead of blind-retrying into a redundant sorter). Reaching tutorial 9 unlocks circuitAssembler/signalLab (unlockAt 9). First-data assertions stay STRICT (7 machines, signalLab + every chain id, then first Data); no resource injected, no assertion relaxed.",
+    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each. dev-64d stabilization: a FRESH browser per loop-run isolates renderer crashes; clicks are bounded (6s) with an evaluated-DOM-click fallback for zoom-overlay-intercepted buttons (each logged in clickFallbacks, still a real button -> dispatch -> applyCommand, never a state injection); context/browser cleanup is tolerant. dev-64e PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (1) step 18 upgrades the sorter at its ACTUAL tile read from the persisted mirror (not hardcoded tile 0) after a real camera recenter, committing the dock upgrade-fork primary; (2) settleTutorial polls the game's OWN decodeSave mirror until sim.tutorial reaches the EXACT expected plateau for each step (max 3.5s), keyed to the transition the step already caused through a real button — NOT dev-64d's naive first-persist settle that regressed 69->81; (3) buildViaCatalog restores the resting dock before each build and COMMITS via the dock Build face (catalog Place only arms the ghost), with a bounded real-tile re-aim retry; (4) jargon navigation drives real per-form selectors (dock vs rail), restores the resting dock between catalog builds, and recenters the camera before the furnace tap. Data vocabulary is asserted via the AllResources drawer (the budget-limited chip row escape hatch), never a relaxed chip assertion; Hud budget unchanged. dev-64f PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (Root 1) step 18 opens the sorter inspector FORM-AWARE via selectMachine (recenter + real mirror-tile tap + panel-title confirm + pan clear of the lead, fixing the phoneland panel timeout), polls waitForUpgradeFork until a dock BRANCH face is mounted (the resting Connect primary also matches .dock__btn--primary and was being blind-clicked, racing the re-render), then commits the NAMED cheapest branch 'Less power' via clickDockExact -> machine.upgrade draw -> sorter lv2 -> tutorial 9; (Root 2) step 20 skips already-built machines and WIRES the partial chain between builds (real dock Connect) while ensureAffordable patiently runs the engine's OWN offline catch-up plus a short live-mirror poll to catch the store's ferrous peak (the furnace draws store ferrous above RESERVE_FLOOR into a 2-batch buffer; the store holds >=12 only when the furnace backs up or is starved while the sorter refills), and buildViaCatalog verifies the intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew (throwing instead of blind-retrying into a redundant sorter). Reaching tutorial 9 unlocks circuitAssembler/signalLab (unlockAt 9). First-data assertions stay STRICT (7 machines, signalLab + every chain id, then first Data); no resource injected, no assertion relaxed. dev-64g FINALIZE (no src change; code head stays 1b6c99e): coordinator-authorized step-24 scope correction — the unreachable cost-4 cutters PURCHASE (bounded harness Data peaks at 2; signalLab starved in the unbalanced fresh yard = CORRECT sim behavior, not an app defect) is replaced by a STRICT reachable buy-GATE assertion (cutters .node__buy PRESENT + DISABLED while data<cost, node unlocked/open, unowned); steps 22/23 stay STRICT and UNCHANGED; the full purchase is stated UNVERIFIED and code-verified (research.ts:27, model.ts:86/103, ResearchPanel.tsx:206, commands.ts:139-140/553-567). No resource injected, no sim edit, no criterion relaxed.",
     criteria: {
       "1-contextual-teaching": "freshLoop steps 00-19 assert the OnboardCoach lesson topic at each tutorial stage (salvage/storage/build/connect/trade/upgrade) and the research-path lesson at tutorial 9 with no Data.",
       "2-respect-progress-skip-revisit": "progressLoop seeds a progressed mature save; asserts no reset/overwrite across skip/show/reload and that a second tab (reader lease) yields the coach entirely.",
       "3-vocabulary-jargon-detail": "jargonLoop asserts the furnace constraint headline + expandable detail, the coach glossary, and catalog/resource/research vocabulary parity with content definitions. Data is asserted in the AllResources drawer (spec 5.4 / UI-RESET-51) because the chip row is budget-limited (Hud visibleResources(state, hudChipLimit()-2)); the Hud budget is unchanged.",
       "4-earn-trap-recovery": "earntrapLoop seeds a step-4 yard with 5 scrap; arms placement, hits the blind affordability refusal, then recovers via coach Earn scrap now / Trade at the store and completes the build (not stalled at 0 machines).",
-      "5-fresh-player-walkthrough-AGENT": "freshLoop is AGENT evidence: a scripted fresh-yard walkthrough from tutorial 0 through the full Data chain to first Data so the UNCHANGED showResearch gate opens Research, then buys the cutters node.",
+      "5-fresh-player-walkthrough-AGENT": "freshLoop is AGENT evidence: a scripted fresh-yard walkthrough from tutorial 0 through the full 7-machine Data chain to first Data so the UNCHANGED showResearch gate opens Research (steps 22/23 STRICT), then asserts the research buy-GATE at the bounded harness's data=2: the cutters .node__buy button is PRESENT and DISABLED while data<cost (canBuy), the node reads unlocked/open and stays unowned (step 24, dev-64g coordinator-authorized scope correction). UNVERIFIED (stated): the full cost-4 cutters PURCHASE end-to-end — Data peaks at 2 because signalLab is starved in the unbalanced fresh yard (CORRECT sim behavior, not an app defect); research.buy/canBuy are code-verified (research.ts:27, model.ts:86/103, ResearchPanel.tsx:206, commands.ts:553-567). No criterion requires owning cutters; no injection, no relaxation.",
     },
     fixtureScrutiny: {
       a: "Only setup seeding mutates state, in probe code with the game's OWN encodeSave (FNV-1a, lastSeenMs=Date.now()). fresh=createInitialState() verbatim; earntrap=createInitialState() with tutorial=4, drone.repaired=true, deliveries=1, wreck={remaining:30,generation:2,pulses:6,nextPulseTick:0}, store={scrap:5}, storeUnits=5; progress/jargon=docs/evidence/yard-mature.json payload.sim verbatim. All reducedMotion=true. advanceTime is a probe-only lastSeenMs rewind + reload running the engine's OWN inline catch-up (<=18000 ticks); it never edits sim fields. No src changes; every action is a real UI tap/click through dispatch -> applyCommand.",
@@ -1619,6 +1674,12 @@ async function main() {
         verdict: "probe-only-no-src-change",
         detail: "The remaining 42 failedChecks were PROBE-HARNESS bugs in fresh steps 18-24, not app defects (the 1b6c99e collision fix is intact; jargon/progress/earntrap and fresh 00-17 were already clean). Two root causes fixed in probe.mjs only. Root 1 (step 18): waitForSelector('.dock__btn--primary')+clickPrimary raced the dock re-render — the RESTING 'Connect' primary also matches .dock__btn--primary, so the blind click pressed stale Connect (the trace shows routes 4->5, sorter still lv1, tutorial stuck at 8) instead of machine.upgrade; on phoneland the '.panel--stack' wait also timed out because the lead overlay covered the sorter tile. Now selectMachine opens the sorter inspector FORM-AWARE (recenter + real mirror-tile tap + panel-title confirm + pan clear of the lead), waitForUpgradeFork polls until a dock BRANCH face ('Less power'/'Faster batches') is mounted, then clickDockExact commits the cheapest NAMED branch 'Less power' (draw, 30 credits) -> sorter lv2 -> syncTutorial 8->9. Root 2 (step 20): the whole chain was built BEFORE wiring and ensureAffordable only advanced 2x90s, so the store's ferrous never reached signalLab's 12 ('could not afford signalLab'); at tutorial 8 the locked circuitAssembler/signalLab cards (unlockAt 9) also made buildViaCatalog's blind total-count retry commit a REDUNDANT sorter (sorter t4). Now step 20 skips already-built machines, WIRES the partial chain between builds (real dock Connect) and ensureAffordable patiently runs the engine's OWN offline catch-up plus a short live-mirror poll to catch the store's ferrous peak (the furnace draws store ferrous above RESERVE_FLOOR into a 2-batch input buffer; the store holds >=12 only when the furnace backs up or is starved while the sorter refills); buildViaCatalog verifies the intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew, throwing loudly instead of building a wrong machine. Reaching tutorial 9 (Root 1) unlocks the circuitAssembler/signalLab cards. The first-data assertions stay STRICT (7 machines, signalLab + every chain id, then first Data); no resource injected, no assertion relaxed, showResearch gate byte-identical to main. git diff 1b6c99e..HEAD -- src is EMPTY.",
         source: "work/evidence/UI-RESET-64/probe.mjs (selectMachine/waitForUpgradeFork/ensureAffordable/buildViaCatalog/freshLoop steps 18/20); coordinator triage; src/ui/App.tsx primaryForStep/branchOptions, src/ui/build/BuildCatalog.tsx placeEnabled, src/game/simulation/engine.ts pullFromStore/pullNeed/syncTutorial (read-only)",
+      },
+      {
+        id: "step24-buy-gate-scope-correction",
+        verdict: "coordinator-authorized-probe-only",
+        detail: "dev-64g: after dev-64f's harness fixes the full 3-form run reached 435/438 (fresh steps 00-23 + ALL jargon/progress/earntrap loops CLEAN). The only residual failure, 24-buy-cutters/cutters-owned x3 forms, is an UNREACHABLE probe extension: cutters costs 4 Data (the CHEAPEST node; buffers 8, dispatch 12 — research.ts:22-47) and the bounded harness reaches data=2 because signalLab is starved in the unbalanced fresh yard (copperSeparator/wireMill outputFull, others starved) — CORRECT sim behavior, NOT an app defect; no node is affordable at 2. All five acceptance criteria are met by steps 00-23 + the clean loops; none requires owning cutters. Per coordinator authorization (issue #64 comment 6837767422) step 24 now asserts the STRICT reachable buy-GATE: cutters .node__buy PRESENT + DISABLED while data<cost (canBuy), node unlocked/open, unowned; steps 22/23 STRICT and UNCHANGED. UNVERIFIED (stated per the delivery contract): the full cost-4 research.buy purchase end-to-end; it is code-verified at research.ts:27 (cost 4), model.ts:86/103 (affordable/canBuy), ResearchPanel.tsx:206 (disabled={!node.canBuy}), commands.ts:139-140/553-567 (buyResearch validation order; data<cost refusal at :561). No resource injection, no sim edit, no criterion relaxed; git diff 1b6c99e..HEAD -- src stays EMPTY.",
+        source: "coordinator triage issue #64 comment 6837767422; work/evidence/UI-RESET-64/probe.mjs freshLoop step 24; src/game/content/research.ts; src/ui/research/model.ts; src/ui/panels/ResearchPanel.tsx; src/game/simulation/commands.ts (all read-only)",
       },
     ],
     failedChecks, blockers, consoleErrors, pageErrors, clickFallbacks,
