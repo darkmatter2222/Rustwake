@@ -74,11 +74,14 @@ export function dataNote(note: {
   machine: string;
   perCycle: number;
   seconds: number;
-  input: string;
+  input: { qty: number; resource: string } | null;
 }): string {
   // "Data" is a mass noun in every existing string ("4 Data"), so it never takes
-  // the shared plural rule.
-  return `${note.machine} makes ${formatNumber(note.perCycle)} ${RESEARCH_COPY.dataWord} every ${formatNumber(note.seconds)}s from ${resourceWord(note.input)}.`;
+  // the shared plural rule. The input word resolves through the shared table.
+  const input = note.input
+    ? `${formatNumber(note.input.qty)} ${resourceWord(note.input.resource)}`
+    : RESEARCH_COPY.dataWord;
+  return `${note.machine} makes ${formatNumber(note.perCycle)} ${RESEARCH_COPY.dataWord} every ${formatNumber(note.seconds)}s from ${input}.`;
 }
 
 /** Accessible name for one card: its title plus its four-state word. */

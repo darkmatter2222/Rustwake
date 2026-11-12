@@ -223,7 +223,12 @@ export function completedFocus(state: SimState): FocusView {
  * is the only Data source). Used for the no-data state so the panel answers
  * "how do I earn this?" without inventing content.
  */
-export function dataSourceNote(): { machine: string; perCycle: number; seconds: number; input: string } | null {
+export function dataSourceNote(): {
+  machine: string;
+  perCycle: number;
+  seconds: number;
+  input: { qty: number; resource: string } | null;
+} | null {
   const def = BLUEPRINTS.signalLab;
   if (!def) return null;
   const recipe = RECIPES[def.recipeId];
@@ -235,6 +240,8 @@ export function dataSourceNote(): { machine: string; perCycle: number; seconds: 
     machine: def.label,
     perCycle: out.qty,
     seconds: Math.round(recipe.cycleTicks / 10),
-    input: input ? `${input.qty} ${input.resource}` : "circuits",
+    // Keep qty and resource id separate: the copy layer resolves the id through
+    // resourceWord, and a pre-joined string would leak an unresolved res.* key.
+    input: input ? { qty: input.qty, resource: input.resource } : null,
   };
 }
