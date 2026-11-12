@@ -189,6 +189,13 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const [dismantleFlow, setDismantleFlow] = useState<{ machineId: number; armed: boolean } | null>(
     null
   );
+  /**
+   * UI-RESET-53: the reason the last placement confirm was refused, kept while the ghost
+   * stays armed (preserve-on-refusal). The objective's phase line states it instead of the
+   * now-inapplicable "tap again to place", and re-aiming or re-selecting clears it. It is
+   * separate from `lastReject` so the resting line's trailing "Last …" segment is untouched.
+   */
+  const [buildRefusal, setBuildRefusal] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   /**
    * PLAY-002 2 (TST-001, QA D-3): the last rejected command, kept after the 1.8 s toast
@@ -331,6 +338,14 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       setDismantleFlow(null);
     }
   }, [buildBlueprint]);
+
+  useEffect(() => {
+    // UI-RESET-53: a refused placement keeps the ghost armed, but the refusal reason is
+    // only current for that aim/choice. Re-aiming the ghost, re-selecting a blueprint or
+    // leaving build mode retires it so the phase line returns to the ghost hint. A refused
+    // confirm changes neither dep, so the reason it just set survives until the player acts.
+    setBuildRefusal(null);
+  }, [ghostTile, buildBlueprint]);
 
   useEffect(() => {
     // UI-RESET-53: if the machine a flow points at is gone (dismantled, or the save was
@@ -965,7 +980,10 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
                 : buildBlueprint !== null
                   ? // PLAY-001 P-3: the phase the dock is in, phrased where the secondary
                     // line already lives, so the primary label can keep one wording.
-                    t("phase.ghost", { tile: ghostTile ?? 0 })
+                    // UI-RESET-53: right after a refused confirm the ghost stays armed
+                    // (preserve-on-refusal), so state the refusal reason here instead of
+                    // the now-inapplicable "tap again to place"; re-aiming clears it.
+                    (buildRefusal ?? t("phase.ghost", { tile: ghostTile ?? 0 }))
                   : hintFor(suggestedAction(state))
             }
             numbers={restingLine(state, lastReject)}
@@ -1099,6 +1117,19 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
               setBuildBlueprint(null);
               setGhostTile(null);
               setCatalogOpen(false);
+              setBuildRefusal(null);
+            } else if (result.reason === "blocked-placement") {
+              // UI-RESET-53 (criterion a): an invalid cell preserves the placement so the
+              // player can re-aim without re-opening the catalog. The phase states why and
+              // the preview strip names the blocked cell; re-aiming clears the reason.
+              setBuildRefusal(labelForReject(result));
+            } else {
+              // An affordability refusal returns to the recovery phase (PLAY-001 P-3): the
+              // earn path stays reachable and the dock flips back to the suggested action.
+              setBuildBlueprint(null);
+              setGhostTile(null);
+              setCatalogOpen(false);
+              setBuildRefusal(null);
             }
           }}
           onCancelBuild={() => {
