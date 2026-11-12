@@ -25,17 +25,27 @@
  *        - dense: mature verbatim, settings.reducedMotion=true (stable pixels).
  *        - partial: mature minus route id 1 (store->sorter scrap), references
  *          pruned exactly like repairRegistration; store.scrap raised to 60 so
- *          the suggested belt is affordable. This re-opens a suggested link so
- *          the connect/disconnect flow is reachable through the real UI.
- *        - zeroPower: mature with the sorter marked status="powerLimited",
- *          powerRatio=0, and every machine's in-progress batch raised (progress=1)
- *          so requestedPower (16) exceeds yardPowerCapacity (8). Statuses otherwise
- *          unchanged. Demonstrates the zero-power overview + power bottleneck.
+ *          the suggested belt is affordable. Every drone (starter + spares) is
+ *          parked (repaired=false, inFlight=null) so the yard's only scrap income
+ *          source is idle and store.scrap moves ONLY by the connect charge and the
+ *          disconnect refund. This re-opens a suggested link so the connect/
+ *          disconnect flow is reachable through the real UI with exact arithmetic.
+ *        - zeroPower: ENGINE-DRIVEN, no hand-set status/ratio. Every machine is kept
+ *          mid-batch (progress=1, batchMilli=1e9 so none completes in the window) and
+ *          the sorter's batchPower is raised to 2000, so requestedPower (2015) vastly
+ *          exceeds yardPowerCapacity (8). The engine's own allocatePower then sets
+ *          powerRatio = 8/2015 (~0.004 -> wholePercent 0%) and startBatches marks every
+ *          running machine powerLimited each tick. Demonstrates the zero-power
+ *          overview + power bottleneck from legitimate engine inputs only.
  *        - missingInput: mature with route id 4 (sorter->furnace) removed and
  *          references pruned, leaving the starved furnace with no inbound belt.
- *        - outputFull: mature with the sorter status="outputFull", trayUnits=12
- *          (its outputBuffer), so its inbound belt is blocked and its output
- *          belt is revealable from the bottleneck list.
+ *        - outputFull: ENGINE-DRIVEN, no hand-set status. The sorter's tray is filled
+ *          to its outputBuffer (12) and EVERY sorter output belt is saturated
+ *          (inFlight=capacity, cargo arriving far in the future so settleArrivals never
+ *          drains it). enqueueCargo then finds no room, keeps all 12 tray units and the
+ *          engine sets status="outputFull"; startBatches refuses a new batch while
+ *          trayUnits>0. Its inbound belt is blocked and its output belt is revealable
+ *          from the bottleneck list.
  *      Every acceptance ACTION (tap machine, toggle routes, reveal, connect,
  *      cancel, confirm, disconnect) is a real UI tap/click through dispatch ->
  *      applyCommand. The mature yard's belts are pre-price (run:null, refund 0),
@@ -137,13 +147,28 @@ function derivePartial() {
   removeRoutes(sim, [1]); // store -> sorter scrap: re-opens a suggested link
   sim.store.scrap = 60; // SETUP: afford the suggested belt deterministically
   recomputeStoreUnits(sim);
+  // SETUP: idle every drone so scrap income cannot accrue during the flow. The refund
+  // scenario asserts EXACT belt cost/refund arithmetic; the drone is the yard's only
+  // scrap income source (updateUnit returns early when !repaired), so parking it makes
+  // store.scrap move only by the connect charge and the disconnect refund. This isolates
+  // the belt arithmetic under test; it does not weaken validateSim (an unrepaired drone
+  // is a normal fresh-yard state) and no acceptance action depends on drone delivery.
+  sim.drone.repaired = false;
+  sim.drone.inFlight = null;
+  for (const d of sim.spares) { d.repaired = false; d.inFlight = null; }
   return { sim, settings: baseSettings() };
 }
 function deriveZeroPower() {
   const sim = cloneSim();
-  sim.powerRatio = 0;
-  for (const m of sim.machines) m.progress = 1; // requestedPower sums batchPower where progress>0
-  sim.machines.find((m) => m.id === 1).status = "powerLimited";
+  // Honest engine-driven zero power: keep every machine mid-batch (progress>0) with a
+  // huge batchMilli so none completes during the window, and raise the sorter's
+  // batchPower so requestedPower (2015) vastly exceeds yardPowerCapacity (8). The engine's
+  // own allocatePower then sets powerRatio = 8/2015 (~0.004 -> wholePercent 0%) and marks
+  // every running machine powerLimited each tick. No status/ratio is hand-set: the seed
+  // only chooses inputs the engine legitimately consumes, and startBatches skips
+  // progress>0 machines so the seeded batchPower/batchMilli persist.
+  for (const m of sim.machines) { m.progress = 1; m.batchMilli = 1e9; }
+  sim.machines.find((m) => m.id === 1).batchPower = 2000;
   return { sim, settings: baseSettings() };
 }
 function deriveMissingInput() {
@@ -154,8 +179,20 @@ function deriveMissingInput() {
 function deriveOutputFull() {
   const sim = cloneSim();
   const sorter = sim.machines.find((m) => m.id === 1);
-  sorter.status = "outputFull";
+  // Honest engine-driven output-full: fill the sorter's tray to its outputBuffer (12)
+  // and saturate EVERY sorter output belt (inFlight = capacity, cargo arriving far in the
+  // future so settleArrivals never drains it during the window). enqueueCargo then finds
+  // no room on any link, keeps all 12 tray units and sets status="outputFull"; startBatches
+  // refuses to start a new batch while trayUnits>0. The sorter stays mid-batch (mature
+  // progress) so the engine, not a hand-set status, produces and holds the outputFull state.
+  sorter.tray = [{ resource: "ferrous", qty: 12 }];
   sorter.trayUnits = 12; // sorter outputBuffer
+  for (const r of sim.routes) {
+    if (r.from.kind === "machine" && r.from.id === 1) {
+      r.inFlight = r.capacity;
+      r.items = [{ resource: r.filter ?? "ferrous", qty: r.capacity, arrive: sim.tick + 1e9 }];
+    }
+  }
   return { sim, settings: baseSettings() };
 }
 
@@ -217,15 +254,24 @@ async function logisticsDom(page) {
         const ctx = canvas.getContext("2d");
         const { width, height } = canvas;
         const data = ctx.getImageData(0, 0, width, height).data;
-        let cyan = 0, orange = 0, amber = 0;
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-          if (a < 40) continue;
-          if (b > r + 25 && g > r + 15 && b > 120) cyan += 1;
-          if (r > g + 25 && g >= b && r > 120) orange += 1;
-          if (r > 150 && g > 110 && b < 130 && r > b + 50) amber += 1;
+        let cyan = 0, orange = 0, amber = 0, rail = 0;
+        const railSet = [];
+        for (let y = 0; y < height; y += 1) {
+          for (let x = 0; x < width; x += 1) {
+            const i = (y * width + x) * 4;
+            const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+            if (a < 40) continue;
+            if (b > r + 25 && g > r + 15 && b > 120) cyan += 1;
+            if (r > g + 25 && g >= b && r > 120) orange += 1;
+            if (r > 150 && g > 110 && b < 130 && r > b + 50) amber += 1;
+            // Working-rail-over-floor band: rgba(95,216,232,0.5) over floor(34,56,74)
+            // lands at (64,136,153). This isolates route ink from full-cyan machine
+            // pips/drones/accent bars (95,216,232 -> b232, excluded by b<=185), body
+            // grays (g-r~31 < 40), idle/dimmed rails (b<120) and the white select outline.
+            if (g > r + 40 && b > r + 50 && b >= 120 && b <= 185 && g <= 175) { rail += 1; railSet.push(y * width + x); }
+          }
         }
-        census = { cyan, orange, amber, width, height };
+        census = { cyan, orange, amber, rail, railSet, width, height };
       } catch (e) { census = { error: String(e) }; }
     }
 
@@ -410,7 +456,7 @@ async function dismissReport(page) {
  * then driven with real pointer down/up so App.applyGestureOutput -> pickTarget
  * -> setSelected runs exactly as a player tap does.
  */
-async function tapTile(page, tile) {
+async function tapTile(page, tile, expectPanel = true) {
   const pt = await page.evaluate(({ tile, YARD_COLS, CELL }) => {
     const c = document.querySelector(".game canvas");
     const r = c.getBoundingClientRect();
@@ -420,15 +466,29 @@ async function tapTile(page, tile) {
     const camera = { x: parts[0], y: parts[1], scale: parts[2] };
     const col = tile % YARD_COLS, row = Math.floor(tile / YARD_COLS);
     const wx = col * CELL + CELL / 2, wy = row * CELL + CELL / 2;
-    const sx = (wx - camera.x) * camera.scale + view.width / 2;
-    const sy = (wy - camera.y) * camera.scale + view.height / 2;
-    return { x: r.left + sx, y: r.top + sy };
+    const toClient = (ox, oy) => {
+      const sx = (wx + ox - camera.x) * camera.scale + view.width / 2;
+      const sy = (wy + oy - camera.y) * camera.scale + view.height / 2;
+      return { x: r.left + sx, y: r.top + sy };
+    };
+    // The shell-zoom faces can cover a tile's exact center on phoneland. Search small
+    // offsets (within the +/-16 world pick tolerance) for a point where the canvas is
+    // the top element, so the tap reaches App.applyGestureOutput -> pickTarget exactly
+    // as a player's cleared tap does. Falls back to the center if none is clear.
+    const offs = [[0, 0], [6, 0], [-6, 0], [0, 6], [0, -6], [10, 0], [-10, 0], [0, 10], [0, -10], [12, 12], [-12, -12], [12, -12], [-12, 12], [14, 0], [-14, 0], [0, 14], [0, -14]];
+    for (const [ox, oy] of offs) {
+      const q = toClient(ox, oy);
+      if (document.elementFromPoint(q.x, q.y) === c) return { x: q.x, y: q.y, ox, oy };
+    }
+    const q = toClient(0, 0);
+    return { x: q.x, y: q.y, ox: 0, oy: 0, fallback: true };
   }, { tile, YARD_COLS, CELL });
   await page.mouse.move(pt.x, pt.y);
   await page.mouse.down();
   await page.mouse.up();
-  await page.waitForSelector(".panel--stack", { timeout: 5000 });
+  if (expectPanel) await page.waitForSelector(".panel--stack", { timeout: 5000 });
   await page.waitForTimeout(250);
+  return pt;
 }
 
 async function runStep(page, form, name, action, expect = [], waitMs = 350) {
@@ -479,13 +539,29 @@ async function newPage(browser, form, fixture) {
   await clickSel(page, ".gate__btn");
   await page.waitForTimeout(700);
   await dismissReport(page);
+  // Settle past one authoritative checkpoint (store PERSIST_MS=1000) so the persisted
+  // mirror reflects the ENGINE's state, not just the seeded envelope. The engine-derived
+  // fixtures (zeroPower ratio, outputFull status) only appear in localStorage after the
+  // tick loop has advanced and persisted; reading earlier would race the first persist.
+  await page.waitForTimeout(1300);
   return { context, page, phone };
 }
 
 const SECTIONS = ["Identity", "Recipe", "Production", "Bottleneck", "Transport", "Recovery context", "Actions"];
 const normColor = (c) => (c ?? "").replace(/\s+/g, "");
-const parseCost = (note) => { const m = /·\s*(\d+)\s+scrap/.exec(note || ""); return m ? Number(m[1]) : null; };
-const parseRefund = (note) => { const m = /\+(\d+)\s+scrap/.exec(note || ""); return m ? Number(m[1]) : null; };
+const parseCost = (note) => { const m = /·\s*(\d+)\s+scraps?/.exec(note || ""); return m ? Number(m[1]) : null; };
+const parseRefund = (note) => { const m = /\+(\d+)\s+scraps?/.exec(note || ""); return m ? Number(m[1]) : null; };
+/** Pixels rail-band in set A but not in set B (route ink removed/added between frames).
+ *  Cancels every static element (backdrop, machine-base band) because those appear in
+ *  both frames; only the route layer changes when visibility toggles. */
+const railRemoved = (a, b) => {
+  if (!a?.railSet || !b?.railSet) return 0;
+  const sb = new Set(b.railSet);
+  let n = 0;
+  for (const p of a.railSet) if (!sb.has(p)) n += 1;
+  return n;
+};
+const RAIL_DIFF_MIN = 10;
 
 // ============================ dense routes + legend + visibility + selection ============================
 async function denseLoop(browser, form) {
@@ -524,6 +600,7 @@ async function denseLoop(browser, form) {
     { name: "toggle flips off and labels Show routes", test: (b, a) => a.dom.legend.toggle.text === "Show routes" && a.dom.legend.toggle.pressed === "false" },
     { name: "hiding removes cyan rail pixels (strictly fewer)", test: (b, a) => a.dom.census.cyan < b.dom.census.cyan, detail: (b, a) => `visible=${b.dom.census.cyan} hidden=${a.dom.census.cyan}` },
     { name: "no working-rail cyan remains once hidden", test: (b, a) => a.dom.census.cyan < visibleCyan * 0.5, detail: (b, a) => `hidden=${a.dom.census.cyan} visible=${visibleCyan}` },
+    { name: "hiding removes working-rail ink (rail-band diff >= floor)", test: (b, a) => railRemoved(b.dom.census, a.dom.census) >= RAIL_DIFF_MIN, detail: (b, a) => `railRemoved=${railRemoved(b.dom.census, a.dom.census)} floor=${RAIL_DIFF_MIN}` },
     { name: "routes keep running while hidden (count unchanged)", test: (b, a) => a.sim.routes === b.sim.routes && a.sim.routes === 18 },
   ]);
 
@@ -532,6 +609,7 @@ async function denseLoop(browser, form) {
   }, [
     { name: "toggle flips back on", test: (b, a) => a.dom.legend.toggle.text === "Hide routes" && a.dom.legend.toggle.pressed === "true" },
     { name: "showing restores cyan rail pixels", test: (b, a) => a.dom.census.cyan > b.dom.census.cyan, detail: (b, a) => `hidden=${b.dom.census.cyan} shown=${a.dom.census.cyan}` },
+    { name: "showing restores working-rail ink (rail-band diff >= floor)", test: (b, a) => railRemoved(a.dom.census, b.dom.census) >= RAIL_DIFF_MIN, detail: (b, a) => `railRestored=${railRemoved(a.dom.census, b.dom.census)} floor=${RAIL_DIFF_MIN}` },
     { name: "route count still 18 (presentation only)", test: (b, a) => a.sim.routes === 18 },
   ]);
 
@@ -588,7 +666,7 @@ async function zeroPowerLoop(browser, form) {
   await runStep(page, `${form}-zeropower`, "00-open-sorter", async () => {
     await tapTile(page, 0);
   }, [
-    { name: "seed loaded at zero power (ratio 0, 8 machines)", test: () => seed?.powerRatio === 0 && seed?.machines?.length === 8 },
+    { name: "engine drove the seed to near-zero power (ratio <0.01, 8 machines, 18 routes)", test: () => seed?.powerRatio < 0.01 && seed?.machines?.length === 8 && seed?.routes?.length === 18, detail: () => `powerRatio=${seed?.powerRatio}` },
     { name: "overview power reads 0% of capacity 8", test: (b, a) => /\/8 · 0%$/.test(a.dom.overview.powerValue), detail: (b, a) => a.dom.overview.powerValue },
     { name: "power gauge at 0 and marked limited", test: (b, a) => a.dom.overview.gauge.now === "0" && a.dom.overview.gauge.limited === true },
     { name: "over-budget note shown", test: (b, a) => a.dom.overview.powerNote === "Over budget — every running machine slows to the same fraction." },
@@ -680,13 +758,13 @@ async function refundLoop(browser, form) {
   }, [
     { name: "seed loaded intact (17 routes, scrap 60, sorter selected)", test: (b, a) => seed?.routes?.length === 17 && seed?.store?.scrap === 60 && a.dom.panel?.aria === "Scrap sorter details" },
     { name: "a suggested link is offered (store -> sorter)", test: (b, a) => a.dom.controls.suggestedCount >= 1 && a.dom.controls.suggestedConnect === true },
-    { name: "pre-price mature belts show +0 scrap refund (run:null)", test: (b, a) => a.dom.controls.laid.some((l) => l.refund === "+0 scrap"), detail: (b, a) => JSON.stringify(a.dom.controls.laid.map((l) => l.refund)) },
+    { name: "pre-price mature belts show +0 scrap refund (run:null)", test: (b, a) => a.dom.controls.laid.some((l) => /^\+0 scraps?$/.test(l.refund || "")), detail: (b, a) => JSON.stringify(a.dom.controls.laid.map((l) => l.refund)) },
   ]);
 
   const preview = await runStep(page, `${form}-refund`, "01-connect-preview", async () => {
     await clickBtnIn(page, ".logistics-controls__group", "Connect"); // suggested-links group
   }, [
-    { name: "preview group opens with a validity/cost note and Cancel", test: (b, a) => !!a.dom.controls.confirm && /^Valid — ready to lay\. \d+ tiles · \d+ scrap\.$/.test(a.dom.controls.confirm.note) && a.dom.controls.confirm.hasCancel === true && a.dom.controls.confirm.invalid === false, detail: (b, a) => a.dom.controls.confirm?.note },
+    { name: "preview group opens with a validity/cost note and Cancel", test: (b, a) => !!a.dom.controls.confirm && /^Valid — ready to lay\. \d+ tiles · \d+ scraps?\.$/.test(a.dom.controls.confirm.note) && a.dom.controls.confirm.hasCancel === true && a.dom.controls.confirm.invalid === false, detail: (b, a) => a.dom.controls.confirm?.note },
     { name: "preview dispatches nothing (routes + scrap unchanged)", test: (b, a) => a.sim.routes === b.sim.routes && a.sim.storeScrap === b.sim.storeScrap },
   ]);
   flow.cost = parseCost(preview.after.dom.controls.confirm?.note);
@@ -813,7 +891,7 @@ async function main() {
     chrome: executablePath,
     method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; no vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through panel buttons/selects -> props.dispatch -> applyCommand. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all five scenario loops run on each.",
     fixtureScrutiny: {
-      a: "Only setup seeding mutates state: fixtures derived from docs/evidence/yard-mature.json before encoding (partial removes route 1 + raises store scrap to 60; zeroPower marks the sorter powerLimited at ratio 0 with every batch in progress so requestedPower 16 > capacity 8; missingInput removes route 4; outputFull marks the sorter outputFull with tray 12/12; all set reducedMotion=true for stable pixels). No src changes; every action is a real UI tap/click through dispatch -> applyCommand.",
+      a: "Only setup seeding mutates state: fixtures derived from docs/evidence/yard-mature.json before encoding with the game's own encodeSave arithmetic (FNV-1a checksum, lastSeenMs=Date.now()). partial removes route 1, raises store scrap to 60 and parks every drone (repaired=false) so scrap moves only by belt charge/refund; missingInput removes route 4. zeroPower and outputFull are ENGINE-DRIVEN, not hand-set statuses: zeroPower keeps every machine mid-batch (progress=1, batchMilli=1e9) and raises the sorter batchPower to 2000 so the engine's allocatePower yields ratio 8/2015 (~0%) and startBatches marks all powerLimited; outputFull fills the sorter tray to its outputBuffer (12) and saturates its output belts so enqueueCargo keeps the tray full and the engine sets outputFull. All set reducedMotion=true for stable pixels. No src changes; every action is a real UI tap/click through dispatch -> applyCommand.",
       b: "Documented in this probe header, the derive* functions and results.json.",
       c: "Seeded envelopes pass the game's full decodeSave/repairRegistration/validateSim; the 00-open steps assert the loaded mirror matches the seed. Route references pruned exactly like repairRegistration. No invariant weakened or bypassed.",
       d: "No action faked by injection; localStorage read only as the game's own persistence mirror (written on every ok dispatch). The refund scenario connects a fresh belt through the real UI (engine prices its run) then disconnects it, because mature belts are pre-price (run:null, refund 0).",
@@ -822,7 +900,8 @@ async function main() {
       cyanRail: "b>r+25 && g>r+15 && b>120",
       orange: "r>g+25 && g>=b && r>120 (blocked rail; residue cargo shares the hue, so blocked is corroborated by DOM route status)",
       amber: "r>150 && g>110 && b<130 && r>b+50",
-      visibilityClaim: "strictly relative: visible.cyan > hidden.cyan, and hidden.cyan < 0.5*visible.cyan; route count unchanged while hidden.",
+      railBand: "g>r+40 && b>r+50 && b>=120 && b<=185 && g<=175 (working-rail-over-floor ink; excludes full-cyan pips b232, body grays and dimmed rails b<120)",
+      visibilityClaim: "strictly relative: visible.cyan > hidden.cyan, hidden.cyan < 0.5*visible.cyan, and the rail-band set diff (railRemoved) >= 10 pixels both when hiding (ink removed) and showing (ink restored); route count unchanged while hidden.",
     },
     fixtures: Object.fromEntries(Object.entries(FIXTURES).map(([k, v]) => [k, {
       machines: v.sim.machines.length, routes: v.sim.routes.length, storeScrap: v.sim.store.scrap,
