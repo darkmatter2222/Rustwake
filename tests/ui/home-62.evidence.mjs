@@ -88,10 +88,12 @@ function assert(ff, phase, name, cond, detail = "") {
  * Two layers, both form-factor independent:
  *  - full frame: exact device dimensions, not blank (distinct colors), dark theme.
  *  - content region: lit-text density INSIDE the primary UI's card box. `content`
- *    is either a CSS selector for a bounded card, or an explicit CSS-px box (used
- *    for `.gate`: the gate itself is a full-viewport overlay, so the meaningful
- *    region is the union box of its centered children — assertGateGeometry proves
- *    that card is strictly smaller than the frame before we audit it). A centered
+ *    is either a CSS selector for a bounded card, or an explicit CSS-px box:
+ *    the gate's centered-card union (assertGateGeometry proves that card is
+ *    strictly smaller than the frame before we audit it), or the contentBox of
+ *    containers the rail mode stretches by design (menu sheet / inspector
+ *    panels fill the gutter top-to-bottom; their head+rows are the painted UI).
+ *    A centered
  *    card leaves large dark margins on a wide desktop frame, so a single
  *    full-frame bright-share threshold would mis-scale across form factors; we
  *    measure where the UI actually is instead. This is stricter, not weaker.
@@ -156,7 +158,7 @@ async function auditFrame(page, buf, ff, phase, file, viewport, dsf, content) {
         darkShare: +(dark / total).toFixed(4),
         brightShare: +(bright / total).toFixed(4),
         samples: total,
-        content: typeof content === "string" ? content : "gate-card-box",
+        content: typeof content === "string" ? content : "content-box",
         region: {
           box: { x0: rx0, y0: ry0, x1: rx1, y1: ry1 },
           brightShare: regionTotal ? +(regionBright / regionTotal).toFixed(4) : 0,
@@ -303,6 +305,27 @@ const gateGeometry = (page) =>
       children: kids.length,
     };
   });
+/**
+ * Union box (CSS px) of the visible elements matching `selectors`. Used where
+ * the container itself is stretched by design — the rail-mode inspector gutter
+ * pins the menu sheet and panels top-to-bottom (documented, measured shell.css
+ * rules), so the painted CONTENT (head + rows + actions) is the meaningful
+ * lit-text region, exactly like the gate's centered card.
+ */
+const contentBox = (page, selectors) =>
+  page.evaluate((selectors) => {
+    const rects = [...document.querySelectorAll(selectors)]
+      .map((n) => n.getBoundingClientRect())
+      .filter((r) => r.width > 0 && r.height > 0);
+    if (!rects.length) return null;
+    return {
+      left: Math.min(...rects.map((r) => r.left)),
+      top: Math.min(...rects.map((r) => r.top)),
+      right: Math.max(...rects.map((r) => r.right)),
+      bottom: Math.max(...rects.map((r) => r.bottom)),
+    };
+  }, selectors);
+
 async function assertGateGeometry(page, ff, phase) {
   const geo = await gateGeometry(page);
   assert(
@@ -514,7 +537,9 @@ async function runFormFactor(browser, ff, viewport, dsf, isMobile) {
   assert(ff, M, "Home row is navigation-worded", homeRow.includes("yard overview"), homeRow);
   await assertTargets(b, ff, M, ".shell-menu");
   assert(ff, M, "no page scroll with menu", (await noScroll(b)).ok);
-  await shot(b, ff, M, "06-menu.png", viewport, dsf, ".shell-menu");
+  const menuBox = await contentBox(b, ".shell-menu__head, .shell-menu__row");
+  assert(ff, M, "menu content box measured", Boolean(menuBox), JSON.stringify(menuBox));
+  await shot(b, ff, M, "06-menu.png", viewport, dsf, menuBox);
 
   await clickText(b, "Settings", ".shell-menu__row");
   await b.waitForSelector(".panel--settings");
@@ -522,7 +547,12 @@ async function runFormFactor(browser, ff, viewport, dsf, isMobile) {
   assert(ff, M, "post-start Sound actual value", (await rowVal(b, "Sound")) === "On");
   assert(ff, M, "post-start Text actual value", (await rowVal(b, "Text size")) === "1");
   await assertTargets(b, ff, M, ".panel--settings");
-  await shot(b, ff, M, "07-settings-poststart.png", viewport, dsf, ".panel--settings");
+  const settingsBox = await contentBox(
+    b,
+    ".panel--settings .panel__head, .panel--settings .panel__row, .panel--settings .status-line, .panel--settings .panel__actions"
+  );
+  assert(ff, M, "settings content box measured", Boolean(settingsBox), JSON.stringify(settingsBox));
+  await shot(b, ff, M, "07-settings-poststart.png", viewport, dsf, settingsBox);
   await b.keyboard.press("Escape");
   await b.waitForSelector(".panel--settings", { state: "detached" });
   assert(ff, M, "Escape closes post-start settings", (await b.locator(".hud").count()) === 1);
