@@ -172,6 +172,8 @@ const receipt = {
     reportDismissal: "The boot absence credit is synchronous in createStore, so a boot report is already mounted when the shell paints and is dismissed immediately. A RELOAD report mounts only when claim() adopts the stale lease (~LEASE_TTL_MS=1.5s after reload) and credits the absence; the probe therefore waits for lease adoption THROUGH the app's own lease record, then gives the report a bounded 3s appear-window, dismisses it, and only then opens/measures the yard panel. assertPanelFits additionally asserts a single-panel census (0 reports, exactly 1 .hud>.panel) so a stacked two-panel budget (26%/50%) can never masquerade as inner-panel overflow.",
     twoPanelArtifact: "The earlier 139px (phone) / 111px (phone-landscape) 'overflow' on the reload/hostile phases was this dismissal race: the report mounted after dismissal and stacked with the yard panel. With dismissal ordered after adoption the panel is single everywhere and those phases measure their true body height.",
     distinctFrames: "The imported yard is deterministic (same sim/settings/note), so post-import frames are captured only after a per-scale LIVE-TICK offset on the record page (after-import +30/+70, reload +20/+60, hostile +10/+90 for ts1/ts2). The live Tick row then differs between every frame by construction, the yard's resumed stepping is proven, and the hostile clamp frame is taken on the record page because the replace-page note ('Applied · tick <incoming>') is deterministic. Frame distinctness is asserted, never relaxed.",
+    definiteBodyBand: "The 0px inner-scroll target is asserted as body.scrollHeight <= body.clientHeight with overflow:auto (never hidden, so genuine overflow is never clipped). A shrink-to-fit body whose fractional content height lands mid-pixel reads scrollHeight(ceil) 1px above clientHeight(floor) even when the page fits (measured phone ts2 replace 208/207). save.css therefore gives the save panel a definite height (its existing 42% cap outside the rail; the rail's absolute top/bottom own it) and the body flex:1 1 auto fills that band with spare room below the content. This is a layout fix, not a relaxation: the assertion and the overflow:auto scroller are unchanged, and the phone-landscape ts2 band (61-94px) still genuinely cannot fit the pages and still fails.",
+    contentBoxRegion: "The pixel audit's lit-text region (panelContent) bounds the rendered head + .save-page content, not .panel__body. Once the body fills its definite band, the body box on a sparse page (desktop ts1 record) includes empty filler below the content and dilutes the bright share below the 0.004 floor even though the text is fully lit. Sampling the actual content box restores the intended 'is the panel text lit' measurement; the 0.004 threshold and the dims/not-blank/dark/card-not-full-frame assertions are unchanged.",
   },
   formFactors: {},
   failures: [],
@@ -388,7 +390,12 @@ const contentBox = (page, selectors) =>
     if (!rects.length) return null;
     return { left: Math.min(...rects.map((r) => r.left)), top: Math.min(...rects.map((r) => r.top)), right: Math.max(...rects.map((r) => r.right)), bottom: Math.max(...rects.map((r) => r.bottom)) };
   }, selectors);
-const panelContent = (page) => contentBox(page, `${PANEL} .panel__head, ${PANEL} .panel__body`);
+// The lit-text "content-box" bounds the RENDERED page content (head + .save-page),
+// not .panel__body: the body now fills its definite flex band, so on a sparse page
+// (desktop ts1 record) the body box is mostly empty filler below the content and
+// would dilute the bright-pixel share. Sampling the actual content box is the
+// honest region for "is the panel's text lit"; the 0.004 threshold is unchanged.
+const panelContent = (page) => contentBox(page, `${PANEL} .panel__head, ${PANEL} .save-page`);
 
 /** The real player path to the Yard record: rail slot where rail mode owns it,
  *  dock Yard button otherwise (phone portrait). */
