@@ -468,13 +468,16 @@ describe("first-feel shell", () => {
 
     const panel = document.querySelector(".panel");
     expect(panel?.textContent).toContain("Yard record");
-    expect(panel?.textContent).toContain("Saved yard");
     expect(panel?.textContent).toContain(`Tick${state.tick}`);
+    expect(findButton("Import")).toBeDefined();
+    // UI-RESET-63: the export moved to its own labelled Backup page; the record
+    // page keeps every statistic and both transfer entries.
+    act(() => findButton("Backup")?.click());
+    expect(panel?.textContent).toContain("Saved yard");
     const field = panel?.querySelector("textarea") as HTMLTextAreaElement | undefined;
     expect(field?.value.startsWith('{"schemaVersion":1,')).toBe(true);
     expect(JSON.parse(field?.value ?? "{}").payload.sim.tick).toBe(state.tick);
     expect(findButton("Copy")).toBeDefined();
-    expect(findButton("Import")).toBeDefined();
   });
 
   it("imports a pasted yard and keeps the running one when the text is damaged (B-06)", () => {
@@ -505,6 +508,12 @@ describe("first-feel shell", () => {
     expect(field).toBeDefined();
     typeInto(field, text);
     act(() => findButton("Apply")?.click());
+    // UI-RESET-63: Apply now validates and previews first; the replacement only
+    // happens after the deliberate acknowledgement + confirm in the gate.
+    const ack = document.querySelector<HTMLInputElement>(".import-confirm__ack input");
+    expect(ack).not.toBeNull();
+    act(() => ack?.click());
+    act(() => findButton("Replace yard")?.click());
     expect(store.getState().tick).toBe(source.getState().tick);
     expect(store.getState().machines.length).toBe(1);
     expect(document.querySelector(".panel")?.textContent).toContain("Applied");
