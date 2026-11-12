@@ -1,0 +1,3908 @@
+{
+  "task": "UI-RESET-55 explicit upgrade branch comparison",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/55",
+  "headSha": "f679d18d117cc7685575b4621a76bc7804036440",
+  "headShaNote": "code commit under test; the evidence-only commit containing this receipt follows it as PR head",
+  "tool": "playwright-core headless Chrome, DOM/geometry/console assertions only (no vision)",
+  "seed": "A/B/D/E/F/G: command-built yards via the game's own applyCommand/advance + encodeSave checksum (see MUTATIONS commandYard/freeze); C: docs/evidence/yard-mature.json + lastSeenMs=now + credits=1000",
+  "mutations": [
+    "base: payload.lastSeenMs = Date.now() (avoid catch-up drift); yard-mature credits 82 -> 1000 (M1 lvl14 plain upgrade costs 222 via the engine's iterative ceil; the printed cost is still the real engine formula, asserted against the sim delta)",
+    "commandYard: seed built with the real engine (createInitialState + 6 salvage pulses + drone.repair + advance 262, then probe-only restock store.scrap=500/store.ferrous=100/storeCapacity=2000 BEFORE the priced builds/connects so every command is affordable — furnace buildCost is scrap 10 + ferrous 5), then build sorter tile 8 + scrap input + ferrous/nonferrous outputs [+ furnaces tiles 9..12] + advance 120 + tutorial=9/exportClaimed + credits=1000 (or 12 for the shortfall yard); every seed command asserts ok",
+    "freeze: every route items=[]/inFlight=0; every machine tray=[]/trayUnits=0, inBuf full at blueprint.inputBuffer (engine pullNeed=0, no arrivals), batch=[input x recipe qty]/progress=1/batchMilli=1e9 (frozen mid-batch, never completes during capture), status=running. Credits move ONLY through the real upgrade/respec commands under test",
+    "starved: input route removed + sorter.inRoutes=[] + inBuf={}/inBufUnits=0 + batch=null/progress=0 (sorter stays starved while the frame is captured; the engine cannot start a batch with an empty buffer and no input link)",
+    "power: NO batchPower mutation — four frozen furnaces (draw 2 each) plus the sorter (draw 1) request 9 > TUNING.yardPowerCapacity 8, so the yard is genuinely power limited; demand/percent are computed from the live sim at frame time and the DOM is asserted against that",
+    "textScale: settings.textScale = 2 (200% text frames)"
+  ],
+  "frameAudit": "every capture frame runs probe()+audit() before screenshot; checks recorded per frame; any failed check fails the run; every action-level assertion (tap identity, printed===branchPrice===credits delta, picks, derived values, no-dispatch card taps, blocked taps, free respec, console) is recorded with its numbers in actionChecks, pass or fail",
+  "actionProof": "clickUpgradeSync/clickActionSync click the real button and read localStorage in the same JS task (dispatch->applyCommand->persist synchronous; zero engine ticks between click and read). The pre-click baseline is flushed through the real HudTop sound toggle first (setSettings -> synchronous persist, zero sim effect, restored). Card taps are proven dispatch-free by the same-task before/after revision and credits.",
+  "scrollProof": "phone and 200% text frames prove reachability by scrolling EACH card and the buy face into view with scrollIntoView and asserting painted visibility at >=44px (proveReachable, recorded per element); frames then paint the scrolled window they claim",
+  "contrastConditions": [
+    "D power-limited: sorter (draw 1) + 4 frozen furnaces (draw 2 each) request 9 > yardPowerCapacity 8 -> powerRatio 8/9; the furnace's draw card (2 -> 1 unit) carries the shared-budget tradeoff and the inspector prints the live demand/percent",
+    "E buffer-starved: lone sorter with its input route removed and an empty buffer stays Needs input; the buffer card (12 -> 18 units) carries the bursty-supply tradeoff while the draw card is maxed at the 1-unit floor",
+    "same three cards in dock order in both yards: the state, not the UI, explains the branch choice; no balance value is changed by the probe"
+  ],
+  "viewports": [
+    "1280x800 desktop rail",
+    "390x844 phone sheet",
+    "390x844 phone @200% text"
+  ],
+  "entryChunk": {
+    "file": "index-Clip2Pa4.js",
+    "bytes": 126097,
+    "baseBytes": 119100,
+    "deltaBytes": 6997,
+    "capBytes": 233000,
+    "underCap": true
+  },
+  "sequences": [
+    {
+      "id": "A",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter + furnace) + credits=1000 + freeze (MUTATIONS)",
+      "actions": [
+        "card taps x10",
+        "buy speed",
+        "buy buffer x3",
+        "buy draw",
+        "respec speed",
+        "respec buffer",
+        "plain Upgrade"
+      ],
+      "tapped": {
+        "tile": 9,
+        "sx": 569,
+        "sy": 270
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "B",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter + furnace) + credits=12 + freeze (MUTATIONS)",
+      "actions": [
+        "select speed",
+        "blocked buy"
+      ],
+      "tapped": {
+        "tile": 9,
+        "sx": 569,
+        "sy": 270
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "C",
+      "viewport": "1280x800",
+      "seed": "yard-mature + lastSeenMs=now + credits=1000 (legacy branch-less machines)",
+      "actions": [
+        "plain Upgrade (M1)"
+      ],
+      "tapped": {
+        "tile": 0,
+        "sx": 323,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "D",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter + 4 furnaces) + freeze: demand 9 > capacity 8 (MUTATIONS power)",
+      "condition": "power-limited",
+      "power": {
+        "demand": 9,
+        "percent": 89
+      },
+      "tapped": {
+        "tile": 9,
+        "sx": 569,
+        "sy": 273
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "E",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter, input route removed, buffer empty) + freeze (MUTATIONS starved)",
+      "condition": "buffer-starved",
+      "tapped": {
+        "tile": 8,
+        "sx": 487,
+        "sy": 270
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "F",
+      "viewport": "390x844",
+      "seed": "commandYard(sorter + furnace) + credits=1000 + freeze (MUTATIONS)",
+      "actions": [
+        "select speed",
+        "buy"
+      ],
+      "tapped": {
+        "tile": 9,
+        "sx": 191,
+        "sy": 361
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "G",
+      "viewport": "390x844 @200% text",
+      "seed": "commandYard(sorter + furnace) + credits=1000 + textScale=2 + freeze (MUTATIONS)",
+      "actions": [
+        "select speed",
+        "buy"
+      ],
+      "tapped": {
+        "tile": 9,
+        "sx": 191,
+        "sy": 435
+      },
+      "consoleErrors": []
+    }
+  ],
+  "summary": {
+    "frames": 22,
+    "passed": 22,
+    "failed": 0,
+    "checkFailures": 0,
+    "actionChecks": 55,
+    "actionChecksPassed": 55
+  },
+  "failures": [],
+  "keyProofs": [
+    {
+      "proof": "A.buySpeed",
+      "printed": 50,
+      "branchPrice": 50,
+      "creditsBefore": 1000,
+      "creditsAfter": 950,
+      "level": 2,
+      "branch": [
+        "speed"
+      ]
+    },
+    {
+      "proof": "A.bufferTaps",
+      "prices": [
+        47,
+        55,
+        64
+      ],
+      "creditsAfter": 784,
+      "level": 5,
+      "branch": [
+        "speed",
+        "buffer",
+        "buffer",
+        "buffer"
+      ]
+    },
+    {
+      "proof": "A.drawBuy",
+      "printed": 75,
+      "branchPrice": 75,
+      "creditsBefore": 784,
+      "creditsAfter": 709,
+      "powerAfter": 1
+    },
+    {
+      "proof": "A.respec",
+      "creditsBefore": 709,
+      "creditsAfter": 709,
+      "level": 6,
+      "branch": [
+        "speed",
+        "buffer",
+        "buffer",
+        "buffer",
+        "speed"
+      ],
+      "batchMilli": 33334,
+      "engineBatchMilli": 33334
+    },
+    {
+      "proof": "A.plainUnnamed",
+      "printed": 30,
+      "upgradeCost": 30,
+      "creditsDelta": 30,
+      "level": 2,
+      "branch": null,
+      "speedRanks": 1
+    },
+    {
+      "proof": "B.blockedTap",
+      "printedPrice": 50,
+      "creditsBefore": 12,
+      "creditsAfter": 12,
+      "level": 1,
+      "revisionDelta": 0
+    },
+    {
+      "proof": "C.legacyPlain",
+      "printed": 222,
+      "engineUpgradeCost": 222,
+      "creditsDelta": 222,
+      "levelBefore": 14,
+      "levelAfter": 15,
+      "branch": null
+    },
+    {
+      "proof": "F.phoneBuy",
+      "printed": 50,
+      "branchPrice": 50,
+      "creditsBefore": 1000,
+      "creditsAfter": 950,
+      "level": 2
+    }
+  ],
+  "actionChecks": [
+    {
+      "check": "A.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":9,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":2,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "A.taps.noDispatch",
+      "ok": true,
+      "detail": "{\"revision\":\"14 -> 14\",\"credits\":1000}"
+    },
+    {
+      "check": "A.buySpeed.clicked",
+      "ok": true,
+      "detail": "disabled=false"
+    },
+    {
+      "check": "A.buySpeed.parity",
+      "ok": true,
+      "detail": "printed=50 branchPrice=50 delta=50"
+    },
+    {
+      "check": "A.buySpeed.level",
+      "ok": true,
+      "detail": "level=2 branch=[\"speed\"]"
+    },
+    {
+      "check": "A.buySpeed.batchMilli",
+      "ok": true,
+      "detail": "stored=36364 engine=36364"
+    },
+    {
+      "check": "A.buySpeed.revision",
+      "ok": true,
+      "detail": "14 -> 15"
+    },
+    {
+      "check": "A.bufferTap1.parity",
+      "ok": true,
+      "detail": "printed=47 branchPrice=47 delta=47"
+    },
+    {
+      "check": "A.bufferTap1.state",
+      "ok": true,
+      "detail": "level=3 branch=[\"speed\",\"buffer\"]"
+    },
+    {
+      "check": "A.bufferTap2.parity",
+      "ok": true,
+      "detail": "printed=55 branchPrice=55 delta=55"
+    },
+    {
+      "check": "A.bufferTap2.state",
+      "ok": true,
+      "detail": "level=4 branch=[\"speed\",\"buffer\",\"buffer\"]"
+    },
+    {
+      "check": "A.bufferTap3.parity",
+      "ok": true,
+      "detail": "printed=64 branchPrice=64 delta=64"
+    },
+    {
+      "check": "A.bufferTap3.state",
+      "ok": true,
+      "detail": "level=5 branch=[\"speed\",\"buffer\",\"buffer\",\"buffer\"]"
+    },
+    {
+      "check": "A.bufferTaps.credits",
+      "ok": true,
+      "detail": "credits=784"
+    },
+    {
+      "check": "A.drawBuy.parity",
+      "ok": true,
+      "detail": "printed=75 branchPrice=75 delta=75"
+    },
+    {
+      "check": "A.drawBuy.power",
+      "ok": true,
+      "detail": "power=1 level=6 branch=[\"speed\",\"buffer\",\"buffer\",\"buffer\",\"draw\"]"
+    },
+    {
+      "check": "A.respec.free",
+      "ok": true,
+      "detail": "credits 709 -> 709, level=6"
+    },
+    {
+      "check": "A.respec.lastOnly",
+      "ok": true,
+      "detail": "[\"speed\",\"buffer\",\"buffer\",\"buffer\",\"speed\"]"
+    },
+    {
+      "check": "A.respec.batchMilli",
+      "ok": true,
+      "detail": "stored=33334 engine=33334"
+    },
+    {
+      "check": "A.respec.revision",
+      "ok": true,
+      "detail": "19 -> 20"
+    },
+    {
+      "check": "A.respec2.free",
+      "ok": true,
+      "detail": "{\"credits\":709,\"level\":6,\"branch\":[\"speed\",\"buffer\",\"buffer\",\"buffer\",\"buffer\"]}"
+    },
+    {
+      "check": "A.respec2.guard",
+      "ok": true,
+      "detail": "[{\"branch\":\"speed\",\"disabled\":false,\"text\":\"Speed · 3.33s\",\"minH\":44},{\"branch\":\"buffer\",\"disabled\":true,\"text\":\"Input buffer · 36 units (current)\",\"minH\":44},{\"branch\":\"draw\",\"disabled\":false,\"text\":\"Power draw · 1 unit\",\"minH\":44}]"
+    },
+    {
+      "check": "A.tapSorter",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":1,\"progress\":51001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "A.plain.parity",
+      "ok": true,
+      "detail": "printed=30 engine=30 delta=30"
+    },
+    {
+      "check": "A.plain.unnamed",
+      "ok": true,
+      "detail": "{\"level\":2,\"ranks\":{\"speed\":1,\"buffer\":0,\"draw\":0},\"milli\":36364,\"engineBefore\":40000}"
+    },
+    {
+      "check": "A.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "B.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":9,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":2,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "B.notAffordable",
+      "ok": true,
+      "detail": "[\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need \",\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 40 \",\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credi\"]"
+    },
+    {
+      "check": "B.blocked.noCharge",
+      "ok": true,
+      "detail": "{\"credits\":12,\"level\":1,\"revision\":\"14 -> 14\"}"
+    },
+    {
+      "check": "B.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "C.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"branch\":null,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8}"
+    },
+    {
+      "check": "C.legacy",
+      "ok": true,
+      "detail": "{\"level\":14,\"branch\":null}"
+    },
+    {
+      "check": "C.plain.parity",
+      "ok": true,
+      "detail": "printed=222 engine=222 delta=222"
+    },
+    {
+      "check": "C.plain.unnamed",
+      "ok": true,
+      "detail": "{\"level\":15,\"milli\":16667}"
+    },
+    {
+      "check": "C.tapFurnace",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"level\":13,\"branch\":null,\"batchMilli\":18182,\"batchPower\":2,\"progress\":0,\"status\":\"starved\",\"trayUnits\":0,\"inBufUnits\":1}"
+    },
+    {
+      "check": "C.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "D.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":9,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":2,\"progress\":890,\"status\":\"powerLimited\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "D.powerLimited",
+      "ok": true,
+      "detail": "{\"demand\":9,\"percent\":89}"
+    },
+    {
+      "check": "D.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "E.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"branch\":null,\"batchMilli\":40000,\"batchPower\":1,\"progress\":0,\"status\":\"starved\",\"trayUnits\":0,\"inBufUnits\":0}"
+    },
+    {
+      "check": "E.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "F.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":9,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":2,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "F.reach.speed",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":649,\"w\":344,\"h\":128,\"visible\":true}"
+    },
+    {
+      "check": "F.reach.buffer",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":649,\"w\":344,\"h\":128,\"visible\":true}"
+    },
+    {
+      "check": "F.reach.draw",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":650,\"w\":344,\"h\":127,\"visible\":true}"
+    },
+    {
+      "check": "F.reach.buy",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":733,\"w\":344,\"h\":44,\"visible\":true}"
+    },
+    {
+      "check": "F.buy.parity",
+      "ok": true,
+      "detail": "printed=50 branchPrice=50 delta=50 level=2"
+    },
+    {
+      "check": "F.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "G.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":9,\"level\":1,\"branch\":null,\"batchMilli\":1000000000,\"batchPower\":2,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12}"
+    },
+    {
+      "check": "G.reach.speed",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":477,\"w\":344,\"h\":271,\"visible\":true}"
+    },
+    {
+      "check": "G.reach.buffer",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":477,\"w\":344,\"h\":271,\"visible\":true}"
+    },
+    {
+      "check": "G.reach.draw",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":477,\"w\":344,\"h\":271,\"visible\":true}"
+    },
+    {
+      "check": "G.reach.buy",
+      "ok": true,
+      "detail": "{\"x\":23,\"y\":700,\"w\":344,\"h\":48,\"visible\":true}"
+    },
+    {
+      "check": "G.buy.parity",
+      "ok": true,
+      "detail": "delta=50 branchPrice=50 level=2"
+    },
+    {
+      "check": "G.console",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "captures": [
+    {
+      "frame": 1,
+      "sequence": "A",
+      "name": "cards-rest",
+      "file": "a1-desk-cards-rest.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 40 credits\",\"Move · cell 0 · 8 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 40 credits\",\"Move · cell 0 · 8 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 40 credits\",\"Move · cell 0 · 8 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "accentOne",
+          "ok": true,
+          "detail": "accent=1"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.speed.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.speed~4.00s → 3.64s",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.speed~Cost: 50 credits",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.speed~Shortens every batch by one spee",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.speed~Rank 0 → 1",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.buffer.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.buffer~12 units → 18 units",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 40 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.buffer~Cost: 40 credits",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 40 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.buffer~Adds 6 input units so a bursty s",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 40 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.draw~2 units → 1 unit",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time a\""
+        },
+        {
+          "check": "card.draw~Cost: 40 credits",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time a\""
+        },
+        {
+          "check": "card.draw~Cuts this machine's draw by 1 un",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time a\""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "buy~Buy selected",
+          "ok": true,
+          "detail": "label=\"Buy selected\""
+        },
+        {
+          "check": "receiptAbsent",
+          "ok": true,
+          "detail": "null"
+        },
+        {
+          "check": "respecNone",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the current and proposed value with its unit, the price and the tradeoff. Nothing is selected until you tap a card.\",\"Select a branch card above to enable the purchase. Tapping a card never spends anything.\",\"The plain Upgrade face below buys an unnamed level at the plain price: it counts as one speed rank and changes nothing else.\",\"No named upgrade to re-pick yet. Buy a branch above first; a plain unnamed level cannot be re-picked.\",\"Free: moves only the most recent named rank to another branch. The level, the credits and every older pick stay exactly as they are.\"]"
+        },
+        {
+          "check": "upgradeNote~Select a branch card above t",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the curren\",\"Select a branch card above to enable the purchase. Tapping a\",\"The plain Upgrade face below buys an unnamed level at the pl\",\"No named upgrade to re-pick yet. Buy a branch above first; a\",\"Free: moves only the most recent named rank to another branc\"]"
+        },
+        {
+          "check": "upgradeNote~The plain Upgrade face below",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the curren\",\"Select a branch card above to enable the purchase. Tapping a\",\"The plain Upgrade face below buys an unnamed level at the pl\",\"No named upgrade to re-pick yet. Buy a branch above first; a\",\"Free: moves only the most recent named rank to another branc\"]"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":194,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":343,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":476,\"w\":294,\"h\":143,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 2,
+      "sequence": "A",
+      "name": "selection-stable",
+      "file": "a2-desk-selection-stable.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Input buffer · 40 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.pressed",
+          "ok": true,
+          "detail": "pressed=true"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "buyDisabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "buy~Input buffer",
+          "ok": true,
+          "detail": "label=\"Buy selected · Input buffer · 40 credits\""
+        },
+        {
+          "check": "buy~40 credits",
+          "ok": true,
+          "detail": "label=\"Buy selected · Input buffer · 40 credits\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "buyPainted",
+          "ok": true,
+          "detail": "{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true}"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 3,
+      "sequence": "A",
+      "name": "after-speed-buy",
+      "file": "a3-desk-after-speed-buy.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"2\" want \"2\""
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Speed · 57 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=true"
+        },
+        {
+          "check": "card.speed~Rank 1 → 2",
+          "ok": true,
+          "detail": "text=\"SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.speed~57 credits",
+          "ok": true,
+          "detail": "text=\"SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "buy~Speed",
+          "ok": true,
+          "detail": "label=\"Buy selected · Speed · 57 credits\""
+        },
+        {
+          "check": "buy~57 credits",
+          "ok": true,
+          "detail": "label=\"Buy selected · Speed · 57 credits\""
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=applied want=applied"
+        },
+        {
+          "check": "receipt~Applied: Speed",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~Rank 1",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~level 2",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~paid 50 credits",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~1000 → 950",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~4.00s → 3.64s",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":44},{\"b\":\"buffer\",\"h\":44},{\"b\":\"draw\",\"h\":44}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 4,
+      "sequence": "A",
+      "name": "after-buffer-taps",
+      "file": "a4-desk-after-buffer-taps.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"5\" want \"5\""
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Input buffer · 75 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.pressed",
+          "ok": true,
+          "detail": "pressed=true"
+        },
+        {
+          "check": "card.buffer~Rank 3 → 4",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 3 → 4Input capacity: 30 units → 36 units+6 input unitsCost: 75 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.buffer~75 credits",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 3 → 4Input capacity: 30 units → 36 units+6 input unitsCost: 75 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "buy~Input buffer",
+          "ok": true,
+          "detail": "label=\"Buy selected · Input buffer · 75 credits\""
+        },
+        {
+          "check": "buy~75 credits",
+          "ok": true,
+          "detail": "label=\"Buy selected · Input buffer · 75 credits\""
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=applied want=applied"
+        },
+        {
+          "check": "receipt~Applied: Input buffer",
+          "ok": true,
+          "detail": "text=\"Applied: Input buffer Rank 3 · level 5 · Input capacity 24 units → 30 units · paid 64 credits (848 → 784)\""
+        },
+        {
+          "check": "receipt~Rank 3",
+          "ok": true,
+          "detail": "text=\"Applied: Input buffer Rank 3 · level 5 · Input capacity 24 units → 30 units · paid 64 credits (848 → 784)\""
+        },
+        {
+          "check": "receipt~level 5",
+          "ok": true,
+          "detail": "text=\"Applied: Input buffer Rank 3 · level 5 · Input capacity 24 units → 30 units · paid 64 credits (848 → 784)\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":44},{\"b\":\"buffer\",\"h\":44},{\"b\":\"draw\",\"h\":44}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 85 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 85 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 85 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 5,
+      "sequence": "A",
+      "name": "after-draw-buy",
+      "file": "a5-desk-after-draw-buy.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"6\" want \"6\""
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Power draw · 87 credits\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":610,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.pressed",
+          "ok": true,
+          "detail": "pressed=true"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=true"
+        },
+        {
+          "check": "card.draw~No effect",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 87 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "card.draw~Already at the 1-unit power floo",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 87 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "card.draw~1 unit → 1 unit",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 87 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=applied want=applied"
+        },
+        {
+          "check": "receipt~Applied: Power draw",
+          "ok": true,
+          "detail": "text=\"Applied: Power draw Rank 1 · level 6 · Power per batch 2 units → 1 unit · paid 75 credits (784 → 709)\""
+        },
+        {
+          "check": "receipt~2 units → 1 unit",
+          "ok": true,
+          "detail": "text=\"Applied: Power draw Rank 1 · level 6 · Power per batch 2 units → 1 unit · paid 75 credits (784 → 709)\""
+        },
+        {
+          "check": "receipt~level 6",
+          "ok": true,
+          "detail": "text=\"Applied: Power draw Rank 1 · level 6 · Power per batch 2 units → 1 unit · paid 75 credits (784 → 709)\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":44},{\"b\":\"buffer\",\"h\":44},{\"b\":\"draw\",\"h\":44}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 6,
+      "sequence": "A",
+      "name": "respec-receipt",
+      "file": "a6-desk-respec-receipt.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Power draw · 87 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":965,\"y\":456,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=respec want=respec"
+        },
+        {
+          "check": "receipt~Re-picked the last upgrade to Sp",
+          "ok": true,
+          "detail": "text=\"Re-picked the last upgrade to Speed (free) · level 6 · Batch time 3.33s · Input capacity 30 units · Power per batch 2 units · credits unchanged (709 → 709)\""
+        },
+        {
+          "check": "receipt~level 6",
+          "ok": true,
+          "detail": "text=\"Re-picked the last upgrade to Speed (free) · level 6 · Batch time 3.33s · Input capacity 30 units · Power per batch 2 units · credits unchanged (709 → 709)\""
+        },
+        {
+          "check": "receipt~credits unchanged (709 → 709)",
+          "ok": true,
+          "detail": "text=\"Re-picked the last upgrade to Speed (free) · level 6 · Batch time 3.33s · Input capacity 30 units · Power per batch 2 units · credits unchanged (709 → 709)\""
+        },
+        {
+          "check": "respec.speed.present",
+          "ok": true,
+          "detail": "missing respec face"
+        },
+        {
+          "check": "respec.speed.disabled",
+          "ok": true,
+          "detail": "disabled=true"
+        },
+        {
+          "check": "respec.speed~current",
+          "ok": true,
+          "detail": "text=\"Speed · 3.33s (current)\""
+        },
+        {
+          "check": "respec.buffer.present",
+          "ok": true,
+          "detail": "missing respec face"
+        },
+        {
+          "check": "respec.buffer.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "respec.draw.present",
+          "ok": true,
+          "detail": "missing respec face"
+        },
+        {
+          "check": "respec.draw.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":44},{\"b\":\"buffer\",\"h\":44},{\"b\":\"draw\",\"h\":44}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 2 → 3Batch time: 3.33s → 3.08s-0.26s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 2 → 3Batch time: 3.33s → 3.08s-0.26s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 2 → 3Batch time: 3.33s → 3.08s-0.26s per batchCost: 97 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 7,
+      "sequence": "A",
+      "name": "sorter-draw-floor",
+      "file": "a7-desk-sorter-draw-floor.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":610,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.speed~4.00s → 3.64s",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the\""
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=true"
+        },
+        {
+          "check": "card.draw~No effect",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "card.draw~Already at the 1-unit power floo",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "card.draw~1 unit → 1 unit",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "card.draw~no change",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":194,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":343,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":476,\"w\":294,\"h\":128,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 8,
+      "sequence": "A",
+      "name": "after-plain-upgrade",
+      "file": "a8-desk-after-plain-upgrade.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"2\" want \"2\""
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 35 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 35 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 35 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +34 units\"]"
+        },
+        {
+          "check": "accentOne",
+          "ok": true,
+          "detail": "accent=1"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":610,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "respecNone",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the current and proposed value with its unit, the price and the tradeoff. Nothing is selected until you tap a card.\",\"Select a branch card above to enable the purchase. Tapping a card never spends anything.\",\"The plain Upgrade face below buys an unnamed level at the plain price: it counts as one speed rank and changes nothing else.\",\"No named upgrade to re-pick yet. Buy a branch above first; a plain unnamed level cannot be re-picked.\",\"Free: moves only the most recent named rank to another branch. The level, the credits and every older pick stay exactly as they are.\"]"
+        },
+        {
+          "check": "upgradeNote~The plain Upgrade face below",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the curren\",\"Select a branch card above to enable the purchase. Tapping a\",\"The plain Upgrade face below buys an unnamed level at the pl\",\"No named upgrade to re-pick yet. Buy a branch above first; a\",\"Free: moves only the most recent named rank to another branc\"]"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 45 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 45 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 45 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 9,
+      "sequence": "B",
+      "name": "shortfall-cards",
+      "file": "b1-desk-shortfall-cards.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed~Cost: 50 credits",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credit\""
+        },
+        {
+          "check": "card.speed~Need 50 credits · have 12",
+          "ok": true,
+          "detail": "text=\"SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credit\""
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer~Need 40 credits · have 12",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 40 credits · Need 40 credits · have 12Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time an\""
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw~Need 40 credits · have 12",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Need 40 credits · have 12Cuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves b\""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":194,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":343,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":476,\"w\":294,\"h\":143,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 10,
+      "sequence": "B",
+      "name": "blocked-receipt",
+      "file": "b2-desk-blocked-receipt.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Speed · 50 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":965,\"y\":625,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=short want=short"
+        },
+        {
+          "check": "receipt~Not applied: Need 50 credits · h",
+          "ok": true,
+          "detail": "text=\"Not applied: Need 50 credits · have 12. Nothing was spent.\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "receiptPainted",
+          "ok": true,
+          "detail": "{\"x\":965,\"y\":677,\"w\":294,\"h\":32,\"visible\":true}"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Need 50 credits · have 12Shortens every batch"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 11,
+      "sequence": "C",
+      "name": "legacy-sorter-cards",
+      "file": "c1-desk-legacy-sorter-cards.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"14\" want \"14\""
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":614,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed~Rank 13 → 14",
+          "ok": true,
+          "detail": "text=\"SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "card.speed~1.74s → 1.67s",
+          "ok": true,
+          "detail": "text=\"SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "card.speed~232 credits",
+          "ok": true,
+          "detail": "text=\"SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer~18 units → 24 units",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 18 units → 24 units+6 input unitsCost: 222 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dr\""
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=true"
+        },
+        {
+          "check": "card.draw~No effect",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 222 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "respecNone",
+          "ok": true,
+          "detail": "[\"Choose what the next level buys. Each card prints the current and proposed value with its unit, the price and the tradeoff. Nothing is selected until you tap a card.\",\"Select a branch card above to enable the purchase. Tapping a card never spends anything.\",\"The plain Upgrade face below buys an unnamed level at the plain price: it counts as one speed rank and changes nothing else.\",\"No named upgrade to re-pick yet. Buy a branch above first; a plain unnamed level cannot be re-picked.\",\"Free: moves only the most recent named rank to another branch. The level, the credits and every older pick stay exactly as they are.\"]"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":198,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":347,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":480,\"w\":294,\"h\":128,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 13 → 14Batch time: 1.74s → 1.67s-0.07s per batchCost: 232 credits · Affordable nowShortens every batch by one "
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 12,
+      "sequence": "C",
+      "name": "legacy-after-plain",
+      "file": "c2-desk-legacy-after-plain.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"15\" want \"15\""
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":614,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed~Rank 14 → 15",
+          "ok": true,
+          "detail": "text=\"SpeedRank 14 → 15Batch time: 1.67s → 1.60s-0.07s per batchCost: 268 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 14 → 15Batch time: 1.67s → 1.60s-0.07s per batchCost: 268 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 14 → 15Batch time: 1.67s → 1.60s-0.07s per batchCost: 268 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 14 → 15Batch time: 1.67s → 1.60s-0.07s per batchCost: 268 credits · Affordable nowShortens every batch by one "
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 13,
+      "sequence": "C",
+      "name": "legacy-furnace-cards",
+      "file": "c3-desk-legacy-furnace-cards.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"13\" want \"13\""
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":630,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed~Rank 12 → 13",
+          "ok": true,
+          "detail": "text=\"SpeedRank 12 → 13Batch time: 1.82s → 1.74s-0.08s per batchCost: 260 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "card.speed~1.82s",
+          "ok": true,
+          "detail": "text=\"SpeedRank 12 → 13Batch time: 1.82s → 1.74s-0.08s per batchCost: 260 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above \""
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.draw~2 units → 1 unit",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 250 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time \""
+        },
+        {
+          "check": "card.draw~250 credits",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 250 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time \""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":198,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":347,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":481,\"w\":294,\"h\":143,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 12 → 13Batch time: 1.82s → 1.74s-0.08s per batchCost: 260 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 12 → 13Batch time: 1.82s → 1.74s-0.08s per batchCost: 260 credits · Affordable nowShortens every batch by one "
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 12 → 13Batch time: 1.82s → 1.74s-0.08s per batchCost: 260 credits · Affordable nowShortens every batch by one "
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 14,
+      "sequence": "D",
+      "name": "power-limited",
+      "file": "d1-desk-power-limited.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row~Power",
+          "ok": true,
+          "detail": "got \"2 units · Power limited: 89% speed\" want~\"Power limited: 89% speed\""
+        },
+        {
+          "check": "note~Power limited: the yard requ",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 9/8 · 89% speed for every running machine.\"]"
+        },
+        {
+          "check": "note~9/8",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 9/8 · 89% speed for every running machine.\"]"
+        },
+        {
+          "check": "note~89%",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 9/8 · 89% speed for every running machine.\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":630,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.draw~2 units → 1 unit",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time a\""
+        },
+        {
+          "check": "card.draw~Cuts this machine's draw by 1 un",
+          "ok": true,
+          "detail": "text=\"Power drawRank 0 → 1Power per batch: 2 units → 1 unit-1 power unitCost: 40 credits · Affordable nowCuts this machine's draw by 1 unit, freeing shared yard power for other machines. Leaves batch time a\""
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":143}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":198,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":347,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":481,\"w\":294,\"h\":143,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 15,
+      "sequence": "E",
+      "name": "buffer-starved",
+      "file": "e1-desk-buffer-starved.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Status",
+          "ok": true,
+          "detail": "got \"Needs input\" want \"Needs input\""
+        },
+        {
+          "check": "note~Missing input: the buffer is",
+          "ok": true,
+          "detail": "[\"Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it.\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":131,\"w\":320,\"h\":661,\"right\":1272,\"bottom\":792}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":965,\"y\":611,\"w\":294,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.buffer~12 units → 18 units",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.buffer~Adds 6 input units so a bursty s",
+          "ok": true,
+          "detail": "text=\"Input bufferRank 0 → 1Input capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power dra\""
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.disabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.disabled",
+          "ok": true,
+          "detail": "disabled=true"
+        },
+        {
+          "check": "card.draw~No effect",
+          "ok": true,
+          "detail": "text=\"Power drawNo effectPower per batch: 1 unit → 1 unitno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.\""
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":143},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "cardsPainted",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"p\":{\"x\":965,\"y\":194,\"w\":294,\"h\":143,\"visible\":true}},{\"b\":\"buffer\",\"p\":{\"x\":965,\"y\":343,\"w\":294,\"h\":128,\"visible\":true}},{\"b\":\"draw\",\"p\":{\"x\":965,\"y\":477,\"w\":294,\"h\":128,\"visible\":true}}]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 16,
+      "sequence": "F",
+      "name": "sheet-rest",
+      "file": "f1-phone-sheet-rest.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "longContent",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":1601,\"ch\":272,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "bodyScroller",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":1601,\"ch\":272,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":23,\"y\":1667,\"w\":344,\"h\":0,\"visible\":false},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.buffer.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.buffer.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "card.draw.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.draw.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":128},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 17,
+      "sequence": "F",
+      "name": "sheet-cards",
+      "file": "f2-phone-sheet-cards.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":44,\"painted\":{\"x\":23,\"y\":906,\"w\":344,\"h\":0,\"visible\":false},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "noAutoSelect",
+          "ok": true,
+          "detail": "{\"pressed\":[false,false,false],\"buyDisabled\":true}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":128},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 18,
+      "sequence": "F",
+      "name": "sheet-receipt",
+      "file": "f3-phone-sheet-receipt.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Speed · 57 credits\",\"disabled\":false,\"minH\":44,\"painted\":{\"x\":23,\"y\":693,\"w\":344,\"h\":44,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=applied want=applied"
+        },
+        {
+          "check": "receipt~Applied: Speed",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~level 2",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~paid 50 credits",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":128},{\"b\":\"buffer\",\"h\":128},{\"b\":\"draw\",\"h\":128}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "44"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":44},{\"b\":\"buffer\",\"h\":44},{\"b\":\"draw\",\"h\":44}]"
+        },
+        {
+          "check": "receiptPainted",
+          "ok": true,
+          "detail": "{\"x\":23,\"y\":745,\"w\":344,\"h\":32,\"visible\":true}"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 19,
+      "sequence": "G",
+      "name": "ts2-rest",
+      "file": "g1-phone-ts2-rest.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "longContent",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":3873,\"ch\":271,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "bodyScroller",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":3873,\"ch\":271,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":48,\"painted\":{\"x\":23,\"y\":3194,\"w\":344,\"h\":0,\"visible\":false},\"inPanelActions\":false}"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":313},{\"b\":\"buffer\",\"h\":346},{\"b\":\"draw\",\"h\":346}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "48"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 20,
+      "sequence": "G",
+      "name": "ts2-cards",
+      "file": "g2-phone-ts2-cards.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected\",\"disabled\":true,\"minH\":48,\"painted\":{\"x\":23,\"y\":1458,\"w\":344,\"h\":0,\"visible\":false},\"inPanelActions\":false}"
+        },
+        {
+          "check": "card.speed.present",
+          "ok": true,
+          "detail": "missing card"
+        },
+        {
+          "check": "card.speed.pressed",
+          "ok": true,
+          "detail": "pressed=false"
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":313},{\"b\":\"buffer\",\"h\":346},{\"b\":\"draw\",\"h\":346}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "48"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 21,
+      "sequence": "G",
+      "name": "ts2-buy",
+      "file": "g3-phone-ts2-buy.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Speed · 50 credits\",\"disabled\":false,\"minH\":82,\"painted\":{\"x\":23,\"y\":666,\"w\":344,\"h\":82,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "buyDisabled",
+          "ok": true,
+          "detail": "disabled=false"
+        },
+        {
+          "check": "buy~Speed",
+          "ok": true,
+          "detail": "label=\"Buy selected · Speed · 50 credits\""
+        },
+        {
+          "check": "buy~50 credits",
+          "ok": true,
+          "detail": "label=\"Buy selected · Speed · 50 credits\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":313},{\"b\":\"buffer\",\"h\":346},{\"b\":\"draw\",\"h\":346}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "82"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "buyPainted",
+          "ok": true,
+          "detail": "{\"x\":23,\"y\":666,\"w\":344,\"h\":82,\"visible\":true}"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 0 → 1Batch time: 4.00s → 3.64s-0.36s per batchCost: 50 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 22,
+      "sequence": "G",
+      "name": "ts2-receipt",
+      "file": "g4-phone-ts2-receipt.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        },
+        {
+          "check": "upgradePresent",
+          "ok": true,
+          "detail": "no .upgrade-compare surface"
+        },
+        {
+          "check": "cardOrder",
+          "ok": true,
+          "detail": "[\"speed\",\"buffer\",\"draw\"]"
+        },
+        {
+          "check": "buyOutsideActions",
+          "ok": true,
+          "detail": "{\"label\":\"Buy selected · Speed · 57 credits\",\"disabled\":false,\"minH\":82,\"painted\":{\"x\":23,\"y\":564,\"w\":344,\"h\":82,\"visible\":true},\"inPanelActions\":false}"
+        },
+        {
+          "check": "receiptKind",
+          "ok": true,
+          "detail": "kind=applied want=applied"
+        },
+        {
+          "check": "receipt~level 2",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "receipt~paid 50 credits",
+          "ok": true,
+          "detail": "text=\"Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 50 credits (1000 → 950)\""
+        },
+        {
+          "check": "cardFloors",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":313},{\"b\":\"buffer\",\"h\":346},{\"b\":\"draw\",\"h\":346}]"
+        },
+        {
+          "check": "buyFloor",
+          "ok": true,
+          "detail": "82"
+        },
+        {
+          "check": "respecFloor",
+          "ok": true,
+          "detail": "[{\"b\":\"speed\",\"h\":46},{\"b\":\"buffer\",\"h\":46},{\"b\":\"draw\",\"h\":46}]"
+        },
+        {
+          "check": "receiptPainted",
+          "ok": true,
+          "detail": "{\"x\":23,\"y\":654,\"w\":344,\"h\":94,\"visible\":true}"
+        },
+        {
+          "check": "hygiene.noNaN",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.noRawKeys",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        },
+        {
+          "check": "hygiene.no1units",
+          "ok": true,
+          "detail": "SpeedRank 1 → 2Batch time: 3.64s → 3.33s-0.30s per batchCost: 57 credits · Affordable nowShortens every batch by one spe"
+        }
+      ],
+      "passed": true
+    }
+  ]
+}
