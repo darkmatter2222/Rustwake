@@ -1,0 +1,283 @@
+/*
+ * UI-RESET-61 (issue #61): scoped return-report styles.
+ *
+ * Every selector is anchored to `.panel--report`, so nothing here leaks into
+ * the shell, the other panels or the read-only styles.css cascade. The overlay
+ * geometry (order 2, max-height 42% alone / 26% stacked, the rail-mode gutter)
+ * stays owned by styles.css; this file only shapes the report's internals:
+ * a sticky summary over a scrolling detail, comparison bars, the cap/bottleneck
+ * accents, a thin scrollbar, and large-text / short-viewport bargains so the
+ * receipt reads on a phone in landscape and at text scale 2.
+ *
+ * Sizes are rem-based: they follow the app's --text-scale root font, and the
+ * .text-large rules below trade padding (never type) for room.
+ */
+
+/* ---- the one resume action: legacy .icon-btn contract, primary emphasis ---- */
+.panel--report .return-resume {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(95, 216, 232, 0.12);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.panel--report .return-resume:active {
+  background: rgba(95, 216, 232, 0.24);
+}
+
+/* ---- declared scroller: thin, quiet, always discoverable ---- */
+.panel--report .panel__body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--steel) transparent;
+}
+.panel--report .panel__body::-webkit-scrollbar {
+  width: 6px;
+}
+.panel--report .panel__body::-webkit-scrollbar-thumb {
+  background: var(--steel);
+  border-radius: 3px;
+}
+.panel--report .panel__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---- sticky summary: time away, state chip, headline, applied status ---- */
+.panel--report .return-summary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  /* Bleed to the panel edges so scrolled detail never shows beside the strip. */
+  margin: 0 -12px;
+  padding: 0 12px 8px;
+  /* Solid (not the translucent --panel) so the strip occludes what scrolls under it. */
+  background: #0c1424;
+  border-bottom: 1px solid rgba(111, 147, 173, 0.25);
+}
+.panel--report .return-away {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 0;
+}
+.panel--report .return-away__value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--furnace);
+  font-variant-numeric: tabular-nums;
+}
+.panel--report .return-away__key {
+  font-size: 0.78rem;
+  color: var(--steel-light);
+}
+.panel--report .return-chip {
+  display: inline-block;
+  margin: 4px 0 0;
+  padding: 1px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.panel--report .return-chip[data-kind="zero-gain"],
+.panel--report .return-chip[data-kind="no-credit"] {
+  color: var(--steel-light);
+}
+.panel--report .return-chip[data-state="Capped"],
+.panel--report .return-chip[data-state="Long absence"] {
+  color: var(--furnace);
+}
+.panel--report .return-headline {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+}
+.panel--report .return-zero {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--steel-light);
+}
+.panel--report .return-applied {
+  margin: 4px 0 0;
+  font-size: 0.78rem;
+  color: var(--cyan);
+}
+
+/* ---- gains: one row per stored resource, largest first, comparison bar ---- */
+.panel--report .return-gains {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.panel--report .return-gain {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(24px, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.84rem;
+}
+.panel--report .return-gain__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--steel-light);
+}
+.panel--report .return-gain__bar {
+  display: block;
+  min-width: 24px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(56, 85, 107, 0.5);
+  overflow: hidden;
+}
+.panel--report .return-gain__fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--cyan);
+}
+.panel--report .return-gain__value {
+  font-weight: 600;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+}
+.panel--report .return-credits {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  color: var(--steel-light);
+}
+.panel--report .return-credits__value {
+  font-weight: 600;
+  color: var(--furnace);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- detail sections ---- */
+.panel--report .return-section-title {
+  margin: 10px 0 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+.panel--report .return-limits {
+  margin-top: 8px;
+  padding-left: 8px;
+  border-left: 2px solid var(--furnace);
+}
+.panel--report .return-limits .return-section-title {
+  margin-top: 0;
+}
+.panel--report .return-limit {
+  margin: 2px 0;
+  font-size: 0.78rem;
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+.panel--report .return-bottleneck__label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--furnace);
+}
+.panel--report .return-bottleneck__advice {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--steel-light);
+  overflow-wrap: anywhere;
+}
+/* The legacy record rows: present verbatim, one step quieter than the summary. */
+.panel--report .return-detail {
+  font-size: 0.78rem;
+  opacity: 0.92;
+}
+
+/* ---- optional recovery footer: clipboard diagnostic + guidance, no claim ---- */
+.panel--report .return-recovery {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(111, 147, 173, 0.25);
+}
+.panel--report .return-recovery .return-section-title {
+  margin-top: 0;
+}
+.panel--report .return-recovery__body {
+  margin: 0 0 6px;
+  font-size: 0.78rem;
+  color: var(--steel-light);
+  overflow-wrap: anywhere;
+}
+.panel--report .return-copy {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: var(--panel);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+.panel--report .return-copy:active {
+  background: rgba(95, 216, 232, 0.16);
+}
+.panel--report .return-copy__note {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: var(--cyan);
+}
+.panel--report .return-resume:focus-visible,
+.panel--report .return-copy:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* ---- large text (.text-large at scale >= 1.5): spend padding, never type ---- */
+.text-large .panel--report .return-summary {
+  padding-bottom: 6px;
+}
+.text-large .panel--report .return-away__value {
+  font-size: 1.25rem;
+}
+.text-large .panel--report .return-gains {
+  gap: 2px;
+}
+.text-large .panel--report .return-section-title {
+  margin: 6px 0 2px;
+}
+.text-large .panel--report .return-detail {
+  font-size: 0.72rem;
+}
+.text-large .panel--report .return-recovery {
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+/* ---- short viewports (phone landscape): compact the strip, keep the type ---- */
+@media (max-height: 460px) {
+  .panel--report .return-away__value {
+    font-size: 1.15rem;
+  }
+  .panel--report .return-summary {
+    padding-bottom: 6px;
+  }
+  .panel--report .return-headline {
+    font-size: 0.88rem;
+  }
+  .panel--report .return-applied,
+  .panel--report .return-zero {
+    font-size: 0.72rem;
+  }
+  .panel--report .return-section-title {
+    margin: 6px 0 2px;
+  }
+}
