@@ -14,7 +14,6 @@ import {
   type RouteState,
   type SimState,
 } from "../../src/game/simulation/types";
-import { advance } from "../../src/game/simulation/engine";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { systemTotals, unitTotal } from "../../src/game/simulation/invariants";
 import {
@@ -179,8 +178,10 @@ describe("REG-100 gate 1: registration is additive, derived and deterministic", 
   it("a legacy single-output machine decodes and derives exactly one output", () => {
     const state = createInitialState();
     state.tutorial = 9;
+    // The furnace build is priced in scrap AND ferrous (defs.ts), so fund both.
     state.store["scrap"] = 300;
-    state.storeUnits = 300;
+    state.store["ferrous"] = 20;
+    state.storeUnits = 320;
     expect(send(state, { type: "machine.build", blueprint: "furnace", tile: 8 })).toBe(true);
     const machine = state.machines[0];
     expect(send(state, { type: "route.connect", from: 0, to: machine.id, filter: "ferrous" })).toBe(true);
@@ -232,14 +233,23 @@ describe("REG-100 gates 2 + 6: two-output dismantle refunds and drops EVERY link
 
       // The store returns exactly the registered refund — both belts, not just the last.
       expect(state.storeUnits - storeBefore).toBe(refund);
-      // Conservation: the only matter CREATED is the priced scrap refund; everything else relocates.
+      // Conservation: the only matter CREATED is the priced refund — each build-cost
+      // resource at dismantleRefundPct (the separator's build also costs ferrous, so its
+      // refund creates ferrous too) plus the scrap belt refunds; all else merely relocates.
       expect(unitTotal(state) - unitBefore).toBe(buildRefund + beltSum);
-      const totalsAfter = systemTotals(state);
-      for (const key of Object.keys(totalsBefore) as ResourceId[]) {
-        if (key === "scrap") continue;
-        expect(totalsAfter[key] ?? 0).toBe(totalsBefore[key] ?? 0);
+      const created: Partial<Record<ResourceId, number>> = {};
+      for (const item of BLUEPRINTS[blueprint].buildCost) {
+        created[item.resource] = (created[item.resource] ?? 0) + refundOf(item.qty);
       }
-      expect((totalsAfter["scrap"] ?? 0) - (totalsBefore["scrap"] ?? 0)).toBe(buildRefund + beltSum);
+      created.scrap = (created.scrap ?? 0) + beltSum;
+      const totalsAfter = systemTotals(state);
+      const keys = new Set([
+        ...(Object.keys(totalsBefore) as ResourceId[]),
+        ...(Object.keys(totalsAfter) as ResourceId[]),
+      ]);
+      for (const key of keys) {
+        expect((totalsAfter[key] ?? 0) - (totalsBefore[key] ?? 0)).toBe(created[key] ?? 0);
+      }
 
       // Every registered route is dropped: no machine, no route, no dangling endpoint.
       expect(state.machines.length).toBe(0);
@@ -276,10 +286,10 @@ describe("REG-100 gate 2: a loaded belt conserves every unit on dismantle", () =
     machine.progress = 4000;
     machine.status = "running";
     const inputRoute = state.routes.find((route) => route.to.id === machine.id)!;
-    inputRoute.items = [{ resource: "scrap", qty: 5 }];
+    inputRoute.items = [{ resource: "scrap", qty: 5, arrive: 0 }];
     const outputRoutes = state.routes.filter((route) => route.from.id === machine.id);
-    outputRoutes[0].items = [{ resource: "ferrous", qty: 2 }];
-    outputRoutes[1].items = [{ resource: "nonferrous", qty: 2 }];
+    outputRoutes[0].items = [{ resource: "ferrous", qty: 2, arrive: 0 }];
+    outputRoutes[1].items = [{ resource: "nonferrous", qty: 2, arrive: 0 }];
 
     const refund = expectedRefund(state, machine);
     const created = createdScrapRefund(state, machine);
@@ -310,7 +320,6 @@ describe("REG-100 gate 2: a loaded belt conserves every unit on dismantle", () =
 describe("REG-100 gates 3 + 4: validateSim intact and the sequence is deterministic", () => {
   it("validateSim still refuses a dangling-endpoint route (the existing check is not weakened)", () => {
     const state = twoOutputYard("sorter");
-    const machine = state.machines[0];
     // Remove the machine but leave its routes: validateSim must still refuse the dangling
     // endpoints (the input route trips `routeTarget`, an output route `routeSource`).
     state.machines = [];
@@ -381,7 +390,7 @@ describe("REG-100 gate 5: save round-trip and load-path orphan repair", () => {
     const beltPrice = beltCost(orphan.run!.length);
     const beltRefund = refundOf(beltPrice);
     // Put non-scrap cargo on the orphan belt so its return is separable from the scrap refund.
-    orphan.items = [{ resource: "copper", qty: 4 }];
+    orphan.items = [{ resource: "copper", qty: 4, arrive: 0 }];
     // Simulate the pre-fix dismantle: it removed the machine and dropped the REGISTERED set
     // (the input + the last output, which the singular mirror named) but NEVER dropped this
     // earlier output — leaving exactly one dangling-endpoint orphan behind.
