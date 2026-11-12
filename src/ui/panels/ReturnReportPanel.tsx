@@ -65,13 +65,27 @@ export function ReturnReportPanel(props: {
     return () => {
       // Synchronous with the unmount commit (Escape included), so focus never
       // drops to the body. A disconnected opener (the boot gate, a closed menu
-      // row) falls back to the shell's Menu face, then the first dock button.
+      // row) falls back to a VISIBLE shell control. The Menu face is display:none
+      // in rail mode (wide desktop / phone landscape), where slot 5 owns the
+      // menu, so focusing it would no-op: skip hidden/disabled faces and prefer
+      // the rail's menu slot, then the first dock button.
       const opener = openerRef.current;
+      const usable = (el: HTMLElement | null): el is HTMLElement => {
+        if (!el || !el.isConnected || (el as HTMLButtonElement).disabled) return false;
+        const cs = getComputedStyle(el);
+        return cs.display !== "none" && cs.visibility !== "hidden";
+      };
+      const firstVisible = (selector: string): HTMLElement | null => {
+        for (const el of Array.from(document.querySelectorAll<HTMLElement>(selector))) {
+          if (usable(el)) return el;
+        }
+        return null;
+      };
       const target =
-        opener && opener.isConnected
-          ? opener
-          : (document.querySelector<HTMLElement>(".shell-menu-face") ??
-            document.querySelector<HTMLElement>(".dock button"));
+        (usable(opener) ? opener : null) ??
+        firstVisible(".shell-menu-face") ??
+        firstVisible('.shell-rail__slot[data-slot="menu"]') ??
+        firstVisible(".dock button");
       if (target && typeof target.focus === "function") target.focus();
     };
   }, []);
