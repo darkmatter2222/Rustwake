@@ -16,6 +16,7 @@ import {
   inputCapacityOf,
   machineById,
   manhattanRun,
+  outputRouteIds,
   pushLog,
   upgradeRanks,
   type MachineState,
@@ -332,14 +333,19 @@ function dismantleMachine(s: SimState, machineId: number): CommandResult {
   if (index < 0) return { ok: false, reason: "not-found" };
   const machine = s.machines[index];
   const def = BLUEPRINTS[machine.blueprint];
-  const outRouteId = machine.outRoute;
+  // Issue #100: account against EVERY registered output link plus every input link.
+  // Output registration is derived from the route table (`outputRouteIds`), so a
+  // multi-output machine refunds and drops every belt it laid, not just the singular
+  // `outRoute` mirror. Deduped so a link is never refunded twice; a missing route
+  // contributes nothing (beltRefund of undefined = 0).
+  const outRouteIds = [...new Set(outputRouteIds(s, machine.id))];
   const inRouteIds = [...machine.inRoutes];
+  const registeredIds = [...new Set([...outRouteIds, ...inRouteIds])];
   // BELT-001: only the build cost is discounted; the tray, the started batch and
   // the input buffer still return in full, plus each dropped link's belt refund.
   let refundUnits = machine.trayUnits + machine.inBufUnits;
   for (const item of def.buildCost) refundUnits += refundOf(item.qty);
-  for (const id of outRouteId === null ? inRouteIds : [outRouteId, ...inRouteIds])
-    refundUnits += beltRefund(routeById(s, id));
+  for (const id of registeredIds) refundUnits += beltRefund(routeById(s, id));
   if (s.storeCapacity - s.storeUnits < refundUnits) return { ok: false, reason: "no-room" };
   for (const item of def.buildCost) addToStore(s, item.resource, refundOf(item.qty));
   for (const item of machine.tray) addToStore(s, item.resource, item.qty);
@@ -348,7 +354,9 @@ function dismantleMachine(s: SimState, machineId: number): CommandResult {
     addToStore(s, key, machine.inBuf[key] ?? 0);
   }
   s.machines.splice(index, 1);
-  if (outRouteId !== null) dropRoute(s, outRouteId);
+  // Drop outputs first, then inputs, in registration order — deterministic, and every
+  // registered link is removed so no route is left pointing at the removed machine.
+  for (const id of outRouteIds) dropRoute(s, id);
   for (const id of inRouteIds) dropRoute(s, id);
   return commit(s, "dismantle", machine.id);
 }
@@ -426,6 +434,13 @@ function connectRoute(
   }
   if (from !== 0) {
     const source = machineById(s, from);
+    // Issue #100: the route just pushed to `s.routes` IS the additive registration —
+    // the route table is the engine's flow source of truth, and `outputRouteIds` derives
+    // the machine's whole output set from it. The old defect was that downstream readers
+    // (dismantle, inspector, diagnostics) accounted against the singular `outRoute` mirror
+    // alone, so a multi-output recipe's earlier belts were never refunded, dropped or
+    // reported. They now read the table, so every output is registered. The mirror stays
+    // the newest output purely for legacy readers/saves; overwriting it loses nothing.
     if (source) source.outRoute = route.id;
   }
   return commit(s, "connect", route.id);
@@ -458,7 +473,12 @@ function dropRoute(s: SimState, routeId: number): void {
     target.inRoutes = target.inRoutes.filter((id) => id !== routeId);
   }
   const source = route.from.kind === "machine" ? machineById(s, route.from.id) : undefined;
-  if (source && source.outRoute === routeId) source.outRoute = null;
+  if (source) {
+    // Issue #100: the derived output set follows `s.routes`, so removing the route below
+    // already unregisters it. The legacy singular mirror clears only when it named this
+    // link; earlier outputs remain in the table and stay registered.
+    if (source.outRoute === routeId) source.outRoute = null;
+  }
   s.routes.splice(index, 1);
 }
 

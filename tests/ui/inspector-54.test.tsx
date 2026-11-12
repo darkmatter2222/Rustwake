@@ -23,7 +23,7 @@ import {
   type Command,
   type CommandBody,
 } from "../../src/game/simulation/commands";
-import { createInitialState, type MachineState, type SimState } from "../../src/game/simulation/types";
+import { createInitialState, outputRouteIds, type MachineState, type SimState } from "../../src/game/simulation/types";
 import { advance } from "../../src/game/simulation/engine";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { rateReading, requestedPower } from "../../src/game/simulation/diagnostics";
@@ -94,15 +94,13 @@ function yardWithAFullyLinkedSorter(): SimState {
 
 /**
  * The engine's own dismantle arithmetic (commands.ts `dismantleMachine`): build refund +
- * tray + buffer + the in-progress batch in full + one belt refund per REGISTERED link
- * (`[outRoute, ...inRoutes]`), never per touching link. `connectRoute` overwrites
- * `outRoute` on every output connect, so a multi-output yard has touching routes the
- * engine never registered and never refunds (engine follow-up: issue #100).
+ * tray + buffer + the in-progress batch in full + one belt refund per REGISTERED link.
+ * Issue #100: the engine registers EVERY output link (`outputRouteIds`) plus every input
+ * link, deduped, so on a fully-linked multi-output yard the registered set equals the
+ * touching set and no belt is left unrefunded or orphaned.
  */
 function registeredRefund(state: SimState, machine: MachineState): number {
-  const ids = [machine.outRoute, ...machine.inRoutes].filter(
-    (id): id is number => id !== null,
-  );
+  const ids = [...new Set([...outputRouteIds(state, machine.id), ...machine.inRoutes])];
   const registered = state.routes.filter((route) => ids.includes(route.id));
   return (
     BLUEPRINTS[machine.blueprint].buildCost.reduce(
@@ -542,12 +540,11 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     expect(machine.outRoute).not.toBeNull();
   });
 
-  it("Dismantle after Connect lays two outputs refunds only the engine-registered links", () => {
-    // QA REWORK #99 repro (sequence J): the sorter's two-output recipe leaves two
-    // pending plans; the panel's own Connect face lays BOTH through route.connect,
-    // and the engine registers only the LAST output in machine.outRoute. The face
-    // must refund [outRoute, ...inRoutes] — not every touching route — or it
-    // overprints the tap by the orphaned belt's refund (engine follow-up: #100).
+  it("Dismantle after Connect lays two outputs refunds every engine-registered link", () => {
+    // QA REWORK #99 repro (sequence J), fixed by #100: the sorter's two-output recipe
+    // leaves two pending plans; the panel's own Connect face lays BOTH through route.connect,
+    // and the engine now registers EVERY output (derived from the route table). The face refunds the
+    // whole registered set — which equals every touching route — so no belt is orphaned.
     const state = yardWithASorter();
     const machine = state.machines[0];
     const outId = machine.outRoute;
@@ -570,7 +567,8 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     expect(printed).not.toBeNull();
     const refund = Number(printed?.[1]);
     expect(refund).toBe(registeredRefund(state, machine));
-    // Regression condition: the old all-touching-links formula overprints this tap.
+    // Issue #100: every touching route is now registered, so the all-touching formula and
+    // the registered-set face agree exactly — the old orphan underprint is gone.
     const touching = state.routes.filter(
       (route) => route.from.id === machine.id || route.to.id === machine.id,
     );
@@ -583,7 +581,7 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
         (total, route) => total + refundOf(beltCost(route.run?.length ?? 0)),
         0,
       );
-    expect(allLinksRefund).toBeGreaterThan(refund);
+    expect(allLinksRefund).toBe(refund);
     const unitsBefore = state.storeUnits;
     act(() => face?.click());
     expect(state.machines.length).toBe(0);
@@ -591,14 +589,14 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
   });
 
   it("Dismantle on a four-link yard with a running batch refunds the registered set plus the batch", () => {
-    // QA REWORK #99 repro (sequence C analog): a mature yard touches four routes but
-    // the engine registers only [outRoute, ...inRoutes]. The r2 batch term must
-    // survive alongside the corrected belt term, and the tap must return exactly
+    // QA REWORK #99 repro (sequence C analog), fixed by #100: a mature yard touches four
+    // routes and the engine now registers all of them (every output + the input). The r2
+    // batch term must survive alongside the belt term, and the tap must return exactly
     // the printed face — no more, no less.
     const state = yardWithAFullyLinkedSorter();
     const machine = state.machines[0];
     // A third output link (null filter carries anything): four touching routes now,
-    // and the engine registers this last output plus the one input.
+    // and the engine registers all three outputs plus the one input.
     send(state, { type: "route.connect", from: machine.id, to: 0, filter: null });
     expect(machine.outRoute).toBe(state.routes[state.routes.length - 1].id);
     // Freeze belt cargo empty (test-only mutation): `dropRoute` also returns any
@@ -633,9 +631,9 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     act(() => face?.click());
     expect(state.machines.length).toBe(0);
     expect(state.storeUnits - unitsBefore).toBe(refund);
-    // The engine drops only the two registered routes; the two orphaned outputs
-    // survive. Issue #100 owns that engine defect — the UI fix must not mask it.
-    expect(state.routes.length).toBe(2);
+    // Issue #100: the engine drops EVERY registered route — all three outputs plus the
+    // input — so no orphan survives the dismantle.
+    expect(state.routes.length).toBe(0);
   });
 });
 

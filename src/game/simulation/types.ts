@@ -29,6 +29,12 @@ export interface MachineState {
   batchPower: number;
   status: MachineStatus;
   inRoutes: number[];
+  /**
+   * Legacy "last connected output" mirror (issue #100). The authoritative output
+   * registration is DERIVED from the route table by `outputRouteIds`, because the
+   * route table is already the engine's flow source of truth. This scalar is kept
+   * only so pre-#100 readers and saves stay byte-identical; no accounting reads it.
+   */
   outRoute: number | null;
   starvedTicks: number;
   /** Count of batches completed, for rate measurement. */
@@ -289,6 +295,24 @@ export function pushLog(s: SimState, key: string, value: number): void {
 export function machineById(s: SimState, id: number): MachineState | undefined {
   for (const m of s.machines) if (m.id === id) return m;
   return undefined;
+}
+
+/**
+ * The machine's registered output links, in route-table order (issue #100). Registration
+ * is DERIVED from `s.routes` — the same table the engine ships flow over — so every output
+ * a machine has laid is accounted for, additively and deterministically, with no stored
+ * plural to overwrite or migrate. A pre-#100 save whose singular `outRoute` mirror named
+ * only the last of several outputs is repaired simply by reading the table: the earlier
+ * belts are already there, so dismantle refunds and drops them and the inspector reports
+ * them, with no mutation and no value change. `connectRoute` appends a route, `dropRoute`
+ * removes it, and this set follows the table exactly.
+ */
+export function outputRouteIds(state: SimState, machineId: number): number[] {
+  const ids: number[] = [];
+  for (const route of state.routes) {
+    if (route.from.kind === "machine" && route.from.id === machineId) ids.push(route.id);
+  }
+  return ids;
 }
 
 /** Milli-tick requirement for a level, from the additive rate curve. */

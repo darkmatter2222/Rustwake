@@ -5,7 +5,7 @@ import {
   type ResourceId,
 } from "../../game/content/defs";
 import type { MachineState, SimState } from "../../game/simulation/types";
-import { batchMilliFor, inputCapacityOf, upgradeRanks } from "../../game/simulation/types";
+import { batchMilliFor, inputCapacityOf, outputRouteIds, upgradeRanks } from "../../game/simulation/types";
 import type { Command } from "../../game/simulation/commands";
 import { beltCost, refundOf, upgradeCost } from "../../game/simulation/commands";
 import {
@@ -96,22 +96,19 @@ export function MachinePanel(props: {
    * number cannot drift from what the tap charges: `moveMachine` takes `movePenaltyPct` of
    * every build-cost line, `dismantleMachine` returns `refundOf` on those lines, the tray,
    * the buffer and the in-progress batch in full, and one belt refund per link the engine
-   * has REGISTERED on the machine (`outRoute` + `inRoutes`), not per touching link.
+   * has REGISTERED on the machine (every derived output route + `inRoutes`), not per touching link.
    * `links` stays the all-touching set the extent row below prints, and the store's
    * endpoint id (0) never collides with a machine.
    */
   const links = props.state.routes.filter(
     (route) => route.from.id === machine.id || route.to.id === machine.id
   );
-  // UI-RESET-54 r3 (QA REWORK on #99): `connectRoute` overwrites `source.outRoute` on
-  // every output connect, so a fully-linked multi-output machine touches routes the
-  // engine never registered. `dismantleMachine` refunds belts for `[outRoute, ...inRoutes]`
-  // only; counting every touching link overprinted the tap by the orphaned belts' refund.
-  // The engine's overwrite/orphaning itself is filed separately as issue #100 — the face
-  // must mirror the engine as it stands, so it resolves exactly the registered set.
-  const registeredIds = [machine.outRoute, ...machine.inRoutes].filter(
-    (id): id is number => id !== null
-  );
+  // Issue #100: the engine registers EVERY output link (derived from the route table) plus
+  // every input link, and `dismantleMachine` refunds and drops that whole set. The face
+  // mirrors it exactly — `outputRouteIds` reads the table, deduped so no belt is counted
+  // twice. `links` below stays the all-touching set the extent row prints; on a fully-linked
+  // machine the registered set and the touching set coincide, so the face no longer underprints.
+  const registeredIds = [...new Set([...outputRouteIds(props.state, machine.id), ...machine.inRoutes])];
   const registeredLinks = props.state.routes.filter((route) =>
     registeredIds.includes(route.id)
   );
