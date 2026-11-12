@@ -1,16 +1,40 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { SimState } from "../../game/simulation/types";
-import { fleetUnits } from "../../game/simulation/types";
 import { importNoteFor } from "../text";
 import { t } from "../../game/content/strings";
 import type { ImportResult } from "../../game/persistence/save";
-import { Row } from "./shared";
+import { SAVE_COPY } from "../save/copy";
+import {
+  copySaveText,
+  currentSettingsOf,
+  downloadSaveText,
+  exportFileName,
+  previewImport,
+  summarizeYard,
+  type ImportPreview,
+} from "../save/model";
+import { ImportConfirm } from "../save/ImportConfirm";
+import "../save/save.css";
 
 /**
- * The yard record plus the two save transfers (spec 22.1, B-06). Two pages so one
- * textarea is on screen at a time and the panel keeps its 0 px inner scroll at the
- * 2.0 text scale (spec 6.4): page 0 shows the record and the export, page 1 the
- * import field. A refused file leaves the running yard untouched.
+ * UI-RESET-63: the yard record plus the two save transfers, rebuilt as three
+ * clearly labelled pages so backup/export and replace/import are never one
+ * ambiguous act:
+ *
+ *   page 0 — the record: every statistic the old panel kept, then Backup/Import;
+ *   page 1 — Backup · export: copy or download the current save (read-only);
+ *   page 2 — Replace · import: paste, then Apply. Apply VALIDATES FIRST through
+ *            the same decode the store uses; a refused text explains itself and
+ *            never calls onImport. A sound text opens the confirmation gate with
+ *            a current-vs-incoming preview and an export-first offer, and only
+ *            the acknowledged "Replace yard" press calls onImport.
+ *
+ * The mount contract is unchanged (state / exportText / onImport / onClose), so
+ * a successful import refreshes the record, the export text and the settings
+ * through the store's existing notify path. Failed or canceled imports leave the
+ * running yard untouched. Pages stay compact enough for 0 px inner panel scroll
+ * at the 2.0 text scale (spec 6.4); the gate is a bounded alertdialog that may
+ * scroll itself, exactly like the reset dialog.
  */
 export function YardPanel(props: {
   state: SimState;
@@ -21,19 +45,43 @@ export function YardPanel(props: {
   const [page, setPage] = useState(0);
   const [draft, setDraft] = useState("");
   const [note, setNote] = useState(t("note.exportIdle"));
+  const [preview, setPreview] = useState<ImportPreview | null>(null);
+  const applyRef = useRef<HTMLButtonElement | null>(null);
   const exportId = "rustwake-save-export";
   const importId = "rustwake-save-import";
+  const summary = summarizeYard(props.state);
 
   const copyExport = () => {
-    const clipboard = navigator.clipboard?.writeText;
-    if (!clipboard) {
-      setNote(t("note.copyManual"));
+    void copySaveText(props.exportText).then((ok) =>
+      setNote(ok ? t("note.copied") : t("note.copyManual"))
+    );
+  };
+
+  const downloadExport = () => {
+    const ok = downloadSaveText(props.exportText, exportFileName(props.state.tick));
+    setNote(ok ? SAVE_COPY.downloadStarted : SAVE_COPY.downloadFailed);
+  };
+
+  /** Validate BEFORE any mutation: a refusal is a note, never an import call. */
+  const applyImport = () => {
+    const result = previewImport(draft, currentSettingsOf(props.exportText));
+    if (result.status === "refused") {
+      setNote(result.note);
       return;
     }
-    clipboard.call(navigator.clipboard, props.exportText).then(
-      () => setNote(t("note.copied")),
-      () => setNote(t("note.copyManual"))
-    );
+    setPreview(result.preview);
+  };
+
+  const closePreview = () => {
+    setPreview(null);
+    // Focus returns to the control that opened the gate, on cancel AND confirm.
+    applyRef.current?.focus();
+  };
+
+  const confirmImport = () => {
+    const result = props.onImport(draft);
+    setNote(importNoteFor(result));
+    closePreview();
   };
 
   return (
@@ -46,27 +94,51 @@ export function YardPanel(props: {
       </div>
       <div className="panel__body">
         {page === 0 ? (
-          <>
-            <dl>
-              <Row label={t("row.tick")} value={props.state.tick} />
-              <Row label={t("row.machines")} value={props.state.machines.length} />
-              <Row
-                label={t("row.drones")}
-                value={fleetUnits(props.state).filter((unitState) => unitState.repaired).length}
-              />
-              <Row label={t("row.links")} value={props.state.routes.length} />
-              <Row label={t("row.credits")} value={props.state.credits} />
-              <Row
-                label={t("row.save")}
-                value={t("value.characters", { count: props.exportText.length })}
-              />
+          <div className="save-page save-page--record">
+            <dl className="save-stats">
+              <div className="save-stat">
+                <dt>{t("row.tick")}</dt>
+                <dd>{summary.tick}</dd>
+              </div>
+              <div className="save-stat">
+                <dt>{t("row.machines")}</dt>
+                <dd>{summary.machines}</dd>
+              </div>
+              <div className="save-stat">
+                <dt>{t("row.drones")}</dt>
+                <dd>{summary.drones}</dd>
+              </div>
+              <div className="save-stat">
+                <dt>{t("row.links")}</dt>
+                <dd>{summary.links}</dd>
+              </div>
+              <div className="save-stat">
+                <dt>{t("row.credits")}</dt>
+                <dd>{summary.credits}</dd>
+              </div>
+              <div className="save-stat save-stat--wide">
+                <dt>{t("row.save")}</dt>
+                <dd>{t("value.characters", { count: props.exportText.length })}</dd>
+              </div>
             </dl>
+            <div className="panel__actions">
+              <button className="icon-btn" onClick={() => setPage(1)}>
+                {SAVE_COPY.openBackup}
+              </button>
+              <button className="icon-btn" onClick={() => setPage(2)}>
+                {t("btn.import")}
+              </button>
+            </div>
+          </div>
+        ) : page === 1 ? (
+          <div className="save-page save-page--backup">
+            <h3 className="save-heading">{SAVE_COPY.backupHeading}</h3>
             <label className="panel__field" htmlFor={exportId}>
               {t("field.savedYard")}
             </label>
             <textarea
               id={exportId}
-              className="panel__code"
+              className="panel__code save-code"
               readOnly
               value={props.exportText}
               onFocus={(event) => event.currentTarget.select()}
@@ -75,38 +147,52 @@ export function YardPanel(props: {
               <button className="icon-btn" onClick={copyExport}>
                 {t("btn.copy")}
               </button>
-              <button className="icon-btn" onClick={() => setPage(1)}>
-                {t("btn.import")}
+              <button className="icon-btn" onClick={downloadExport}>
+                {SAVE_COPY.download}
+              </button>
+              <button className="icon-btn" onClick={() => setPage(0)}>
+                {t("btn.back")}
               </button>
             </div>
-          </>
+          </div>
         ) : (
-          <>
-            <p className="status-line">{t("note.paste")}</p>
+          <div className="save-page save-page--replace">
+            <h3 className="save-heading">{SAVE_COPY.replaceHeading}</h3>
+            <p className="save-hint">{SAVE_COPY.replaceHint}</p>
             <label className="panel__field" htmlFor={importId}>
               {t("field.pastedText")}
             </label>
             <textarea
               id={importId}
-              className="panel__code"
+              className="panel__code save-code"
               value={draft}
               onChange={(event) => setDraft(event.currentTarget.value)}
             />
             <div className="panel__actions">
-              <button
-                className="icon-btn"
-                onClick={() => setNote(importNoteFor(props.onImport(draft)))}
-              >
+              <button className="icon-btn" ref={applyRef} onClick={applyImport}>
                 {t("btn.apply")}
               </button>
               <button className="icon-btn" onClick={() => setPage(0)}>
                 {t("btn.back")}
               </button>
             </div>
-          </>
+          </div>
         )}
-        <p className="status-line">{note}</p>
+        <p className="status-line" role="status">
+          {note}
+        </p>
       </div>
+      {preview !== null ? (
+        <ImportConfirm
+          current={summary}
+          incoming={preview.summary}
+          settingsLine={preview.settingsLine}
+          exportText={props.exportText}
+          currentTick={props.state.tick}
+          onCancel={closePreview}
+          onConfirm={confirmImport}
+        />
+      ) : null}
     </div>
   );
 }

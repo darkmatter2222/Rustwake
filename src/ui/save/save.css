@@ -1,0 +1,248 @@
+/* UI-RESET-63: the save-management sheet. Scoped to the Yard record's own pages
+   (.save-*) and the replacement gate (.import-confirm__*); the global styles.css
+   is untouched. The gate mirrors the reset dialog's grammar (bounded alertdialog,
+   rust border, acknowledgement-gated confirm) with one deliberate difference: the
+   scrim is position:fixed, because this dialog renders INSIDE the panel tree and
+   an absolute scrim would be clipped by the panel's own box. */
+
+/* --- Yard record pages ---------------------------------------------------- */
+
+.save-heading {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  color: var(--furnace);
+}
+
+.save-hint {
+  margin: 2px 0 0;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  color: var(--steel-light);
+}
+
+/* The record's six statistics: two columns on the phone, the save-size row
+   spanning both. `.panel .save-stats` outranks the global single-column
+   `.panel dl` grid without editing it. */
+.panel .save-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 12px;
+  margin: 0;
+  font-size: 0.84rem;
+}
+
+.save-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.save-stat--wide {
+  grid-column: 1 / -1;
+}
+
+.save-page .panel__actions {
+  margin-top: 6px;
+}
+
+/* The transfer textareas keep the shared .panel__code face (monospace, own
+   scroll, 44 px floor) at a shorter fixed height, so a whole page fits the
+   panel body at the 2.0 text scale without inner panel scroll. */
+.save-code {
+  height: 3em;
+}
+
+/* --- Replacement gate (reset-dialog grammar) ------------------------------ */
+
+.import-confirm__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 13, 24, 0.82);
+}
+
+.import-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(92vw, 480px);
+  max-height: min(86dvh, 600px);
+  overflow: hidden auto;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(201, 113, 58, 0.65);
+  background: var(--panel);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 113, 58, 0.55) rgba(9, 15, 26, 0.4);
+}
+
+.import-confirm__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--furnace);
+}
+
+.import-confirm__warning {
+  margin: 0;
+  color: var(--paper);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.import-confirm__preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.import-confirm__column-title {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--cyan);
+}
+
+.import-confirm__stats {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.import-confirm__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.import-confirm__row dt {
+  color: var(--steel-light);
+}
+
+.import-confirm__row dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.import-confirm__settings {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.import-confirm__backup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.import-confirm__offer {
+  margin: 0;
+  color: var(--steel-light);
+  font-size: 0.8rem;
+}
+
+.import-confirm__backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.import-confirm__ack {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--steel-light);
+  font-size: 0.85rem;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.import-confirm__ack input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  accent-color: var(--rust);
+  cursor: pointer;
+}
+
+.import-confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* The armed confirm takes the rust accent (the destructive face); the disabled
+   face stays clearly inert. The extra class outranks the global .icon-btn:disabled. */
+.import-confirm .import-confirm__replace:not(:disabled) {
+  border-color: rgba(201, 113, 58, 0.8);
+  background: linear-gradient(180deg, rgba(201, 113, 58, 0.5), rgba(201, 113, 58, 0.24));
+  color: var(--paper);
+}
+
+.import-confirm .import-confirm__replace:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Large text: give back spacing, never type ---------------------------- */
+
+.text-large .save-page .panel__actions {
+  margin-top: 4px;
+}
+
+.text-large .save-hint {
+  margin-top: 0;
+}
+
+.text-large .import-confirm {
+  gap: 10px;
+  padding: 12px;
+}
+
+.text-large .import-confirm__preview {
+  gap: 8px;
+}
+
+/* --- Rail mode (wide desktop / phone landscape): compact the pages -------- */
+/* Same media grammar as the inspector rail. The pages drop their guidance
+   lines and tighten spacing so each one fits the rail body at the 2.0 text
+   scale with 0 px inner panel scroll; the headings still name the two acts. */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .panel .save-stats {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px 10px;
+  }
+
+  .save-hint {
+    display: none;
+  }
+
+  .save-code {
+    height: 2.4em;
+  }
+
+  .save-page .panel__actions {
+    margin-top: 4px;
+  }
+
+  .save-page .panel__field {
+    margin-top: 4px;
+  }
+
+  /* The record page's idle guidance is the one line the rail cannot afford;
+     the backup/replace pages keep their live status notes. */
+  .save-page--record .status-line {
+    display: none;
+  }
+}

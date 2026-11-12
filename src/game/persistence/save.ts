@@ -110,7 +110,36 @@ export function decodeSave(text: string | null): DecodeResult {
   repairRegistration(envelope.payload.sim);
   const invalid = validateSim(envelope.payload.sim);
   if (invalid) return { ok: false, reason: "invalid", detail: invalid };
-  return { ok: true, payload: envelope.payload };
+  // UI-RESET-63: settings are untrusted input too. Sanitizing HERE protects both
+  // readers of a decode — boot and manual import — without either call site
+  // having to remember it. Healthy saves round-trip unchanged.
+  return {
+    ok: true,
+    payload: { ...envelope.payload, settings: sanitizeSettings(envelope.payload.settings) },
+  };
+}
+
+/**
+ * UI-RESET-63: a save's settings block is attacker-controlled text, and the UI
+ * multiplies `textScale` straight into the root font size — a crafted envelope
+ * with `textScale: 99` (or a non-boolean `muted`) would break the whole screen
+ * on import or boot. Clamp the scale to the supported [1, 2] range (the same
+ * steps the settings cycle offers), accept booleans only as literal `true`, and
+ * fall back to the defaults for anything missing or malformed. A sound save —
+ * including every older v1 save — passes through value-for-value.
+ */
+export function sanitizeSettings(settings: unknown): SaveSettings {
+  if (typeof settings !== "object" || settings === null) return { ...DEFAULT_SETTINGS };
+  const raw = settings as Record<string, unknown>;
+  const scale =
+    typeof raw.textScale === "number" && Number.isFinite(raw.textScale)
+      ? Math.min(2, Math.max(1, raw.textScale))
+      : DEFAULT_SETTINGS.textScale;
+  return {
+    muted: raw.muted === true,
+    reducedMotion: raw.reducedMotion === true,
+    textScale: scale,
+  };
 }
 
 /**
