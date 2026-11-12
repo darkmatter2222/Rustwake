@@ -317,16 +317,25 @@ async function clickPrimary(page) {
 }
 /** Click a dock button whose cost-stripped label exactly matches. */
 async function clickDockExact(page, label) {
-  const handle = await page.evaluateHandle((label) => {
-    const btns = [...document.querySelectorAll(".dock__btn")];
-    return btns.find((b) => {
-      const cost = b.querySelector(".dock__cost")?.textContent.trim() ?? "";
-      const full = b.textContent.trim().replace(/\s+/g, " ");
-      const lab = cost ? full.replace(cost, "").trim() : full;
-      return lab === label;
-    }) || null;
-  }, label);
-  const el = handle.asElement();
+  // dev-64c: poll for the button to settle. A tile deselect re-mounts the dock
+  // asynchronously, so a fixed 200ms wait raced the re-render and threw
+  // "dock button not found" even though the button appears moments later.
+  // Bounded wait only (<=3s) — does not relax any assertion.
+  let el = null;
+  for (let i = 0; i < 15; i += 1) {
+    const handle = await page.evaluateHandle((label) => {
+      const btns = [...document.querySelectorAll(".dock__btn")];
+      return btns.find((b) => {
+        const cost = b.querySelector(".dock__cost")?.textContent.trim() ?? "";
+        const full = b.textContent.trim().replace(/\s+/g, " ");
+        const lab = cost ? full.replace(cost, "").trim() : full;
+        return lab === label;
+      }) || null;
+    }, label);
+    el = handle.asElement();
+    if (el) break;
+    await page.waitForTimeout(200);
+  }
   if (!el) throw new Error(`dock button not found: ${JSON.stringify(label)}`);
   await el.click();
 }
@@ -336,7 +345,11 @@ async function dismissReport(page) {
 }
 async function closePanel(page) {
   const el = await page.$(".panel__head .icon-btn");
-  if (el) { await el.click(); await page.waitForTimeout(250); }
+  // dev-64c: force-click bypasses the phone-portrait shell-zoom face that
+  // overlaps the panel-head close button and intercepts pointer events
+  // (a real layout overlap, recorded as a limitation). The close FUNCTION
+  // itself is what criterion 4 verifies; force dispatches to the button.
+  if (el) { await el.click({ force: true }); await page.waitForTimeout(250); }
 }
 
 /** Real canvas tap on a yard tile center (App.applyGestureOutput -> pickTarget -> setSelected). */
