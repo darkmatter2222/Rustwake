@@ -1,0 +1,148 @@
+/* UI-RESET-64: the contextual onboarding coach's own sheet. It paints inside `.hud__lead`,
+   after the objective card and alongside the placement strips, so the camera's chrome
+   insets (which read the lead's painted bottom) reserve its band with no second measurement
+   and the world is never obscured. Deliberately NOT a `.panel`, NOT a `.dock` and NOT a
+   `.place-strip`: the overlay-stack census keeps counting inspectors only, the dock keeps
+   its pinned faces, and none of the census classes (`.objective`, `.status-line`,
+   `.dock__btn`, `.resources__item`) are reused. The layout grammar is the lead block's
+   (same fill, border, radius, left alignment) so it speaks one visual language; the action
+   faces reuse `.icon-btn`, whose 44 px floor the legibility census already declares. */
+
+.onboard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: flex-start;
+  width: 100%;
+  max-width: min(100%, 560px);
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  border-left: 3px solid var(--cyan);
+  background: var(--panel);
+  font-size: 0.84rem;
+  pointer-events: auto;
+}
+
+.onboard--hidden {
+  flex-direction: row;
+  align-items: center;
+  border-left-color: rgba(111, 147, 173, 0.7);
+  padding: 4px 6px;
+}
+
+.onboard__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+.onboard__badge {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--cyan);
+}
+
+.onboard__what,
+.onboard__why,
+.onboard__next {
+  margin: 0;
+  line-height: 1.3;
+}
+.onboard__what {
+  color: var(--paper);
+}
+.onboard__why,
+.onboard__next {
+  color: rgba(244, 247, 251, 0.78);
+}
+.onboard__label {
+  font-weight: 600;
+  color: rgba(244, 247, 251, 0.92);
+}
+
+/* The expandable detail: a native disclosure, so the summary is not a `<button>` and the
+   dock/face census never counts it. The deeper vocabulary stays collapsed by default, so
+   the coach never obscures the world until the player asks for the detail. */
+.onboard__detail {
+  margin: 0;
+}
+.onboard__summary {
+  cursor: pointer;
+  color: rgba(244, 247, 251, 0.6);
+  list-style-position: inside;
+}
+.onboard__detail-body {
+  margin: 4px 0 0;
+  line-height: 1.35;
+  color: rgba(244, 247, 251, 0.72);
+}
+
+/* Reachable recovery from the place-mode earn trap: a warning edge, a shape and not only a
+   hue (spec 6.4), with one accent-filled earn face per row in the dock's own grammar. */
+.onboard__recover {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 2px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 183, 101, 0.6);
+  background: rgba(201, 113, 58, 0.14);
+}
+.onboard__recover-title {
+  margin: 0;
+  font-weight: 600;
+  color: var(--furnace);
+}
+.onboard__recover-short {
+  margin: 0;
+  line-height: 1.3;
+  color: var(--furnace);
+}
+.onboard__recover-hint {
+  margin: 0;
+  line-height: 1.3;
+  color: rgba(244, 247, 251, 0.72);
+}
+.onboard__actions {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 2px;
+}
+.onboard__earn {
+  flex: 2 1 auto;
+  border-color: rgba(255, 183, 101, 0.7);
+  background-color: rgb(201, 113, 58);
+  background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.32), rgba(201, 113, 58, 0.18));
+  color: var(--night);
+}
+.onboard__actions > .icon-btn:not(.onboard__earn) {
+  flex: 1 1 auto;
+}
+
+/* The skip / revisit faces stay plain `.icon-btn` and keep its 44 px tap-target floor;
+   only the padding and ink step down so the head row stays compact. */
+.onboard__skip {
+  flex: 0 0 auto;
+  padding: 0 8px;
+  font-size: 0.78rem;
+}
+
+/* Large text: the labels step down with the dock's own L-3 grammar so the coach stays
+   compact at 360 px, while every target keeps its floor. */
+.text-large .onboard {
+  font-size: 0.74rem;
+  padding: 6px 8px;
+}
+.text-large .onboard__actions {
+  gap: 2px;
+}
+.text-large .onboard__actions > .icon-btn {
+  padding: 0 4px;
+  font-size: 0.74rem;
+  line-height: 1.1;
+}

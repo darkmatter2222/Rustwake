@@ -61,6 +61,19 @@ export const COPY = {
     noLinks:
       "No links yet: this machine is isolated. Connect lays belt from the dock store or a producer.",
   },
+  /**
+   * UI-RESET-64 (criterion 3): the concise, plain-language headline for each bottleneck,
+   * shown by default; the full diagnostic sentence above becomes the expandable detail.
+   * One short phrase per constraint, in the player's vocabulary, never a key shape.
+   */
+  constraintHeads: {
+    missingInput: "Needs input to run",
+    fullOutput: "Output tray is full",
+    power: "Running on limited power",
+    noOutputLink: "No output route yet",
+    busyLink: "Output belt is at capacity",
+    noLinks: "No routes connected yet",
+  },
   actions: {
     connectPrimary: "Connect is the primary action: it lays belt for",
     connectPrimaryEnd: "and starts the flow immediately.",

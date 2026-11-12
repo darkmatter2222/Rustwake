@@ -18,6 +18,14 @@ export const COPY = {
   costLabel: "Cost",
   chargeLabel: "Charge",
   aimHint: "Tap the yard to aim · Build confirms · Cancel plans again.",
+  /**
+   * UI-RESET-64 (criterion 4): the reachable recovery from the place-mode earn trap (#41),
+   * named in text the moment a build is unaffordable, so even a player who skipped the coach
+   * is shown a way to earn instead of repeat refusals. The coach carries the one-tap buttons;
+   * this line keeps the recovery visible on the preview itself. Plain words, never a key shape.
+   */
+  earnRecoveryHint:
+    "Short on materials — salvage the wreck for scrap, or sell stock at the Store, then build again.",
   moveAimHint: "Tap the yard (or press N) to aim the destination.",
   confirmMove: "Confirm move",
   cancelMove: "Cancel move",

@@ -58,6 +58,7 @@
 .place-strip__reason,
 .place-strip__cost,
 .place-strip__short,
+.place-strip__earn,
 .place-strip__hint,
 .place-strip__dest,
 .place-strip__total,
@@ -76,6 +77,11 @@
 }
 .place-strip__short {
   color: var(--furnace);
+}
+/* UI-RESET-64: the reachable earn recovery reads as guidance, a step calmer than the
+   shortfall number above it, so the way forward is legible without shouting. */
+.place-strip__earn {
+  color: rgba(244, 247, 251, 0.78);
 }
 .place-strip__dest {
   color: var(--paper);

@@ -1,0 +1,9 @@
+﻿
+> rustwake@0.1.0 validate C:\Users\ryans\AppData\Local\Temp\opencode\rw-64
+> tsx scripts/validate-content.mjs
+
+tables: 15 resources, 8 blueprints, 12 recipes, 3 research nodes
+content: 0 violation(s) in 3 ms
+behaviour: firstDrone=379 firstResearch=527 tick=18298 machines=8 links=18 drones=4 batches=1838 credits=157 nodes=3 | 0 violation(s)
+validated: no violations
+VALIDATE_EXIT=0

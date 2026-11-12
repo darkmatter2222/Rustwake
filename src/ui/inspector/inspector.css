@@ -69,6 +69,26 @@
   color: var(--furnace);
 }
 
+/* UI-RESET-64 (criterion 3): each bottleneck is a native disclosure — a concise headline
+   summary by default, the full diagnostic sentence (engine numbers + recovery hint) as the
+   expandable detail. The summary is not a `<button>`, so the action-face census never counts
+   it; the detail keeps `.inspector-note--constraint` and its exact text, so the inspector
+   sentence contract is unchanged. */
+.inspector-constraint {
+  margin: 2px 0 0;
+}
+.inspector-constraint__summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--furnace);
+  overflow-wrap: anywhere;
+  list-style-position: inside;
+}
+.inspector-constraint > .inspector-note {
+  padding-left: 14px;
+}
+
 /* Recovery context tabs: in-panel, selection-preserving, 44 px touch floor. */
 .inspector-context {
   display: flex;

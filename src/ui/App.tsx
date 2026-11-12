@@ -63,6 +63,7 @@ import { ResetDialog } from "./shell/ResetDialog";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { BuildCatalog } from "./build/BuildCatalog";
 import { DismantleCard, MoveStrip, PlacementStrip } from "./place/PlacePreview";
+import { OnboardCoach } from "./onboard/OnboardCoach";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
 import { MenuSheet, ShellMenuFace, ShellRail, ShellZoom, useRailMode } from "./shell/Shell";
@@ -87,8 +88,15 @@ export interface PrimaryAction {
   branches?: { id: UpgradeBranch; label: string; cost?: string; run: () => void }[];
 }
 
+// UI-RESET-64: `seenCommands` is persisted SimState and is never pruned, so a
+// bare per-load counter restarting at c1 collides with the save's c1..cN after
+// any reload: applyCommand dedupes the collision to ok:true WITHOUT executing,
+// silently dropping the first N post-reload dispatches. A unique per-load epoch
+// prefix keeps ids distinct across reloads; the sequential suffix preserves
+// within-session ordering, so a genuine same-id retry still dedups idempotently.
+const commandEpoch = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 let commandSeq = 0;
-const nextCommandId = (): string => `c${++commandSeq}`;
+const nextCommandId = (): string => `${commandEpoch}-${++commandSeq}`;
 
 /**
  * L-1 / UI-RESET-49 G2: the chrome band the world is fitted into, read from the
@@ -1139,6 +1147,25 @@ export function App({
               {t("report.reconciling")}
             </p>
           ) : null}
+          {/* UI-RESET-64: the contextual onboarding coach. It paints inside the lead block
+              after the objective card, so the camera's chrome insets reserve its band and
+              the world is never obscured. It is not a `.panel`/`.dock`/`.place-strip` and
+              reuses no census class, so the resting-screen, dock-face and overlay-stack
+              censuses are untouched. It derives every lesson from the authoritative state
+              (respecting progress), adds a reachable earn-trap recovery, and guides the
+              fresh yard to first Data without ever weakening the showResearch gate. */}
+          <OnboardCoach
+            state={state}
+            buildBlueprint={buildBlueprint}
+            ghostTile={ghostTile}
+            reader={role === "reader"}
+            onSalvage={() => dispatch({ id: nextCommandId(), type: "manual.salvage" })}
+            onStore={() => {
+              setSelected(-2);
+              setMenuOpen(false);
+              setCatalogOpen(false);
+            }}
+          />
           {/* UI-RESET-53: the explicit placement / move / dismantle previews. They paint
               inside the lead block so the camera's chrome insets reserve their band, and
               they are not `.panel`s, so the overlay census and dock faces are untouched.

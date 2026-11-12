@@ -36,7 +36,7 @@ import {
 import { Row, nextId } from "./shared";
 import { COPY } from "../inspector/copy";
 import { ContextPanes } from "../inspector/ContextPanes";
-import { constraintNotes, primaryActionNote, recipeFlow } from "../inspector/model";
+import { constraintCards, primaryActionNote, recipeFlow } from "../inspector/model";
 import { UpgradeCompare } from "../upgrade/UpgradeCompare";
 import { LogisticsLegend } from "../logistics/LogisticsLegend";
 import { LogisticsOverview } from "../logistics/LogisticsOverview";
@@ -135,7 +135,7 @@ export function MachinePanel(props: {
     100,
     Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
   );
-  const constraints = constraintNotes(props.state, machine, props.powerRatio);
+  const constraints = constraintCards(props.state, machine, props.powerRatio);
 
   return (
     <div
@@ -246,10 +246,15 @@ export function MachinePanel(props: {
               <Row label={t("row.needs")} value={describeInputs(recipe)} />
             ) : null}
           </dl>
-          {constraints.map((note) => (
-            <p key={note} className="inspector-note inspector-note--constraint">
-              {note}
-            </p>
+          {/* UI-RESET-64 (criterion 3): each bottleneck leads with a concise headline; the
+              full diagnostic sentence (the engine's own numbers + recovery hint) is the
+              expandable detail. The detail keeps `.inspector-note--constraint` and its exact
+              text, so the inspector sentence contract is unchanged. */}
+          {constraints.map((card) => (
+            <details key={card.detail} className="inspector-constraint">
+              <summary className="inspector-constraint__summary">{card.short}</summary>
+              <p className="inspector-note inspector-note--constraint">{card.detail}</p>
+            </details>
           ))}
           {/* UI-RESET-59 (G3): the yard production/power overview and the bottleneck list,
               embedded in this section (no new landmark). Each bottleneck reveals a belt

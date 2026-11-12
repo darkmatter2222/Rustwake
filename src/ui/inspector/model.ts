@@ -51,48 +51,66 @@ export function recipeFlow(machine: MachineState): string {
 }
 
 /**
+ * UI-RESET-64 (criterion 3): one bottleneck constraint as a concise headline plus the
+ * full diagnostic sentence. The headline is the plain-language "what" the player reads
+ * at a glance; the detail is the engine's own numbers and the recovery hint, revealed on
+ * demand so unexplained diagnostic jargon never dominates the panel. `detail` is exactly
+ * the sentence `constraintNotes` has always printed, so the two cannot drift.
+ */
+export interface ConstraintCard {
+  readonly short: string;
+  readonly detail: string;
+}
+
+/**
  * The bottleneck explanations the acceptance asks for: missing input, full output,
  * low power and transport limits, each in one sentence with the engine's own numbers.
  * Only the constraints that actually hold are returned, in a stable priority order.
+ * Each entry pairs that sentence with a concise headline (UI-RESET-64); `constraintNotes`
+ * and `constraintCards` both read this one derivation so the detail can never drift.
  */
-export function constraintNotes(
+function constraintEntries(
   state: SimState,
   machine: MachineState,
   powerRatio: number,
-): string[] {
+): ConstraintCard[] {
   const def = BLUEPRINTS[machine.blueprint];
   const recipe = RECIPES[def.recipeId];
-  const notes: string[] = [];
+  const notes: ConstraintCard[] = [];
 
   if (machine.status === "starved") {
     const short = recipe.inputs
       .map((item) => ({ item, held: machine.inBuf[item.resource] ?? 0 }))
       .filter(({ item, held }) => held < item.qty)
       .map(({ item, held }) => `${formatNumber(item.qty - held)} ${resourceWord(item.resource)}`);
-    notes.push(
-      short.length > 0
-        ? `${COPY.constraints.missingInput} ${short.join(t("value.comma"))}. ${COPY.constraints.missingInputEnd}`
-        : COPY.constraints.missingInputEnd,
-    );
+    notes.push({
+      short: COPY.constraintHeads.missingInput,
+      detail:
+        short.length > 0
+          ? `${COPY.constraints.missingInput} ${short.join(t("value.comma"))}. ${COPY.constraints.missingInputEnd}`
+          : COPY.constraints.missingInputEnd,
+    });
   }
 
   if (machine.status === "outputFull" || machine.trayUnits >= def.outputBuffer) {
-    notes.push(
-      `${COPY.constraints.fullOutput} ${formatNumber(machine.trayUnits)}/${def.outputBuffer}. ${COPY.constraints.fullOutputEnd}`,
-    );
+    notes.push({
+      short: COPY.constraintHeads.fullOutput,
+      detail: `${COPY.constraints.fullOutput} ${formatNumber(machine.trayUnits)}/${def.outputBuffer}. ${COPY.constraints.fullOutputEnd}`,
+    });
   }
 
   if (powerRatio < 0.999) {
-    notes.push(
-      `${COPY.constraints.power} ${formatNumber(requestedPower(state))}/${TUNING.yardPowerCapacity} · ${wholePercent(powerRatio)}% ${COPY.constraints.powerEnd}`,
-    );
+    notes.push({
+      short: COPY.constraintHeads.power,
+      detail: `${COPY.constraints.power} ${formatNumber(requestedPower(state))}/${TUNING.yardPowerCapacity} · ${wholePercent(powerRatio)}% ${COPY.constraints.powerEnd}`,
+    });
   }
 
   const links = state.routes.filter(
     (route) => route.from.id === machine.id || route.to.id === machine.id,
   );
   if (links.length === 0) {
-    notes.push(COPY.constraints.noLinks);
+    notes.push({ short: COPY.constraintHeads.noLinks, detail: COPY.constraints.noLinks });
   } else if (recipe.outputs.length > 0) {
     // Issue #100: read EVERY registered output link, derived from the route table so a
     // multi-output machine reports its busiest belt and `noOutputLink` fires only when the
@@ -101,19 +119,40 @@ export function constraintNotes(
       .map((id) => state.routes.find((route) => route.id === id))
       .filter((route): route is RouteState => route !== undefined);
     if (outRoutes.length === 0) {
-      notes.push(COPY.constraints.noOutputLink);
+      notes.push({ short: COPY.constraintHeads.noOutputLink, detail: COPY.constraints.noOutputLink });
     } else {
       const busy = outRoutes.reduce((worst, route) => {
         const value = wholePercent(route.busyTicks / Math.max(1, route.ageTicks));
         return value > worst ? value : worst;
       }, 0);
       if (busy >= 85) {
-        notes.push(`${COPY.constraints.busyLink} ${busy}% ${COPY.constraints.busyLinkEnd}`);
+        notes.push({
+          short: COPY.constraintHeads.busyLink,
+          detail: `${COPY.constraints.busyLink} ${busy}% ${COPY.constraints.busyLinkEnd}`,
+        });
       }
     }
   }
 
   return notes;
+}
+
+/** The full diagnostic sentences, in priority order — unchanged contract (UI-RESET-54/100). */
+export function constraintNotes(
+  state: SimState,
+  machine: MachineState,
+  powerRatio: number,
+): string[] {
+  return constraintEntries(state, machine, powerRatio).map((entry) => entry.detail);
+}
+
+/** UI-RESET-64: the same constraints as concise headline + expandable detail pairs. */
+export function constraintCards(
+  state: SimState,
+  machine: MachineState,
+  powerRatio: number,
+): ConstraintCard[] {
+  return constraintEntries(state, machine, powerRatio);
 }
 
 /** Storage recovery context: the shared store plus every resource this recipe touches. */

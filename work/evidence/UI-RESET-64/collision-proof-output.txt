@@ -1,0 +1,9 @@
+﻿pre-reload build c1: {"ok":true,"revision":1} machines= 1 scrap= 80
+same-id retry within session: {"ok":true,"revision":1} DEDUP_IN_SESSION_OK= true
+seenCommands after reload: ["c1"]
+post-reload build OLD id c1: {"ok":true,"revision":1} machines= 1 scrap= 80
+OLD_SCHEME_COLLISION_NOOP= true (control: the pre-existing bug reproduces)
+post-reload build NEW epoch id: {"ok":true,"revision":2} machines= 2 scrap= 60
+COLLISION_NOOP_CONFIRMED= false
+same-id retry across reload: {"ok":true,"revision":2} DEDUP_CROSS_RELOAD_OK= true
+PROOF_PASS: collision fixed, dedup preserved

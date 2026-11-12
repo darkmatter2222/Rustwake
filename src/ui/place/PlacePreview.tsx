@@ -77,6 +77,11 @@ export function PlacementStrip(props: {
       {check.shortfall ? (
         <p className="place-strip__short">{shortfallLine(check.shortfall)}</p>
       ) : null}
+      {/* UI-RESET-64 (criterion 4): name the reachable earn recovery the moment the build is
+          unaffordable, so the preview shows a way forward instead of repeat refusals. */}
+      {check.shortfall ? (
+        <p className="place-strip__earn">{COPY.earnRecoveryHint}</p>
+      ) : null}
       <p className="place-strip__hint">{COPY.aimHint}</p>
     </section>
   );
