@@ -443,7 +443,9 @@ async function advanceTime(page, seconds) {
 /** Advance time until the store can cover a blueprint's build cost (probe-only income). */
 async function ensureAffordable(page, id) {
   const cost = BLUEPRINTS[id].buildCost;
-  for (let i = 0; i < 12; i += 1) {
+  // Bounded retries (dev-64c): on the collision-blocked fresh yard no income can
+  // arrive, so give up fast rather than burn reloads. Does not relax any assertion.
+  for (let i = 0; i < 2; i += 1) {
     const s = await readSim(page);
     if (s && cost.every((c) => (s.store[c.resource] ?? 0) >= c.qty)) return true;
     await advanceTime(page, 90);
@@ -480,7 +482,8 @@ async function connectAll(page) {
 
 /** Advance time until the store holds at least `min` Data (the engine produces it). */
 async function waitForData(page, min) {
-  for (let i = 0; i < 10; i += 1) {
+  // Bounded retries (dev-64c): see ensureAffordable. The first-data assertion stays strict.
+  for (let i = 0; i < 2; i += 1) {
     const s = await readSim(page);
     if ((s?.store.data ?? 0) >= min) return s.store.data ?? 0;
     await advanceTime(page, 120);
