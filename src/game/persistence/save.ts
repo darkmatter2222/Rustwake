@@ -1,9 +1,10 @@
-import { BLUEPRINTS, RECIPES } from "../content/defs";
+import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../content/defs";
 import { RESEARCH } from "../content/research";
 import {
   SCHEMA_VERSION,
   createInitialState,
   type DroneState,
+  type RouteState,
   type SimState,
 } from "../simulation/types";
 
@@ -99,9 +100,107 @@ export function decodeSave(text: string | null): DecodeResult {
   const body = JSON.stringify(envelope.payload);
   if (checksum(body) !== envelope.checksum)
     return { ok: false, reason: "checksum" };
+  // Issue #100: repair pre-fix registration damage on the load path, BEFORE validation.
+  // The store decodes then migrates and falls back to a fresh yard on any decode failure,
+  // so a pre-fix orphaned save (a route whose machine endpoint was dismantled) must be
+  // repaired here or it would fail `routeSource`/`routeTarget` and silently reset the yard.
+  // A living under-registered machine needs no repair: its whole output set is DERIVED
+  // from the route table at read time (`outputRouteIds`), so it is already whole.
+  repairRegistration(envelope.payload.sim);
   const invalid = validateSim(envelope.payload.sim);
   if (invalid) return { ok: false, reason: "invalid", detail: invalid };
   return { ok: true, payload: envelope.payload };
+}
+
+/**
+ * Issue #100 load-path repair. A pure, deterministic, idempotent function of the parsed
+ * save: no clocks, no randomness, and a second pass changes nothing, so re-loading a
+ * repaired save never refunds twice. It only touches DAMAGED records, so a healthy save
+ * — including a legacy single-output save AND a pre-fix multi-output save whose singular
+ * `outRoute` mirror named only the last belt — round-trips byte-for-byte.
+ *
+ * Registration itself needs no repair: `outputRouteIds` DERIVES a machine's whole output
+ * set from the route table (the engine's flow source of truth), so a living under-registered
+ * machine (sub-case (i)) is already whole the moment it is read — dismantle refunds and drops
+ * every belt, the inspector reports every belt, with no mutation and no value change.
+ *
+ * The one damage that cannot be derived away is a route whose machine endpoint no longer
+ * exists (sub-case (ii)): a dismantled machine's orphan belt, which the pre-fix defect never
+ * refunded or dropped. `validateSim` refuses such a route (`routeSource`/`routeTarget`), and
+ * the store falls back to a fresh yard on any decode failure, so the orphan must be removed
+ * HERE, before validation, or the player's save silently resets. It is removed with the same
+ * compensation `dropRoute` pays: in-flight items return to the store (clamped to free room,
+ * the rest to overflow) and the paid belt cost is refunded at `dismantleRefundPct`. The paid
+ * value is preserved, never deleted. Stale `inRoutes`/`outRoute` references to a dropped route
+ * are pruned so the repaired record is internally consistent.
+ *
+ * Structurally malformed sims are left untouched for `validateSim` to refuse, so repair
+ * never throws on adversarial input and never masks the real decode failure.
+ */
+export function repairRegistration(sim: SimState): SimState {
+  if (
+    !Array.isArray(sim.machines) ||
+    !Array.isArray(sim.routes) ||
+    !Array.isArray(sim.overflow) ||
+    typeof sim.store !== "object" ||
+    sim.store === null ||
+    !Number.isSafeInteger(sim.storeCapacity) ||
+    !Number.isSafeInteger(sim.storeUnits)
+  ) {
+    return sim;
+  }
+  const machineIds = new Set(sim.machines.map((m) => m.id));
+  // Drop dangling-endpoint routes, compensating exactly like `dropRoute`.
+  const kept: RouteState[] = [];
+  const dropped = new Set<number>();
+  for (const route of sim.routes) {
+    // Structurally malformed entries (null, non-object, missing/non-object endpoints)
+    // are left UNTOUCHED for `validateSim` to refuse — repair never throws on
+    // adversarial input and never masks the real decode failure (docstring above).
+    if (
+      !route ||
+      typeof route !== "object" ||
+      !route.from ||
+      typeof route.from !== "object" ||
+      !route.to ||
+      typeof route.to !== "object"
+    ) {
+      kept.push(route);
+      continue;
+    }
+    const sourceGone = route.from.kind === "machine" && !machineIds.has(route.from.id);
+    const targetGone = route.to.kind === "machine" && !machineIds.has(route.to.id);
+    if (!sourceGone && !targetGone) {
+      kept.push(route);
+      continue;
+    }
+    dropped.add(route.id);
+    for (const item of Array.isArray(route.items) ? route.items : []) {
+      if (!item || !Number.isSafeInteger(item.qty) || item.qty < 0) continue;
+      const room = sim.storeCapacity - sim.storeUnits;
+      const moved = Math.min(item.qty, Math.max(0, room));
+      repairAddToStore(sim, item.resource, moved);
+      if (item.qty > moved) sim.overflow.push({ resource: item.resource, qty: item.qty - moved });
+    }
+    const price = TUNING.beltCostPerTile * (route.run?.length ?? 0);
+    const refund = Math.round((price * TUNING.dismantleRefundPct) / 100);
+    if (refund > 0) repairAddToStore(sim, "scrap", refund);
+  }
+  if (dropped.size === 0) return sim;
+  sim.routes = kept;
+  // Prune stale references to the dropped routes so the surviving records stay consistent.
+  for (const m of sim.machines) {
+    if (Array.isArray(m.inRoutes)) m.inRoutes = m.inRoutes.filter((id) => !dropped.has(id));
+    if (m.outRoute !== null && dropped.has(m.outRoute)) m.outRoute = null;
+  }
+  return sim;
+}
+
+/** `addToStore`'s exact arithmetic (no clamp), kept local so save.ts stays self-contained. */
+function repairAddToStore(sim: SimState, resource: ResourceId, amount: number): void {
+  if (amount <= 0) return;
+  sim.store[resource] = (sim.store[resource] ?? 0) + amount;
+  sim.storeUnits += amount;
 }
 
 /** Returns the first violated invariant name, or null when the state is sound. */
@@ -206,6 +305,12 @@ export function validateSim(state: unknown): string | null {
       return `routeRun:${r.id}`;
     }
   }
+  // Issue #100: output registration is DERIVED from the route table (`outputRouteIds`),
+  // not stored, so there is no new plural invariant to validate and a pre-fix save whose
+  // singular `outRoute` mirror named only the last of several outputs stays valid — the
+  // route table is the registration, and its endpoints are already checked above by
+  // `routeSource`/`routeTarget`. The load-path repair removes any dangling-endpoint orphan
+  // before this runs, so a healthy, legacy or repaired state all validate to null.
   if (s.research !== undefined) {
     if (typeof s.research !== "object" || s.research === null)
       return "research";

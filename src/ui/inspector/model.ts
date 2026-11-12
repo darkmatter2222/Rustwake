@@ -7,7 +7,13 @@
  * return, and the tests can assert the sentences without a DOM.
  */
 import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../../game/content/defs";
-import { qty, type MachineState, type SimState } from "../../game/simulation/types";
+import {
+  outputRouteIds,
+  qty,
+  type MachineState,
+  type RouteState,
+  type SimState,
+} from "../../game/simulation/types";
 import { requestedPower } from "../../game/simulation/diagnostics";
 import { beltCost } from "../../game/simulation/commands";
 import type { ConnectionPlan } from "../../game/simulation/autoconnect";
@@ -88,14 +94,19 @@ export function constraintNotes(
   if (links.length === 0) {
     notes.push(COPY.constraints.noLinks);
   } else if (recipe.outputs.length > 0) {
-    const outRoute =
-      machine.outRoute !== null
-        ? state.routes.find((route) => route.id === machine.outRoute)
-        : undefined;
-    if (!outRoute) {
+    // Issue #100: read EVERY registered output link, derived from the route table so a
+    // multi-output machine reports its busiest belt and `noOutputLink` fires only when the
+    // table genuinely holds no output for this machine. The same number the assistant reports.
+    const outRoutes = outputRouteIds(state, machine.id)
+      .map((id) => state.routes.find((route) => route.id === id))
+      .filter((route): route is RouteState => route !== undefined);
+    if (outRoutes.length === 0) {
       notes.push(COPY.constraints.noOutputLink);
     } else {
-      const busy = wholePercent(outRoute.busyTicks / Math.max(1, outRoute.ageTicks));
+      const busy = outRoutes.reduce((worst, route) => {
+        const value = wholePercent(route.busyTicks / Math.max(1, route.ageTicks));
+        return value > worst ? value : worst;
+      }, 0);
       if (busy >= 85) {
         notes.push(`${COPY.constraints.busyLink} ${busy}% ${COPY.constraints.busyLinkEnd}`);
       }

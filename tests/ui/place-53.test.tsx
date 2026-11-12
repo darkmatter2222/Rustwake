@@ -20,7 +20,7 @@ import {
 } from "../../src/game/simulation/commands";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { advance } from "../../src/game/simulation/engine";
-import { createInitialState, type SimState } from "../../src/game/simulation/types";
+import { createInitialState, outputRouteIds, type SimState } from "../../src/game/simulation/types";
 import { DEFAULT_SETTINGS, SAVE_KEY, encodeSave } from "../../src/game/persistence/save";
 import { tileToWorld, type Camera } from "../../src/game/renderer/scene";
 import { moveCostOf, dismantleImpact } from "../../src/ui/place/flow";
@@ -103,8 +103,9 @@ function yardState(opts: YardOpts = {}): SimState {
     }
     // Then drain the purse so the seed advance cannot load belt cargo: `dropRoute`
     // rides in-transit items home on top of the belt refund, and the parity reads
-    // must see EMPTY belts. The orphaned output link (connectRoute overwrites
-    // outRoute) stays unrefunded — the delta proves the registered-set contract.
+    // must see EMPTY belts. Issue #100: every output is registered (derived from the
+    // route table), so the dismantle refunds all of them — the delta proves the full
+    // registered-set contract, with no orphan left unrefunded.
     state.store.scrap = 0;
     state.storeUnits = sumStore(state.store);
   }
@@ -286,7 +287,8 @@ describe("UI-RESET-53 engine parity of the printed numbers", () => {
     expect(impact.buildRefund).toBe(buildRefund);
     expect(impact.buildRefund).toBe(18); // round(20 * 90%)
     const machine = state.machines[0];
-    const routeIds = [machine.outRoute, ...machine.inRoutes].filter((x): x is number => x !== null);
+    // Issue #100: the registered set is every output link plus every input link, deduped.
+    const routeIds = [...new Set([...outputRouteIds(state, machine.id), ...machine.inRoutes])];
     const beltRefund = routeIds.reduce((sum, rid) => {
       const route = state.routes.find((r) => r.id === rid);
       return sum + refundOf(beltCost(route?.run?.length ?? 0));

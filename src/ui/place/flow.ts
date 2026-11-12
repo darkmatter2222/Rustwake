@@ -19,6 +19,7 @@
 import { BLUEPRINTS, TUNING, type ItemStack } from "../../game/content/defs";
 import { DOCK_TILE, YARD_TILES, beltCost, refundOf } from "../../game/simulation/commands";
 import { resourceWord, t } from "../../game/content/strings";
+import { outputRouteIds } from "../../game/simulation/types";
 import type { SimState } from "../../game/simulation/types";
 
 /** Why a cell can or cannot receive a machine — the engine's `validTile` verdict. */
@@ -163,8 +164,10 @@ export function dismantleImpact(state: SimState, machineId: number): DismantleIm
   if (!def) return EMPTY_IMPACT;
   let buildRefund = 0;
   for (const item of def.buildCost) buildRefund += refundOf(item.qty);
-  const routeIds =
-    machine.outRoute === null ? [...machine.inRoutes] : [machine.outRoute, ...machine.inRoutes];
+  // Issue #100: mirror the engine's FULL registered set — every output link (derived from
+  // the route table) plus every input link, deduped — so this preview stays equal to the
+  // dismantle commit's payout on a multi-output machine (the #54 parity contract).
+  const routeIds = [...new Set([...outputRouteIds(state, machine.id), ...machine.inRoutes])];
   let beltRefundUnits = 0;
   for (const id of routeIds) {
     const route = state.routes.find((r) => r.id === id);

@@ -1,0 +1,2092 @@
+{
+  "generatedBy": "scripts/probe-registration100.mjs",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/100",
+  "pr": "https://github.com/darkmatter2222/Rustwake/pull/103",
+  "headSha": "f93ca09a973e86fd2622f4c398fc3ec1d175bb23",
+  "url": "http://localhost:4295/",
+  "tuning": {
+    "beltCostPerTile": 1,
+    "dismantleRefundPct": 90,
+    "reserveFloor": 10,
+    "dockCapacity": 900
+  },
+  "fixtureDeterminism": {
+    "fourRouteYard": {
+      "byteIdentical": true,
+      "checksum": "0a1c0882"
+    },
+    "connectYard-sorter": {
+      "byteIdentical": true,
+      "checksum": "7fda6c67"
+    },
+    "connectYard-copperSeparator": {
+      "byteIdentical": true,
+      "checksum": "f80412a1"
+    },
+    "orphanSave": {
+      "byteIdentical": true,
+      "checksum": "c63d5e4d"
+    }
+  },
+  "cells": [
+    {
+      "label": "390x844",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    },
+    {
+      "label": "1920x1080",
+      "width": 1920,
+      "height": 1080,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  ],
+  "results": {
+    "390x844": {
+      "four-yard": {
+        "preShot": "docs/evidence/registration100/390x844-four-yard-pre.png",
+        "armedShot": "docs/evidence/registration100/390x844-four-yard-armed.png",
+        "postShot": "docs/evidence/registration100/390x844-four-yard-post.png",
+        "face": 30,
+        "delta": 30
+      },
+      "connect-sorter": {
+        "preShot": "docs/evidence/registration100/390x844-connect-sorter-pre.png",
+        "armedShot": "docs/evidence/registration100/390x844-connect-sorter-armed.png",
+        "postShot": "docs/evidence/registration100/390x844-connect-sorter-post.png",
+        "face": 24,
+        "delta": 24
+      },
+      "connect-copperSeparator": {
+        "preShot": "docs/evidence/registration100/390x844-connect-copperSeparator-pre.png",
+        "armedShot": "docs/evidence/registration100/390x844-connect-copperSeparator-armed.png",
+        "postShot": "docs/evidence/registration100/390x844-connect-copperSeparator-post.png",
+        "face": 34,
+        "delta": 34
+      },
+      "orphan-save": {
+        "firstShot": "docs/evidence/registration100/390x844-orphan-save-loaded.png",
+        "reloadShot": "docs/evidence/registration100/390x844-orphan-save-reloaded.png",
+        "beltRefund": 2,
+        "cargo": 4,
+        "storeUnits": 290
+      },
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    "1920x1080": {
+      "four-yard": {
+        "preShot": "docs/evidence/registration100/1920x1080-four-yard-pre.png",
+        "armedShot": "docs/evidence/registration100/1920x1080-four-yard-armed.png",
+        "postShot": "docs/evidence/registration100/1920x1080-four-yard-post.png",
+        "face": 30,
+        "delta": 30
+      },
+      "connect-sorter": {
+        "preShot": "docs/evidence/registration100/1920x1080-connect-sorter-pre.png",
+        "armedShot": "docs/evidence/registration100/1920x1080-connect-sorter-armed.png",
+        "postShot": "docs/evidence/registration100/1920x1080-connect-sorter-post.png",
+        "face": 24,
+        "delta": 24
+      },
+      "connect-copperSeparator": {
+        "preShot": "docs/evidence/registration100/1920x1080-connect-copperSeparator-pre.png",
+        "armedShot": "docs/evidence/registration100/1920x1080-connect-copperSeparator-armed.png",
+        "postShot": "docs/evidence/registration100/1920x1080-connect-copperSeparator-post.png",
+        "face": 34,
+        "delta": 34
+      },
+      "orphan-save": {
+        "firstShot": "docs/evidence/registration100/1920x1080-orphan-save-loaded.png",
+        "reloadShot": "docs/evidence/registration100/1920x1080-orphan-save-reloaded.png",
+        "beltRefund": 2,
+        "cargo": 4,
+        "storeUnits": 290
+      },
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  },
+  "checks": [
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "checksum-valid routes:[{}] refuses gracefully, never throws",
+      "ok": true,
+      "detail": {
+        "threw": null,
+        "result": {
+          "ok": false,
+          "reason": "invalid",
+          "detail": "routeCapacity:undefined"
+        }
+      }
+    },
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "repair leaves malformed route entries untouched, never throws",
+      "ok": true,
+      "detail": {
+        "threw": null
+      }
+    },
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "dropped orphan with non-array items compensates without throwing",
+      "ok": true,
+      "detail": {
+        "threw": null,
+        "refund": 2,
+        "expected": 2
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "dismantle face == model refund (all 4 belts)",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "expected": 30,
+        "buildRefund": 18,
+        "beltSum": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "face exceeds the pre-fix delta by the orphaned belt refund",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "preFixDelta": 27
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "Transport Links row lists all four extents",
+      "ok": true,
+      "detail": {
+        "got": "3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap",
+        "expected": "3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "no noOutputLink advisory (outputs exist)",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "pre-click save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "pre-click mirror: 4 routes, mirror names last, 2 inRoutes",
+      "ok": true,
+      "detail": {
+        "routes": 4,
+        "outRoute": 4,
+        "inRoutes": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "pre-click store is the inert floor balance",
+      "ok": true,
+      "detail": {
+        "storeUnits": 10,
+        "store": {
+          "scrap": 10
+        }
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "route 4 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "total": "Total back to the store: +30 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "card belt line names all 4 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "expected": "Belt links return +12 across 4 links"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +30 units"
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "total": "Total back to the store: +30 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "post-click save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "engine store delta == face",
+      "ok": true,
+      "detail": {
+        "delta": 30,
+        "face": 30
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "revision advanced exactly once",
+      "ok": true,
+      "detail": {
+        "before": 5,
+        "after": 6
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "conservation: only the priced scrap refund is created",
+      "ok": true,
+      "detail": {
+        "unitDelta": 30,
+        "scrapDelta": 30,
+        "createdScrap": 30
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "390x844",
+      "name": "HUD store chip mirrors the refunded balance",
+      "ok": true,
+      "detail": {
+        "hud": {
+          "store": "40/900",
+          "scrap": "40"
+        },
+        "expectedStore": "40/900"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "tap opens the machine panel",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "panel title",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "Connect affordance present",
+      "ok": true,
+      "detail": [
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 0 · 10 units",
+        "Dismantle · +20 units"
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "pre-Connect face sums build + input belt only",
+      "ok": true,
+      "detail": {
+        "face": 20,
+        "expected": 20
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "planner offers exactly the two output plans",
+      "ok": true,
+      "detail": [
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "ferrous",
+          "tiles": 2
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "nonferrous",
+          "tiles": 2
+        }
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "Connect clicked",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "post-Connect save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "both output routes registered (derived from the table)",
+      "ok": true,
+      "detail": {
+        "outputs": [
+          2,
+          3
+        ],
+        "routes": 3
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "legacy mirror names the newest output only",
+      "ok": true,
+      "detail": {
+        "outRoute": 3,
+        "last": 3
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "Connect paid exactly the printed belt price",
+      "ok": true,
+      "detail": {
+        "storeUnits": 2,
+        "expected": 2
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "repainted dismantle face == build + all three belt refunds",
+      "ok": true,
+      "detail": {
+        "face": 24,
+        "expected": 24
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "Transport Links row lists all three extents",
+      "ok": true,
+      "detail": {
+        "got": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap",
+        "expected": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "no noOutputLink advisory with two live outputs",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "no busy-link note on quiet belts",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +24 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "card belt line names all 3 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "expected": "Belt links return +6 across 3 links"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +24 units"
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +24 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "post-dismantle save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "engine store delta == face (both belts refunded)",
+      "ok": true,
+      "detail": {
+        "delta": 24,
+        "face": 24
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "390x844",
+      "name": "per-resource conservation (build refunds + belt scrap only)",
+      "ok": true,
+      "detail": {
+        "scrap": {
+          "diff": 24,
+          "created": 24
+        }
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "tap opens the machine panel",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "panel title",
+      "ok": true,
+      "detail": "Copper separator"
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "Connect affordance present",
+      "ok": true,
+      "detail": [
+        "Connect",
+        "Upgrade · 45 credits",
+        "Move · cell 0 · 16 units",
+        "Dismantle · +30 units"
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "pre-Connect face sums build + input belt only",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "expected": 30
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "planner offers exactly the two output plans",
+      "ok": true,
+      "detail": [
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "copper",
+          "tiles": 2
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "residue",
+          "tiles": 2
+        }
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "Connect clicked",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "post-Connect save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "both output routes registered (derived from the table)",
+      "ok": true,
+      "detail": {
+        "outputs": [
+          2,
+          3
+        ],
+        "routes": 3
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "legacy mirror names the newest output only",
+      "ok": true,
+      "detail": {
+        "outRoute": 3,
+        "last": 3
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "Connect paid exactly the printed belt price",
+      "ok": true,
+      "detail": {
+        "storeUnits": 2,
+        "expected": 2
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "repainted dismantle face == build + all three belt refunds",
+      "ok": true,
+      "detail": {
+        "face": 34,
+        "expected": 34
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "Transport Links row lists all three extents",
+      "ok": true,
+      "detail": {
+        "got": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap",
+        "expected": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "no noOutputLink advisory with two live outputs",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 nonferrous. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "no busy-link note on quiet belts",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 nonferrous. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 4,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 4,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 4,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +34 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "card belt line names all 3 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "expected": "Belt links return +6 across 3 links"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +34 units"
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +34 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "post-dismantle save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "engine store delta == face (both belts refunded)",
+      "ok": true,
+      "detail": {
+        "delta": 34,
+        "face": 34
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "390x844",
+      "name": "per-resource conservation (build refunds + belt scrap only)",
+      "ok": true,
+      "detail": {
+        "scrap": {
+          "diff": 29,
+          "created": 29
+        },
+        "ferrous": {
+          "diff": 5,
+          "created": 5
+        }
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "damaged save fails validateSim un-repaired (the reset trigger)",
+      "ok": true,
+      "detail": "routeSource:2"
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "decodeSave repairs before validation",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "loaded frame mirror decodes (no invalid fallback)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "orphan belt dropped on load",
+      "ok": true,
+      "detail": {
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "no reset: tutorial, store and machine cursor survive",
+      "ok": true,
+      "detail": {
+        "tutorial": 9,
+        "storeUnits": 290,
+        "expected": 290,
+        "nextMachineId": 2
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "cargo conserved: copper relocated to the store",
+      "ok": true,
+      "detail": {
+        "copper": 4,
+        "expected": 4
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "belt refunded exactly once at dismantleRefundPct",
+      "ok": true,
+      "detail": {
+        "scrap": 271,
+        "expected": 271,
+        "beltRefund": 2,
+        "cargo": 4
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "validateSim null on the repaired live frame",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "HUD shows the repaired balance, not a fresh yard",
+      "ok": true,
+      "detail": {
+        "hud": {
+          "store": "290/900",
+          "scrap": "271"
+        },
+        "storeUnits": 290
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "app persisted the repaired frame (routes gone, cargo in store)",
+      "ok": true,
+      "detail": {
+        "routes": 0,
+        "storeUnits": 290
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "reload decodes",
+      "ok": true
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "390x844",
+      "name": "reload refunds nothing a second time (idempotent repair)",
+      "ok": true,
+      "detail": {
+        "before": 290,
+        "after": 290,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "dismantle face == model refund (all 4 belts)",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "expected": 30,
+        "buildRefund": 18,
+        "beltSum": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "face exceeds the pre-fix delta by the orphaned belt refund",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "preFixDelta": 27
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "Transport Links row lists all four extents",
+      "ok": true,
+      "detail": {
+        "got": "3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap",
+        "expected": "3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap, 3 tiles · 3 scrap"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "no noOutputLink advisory (outputs exist)",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "pre-click save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "pre-click mirror: 4 routes, mirror names last, 2 inRoutes",
+      "ok": true,
+      "detail": {
+        "routes": 4,
+        "outRoute": 4,
+        "inRoutes": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "pre-click store is the inert floor balance",
+      "ok": true,
+      "detail": {
+        "storeUnits": 10,
+        "store": {
+          "scrap": 10
+        }
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "route 4 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 8,
+        "near": 9,
+        "total": 12
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "total": "Total back to the store: +30 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "card belt line names all 4 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "expected": "Belt links return +12 across 4 links"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +30 units"
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +12 across 4 links"
+        ],
+        "total": "Total back to the store: +30 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "post-click save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "engine store delta == face",
+      "ok": true,
+      "detail": {
+        "delta": 30,
+        "face": 30
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "revision advanced exactly once",
+      "ok": true,
+      "detail": {
+        "before": 5,
+        "after": 6
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "conservation: only the priced scrap refund is created",
+      "ok": true,
+      "detail": {
+        "unitDelta": 30,
+        "scrapDelta": 30,
+        "createdScrap": 30
+      }
+    },
+    {
+      "scenario": "four-yard",
+      "cell": "1920x1080",
+      "name": "HUD store chip mirrors the refunded balance",
+      "ok": true,
+      "detail": {
+        "hud": {
+          "store": "40/900",
+          "scrap": "40"
+        },
+        "expectedStore": "40/900"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "tap opens the machine panel",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "panel title",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "Connect affordance present",
+      "ok": true,
+      "detail": [
+        "Connect",
+        "Upgrade · 30 credits",
+        "Move · cell 0 · 10 units",
+        "Dismantle · +20 units"
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "pre-Connect face sums build + input belt only",
+      "ok": true,
+      "detail": {
+        "face": 20,
+        "expected": 20
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "planner offers exactly the two output plans",
+      "ok": true,
+      "detail": [
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "ferrous",
+          "tiles": 2
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "nonferrous",
+          "tiles": 2
+        }
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "Connect clicked",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "post-Connect save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "both output routes registered (derived from the table)",
+      "ok": true,
+      "detail": {
+        "outputs": [
+          2,
+          3
+        ],
+        "routes": 3
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "legacy mirror names the newest output only",
+      "ok": true,
+      "detail": {
+        "outRoute": 3,
+        "last": 3
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "Connect paid exactly the printed belt price",
+      "ok": true,
+      "detail": {
+        "storeUnits": 2,
+        "expected": 2
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "repainted dismantle face == build + all three belt refunds",
+      "ok": true,
+      "detail": {
+        "face": 24,
+        "expected": 24
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "Transport Links row lists all three extents",
+      "ok": true,
+      "detail": {
+        "got": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap",
+        "expected": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "no noOutputLink advisory with two live outputs",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "no busy-link note on quiet belts",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 scrap. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 2,
+        "near": 2,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +24 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "card belt line names all 3 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "expected": "Belt links return +6 across 3 links"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +24 units"
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +18",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +24 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "post-dismantle save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "engine store delta == face (both belts refunded)",
+      "ok": true,
+      "detail": {
+        "delta": 24,
+        "face": 24
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "connect-sorter",
+      "cell": "1920x1080",
+      "name": "per-resource conservation (build refunds + belt scrap only)",
+      "ok": true,
+      "detail": {
+        "scrap": {
+          "diff": 24,
+          "created": 24
+        }
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "tap opens the machine panel",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "panel title",
+      "ok": true,
+      "detail": "Copper separator"
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "Connect affordance present",
+      "ok": true,
+      "detail": [
+        "Connect",
+        "Upgrade · 45 credits",
+        "Move · cell 0 · 16 units",
+        "Dismantle · +30 units"
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "pre-Connect face sums build + input belt only",
+      "ok": true,
+      "detail": {
+        "face": 30,
+        "expected": 30
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "planner offers exactly the two output plans",
+      "ok": true,
+      "detail": [
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "copper",
+          "tiles": 2
+        },
+        {
+          "from": 1,
+          "to": 0,
+          "filter": "residue",
+          "tiles": 2
+        }
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "Connect clicked",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "post-Connect save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "both output routes registered (derived from the table)",
+      "ok": true,
+      "detail": {
+        "outputs": [
+          2,
+          3
+        ],
+        "routes": 3
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "legacy mirror names the newest output only",
+      "ok": true,
+      "detail": {
+        "outRoute": 3,
+        "last": 3
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "Connect paid exactly the printed belt price",
+      "ok": true,
+      "detail": {
+        "storeUnits": 2,
+        "expected": 2
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "repainted dismantle face == build + all three belt refunds",
+      "ok": true,
+      "detail": {
+        "face": 34,
+        "expected": 34
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "Transport Links row lists all three extents",
+      "ok": true,
+      "detail": {
+        "got": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap",
+        "expected": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "no noOutputLink advisory with two live outputs",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 nonferrous. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "no busy-link note on quiet belts",
+      "ok": true,
+      "detail": [
+        "Missing input: the buffer is short 2 nonferrous. to start the next batch. A link from the dock store or a producer refills it."
+      ]
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "route 1 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 3,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "route 2 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 3,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "route 3 painted (ink hits)",
+      "ok": true,
+      "detail": {
+        "hits": 1,
+        "near": 3,
+        "total": 6
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "dismantle face button opens the check card",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "check card fits and is unarmed",
+      "ok": true,
+      "detail": {
+        "armed": "false",
+        "fits": "true",
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +34 units",
+        "confirm": "Dismantle machine"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "card belt line names all 3 registered links",
+      "ok": true,
+      "detail": {
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "expected": "Belt links return +6 across 3 links"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "card total == panel face",
+      "ok": true,
+      "detail": "Total back to the store: +34 units"
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "first confirm arms",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "card armed after first confirm",
+      "ok": true,
+      "detail": {
+        "armed": "true",
+        "fits": "true",
+        "impact": [
+          "Build price returns +28",
+          "Belt links return +6 across 3 links"
+        ],
+        "total": "Total back to the store: +34 units",
+        "confirm": "Tap again to dismantle"
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "second confirm commits",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "post-dismantle save decodes",
+      "ok": true
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "engine store delta == face (both belts refunded)",
+      "ok": true,
+      "detail": {
+        "delta": 34,
+        "face": 34
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "machine and every route dropped",
+      "ok": true,
+      "detail": {
+        "machines": 0,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "validateSim null after dismantle",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "connect-copperSeparator",
+      "cell": "1920x1080",
+      "name": "per-resource conservation (build refunds + belt scrap only)",
+      "ok": true,
+      "detail": {
+        "scrap": {
+          "diff": 29,
+          "created": 29
+        },
+        "ferrous": {
+          "diff": 5,
+          "created": 5
+        }
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "damaged save fails validateSim un-repaired (the reset trigger)",
+      "ok": true,
+      "detail": "routeSource:2"
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "decodeSave repairs before validation",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "loaded frame mirror decodes (no invalid fallback)",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "orphan belt dropped on load",
+      "ok": true,
+      "detail": {
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "no reset: tutorial, store and machine cursor survive",
+      "ok": true,
+      "detail": {
+        "tutorial": 9,
+        "storeUnits": 290,
+        "expected": 290,
+        "nextMachineId": 2
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "cargo conserved: copper relocated to the store",
+      "ok": true,
+      "detail": {
+        "copper": 4,
+        "expected": 4
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "belt refunded exactly once at dismantleRefundPct",
+      "ok": true,
+      "detail": {
+        "scrap": 271,
+        "expected": 271,
+        "beltRefund": 2,
+        "cargo": 4
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "validateSim null on the repaired live frame",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "HUD shows the repaired balance, not a fresh yard",
+      "ok": true,
+      "detail": {
+        "hud": {
+          "store": "290/900",
+          "scrap": "271"
+        },
+        "storeUnits": 290
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "app persisted the repaired frame (routes gone, cargo in store)",
+      "ok": true,
+      "detail": {
+        "routes": 0,
+        "storeUnits": 290
+      }
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "reload decodes",
+      "ok": true
+    },
+    {
+      "scenario": "orphan-save",
+      "cell": "1920x1080",
+      "name": "reload refunds nothing a second time (idempotent repair)",
+      "ok": true,
+      "detail": {
+        "before": 290,
+        "after": 290,
+        "routes": 0
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "summary": {
+    "total": 201,
+    "passed": 201,
+    "failed": 0
+  }
+}

@@ -54,7 +54,9 @@ export const COPY = {
     powerEnd: "speed for every running machine.",
     noOutputLink:
       "No output link: finished batches wait in the tray. Connect offers the missing belt below.",
-    busyLink: "Transport limit: the output link is",
+    // Issue #100: a multi-output machine has several output belts; the note reports the
+    // busiest one, so the sentence stays grammatical for one link or many.
+    busyLink: "Transport limit: an output link is",
     busyLinkEnd: "busy, so belt capacity caps throughput.",
     noLinks:
       "No links yet: this machine is isolated. Connect lays belt from the dock store or a producer.",

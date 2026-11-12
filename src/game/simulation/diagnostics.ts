@@ -8,6 +8,7 @@
 import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../content/defs";
 import { plural, resourceWord, t } from "../content/strings";
 import { routeById } from "./engine";
+import { outputRouteIds } from "./types";
 import type { MachineState, RouteState, SimState } from "./types";
 
 export interface MachineDiagnosis {
@@ -103,7 +104,9 @@ export function rateReading(m: MachineState): RateReading {
 
 function busiestLinkPercent(s: SimState, m: MachineState): number | null {
   let worst: number | null = null;
-  const ids = m.outRoute === null ? m.inRoutes : [...m.inRoutes, m.outRoute];
+  // Issue #100: measure every registered output link (derived from the route table),
+  // not just the singular mirror, so a multi-output machine's busiest belt is reported.
+  const ids = [...m.inRoutes, ...outputRouteIds(s, m.id)];
   for (const id of ids) {
     const route = routeById(s, id);
     if (!route) continue;
@@ -145,7 +148,7 @@ function advise(s: SimState, m: MachineState, measured: Measures): string {
     }
     return t("advice.needsNone", { inputs: inputText });
   }
-  if (m.outRoute === null && m.trayUnits > 0) {
+  if (outputRouteIds(s, m.id).length === 0 && m.trayUnits > 0) {
     return t("advice.outputWaiting", {
       count: m.trayUnits,
       units: plural(m.trayUnits, t("unit.unit")),
