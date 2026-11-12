@@ -20,6 +20,7 @@ import {
   checksum,
   decodeSave,
   encodeSave,
+  repairRegistration,
   validateSim,
   DEFAULT_SETTINGS,
 } from "../../src/game/persistence/save";
@@ -476,5 +477,86 @@ describe("REG-100 gate 7: the out-of-scope capacity pre-check quirk is unchanged
     // ...yet the returned materials include the batch, overshooting capacity by exactly the batch.
     expect(state.storeUnits - storeBefore).toBe(preCheckRefund + 2);
     expect(state.storeUnits).toBe(TUNING.dockCapacity + 2);
+  });
+});
+
+describe("REG-100 REWORK: repairRegistration never throws on malformed routes", () => {
+  /**
+   * A checksum-VALID envelope whose route table is replaced with adversarial entries.
+   * Built with the game's own encoder + FNV-1a checksum so the checksum gate passes and
+   * the malformed routes reach `repairRegistration` (the QA REWORK repro, comment
+   * 6817277787): pre-guard, `route.from.kind` on `{}` threw a TypeError inside
+   * `decodeSave`, masking `validateSim`'s graceful refusal.
+   */
+  function malformedEnvelope(routes: unknown[]): string {
+    const state = createInitialState();
+    state.tutorial = 9;
+    const envelope = JSON.parse(encodeSave(state, 1_700_000_000_000, DEFAULT_SETTINGS));
+    envelope.payload.sim.routes = routes;
+    envelope.checksum = checksum(JSON.stringify(envelope.payload));
+    return JSON.stringify(envelope);
+  }
+
+  it("a checksum-valid routes:[{}] import refuses gracefully (invalid/routeCapacity:undefined), never throws", () => {
+    const text = malformedEnvelope([{}]);
+    // The never-throw contract: decodeSave must RETURN a refusal, not throw.
+    expect(() => decodeSave(text)).not.toThrow();
+    expect(decodeSave(text)).toEqual({
+      ok: false,
+      reason: "invalid",
+      detail: "routeCapacity:undefined",
+    });
+    // Repair leaves the malformed route present, untouched, for validateSim to refuse.
+    const state = createInitialState();
+    state.routes = [{}] as unknown as RouteState[];
+    expect(() => repairRegistration(state)).not.toThrow();
+    expect(state.routes).toEqual([{}]);
+    expect(validateSim(state)).toBe("routeCapacity:undefined");
+  });
+
+  it("repairRegistration leaves null / missing-endpoint route entries untouched, without throwing or compensating", () => {
+    const malformed: unknown[] = [
+      {},
+      null,
+      { id: 9, capacity: 4, inFlight: 0, items: [], from: null, to: { kind: "store", id: 0 } },
+      { id: 10, capacity: 4, inFlight: 0, items: [], from: { kind: "store", id: 0 }, to: "yard" },
+    ];
+    const state = createInitialState();
+    state.tutorial = 9;
+    state.routes = malformed as RouteState[];
+    const before = JSON.stringify(state);
+    expect(() => repairRegistration(state)).not.toThrow();
+    // Same entries, same order, no drop, no refund, no mutation of any kind.
+    expect(state.routes).toEqual(malformed);
+    expect(JSON.stringify(state)).toBe(before);
+  });
+
+  it("a dropped orphan route with a truthy NON-ARRAY items field is compensated without throwing", () => {
+    const state = createInitialState();
+    state.tutorial = 9;
+    const orphan = {
+      id: 7,
+      from: { kind: "machine", id: 99 }, // machine 99 does not exist -> sourceGone
+      to: { kind: "store", id: 0 },
+      filter: null,
+      capacity: 4,
+      latency: 1,
+      run: [1, 2],
+      items: { resource: "scrap", qty: 3 }, // adversarial: truthy, but not an array
+      inFlight: 0,
+      busyTicks: 0,
+      ageTicks: 0,
+    };
+    state.routes = [orphan as unknown as RouteState];
+    const storeBefore = state.storeUnits;
+    expect(() => repairRegistration(state)).not.toThrow();
+    // The orphan is still dropped; malformed items contribute nothing; the belt refund
+    // pays exactly the priced run at dismantleRefundPct (compensation math unchanged).
+    expect(state.routes.length).toBe(0);
+    const refund = Math.round(
+      (TUNING.beltCostPerTile * 2 * TUNING.dismantleRefundPct) / 100,
+    );
+    expect(state.storeUnits - storeBefore).toBe(refund);
+    expect(validateSim(state)).toBeNull();
   });
 });

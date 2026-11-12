@@ -154,6 +154,20 @@ export function repairRegistration(sim: SimState): SimState {
   const kept: RouteState[] = [];
   const dropped = new Set<number>();
   for (const route of sim.routes) {
+    // Structurally malformed entries (null, non-object, missing/non-object endpoints)
+    // are left UNTOUCHED for `validateSim` to refuse — repair never throws on
+    // adversarial input and never masks the real decode failure (docstring above).
+    if (
+      !route ||
+      typeof route !== "object" ||
+      !route.from ||
+      typeof route.from !== "object" ||
+      !route.to ||
+      typeof route.to !== "object"
+    ) {
+      kept.push(route);
+      continue;
+    }
     const sourceGone = route.from.kind === "machine" && !machineIds.has(route.from.id);
     const targetGone = route.to.kind === "machine" && !machineIds.has(route.to.id);
     if (!sourceGone && !targetGone) {
@@ -161,7 +175,7 @@ export function repairRegistration(sim: SimState): SimState {
       continue;
     }
     dropped.add(route.id);
-    for (const item of route.items ?? []) {
+    for (const item of Array.isArray(route.items) ? route.items : []) {
       if (!item || !Number.isSafeInteger(item.qty) || item.qty < 0) continue;
       const room = sim.storeCapacity - sim.storeUnits;
       const moved = Math.min(item.qty, Math.max(0, room));
