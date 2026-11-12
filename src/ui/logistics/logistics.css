@@ -1,0 +1,312 @@
+/*
+ * UI-RESET-59 (G3): the logistics surfaces' own sheet. `src/ui/styles.css` is read-only
+ * for this issue, so every rule is namespaced under `.logistics-*` and borrows the shipped
+ * palette tokens (--well, --steel, --steel-light, --paper, --body-light, --cyan, --furnace,
+ * --rust) instead of redefining them. These surfaces embed inside the inspector's existing
+ * Transport and Bottleneck sections; nothing here restyles the pinned base contracts
+ * (`.inspector-section`, `.inspector-section__title`, `.panel__actions`, `.inspector-context__btn`).
+ * Buttons and selects keep the 44 px touch floor the rest of the mobile shell uses.
+ */
+
+.logistics-legend,
+.logistics-overview,
+.logistics-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(111, 147, 173, 0.25);
+}
+
+.logistics-subtitle {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+
+.logistics-note {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+.logistics-note--invalid {
+  color: var(--furnace);
+}
+
+.logistics-note--unsupported {
+  color: var(--steel-light);
+  font-style: italic;
+}
+
+/* Shared swatch: a small colour chip keyed to the canvas rail / material colour. */
+.logistics-swatch {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(11, 18, 32, 0.6);
+}
+
+.logistics-swatch--rail {
+  height: 6px;
+  border-radius: 2px;
+}
+
+.logistics-legend__statuses,
+.logistics-legend__swatches,
+.logistics-routes,
+.logistics-bottlenecks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logistics-legend__status,
+.logistics-legend__material {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--paper);
+}
+
+.logistics-legend__label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--steel-light);
+}
+
+.logistics-legend__hint {
+  font-size: 0.72rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+.logistics-legend__materials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Buttons: scoped, never `.icon-btn`, so the pinned three-face action row is untouched. */
+.logistics-btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.logistics-btn[aria-pressed="true"] {
+  border-color: rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.14);
+  color: var(--cyan);
+}
+
+.logistics-btn--primary {
+  border-color: rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.18);
+  color: var(--cyan);
+}
+
+.logistics-btn--danger {
+  border-color: rgba(201, 113, 58, 0.6);
+  color: var(--furnace);
+}
+
+.logistics-toggle {
+  align-self: flex-start;
+}
+
+/* Overview power gauge. */
+.logistics-overview__power {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logistics-overview__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.logistics-overview__value {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.logistics-overview__stats {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logistics-gauge {
+  height: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(111, 147, 173, 0.3);
+  background: var(--well);
+  overflow: hidden;
+}
+
+.logistics-gauge__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--cyan), var(--steel-light));
+  transition: width 120ms linear;
+}
+
+.logistics-gauge__fill--limited {
+  background: linear-gradient(90deg, var(--rust), var(--furnace));
+}
+
+.logistics-overview__bottlenecks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logistics-bottleneck {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.25);
+  background: var(--well);
+}
+
+.logistics-bottleneck__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.logistics-bottleneck__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.logistics-bottleneck__detail {
+  font-size: 0.74rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+/* Route controls. */
+.logistics-controls__group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logistics-route {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.25);
+  background: var(--well);
+  font-size: 0.78rem;
+  color: var(--paper);
+}
+
+.logistics-route__path {
+  font-weight: 600;
+}
+
+.logistics-route__meta {
+  color: var(--body-light);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.logistics-route__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.logistics-route__refund {
+  font-size: 0.74rem;
+  color: var(--steel-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.logistics-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logistics-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.74rem;
+  color: var(--steel-light);
+  min-width: 0;
+}
+
+.logistics-select {
+  min-height: 44px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  max-width: 100%;
+}
+
+.logistics-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 216, 232, 0.4);
+  background: rgba(95, 216, 232, 0.08);
+}
+
+.logistics-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logistics-gauge__fill {
+    transition: none;
+  }
+}

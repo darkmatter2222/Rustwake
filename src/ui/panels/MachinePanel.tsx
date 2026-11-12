@@ -38,7 +38,11 @@ import { COPY } from "../inspector/copy";
 import { ContextPanes } from "../inspector/ContextPanes";
 import { constraintNotes, primaryActionNote, recipeFlow } from "../inspector/model";
 import { UpgradeCompare } from "../upgrade/UpgradeCompare";
+import { LogisticsLegend } from "../logistics/LogisticsLegend";
+import { LogisticsOverview } from "../logistics/LogisticsOverview";
+import { RouteControls } from "../logistics/RouteControls";
 import "../inspector/inspector.css";
+import "../logistics/logistics.css";
 
 /**
  * UI-RESET-54 (G2 wave 3): the machine inspector. The old two-page text dump becomes
@@ -247,6 +251,10 @@ export function MachinePanel(props: {
               {note}
             </p>
           ))}
+          {/* UI-RESET-59 (G3): the yard production/power overview and the bottleneck list,
+              embedded in this section (no new landmark). Each bottleneck reveals a belt
+              touching the affected machine on the canvas through the shared view bridge. */}
+          <LogisticsOverview state={props.state} />
         </section>
 
         <section className="inspector-section">
@@ -269,6 +277,16 @@ export function MachinePanel(props: {
           ) : (
             <p className="inspector-note">{COPY.context.noLinks}</p>
           )}
+          {/* UI-RESET-59 (G3): the route legend + belt-layer visibility toggle, and the
+              connect/disconnect/filter controls with cost/validity preview and cancel.
+              Embedded here so the seven-section, three-face and three-tab contracts hold;
+              every control dispatches through props.dispatch (the real command path). */}
+          <LogisticsLegend state={props.state} />
+          {/* UI-RESET-59: keyed by machine id (like UpgradeCompare below) so the custom-link
+              form's from/to/filter reset to the inspected machine instead of drifting from
+              the first machine opened. Without the key, useState(machine.id) keeps the stale
+              source after a selection swap and the preview prices the wrong endpoint pair. */}
+          <RouteControls key={machine.id} state={props.state} machine={machine} dispatch={props.dispatch} />
         </section>
 
         <section className="inspector-section">

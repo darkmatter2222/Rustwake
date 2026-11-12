@@ -1,6 +1,11 @@
 import { TUNING } from "../content/defs";
 import { DOCK_TILE, YARD_COLS, YARD_ROWS } from "../simulation/commands";
 import { beltExtentLine } from "../../ui/text";
+// UI-RESET-59 (G3): the logistics view bridge (plain, React-free) and the shared route
+// colours/status. The renderer reads the bridge synchronously; the inspector writes it.
+import { getLogisticsView } from "../../ui/logistics/view";
+import { ROUTE_STATUS_COLORS, materialColor } from "../../ui/logistics/material";
+import { routeStatus } from "../../ui/logistics/model";
 import type { DroneState, Endpoint, MachineState, SimState } from "../simulation/types";
 import {
   APRON_EDGE,
@@ -287,7 +292,7 @@ export function drawScene(
   drawFloorKit(ctx, camera, view, s);
   drawForeground(ctx, camera, view, s);
   if (options.buildMode) drawGrid(ctx, camera, view);
-  drawRoutes(ctx, state, camera, view, phase, options.selected);
+  drawRoutes(ctx, state, camera, view, phase, options.selected, reducedMotion);
   drawWreck(ctx, state, camera, view, options.selected === -1);
   drawDock(ctx, state, camera, view, options.selected === -2);
   const sheen: [number, number, number, number][] = [];
@@ -582,14 +587,30 @@ function drawRoutes(
   camera: Camera,
   view: ViewState,
   phase: number,
-  selected: number | null
+  selected: number | null,
+  reducedMotion: boolean
 ): void {
+  // UI-RESET-59 (G3): the belt layer is presentation only. Hiding it (the inspector toggle)
+  // skips every route paint without removing a route or touching the simulation.
+  const logistics = getLogisticsView();
+  if (!logistics.routesVisible) return;
   const s = camera.scale;
-  ctx.strokeStyle = "rgba(95,216,232,0.5)";
+  const focus = logistics.focusedRouteId;
+  // A selection OR a bottleneck focus reveals related routes and de-emphasises the rest.
+  const hasFocus = selected !== null || focus !== null;
   ctx.lineWidth = 2;
   // The same small glyph size the level digit uses; a fractional px size is valid CSS.
   ctx.font = `${6 * s}px system-ui, sans-serif`;
   ctx.textAlign = "center";
+  // Direction reads as a dash flow toward the destination. The recording contexts the draw
+  // tests use have no `setLineDash`, so this is capability-guarded: where it is absent the
+  // rail stays the solid pinned stroke and the rest frame adds nothing. The arrowhead below
+  // marks the receiving end on a revealed route even when motion is reduced.
+  const canDash = typeof ctx.setLineDash === "function";
+  if (canDash) {
+    ctx.setLineDash([4 * s, 3 * s]);
+    ctx.lineDashOffset = reducedMotion ? 0 : -((state.tick + phase) % 7) * s;
+  }
   for (const route of state.routes) {
     // BELT-001 g4: the drawn extent *is* the priced extent. `run` is the tile list the
     // connect tap charged `beltCost` from, so this orthogonal polyline is that number's
@@ -602,6 +623,11 @@ function drawRoutes(
         [endpointOf(state, route.from), endpointOf(state, route.to)];
     const path = pts.map((p) => worldToScreen(camera, view, p.x, p.y));
     const legs = path.length - 1;
+    const related = selected === route.from.id || selected === route.to.id || focus === route.id;
+    // Status modulates only the stroke STYLE (working keeps the exact pinned cyan), so the
+    // rest-frame paint budget is unchanged. An unrelated route dims while a focus is active.
+    const status = routeStatus(state, route);
+    ctx.strokeStyle = hasFocus && !related ? dimRail(ROUTE_STATUS_COLORS[status]) : ROUTE_STATUS_COLORS[status];
     ctx.beginPath();
     path.forEach((p, i) => (i === 0 ? ctx.moveTo : ctx.lineTo).call(ctx, snap(p.x), snap(p.y)));
     ctx.stroke();
@@ -612,6 +638,9 @@ function drawRoutes(
       ctx.fillStyle = PALETTE.bodyLight;
       ctx.fillText(beltExtentLine(route), at.x, at.y - 4 * s);
     }
+    // G3: the material arrowhead, painted only on a revealed route (selection-related or the
+    // focused bottleneck belt). One `fill`, snapped, so it never enters the rest-frame census.
+    if (related) drawArrowhead(ctx, path, legs, materialColor(route.filter), s);
     for (const item of route.items) {
       // 3x3 amber token per in-transit item, snapped, scaled with the camera.
       // A9: the same sub-tick phase as the drone, over the 5-tick latency window. Only the
@@ -625,6 +654,53 @@ function drawRoutes(
       rectOf(ctx, at.x - 1.5 * s, at.y - 1.5 * s, 3 * s, 3 * s, "amber");
     }
   }
+  // Restore the solid line for every later stroke (wreck, dock, machines, selection ring).
+  if (canDash) {
+    ctx.setLineDash([]);
+    ctx.lineDashOffset = 0;
+  }
+}
+
+/**
+ * G3: lower a rail's alpha to de-emphasise an unrelated route while a focus is active. The
+ * pinned working cyan keeps its exact hue; only the trailing alpha is scaled, so a revealed
+ * route still strokes in the contracted style and an irrelevant one recedes.
+ */
+function dimRail(style: string): string {
+  const match = /rgba\(([^)]+),\s*([\d.]+)\)/.exec(style);
+  if (!match) return style;
+  return `rgba(${match[1]},${Math.round(Number(match[2]) * 0.35 * 100) / 100})`;
+}
+
+/**
+ * G3: a small material-coloured triangle pointing along the belt toward its destination,
+ * drawn just short of the receiving end. One `fill` (beginPath + moveTo + two lineTo), every
+ * coordinate snapped to the half-CSS-px grid. Only called on a revealed route.
+ */
+function drawArrowhead(
+  ctx: CanvasRenderingContext2D,
+  path: { x: number; y: number }[],
+  legs: number,
+  color: string,
+  s: number
+): void {
+  const at = pathAt(path, legs, 0.82);
+  const ahead = pathAt(path, legs, 0.92);
+  let dx = ahead.x - at.x;
+  let dy = ahead.y - at.y;
+  const len = Math.hypot(dx, dy) || 1;
+  dx /= len;
+  dy /= len;
+  const size = 3 * s;
+  const px = -dy;
+  const py = dx;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(snap(at.x + dx * size), snap(at.y + dy * size));
+  ctx.lineTo(snap(at.x - dx * size + px * size), snap(at.y - dy * size + py * size));
+  ctx.lineTo(snap(at.x - dx * size - px * size), snap(at.y - dy * size - py * size));
+  ctx.closePath();
+  ctx.fill();
 }
 
 /**
