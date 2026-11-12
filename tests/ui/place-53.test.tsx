@@ -51,16 +51,6 @@ import { COPY } from "../../src/ui/place/copy";
 // React 18's act() needs the environment flag; jsdom does not set it itself.
 (globalThis as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
 
-function memoryStorage() {
-  const map = new Map<string, string>();
-  return {
-    getItem: (key: string) => (map.has(key) ? (map.get(key) as string) : null),
-    setItem: (key: string, value: string) => {
-      map.set(key, value);
-    },
-  };
-}
-
 const sumStore = (store: Record<string, number>): number =>
   Object.values(store).reduce((total, qty) => total + qty, 0);
 
@@ -96,18 +86,26 @@ function yardState(opts: YardOpts = {}): SimState {
   if (!opts.empty) {
     buildAt(opts.blueprint ?? "sorter", opts.tile ?? 8);
     if (opts.second !== undefined) buildAt("sorter", opts.second);
-    if (opts.connect) {
-      const id = state.machines[0].id;
-      for (const plan of planConnections(state, id)) {
-        send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
-      }
-    }
   }
   if (opts.fill) {
     state.store.scrap = state.storeCapacity;
     state.storeUnits = state.storeCapacity;
   } else {
     state.store.scrap = (state.store.scrap ?? 0) + (opts.scrap ?? 100);
+    state.storeUnits = sumStore(state.store);
+  }
+  if (opts.connect && !opts.empty) {
+    // Belt links are paid from the store, so the scrap headroom must land FIRST
+    // (a 0-scrap connect is refused `insufficient` and registers no route).
+    const id = state.machines[0].id;
+    for (const plan of planConnections(state, id)) {
+      send({ type: "route.connect", from: plan.from, to: plan.to, filter: plan.filter });
+    }
+    // Then drain the purse so the seed advance cannot load belt cargo: `dropRoute`
+    // rides in-transit items home on top of the belt refund, and the parity reads
+    // must see EMPTY belts. The orphaned output link (connectRoute overwrites
+    // outRoute) stays unrefunded — the delta proves the registered-set contract.
+    state.store.scrap = 0;
     state.storeUnits = sumStore(state.store);
   }
   advance(state, 1);
@@ -216,11 +214,18 @@ const stripCancel = (flow: string) =>
 const stripText = (flow: string, sel: string) =>
   strip(flow)?.querySelector(sel)?.textContent ?? "";
 
-/** Arm the explicit placement preview for a blueprint through the real catalog path. */
+/** Arm the explicit placement preview for a blueprint through the real catalog path.
+ * An unaffordable pick disables the footer Place (build-52); "Close catalog" still
+ * arms the ghost underneath, so the preview can name the shortfall — never a dead end. */
 function armPlacement(blueprint = "sorter"): void {
   tapDockExact("Build");
   act(() => card(blueprint)!.click());
-  act(() => catalogButton("Place")!.click());
+  const place = catalogButton("Place");
+  if (place && !place.disabled) {
+    act(() => place.click());
+  } else {
+    act(() => catalogButton("Close catalog")!.click());
+  }
 }
 
 /** Select a machine by tapping its tile, then open its inspector Move / Dismantle face. */
@@ -650,6 +655,7 @@ describe("UI-RESET-53 (d) repeated taps and navigation", () => {
     expect(store.getState().machines.length).toBe(countBefore); // never bought
     expect(scrapOf(store)).toBe(scrapBefore); // never charged
     expect(phases.size).toBeGreaterThanOrEqual(1); // always an explanation, never silent
+    expect([...phases].every((line) => line.trim().length > 0)).toBe(true);
     // Navigation stays reachable: the dock and the Store face are still there.
     expect(document.querySelector(".dock")).not.toBeNull();
     expect(dockFaces().length).toBeGreaterThanOrEqual(3);
