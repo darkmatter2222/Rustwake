@@ -8,7 +8,9 @@
 // Prerequisites (from the worktree root):
 //   pnpm build
 //   node node_modules/vite/bin/vite.js preview --port 4235 --strictPort
-//   node work/evidence/UI-RESET-54/capture-inspector-54.mjs
+//   node --import tsx work/evidence/UI-RESET-54/capture-inspector-54.mjs
+// (tsx lets the probe build the J/K seeds with the game's OWN command engine and
+// encodeSave checksum — read-only imports; no engine/sim file is modified.)
 //
 // NO VISION: every frame is audited by DOM/geometry/console assertions only.
 // FRAME AUDIT hard rule: shot() records probe() + audit() for EVERY capture;
@@ -59,6 +61,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
+// Read-only game imports (run under tsx): the J/K seeds are built with the real
+// command engine and persisted with the game's own encodeSave checksum, exactly
+// like a player's save. Nothing in src/ is modified by this probe.
+import { applyCommand, beltCost, refundOf } from "../../../src/game/simulation/commands.ts";
+import { createInitialState } from "../../../src/game/simulation/types.ts";
+import { advance } from "../../../src/game/simulation/engine.ts";
+import { BLUEPRINTS, TUNING } from "../../../src/game/content/defs.ts";
+import { encodeSave, DEFAULT_SETTINGS } from "../../../src/game/persistence/save.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, "../../..");
@@ -83,7 +93,109 @@ const MUTATIONS = [
   "fullOutput: M1 tray 12/12, routes 2/3/4 removed, outRoute=null, M2.inRoutes stripped",
   "busyLink: route 4 busyTicks=9000 ageTicks=10000 (90% busy)",
   "textScale: settings.textScale=2 (200% text)",
+  "J/K commandYard: seed built with the real engine (createInitialState + 6 salvage pulses + drone.repair + advance 262, then probe-only restock store.scrap=500/store.ferrous=20/storeCapacity=2000 (storeUnits recomputed from the store map) BEFORE the priced commands so every build/connect is affordable — connectRoute charges the belt from store scrap and the furnace buildCost is scrap 10 + ferrous 5 — then build sorter tile 8 + connect scrap input [+ furnace tile 9 and 3 output links for K] + advance 120 + tutorial=9/exportClaimed; every seed command asserts ok), then a determinism freeze: every route items=[]/inFlight=0, sorter tray=[]/trayUnits=0, inBuf={scrap:12}/inBufUnits=12 (full -> engine pullNeed=0, no arrivals), batch=[scrap x2]/progress=1/batchMilli=1e9 (frozen mid-batch, never completes during capture). With tray empty, buffer full and the batch frozen the engine cannot load cargo, so the store delta isolates the refund: printed === delta exactly. Persisted via the game's own encodeSave (checksum included), lastSeenMs=Date.now()",
 ];
+
+// The engine's dismantle arithmetic, computed from a RAW save sim (clickActionSync
+// baseline or the probe projection): build refund + tray + buffer + batch in full +
+// one belt refund per REGISTERED link ([outRoute, ...inRoutes]) — commands.ts
+// dismantleMachine. The all-touching variant is what the defective face printed.
+function batchUnitsOf(m) {
+  return m.batch ? m.batch.reduce((t, b) => t + b.qty, 0) : m.batchUnits ?? 0;
+}
+// The raw save sim (clickActionSync baseline) carries endpoint objects and run arrays;
+// the probe projection flattens them to ids and a run length. Accept both shapes.
+const endpointId = (e) => (e !== null && typeof e === "object" ? e.id : e);
+const runLength = (r) => (Array.isArray(r.run) ? r.run.length : r.run ?? 0);
+function registeredRefundOf(sim, machineId) {
+  const m = sim.machines.find((x) => x.id === machineId);
+  if (!m) return null;
+  const ids = [m.outRoute, ...(m.inRoutes ?? [])].filter((id) => id !== null);
+  const reg = sim.routes.filter((r) => ids.includes(r.id));
+  return (
+    BLUEPRINTS[m.blueprint].buildCost.reduce((t, it) => t + refundOf(it.qty), 0) +
+    m.trayUnits +
+    m.inBufUnits +
+    batchUnitsOf(m) +
+    reg.reduce((t, r) => t + refundOf(beltCost(runLength(r))), 0)
+  );
+}
+function allLinksRefundOf(sim, machineId) {
+  const m = sim.machines.find((x) => x.id === machineId);
+  if (!m) return null;
+  const links = sim.routes.filter((r) => endpointId(r.from) === machineId || endpointId(r.to) === machineId);
+  return (
+    BLUEPRINTS[m.blueprint].buildCost.reduce((t, it) => t + refundOf(it.qty), 0) +
+    m.trayUnits +
+    m.inBufUnits +
+    batchUnitsOf(m) +
+    links.reduce((t, r) => t + refundOf(beltCost(runLength(r))), 0)
+  );
+}
+// In-flight cargo on the REGISTERED routes: dropRoute returns it to the store on
+// top of the refund, so the engine store delta is printed + cargo. The J/K freeze
+// pins this at 0; C (live yard-mature) computes it from the same-task baseline.
+function registeredCargoOf(sim, machineId) {
+  const m = sim.machines.find((x) => x.id === machineId);
+  if (!m) return null;
+  const ids = [m.outRoute, ...(m.inRoutes ?? [])].filter((id) => id !== null);
+  return sim.routes
+    .filter((r) => ids.includes(r.id))
+    .reduce((t, r) => t + (r.items ? r.items.reduce((u, it) => u + it.qty, 0) : r.cargo ?? 0), 0);
+}
+
+// Command-built priced seed (the yard-mature routes are pre-price, so they cannot
+// demonstrate the belt term). Every build/connect is a real engine command; the
+// restock + freeze are probe-only mutations, documented in MUTATIONS, and the
+// result passes the game's own validateSim via encodeSave/decodeSave.
+function commandYardSeed({ furnace }) {
+  const s = createInitialState();
+  let n = 0;
+  const send = (body) => {
+    const res = applyCommand(s, { ...body, id: `ev54-${(n += 1)}` });
+    if (!res.ok) throw new Error(`commandYard seed ${body.type} rejected: ${res.reason}`);
+    return res;
+  };
+  for (let i = 0; i < 6; i += 1) {
+    send({ type: "manual.salvage" });
+    advance(s, TUNING.manualPulseTicks);
+  }
+  send({ type: "drone.repair" });
+  advance(s, 262);
+  // Probe-only restock BEFORE the priced builds/connects: connectRoute charges the
+  // belt from store scrap and the furnace buildCost is scrap 10 + ferrous 5, so every
+  // command must be affordable (documented in MUTATIONS). The determinism freeze
+  // below still pins all cargo at 0.
+  s.store.scrap = 500;
+  s.store.ferrous = 20;
+  s.storeCapacity = 2000;
+  s.storeUnits = Object.values(s.store).reduce((t, q) => t + q, 0);
+  send({ type: "machine.build", blueprint: "sorter", tile: 8 });
+  const sorter = s.machines[s.machines.length - 1];
+  send({ type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
+  if (furnace) {
+    send({ type: "machine.build", blueprint: "furnace", tile: 9 });
+    const fur = s.machines[s.machines.length - 1];
+    send({ type: "route.connect", from: sorter.id, to: 0, filter: "ferrous" });
+    send({ type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
+    send({ type: "route.connect", from: sorter.id, to: fur.id, filter: "ferrous" });
+  }
+  advance(s, 120);
+  s.tutorial = 9;
+  s.exportClaimed = true;
+  // Determinism freeze (probe-only): tray empty + buffer full + frozen batch means
+  // the engine cannot load cargo, so the store delta isolates the refund exactly.
+  for (const r of s.routes) { r.items = []; r.inFlight = 0; }
+  sorter.tray = [];
+  sorter.trayUnits = 0;
+  sorter.inBuf = { scrap: 12 };
+  sorter.inBufUnits = 12;
+  sorter.batch = [{ resource: "scrap", qty: 2 }];
+  sorter.progress = 1;
+  sorter.batchMilli = 1000000000;
+  sorter.status = "running";
+  return { text: encodeSave(s, Date.now(), { ...DEFAULT_SETTINGS }), sorterId: sorter.id };
+}
 
 // The engine's real upgrade cost: iterative ceil, NOT ceil(base*1.16^level).
 function engineUpgradeCost(base, level) {
@@ -284,9 +396,9 @@ async function probe(p) {
       } : null,
       sim: sim ? {
         tick: sim.tick, revision: sim.revision, credits: sim.credits, storeUnits: sim.storeUnits, powerRatio: sim.powerRatio,
-        machines: sim.machines.map((m) => ({ id: m.id, blueprint: m.blueprint, tile: m.tile, level: m.level, batchMilli: m.batchMilli, batchPower: m.batchPower, progress: m.progress, status: m.status, trayUnits: m.trayUnits, inBufUnits: m.inBufUnits, batchUnits: (m.batch ?? []).reduce((t, b) => t + b.qty, 0) })),
+        machines: sim.machines.map((m) => ({ id: m.id, blueprint: m.blueprint, tile: m.tile, level: m.level, batchMilli: m.batchMilli, batchPower: m.batchPower, progress: m.progress, status: m.status, trayUnits: m.trayUnits, inBufUnits: m.inBufUnits, batchUnits: (m.batch ?? []).reduce((t, b) => t + b.qty, 0), outRoute: m.outRoute ?? null, inRoutes: m.inRoutes ?? [] })),
         machineTiles: sim.machines.map((m) => m.tile),
-        routes: sim.routes.map((r) => ({ id: r.id, from: r.from.id, to: r.to.id, filter: r.filter, busyTicks: r.busyTicks ?? 0, ageTicks: r.ageTicks ?? 0, run: r.run ? r.run.length : null })),
+        routes: sim.routes.map((r) => ({ id: r.id, from: r.from.id, to: r.to.id, filter: r.filter, busyTicks: r.busyTicks ?? 0, ageTicks: r.ageTicks ?? 0, run: r.run ? r.run.length : null, cargo: (r.items ?? []).reduce((t, it) => t + it.qty, 0) })),
       } : null,
     };
   });
@@ -632,11 +744,113 @@ try {
     const dmM = dm.before.machines.find((m) => m.id === 1);
     // clickActionSync reads the raw save sim, where the batch is an ItemStack[] (not the projected batchUnits).
     const dmBatch = (dmM?.batch ?? []).reduce((t, b) => t + b.qty, 0);
-    check("C.dismantle.refund", dm.after.storeUnits - dm.before.storeUnits === dmRefund, `${dm.before.storeUnits} -> ${dm.after.storeUnits} refund=${dmRefund} tray=${dmM?.trayUnits} buf=${dmM?.inBufUnits} batch=${dmBatch} baselineLagTicks=${dm.baselineLagTicks}`);
+    // Engine truth (r3): the face must equal the REGISTERED-set formula, and the store
+    // delta is that refund PLUS any in-flight cargo on the registered routes (dropRoute
+    // returns it). yard-mature's belts are pre-price (run absent -> refund 0), so the
+    // printed number here is unchanged by the registered-set fix; cargo is computed
+    // from the same-task baseline, never assumed.
+    const dmReg = registeredRefundOf(dm.before, 1);
+    const dmCargo = registeredCargoOf(dm.before, 1);
+    check("C.dismantle.face", dmRefund === dmReg, `printed=${dmRefund} registeredFormula=${dmReg}`);
+    check("C.dismantle.refund", dm.after.storeUnits - dm.before.storeUnits === dmRefund + dmCargo, `${dm.before.storeUnits} -> ${dm.after.storeUnits} refund=${dmRefund} cargo=${dmCargo} tray=${dmM?.trayUnits} buf=${dmM?.inBufUnits} batch=${dmBatch} baselineLagTicks=${dm.baselineLagTicks}`);
     check("C.dismantle.gone", dm.after.machines.length === dm.before.machines.length - 1 && !dm.after.machines.some((m) => m.id === 1), `machines=${dm.after.machines.length}`);
     await p.waitForTimeout(400);
     await shot("C", "after-dismantle", p, "c7-desk-after-dismantle.png", { mode: "rail", markers: true, panelNull: true });
     sequences.push({ id: "C", viewport: "1280x800", seed: "yard-mature + lastSeenMs=now + credits=1000", actions: ["Upgrade", "Move", "Dismantle"], tapped: { tile: tap.tile, sx: tap.sx, sy: tap.sy }, ...seqConsole("C", errors) });
+    await ctx.close();
+  }
+
+  // ---- J: QA REWORK #99 repro — the real Connect face lays BOTH output plans,
+  //      the engine registers only the last, Dismantle must print === delta ----
+  {
+    const { text, sorterId } = commandYardSeed({ furnace: false });
+    const { ctx, p, errors } = await make(browser, { w: 1280, h: 800 }, text);
+    await settle(p, false);
+    const tap = await tapMachine(p, 8);
+    check("J.tap", tap.machine && tap.machine.id === sorterId && !!tap.probe.panel, JSON.stringify(tap.machine));
+    check("J.connectPrimary", (tap.probe.panel?.faces[0] ?? "") === "Connect", JSON.stringify(tap.probe.panel?.faces));
+    // Real Connect click -> route.connect per plan; connectRoute overwrites outRoute,
+    // so only the LAST output is registered (commands.ts). The freeze keeps cargo 0.
+    const cn = await clickActionSync(p, "Connect");
+    check("J.connect.clicked", cn.ok, cn.reason ?? "");
+    const cnM = cn.after.machines.find((m) => m.id === sorterId);
+    const cnOuts = cn.after.routes.filter((r) => r.from.id === sorterId);
+    check("J.connect.twoOutputs", cnOuts.length === 2, JSON.stringify(cnOuts.map((r) => r.id)));
+    check("J.connect.lastRegistered", cnM.outRoute === cnOuts[cnOuts.length - 1].id, `outRoute=${cnM.outRoute} laid=${JSON.stringify(cnOuts.map((r) => r.id))}`);
+    await p.waitForTimeout(400);
+    // The two-output refund frame: corrected face audited against the engine's
+    // registered-set formula, with the all-links overprint guard recorded.
+    const jPr = await shot("J", "two-output-refund", p, "j1-desk-two-output-refund.png", {
+      mode: "rail", markers: true, panel: true, title: "Scrap sorter", sections: true,
+      firstAction: "Upgrade", actionCount: 3, accentOne: true, actionGrammar: true,
+      rowMatches: [{ label: "Links", pattern: "ticks|tiles" }],
+      progressNumeric: true,
+    });
+    const jFace = (jPr.panel?.faces ?? []).find((f) => f.startsWith("Dismantle"));
+    const jPrinted = Number((jFace?.match(/Dismantle · \+(\d+) units/) ?? [])[1]);
+    const jReg = registeredRefundOf(jPr.sim, sorterId);
+    const jAll = allLinksRefundOf(jPr.sim, sorterId);
+    check("J.frame.face", jPrinted === jReg, `printed=${jPrinted} registeredFormula=${jReg}`);
+    check("J.frame.overprintGuard", jAll > jPrinted, `allLinksFormula=${jAll} printed=${jPrinted} (overprint the fix removes)`);
+    check("J.frame.threeLinks", (jPr.panel?.rowMap?.Links ?? "").split(", ").length === 3, jPr.panel?.rowMap?.Links);
+    // Dismantle through the real face: printed === registered formula === store delta.
+    const dm = await clickActionSync(p, "Dismantle");
+    check("J.dismantle.clicked", dm.ok, dm.reason ?? "");
+    const dmRefund = Number((dm.label.match(/Dismantle · \+(\d+) units/) ?? [])[1]);
+    const dmReg = registeredRefundOf(dm.before, sorterId);
+    const dmCargo = registeredCargoOf(dm.before, sorterId);
+    const dmDelta = dm.after.storeUnits - dm.before.storeUnits;
+    check("J.dismantle.face", dmRefund === dmReg, `printed=${dmRefund} registeredFormula=${dmReg}`);
+    check("J.dismantle.cargoZero", dmCargo === 0, `cargo=${dmCargo}`);
+    check("J.dismantle.parity", dmDelta === dmRefund, `${dm.before.storeUnits} -> ${dm.after.storeUnits} delta=${dmDelta} printed=${dmRefund} baselineLagTicks=${dm.baselineLagTicks}`);
+    check("J.dismantle.gone", !dm.after.machines.some((m) => m.id === sorterId), `machines=${dm.after.machines.length}`);
+    await p.waitForTimeout(400);
+    await shot("J", "after-dismantle", p, "j2-desk-two-output-after-dismantle.png", { mode: "rail", markers: true, panelNull: true });
+    sequences.push({ id: "J", viewport: "1280x800", seed: "commandYard(sorter only) + restock/freeze (MUTATIONS)", actions: ["Connect", "Dismantle"], tapped: { tile: tap.tile, sx: tap.sx, sy: tap.sy }, numbers: { printed: dmRefund, registeredFormula: dmReg, allLinksFormula: allLinksRefundOf(dm.before, sorterId), cargo: dmCargo, storeDelta: dmDelta }, ...seqConsole("J", errors) });
+    await ctx.close();
+  }
+
+  // ---- K: QA REWORK #99 seeded multi-route yard — 4 touching links, only 2
+  //      registered, running batch: printed === registered formula === delta ----
+  {
+    const { text, sorterId } = commandYardSeed({ furnace: true });
+    const { ctx, p, errors } = await make(browser, { w: 1280, h: 800 }, text);
+    await settle(p, false);
+    const tap = await tapMachine(p, 8);
+    check("K.tap", tap.machine && tap.machine.id === sorterId && !!tap.probe.panel, JSON.stringify(tap.machine));
+    const kPr = await shot("K", "multi-route-refund", p, "k1-desk-multi-route-refund.png", {
+      mode: "rail", markers: true, panel: true, title: "Scrap sorter", sections: true,
+      firstAction: "Upgrade", actionCount: 3, actionGrammar: true,
+      rowMatches: [{ label: "Links", pattern: "ticks|tiles" }],
+      progressNumeric: true,
+    });
+    const kFace = (kPr.panel?.faces ?? []).find((f) => f.startsWith("Dismantle"));
+    const kPrinted = Number((kFace?.match(/Dismantle · \+(\d+) units/) ?? [])[1]);
+    const kReg = registeredRefundOf(kPr.sim, sorterId);
+    const kAll = allLinksRefundOf(kPr.sim, sorterId);
+    const kTouching = kPr.sim.routes.filter((r) => endpointId(r.from) === sorterId || endpointId(r.to) === sorterId).length;
+    const kBatch = kPr.sim.machines.find((m) => m.id === sorterId)?.batchUnits;
+    check("K.frame.fourLinks", kTouching === 4, `touching=${kTouching}`);
+    check("K.frame.face", kPrinted === kReg, `printed=${kPrinted} registeredFormula=${kReg}`);
+    check("K.frame.batchTerm", kBatch === 2, `batchUnits=${kBatch} (r2 batch term kept)`);
+    check("K.frame.overprintGuard", kAll > kPrinted, `allLinksFormula=${kAll} printed=${kPrinted} (overprint the fix removes)`);
+    check("K.frame.fourLinkRow", (kPr.panel?.rowMap?.Links ?? "").split(", ").length === 4, kPr.panel?.rowMap?.Links);
+    const dm = await clickActionSync(p, "Dismantle");
+    check("K.dismantle.clicked", dm.ok, dm.reason ?? "");
+    const dmRefund = Number((dm.label.match(/Dismantle · \+(\d+) units/) ?? [])[1]);
+    const dmReg = registeredRefundOf(dm.before, sorterId);
+    const dmCargo = registeredCargoOf(dm.before, sorterId);
+    const dmDelta = dm.after.storeUnits - dm.before.storeUnits;
+    check("K.dismantle.face", dmRefund === dmReg, `printed=${dmRefund} registeredFormula=${dmReg}`);
+    check("K.dismantle.cargoZero", dmCargo === 0, `cargo=${dmCargo}`);
+    check("K.dismantle.parity", dmDelta === dmRefund, `${dm.before.storeUnits} -> ${dm.after.storeUnits} delta=${dmDelta} printed=${dmRefund} baselineLagTicks=${dm.baselineLagTicks}`);
+    check("K.dismantle.gone", !dm.after.machines.some((m) => m.id === sorterId), `machines=${dm.after.machines.length}`);
+    // The engine drops only the 2 registered routes; the 2 orphaned outputs survive.
+    // Issue #100 owns that engine defect — the UI fix must not mask or "fix" it.
+    check("K.dismantle.orphansSurvive", dm.after.routes.length === dm.before.routes.length - 2, `routes ${dm.before.routes.length} -> ${dm.after.routes.length}`);
+    await p.waitForTimeout(400);
+    await shot("K", "after-dismantle", p, "k2-desk-multi-route-after-dismantle.png", { mode: "rail", markers: true, panelNull: true });
+    sequences.push({ id: "K", viewport: "1280x800", seed: "commandYard(sorter + furnace, 4 links) + restock/freeze (MUTATIONS)", actions: ["Dismantle"], tapped: { tile: tap.tile, sx: tap.sx, sy: tap.sy }, numbers: { printed: dmRefund, registeredFormula: dmReg, allLinksFormula: allLinksRefundOf(dm.before, sorterId), cargo: dmCargo, storeDelta: dmDelta }, ...seqConsole("K", errors) });
     await ctx.close();
   }
 
@@ -808,7 +1022,7 @@ const receipt = {
   headSha: process.env.RUSTWAKE_SHA ?? "pending-stamp",
   headShaNote: "code commit under test; the evidence-only commit containing this receipt follows it as PR head",
   tool: "playwright-core headless Chrome, DOM/geometry/console assertions only (no vision)",
-  seed: "docs/evidence/yard-mature.json",
+  seed: "docs/evidence/yard-mature.json (A-I); J/K: command-built priced yards via the game's own applyCommand/advance + encodeSave checksum (see MUTATIONS commandYard)",
   mutations: MUTATIONS,
   frameAudit: "every capture frame runs probe()+audit() before screenshot; checks recorded per frame; any failed check fails the run; every action-level assertion (tap identity, costs, charges, refunds, no-dispatch panes, console) is recorded with its numbers in actionChecks, pass or fail",
   actionProof: "clickActionSync clicks the real .panel__actions button and reads localStorage in the same JS task (dispatch->applyCommand->persist synchronous; zero engine ticks between click and read). The pre-click baseline is flushed through the real HudTop sound toggle first: setSettings persists the LIVE sim synchronously with zero sim effect and is restored after the read, so the ~1s interval checkpoint cannot lag the baseline (baselineLagTicks recorded per action)",
@@ -818,6 +1032,7 @@ const receipt = {
     "C.move.charge (probe bug): the pre-click localStorage baseline was the ~1s interval checkpoint, stale against live engine storeUnits drift (belt loading / drone arrivals / overflow drain). clickActionSync now flushes the live sim via the real HudTop sound toggle (setSettings -> synchronous persist, zero sim effect, restored) inside the same JS task. No UI change.",
     "C.dismantle.refund (REAL UI DEFECT, fixed): dismantleMachine also returns the in-progress machine.batch to the store (commands.ts), but the printed refund omitted it. Live-confirmed with the exact baseline: printed 28 vs engine delta 30, machine.batch=[scrap x2]. MachinePanel.tsx refundUnits now adds batch units; inspector-54.test.tsx gained a batch-holding regression case. Read-only fixtures are batch-free and unchanged (i18n '+23 units' = 18 build + 1 buffer + 2x2 links; belt-extent refundOf(20)+6; panel-rows grammar only) — verified by replicating the i18n fixture: batch=[], printed 23 = engine delta 23.",
     "I/ts2-actions (probe bug): scrollBodyBottom set scrollTop=scrollHeight; at 200% text the two consequence notes (~399px) exceed the 271px body window, parking all three faces fully above the clip (painted h=0). Live geometry verified the faces are reachable by ordinary scrolling: scrollIntoView({block:'nearest'}) paints all three at 44px. The probe now scrolls the actions into view. No UI change.",
+    "J/K.dismantle (REAL UI DEFECT, fixed — QA REWORK #99, comments 6810320448/6810320987): the dismantle face summed belt refunds over EVERY touching route, but dismantleMachine refunds only the engine-REGISTERED set [outRoute, ...inRoutes]; connectRoute overwrites outRoute on each output connect, so a fully-linked multi-output machine overprinted the tap by the orphaned belts' refund. Live-confirmed at the exact same-task baseline with the corrected face: two-output yard printed 36 === engine store delta 36 (J; the defective all-links face would have printed 38), four-link yard with a running batch printed 36 === delta 36 (K; all-links would have printed 40). MachinePanel.tsx now resolves the registered set for the belt term (the r2 batch term is kept; the all-touching set still drives the extent row). inspector-54.test.tsx gained two regression cases: two-output laid by the real Connect face, and a four-link yard with a running batch. The engine's outRoute overwrite/orphaning itself is filed as issue #100 and is NOT changed here — K.dismantle.orphansSurvive asserts the two orphaned routes survive dismantle. C.dismantle.refund now asserts the full engine truth delta === printed + registered cargo (yard-mature's belts are pre-price, so its printed number is unchanged by this fix); J/K freeze cargo at 0 (documented probe-only seed mutations) so printed === delta holds exactly.",
   ],
   viewports: ["1280x800 desktop rail", "390x844 phone sheet", "390x844 phone @200% text"],
   sequences,

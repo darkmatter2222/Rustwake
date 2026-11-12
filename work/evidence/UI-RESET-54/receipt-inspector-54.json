@@ -1,10 +1,10 @@
 {
   "task": "UI-RESET-54 machine inspector",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/54",
-  "headSha": "8393298bd3102580c7c89ca448b93468fe7b7998",
+  "headSha": "3269193b5d69b88712aa42ae19852fea3577cf1f",
   "headShaNote": "code commit under test; the evidence-only commit containing this receipt follows it as PR head",
   "tool": "playwright-core headless Chrome, DOM/geometry/console assertions only (no vision)",
-  "seed": "docs/evidence/yard-mature.json",
+  "seed": "docs/evidence/yard-mature.json (A-I); J/K: command-built priced yards via the game's own applyCommand/advance + encodeSave checksum (see MUTATIONS commandYard)",
   "mutations": [
     "base: payload.lastSeenMs = Date.now() (avoid catch-up drift)",
     "credits: sim.credits = 1000 (seed 82 < lvl14 upgrade cost 222, iterative ceil)",
@@ -12,7 +12,8 @@
     "power: M1.batchPower=9 + batchMilli=1e9 (draw pinned > capacity 8); others start 0, live demand/percent computed from sim at frame time",
     "fullOutput: M1 tray 12/12, routes 2/3/4 removed, outRoute=null, M2.inRoutes stripped",
     "busyLink: route 4 busyTicks=9000 ageTicks=10000 (90% busy)",
-    "textScale: settings.textScale=2 (200% text)"
+    "textScale: settings.textScale=2 (200% text)",
+    "J/K commandYard: seed built with the real engine (createInitialState + 6 salvage pulses + drone.repair + advance 262, then probe-only restock store.scrap=500/store.ferrous=20/storeCapacity=2000 (storeUnits recomputed from the store map) BEFORE the priced commands so every build/connect is affordable — connectRoute charges the belt from store scrap and the furnace buildCost is scrap 10 + ferrous 5 — then build sorter tile 8 + connect scrap input [+ furnace tile 9 and 3 output links for K] + advance 120 + tutorial=9/exportClaimed; every seed command asserts ok), then a determinism freeze: every route items=[]/inFlight=0, sorter tray=[]/trayUnits=0, inBuf={scrap:12}/inBufUnits=12 (full -> engine pullNeed=0, no arrivals), batch=[scrap x2]/progress=1/batchMilli=1e9 (frozen mid-batch, never completes during capture). With tray empty, buffer full and the batch frozen the engine cannot load cargo, so the store delta isolates the refund: printed === delta exactly. Persisted via the game's own encodeSave (checksum included), lastSeenMs=Date.now()"
   ],
   "frameAudit": "every capture frame runs probe()+audit() before screenshot; checks recorded per frame; any failed check fails the run; every action-level assertion (tap identity, costs, charges, refunds, no-dispatch panes, console) is recorded with its numbers in actionChecks, pass or fail",
   "actionProof": "clickActionSync clicks the real .panel__actions button and reads localStorage in the same JS task (dispatch->applyCommand->persist synchronous; zero engine ticks between click and read). The pre-click baseline is flushed through the real HudTop sound toggle first: setSettings persists the LIVE sim synchronously with zero sim effect and is restored after the read, so the ~1s interval checkpoint cannot lag the baseline (baselineLagTicks recorded per action)",
@@ -21,7 +22,8 @@
     "C.tap / D.tap / C.move.identity (probe bug): the sim projection read m.type, but the save schema and MachinePanel use m.blueprint; projection and the three checks now read blueprint. No UI change.",
     "C.move.charge (probe bug): the pre-click localStorage baseline was the ~1s interval checkpoint, stale against live engine storeUnits drift (belt loading / drone arrivals / overflow drain). clickActionSync now flushes the live sim via the real HudTop sound toggle (setSettings -> synchronous persist, zero sim effect, restored) inside the same JS task. No UI change.",
     "C.dismantle.refund (REAL UI DEFECT, fixed): dismantleMachine also returns the in-progress machine.batch to the store (commands.ts), but the printed refund omitted it. Live-confirmed with the exact baseline: printed 28 vs engine delta 30, machine.batch=[scrap x2]. MachinePanel.tsx refundUnits now adds batch units; inspector-54.test.tsx gained a batch-holding regression case. Read-only fixtures are batch-free and unchanged (i18n '+23 units' = 18 build + 1 buffer + 2x2 links; belt-extent refundOf(20)+6; panel-rows grammar only) — verified by replicating the i18n fixture: batch=[], printed 23 = engine delta 23.",
-    "I/ts2-actions (probe bug): scrollBodyBottom set scrollTop=scrollHeight; at 200% text the two consequence notes (~399px) exceed the 271px body window, parking all three faces fully above the clip (painted h=0). Live geometry verified the faces are reachable by ordinary scrolling: scrollIntoView({block:'nearest'}) paints all three at 44px. The probe now scrolls the actions into view. No UI change."
+    "I/ts2-actions (probe bug): scrollBodyBottom set scrollTop=scrollHeight; at 200% text the two consequence notes (~399px) exceed the 271px body window, parking all three faces fully above the clip (painted h=0). Live geometry verified the faces are reachable by ordinary scrolling: scrollIntoView({block:'nearest'}) paints all three at 44px. The probe now scrolls the actions into view. No UI change.",
+    "J/K.dismantle (REAL UI DEFECT, fixed — QA REWORK #99, comments 6810320448/6810320987): the dismantle face summed belt refunds over EVERY touching route, but dismantleMachine refunds only the engine-REGISTERED set [outRoute, ...inRoutes]; connectRoute overwrites outRoute on each output connect, so a fully-linked multi-output machine overprinted the tap by the orphaned belts' refund. Live-confirmed at the exact same-task baseline with the corrected face: two-output yard printed 36 === engine store delta 36 (J; the defective all-links face would have printed 38), four-link yard with a running batch printed 36 === delta 36 (K; all-links would have printed 40). MachinePanel.tsx now resolves the registered set for the belt term (the r2 batch term is kept; the all-touching set still drives the extent row). inspector-54.test.tsx gained two regression cases: two-output laid by the real Connect face, and a four-link yard with a running batch. The engine's outRoute overwrite/orphaning itself is filed as issue #100 and is NOT changed here — K.dismantle.orphansSurvive asserts the two orphaned routes survive dismantle. C.dismantle.refund now asserts the full engine truth delta === printed + registered cargo (yard-mature's belts are pre-price, so its printed number is unchanged by this fix); J/K freeze cargo at 0 (documented probe-only seed mutations) so printed === delta holds exactly."
   ],
   "viewports": [
     "1280x800 desktop rail",
@@ -54,6 +56,49 @@
         "tile": 0,
         "sx": 323,
         "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "J",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter only) + restock/freeze (MUTATIONS)",
+      "actions": [
+        "Connect",
+        "Dismantle"
+      ],
+      "tapped": {
+        "tile": 8,
+        "sx": 487,
+        "sy": 270
+      },
+      "numbers": {
+        "printed": 36,
+        "registeredFormula": 36,
+        "allLinksFormula": 38,
+        "cargo": 0,
+        "storeDelta": 36
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "K",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter + furnace, 4 links) + restock/freeze (MUTATIONS)",
+      "actions": [
+        "Dismantle"
+      ],
+      "tapped": {
+        "tile": 8,
+        "sx": 487,
+        "sy": 270
+      },
+      "numbers": {
+        "printed": 36,
+        "registeredFormula": 36,
+        "allLinksFormula": 40,
+        "cargo": 0,
+        "storeDelta": 36
       },
       "consoleErrors": []
     },
@@ -129,12 +174,12 @@
     }
   ],
   "summary": {
-    "frames": 19,
-    "passed": 19,
+    "frames": 23,
+    "passed": 23,
     "failed": 0,
     "checkFailures": 0,
-    "actionChecks": 34,
-    "actionChecksPassed": 34
+    "actionChecks": 62,
+    "actionChecksPassed": 62
   },
   "failures": [],
   "actionChecks": [
@@ -151,7 +196,7 @@
     {
       "check": "C.tap",
       "ok": true,
-      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2}"
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
     },
     {
       "check": "C.storage.noDispatch",
@@ -229,9 +274,14 @@
       "detail": ""
     },
     {
+      "check": "C.dismantle.face",
+      "ok": true,
+      "detail": "printed=30 registeredFormula=30"
+    },
+    {
       "check": "C.dismantle.refund",
       "ok": true,
-      "detail": "316 -> 346 refund=30 tray=0 buf=10 batch=2 baselineLagTicks=5"
+      "detail": "316 -> 346 refund=30 cargo=0 tray=0 buf=10 batch=2 baselineLagTicks=6"
     },
     {
       "check": "C.dismantle.gone",
@@ -244,9 +294,144 @@
       "detail": "[]"
     },
     {
+      "check": "J.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"batchMilli\":1000000000,\"batchPower\":1,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12,\"batchUnits\":2,\"outRoute\":null,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "J.connectPrimary",
+      "ok": true,
+      "detail": "[\"Connect\",\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +34 units\"]"
+    },
+    {
+      "check": "J.connect.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.connect.twoOutputs",
+      "ok": true,
+      "detail": "[2,3]"
+    },
+    {
+      "check": "J.connect.lastRegistered",
+      "ok": true,
+      "detail": "outRoute=3 laid=[2,3]"
+    },
+    {
+      "check": "J.frame.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "J.frame.overprintGuard",
+      "ok": true,
+      "detail": "allLinksFormula=38 printed=36 (overprint the fix removes)"
+    },
+    {
+      "check": "J.frame.threeLinks",
+      "ok": true,
+      "detail": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+    },
+    {
+      "check": "J.dismantle.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.dismantle.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "J.dismantle.cargoZero",
+      "ok": true,
+      "detail": "cargo=0"
+    },
+    {
+      "check": "J.dismantle.parity",
+      "ok": true,
+      "detail": "498 -> 534 delta=36 printed=36 baselineLagTicks=4"
+    },
+    {
+      "check": "J.dismantle.gone",
+      "ok": true,
+      "detail": "machines=0"
+    },
+    {
+      "check": "J.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "K.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"batchMilli\":1000000000,\"batchPower\":1,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "K.frame.fourLinks",
+      "ok": true,
+      "detail": "touching=4"
+    },
+    {
+      "check": "K.frame.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "K.frame.batchTerm",
+      "ok": true,
+      "detail": "batchUnits=2 (r2 batch term kept)"
+    },
+    {
+      "check": "K.frame.overprintGuard",
+      "ok": true,
+      "detail": "allLinksFormula=40 printed=36 (overprint the fix removes)"
+    },
+    {
+      "check": "K.frame.fourLinkRow",
+      "ok": true,
+      "detail": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+    },
+    {
+      "check": "K.dismantle.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "K.dismantle.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "K.dismantle.cargoZero",
+      "ok": true,
+      "detail": "cargo=0"
+    },
+    {
+      "check": "K.dismantle.parity",
+      "ok": true,
+      "detail": "480 -> 516 delta=36 printed=36 baselineLagTicks=0"
+    },
+    {
+      "check": "K.dismantle.gone",
+      "ok": true,
+      "detail": "machines=1"
+    },
+    {
+      "check": "K.dismantle.orphansSurvive",
+      "ok": true,
+      "detail": "routes 4 -> 2"
+    },
+    {
+      "check": "K.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
       "check": "D.tap",
       "ok": true,
-      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"level\":13,\"batchMilli\":18182,\"batchPower\":2,\"progress\":0,\"status\":\"starved\",\"trayUnits\":0,\"inBufUnits\":0,\"batchUnits\":0}"
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"level\":13,\"batchMilli\":18182,\"batchPower\":2,\"progress\":0,\"status\":\"starved\",\"trayUnits\":0,\"inBufUnits\":0,\"batchUnits\":0,\"outRoute\":5,\"inRoutes\":[]}"
     },
     {
       "check": "D.console",
@@ -256,7 +441,7 @@
     {
       "check": "E.tap",
       "ok": true,
-      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":1000000000,\"batchPower\":9,\"progress\":5889,\"status\":\"powerLimited\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2}"
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":1000000000,\"batchPower\":9,\"progress\":5889,\"status\":\"powerLimited\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
     },
     {
       "check": "E.powerLimited",
@@ -271,7 +456,7 @@
     {
       "check": "F.tap",
       "ok": true,
-      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"outputFull\",\"trayUnits\":12,\"inBufUnits\":8,\"batchUnits\":2}"
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"outputFull\",\"trayUnits\":12,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":null,\"inRoutes\":[1]}"
     },
     {
       "check": "F.console",
@@ -281,7 +466,7 @@
     {
       "check": "G.tap",
       "ok": true,
-      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2}"
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
     },
     {
       "check": "G.console",
@@ -947,12 +1132,12 @@
         {
           "check": "firstAction",
           "ok": true,
-          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +28 units\"]"
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +30 units\"]"
         },
         {
           "check": "actionCount",
           "ok": true,
-          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +28 units\"]"
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +30 units\"]"
         },
         {
           "check": "dockGeometry",
@@ -1028,6 +1213,357 @@
     },
     {
       "frame": 10,
+      "sequence": "J",
+      "name": "two-output-refund",
+      "file": "j1-desk-two-output-refund.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap\" want /ticks|tiles/"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "accentOne",
+          "ok": true,
+          "detail": "accent=1"
+        },
+        {
+          "check": "progressNumeric",
+          "ok": true,
+          "detail": "now=0"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":400,\"w\":320,\"h\":392,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 11,
+      "sequence": "J",
+      "name": "after-dismantle",
+      "file": "j2-desk-two-output-after-dismantle.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 12,
+      "sequence": "K",
+      "name": "multi-route-refund",
+      "file": "k1-desk-multi-route-refund.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap\" want /ticks|tiles/"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "progressNumeric",
+          "ok": true,
+          "detail": "now=0"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":400,\"w\":320,\"h\":392,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 13,
+      "sequence": "K",
+      "name": "after-dismantle",
+      "file": "k2-desk-multi-route-after-dismantle.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 14,
       "sequence": "D",
       "name": "starved",
       "file": "d1-desk-starved.png",
@@ -1121,7 +1657,7 @@
       "passed": true
     },
     {
-      "frame": 11,
+      "frame": 15,
       "sequence": "E",
       "name": "power-limited",
       "file": "e1-desk-power-limited.png",
@@ -1205,7 +1741,7 @@
       "passed": true
     },
     {
-      "frame": 12,
+      "frame": 16,
       "sequence": "E",
       "name": "power-pane",
       "file": "e2-desk-power-pane.png",
@@ -1274,7 +1810,7 @@
       "passed": true
     },
     {
-      "frame": 13,
+      "frame": 17,
       "sequence": "F",
       "name": "full-output",
       "file": "f1-desk-full-output.png",
@@ -1353,7 +1889,7 @@
       "passed": true
     },
     {
-      "frame": 14,
+      "frame": 18,
       "sequence": "G",
       "name": "busy-link",
       "file": "g1-desk-busy-link.png",
@@ -1427,7 +1963,7 @@
       "passed": true
     },
     {
-      "frame": 15,
+      "frame": 19,
       "sequence": "H",
       "name": "sheet-rest",
       "file": "h1-phone-sheet.png",
@@ -1526,7 +2062,7 @@
       "passed": true
     },
     {
-      "frame": 16,
+      "frame": 20,
       "sequence": "H",
       "name": "sheet-actions",
       "file": "h2-phone-sheet-actions.png",
@@ -1605,7 +2141,7 @@
       "passed": true
     },
     {
-      "frame": 17,
+      "frame": 21,
       "sequence": "H",
       "name": "sheet-pane",
       "file": "h3-phone-sheet-pane.png",
@@ -1669,7 +2205,7 @@
       "passed": true
     },
     {
-      "frame": 18,
+      "frame": 22,
       "sequence": "I",
       "name": "ts2-rest",
       "file": "i1-phone-ts2.png",
@@ -1773,7 +2309,7 @@
       "passed": true
     },
     {
-      "frame": 19,
+      "frame": 23,
       "sequence": "I",
       "name": "ts2-actions",
       "file": "i2-phone-ts2-actions.png",
