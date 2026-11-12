@@ -169,27 +169,6 @@ async function readSim(page) {
   return dec.ok ? dec.payload.sim : null;
 }
 
-/**
- * dev-64d: settle the persisted mirror before asserting tick-driven state.
- * The store only writes the localStorage mirror on its PERSIST_MS=1000 cadence
- * (src/app/store.ts tickLoop), and `tutorial` is advanced by syncTutorial inside
- * stepTick (engine.ts), NOT by applyCommand. So a command that mutates state
- * advances the tutorial only on the next tick, and that tutorial value reaches
- * the mirror only on the next >=1000ms persist. A fixed post-action wait shorter
- * than PERSIST_MS reads a stale mirror and misreports the tutorial one stage
- * behind. This waits (bounded) for the game's OWN next tick persist to land so
- * assertions read fresh authoritative state. It relaxes NO assertion: every
- * check still requires its exact expected value; we only wait for the persist
- * that carries it. beforeTick is the mirror tick sampled before the action.
- */
-async function settleMirror(page, beforeTick) {
-  for (let i = 0; i < 12; i += 1) {
-    const s = await readSim(page);
-    if (s && s.tick > beforeTick) return;
-    await page.waitForTimeout(150);
-  }
-}
-
 /** One full DOM + geometry + canvas-pixel snapshot of the onboarding surfaces. */
 async function onboardDom(page) {
   return await page.evaluate(() => {
@@ -558,14 +537,11 @@ async function waitForData(page, min) {
 }
 
 async function runStep(page, form, name, action, expect = [], waitMs = 350) {
-  const beforeSimRaw = await readSim(page);
-  const beforeTick = beforeSimRaw && typeof beforeSimRaw.tick === "number" ? beforeSimRaw.tick : 0;
-  const before = { sim: summarize(beforeSimRaw), dom: await onboardDom(page) };
+  const before = { sim: summarize(await readSim(page)), dom: await onboardDom(page) };
   await shot(page, `${form}/${name}-before.png`, { phase: "before", step: name, form, sim: before.sim });
   let error = null;
   try { await action(); } catch (e) { error = String((e && e.message) || e); blockers.push(`${form}/${name}: ${error}`); }
   await page.waitForTimeout(waitMs);
-  await settleMirror(page, beforeTick);
   const after = { sim: summarize(await readSim(page)), dom: await onboardDom(page) };
   await shot(page, `${form}/${name}-after.png`, { phase: "after", step: name, form, sim: after.sim });
   const checks = expect.map((e) => {
@@ -700,16 +676,7 @@ async function freshLoop(browser, form) {
       { name: "coach-upgrade-topic", test: (b, a) => a.dom.coach?.topic === "upgrade" },
     ]);
 
-    await runStep(page, F, "18-upgrade-sorter", async () => {
-      // dev-64d: a fresh sorter lands on tile 8 (not tile 0). Target the sorter's
-      // ACTUAL tile from the persisted mirror so the panel arms an upgrade of the
-      // existing sorter rather than a build on an empty tile. No assertion relaxed.
-      const sim = await readSim(page);
-      const sorter = sim && Array.isArray(sim.machines) ? sim.machines.find((m) => m.blueprint === "sorter") : null;
-      await tapTile(page, sorter ? sorter.tile : 0);
-      await page.waitForTimeout(250);
-      await clickPrimary(page);
-    }, [
+    await runStep(page, F, "18-upgrade-sorter", async () => { await tapTile(page, 0); await page.waitForTimeout(250); await clickPrimary(page); }, [
       { name: "machine-upgraded", test: (b, a) => /lv2/.test(a.sim.machineList) },
       { name: "tutorial-9", test: (b, a) => a.sim.tutorial === 9 },
     ]);
