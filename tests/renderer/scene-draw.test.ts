@@ -467,29 +467,51 @@ const CYCLE: MachineStatus[] = ["running", "starved", "outputFull", "idle", "pow
 
 describe("Q-004a 3A: sub-tick interpolation from one caller-supplied phase", () => {
   it("C-1: getFramePhase is a [0,1) fraction that advances with the frame clock and restarts each tick", () => {
-    vi.useFakeTimers();
+    // #110: deterministic by construction. jsdom's rAF fires through a faked
+    // setInterval but stamps callbacks with the REAL performance.now(), so
+    // advanceTimersByTime let wall-clock load leak into the tick accumulator.
+    // Instead, capture the rAF callback and invoke it with explicit timestamps
+    // in lockstep with the manual clock; no real clock can reach the loop.
     let clock = 0;
-    const store = createStore({ storage: null, now: () => clock, frameClock: () => clock });
-    store.start();
-    const start = store.getFramePhase();
-    const tickStart = store.getState().tick;
-    vi.advanceTimersByTime(40);
-    const first = store.getFramePhase();
-    vi.advanceTimersByTime(15);
-    const second = store.getFramePhase();
-    vi.advanceTimersByTime(85);
-    const after = store.getFramePhase();
-    const tickAfter = store.getState().tick;
-    store.stop();
-    vi.useRealTimers();
-    // 140 ms of fake clock = one whole tick plus a remainder.
-    expect(after).toBeGreaterThanOrEqual(0);
-    expect(after).toBeLessThan(1);
-    expect(first).toBeGreaterThanOrEqual(0);
-    expect(first).toBeLessThan(1);
-    expect(second).toBeGreaterThan(first);
-    expect(tickAfter).toBeGreaterThan(tickStart);
-    expect(start).toBe(0);
+    let pendingFrame: FrameRequestCallback | null = null;
+    const raf = vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation((callback) => {
+      pendingFrame = callback;
+      return 1;
+    });
+    const caf = vi.spyOn(globalThis, "cancelAnimationFrame").mockImplementation(() => {
+      pendingFrame = null;
+    });
+    try {
+      const store = createStore({ storage: null, now: () => clock, frameClock: () => clock });
+      store.start();
+      const step = (ms: number) => {
+        clock += ms;
+        const callback = pendingFrame;
+        pendingFrame = null;
+        if (callback) callback(clock);
+      };
+      const start = store.getFramePhase();
+      const tickStart = store.getState().tick;
+      step(40);
+      const first = store.getFramePhase();
+      step(15);
+      const second = store.getFramePhase();
+      step(85);
+      const after = store.getFramePhase();
+      const tickAfter = store.getState().tick;
+      store.stop();
+      // 140 ms of stepped frame clock = one whole tick plus a remainder.
+      expect(after).toBeGreaterThanOrEqual(0);
+      expect(after).toBeLessThan(1);
+      expect(first).toBeGreaterThanOrEqual(0);
+      expect(first).toBeLessThan(1);
+      expect(second).toBeGreaterThan(first);
+      expect(tickAfter).toBeGreaterThan(tickStart);
+      expect(start).toBe(0);
+    } finally {
+      raf.mockRestore();
+      caf.mockRestore();
+    }
   });
 
   it("A1: with the same state, framePhase 0.0 and 0.9 move 4+ of the six drone elements", () => {
