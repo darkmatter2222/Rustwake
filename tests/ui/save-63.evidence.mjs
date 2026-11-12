@@ -168,6 +168,11 @@ const receipt = {
     { fixture: "tutorial unlock", mutation: "seed sim.tutorial = 9", exercises: "B-06 Yard destination reachability without playing the tutorial", where: "probe only" },
   ],
   liveSimTolerance: "yard steps ~10 ticks/s and render/checkpoint may lead each other by a step; tick/credits/save-size asserted as symmetric bounds vs an atomic rows+localStorage read; machines/routes/settings/research/spares asserted exactly; a refused import must keep tick far below the incoming tick",
+  captureProtocol: {
+    reportDismissal: "The boot absence credit is synchronous in createStore, so a boot report is already mounted when the shell paints and is dismissed immediately. A RELOAD report mounts only when claim() adopts the stale lease (~LEASE_TTL_MS=1.5s after reload) and credits the absence; the probe therefore waits for lease adoption THROUGH the app's own lease record, then gives the report a bounded 3s appear-window, dismisses it, and only then opens/measures the yard panel. assertPanelFits additionally asserts a single-panel census (0 reports, exactly 1 .hud>.panel) so a stacked two-panel budget (26%/50%) can never masquerade as inner-panel overflow.",
+    twoPanelArtifact: "The earlier 139px (phone) / 111px (phone-landscape) 'overflow' on the reload/hostile phases was this dismissal race: the report mounted after dismissal and stacked with the yard panel. With dismissal ordered after adoption the panel is single everywhere and those phases measure their true body height.",
+    distinctFrames: "The imported yard is deterministic (same sim/settings/note), so post-import frames are captured only after a per-scale LIVE-TICK offset on the record page (after-import +30/+70, reload +20/+60, hostile +10/+90 for ts1/ts2). The live Tick row then differs between every frame by construction, the yard's resumed stepping is proven, and the hostile clamp frame is taken on the record page because the replace-page note ('Applied · tick <incoming>') is deterministic. Frame distinctness is asserted, never relaxed.",
+  },
   formFactors: {},
   failures: [],
 };
@@ -344,11 +349,20 @@ const panelGeom = (page) =>
         const c = document.querySelector("canvas");
         return c ? { w: c.width, h: c.height } : null;
       })(),
+      census: (() => {
+        const panels = [...document.querySelectorAll(".hud > .panel")];
+        return {
+          count: panels.length,
+          labels: panels.map((p) => p.getAttribute("aria-label") ?? p.className),
+          reports: document.querySelectorAll(".panel--report").length,
+        };
+      })(),
     };
   }, PANEL);
 async function assertPanelFits(page, ff, phase) {
   const geo = await panelGeom(page);
   assert(ff, phase, "panel present", geo.present, JSON.stringify(geo));
+  assert(ff, phase, "single-panel budget: report dismissed before measuring", geo.census.reports === 0 && geo.census.count === 1, JSON.stringify(geo.census));
   assert(ff, phase, "0px inner panel scroll (body.scrollHeight <= clientHeight)", geo.body && geo.body.scrollHeight <= geo.body.clientHeight, JSON.stringify(geo.body));
   assert(ff, phase, "panel body not scrolled", geo.body && geo.body.scrollTop === 0, JSON.stringify(geo.body));
   const ns = await noScroll(page);
@@ -391,14 +405,26 @@ async function openYard(page) {
   await page.waitForSelector(PANEL);
   return via;
 }
-async function dismissReport(page) {
-  const el = await page.$(".panel--report .panel__head .icon-btn");
-  if (el) {
-    await el.click();
-    await page.waitForSelector(".panel--report", { state: "detached" });
-    return true;
+/** Dismiss the return report, waiting a bounded window for it to APPEAR first.
+ *  The boot credit is synchronous in createStore, so a boot report is already
+ *  mounted when the shell paints (short window). A RELOAD report is different:
+ *  the new document boots reader and the store only credits the absence when
+ *  claim() adopts the stale lease (~LEASE_TTL_MS later), so the caller must
+ *  wait for lease adoption first and then give the report a longer window.
+ *  Dismissing before that promotion is the two-panel measurement race: the
+ *  report mounts AFTER the dismissal and stacks with the yard panel (26% /
+ *  50% budget), which reads as inner-panel overflow that is not there. */
+async function dismissReport(page, appearTimeout = 600) {
+  try {
+    await page.waitForSelector(".panel--report", { timeout: appearTimeout });
+  } catch {
+    return false; // no absence worth a report (e.g. a reader boot)
   }
-  return false;
+  const el = await page.$(".panel--report .panel__head .icon-btn");
+  if (!el) return false;
+  await el.click();
+  await page.waitForSelector(".panel--report", { state: "detached" });
+  return true;
 }
 async function boot(page) {
   await page.goto(url, { waitUntil: "networkidle" });
@@ -406,6 +432,21 @@ async function boot(page) {
   await page.click(".gate__btn");
   await page.waitForSelector(".dock, .shell-rail", { timeout: 20000 });
   await dismissReport(page);
+}
+/** Wait until the record page's LIVE Tick row reaches target: proof the yard
+ *  is stepping, and a per-scale offset that makes post-import frames distinct
+ *  by construction (the imported yard is otherwise deterministic). */
+async function waitLiveTick(page, target, timeout = 20000) {
+  await page.waitForFunction(
+    ({ sel, target }) => {
+      const rows = [...document.querySelectorAll(`${sel} .save-stat`)];
+      const row = rows.find((n) => n.querySelector("dt")?.textContent?.trim() === "Tick");
+      const tick = Number(row?.querySelector("dd")?.textContent ?? NaN);
+      return Number.isFinite(tick) && tick >= target;
+    },
+    { sel: PANEL, target },
+    { timeout }
+  );
 }
 const fillImport = (page, text) => page.fill("#rustwake-save-import", text);
 async function openGate(page, text) {
@@ -674,6 +715,13 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     const recAfter = await readRecord(page);
     assert(ff, P, "record refreshed: machines incoming", recAfter.rows.find((r) => r.label === "Machines")?.value === String(incoming.sim.machines.length), JSON.stringify(recAfter.rows));
     await assertPanelFits(page, ff, P);
+    // Per-scale live-tick offset: the imported yard is deterministic, so wait
+    // for it to step a scale-specific distance before capturing. This both
+    // proves the yard resumes stepping after import and makes the frame
+    // distinct from the reload/hostile frames by construction.
+    let liveImport = true;
+    try { await waitLiveTick(page, incoming.sim.tick + (scale === 1 ? 30 : 70)); } catch { liveImport = false; }
+    assert(ff, P, "after import: yard resumes stepping (live tick advanced)", liveImport, JSON.stringify({ target: incoming.sim.tick + (scale === 1 ? 30 : 70) }));
     await shot(page, ff, P, `ts${scale}-05-after-import.png`, viewport, dsf, await panelContent(page));
     await clickText(page, "Backup", `${PANEL} button`);
     await page.waitForSelector("#rustwake-save-export");
@@ -691,7 +739,6 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     await page.waitForSelector(".gate__btn", { timeout: 20000 });
     await page.click(".gate__btn");
     await page.waitForSelector(".dock, .shell-rail", { timeout: 20000 });
-    await dismissReport(page);
     // The reloaded document gets a NEW lease id; the old record stays fresh for
     // up to LEASE_TTL_MS (1.5 s), so the page boots reader and the store's own
     // claim() adopts the stale lease on a later step. Wait for that adoption
@@ -705,6 +752,11 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
       { timeout: 10000 }
     );
     assert(ff, P, "reload: writer lease re-adopted by the new document", (await leaseOwner(page)) !== preOwner, JSON.stringify({ preOwner, post: await leaseOwner(page) }));
+    // The absence credit fires on promotion, so the return report mounts only
+    // AFTER adoption. Dismiss it now (bounded window) and let catch-up settle
+    // before measuring the save panel; measuring before this is the two-panel
+    // race that reads as phantom inner-panel overflow.
+    await dismissReport(page, 3000);
     await openYard(page);
     const post = await readMirror(page);
     assert(ff, P, "reload: imported tick persists (no double-apply, no reset)", post.sim.tick >= incoming.sim.tick && post.sim.tick <= preReload.sim.tick + 600, JSON.stringify({ post: post.sim.tick, incoming: incoming.sim.tick, preReload: preReload.sim.tick }));
@@ -712,6 +764,10 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     assert(ff, P, "reload: settings stable", JSON.stringify(post.settings) === JSON.stringify(incoming.settings), JSON.stringify(post.settings));
     const rec = await readRecord(page);
     assert(ff, P, "reload: record shows the imported yard", rec.rows.find((r) => r.label === "Machines")?.value === String(incoming.sim.machines.length), JSON.stringify(rec.rows));
+    // Live-tick offset before capture (distinct frame + proof of resumed sim).
+    let liveReload = true;
+    try { await waitLiveTick(page, post.sim.tick + (scale === 1 ? 20 : 60)); } catch { liveReload = false; }
+    assert(ff, P, "reload: yard resumes stepping after adoption", liveReload, JSON.stringify({ target: post.sim.tick + (scale === 1 ? 20 : 60) }));
     await assertPanelFits(page, ff, P);
     await shot(page, ff, P, `ts${scale}-06-reload.png`, viewport, dsf, await panelContent(page));
   }
@@ -730,7 +786,16 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     assert(ff, P, "hostile settings sanitized on import", JSON.stringify(after.settings) === JSON.stringify({ muted: false, reducedMotion: false, textScale: 2 }), JSON.stringify(after.settings));
     const rootAfter = await page.evaluate(() => ({ scaleVar: document.documentElement.style.getPropertyValue("--text-scale"), textLarge: document.documentElement.classList.contains("text-large") }));
     assert(ff, P, "textScale 99 clamped to 2 at the root", rootAfter.scaleVar === "2" && rootAfter.textLarge === true, JSON.stringify(rootAfter));
-    await assertPanelFits(page, ff, P);
+    await assertPanelFits(page, ff, P); // replace page at the clamped scale
+    // The replace-page note ("Applied · tick <incoming>") is deterministic, so
+    // capture the clamp evidence on the RECORD page after a per-scale live-tick
+    // offset: the live Tick row differs from every other frame by construction.
+    await clickText(page, "Back", `${PANEL} button`);
+    await page.waitForSelector(`${PANEL} .save-stats`);
+    let liveHostile = true;
+    try { await waitLiveTick(page, incoming.sim.tick + (scale === 1 ? 10 : 90)); } catch { liveHostile = false; }
+    assert(ff, P, "hostile: yard steps after the clamped import", liveHostile, JSON.stringify({ target: incoming.sim.tick + (scale === 1 ? 10 : 90) }));
+    await assertPanelFits(page, ff, P); // record page at the clamped scale
     await shot(page, ff, P, `ts${scale}-07-hostile-clamp.png`, viewport, dsf, await panelContent(page));
   }
 
