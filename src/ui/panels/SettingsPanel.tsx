@@ -29,8 +29,10 @@ export function SettingsPanel(props: {
   const [fullscreenSupported] = useState<boolean>(
     () => typeof document !== "undefined" && document.fullscreenEnabled === true
   );
+  // `!= null` on purpose: browsers without the Fullscreen API leave the property
+  // undefined, and that must read as windowed, not fullscreen.
   const [isFullscreen, setIsFullscreen] = useState<boolean>(
-    () => typeof document !== "undefined" && document.fullscreenElement !== null
+    () => typeof document !== "undefined" && document.fullscreenElement != null
   );
   const [displayNote, setDisplayNote] = useState<string | null>(
     fullscreenSupported ? null : SETTINGS_COPY.displayUnsupported
@@ -39,7 +41,7 @@ export function SettingsPanel(props: {
   useEffect(() => {
     if (!fullscreenSupported || typeof document === "undefined") return;
     const onChange = () => {
-      setIsFullscreen(document.fullscreenElement !== null);
+      setIsFullscreen(document.fullscreenElement != null);
       setDisplayNote(null);
     };
     document.addEventListener("fullscreenchange", onChange);
@@ -53,7 +55,7 @@ export function SettingsPanel(props: {
       : document.documentElement.requestFullscreen();
     Promise.resolve(action).catch(() => {
       setDisplayNote(SETTINGS_COPY.displayDenied);
-      setIsFullscreen(document.fullscreenElement !== null);
+      setIsFullscreen(document.fullscreenElement != null);
     });
   }, [fullscreenSupported]);
 
