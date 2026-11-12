@@ -310,6 +310,26 @@ async function scrollBodyToBottom(page) {
   await page.waitForTimeout(200);
 }
 
+// Bring a card's HEAD to just below the sticky overview, so the top of a card
+// taller than the scrollport is provably viewable (not permanently occluded).
+// At large text a card can exceed the scrollport height, so "whole card fits"
+// is impossible; traversability (head AND tail each reachable) is the real bar.
+async function scrollCardHeadIntoView(page, nodeId) {
+  await page.evaluate((id) => {
+    const body = document.querySelector(".panel--research .panel__body");
+    const cardEl = document.querySelector(`.node[data-node="${id}"]`);
+    const summary = document.querySelector(".panel--research .research-summary");
+    if (!body || !cardEl) return;
+    const bodyTop = body.getBoundingClientRect().top;
+    const cardTopInBody = cardEl.getBoundingClientRect().top - bodyTop;
+    const contentOffset = body.scrollTop + cardTopInBody; // card head in content coords
+    const summaryH = summary ? summary.getBoundingClientRect().height : 0;
+    const target = contentOffset - summaryH - 2; // head lands just under the stuck strip
+    body.scrollTop = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+  }, nodeId);
+  await page.waitForTimeout(200);
+}
+
 async function runStep(page, form, name, action, expect = [], waitMs = 350) {
   const before = { sim: summarize(await readSim(page)), dom: await researchDom(page) };
   await shot(page, `${form}/${name}-before.png`, { phase: "before", step: name, form, sim: before.sim });
@@ -481,22 +501,43 @@ async function largeLoop(browser, form) {
     { name: "panel inside viewport, no horizontal overflow", test: (b, a) => a.dom.panel.rect.left >= -1 && a.dom.panel.rect.right <= a.dom.viewport.w + 1 && a.dom.docScrollW <= a.dom.viewport.w + 1 },
     { name: "all decision lines still painted", test: (b, a) => a.dom.panel.cards.every((c) => c.prereq && c.effect && c.stateLine) && !!a.dom.panel.summary && !!a.dom.panel.focus },
   ]);
-  await runStep(page, `${form}-large`, "01-scroll", async () => {
+  // At scale 2 a card can be taller than the phone scrollport, so "whole card
+  // fits at once" is geometrically impossible. The real acceptance bar is
+  // traversability: the last card's TAIL (cost + Buy) and its HEAD must each be
+  // bringable into the visible band below the sticky overview. Prove both.
+  await runStep(page, `${form}-large`, "01-scroll-tail", async () => {
     await scrollBodyToBottom(page);
   }, [
-    { name: "last card reachable at scale 2", test: (b, a) => {
+    { name: "last card tail (cost + Buy) reachable at scale 2", test: (b, a) => {
         const c = card(a.dom, "dispatch").rect, body = a.dom.panel.body.rect;
-        return c.top >= body.top - 1 && c.bottom <= body.bottom + 1;
+        const bandTop = a.dom.panel.summary ? a.dom.panel.summary.rect.bottom : body.top;
+        return c.bottom <= body.bottom + 1 && c.bottom > bandTop - 1 && c.top < body.bottom;
+      }, detail: (b, a) => {
+        const c = card(a.dom, "dispatch").rect, body = a.dom.panel.body.rect;
+        return `cardBottom=${c.bottom.toFixed(1)} bodyBottom=${body.bottom.toFixed(1)} summaryBottom=${a.dom.panel.summary.rect.bottom.toFixed(1)}`;
       } },
-    { name: "overview sticky or whole panel fits at scale 2", test: (b, a) => {
+    { name: "overview stays sticky while scrolling at scale 2", test: (b, a) => {
         const body = a.dom.panel.body;
         if (body.scrollHeight > body.clientHeight + 4) {
-          return body.scrollTop > 0 && Math.abs(a.dom.panel.summary.offsetFromBodyTop) <= 2;
+          return body.scrollTop > 0 && Math.abs(a.dom.panel.summary.offsetFromBodyTop) <= 2 && a.dom.panel.summary.position === "sticky";
         }
         return a.dom.panel.cards.every((c) => c.rect.bottom <= body.rect.bottom + 1);
-      } },
+      }, detail: (b, a) => `scrollH=${a.dom.panel.body.scrollHeight} clientH=${a.dom.panel.body.clientHeight} scrollTop=${a.dom.panel.body.scrollTop} summaryOffset=${a.dom.panel.summary.offsetFromBodyTop.toFixed(1)}` },
   ]);
-  await runStep(page, `${form}-large`, "02-buy", async () => {
+  await runStep(page, `${form}-large`, "02-scroll-head", async () => {
+    await scrollCardHeadIntoView(page, "dispatch");
+  }, [
+    { name: "last card head reachable below the overview at scale 2", test: (b, a) => {
+        const c = card(a.dom, "dispatch").rect, body = a.dom.panel.body.rect;
+        const bandTop = a.dom.panel.summary ? a.dom.panel.summary.rect.bottom : body.top;
+        return c.top >= bandTop - 1 && c.top <= body.bottom + 1;
+      }, detail: (b, a) => {
+        const c = card(a.dom, "dispatch").rect, body = a.dom.panel.body.rect;
+        return `cardTop=${c.top.toFixed(1)} summaryBottom=${a.dom.panel.summary.rect.bottom.toFixed(1)} bodyBottom=${body.bottom.toFixed(1)}`;
+      } },
+    { name: "no type shrunk by scrolling at scale 2 (fonts unchanged)", test: (b, a) => JSON.stringify(card(a.dom, "dispatch").fonts) === JSON.stringify(card(b.dom, "dispatch").fonts) },
+  ]);
+  await runStep(page, `${form}-large`, "03-buy", async () => {
     await clickButton(page, '.node[data-node="buffers"] .node__buy', "Buy · 8 Data");
     await page.waitForTimeout(250);
   }, [
