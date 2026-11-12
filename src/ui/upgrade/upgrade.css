@@ -1,0 +1,188 @@
+/*
+ * UI-RESET-55 (G2 wave 4): the upgrade comparison's own sheet. `src/ui/styles.css`
+ * is read-only for this issue, so every surface is namespaced under `.upgrade-*`
+ * and borrows the shipped palette tokens (--well, --steel, --furnace, --cyan) the
+ * inspector sheet already uses. Nothing here restyles the pinned base contracts:
+ * `.panel__row`, `.panel dl`, `.panel__body`, `.panel__actions` and the first-child
+ * accent keep the cascade they already have. Cards and controls keep the 44 px
+ * touch floor at every --text-scale, and the card grid folds to one column when
+ * the panel is too narrow for three readable cards.
+ */
+
+.upgrade-compare {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  margin-top: 6px;
+}
+
+.upgrade-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px;
+}
+
+.upgrade-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.upgrade-card[aria-pressed="true"] {
+  border-color: rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.14);
+}
+
+.upgrade-card:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.upgrade-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.upgrade-card__badge {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--steel-light);
+  white-space: nowrap;
+}
+
+.upgrade-card__badge--maxed {
+  color: var(--furnace);
+  font-weight: 700;
+}
+
+.upgrade-card__metric {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.upgrade-card__delta {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--cyan);
+}
+
+.upgrade-card__cost {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.upgrade-card__ok {
+  color: var(--cyan);
+}
+
+.upgrade-card__short {
+  color: var(--furnace);
+}
+
+.upgrade-card__tradeoff {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+.upgrade-buy {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.14);
+  color: var(--cyan);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.upgrade-buy:disabled {
+  border-color: var(--steel);
+  background: var(--well);
+  color: var(--steel-light);
+  cursor: not-allowed;
+}
+
+.upgrade-receipt {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  overflow-wrap: anywhere;
+}
+
+.upgrade-receipt--applied,
+.upgrade-receipt--respec {
+  color: var(--cyan);
+}
+
+.upgrade-receipt--short {
+  color: var(--furnace);
+}
+
+.upgrade-receipt--noop {
+  color: var(--body-light);
+}
+
+.upgrade-note {
+  margin: 2px 0 0;
+  font-size: 0.74rem;
+  color: var(--steel-light);
+  overflow-wrap: anywhere;
+}
+
+.upgrade-respec {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.upgrade-respec__title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--paper);
+}
+
+.upgrade-respec__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.upgrade-respec__btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.upgrade-respec__btn:disabled {
+  border-color: rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.14);
+  color: var(--cyan);
+  cursor: not-allowed;
+}

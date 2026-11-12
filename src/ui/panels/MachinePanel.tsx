@@ -37,6 +37,7 @@ import { Row, nextId } from "./shared";
 import { COPY } from "../inspector/copy";
 import { ContextPanes } from "../inspector/ContextPanes";
 import { constraintNotes, primaryActionNote, recipeFlow } from "../inspector/model";
+import { UpgradeCompare } from "../upgrade/UpgradeCompare";
 import "../inspector/inspector.css";
 
 /**
@@ -59,6 +60,14 @@ import "../inspector/inspector.css";
  * Recovery context opens in-panel (see ContextPanes): the App contract has no selection
  * callback, and the acceptance forbids losing the machine selection, so Storage/Routes/
  * Power are local panes that dispatch nothing.
+ *
+ * UI-RESET-55 (G2 wave 4): the Actions section now opens with the explicit branch
+ * comparison (see UpgradeCompare) — three selectable cards printing current → proposed
+ * values, units, price and tradeoff, a deliberate Buy selected face, and the free
+ * last-pick re-pick. The plain unnamed Upgrade face stays below as the accent-named
+ * primary exactly as #54 pinned it; the comparison labels honestly that an unnamed
+ * level counts as one speed rank. No new section landmark and no new `.panel__actions`
+ * child is introduced, so the seven-section and three-face contracts hold.
  */
 export function MachinePanel(props: {
   state: SimState;
@@ -282,6 +291,14 @@ export function MachinePanel(props: {
               })}
             />
           </dl>
+          {/* UI-RESET-55: keyed by machine id so the selection and the receipt reset
+              when the inspected machine changes, and never drift between machines. */}
+          <UpgradeCompare
+            key={machine.id}
+            state={props.state}
+            machine={machine}
+            dispatch={props.dispatch}
+          />
           <div className="panel__actions">
             {plans.length > 0 ? (
               <button
