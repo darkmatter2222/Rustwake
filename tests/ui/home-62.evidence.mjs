@@ -247,16 +247,17 @@ async function assertTargets(page, ff, phase, scope) {
   assert(ff, phase, `touch targets >= 44px in ${scope ?? "document"}`, bad.length === 0, JSON.stringify(bad.length ? bad : rows.map((r) => r.h)));
 }
 async function openMenu(page) {
-  // Rail mode (wide desktop) hides the dock Menu face; slot 5 owns the menu there.
+  // Rail mode (wide desktop) hides the dock Menu face; the rail's "menu" slot
+  // owns it there (data-slot carries the slot NAME, not its 1-based index).
   const via = await page.evaluate(() => {
     const face = document.querySelector(".shell-menu-face");
     if (face && face.getBoundingClientRect().width > 0) return "face";
-    const slot = document.querySelector('.shell-rail [data-slot="5"]');
+    const slot = document.querySelector('.shell-rail [data-slot="menu"]');
     return slot ? "rail" : "none";
   });
   if (via === "face") await page.click(".shell-menu-face");
-  else if (via === "rail") await page.click('.shell-rail [data-slot="5"]');
-  else throw new Error("openMenu: no menu face or rail slot 5");
+  else if (via === "rail") await page.click('.shell-rail [data-slot="menu"]');
+  else throw new Error("openMenu: no menu face or rail menu slot");
   await page.waitForSelector(".shell-menu");
   return via;
 }
