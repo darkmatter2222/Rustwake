@@ -470,8 +470,9 @@ async function tapTile(page, tile, expectPanel = true) {
   const beforeAria = await readAria();
   let pt = null;
   // The shell-zoom faces / objective / status-line can cover a tile's exact center on
-  // phoneland, so search small offsets (within the +/-16 world pick tolerance) for a point
-  // where the canvas is the top element, exactly as a player's cleared tap needs.
+  // phoneland, so search the full +/-15 world pick box (rings outward from the center, the
+  // same Chebyshev <=16 tolerance pickTarget uses) for a point where the canvas is the top
+  // element — exactly as a player taps anywhere on the machine's tile to clear chrome.
   //
   // The client point is computed from the canvas' OWN camera stamp (dataset.cam) and the
   // pointer down/up is dispatched SYNCHRONOUSLY in the SAME evaluate. App.applyGestureOutput
@@ -496,7 +497,14 @@ async function tapTile(page, tile, expectPanel = true) {
         x: (wx + ox - camera.x) * camera.scale + view.width / 2,
         y: (wy + oy - camera.y) * camera.scale + view.height / 2,
       });
-      const offs = [[0, 0], [6, 0], [-6, 0], [0, 6], [0, -6], [10, 0], [-10, 0], [0, 10], [0, -10], [12, 12], [-12, -12], [12, -12], [-12, 12], [14, 0], [-14, 0], [0, 14], [0, -14]];
+      const offs = [];
+      for (let d = 0; d <= 15; d += 3) {
+        for (let a = -d; a <= d; a += 3) {
+          for (let b = -d; b <= d; b += 3) {
+            if (Math.max(Math.abs(a), Math.abs(b)) === d) offs.push([a, b]);
+          }
+        }
+      }
       let local = null, ox = 0, oy = 0;
       for (const [a, b] of offs) {
         const q = toLocal(a, b);
