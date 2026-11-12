@@ -470,13 +470,18 @@ async function tapTile(page, tile, expectPanel = true) {
   const beforeAria = await readAria();
   let pt = null;
   // The shell-zoom faces / objective / status-line can cover a tile's exact center on
-  // phoneland, and a transient overlay can momentarily swallow EVERY pick offset so the
-  // fallback center lands on the shell-zoom reset face (which recenters the camera rather
-  // than selecting). Search small offsets (within the +/-16 world pick tolerance) for a
-  // point where the canvas is the top element so the tap reaches App.applyGestureOutput ->
-  // pickTarget exactly as a player's cleared tap does, and RE-TAP until the inspector
-  // actually changes machine — exactly as a player re-taps a tile a passing overlay ate.
-  // No state is injected; selection stays a real canvas gesture throughout.
+  // phoneland, so search small offsets (within the +/-16 world pick tolerance) for a point
+  // where the canvas is the top element, exactly as a player's cleared tap needs.
+  //
+  // The client point is computed from the canvas' OWN camera stamp (dataset.cam) and the
+  // pointer down/up is dispatched SYNCHRONOUSLY in the SAME evaluate. App.applyGestureOutput
+  // resolves a tap against the LIVE cameraRef at pointerup; on phoneland the camera eases /
+  // refits between separate CDP calls, so a point computed in one call and tapped in a later
+  // page.mouse call lands on a stale camera and misses the tile. Reading the stamp and
+  // driving the gesture in one synchronous block removes that window: no rAF can run between
+  // them, so screenToWorld sees the exact camera the point was computed against. This is a
+  // real cleared tap through React's onPointerDown/onPointerUp -> gesture machine ->
+  // pickTarget -> setSelected; no state is injected and selection stays a canvas gesture.
   for (let attempt = 0; attempt < 6; attempt += 1) {
     pt = await page.evaluate(({ tile, YARD_COLS, CELL }) => {
       const c = document.querySelector(".game canvas");
@@ -487,28 +492,28 @@ async function tapTile(page, tile, expectPanel = true) {
       const camera = { x: parts[0], y: parts[1], scale: parts[2] };
       const col = tile % YARD_COLS, row = Math.floor(tile / YARD_COLS);
       const wx = col * CELL + CELL / 2, wy = row * CELL + CELL / 2;
-      const toClient = (ox, oy) => {
-        const sx = (wx + ox - camera.x) * camera.scale + view.width / 2;
-        const sy = (wy + oy - camera.y) * camera.scale + view.height / 2;
-        return { x: r.left + sx, y: r.top + sy };
-      };
+      const toLocal = (ox, oy) => ({
+        x: (wx + ox - camera.x) * camera.scale + view.width / 2,
+        y: (wy + oy - camera.y) * camera.scale + view.height / 2,
+      });
       const offs = [[0, 0], [6, 0], [-6, 0], [0, 6], [0, -6], [10, 0], [-10, 0], [0, 10], [0, -10], [12, 12], [-12, -12], [12, -12], [-12, 12], [14, 0], [-14, 0], [0, 14], [0, -14]];
-      for (const [ox, oy] of offs) {
-        const q = toClient(ox, oy);
-        if (document.elementFromPoint(q.x, q.y) === c) return { x: q.x, y: q.y, ox, oy };
+      let local = null, ox = 0, oy = 0;
+      for (const [a, b] of offs) {
+        const q = toLocal(a, b);
+        if (document.elementFromPoint(r.left + q.x, r.top + q.y) === c) { local = q; ox = a; oy = b; break; }
       }
-      const q = toClient(0, 0);
-      return { x: q.x, y: q.y, ox: 0, oy: 0, fallback: true };
+      // Only tap a genuinely clear canvas point. The fallback center can land on the
+      // shell-zoom reset face and recenter the camera, invalidating the stable-camera pixel
+      // comparisons downstream. If a transient HUD overlay covers every pick offset, wait
+      // for it to clear and re-search instead of tapping chrome.
+      if (!local) return { fallback: true, cam: c.dataset.cam || null };
+      const clientX = r.left + local.x, clientY = r.top + local.y;
+      const base = { bubbles: true, cancelable: true, composed: true, pointerId: 1, pointerType: "mouse", isPrimary: true, clientX, clientY, button: 0 };
+      c.dispatchEvent(new PointerEvent("pointerdown", { ...base, buttons: 1 }));
+      c.dispatchEvent(new PointerEvent("pointerup", { ...base, buttons: 0 }));
+      return { x: clientX, y: clientY, ox, oy, cam: c.dataset.cam || null };
     }, { tile, YARD_COLS, CELL });
-    // Only tap a genuinely clear canvas point. The fallback center can land on the
-    // shell-zoom reset face and recenter the camera, which would invalidate the
-    // stable-camera pixel comparisons (selection de-emphasis) downstream. If a transient
-    // HUD overlay covers every pick offset, wait for it to clear and re-search instead of
-    // tapping chrome — the camera stays fixed and selection remains a real canvas gesture.
     if (!pt.fallback) {
-      await page.mouse.move(pt.x, pt.y);
-      await page.mouse.down();
-      await page.mouse.up();
       if (expectPanel) await page.waitForSelector(".panel--stack", { timeout: 2000 }).catch(() => {});
       await page.waitForTimeout(250);
       const afterAria = await readAria();
