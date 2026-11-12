@@ -898,3 +898,161 @@ body {
     bottom: calc(62px + env(safe-area-inset-bottom));
   }
 }
+
+/* ---- UI-RESET-62: title/continue, settings and the reset confirmation ----
+   Appended after every pinned block; nothing above is rewritten. The gate keeps
+   its radial night field; the new faces borrow the same rust/amber accent family
+   so the home screen reads as one artifact with the yard. */
+
+.gate__save {
+  margin: 0;
+  max-width: min(92vw, 460px);
+  color: var(--cyan);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.gate__secondary {
+  min-width: 190px;
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(111, 147, 173, 0.45);
+  background: rgba(11, 18, 32, 0.66);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.92rem;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.gate__secondary:hover {
+  border-color: rgba(95, 216, 232, 0.65);
+  background: rgba(95, 216, 232, 0.1);
+}
+
+.gate__secondary:active {
+  background: rgba(95, 216, 232, 0.18);
+}
+
+/* Pre-start settings: the same SettingsPanel, centred over the gate instead of
+   docked into the HUD column (there is no HUD yet). It is not a `.hud` child, so
+   the overlay census and the camera insets never see it. */
+.gate-settings {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 13, 24, 0.78);
+}
+
+.gate-settings .panel {
+  margin-top: 0;
+  width: min(92vw, 560px);
+  max-width: min(92vw, 560px);
+  max-height: min(80dvh, 640px);
+}
+
+/* The reset confirmation: one bounded alertdialog above the shell (the Menu
+   sheet sits at z-index 30). Cancel keeps the safe steel treatment; the armed
+   confirm takes the rust accent so the destructive face is unmistakable. */
+.reset-dialog__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 13, 24, 0.82);
+}
+
+.reset-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(92vw, 480px);
+  max-height: min(86dvh, 600px);
+  overflow: hidden auto;
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(201, 113, 58, 0.65);
+  background: var(--panel);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 113, 58, 0.55) rgba(9, 15, 26, 0.4);
+}
+
+.reset-dialog__title {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--furnace);
+}
+
+.reset-dialog__warning {
+  margin: 0;
+  color: var(--paper);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.reset-dialog__save {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.reset-dialog__ack {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--steel-light);
+  font-size: 0.85rem;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.reset-dialog__ack input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  accent-color: var(--rust);
+  cursor: pointer;
+}
+
+.reset-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.reset-dialog__confirm:not(:disabled) {
+  border-color: rgba(201, 113, 58, 0.8);
+  background: linear-gradient(180deg, rgba(201, 113, 58, 0.5), rgba(201, 113, 58, 0.24));
+  color: var(--paper);
+}
+
+.reset-dialog__confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Settings panel: the destructive entry borrows the rust border, and every
+   row control keeps the shared 44 px icon-btn floor. */
+.panel--settings .panel__danger {
+  border-color: rgba(201, 113, 58, 0.65);
+  color: var(--furnace);
+}
+
+.panel--settings .panel__danger:hover {
+  background: rgba(201, 113, 58, 0.16);
+}
+
+.panel--settings .icon-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}

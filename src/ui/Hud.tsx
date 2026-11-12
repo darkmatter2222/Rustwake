@@ -7,6 +7,7 @@ import { RESOURCE_LABEL, costSummary, hudChipLimit, priceLine, visibleResources 
 import { ALL_RESOURCES_ID, AllResources } from "./hud/AllResources";
 import { publishHudState } from "./hud/bridge";
 import { COPY } from "./hud/copy";
+import { HOME_COPY } from "./home/copy";
 import { capacityText, hudNumber } from "./hud/format";
 import {
   BoltIcon,
@@ -35,13 +36,52 @@ const COST = "dock__cost";
 const SOUND_OFF = t("sound.off");
 const SOUND_ON = t("sound.on");
 
-export function Gate(props: { onBegin: () => void; muted: boolean; onToggleMute: () => void }) {
+/**
+ * UI-RESET-62: the title/continue screen. With real save progress the primary
+ * face reads Continue and keeps the pinned accessible name prefix ("Begin
+ * recovery…") so keyboard and test paths still find it; the actual save is
+ * summarised underneath from the loaded state. A settings-only envelope is not
+ * progress, so a fresh yard still reads Begin recovery. New game… opens the
+ * reset confirmation (never resets directly) and Settings opens the persisted
+ * settings before the run starts. Neither secondary face uses `.gate__btn`, so
+ * the primary remains the first begin action on the screen.
+ */
+export function Gate(props: {
+  onBegin: () => void;
+  muted: boolean;
+  onToggleMute: () => void;
+  hasProgress: boolean;
+  summary: string | null;
+  onNewGame: () => void;
+  onSettings: () => void;
+}) {
   return (
     <div className="gate">
       <h1 className="gate__title">{t("gate.title")}</h1>
       <p className="gate__sub">{t("gate.sub")}</p>
-      <button className="gate__btn" onClick={props.onBegin}>
-        {t("gate.begin")}
+      {props.hasProgress && props.summary !== null ? (
+        <p className="gate__save" role="status">
+          {HOME_COPY.savedRun} — {props.summary}
+        </p>
+      ) : (
+        <p className="gate__save">{HOME_COPY.freshYard}</p>
+      )}
+      <button
+        className="gate__btn"
+        onClick={props.onBegin}
+        aria-label={
+          props.hasProgress ? "Begin recovery — continue the saved yard" : undefined
+        }
+      >
+        {props.hasProgress ? HOME_COPY.continue : t("gate.begin")}
+      </button>
+      {props.hasProgress ? (
+        <button type="button" className="gate__secondary" onClick={props.onNewGame}>
+          {HOME_COPY.newGame}
+        </button>
+      ) : null}
+      <button type="button" className="gate__secondary" onClick={props.onSettings}>
+        {HOME_COPY.settings}
       </button>
       <button className="icon-btn" onClick={props.onToggleMute}>
         {props.muted ? SOUND_OFF : SOUND_ON}

@@ -1,5 +1,6 @@
 import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../content/defs";
 import { RESEARCH } from "../content/research";
+import { LEASE_KEY } from "./lease";
 import {
   SCHEMA_VERSION,
   createInitialState,
@@ -423,4 +424,47 @@ function flightOf(value: DroneState["inFlight"]): DroneState["inFlight"] {
   if (!Number.isSafeInteger(value.qty) || value.qty < 0) return null;
   if (!Number.isSafeInteger(value.arrive)) return null;
   return { qty: value.qty, arrive: value.arrive };
+}
+
+/**
+ * UI-RESET-62: whether a loaded payload carries real yard progress, as opposed to
+ * a settings-only envelope. Pre-start settings changes persist a fresh sim, so the
+ * mere presence of a save is not evidence of a run worth continuing: the title
+ * screen offers Continue only when one of these markers is set. Pure and total —
+ * a malformed record simply reads as no progress.
+ */
+export function hasSaveProgress(sim: SimState | null | undefined): boolean {
+  if (!sim || typeof sim !== "object") return false;
+  if (Number.isSafeInteger(sim.tick) && sim.tick > 0) return true;
+  if (Number.isSafeInteger(sim.revision) && sim.revision > 0) return true;
+  if (Number.isSafeInteger(sim.tutorial) && sim.tutorial > 0) return true;
+  if (Array.isArray(sim.machines) && sim.machines.length > 0) return true;
+  if (Array.isArray(sim.routes) && sim.routes.length > 0) return true;
+  if (Number.isSafeInteger(sim.credits) && sim.credits > 0) return true;
+  if (sim.drone && sim.drone.repaired === true) return true;
+  if (Array.isArray(sim.spares) && sim.spares.length > 0) return true;
+  if (sim.research && Object.keys(sim.research).length > 0) return true;
+  return false;
+}
+
+/**
+ * UI-RESET-62: the one destructive reset path. Removes the save envelope AND the
+ * writer lease, so the reload after a reset starts a fresh yard as the writer
+ * instead of being demoted to reader by a stale lease heartbeat. Storage is
+ * duck-typed (removeItem may be absent on minimal test doubles) and every removal
+ * is guarded: a storage failure must never turn a confirmed reset into a crash.
+ * The caller reloads the page afterwards; no live store state is mutated here.
+ */
+export function clearSave(storage: { removeItem?: (key: string) => void } | null | undefined): void {
+  if (!storage || typeof storage.removeItem !== "function") return;
+  try {
+    storage.removeItem(SAVE_KEY);
+  } catch {
+    // A hostile or full storage must not block the reset; the reload still runs.
+  }
+  try {
+    storage.removeItem(LEASE_KEY);
+  } catch {
+    // Same guard for the lease record.
+  }
 }

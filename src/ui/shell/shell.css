@@ -210,8 +210,12 @@
 }
 
 .shell-zoom__face--reset {
-  font-size: 0.78rem;
+  /* UI-RESET-62: the face reads "Recenter" (camera, not navigation). A fixed-px
+     label keeps the longer word inside the reserved 60 px camera gutter at every
+     text scale; the accessible name ("Reset view") is unchanged. */
+  font-size: 10px;
   letter-spacing: 0.02em;
+  padding: 0 3px;
 }
 
 /* The bounded scrollers (inspector bodies, the Menu sheet) get a thin themed
@@ -330,4 +334,21 @@
     left: 110px;
     bottom: max(62px, calc(var(--shell-zoom-clear, 62px) + env(safe-area-inset-bottom)));
   }
+}
+
+/* ---- UI-RESET-62: the destructive menu entry ----
+   Appended after every pinned block. The Reset game row keeps the shared row
+   geometry (44 px floor, bounded scroller) and only borrows the rust accent so
+   it reads as dangerous next to the navigation rows. */
+.shell-menu__row--danger {
+  border-color: rgba(201, 113, 58, 0.6);
+  color: var(--furnace);
+}
+
+.shell-menu__row--danger:active {
+  background: rgba(201, 113, 58, 0.18);
+}
+
+.shell-menu__row--danger .shell-menu__hint {
+  color: rgba(255, 183, 101, 0.72);
 }
