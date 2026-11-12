@@ -92,6 +92,30 @@ function yardWithAFullyLinkedSorter(): SimState {
   return state;
 }
 
+/**
+ * The engine's own dismantle arithmetic (commands.ts `dismantleMachine`): build refund +
+ * tray + buffer + the in-progress batch in full + one belt refund per REGISTERED link
+ * (`[outRoute, ...inRoutes]`), never per touching link. `connectRoute` overwrites
+ * `outRoute` on every output connect, so a multi-output yard has touching routes the
+ * engine never registered and never refunds (engine follow-up: issue #100).
+ */
+function registeredRefund(state: SimState, machine: MachineState): number {
+  const ids = [machine.outRoute, ...machine.inRoutes].filter(
+    (id): id is number => id !== null,
+  );
+  const registered = state.routes.filter((route) => ids.includes(route.id));
+  return (
+    BLUEPRINTS[machine.blueprint].buildCost.reduce(
+      (total, item) => total + refundOf(item.qty),
+      0,
+    ) +
+    machine.trayUnits +
+    machine.inBufUnits +
+    machine.batch.reduce((total, item) => total + item.qty, 0) +
+    registered.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0)
+  );
+}
+
 /** One isolated sorter: no links, empty buffer — the starved/no-transport case. */
 function yardWithAnIsolatedSorter(): SimState {
   const state = yardWithASorter();
@@ -516,6 +540,102 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     act(() => face.click());
     expect(state.routes.length).toBe(routesBefore + plans.length);
     expect(machine.outRoute).not.toBeNull();
+  });
+
+  it("Dismantle after Connect lays two outputs refunds only the engine-registered links", () => {
+    // QA REWORK #99 repro (sequence J): the sorter's two-output recipe leaves two
+    // pending plans; the panel's own Connect face lays BOTH through route.connect,
+    // and the engine registers only the LAST output in machine.outRoute. The face
+    // must refund [outRoute, ...inRoutes] — not every touching route — or it
+    // overprints the tap by the orphaned belt's refund (engine follow-up: #100).
+    const state = yardWithASorter();
+    const machine = state.machines[0];
+    const outId = machine.outRoute;
+    state.routes = state.routes.filter((route) => route.id !== outId);
+    machine.outRoute = null;
+    expect(planConnections(state, machine.id).length).toBe(2);
+    const host = mountPanel(state, machine);
+    const connect = actionFaces(host)[0];
+    expect(connect.textContent).toBe(t("btn.connect"));
+    act(() => connect.click());
+    const outputs = state.routes.filter((route) => route.from.id === machine.id);
+    expect(outputs.length).toBe(2);
+    expect(machine.outRoute).toBe(outputs[outputs.length - 1].id);
+    // Repaint from the post-Connect state, then read the corrected face.
+    const repaint = mountPanel(state, machine);
+    const face = actionFaces(repaint).find((item) =>
+      item.textContent?.startsWith("Dismantle"),
+    );
+    const printed = /^Dismantle · \+(\d+) units$/.exec(face?.textContent ?? "");
+    expect(printed).not.toBeNull();
+    const refund = Number(printed?.[1]);
+    expect(refund).toBe(registeredRefund(state, machine));
+    // Regression condition: the old all-touching-links formula overprints this tap.
+    const touching = state.routes.filter(
+      (route) => route.from.id === machine.id || route.to.id === machine.id,
+    );
+    const allLinksRefund =
+      BLUEPRINTS.sorter.buildCost.reduce((total, item) => total + refundOf(item.qty), 0) +
+      machine.trayUnits +
+      machine.inBufUnits +
+      machine.batch.reduce((total, item) => total + item.qty, 0) +
+      touching.reduce(
+        (total, route) => total + refundOf(beltCost(route.run?.length ?? 0)),
+        0,
+      );
+    expect(allLinksRefund).toBeGreaterThan(refund);
+    const unitsBefore = state.storeUnits;
+    act(() => face?.click());
+    expect(state.machines.length).toBe(0);
+    expect(state.storeUnits - unitsBefore).toBe(refund);
+  });
+
+  it("Dismantle on a four-link yard with a running batch refunds the registered set plus the batch", () => {
+    // QA REWORK #99 repro (sequence C analog): a mature yard touches four routes but
+    // the engine registers only [outRoute, ...inRoutes]. The r2 batch term must
+    // survive alongside the corrected belt term, and the tap must return exactly
+    // the printed face — no more, no less.
+    const state = yardWithAFullyLinkedSorter();
+    const machine = state.machines[0];
+    // A third output link (null filter carries anything): four touching routes now,
+    // and the engine registers this last output plus the one input.
+    send(state, { type: "route.connect", from: machine.id, to: 0, filter: null });
+    expect(machine.outRoute).toBe(state.routes[state.routes.length - 1].id);
+    // Freeze belt cargo empty (test-only mutation): `dropRoute` also returns any
+    // in-flight items to the store, so an empty belt lets the store delta isolate
+    // the refund face. The cargo return itself is engine behaviour, checked in the
+    // browser probe as delta === printed + cargo.
+    for (const route of state.routes) {
+      route.items = [];
+      route.inFlight = 0;
+    }
+    // Running batch (test-only mutation, as in the r2 batch test above): the engine
+    // returns its reserved inputs in full on top of build/tray/buffer/belt parts.
+    machine.batch = [{ resource: "scrap", qty: 2 }];
+    machine.progress = 4000;
+    machine.status = "running";
+    const touching = state.routes.filter(
+      (route) => route.from.id === machine.id || route.to.id === machine.id,
+    );
+    expect(touching.length).toBe(4);
+    const host = mountPanel(state, machine);
+    const face = actionFaces(host).find((item) => item.textContent?.startsWith("Dismantle"));
+    const printed = /^Dismantle · \+(\d+) units$/.exec(face?.textContent ?? "");
+    expect(printed).not.toBeNull();
+    const refund = Number(printed?.[1]);
+    expect(refund).toBe(registeredRefund(state, machine));
+    // The batch term is present: dropping it would underprint by exactly 2.
+    const batchUnits = machine.batch.reduce((total, item) => total + item.qty, 0);
+    machine.batch = [];
+    expect(refund).toBe(registeredRefund(state, machine) + batchUnits);
+    machine.batch = [{ resource: "scrap", qty: 2 }];
+    const unitsBefore = state.storeUnits;
+    act(() => face?.click());
+    expect(state.machines.length).toBe(0);
+    expect(state.storeUnits - unitsBefore).toBe(refund);
+    // The engine drops only the two registered routes; the two orphaned outputs
+    // survive. Issue #100 owns that engine defect — the UI fix must not mask it.
+    expect(state.routes.length).toBe(2);
   });
 });
 

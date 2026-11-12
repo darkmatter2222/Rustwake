@@ -86,12 +86,25 @@ export function MachinePanel(props: {
    * applies to that tap, from the same exported helpers `commands.ts` uses, so a printed
    * number cannot drift from what the tap charges: `moveMachine` takes `movePenaltyPct` of
    * every build-cost line, `dismantleMachine` returns `refundOf` on those lines, the tray,
-   * the buffer and the in-progress batch in full, and one belt refund per attached link.
-   * `links` is the same set the extent row below prints, and the store's endpoint id (0)
-   * never collides with a machine.
+   * the buffer and the in-progress batch in full, and one belt refund per link the engine
+   * has REGISTERED on the machine (`outRoute` + `inRoutes`), not per touching link.
+   * `links` stays the all-touching set the extent row below prints, and the store's
+   * endpoint id (0) never collides with a machine.
    */
   const links = props.state.routes.filter(
     (route) => route.from.id === machine.id || route.to.id === machine.id
+  );
+  // UI-RESET-54 r3 (QA REWORK on #99): `connectRoute` overwrites `source.outRoute` on
+  // every output connect, so a fully-linked multi-output machine touches routes the
+  // engine never registered. `dismantleMachine` refunds belts for `[outRoute, ...inRoutes]`
+  // only; counting every touching link overprinted the tap by the orphaned belts' refund.
+  // The engine's overwrite/orphaning itself is filed separately as issue #100 — the face
+  // must mirror the engine as it stands, so it resolves exactly the registered set.
+  const registeredIds = [machine.outRoute, ...machine.inRoutes].filter(
+    (id): id is number => id !== null
+  );
+  const registeredLinks = props.state.routes.filter((route) =>
+    registeredIds.includes(route.id)
   );
   const moveCost = def.buildCost.reduce(
     (sum, item) => sum + Math.round((item.qty * TUNING.movePenaltyPct) / 100),
@@ -104,7 +117,10 @@ export function MachinePanel(props: {
     machine.trayUnits +
     machine.inBufUnits +
     machine.batch.reduce((total, item) => total + item.qty, 0) +
-    links.reduce((total, route) => total + refundOf(beltCost(route.run?.length ?? 0)), 0);
+    registeredLinks.reduce(
+      (total, route) => total + refundOf(beltCost(route.run?.length ?? 0)),
+      0
+    );
   const batchPercent = Math.min(
     100,
     Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
