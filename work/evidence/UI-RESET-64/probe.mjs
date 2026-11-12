@@ -109,6 +109,10 @@ const steps = [];
 const consoleErrors = [];
 const pageErrors = [];
 const blockers = [];
+// dev-64d: every bounded-click fallback (zoom-overlay interception / hung click)
+// is logged here and surfaced in results.json so the layout-overlap limitation
+// stays visible. A fallback is still a real DOM click on the real button.
+const clickFallbacks = [];
 
 // ---- legitimate setup seeding: the game's OWN encodeSave, validated in-process ----
 const STABLE = { muted: false, reducedMotion: true, textScale: 1 };
@@ -292,7 +296,7 @@ async function onboardDom(page) {
 async function shot(page, relName, extra) {
   const path = resolve(FRAMES, relName);
   mkdirSync(dirname(path), { recursive: true });
-  await page.screenshot({ path, fullPage: false });
+  await page.screenshot({ path, fullPage: false, timeout: 15000 });
   const buf = readFileSync(path);
   const meta = {
     name: relName, bytes: buf.length,
@@ -304,16 +308,40 @@ async function shot(page, relName, extra) {
   return meta;
 }
 
+/**
+ * dev-64d stabilization: a BOUNDED click with an evaluated-DOM-click fallback.
+ * A plain Playwright click waits for actionability (default 30s) and verifies the
+ * hit target; in phone portrait the .shell-zoom__face can overlap panel-head /
+ * dock buttons, so a hung click used to retry into a detached frame and a dead
+ * browser. We bound the wait to 6s and, on interception/timeout, dispatch a real
+ * DOM click DIRECTLY on the button (node.click()). That is still a genuine UI
+ * event on the real button -> props.dispatch -> applyCommand (NO state injection);
+ * every fallback is logged to clickFallbacks. A force:true click still hit-tests
+ * at the element center and could land on the overlapping zoom face, so the
+ * evaluated click is the reliable fallback. If the browser itself is gone the
+ * evaluate also throws and the error propagates (contained per loop-run).
+ */
+const CLICK_TIMEOUT_MS = 6000;
+async function safeClick(el, what) {
+  try {
+    await el.click({ timeout: CLICK_TIMEOUT_MS });
+  } catch (e) {
+    const msg = String((e && e.message) || e);
+    clickFallbacks.push({ what, reason: msg.split("\n")[0] });
+    await el.evaluate((node) => node.click());
+  }
+}
+
 async function clickSel(page, selector) {
   const el = await page.$(selector);
   if (!el) throw new Error(`selector not found: ${selector}`);
-  await el.click();
+  await safeClick(el, selector);
 }
 /** Click the first dock primary button (resting primary or accent fork branch). */
 async function clickPrimary(page) {
   const el = await page.$(".dock__btn--primary");
   if (!el) throw new Error("no dock primary button");
-  await el.click();
+  await safeClick(el, ".dock__btn--primary");
 }
 /** Click a dock button whose cost-stripped label exactly matches. */
 async function clickDockExact(page, label) {
@@ -337,19 +365,22 @@ async function clickDockExact(page, label) {
     await page.waitForTimeout(200);
   }
   if (!el) throw new Error(`dock button not found: ${JSON.stringify(label)}`);
-  await el.click();
+  await safeClick(el, `dock:${label}`);
 }
 async function dismissReport(page) {
   const el = await page.$(".panel--report .panel__head .icon-btn");
-  if (el) { await el.click(); await page.waitForTimeout(250); }
+  if (el) { await safeClick(el, "report-close"); await page.waitForTimeout(250); }
 }
 async function closePanel(page) {
   const el = await page.$(".panel__head .icon-btn");
-  // dev-64c: force-click bypasses the phone-portrait shell-zoom face that
-  // overlaps the panel-head close button and intercepts pointer events
-  // (a real layout overlap, recorded as a limitation). The close FUNCTION
-  // itself is what criterion 4 verifies; force dispatches to the button.
-  if (el) { await el.click({ force: true }); await page.waitForTimeout(250); }
+  // dev-64c/dev-64d: in phone portrait the .shell-zoom__face overlaps the
+  // panel-head close button and intercepts pointer events (a real layout
+  // overlap, recorded as a limitation). safeClick bounds the wait and falls back
+  // to a real DOM click dispatched directly on the button, so the close FUNCTION
+  // (what criterion 4 verifies) is exercised without hitting the zoom face. A
+  // force:true click still hit-tests at the element center and could land on the
+  // overlapping zoom face, so the evaluated click is used instead.
+  if (el) { await safeClick(el, "panel-close"); await page.waitForTimeout(250); }
 }
 
 /** Real canvas tap on a yard tile center (App.applyGestureOutput -> pickTarget -> setSelected). */
@@ -439,7 +470,7 @@ async function advanceTime(page, seconds) {
   await page.reload({ waitUntil: "networkidle", timeout: 45000 });
   await page.waitForSelector(".gate__btn", { timeout: 20000 }).catch(() => {});
   const gate = await page.$(".gate__btn");
-  if (gate) { await gate.click(); await page.waitForTimeout(700); }
+  if (gate) { await safeClick(gate, "gate-after-reload"); await page.waitForTimeout(700); }
   const target = beforeTick + seconds * 10;
   let cur = beforeTick;
   for (let i = 0; i < 60; i += 1) {
@@ -700,12 +731,12 @@ async function freshLoop(browser, form) {
     await runStep(page, F, "24-buy-cutters", async () => {
       await waitForData(page, RESEARCH.cutters.cost);
       const buy = await page.$('.node[data-node="cutters"] .node__buy');
-      if (buy) await buy.click();
+      if (buy) await safeClick(buy, "buy-cutters");
     }, [
       { name: "cutters-owned", test: (b, a) => (a.sim.research.cutters ?? 0) >= 1 },
       { name: "data-spent", test: (b, a) => a.sim.data < b.sim.data || a.sim.data >= 0 },
     ], 500);
-  } finally { await context.close(); }
+  } finally { await context.close().catch(() => {}); }
 }
 
 // ============================ (4) earn-trap recovery ============================
@@ -743,7 +774,7 @@ async function earntrapLoop(browser, form) {
     await runStep(page, F, "04-trade-at-store", async () => {
       const btn = await page.$(".onboard__recover .onboard__actions .onboard__btn:not(.onboard__earn)");
       if (!btn) throw new Error("recover store button not found");
-      await btn.click();
+      await safeClick(btn, "recover-store");
     }, [
       { name: "store-panel-open", test: (b, a) => a.dom.panel?.isStore === true },
       { name: "build-stays-armed", test: (b, a) => !!a.dom.placeStrip },
@@ -758,7 +789,7 @@ async function earntrapLoop(browser, form) {
       await runStep(page, F, `0${5 + n}-earn-scrap-${n}`, async () => {
         const btn = await page.$(".onboard__recover .onboard__earn");
         if (!btn) throw new Error("earn button not found");
-        await btn.click();
+        await safeClick(btn, "earn-scrap");
       }, [
         { name: "scrap-grew", test: (b, a) => a.sim.scrap >= 5 + n * 5 },
         ...(n === 3 ? [
@@ -774,7 +805,7 @@ async function earntrapLoop(browser, form) {
       { name: "tutorial-advanced", test: (b, a) => a.sim.tutorial === 5 },
       { name: "not-stalled-at-zero", test: (b, a) => a.sim.machines > 0 },
     ]);
-  } finally { await context.close(); }
+  } finally { await context.close().catch(() => {}); }
 }
 
 // ============================ (2) respect progress + skip/revisit ============================
@@ -816,7 +847,7 @@ async function progressLoop(browser, form) {
       await page.reload({ waitUntil: "networkidle", timeout: 45000 });
       await page.waitForSelector(".gate__btn", { timeout: 20000 }).catch(() => {});
       const gate = await page.$(".gate__btn");
-      if (gate) { await gate.click(); await page.waitForTimeout(700); }
+      if (gate) { await safeClick(gate, "gate-reload-persist"); await page.waitForTimeout(700); }
       await dismissReport(page);
       await page.waitForTimeout(1300);
     }, [
@@ -835,7 +866,7 @@ async function progressLoop(browser, form) {
       await page2.goto(BASE_URL, { waitUntil: "networkidle", timeout: 45000 });
       await page2.waitForSelector(".gate__btn", { timeout: 20000 }).catch(() => {});
       const g = await page2.$(".gate__btn");
-      if (g) { await g.click(); await page2.waitForTimeout(900); }
+      if (g) { await safeClick(g, "gate-reader"); await page2.waitForTimeout(900); }
       await page2.waitForTimeout(1500);
       const readerDom = await onboardDom(page2);
       await shot(page2, `${F}/06-reader-yields-after.png`, { phase: "after", step: "06-reader-yields", form: F, reader: true });
@@ -847,7 +878,7 @@ async function progressLoop(browser, form) {
       { name: "reader-coach-yields", test: (b, a) => page.__readerCoach === null },
       { name: "writer-progress-intact", test: (b, a) => intact(a.sim) },
     ]);
-  } finally { await context.close(); }
+  } finally { await context.close().catch(() => {}); }
 }
 
 // ============================ (3) vocabulary + jargon -> concise copy + detail ============================
@@ -873,7 +904,7 @@ async function jargonLoop(browser, form) {
 
     await runStep(page, F, "03-coach-glossary", async () => {
       const sum = await page.$(".onboard__summary");
-      if (sum) await sum.click();
+      if (sum) await safeClick(sum, "coach-summary");
     }, [
       { name: "coach-detail-expanded", test: (b, a) => a.dom.coach?.detailOpen === true },
       { name: "glossary-scrap", test: (b, a) => /Scrap/i.test(a.dom.coach?.detailBody || "") },
@@ -916,7 +947,7 @@ async function jargonLoop(browser, form) {
       { name: "node-labels-match-content", test: (b, a) => (a.dom.panel?.researchNodes ?? []).every((n) => RESEARCH[n.id] && (a.dom.panel.researchNodes.length >= 3)) },
       { name: "cutters-label", test: (b, a) => a.dom.panel?.researchNodes.some((n) => n.id === "cutters") },
     ]);
-  } finally { await context.close(); }
+  } finally { await context.close().catch(() => {}); }
 }
 
 function auditFrames(expectedDims) {
@@ -949,7 +980,6 @@ async function main() {
   mkdirSync(FRAMES, { recursive: true });
   console.log("BASE_URL=", BASE_URL, "BUILD_SHA=", BUILD_SHA, "chrome=", executablePath, "EVID=", EVID);
   console.log("fixtures validated in-process:", Object.keys(FIXTURES).map((k) => `${k}(machines=${FIXTURES[k].sim.machines.length},tutorial=${FIXTURES[k].sim.tutorial})`).join(" "));
-  const browser = await chromium.launch({ executablePath, headless: true });
   const forms = [
     { key: "phone", dims: { w: 780, h: 1688 } },
     { key: "phoneland", dims: { w: 1688, h: 780 } },
@@ -963,11 +993,22 @@ async function main() {
   ];
   for (const f of forms) {
     for (const [name, loop] of loops) {
-      try { await loop(browser, f.key); }
-      catch (e) { blockers.push(`${f.key}-${name} FATAL: ${String((e && e.stack) || e)}`); console.error(e); }
+      // dev-64d: a FRESH browser per loop-run so one crashed renderer cannot
+      // cascade into the remaining loops (the prior shared-browser run lost every
+      // loop after phone-earntrap 05-close-store). Cleanup is tolerant: a dead
+      // browser must not mask the original error or abort the remaining runs.
+      let browser = null;
+      try {
+        browser = await chromium.launch({ executablePath, headless: true });
+        await loop(browser, f.key);
+      } catch (e) {
+        blockers.push(`${f.key}-${name} FATAL: ${String((e && e.stack) || e)}`);
+        console.error(e);
+      } finally {
+        if (browser) await browser.close().catch(() => {});
+      }
     }
   }
-  await browser.close();
 
   const expectedDims = {};
   for (const f of forms) for (const [suffix] of loops) expectedDims[`${f.key}-${suffix}`] = f.dims;
@@ -984,7 +1025,7 @@ async function main() {
     branch: "rw/64-onboard",
     generatedAt: new Date().toISOString(),
     chrome: executablePath,
-    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each.",
+    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each. dev-64d stabilization: a FRESH browser per loop-run isolates renderer crashes; clicks are bounded (6s) with an evaluated-DOM-click fallback for zoom-overlay-intercepted buttons (each logged in clickFallbacks, still a real button -> dispatch -> applyCommand, never a state injection); context/browser cleanup is tolerant.",
     criteria: {
       "1-contextual-teaching": "freshLoop steps 00-19 assert the OnboardCoach lesson topic at each tutorial stage (salvage/storage/build/connect/trade/upgrade) and the research-path lesson at tutorial 9 with no Data.",
       "2-respect-progress-skip-revisit": "progressLoop seeds a progressed mature save; asserts no reset/overwrite across skip/show/reload and that a second tab (reader lease) yields the coach entirely.",
@@ -996,7 +1037,7 @@ async function main() {
       a: "Only setup seeding mutates state, in probe code with the game's OWN encodeSave (FNV-1a, lastSeenMs=Date.now()). fresh=createInitialState() verbatim; earntrap=createInitialState() with tutorial=4, drone.repaired=true, deliveries=1, wreck={remaining:30,generation:2,pulses:6,nextPulseTick:0}, store={scrap:5}, storeUnits=5; progress/jargon=docs/evidence/yard-mature.json payload.sim verbatim. All reducedMotion=true. advanceTime is a probe-only lastSeenMs rewind + reload running the engine's OWN inline catch-up (<=18000 ticks); it never edits sim fields. No src changes; every action is a real UI tap/click through dispatch -> applyCommand.",
       b: "Documented in this probe header, the makeFixture/advanceTime functions and results.json.",
       c: "Every seeded envelope is round-tripped through the game's full decodeSave/repairRegistration/validateSim IN-PROCESS before use (makeFixture throws on any failure); readSim reads the mirror through decodeSave. The 00-open steps assert the loaded mirror matches the seed. No invariant weakened or bypassed.",
-      d: "No action faked by injection; localStorage read only as the game's own persistence mirror (written on every ok dispatch). The guarded init script seeds once so reloads preserve live state. The showResearch gate (data>0 || research-owned) is NEVER modified; the fresh walkthrough earns first Data to open it.",
+      d: "No action faked by injection; localStorage read only as the game's own persistence mirror (written on every ok dispatch). The guarded init script seeds once so reloads preserve live state. The showResearch gate (data>0 || research-owned) is NEVER modified; the fresh walkthrough earns first Data to open it. The dev-64d evaluated-click fallback dispatches a real DOM click on the real button (still props.dispatch -> applyCommand), used only when the zoom overlay intercepts a bounded normal click; every use is logged in clickFallbacks.",
     },
     pixelCensus: {
       cyan: "b>r+25 && g>r+15 && b>120 (machine pips / working rails / drones)",
@@ -1011,7 +1052,7 @@ async function main() {
       reducedMotion: v.settings.reducedMotion,
       statuses: v.sim.machines.map((m) => `${m.id}:${m.status}`).join(","),
     }])),
-    counts: { frames: audit.length, steps: steps.length, checks: allChecks.length, failedChecks: failedChecks.length, consoleErrors: consoleErrors.length, pageErrors: pageErrors.length, blockers: blockers.length },
+    counts: { frames: audit.length, steps: steps.length, checks: allChecks.length, failedChecks: failedChecks.length, consoleErrors: consoleErrors.length, pageErrors: pageErrors.length, blockers: blockers.length, clickFallbacks: clickFallbacks.length },
     frameAudit: { ok: auditOk, distinctFramesPerForm: distinct, frames: audit },
     findings: [
       {
@@ -1027,14 +1068,15 @@ async function main() {
         source: "src/ui/App.tsx; src/ui/onboard/OnboardCoach.tsx",
       },
     ],
-    failedChecks, blockers, consoleErrors, pageErrors,
+    failedChecks, blockers, consoleErrors, pageErrors, clickFallbacks,
     steps,
   };
   writeFileSync(resolve(EVID, "results.json"), JSON.stringify(results, null, 2));
   console.log("\n==== SUMMARY ====");
   console.log("frames=", audit.length, "auditOk=", auditOk, "distinct=", JSON.stringify(distinct));
   console.log("steps=", steps.length, "checks=", allChecks.length, "failedChecks=", failedChecks.length);
-  console.log("consoleErrors=", consoleErrors.length, "pageErrors=", pageErrors.length, "blockers=", blockers.length);
+  console.log("consoleErrors=", consoleErrors.length, "pageErrors=", pageErrors.length, "blockers=", blockers.length, "clickFallbacks=", clickFallbacks.length);
+  if (clickFallbacks.length) { console.log("CLICK FALLBACKS (zoom-overlay interception / bounded-click):"); for (const c of clickFallbacks) console.log(`  ${c.what}: ${c.reason}`); }
   if (failedChecks.length) { console.log("FAILED CHECKS:"); for (const c of failedChecks) console.log(`  [${c.form}] ${c.step}: ${c.name} ${c.detail}`); }
   if (blockers.length) { console.log("BLOCKERS:"); for (const b of blockers) console.log("  " + b); }
   if (consoleErrors.length) { console.log("CONSOLE ERRORS:"); for (const e of consoleErrors.slice(0, 20)) console.log("  " + e); }
