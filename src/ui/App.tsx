@@ -53,9 +53,13 @@ import {
   MachinePanel,
   ResearchPanel,
   ReturnReportPanel,
+  SettingsPanel,
   StorePanel,
   YardPanel,
 } from "./Panels";
+import { clearSave, hasSaveProgress } from "../game/persistence/save";
+import { saveSummary } from "./home/copy";
+import { ResetDialog } from "./shell/ResetDialog";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { BuildCatalog } from "./build/BuildCatalog";
 import { DismantleCard, MoveStrip, PlacementStrip } from "./place/PlacePreview";
@@ -143,7 +147,19 @@ function fitToShell(cssWidth: number, cssHeight: number): Camera {
   return camera;
 }
 
-export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi }) {
+/**
+ * UI-RESET-62: `reload` is injectable so the reset flow can be exercised in jsdom
+ * (which does not implement location.reload); production uses the real reload.
+ */
+export function App({
+  store,
+  audioApi,
+  reload,
+}: {
+  store: GameStore;
+  audioApi?: AudioApi;
+  reload?: () => void;
+}) {
   useRevision(store);
   const state = useSim(store);
   const settings = useSettings(store);
@@ -213,6 +229,24 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   const menuOpenerRef = useRef<HTMLElement | null>(null);
   const menuFaceRef = useRef<HTMLButtonElement | null>(null);
   const railMode = useRailMode();
+  /**
+   * UI-RESET-62: the settings surface and the reset confirmation. `gateSettings`
+   * is the pre-start settings overlay (the yard has not begun); after start the
+   * same panel opens as the -5 inspector sentinel. `resetOpen` is the one
+   * destructive confirmation layer — nothing is deleted until it confirms.
+   */
+  const [gateSettings, setGateSettings] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
+  const resetOpenerRef = useRef<HTMLElement | null>(null);
+  /**
+   * UI-RESET-62: the OS reduced-motion preference, live. It is read as an
+   * effective override (user setting OR OS), never force-written into the save,
+   * so the stored preference stays the player's own and survives the OS flipping
+   * back. The renderer and the settings panel both read the effective value.
+   */
+  const [osReducedMotion, setOsReducedMotion] = useState<boolean>(
+    () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+  );
 
   const audio = useCallback((): AudioApi => {
     if (!audioRef.current) audioRef.current = createAudio(store.getSettings().muted);
@@ -412,12 +446,18 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   }, [audio]);
 
   useEffect(() => {
-    // The operating-system preference wins for reduced motion; the saved value
-    // covers every other case, and the renderer reads it from settings each frame.
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      store.setSettings({ reducedMotion: true });
-    }
-  }, [store]);
+    // UI-RESET-62: the operating-system preference wins for reduced motion while
+    // it is active, but it is no longer force-persisted over the player's saved
+    // choice — the effective value is `settings.reducedMotion || osReducedMotion`
+    // and the settings panel explains the override. Live-listened so flipping the
+    // OS preference mid-session takes effect without a reload.
+    const mql = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+    if (!mql) return;
+    const onChange = () => setOsReducedMotion(mql.matches);
+    onChange();
+    mql.addEventListener?.("change", onChange);
+    return () => mql.removeEventListener?.("change", onChange);
+  }, []);
 
   const cycleTextScale = useCallback(() => {
     const steps = [1, 1.25, 1.5, 2];
@@ -430,6 +470,52 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     store.setSettings({ muted: next });
     audio().setMuted(next);
   }, [store, audio]);
+
+  const toggleReducedMotion = useCallback(() => {
+    store.setSettings({ reducedMotion: !store.getSettings().reducedMotion });
+  }, [store]);
+
+  /** UI-RESET-62: open the reset confirmation, remembering the opener for focus restore. */
+  const openReset = useCallback(() => {
+    resetOpenerRef.current = (document.activeElement as HTMLElement | null) ?? null;
+    setResetOpen(true);
+  }, []);
+
+  /** Cancel: the save is untouched; focus returns to whatever opened the dialog. */
+  const closeReset = useCallback(() => {
+    setResetOpen(false);
+    const opener = resetOpenerRef.current;
+    if (opener && opener !== document.body && typeof opener.focus === "function") {
+      opener.focus();
+    }
+  }, []);
+
+  /**
+   * UI-RESET-62 (sponsor reset-game): the only destructive path, reached solely
+   * through the confirmed dialog. Stop the tick loop, remove the save envelope
+   * and the writer lease, then reload into a fresh title screen. Clearing the
+   * lease matters: a stale heartbeat would otherwise demote the fresh yard to
+   * reader for the lease TTL after the reload.
+   */
+  const performReset = useCallback(() => {
+    store.stop();
+    let storage: Storage | null = null;
+    try {
+      storage = typeof window !== "undefined" ? window.localStorage : null;
+    } catch {
+      storage = null;
+    }
+    clearSave(storage);
+    if (reload) reload();
+    else window.location.reload();
+  }, [store, reload]);
+
+  /** The settings panel's reset entry closes nothing underneath; the dialog layers on top. */
+  const openSettingsFromMenu = useCallback(() => {
+    setSelected(-5);
+    setMenuOpen(false);
+    setCatalogOpen(false);
+  }, []);
 
   const openMenu = useCallback(() => {
     menuOpenerRef.current = (document.activeElement as HTMLElement | null) ?? null;
@@ -528,6 +614,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     // whole stack at once and no pile-up can survive a thumb.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
+      // UI-RESET-62: the reset confirmation is the newest layer — one press
+      // cancels it (the save is untouched) before anything underneath.
+      if (resetOpen) {
+        closeReset();
+        return;
+      }
+      // Pre-start settings overlay: Escape returns to the title screen.
+      if (!started && gateSettings) {
+        setGateSettings(false);
+        return;
+      }
       if (menuOpen) {
         closeMenu();
         return;
@@ -560,7 +657,20 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [reportOpen, selected, buildBlueprint, menuOpen, closeMenu, store, moveFlow, dismantleFlow]);
+  }, [
+    reportOpen,
+    selected,
+    buildBlueprint,
+    menuOpen,
+    closeMenu,
+    store,
+    moveFlow,
+    dismantleFlow,
+    resetOpen,
+    closeReset,
+    started,
+    gateSettings,
+  ]);
 
   useEffect(() => {
     // Spec §5: keys 1–5 reach the five destinations, arrows pan, +/- zoom and N
@@ -568,6 +678,10 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     // typed into the yard record must never steer the shell.
     const onKey = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
+      // UI-RESET-62: while the reset confirmation (or the pre-start settings
+      // overlay) is up, shell shortcuts are inert — no digit can navigate the
+      // yard underneath a destructive dialog.
+      if (resetOpen || (!started && gateSettings)) return;
       const target = event.target;
       if (
         target instanceof HTMLElement &&
@@ -637,7 +751,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onSlot, buildBlueprint, store, moveFlow]);
+  }, [onSlot, buildBlueprint, store, moveFlow, resetOpen, started, gateSettings]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -697,7 +811,9 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       // invalid exactly as the engine refuses a move onto itself.
       const previewTile = buildBlueprint !== null ? ghostTile : moveFlow !== null ? moveFlow.tile : null;
       drawScene(ctx, snapshot, cameraRef.current, { width: cssWidth, height: cssHeight }, {
-        reducedMotion: settings.reducedMotion,
+        // UI-RESET-62: the effective value — the saved preference OR the live OS
+        // override — so the yard calms down whichever source requests it.
+        reducedMotion: settings.reducedMotion || osReducedMotion,
         buildMode: buildBlueprint !== null || moveFlow !== null,
         ghostTile: previewTile,
         ghostValid:
@@ -715,13 +831,18 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       const previous = cueStateRef.current;
       const current = snapshot;
       if (previous !== current) {
-        const centre = worldToTile(cameraRef.current.x, cameraRef.current.y) ?? DOCK_TILE;
-        for (const cue of stateCues(previous, current)) {
-          const tile = cueTile(current, cue);
-          audio().play(cue, {
-            distance: tile === null ? 0 : tileDistance(tile, centre),
-            zoom: cameraRef.current.scale,
-          });
+        // UI-RESET-62: state cues only voice after the player has begun — the
+        // title screen must never play unsolicited audio. The baseline still
+        // advances pre-start, so beginning does not fire a burst of stale cues.
+        if (started) {
+          const centre = worldToTile(cameraRef.current.x, cameraRef.current.y) ?? DOCK_TILE;
+          for (const cue of stateCues(previous, current)) {
+            const tile = cueTile(current, cue);
+            audio().play(cue, {
+              distance: tile === null ? 0 : tileDistance(tile, centre),
+              zoom: cameraRef.current.scale,
+            });
+          }
         }
         cueStateRef.current = current;
       }
@@ -729,7 +850,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     raf = requestAnimationFrame(render);
     return () => cancelAnimationFrame(raf);
-  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio, moveFlow]);
+  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio, moveFlow, started, osReducedMotion]);
 
   /**
    * UI-RESET-50: apply one gesture-machine output. Pan and pinch steer the
@@ -910,6 +1031,10 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
   }
 
   if (!started) {
+    // UI-RESET-62: Continue is offered only for real save progress — a
+    // settings-only envelope (pre-start preference changes) is a fresh yard.
+    const progress = hasSaveProgress(state);
+    const summary = progress ? saveSummary(state) : null;
     return (
       <div className="game">
         <canvas ref={canvasRef} />
@@ -926,7 +1051,27 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             store.setSettings({ muted: next });
             audio().setMuted(next);
           }}
+          hasProgress={progress}
+          summary={summary}
+          onNewGame={openReset}
+          onSettings={() => setGateSettings(true)}
         />
+        {gateSettings ? (
+          <div className="gate-settings">
+            <SettingsPanel
+              settings={settings}
+              osReducedMotion={osReducedMotion}
+              onToggleMute={toggleMute}
+              onCycleText={cycleTextScale}
+              onToggleReducedMotion={toggleReducedMotion}
+              onReset={openReset}
+              onClose={() => setGateSettings(false)}
+            />
+          </div>
+        ) : null}
+        {resetOpen ? (
+          <ResetDialog summary={summary} onCancel={closeReset} onConfirm={performReset} />
+        ) : null}
       </div>
     );
   }
@@ -1047,6 +1192,19 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             onClose={() => setSelected(null)}
           />
         ) : null}
+        {/* UI-RESET-62: the settings inspector (-5). Same panel grammar as the
+            other inspectors; Escape closes it through the shared selection path. */}
+        {selected === -5 ? (
+          <SettingsPanel
+            settings={settings}
+            osReducedMotion={osReducedMotion}
+            onToggleMute={toggleMute}
+            onCycleText={cycleTextScale}
+            onToggleReducedMotion={toggleReducedMotion}
+            onReset={openReset}
+            onClose={() => setSelected(null)}
+          />
+        ) : null}
         {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
         {/* UI-RESET-52: the build catalog. Not a `.panel`: it never joins the
             overlay-stack census, and the camera's chrome insets never measure
@@ -1097,6 +1255,8 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             onToggleMute={toggleMute}
             textScale={settings.textScale}
             onCycleText={cycleTextScale}
+            onSettings={openSettingsFromMenu}
+            onReset={openReset}
           />
         ) : null}
         <DockButtons
@@ -1167,6 +1327,17 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           onReset={resetCamera}
         />
       </div>
+      {/* UI-RESET-62: the reset confirmation layers above the whole shell but
+          outside `.hud`, so the HUD census never counts it. The menu/settings
+          underneath stay exactly as they were; Cancel restores focus to the row
+          that opened it. */}
+      {resetOpen ? (
+        <ResetDialog
+          summary={hasSaveProgress(state) ? saveSummary(state) : null}
+          onCancel={closeReset}
+          onConfirm={performReset}
+        />
+      ) : null}
     </div>
   );
 }

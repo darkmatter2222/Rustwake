@@ -11,3 +11,4 @@ export { StorePanel } from "./panels/StorePanel";
 export { ResearchPanel } from "./panels/ResearchPanel";
 export { YardPanel } from "./panels/YardPanel";
 export { ReturnReportPanel } from "./panels/ReturnReportPanel";
+export { SettingsPanel } from "./panels/SettingsPanel";

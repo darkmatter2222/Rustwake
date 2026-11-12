@@ -1,5 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { t } from "../../game/content/strings";
+import { RESET_COPY } from "../home/copy";
 import { SHELL_RAIL_QUERY, SHELL_SLOTS, type ShellSlot } from "./layout";
 import "./shell.css";
 
@@ -153,7 +154,10 @@ export function ShellZoom(props: {
         aria-label="Reset view"
         onClick={props.onReset}
       >
-        Fit
+        {/* UI-RESET-62: the camera control is labelled for what it does —
+            recentre the view — so it can never be mistaken for menu navigation.
+            The accessible name stays the pinned "Reset view". */}
+        Recenter
       </button>
     </div>
   );
@@ -178,6 +182,8 @@ export function MenuSheet(props: {
   onToggleMute: () => void;
   textScale: number;
   onCycleText: () => void;
+  onSettings: () => void;
+  onReset: () => void;
 }) {
   const ref = useRef<HTMLElement | null>(null);
   useEffect(() => {
@@ -194,7 +200,9 @@ export function MenuSheet(props: {
       <div className="shell-menu__body">
         <button type="button" className="shell-menu__row" onClick={props.onHome}>
           {t("btn.home")}
-          <span className="shell-menu__hint">Centre the yard and clear the selection</span>
+          {/* UI-RESET-62: navigation wording, so this row cannot be confused with
+              the camera's own Recenter face in the zoom stack. */}
+          <span className="shell-menu__hint">Back to the yard overview; clears the selection</span>
         </button>
         <button
           type="button"
@@ -225,6 +233,21 @@ export function MenuSheet(props: {
         <button type="button" className="shell-menu__row" onClick={props.onCycleText}>
           {t("btn.textScale", { scale: props.textScale })}
           <span className="shell-menu__hint">Cycle 1 / 1.25 / 1.5 / 2</span>
+        </button>
+        {/* UI-RESET-62: the full settings surface and the destructive reset entry,
+            appended after the pinned quick rows. Reset never deletes here — it
+            opens the confirmation dialog, on phone and desktop alike. */}
+        <button type="button" className="shell-menu__row" onClick={props.onSettings}>
+          Settings
+          <span className="shell-menu__hint">{RESET_COPY.settingsRowHint}</span>
+        </button>
+        <button
+          type="button"
+          className="shell-menu__row shell-menu__row--danger"
+          onClick={props.onReset}
+        >
+          {RESET_COPY.title}
+          <span className="shell-menu__hint">{RESET_COPY.menuHint}</span>
         </button>
       </div>
     </section>
