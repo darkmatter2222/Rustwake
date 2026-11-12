@@ -88,8 +88,15 @@ export interface PrimaryAction {
   branches?: { id: UpgradeBranch; label: string; cost?: string; run: () => void }[];
 }
 
+// UI-RESET-64: `seenCommands` is persisted SimState and is never pruned, so a
+// bare per-load counter restarting at c1 collides with the save's c1..cN after
+// any reload: applyCommand dedupes the collision to ok:true WITHOUT executing,
+// silently dropping the first N post-reload dispatches. A unique per-load epoch
+// prefix keeps ids distinct across reloads; the sequential suffix preserves
+// within-session ordering, so a genuine same-id retry still dedups idempotently.
+const commandEpoch = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 let commandSeq = 0;
-const nextCommandId = (): string => `c${++commandSeq}`;
+const nextCommandId = (): string => `${commandEpoch}-${++commandSeq}`;
 
 /**
  * L-1 / UI-RESET-49 G2: the chrome band the world is fitted into, read from the
