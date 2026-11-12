@@ -42,6 +42,7 @@ import {
   DEFAULT_SETTINGS,
   SAVE_KEY,
 } from "../../src/game/persistence/save.ts";
+import { LEASE_KEY } from "../../src/game/persistence/lease.ts";
 import { createInitialState } from "../../src/game/simulation/types.ts";
 import { applyCommand } from "../../src/game/simulation/commands.ts";
 import { advance } from "../../src/game/simulation/engine.ts";
@@ -166,7 +167,7 @@ const receipt = {
     { fixture: "clipboard/download failure env", mutation: "addInitScript removes navigator.clipboard and URL.createObjectURL/revokeObjectURL", exercises: "the manual-copy / download-unavailable notes in a real browser", where: "probe only (browser env, not src)" },
     { fixture: "tutorial unlock", mutation: "seed sim.tutorial = 9", exercises: "B-06 Yard destination reachability without playing the tutorial", where: "probe only" },
   ],
-  liveSimTolerance: "yard steps ~10 ticks/s; tick/credits/save-size asserted as monotonic bounds vs an atomic rows+localStorage read; machines/routes/settings/research/spares asserted exactly; a refused import must keep tick far below the incoming tick",
+  liveSimTolerance: "yard steps ~10 ticks/s and render/checkpoint may lead each other by a step; tick/credits/save-size asserted as symmetric bounds vs an atomic rows+localStorage read; machines/routes/settings/research/spares asserted exactly; a refused import must keep tick far below the incoming tick",
   formFactors: {},
   failures: [],
 };
@@ -178,9 +179,11 @@ function record(ff, phase, name, pass, detail) {
   ph.assertions.push({ name, pass, detail });
   if (!pass) receipt.failures.push(`${ff}/${phase}: ${name} — ${detail}`);
 }
+/** Collect-all (research-58 pattern): one run surfaces every failure so the
+ *  CSS can be iterated against the full measured picture. Hard flow breaks
+ *  (missing selectors, timeouts) still throw through the waits themselves. */
 function assert(ff, phase, name, cond, detail = "") {
   record(ff, phase, name, Boolean(cond), detail);
-  if (!cond) throw new Error(`ASSERT FAILED ${ff}/${phase}: ${name} ${detail}`);
 }
 
 /* ---- full-frame pixel audit (decode the PNG in Chromium itself) ---- */
@@ -279,12 +282,18 @@ const clickText = async (page, label, scope = "button") => {
   if (!el) throw new Error(`clickText: no ${scope} starts with "${label}"`);
   await el.click();
 };
-const waitNote = (page, text) =>
-  page.waitForFunction(
-    ({ sel, text }) => document.querySelector(`${sel} .status-line`)?.textContent?.includes(text),
-    { sel: PANEL, text },
-    { timeout: 8000 }
-  );
+const waitNote = async (page, text) => {
+  try {
+    await page.waitForFunction(
+      ({ sel, text }) => document.querySelector(`${sel} .status-line`)?.textContent?.includes(text),
+      { sel: PANEL, text },
+      { timeout: 8000 }
+    );
+  } catch {
+    const actual = await noteText(page).catch(() => "<unreadable>");
+    throw new Error(`waitNote("${text}") timed out; actual note: "${actual}"`);
+  }
+};
 const noteText = (page) => page.evaluate((sel) => document.querySelector(`${sel} .status-line`)?.textContent?.trim() ?? "", PANEL);
 const activeLabel = (page) =>
   page.evaluate(() => {
@@ -451,7 +460,32 @@ function watchConsole(page, sink) {
   });
   page.on("pageerror", (err) => sink.pageerrors.push(String(err)));
 }
-const seedInit = (text) => `localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(text)});`;
+/** Seed ONCE per context: addInitScript runs on EVERY navigation (including
+ *  reload and the reader's second page), and re-seeding would overwrite the
+ *  live checkpoint the probe is meant to observe. */
+const seedInit = (text) =>
+  `if (localStorage.getItem(${JSON.stringify(SAVE_KEY)}) === null) localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(text)});`;
+const leaseOwner = (page) =>
+  page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "null")?.owner ?? null, LEASE_KEY);
+/** The export textarea is the render-time checkpoint; the storage raw is the
+ *  last persist. In the live app they may lead each other by a step, so identity
+ *  is asserted as: both decode, structure + settings EXACT, tick within bound.
+ *  (Same-instant byte identity is proven in the jsdom suite, which has no loop.) */
+async function assertExportCurrent(page, ff, phase, selector) {
+  const atomic = await page.evaluate(
+    ({ key, sel }) => ({ value: document.querySelector(sel)?.value ?? null, raw: localStorage.getItem(key), readOnly: document.querySelector(sel)?.readOnly ?? null }),
+    { key: SAVE_KEY, sel: selector }
+  );
+  const v = decodeSave(atomic.value ?? "");
+  const r = decodeSave(atomic.raw ?? "");
+  assert(ff, phase, "export textarea decodes as a valid save", v.ok, JSON.stringify(v.ok ? {} : v));
+  assert(ff, phase, "export textarea is read-only", atomic.readOnly === true, JSON.stringify(atomic.readOnly));
+  if (v.ok && r.ok) {
+    assert(ff, phase, "export structure identical to the checkpoint", structure(v.payload.sim) === structure(r.payload.sim), "structure differs");
+    assert(ff, phase, "export settings identical to the checkpoint", JSON.stringify(v.payload.settings) === JSON.stringify(r.payload.settings), JSON.stringify({ export: v.payload.settings, checkpoint: r.payload.settings }));
+    assert(ff, phase, "export tick within live-sim bound of the checkpoint", Math.abs(v.payload.sim.tick - r.payload.sim.tick) <= 100, JSON.stringify({ exportTick: v.payload.sim.tick, checkpointTick: r.payload.sim.tick }));
+  }
+}
 
 /* ---- one form factor at one text scale: the full acceptance flow ---- */
 async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
@@ -476,10 +510,12 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     assert(ff, P, "Machines exact", val("Machines") === String(expected.machines), JSON.stringify(rec.rows));
     assert(ff, P, "Drones exact", val("Drones") === String(expected.drones), JSON.stringify(rec.rows));
     assert(ff, P, "Links exact", val("Links") === String(expected.links), JSON.stringify(rec.rows));
+    // The render and the checkpoint may lead each other by a step (notify vs
+    // persist ordering), so the bound is symmetric: same yard, a few ticks apart.
     const tickShown = Number(val("Tick"));
-    assert(ff, P, "Tick within live-sim bound", tickShown <= rec.sim.tick && rec.sim.tick - tickShown <= 100, JSON.stringify({ tickShown, mirror: rec.sim.tick }));
+    assert(ff, P, "Tick within live-sim bound", Math.abs(rec.sim.tick - tickShown) <= 100, JSON.stringify({ tickShown, mirror: rec.sim.tick }));
     const creditsShown = Number(val("Credits"));
-    assert(ff, P, "Credits within live-sim bound", creditsShown <= rec.sim.credits && rec.sim.credits - creditsShown <= 500, JSON.stringify({ creditsShown, mirror: rec.sim.credits }));
+    assert(ff, P, "Credits within live-sim bound", Math.abs(rec.sim.credits - creditsShown) <= 500, JSON.stringify({ creditsShown, mirror: rec.sim.credits }));
     const saveShown = Number((val("Save") ?? "").replace(/\D/g, ""));
     assert(ff, P, "Save size within live-sim bound", Math.abs(saveShown - rec.raw.length) <= 64, JSON.stringify({ saveShown, rawLength: rec.raw.length }));
     assert(ff, P, "Backup + Import + Close entries", (await page.locator(`${PANEL} button`, { hasText: "Backup" }).count()) === 1 && (await page.locator(`${PANEL} button`, { hasText: "Import" }).count()) === 1 && (await page.locator(`${PANEL} button`, { hasText: "Close" }).count()) === 1);
@@ -497,8 +533,7 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     await clickText(page, "Backup", `${PANEL} button`);
     await page.waitForSelector("#rustwake-save-export");
     assert(ff, P, "backup heading names the act", (await page.locator(`${PANEL} .save-heading`).textContent()).trim() === SAVE_COPY.backupHeading);
-    const atomic = await page.evaluate((key) => ({ value: document.querySelector("#rustwake-save-export").value, raw: localStorage.getItem(key), readOnly: document.querySelector("#rustwake-save-export").readOnly }), SAVE_KEY);
-    assert(ff, P, "export textarea byte-identical to the checkpoint", atomic.value === atomic.raw && atomic.readOnly, JSON.stringify({ len: atomic.value.length, rawLen: atomic.raw.length, readOnly: atomic.readOnly }));
+    await assertExportCurrent(page, ff, P, "#rustwake-save-export");
     await assertPanelFits(page, ff, P);
     await assertTargets(page, ff, P, PANEL);
     await shot(page, ff, P, `ts${scale}-02-backup.png`, viewport, dsf, await panelContent(page));
@@ -584,7 +619,7 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     assert(ff, P, "incoming preview exact (migrated older save)", incVal("Tick") === String(olderPreview.preview.summary.tick) && incVal("Machines") === String(olderPreview.preview.summary.machines) && incVal("Drones") === String(olderPreview.preview.summary.drones) && incVal("Links") === String(olderPreview.preview.summary.links) && incVal("Credits") === String(olderPreview.preview.summary.credits), JSON.stringify(cols.incoming));
     const curTick = Number(cols.current.find((r) => r.label === "Tick")?.value);
     const mirrorSim = JSON.parse(cols.raw).payload.sim;
-    assert(ff, P, "current preview within live-sim bound", curTick <= mirrorSim.tick && mirrorSim.tick - curTick <= 100, JSON.stringify({ curTick, mirror: mirrorSim.tick }));
+    assert(ff, P, "current preview within live-sim bound", Math.abs(mirrorSim.tick - curTick) <= 100, JSON.stringify({ curTick, mirror: mirrorSim.tick }));
     const expectedLine = settingsChangeLine({ ...DEFAULT_SETTINGS, textScale: scale }, incoming.settings);
     assert(ff, P, "settings consequence line", (await page.locator(".import-confirm__settings").textContent()).trim() === expectedLine, expectedLine);
     assert(ff, P, "export-first offer present", (await page.locator(".import-confirm__offer").textContent()).includes("Back up the current yard first") && (await page.locator(".import-confirm button", { hasText: "Copy current save" }).count()) === 1 && (await page.locator(".import-confirm button", { hasText: "Download current save" }).count()) === 1);
@@ -642,8 +677,7 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
     await shot(page, ff, P, `ts${scale}-05-after-import.png`, viewport, dsf, await panelContent(page));
     await clickText(page, "Backup", `${PANEL} button`);
     await page.waitForSelector("#rustwake-save-export");
-    const atomicAfter = await page.evaluate((key) => ({ value: document.querySelector("#rustwake-save-export").value, raw: localStorage.getItem(key) }), SAVE_KEY);
-    assert(ff, P, "export refreshed byte-identical to the new checkpoint", atomicAfter.value === atomicAfter.raw, JSON.stringify({ len: atomicAfter.value.length }));
+    await assertExportCurrent(page, ff, P, "#rustwake-save-export");
     await clickText(page, "Back", `${PANEL} button`);
     await page.waitForSelector(`${PANEL} .save-stats`);
   }
@@ -652,11 +686,25 @@ async function runScale(browser, ff, viewport, dsf, isMobile, scale) {
   {
     const P = T("reload");
     const preReload = await readMirror(page);
+    const preOwner = await leaseOwner(page);
     await page.reload({ waitUntil: "networkidle" });
     await page.waitForSelector(".gate__btn", { timeout: 20000 });
     await page.click(".gate__btn");
     await page.waitForSelector(".dock, .shell-rail", { timeout: 20000 });
     await dismissReport(page);
+    // The reloaded document gets a NEW lease id; the old record stays fresh for
+    // up to LEASE_TTL_MS (1.5 s), so the page boots reader and the store's own
+    // claim() adopts the stale lease on a later step. Wait for that adoption
+    // through the app's own lease record before exercising writes again.
+    await page.waitForFunction(
+      ({ k, old }) => {
+        const r = JSON.parse(localStorage.getItem(k) ?? "null");
+        return Boolean(r) && r.owner !== old;
+      },
+      { k: LEASE_KEY, old: preOwner },
+      { timeout: 10000 }
+    );
+    assert(ff, P, "reload: writer lease re-adopted by the new document", (await leaseOwner(page)) !== preOwner, JSON.stringify({ preOwner, post: await leaseOwner(page) }));
     await openYard(page);
     const post = await readMirror(page);
     assert(ff, P, "reload: imported tick persists (no double-apply, no reset)", post.sim.tick >= incoming.sim.tick && post.sim.tick <= preReload.sim.tick + 600, JSON.stringify({ post: post.sim.tick, incoming: incoming.sim.tick, preReload: preReload.sim.tick }));
@@ -841,6 +889,7 @@ try {
     ])
   );
   receipt.summary = counts;
+  if (receipt.failures.length > 0) process.exitCode = 1;
   receipt.serverLogTail = serverLog.slice(-400);
   writeFileSync(resolve(out, "receipt.json"), JSON.stringify(receipt, null, 2));
   writeFileSync(resolve(root, "tests/ui/save-63.evidence.json"), JSON.stringify(receipt, null, 2));
