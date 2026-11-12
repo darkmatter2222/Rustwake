@@ -30,6 +30,7 @@ import {
   type PaletteKey,
   type PartTuple,
 } from "./sprites";
+import { effectiveReducedMotion } from "./motion";
 
 export const CELL = 32;
 export const WORLD_W = YARD_COLS * CELL;
@@ -212,16 +213,29 @@ function paintParts(
 }
 
 /**
- * The body of one glyph row: its largest-area solid part, ignoring the ground/base band
- * (colour index 15) and the ellipse. Used for the bevel, so no per-role table is needed.
+ * UI-RESET-60: one upper-left facet for a solid part - a lit top band and left column in
+ * the `select` group, a dark bottom band and right column in the `path` group. Every band
+ * is inset inside the part's own box, so the union ink census and the silhouette masks are
+ * unchanged (the part is already painted by `paintParts`); the whole machine row still
+ * costs exactly two grouped paints. A 3-unit post keeps its full width on the lit band;
+ * the side columns only exist on bodies with a middle band (>= 6 x 6) to lighten/darken.
  */
-function bodyRowOf(row: readonly PartTuple[]): PartTuple | null {
-  let best: PartTuple | null = null;
-  for (const t of row) {
-    if (t[5] === 1 || t[4] === 15) continue;
-    if (!best || t[2] * t[3] > best[2] * best[3]) best = t;
+function facetPart(
+  sheen: [number, number, number, number][],
+  shade: [number, number, number, number][],
+  px: number,
+  py: number,
+  s: number,
+  part: PartTuple
+): void {
+  const [bx, by, bw, bh] = part;
+  const inset = bw >= 6 ? 1 : 0;
+  sheen.push([px + (bx + inset) * s, py + by * s, (bw - 2 * inset) * s, 2 * s]);
+  shade.push([px + (bx + inset) * s, py + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
+  if (bh >= 6 && bw >= 6) {
+    sheen.push([px + bx * s, py + (by + 2) * s, 2 * s, (bh - 4) * s]);
+    shade.push([px + (bx + bw - 2) * s, py + (by + 2) * s, 2 * s, (bh - 4) * s]);
   }
-  return best;
 }
 
 /** Quantised pip row, never a continuous ratio bar (B5). */
@@ -256,6 +270,10 @@ export function drawScene(
   const s = camera.scale;
   // A1: one phase for the whole frame, shared by every moving group (Q-004 C-1).
   const phase = subTickPhase(options.framePhase);
+  // UI-RESET-60: the caller's option OR the live OS preference, read once per frame inside
+  // the renderer (no signature change, no new persisted setting). jsdom has no matchMedia,
+  // so the unit tests keep the caller's option as the whole answer.
+  const reducedMotion = effectiveReducedMotion(options.reducedMotion);
   // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).
   ctx.fillStyle = PALETTE.night;
   ctx.fillRect(0, 0, view.width, view.height);
@@ -275,7 +293,7 @@ export function drawScene(
   const sheen: [number, number, number, number][] = [];
   const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, options.reducedMotion, phase);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, reducedMotion, phase);
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
@@ -283,7 +301,7 @@ export function drawScene(
   // facet edge itself (the top luminance bucket) instead of a 0.9 blend one step below it.
   groupFill(ctx, sheen, "select", 1);
   groupFill(ctx, shade, "path");
-  drawDrones(ctx, state, camera, view, options.reducedMotion, phase);
+  drawDrones(ctx, state, camera, view, reducedMotion, phase);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
 }
 
@@ -459,22 +477,14 @@ function drawMachine(
   // scale/shift put different pixels on the live frame than the unit-resolution witnesses
   // read, so the phone census and the op-log table disagreed by construction.
   paintParts(ctx, p.x, p.y, s, row);
-  // ART-001/ART-003: one light direction for the whole sheet - upper left lit, lower
-  // right dark. The lit pair (top edge + left column) rides in the `select` group, the
-  // dark pair (underlying bottom + right column) in the `path` group: two grouped paths
-  // for the row, but now a real 2-step facet on every body, not just an edge line.
-  const body = bodyRowOf(row);
-  if (body) {
-    const [bx, by, bw, bh] = body;
-    const inset = bw >= 6 ? 1 : 0; // a 3-unit post keeps the whole width on its lit band
-    sheen.push([p.x + (bx + inset) * s, p.y + by * s, (bw - 2 * inset) * s, 2 * s]);
-    shade.push([p.x + (bx + inset) * s, p.y + (by + bh - 2) * s, (bw - 2 * inset) * s, 2 * s]);
-    // The side columns only exist on bodies that have a middle band to lighten/darken;
-    // a 3-unit bar is one step already, so the top/bottom pair is the whole facet.
-    if (bh >= 6 && bw >= 6) {
-      sheen.push([p.x + bx * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
-      shade.push([p.x + (bx + bw - 2) * s, p.y + (by + 2) * s, 2 * s, (bh - 4) * s]);
-    }
+  // ART-001/ART-003 + UI-RESET-60: one light direction for the whole sheet - upper left
+  // lit, lower right dark - now on EVERY solid block of the glyph (>= 4 x 4, not the ground
+  // band or an ellipse), not just the largest body. The lit pair rides in the `select`
+  // group, the dark pair in the `path` group: still two grouped paths for the whole row,
+  // and every band is inset inside its part box so the union ink census is unchanged.
+  for (const part of row) {
+    if (part[5] === 1 || part[4] === 15 || part[2] < 4 || part[3] < 4) continue;
+    facetPart(sheen, shade, p.x, p.y, s, part);
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
   // ART-003 named motion states - anticipation and settle, not a uniform crawl. One

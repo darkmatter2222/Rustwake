@@ -342,23 +342,38 @@ export const APRON_PROPS: readonly PartTuple[] = [
 /** Lit core of the apron props (light comes from the upper left). The last three rows are
  *  ART-004 D1's horizon stack in the lower gutter: three 2-unit `bodyLight` rails across
  *  the pad width, so the ~149 CSS px of dead night below the plate reads as ground the yard
- *  continues into. Same colour index as the prop tops, so no new paint group. */
+ *  continues into. Same colour index as the prop tops, so no new paint group.
+ *  UI-RESET-60: the four left columns give each foreground crate the SAME upper-left facet
+ *  the machines carry (lit top + lit left), so the near plane reads as one lit material.
+ *  They sit at y >= 200, outside every 32-unit cell box, and reuse the tops' colour index,
+ *  so the cell census and the paint-group count are unchanged. */
 export const APRON_TOPS: readonly PartTuple[] = [
   [6, 198, 12, 2, 3],
   [26, 200, 8, 2, 3],
   [164, 198, 10, 2, 3],
   [150, 202, 6, 2, 3],
+  [6, 200, 2, 10, 3], // crate 1 lit left column
+  [26, 202, 2, 8, 3], // crate 2 lit left column
+  [164, 200, 2, 10, 3], // crate 3 lit left column
+  [150, 204, 2, 6, 3], // crate 4 lit left column
   [0, 236, 192, 2, 3],
   [0, 248, 192, 2, 3],
   [0, 260, 192, 2, 3],
 ];
 
-/** Contact shadows under the props, one step under the pad tone. */
+/** Contact shadows under the props, one step under the pad tone.
+ *  UI-RESET-60: the four right columns are the dark half of the crate facet (lower-right
+ *  shade), the same direction the machines use. y >= 200, outside every cell box, reusing
+ *  the shadow colour index - no new paint group, no cell ink. */
 export const APRON_SHADOWS: readonly PartTuple[] = [
   [6, 210, 14, 2, 15],
   [26, 210, 10, 2, 15],
   [150, 210, 12, 2, 15],
   [164, 210, 12, 2, 15],
+  [16, 200, 2, 10, 15], // crate 1 shade right column
+  [32, 202, 2, 8, 15], // crate 2 shade right column
+  [172, 200, 2, 10, 15], // crate 3 shade right column
+  [154, 204, 2, 6, 15], // crate 4 shade right column
 ];
 
 /** Lit core inside the FK1 worn band and its spur, inset so no new ink appears. */
