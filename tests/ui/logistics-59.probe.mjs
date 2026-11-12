@@ -14,6 +14,8 @@
  *   pnpm preview --port 4195 --strictPort --host 127.0.0.1   (background, cwd=worktree)
  *   BASE_URL='http://127.0.0.1:4195/' RW59_SHA='<head sha>' node tests/ui/logistics-59.probe.mjs
  * Artifacts land in RW59_EVID (default C:/Users/ryans/AppData/Local/Temp/rw-coord/UI-RESET-59).
+ * Form factors: phone 390x844 dpr2 (portrait), phoneland 844x390 dpr2 (rail) and
+ * desktop 1920x1080 dpr1 (rail). Every scenario loop runs on all three.
  *
  * Fixture scrutiny (task a-d):
  *  (a) The only state mutation is SETUP seeding. Fixtures are derived from the
@@ -75,6 +77,14 @@ const YARD_COLS = 6;
 const CELL = 32;
 const BELT_COST_PER_TILE = 1;
 const DISMANTLE_REFUND_PCT = 90;
+
+// The three required form factors. `phoneland` (844x390 dpr2) matches the shell rail
+// query "(min-width: 600px) and (max-height: 460px)"; desktop matches "(min-width: 1200px)".
+const FORM_FACTORS = {
+  phone: { width: 390, height: 844, dpr: 2 },
+  phoneland: { width: 844, height: 390, dpr: 2 },
+  desktop: { width: 1920, height: 1080, dpr: 1 },
+};
 
 const chromeCandidates = [
   process.env.CHROME_PATH,
@@ -233,6 +243,7 @@ async function logisticsDom(page) {
       gate: !!q(".gate__btn"),
       cam,
       census,
+      rail: rect(q(".shell-rail")),
       panel: panel
         ? {
             cls: panel.className,
@@ -306,6 +317,10 @@ async function logisticsDom(page) {
                 }))
               : [],
             customSelects: controls.querySelectorAll(".logistics-select").length,
+            customPreview: (() => {
+              const n = controls.querySelector(".logistics-form + .logistics-note");
+              return n ? { note: txt(n), invalid: n.classList.contains("logistics-note--invalid") } : null;
+            })(),
             filterNote: txt(controls.querySelector(".logistics-note:not(.logistics-note--unsupported)")),
             unsupported: txt(controls.querySelector(".logistics-note--unsupported")),
             confirm: confirm
@@ -352,6 +367,24 @@ async function clickBtnIn(page, scope, text) {
   const el = handle.asElement();
   if (!el) throw new Error(`button not found: ${scope} text=${JSON.stringify(text)}`);
   await el.click();
+}
+/** Click a .logistics-btn by text inside the nth controls group (0 suggested, 1 laid, 2 custom). */
+async function clickBtnInGroup(page, groupIndex, text) {
+  const handle = await page.evaluateHandle(({ groupIndex, text }) => {
+    const groups = [...document.querySelectorAll(".logistics-controls .logistics-controls__group")];
+    const g = groups[groupIndex];
+    if (!g) return null;
+    return [...g.querySelectorAll(".logistics-btn")].find((b) => b.textContent.trim() === text) || null;
+  }, { groupIndex, text });
+  const el = handle.asElement();
+  if (!el) throw new Error(`button not found: group ${groupIndex} text=${JSON.stringify(text)}`);
+  await el.click();
+}
+/** Change the custom-link material select through the real DOM event path (React onChange). */
+async function selectCustomFilter(page, value) {
+  const handles = await page.$$(".logistics-form .logistics-select");
+  if (handles.length !== 3) throw new Error(`expected 3 custom selects, found ${handles.length}`);
+  await handles[2].selectOption(value);
 }
 /** Click the nth .logistics-btn--danger inside the laid-links group (table order). */
 async function clickDisconnectIndex(page, index) {
@@ -420,10 +453,13 @@ async function runStep(page, form, name, action, expect = [], waitMs = 350) {
 }
 
 async function newPage(browser, form, fixture) {
-  const phone = form.startsWith("phone");
+  const key = form.split("-")[0];
+  const ff = FORM_FACTORS[key];
+  if (!ff) throw new Error(`unknown form factor: ${form}`);
+  const phone = key !== "desktop";
   const context = await browser.newContext({
-    viewport: phone ? { width: 390, height: 844 } : { width: 1920, height: 1080 },
-    deviceScaleFactor: phone ? 2 : 1,
+    viewport: { width: ff.width, height: ff.height },
+    deviceScaleFactor: ff.dpr,
     isMobile: phone, hasTouch: phone,
   });
   if (fixture) {
@@ -474,6 +510,11 @@ async function denseLoop(browser, form) {
     { name: "controls expose connect/disconnect/filter honestly", test: (b, a) => a.dom.controls.present && a.dom.controls.customSelects === 3 && a.dom.controls.unsupported === "Changing a filter in place is not supported by the simulation." && a.dom.controls.laid.every((l) => l.hasDisconnect) },
     { name: "panel inside viewport, no horizontal overflow", test: (b, a) => a.dom.panel.rect.left >= -1 && a.dom.panel.rect.right <= a.dom.viewport.w + 1 && a.dom.docScrollW <= a.dom.viewport.w + 1 },
     { name: "toggle keeps the 44px touch floor", test: (b, a) => a.dom.legend.toggle.rect.height >= 44 },
+    { name: "legend states the direction convention", test: (b, a) => a.dom.legend.direction === "Dashes flow toward the destination; the arrowhead marks the receiving end." },
+    { name: "every laid link prints its direction (source → destination)", test: (b, a) => a.dom.controls.laid.length > 0 && a.dom.controls.laid.every((l) => / → /.test(l.path)) },
+    { name: "legend lists exactly the 11 carried materials, scrap swatch first", test: (b, a) => a.dom.legend.materials.length === 11 && a.dom.legend.materials[0].label === "Scrap" && normColor(a.dom.legend.materials[0].swatch) === "rgb(255,183,101)" && a.dom.legend.materials.every((m) => !!m.swatch), detail: (b, a) => JSON.stringify(a.dom.legend.materials.map((m) => m.label)) },
+    { name: "production overview derived from state (batches/s across 8 machines)", test: (b, a) => a.dom.overview.rows.some((r) => r.label === "Production" && /batches\/s across 8 machines$/.test(r.value)), detail: (b, a) => JSON.stringify(a.dom.overview.rows.find((r) => r.label === "Production")) },
+    { name: "shell rail matches the form factor (landscape/desktop rail, phone none)", test: (b, a) => form === "phone" ? a.dom.rail === null : (a.dom.rail?.width ?? 0) > 0, detail: (b, a) => JSON.stringify(a.dom.rail) },
   ]);
   const visibleCyan = open.after.dom.census?.cyan ?? 0;
 
@@ -492,6 +533,50 @@ async function denseLoop(browser, form) {
     { name: "toggle flips back on", test: (b, a) => a.dom.legend.toggle.text === "Hide routes" && a.dom.legend.toggle.pressed === "true" },
     { name: "showing restores cyan rail pixels", test: (b, a) => a.dom.census.cyan > b.dom.census.cyan, detail: (b, a) => `hidden=${b.dom.census.cyan} shown=${a.dom.census.cyan}` },
     { name: "route count still 18 (presentation only)", test: (b, a) => a.sim.routes === 18 },
+  ]);
+
+  // De-emphasis, relative pixel claim: with the sorter selected, every working rail in the
+  // mature seed (1, 3, 4) touches the sorter and strokes bright. Selecting the furnace
+  // (tile 1) keeps only route 4 related; working rails 1 and 3 dim to 35% alpha and fall
+  // below the cyan census threshold, so bright cyan must strictly decrease. The furnace is
+  // starved in this seed, so it cannot start a new working belt during the window.
+  await runStep(page, `${form}-dense`, "03-select-furnace-dims-unrelated", async () => {
+    await tapTile(page, 1);
+  }, [
+    { name: "real tap selects the furnace", test: (b, a) => a.dom.panel?.aria === "Furnace details" && a.dom.panel?.title === "Furnace" },
+    { name: "selection de-emphasizes unrelated working rails (bright cyan strictly decreases)", test: (b, a) => b.dom.census && a.dom.census && a.dom.census.cyan < b.dom.census.cyan, detail: (b, a) => `sorter=${b.dom.census?.cyan} furnace=${a.dom.census?.cyan}` },
+    { name: "selection dispatches no command (routes unchanged)", test: (b, a) => a.sim.routes === b.sim.routes && a.sim.routes === 18 },
+    { name: "seven inspector sections preserved on the second machine", test: (b, a) => JSON.stringify(a.dom.panel.sections) === JSON.stringify(SECTIONS) },
+  ]);
+
+  // Validity preview, invalid branch: the furnace's custom link defaults (from furnace,
+  // to dock store) with material "steel" duplicate laid route 5. The preview must say so
+  // plainly, and committing it must be rejected by the engine with no state change.
+  await runStep(page, `${form}-dense`, "04-custom-duplicate-preview", async () => {
+    await selectCustomFilter(page, "steel");
+    await page.waitForTimeout(120);
+    await clickBtnInGroup(page, 2, "Connect");
+  }, [
+    { name: "inline custom preview flags the duplicate as invalid", test: (b, a) => a.dom.controls.customPreview?.invalid === true && a.dom.controls.customPreview?.note === "Invalid — an identical belt already runs between these endpoints.", detail: (b, a) => JSON.stringify(a.dom.controls.customPreview) },
+    { name: "confirm preview repeats the invalid reason with a Cancel", test: (b, a) => !!a.dom.controls.confirm && a.dom.controls.confirm.invalid === true && a.dom.controls.confirm.note === "Invalid — an identical belt already runs between these endpoints." && a.dom.controls.confirm.hasCancel === true, detail: (b, a) => JSON.stringify(a.dom.controls.confirm) },
+    { name: "previewing dispatches nothing (routes unchanged)", test: (b, a) => a.sim.routes === b.sim.routes && a.sim.routes === 18 },
+  ]);
+
+  await runStep(page, `${form}-dense`, "05-invalid-commit-rejected", async () => {
+    await clickBtnIn(page, ".logistics-confirm", "Connect"); // primary commit of an invalid plan
+  }, [
+    { name: "engine rejects the duplicate (no route laid)", test: (b, a) => a.sim.routes === 18 && JSON.stringify(a.sim.routeIds) === JSON.stringify(b.sim.routeIds) },
+    { name: "preview cleared after the rejected commit", test: (b, a) => a.dom.controls.confirm === null },
+    { name: "inline preview still reports the duplicate honestly", test: (b, a) => a.dom.controls.customPreview?.invalid === true },
+  ]);
+
+  await runStep(page, `${form}-dense`, "06-invalid-cancel", async () => {
+    await clickBtnInGroup(page, 2, "Connect");
+    await page.waitForTimeout(120);
+    await clickBtnIn(page, ".logistics-confirm", "Cancel");
+  }, [
+    { name: "cancel closes the invalid preview", test: (b, a) => a.dom.controls.confirm === null },
+    { name: "cancel laid no belt (routes unchanged)", test: (b, a) => a.sim.routes === 18 },
   ]);
   await context.close();
 }
@@ -691,6 +776,7 @@ async function main() {
   const browser = await chromium.launch({ executablePath, headless: true });
   const forms = [
     { key: "phone", dims: { w: 780, h: 1688 } },
+    { key: "phoneland", dims: { w: 1688, h: 780 } },
     { key: "desktop", dims: { w: 1920, h: 1080 } },
   ];
   const loops = [
@@ -725,7 +811,7 @@ async function main() {
     branch: "rw/59-logistics",
     generatedAt: new Date().toISOString(),
     chrome: executablePath,
-    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; no vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through panel buttons -> props.dispatch -> applyCommand.",
+    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; no vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through panel buttons/selects -> props.dispatch -> applyCommand. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all five scenario loops run on each.",
     fixtureScrutiny: {
       a: "Only setup seeding mutates state: fixtures derived from docs/evidence/yard-mature.json before encoding (partial removes route 1 + raises store scrap to 60; zeroPower marks the sorter powerLimited at ratio 0 with every batch in progress so requestedPower 16 > capacity 8; missingInput removes route 4; outputFull marks the sorter outputFull with tray 12/12; all set reducedMotion=true for stable pixels). No src changes; every action is a real UI tap/click through dispatch -> applyCommand.",
       b: "Documented in this probe header, the derive* functions and results.json.",
