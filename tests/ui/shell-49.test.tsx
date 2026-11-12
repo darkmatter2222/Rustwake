@@ -402,6 +402,10 @@ describe("G2 keyboard destinations", () => {
 
     // A save code typed into the yard record must never steer the shell.
     pressKey("1");
+    // UI-RESET-63: the export code now lives on the labelled Backup page; the
+    // record page keeps every statistic and both transfer entries. The intent
+    // is unchanged — keys typed in the save code stay in the field.
+    act(() => findButton("Backup")?.click());
     const field = document.querySelector<HTMLTextAreaElement>(".panel__code");
     expect(field).not.toBeNull();
     pressKey("3", field!);
