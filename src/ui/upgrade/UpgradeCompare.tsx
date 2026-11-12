@@ -104,24 +104,31 @@ export function UpgradeCompare(props: {
     }
   };
 
-  /** Free re-pick of the last named outcome; no-ops report themselves honestly. */
+  /**
+   * Free re-pick of the last named outcome; no-ops report themselves honestly.
+   * `applyCommand` counts EVERY ok command in the revision, including the engine's
+   * no-op respecs, so the no-op is detected by reading the picks back, not the counter.
+   */
   const respec = (branch: UpgradeBranch) => {
-    const beforeRevision = state.revision;
     const beforeCredits = state.credits;
-    asResult(
-      props.dispatch({
-        id: nextId("s55"),
-        type: "machine.respec",
-        machineId: machine.id,
-        branch,
-      }),
-    );
+    const beforePicks = machine.branch ? [...machine.branch] : [];
+    const lastBefore = beforePicks[beforePicks.length - 1] ?? null;
+    props.dispatch({
+      id: nextId("s55"),
+      type: "machine.respec",
+      machineId: machine.id,
+      branch,
+    });
     const after = machineById(props.state, machine.id);
     if (!after) return;
-    if (props.state.revision === beforeRevision) {
+    const afterPicks = after.branch ?? [];
+    const changed =
+      afterPicks.length !== beforePicks.length ||
+      afterPicks.some((pick, index) => pick !== beforePicks[index]);
+    if (!changed) {
       setReceipt({
         kind: "noop",
-        text: info.last === branch ? UPGRADE_COPY.respecNoopSame : UPGRADE_COPY.respecNoopNone,
+        text: lastBefore === branch ? UPGRADE_COPY.respecNoopSame : UPGRADE_COPY.respecNoopNone,
       });
       return;
     }

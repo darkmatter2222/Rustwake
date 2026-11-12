@@ -85,7 +85,6 @@ export function metricValue(
 export function branchCards(state: SimState, machine: MachineState): BranchCardModel[] {
   const def = BLUEPRINTS[machine.blueprint];
   const ranks = upgradeRanks(machine);
-  const bufferBonus = researchBonus(state).inputBuffer;
   return UPGRADE_BRANCHES.map((branch) => {
     const next = afterPurchase(machine, branch);
     const cost = branchPrice(def.baseUpgradeCost, machine.level, branch);
