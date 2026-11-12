@@ -1,10 +1,10 @@
 {
   "issue": 61,
   "role": "developer",
-  "buildSha": "426aa05508de6fd010799c714f716a890bc431a3",
+  "buildSha": "ab3f67aa3fbada898c0e19d5b9d11ccc1f5da6d4",
   "baseUrl": "http://127.0.0.1:5161/",
   "branch": "rw/61-return",
-  "generatedAt": "2026-11-12T12:51:18.684Z",
+  "generatedAt": "2026-11-12T12:53:36.184Z",
   "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "method": "headless Chrome DOM + geometry + canvas-pixel + persisted-state mirror only; no vision. Screenshots are hashed mirrors, not inspected visually. Report parity anchored to the game's OWN catchUp oracle on a seed clone at the DOM's exact awayTicks.",
   "fixtureScrutiny": {
@@ -67,7 +67,7 @@
   },
   "counts": {
     "frames": 37,
-    "totalFrameBytes": 5353120,
+    "totalFrameBytes": 5347854,
     "steps": 17,
     "checks": 174,
     "failedChecks": 0,
@@ -84,150 +84,150 @@
       "phone-large": true,
       "phone-zero": true
     },
-    "totalFrameBytes": 5353120,
+    "totalFrameBytes": 5347854,
     "frames": [
       {
         "frame": "desktop-short/00-boot-after.png",
-        "bytes": 102504,
+        "bytes": 102450,
         "width": 1920,
         "height": 1080,
-        "sha256": "4ac88eea55e0306b85853b3a9f3fcc5eb8d1f2dee2a3849a4f828ff9a8ef7dcf",
+        "sha256": "866fdb4d2562bf7167396ca6172f7fbef2da9be7d1194048763fe469e691ea2d",
         "ok": true
       },
       {
         "frame": "desktop-short/00-boot-before.png",
-        "bytes": 102102,
+        "bytes": 102205,
         "width": 1920,
         "height": 1080,
-        "sha256": "c5c3108949ab1dbece0e07831aad5a0fbdfa2f1451671837d9bd6a4fa429b921",
+        "sha256": "cc76600deaa79ae812e67f8a6eb0cfd14a7544afa6e39a00b16a786832e14d9c",
         "ok": true
       },
       {
         "frame": "desktop-short/01-close-focus-after.png",
-        "bytes": 62069,
+        "bytes": 61211,
         "width": 1920,
         "height": 1080,
-        "sha256": "5fd54753cf382711ea1bb7e98e550b72d98b819270e5a6e794dc56649062e584",
+        "sha256": "8e4f1c665644259f6472ed31a80f9a96f46f1e7e6646a2ce4259496d81132acc",
         "ok": true
       },
       {
         "frame": "desktop-short/01-close-focus-before.png",
-        "bytes": 102533,
+        "bytes": 102508,
         "width": 1920,
         "height": 1080,
-        "sha256": "aac69ad8e04e3c8c6a3e684bee1b9c4130178808d2c75299fea2cfac85abdaf1",
+        "sha256": "bfe902a0e4fde8a2457bd794affc9414ff1942c866dd888c65d2cb438cae68d6",
         "ok": true
       },
       {
         "frame": "phone-cap/00-boot-after.png",
-        "bytes": 152329,
+        "bytes": 152379,
         "width": 780,
         "height": 1688,
-        "sha256": "35a17acb63ceddc56fe310e24022bf8b7d2da03cbb95ea75912443e2e0f4e6ba",
+        "sha256": "8a947bba573fe3e0443d20f15be38fed068471e170af43842268355201c3851d",
         "ok": true
       },
       {
         "frame": "phone-cap/00-boot-before.png",
-        "bytes": 152278,
+        "bytes": 152223,
         "width": 780,
         "height": 1688,
-        "sha256": "6cbbe5bb6ee95af131dcb1ccdfb848abcd13887afea20f747902678f58da0124",
+        "sha256": "96e397de03ae3ad4cf2c673c0ee6c2c247c52ae8dda5e588b8dc432789ec73f9",
         "ok": true
       },
       {
         "frame": "phone-cap/01-scroll-recovery-after.png",
-        "bytes": 164253,
+        "bytes": 164263,
         "width": 780,
         "height": 1688,
-        "sha256": "28b52b8d24517ab2099d25a4530a75b7c09f871cffabf3159b6216d314e4a9c7",
+        "sha256": "7fe9cde16c21ec4855793a2a1662ff469e17dbb1dda43d04ce2678c89174aebe",
         "ok": true
       },
       {
         "frame": "phone-cap/01-scroll-recovery-before.png",
-        "bytes": 151590,
+        "bytes": 152348,
         "width": 780,
         "height": 1688,
-        "sha256": "d749836b1a575d02bdd0c1b32600c8c179c423e7c77508b07dd82fa6f14c6909",
+        "sha256": "b409d34d12fba1b40c6406d050b71503eb1bdd5a9e4ec796bd9684ef2a35f05e",
         "ok": true
       },
       {
         "frame": "phone-cap/02-copy-report-after.png",
-        "bytes": 165283,
+        "bytes": 164284,
         "width": 780,
         "height": 1688,
-        "sha256": "98e04b1dcf22cd69f15e60c4d71c0e4cbae5c1dba37e07f1c11039e798c98750",
+        "sha256": "8743bf57137517367a35a3d5bccb0466f9efd36b693675fc31e9bbefebdc7fd8",
         "ok": true
       },
       {
         "frame": "phone-cap/02-copy-report-before.png",
-        "bytes": 164153,
+        "bytes": 164309,
         "width": 780,
         "height": 1688,
-        "sha256": "52f9e3995301e7885713c4dfab5c058885da7a3869730c4b9b97e493e8c3321b",
+        "sha256": "5f813629f141c89c64503da23d762316484ee082587ef5ba2c6d4c19ee971cb2",
         "ok": true
       },
       {
         "frame": "phone-cap/03-close-focus-after.png",
-        "bytes": 105075,
+        "bytes": 104754,
         "width": 780,
         "height": 1688,
-        "sha256": "634aef092dbebcbf44674fecc01f7ac77580ec0d37581865589a33a6d414486f",
+        "sha256": "7ee4fb9a2991c317eb2ec2e8f3b9ae1111845e80d6cafec5ff5e161285a8bec6",
         "ok": true
       },
       {
         "frame": "phone-cap/03-close-focus-before.png",
-        "bytes": 163847,
+        "bytes": 164898,
         "width": 780,
         "height": 1688,
-        "sha256": "b9d35268c21a58d57476cfd72eeda6573522a7a7e52f4a9614cf88abdbdae7a5",
+        "sha256": "a1b7225e99c5d0dc29e9f3c51088f56cc83d83e7b396db5457bb866a64beda45",
         "ok": true
       },
       {
         "frame": "phone-cap/04-menu-reopen-after.png",
-        "bytes": 152704,
+        "bytes": 151654,
         "width": 780,
         "height": 1688,
-        "sha256": "8720722eea478d71c32515f5cbd683f770dde7443ce69fe9be86d56b851be3ee",
+        "sha256": "492c2e9cb95469e21c7d78b1f482533467cb0d4814c3c8dc9bdc4ed3639ab306",
         "ok": true
       },
       {
         "frame": "phone-cap/04-menu-reopen-before.png",
-        "bytes": 104660,
+        "bytes": 104830,
         "width": 780,
         "height": 1688,
-        "sha256": "3f6e92e76b84b9817c3a71254059e28490b425580982797c23d38be51562e581",
+        "sha256": "9339283ebb5b5482f581608bfee89857674f2eff1bcc253c87b9457f644ba64c",
         "ok": true
       },
       {
         "frame": "phone-cap/05-escape-focus-after.png",
-        "bytes": 106426,
+        "bytes": 106491,
         "width": 780,
         "height": 1688,
-        "sha256": "6a7155434710ad7424c0ce7d42d255ea44e52dc98e205ae7ef3330c78b1fc125",
+        "sha256": "57c0f29269110ae4fad21a1d7697228f8bc118942b809ca8907214a5a0ec2c18",
         "ok": true
       },
       {
         "frame": "phone-cap/05-escape-focus-before.png",
-        "bytes": 152866,
+        "bytes": 151740,
         "width": 780,
         "height": 1688,
-        "sha256": "a1b98286119da73f35acf08f57d42fa409685491ab196c1d27d0abbebfff59ea",
+        "sha256": "ea6fc46e62f19f914ae3943c1023ecf082cf36973c5af049521487173784c1e5",
         "ok": true
       },
       {
         "frame": "phone-cap/06-reload-no-double-apply-after.png",
-        "bytes": 167140,
+        "bytes": 167092,
         "width": 780,
         "height": 1688,
-        "sha256": "dd7ce05e8a83d53afb61247f762d13b14c49f481de0582ae3051dd0c87cb833d",
+        "sha256": "7cfb16cfc84ea7932a1e98c26d636b7fc43cc8ec6a4bcc8daeefec5cb59a293f",
         "ok": true
       },
       {
         "frame": "phone-cap/06-reload-no-double-apply-before.png",
-        "bytes": 106668,
+        "bytes": 106777,
         "width": 780,
         "height": 1688,
-        "sha256": "82edcceba0f8a54301de9cfc2bf1aff8ec29413cfe8ef8de3906972715f30dc3",
+        "sha256": "7ea5144ce76081ae815e7b6f2385f6f61f3bfcbd8a8adb004f44b4cee5139e8f",
         "ok": true
       },
       {
@@ -240,50 +240,50 @@
       },
       {
         "frame": "phone-landscape-long/00-boot-after.png",
-        "bytes": 147977,
+        "bytes": 148094,
         "width": 1688,
         "height": 780,
-        "sha256": "554b3fe0a9dcba284bd40a7fa1a8f7e54dcb2f2bd41dd6a0df2afe77050262ee",
+        "sha256": "8eeb8649f01654e8fcfc80a9230c83f62765534585414b4e37a6693349b1e0c2",
         "ok": true
       },
       {
         "frame": "phone-landscape-long/00-boot-before.png",
-        "bytes": 147916,
+        "bytes": 147990,
         "width": 1688,
         "height": 780,
-        "sha256": "7868b116c1b509a8e4a7275cd53be5864c052afb379a3e5bb68c42b39d7f2771",
+        "sha256": "8f76f4d33dbdbe58b1100f79144a7a0df6003218845eb84b29fb0bfa93b955af",
         "ok": true
       },
       {
         "frame": "phone-landscape-long/01-scroll-recovery-after.png",
-        "bytes": 148844,
+        "bytes": 149032,
         "width": 1688,
         "height": 780,
-        "sha256": "12838b5a977b248d79c4dae46d226b06842705207cfa8df2301ba736a1e0b12b",
+        "sha256": "635d170669cbceb1ca3fc58bdbabd55bffa72aa91c2da4ec665d7af9e640dbaa",
         "ok": true
       },
       {
         "frame": "phone-landscape-long/01-scroll-recovery-before.png",
-        "bytes": 148363,
+        "bytes": 148248,
         "width": 1688,
         "height": 780,
-        "sha256": "2763fc65e1d4c1471f783c390e5e7081d99d14304de5827e9c140278edb64101",
+        "sha256": "fc24ea4356f6303725df53eebe6640801855639dfc9c2edf1791cd44279cb944",
         "ok": true
       },
       {
         "frame": "phone-landscape-long/02-close-focus-after.png",
-        "bytes": 103557,
+        "bytes": 103284,
         "width": 1688,
         "height": 780,
-        "sha256": "7fa16fa455fb352c3b89930b46f740fbb55d80107b95313cf1ccd3c62e1d26c0",
+        "sha256": "afb370c5cc8755e0e133af9a674b8707f7c456776c317aeca01a2eacefa0dc40",
         "ok": true
       },
       {
         "frame": "phone-landscape-long/02-close-focus-before.png",
-        "bytes": 149032,
+        "bytes": 149043,
         "width": 1688,
         "height": 780,
-        "sha256": "f6a3633d17b526a06030519115e112928ef6fe1c37c96eda1da2e4153525bd4f",
+        "sha256": "123dcc1ff0f3cf46886203d66a91debc948fbeaf655146fa42f031aae6d2b91d",
         "ok": true
       },
       {
@@ -296,50 +296,50 @@
       },
       {
         "frame": "phone-large/00-boot-after.png",
-        "bytes": 221835,
+        "bytes": 221734,
         "width": 780,
         "height": 1688,
-        "sha256": "ccbaefe76266ca19fffcd40a902bbbaa340c272983d6a5e19b9e8af4b085124d",
+        "sha256": "ac8ab005d1bde7d276b13c4b8d066e9a0c9b3fd0608f7044d77fc375276b198a",
         "ok": true
       },
       {
         "frame": "phone-large/00-boot-before.png",
-        "bytes": 221263,
+        "bytes": 221404,
         "width": 780,
         "height": 1688,
-        "sha256": "1aa7b5e72ed7813cca8585513567e2a829af5dfd34d11ec1efaa00c6f408268f",
+        "sha256": "4c419cfcaf32d47dbf30ba310d92f10d82223014e515312c38d2f9ce3eee9577",
         "ok": true
       },
       {
         "frame": "phone-large/01-scroll-tail-after.png",
-        "bytes": 215187,
+        "bytes": 215364,
         "width": 780,
         "height": 1688,
-        "sha256": "3c81126c7b9aa23ef2c8f127de382dea1660cfab1cde01ed4e5c202eae435c00",
+        "sha256": "28437dd9f0d32851c3e5f90bd71cd826d54f527d6e5873d1500cadc1c3aae3a1",
         "ok": true
       },
       {
         "frame": "phone-large/01-scroll-tail-before.png",
-        "bytes": 221402,
+        "bytes": 221675,
         "width": 780,
         "height": 1688,
-        "sha256": "9be4554d6e835c9357247b34615c7d4b12ab672bfa90771a7616b286e54a9b77",
+        "sha256": "11744b686e2cf142ce619c785f49f5c64ab7539862504f6d33d3195db4cd5186",
         "ok": true
       },
       {
         "frame": "phone-large/02-close-focus-after.png",
-        "bytes": 157145,
+        "bytes": 156921,
         "width": 780,
         "height": 1688,
-        "sha256": "61df5c2a343d3df59ce98a4a10f0a815331010df8b48e4993f838768efd08b6f",
+        "sha256": "3aec7b665c8b71541d65361de6af9ae7af4d8f2ab114063524aedd7d9d317413",
         "ok": true
       },
       {
         "frame": "phone-large/02-close-focus-before.png",
-        "bytes": 215392,
+        "bytes": 215195,
         "width": 780,
         "height": 1688,
-        "sha256": "3b0a2c7062c68d8e5e71bf185bf57b2bb1f8e30119c13666e8027448f2e047b3",
+        "sha256": "9b5d10996dd6c33521040b45d83fdcbe95e0031e5e85d07d5311b59274f82206",
         "ok": true
       },
       {
@@ -352,18 +352,18 @@
       },
       {
         "frame": "phone-zero/00-boot-after.png",
-        "bytes": 139799,
+        "bytes": 138708,
         "width": 780,
         "height": 1688,
-        "sha256": "6b43c393f8a62d3ab1b412be8d5ec78e987136ea7440ee3fef46116e44196b24",
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
         "ok": true
       },
       {
         "frame": "phone-zero/00-boot-before.png",
-        "bytes": 139799,
+        "bytes": 138708,
         "width": 780,
         "height": 1688,
-        "sha256": "6b43c393f8a62d3ab1b412be8d5ec78e987136ea7440ee3fef46116e44196b24",
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
         "ok": true
       },
       {
@@ -376,10 +376,10 @@
       },
       {
         "frame": "phone-zero/01-reload-byte-equal-before.png",
-        "bytes": 139799,
+        "bytes": 138708,
         "width": 780,
         "height": 1688,
-        "sha256": "6b43c393f8a62d3ab1b412be8d5ec78e987136ea7440ee3fef46116e44196b24",
+        "sha256": "80f11896807a684bf391640274040da09b03d216c3d082a3940c59754ddebfdf",
         "ok": true
       }
     ]
@@ -577,14 +577,14 @@
       "step": "00-boot",
       "name": "yard canvas is painted (distinct colors + lit fraction)",
       "ok": true,
-      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":53,\"litFraction\":0.3383344320864258,\"sampled\":188092}"
+      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":53,\"litFraction\":0.3383929141058631,\"sampled\":188092}"
     },
     {
       "form": "phone-cap",
       "step": "00-boot",
       "name": "catch-up loading line painted once as role=status (no dialog)",
       "ok": true,
-      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487842001}] live=false"
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487982535}] live=false"
     },
     {
       "form": "phone-cap",
@@ -682,14 +682,14 @@
       "step": "06-reload-no-double-apply",
       "name": "reload reads the game's persisted save (lastSeen moves forward, no reseed)",
       "ok": true,
-      "detail": "lastSeen 1794487852110 -> 1794487855234"
+      "detail": "lastSeen 1794487991611 -> 1794487994851"
     },
     {
       "form": "phone-cap",
       "step": "06-reload-no-double-apply",
       "name": "no second cap credit: awayTicks collapses to the real reload gap",
       "ok": true,
-      "detail": "reloadAway=21 (must be < 1200, not 468003)"
+      "detail": "reloadAway=22 (must be < 1200, not 468003)"
     },
     {
       "form": "phone-cap",
@@ -738,7 +738,7 @@
       "step": "00-boot",
       "name": "awayTicks within seed gap + drift bound",
       "ok": true,
-      "detail": "away=2592142 expected=2592000..2593200"
+      "detail": "away=2592133 expected=2592000..2593200"
     },
     {
       "form": "phone-landscape-long",
@@ -871,14 +871,14 @@
       "step": "00-boot",
       "name": "yard canvas is painted (distinct colors + lit fraction)",
       "ok": true,
-      "detail": "canvas={\"ok\":true,\"w\":1688,\"h\":780,\"distinct\":43,\"litFraction\":0.14800204155413307,\"sampled\":188092}"
+      "detail": "canvas={\"ok\":true,\"w\":1688,\"h\":780,\"distinct\":43,\"litFraction\":0.14796482572358208,\"sampled\":188092}"
     },
     {
       "form": "phone-landscape-long",
       "step": "00-boot",
       "name": "catch-up loading line painted once as role=status (no dialog)",
       "ok": true,
-      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487855794}] live=false"
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487995443}] live=false"
     },
     {
       "form": "phone-landscape-long",
@@ -969,7 +969,7 @@
       "step": "00-boot",
       "name": "seed loaded intact (machines/routes/tutorial preserved)",
       "ok": true,
-      "detail": "mirror machines=0 routes=0 tutorial=0 tick=6226 seedTick=0"
+      "detail": "mirror machines=0 routes=0 tutorial=0 tick=6206 seedTick=0"
     },
     {
       "form": "phone-zero",
@@ -990,7 +990,7 @@
       "step": "00-boot",
       "name": "awayTicks within seed gap + drift bound",
       "ok": true,
-      "detail": "away=6226 expected=6000..7200"
+      "detail": "away=6206 expected=6000..7200"
     },
     {
       "form": "phone-zero",
@@ -1025,7 +1025,7 @@
       "step": "00-boot",
       "name": "away hero shows day-precision label",
       "ok": true,
-      "detail": "dom=\"10m 23s\" expected=\"10m 23s\""
+      "detail": "dom=\"10m 21s\" expected=\"10m 21s\""
     },
     {
       "form": "phone-zero",
@@ -1053,7 +1053,7 @@
       "step": "00-boot",
       "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
       "ok": true,
-      "detail": "rows=[\"Away 10m 23s\",\"Your operation worked for 10m 23s\",\"0\",\"0\"]"
+      "detail": "rows=[\"Away 10m 21s\",\"Your operation worked for 10m 21s\",\"0\",\"0\"]"
     },
     {
       "form": "phone-zero",
@@ -1179,7 +1179,7 @@
       "step": "01-reload-byte-equal",
       "name": "lastSeen moves forward (persisted save, no reseed)",
       "ok": true,
-      "detail": "lastSeen 1794487864073 -> 1794487867878"
+      "detail": "lastSeen 1794488002572 -> 1794488006359"
     },
     {
       "form": "desktop-short",
@@ -1193,7 +1193,7 @@
       "step": "00-boot",
       "name": "seed loaded intact (machines/routes/tutorial preserved)",
       "ok": true,
-      "detail": "mirror machines=8 routes=18 tutorial=9 tick=19167 seedTick=18298"
+      "detail": "mirror machines=8 routes=18 tutorial=9 tick=19146 seedTick=18298"
     },
     {
       "form": "desktop-short",
@@ -1214,14 +1214,14 @@
       "step": "00-boot",
       "name": "awayTicks within seed gap + drift bound",
       "ok": true,
-      "detail": "away=869 expected=600..1800"
+      "detail": "away=848 expected=600..1800"
     },
     {
       "form": "desktop-short",
       "step": "00-boot",
       "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
       "ok": true,
-      "detail": "dom=scrap+345,wire+52,ferrous+25,plates+15,data+8,circuits+4 oracle=scrap+345,wire+52,ferrous+25,plates+15,data+8,circuits+4"
+      "detail": "dom=scrap+332,wire+52,ferrous+24,plates+15,data+8,circuits+4 oracle=scrap+332,wire+52,ferrous+24,plates+15,data+8,circuits+4"
     },
     {
       "form": "desktop-short",
@@ -1235,7 +1235,7 @@
       "step": "00-boot",
       "name": "headline derives from oracle totals",
       "ok": true,
-      "detail": "dom=\"+449 units across 6 resources\" expected=\"+449 units across 6 resources\""
+      "detail": "dom=\"+435 units across 6 resources\" expected=\"+435 units across 6 resources\""
     },
     {
       "form": "desktop-short",
@@ -1249,7 +1249,7 @@
       "step": "00-boot",
       "name": "away hero shows day-precision label",
       "ok": true,
-      "detail": "dom=\"1m 27s\" expected=\"1m 27s\""
+      "detail": "dom=\"1m 25s\" expected=\"1m 25s\""
     },
     {
       "form": "desktop-short",
@@ -1277,7 +1277,7 @@
       "step": "00-boot",
       "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
       "ok": true,
-      "detail": "rows=[\"Away 1m 27s\",\"Your operation worked for 1m 27s\",\"87\",\"125\",\"Waiting for input\"]"
+      "detail": "rows=[\"Away 1m 25s\",\"Your operation worked for 1m 25s\",\"84\",\"122\",\"Waiting for input\"]"
     },
     {
       "form": "desktop-short",
@@ -1347,7 +1347,7 @@
       "step": "00-boot",
       "name": "yard canvas is painted (distinct colors + lit fraction)",
       "ok": true,
-      "detail": "canvas={\"ok\":true,\"w\":1920,\"h\":1080,\"distinct\":69,\"litFraction\":0.2754288067677371,\"sampled\":296229}"
+      "detail": "canvas={\"ok\":true,\"w\":1920,\"h\":1080,\"distinct\":72,\"litFraction\":0.2756651104382083,\"sampled\":296229}"
     },
     {
       "form": "desktop-short",
@@ -1389,7 +1389,7 @@
       "step": "01-close-focus",
       "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
       "ok": true,
-      "detail": "credits 82->82 storeTotal 760->761"
+      "detail": "credits 82->82 storeTotal 746->756"
     },
     {
       "form": "phone-large",
@@ -1424,7 +1424,7 @@
       "step": "00-boot",
       "name": "awayTicks within seed gap + drift bound",
       "ok": true,
-      "detail": "away=468289 expected=468000..469200"
+      "detail": "away=468267 expected=468000..469200"
     },
     {
       "form": "phone-large",
@@ -1557,14 +1557,14 @@
       "step": "00-boot",
       "name": "yard canvas is painted (distinct colors + lit fraction)",
       "ok": true,
-      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":50,\"litFraction\":0.3382972162558748,\"sampled\":188092}"
+      "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":50,\"litFraction\":0.33816961912255705,\"sampled\":188092}"
     },
     {
       "form": "phone-large",
       "step": "00-boot",
       "name": "catch-up loading line painted once as role=status (no dialog)",
       "ok": true,
-      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794487870446}] live=false"
+      "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794488008826}] live=false"
     },
     {
       "form": "phone-large",
