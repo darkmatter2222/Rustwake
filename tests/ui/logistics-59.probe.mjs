@@ -477,7 +477,7 @@ async function tapTile(page, tile, expectPanel = true) {
   // pickTarget exactly as a player's cleared tap does, and RE-TAP until the inspector
   // actually changes machine — exactly as a player re-taps a tile a passing overlay ate.
   // No state is injected; selection stays a real canvas gesture throughout.
-  for (let attempt = 0; attempt < 5; attempt += 1) {
+  for (let attempt = 0; attempt < 6; attempt += 1) {
     pt = await page.evaluate(({ tile, YARD_COLS, CELL }) => {
       const c = document.querySelector(".game canvas");
       const r = c.getBoundingClientRect();
@@ -500,14 +500,21 @@ async function tapTile(page, tile, expectPanel = true) {
       const q = toClient(0, 0);
       return { x: q.x, y: q.y, ox: 0, oy: 0, fallback: true };
     }, { tile, YARD_COLS, CELL });
-    await page.mouse.move(pt.x, pt.y);
-    await page.mouse.down();
-    await page.mouse.up();
-    if (expectPanel) await page.waitForSelector(".panel--stack", { timeout: 2000 }).catch(() => {});
-    await page.waitForTimeout(250);
-    const afterAria = await readAria();
-    if (!expectPanel || afterAria !== beforeAria) break;
-    await page.waitForTimeout(200);
+    // Only tap a genuinely clear canvas point. The fallback center can land on the
+    // shell-zoom reset face and recenter the camera, which would invalidate the
+    // stable-camera pixel comparisons (selection de-emphasis) downstream. If a transient
+    // HUD overlay covers every pick offset, wait for it to clear and re-search instead of
+    // tapping chrome — the camera stays fixed and selection remains a real canvas gesture.
+    if (!pt.fallback) {
+      await page.mouse.move(pt.x, pt.y);
+      await page.mouse.down();
+      await page.mouse.up();
+      if (expectPanel) await page.waitForSelector(".panel--stack", { timeout: 2000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      const afterAria = await readAria();
+      if (!expectPanel || afterAria !== beforeAria) break;
+    }
+    await page.waitForTimeout(220);
   }
   return pt;
 }
