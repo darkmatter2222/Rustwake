@@ -42,7 +42,7 @@
  */
 import { chromium } from "playwright-core";
 import {
-  existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync,
+  existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, rmSync,
 } from "node:fs";
 import { resolve, join, dirname } from "node:path";
 import { createHash } from "node:crypto";
@@ -585,6 +585,11 @@ function auditFrames(expectedDims) {
 }
 
 async function main() {
+  // The mirror audit hashes every PNG under frames/ against this run's shot
+  // metadata, so stale frames from an earlier run (e.g. renamed steps) would
+  // read as hash mismatches. Start each run from a clean frames dir so the
+  // evidence is exactly one self-consistent capture at the head SHA.
+  if (existsSync(FRAMES)) rmSync(FRAMES, { recursive: true, force: true });
   mkdirSync(FRAMES, { recursive: true });
   console.log("BASE_URL=", BASE_URL, "BUILD_SHA=", BUILD_SHA, "chrome=", executablePath, "EVID=", EVID);
   const browser = await chromium.launch({ executablePath, headless: true });
