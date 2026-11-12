@@ -282,7 +282,11 @@ export function MachinePanel(props: {
               Embedded here so the seven-section, three-face and three-tab contracts hold;
               every control dispatches through props.dispatch (the real command path). */}
           <LogisticsLegend state={props.state} />
-          <RouteControls state={props.state} machine={machine} dispatch={props.dispatch} />
+          {/* UI-RESET-59: keyed by machine id (like UpgradeCompare below) so the custom-link
+              form's from/to/filter reset to the inspected machine instead of drifting from
+              the first machine opened. Without the key, useState(machine.id) keeps the stale
+              source after a selection swap and the preview prices the wrong endpoint pair. */}
+          <RouteControls key={machine.id} state={props.state} machine={machine} dispatch={props.dispatch} />
         </section>
 
         <section className="inspector-section">
