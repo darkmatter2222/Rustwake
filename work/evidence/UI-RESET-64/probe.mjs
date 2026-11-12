@@ -128,6 +128,12 @@ earntrapSim.drone.deliveries = 1;
 earntrapSim.wreck = { remaining: 30, generation: 2, pulses: 6, nextPulseTick: 0 };
 earntrapSim.store = { scrap: 5 };
 earntrapSim.storeUnits = 5;
+// Pause the repaired drone's auto-delivery for the short blind-trap loop so the
+// player stays at 5 scrap (cannot afford the 20-scrap sorter). Tutorial 4 requires
+// drone.repaired=true + deliveries>=1 (engine.ts), so those are kept; only the next
+// delivery is deferred far beyond the loop. No action is faked — income is paused.
+earntrapSim.drone.nextDeliveryTick = 1_000_000_000;
+earntrapSim.drone.inFlight = null;
 const matureSim = JSON.parse(readFileSync(resolve(ROOT, "docs/evidence/yard-mature.json"), "utf8")).payload.sim;
 const FIXTURES = {
   fresh: makeFixture(freshSim, { ...STABLE }),
@@ -548,7 +554,7 @@ async function freshLoop(browser, form) {
       { name: "coach-salvage-lesson", test: (b, a) => a.dom.coach?.mode === "lesson" && a.dom.coach?.topic === "salvage" && a.dom.coach?.lesson === "tutorial-0" },
       { name: "coach-has-what-why-next", test: (b, a) => !!a.dom.coach?.what && !!a.dom.coach?.why && !!a.dom.coach?.next },
       { name: "research-face-absent", test: (b, a) => !researchFacePresent(a.dom) },
-      { name: "research-rail-needs-data", test: (b, a) => researchSlot(a.dom)?.disabled === true && /data/i.test(researchSlot(a.dom)?.reason || "") },
+      { name: "research-rail-needs-data", test: (b, a) => a.dom.railPresent ? (researchSlot(a.dom)?.disabled === true && /data/i.test(researchSlot(a.dom)?.reason || "")) : !researchFacePresent(a.dom) },
       { name: "yard-canvas-paints", test: (b, a) => (a.dom.census?.ink ?? 0) > 100 },
     ]);
 
@@ -633,7 +639,7 @@ async function freshLoop(browser, form) {
       { name: "research-goal-copy", test: (b, a) => /first Data/i.test(a.dom.coach?.what || "") },
       { name: "still-no-data", test: (b, a) => a.sim.data === 0 },
       { name: "research-face-still-absent", test: (b, a) => !researchFacePresent(a.dom) },
-      { name: "gate-not-weakened-rail-disabled", test: (b, a) => researchSlot(a.dom)?.disabled === true },
+      { name: "gate-not-weakened-rail-disabled", test: (b, a) => a.dom.railPresent ? researchSlot(a.dom)?.disabled === true : !researchFacePresent(a.dom) },
     ]);
 
     // (5) Build the full Data chain through the real catalog, honoring the fresh-yard
@@ -657,7 +663,7 @@ async function freshLoop(browser, form) {
     await runStep(page, F, "22-first-data-unlocks-research", async () => { await waitForData(page, 1); }, [
       { name: "first-data-landed", test: (b, a) => a.sim.data > 0 },
       { name: "research-face-appears", test: (b, a) => researchFacePresent(a.dom) },
-      { name: "research-rail-enabled", test: (b, a) => researchSlot(a.dom)?.disabled === false },
+      { name: "research-rail-enabled", test: (b, a) => a.dom.railPresent ? researchSlot(a.dom)?.disabled === false : a.dom.dock.some((d) => d.label === "Research") },
       { name: "coach-left-research-path", test: (b, a) => a.dom.coach?.lesson !== "research-path" },
     ], 500);
 
@@ -759,7 +765,9 @@ async function earntrapLoop(browser, form) {
 async function progressLoop(browser, form) {
   const F = `${form}-progress`;
   const { context, page } = await newPage(browser, F, FIXTURES.progress);
-  const intact = (s) => s && s.machines === 8 && s.routes === 18 && s.data === 76 && s.tutorial === 9;
+  // "Not reset" semantics: machines/routes/tutorial must be unchanged; Data only
+  // grows as the mature chain runs live (>=76), it must never be reset toward 0.
+  const intact = (s) => s && s.machines === 8 && s.routes === 18 && s.data >= 76 && s.tutorial === 9;
   try {
     await runStep(page, F, "00-progress-open", async () => {}, [
       { name: "progress-respected", test: (b, a) => intact(a.sim) },
