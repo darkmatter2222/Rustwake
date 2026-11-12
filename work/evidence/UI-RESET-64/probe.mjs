@@ -596,6 +596,94 @@ async function ensureAffordable(page, id) {
 }
 
 /**
+ * dev-64e: accumulate steel through the game's OWN offline income until the store can
+ * cover the one-time export contract. CORRECTED root cause for fresh step 17: the
+ * step-7 dock primary is labeled t("tut.sellSteel") ("Sell steel") but actually
+ * dispatches contract.export (App.tsx step===7), NOT a repeatable sell. exportContract
+ * (commands.ts) spends TUNING.exportContractSteel=3 steel and grants 30 credits, sets
+ * exportClaimed=true; sellResource is locked until exportClaimed, and syncTutorial 7->8
+ * (engine.ts) needs credits>0. The prior probe advanced only 45s at step 16 (steel=1)
+ * then clicked, so the contract was refused for insufficient steel — credits stayed 0,
+ * tutorial stuck at 7, and steps 18-24 cascaded (the trace shows steel RISING 1->2 with
+ * credits 0 and primary still "Sell steel"). This is a PROBE income gap, not a src
+ * defect: a real player keeps the furnace running until 3 steel accrues, then claims.
+ * Bounded retries via advanceTime (the game's own catch-up); no assertion relaxed and
+ * no sim field injected. The steel-produced/tutorial-7 checks at step 16 stay intact.
+ */
+async function ensureSteel(page, qty) {
+  for (let i = 0; i < 4; i += 1) {
+    const s = await readSim(page);
+    if (s && (s.store.steel ?? 0) >= qty) return true;
+    await advanceTime(page, 90);
+  }
+  const s = await readSim(page);
+  return !!s && (s.store.steel ?? 0) >= qty;
+}
+
+/**
+ * dev-64e: restore a fixture's PRISTINE seeded state through the game's OWN encodeSave
+ * with a FRESH lastSeenMs (no offline catch-up), then reload. SETUP seeding only (fixture
+ * scrutiny a/c) — the jargon loop uses it so the furnace is inspected in its documented
+ * starved state. The live yard refills the furnace buffer and ramps power demand within a
+ * few seconds: the trace shows the first constraint card drift from "Needs input to run"
+ * (missingInput) to "Running on limited power" between steps 01 and 02, which is why the
+ * expand assertion read the wrong card. Each inspection re-seeds and acts inside the
+ * fresh starved window (powerRatio back to 1 also removes the power card, so missingInput
+ * is first). No sim field is injected and no assertion relaxed — the expand is still a
+ * real summary click. Re-encoding (NOT reusing the module-load envelope) avoids a stale
+ * lastSeenMs triggering a large catch-up that would itself refill the furnace.
+ */
+async function reseed(page, fixture) {
+  const env = encodeSave(fixture.sim, Date.now(), fixture.settings);
+  if (!decodeSave(env).ok) throw new Error("reseed: re-encode failed validation");
+  await page.evaluate(({ KEY, env }) => localStorage.setItem(KEY, env), { KEY: SAVE_KEY, env });
+  await page.reload({ waitUntil: "networkidle", timeout: 45000 });
+  const gate = await page.$(".gate__btn");
+  if (gate) { await safeClick(gate, "gate-after-reseed"); await page.waitForTimeout(200); }
+  await dismissReport(page);
+  await page.waitForTimeout(150);
+}
+
+/** Real canvas drag that pans the camera (App gesture machine -> intentRef). */
+async function panYard(page, dx, dy) {
+  await page.evaluate(({ dx, dy }) => {
+    const c = document.querySelector(".game canvas");
+    const r = c.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const base = { bubbles: true, cancelable: true, composed: true, pointerId: 1, pointerType: "mouse", isPrimary: true, button: 0 };
+    c.dispatchEvent(new PointerEvent("pointerdown", { ...base, clientX: cx, clientY: cy, buttons: 1 }));
+    const steps = 6;
+    for (let i = 1; i <= steps; i += 1) {
+      c.dispatchEvent(new PointerEvent("pointermove", { ...base, clientX: cx + (dx * i) / steps, clientY: cy + (dy * i) / steps, buttons: 1 }));
+    }
+    c.dispatchEvent(new PointerEvent("pointerup", { ...base, clientX: cx + dx, clientY: cy + dy, buttons: 0 }));
+  }, { dx, dy });
+  await page.waitForTimeout(220);
+}
+
+/**
+ * dev-64e: open the furnace inspector by its ACTUAL mirror tile. resetView refits the
+ * yard; on the small landscape rail form the coach/lead can overlay the top-row furnace
+ * tile (tile 1) so a center tap hits the lead instead of the canvas (the phoneland trace
+ * showed panel.title empty after the tap). Pan the yard DOWN through a real drag to clear
+ * the lead and retry, bounded. tapTile re-reads dataset.cam each attempt so it tracks the
+ * pan. Returns the furnace machine record. No assertion relaxed.
+ */
+async function selectFurnace(page) {
+  const sim = await readSim(page);
+  const furnace = sim?.machines.find((m) => m.blueprint === "furnace");
+  if (!furnace) throw new Error("no furnace present to inspect");
+  await resetView(page);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await tapTile(page, furnace.tile);
+    const title = await page.evaluate(() => document.querySelector(".panel--stack .panel__title")?.textContent || "");
+    if (/Furnace/i.test(title)) return furnace;
+    await panYard(page, 0, 55);
+  }
+  return furnace;
+}
+
+/**
  * Build a machine through the REAL catalog flow:
  *   restore resting dock -> Build (openCatalog) -> card (onSelect re-aims ghost) ->
  *   catalog Place (onPlace ONLY closes the catalog, leaving the ghost armed) ->
@@ -803,7 +891,15 @@ async function freshLoop(browser, form) {
       { name: "coach-trade-topic", test: (b, a) => a.dom.coach?.topic === "trade" },
     ]);
 
-    await runStep(page, F, "17-sell-steel", async () => { await clickPrimary(page); await settleTutorial(page, 8); }, [
+    await runStep(page, F, "17-sell-steel", async () => {
+      // dev-64e: the step-7 primary CLAIMS the one-time export contract (contract.export,
+      // spends 3 steel -> +30 credits), not a repeatable sell. Accumulate steel>=3 through
+      // the game's own income first so the claim is affordable, then commit and settle to
+      // tutorial 8 (syncTutorial 7->8 needs credits>0). No assertion relaxed.
+      await ensureSteel(page, TUNING.exportContractSteel);
+      await clickPrimary(page);
+      await settleTutorial(page, 8);
+    }, [
       { name: "credits-earned", test: (b, a) => a.sim.credits >= 30 },
       { name: "tutorial-8-upgrade", test: (b, a) => a.sim.tutorial === 8 },
       { name: "coach-upgrade-topic", test: (b, a) => a.dom.coach?.topic === "upgrade" },
@@ -1042,23 +1138,29 @@ async function jargonLoop(browser, form) {
     ]);
 
     await runStep(page, F, "01-inspect-furnace", async () => {
-      // dev-64e: recenter first (the phoneland camera was panned off the fit, so the
-      // furnace tap missed), then tap the furnace's ACTUAL tile read from the mirror.
-      const sim = await readSim(page);
-      const furnace = sim?.machines.find((m) => m.blueprint === "furnace");
-      if (!furnace) throw new Error("no furnace present to inspect");
-      await resetView(page);
-      await tapTile(page, furnace.tile);
+      // dev-64e: re-seed the pristine starved mature yard (fresh lastSeenMs, no catch-up)
+      // and open the furnace by its ACTUAL mirror tile, panning clear of the lead overlay
+      // on the landscape rail form. The live yard refills the furnace within seconds, so
+      // inspect inside the fresh starved window. No assertion relaxed.
+      await reseed(page, FIXTURES.jargon);
+      await selectFurnace(page);
     }, [
       { name: "furnace-panel", test: (b, a) => /Furnace/i.test(a.dom.panel?.title || "") },
       { name: "constraint-headline", test: (b, a) => /Needs input to run/i.test(a.dom.panel?.constraint?.summary || "") },
       { name: "constraint-detail-present", test: (b, a) => !!a.dom.panel?.constraint?.detail },
-    ]);
+    ], 200);
 
-    await runStep(page, F, "02-expand-constraint", async () => { await clickSel(page, ".inspector-constraint__summary"); }, [
+    await runStep(page, F, "02-expand-constraint", async () => {
+      // dev-64e: re-seed + re-open the furnace so the missingInput card is first (the live
+      // yard otherwise drifts to the power card between steps), then expand it through the
+      // REAL summary click and read inside the starved window. Assertions unchanged.
+      await reseed(page, FIXTURES.jargon);
+      await selectFurnace(page);
+      await clickSel(page, ".inspector-constraint__summary");
+    }, [
       { name: "detail-expanded", test: (b, a) => a.dom.panel?.constraint?.open === true },
       { name: "jargon-explained", test: (b, a) => /Missing input/i.test(a.dom.panel?.constraint?.detail || "") },
-    ]);
+    ], 200);
 
     await runStep(page, F, "03-coach-glossary", async () => {
       const sum = await page.$(".onboard__summary");
