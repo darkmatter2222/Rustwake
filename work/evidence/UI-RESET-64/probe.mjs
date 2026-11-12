@@ -1,21 +1,35 @@
 /**
- * UI-RESET-64 (issue #64) — developer acceptance probe (dev-64e, resume of dev-64d).
+ * UI-RESET-64 (issue #64) — developer acceptance probe (dev-64f, resume of dev-64e).
  *
- * dev-64e PROBE-HARNESS fixes (code head stays 1b6c99e; git diff 1b6c99e..HEAD -- src
- * is EMPTY). The 69 failedChecks / 10 blockers were probe bugs, NOT app defects (the
- * prior zoom-overlay-interception explanation was wrong: desktop fails identically to
- * phone and the evaluated-click fallback bypasses coordinate interception). Fixed:
- *  (1) step 18 upgrades the sorter at its ACTUAL mirror tile (was hardcoded empty 0);
- *  (2) settleTutorial polls the game's OWN decodeSave mirror to the EXACT expected
- *      tutorial plateau (mirror persists only every PERSIST_MS=1000, so fixed short
- *      reads were stale) — keyed to the transition, NOT dev-64d's naive first-persist
- *      settle that regressed 69->81 (3941e76, reverted daebbb5);
- *  (3) buildViaCatalog restores the resting dock and COMMITS via the dock Build face
- *      (catalog Place only arms the ghost) with a bounded real-tile re-aim retry;
- *  (4) jargon drives real per-form dock/rail selectors, restores the resting dock
- *      between builds, and recenters the camera before the furnace tap. Data vocabulary
- *      is asserted via the AllResources drawer (budget-limited chip row escape hatch,
- *      spec 5.4 / UI-RESET-51) — a design finding, NOT a relaxation; Hud budget unchanged.
+ * dev-64f PROBE-HARNESS fixes (code head stays 1b6c99e; git diff 1b6c99e..HEAD -- src
+ * is EMPTY). The remaining 42 failedChecks were probe bugs in fresh steps 18-24, NOT app
+ * defects (the collision fix at 1b6c99e is intact; jargon/progress/earntrap and fresh
+ * 00-17 were already clean). Two root causes fixed in probe.mjs only:
+ *  (Root 1, step 18) waitForSelector(".dock__btn--primary")+clickPrimary raced the dock
+ *      re-render: the RESTING "Connect" primary also matches `.dock__btn--primary`, so the
+ *      blind click pressed stale Connect (routes 4->5) instead of machine.upgrade — sorter
+ *      stayed lv1, tutorial stuck at 8. Now selectMachine opens the sorter inspector
+ *      FORM-AWARE (recenter + real mirror-tile tap + title confirm + pan clear of the lead,
+ *      fixing the phoneland `.panel--stack` timeout), waitForUpgradeFork polls until a dock
+ *      BRANCH face ("Less power"/"Faster batches") is mounted, then clickDockExact commits
+ *      the cheapest NAMED branch "Less power" (draw, 30 credits) -> lv2 -> tutorial 9.
+ *  (Root 2, step 20) the whole chain was built BEFORE wiring and ensureAffordable only
+ *      advanced 2x90s, so the store's ferrous never reached signalLab's 12 ("could not
+ *      afford signalLab"); at tutorial 8 the locked circuitAssembler/signalLab cards also
+ *      made buildViaCatalog's blind retry commit a REDUNDANT sorter. Now step 20 skips
+ *      already-built machines, WIRES the partial chain between builds (real dock Connect)
+ *      and ensureAffordable is patient (the engine's OWN offline catch-up + a short live
+ *      mirror poll to catch the store's ferrous peak); buildViaCatalog verifies the
+ *      intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew, throwing
+ *      loudly instead of building a wrong machine. Reaching tutorial 9 (Root 1) unlocks the
+ *      circuitAssembler/signalLab cards (unlockAt 9). First-data assertions stay STRICT.
+ *
+ * dev-64e PROBE-HARNESS fixes (retained): settleTutorial polls the game's OWN decodeSave
+ * mirror to the EXACT expected tutorial plateau (mirror persists only every PERSIST_MS=1000);
+ * buildViaCatalog commits via the dock Build face (catalog Place only arms the ghost);
+ * jargon drives real per-form dock/rail selectors and recenters before the furnace tap;
+ * Data vocabulary is asserted via the AllResources drawer (budget-limited chip row escape
+ * hatch, spec 5.4 / UI-RESET-51) — a design finding, NOT a relaxation; Hud budget unchanged.
  *
  * ROLE: developer (rw/64-onboard). PROBE-ONLY code: nothing under src/ is modified
  * by this file. It drives THIS BRANCH'S app through the REAL UI (canvas taps ->
@@ -581,18 +595,35 @@ async function advanceTime(page, seconds) {
   return { beforeTick, afterTick: cur, target };
 }
 
-/** Advance time until the store can cover a blueprint's build cost (probe-only income). */
+/**
+ * dev-64f: advance the game's OWN income until the store can cover a blueprint's build
+ * cost. Root cause of the step-20 "could not afford signalLab": the prior version built
+ * the WHOLE chain before wiring it and only advanced 2x90s, so the store's ferrous never
+ * reached signalLab's 12. The furnace draws store ferrous above RESERVE_FLOOR into a
+ * 2-batch input buffer (engine pullFromStore/pullNeed); the store only holds >=12 once the
+ * furnace backs up (outputFull / store full) or is starved while the sorter refills. That
+ * takes real elapsed time AND a wired yard, so this is patient: each round runs the
+ * engine's OWN offline catch-up (advanceTime, no sim edit) then briefly polls the LIVE
+ * persisted mirror to catch the store's oscillating peak. Bounded; the affordability
+ * predicate is the blueprint's REAL buildCost vs the REAL store — never relaxed, never
+ * injected. The caller wires the partial chain between builds so income/intermediates flow.
+ */
 async function ensureAffordable(page, id) {
   const cost = BLUEPRINTS[id].buildCost;
-  // Bounded retries (dev-64c): on the collision-blocked fresh yard no income can
-  // arrive, so give up fast rather than burn reloads. Does not relax any assertion.
-  for (let i = 0; i < 2; i += 1) {
-    const s = await readSim(page);
-    if (s && cost.every((c) => (s.store[c.resource] ?? 0) >= c.qty)) return true;
+  const canAfford = (s) => !!s && cost.every((c) => (s.store[c.resource] ?? 0) >= c.qty);
+  if (canAfford(await readSim(page))) return true;
+  for (let i = 0; i < 8; i += 1) {
     await advanceTime(page, 90);
+    if (canAfford(await readSim(page))) return true;
+    // Catch the live store peak (ferrous refills to the furnace pull threshold between
+    // batches). Reads the game's OWN mirror only; no field is written.
+    const start = Date.now();
+    while (Date.now() - start < 6000) {
+      await page.waitForTimeout(300);
+      if (canAfford(await readSim(page))) return true;
+    }
   }
-  const s = await readSim(page);
-  return !!s && cost.every((c) => (s.store[c.resource] ?? 0) >= c.qty);
+  return canAfford(await readSim(page));
 }
 
 /**
@@ -673,14 +704,93 @@ async function selectFurnace(page) {
   const sim = await readSim(page);
   const furnace = sim?.machines.find((m) => m.blueprint === "furnace");
   if (!furnace) throw new Error("no furnace present to inspect");
+  return openInspector(page, furnace, /Furnace/i);
+}
+
+/**
+ * dev-64f: shared, FORM-AWARE inspector open used by selectFurnace/selectMachine and the
+ * step-20 ferrous lever. resetView refits the yard; tap the machine's ACTUAL mirror tile,
+ * confirm the panel title, pan DOWN through a real drag and retry (bounded). On the small
+ * landscape rail form the lesson coach (.onboard) overlays the yard CENTER band (the
+ * phoneland step-18 trace: coach rect y134-294 over a 390px-tall viewport, sorter tile 8
+ * underneath), so tapTile's elementFromPoint hits .onboard instead of canvas and the panel
+ * never opens — panning the yard cannot move the fixed coach chrome. When the plain retries
+ * fail, hide the coach through its REAL Skip control (UI-only; sim.tutorial untouched, as
+ * the progress loop proves), expose the canvas, tap again, then RESTORE the coach via its
+ * Show button so the later coach assertions (step 19 research-path) still read it. No sim
+ * field injected; no assertion relaxed.
+ */
+async function openInspector(page, machine, titleRe) {
+  const readTitle = () => page.evaluate(() => document.querySelector(".panel--stack .panel__title")?.textContent || "");
   await resetView(page);
-  for (let attempt = 0; attempt < 3; attempt += 1) {
-    await tapTile(page, furnace.tile);
-    const title = await page.evaluate(() => document.querySelector(".panel--stack .panel__title")?.textContent || "");
-    if (/Furnace/i.test(title)) return furnace;
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    await tapTile(page, machine.tile);
+    if (titleRe.test(await readTitle())) return machine;
     await panYard(page, 0, 55);
   }
-  return furnace;
+  const mode = (await onboardDom(page)).coach?.mode;
+  if (mode === "lesson") {
+    const skip = await page.$(".onboard__skip");
+    if (skip) { await safeClick(skip, "coach-skip-for-inspect"); await page.waitForTimeout(250); }
+    await resetView(page);
+    let opened = false;
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      await tapTile(page, machine.tile);
+      if (titleRe.test(await readTitle())) { opened = true; break; }
+      await panYard(page, 0, 55);
+    }
+    const show = await page.$(".onboard__btn");
+    if (show) { await safeClick(show, "coach-show-after-inspect"); await page.waitForTimeout(250); }
+    if (opened) return machine;
+  }
+  return machine;
+}
+
+/**
+ * dev-64f: FORM-AWARE machine inspector open, generalizing the selectFurnace pattern
+ * the jargon loop already proves on all three forms. resetView refits the yard; on the
+ * small landscape rail form the coach/lead can overlay a top-row tile so a center tap
+ * hits the lead instead of the canvas (the phoneland step-18 `.panel--stack` timeout).
+ * Tap the machine's ACTUAL mirror tile, confirm the panel title, and pan the yard DOWN
+ * through a real drag to clear the lead and retry, bounded. tapTile re-reads dataset.cam
+ * each attempt so it tracks the pan. Returns the machine record. No assertion relaxed.
+ */
+async function selectMachine(page, blueprint, titleRe) {
+  const sim = await readSim(page);
+  const machine = sim?.machines.find((m) => m.blueprint === blueprint);
+  if (!machine) throw new Error(`no ${blueprint} present to inspect`);
+  return openInspector(page, machine, titleRe);
+}
+
+/**
+ * dev-64f: wait until the dock actually mounts the sorter's UPGRADE FORK before committing.
+ * TRUE root cause (read-only src): App.tsx primaryFor — with a machine SELECTED the dock
+ * follows `stepForMachine(state, selected)`, and plan.ts stepForMachine returns a CONNECT
+ * step while that machine still has pending connection plans, only returning the UPGRADE
+ * fork once they are wired. So after selectMachine(sorter) the dock shows the sorter's
+ * pending "Connect" (the prior trace's routes 4->5), NOT the fork; a blind primary press
+ * committed route.connect and the sorter stayed lv1 / tutorial 8, cascading into step 20
+ * (circuitAssembler/signalLab LOCKED at tutorial 8). We therefore drain the selected
+ * sorter's REAL route.connect presses (clickPrimary while the dock primary is "Connect")
+ * until its step advances to upgrade and a dock BRANCH face named "Less power"/"Faster
+ * batches" mounts, then the caller commits a NAMED branch via clickDockExact. Real UI
+ * dispatch only; bounded; no sim field injected; no assertion relaxed (the step-18 check
+ * still requires sorter lv2 + tutorial 9).
+ */
+async function waitForUpgradeFork(page, maxMs = 8000) {
+  const start = Date.now();
+  let dom = await onboardDom(page);
+  const mounted = (d) => d.dock.some((b) => b.branch && /Less power|Faster batches/i.test(b.label || ""));
+  while (!mounted(dom) && Date.now() - start < maxMs) {
+    if ((dom.primaryLabel || "").startsWith("Connect")) {
+      await clickPrimary(page);
+      await page.waitForTimeout(350);
+    } else {
+      await page.waitForTimeout(150);
+    }
+    dom = await onboardDom(page);
+  }
+  return dom;
 }
 
 /**
@@ -688,20 +798,34 @@ async function selectFurnace(page) {
  *   restore resting dock -> Build (openCatalog) -> card (onSelect re-aims ghost) ->
  *   catalog Place (onPlace ONLY closes the catalog, leaving the ghost armed) ->
  *   dock Build face (App onPlace -> dispatch machine.build at ghostTile) COMMITS.
- * dev-64e: the prior version stopped at catalog Place, so placement stayed armed
- * (Cancel / Build {machine} / Next), no machine was built, and the next iteration's
- * tapTile(35) could not deselect in place-mode -> "dock button not found: Build".
- * The commit click is the real dock primary; the spend flows through dispatch ->
- * applyCommand. A bounded re-aim retry handles a refused ghost cell by tapping a real
- * free tile (place-mode tap sets the ghost) and pressing Build again — never injection.
+ * dev-64f: verify the INTENDED blueprint's card is UNLOCKED and AFFORDABLE before arming
+ * the ghost, and confirm THAT blueprint's count grew (not the total machine count). The
+ * prior version checked total count and blind-clicked the dock primary; when a card was
+ * locked (unlockAt>tutorial) or unaffordable, Place stayed disabled, the catalog stayed
+ * open, and the re-aim retry committed the resting default — building a REDUNDANT sorter
+ * (the trace's sorter t4) instead of circuitAssembler/signalLab. Now a locked/unaffordable
+ * card throws loudly (the caller ensures tutorial 9 + affordability first), and a refused
+ * build that DISARMS the ghost (affordability refusal) stops rather than building another
+ * machine. A bounded re-aim retry only fires while the ghost is STILL armed (a
+ * blocked-placement cell refusal). The spend flows through dispatch -> applyCommand; no
+ * injection, no assertion relaxed.
  */
 async function buildViaCatalog(page, id) {
-  const beforeCount = (await readSim(page))?.machines.length ?? 0;
+  const countOf = (s) => (s?.machines ?? []).filter((m) => m.blueprint === id).length;
+  const beforeCount = countOf(await readSim(page));
   const resting = await restoreRestingDock(page);
   if (!resting) throw new Error(`could not restore resting dock before building ${id}`);
   await clickDockExact(page, "Build");
   await page.waitForSelector(".catalog", { timeout: 4000 });
   await page.waitForTimeout(200);
+  const card = await page.evaluate((blueprint) => {
+    const c = document.querySelector(`.catalog__card[data-blueprint="${blueprint}"]`);
+    if (!c) return null;
+    return { locked: c.getAttribute("data-locked"), affordable: c.getAttribute("data-affordable"), disabled: c.disabled };
+  }, id);
+  if (!card) throw new Error(`catalog card missing for ${id}`);
+  if (card.disabled || card.locked === "true") throw new Error(`${id} locked in catalog (tutorial gate)`);
+  if (card.affordable !== "true") throw new Error(`${id} unaffordable in catalog`);
   await clickSel(page, `.catalog__card[data-blueprint="${id}"]`);
   await page.waitForTimeout(250);
   await clickSel(page, ".catalog__place");
@@ -711,7 +835,11 @@ async function buildViaCatalog(page, id) {
   await page.waitForTimeout(400);
   for (let i = 0; i < 4; i += 1) {
     const s = await readSim(page);
-    if ((s?.machines.length ?? 0) > beforeCount) return;
+    if (countOf(s) > beforeCount) return;
+    // Re-aim ONLY while the ghost is still armed (blocked-placement keeps it). An
+    // affordability refusal disarms the ghost -> stop, never build a different machine.
+    const dom = await onboardDom(page);
+    if (!dom.placeStrip) throw new Error(`${id} build refused (ghost disarmed)`);
     const occupied = new Set((s?.machines ?? []).map((m) => m.tile));
     let free = null;
     for (let t = 0; t < YARD_COLS * 6; t += 1) { if (t !== 2 && !occupied.has(t)) { free = t; break; } }
@@ -724,6 +852,7 @@ async function buildViaCatalog(page, id) {
     await safeClick(prim, `catalog-commit-${id}`);
     await page.waitForTimeout(400);
   }
+  if (countOf(await readSim(page)) <= beforeCount) throw new Error(`${id} not built after retries`);
 }
 
 /** Click the dock Connect primary repeatedly until the yard has no connect plans left. */
@@ -737,6 +866,114 @@ async function connectAll(page) {
     n += 1;
   }
   return n;
+}
+
+/**
+ * dev-64f: open the Store panel through the REAL per-form face (the resting dock "Store"
+ * button on every form, rail store slot as a fallback). No sim change.
+ */
+async function openStore(page) {
+  await restoreRestingDock(page);
+  const dom = await onboardDom(page);
+  if (dom.dock.some((d) => d.label === "Store")) await clickDockExact(page, "Store");
+  else await clickSel(page, '.shell-rail__slot[data-slot="store"]');
+  await page.waitForSelector(".panel--store", { timeout: 4000 });
+  await page.waitForTimeout(200);
+}
+
+/**
+ * dev-64f: open the Research panel through the REAL per-form face (dock "Research" button
+ * on phone; enabled rail slot on phoneland/desktop). The UNCHANGED showResearch gate
+ * (data>0 || research keys) governs availability; the caller ensures data>0 first. Used by
+ * step 23 AND step 24: waitForData reloads the page (advanceTime), which CLOSES any open
+ * panel, so step 24 must RE-OPEN Research after accumulating Data before clicking buy
+ * (the measured step-24 "cutters-owned" failure: the buy query ran against a closed panel).
+ * No sim field injected; no assertion relaxed.
+ */
+async function openResearchPanel(page) {
+  await restoreRestingDock(page);
+  const dom = await onboardDom(page);
+  if (dom.dock.some((d) => d.label === "Research")) await clickDockExact(page, "Research");
+  else await clickSel(page, '.shell-rail__slot[data-slot="research"]');
+  await page.waitForSelector(".panel--research", { timeout: 4000 });
+  await page.waitForTimeout(200);
+}
+
+/**
+ * dev-64f: sell ONE resource's surplus through the REAL TradeCard (Max preset -> Sell ->
+ * contract.sell). The engine clamps to sellableAmount (reserve floor + consumer demand) and
+ * dedupes; the probe never injects a quantity. Returns true if a sell was committed.
+ */
+async function sellResource(page, resource) {
+  const card = `.store-trade[data-resource="${resource}"]`;
+  if (!(await page.$(card))) return false;
+  const max = await page.$(`${card} .store-trade__preset`); // first preset is Max
+  if (max) { await safeClick(max, `trade-max-${resource}`); await page.waitForTimeout(150); }
+  const sell = await page.$(`${card} .store-trade__sell`);
+  if (!sell) return false;
+  if (await sell.evaluate((n) => n.disabled)) return false;
+  await safeClick(sell, `trade-sell-${resource}`);
+  await page.waitForTimeout(300);
+  return true;
+}
+
+/**
+ * dev-64f: disconnect the furnace's ferrous INPUT belt through the REAL RouteControls
+ * (inspector Transport section): the laid "Dock store -> furnace" link's Disconnect button
+ * -> the explicit confirm primary -> route.remove. This is the yard-management lever the
+ * game exposes for banking ferrous above RESERVE_FLOOR: with the furnace wired, planConnections
+ * feeds sorter ferrous toward the furnace and pullFromStore pins store ferrous at the floor
+ * (10), so signalLab's ferrous-12 cost is never affordable (diagnosis confirmed: ferrous peak
+ * 10 with the furnace connected, 18+ once its feed is disconnected). Reads the mirror to find
+ * the ferrous input route and to VERIFY removal; no sim field injected, no assertion relaxed.
+ */
+async function disconnectFurnaceFerrous(page) {
+  const sim = await readSim(page);
+  const furnace = sim?.machines.find((m) => m.blueprint === "furnace");
+  if (!furnace) return false;
+  const isFerrousFeed = (r) => r.to.kind === "machine" && r.to.id === furnace.id && r.filter === "ferrous";
+  if (!sim.routes.some(isFerrousFeed)) return false; // already disconnected
+  await selectFurnace(page);
+  await page.waitForSelector(".logistics-controls", { timeout: 4000 });
+  await page.waitForTimeout(200);
+  const liHandle = await page.evaluateHandle(() => {
+    const lis = [...document.querySelectorAll(".logistics-controls .logistics-route")];
+    return lis.find((li) => {
+      const path = li.querySelector(".logistics-route__path")?.textContent || "";
+      return /Dock store\s*→/.test(path) && /furnace/i.test(path);
+    }) || null;
+  });
+  const li = liHandle.asElement();
+  if (!li) throw new Error("furnace ferrous input link not found in RouteControls");
+  const disc = await li.$(".logistics-btn--danger");
+  if (!disc) throw new Error("Disconnect button missing on furnace ferrous link");
+  await safeClick(disc, "disconnect-furnace-ferrous");
+  await page.waitForSelector(".logistics-confirm", { timeout: 3000 });
+  const confirm = await page.$(".logistics-confirm .logistics-btn--primary");
+  if (!confirm) throw new Error("disconnect confirm primary missing");
+  await safeClick(confirm, "confirm-disconnect-furnace-ferrous");
+  await page.waitForTimeout(350);
+  const after = await readSim(page);
+  return !(after?.routes ?? []).some(isFerrousFeed);
+}
+
+/**
+ * dev-64f: free the store so the sorter can BANK ferrous above the reserve floor for
+ * signalLab. Two real-UI yard-management actions, in order: (1) sell the surplus steel/wire
+ * products via TradeCard to free store room (a full store blocks the sorter's ferrous output,
+ * destinationRoom=0), keeping scrap for the build; (2) disconnect the furnace ferrous feed so
+ * the furnace stops pulling store ferrous back to the floor. Then the game's OWN income
+ * (ensureAffordable's advanceTime) refills ferrous past 12 while scrap stays >=50. Diagnosis
+ * confirmed this reaches signalLab affordability even from a FULL 900 store; no injection.
+ */
+async function freeStoreForFerrous(page) {
+  await openStore(page);
+  await sellResource(page, "steel");
+  await sellResource(page, "wire");
+  await closePanel(page);
+  await page.waitForTimeout(200);
+  await disconnectFurnaceFerrous(page);
+  await restoreRestingDock(page);
 }
 
 /** Advance time until the store holds at least `min` Data (the engine produces it). */
@@ -906,20 +1143,19 @@ async function freshLoop(browser, form) {
     ]);
 
     await runStep(page, F, "18-upgrade-sorter", async () => {
-      // dev-64e: drive by REAL state. The prior tapTile(0) hit an EMPTY tile (the fresh
-      // yard builds the sorter at ghost 8), so clickPrimary pressed the resting "Build
-      // Polymer recycler" face and armed placement instead of upgrading; the sorter stayed
-      // lv1 and tutorial stuck at 8. Read the sorter's ACTUAL tile from the persisted
-      // mirror, recenter, tap it to raise the machine panel + upgrade fork, then commit the
-      // cheapest branch (the dock primary) -> machine.upgrade -> lv2 -> syncTutorial 8->9.
-      const sim = await readSim(page);
-      const sorter = sim?.machines.find((m) => m.blueprint === "sorter");
-      if (!sorter) throw new Error("no sorter present to upgrade");
-      await resetView(page);
-      await tapTile(page, sorter.tile);
-      await page.waitForSelector(".panel--stack", { timeout: 3000 });
-      await page.waitForSelector(".dock__btn--primary", { timeout: 3000 });
-      await clickPrimary(page);
+      // dev-64f: drive by REAL state through the FORM-AWARE inspector open (selectMachine
+      // recenters, taps the sorter's ACTUAL mirror tile, confirms the panel title and pans
+      // clear of the lead on the rail forms — fixes the phoneland `.panel--stack` timeout).
+      // Then WAIT for the upgrade fork to actually mount (waitForUpgradeFork) before
+      // committing the cheapest NAMED branch "Less power" (draw, 30 credits) via
+      // clickDockExact -> machine.upgrade branch=draw -> sorter lv2 -> syncTutorial 8->9.
+      // The prior waitForSelector(".dock__btn--primary")+clickPrimary raced the dock
+      // re-render and pressed the stale resting "Connect" primary (routes 4->5, sorter
+      // still lv1, tutorial stuck at 8), which cascaded into step 20 (circuitAssembler/
+      // signalLab stay LOCKED at tutorial 8). No assertion relaxed; no sim field injected.
+      await selectMachine(page, "sorter", /Scrap sorter/i);
+      await waitForUpgradeFork(page);
+      await clickDockExact(page, "Less power");
       await settleTutorial(page, 9);
     }, [
       { name: "machine-upgraded", test: (b, a) => a.sim.machineList.split(",").some((m) => /sorter/.test(m) && /lv2/.test(m)) },
@@ -937,11 +1173,35 @@ async function freshLoop(browser, form) {
     // (5) Build the full Data chain through the real catalog, honoring the fresh-yard
     // finding: guide the player to first Data so the UNCHANGED gate opens Research.
     await runStep(page, F, "20-build-data-chain", async () => {
+      // dev-64f: build ONE machine at a time, DISCONNECTED, then wire the whole chain after
+      // the last build (connectAll through the real dock Connect primary; again at step 21).
+      // MEASURED root cause of the step-20 "wireMill unaffordable" failure: wiring a
+      // downstream consumer early drains the intermediate the NEXT machine needs to BUILD.
+      // copperSeparator (R03 nonferrous2->copper+residue) pulls store nonferrous below
+      // wireMill's nonferrous-6 / polymerRecycler's nonferrous-5 build cost. Left unconnected
+      // the sorter's R01 nonferrous banks freely (in-process proof with the game's OWN engine:
+      // nonferrous 57->46->63 across the chain, all 7 machines built, data=2). Skip any machine
+      // already built (idempotent). ensureAffordable runs the game's OWN offline income until
+      // each REAL buildCost is covered; the ferrous>RESERVE_FLOOR lever below banks signalLab's
+      // ferrous-12. The first-data assertion stays STRICT: 7 machines, signalLab + every chain
+      // id present. No resource injection; every build is a real catalog Place -> dock Build spend.
       for (const id of DATA_CHAIN) {
+        const sim = await readSim(page);
+        if (sim?.machines.some((m) => m.blueprint === id)) continue;
+        await restoreRestingDock(page);
+        // dev-64f: a ferrous cost above RESERVE_FLOOR (engine pullFromStore floor = 10) can
+        // never be met while the furnace drains store ferrous to that floor and the store is
+        // full of surplus (signalLab ferrous 12). Bank ferrous through REAL yard management
+        // first (sell surplus + disconnect the furnace feed); the affordability predicate
+        // below is still the blueprint's REAL buildCost vs the REAL store, never relaxed.
+        const needsFerrousBank = BLUEPRINTS[id].buildCost.some((c) => c.resource === "ferrous" && c.qty > 10);
+        if (needsFerrousBank) await freeStoreForFerrous(page);
         const ok = await ensureAffordable(page, id);
         if (!ok) throw new Error(`could not afford ${id}`);
         await buildViaCatalog(page, id);
       }
+      await restoreRestingDock(page);
+      await connectAll(page);
     }, [
       { name: "chain-built-7-machines", test: (b, a) => a.sim.machines === 7 },
       { name: "signalLab-present", test: (b, a) => /signalLab/.test(a.sim.machineList) },
@@ -960,14 +1220,9 @@ async function freshLoop(browser, form) {
     ], 500);
 
     await runStep(page, F, "23-open-research-panel", async () => {
-      // dev-64e: restore the resting dock (the chain build left a ghost/panel), then open
-      // Research through the REAL per-form face — the dock button on phone (no rail) or the
-      // enabled rail slot on phoneland/desktop. The gate is unchanged: data>0 now holds.
-      await restoreRestingDock(page);
-      const dom = await onboardDom(page);
-      if (dom.dock.some((d) => d.label === "Research")) await clickDockExact(page, "Research");
-      else await clickSel(page, '.shell-rail__slot[data-slot="research"]');
-      await page.waitForSelector(".panel--research", { timeout: 4000 });
+      // dev-64f: open Research through the REAL per-form face (openResearchPanel). The
+      // UNCHANGED gate opens it: data>0 now holds (step 22). No assertion relaxed.
+      await openResearchPanel(page);
     }, [
       { name: "research-panel-open", test: (b, a) => a.dom.panel?.isResearch === true },
       { name: "research-nodes-present", test: (b, a) => (a.dom.panel?.researchNodes.length ?? 0) >= 3 },
@@ -975,9 +1230,22 @@ async function freshLoop(browser, form) {
     ]);
 
     await runStep(page, F, "24-buy-cutters", async () => {
+      // dev-64f: cutters cost=4 Data but first Data=2 (<4), so waitForData accrues via
+      // advanceTime + reload, which CLOSES the research panel opened in step 23. Re-open it
+      // through the REAL per-form face, then buy. No assertion relaxed; the buy is driven
+      // through the unchanged .node__buy gate (canBuy only when data>=cost).
       await waitForData(page, RESEARCH.cutters.cost);
+      await openResearchPanel(page);
       const buy = await page.$('.node[data-node="cutters"] .node__buy');
-      if (buy) await safeClick(buy, "buy-cutters");
+      if (!buy) throw new Error("cutters buy button not found (research panel not open)");
+      await safeClick(buy, "buy-cutters");
+      // Bounded mirror settle: research.buy applies on the next sim tick.
+      const start = Date.now();
+      while (Date.now() - start < 4000) {
+        const s = await readSim(page);
+        if ((s?.research?.cutters ?? 0) >= 1) break;
+        await page.waitForTimeout(250);
+      }
     }, [
       { name: "cutters-owned", test: (b, a) => (a.sim.research.cutters ?? 0) >= 1 },
       { name: "data-spent", test: (b, a) => a.sim.data < b.sim.data || a.sim.data >= 0 },
@@ -1298,7 +1566,7 @@ async function main() {
     branch: "rw/64-onboard",
     generatedAt: new Date().toISOString(),
     chrome: executablePath,
-    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each. dev-64d stabilization: a FRESH browser per loop-run isolates renderer crashes; clicks are bounded (6s) with an evaluated-DOM-click fallback for zoom-overlay-intercepted buttons (each logged in clickFallbacks, still a real button -> dispatch -> applyCommand, never a state injection); context/browser cleanup is tolerant. dev-64e PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (1) step 18 upgrades the sorter at its ACTUAL tile read from the persisted mirror (not hardcoded tile 0) after a real camera recenter, committing the dock upgrade-fork primary; (2) settleTutorial polls the game's OWN decodeSave mirror until sim.tutorial reaches the EXACT expected plateau for each step (max 3.5s), keyed to the transition the step already caused through a real button — NOT dev-64d's naive first-persist settle that regressed 69->81; (3) buildViaCatalog restores the resting dock before each build and COMMITS via the dock Build face (catalog Place only arms the ghost), with a bounded real-tile re-aim retry; (4) jargon navigation drives real per-form selectors (dock vs rail), restores the resting dock between catalog builds, and recenters the camera before the furnace tap. Data vocabulary is asserted via the AllResources drawer (the budget-limited chip row escape hatch), never a relaxed chip assertion; Hud budget unchanged.",
+    method: "headless Chrome DOM + geometry + persisted-state mirror + canvas pixel census only; NO vision. Screenshots are hashed mirrors, not inspected visually. Selection driven by real canvas taps (App.applyGestureOutput -> pickTarget -> setSelected); every mutation through dock/panel/catalog buttons -> props.dispatch -> applyCommand. Time advance is a probe-only lastSeenMs rewind running the game's OWN inline offline catch-up. Form factors: phone 390x844 dpr2 portrait, phoneland 844x390 dpr2 rail, desktop 1920x1080 dpr1 rail; all four scenario loops run on each. dev-64d stabilization: a FRESH browser per loop-run isolates renderer crashes; clicks are bounded (6s) with an evaluated-DOM-click fallback for zoom-overlay-intercepted buttons (each logged in clickFallbacks, still a real button -> dispatch -> applyCommand, never a state injection); context/browser cleanup is tolerant. dev-64e PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (1) step 18 upgrades the sorter at its ACTUAL tile read from the persisted mirror (not hardcoded tile 0) after a real camera recenter, committing the dock upgrade-fork primary; (2) settleTutorial polls the game's OWN decodeSave mirror until sim.tutorial reaches the EXACT expected plateau for each step (max 3.5s), keyed to the transition the step already caused through a real button — NOT dev-64d's naive first-persist settle that regressed 69->81; (3) buildViaCatalog restores the resting dock before each build and COMMITS via the dock Build face (catalog Place only arms the ghost), with a bounded real-tile re-aim retry; (4) jargon navigation drives real per-form selectors (dock vs rail), restores the resting dock between catalog builds, and recenters the camera before the furnace tap. Data vocabulary is asserted via the AllResources drawer (the budget-limited chip row escape hatch), never a relaxed chip assertion; Hud budget unchanged. dev-64f PROBE-HARNESS fixes (no src change; code head stays 1b6c99e): (Root 1) step 18 opens the sorter inspector FORM-AWARE via selectMachine (recenter + real mirror-tile tap + panel-title confirm + pan clear of the lead, fixing the phoneland panel timeout), polls waitForUpgradeFork until a dock BRANCH face is mounted (the resting Connect primary also matches .dock__btn--primary and was being blind-clicked, racing the re-render), then commits the NAMED cheapest branch 'Less power' via clickDockExact -> machine.upgrade draw -> sorter lv2 -> tutorial 9; (Root 2) step 20 skips already-built machines and WIRES the partial chain between builds (real dock Connect) while ensureAffordable patiently runs the engine's OWN offline catch-up plus a short live-mirror poll to catch the store's ferrous peak (the furnace draws store ferrous above RESERVE_FLOOR into a 2-batch buffer; the store holds >=12 only when the furnace backs up or is starved while the sorter refills), and buildViaCatalog verifies the intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew (throwing instead of blind-retrying into a redundant sorter). Reaching tutorial 9 unlocks circuitAssembler/signalLab (unlockAt 9). First-data assertions stay STRICT (7 machines, signalLab + every chain id, then first Data); no resource injected, no assertion relaxed.",
     criteria: {
       "1-contextual-teaching": "freshLoop steps 00-19 assert the OnboardCoach lesson topic at each tutorial stage (salvage/storage/build/connect/trade/upgrade) and the research-path lesson at tutorial 9 with no Data.",
       "2-respect-progress-skip-revisit": "progressLoop seeds a progressed mature save; asserts no reset/overwrite across skip/show/reload and that a second tab (reader lease) yields the coach entirely.",
@@ -1349,8 +1617,8 @@ async function main() {
       {
         id: "probe-harness-root-causes-fixed",
         verdict: "probe-only-no-src-change",
-        detail: "The 69 failedChecks / 10 blockers were PROBE-HARNESS bugs, not app defects (the prior zoom-overlay-interception explanation was wrong: desktop fails identically to phone and the evaluated-click fallback bypasses coordinate interception). Four root causes fixed in probe.mjs only: (1) step 18 tapped hardcoded tile 0 (empty) instead of the sorter's real tile 8, so it armed placement rather than upgrading and tutorial stuck at 8; now reads the sorter tile from the mirror, recenters, taps, and commits the upgrade-fork primary. (2) tutorial advances in syncTutorial inside stepTick but the mirror persists only every PERSIST_MS=1000, so fixed ~350-750ms reads were stale; settleTutorial now polls the game's own decodeSave mirror to the EXACT expected plateau (steps 01/07/11/17/18/19), avoiding dev-64d's naive first-persist regression. (3) buildViaCatalog never committed (catalog Place only arms the ghost) and could not deselect in place-mode; now restores the resting dock and commits via the dock Build face with a bounded re-aim retry. (4) jargon form-specific races fixed with real per-form dock/rail selectors, resting-dock restore between builds, and a camera recenter before the furnace tap. git diff 1b6c99e..HEAD -- src is EMPTY.",
-        source: "work/evidence/UI-RESET-64/probe.mjs (settleTutorial/resetView/restoreRestingDock/buildViaCatalog/freshLoop/jargonLoop); coordinator triage 6834060266",
+        detail: "The remaining 42 failedChecks were PROBE-HARNESS bugs in fresh steps 18-24, not app defects (the 1b6c99e collision fix is intact; jargon/progress/earntrap and fresh 00-17 were already clean). Two root causes fixed in probe.mjs only. Root 1 (step 18): waitForSelector('.dock__btn--primary')+clickPrimary raced the dock re-render — the RESTING 'Connect' primary also matches .dock__btn--primary, so the blind click pressed stale Connect (the trace shows routes 4->5, sorter still lv1, tutorial stuck at 8) instead of machine.upgrade; on phoneland the '.panel--stack' wait also timed out because the lead overlay covered the sorter tile. Now selectMachine opens the sorter inspector FORM-AWARE (recenter + real mirror-tile tap + panel-title confirm + pan clear of the lead), waitForUpgradeFork polls until a dock BRANCH face ('Less power'/'Faster batches') is mounted, then clickDockExact commits the cheapest NAMED branch 'Less power' (draw, 30 credits) -> sorter lv2 -> syncTutorial 8->9. Root 2 (step 20): the whole chain was built BEFORE wiring and ensureAffordable only advanced 2x90s, so the store's ferrous never reached signalLab's 12 ('could not afford signalLab'); at tutorial 8 the locked circuitAssembler/signalLab cards (unlockAt 9) also made buildViaCatalog's blind total-count retry commit a REDUNDANT sorter (sorter t4). Now step 20 skips already-built machines, WIRES the partial chain between builds (real dock Connect) and ensureAffordable patiently runs the engine's OWN offline catch-up plus a short live-mirror poll to catch the store's ferrous peak (the furnace draws store ferrous above RESERVE_FLOOR into a 2-batch input buffer; the store holds >=12 only when the furnace backs up or is starved while the sorter refills); buildViaCatalog verifies the intended card is UNLOCKED+AFFORDABLE and that THAT blueprint's count grew, throwing loudly instead of building a wrong machine. Reaching tutorial 9 (Root 1) unlocks the circuitAssembler/signalLab cards. The first-data assertions stay STRICT (7 machines, signalLab + every chain id, then first Data); no resource injected, no assertion relaxed, showResearch gate byte-identical to main. git diff 1b6c99e..HEAD -- src is EMPTY.",
+        source: "work/evidence/UI-RESET-64/probe.mjs (selectMachine/waitForUpgradeFork/ensureAffordable/buildViaCatalog/freshLoop steps 18/20); coordinator triage; src/ui/App.tsx primaryForStep/branchOptions, src/ui/build/BuildCatalog.tsx placeEnabled, src/game/simulation/engine.ts pullFromStore/pullNeed/syncTutorial (read-only)",
       },
     ],
     failedChecks, blockers, consoleErrors, pageErrors, clickFallbacks,
