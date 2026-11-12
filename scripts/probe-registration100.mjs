@@ -50,6 +50,7 @@ import {
   checksum,
   decodeSave,
   encodeSave,
+  repairRegistration,
   validateSim,
 } from "../src/game/persistence/save";
 import { LEASE_KEY } from "../src/game/persistence/lease";
@@ -685,6 +686,65 @@ const run = async () => {
     witness[name] = { byteIdentical: a === b, checksum: checksum(a) };
     if (a !== b) throw new Error(`fixture ${name} is not deterministic`);
   }
+  // REWORK guard (QA verdict 6817277787): a checksum-VALID malformed route table must
+  // refuse GRACEFULLY through decodeSave — repair never throws and never masks the
+  // refusal. Engine-level checks, independent of the browser cells below.
+  const malformedBase = createInitialState();
+  malformedBase.tutorial = 9;
+  const malformedEnvelope = (routes) => {
+    const envelope = JSON.parse(encodeSave(malformedBase, WITNESS_MS, SETTINGS));
+    envelope.payload.sim.routes = routes;
+    envelope.checksum = checksum(JSON.stringify(envelope.payload));
+    return JSON.stringify(envelope);
+  };
+  let malformedRefusal = null;
+  let malformedThrow = null;
+  try {
+    malformedRefusal = decodeSave(malformedEnvelope([{}]));
+  } catch (error) {
+    malformedThrow = String(error);
+  }
+  check("malformed-import", "node", "checksum-valid routes:[{}] refuses gracefully, never throws",
+    malformedThrow === null && malformedRefusal?.ok === false &&
+      malformedRefusal?.reason === "invalid" && malformedRefusal?.detail === "routeCapacity:undefined",
+    { threw: malformedThrow, result: malformedRefusal });
+  const malformedSim = createInitialState();
+  malformedSim.tutorial = 9;
+  malformedSim.routes = [
+    {},
+    null,
+    { id: 9, capacity: 4, inFlight: 0, items: [], from: null, to: { kind: "store", id: 0 } },
+    { id: 10, capacity: 4, inFlight: 0, items: [], from: { kind: "store", id: 0 }, to: "yard" },
+  ];
+  const malformedBefore = JSON.stringify(malformedSim);
+  let repairThrow = null;
+  try {
+    repairRegistration(malformedSim);
+  } catch (error) {
+    repairThrow = String(error);
+  }
+  check("malformed-import", "node", "repair leaves malformed route entries untouched, never throws",
+    repairThrow === null && JSON.stringify(malformedSim) === malformedBefore,
+    { threw: repairThrow });
+  const nonArrayItemsSim = createInitialState();
+  nonArrayItemsSim.tutorial = 9;
+  nonArrayItemsSim.routes = [{
+    id: 7, from: { kind: "machine", id: 99 }, to: { kind: "store", id: 0 },
+    filter: null, capacity: 4, latency: 1, run: [1, 2],
+    items: { resource: "scrap", qty: 3 }, inFlight: 0, busyTicks: 0, ageTicks: 0,
+  }];
+  const nonArrayBefore = nonArrayItemsSim.storeUnits;
+  let nonArrayThrow = null;
+  try {
+    repairRegistration(nonArrayItemsSim);
+  } catch (error) {
+    nonArrayThrow = String(error);
+  }
+  const nonArrayRefund = Math.round((TUNING.beltCostPerTile * 2 * TUNING.dismantleRefundPct) / 100);
+  check("malformed-import", "node", "dropped orphan with non-array items compensates without throwing",
+    nonArrayThrow === null && nonArrayItemsSim.routes.length === 0 &&
+      nonArrayItemsSim.storeUnits - nonArrayBefore === nonArrayRefund,
+    { threw: nonArrayThrow, refund: nonArrayItemsSim.storeUnits - nonArrayBefore, expected: nonArrayRefund });
   console.log(`REG-100 headless evidence · ${url} · head ${headSha}`);
   const browser = await chromium.launch({ executablePath, headless: true });
   const results = {};
