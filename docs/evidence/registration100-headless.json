@@ -2,7 +2,7 @@
   "generatedBy": "scripts/probe-registration100.mjs",
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/100",
   "pr": "https://github.com/darkmatter2222/Rustwake/pull/103",
-  "headSha": "9b14e1b458cbe7d600e335973521ca471e74f144",
+  "headSha": "f93ca09a973e86fd2622f4c398fc3ec1d175bb23",
   "url": "http://localhost:4295/",
   "tuning": {
     "beltCostPerTile": 1,
@@ -113,6 +113,40 @@
     }
   },
   "checks": [
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "checksum-valid routes:[{}] refuses gracefully, never throws",
+      "ok": true,
+      "detail": {
+        "threw": null,
+        "result": {
+          "ok": false,
+          "reason": "invalid",
+          "detail": "routeCapacity:undefined"
+        }
+      }
+    },
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "repair leaves malformed route entries untouched, never throws",
+      "ok": true,
+      "detail": {
+        "threw": null
+      }
+    },
+    {
+      "scenario": "malformed-import",
+      "cell": "node",
+      "name": "dropped orphan with non-array items compensates without throwing",
+      "ok": true,
+      "detail": {
+        "threw": null,
+        "refund": 2,
+        "expected": 2
+      }
+    },
     {
       "scenario": "four-yard",
       "cell": "390x844",
@@ -2051,8 +2085,8 @@
     }
   ],
   "summary": {
-    "total": 198,
-    "passed": 198,
+    "total": 201,
+    "passed": 201,
     "failed": 0
   }
 }
