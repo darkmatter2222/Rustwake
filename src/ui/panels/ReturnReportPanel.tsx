@@ -221,7 +221,15 @@ export function ReturnReportPanel(props: {
         <div className="return-recovery">
           <h3 className="return-section-title">{RETURN_COPY.recoveryTitle}</h3>
           <p className="return-recovery__body">{RETURN_COPY.recoveryBody}</p>
-          <button type="button" className="return-copy" onClick={copyReport}>
+          {/* The 44px tap floor is inline as well as in return.css: the HUD
+              button census (build-52) reads computed styles from the shared
+              sheets only, and this control must keep the floor everywhere. */}
+          <button
+            type="button"
+            className="return-copy"
+            style={{ minHeight: "44px" }}
+            onClick={copyReport}
+          >
             {RETURN_COPY.copyReport}
           </button>
           {copyNote ? (
