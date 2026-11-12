@@ -1,0 +1,320 @@
+/* ===========================================================================
+   UI-RESET-58 (issue #58): the research surface's own paint layer.
+
+   Everything here is scoped to the research surface (.research-* classes and
+   .panel--research descendants). The shell chrome (.panel, .panel__body, the
+   rail geometry) and the legacy card rules (.node, .node__state, .node__cost)
+   stay owned by styles.css; this file only adds the #58 decision layer:
+   the sticky path overview, four-state badges, prerequisite / why lines and
+   the focus readout. No type is shrunk to fit — the overview earns its room
+   by being compact, and the cards keep the base sizes at every text scale.
+   =========================================================================== */
+
+/* --- The sticky path overview ------------------------------------------- */
+
+/* Sticks to the top of .panel__body (the declared scroller), so the whole
+   branch's state stays visible while the cards scroll under it — the desktop
+   overview, and the phone's way back to the top without a second control.
+   Solid background: a sticky strip over scrolling cards must not show through. */
+.research-summary {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  margin: 0 0 8px;
+  padding: 6px 0;
+  background: #0c1424;
+  border-bottom: 1px solid rgba(111, 147, 173, 0.25);
+}
+
+.research-progress {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  color: var(--steel-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.research-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
+  gap: 6px;
+}
+
+.research-seg {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(111, 147, 173, 0.28);
+  border-top-width: 3px;
+  background: rgba(9, 15, 26, 0.55);
+  min-width: 0;
+}
+
+.research-seg__step {
+  font-size: 0.62rem;
+  color: var(--steel-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.research-seg__name {
+  font-size: 0.72rem;
+  color: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.research-seg__state {
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* State reads without relying on colour alone: the word is printed, and the
+   top edge carries the same hue the card badge uses. */
+.research-seg[data-research-state="completed"] {
+  border-top-color: var(--cyan);
+}
+.research-seg[data-research-state="completed"] .research-seg__state {
+  color: var(--cyan);
+}
+.research-seg[data-research-state="available"] {
+  border-top-color: var(--furnace);
+}
+.research-seg[data-research-state="available"] .research-seg__state {
+  color: var(--furnace);
+}
+.research-seg[data-research-state="unlocked"] {
+  border-top-color: var(--steel-light);
+}
+.research-seg[data-research-state="unlocked"] .research-seg__state {
+  color: var(--steel-light);
+}
+.research-seg[data-research-state="locked"] {
+  border-top-color: rgba(111, 147, 173, 0.45);
+  border-style: dashed;
+  border-top-style: solid;
+}
+.research-seg[data-research-state="locked"] .research-seg__state {
+  color: var(--steel-light);
+}
+
+/* --- Four-state badges --------------------------------------------------- */
+
+.research-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(111, 147, 173, 0.5);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+  white-space: nowrap;
+}
+
+.research-badge--completed {
+  color: var(--cyan);
+  border-color: rgba(95, 216, 232, 0.5);
+  background: rgba(95, 216, 232, 0.12);
+}
+
+.research-badge--available {
+  color: var(--furnace);
+  border-color: rgba(255, 183, 101, 0.55);
+  background: rgba(255, 183, 101, 0.14);
+}
+
+.research-badge--unlocked {
+  color: var(--steel-light);
+  border-color: rgba(111, 147, 173, 0.55);
+  background: rgba(56, 85, 107, 0.25);
+}
+
+.research-badge--locked {
+  color: var(--steel-light);
+  border-style: dashed;
+  background: transparent;
+}
+
+/* Card edges follow the four-state word, extending the legacy known/open/locked
+   edges rather than replacing them. */
+.node[data-research-state="available"] {
+  box-shadow: inset 3px 0 0 rgba(255, 183, 101, 0.6);
+}
+.node[data-research-state="unlocked"] {
+  border-color: rgba(111, 147, 173, 0.55);
+}
+.node[data-research-state="completed"] {
+  box-shadow: inset 3px 0 0 rgba(95, 216, 232, 0.45);
+}
+
+/* --- Prerequisite and why-unavailable lines ------------------------------ */
+
+.research-prereq {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--steel-light);
+}
+
+.research-why {
+  margin: 0;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.research-why[data-why="unlocked"] {
+  color: var(--furnace);
+}
+
+.research-why[data-why="locked"] {
+  color: var(--steel-light);
+}
+
+.research-datanote {
+  margin: 0 0 8px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(95, 216, 232, 0.4);
+  font-size: 0.72rem;
+  color: var(--steel-light);
+}
+
+/* --- The focus readout ---------------------------------------------------- */
+
+.research-focus {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 216, 232, 0.35);
+  background: linear-gradient(135deg, rgba(95, 216, 232, 0.08), rgba(11, 18, 32, 0.6));
+}
+
+.research-focus__title {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--cyan);
+}
+
+.research-focus__where {
+  margin: 2px 0 0;
+  font-size: 0.72rem;
+  color: var(--steel-light);
+}
+
+.research-focus__rows {
+  margin: 6px 0 0;
+  display: grid;
+  gap: 2px;
+}
+
+.research-focus__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.research-focus__row dt {
+  flex: 0 1 auto;
+  font-size: 0.72rem;
+  color: var(--steel-light);
+}
+
+.research-focus__row dd {
+  margin: 0;
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  color: var(--paper);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* --- The per-card Details target ------------------------------------------ */
+
+/* Secondary control: the buy target keeps the shared 44 px floor; this one is
+   a compact text button that only moves the in-panel focus readout. */
+.research-details {
+  padding: 2px 8px;
+  min-height: 24px;
+  border-radius: 6px;
+  border: 1px solid rgba(95, 216, 232, 0.35);
+  background: transparent;
+  color: var(--cyan);
+  font: inherit;
+  font-size: 0.66rem;
+  cursor: pointer;
+}
+
+.research-details:hover,
+.research-details:focus-visible {
+  background: rgba(95, 216, 232, 0.12);
+}
+
+/* --- The declared scroller's own scrollbar -------------------------------- */
+
+/* .panel__body is the one contained scroller (styles.css); the research panel
+   gives it a visible, on-palette scrollbar so the overflow is discoverable on
+   desktop instead of hiding behind an overlay bar. */
+.panel--research .panel__body {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(95, 216, 232, 0.4) rgba(9, 15, 26, 0.6);
+}
+
+.panel--research .panel__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel--research .panel__body::-webkit-scrollbar-track {
+  background: rgba(9, 15, 26, 0.6);
+  border-radius: 4px;
+}
+
+.panel--research .panel__body::-webkit-scrollbar-thumb {
+  background: rgba(95, 216, 232, 0.4);
+  border-radius: 4px;
+}
+
+.panel--research .panel__body::-webkit-scrollbar-thumb:hover {
+  background: rgba(95, 216, 232, 0.6);
+}
+
+/* --- Large text ------------------------------------------------------------ */
+
+/* At scale >= 1.5 the chrome gives back padding before the type does, the same
+   bargain .text-large .node already makes in styles.css. No font size steps
+   down here: every research line keeps its base rem at every scale. */
+.text-large .research-summary {
+  padding: 4px 0;
+  margin-bottom: 6px;
+}
+
+.text-large .research-seg {
+  padding: 3px 5px;
+}
+
+.text-large .research-focus {
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+
+.text-large .research-details {
+  padding: 1px 6px;
+}
+
+/* --- Rail mode (the shell's own query, mirrored literally) ------------------ */
+
+/* The inspector column is 320 px wide (shell-owned geometry). The overview
+   stays three-across at that width — each segment keeps its full type and
+   wraps its name instead of shrinking — and the cards keep the base sizes, so
+   the desktop reads the whole path without an unreadably compressed tree. */
+@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+  .panel--research .research-path {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .panel--research .research-focus__row {
+    flex-wrap: wrap;
+  }
+}
