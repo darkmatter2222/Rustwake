@@ -950,6 +950,15 @@ body {
 }
 
 .gate-settings .panel {
+  /* UI-RESET-62: the rail-mode media query positions every `.panel` into the
+     HUD's right inspector gutter (position:absolute; right:8; top:104). That
+     gutter only exists post-start; pre-start there is no rail, and the scrim
+     above is a full-viewport place-items:center grid. Without these two lines
+     the desktop title-settings card inherits the absolute gutter box and parks
+     at the right edge instead of centring (measured 1352..1912 at 1920x1080).
+     Static + centre restores the same centred card the phone already paints. */
+  position: static;
+  align-self: center;
   margin-top: 0;
   width: min(92vw, 560px);
   max-width: min(92vw, 560px);

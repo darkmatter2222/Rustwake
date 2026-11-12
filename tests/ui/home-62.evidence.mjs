@@ -363,6 +363,19 @@ async function runFormFactor(browser, ff, viewport, dsf, isMobile) {
   const S = "gate-settings";
   await clickText(a, "Settings", ".gate__secondary");
   await a.waitForSelector(".gate-settings .panel--settings");
+  // Regression: the rail-mode `.panel` gutter rule must not leak pre-start —
+  // the settings card centres in the viewport on every form factor.
+  const panelGeo = await a.evaluate(() => {
+    const r = document.querySelector(".gate-settings .panel").getBoundingClientRect();
+    return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, w: window.innerWidth, h: window.innerHeight };
+  });
+  assert(
+    ff, S, "settings card centered in viewport (not the HUD gutter)",
+    Math.abs((panelGeo.left + panelGeo.right) / 2 - panelGeo.w / 2) <= 2 &&
+      Math.abs((panelGeo.top + panelGeo.bottom) / 2 - panelGeo.h / 2) <= 2 &&
+      panelGeo.left >= 0 && panelGeo.top >= 0 && panelGeo.right <= panelGeo.w && panelGeo.bottom <= panelGeo.h,
+    JSON.stringify(panelGeo)
+  );
   assert(ff, S, "Sound actual value On", (await rowVal(a, "Sound")) === "On");
   assert(ff, S, "Text size actual value 1", (await rowVal(a, "Text size")) === "1");
   assert(ff, S, "Reduced motion actual value Off", (await rowVal(a, "Reduced motion")) === "Off");
