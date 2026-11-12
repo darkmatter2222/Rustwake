@@ -58,6 +58,7 @@ import {
 } from "./Panels";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { BuildCatalog } from "./build/BuildCatalog";
+import { DismantleCard, MoveStrip, PlacementStrip } from "./place/PlacePreview";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
 import { MenuSheet, ShellMenuFace, ShellRail, ShellZoom, useRailMode } from "./shell/Shell";
@@ -175,6 +176,26 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
    * retires catalog and ghost together as the one build layer.
    */
   const [catalogOpen, setCatalogOpen] = useState(false);
+  /**
+   * UI-RESET-53: the explicit move and dismantle flows. Each is a session-only intent
+   * (never written into the save): `moveFlow` holds the machine being moved and its
+   * aimed destination; `dismantleFlow` holds the machine under review and whether the
+   * destructive tap has been armed. Both are mutually exclusive with the build ghost.
+   * The real spend only happens through `commit` after a valid confirmation — the
+   * panel's Move/Dismantle dispatches are intercepted into these flows here, so the
+   * read-only inspector is unchanged while the safeguard lives at the flow layer.
+   */
+  const [moveFlow, setMoveFlow] = useState<{ machineId: number; tile: number } | null>(null);
+  const [dismantleFlow, setDismantleFlow] = useState<{ machineId: number; armed: boolean } | null>(
+    null
+  );
+  /**
+   * UI-RESET-53: the reason the last placement confirm was refused, kept while the ghost
+   * stays armed (preserve-on-refusal). The objective's phase line states it instead of the
+   * now-inapplicable "tap again to place", and re-aiming or re-selecting clears it. It is
+   * separate from `lastReject` so the resting line's trailing "Last …" segment is untouched.
+   */
+  const [buildRefusal, setBuildRefusal] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   /**
    * PLAY-002 2 (TST-001, QA D-3): the last rejected command, kept after the 1.8 s toast
@@ -198,8 +219,9 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     return audioRef.current;
   }, [store]);
 
-  const dispatch = useCallback(
-    (command: Command) => {
+  /** The one real spend path: dispatch to the engine, then voice + readout the outcome. */
+  const commit = useCallback(
+    (command: Command): CommandResult => {
       const result = store.dispatch(command);
       if (result.ok) {
         audio().play(cueFor(command.type));
@@ -220,6 +242,121 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     },
     [store, audio]
   );
+
+  /**
+   * UI-RESET-53: the inspector's Move and Dismantle buttons dispatch through here.
+   * Rather than spending at once they open an explicit flow — a destination preview
+   * for move, an impact card for dismantle — and the real command only runs on a valid
+   * confirmation (`confirmMove` / `confirmDismantle`). That keeps the read-only
+   * inspector untouched while the deliberate safeguard lives at the flow layer. Every
+   * other command commits straight away, exactly as before. If the machine is already
+   * gone the command falls through so the engine's own not-found refusal is surfaced.
+   */
+  const dispatch = useCallback(
+    (command: Command): CommandResult => {
+      if (command.type === "machine.move" || command.type === "machine.dismantle") {
+        const snapshot = store.getState();
+        const exists = snapshot.machines.some((m) => m.id === command.machineId);
+        if (exists) {
+          // One destructive intent at a time: opening a flow retires the build ghost
+          // and the other flow, and keeps the machine selected so its inspector stays.
+          setBuildBlueprint(null);
+          setGhostTile(null);
+          setCatalogOpen(false);
+          setSelected(command.machineId);
+          if (command.type === "machine.move") {
+            setDismantleFlow(null);
+            setMoveFlow((prev) =>
+              prev && prev.machineId === command.machineId
+                ? prev
+                : { machineId: command.machineId, tile: firstFreeTile(snapshot) }
+            );
+          } else {
+            setMoveFlow(null);
+            setDismantleFlow((prev) =>
+              prev && prev.machineId === command.machineId
+                ? prev
+                : { machineId: command.machineId, armed: false }
+            );
+          }
+          // No command was issued: the flow is open, nothing was charged. The revision
+          // is unchanged, so the store's subscribers are not notified by this tap.
+          return { ok: true, revision: snapshot.revision };
+        }
+      }
+      return commit(command);
+    },
+    [store, commit]
+  );
+
+  /**
+   * UI-RESET-53: confirm a move only against a valid destination. A refusal keeps the
+   * flow open (the toast + lastReject already name the reason); success retires it.
+   */
+  const confirmMove = useCallback(() => {
+    if (moveFlow === null) return;
+    const result = commit({
+      id: nextCommandId(),
+      type: "machine.move",
+      machineId: moveFlow.machineId,
+      tile: moveFlow.tile,
+    });
+    if (result.ok) setMoveFlow(null);
+  }, [commit, moveFlow]);
+
+  /**
+   * UI-RESET-53: the dismantle safeguard. The first tap arms; the second commits. A
+   * refusal disarms and keeps the card so the impact stays readable; success retires
+   * the card and the selection (the machine is gone).
+   */
+  const confirmDismantle = useCallback(() => {
+    if (dismantleFlow === null) return;
+    if (!dismantleFlow.armed) {
+      setDismantleFlow({ ...dismantleFlow, armed: true });
+      return;
+    }
+    const result = commit({
+      id: nextCommandId(),
+      type: "machine.dismantle",
+      machineId: dismantleFlow.machineId,
+    });
+    if (result.ok) {
+      setDismantleFlow(null);
+      setSelected(null);
+    } else {
+      setDismantleFlow({ ...dismantleFlow, armed: false });
+    }
+  }, [commit, dismantleFlow]);
+
+  useEffect(() => {
+    // UI-RESET-53: build, move and dismantle are one destructive intent at a time.
+    // However build mode is entered (catalog, tutorial step or yard ladder), an open
+    // move/dismantle flow yields to it. The intercept clears build synchronously when a
+    // flow opens, so the two directions never leave both intents armed.
+    if (buildBlueprint !== null) {
+      setMoveFlow(null);
+      setDismantleFlow(null);
+    }
+  }, [buildBlueprint]);
+
+  useEffect(() => {
+    // UI-RESET-53: a refused placement keeps the ghost armed, but the refusal reason is
+    // only current for that aim/choice. Re-aiming the ghost, re-selecting a blueprint or
+    // leaving build mode retires it so the phase line returns to the ghost hint. A refused
+    // confirm changes neither dep, so the reason it just set survives until the player acts.
+    setBuildRefusal(null);
+  }, [ghostTile, buildBlueprint]);
+
+  useEffect(() => {
+    // UI-RESET-53: if the machine a flow points at is gone (dismantled, or the save was
+    // replaced), retire the flow so no stale intent can confirm against a missing id.
+    if (moveFlow !== null && !state.machines.some((m) => m.id === moveFlow.machineId)) {
+      setMoveFlow(null);
+    }
+    if (dismantleFlow !== null && !state.machines.some((m) => m.id === dismantleFlow.machineId)) {
+      setDismantleFlow(null);
+    }
+  }, [state.revision, state.machines, moveFlow, dismantleFlow]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -395,6 +532,16 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
         closeMenu();
         return;
       }
+      // UI-RESET-53: the move/dismantle flow is the newest intent layer, so one press
+      // retires it (and disarms) before the inspector underneath. No spend, no loop.
+      if (moveFlow !== null) {
+        setMoveFlow(null);
+        return;
+      }
+      if (dismantleFlow !== null) {
+        setDismantleFlow(null);
+        return;
+      }
       if (selected !== null) {
         setSelected(null);
         return;
@@ -413,7 +560,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [reportOpen, selected, buildBlueprint, menuOpen, closeMenu, store]);
+  }, [reportOpen, selected, buildBlueprint, menuOpen, closeMenu, store, moveFlow, dismantleFlow]);
 
   useEffect(() => {
     // Spec §5: keys 1–5 reach the five destinations, arrows pan, +/- zoom and N
@@ -478,13 +625,19 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           if (buildBlueprint !== null) {
             event.preventDefault();
             setGhostTile((tile) => cycleGhostTile(store.getState(), tile));
+          } else if (moveFlow !== null) {
+            // UI-RESET-53: in move mode N cycles the destination preview, never a spend.
+            event.preventDefault();
+            setMoveFlow((flow) =>
+              flow === null ? flow : { ...flow, tile: cycleGhostTile(store.getState(), flow.tile) }
+            );
           }
           return;
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onSlot, buildBlueprint, store]);
+  }, [onSlot, buildBlueprint, store, moveFlow]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -538,15 +691,20 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       // Q-004 B1: one state read per rendered frame, shared by the canvas, the ghost
       // validity check and the cue diff, so both surfaces describe the same tick.
       const snapshot = store.getState();
+      // UI-RESET-53: move mode reuses the build ghost's paint path — the aimed
+      // destination is the ghost tile and the moving machine stays highlighted. The
+      // validity formula is unchanged, so the machine's own (occupied) cell reads
+      // invalid exactly as the engine refuses a move onto itself.
+      const previewTile = buildBlueprint !== null ? ghostTile : moveFlow !== null ? moveFlow.tile : null;
       drawScene(ctx, snapshot, cameraRef.current, { width: cssWidth, height: cssHeight }, {
         reducedMotion: settings.reducedMotion,
-        buildMode: buildBlueprint !== null,
-        ghostTile: buildBlueprint !== null ? ghostTile : null,
+        buildMode: buildBlueprint !== null || moveFlow !== null,
+        ghostTile: previewTile,
         ghostValid:
-          ghostTile !== null &&
-          ghostTile !== DOCK_TILE &&
-          !snapshot.machines.some((m) => m.tile === ghostTile),
-        selected,
+          previewTile !== null &&
+          previewTile !== DOCK_TILE &&
+          !snapshot.machines.some((m) => m.tile === previewTile),
+        selected: moveFlow !== null ? moveFlow.machineId : selected,
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
       });
@@ -571,7 +729,7 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
     };
     raf = requestAnimationFrame(render);
     return () => cancelAnimationFrame(raf);
-  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio]);
+  }, [store, settings.reducedMotion, buildBlueprint, ghostTile, selected, audio, moveFlow]);
 
   /**
    * UI-RESET-50: apply one gesture-machine output. Pan and pinch steer the
@@ -598,15 +756,29 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
       );
       intentRef.current = true;
     }
-    if (out.ghost && buildBlueprint !== null) {
+    if (out.ghost) {
       const world = screenToWorld(cameraRef.current, view, out.ghost.x, out.ghost.y);
-      setGhostTile(worldToTile(world.x, world.y));
+      const tile = worldToTile(world.x, world.y);
+      if (buildBlueprint !== null) {
+        setGhostTile(tile);
+      } else if (moveFlow !== null && tile !== null) {
+        // UI-RESET-53: dragging in move mode aims the destination preview only.
+        setMoveFlow((flow) => (flow === null ? flow : { ...flow, tile }));
+      }
     }
     if (!out.tap) return;
     const world = screenToWorld(cameraRef.current, view, out.tap.x, out.tap.y);
     if (buildBlueprint !== null) {
       const tile = worldToTile(world.x, world.y);
       if (tile !== null) setGhostTile(tile);
+      return;
+    }
+    if (moveFlow !== null) {
+      // UI-RESET-53: a cleared tap in move mode only aims the destination — it never
+      // selects, salvages or spends. The Confirm face is the single committing tap, and
+      // a tap outside the yard keeps the last aimed cell rather than clearing it.
+      const tile = worldToTile(world.x, world.y);
+      if (tile !== null) setMoveFlow((flow) => (flow === null ? flow : { ...flow, tile }));
       return;
     }
     const hit = pickTarget(store.getState(), world.x, world.y);
@@ -808,7 +980,10 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
                 : buildBlueprint !== null
                   ? // PLAY-001 P-3: the phase the dock is in, phrased where the secondary
                     // line already lives, so the primary label can keep one wording.
-                    t("phase.ghost", { tile: ghostTile ?? 0 })
+                    // UI-RESET-53: right after a refused confirm the ghost stays armed
+                    // (preserve-on-refusal), so state the refusal reason here instead of
+                    // the now-inapplicable "tap again to place"; re-aiming clears it.
+                    (buildRefusal ?? t("phase.ghost", { tile: ghostTile ?? 0 }))
                   : hintFor(suggestedAction(state))
             }
             numbers={restingLine(state, lastReject)}
@@ -818,6 +993,31 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
             <p className="reconcile" role="status">
               {t("report.reconciling")}
             </p>
+          ) : null}
+          {/* UI-RESET-53: the explicit placement / move / dismantle previews. They paint
+              inside the lead block so the camera's chrome insets reserve their band, and
+              they are not `.panel`s, so the overlay census and dock faces are untouched.
+              Only one destructive intent is ever armed at a time (see the exclusion effect). */}
+          {buildBlueprint !== null && !catalogOpen ? (
+            <PlacementStrip state={state} blueprint={buildBlueprint} tile={ghostTile} />
+          ) : null}
+          {moveFlow !== null ? (
+            <MoveStrip
+              state={state}
+              machineId={moveFlow.machineId}
+              tile={moveFlow.tile}
+              onConfirm={confirmMove}
+              onCancel={() => setMoveFlow(null)}
+            />
+          ) : null}
+          {dismantleFlow !== null ? (
+            <DismantleCard
+              state={state}
+              machineId={dismantleFlow.machineId}
+              armed={dismantleFlow.armed}
+              onConfirm={confirmDismantle}
+              onCancel={() => setDismantleFlow(null)}
+            />
           ) : null}
         </div>
         {toast ? <Toast text={toast} onDone={() => setToast(null)} /> : null}
@@ -905,10 +1105,32 @@ export function App({ store, audioApi }: { store: GameStore; audioApi?: AudioApi
           onOpenCatalog={openCatalog}
           onPlace={() => {
             if (buildBlueprint === null || ghostTile === null) return;
-            dispatch({ id: nextCommandId(), type: "machine.build", blueprint: buildBlueprint, tile: ghostTile });
-            setBuildBlueprint(null);
-            setGhostTile(null);
-            setCatalogOpen(false);
+            // UI-RESET-53: a refused Build keeps the ghost armed underneath so the player
+            // can re-aim or top up and try again — only a real spend retires the preview.
+            const result = dispatch({
+              id: nextCommandId(),
+              type: "machine.build",
+              blueprint: buildBlueprint,
+              tile: ghostTile,
+            });
+            if (result.ok) {
+              setBuildBlueprint(null);
+              setGhostTile(null);
+              setCatalogOpen(false);
+              setBuildRefusal(null);
+            } else if (result.reason === "blocked-placement") {
+              // UI-RESET-53 (criterion a): an invalid cell preserves the placement so the
+              // player can re-aim without re-opening the catalog. The phase states why and
+              // the preview strip names the blocked cell; re-aiming clears the reason.
+              setBuildRefusal(labelForReject(result));
+            } else {
+              // An affordability refusal returns to the recovery phase (PLAY-001 P-3): the
+              // earn path stays reachable and the dock flips back to the suggested action.
+              setBuildBlueprint(null);
+              setGhostTile(null);
+              setCatalogOpen(false);
+              setBuildRefusal(null);
+            }
           }}
           onCancelBuild={() => {
             // UI-RESET-52: Cancel returns to the catalog with the choice and the
