@@ -1,0 +1,251 @@
+﻿BASE_URL= http://127.0.0.1:4164/ BUILD_SHA= 1b6c99eb739037dd088ae5302423af0c6428a2be chrome= C:/Program Files/Google/Chrome/Application/chrome.exe EVID= work/evidence/UI-RESET-64
+fixtures validated in-process: fresh(machines=0,tutorial=0) earntrap(machines=0,tutorial=4) progress(machines=8,tutorial=9) jargon(machines=8,tutorial=9)
+[phone-fresh] 00-fresh-yard: ok
+[phone-fresh] 01-salvage: ok
+[phone-fresh] 02-salvage: ok
+[phone-fresh] 03-salvage: ok
+[phone-fresh] 04-salvage: ok
+[phone-fresh] 05-salvage: ok
+[phone-fresh] 06-salvage: ok
+[phone-fresh] 07-repair-drone: ok
+[phone-fresh] 08-first-delivery: ok
+[phone-fresh] 09-arm-sorter: ok
+[phone-fresh] 10-build-sorter: ok
+[phone-fresh] 11-connect-sorter: ok
+[phone-fresh] 12-earn-ferrous: ok
+[phone-fresh] 13-arm-furnace: ok
+[phone-fresh] 14-build-furnace: ok
+[phone-fresh] 15-connect-furnace: ok
+[phone-fresh] 16-make-steel: ok
+[phone-fresh] 17-sell-steel: ok
+[phone-fresh] 18-upgrade-sorter: CHECK-FAIL machine-upgraded,tutorial-9
+[phone-fresh] 19-research-path-lesson: CHECK-FAIL research-path-lesson,research-goal-copy
+[phone-fresh] 20-build-data-chain: ACTION-ERROR could not afford signalLab
+[phone-fresh] 21-connect-data-chain: ok
+[phone-fresh] 22-first-data-unlocks-research: CHECK-FAIL first-data-landed,research-face-appears,research-rail-enabled
+[phone-fresh] 23-open-research-panel: ACTION-ERROR selector not found: .shell-rail__slot[data-slot="research"]
+[phone-fresh] 24-buy-cutters: CHECK-FAIL cutters-owned
+[phone-earntrap] 00-earntrap-open: ok
+[phone-earntrap] 01-arm-blinded: ok
+[phone-earntrap] 02-blind-confirm-refusal: ok
+[phone-earntrap] 03-rearm: ok
+[phone-earntrap] 04-trade-at-store: ok
+[phone-earntrap] 05-close-store: ok
+[phone-earntrap] 06-earn-scrap-1: ok
+[phone-earntrap] 07-earn-scrap-2: ok
+[phone-earntrap] 08-earn-scrap-3: ok
+[phone-earntrap] 09-build-recovered: ok
+[phone-progress] 00-progress-open: ok
+[phone-progress] 01-skip-lessons: ok
+[phone-progress] 02-revisit-lessons: ok
+[phone-progress] 03-skip-again: ok
+[phone-progress] 04-reload-persist: ok
+[phone-progress] 05-show-after-reload: ok
+[phone-progress] 06-reader-yields: ok
+[phone-jargon] 00-jargon-open: ok
+[phone-jargon] 01-inspect-furnace: ok
+[phone-jargon] 02-expand-constraint: ok
+[phone-jargon] 03-coach-glossary: ok
+[phone-jargon] 04-catalog-vocabulary: ok
+[phone-jargon] 05-close-catalog-resources: ok
+[phone-jargon] 06-research-vocabulary: ok
+[phoneland-fresh] 00-fresh-yard: ok
+[phoneland-fresh] 01-salvage: ok
+[phoneland-fresh] 02-salvage: ok
+[phoneland-fresh] 03-salvage: ok
+[phoneland-fresh] 04-salvage: ok
+[phoneland-fresh] 05-salvage: ok
+[phoneland-fresh] 06-salvage: ok
+[phoneland-fresh] 07-repair-drone: ok
+[phoneland-fresh] 08-first-delivery: ok
+[phoneland-fresh] 09-arm-sorter: ok
+[phoneland-fresh] 10-build-sorter: ok
+[phoneland-fresh] 11-connect-sorter: ok
+[phoneland-fresh] 12-earn-ferrous: ok
+[phoneland-fresh] 13-arm-furnace: ok
+[phoneland-fresh] 14-build-furnace: ok
+[phoneland-fresh] 15-connect-furnace: ok
+[phoneland-fresh] 16-make-steel: ok
+[phoneland-fresh] 17-sell-steel: ok
+[phoneland-fresh] 18-upgrade-sorter: ACTION-ERROR page.waitForSelector: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--stack') to be visible[22m
+
+[phoneland-fresh] 19-research-path-lesson: CHECK-FAIL research-path-lesson,research-goal-copy
+[phoneland-fresh] 20-build-data-chain: ACTION-ERROR could not afford signalLab
+[phoneland-fresh] 21-connect-data-chain: ok
+[phoneland-fresh] 22-first-data-unlocks-research: CHECK-FAIL first-data-landed,research-face-appears,research-rail-enabled
+[phoneland-fresh] 23-open-research-panel: ACTION-ERROR page.waitForSelector: Timeout 4000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--research') to be visible[22m
+
+[phoneland-fresh] 24-buy-cutters: CHECK-FAIL cutters-owned
+[phoneland-earntrap] 00-earntrap-open: ok
+[phoneland-earntrap] 01-arm-blinded: ok
+[phoneland-earntrap] 02-blind-confirm-refusal: ok
+[phoneland-earntrap] 03-rearm: ok
+[phoneland-earntrap] 04-trade-at-store: ok
+[phoneland-earntrap] 05-close-store: ok
+[phoneland-earntrap] 06-earn-scrap-1: ok
+[phoneland-earntrap] 07-earn-scrap-2: ok
+[phoneland-earntrap] 08-earn-scrap-3: ok
+[phoneland-earntrap] 09-build-recovered: ok
+[phoneland-progress] 00-progress-open: ok
+[phoneland-progress] 01-skip-lessons: ok
+[phoneland-progress] 02-revisit-lessons: ok
+[phoneland-progress] 03-skip-again: ok
+[phoneland-progress] 04-reload-persist: ok
+[phoneland-progress] 05-show-after-reload: ok
+[phoneland-progress] 06-reader-yields: ok
+[phoneland-jargon] 00-jargon-open: ok
+[phoneland-jargon] 01-inspect-furnace: ok
+[phoneland-jargon] 02-expand-constraint: ok
+[phoneland-jargon] 03-coach-glossary: ok
+[phoneland-jargon] 04-catalog-vocabulary: ok
+[phoneland-jargon] 05-close-catalog-resources: ok
+[phoneland-jargon] 06-research-vocabulary: ok
+[desktop-fresh] 00-fresh-yard: ok
+[desktop-fresh] 01-salvage: ok
+[desktop-fresh] 02-salvage: ok
+[desktop-fresh] 03-salvage: ok
+[desktop-fresh] 04-salvage: ok
+[desktop-fresh] 05-salvage: ok
+[desktop-fresh] 06-salvage: ok
+[desktop-fresh] 07-repair-drone: ok
+[desktop-fresh] 08-first-delivery: ok
+[desktop-fresh] 09-arm-sorter: ok
+[desktop-fresh] 10-build-sorter: ok
+[desktop-fresh] 11-connect-sorter: ok
+[desktop-fresh] 12-earn-ferrous: ok
+[desktop-fresh] 13-arm-furnace: ok
+[desktop-fresh] 14-build-furnace: ok
+[desktop-fresh] 15-connect-furnace: ok
+[desktop-fresh] 16-make-steel: ok
+[desktop-fresh] 17-sell-steel: ok
+[desktop-fresh] 18-upgrade-sorter: CHECK-FAIL machine-upgraded,tutorial-9
+[desktop-fresh] 19-research-path-lesson: CHECK-FAIL research-path-lesson,research-goal-copy
+[desktop-fresh] 20-build-data-chain: ACTION-ERROR could not afford signalLab
+[desktop-fresh] 21-connect-data-chain: ok
+[desktop-fresh] 22-first-data-unlocks-research: CHECK-FAIL first-data-landed,research-face-appears,research-rail-enabled
+[desktop-fresh] 23-open-research-panel: ACTION-ERROR page.waitForSelector: Timeout 4000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--research') to be visible[22m
+
+[desktop-fresh] 24-buy-cutters: CHECK-FAIL cutters-owned
+[desktop-earntrap] 00-earntrap-open: ok
+[desktop-earntrap] 01-arm-blinded: ok
+[desktop-earntrap] 02-blind-confirm-refusal: ok
+[desktop-earntrap] 03-rearm: ok
+[desktop-earntrap] 04-trade-at-store: ok
+[desktop-earntrap] 05-close-store: ok
+[desktop-earntrap] 06-earn-scrap-1: ok
+[desktop-earntrap] 07-earn-scrap-2: ok
+[desktop-earntrap] 08-earn-scrap-3: ok
+[desktop-earntrap] 09-build-recovered: ok
+[desktop-progress] 00-progress-open: ok
+[desktop-progress] 01-skip-lessons: ok
+[desktop-progress] 02-revisit-lessons: ok
+[desktop-progress] 03-skip-again: ok
+[desktop-progress] 04-reload-persist: ok
+[desktop-progress] 05-show-after-reload: ok
+[desktop-progress] 06-reader-yields: ok
+[desktop-jargon] 00-jargon-open: ok
+[desktop-jargon] 01-inspect-furnace: ok
+[desktop-jargon] 02-expand-constraint: ok
+[desktop-jargon] 03-coach-glossary: ok
+[desktop-jargon] 04-catalog-vocabulary: ok
+[desktop-jargon] 05-close-catalog-resources: ok
+[desktop-jargon] 06-research-vocabulary: ok
+
+==== SUMMARY ====
+frames= 294 auditOk= false distinct= {"desktop-earntrap":true,"desktop-fresh":true,"desktop-jargon":true,"desktop-progress":true,"phone-earntrap":true,"phone-fresh":true,"phone-jargon":true,"phone-progress":true,"phoneland-earntrap":true,"phoneland-fresh":true,"phoneland-jargon":true,"phoneland-progress":true}
+steps= 147 checks= 438 failedChecks= 42
+consoleErrors= 0 pageErrors= 0 blockers= 7 clickFallbacks= 27
+CLICK FALLBACKS (zoom-overlay interception / bounded-click):
+  .catalog__card[data-blueprint="circuitAssembler"]: elementHandle.click: Timeout 6000ms exceeded.
+  panel-close: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__close: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__card[data-blueprint="copperSeparator"]: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__card[data-blueprint="polymerRecycler"]: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__card[data-blueprint="wireMill"]: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__card[data-blueprint="circuitAssembler"]: elementHandle.click: Timeout 6000ms exceeded.
+  .shell-rail__slot[data-slot="research"]: elementHandle.click: Timeout 6000ms exceeded.
+  earn-scrap: elementHandle.click: Timeout 6000ms exceeded.
+  earn-scrap: elementHandle.click: Timeout 6000ms exceeded.
+  earn-scrap: elementHandle.click: Timeout 6000ms exceeded.
+  .onboard__btn: elementHandle.click: Timeout 6000ms exceeded.
+  .onboard__btn: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Research: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  .catalog__card[data-blueprint="circuitAssembler"]: elementHandle.click: Timeout 6000ms exceeded.
+  .shell-rail__slot[data-slot="research"]: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Build: elementHandle.click: Timeout 6000ms exceeded.
+  dock:Research: elementHandle.click: Timeout 6000ms exceeded.
+FAILED CHECKS:
+  [phone-fresh] 18-upgrade-sorter: machine-upgraded 
+  [phone-fresh] 18-upgrade-sorter: tutorial-9 
+  [phone-fresh] 19-research-path-lesson: research-path-lesson 
+  [phone-fresh] 19-research-path-lesson: research-goal-copy 
+  [phone-fresh] 20-build-data-chain: chain-built-7-machines 
+  [phone-fresh] 20-build-data-chain: signalLab-present 
+  [phone-fresh] 20-build-data-chain: all-chain-present 
+  [phone-fresh] 22-first-data-unlocks-research: first-data-landed 
+  [phone-fresh] 22-first-data-unlocks-research: research-face-appears 
+  [phone-fresh] 22-first-data-unlocks-research: research-rail-enabled 
+  [phone-fresh] 23-open-research-panel: research-panel-open 
+  [phone-fresh] 23-open-research-panel: research-nodes-present 
+  [phone-fresh] 23-open-research-panel: cutters-node-present 
+  [phone-fresh] 24-buy-cutters: cutters-owned 
+  [phoneland-fresh] 18-upgrade-sorter: machine-upgraded 
+  [phoneland-fresh] 18-upgrade-sorter: tutorial-9 
+  [phoneland-fresh] 19-research-path-lesson: research-path-lesson 
+  [phoneland-fresh] 19-research-path-lesson: research-goal-copy 
+  [phoneland-fresh] 20-build-data-chain: chain-built-7-machines 
+  [phoneland-fresh] 20-build-data-chain: signalLab-present 
+  [phoneland-fresh] 20-build-data-chain: all-chain-present 
+  [phoneland-fresh] 22-first-data-unlocks-research: first-data-landed 
+  [phoneland-fresh] 22-first-data-unlocks-research: research-face-appears 
+  [phoneland-fresh] 22-first-data-unlocks-research: research-rail-enabled 
+  [phoneland-fresh] 23-open-research-panel: research-panel-open 
+  [phoneland-fresh] 23-open-research-panel: research-nodes-present 
+  [phoneland-fresh] 23-open-research-panel: cutters-node-present 
+  [phoneland-fresh] 24-buy-cutters: cutters-owned 
+  [desktop-fresh] 18-upgrade-sorter: machine-upgraded 
+  [desktop-fresh] 18-upgrade-sorter: tutorial-9 
+  [desktop-fresh] 19-research-path-lesson: research-path-lesson 
+  [desktop-fresh] 19-research-path-lesson: research-goal-copy 
+  [desktop-fresh] 20-build-data-chain: chain-built-7-machines 
+  [desktop-fresh] 20-build-data-chain: signalLab-present 
+  [desktop-fresh] 20-build-data-chain: all-chain-present 
+  [desktop-fresh] 22-first-data-unlocks-research: first-data-landed 
+  [desktop-fresh] 22-first-data-unlocks-research: research-face-appears 
+  [desktop-fresh] 22-first-data-unlocks-research: research-rail-enabled 
+  [desktop-fresh] 23-open-research-panel: research-panel-open 
+  [desktop-fresh] 23-open-research-panel: research-nodes-present 
+  [desktop-fresh] 23-open-research-panel: cutters-node-present 
+  [desktop-fresh] 24-buy-cutters: cutters-owned 
+BLOCKERS:
+  phone-fresh/20-build-data-chain: could not afford signalLab
+  phone-fresh/23-open-research-panel: selector not found: .shell-rail__slot[data-slot="research"]
+  phoneland-fresh/18-upgrade-sorter: page.waitForSelector: Timeout 3000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--stack') to be visible[22m
+
+  phoneland-fresh/20-build-data-chain: could not afford signalLab
+  phoneland-fresh/23-open-research-panel: page.waitForSelector: Timeout 4000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--research') to be visible[22m
+
+  desktop-fresh/20-build-data-chain: could not afford signalLab
+  desktop-fresh/23-open-research-panel: page.waitForSelector: Timeout 4000ms exceeded.
+Call log:
+[2m  - waiting for locator('.panel--research') to be visible[22m
+

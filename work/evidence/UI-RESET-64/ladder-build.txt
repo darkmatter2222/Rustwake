@@ -13,4 +13,5 @@ dist/assets/index-BcGsrB4w.css           59.32 kB Γöé gzip: 10.07 kB
 dist/assets/tables-B9sEqhLW.js           26.62 kB Γöé gzip:  9.76 kB
 dist/assets/vendor-Bt4lNSbZ.js          141.66 kB Γöé gzip: 45.37 kB
 dist/assets/index-DOVS8-GJ.js           190.33 kB Γöé gzip: 56.61 kB
-Γ£ô built in 702ms
+Γ£ô built in 713ms
+BUILD_EXIT=0
