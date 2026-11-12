@@ -1,0 +1,148 @@
+/* UI-RESET-53: the placement / move / dismantle strips' own sheet. They paint inside
+   `.hud__lead`, after the objective card, so the camera's chrome insets (which read the
+   lead's painted bottom) reserve their band with no second measurement. Deliberately NOT
+   a `.panel` and NOT a `.dock`: the overlay-stack census keeps counting inspectors only,
+   the dock keeps its pinned faces, and the paired-layer budget is untouched. The layout
+   grammar is the objective card's (same fill, border, radius, left alignment) so the lead
+   block speaks one visual language; the action faces reuse `.icon-btn`, whose 44 px floor
+   the legibility census already declares. */
+
+.place-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-self: flex-start;
+  width: 100%;
+  max-width: min(100%, 560px);
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  border-left: 3px solid var(--cyan);
+  background: var(--panel);
+  font-size: 0.84rem;
+  pointer-events: auto;
+}
+
+.place-strip--move {
+  border-left-color: rgb(201, 113, 58);
+}
+.place-strip--dismantle {
+  border-left-color: var(--furnace);
+}
+/* The armed stage reads as a warning edge, a shape and not only a hue (spec 6.4). */
+.place-strip--armed {
+  border-color: rgba(255, 183, 101, 0.85);
+  border-left-color: rgb(201, 113, 58);
+  background: rgba(201, 113, 58, 0.14);
+}
+
+.place-strip__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  align-items: baseline;
+}
+.place-strip__title {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--paper);
+}
+.place-strip__machine {
+  color: var(--cyan);
+}
+.place-strip__cell {
+  color: rgba(244, 247, 251, 0.72);
+}
+
+.place-strip__reason,
+.place-strip__cost,
+.place-strip__short,
+.place-strip__hint,
+.place-strip__dest,
+.place-strip__total,
+.place-strip__room {
+  margin: 0;
+  line-height: 1.3;
+}
+.place-strip__reason--ok {
+  color: rgba(244, 247, 251, 0.72);
+}
+.place-strip__reason--bad {
+  color: var(--furnace);
+}
+.place-strip__cost {
+  color: var(--furnace);
+}
+.place-strip__short {
+  color: var(--furnace);
+}
+.place-strip__dest {
+  color: var(--paper);
+}
+.place-strip__total {
+  font-weight: 600;
+  color: var(--cyan);
+}
+.place-strip__room {
+  color: rgba(244, 247, 251, 0.72);
+}
+.place-strip__hint {
+  color: rgba(244, 247, 251, 0.6);
+}
+.place-strip__hint--armed {
+  color: var(--furnace);
+}
+
+.place-strip__impact {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  line-height: 1.3;
+  color: rgba(244, 247, 251, 0.8);
+}
+
+/* One accent-filled confirm per row, the dock's own grammar; Cancel stays the plain
+   `.icon-btn` face. Both keep the 44 px floor `.icon-btn` declares. */
+.place-strip__actions {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+  margin-top: 2px;
+}
+.place-strip__confirm {
+  flex: 2 1 auto;
+  border-color: rgba(255, 183, 101, 0.7);
+  background-color: rgb(201, 113, 58);
+  background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.32), rgba(201, 113, 58, 0.18));
+  color: var(--night);
+}
+.place-strip__confirm:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+.place-strip__actions > .icon-btn:not(.place-strip__confirm) {
+  flex: 1 1 auto;
+}
+/* The armed commit keeps the accent fill but reads hotter at the edge. */
+.place-strip__confirm--armed {
+  border-color: rgba(255, 183, 101, 0.95);
+  background-image: linear-gradient(180deg, rgba(255, 183, 101, 0.5), rgba(201, 113, 58, 0.3));
+}
+
+/* Large text: the labels step down with the dock's own L-3 grammar so the strip stays
+   compact at 360 px, while every target keeps its floor. */
+.text-large .place-strip {
+  font-size: 0.74rem;
+  padding: 6px 8px;
+}
+.text-large .place-strip__actions {
+  gap: 2px;
+}
+.text-large .place-strip__actions > .icon-btn {
+  padding: 0 4px;
+  font-size: 0.74rem;
+  line-height: 1.1;
+}
