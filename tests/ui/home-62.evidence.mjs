@@ -95,8 +95,10 @@ function assert(ff, phase, name, cond, detail = "") {
  *    card leaves large dark margins on a wide desktop frame, so a single
  *    full-frame bright-share threshold would mis-scale across form factors; we
  *    measure where the UI actually is instead. This is stricter, not weaker.
- *    Region sampling uses a finer stride (7px) than the full frame (97px) so small
- *    desktop cards still yield thousands of samples.
+ *    Both layers sample at a 7px stride: a coarse 97px grid aliases against the
+ *    centered card on a wide desktop (it can miss the lit text entirely), which
+ *    was calibrated against captured frames — phone 12 vs 110 distinct colors
+ *    and desktop 10 vs 69 at 97px vs 7px. Denser sampling, same thresholds.
  */
 async function auditFrame(page, buf, ff, phase, file, viewport, dsf, content) {
   const stats = await page.evaluate(
@@ -124,8 +126,8 @@ async function auditFrame(page, buf, ff, phase, file, viewport, dsf, content) {
       let dark = 0;
       let bright = 0;
       let total = 0;
-      for (let y = 0; y < c.height; y += 97) {
-        for (let x = 0; x < c.width; x += 97) {
+      for (let y = 0; y < c.height; y += 7) {
+        for (let x = 0; x < c.width; x += 7) {
           const i = (y * c.width + x) * 4;
           const rr = data[i];
           const gg = data[i + 1];
