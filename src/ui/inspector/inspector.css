@@ -1,0 +1,127 @@
+/*
+ * UI-RESET-54 (G2 wave 3): the machine inspector's own sheet. `src/ui/styles.css` is
+ * read-only for this issue, so every new surface is namespaced under `.inspector-*`
+ * and borrows the shipped palette tokens (--well, --steel, --furnace, --cyan) instead
+ * of redefining them. Nothing here restyles the pinned base contracts: `.panel__row`,
+ * `.panel dl`, `.panel__body`, `.panel__actions` and the first-child accent keep the
+ * cascade they already have, with or without this sheet loaded.
+ */
+
+.inspector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.inspector-section + .inspector-section {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(111, 147, 173, 0.25);
+}
+
+.inspector-section__title {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+
+/* The recipe flow line: input → output in one glanceable band. */
+.inspector-flow {
+  margin: 0;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(95, 216, 232, 0.25);
+  background: var(--well);
+  color: var(--paper);
+  font-size: 0.84rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* Batch progress: the number lives in the Batch row; this is its painted bar. */
+.inspector-progress {
+  height: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(111, 147, 173, 0.3);
+  background: var(--well);
+  overflow: hidden;
+}
+
+.inspector-progress__fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--rust), var(--furnace));
+  transition: width 120ms linear;
+}
+
+.inspector-note {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+.inspector-note--constraint {
+  color: var(--furnace);
+}
+
+/* Recovery context tabs: in-panel, selection-preserving, 44 px touch floor. */
+.inspector-context {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.inspector-context__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.inspector-context__btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.inspector-context__btn[aria-pressed="true"] {
+  border-color: rgba(95, 216, 232, 0.7);
+  background: rgba(95, 216, 232, 0.14);
+  color: var(--cyan);
+}
+
+.inspector-context__pane {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Consequence sentences under the command faces. */
+.inspector-actions-note {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
+.inspector-actions-note--secondary {
+  color: var(--steel-light);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inspector-progress__fill {
+    transition: none;
+  }
+}

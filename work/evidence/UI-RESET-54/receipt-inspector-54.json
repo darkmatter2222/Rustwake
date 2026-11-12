@@ -1,0 +1,2376 @@
+{
+  "task": "UI-RESET-54 machine inspector",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/54",
+  "headSha": "3269193b5d69b88712aa42ae19852fea3577cf1f",
+  "headShaNote": "code commit under test; the evidence-only commit containing this receipt follows it as PR head",
+  "tool": "playwright-core headless Chrome, DOM/geometry/console assertions only (no vision)",
+  "seed": "docs/evidence/yard-mature.json (A-I); J/K: command-built priced yards via the game's own applyCommand/advance + encodeSave checksum (see MUTATIONS commandYard)",
+  "mutations": [
+    "base: payload.lastSeenMs = Date.now() (avoid catch-up drift)",
+    "credits: sim.credits = 1000 (seed 82 < lvl14 upgrade cost 222, iterative ceil)",
+    "starved: route 4 removed, M2.inRoutes=[], M1.outRoute=null (furnace stays starved)",
+    "power: M1.batchPower=9 + batchMilli=1e9 (draw pinned > capacity 8); others start 0, live demand/percent computed from sim at frame time",
+    "fullOutput: M1 tray 12/12, routes 2/3/4 removed, outRoute=null, M2.inRoutes stripped",
+    "busyLink: route 4 busyTicks=9000 ageTicks=10000 (90% busy)",
+    "textScale: settings.textScale=2 (200% text)",
+    "J/K commandYard: seed built with the real engine (createInitialState + 6 salvage pulses + drone.repair + advance 262, then probe-only restock store.scrap=500/store.ferrous=20/storeCapacity=2000 (storeUnits recomputed from the store map) BEFORE the priced commands so every build/connect is affordable — connectRoute charges the belt from store scrap and the furnace buildCost is scrap 10 + ferrous 5 — then build sorter tile 8 + connect scrap input [+ furnace tile 9 and 3 output links for K] + advance 120 + tutorial=9/exportClaimed; every seed command asserts ok), then a determinism freeze: every route items=[]/inFlight=0, sorter tray=[]/trayUnits=0, inBuf={scrap:12}/inBufUnits=12 (full -> engine pullNeed=0, no arrivals), batch=[scrap x2]/progress=1/batchMilli=1e9 (frozen mid-batch, never completes during capture). With tray empty, buffer full and the batch frozen the engine cannot load cargo, so the store delta isolates the refund: printed === delta exactly. Persisted via the game's own encodeSave (checksum included), lastSeenMs=Date.now()"
+  ],
+  "frameAudit": "every capture frame runs probe()+audit() before screenshot; checks recorded per frame; any failed check fails the run; every action-level assertion (tap identity, costs, charges, refunds, no-dispatch panes, console) is recorded with its numbers in actionChecks, pass or fail",
+  "actionProof": "clickActionSync clicks the real .panel__actions button and reads localStorage in the same JS task (dispatch->applyCommand->persist synchronous; zero engine ticks between click and read). The pre-click baseline is flushed through the real HudTop sound toggle first: setSettings persists the LIVE sim synchronously with zero sim effect and is restored after the read, so the ~1s interval checkpoint cannot lag the baseline (baselineLagTicks recorded per action)",
+  "scrollProof": "phone sheet frames scroll .panel__actions into view with scrollIntoView({block:'nearest'}) — the smallest scroll that paints every face. Absolute body bottom is NOT used: at 200% text the consequence notes below the faces are taller than the body window and would park the faces above the clip",
+  "resolutions": [
+    "C.tap / D.tap / C.move.identity (probe bug): the sim projection read m.type, but the save schema and MachinePanel use m.blueprint; projection and the three checks now read blueprint. No UI change.",
+    "C.move.charge (probe bug): the pre-click localStorage baseline was the ~1s interval checkpoint, stale against live engine storeUnits drift (belt loading / drone arrivals / overflow drain). clickActionSync now flushes the live sim via the real HudTop sound toggle (setSettings -> synchronous persist, zero sim effect, restored) inside the same JS task. No UI change.",
+    "C.dismantle.refund (REAL UI DEFECT, fixed): dismantleMachine also returns the in-progress machine.batch to the store (commands.ts), but the printed refund omitted it. Live-confirmed with the exact baseline: printed 28 vs engine delta 30, machine.batch=[scrap x2]. MachinePanel.tsx refundUnits now adds batch units; inspector-54.test.tsx gained a batch-holding regression case. Read-only fixtures are batch-free and unchanged (i18n '+23 units' = 18 build + 1 buffer + 2x2 links; belt-extent refundOf(20)+6; panel-rows grammar only) — verified by replicating the i18n fixture: batch=[], printed 23 = engine delta 23.",
+    "I/ts2-actions (probe bug): scrollBodyBottom set scrollTop=scrollHeight; at 200% text the two consequence notes (~399px) exceed the 271px body window, parking all three faces fully above the clip (painted h=0). Live geometry verified the faces are reachable by ordinary scrolling: scrollIntoView({block:'nearest'}) paints all three at 44px. The probe now scrolls the actions into view. No UI change.",
+    "J/K.dismantle (REAL UI DEFECT, fixed — QA REWORK #99, comments 6810320448/6810320987): the dismantle face summed belt refunds over EVERY touching route, but dismantleMachine refunds only the engine-REGISTERED set [outRoute, ...inRoutes]; connectRoute overwrites outRoute on each output connect, so a fully-linked multi-output machine overprinted the tap by the orphaned belts' refund. Live-confirmed at the exact same-task baseline with the corrected face: two-output yard printed 36 === engine store delta 36 (J; the defective all-links face would have printed 38), four-link yard with a running batch printed 36 === delta 36 (K; all-links would have printed 40). MachinePanel.tsx now resolves the registered set for the belt term (the r2 batch term is kept; the all-touching set still drives the extent row). inspector-54.test.tsx gained two regression cases: two-output laid by the real Connect face, and a four-link yard with a running batch. The engine's outRoute overwrite/orphaning itself is filed as issue #100 and is NOT changed here — K.dismantle.orphansSurvive asserts the two orphaned routes survive dismantle. C.dismantle.refund now asserts the full engine truth delta === printed + registered cargo (yard-mature's belts are pre-price, so its printed number is unchanged by this fix); J/K freeze cargo at 0 (documented probe-only seed mutations) so printed === delta holds exactly."
+  ],
+  "viewports": [
+    "1280x800 desktop rail",
+    "390x844 phone sheet",
+    "390x844 phone @200% text"
+  ],
+  "sequences": [
+    {
+      "id": "A",
+      "viewport": "1280x800",
+      "seed": "fresh",
+      "consoleErrors": []
+    },
+    {
+      "id": "B",
+      "viewport": "390x844",
+      "seed": "fresh",
+      "consoleErrors": []
+    },
+    {
+      "id": "C",
+      "viewport": "1280x800",
+      "seed": "yard-mature + lastSeenMs=now + credits=1000",
+      "actions": [
+        "Upgrade",
+        "Move",
+        "Dismantle"
+      ],
+      "tapped": {
+        "tile": 0,
+        "sx": 323,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "J",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter only) + restock/freeze (MUTATIONS)",
+      "actions": [
+        "Connect",
+        "Dismantle"
+      ],
+      "tapped": {
+        "tile": 8,
+        "sx": 487,
+        "sy": 270
+      },
+      "numbers": {
+        "printed": 36,
+        "registeredFormula": 36,
+        "allLinksFormula": 38,
+        "cargo": 0,
+        "storeDelta": 36
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "K",
+      "viewport": "1280x800",
+      "seed": "commandYard(sorter + furnace, 4 links) + restock/freeze (MUTATIONS)",
+      "actions": [
+        "Dismantle"
+      ],
+      "tapped": {
+        "tile": 8,
+        "sx": 487,
+        "sy": 270
+      },
+      "numbers": {
+        "printed": 36,
+        "registeredFormula": 36,
+        "allLinksFormula": 40,
+        "cargo": 0,
+        "storeDelta": 36
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "D",
+      "viewport": "1280x800",
+      "seed": "yard-mature + route 4 removed (furnace stays starved)",
+      "tapped": {
+        "tile": 1,
+        "sx": 405,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "E",
+      "viewport": "1280x800",
+      "seed": "yard-mature + M1 draw pinned 9 (> capacity 8)",
+      "power": {
+        "demand": 13,
+        "percent": 62
+      },
+      "tapped": {
+        "tile": 0,
+        "sx": 323,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "F",
+      "viewport": "1280x800",
+      "seed": "yard-mature + tray 12/12 + output routes removed",
+      "tapped": {
+        "tile": 0,
+        "sx": 323,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "G",
+      "viewport": "1280x800",
+      "seed": "yard-mature + route 4 90% busy",
+      "tapped": {
+        "tile": 0,
+        "sx": 323,
+        "sy": 190
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "H",
+      "viewport": "390x844",
+      "seed": "yard-mature + lastSeenMs=now",
+      "tapped": {
+        "tile": 0,
+        "sx": 33,
+        "sy": 312
+      },
+      "consoleErrors": []
+    },
+    {
+      "id": "I",
+      "viewport": "390x844 @200% text",
+      "seed": "yard-mature + textScale=2",
+      "tapped": {
+        "tile": 0,
+        "sx": 33,
+        "sy": 394
+      },
+      "consoleErrors": []
+    }
+  ],
+  "summary": {
+    "frames": 23,
+    "passed": 23,
+    "failed": 0,
+    "checkFailures": 0,
+    "actionChecks": 62,
+    "actionChecksPassed": 62
+  },
+  "failures": [],
+  "actionChecks": [
+    {
+      "check": "A.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "B.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "C.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "C.storage.noDispatch",
+      "ok": true,
+      "detail": "revision 1458 -> 1458"
+    },
+    {
+      "check": "C.routes.noDispatch",
+      "ok": true,
+      "detail": "revision 1458 -> 1458"
+    },
+    {
+      "check": "C.routes.count",
+      "ok": true,
+      "detail": "[{\"label\":\"dock → scrap sorter\",\"value\":\"carries Scrap · 5 ticks · 20% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Nonferrous · 5 ticks · 22% busy\"},{\"label\":\"scrap sorter → furnace\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"}]"
+    },
+    {
+      "check": "C.power.noDispatch",
+      "ok": true,
+      "detail": "revision 1458 -> 1458"
+    },
+    {
+      "check": "C.upgrade.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C.upgrade.cost",
+      "ok": true,
+      "detail": "printed=222 engine=222"
+    },
+    {
+      "check": "C.upgrade.credits",
+      "ok": true,
+      "detail": "1000 -> 778 cost=222"
+    },
+    {
+      "check": "C.upgrade.level",
+      "ok": true,
+      "detail": "level=15"
+    },
+    {
+      "check": "C.upgrade.faster",
+      "ok": true,
+      "detail": "17392 -> 16667"
+    },
+    {
+      "check": "C.move.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C.move.tile",
+      "ok": true,
+      "detail": "tile=9 printed=9"
+    },
+    {
+      "check": "C.move.charge",
+      "ok": true,
+      "detail": "326 -> 316 charge=10 baselineLagTicks=1"
+    },
+    {
+      "check": "C.move.identity",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":15,\"inBuf\":{\"scrap\":8},\"inBufUnits\":8,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":2001,\"progressRem\":0,\"progressDen\":8,\"batchMilli\":16667,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":4,\"starvedTicks\":356,\"batchesDone\":720,\"ageTicks\":18032,\"busyTicks\":17676,\"fullTicks\":0,\"rateAge\":18000,\"rateFrom\":718,\"rateAgePrev\":17400,\"rateFromPrev\":687}"
+    },
+    {
+      "check": "C.move.routes",
+      "ok": true,
+      "detail": "route ids changed"
+    },
+    {
+      "check": "C.dismantle.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C.dismantle.face",
+      "ok": true,
+      "detail": "printed=30 registeredFormula=30"
+    },
+    {
+      "check": "C.dismantle.refund",
+      "ok": true,
+      "detail": "316 -> 346 refund=30 cargo=0 tray=0 buf=10 batch=2 baselineLagTicks=6"
+    },
+    {
+      "check": "C.dismantle.gone",
+      "ok": true,
+      "detail": "machines=7"
+    },
+    {
+      "check": "C.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "J.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"batchMilli\":1000000000,\"batchPower\":1,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12,\"batchUnits\":2,\"outRoute\":null,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "J.connectPrimary",
+      "ok": true,
+      "detail": "[\"Connect\",\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +34 units\"]"
+    },
+    {
+      "check": "J.connect.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.connect.twoOutputs",
+      "ok": true,
+      "detail": "[2,3]"
+    },
+    {
+      "check": "J.connect.lastRegistered",
+      "ok": true,
+      "detail": "outRoute=3 laid=[2,3]"
+    },
+    {
+      "check": "J.frame.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "J.frame.overprintGuard",
+      "ok": true,
+      "detail": "allLinksFormula=38 printed=36 (overprint the fix removes)"
+    },
+    {
+      "check": "J.frame.threeLinks",
+      "ok": true,
+      "detail": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+    },
+    {
+      "check": "J.dismantle.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.dismantle.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "J.dismantle.cargoZero",
+      "ok": true,
+      "detail": "cargo=0"
+    },
+    {
+      "check": "J.dismantle.parity",
+      "ok": true,
+      "detail": "498 -> 534 delta=36 printed=36 baselineLagTicks=4"
+    },
+    {
+      "check": "J.dismantle.gone",
+      "ok": true,
+      "detail": "machines=0"
+    },
+    {
+      "check": "J.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "K.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":8,\"level\":1,\"batchMilli\":1000000000,\"batchPower\":1,\"progress\":1001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":12,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "K.frame.fourLinks",
+      "ok": true,
+      "detail": "touching=4"
+    },
+    {
+      "check": "K.frame.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "K.frame.batchTerm",
+      "ok": true,
+      "detail": "batchUnits=2 (r2 batch term kept)"
+    },
+    {
+      "check": "K.frame.overprintGuard",
+      "ok": true,
+      "detail": "allLinksFormula=40 printed=36 (overprint the fix removes)"
+    },
+    {
+      "check": "K.frame.fourLinkRow",
+      "ok": true,
+      "detail": "2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap"
+    },
+    {
+      "check": "K.dismantle.clicked",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "K.dismantle.face",
+      "ok": true,
+      "detail": "printed=36 registeredFormula=36"
+    },
+    {
+      "check": "K.dismantle.cargoZero",
+      "ok": true,
+      "detail": "cargo=0"
+    },
+    {
+      "check": "K.dismantle.parity",
+      "ok": true,
+      "detail": "480 -> 516 delta=36 printed=36 baselineLagTicks=0"
+    },
+    {
+      "check": "K.dismantle.gone",
+      "ok": true,
+      "detail": "machines=1"
+    },
+    {
+      "check": "K.dismantle.orphansSurvive",
+      "ok": true,
+      "detail": "routes 4 -> 2"
+    },
+    {
+      "check": "K.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "D.tap",
+      "ok": true,
+      "detail": "{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"level\":13,\"batchMilli\":18182,\"batchPower\":2,\"progress\":0,\"status\":\"starved\",\"trayUnits\":0,\"inBufUnits\":0,\"batchUnits\":0,\"outRoute\":5,\"inRoutes\":[]}"
+    },
+    {
+      "check": "D.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "E.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":1000000000,\"batchPower\":9,\"progress\":5889,\"status\":\"powerLimited\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "E.powerLimited",
+      "ok": true,
+      "detail": "{\"demand\":13,\"percent\":62}"
+    },
+    {
+      "check": "E.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "F.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"outputFull\",\"trayUnits\":12,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":null,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "F.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "G.tap",
+      "ok": true,
+      "detail": "{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"level\":14,\"batchMilli\":17392,\"batchPower\":1,\"progress\":6001,\"status\":\"running\",\"trayUnits\":0,\"inBufUnits\":8,\"batchUnits\":2,\"outRoute\":4,\"inRoutes\":[1]}"
+    },
+    {
+      "check": "G.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "H.tap",
+      "ok": true,
+      "detail": "no panel after tap at 33,312 tile 0"
+    },
+    {
+      "check": "H.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "I.tap",
+      "ok": true,
+      "detail": "no panel after tap at 33,394 tile 0"
+    },
+    {
+      "check": "I.console",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "captures": [
+    {
+      "frame": 1,
+      "sequence": "A",
+      "name": "yard-fresh",
+      "file": "a1-desk-yard-fresh.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 2,
+      "sequence": "B",
+      "name": "yard-fresh",
+      "file": "b1-phone-yard-fresh.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 3,
+      "sequence": "C",
+      "name": "inspector-rest",
+      "file": "c1-desk-inspector.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=135px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":120,\"right\":1272,\"bottom\":128}"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Status",
+          "ok": true,
+          "detail": "got \"Working\" want \"Working\""
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"14\" want \"14\""
+        },
+        {
+          "check": "row=Cell",
+          "ok": true,
+          "detail": "got \"0\" want \"0\""
+        },
+        {
+          "check": "row~Actual rate",
+          "ok": true,
+          "detail": "got \"0.52 batches/s · 60s window\" want~\"batches/s\""
+        },
+        {
+          "check": "row~Actual rate",
+          "ok": true,
+          "detail": "got \"0.52 batches/s · 60s window\" want~\"s window\""
+        },
+        {
+          "check": "row~Max rate",
+          "ok": true,
+          "detail": "got \"0.57 batches/s at full power\" want~\"batches/s at full power\""
+        },
+        {
+          "check": "row~Batch",
+          "ok": true,
+          "detail": "got \"98%\" want~\"%\""
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"5 ticks, 5 ticks, 5 ticks, 5 ticks\" want /ticks|tiles/"
+        },
+        {
+          "check": "noteCount",
+          "ok": true,
+          "detail": "notes=0 []"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 222 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 222 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 222 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "accentOne",
+          "ok": true,
+          "detail": "accent=1"
+        },
+        {
+          "check": "primaryNote",
+          "ok": true,
+          "detail": "Upgrade is the primary action: it spends the printed credits now and shortens every batch to the time shown in Next upgr"
+        },
+        {
+          "check": "secondaryNote",
+          "ok": true,
+          "detail": "Move and Dismantle are secondary. Move keeps the machine, its level and its links, re-laying touching belt for the print"
+        },
+        {
+          "check": "progressNumeric",
+          "ok": true,
+          "detail": "now=98"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 4,
+      "sequence": "C",
+      "name": "pane-storage",
+      "file": "c2-desk-pane-storage.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "paneTabPressed",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":true,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":false,\"minH\":44}]"
+        },
+        {
+          "check": "paneRow~Store capacity",
+          "ok": true,
+          "detail": "[{\"label\":\"Store capacity\",\"value\":\"319/900\"},{\"label\":\"Scrap\",\"value\":\"26\"},{\"label\":\"Ferrous\",\"value\":\"21\"},{\"label\":\"Nonferrous\",\"value\":\"10\"},{\"label\":\"Reserve\",\"value\":\"10 units kept per material\"}]"
+        },
+        {
+          "check": "paneRow~Scrap",
+          "ok": true,
+          "detail": "[{\"label\":\"Store capacity\",\"value\":\"319/900\"},{\"label\":\"Scrap\",\"value\":\"26\"},{\"label\":\"Ferrous\",\"value\":\"21\"},{\"label\":\"Nonferrous\",\"value\":\"10\"},{\"label\":\"Reserve\",\"value\":\"10 units kept per material\"}]"
+        },
+        {
+          "check": "paneRow~Reserve",
+          "ok": true,
+          "detail": "[{\"label\":\"Store capacity\",\"value\":\"319/900\"},{\"label\":\"Scrap\",\"value\":\"26\"},{\"label\":\"Ferrous\",\"value\":\"21\"},{\"label\":\"Nonferrous\",\"value\":\"10\"},{\"label\":\"Reserve\",\"value\":\"10 units kept per material\"}]"
+        },
+        {
+          "check": "contextFloors",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":true,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":false,\"minH\":44}]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 5,
+      "sequence": "C",
+      "name": "pane-routes",
+      "file": "c3-desk-pane-routes.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "paneTabPressed",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":false,\"minH\":44},{\"label\":\"Routes\",\"pressed\":true,\"minH\":44},{\"label\":\"Power\",\"pressed\":false,\"minH\":44}]"
+        },
+        {
+          "check": "paneRow~dock → scrap sorter",
+          "ok": true,
+          "detail": "[{\"label\":\"dock → scrap sorter\",\"value\":\"carries Scrap · 5 ticks · 20% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Nonferrous · 5 ticks · 22% busy\"},{\"label\":\"scrap sorter → furnace\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"}]"
+        },
+        {
+          "check": "paneRow~scrap sorter → furnace",
+          "ok": true,
+          "detail": "[{\"label\":\"dock → scrap sorter\",\"value\":\"carries Scrap · 5 ticks · 20% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"scrap sorter → dock\",\"value\":\"carries Nonferrous · 5 ticks · 22% busy\"},{\"label\":\"scrap sorter → furnace\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"}]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 6,
+      "sequence": "C",
+      "name": "pane-power",
+      "file": "c4-desk-pane-power.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "paneTabPressed",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":false,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":true,\"minH\":44}]"
+        },
+        {
+          "check": "paneRow~Yard demand",
+          "ok": true,
+          "detail": "[{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"Yard demand\",\"value\":\"7/8\"},{\"label\":\"This machine\",\"value\":\"1 unit\"},{\"label\":\"Shared speed\",\"value\":\"100%\"}]"
+        },
+        {
+          "check": "paneRow~This machine",
+          "ok": true,
+          "detail": "[{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"Yard demand\",\"value\":\"7/8\"},{\"label\":\"This machine\",\"value\":\"1 unit\"},{\"label\":\"Shared speed\",\"value\":\"100%\"}]"
+        },
+        {
+          "check": "paneRow~Shared speed",
+          "ok": true,
+          "detail": "[{\"label\":\"scrap sorter → dock\",\"value\":\"carries Ferrous · 5 ticks · 11% busy\"},{\"label\":\"Yard demand\",\"value\":\"7/8\"},{\"label\":\"This machine\",\"value\":\"1 unit\"},{\"label\":\"Shared speed\",\"value\":\"100%\"}]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 7,
+      "sequence": "C",
+      "name": "after-upgrade",
+      "file": "c5-desk-after-upgrade.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Level",
+          "ok": true,
+          "detail": "got \"15\" want \"15\""
+        },
+        {
+          "check": "row~Next upgrade",
+          "ok": true,
+          "detail": "got \"1.67s → 1.60s · 258 credits\" want~\"credits\""
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +28 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +28 units\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 8,
+      "sequence": "C",
+      "name": "after-move",
+      "file": "c6-desk-after-move.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "row=Cell",
+          "ok": true,
+          "detail": "got \"9\" want \"9\""
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 258 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +30 units\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 9,
+      "sequence": "C",
+      "name": "after-dismantle",
+      "file": "c7-desk-after-dismantle.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"135px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=135px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":120,\"right\":1272,\"bottom\":128}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 10,
+      "sequence": "J",
+      "name": "two-output-refund",
+      "file": "j1-desk-two-output-refund.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap\" want /ticks|tiles/"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "accentOne",
+          "ok": true,
+          "detail": "accent=1"
+        },
+        {
+          "check": "progressNumeric",
+          "ok": true,
+          "detail": "now=0"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":400,\"w\":320,\"h\":392,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 11,
+      "sequence": "J",
+      "name": "after-dismantle",
+      "file": "j2-desk-two-output-after-dismantle.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 12,
+      "sequence": "K",
+      "name": "multi-route-refund",
+      "file": "k1-desk-multi-route-refund.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap, 2 tiles · 2 scrap\" want /ticks|tiles/"
+        },
+        {
+          "check": "firstAction",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionCount",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 30 credits\",\"Move · cell 0 · 10 units\",\"Dismantle · +36 units\"]"
+        },
+        {
+          "check": "progressNumeric",
+          "ok": true,
+          "detail": "now=0"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":400,\"w\":320,\"h\":392,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 13,
+      "sequence": "K",
+      "name": "after-dismantle",
+      "file": "k2-desk-multi-route-after-dismantle.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"131px\",\"rail\":true,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "marker.shell-inspector-top",
+          "ok": true,
+          "detail": "top=131px lead={\"x\":110,\"y\":8,\"w\":1162,\"h\":116,\"right\":1272,\"bottom\":124}"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 14,
+      "sequence": "D",
+      "name": "starved",
+      "file": "d1-desk-starved.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Furnace details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Furnace"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Status",
+          "ok": true,
+          "detail": "got \"Needs input\" want \"Needs input\""
+        },
+        {
+          "check": "row=Needs",
+          "ok": true,
+          "detail": "got \"2 Ferrous\" want \"2 Ferrous\""
+        },
+        {
+          "check": "note~Missing input: the buffe",
+          "ok": true,
+          "detail": "[\"Missing input: the buffer is short 2 ferrous. to start the next batch. A link from the dock store or a producer refills it.\"]"
+        },
+        {
+          "check": "note~2 ferrous",
+          "ok": true,
+          "detail": "[\"Missing input: the buffer is short 2 ferrous. to start the next batch. A link from the dock store or a producer refills it.\"]"
+        },
+        {
+          "check": "noteCount",
+          "ok": true,
+          "detail": "notes=1 [\"Missing input: the buffer is short 2 ferrous. to start the next batch. A link from the dock store or a producer refills it.\"]"
+        },
+        {
+          "check": "actionCountMin",
+          "ok": true,
+          "detail": "[\"Connect\",\"Upgrade · 250 credits\",\"Move · cell 9 · 8 units\",\"Dismantle · +14 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Connect\",\"Upgrade · 250 credits\",\"Move · cell 9 · 8 units\",\"Dismantle · +14 units\"]"
+        },
+        {
+          "check": "primaryConsistent",
+          "ok": true,
+          "detail": "first=Connect note=Connect is the primary action: it lays belt for 2 tiles · 2 scrap and starts the flow imme"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 15,
+      "sequence": "E",
+      "name": "power-limited",
+      "file": "e1-desk-power-limited.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row~Rate at current power",
+          "ok": true,
+          "detail": "got \"0.00 batches/s\" want~\"batches/s\""
+        },
+        {
+          "check": "row~Power",
+          "ok": true,
+          "detail": "got \"9 units · Power limited: 62% speed\" want~\"Power limited: 62% speed\""
+        },
+        {
+          "check": "note~Power limited: the yard ",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 13/8 · 62% speed for every running machine.\"]"
+        },
+        {
+          "check": "note~13/8",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 13/8 · 62% speed for every running machine.\"]"
+        },
+        {
+          "check": "note~62%",
+          "ok": true,
+          "detail": "[\"Power limited: the yard requests 13/8 · 62% speed for every running machine.\"]"
+        },
+        {
+          "check": "noteCount",
+          "ok": true,
+          "detail": "notes=1 [\"Power limited: the yard requests 13/8 · 62% speed for every running machine.\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 16,
+      "sequence": "E",
+      "name": "power-pane",
+      "file": "e2-desk-power-pane.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "paneTabPressed",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":false,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":true,\"minH\":44}]"
+        },
+        {
+          "check": "paneRow~Yard demand",
+          "ok": true,
+          "detail": "[{\"label\":\"Yard demand\",\"value\":\"13/8\"},{\"label\":\"This machine\",\"value\":\"9 units\"},{\"label\":\"Shared speed\",\"value\":\"62%\"}]"
+        },
+        {
+          "check": "paneRow~This machine",
+          "ok": true,
+          "detail": "[{\"label\":\"Yard demand\",\"value\":\"13/8\"},{\"label\":\"This machine\",\"value\":\"9 units\"},{\"label\":\"Shared speed\",\"value\":\"62%\"}]"
+        },
+        {
+          "check": "paneRow~Shared speed",
+          "ok": true,
+          "detail": "[{\"label\":\"Yard demand\",\"value\":\"13/8\"},{\"label\":\"This machine\",\"value\":\"9 units\"},{\"label\":\"Shared speed\",\"value\":\"62%\"}]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 17,
+      "sequence": "F",
+      "name": "full-output",
+      "file": "f1-desk-full-output.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row=Status",
+          "ok": true,
+          "detail": "got \"Cargo full\" want \"Cargo full\""
+        },
+        {
+          "check": "row=Tray",
+          "ok": true,
+          "detail": "got \"12/12\" want \"12/12\""
+        },
+        {
+          "check": "note~Output full: the tray ho",
+          "ok": true,
+          "detail": "[\"Output full: the tray holds 12/12. Connect an output link or sell from the store to clear it.\",\"No output link: finished batches wait in the tray. Connect offers the missing belt below.\"]"
+        },
+        {
+          "check": "note~12/12",
+          "ok": true,
+          "detail": "[\"Output full: the tray holds 12/12. Connect an output link or sell from the store to clear it.\",\"No output link: finished batches wait in the tray. Connect offers the missing belt below.\"]"
+        },
+        {
+          "check": "noteCount",
+          "ok": true,
+          "detail": "notes=2 [\"Output full: the tray holds 12/12. Connect an output link or sell from the store to clear it.\",\"No output link: finished batches wait in the tray. Connect offers the missing belt below.\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 18,
+      "sequence": "G",
+      "name": "busy-link",
+      "file": "g1-desk-busy-link.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "row/Links/",
+          "ok": true,
+          "detail": "got \"5 ticks, 5 ticks, 5 ticks, 5 ticks\" want /ticks|tiles/"
+        },
+        {
+          "check": "note~Transport limit: the out",
+          "ok": true,
+          "detail": "[\"Transport limit: the output link is 90% busy, so belt capacity caps throughput.\"]"
+        },
+        {
+          "check": "note~90% busy",
+          "ok": true,
+          "detail": "[\"Transport limit: the output link is 90% busy, so belt capacity caps throughput.\"]"
+        },
+        {
+          "check": "noteCount",
+          "ok": true,
+          "detail": "notes=1 [\"Transport limit: the output link is 90% busy, so belt capacity caps throughput.\"]"
+        },
+        {
+          "check": "dockGeometry",
+          "ok": true,
+          "detail": "{\"x\":952,\"y\":135,\"w\":320,\"h\":657,\"right\":1272,\"bottom\":792}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 19,
+      "sequence": "H",
+      "name": "sheet-rest",
+      "file": "h1-phone-sheet.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "contextFloors",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":false,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":false,\"minH\":44}]"
+        },
+        {
+          "check": "longContent",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":923,\"ch\":272,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "bodyScroller",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":923,\"ch\":272,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 20,
+      "sequence": "H",
+      "name": "sheet-actions",
+      "file": "h2-phone-sheet-actions.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "actionCountMin",
+          "ok": true,
+          "detail": "[\"Upgrade · 222 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +28 units\"]"
+        },
+        {
+          "check": "actionGrammar",
+          "ok": true,
+          "detail": "[\"Upgrade · 222 credits\",\"Move · cell 9 · 10 units\",\"Dismantle · +28 units\"]"
+        },
+        {
+          "check": "primaryConsistent",
+          "ok": true,
+          "detail": "first=Upgrade · 222 credits note=Upgrade is the primary action: it spends the printed credits now and shortens every batch "
+        },
+        {
+          "check": "secondaryNote",
+          "ok": true,
+          "detail": "Move and Dismantle are secondary. Move keeps the machine, its level and its links, re-laying touching belt for the print"
+        },
+        {
+          "check": "actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Upgrade · 222 credits\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":681,\"pw\":150,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Move · cell 9 · 10 units\",\"minH\":44,\"visible\":true,\"px\":181,\"py\":681,\"pw\":156,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Dismantle · +28 units\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":733,\"pw\":149,\"ph\":44,\"inPanelActions\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 21,
+      "sequence": "H",
+      "name": "sheet-pane",
+      "file": "h3-phone-sheet-pane.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "paneTabPressed",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":true,\"minH\":44},{\"label\":\"Routes\",\"pressed\":false,\"minH\":44},{\"label\":\"Power\",\"pressed\":false,\"minH\":44}]"
+        },
+        {
+          "check": "paneRow~Store capacity",
+          "ok": true,
+          "detail": "[{\"label\":\"Store capacity\",\"value\":\"320/900\"},{\"label\":\"Scrap\",\"value\":\"26\"},{\"label\":\"Ferrous\",\"value\":\"22\"},{\"label\":\"Nonferrous\",\"value\":\"10\"},{\"label\":\"Reserve\",\"value\":\"10 units kept per material\"}]"
+        },
+        {
+          "check": "actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Upgrade · 222 credits\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":681,\"pw\":150,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Move · cell 9 · 10 units\",\"minH\":44,\"visible\":true,\"px\":181,\"py\":681,\"pw\":156,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Dismantle · +30 units\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":733,\"pw\":149,\"ph\":44,\"inPanelActions\":true}]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":442,\"w\":370,\"h\":348,\"right\":380,\"bottom\":790}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 22,
+      "sequence": "I",
+      "name": "ts2-rest",
+      "file": "i1-phone-ts2.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "marker.shell-rail-or-face",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.zoom",
+          "ok": true,
+          "detail": "[\"Zoom in\",\"Zoom out\",\"Reset view\"]"
+        },
+        {
+          "check": "marker.hud",
+          "ok": true,
+          "detail": "{\"shellInspectorTop\":\"\",\"rail\":false,\"face\":true,\"zoomGroup\":true,\"zoomButtons\":[\"Zoom in\",\"Zoom out\",\"Reset view\"],\"hud\":true,\"hudLead\":true,\"canvas\":true}"
+        },
+        {
+          "check": "marker.canvas",
+          "ok": true,
+          "detail": ""
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "sections",
+          "ok": true,
+          "detail": "[\"Identity\",\"Recipe\",\"Production\",\"Bottleneck\",\"Transport\",\"Recovery context\",\"Actions\"]"
+        },
+        {
+          "check": "contextFloors",
+          "ok": true,
+          "detail": "[{\"label\":\"Storage\",\"pressed\":false,\"minH\":46},{\"label\":\"Routes\",\"pressed\":false,\"minH\":46},{\"label\":\"Power\",\"pressed\":false,\"minH\":46}]"
+        },
+        {
+          "check": "longContent",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":2121,\"ch\":271,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "bodyScroller",
+          "ok": true,
+          "detail": "{\"sw\":344,\"cw\":344,\"sh\":2121,\"ch\":271,\"overflow\":\"auto\"}"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 23,
+      "sequence": "I",
+      "name": "ts2-actions",
+      "file": "i2-phone-ts2-actions.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel.panel--stack"
+        },
+        {
+          "check": "rootContract",
+          "ok": true,
+          "detail": "rootLabel=Scrap sorter details"
+        },
+        {
+          "check": "title",
+          "ok": true,
+          "detail": "title=Scrap sorter"
+        },
+        {
+          "check": "actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Upgrade · 222 credits\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":600,\"pw\":278,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Move · cell 9 · 10 units\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":652,\"pw\":290,\"ph\":44,\"inPanelActions\":true},{\"label\":\"Dismantle · +28 units\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":704,\"pw\":276,\"ph\":44,\"inPanelActions\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "sheetGeometry",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":414,\"w\":370,\"h\":348,\"right\":380,\"bottom\":761}"
+        }
+      ],
+      "passed": true
+    }
+  ]
+}
