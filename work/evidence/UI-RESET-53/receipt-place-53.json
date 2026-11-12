@@ -1,0 +1,2514 @@
+{
+  "task": "UI-RESET-53 explicit placement, move and dismantle flows",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/53",
+  "headSha": "bea52198a64e7663d270614e1d7665a8a1797a21",
+  "headShaNote": "code commit under test; the evidence-only commit containing this receipt follows it as PR head",
+  "tool": "playwright-core headless Chrome, DOM/geometry/console assertions only (no vision)",
+  "seed": "command-built yards via the game's own applyCommand/advance + planConnections + encodeSave checksum (identical fixture arithmetic to tests/ui/place-53.test.tsx yardState); fresh boot for A/B; one-shot sessionStorage guard so the reload probe boots the PERSISTED save, not the seed",
+  "mutations": [
+    "base: every seed payload.lastSeenMs = Date.now() (no offline catch-up drift); settings.muted=true; tutorial=9 and exportClaimed=true (skip the ladder, open the sell desk)",
+    "yard: probe-only restock of each buildCost line BEFORE machine.build so the seed command is affordable (same fixture shape as tests/ui/place-53.test.tsx yardState); +100 scrap headroom unless overridden",
+    "connect: route.connect via the engine's planConnections AFTER the scrap headroom (a 0-scrap connect is refused insufficient), then probe-only drain store.scrap=0 so the seed advance(1) loads EMPTY belts — dropRoute returns in-transit cargo on top of the belt refund, and the parity reads must isolate the registered-set refund (the orphaned output link from connectRoute's outRoute overwrite stays unrefunded; engine follow-up #100 HELD)",
+    "fill: store.scrap=storeCapacity (store full -> dismantle no-room case)",
+    "empty: no seed build (resting primary stays the build step for the repeated-tap probe), scrap=0",
+    "textScale: settings.textScale=2 (200% text frames)"
+  ],
+  "resolutions": [
+    "probe fix: the sim projection referenced a Node-side constant inside page.evaluate (ReferenceError -> null sim); replaced with the literal storage key",
+    "probe fix: addInitScript re-runs on every navigation — a sessionStorage one-shot guard keeps p.reload() from re-seeding over the persisted commands",
+    "probe fix: the empty-yard repeated-tap expectation is blueprint-agnostic — at tutorial 9 the yard ladder arms the nearest unbuilt blueprint (furnace, 10 scrap + 5 ferrous), and the contract under test is the explained shortfall, never a silent buy",
+    "probe fix: on phone the open inspector can overlay the tapped yard cell; the move-aim probe falls back to the flow's documented N-key path (recorded per sequence as moveAimPath)"
+  ],
+  "frameAudit": "every capture frame runs probe()+audit() before screenshot; checks recorded per frame; any failed check fails the run; every action-level assertion (charges, refunds, parity, no-dispatch arms, repeated taps, reload) is recorded with its numbers in actionChecks, pass or fail",
+  "actionProof": "clickSync clicks the real button (dock primary / strip Confirm / Keep machine / Sell) and reads localStorage in the same JS task (dispatch->applyCommand->persist synchronous; zero engine ticks between click and read). The pre-click baseline is flushed through the real HudTop sound toggle (setSettings -> synchronous persist, zero sim effect, restored); baselineLagTicks recorded per action. Tile taps project through the canvas's own camera stamp (dataset.cam) with the pointer handler's screenToWorld inverse",
+  "parityProof": "dismantle: printed total === Node-side registered-set formula (buildRefund + tray + inBuf + batch + registered belt refunds) === same-task storeUnits delta, on EMPTY-belt seeds (dropRoute also returns in-transit cargo; the seed drains scrap after connecting so cargo=0, matching the #54 inspector contract). move: printed per-line charge === same-task store delta. The orphaned output link (connectRoute overwrites outRoute; engine follow-up #100 HELD) stays unrefunded — the delta discriminates registered-set vs all-touching",
+  "viewports": [
+    "1280x800 desktop rail",
+    "390x844 phone",
+    "390x844 phone @200% text"
+  ],
+  "sequences": [
+    {
+      "id": "A",
+      "viewport": "1280x800",
+      "seed": "fresh",
+      "consoleErrors": []
+    },
+    {
+      "id": "B",
+      "viewport": "390x844",
+      "seed": "fresh",
+      "consoleErrors": []
+    },
+    {
+      "id": "C",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8, sorter@20, scrap 100)",
+      "consoleErrors": []
+    },
+    {
+      "id": "C2",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8, scrap 0)",
+      "consoleErrors": []
+    },
+    {
+      "id": "D",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8, sorter@20, scrap 100)",
+      "consoleErrors": []
+    },
+    {
+      "id": "E",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8 connected, belts drained empty)",
+      "expectedRefund": 22,
+      "consoleErrors": []
+    },
+    {
+      "id": "E2",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8, store full)",
+      "consoleErrors": []
+    },
+    {
+      "id": "F",
+      "viewport": "1280x800",
+      "seed": "empty yard, scrap 0",
+      "phases": [
+        "Ghost on cell 0 · tap again to place",
+        "Tap Salvage until the drone repair is affordable.",
+        "Ghost on cell 0 · tap again to place",
+        "Tap Salvage until the drone repair is affordable.",
+        "Ghost on cell 0 · tap again to place",
+        "Tap Salvage until the drone repair is affordable.",
+        "Ghost on cell 0 · tap again to place",
+        "Tap Salvage until the drone repair is affordable."
+      ],
+      "consoleErrors": []
+    },
+    {
+      "id": "H",
+      "viewport": "390x844",
+      "seed": "yard(sorter@8, sorter@20, scrap 100)",
+      "moveAimPath": "N-key (inspector overlay covers the tapped cell on phone)",
+      "consoleErrors": []
+    },
+    {
+      "id": "I",
+      "viewport": "390x844 @200% text",
+      "seed": "yard(sorter@8, scrap 100) + textScale=2",
+      "consoleErrors": []
+    },
+    {
+      "id": "J",
+      "viewport": "1280x800",
+      "seed": "yard(sorter@8, scrap 100)",
+      "postTiles": [
+        20
+      ],
+      "reTiles": [
+        20
+      ],
+      "consoleErrors": []
+    }
+  ],
+  "summary": {
+    "frames": 35,
+    "passed": 35,
+    "failed": 0,
+    "checkFailures": 0,
+    "actionChecks": 62,
+    "actionChecksPassed": 62
+  },
+  "failures": [],
+  "actionChecks": [
+    {
+      "check": "A.earn.primaryLabel",
+      "ok": true,
+      "detail": "[{\"face\":\"Store\",\"label\":\"Store\",\"primary\":false,\"disabled\":false},{\"face\":\"Salvage\",\"label\":\"Salvage\",\"primary\":true,\"disabled\":false},{\"face\":\"Build\",\"label\":\"Build\",\"primary\":false,\"disabled\":false}]"
+    },
+    {
+      "check": "A.earn.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "A.earn.charge",
+      "ok": true,
+      "detail": "dScrap=5 rev 0->1 lag=4"
+    },
+    {
+      "check": "A.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "B.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "C.arm.via",
+      "ok": true,
+      "detail": "via=Place"
+    },
+    {
+      "check": "C.refuse.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C.refuse.preserve",
+      "ok": true,
+      "detail": "rev 2->2 machines=2 units=100"
+    },
+    {
+      "check": "C.reaim.clears",
+      "ok": true,
+      "detail": "verdict=ok status=\"Ghost on cell 28 · tap again to place\""
+    },
+    {
+      "check": "C.dockRefuse.preserve",
+      "ok": true,
+      "detail": "rev 2->2"
+    },
+    {
+      "check": "C.edge.valid",
+      "ok": true,
+      "detail": "\"Cell 35\""
+    },
+    {
+      "check": "C.outside.isOffYard",
+      "ok": true,
+      "detail": "world=(442.8,255.1)"
+    },
+    {
+      "check": "C.cancel.noSpend",
+      "ok": true,
+      "detail": "scrap=100 machines=2"
+    },
+    {
+      "check": "C.build.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C.build.charge",
+      "ok": true,
+      "detail": "dScrap=20 built={\"id\":3,\"blueprint\":\"sorter\",\"tile\":28,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"idle\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":0,\"batchesDone\":0,\"ageTicks\":0,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0} rev 2->3 lag=2"
+    },
+    {
+      "check": "C.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "C2.arm.viaClose",
+      "ok": true,
+      "detail": "via=Close catalog (unaffordable Place is disabled, build-52)"
+    },
+    {
+      "check": "C2.refuse.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "C2.refuse.recovery",
+      "ok": true,
+      "detail": "rev 1->1 units=0"
+    },
+    {
+      "check": "C2.recovery.explained",
+      "ok": true,
+      "detail": "status=\"Tap Salvage until the drone repair is affordable.\""
+    },
+    {
+      "check": "C2.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "D.open.noCharge",
+      "ok": true,
+      "detail": "rev 2->2 tile=8"
+    },
+    {
+      "check": "D.occupied.noSpend",
+      "ok": true,
+      "detail": "disabled=true rev 2->2"
+    },
+    {
+      "check": "D.ownCell.blocked",
+      "ok": true,
+      "detail": "{\"verdict\":\"occupied\",\"confirm\":{\"label\":\"Confirm move\",\"disabled\":true}}"
+    },
+    {
+      "check": "D.dock.blocked",
+      "ok": true,
+      "detail": "{\"verdict\":\"dock\",\"confirm\":{\"label\":\"Confirm move\",\"disabled\":true}}"
+    },
+    {
+      "check": "D.move.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "D.move.charge",
+      "ok": true,
+      "detail": "tile=28 dScrap=10 want=10 dUnits=10 rev 2->3 lag=2"
+    },
+    {
+      "check": "D.nCycle",
+      "ok": true,
+      "detail": "\"Destination: cell 20\" -> \"Destination: cell 21\""
+    },
+    {
+      "check": "D.cancel.noSpend",
+      "ok": true,
+      "detail": "tile=28 rev 3->3"
+    },
+    {
+      "check": "D.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "E.seed.emptyBelts",
+      "ok": true,
+      "detail": "registeredCargo=0"
+    },
+    {
+      "check": "E.parity.printedVsEngine",
+      "ok": true,
+      "detail": "printed=22 engine=22"
+    },
+    {
+      "check": "E.parity.beltLine",
+      "ok": true,
+      "detail": "[\"Build price returns +18\",\"Belt links return +4 across 2 links\"]"
+    },
+    {
+      "check": "E.open.noDispatch",
+      "ok": true,
+      "detail": "rev 4->4"
+    },
+    {
+      "check": "E.arm.noDispatch",
+      "ok": true,
+      "detail": "rev 4->4"
+    },
+    {
+      "check": "E.keep.noRefund",
+      "ok": true,
+      "detail": "rev 4->4"
+    },
+    {
+      "check": "E.commit.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "E.commit.parity",
+      "ok": true,
+      "detail": "delta=22 printed=22 engine=22 links=2 routes 3->1 rev 4->5 lag=0"
+    },
+    {
+      "check": "E.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "E2.noroom.noDispatch",
+      "ok": true,
+      "detail": "disabled=true"
+    },
+    {
+      "check": "E2.store.sellFace",
+      "ok": true,
+      "detail": "[\"Sell 60 · +60\"]"
+    },
+    {
+      "check": "E2.sell.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "E2.sell.freesRoom",
+      "ok": true,
+      "detail": "units 900->840 credits 0->60 lag=4"
+    },
+    {
+      "check": "E2.recovery.fits",
+      "ok": true,
+      "detail": "fits=true room=60 need=18"
+    },
+    {
+      "check": "E2.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "F.seed.empty",
+      "ok": true,
+      "detail": "{\"machines\":0,\"units\":0}"
+    },
+    {
+      "check": "F.shortfall.explained",
+      "ok": true,
+      "detail": "short=\"Need 10 scrap · have 0\""
+    },
+    {
+      "check": "F.taps.neverBuy",
+      "ok": true,
+      "detail": "a machine appeared"
+    },
+    {
+      "check": "F.taps.neverCharge",
+      "ok": true,
+      "detail": "store units moved"
+    },
+    {
+      "check": "F.taps.alwaysExplain",
+      "ok": true,
+      "detail": "[\"Ghost on cell 0 · tap again to place\",\"Tap Salvage until the drone repair is affordable.\",\"Ghost on cell 0 · tap again to place\",\"Tap Salvage until the drone repair is affordable.\",\"Ghost on cell 0 · tap again to place\",\"Tap Salvage until the drone repair is affordable.\",\"Ghost on cell 0 · tap again to place\",\"Tap Salvage until the drone repair is affordable.\"]"
+    },
+    {
+      "check": "F.catalog.placeDisabled",
+      "ok": true,
+      "detail": "{\"disabled\":true,\"label\":\"Place Scrap sorter\"}"
+    },
+    {
+      "check": "F.catalog.neverBuy",
+      "ok": true,
+      "detail": "{\"machines\":0,\"units\":0,\"catalog\":true}"
+    },
+    {
+      "check": "F.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "H.move.aim28",
+      "ok": true,
+      "detail": "dest=Destination: cell 28 path=N-key (inspector overlay covers the tapped cell on phone)"
+    },
+    {
+      "check": "H.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "I.console",
+      "ok": true,
+      "detail": "[]"
+    },
+    {
+      "check": "J.build.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.move.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.dismantle.ok",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "J.post.state",
+      "ok": true,
+      "detail": "tiles=[20] rev=4"
+    },
+    {
+      "check": "J.reload.parity",
+      "ok": true,
+      "detail": "tiles [20]->[20] rev 4->4 units 88->88"
+    },
+    {
+      "check": "J.console",
+      "ok": true,
+      "detail": "[]"
+    }
+  ],
+  "captures": [
+    {
+      "frame": 1,
+      "sequence": "A",
+      "name": "yard-fresh",
+      "file": "a1-desk-yard-fresh.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 2,
+      "sequence": "A",
+      "name": "salvage-earned",
+      "file": "a2-desk-salvage.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 3,
+      "sequence": "B",
+      "name": "yard-fresh",
+      "file": "b1-phone-yard-fresh.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 4,
+      "sequence": "C",
+      "name": "place-valid",
+      "file": "c1-desk-place-valid.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.cell~Cell 28",
+          "ok": true,
+          "detail": "got \"Cell 28\" want~\"Cell 28\""
+        },
+        {
+          "check": "strip.cost~20 scrap",
+          "ok": true,
+          "detail": "got \"Cost: 20 scrap\" want~\"20 scrap\""
+        },
+        {
+          "check": "strip.reason~Clear cell",
+          "ok": true,
+          "detail": "got \"Clear cell — Build spends the price below.\" want~\"Clear cell\""
+        },
+        {
+          "check": "strip.hint~Build confirms",
+          "ok": true,
+          "detail": "got \"Tap the yard to aim · Build confirms · Cancel plans again.\" want~\"Build confirms\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 5,
+      "sequence": "C",
+      "name": "place-occupied",
+      "file": "c2-desk-place-occupied.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=occupied"
+        },
+        {
+          "check": "strip.cell~Cell 20",
+          "ok": true,
+          "detail": "got \"Cell 20\" want~\"Cell 20\""
+        },
+        {
+          "check": "strip.reason~Cell 20 is already occupied",
+          "ok": true,
+          "detail": "got \"Cell 20 is already occupied — pick a free cell.\" want~\"Cell 20 is already occupied\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 6,
+      "sequence": "C",
+      "name": "place-refused-preserved",
+      "file": "c3-desk-place-refused-preserved.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=occupied"
+        },
+        {
+          "check": "strip.reason~Cell 20 is already occupied",
+          "ok": true,
+          "detail": "got \"Cell 20 is already occupied — pick a free cell.\" want~\"Cell 20 is already occupied\""
+        },
+        {
+          "check": "statusLine",
+          "ok": true,
+          "detail": "status=\"Tile blocked\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 7,
+      "sequence": "C",
+      "name": "place-dock",
+      "file": "c4-desk-place-dock.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=dock"
+        },
+        {
+          "check": "strip.reason~The dock cell cannot hold a ",
+          "ok": true,
+          "detail": "got \"The dock cell cannot hold a machine.\" want~\"The dock cell cannot hold a machine.\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 8,
+      "sequence": "C",
+      "name": "place-edge",
+      "file": "c5-desk-place-edge.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.cell~Cell 35",
+          "ok": true,
+          "detail": "got \"Cell 35\" want~\"Cell 35\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 9,
+      "sequence": "C",
+      "name": "place-cancel-catalog",
+      "file": "c6-desk-place-cancel-catalog.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "catalogPresent",
+          "ok": true,
+          "detail": "no .catalog"
+        },
+        {
+          "check": "catalog.cardPressed",
+          "ok": true,
+          "detail": "{\"blueprint\":\"sorter\",\"affordable\":\"true\",\"pressed\":\"true\"}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 10,
+      "sequence": "C",
+      "name": "place-built",
+      "file": "c7-desk-place-built.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 11,
+      "sequence": "C2",
+      "name": "place-shortfall",
+      "file": "c8-desk-place-shortfall.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":116,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.short~Need 20 scrap",
+          "ok": true,
+          "detail": "got \"Need 20 scrap · have 0\" want~\"Need 20 scrap\""
+        },
+        {
+          "check": "strip.cost~20 scrap",
+          "ok": true,
+          "detail": "got \"Cost: 20 scrap\" want~\"20 scrap\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 12,
+      "sequence": "C2",
+      "name": "place-recovery",
+      "file": "c9-desk-place-recovery.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 13,
+      "sequence": "C2",
+      "name": "store-recovery",
+      "file": "c10-desk-store-recovery.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "panelPresent",
+          "ok": true,
+          "detail": "no .panel"
+        },
+        {
+          "check": "panel.title",
+          "ok": true,
+          "detail": "title=Yard store"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 14,
+      "sequence": "D",
+      "name": "move-open",
+      "file": "d1-desk-move-open.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.move.present",
+          "ok": true,
+          "detail": "strips=move"
+        },
+        {
+          "check": "strip.move.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":166,\"visible\":true}"
+        },
+        {
+          "check": "strip.dest~Destination: cell",
+          "ok": true,
+          "detail": "got \"Destination: cell 0\" want~\"Destination: cell\""
+        },
+        {
+          "check": "strip.cost~10 scrap",
+          "ok": true,
+          "detail": "got \"Charge: 10 scrap\" want~\"10 scrap\""
+        },
+        {
+          "check": "strip.machine~Scrap sorter",
+          "ok": true,
+          "detail": "got \"Scrap sorter\" want~\"Scrap sorter\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 15,
+      "sequence": "D",
+      "name": "move-occupied",
+      "file": "d2-desk-move-occupied.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.move.present",
+          "ok": true,
+          "detail": "strips=move"
+        },
+        {
+          "check": "strip.move.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":166,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=occupied"
+        },
+        {
+          "check": "strip.reason~Cell 20 is already occupied",
+          "ok": true,
+          "detail": "got \"Cell 20 is already occupied — pick a free cell.\" want~\"Cell 20 is already occupied\""
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Confirm move\",\"disabled\":true}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 16,
+      "sequence": "D",
+      "name": "move-valid",
+      "file": "d3-desk-move-valid.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.move.present",
+          "ok": true,
+          "detail": "strips=move"
+        },
+        {
+          "check": "strip.move.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":166,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.dest~Destination: cell 28",
+          "ok": true,
+          "detail": "got \"Destination: cell 28\" want~\"Destination: cell 28\""
+        },
+        {
+          "check": "strip.reason~Clear destination",
+          "ok": true,
+          "detail": "got \"Clear destination — confirm spends the charge below.\" want~\"Clear destination\""
+        },
+        {
+          "check": "strip.confirmLabel",
+          "ok": true,
+          "detail": "{\"label\":\"Confirm move\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Confirm move\",\"disabled\":false}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 17,
+      "sequence": "D",
+      "name": "move-done",
+      "file": "d4-desk-move-done.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.move.gone",
+          "ok": true,
+          "detail": "strips="
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 18,
+      "sequence": "D",
+      "name": "move-cancel",
+      "file": "d5-desk-move-cancel.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.move.gone",
+          "ok": true,
+          "detail": "strips="
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 19,
+      "sequence": "E",
+      "name": "dismantle-impact",
+      "file": "e1-desk-dismantle-impact.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":163,\"visible\":true}"
+        },
+        {
+          "check": "strip.armed",
+          "ok": true,
+          "detail": "armed=false"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=true"
+        },
+        {
+          "check": "strip.impact~Build price returns +18",
+          "ok": true,
+          "detail": "got \"Build price returns +18 | Belt links return +4 across 2 links\" want~\"Build price returns +18\""
+        },
+        {
+          "check": "strip.total~+22",
+          "ok": true,
+          "detail": "got \"Total back to the store: +22 units\" want~\"+22\""
+        },
+        {
+          "check": "strip.room~Free store room",
+          "ok": true,
+          "detail": "got \"Free store room: 900 units\" want~\"Free store room\""
+        },
+        {
+          "check": "strip.confirmLabel",
+          "ok": true,
+          "detail": "{\"label\":\"Dismantle machine\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Dismantle machine\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.cancelLabel",
+          "ok": true,
+          "detail": "cancel=Keep machine"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 20,
+      "sequence": "E",
+      "name": "dismantle-armed",
+      "file": "e2-desk-dismantle-armed.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":184,\"visible\":true}"
+        },
+        {
+          "check": "strip.armed",
+          "ok": true,
+          "detail": "armed=true"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=true"
+        },
+        {
+          "check": "strip.hint~Tap again to commit",
+          "ok": true,
+          "detail": "got \"This removes the machine and drops its belt links. Tap again to commit, or keep it.\" want~\"Tap again to commit\""
+        },
+        {
+          "check": "strip.confirmLabel",
+          "ok": true,
+          "detail": "{\"label\":\"Tap again to dismantle\",\"disabled\":false}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 21,
+      "sequence": "E",
+      "name": "dismantle-kept",
+      "file": "e3-desk-dismantle-kept.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.gone",
+          "ok": true,
+          "detail": "strips="
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 22,
+      "sequence": "E",
+      "name": "dismantle-committed",
+      "file": "e4-desk-dismantle-committed.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 23,
+      "sequence": "E2",
+      "name": "dismantle-noroom",
+      "file": "e5-desk-dismantle-noroom.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":187,\"visible\":true}"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=false"
+        },
+        {
+          "check": "strip.reason~Store full — free 18 more un",
+          "ok": true,
+          "detail": "got \"Store full — free 18 more units, then try again.\" want~\"Store full — free 18 more unit\""
+        },
+        {
+          "check": "strip.hint~Sell stock from the Store",
+          "ok": true,
+          "detail": "got \"Sell stock from the Store, or let routes drain, to make room.\" want~\"Sell stock from the Store\""
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Dismantle machine\",\"disabled\":true}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 24,
+      "sequence": "E2",
+      "name": "dismantle-recovered",
+      "file": "e6-desk-dismantle-recovered.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":146,\"visible\":true}"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=true"
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Dismantle machine\",\"disabled\":false}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 25,
+      "sequence": "F",
+      "name": "taps-armed-shortfall",
+      "file": "f1-desk-taps-armed.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":110,\"y\":130,\"w\":560,\"h\":116,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=false"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.short~have 0",
+          "ok": true,
+          "detail": "got \"Need 10 scrap · have 0\" want~\"have 0\""
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 26,
+      "sequence": "F",
+      "name": "taps-recovery",
+      "file": "f2-desk-taps-recovery.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 27,
+      "sequence": "F",
+      "name": "catalog-disabled",
+      "file": "f3-desk-catalog-disabled.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "catalogPresent",
+          "ok": true,
+          "detail": "no .catalog"
+        },
+        {
+          "check": "catalog.placeDisabled",
+          "ok": true,
+          "detail": "{\"disabled\":true,\"label\":\"Place Scrap sorter\"}"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 28,
+      "sequence": "H",
+      "name": "phone-place-valid",
+      "file": "h1-phone-place-valid.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":201,\"w\":370,\"h\":96,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.cell~Cell 28",
+          "ok": true,
+          "detail": "got \"Cell 28\" want~\"Cell 28\""
+        },
+        {
+          "check": "strip.cost~20 scrap",
+          "ok": true,
+          "detail": "got \"Cost: 20 scrap\" want~\"20 scrap\""
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 29,
+      "sequence": "H",
+      "name": "phone-move-valid",
+      "file": "h2-phone-move-valid.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.move.present",
+          "ok": true,
+          "detail": "strips=move"
+        },
+        {
+          "check": "strip.move.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":201,\"w\":370,\"h\":166,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.dest~Destination: cell 28",
+          "ok": true,
+          "detail": "got \"Destination: cell 28\" want~\"Destination: cell 28\""
+        },
+        {
+          "check": "strip.confirmDisabled",
+          "ok": true,
+          "detail": "{\"label\":\"Confirm move\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Confirm move\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":315,\"pw\":221,\"ph\":44,\"inStrip\":true},{\"label\":\"Cancel\",\"minH\":44,\"visible\":true,\"px\":250,\"py\":315,\"pw\":119,\"ph\":44,\"inStrip\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 30,
+      "sequence": "H",
+      "name": "phone-dismantle-impact",
+      "file": "h3-phone-dismantle-impact.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":201,\"w\":370,\"h\":146,\"visible\":true}"
+        },
+        {
+          "check": "strip.armed",
+          "ok": true,
+          "detail": "armed=false"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=true"
+        },
+        {
+          "check": "strip.impact~Build price returns +18",
+          "ok": true,
+          "detail": "got \"Build price returns +18\" want~\"Build price returns +18\""
+        },
+        {
+          "check": "strip.confirmLabel",
+          "ok": true,
+          "detail": "{\"label\":\"Dismantle machine\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Dismantle machine\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":294,\"pw\":201,\"ph\":44,\"inStrip\":true},{\"label\":\"Keep machine\",\"minH\":44,\"visible\":true,\"px\":230,\"py\":294,\"pw\":139,\"ph\":44,\"inStrip\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 31,
+      "sequence": "H",
+      "name": "phone-dismantle-armed",
+      "file": "h4-phone-dismantle-armed.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":201,\"w\":370,\"h\":183,\"visible\":true}"
+        },
+        {
+          "check": "strip.armed",
+          "ok": true,
+          "detail": "armed=true"
+        },
+        {
+          "check": "strip.confirmLabel",
+          "ok": true,
+          "detail": "{\"label\":\"Tap again to dismantle\",\"disabled\":false}"
+        },
+        {
+          "check": "strip.actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Tap again to dismantle\",\"minH\":44,\"visible\":true,\"px\":23,\"py\":331,\"pw\":209,\"ph\":44,\"inStrip\":true},{\"label\":\"Keep machine\",\"minH\":44,\"visible\":true,\"px\":238,\"py\":331,\"pw\":131,\"ph\":44,\"inStrip\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 32,
+      "sequence": "I",
+      "name": "ts2-place",
+      "file": "i1-phone-ts2-place.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.placement.present",
+          "ok": true,
+          "detail": "strips=placement"
+        },
+        {
+          "check": "strip.placement.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":359,\"w\":370,\"h\":232,\"visible\":true}"
+        },
+        {
+          "check": "strip.valid",
+          "ok": true,
+          "detail": "valid=true"
+        },
+        {
+          "check": "strip.verdict",
+          "ok": true,
+          "detail": "verdict=ok"
+        },
+        {
+          "check": "strip.cell~Cell 28",
+          "ok": true,
+          "detail": "got \"Cell 28\" want~\"Cell 28\""
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 33,
+      "sequence": "I",
+      "name": "ts2-dismantle",
+      "file": "i2-phone-ts2-dismantle.png",
+      "viewport": {
+        "w": 390,
+        "h": 844
+      },
+      "mode": "phone",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":390,\"sh\":844,\"cw\":390,\"ch\":844}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":false,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=phone"
+        },
+        {
+          "check": "strip.dismantle.present",
+          "ok": true,
+          "detail": "strips=dismantle"
+        },
+        {
+          "check": "strip.dismantle.painted",
+          "ok": true,
+          "detail": "{\"x\":10,\"y\":359,\"w\":370,\"h\":231,\"visible\":true}"
+        },
+        {
+          "check": "strip.armed",
+          "ok": true,
+          "detail": "armed=false"
+        },
+        {
+          "check": "strip.fits",
+          "ok": true,
+          "detail": "fits=true"
+        },
+        {
+          "check": "strip.impact~Build price returns +18",
+          "ok": true,
+          "detail": "got \"Build price returns +18\" want~\"Build price returns +18\""
+        },
+        {
+          "check": "strip.actionsReachable",
+          "ok": true,
+          "detail": "[{\"label\":\"Dismantle machine\",\"minH\":51,\"visible\":true,\"px\":21,\"py\":533,\"pw\":199,\"ph\":51,\"inStrip\":true},{\"label\":\"Keep machine\",\"minH\":51,\"visible\":true,\"px\":222,\"py\":533,\"pw\":149,\"ph\":51,\"inStrip\":true}]"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 34,
+      "sequence": "J",
+      "name": "commands-done",
+      "file": "j1-desk-commands-done.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "strip.placement.gone",
+          "ok": true,
+          "detail": "strips="
+        },
+        {
+          "check": "panelGone",
+          "ok": true,
+          "detail": "panel still mounted"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "frame": 35,
+      "sequence": "J",
+      "name": "reloaded",
+      "file": "j2-desk-reloaded.png",
+      "viewport": {
+        "w": 1280,
+        "h": 800
+      },
+      "mode": "rail",
+      "checks": [
+        {
+          "check": "noBodyScroll",
+          "ok": true,
+          "detail": "{\"sw\":1280,\"sh\":800,\"cw\":1280,\"ch\":800}"
+        },
+        {
+          "check": "bodyHidden",
+          "ok": true,
+          "detail": "hidden"
+        },
+        {
+          "check": "ink",
+          "ok": true,
+          "detail": "ink=1"
+        },
+        {
+          "check": "markers",
+          "ok": true,
+          "detail": "{\"hud\":true,\"hudLead\":true,\"dock\":true,\"canvas\":true,\"rail\":true,\"zoomGroup\":true}"
+        },
+        {
+          "check": "mode",
+          "ok": true,
+          "detail": "mode=rail"
+        },
+        {
+          "check": "floors",
+          "ok": true,
+          "detail": "[]"
+        },
+        {
+          "check": "reach",
+          "ok": true,
+          "detail": "[]"
+        }
+      ],
+      "passed": true
+    }
+  ]
+}
