@@ -1,10 +1,10 @@
 {
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/62",
   "pr": "https://github.com/darkmatter2222/Rustwake/pull/105",
-  "headSha": "b8b3ad1430db434c4ea1f8910af0a2b7dde9aceb",
+  "headSha": "32d6ed877e7a9948f01eea24bde58546f57fc155",
   "branch": "rw/68-regression",
-  "server": "vite dev (this worktree) at http://127.0.0.1:5172/",
-  "capturedAt": "2026-11-13T09:32:22.834Z",
+  "server": "vite dev (this worktree) at http://127.0.0.1:4200/",
+  "capturedAt": "2026-11-13T12:19:59.343Z",
   "seed": {
     "tick": 372,
     "machines": 1,
@@ -480,7 +480,7 @@
             {
               "name": "old writer lease cleared (fresh claim after reload)",
               "pass": true,
-              "detail": "{\"oldLeaseOwner\":\"t1-a5vb\",\"newLeaseOwner\":\"t1-9hga\"}"
+              "detail": "{\"oldLeaseOwner\":\"t1-8yck\",\"newLeaseOwner\":\"t1-4kn5\"}"
             },
             {
               "name": "fresh title after reload",
@@ -1291,7 +1291,7 @@
             {
               "name": "old writer lease cleared (fresh claim after reload)",
               "pass": true,
-              "detail": "{\"oldLeaseOwner\":\"t1-k3fz\",\"newLeaseOwner\":\"t1-bpt9\"}"
+              "detail": "{\"oldLeaseOwner\":\"t1-f0qv\",\"newLeaseOwner\":\"t1-kc6p\"}"
             },
             {
               "name": "fresh title after reload",
@@ -1643,5 +1643,5 @@
       "screenshots": 8
     }
   },
-  "serverLogTail": "\n  \u001b[32m\u001b[1mVITE\u001b[22m v5.4.11\u001b[39m  \u001b[2mready in \u001b[0m\u001b[1m303\u001b[22m\u001b[2m\u001b[0m ms\u001b[22m\n\n  \u001b[32m➜\u001b[39m  \u001b[1mLocal\u001b[22m:   \u001b[36mhttp://127.0.0.1:\u001b[1m5172\u001b[22m/\u001b[39m\n"
+  "serverLogTail": "\n  \u001b[32m\u001b[1mVITE\u001b[22m v5.4.11\u001b[39m  \u001b[2mready in \u001b[0m\u001b[1m220\u001b[22m\u001b[2m\u001b[0m ms\u001b[22m\n\n  \u001b[32m➜\u001b[39m  \u001b[1mLocal\u001b[22m:   \u001b[36mhttp://127.0.0.1:\u001b[1m4200\u001b[22m/\u001b[39m\n"
 }
