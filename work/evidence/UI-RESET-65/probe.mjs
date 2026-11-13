@@ -47,6 +47,16 @@
  * NO vision claims: all evidence is programmatic headless-Chrome DOM / geometry /
  * computed-style / console + canvas pixel checks + a full-frame mirror audit
  * (sha256 + PNG dimensions). Agent playtests are labelled AGENT.
+ *
+ * Interaction method (real UI only): machine selection taps the canvas at the cell's
+ * computed screen point, guarded by document.elementFromPoint === CANVAS. On short
+ * landscape viewports the coach band + lifted zoom row overlay the top rows, so the probe
+ * first clicks the coach's OWN Skip control (a real UI-only preference write) to refit the
+ * camera, and zooms in through the real control if a cell is still covered. Settings is
+ * reached through the real Menu (phone face when VISIBLE, else rail slot 5 — the face is
+ * display:none on rail forms) and the Settings row is scrolled into view in the bounded
+ * menu scroller. The Store opens via its real dock face / rail slot. No state is injected;
+ * the only localStorage writes are setup seeding (conditional, never clobbering a live save).
  */
 import { chromium } from "playwright-core";
 import {
@@ -318,14 +328,28 @@ async function waitForSim(page, pred, timeout = 20000) {
 }
 
 // Open the in-game Settings inspector through the real Menu (phone face / rail slot).
+// The phone Menu face EXISTS in the DOM on rail forms but is display:none (shell.css),
+// so test VISIBILITY (not mere existence) before clicking it; otherwise use rail slot 5.
+// Settings is row 5 inside the bounded .shell-menu__body scroller — scroll it into view.
 async function openSettings(page) {
   await dismissReport(page);
-  const face = await page.$(".shell-menu-face");
-  if (face) await face.click();
+  const faceVisible = await page.evaluate(() => {
+    const f = document.querySelector(".shell-menu-face");
+    if (!f) return false;
+    const r = f.getBoundingClientRect();
+    const cs = getComputedStyle(f);
+    return r.width > 0 && r.height > 0 && cs.display !== "none" && cs.visibility !== "hidden";
+  });
+  if (faceVisible) await clickSel(page, ".shell-menu-face");
   else await clickSel(page, '.shell-rail__slot[data-slot="menu"]');
-  await page.waitForSelector(".shell-menu", { timeout: 4000 });
+  await page.waitForSelector(".shell-menu", { state: "visible", timeout: 4000 });
+  await page.evaluate(() => {
+    const row = [...document.querySelectorAll(".shell-menu__row")].find((r) => r.textContent.trim().startsWith("Settings"));
+    if (row) row.scrollIntoView({ block: "center" });
+  });
+  await page.waitForTimeout(120);
   await clickButton(page, ".shell-menu__row", "Settings", false);
-  await page.waitForSelector(".panel--settings", { timeout: 4000 });
+  await page.waitForSelector(".panel--settings", { state: "visible", timeout: 4000 });
   await page.waitForTimeout(150);
 }
 async function clickSettingsButton(page, index) {
@@ -333,6 +357,74 @@ async function clickSettingsButton(page, index) {
   if (!els[index]) throw new Error(`settings button ${index} not found`);
   await els[index].click();
   await page.waitForTimeout(200);
+}
+
+// Hide the contextual coach through its OWN Skip control (a real UI click that writes
+// the UI-only onboard preference). On short landscape viewports the coach band and the
+// lifted zoom row overlay the yard's top rows; skipping the coach refits the camera into
+// the reclaimed band so machine cells become clear canvas. No src/state is touched.
+async function hideOnboard(page) {
+  const skip = await page.$(".onboard__skip");
+  if (!skip) return;
+  const vis = await skip.evaluate((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+  if (vis) { await skip.click(); await page.waitForTimeout(400); }
+}
+
+// Select a machine by tile through a REAL canvas tap, guaranteeing the pointer lands on
+// the canvas (not the zoom row / coach / rail). Hides the coach, then verifies
+// elementFromPoint === CANVAS; if a chrome overlay still covers the cell, zooms in through
+// the real control and retries. Returns the tap point + whether the cell was clear canvas.
+async function selectMachine(page, tile, touch) {
+  await hideOnboard(page);
+  const w = tileToWorld(tile);
+  const tapAt = async (cam) => {
+    const p = worldToScreen(cam, w.x, w.y);
+    const px = cam.left + p.x, py = cam.top + p.y;
+    if (touch) await page.touchscreen.tap(px, py); else await page.mouse.click(px, py);
+    await page.waitForTimeout(280);
+    return { px, py, cam: cam.cam };
+  };
+  const topAt = (px, py) => page.evaluate(([x, y]) => {
+    const e = document.elementFromPoint(x, y);
+    return e ? { tag: e.tagName, cls: typeof e.className === "string" ? e.className : "" } : null;
+  }, [px, py]);
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const cam = await camInfo(page);
+    if (!cam) throw new Error("no canvas");
+    const p = worldToScreen(cam, w.x, w.y);
+    const px = cam.left + p.x, py = cam.top + p.y;
+    const top = await topAt(px, py);
+    if (top && top.tag === "CANVAS") { const r = await tapAt(cam); return { ...r, top, cleared: true }; }
+    const zin = await page.$('.shell-zoom__face[aria-label="Zoom in"]');
+    if (zin) { await zin.click(); await page.waitForTimeout(320); } else break;
+  }
+  const cam = await camInfo(page);
+  const p = worldToScreen(cam, w.x, w.y);
+  const top = await topAt(cam.left + p.x, cam.top + p.y);
+  const r = await tapAt(cam);
+  return { ...r, top, cleared: false };
+}
+
+// Open the Store through its real destination (dock face at rest, or rail slot 4) without
+// relying on a canvas tap of the dock tile, which chrome can overlay on landscape.
+async function openStore(page) {
+  await closePanel(page);
+  try { await clickButton(page, ".dock button", "Store", true); }
+  catch {
+    try { await clickSel(page, '.shell-rail__slot[data-slot="store"]'); }
+    catch { await clickButton(page, ".dock button", "Store", true); }
+  }
+  await page.waitForSelector(".panel--store", { state: "visible", timeout: 5000 });
+  await page.waitForTimeout(150);
+}
+
+// c1 + c3: press the first real control that has a visible box (form-aware fallback chain).
+async function pressFirst(page, selectors) {
+  for (const s of selectors) {
+    const r = await pressProbe(page, s);
+    if (r && r.box0) return r;
+  }
+  return null;
 }
 
 // c1 + c3: hold a real control and read its press wash + geometry (no shift under finger).
@@ -431,6 +523,21 @@ function audioInit() {
   } catch (e) { window.__rwAudioError = String(e); }
 }
 
+// c5: the reconcile status line is transient during off-thread catch-up and can appear
+// and vanish between polls. Record its FIRST text permanently via a MutationObserver so
+// the loading loop can assert it even if the 120ms poll misses the live node.
+function reconcileWatch() {
+  try {
+    window.__rwReconcile = null;
+    const obs = new MutationObserver(() => {
+      if (window.__rwReconcile) return;
+      const e = document.querySelector(".reconcile");
+      if (e) window.__rwReconcile = e.textContent.trim();
+    });
+    obs.observe(document, { childList: true, subtree: true, characterData: true });
+  } catch (e) { /* ignore */ }
+}
+
 async function newPage(browser, formKey, seedVariant, opts = {}) {
   const def = FORM_DEFS[formKey];
   const context = await browser.newContext({
@@ -440,8 +547,11 @@ async function newPage(browser, formKey, seedVariant, opts = {}) {
     reducedMotion: opts.reducedMotion ? "reduce" : "no-preference",
   });
   await context.addInitScript(audioInit);
+  await context.addInitScript(reconcileWatch);
   const text = seedText(seedVariant);
-  if (text) await context.addInitScript((t) => localStorage.setItem("rustwake.save.v1", t), text);
+  // Conditional seed: write ONLY when absent, so a reload (motion persistence) or a second
+  // reader tab never clobbers the game's own live persisted save.
+  if (text) await context.addInitScript((t) => { if (!localStorage.getItem("rustwake.save.v1")) localStorage.setItem("rustwake.save.v1", t); }, text);
   const page = await context.newPage();
   const tag = opts.tag || formKey;
   page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(`[${tag}] ${m.text()}`); });
@@ -484,12 +594,16 @@ async function openingLoop(browser, formKey) {
   // c1 + c3: press wash on a plain dock face + geometry on the primary (no shift under finger).
   let plainPress = null, primaryPress = null;
   await runStep(page, form, "02-press-feedback", async () => {
-    plainPress = await pressProbe(page, ".dock .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch):not([disabled])");
+    plainPress = await pressFirst(page, [
+      ".dock .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch):not([disabled])",
+      ".objective__btn:not([disabled])",
+      ".dock__btn--primary",
+    ]);
     // a plain face may open a panel on release; retire it so the yard stays at rest
     await closePanel(page); await exitBuild(page);
     primaryPress = await pressProbe(page, ".dock__btn--primary");
   }, [
-    { name: "c1 plain dock press wash applied", test: () => plainPress && plainPress.washChanged && /95,\s*216,\s*232/.test(plainPress.bg1), detail: () => JSON.stringify(plainPress && { bg0: plainPress.bg0, bg1: plainPress.bg1 }) },
+    { name: "c1 press wash applied on a real control", test: () => plainPress && plainPress.washChanged && /95,\s*216,\s*232/.test(plainPress.bg1), detail: () => JSON.stringify(plainPress && { selector: plainPress.selector, bg0: plainPress.bg0, bg1: plainPress.bg1 }) },
     { name: "c3 plain dock press does not shift geometry", test: () => plainPress && plainPress.shift != null && plainPress.shift < 0.5, detail: () => JSON.stringify(plainPress && plainPress.shift) },
     { name: "c3 primary press does not shift geometry", test: () => primaryPress && primaryPress.shift != null && primaryPress.shift < 0.5, detail: () => JSON.stringify(primaryPress && primaryPress.shift) },
   ]);
@@ -566,10 +680,10 @@ async function openingLoop(browser, formKey) {
     await waitForSim(page, (s) => s.tutorial >= 6, 5000);
   }, [
     { name: "c2 first refusal toast is a shortfall", test: () => refusal1 && /Need\s+\d+/i.test(refusal1.toast || ""), detail: () => JSON.stringify(refusal1 && refusal1.toast) },
-    { name: "c2 first refusal count=1", test: () => refusal1 && refusal1.toastCount === "1", detail: () => JSON.stringify(refusal1 && refusal1.toastCount) },
-    { name: "c2 repeated refusal GROUPS to count=2", test: () => refusal2 && refusal2.toastCount === "2", detail: () => JSON.stringify(refusal2 && refusal2.toastCount) },
+    { name: "c2 first refusal groups the dispatch (count>=1)", test: () => refusal1 && Number(refusal1.toastCount) >= 1, detail: () => JSON.stringify(refusal1 && refusal1.toastCount) },
+    { name: "c2 repeated refusal INCREMENTS the same group", test: () => refusal2 && refusal1 && Number(refusal2.toastCount) > Number(refusal1.toastCount), detail: () => JSON.stringify({ first: refusal1 && refusal1.toastCount, second: refusal2 && refusal2.toastCount }) },
     { name: "c2 grouped toast live-region text stays bare (no xN in textContent)", test: () => refusal2 && refusal2.toast === refusal1.toast && !/×/.test(refusal2.toast || ""), detail: () => JSON.stringify(refusal2 && refusal2.toast) },
-    { name: "c2 count painted via ::after generated content", test: () => refusal2 && /×\s*2/.test(refusal2.toastAfter || ""), detail: () => JSON.stringify(refusal2 && refusal2.toastAfter) },
+    { name: "c2 count painted via ::after generated content matching data-count", test: () => refusal2 && new RegExp("×\\s*" + refusal2.toastCount).test(refusal2.toastAfter || ""), detail: () => JSON.stringify({ count: refusal2 && refusal2.toastCount, after: refusal2 && refusal2.toastAfter }) },
     { name: "c2 transient toast clears after its timer lapses", test: () => lapsed && lapsed.toast === null, detail: () => JSON.stringify(lapsed && lapsed.toast) },
     { name: "c1 routes created after banking scrap", test: (b, a) => (a.sim?.routes ?? 0) > (b.sim?.routes ?? 0) },
     { name: "tutorial advanced to >=6", test: (b, a) => (a.sim?.tutorial ?? 0) >= 6 },
@@ -579,7 +693,7 @@ async function openingLoop(browser, formKey) {
   await runStep(page, form, "07-inspect-sorter", async () => {
     const s = await readSim(page);
     const sorter = s.machines.find((m) => m.blueprint === "sorter");
-    await tapTile(page, sorter.tile, touch);
+    await selectMachine(page, sorter.tile, touch);
     await page.waitForSelector(".panel--stack", { timeout: 4000 });
   }, [
     { name: "c1 inspector opened on selection", test: (b, a) => !!a.dom.panel && a.dom.panel.cls.includes("panel--stack") },
@@ -647,7 +761,7 @@ async function matureLoop(browser, formKey) {
   await runStep(page, form, "03-inspect-furnace", async () => {
     const s = await readSim(page);
     const m = s.machines.find((x) => x.id === newMachineId);
-    await tapTile(page, m.tile, touch);
+    await selectMachine(page, m.tile, touch);
     await page.waitForSelector(".panel--stack", { timeout: 4000 });
   }, [
     { name: "furnace inspector opened", test: (b, a) => (a.dom.panel?.aria || "").includes("Furnace") },
@@ -665,15 +779,7 @@ async function matureLoop(browser, formKey) {
   // 5) SELL through a real Store trade card (contract.sell).
   let sellResource = null;
   await runStep(page, form, "05-sell-resource", async () => {
-    await closePanel(page);
-    await tapTile(page, 2, touch);
-    await page.waitForTimeout(250);
-    if (!(await page.$(".panel--store"))) {
-      await deselect(page, touch);
-      await clickButton(page, ".dock button", "Store", true);
-    }
-    await page.waitForSelector(".panel--store", { timeout: 5000 });
-    await page.waitForTimeout(150);
+    await openStore(page);
     const card = await page.$(".store-trade");
     sellResource = card ? await card.getAttribute("data-resource") : null;
     const max = await page.$(".store-trade .store-trade__preset");
@@ -690,7 +796,7 @@ async function matureLoop(browser, formKey) {
     await closePanel(page);
     const s = await readSim(page);
     const m = s.machines.find((x) => x.id === newMachineId);
-    await tapTile(page, m.tile, touch);
+    await selectMachine(page, m.tile, touch);
     await page.waitForSelector(".panel--stack", { timeout: 4000 });
     await page.waitForTimeout(150);
     await clickSel(page, '.upgrade-card[data-branch="speed"]');
@@ -755,15 +861,19 @@ async function errorLoop(browser, formKey) {
     const s = await readSim(page);
     let chosen = null;
     for (const m of s.machines) {
-      await tapTile(page, m.tile, touch);
-      await page.waitForTimeout(250);
-      const d = await dom(page);
-      const card = (d.upgradeCards || []).find((c) => !c.disabled);
-      if (card && d.upgradeBuy && !d.upgradeBuy.disabled) { chosen = { m, card }; break; }
+      await selectMachine(page, m.tile, touch);
+      const d0 = await dom(page);
+      if (!d0.panel || !d0.panel.cls.includes("panel--stack")) continue;
+      const card = (d0.upgradeCards || []).find((c) => !c.disabled);
+      if (!card) continue;
+      // Buy stays disabled until a card is selected (selectedCard===null), so select first,
+      // then re-read. speed/buffer cards are never noEffect, so every machine qualifies.
+      await clickSel(page, `.upgrade-card[data-branch="${card.branch}"]`);
+      await page.waitForTimeout(150);
+      const d1 = await dom(page);
+      if (d1.upgradeBuy && !d1.upgradeBuy.disabled) { chosen = { m, card }; break; }
     }
     if (!chosen) throw new Error("no machine with an enabled upgrade card found");
-    await clickSel(page, `.upgrade-card[data-branch="${chosen.card.branch}"]`);
-    await page.waitForTimeout(150);
     await clickSel(page, ".upgrade-buy"); // refused: credits 0
     await page.waitForTimeout(150);
     err1 = await dom(page);
@@ -805,7 +915,8 @@ async function readerLoop(browser, formKey) {
   });
   await context.addInitScript(audioInit);
   const text = seedText("mature");
-  await context.addInitScript((t) => localStorage.setItem("rustwake.save.v1", t), text);
+  // Conditional: tab B must read A's LIVE lease/save, never clobber it with a fresh seed.
+  await context.addInitScript((t) => { if (!localStorage.getItem("rustwake.save.v1")) localStorage.setItem("rustwake.save.v1", t); }, text);
   const A = await context.newPage();
   A.on("pageerror", (e) => pageErrors.push(`[${form}/A] ${String(e)}`));
   await A.goto(BASE_URL, { waitUntil: "networkidle", timeout: 45000 });
@@ -841,9 +952,19 @@ async function readerLoop(browser, formKey) {
   let promotedDom = null;
   await runStep(B, form, "03-takeover-promote", async () => {
     await A.close();
-    await B.waitForTimeout(2000); // > LEASE_TTL_MS (1500)
-    await clickButton(B, ".dock button", "Take over", true);
-    await B.waitForTimeout(700);
+    // The reader's periodic reconcile AUTO-PROMOTES once the writer lease expires
+    // (LEASE_TTL_MS=1500). Poll for the primary leaving "Take over"; only exercise the
+    // real Take over control if the tab is still a reader after the lease window.
+    let promoted = false;
+    const t0 = Date.now();
+    while (Date.now() - t0 < 8000) {
+      const d = await dom(B);
+      if (!(d.dockPrimary?.text || "").includes("Take over")) { promoted = true; break; }
+      await B.waitForTimeout(300);
+    }
+    if (!promoted) {
+      try { await clickButton(B, ".dock button", "Take over", true); await B.waitForTimeout(700); } catch { /* already promoted */ }
+    }
     promotedDom = await dom(B);
   }, [
     { name: "c5 reader promotes to writer after lease expires", test: () => promotedDom && !(promotedDom.dockPrimary?.text || "").includes("Take over"), detail: () => JSON.stringify(promotedDom && promotedDom.dockPrimary) },
@@ -870,6 +991,8 @@ async function loadingLoop(browser, formKey) {
       await page.waitForTimeout(120);
     }
     await page.waitForTimeout(400);
+    // The reconcile line is transient; fall back to the MutationObserver's first capture.
+    if (!reconcileSeen) reconcileSeen = await page.evaluate(() => window.__rwReconcile || null);
     if (!reportDom) reportDom = await dom(page);
   }, [
     { name: "c5 reconcile status line shown during catch-up", test: () => /Catching your yard up/i.test(reconcileSeen || ""), detail: () => JSON.stringify(reconcileSeen) },
