@@ -1,10 +1,10 @@
 {
   "issue": 58,
   "role": "developer",
-  "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
-  "baseUrl": "http://127.0.0.1:4198/",
+  "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+  "baseUrl": "http://127.0.0.1:4196/",
   "branch": "rw/58-research",
-  "generatedAt": "2026-11-13T09:23:58.836Z",
+  "generatedAt": "2026-11-13T12:04:00.215Z",
   "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "method": "headless Chrome DOM + geometry + persisted-state mirror only; no vision. Screenshots are hashed mirrors, not inspected visually.",
   "fixtureScrutiny": {
@@ -83,10 +83,10 @@
     "frames": [
       {
         "frame": "desktop-completed/00-open-after.png",
-        "bytes": 128647,
+        "bytes": 128773,
         "width": 1920,
         "height": 1080,
-        "sha256": "46d7f16d926a5ea8d1ee046b0d00d5bf2e46e6f827de42214ca5d8a939bda2a0",
+        "sha256": "7291d95cfaefdddbc736c09d6c518cc4903b7d9641249a743381518021459c74",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -94,10 +94,10 @@
       },
       {
         "frame": "desktop-completed/00-open-before.png",
-        "bytes": 69325,
+        "bytes": 69329,
         "width": 1920,
         "height": 1080,
-        "sha256": "a3f88b410c488424b8ff5b369b07e7695589bd926b20e5ad4d3c12d187f8ef92",
+        "sha256": "08a7382d305b7779f59ed9dd9de43d6c61705f32c4f839e8d70cb222453d3127",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -138,10 +138,10 @@
       },
       {
         "frame": "desktop-large/00-open-before.png",
-        "bytes": 121025,
+        "bytes": 121183,
         "width": 1920,
         "height": 1080,
-        "sha256": "23f7d6f1eb332ff96d2b334bd7984c3c741e50785aa025b1d1a5b3ebaf130ef7",
+        "sha256": "f616d543dbe240c64cf3516aa22c5650c5e6fa4b95f0eed874c650b7210f1c17",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -149,10 +149,10 @@
       },
       {
         "frame": "desktop-large/01-scroll-tail-after.png",
-        "bytes": 181933,
+        "bytes": 181722,
         "width": 1920,
         "height": 1080,
-        "sha256": "8d17e2e02248ded507bf1283295ad790efe1be4155b67255fa936b19c1a75eb4",
+        "sha256": "33f9a8ed59d7765d0b5f0a479df6b4dd0107d2b05feb6d3b9367169616432941",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -160,10 +160,10 @@
       },
       {
         "frame": "desktop-large/01-scroll-tail-before.png",
-        "bytes": 215071,
+        "bytes": 214842,
         "width": 1920,
         "height": 1080,
-        "sha256": "fbbbf957addf77580d21ac44c8ccea7a269e5171cb374421ee90cab1996f2613",
+        "sha256": "0465cada7d5405d802b14d8f7eb2bf09aa4835902968225563bed1004df13c47",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -171,10 +171,10 @@
       },
       {
         "frame": "desktop-large/02-scroll-head-after.png",
-        "bytes": 180911,
+        "bytes": 180765,
         "width": 1920,
         "height": 1080,
-        "sha256": "1a369f9866e89d0a7d189be572710b0c96be1c70429ed35b3a97549073222342",
+        "sha256": "f2c49aca26f2acf671add194b7f8ff359830916d2af8d3080422eb5ab3ef801a",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -182,10 +182,10 @@
       },
       {
         "frame": "desktop-large/02-scroll-head-before.png",
-        "bytes": 181570,
+        "bytes": 181631,
         "width": 1920,
         "height": 1080,
-        "sha256": "6860faec969c2da56de46ba981422ec40353b7d4254bec2fd988e50afadadfb5",
+        "sha256": "a0ed31befbaae6ec47002edca35720afebcc61dd1e32a4be978753bbc172cbfd",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -193,10 +193,10 @@
       },
       {
         "frame": "desktop-large/03-buy-after.png",
-        "bytes": 170217,
+        "bytes": 170603,
         "width": 1920,
         "height": 1080,
-        "sha256": "43b3ce8d7ab6d5406a48c5505c8a0ff6e71c33cdb71b9a6105eddbef94613b34",
+        "sha256": "f2fdda0aa475bba26803a9c048084fa50650da9afdbc356d9c444948d610bfea",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -204,10 +204,10 @@
       },
       {
         "frame": "desktop-large/03-buy-before.png",
-        "bytes": 180916,
+        "bytes": 180952,
         "width": 1920,
         "height": 1080,
-        "sha256": "4ed791dd21ef554755abf8acc698b386eb3761379acbd7cb05ca1248c5aaf917",
+        "sha256": "9e7675894b32f1eda44ca0b072b5364e3cc4941d5534037fdcf19d795f2402e1",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -237,10 +237,10 @@
       },
       {
         "frame": "desktop-partial/00-open-after.png",
-        "bytes": 145509,
+        "bytes": 145238,
         "width": 1920,
         "height": 1080,
-        "sha256": "e52c7599902f065c40dd9a734422bb93a47fba4e3ec5857944640e59c3c77358",
+        "sha256": "53e6b7a82f1f825b72e36f055a396b2f1088a4ada98786eda263788ea40a25f0",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -248,10 +248,10 @@
       },
       {
         "frame": "desktop-partial/00-open-before.png",
-        "bytes": 69257,
+        "bytes": 69194,
         "width": 1920,
         "height": 1080,
-        "sha256": "acbe84baf5b5cfc90ecf9f6149d056a1981cf23f1499d2b30343d0eb8db60db6",
+        "sha256": "5b6a00907a0ca52c633b79fda35648491b7ed35147655bd909b82d1b47188eb1",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -259,10 +259,10 @@
       },
       {
         "frame": "desktop-partial/01-buy-buffers-after.png",
-        "bytes": 139321,
+        "bytes": 139358,
         "width": 1920,
         "height": 1080,
-        "sha256": "9b9edd30d1310be706bcdedc2c2326e8062d40ab06afc26dadc0316b41f92125",
+        "sha256": "8317c4d0f2106b7ee6cfca5609c70dd34e772013b9be0a792992ad4021baf030",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -270,10 +270,10 @@
       },
       {
         "frame": "desktop-partial/01-buy-buffers-before.png",
-        "bytes": 145119,
+        "bytes": 145140,
         "width": 1920,
         "height": 1080,
-        "sha256": "ebf17069bbf5514a27c5d784d20415c2d7dba36e759c757f8cc8e1dd3b0228fc",
+        "sha256": "c8b3fcec1faec252acf121e61b8216d055af1c6016ea9928a43f6c7310f06d3b",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -281,10 +281,10 @@
       },
       {
         "frame": "desktop-partial/02-scroll-overview-after.png",
-        "bytes": 139191,
+        "bytes": 139173,
         "width": 1920,
         "height": 1080,
-        "sha256": "fa7be2d80e11b85b5ba9c5376096e90eeea9dfdd1e555f69df7f69b0787ea62c",
+        "sha256": "3a74cefe7862aef4043d4cd3ee1e4a00914d58b3d89a59c4554f2ad9f44086ca",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -303,10 +303,10 @@
       },
       {
         "frame": "desktop-partial/03-details-dispatch-after.png",
-        "bytes": 131379,
+        "bytes": 131475,
         "width": 1920,
         "height": 1080,
-        "sha256": "15e1b8fe8960e5ad14777892b21e314e364e424a3e14d25813dc26b952ea7103",
+        "sha256": "a98f4d6c88aa91b34e938123ef36d265306b62e9083d8ae4bfa91a8161354889",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -314,10 +314,10 @@
       },
       {
         "frame": "desktop-partial/03-details-dispatch-before.png",
-        "bytes": 139443,
+        "bytes": 139022,
         "width": 1920,
         "height": 1080,
-        "sha256": "51dc7639185587071dd890cc7cf455f312716707722e3e2a92783e79830df062",
+        "sha256": "989cfbf365c8b8484fbe2202f6abf078736a7e76de142605668d91b1d647cdd4",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -325,10 +325,10 @@
       },
       {
         "frame": "desktop-partial/04-close-after.png",
-        "bytes": 67203,
+        "bytes": 67092,
         "width": 1920,
         "height": 1080,
-        "sha256": "b5dac8f97091a0019c5205edd8e70e5cdac02b0f2b75163e2dc4619131bc487f",
+        "sha256": "1a8422ccda9f072a7de758a0e498e0b5580b4e4a606eac18c3e97b15f7f33604",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -336,10 +336,10 @@
       },
       {
         "frame": "desktop-partial/04-close-before.png",
-        "bytes": 131276,
+        "bytes": 131443,
         "width": 1920,
         "height": 1080,
-        "sha256": "a1563e1cfde1f1455cda1baa1e5359d34ba31b4a052d622f24f9f820a482129a",
+        "sha256": "35f5207e63ae1c303572df629d410936e27b1278fac8781ee65399627881580e",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -347,10 +347,10 @@
       },
       {
         "frame": "phone-completed/00-open-after.png",
-        "bytes": 224632,
+        "bytes": 224431,
         "width": 780,
         "height": 1688,
-        "sha256": "49e1b9b76881fb7e0be20c563fd4640fa6df95fe379d3700a6e7a19baf1642da",
+        "sha256": "48d074068cdf78f3029b9523e67c667fa0150b927dd49bf8e9329d87aac3b2e8",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -358,10 +358,10 @@
       },
       {
         "frame": "phone-completed/00-open-before.png",
-        "bytes": 131574,
+        "bytes": 131596,
         "width": 780,
         "height": 1688,
-        "sha256": "8ac376f3bc2adaa6ff63f0f26b6e818ef43f40edbaf659efbc65af0feb57b33d",
+        "sha256": "7f649157c97003cf9de54c5ef1dfab20238360065704b0a3a5dd5472a779342d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -391,10 +391,10 @@
       },
       {
         "frame": "phone-large/00-open-after.png",
-        "bytes": 233044,
+        "bytes": 233204,
         "width": 780,
         "height": 1688,
-        "sha256": "4ce57cc62994932a523890677907b0615308300088cb6b3ca829f6e8b0f0e813",
+        "sha256": "1623ad66e4f92cf0cece1972023abe34f3393228dba10fb613c5f580494ec49c",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -402,10 +402,10 @@
       },
       {
         "frame": "phone-large/00-open-before.png",
-        "bytes": 152286,
+        "bytes": 152531,
         "width": 780,
         "height": 1688,
-        "sha256": "9d458a725dd90eed398bc2bb6cba196f8a1e1c3b99b392339203d3fb51d9e3f5",
+        "sha256": "9a7233b041dcd6135e368a6ddabcc05c7b89242ecb829f11b185fd8367c9d57d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -413,10 +413,10 @@
       },
       {
         "frame": "phone-large/01-scroll-tail-after.png",
-        "bytes": 212036,
+        "bytes": 212154,
         "width": 780,
         "height": 1688,
-        "sha256": "dbeed0478ca1e1505744175b269d89b55343fe87b5faf81b70bdaa2a6dc6ad82",
+        "sha256": "94cf3947d5661c2d3d66dadb678ea779b75c70f24c094c5c2d59fa24bcd7e7d8",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -424,10 +424,10 @@
       },
       {
         "frame": "phone-large/01-scroll-tail-before.png",
-        "bytes": 233431,
+        "bytes": 232861,
         "width": 780,
         "height": 1688,
-        "sha256": "a6c482b71fdb8e92c071c5a6b063fa3c04de6d1ff16ca9f21ba84fee1cbb8ef2",
+        "sha256": "cb5a0052dcb6e9d9634925eb63a85a68fe1e45cf3b3eec539504740a80542ca3",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -435,10 +435,10 @@
       },
       {
         "frame": "phone-large/02-scroll-head-after.png",
-        "bytes": 207857,
+        "bytes": 208149,
         "width": 780,
         "height": 1688,
-        "sha256": "a7cc7cc4a79077bf469351ce3f2a6d8414e67a566be5d7d3ab48ece36bf4f185",
+        "sha256": "3932ac0a33f1d9502a099f66a556cb5559187a8563ff69f37c5b3f6c16b9d17e",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -446,10 +446,10 @@
       },
       {
         "frame": "phone-large/02-scroll-head-before.png",
-        "bytes": 212285,
+        "bytes": 212086,
         "width": 780,
         "height": 1688,
-        "sha256": "4ed69cf8253b61490e909679451d1b3d5a17f1fa7edd0c0e1855e49b96a3895b",
+        "sha256": "3b728c615f5081fc119e3164dee2a7622cb6b2ac448adaedc5a244b58fb93dd5",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -457,10 +457,10 @@
       },
       {
         "frame": "phone-large/03-buy-after.png",
-        "bytes": 195328,
+        "bytes": 194471,
         "width": 780,
         "height": 1688,
-        "sha256": "03f4ec8aa7e923d2a10b09c5eb05b42bdbde53c1a29ebfd325b169344d0089fb",
+        "sha256": "a6b5a84da9f3db88b0c2fb6f7df16a5d32075d3491c3a375c4ade7ec9683712b",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -468,10 +468,10 @@
       },
       {
         "frame": "phone-large/03-buy-before.png",
-        "bytes": 207761,
+        "bytes": 207844,
         "width": 780,
         "height": 1688,
-        "sha256": "872ca27cf397ce66cfe73e6259c8fec7ecc8d3863605ce6c3f0377f5a38c1eb1",
+        "sha256": "13d74176c3177b7582eb7ec02a491b039039af1c68665fbe7189f82def3aad13",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -479,10 +479,10 @@
       },
       {
         "frame": "phone-nodata/00-open-after.png",
-        "bytes": 245721,
+        "bytes": 245773,
         "width": 780,
         "height": 1688,
-        "sha256": "02992cdd24828af36291272284ed94694d4006ed87d55a3afaed7d48dcd667a1",
+        "sha256": "8211a442888e3a5c15b1d83c0ebde328c8a5772d085b37c00da9de56c688a25f",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -490,10 +490,10 @@
       },
       {
         "frame": "phone-nodata/00-open-before.png",
-        "bytes": 127794,
+        "bytes": 127787,
         "width": 780,
         "height": 1688,
-        "sha256": "590a594fe451cc8be6ed6ba2239c050edfbdfd6679cd5914a49c78e709e1e05a",
+        "sha256": "50bd2ca03ddc69cd414505c0ea617cc9c8d387c5c66673738bef987413cfa2ad",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -501,10 +501,10 @@
       },
       {
         "frame": "phone-partial/00-open-after.png",
-        "bytes": 242209,
+        "bytes": 242233,
         "width": 780,
         "height": 1688,
-        "sha256": "c7579f4069664abc05b91f94ab7042c6952beb55e9ac1d13da9260b52f455497",
+        "sha256": "47270220933134577585b570eda6b4eaf0877e166ff10655e5f23bd3d8c5d615",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -512,10 +512,10 @@
       },
       {
         "frame": "phone-partial/00-open-before.png",
-        "bytes": 129183,
+        "bytes": 129013,
         "width": 780,
         "height": 1688,
-        "sha256": "5b2d903b34dd840c83096d2202e0c1e44338caf9f52db5b79b09058839827668",
+        "sha256": "1a6f4799abfb45449fd49d4832d5e7a52cbd960c84b7e92d05649f111876607b",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -526,7 +526,7 @@
         "bytes": 176334,
         "width": 780,
         "height": 1688,
-        "sha256": "e0922170c84f790245b0b198c12a57e8c7b850bc4a5abcdff3dcb36f97218d4e",
+        "sha256": "4c0882485fc5eac2f10080fabff2fa4884a6e330188dd81de4a10369cdaac73b",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -556,10 +556,10 @@
       },
       {
         "frame": "phone-partial/02-scroll-overview-before.png",
-        "bytes": 176536,
+        "bytes": 176534,
         "width": 780,
         "height": 1688,
-        "sha256": "696690eed992885c176e8131b60dbcc0d84bca7102ce33755bb39acd1aa7d0e1",
+        "sha256": "80381fde9bb8f725730023963c4a10a621d4f015d18101d9f54fcaa850e58651",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -567,10 +567,10 @@
       },
       {
         "frame": "phone-partial/03-details-dispatch-after.png",
-        "bytes": 177683,
+        "bytes": 177668,
         "width": 780,
         "height": 1688,
-        "sha256": "6de52f5bef64a8f19a52e83e7018c0dce405291fded447ec5fdc75347115ed65",
+        "sha256": "872dd0453328061084b01e19503e8c79438a0d251b3861ec1af4e98cb2c743bf",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -578,10 +578,10 @@
       },
       {
         "frame": "phone-partial/03-details-dispatch-before.png",
-        "bytes": 178769,
+        "bytes": 178764,
         "width": 780,
         "height": 1688,
-        "sha256": "593793f10fdf539ad479305451776238e72da06df308c90d9bfc812c982639ce",
+        "sha256": "d738b6da73c56276bd0801239766c7aae7200a4b95ad3406fe4809ce67d06530",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -683,7 +683,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -747,7 +747,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1143,7 +1143,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1458,7 +1458,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1799,7 +1799,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2103,7 +2103,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2429,7 +2429,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2733,7 +2733,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3042,7 +3042,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3334,7 +3334,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3410,7 +3410,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3474,7 +3474,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3837,7 +3837,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3908,7 +3908,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -4234,7 +4234,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -4298,7 +4298,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -4644,7 +4644,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -4958,7 +4958,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -5289,7 +5289,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -5603,7 +5603,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -5934,7 +5934,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6249,7 +6249,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6523,7 +6523,7 @@
       "before": {
         "sim": null,
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6549,7 +6549,7 @@
           "machineList": []
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6635,7 +6635,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -6702,7 +6702,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -7101,7 +7101,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -7419,7 +7419,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -7763,7 +7763,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -8070,7 +8070,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -8399,7 +8399,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -8706,7 +8706,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9018,7 +9018,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9313,7 +9313,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9392,7 +9392,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9459,7 +9459,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9825,7 +9825,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -9899,7 +9899,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -10228,7 +10228,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -10295,7 +10295,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -10644,7 +10644,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -10961,7 +10961,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -11295,7 +11295,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -11612,7 +11612,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -11946,7 +11946,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -12264,7 +12264,7 @@
           ]
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -12541,7 +12541,7 @@
       "before": {
         "sim": null,
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -12570,7 +12570,7 @@
           "machineList": []
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
