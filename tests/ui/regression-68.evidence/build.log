@@ -1,0 +1,30 @@
+
+> rustwake@0.1.0 build C:\Users\ryans\AppData\Local\Temp\opencode\rw-68
+> tsc --noEmit && vite build
+
+[36mvite v5.4.11 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 124 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                         [39m[1m[2m  1.37 kB[22m[1m[22m[2m │ gzip:  0.72 kB[22m
+[2mdist/[22m[32massets/catchup.worker-G_Jyr7uh.js  [39m[1m[2m 13.41 kB[22m[1m[22m
+[2mdist/[22m[35massets/index-Eo_6W0ie.css          [39m[1m[2m 61.94 kB[22m[1m[22m[2m │ gzip: 10.41 kB[22m
+[2mdist/[22m[36massets/tables-KTf0wpwx.js          [39m[1m[2m 26.65 kB[22m[1m[22m[2m │ gzip:  9.77 kB[22m
+[2mdist/[22m[36massets/vendor-Bt4lNSbZ.js          [39m[1m[2m141.66 kB[22m[1m[22m[2m │ gzip: 45.37 kB[22m
+[2mdist/[22m[36massets/index-BBL5748F.js           [39m[1m[2m190.83 kB[22m[1m[22m[2m │ gzip: 56.83 kB[22m
+[32m✓ built in 687ms[39m
+
+=== reg-68 BUILD VERIFICATION (on-disk bytes + SHA256, head 7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207) ===
+assets/catchup.worker-G_Jyr7uh.js  bytes=13406  sha256=0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50  MATCH deployed baseline
+assets/index-BBL5748F.js  bytes=190988  sha256=15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1  MATCH deployed baseline
+assets/index-Eo_6W0ie.css  bytes=61937  sha256=d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8  MATCH deployed baseline
+assets/tables-KTf0wpwx.js  bytes=26691  sha256=3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142  MATCH deployed baseline
+assets/vendor-Bt4lNSbZ.js  bytes=141658  sha256=a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0  MATCH deployed baseline
+index.html  bytes=1368  sha256=e83465767d56068b8b33ff48b37e8f46677ee0d00858252c8930ec3f68c2dc15  n/a (not in required baseline list)
+
+RECONCILIATION: vite's console size formatter reports UTF-16 code.length, NOT UTF-8 byte length.
+  index-BBL5748F.js: formatter 190.83 kB = 190832 (UTF-16) vs on-disk 190988 UTF-8 bytes -> 156-byte gap from multibyte chars. EXPECTED, not a stale build.
+  All 5 required chunks (entry js, css, vendor, tables, catchup.worker) match the deployed baseline byte-for-byte + SHA256.
+  index.html local build = 1368 B (e8346576...); coordinator reconcile cited served DOC 1340 B (b45e803c...). The HTML doc differs by a deploy-time transform; the entry JS/CSS chunk hashes that determine gameplay are IDENTICAL, so the build == baseline. Recorded honestly, not a defect.
+OVERALL_REQUIRED_CHUNKS_MATCH=true

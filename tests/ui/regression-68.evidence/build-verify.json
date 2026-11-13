@@ -1,0 +1,36 @@
+{
+  "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "inventory": [
+    {
+      "file": "assets/catchup.worker-G_Jyr7uh.js",
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+    },
+    {
+      "file": "assets/index-BBL5748F.js",
+      "bytes": 190988,
+      "sha256": "15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1"
+    },
+    {
+      "file": "assets/index-Eo_6W0ie.css",
+      "bytes": 61937,
+      "sha256": "d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8"
+    },
+    {
+      "file": "assets/tables-KTf0wpwx.js",
+      "bytes": 26691,
+      "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+    },
+    {
+      "file": "assets/vendor-Bt4lNSbZ.js",
+      "bytes": 141658,
+      "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+    },
+    {
+      "file": "index.html",
+      "bytes": 1368,
+      "sha256": "e83465767d56068b8b33ff48b37e8f46677ee0d00858252c8930ec3f68c2dc15"
+    }
+  ],
+  "requiredChunksMatch": true
+}
