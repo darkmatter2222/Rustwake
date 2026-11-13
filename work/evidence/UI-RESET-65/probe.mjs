@@ -370,11 +370,22 @@ async function hideOnboard(page) {
   if (vis) { await skip.click(); await page.waitForTimeout(400); }
 }
 
+// Restore the fitted camera through the real "Reset view" (Recenter) control. selectMachine
+// zooms in to clear chrome overlays; without a reset that zoom ratchets across successive
+// machines and pushes later cells off-screen. Recenter refits into the current chrome band.
+async function resetView(page) {
+  const reset = await page.$(".shell-zoom__face--reset");
+  if (!reset) return;
+  const vis = await reset.evaluate((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+  if (vis) { await reset.click(); await page.waitForTimeout(320); }
+}
+
 // Select a machine by tile through a REAL canvas tap, guaranteeing the pointer lands on
-// the canvas (not the zoom row / coach / rail). Hides the coach, then verifies
-// elementFromPoint === CANVAS; if a chrome overlay still covers the cell, zooms in through
-// the real control and retries. Returns the tap point + whether the cell was clear canvas.
+// the canvas (not the zoom row / coach / rail). Resets the camera to fit, hides the coach,
+// then verifies elementFromPoint === CANVAS; if a chrome overlay still covers the cell, zooms
+// in through the real control and retries. Returns the tap point + whether the cell was clear.
 async function selectMachine(page, tile, touch) {
+  await resetView(page);
   await hideOnboard(page);
   const w = tileToWorld(tile);
   const tapAt = async (cam) => {
@@ -405,15 +416,25 @@ async function selectMachine(page, tile, touch) {
   return { ...r, top, cleared: false };
 }
 
-// Open the Store through its real destination (dock face at rest, or rail slot 4) without
-// relying on a canvas tap of the dock tile, which chrome can overlay on landscape.
-async function openStore(page) {
+// Open the Store through its real destination. Rail forms expose an always-enabled Store
+// rail slot (earned at tutorial 9) — use it directly. Phone has no rail: a selected machine
+// or a pending upgrade fork replaces the dock's rest faces (Hud.tsx:360 branch row), so clear
+// the selection with a real empty-cell tap (deselect) until the rest "Store" face returns.
+async function openStore(page, touch) {
   await closePanel(page);
-  try { await clickButton(page, ".dock button", "Store", true); }
-  catch {
-    try { await clickSel(page, '.shell-rail__slot[data-slot="store"]'); }
-    catch { await clickButton(page, ".dock button", "Store", true); }
+  await dismissReport(page);
+  const railStore = await page.$('.shell-rail__slot[data-slot="store"]');
+  if (railStore) {
+    const vis = await railStore.evaluate((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; });
+    if (vis) {
+      await railStore.click();
+      await page.waitForSelector(".panel--store", { state: "visible", timeout: 5000 });
+      await page.waitForTimeout(150);
+      return;
+    }
   }
+  await deselect(page, touch);
+  await clickButton(page, ".dock button", "Store", true);
   await page.waitForSelector(".panel--store", { state: "visible", timeout: 5000 });
   await page.waitForTimeout(150);
 }
@@ -523,18 +544,26 @@ function audioInit() {
   } catch (e) { window.__rwAudioError = String(e); }
 }
 
-// c5: the reconcile status line is transient during off-thread catch-up and can appear
-// and vanish between polls. Record its FIRST text permanently via a MutationObserver so
-// the loading loop can assert it even if the 120ms poll misses the live node.
+// c5: the reconcile status line is transient during off-thread catch-up. React can insert
+// and remove the <p class="reconcile"> within one batch (the worker handoff is fast), so a
+// post-hoc querySelector in the observer callback can miss it. Scan the ACTUAL addedNodes
+// instead: the inserted node carries its text even if a later mutation in the same batch
+// removes it. Record the FIRST reconcile text permanently for the loading loop.
 function reconcileWatch() {
   try {
     window.__rwReconcile = null;
-    const obs = new MutationObserver(() => {
-      if (window.__rwReconcile) return;
-      const e = document.querySelector(".reconcile");
-      if (e) window.__rwReconcile = e.textContent.trim();
+    const scan = (node) => {
+      if (window.__rwReconcile || !node || node.nodeType !== 1) return;
+      if (node.matches && node.matches(".reconcile")) { window.__rwReconcile = node.textContent.trim(); return; }
+      if (node.querySelector) { const e = node.querySelector(".reconcile"); if (e) window.__rwReconcile = e.textContent.trim(); }
+    };
+    const obs = new MutationObserver((muts) => {
+      for (const m of muts) {
+        for (const n of m.addedNodes) scan(n);
+        if (window.__rwReconcile) return;
+      }
     });
-    obs.observe(document, { childList: true, subtree: true, characterData: true });
+    obs.observe(document, { childList: true, subtree: true });
   } catch (e) { /* ignore */ }
 }
 
@@ -741,6 +770,10 @@ async function matureLoop(browser, formKey) {
 
   // 2) BUILD a furnace: catalog card -> Place -> dock Build face (real machine.build).
   let newMachineId = null;
+  // Measure the scrap cost in a tight window around the commit click: the full catalog flow
+  // spans ~1s during which idle drone deliveries can offset the cost, so a raw before/after
+  // delta is confounded. The commit window (~120ms) is far shorter than a delivery cycle.
+  let scrapAtCommit = null, scrapAfterCommit = null;
   await runStep(page, form, "02-build-furnace", async () => {
     const before = await readSim(page);
     newMachineId = before.nextMachineId;
@@ -750,11 +783,14 @@ async function matureLoop(browser, formKey) {
     await clickSel(page, ".catalog__place");
     await page.waitForSelector('.place-strip[data-flow="placement"]', { timeout: 4000 });
     await page.waitForTimeout(150);
+    scrapAtCommit = (await readSim(page)).store.scrap;
     await clickSel(page, ".dock__btn--primary");
+    await page.waitForTimeout(120);
+    scrapAfterCommit = (await readSim(page)).store.scrap;
   }, [
     { name: "c1 machine count +1 (real build result)", test: (b, a) => (a.sim?.machines ?? 0) === (b.sim?.machines ?? 0) + 1 },
     { name: "new furnace exists", test: (b, a) => (a.sim?.machineList || []).some((m) => m.id === newMachineId && m.bp === "furnace") },
-    { name: "build cost spent (scrap down)", test: (b, a) => (a.sim?.store?.scrap ?? 0) < (b.sim?.store?.scrap ?? 0) },
+    { name: "build cost spent (scrap down at commit)", test: () => scrapAtCommit != null && scrapAfterCommit != null && scrapAfterCommit < scrapAtCommit, detail: () => JSON.stringify({ scrapAtCommit, scrapAfterCommit }) },
   ]);
 
   // 3) INSPECT the new furnace via real canvas tap.
@@ -779,7 +815,7 @@ async function matureLoop(browser, formKey) {
   // 5) SELL through a real Store trade card (contract.sell).
   let sellResource = null;
   await runStep(page, form, "05-sell-resource", async () => {
-    await openStore(page);
+    await openStore(page, touch);
     const card = await page.$(".store-trade");
     sellResource = card ? await card.getAttribute("data-resource") : null;
     const max = await page.$(".store-trade .store-trade__preset");
@@ -860,7 +896,9 @@ async function errorLoop(browser, formKey) {
   await runStep(page, form, "01-upgrade-refusal-group", async () => {
     const s = await readSim(page);
     let chosen = null;
-    for (const m of s.machines) {
+    // Try higher tiles first: on short landscape viewports the lifted zoom row overlays the
+    // yard's top row, while lower-row centre cells (e.g. tile 8) stay clear canvas at fit.
+    for (const m of [...s.machines].sort((a, b) => b.tile - a.tile)) {
       await selectMachine(page, m.tile, touch);
       const d0 = await dom(page);
       if (!d0.panel || !d0.panel.cls.includes("panel--stack")) continue;
@@ -980,7 +1018,7 @@ async function loadingLoop(browser, formKey) {
   const form = `${formKey}-loading`;
   const { context, page } = await newPage(browser, formKey, "old", { tag: form });
   // Begin, then poll for the reconcile status line and the adopted return report.
-  let reconcileSeen = null, reportDom = null;
+  let reconcileSeen = null, reportDom = null, catchupMarks = null;
   await runStep(page, form, "01-catchup-report", async () => {
     await clickSel(page, ".gate__btn");
     const t0 = Date.now();
@@ -988,13 +1026,21 @@ async function loadingLoop(browser, formKey) {
       const d = await dom(page);
       if (d.reconcile && !reconcileSeen) { reconcileSeen = d.reconcile; await shot(page, `${form}/02-reconcile.png`, { phase: "reconcile", form, dom: d }); }
       if (d.report) { reportDom = d; break; }
-      await page.waitForTimeout(120);
+      await page.waitForTimeout(60);
     }
-    await page.waitForTimeout(400);
-    // The reconcile line is transient; fall back to the MutationObserver's first capture.
+    await page.waitForTimeout(300);
+    // The reconcile line is transient; fall back to the MutationObserver's addedNodes capture.
     if (!reconcileSeen) reconcileSeen = await page.evaluate(() => window.__rwReconcile || null);
+    // Deterministic proof the off-thread loading state was entered: store.creditAbsence sets
+    // reconciling=true and fires performance.mark("rustwake:catchup-start") whenever the gap
+    // exceeds CATCHUP_WORKER_MIN_TICKS and a Worker exists (both true for the 24h "old" seed).
+    catchupMarks = await page.evaluate(() => ({
+      start: performance.getEntriesByName("rustwake:catchup-start").length,
+      adopted: performance.getEntriesByName("rustwake:catchup-adopted").length,
+    }));
     if (!reportDom) reportDom = await dom(page);
   }, [
+    { name: "c5 catch-up worker loading state entered (reconcile mark)", test: () => !!(catchupMarks && catchupMarks.start > 0), detail: () => JSON.stringify(catchupMarks) },
     { name: "c5 reconcile status line shown during catch-up", test: () => /Catching your yard up/i.test(reconcileSeen || ""), detail: () => JSON.stringify(reconcileSeen) },
     { name: "c5 return report adopted after catch-up", test: () => reportDom && !!reportDom.report, detail: () => JSON.stringify(reportDom && reportDom.report) },
     { name: "c5 return report titled While you were away", test: () => reportDom && /While you were away/i.test(reportDom.report?.title || ""), detail: () => JSON.stringify(reportDom && reportDom.report?.title) },
