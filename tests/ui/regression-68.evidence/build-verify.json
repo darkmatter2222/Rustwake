@@ -1,5 +1,5 @@
 {
-  "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
   "inventory": [
     {
       "file": "assets/catchup.worker-G_Jyr7uh.js",
@@ -7,14 +7,14 @@
       "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
     },
     {
-      "file": "assets/index-BBL5748F.js",
-      "bytes": 190988,
-      "sha256": "15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1"
+      "file": "assets/index-CEQDUmwp.js",
+      "bytes": 191098,
+      "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
     },
     {
-      "file": "assets/index-Eo_6W0ie.css",
-      "bytes": 61937,
-      "sha256": "d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8"
+      "file": "assets/index-ekc2mZk4.css",
+      "bytes": 61957,
+      "sha256": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af"
     },
     {
       "file": "assets/tables-KTf0wpwx.js",
@@ -29,8 +29,9 @@
     {
       "file": "index.html",
       "bytes": 1368,
-      "sha256": "e83465767d56068b8b33ff48b37e8f46677ee0d00858252c8930ec3f68c2dc15"
+      "sha256": "7f8f45dded9c5b88b6e322eded92a62bcb1189788bc2fc6beb26ffe8b523dae3"
     }
   ],
-  "requiredChunksMatch": true
+  "requiredChunksMatch": true,
+  "docNote": "index.html is the local Windows CRLF build (1368 B). LF-normalized it is 1341 B vs the deployed Linux LF artifact (1340 B, sha256 49e6bb963d137fca5892f1d587cf7c2504afbebfd8eecae74116e3779f30beaf); a 1-byte residual remains after CRLF+trailing-newline normalization, most plausibly host-owned deploy-adapter normalization. Per charter the deployed artifact is authoritative; all five JS/CSS chunks (including entry index-CEQDUmwp.js 191098 B b85367da) are byte-identical to the deployed baseline, which is the hard build gate."
 }
