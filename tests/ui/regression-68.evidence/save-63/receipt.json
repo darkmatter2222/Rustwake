@@ -1,10 +1,10 @@
 {
   "issue": "https://github.com/darkmatter2222/Rustwake/issues/63",
   "pr": "https://github.com/darkmatter2222/Rustwake/pull/108",
-  "headSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "headSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
   "branch": "rw/68-regression",
-  "server": "vite preview of THIS worktree's pnpm build (dist) at http://127.0.0.1:5163/",
-  "capturedAt": "2026-11-13T09:32:22.793Z",
+  "server": "vite preview of THIS worktree's pnpm build (dist) at http://127.0.0.1:4199/",
+  "capturedAt": "2026-11-13T12:17:06.901Z",
   "seed": {
     "via": "src encodeSave + engine applyCommand/advance; lastSeenMs = Date.now() at capture",
     "current": {
@@ -95,27 +95,27 @@
             {
               "name": "six statistics present",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"701\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"700\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
             },
             {
               "name": "Machines exact",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"701\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"700\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
             },
             {
               "name": "Drones exact",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"701\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"700\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
             },
             {
               "name": "Links exact",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"701\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"700\"},{\"label\":\"Machines\",\"value\":\"1\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"1821 characters\"}]"
             },
             {
               "name": "Tick within live-sim bound",
               "pass": true,
-              "detail": "{\"tickShown\":701,\"mirror\":699}"
+              "detail": "{\"tickShown\":700,\"mirror\":699}"
             },
             {
               "name": "Credits within live-sim bound",
@@ -195,7 +195,7 @@
             {
               "name": "pixel audit phone-ts1-01-record.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1196},\"brightShare\":0.0179,\"samples\":5544}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1196},\"brightShare\":0.0177,\"samples\":5544}"
             }
           ],
           "screenshots": [
@@ -205,7 +205,7 @@
               "height": 1688,
               "distinctColors": 169,
               "darkShare": 0.8954,
-              "brightShare": 0.0245,
+              "brightShare": 0.0246,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -215,7 +215,7 @@
                   "x1": 734,
                   "y1": 1196
                 },
-                "brightShare": 0.0179,
+                "brightShare": 0.0177,
                 "samples": 5544
               }
             }
@@ -283,7 +283,7 @@
             {
               "name": "export tick within live-sim bound of the checkpoint",
               "pass": true,
-              "detail": "{\"exportTick\":703,\"checkpointTick\":699}"
+              "detail": "{\"exportTick\":702,\"checkpointTick\":699}"
             },
             {
               "name": "panel present",
@@ -323,7 +323,7 @@
             {
               "name": "pixel audit phone-ts1-02-backup.png: not blank",
               "pass": true,
-              "detail": "distinctColors=177"
+              "detail": "distinctColors=176"
             },
             {
               "name": "pixel audit phone-ts1-02-backup.png: dark UI",
@@ -338,7 +338,7 @@
             {
               "name": "pixel audit phone-ts1-02-backup.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1218},\"brightShare\":0.0467,\"samples\":5841}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1218},\"brightShare\":0.0471,\"samples\":5841}"
             },
             {
               "name": "clipboard round trip: valid save written",
@@ -348,12 +348,12 @@
             {
               "name": "clipboard round trip: tick in live-sim window",
               "pass": true,
-              "detail": "{\"clipTick\":705,\"preTick\":699}"
+              "detail": "{\"clipTick\":703,\"preTick\":699}"
             },
             {
               "name": "download file name carries the tick",
               "pass": true,
-              "detail": "rustwake-yard-tick-705.json"
+              "detail": "rustwake-yard-tick-704.json"
             },
             {
               "name": "downloaded file is a valid save",
@@ -363,12 +363,12 @@
             {
               "name": "downloaded tick matches file name",
               "pass": true,
-              "detail": "{\"dlTick\":705,\"fname\":\"rustwake-yard-tick-705.json\"}"
+              "detail": "{\"dlTick\":704,\"fname\":\"rustwake-yard-tick-704.json\"}"
             },
             {
               "name": "downloaded file name uses exportFileName()",
               "pass": true,
-              "detail": "rustwake-yard-tick-705.json"
+              "detail": "rustwake-yard-tick-704.json"
             }
           ],
           "screenshots": [
@@ -376,9 +376,9 @@
               "file": "phone-ts1-02-backup.png",
               "width": 780,
               "height": 1688,
-              "distinctColors": 177,
+              "distinctColors": 176,
               "darkShare": 0.886,
-              "brightShare": 0.0298,
+              "brightShare": 0.03,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -388,7 +388,7 @@
                   "x1": 734,
                   "y1": 1218
                 },
-                "brightShare": 0.0467,
+                "brightShare": 0.0471,
                 "samples": 5841
               }
             }
@@ -485,7 +485,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":699,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":699,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -515,7 +515,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":709,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":699,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -545,7 +545,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":709,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":699,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -575,7 +575,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":709,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":699,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -600,7 +600,7 @@
             {
               "name": "pixel audit phone-ts1-03-refusal.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8899"
+              "detail": "darkShare=0.8898"
             },
             {
               "name": "pixel audit phone-ts1-03-refusal.png: card region is NOT the full frame",
@@ -610,7 +610,7 @@
             {
               "name": "pixel audit phone-ts1-03-refusal.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1249},\"brightShare\":0.0398,\"samples\":6336}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1249},\"brightShare\":0.0406,\"samples\":6336}"
             }
           ],
           "screenshots": [
@@ -619,8 +619,8 @@
               "width": 780,
               "height": 1688,
               "distinctColors": 178,
-              "darkShare": 0.8899,
-              "brightShare": 0.0291,
+              "darkShare": 0.8898,
+              "brightShare": 0.0292,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -630,7 +630,7 @@
                   "x1": 734,
                   "y1": 1249
                 },
-                "brightShare": 0.0398,
+                "brightShare": 0.0406,
                 "samples": 6336
               }
             }
@@ -687,7 +687,7 @@
             {
               "name": "current preview within live-sim bound",
               "pass": true,
-              "detail": "{\"curTick\":713,\"mirror\":709}"
+              "detail": "{\"curTick\":710,\"mirror\":709}"
             },
             {
               "name": "settings consequence line",
@@ -732,12 +732,12 @@
             {
               "name": "pixel audit phone-ts1-04-gate.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.9427"
+              "detail": "darkShare=0.9428"
             },
             {
               "name": "pixel audit phone-ts1-04-gate.png: lit text in .import-confirm",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":32,\"y0\":337,\"x1\":750,\"y1\":1351},\"brightShare\":0.0202,\"samples\":14935}"
+              "detail": "{\"box\":{\"x0\":32,\"y0\":337,\"x1\":750,\"y1\":1351},\"brightShare\":0.02,\"samples\":14935}"
             },
             {
               "name": "refusal/cancel: yard structure identical",
@@ -832,7 +832,7 @@
             {
               "name": "record refreshed: machines incoming",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"2723\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2492 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"2722\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2492 characters\"}]"
             },
             {
               "name": "panel present",
@@ -912,7 +912,7 @@
             {
               "name": "export tick within live-sim bound of the checkpoint",
               "pass": true,
-              "detail": "{\"exportTick\":2753,\"checkpointTick\":2744}"
+              "detail": "{\"exportTick\":2753,\"checkpointTick\":2747}"
             }
           ],
           "screenshots": [
@@ -921,7 +921,7 @@
               "width": 780,
               "height": 1688,
               "distinctColors": 175,
-              "darkShare": 0.9427,
+              "darkShare": 0.9428,
               "brightShare": 0.0129,
               "samples": 27104,
               "content": ".import-confirm",
@@ -932,7 +932,7 @@
                   "x1": 750,
                   "y1": 1351
                 },
-                "brightShare": 0.0202,
+                "brightShare": 0.02,
                 "samples": 14935
               }
             },
@@ -995,12 +995,12 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-aryu\",\"post\":\"t1-fyrc\"}"
+              "detail": "{\"preOwner\":\"t1-4qoq\",\"post\":\"t1-2wkn\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
               "pass": true,
-              "detail": "{\"post\":2769,\"incoming\":2722,\"preReload\":2754}"
+              "detail": "{\"post\":2768,\"incoming\":2722,\"preReload\":2747}"
             },
             {
               "name": "reload: machines/routes stable",
@@ -1015,12 +1015,12 @@
             {
               "name": "reload: record shows the imported yard",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"2770\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2516 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"2768\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2516 characters\"}]"
             },
             {
               "name": "reload: yard resumes stepping after adoption",
               "pass": true,
-              "detail": "{\"target\":2789}"
+              "detail": "{\"target\":2788}"
             },
             {
               "name": "panel present",
@@ -1070,7 +1070,7 @@
             {
               "name": "pixel audit phone-ts1-06-reload.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1359},\"brightShare\":0.0298,\"samples\":6435}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1359},\"brightShare\":0.03,\"samples\":6435}"
             }
           ],
           "screenshots": [
@@ -1090,7 +1090,7 @@
                   "x1": 734,
                   "y1": 1359
                 },
-                "brightShare": 0.0298,
+                "brightShare": 0.03,
                 "samples": 6435
               }
             }
@@ -1330,7 +1330,7 @@
             {
               "name": "pixel audit phone-ts2-01-record.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8719"
+              "detail": "darkShare=0.8718"
             },
             {
               "name": "pixel audit phone-ts2-01-record.png: card region is NOT the full frame",
@@ -1340,7 +1340,7 @@
             {
               "name": "pixel audit phone-ts2-01-record.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1487},\"brightShare\":0.0376,\"samples\":8217}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1487},\"brightShare\":0.0383,\"samples\":8217}"
             }
           ],
           "screenshots": [
@@ -1349,7 +1349,7 @@
               "width": 780,
               "height": 1688,
               "distinctColors": 180,
-              "darkShare": 0.8719,
+              "darkShare": 0.8718,
               "brightShare": 0.0415,
               "samples": 27104,
               "content": "content-box",
@@ -1360,7 +1360,7 @@
                   "x1": 734,
                   "y1": 1487
                 },
-                "brightShare": 0.0376,
+                "brightShare": 0.0383,
                 "samples": 8217
               }
             }
@@ -1428,7 +1428,7 @@
             {
               "name": "export tick within live-sim bound of the checkpoint",
               "pass": true,
-              "detail": "{\"exportTick\":702,\"checkpointTick\":699}"
+              "detail": "{\"exportTick\":701,\"checkpointTick\":699}"
             },
             {
               "name": "panel present",
@@ -1473,7 +1473,7 @@
             {
               "name": "pixel audit phone-ts2-02-backup.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8657"
+              "detail": "darkShare=0.8659"
             },
             {
               "name": "pixel audit phone-ts2-02-backup.png: card region is NOT the full frame",
@@ -1483,7 +1483,7 @@
             {
               "name": "pixel audit phone-ts2-02-backup.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1472},\"brightShare\":0.061,\"samples\":8019}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":906,\"x1\":734,\"y1\":1472},\"brightShare\":0.0615,\"samples\":8019}"
             },
             {
               "name": "clipboard round trip: valid save written",
@@ -1493,12 +1493,12 @@
             {
               "name": "clipboard round trip: tick in live-sim window",
               "pass": true,
-              "detail": "{\"clipTick\":703,\"preTick\":699}"
+              "detail": "{\"clipTick\":702,\"preTick\":699}"
             },
             {
               "name": "download file name carries the tick",
               "pass": true,
-              "detail": "rustwake-yard-tick-704.json"
+              "detail": "rustwake-yard-tick-703.json"
             },
             {
               "name": "downloaded file is a valid save",
@@ -1508,12 +1508,12 @@
             {
               "name": "downloaded tick matches file name",
               "pass": true,
-              "detail": "{\"dlTick\":704,\"fname\":\"rustwake-yard-tick-704.json\"}"
+              "detail": "{\"dlTick\":703,\"fname\":\"rustwake-yard-tick-703.json\"}"
             },
             {
               "name": "downloaded file name uses exportFileName()",
               "pass": true,
-              "detail": "rustwake-yard-tick-704.json"
+              "detail": "rustwake-yard-tick-703.json"
             }
           ],
           "screenshots": [
@@ -1522,8 +1522,8 @@
               "width": 780,
               "height": 1688,
               "distinctColors": 193,
-              "darkShare": 0.8657,
-              "brightShare": 0.0518,
+              "darkShare": 0.8659,
+              "brightShare": 0.0519,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -1533,7 +1533,7 @@
                   "x1": 734,
                   "y1": 1472
                 },
-                "brightShare": 0.061,
+                "brightShare": 0.0615,
                 "samples": 8019
               }
             }
@@ -1832,7 +1832,7 @@
             {
               "name": "current preview within live-sim bound",
               "pass": true,
-              "detail": "{\"curTick\":710,\"mirror\":709}"
+              "detail": "{\"curTick\":708,\"mirror\":699}"
             },
             {
               "name": "settings consequence line",
@@ -1877,12 +1877,12 @@
             {
               "name": "pixel audit phone-ts2-04-gate.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8912"
+              "detail": "darkShare=0.891"
             },
             {
               "name": "pixel audit phone-ts2-04-gate.png: lit text in .import-confirm",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":32,\"y0\":244,\"x1\":750,\"y1\":1444},\"brightShare\":0.027,\"samples\":17716}"
+              "detail": "{\"box\":{\"x0\":32,\"y0\":244,\"x1\":750,\"y1\":1444},\"brightShare\":0.0271,\"samples\":17716}"
             },
             {
               "name": "refusal/cancel: yard structure identical",
@@ -1897,7 +1897,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":709,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":709,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -1927,7 +1927,7 @@
             {
               "name": "refusal/cancel: tick monotonic, never the incoming yard",
               "pass": true,
-              "detail": "{\"before\":709,\"after\":709,\"incomingTick\":2722}"
+              "detail": "{\"before\":699,\"after\":709,\"incomingTick\":2722}"
             },
             {
               "name": "refusal/cancel: no dialog left open",
@@ -1977,7 +1977,7 @@
             {
               "name": "record refreshed: machines incoming",
               "pass": true,
-              "detail": "[{\"label\":\"Tick\",\"value\":\"2723\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2492 characters\"}]"
+              "detail": "[{\"label\":\"Tick\",\"value\":\"2722\"},{\"label\":\"Machines\",\"value\":\"2\"},{\"label\":\"Drones\",\"value\":\"1\"},{\"label\":\"Links\",\"value\":\"1\"},{\"label\":\"Credits\",\"value\":\"0\"},{\"label\":\"Save\",\"value\":\"2492 characters\"}]"
             },
             {
               "name": "panel present",
@@ -2057,7 +2057,7 @@
             {
               "name": "export tick within live-sim bound of the checkpoint",
               "pass": true,
-              "detail": "{\"exportTick\":2793,\"checkpointTick\":2786}"
+              "detail": "{\"exportTick\":2793,\"checkpointTick\":2788}"
             }
           ],
           "screenshots": [
@@ -2066,8 +2066,8 @@
               "width": 780,
               "height": 1688,
               "distinctColors": 172,
-              "darkShare": 0.8912,
-              "brightShare": 0.0189,
+              "darkShare": 0.891,
+              "brightShare": 0.019,
               "samples": 27104,
               "content": ".import-confirm",
               "region": {
@@ -2077,7 +2077,7 @@
                   "x1": 750,
                   "y1": 1444
                 },
-                "brightShare": 0.027,
+                "brightShare": 0.0271,
                 "samples": 17716
               }
             },
@@ -2140,12 +2140,12 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-44v0\",\"post\":\"t1-1p8a\"}"
+              "detail": "{\"preOwner\":\"t1-kmc8\",\"post\":\"t1-2tkf\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
               "pass": true,
-              "detail": "{\"post\":2808,\"incoming\":2722,\"preReload\":2786}"
+              "detail": "{\"post\":2808,\"incoming\":2722,\"preReload\":2788}"
             },
             {
               "name": "reload: machines/routes stable",
@@ -2440,12 +2440,12 @@
             {
               "name": "pixel audit phone-reader-01-refused.png: not blank",
               "pass": true,
-              "detail": "distinctColors=152"
+              "detail": "distinctColors=154"
             },
             {
               "name": "pixel audit phone-reader-01-refused.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.7893"
+              "detail": "darkShare=0.7891"
             },
             {
               "name": "pixel audit phone-reader-01-refused.png: card region is NOT the full frame",
@@ -2455,7 +2455,7 @@
             {
               "name": "pixel audit phone-reader-01-refused.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1245},\"brightShare\":0.0396,\"samples\":6336}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1245},\"brightShare\":0.0404,\"samples\":6336}"
             },
             {
               "name": "writer yard untouched by the reader's attempt",
@@ -2478,9 +2478,9 @@
               "file": "phone-reader-01-refused.png",
               "width": 780,
               "height": 1688,
-              "distinctColors": 152,
-              "darkShare": 0.7893,
-              "brightShare": 0.0201,
+              "distinctColors": 154,
+              "darkShare": 0.7891,
+              "brightShare": 0.0202,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -2490,7 +2490,7 @@
                   "x1": 734,
                   "y1": 1245
                 },
-                "brightShare": 0.0396,
+                "brightShare": 0.0404,
                 "samples": 6336
               }
             }
@@ -2562,7 +2562,7 @@
             {
               "name": "pixel audit phone-failenv-01-notes.png: not blank",
               "pass": true,
-              "detail": "distinctColors=178"
+              "detail": "distinctColors=179"
             },
             {
               "name": "pixel audit phone-failenv-01-notes.png: dark UI",
@@ -2577,7 +2577,7 @@
             {
               "name": "pixel audit phone-failenv-01-notes.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1218},\"brightShare\":0.0466,\"samples\":5841}"
+              "detail": "{\"box\":{\"x0\":46,\"y0\":806,\"x1\":734,\"y1\":1218},\"brightShare\":0.0474,\"samples\":5841}"
             },
             {
               "name": "no console errors (failure env)",
@@ -2595,9 +2595,9 @@
               "file": "phone-failenv-01-notes.png",
               "width": 780,
               "height": 1688,
-              "distinctColors": 178,
+              "distinctColors": 179,
               "darkShare": 0.8857,
-              "brightShare": 0.0298,
+              "brightShare": 0.0299,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -2607,7 +2607,7 @@
                   "x1": 734,
                   "y1": 1218
                 },
-                "brightShare": 0.0466,
+                "brightShare": 0.0474,
                 "samples": 5841
               }
             }
@@ -2736,12 +2736,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-01-record.png: not blank",
               "pass": true,
-              "detail": "distinctColors=178"
+              "detail": "distinctColors=151"
             },
             {
               "name": "pixel audit phone-landscape-ts1-01-record.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8382"
+              "detail": "darkShare=0.8135"
             },
             {
               "name": "pixel audit phone-landscape-ts1-01-record.png: card region is NOT the full frame",
@@ -2759,9 +2759,9 @@
               "file": "phone-landscape-ts1-01-record.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 178,
-              "darkShare": 0.8382,
-              "brightShare": 0.0233,
+              "distinctColors": 151,
+              "darkShare": 0.8135,
+              "brightShare": 0.0208,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -2879,12 +2879,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-02-backup.png: not blank",
               "pass": true,
-              "detail": "distinctColors=194"
+              "detail": "distinctColors=167"
             },
             {
               "name": "pixel audit phone-landscape-ts1-02-backup.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8352"
+              "detail": "darkShare=0.8102"
             },
             {
               "name": "pixel audit phone-landscape-ts1-02-backup.png: card region is NOT the full frame",
@@ -2932,9 +2932,9 @@
               "file": "phone-landscape-ts1-02-backup.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 194,
-              "darkShare": 0.8352,
-              "brightShare": 0.0251,
+              "distinctColors": 167,
+              "darkShare": 0.8102,
+              "brightShare": 0.0227,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -3151,12 +3151,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-03-refusal.png: not blank",
               "pass": true,
-              "detail": "distinctColors=189"
+              "detail": "distinctColors=161"
             },
             {
               "name": "pixel audit phone-landscape-ts1-03-refusal.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8362"
+              "detail": "darkShare=0.8115"
             },
             {
               "name": "pixel audit phone-landscape-ts1-03-refusal.png: card region is NOT the full frame",
@@ -3166,7 +3166,7 @@
             {
               "name": "pixel audit phone-landscape-ts1-03-refusal.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0437,\"samples\":4032}"
+              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0441,\"samples\":4032}"
             }
           ],
           "screenshots": [
@@ -3174,9 +3174,9 @@
               "file": "phone-landscape-ts1-03-refusal.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 189,
-              "darkShare": 0.8362,
-              "brightShare": 0.0247,
+              "distinctColors": 161,
+              "darkShare": 0.8115,
+              "brightShare": 0.0221,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -3186,7 +3186,7 @@
                   "x1": 1646,
                   "y1": 371
                 },
-                "brightShare": 0.0437,
+                "brightShare": 0.0441,
                 "samples": 4032
               }
             }
@@ -3283,12 +3283,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-04-gate.png: not blank",
               "pass": true,
-              "detail": "distinctColors=146"
+              "detail": "distinctColors=142"
             },
             {
               "name": "pixel audit phone-landscape-ts1-04-gate.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.9532"
+              "detail": "darkShare=0.9527"
             },
             {
               "name": "pixel audit phone-landscape-ts1-04-gate.png: lit text in .import-confirm",
@@ -3428,12 +3428,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-05-after-import.png: not blank",
               "pass": true,
-              "detail": "distinctColors=164"
+              "detail": "distinctColors=147"
             },
             {
               "name": "pixel audit phone-landscape-ts1-05-after-import.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8205"
+              "detail": "darkShare=0.8001"
             },
             {
               "name": "pixel audit phone-landscape-ts1-05-after-import.png: card region is NOT the full frame",
@@ -3476,8 +3476,8 @@
               "file": "phone-landscape-ts1-04-gate.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 146,
-              "darkShare": 0.9532,
+              "distinctColors": 142,
+              "darkShare": 0.9527,
               "brightShare": 0.0043,
               "samples": 27104,
               "content": ".import-confirm",
@@ -3496,9 +3496,9 @@
               "file": "phone-landscape-ts1-05-after-import.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 164,
-              "darkShare": 0.8205,
-              "brightShare": 0.0269,
+              "distinctColors": 147,
+              "darkShare": 0.8001,
+              "brightShare": 0.028,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -3551,7 +3551,7 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-19vh\",\"post\":\"t1-joof\"}"
+              "detail": "{\"preOwner\":\"t1-8s25\",\"post\":\"t1-bwm5\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
@@ -3611,12 +3611,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-06-reload.png: not blank",
               "pass": true,
-              "detail": "distinctColors=166"
+              "detail": "distinctColors=148"
             },
             {
               "name": "pixel audit phone-landscape-ts1-06-reload.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8201"
+              "detail": "darkShare=0.7997"
             },
             {
               "name": "pixel audit phone-landscape-ts1-06-reload.png: card region is NOT the full frame",
@@ -3634,9 +3634,9 @@
               "file": "phone-landscape-ts1-06-reload.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 166,
-              "darkShare": 0.8201,
-              "brightShare": 0.0273,
+              "distinctColors": 148,
+              "darkShare": 0.7997,
+              "brightShare": 0.0283,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -3728,12 +3728,12 @@
             {
               "name": "pixel audit phone-landscape-ts1-07-hostile-clamp.png: not blank",
               "pass": true,
-              "detail": "distinctColors=179"
+              "detail": "distinctColors=158"
             },
             {
               "name": "pixel audit phone-landscape-ts1-07-hostile-clamp.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8064"
+              "detail": "darkShare=0.7916"
             },
             {
               "name": "pixel audit phone-landscape-ts1-07-hostile-clamp.png: card region is NOT the full frame",
@@ -3751,9 +3751,9 @@
               "file": "phone-landscape-ts1-07-hostile-clamp.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 179,
-              "darkShare": 0.8064,
-              "brightShare": 0.039,
+              "distinctColors": 158,
+              "darkShare": 0.7916,
+              "brightShare": 0.0347,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -3881,12 +3881,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-01-record.png: not blank",
               "pass": true,
-              "detail": "distinctColors=178"
+              "detail": "distinctColors=162"
             },
             {
               "name": "pixel audit phone-landscape-ts2-01-record.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8098"
+              "detail": "darkShare=0.7927"
             },
             {
               "name": "pixel audit phone-landscape-ts2-01-record.png: card region is NOT the full frame",
@@ -3904,9 +3904,9 @@
               "file": "phone-landscape-ts2-01-record.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 178,
-              "darkShare": 0.8098,
-              "brightShare": 0.0372,
+              "distinctColors": 162,
+              "darkShare": 0.7927,
+              "brightShare": 0.0332,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4024,12 +4024,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-02-backup.png: not blank",
               "pass": true,
-              "detail": "distinctColors=197"
+              "detail": "distinctColors=188"
             },
             {
               "name": "pixel audit phone-landscape-ts2-02-backup.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8016"
+              "detail": "darkShare=0.7846"
             },
             {
               "name": "pixel audit phone-landscape-ts2-02-backup.png: card region is NOT the full frame",
@@ -4039,7 +4039,7 @@
             {
               "name": "pixel audit phone-landscape-ts2-02-backup.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":641},\"brightShare\":0.058,\"samples\":7308}"
+              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":641},\"brightShare\":0.0576,\"samples\":7308}"
             },
             {
               "name": "clipboard round trip: valid save written",
@@ -4077,9 +4077,9 @@
               "file": "phone-landscape-ts2-02-backup.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 197,
-              "darkShare": 0.8016,
-              "brightShare": 0.0433,
+              "distinctColors": 188,
+              "darkShare": 0.7846,
+              "brightShare": 0.0393,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4089,7 +4089,7 @@
                   "x1": 1646,
                   "y1": 641
                 },
-                "brightShare": 0.058,
+                "brightShare": 0.0576,
                 "samples": 7308
               }
             }
@@ -4296,12 +4296,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-03-refusal.png: not blank",
               "pass": true,
-              "detail": "distinctColors=195"
+              "detail": "distinctColors=178"
             },
             {
               "name": "pixel audit phone-landscape-ts2-03-refusal.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8084"
+              "detail": "darkShare=0.7914"
             },
             {
               "name": "pixel audit phone-landscape-ts2-03-refusal.png: card region is NOT the full frame",
@@ -4319,9 +4319,9 @@
               "file": "phone-landscape-ts2-03-refusal.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 195,
-              "darkShare": 0.8084,
-              "brightShare": 0.0404,
+              "distinctColors": 178,
+              "darkShare": 0.7914,
+              "brightShare": 0.0364,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4433,7 +4433,7 @@
             {
               "name": "pixel audit phone-landscape-ts2-04-gate.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.9175"
+              "detail": "darkShare=0.9171"
             },
             {
               "name": "pixel audit phone-landscape-ts2-04-gate.png: lit text in .import-confirm",
@@ -4573,12 +4573,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-05-after-import.png: not blank",
               "pass": true,
-              "detail": "distinctColors=168"
+              "detail": "distinctColors=148"
             },
             {
               "name": "pixel audit phone-landscape-ts2-05-after-import.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8204"
+              "detail": "darkShare=0.7998"
             },
             {
               "name": "pixel audit phone-landscape-ts2-05-after-import.png: card region is NOT the full frame",
@@ -4622,7 +4622,7 @@
               "width": 1688,
               "height": 780,
               "distinctColors": 169,
-              "darkShare": 0.9175,
+              "darkShare": 0.9171,
               "brightShare": 0.0153,
               "samples": 27104,
               "content": ".import-confirm",
@@ -4641,9 +4641,9 @@
               "file": "phone-landscape-ts2-05-after-import.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 168,
-              "darkShare": 0.8204,
-              "brightShare": 0.0272,
+              "distinctColors": 148,
+              "darkShare": 0.7998,
+              "brightShare": 0.0282,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4696,7 +4696,7 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-3u3f\",\"post\":\"t1-5ma5\"}"
+              "detail": "{\"preOwner\":\"t1-312s\",\"post\":\"t1-kvdg\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
@@ -4756,12 +4756,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-06-reload.png: not blank",
               "pass": true,
-              "detail": "distinctColors=165"
+              "detail": "distinctColors=147"
             },
             {
               "name": "pixel audit phone-landscape-ts2-06-reload.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8202"
+              "detail": "darkShare=0.7997"
             },
             {
               "name": "pixel audit phone-landscape-ts2-06-reload.png: card region is NOT the full frame",
@@ -4779,9 +4779,9 @@
               "file": "phone-landscape-ts2-06-reload.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 165,
-              "darkShare": 0.8202,
-              "brightShare": 0.0273,
+              "distinctColors": 147,
+              "darkShare": 0.7997,
+              "brightShare": 0.0283,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4873,12 +4873,12 @@
             {
               "name": "pixel audit phone-landscape-ts2-07-hostile-clamp.png: not blank",
               "pass": true,
-              "detail": "distinctColors=177"
+              "detail": "distinctColors=157"
             },
             {
               "name": "pixel audit phone-landscape-ts2-07-hostile-clamp.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8058"
+              "detail": "darkShare=0.791"
             },
             {
               "name": "pixel audit phone-landscape-ts2-07-hostile-clamp.png: card region is NOT the full frame",
@@ -4896,9 +4896,9 @@
               "file": "phone-landscape-ts2-07-hostile-clamp.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 177,
-              "darkShare": 0.8058,
-              "brightShare": 0.0394,
+              "distinctColors": 157,
+              "darkShare": 0.791,
+              "brightShare": 0.0352,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -4996,12 +4996,12 @@
             {
               "name": "pixel audit phone-landscape-reader-01-refused.png: not blank",
               "pass": true,
-              "detail": "distinctColors=171"
+              "detail": "distinctColors=160"
             },
             {
               "name": "pixel audit phone-landscape-reader-01-refused.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8019"
+              "detail": "darkShare=0.8119"
             },
             {
               "name": "pixel audit phone-landscape-reader-01-refused.png: card region is NOT the full frame",
@@ -5011,7 +5011,7 @@
             {
               "name": "pixel audit phone-landscape-reader-01-refused.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0466,\"samples\":4032}"
+              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0479,\"samples\":4032}"
             },
             {
               "name": "writer yard untouched by the reader's attempt",
@@ -5034,9 +5034,9 @@
               "file": "phone-landscape-reader-01-refused.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 171,
-              "darkShare": 0.8019,
-              "brightShare": 0.0206,
+              "distinctColors": 160,
+              "darkShare": 0.8119,
+              "brightShare": 0.021,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -5046,7 +5046,7 @@
                   "x1": 1646,
                   "y1": 371
                 },
-                "brightShare": 0.0466,
+                "brightShare": 0.0479,
                 "samples": 4032
               }
             }
@@ -5118,12 +5118,12 @@
             {
               "name": "pixel audit phone-landscape-failenv-01-notes.png: not blank",
               "pass": true,
-              "detail": "distinctColors=193"
+              "detail": "distinctColors=166"
             },
             {
               "name": "pixel audit phone-landscape-failenv-01-notes.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8346"
+              "detail": "darkShare=0.8099"
             },
             {
               "name": "pixel audit phone-landscape-failenv-01-notes.png: card region is NOT the full frame",
@@ -5133,7 +5133,7 @@
             {
               "name": "pixel audit phone-landscape-failenv-01-notes.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0389,\"samples\":4032}"
+              "detail": "{\"box\":{\"x0\":1058,\"y0\":38,\"x1\":1646,\"y1\":371},\"brightShare\":0.0382,\"samples\":4032}"
             },
             {
               "name": "no console errors (failure env)",
@@ -5151,9 +5151,9 @@
               "file": "phone-landscape-failenv-01-notes.png",
               "width": 1688,
               "height": 780,
-              "distinctColors": 193,
-              "darkShare": 0.8346,
-              "brightShare": 0.0252,
+              "distinctColors": 166,
+              "darkShare": 0.8099,
+              "brightShare": 0.0226,
               "samples": 27104,
               "content": "content-box",
               "region": {
@@ -5163,7 +5163,7 @@
                   "x1": 1646,
                   "y1": 371
                 },
-                "brightShare": 0.0389,
+                "brightShare": 0.0382,
                 "samples": 4032
               }
             }
@@ -5292,7 +5292,7 @@
             {
               "name": "pixel audit desktop-ts1-01-record.png: not blank",
               "pass": true,
-              "detail": "distinctColors=141"
+              "detail": "distinctColors=139"
             },
             {
               "name": "pixel audit desktop-ts1-01-record.png: dark UI",
@@ -5315,7 +5315,7 @@
               "file": "desktop-ts1-01-record.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 141,
+              "distinctColors": 139,
               "darkShare": 0.7756,
               "brightShare": 0.0136,
               "samples": 42625,
@@ -5435,12 +5435,12 @@
             {
               "name": "pixel audit desktop-ts1-02-backup.png: not blank",
               "pass": true,
-              "detail": "distinctColors=146"
+              "detail": "distinctColors=147"
             },
             {
               "name": "pixel audit desktop-ts1-02-backup.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.7747"
+              "detail": "darkShare=0.7748"
             },
             {
               "name": "pixel audit desktop-ts1-02-backup.png: card region is NOT the full frame",
@@ -5488,8 +5488,8 @@
               "file": "desktop-ts1-02-backup.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 146,
-              "darkShare": 0.7747,
+              "distinctColors": 147,
+              "darkShare": 0.7748,
               "brightShare": 0.0136,
               "samples": 42625,
               "content": "content-box",
@@ -5707,12 +5707,12 @@
             {
               "name": "pixel audit desktop-ts1-03-refusal.png: not blank",
               "pass": true,
-              "detail": "distinctColors=146"
+              "detail": "distinctColors=144"
             },
             {
               "name": "pixel audit desktop-ts1-03-refusal.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.7746"
+              "detail": "darkShare=0.7747"
             },
             {
               "name": "pixel audit desktop-ts1-03-refusal.png: card region is NOT the full frame",
@@ -5722,7 +5722,7 @@
             {
               "name": "pixel audit desktop-ts1-03-refusal.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1605,\"y0\":308,\"x1\":1899,\"y1\":475},\"brightShare\":0.0625,\"samples\":1008}"
+              "detail": "{\"box\":{\"x0\":1605,\"y0\":308,\"x1\":1899,\"y1\":475},\"brightShare\":0.0595,\"samples\":1008}"
             }
           ],
           "screenshots": [
@@ -5730,8 +5730,8 @@
               "file": "desktop-ts1-03-refusal.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 146,
-              "darkShare": 0.7746,
+              "distinctColors": 144,
+              "darkShare": 0.7747,
               "brightShare": 0.0143,
               "samples": 42625,
               "content": "content-box",
@@ -5742,7 +5742,7 @@
                   "x1": 1899,
                   "y1": 475
                 },
-                "brightShare": 0.0625,
+                "brightShare": 0.0595,
                 "samples": 1008
               }
             }
@@ -5844,12 +5844,12 @@
             {
               "name": "pixel audit desktop-ts1-04-gate.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.9803"
+              "detail": "darkShare=0.9804"
             },
             {
               "name": "pixel audit desktop-ts1-04-gate.png: lit text in .import-confirm",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":720,\"y0\":296,\"x1\":1200,\"y1\":784},\"brightShare\":0.0186,\"samples\":4830}"
+              "detail": "{\"box\":{\"x0\":720,\"y0\":296,\"x1\":1200,\"y1\":784},\"brightShare\":0.0188,\"samples\":4830}"
             },
             {
               "name": "refusal/cancel: yard structure identical",
@@ -6033,7 +6033,7 @@
               "width": 1920,
               "height": 1080,
               "distinctColors": 109,
-              "darkShare": 0.9803,
+              "darkShare": 0.9804,
               "brightShare": 0.0017,
               "samples": 42625,
               "content": ".import-confirm",
@@ -6044,7 +6044,7 @@
                   "x1": 1200,
                   "y1": 784
                 },
-                "brightShare": 0.0186,
+                "brightShare": 0.0188,
                 "samples": 4830
               }
             },
@@ -6107,7 +6107,7 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-8qwj\",\"post\":\"t1-dd28\"}"
+              "detail": "{\"preOwner\":\"t1-cf7i\",\"post\":\"t1-55ne\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
@@ -6437,7 +6437,7 @@
             {
               "name": "pixel audit desktop-ts2-01-record.png: not blank",
               "pass": true,
-              "detail": "distinctColors=170"
+              "detail": "distinctColors=169"
             },
             {
               "name": "pixel audit desktop-ts2-01-record.png: dark UI",
@@ -6460,7 +6460,7 @@
               "file": "desktop-ts2-01-record.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 170,
+              "distinctColors": 169,
               "darkShare": 0.8385,
               "brightShare": 0.0197,
               "samples": 42625,
@@ -6580,12 +6580,12 @@
             {
               "name": "pixel audit desktop-ts2-02-backup.png: not blank",
               "pass": true,
-              "detail": "distinctColors=186"
+              "detail": "distinctColors=187"
             },
             {
               "name": "pixel audit desktop-ts2-02-backup.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.8359"
+              "detail": "darkShare=0.8358"
             },
             {
               "name": "pixel audit desktop-ts2-02-backup.png: card region is NOT the full frame",
@@ -6595,7 +6595,7 @@
             {
               "name": "pixel audit desktop-ts2-02-backup.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1605,\"y0\":486,\"x1\":1899,\"y1\":788},\"brightShare\":0.0779,\"samples\":1848}"
+              "detail": "{\"box\":{\"x0\":1605,\"y0\":486,\"x1\":1899,\"y1\":788},\"brightShare\":0.0774,\"samples\":1848}"
             },
             {
               "name": "clipboard round trip: valid save written",
@@ -6633,9 +6633,9 @@
               "file": "desktop-ts2-02-backup.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 186,
-              "darkShare": 0.8359,
-              "brightShare": 0.0204,
+              "distinctColors": 187,
+              "darkShare": 0.8358,
+              "brightShare": 0.0205,
               "samples": 42625,
               "content": "content-box",
               "region": {
@@ -6645,7 +6645,7 @@
                   "x1": 1899,
                   "y1": 788
                 },
-                "brightShare": 0.0779,
+                "brightShare": 0.0774,
                 "samples": 1848
               }
             }
@@ -6944,7 +6944,7 @@
             {
               "name": "current preview within live-sim bound",
               "pass": true,
-              "detail": "{\"curTick\":709,\"mirror\":709}"
+              "detail": "{\"curTick\":708,\"mirror\":699}"
             },
             {
               "name": "settings consequence line",
@@ -7169,7 +7169,7 @@
             {
               "name": "export tick within live-sim bound of the checkpoint",
               "pass": true,
-              "detail": "{\"exportTick\":2793,\"checkpointTick\":2788}"
+              "detail": "{\"exportTick\":2793,\"checkpointTick\":2789}"
             }
           ],
           "screenshots": [
@@ -7252,12 +7252,12 @@
             {
               "name": "reload: writer lease re-adopted by the new document",
               "pass": true,
-              "detail": "{\"preOwner\":\"t1-7rmx\",\"post\":\"t1-3oon\"}"
+              "detail": "{\"preOwner\":\"t1-h1yd\",\"post\":\"t1-cci8\"}"
             },
             {
               "name": "reload: imported tick persists (no double-apply, no reset)",
               "pass": true,
-              "detail": "{\"post\":2808,\"incoming\":2722,\"preReload\":2788}"
+              "detail": "{\"post\":2808,\"incoming\":2722,\"preReload\":2789}"
             },
             {
               "name": "reload: machines/routes stable",
@@ -7557,7 +7557,7 @@
             {
               "name": "pixel audit desktop-reader-01-refused.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.6912"
+              "detail": "darkShare=0.6911"
             },
             {
               "name": "pixel audit desktop-reader-01-refused.png: card region is NOT the full frame",
@@ -7591,7 +7591,7 @@
               "width": 1920,
               "height": 1080,
               "distinctColors": 115,
-              "darkShare": 0.6912,
+              "darkShare": 0.6911,
               "brightShare": 0.0112,
               "samples": 42625,
               "content": "content-box",
@@ -7674,12 +7674,12 @@
             {
               "name": "pixel audit desktop-failenv-01-notes.png: not blank",
               "pass": true,
-              "detail": "distinctColors=142"
+              "detail": "distinctColors=144"
             },
             {
               "name": "pixel audit desktop-failenv-01-notes.png: dark UI",
               "pass": true,
-              "detail": "darkShare=0.7745"
+              "detail": "darkShare=0.7746"
             },
             {
               "name": "pixel audit desktop-failenv-01-notes.png: card region is NOT the full frame",
@@ -7689,7 +7689,7 @@
             {
               "name": "pixel audit desktop-failenv-01-notes.png: lit text in content-box",
               "pass": true,
-              "detail": "{\"box\":{\"x0\":1605,\"y0\":308,\"x1\":1899,\"y1\":475},\"brightShare\":0.0367,\"samples\":1008}"
+              "detail": "{\"box\":{\"x0\":1605,\"y0\":308,\"x1\":1899,\"y1\":475},\"brightShare\":0.0357,\"samples\":1008}"
             },
             {
               "name": "no console errors (failure env)",
@@ -7707,9 +7707,9 @@
               "file": "desktop-failenv-01-notes.png",
               "width": 1920,
               "height": 1080,
-              "distinctColors": 142,
-              "darkShare": 0.7745,
-              "brightShare": 0.0138,
+              "distinctColors": 144,
+              "darkShare": 0.7746,
+              "brightShare": 0.0137,
               "samples": 42625,
               "content": "content-box",
               "region": {
@@ -7719,7 +7719,7 @@
                   "x1": 1899,
                   "y1": 475
                 },
-                "brightShare": 0.0367,
+                "brightShare": 0.0357,
                 "samples": 1008
               }
             }
@@ -7773,26 +7773,26 @@
         {
           "file": "phone-ts1-01-record.png",
           "ff": "phone",
-          "sha256": "eeef0df8002d87010256b1e942fc0b621452f2732e3e63a8e61d3ff07e5309f6",
-          "bytes": 158855
+          "sha256": "e9623e89aec2429f95a11894a19b286c394bc0863214dfa577f7da276a4effbe",
+          "bytes": 158484
         },
         {
           "file": "phone-ts1-02-backup.png",
           "ff": "phone",
-          "sha256": "f43b3a906837cb53496fffb77bb6553dc28f238458620dbf8d5aa801d24485f2",
-          "bytes": 172551
+          "sha256": "c07d955b2e8516c11f72b12ae1299a858b18d3a584136b38703d4f595e33d29e",
+          "bytes": 172986
         },
         {
           "file": "phone-ts1-03-refusal.png",
           "ff": "phone",
-          "sha256": "c0be59a2501f16ada4a56edbd6cc9289dbcbcffe62014a1385297d930c5f3d39",
-          "bytes": 171340
+          "sha256": "9699d1d5e57f8dac9e866941fc66f33e1c33d67d7ec9f02a7a3f5c27bf667fe0",
+          "bytes": 171556
         },
         {
           "file": "phone-ts1-04-gate.png",
           "ff": "phone",
-          "sha256": "c2f2062699d9b58dbaaa575fc489fadb982a640421ad6df21cd11c3a3bf7fd64",
-          "bytes": 171109
+          "sha256": "07044e2253e47f4aade8dd58bc207b4a2b16b6f1d33df4b54be82fb559bd9c4b",
+          "bytes": 171030
         },
         {
           "file": "phone-ts1-05-after-import.png",
@@ -7803,8 +7803,8 @@
         {
           "file": "phone-ts1-06-reload.png",
           "ff": "phone",
-          "sha256": "364f07f46cf1a083c9612d5d046743183dc3e67ec41e1c0a2546285b78e603f6",
-          "bytes": 205394
+          "sha256": "1a3c0678fb68b9f0ed39960f20d372e1864ce4f46478e42bfb46ffaf948eb215",
+          "bytes": 205417
         },
         {
           "file": "phone-ts1-07-hostile-clamp.png",
@@ -7815,38 +7815,38 @@
         {
           "file": "phone-ts2-01-record.png",
           "ff": "phone",
-          "sha256": "cc63d46f557ccfcf5faa772e33f8063fa00e4bf5d83684f174687f6be207319e",
-          "bytes": 193731
+          "sha256": "8e5093891015087dcdaea335ad0e04395556fa88e240a086eb82a2f7ea584828",
+          "bytes": 193558
         },
         {
           "file": "phone-ts2-02-backup.png",
           "ff": "phone",
-          "sha256": "b312b2ef30a305412342c79f04a7b58ae4aac37609f56c9bed94a2f368c1949b",
-          "bytes": 199919
+          "sha256": "fe1b1c28fcc2ce4535bebe00adbc731fac61f91f2baf17ec66a8498ff1222144",
+          "bytes": 200493
         },
         {
           "file": "phone-ts2-03-refusal.png",
           "ff": "phone",
-          "sha256": "e3cd66e2bf70c3eb38a2c99704af18d758e516361c3142fa0ca67c4062b045de",
-          "bytes": 183020
+          "sha256": "a69399a73f3385a9ccd06b85b54ceda5c3ba143e1b34fe20f18e8ee9f6f6b286",
+          "bytes": 183009
         },
         {
           "file": "phone-ts2-04-gate.png",
           "ff": "phone",
-          "sha256": "5fe20b6545592b14179dd5eab569b1e3f262ae5f2d537ed22f0606057e2d90bc",
-          "bytes": 212829
+          "sha256": "e897c8067ea108ae71a2e270bd2c974714bee635d796c7b547fe5da9a966e883",
+          "bytes": 213098
         },
         {
           "file": "phone-ts2-05-after-import.png",
           "ff": "phone",
-          "sha256": "356a7a1e48e4aa5e6b3cf2cbc7f726b7712335d7a775d0ea7f91396b7babf096",
-          "bytes": 202482
+          "sha256": "6a6a29bdce876cad2767975802fe21465b568ce166d136cf018100dfeff54ceb",
+          "bytes": 202479
         },
         {
           "file": "phone-ts2-06-reload.png",
           "ff": "phone",
-          "sha256": "5a1bb70302832a6bed5f1a83952d7880ecbe8260659029f6bc72556ceefd39c7",
-          "bytes": 205933
+          "sha256": "f779ab04c3351d57e6a640cfd794481f71bb49f0b3c85c4fe8d14c2e79176d28",
+          "bytes": 205927
         },
         {
           "file": "phone-ts2-07-hostile-clamp.png",
@@ -7857,182 +7857,182 @@
         {
           "file": "phone-reader-01-refused.png",
           "ff": "phone",
-          "sha256": "beebf0894f24e85ed9e9113a105758a77bc4898797e523870838f2df2bc13859",
-          "bytes": 119910
+          "sha256": "4686e39e9e2458ea91cf23775dc34a9e1ec307da90d087beb6be773bb9fd1ec3",
+          "bytes": 120101
         },
         {
           "file": "phone-failenv-01-notes.png",
           "ff": "phone",
-          "sha256": "b2382af5e641902d55c67ffd4dc0b146672bfd3e7b5d791b86ad82f79196bf0c",
-          "bytes": 173317
+          "sha256": "992c9a66569b8464b6bd6d69ff8f8562b97b7a3c3f02d369c3a58b7b5b2aca3e",
+          "bytes": 172720
         },
         {
           "file": "phone-landscape-ts1-01-record.png",
           "ff": "phone-landscape",
-          "sha256": "e02b983d8114cc1ce36a0559473a1932794de4f8698e2ffdb00c3b3e67fcb743",
-          "bytes": 143740
+          "sha256": "14b4fe9632db051ce2767e93def170033469728824d6a6acc67e163f7ce1825b",
+          "bytes": 104571
         },
         {
           "file": "phone-landscape-ts1-02-backup.png",
           "ff": "phone-landscape",
-          "sha256": "cd6b1b29ad386b473bffebc2d14328864c62c5507ed5dbf39279540bbc6280ec",
-          "bytes": 151578
+          "sha256": "98f58d33ac728fd6f1fbbf2e0c4bb0730e1298f07f688fc17db351987c7ad2b9",
+          "bytes": 112822
         },
         {
           "file": "phone-landscape-ts1-03-refusal.png",
           "ff": "phone-landscape",
-          "sha256": "d6187a3b0245327f563b947ff0d93ee31e7c9015a75b8ebb3e611a1992c313ed",
-          "bytes": 150780
+          "sha256": "f75c462c7d2eb12d89407806a72427087e39c287211d7547106f2ed38268e16a",
+          "bytes": 112227
         },
         {
           "file": "phone-landscape-ts1-04-gate.png",
           "ff": "phone-landscape",
-          "sha256": "58776f3e91c9064e1f62b71e2ca96df7e2e24673cc435a4b9c423037aa661d90",
-          "bytes": 130770
+          "sha256": "4e60f12726a6a63d511af73cbe8f0f5834ff542540e4fc77169abd3aa57e967d",
+          "bytes": 117317
         },
         {
           "file": "phone-landscape-ts1-05-after-import.png",
           "ff": "phone-landscape",
-          "sha256": "ce4dc619e07c83f7dc7ea2b0f6b0c597375a665d873abb757a5a3484e72a36eb",
-          "bytes": 153858
+          "sha256": "417becf43007f4174fd927c336458d58d601a41b53f08668fe4b36193bb27a76",
+          "bytes": 115584
         },
         {
           "file": "phone-landscape-ts1-06-reload.png",
           "ff": "phone-landscape",
-          "sha256": "887846f52cf48b2a3b6f7e8a0c66515c6b39786d3f23161521ba089f5a00792b",
-          "bytes": 154262
+          "sha256": "58ac54d85effe18c9e6a28c4d5cec9d54a101e3fcf22d96ee2eb06399892d1a6",
+          "bytes": 115516
         },
         {
           "file": "phone-landscape-ts1-07-hostile-clamp.png",
           "ff": "phone-landscape",
-          "sha256": "73f915b9a3d3fef0265310cfb9cb835c00c99a3b31d5bbed395f69ae383d62ab",
-          "bytes": 170549
+          "sha256": "b4626738a2314c35e105b5c43970db17a06dd6744292c96eb769ce8f7de3eb3e",
+          "bytes": 130855
         },
         {
           "file": "phone-landscape-ts2-01-record.png",
           "ff": "phone-landscape",
-          "sha256": "127de14a4832de247153cf8be6eed60ee06385466cda3665c41da5e3d69e3e01",
-          "bytes": 163380
+          "sha256": "6957ccc45790dd0910c5329b5eb00e512136582728aa65b6632f3bfda09efc2c",
+          "bytes": 126455
         },
         {
           "file": "phone-landscape-ts2-02-backup.png",
           "ff": "phone-landscape",
-          "sha256": "c90a302765717238c7ad9ad637f0615b3e6f428bdca75abc4b4ef257b7831213",
-          "bytes": 181767
+          "sha256": "413843ca00ba815525fdb18bcbddcf36f18bc7ae334b31ce2b7c78920c6e32c5",
+          "bytes": 145217
         },
         {
           "file": "phone-landscape-ts2-03-refusal.png",
           "ff": "phone-landscape",
-          "sha256": "8282fc74dd8f58937c588c17144ccfd918a771cb13220c4f3028253f7272db7e",
-          "bytes": 167653
+          "sha256": "b3e572436b4e79b54eedb3f73486589f5ee1989accec0e389b2c0fb185cb330c",
+          "bytes": 131475
         },
         {
           "file": "phone-landscape-ts2-04-gate.png",
           "ff": "phone-landscape",
-          "sha256": "44923f0542f977697e6b59fb8d588a32b3676c6aa58763e7611457ee8cc6c15b",
-          "bytes": 179395
+          "sha256": "f90ffeb3fd8d54eb990b533fd1be88bd0361b01cdbae12f014bea09440f48390",
+          "bytes": 167245
         },
         {
           "file": "phone-landscape-ts2-05-after-import.png",
           "ff": "phone-landscape",
-          "sha256": "92aef8597dcbfb99044f3c251b6c76af062940c09e1cbd7532951ed06e7d6834",
-          "bytes": 153412
+          "sha256": "84f0c505aa0162abefc9ebb8fee4f10256376402610274d7084264edd67be53b",
+          "bytes": 114645
         },
         {
           "file": "phone-landscape-ts2-06-reload.png",
           "ff": "phone-landscape",
-          "sha256": "c51e281572c8119f3bf6a3321ed496bad12056491ab9bfad749464d987a822c7",
-          "bytes": 154713
+          "sha256": "9cecac116fc201b7511fc9b110cb25e2572943cbe2d80b30209f69cb1baf955b",
+          "bytes": 116195
         },
         {
           "file": "phone-landscape-ts2-07-hostile-clamp.png",
           "ff": "phone-landscape",
-          "sha256": "f4b3bd98b1b191e452457cf80ca4e7650e63d00881328c0d0aab459fc82b3288",
-          "bytes": 169727
+          "sha256": "d2fddbdc60f96bd17745a0c211d653a64258d416d47f003e4c6f1f8d3300dffa",
+          "bytes": 130021
         },
         {
           "file": "phone-landscape-reader-01-refused.png",
           "ff": "phone-landscape",
-          "sha256": "62be8af6850dcc86d213bbee2bbf4de1bca4952dfdf40cd8eac05b4b17b05e80",
-          "bytes": 113007
+          "sha256": "6868e8e2ba76f7826bde9cac10984d21b75ef74f37441308e2be4807366f1b66",
+          "bytes": 111016
         },
         {
           "file": "phone-landscape-failenv-01-notes.png",
           "ff": "phone-landscape",
-          "sha256": "4406df4407baf1f09af0ec4e09bf42a07015cb90e316c854df63d48072924811",
-          "bytes": 151497
+          "sha256": "a3660bf5488290ae2bae20548b88eb39d8ed1a126592112911f929b6964e9475",
+          "bytes": 113084
         },
         {
           "file": "desktop-ts1-01-record.png",
           "ff": "desktop",
-          "sha256": "f5f6cb0e5e3aab8b5a61849c909b896826fdbe4aa8e4db5b7723c0a95107f614",
-          "bytes": 69566
+          "sha256": "af056deaf475bbe90a6b41604a8cdfb3f9db63308e9e69a051177489af82363e",
+          "bytes": 69519
         },
         {
           "file": "desktop-ts1-02-backup.png",
           "ff": "desktop",
-          "sha256": "c2609761e4fa43b7e42762a7b154bfa521edb8e3969d35e3f28cea0d4210af3a",
-          "bytes": 72304
+          "sha256": "655c067c00aa8120cfa94b676d319079ba48bd6ff7160704d5b1d6f0f9f3b7d3",
+          "bytes": 72229
         },
         {
           "file": "desktop-ts1-03-refusal.png",
           "ff": "desktop",
-          "sha256": "5e49437ec6a4ac67e19ec771ba500faf405942c57af6690dd8ad99202c353305",
-          "bytes": 72104
+          "sha256": "f85bf69127b4034a525907289bf7f9a2aa93ac309b73b003bd70142452a4e2a1",
+          "bytes": 72066
         },
         {
           "file": "desktop-ts1-04-gate.png",
           "ff": "desktop",
-          "sha256": "47b0f6b0280292af905660200f586c2a1a6e8c08991b1fd5969d3a23eb0a90d9",
-          "bytes": 85231
+          "sha256": "75b504411a6d40fd49c40e9cb22173ef6dc66ca79204065a87a2a33e2f2a5475",
+          "bytes": 85243
         },
         {
           "file": "desktop-ts1-05-after-import.png",
           "ff": "desktop",
-          "sha256": "38a391002c97fa818282b0ed6af26ee88e3e01f42b12dbf899d85280ce2be3b6",
-          "bytes": 87891
+          "sha256": "9d27f8776c16898a93f0d4f55988b7f8cb658fd35587a13a6676a075c4de8aeb",
+          "bytes": 87889
         },
         {
           "file": "desktop-ts1-06-reload.png",
           "ff": "desktop",
-          "sha256": "20b157c4ac632347919493d899cdb881b7a047d5cdae93807d7f3a3e24550e05",
-          "bytes": 88135
+          "sha256": "7c087919e0723f76b9dde1cc4221dda5e5132dcb1dd975833f6bb0a4e6111674",
+          "bytes": 88152
         },
         {
           "file": "desktop-ts1-07-hostile-clamp.png",
           "ff": "desktop",
-          "sha256": "3594376700e70feb45075d03a940090c5e9d6339205eb9de6e2caa8b912e00af",
-          "bytes": 143285
+          "sha256": "ee5fb296fd336eb0b77ce20b18017ba96837679ba84cf0c8179cd85ed5a66ac7",
+          "bytes": 143283
         },
         {
           "file": "desktop-ts2-01-record.png",
           "ff": "desktop",
-          "sha256": "34db39c3d5308a6ec0975ab21c6b971b4d3d4d8aa011f7edfc86f92a9f5bb196",
-          "bytes": 140486
+          "sha256": "0f04d4a5816a152ddb2843f790b61f6922a55f913b3ef13baf4536ee554a1a5a",
+          "bytes": 140498
         },
         {
           "file": "desktop-ts2-02-backup.png",
           "ff": "desktop",
-          "sha256": "b58bc23b571e298c04e787218c47ebf2afe13d72eeaf61e2732a56f9f2ed6b43",
-          "bytes": 148791
+          "sha256": "1d828043caa9d2e9e61f0f85d92e850ee1037fcdedbe65bfb570537e12c7cc21",
+          "bytes": 149072
         },
         {
           "file": "desktop-ts2-03-refusal.png",
           "ff": "desktop",
-          "sha256": "b3a333d74ae5ca30603b6fccd5519d9bf824e2bcb87cb696d76b5b8fcdfd066e",
-          "bytes": 141729
+          "sha256": "d103f65e87b7c210bc0f6bc9d6afb8fcb82308d25d89c72b53e6db8eeb0d2241",
+          "bytes": 141777
         },
         {
           "file": "desktop-ts2-04-gate.png",
           "ff": "desktop",
-          "sha256": "54ed149f40c949a68e868204b8c3a97849dfc0b5630f6d260ff200b47f9c7f6a",
-          "bytes": 172383
+          "sha256": "249a1267c941fc033c4fdfc42e449b89f69148f4bbca6b9764b1a5d6d708de62",
+          "bytes": 172364
         },
         {
           "file": "desktop-ts2-05-after-import.png",
           "ff": "desktop",
-          "sha256": "8ab7762cd910c38cbabfbc5f7a8717f10b7edf1eb8122bb45e7311bd4ab65093",
-          "bytes": 87996
+          "sha256": "f5df65ca693302c84b6e39f16a695c361fa0b55e8bb39d77a164f9c798bf62cb",
+          "bytes": 87981
         },
         {
           "file": "desktop-ts2-06-reload.png",
@@ -8043,20 +8043,20 @@
         {
           "file": "desktop-ts2-07-hostile-clamp.png",
           "ff": "desktop",
-          "sha256": "59308834c9f06fc69d7a5205155e9d32fdf949bf02eccbceee69f7cf80d52636",
-          "bytes": 142515
+          "sha256": "648f4ab493ecc182861d6b15a05a4dd957b85ae68d19ff14754de8d0d4a1646c",
+          "bytes": 142535
         },
         {
           "file": "desktop-reader-01-refused.png",
           "ff": "desktop",
-          "sha256": "9824d4ca654e00e2ad15a78cb35125f58465e79e0246ca63149bb67c096e525e",
-          "bytes": 57593
+          "sha256": "eacc1577f941c673dd4472a46744b1080004572a35b159398bd1362f3107afb5",
+          "bytes": 57523
         },
         {
           "file": "desktop-failenv-01-notes.png",
           "ff": "desktop",
-          "sha256": "8c00f756c2813808405cb9f11dec43f691ea0b4689e64c5d5075d40ddccaa3c8",
-          "bytes": 72574
+          "sha256": "8354ab98a40d86d658a22c5b6cdbb5c7b1ed2970efd31a231e660ed37a084fe5",
+          "bytes": 72458
         }
       ]
     }
@@ -8084,5 +8084,5 @@
       "screenshots": 0
     }
   },
-  "serverLogTail": "  \u001b[32m➜\u001b[39m  \u001b[1mLocal\u001b[22m:   \u001b[36mhttp://127.0.0.1:\u001b[1m5163\u001b[22m/\u001b[39m\n"
+  "serverLogTail": "  \u001b[32m➜\u001b[39m  \u001b[1mLocal\u001b[22m:   \u001b[36mhttp://127.0.0.1:\u001b[1m4199\u001b[22m/\u001b[39m\n"
 }
