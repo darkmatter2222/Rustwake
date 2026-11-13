@@ -12,6 +12,7 @@ import {
 import type { SimState, UpgradeBranch } from "../game/simulation/types";
 import {
   CELL,
+  WORLD_H,
   WRECK_POSITION,
   drawScene,
   fitCamera,
@@ -149,6 +150,27 @@ function fitToShell(cssWidth: number, cssHeight: number): Camera {
   const right = insets?.right ?? 0;
   const regionWidth = Math.max(1, cssWidth - left - right);
   const camera = fitCamera({ width: regionWidth, height: cssHeight }, insets);
+  // #117: fitCamera (scene.ts, frozen) floors the band scale at BAND_MIN_SCALE so
+  // the yard never zooms below a readable size on a tall band. On the short
+  // landscape rail band the #66 bounded lead leaves a world band shorter than that
+  // floor's yard (224 units * 1.1 = 246 px), so the fitted yard overflows back UP
+  // under the lead's opaque objective / status-line / coach chrome and the top-row
+  // machines (the furnace at tile 1) lose every clear canvas tap point — the
+  // logistics-59 phoneland tap-selection regression. Paint truth: when the measured
+  // band cannot hold the floored yard, fit the WHOLE yard to the band the chrome
+  // actually leaves so every machine stays canvas-reachable at the default fit.
+  // The override only fires when the band scale is below the frozen floor
+  // (fitScale < camera.scale); tall bands (phone portrait, desktop rail) already fit
+  // at the frozen scale and keep their proven composition untouched.
+  if (insets) {
+    const usableH = cssHeight - insets.top - insets.bottom;
+    const fitScale = usableH / (WORLD_H + 12);
+    if (usableH > 0 && fitScale < camera.scale) {
+      const bandCentre = insets.top + usableH / 2;
+      camera.scale = fitScale;
+      camera.y = WORLD_H / 2 + (cssHeight / 2 - bandCentre) / fitScale;
+    }
+  }
   if (left > 0 || right > 0) {
     camera.x += (cssWidth / 2 - (left + regionWidth / 2)) / camera.scale;
   }

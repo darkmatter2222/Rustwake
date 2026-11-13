@@ -927,8 +927,20 @@ body {
   :root .hud__lead {
     right: 334px;
     /* Reserve the primary band + a world band below the lead; the remainder is
-       the lead's own scroll area. Paint-truth: App reads this bounded box. */
-    max-height: calc(100% - 150px);
+       the lead's own scroll area. Paint-truth: App reads this bounded box.
+       #117: the original 150px reserve left only a ~76px world band on the
+       390px-tall phoneland rail. The frozen scene floor (BAND_MIN_SCALE 1.1)
+       needs a 246px yard, so the fitted yard overflowed back up under this
+       opaque lead and the top-row furnace lost every clear canvas tap point.
+       App.fitToShell now fits the whole yard to the measured band, but a 76px
+       band renders the yard so small (~0.32 scale) that the logistics-59
+       working-rail ink set-diff falls to the 10px census floor. Reserve 280px
+       instead so the band holds the yard at ~0.87 scale: every machine stays
+       canvas-reachable AND the route-ink census keeps a robust margin. The
+       full-height inspector gutter is independent of this lead cap, so the #66
+       record/backup/replace 0-inner-scroll budget is unchanged; the lead keeps
+       its own declared scroller for the guidance content below the cap. */
+    max-height: calc(100% - 280px);
     overflow-x: hidden;
     overflow-y: auto;
     touch-action: pan-y;
