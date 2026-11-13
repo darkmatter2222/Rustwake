@@ -1089,9 +1089,13 @@ body {
   border-color: rgba(95, 216, 232, 0.65);
 }
 
-/* c2: the repeat counter on a grouped toast. Tabular figures so the width does not
- * jitter as the count climbs; inherits the toast's own placement and pointer-events. */
-.toast__count {
+/* c2: the repeat counter on a grouped toast, painted as generated content keyed on
+ * data-count so the live-region text stays the single sentence (no re-announcement
+ * spam, and every pinned readout keeps reading the bare sentence). Tabular figures keep
+ * the width steady; the toast is pointer-events:none and centred, so the suffix never
+ * shifts an action under a finger. */
+.toast[data-count]:not([data-count="1"])::after {
+  content: " ×" attr(data-count);
   font-variant-numeric: tabular-nums;
   color: var(--cyan);
 }

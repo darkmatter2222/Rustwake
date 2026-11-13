@@ -421,6 +421,9 @@ export function Toast(props: { text: string; count?: number; onDone: () => void 
   // frame, and a per-render dependency would restart the timer so it never fires.
   // UI-RESET-65 (c2): a repeated identical readout bumps `count`, restarting the
   // window once per group rather than firing a fresh toast for every refused tap.
+  // The count is painted by a ::after pseudo-element keyed on data-count, so the
+  // live-region text stays the single sentence — no re-announcement spam, and every
+  // pinned readout keeps reading the bare sentence. The ×N suffix is language-neutral.
   useEffect(() => {
     const timer = setTimeout(() => done.current(), 1800);
     return () => clearTimeout(timer);
@@ -428,7 +431,6 @@ export function Toast(props: { text: string; count?: number; onDone: () => void 
   return (
     <div className="toast" role="status" data-count={count}>
       {props.text}
-      {count > 1 ? <span className="toast__count"> ×{count}</span> : null}
     </div>
   );
 }
