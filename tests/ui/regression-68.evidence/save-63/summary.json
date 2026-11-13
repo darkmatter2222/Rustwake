@@ -1,0 +1,27 @@
+{
+  "headSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "branch": "rw/68-regression",
+  "summary": {
+    "phone": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "phone-landscape": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "desktop": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "mirror": {
+      "assertions": 2,
+      "passed": 2,
+      "screenshots": 0
+    }
+  },
+  "failures": []
+}

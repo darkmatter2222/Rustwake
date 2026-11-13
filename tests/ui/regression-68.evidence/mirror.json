@@ -1,0 +1,3915 @@
+{
+  "count": 422,
+  "allNonEmpty": true,
+  "allDistinct": false,
+  "uniqueSha256": 345,
+  "duplicateFiles": [
+    "access-66/frames/desktop-large-ts2.png",
+    "access-66/frames/desktop-reduced-motion.png",
+    "home-62/frames/desktop-05-after-reset.png",
+    "home-62/frames/phone-05-after-reset.png",
+    "logistics-59-rerun/frames/desktop-zeropower/01-reveal-power-before.png",
+    "logistics-59-rerun/frames/phone-zeropower/01-reveal-power-before.png",
+    "logistics-59-rerun/frames/phoneland-dense/03-select-furnace-dims-unrelated-before.png",
+    "logistics-59-rerun/frames/phoneland-dense/04-custom-duplicate-preview-before.png",
+    "logistics-59-rerun/frames/phoneland-zeropower/01-reveal-power-before.png",
+    "logistics-59/frames/desktop-dense/01-hide-routes-after.png",
+    "logistics-59/frames/desktop-dense/02-show-routes-after.png",
+    "logistics-59/frames/desktop-dense/05-invalid-commit-rejected-after.png",
+    "logistics-59/frames/desktop-missinginput/00-open-furnace-before.png",
+    "logistics-59/frames/desktop-outputfull/00-open-sorter-after.png",
+    "logistics-59/frames/desktop-outputfull/00-open-sorter-before.png",
+    "logistics-59/frames/desktop-outputfull/01-reveal-output-after.png",
+    "logistics-59/frames/desktop-outputfull/01-reveal-output-before.png",
+    "logistics-59/frames/desktop-refund/01-connect-preview-after.png",
+    "logistics-59/frames/desktop-refund/02-cancel-after.png",
+    "logistics-59/frames/desktop-refund/02-cancel-before.png",
+    "logistics-59/frames/desktop-refund/03-connect-confirm-before.png",
+    "logistics-59/frames/desktop-refund/04-disconnect-preview-after.png",
+    "logistics-59/frames/desktop-refund/05-disconnect-confirm-after.png",
+    "logistics-59/frames/desktop-zeropower/00-open-sorter-after.png",
+    "logistics-59/frames/desktop-zeropower/00-open-sorter-before.png",
+    "logistics-59/frames/desktop-zeropower/01-reveal-power-after.png",
+    "logistics-59/frames/desktop-zeropower/01-reveal-power-before.png",
+    "logistics-59/frames/phone-dense/01-hide-routes-after.png",
+    "logistics-59/frames/phone-dense/02-show-routes-after.png",
+    "logistics-59/frames/phone-dense/02-show-routes-before.png",
+    "logistics-59/frames/phone-dense/03-select-furnace-dims-unrelated-after.png",
+    "logistics-59/frames/phone-outputfull/00-open-sorter-after.png",
+    "logistics-59/frames/phone-outputfull/00-open-sorter-before.png",
+    "logistics-59/frames/phone-outputfull/01-reveal-output-after.png",
+    "logistics-59/frames/phone-outputfull/01-reveal-output-before.png",
+    "logistics-59/frames/phone-refund/00-open-sorter-after.png",
+    "logistics-59/frames/phone-refund/00-open-sorter-before.png",
+    "logistics-59/frames/phone-refund/01-connect-preview-after.png",
+    "logistics-59/frames/phone-refund/02-cancel-after.png",
+    "logistics-59/frames/phone-refund/02-cancel-before.png",
+    "logistics-59/frames/phone-refund/03-connect-confirm-after.png",
+    "logistics-59/frames/phone-refund/03-connect-confirm-before.png",
+    "logistics-59/frames/phone-refund/04-disconnect-preview-before.png",
+    "logistics-59/frames/phone-refund/05-disconnect-confirm-after.png",
+    "logistics-59/frames/phone-zeropower/00-open-sorter-after.png",
+    "logistics-59/frames/phone-zeropower/00-open-sorter-before.png",
+    "logistics-59/frames/phone-zeropower/01-reveal-power-after.png",
+    "logistics-59/frames/phone-zeropower/01-reveal-power-before.png",
+    "logistics-59/frames/phoneland-dense/00-open-sorter-before.png",
+    "logistics-59/frames/phoneland-dense/01-hide-routes-after.png",
+    "logistics-59/frames/phoneland-dense/02-show-routes-after.png",
+    "logistics-59/frames/phoneland-dense/02-show-routes-before.png",
+    "logistics-59/frames/phoneland-dense/03-select-furnace-dims-unrelated-after.png",
+    "logistics-59/frames/phoneland-dense/03-select-furnace-dims-unrelated-before.png",
+    "logistics-59/frames/phoneland-dense/04-custom-duplicate-preview-before.png",
+    "logistics-59/frames/phoneland-missinginput/00-open-furnace-before.png",
+    "logistics-59/frames/phoneland-outputfull/00-open-sorter-after.png",
+    "logistics-59/frames/phoneland-outputfull/00-open-sorter-before.png",
+    "logistics-59/frames/phoneland-outputfull/01-reveal-output-after.png",
+    "logistics-59/frames/phoneland-outputfull/01-reveal-output-before.png",
+    "logistics-59/frames/phoneland-refund/00-open-sorter-after.png",
+    "logistics-59/frames/phoneland-refund/00-open-sorter-before.png",
+    "logistics-59/frames/phoneland-refund/01-connect-preview-after.png",
+    "logistics-59/frames/phoneland-refund/01-connect-preview-before.png",
+    "logistics-59/frames/phoneland-refund/02-cancel-after.png",
+    "logistics-59/frames/phoneland-refund/02-cancel-before.png",
+    "logistics-59/frames/phoneland-refund/03-connect-confirm-before.png",
+    "logistics-59/frames/phoneland-refund/04-disconnect-preview-after.png",
+    "logistics-59/frames/phoneland-refund/05-disconnect-confirm-after.png",
+    "logistics-59/frames/phoneland-zeropower/00-open-sorter-after.png",
+    "logistics-59/frames/phoneland-zeropower/00-open-sorter-before.png",
+    "logistics-59/frames/phoneland-zeropower/01-reveal-power-after.png",
+    "logistics-59/frames/phoneland-zeropower/01-reveal-power-before.png",
+    "research-58/frames/desktop-fresh/00-entry-gate-before.png",
+    "research-58/frames/phone-fresh/00-entry-gate-before.png",
+    "return-61/frames/phone-zero/00-boot-before.png",
+    "return-61/frames/phone-zero/01-reload-byte-equal-before.png"
+  ],
+  "duplicateClassification": {
+    "crossRunLogistics": 57,
+    "crossBrowserAccess": 2,
+    "withinProbeStatic": 5,
+    "other": 0
+  },
+  "withinProbeDuplicateGroups": [
+    [
+      "home-62/frames/desktop-01-fresh-gate.png",
+      "home-62/frames/desktop-05-after-reset.png"
+    ],
+    [
+      "home-62/frames/phone-01-fresh-gate.png",
+      "home-62/frames/phone-05-after-reset.png"
+    ],
+    [
+      "research-58/frames/desktop-fresh/00-entry-gate-after.png",
+      "research-58/frames/desktop-fresh/00-entry-gate-before.png"
+    ],
+    [
+      "research-58/frames/phone-fresh/00-entry-gate-after.png",
+      "research-58/frames/phone-fresh/00-entry-gate-before.png"
+    ],
+    [
+      "return-61/frames/phone-zero/00-boot-after.png",
+      "return-61/frames/phone-zero/00-boot-before.png",
+      "return-61/frames/phone-zero/01-reload-byte-equal-before.png"
+    ]
+  ],
+  "note": "Consolidated census: sha256 + PNG IHDR dims + bytes>0/valid-IHDR nonEmpty proxy + distinct. allDistinct=false is EXPECTED and benign: (1) logistics-59 run1 vs verbatim rerun share identical renders (crossRunLogistics); (2) access-66 Chrome vs Edge share a few identical simple frames (crossBrowserAccess); (3) withinProbeStatic frames are legitimately identical static/byte-equal captures accepted by each probe's OWN authoritative audit (frameAudit.ok=true): home-62 after-reset==fresh-gate (reset returns to fresh), research-58 fresh entry-gate before==after (probe marks desktop-fresh/phone-fresh distinct=false), return-61 phone-zero boot before==after==reload-byte-equal (byte-equal reload assertion). Authoritative decoded-pixel nonEmpty/distinct audits live in each reused probe's own results.json.",
+  "frames": [
+    {
+      "file": "access-66-edge/frames/desktop-large-ts1.png",
+      "sha256": "b2767bbd88bff92693f84322bb3925270f75de7c13d3f3ff826430d0b90c9fd9",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 77824,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/desktop-large-ts2.png",
+      "sha256": "80d8c392b8d42b3bbddcf59384caebb0714da07b1ef34e64d907fb682fcf3dce",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 154007,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/desktop-reduced-motion.png",
+      "sha256": "89b0175de7921c29d1ca62f8761c40637ac702677d7a544d688d9db2e6b1d374",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 71585,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/desktop-ts1.png",
+      "sha256": "f23e96e383cc6f15127eaba157679b130a019d8bfadcdb506777675dfcadde0f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 74139,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/desktop-ts2.png",
+      "sha256": "22a8307a6417dbbc126b1a6d3078e1555a5dced73a68f01b7e5e96e94235eff0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 152515,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/laptop-ts1.png",
+      "sha256": "4ed2f319495325d588390b04b6b89ee89375072e844a085382dd8562165d6526",
+      "width": 1366,
+      "height": 768,
+      "bytes": 62984,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/laptop-ts2.png",
+      "sha256": "610197c50156594a1afd91a63e81a09a0c5be9e68aa2aa2566c13f676850ff69",
+      "width": 1366,
+      "height": 768,
+      "bytes": 130261,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-landscape-ts1.png",
+      "sha256": "8157911178d289f9056b2f3872ff55a52bc8ab6f6073b704aae6d40c39296af3",
+      "width": 1688,
+      "height": 780,
+      "bytes": 143805,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-landscape-ts2.png",
+      "sha256": "348538a1d4befc8edc4cff5b250fc8f6e7ff813045ddfa51afb2d7d3abbe58ba",
+      "width": 1688,
+      "height": 780,
+      "bytes": 187799,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-large-ts1.png",
+      "sha256": "32d008f5f0ec3aef15fdf88ae386dfe7a37c3e508947dd736ee8589a3a697fe8",
+      "width": 824,
+      "height": 1830,
+      "bytes": 163791,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-large-ts2.png",
+      "sha256": "6f5e798c4e1b4d874ed461060ed7ca3a9f1fc00379c59d950d88e91b804208c6",
+      "width": 824,
+      "height": 1830,
+      "bytes": 218217,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-small-ts1.png",
+      "sha256": "55ac167db1fc7afa3a789a9eb27c4e412cb8b0fac1f9d0275144bac3571a5837",
+      "width": 720,
+      "height": 1280,
+      "bytes": 124371,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-small-ts2.png",
+      "sha256": "c4745850b865ca2e9c9b2297d2da0bc454773f6283ccf19c8217c200f4d520d2",
+      "width": 720,
+      "height": 1280,
+      "bytes": 149142,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-ts1.png",
+      "sha256": "7180a5ff0dd6d6822d16942b997a92dd206a3bf50e751f8a8ce1f5c90db73fdd",
+      "width": 780,
+      "height": 1688,
+      "bytes": 177972,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/phone-ts2.png",
+      "sha256": "6be692972e43c29e7be19dd8da7627fe9cf8e0d0292a3fd379d9a07b01cb139e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 206228,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/tablet-ts1.png",
+      "sha256": "59d9ed0a2fb6ed4df6042f03f9a920e4b9a6246d28ad1328c8597174b851da28",
+      "width": 1536,
+      "height": 2048,
+      "bytes": 172878,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66-edge/frames/tablet-ts2.png",
+      "sha256": "350662510475142f4839a27bfef97af655da3bcb82ee46abc77f1b583bb057b7",
+      "width": 1536,
+      "height": 2048,
+      "bytes": 297525,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/desktop-large-ts1.png",
+      "sha256": "56f8b1597934de1708d3a86981475104dc9f5f6df64c609fb44917a9e70c9622",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 77848,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/desktop-large-ts2.png",
+      "sha256": "80d8c392b8d42b3bbddcf59384caebb0714da07b1ef34e64d907fb682fcf3dce",
+      "width": 2560,
+      "height": 1440,
+      "bytes": 154007,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "access-66/frames/desktop-reduced-motion.png",
+      "sha256": "89b0175de7921c29d1ca62f8761c40637ac702677d7a544d688d9db2e6b1d374",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 71585,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "access-66/frames/desktop-ts1.png",
+      "sha256": "5ac431bd772221a50ba7f9bd53198b2486aaee7ff991a614bd360dd80dfbb752",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 74063,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/desktop-ts2.png",
+      "sha256": "6330c3f021628d3948b71e2c496d40f89cc8b53e63bb449827f14d41d3a4fd0b",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 152683,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/laptop-ts1.png",
+      "sha256": "35c42009e7e256a7b5a2dce430275f5372566251a3e3b8b0010ee4a4cad2cdc5",
+      "width": 1366,
+      "height": 768,
+      "bytes": 62984,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/laptop-ts2.png",
+      "sha256": "73270d2f5d18b59433c0020224e9ac860d21295e4759b92faebf38c21248bbba",
+      "width": 1366,
+      "height": 768,
+      "bytes": 130241,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-landscape-ts1.png",
+      "sha256": "b736d35756ff65a6133bbbefe39a498e63097798cb75fcb6f3d32360805785bf",
+      "width": 1688,
+      "height": 780,
+      "bytes": 144119,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-landscape-ts2.png",
+      "sha256": "d763674eaae58caa110e2ae07bd97d84acaac47822d19318f0ed702b7611bb0a",
+      "width": 1688,
+      "height": 780,
+      "bytes": 188386,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-large-ts1.png",
+      "sha256": "d09214f97035919c51e0dbb3d6542cb78e3d9c95a9aaf2aac8742dd2e1a6e1c0",
+      "width": 824,
+      "height": 1830,
+      "bytes": 163842,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-large-ts2.png",
+      "sha256": "37c3b4d257a51ab2e7621cb180f26bbd316e159d61230bae84c353ad2a56c186",
+      "width": 824,
+      "height": 1830,
+      "bytes": 218216,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-small-ts1.png",
+      "sha256": "21a2e14625357c35aee832798679195854315041d9b0dd85fe6b1763af5830d5",
+      "width": 720,
+      "height": 1280,
+      "bytes": 124532,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-small-ts2.png",
+      "sha256": "03e8c9a290ac46e1828b103581ae00736fb032f368e789ed267c8abcda7b866d",
+      "width": 720,
+      "height": 1280,
+      "bytes": 149177,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-ts1.png",
+      "sha256": "deb6bf142acf801cd68e1e35da1a7c1169eb955b150db6494b96e052e021650b",
+      "width": 780,
+      "height": 1688,
+      "bytes": 177524,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/phone-ts2.png",
+      "sha256": "afd4f4394b003385fa06f65a0bc0af738ac04c944c0d3fe28d307853e4fb1a10",
+      "width": 780,
+      "height": 1688,
+      "bytes": 206551,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/tablet-ts1.png",
+      "sha256": "3251cf40ed3568fb7d2efa3aaee3afee9ea573edd8f31b8585a639239af210cc",
+      "width": 1536,
+      "height": 2048,
+      "bytes": 172931,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "access-66/frames/tablet-ts2.png",
+      "sha256": "637843e5179e5cd8d897c7d10ace5cad41e39ce3564998b557837776a670d902",
+      "width": 1536,
+      "height": 2048,
+      "bytes": 297522,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-01-fresh-gate.png",
+      "sha256": "84bc73be255699f9537c56f6dea1e607bff6e280f691167dfc2b4ef0bbe96011",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 380181,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-02-gate-settings.png",
+      "sha256": "f139b5da530bd523e52d3d315e696e450fef8defe1be7a916e20fb296c04fdce",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 142726,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-03-continue-gate.png",
+      "sha256": "85b77f8a07738880085e16f4ced44489dfebc68f7e1dbad69ac0b466f359481c",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 387997,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-04-reset-dialog.png",
+      "sha256": "190627c355ebb4c7cd4c946d885c86dde49aa6467426618bb8ce16e7012b3e2f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 121076,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-05-after-reset.png",
+      "sha256": "84bc73be255699f9537c56f6dea1e607bff6e280f691167dfc2b4ef0bbe96011",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 380181,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "home-62/frames/desktop-06-menu.png",
+      "sha256": "4fcf61565062f3254969c9c87799a28e8ccc4f96bf51ff2278330b42a098e789",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 63724,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-07-settings-poststart.png",
+      "sha256": "f642acdb6c14d1646fe238635e2bdd4b5df3677f3ba119e13cbcbd7583ceea8e",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 60537,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/desktop-08-reset-over-menu.png",
+      "sha256": "ec2ae9d19327027da7963f288546ba25c5a97f022e871fa34534b7d537ba5618",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 66863,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-01-fresh-gate.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245202,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-02-gate-settings.png",
+      "sha256": "2ac365a1580483f1248e6a0e8cefdde35221095d27b627fd8765d79c62a3d763",
+      "width": 780,
+      "height": 1688,
+      "bytes": 99870,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-03-continue-gate.png",
+      "sha256": "a06eac25b9318ac07c5cb668cbbf982f628d202a79de223cb7810da08ab9ea0e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 261788,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-04-reset-dialog.png",
+      "sha256": "661087c9c1569c2cdfdeb33b28390c3efbfc1ea463131442c54c63229aa5dad5",
+      "width": 780,
+      "height": 1688,
+      "bytes": 107626,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-05-after-reset.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245202,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "home-62/frames/phone-06-menu.png",
+      "sha256": "4f879b0c77207cdcbb299fb56fa49b8e9866dfa83b8027d6966a85f88b2cdd24",
+      "width": 780,
+      "height": 1688,
+      "bytes": 106268,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-07-settings-poststart.png",
+      "sha256": "c34f6ccf4494d55a2ef0d6f1098ffe7ef84f9c0eab450da9e04a7c65c43a9694",
+      "width": 780,
+      "height": 1688,
+      "bytes": 112286,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "home-62/frames/phone-08-reset-over-menu.png",
+      "sha256": "aa0634d1d212904943d66c3721803595bc404ae732eb4513a343324d1f23e63e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 119931,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/00-open-sorter-after.png",
+      "sha256": "a72f89a4f580231677da09157750fd8162595e7dd78ab8d4c00ae743dadc4d50",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 117600,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/00-open-sorter-before.png",
+      "sha256": "3dac830967711d05d1f212e296fc9d978bb075e97ab9ffe484f1d57f9c7fafc9",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68096,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/01-hide-routes-after.png",
+      "sha256": "3f22fa458c613febf031b0e04388dc8cf2baecde6b9b01a5654b961911977d68",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 108946,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/01-hide-routes-before.png",
+      "sha256": "2a8ce80908a902f0c66ae1768624e3ac2477e3b076ad88e467412ade47903542",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 117620,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/02-show-routes-after.png",
+      "sha256": "dd7eede4c34a0c4576f10cd3c2fe295bd661d2a9ba644f08837a174cd742b050",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112549,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/02-show-routes-before.png",
+      "sha256": "a1e05eef14a0312a1776f298801b4de4e3fc54fb8796aff6269bfce970891246",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109477,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "acc6d48cb173ba0b7ed41ce2e86ead2ae5f5991a8986c67b711914d8a6fc1c9c",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 110958,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "d38e46deb6bf3c9aa60cfb11a4ecc605797cbf0d6ef36237d9062e15e85c0c99",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112824,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "a721e1603de13e4fefbeb0918e87ea5678dc30e8eb5484d48e4aa027dfd7390f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109612,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "c02275e5c17957b2c905511f832f8f100b0b9245c819fdb6d1f6842bc36af017",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111023,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "54b5f904d6fe6abf4cee0cc470d695fcdc13732300ab05463aa8c796128e2a16",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115102,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "27d366fa3e4311d24df389e0d21963f707cb118d3b51ae7b3166825a573319ab",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109603,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/06-invalid-cancel-after.png",
+      "sha256": "1a9b009c633a201bfe041bd8165e21e8820c96e494153fd74f32b4aa6976a6e6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115654,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-dense/06-invalid-cancel-before.png",
+      "sha256": "bfd319c23f6c067e76fa44f404ad7b3e0ae1a94a6257a779cd9f4fa453380a32",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115182,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-missinginput/00-open-furnace-after.png",
+      "sha256": "3458690209e53b49e0c68bc5f961a637f2a98a43815643d5a61e5e6d3cbc94cb",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111456,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-missinginput/00-open-furnace-before.png",
+      "sha256": "88bbb1efc2277f08e42698eae18a4be97605db250ca5e60abb0fe0a2ee5e05f0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68045,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-outputfull/00-open-sorter-after.png",
+      "sha256": "12e1c48264d2c8b7fcb8288a010edc6d7f07c009667d11fafcb1c9da3eb62c7e",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 118099,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-outputfull/00-open-sorter-before.png",
+      "sha256": "5490272ffea990e47e3e8f0db1dd909dc1a8620b450acb850b65630cc7a1aa8d",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68717,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-outputfull/01-reveal-output-after.png",
+      "sha256": "f7e9ddea83af30970bd8d01f602633ba618e688e538ea2fcff7062634e4a6b57",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 120277,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-outputfull/01-reveal-output-before.png",
+      "sha256": "63b23b605af13eda480dd638f5af281ce8baffed95c20d7e84fe68a60ca6f944",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 118120,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/00-open-sorter-after.png",
+      "sha256": "4f0b1cae2fa42994dcb12bb5aa3fc52a08a12e17d0c0ba721e8a5e1f34850f24",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112615,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/00-open-sorter-before.png",
+      "sha256": "c17fbd8a91d3a97d9ba2c359dd96d199f9b8349aff2b841228a9ad46b5f29295",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 66989,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/01-connect-preview-after.png",
+      "sha256": "00b106869f3c0aaf567f2d25d5d1c20531e02459b0cb20c002fac422ef79f880",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 104231,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/01-connect-preview-before.png",
+      "sha256": "1194909869562c29aef70c6473c8e9f116a991b4852a63e748eef30dbe73ba32",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112720,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/02-cancel-after.png",
+      "sha256": "228da41ec8096c8fcc5f1de2b272b7cd010ea9ee38b5325a297cae695d578883",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111712,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/02-cancel-before.png",
+      "sha256": "4c94f134aeb3ee6f4892bb6dde8c612b6cc055366ea03893ad71d80c2ab5dc5f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 104206,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/03-connect-confirm-after.png",
+      "sha256": "3dd2e1a93a7451f44ce23951cb0264d180331ab1d2c93f4d000eaee1adcb639b",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115531,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/03-connect-confirm-before.png",
+      "sha256": "6a54b6ee270917a5a3421f472e278b7b13ac2d2e9a01b8c285056c8fcf566662",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111865,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/04-disconnect-preview-after.png",
+      "sha256": "725ddfd65b9dcb5124da40359cdffba75dc1689f112d730477049d8139cac496",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111950,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/04-disconnect-preview-before.png",
+      "sha256": "9bae44e8109e3cd38d4ee68de667fed104176dc959b7f100693e26f36af196c8",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115502,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/05-disconnect-confirm-after.png",
+      "sha256": "4738d8c25f463882be2473684208dc2ee27072c1aa3df3847cd6aa5dd1a3f632",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111620,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-refund/05-disconnect-confirm-before.png",
+      "sha256": "0c6e76608cfea14960a3f00bad3f4ebe772afb2ab35032917797eabfac1a9995",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112027,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-zeropower/00-open-sorter-after.png",
+      "sha256": "a1a7af9448fde3c9a3b47753d30802e90b05e73ddf39614cc17668c096882a41",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 119500,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-zeropower/00-open-sorter-before.png",
+      "sha256": "a494d9237cff4959dc341a9d304331af07308e24f6a87d999fcefc9356f0bf50",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68261,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-zeropower/01-reveal-power-after.png",
+      "sha256": "7f8760605565cd7acdd9ea3e6cfd242b336c3f207889054ea5c5669d09185a79",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 126087,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/desktop-zeropower/01-reveal-power-before.png",
+      "sha256": "a1a7af9448fde3c9a3b47753d30802e90b05e73ddf39614cc17668c096882a41",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 119500,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/00-open-sorter-after.png",
+      "sha256": "534031529ee5e3f7b39b3292324fe438e47c83b7247cc1bf409765b6ac23a942",
+      "width": 780,
+      "height": 1688,
+      "bytes": 158577,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/00-open-sorter-before.png",
+      "sha256": "d0abba4e1fc356519708849976df89ad1507f9ffd6588df330ef5c37cc4a16dc",
+      "width": 780,
+      "height": 1688,
+      "bytes": 129866,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/01-hide-routes-after.png",
+      "sha256": "24367a53dd14d063174868985a6572282010cd376dba298b0565997a240e7a34",
+      "width": 780,
+      "height": 1688,
+      "bytes": 165440,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/01-hide-routes-before.png",
+      "sha256": "dfee24b60e2e4dffbb55e0c43baf83c4c697b770ed6939e6e415a987989fad72",
+      "width": 780,
+      "height": 1688,
+      "bytes": 158587,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/02-show-routes-after.png",
+      "sha256": "b42fecaeb7e54f4fa8d3f579b6eb53f053dab3132a1534744b6a28988d49350b",
+      "width": 780,
+      "height": 1688,
+      "bytes": 170078,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/02-show-routes-before.png",
+      "sha256": "996d717bc4d0d93256e7857dc44a857c2a38cb70e86fa14993bd95078c756cdf",
+      "width": 780,
+      "height": 1688,
+      "bytes": 165537,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "8a025b802aaafb9e7403b1d058029c8bbfe3433fcde7abbfc9d4ffe44616088a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 168688,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "0b4ae052691f88093c02f70270700386eecf9cda47420b5b2c1a385c993ac770",
+      "width": 780,
+      "height": 1688,
+      "bytes": 170081,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "d4c9754803ef9b10fc27382b314948e08d87a8b8d0fae2c41bbc2a933c12e0b6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 185930,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "a7834b27672cae01d1dbcfbf58f61d68657cfd70b3988c752f0373067b706785",
+      "width": 780,
+      "height": 1688,
+      "bytes": 168676,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "eaa35536067f11ccd9dcd7cf973580bc7cd07662e8936ea0a66082534d37989f",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182811,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "36a2d6bfa718689f411f01762367b646e5ee0318325b2b93f7f29fbe3c1fd975",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182278,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/06-invalid-cancel-after.png",
+      "sha256": "81ce9c195ef5912dd92c39c1cc48b32cf9210b3505130ddf2e238cacab2eb8a8",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182685,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-dense/06-invalid-cancel-before.png",
+      "sha256": "955efea1b1cfbdc8e3f3e7d3286fe289381484d541dc522e2966b603508e5e55",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182545,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-missinginput/00-open-furnace-after.png",
+      "sha256": "72061eb7701defcb543f8de3925ac598164ed042133824299b0b9946681c1444",
+      "width": 780,
+      "height": 1688,
+      "bytes": 148622,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-missinginput/00-open-furnace-before.png",
+      "sha256": "753469ac47720612c1a43c64424868c88eb079c42a80424a9421a45b57db6413",
+      "width": 780,
+      "height": 1688,
+      "bytes": 128262,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-outputfull/00-open-sorter-after.png",
+      "sha256": "7b4a8a052f86c473909553e91f10306b9a753116c08ce3b977160096a56bf636",
+      "width": 780,
+      "height": 1688,
+      "bytes": 164843,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-outputfull/00-open-sorter-before.png",
+      "sha256": "03f004e6b30ed087abb2ded10a2d8fdd2c3150f9948f168021acce061e4f2a88",
+      "width": 780,
+      "height": 1688,
+      "bytes": 132559,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-outputfull/01-reveal-output-after.png",
+      "sha256": "576ba2caaba501fb26cb82f1cf09afac967bf7e34ad8898aa97c2b6aa2c05e74",
+      "width": 780,
+      "height": 1688,
+      "bytes": 191128,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-outputfull/01-reveal-output-before.png",
+      "sha256": "b6c6b4323d9571900b6ed6e2863cfd37485958ebffbcf816420b1d9fdc20840a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 164855,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/00-open-sorter-after.png",
+      "sha256": "45395e2151738909d599ace8913306bb2db53e22363c2d3290abf50c0097b758",
+      "width": 780,
+      "height": 1688,
+      "bytes": 155899,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/00-open-sorter-before.png",
+      "sha256": "a3168840546e7a89c2718de81df878d838bfb6e0496fe67ef731a54c3d5088a0",
+      "width": 780,
+      "height": 1688,
+      "bytes": 130481,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/01-connect-preview-after.png",
+      "sha256": "4bae0dee64a0455f284f1da81e9e21cb3f3ddc81d80debed6f213dd0b09e289f",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162298,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/01-connect-preview-before.png",
+      "sha256": "40212c534d4749950192611623544a1bf60822fffadbfdf994229dc627aeef0a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 156132,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/02-cancel-after.png",
+      "sha256": "38c74d804d19f19c78c8bf932a77cb5b5fec730bf0d77a989bb06f02abac6cc6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 201924,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/02-cancel-before.png",
+      "sha256": "6ff0b9c5d76120403695ae216a5ee621d9584b936741fb8fd5d4fdf2e4ab6460",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162321,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/03-connect-confirm-after.png",
+      "sha256": "c98b8914b055425c51dbbaa3357fca43e921f80ca4db9b8df116d122358b22ca",
+      "width": 780,
+      "height": 1688,
+      "bytes": 193026,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/03-connect-confirm-before.png",
+      "sha256": "1a6a66013ea1ae3c2d2b364a96a9df1d242987f0bba8380900cd37528507ed59",
+      "width": 780,
+      "height": 1688,
+      "bytes": 201923,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/04-disconnect-preview-after.png",
+      "sha256": "ccb8d66a09538aeb325d27fb66194ec53e9b413d437f4e20bee7637c338cd62e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 173458,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/04-disconnect-preview-before.png",
+      "sha256": "c6841df6a42ea9995176cef7229e69e252084ec22e6f6f7b99be1667b5653681",
+      "width": 780,
+      "height": 1688,
+      "bytes": 192804,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/05-disconnect-confirm-after.png",
+      "sha256": "b715f38b4ed13237458671d402f93c454364c74970931ecb38a790a3fa5595cf",
+      "width": 780,
+      "height": 1688,
+      "bytes": 191161,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-refund/05-disconnect-confirm-before.png",
+      "sha256": "46de99a0730c7e38d75515d362debf9f354bb9e677cc3e4377e108be9e439a85",
+      "width": 780,
+      "height": 1688,
+      "bytes": 173318,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-zeropower/00-open-sorter-after.png",
+      "sha256": "5a130c2363fbcb5736e6174483e564a5b837b92dcfe18ecef3eff79c9c5c2f09",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162601,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-zeropower/00-open-sorter-before.png",
+      "sha256": "ace81bd32d5da0a10c1ac25084d10390280743bd3b83201def1093c4c3262ff8",
+      "width": 780,
+      "height": 1688,
+      "bytes": 133075,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-zeropower/01-reveal-power-after.png",
+      "sha256": "cca7892fc6a77f1ac94e991d9279483f553b02aa4b7f7b12e6a8312ba3e51d69",
+      "width": 780,
+      "height": 1688,
+      "bytes": 194022,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phone-zeropower/01-reveal-power-before.png",
+      "sha256": "5a130c2363fbcb5736e6174483e564a5b837b92dcfe18ecef3eff79c9c5c2f09",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162601,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/00-open-sorter-after.png",
+      "sha256": "3ffa66719c8675c46aee5a0db6d12206bf4f134cbe8bb48b092666c5584bece2",
+      "width": 1688,
+      "height": 780,
+      "bytes": 156662,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/00-open-sorter-before.png",
+      "sha256": "6bcfa8e4382220d30dcf1a4441126fd3b1ab991b6cd0ab4742e46129e655e369",
+      "width": 1688,
+      "height": 780,
+      "bytes": 97612,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/01-hide-routes-after.png",
+      "sha256": "0746da41eb02b2bfee3c529fc675db0d053fbae5c2af9bf555d19741a00fa410",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152512,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/01-hide-routes-before.png",
+      "sha256": "6be6f0c2ebd8a7efde65994f5b84ea02faa7e743ba71884bda8ddcf6977bd9b1",
+      "width": 1688,
+      "height": 780,
+      "bytes": 157168,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/02-show-routes-after.png",
+      "sha256": "ef53b85d1f57298397d0ec1ab164bfe7b71d77d0b200ace6a00a1d7644c1cb9c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151759,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/02-show-routes-before.png",
+      "sha256": "24040fdd0f648aa8a322c562666f0965a7527478f094993db28c68fa3c4538bc",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152751,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "0e47bcd04a82f53018a336c186c9a9373a2c24722ab2c01b90c0a4c3aad84121",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152425,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "ef53b85d1f57298397d0ec1ab164bfe7b71d77d0b200ace6a00a1d7644c1cb9c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151759,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "417002aeac37ce19941a4d72312fffa2ca2ae8effd2b9edc473ee661cdcb46c5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 165328,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "0e47bcd04a82f53018a336c186c9a9373a2c24722ab2c01b90c0a4c3aad84121",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152425,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "ba45442126d12edc85dba31395002d75099661d533d7c5fde2c0ad157d63cb8f",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164126,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "19c6d727fa2150534849930dcbde249c40f81787e7205581a14885cb667d6abc",
+      "width": 1688,
+      "height": 780,
+      "bytes": 165547,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/06-invalid-cancel-after.png",
+      "sha256": "0aac3bf430b55b74cbcb548f44bdc0c934b0e8b5de6e1efa0ad9f7184cf99c70",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164723,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-dense/06-invalid-cancel-before.png",
+      "sha256": "d22b86046518e26c3bc6e5742b4f56fc0bd9325370fc445ed97c716374897d6b",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164364,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-missinginput/00-open-furnace-after.png",
+      "sha256": "30dda12ebb43fd4caa67be7891049f4f3a5b9fb442e8a8c3f17753733b3bac62",
+      "width": 1688,
+      "height": 780,
+      "bytes": 140630,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-missinginput/00-open-furnace-before.png",
+      "sha256": "19abc99df6d205926c7bc75086463ecba1e8922e7b22391c8c9e18ecf0ae1285",
+      "width": 1688,
+      "height": 780,
+      "bytes": 95999,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-outputfull/00-open-sorter-after.png",
+      "sha256": "ee7ec188a734e15cd5767c976c1ef706f17147ef07c8b631240a0dd11031afb3",
+      "width": 1688,
+      "height": 780,
+      "bytes": 162421,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-outputfull/00-open-sorter-before.png",
+      "sha256": "3525c89b3679969e080f6e967177ef71f088159f43610b7927d16f42fd1e5cea",
+      "width": 1688,
+      "height": 780,
+      "bytes": 99510,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-outputfull/01-reveal-output-after.png",
+      "sha256": "8ad711b63245b8db025b25a3c6af23ae453dcd7a89e878408d9d0febe7c5a700",
+      "width": 1688,
+      "height": 780,
+      "bytes": 184978,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-outputfull/01-reveal-output-before.png",
+      "sha256": "d647ec78ca437077401ed494dba4d375034e2e78d90767b7e465f5a8c3dca3cb",
+      "width": 1688,
+      "height": 780,
+      "bytes": 162430,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/00-open-sorter-after.png",
+      "sha256": "af578ec8b49ef910f0b18e3d322cba74c40b7de36ec061d3bc85139c20057088",
+      "width": 1688,
+      "height": 780,
+      "bytes": 147305,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/00-open-sorter-before.png",
+      "sha256": "6f26ef7a06e47e33403056ec20692c811ebd7a15c35c8f593540aa44f6d45ffb",
+      "width": 1688,
+      "height": 780,
+      "bytes": 97125,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/01-connect-preview-after.png",
+      "sha256": "68b603c15a4532524e7f687a3292a86d370b4e648d3d600ff63ebe2e6e4a8d03",
+      "width": 1688,
+      "height": 780,
+      "bytes": 145759,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/01-connect-preview-before.png",
+      "sha256": "7dc3f8613fd71e3623cbbcbf2d1a9d5bb40419057f7337028708b976f3a9b1b3",
+      "width": 1688,
+      "height": 780,
+      "bytes": 147410,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/02-cancel-after.png",
+      "sha256": "19c63bc36bdde6222c9d359c00dc73e887e627c56cd76731577ea5c60e13d8fe",
+      "width": 1688,
+      "height": 780,
+      "bytes": 170242,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/02-cancel-before.png",
+      "sha256": "28e292a4c6c800bc2caccfe3c34783321460acbbdecbdc993b685603141cdee5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 145774,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/03-connect-confirm-after.png",
+      "sha256": "8d729e25ddf3dff7ae9a50361b32d1257b6b7f4a4ad74268ba998ac2d68c4d4c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 179294,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/03-connect-confirm-before.png",
+      "sha256": "c0c5378e56de774e26ff16ff9c9e0723fe495882868600905a1b06b06fea90fa",
+      "width": 1688,
+      "height": 780,
+      "bytes": 175598,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/04-disconnect-preview-after.png",
+      "sha256": "e29a6b635c9d1c0136912484d427fc6c75e479a3110b2ea54d7d6f56ea2e66a5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 156918,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/04-disconnect-preview-before.png",
+      "sha256": "446964d63f15e0f3a756358da054d2deb9dc9c20367c0d1f1b3888d8135b65ab",
+      "width": 1688,
+      "height": 780,
+      "bytes": 179897,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/05-disconnect-confirm-after.png",
+      "sha256": "545516430fd88c641a5ecc91cc64900ec3530099c3081466dda11f7742824f58",
+      "width": 1688,
+      "height": 780,
+      "bytes": 170756,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-refund/05-disconnect-confirm-before.png",
+      "sha256": "c2bfbe5c90813bbf18941965b9f980a38dba6bb2134a11053879ba5cd165a2a5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 157531,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-zeropower/00-open-sorter-after.png",
+      "sha256": "81696f39b67386433cf5572543908f912f40e36ff13c2c35c0bec5f1317b6336",
+      "width": 1688,
+      "height": 780,
+      "bytes": 161656,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-zeropower/00-open-sorter-before.png",
+      "sha256": "1244cf3e0c1fad2aad2e6a50c3715b6daa29d8aa7df16892b0a8350e462c7bbe",
+      "width": 1688,
+      "height": 780,
+      "bytes": 100515,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-zeropower/01-reveal-power-after.png",
+      "sha256": "cc7ec5be33d05f416466e849283fb91314e642fe43ea6401e8d9bd256fd78883",
+      "width": 1688,
+      "height": 780,
+      "bytes": 185705,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59-rerun/frames/phoneland-zeropower/01-reveal-power-before.png",
+      "sha256": "81696f39b67386433cf5572543908f912f40e36ff13c2c35c0bec5f1317b6336",
+      "width": 1688,
+      "height": 780,
+      "bytes": 161656,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/00-open-sorter-after.png",
+      "sha256": "bfb74f9ad689b46dfa3dae94f812afd67d28a084895beb5c0cc86bcb06c1d825",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 117617,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/00-open-sorter-before.png",
+      "sha256": "ba8e286bf4c02ab70a901ac90919f2d09a9c57d9371b860db9155802bb193f85",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68104,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/01-hide-routes-after.png",
+      "sha256": "a1e05eef14a0312a1776f298801b4de4e3fc54fb8796aff6269bfce970891246",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109477,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/01-hide-routes-before.png",
+      "sha256": "351ed9dba91392e35b6badc71f817a530442cf99101e1b155c4136542734c576",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 117738,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/02-show-routes-after.png",
+      "sha256": "d38e46deb6bf3c9aa60cfb11a4ecc605797cbf0d6ef36237d9062e15e85c0c99",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112824,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/02-show-routes-before.png",
+      "sha256": "5d9f851215f097809858063c78c66b954f98df29d595733d50cba5743b82cf2d",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109919,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "f5947f4d06c58185a3d0634f392424bf27708991ad75e75138e8c71883aae9b1",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111044,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "862d878a40ad4a37f3bba927905514712c2f72d8b8efc2af2bb092f8b28cd1ce",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112823,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "5e218707a3cde8c94c2ebf4576e9b2a3ee68c97ec6831175540ad205a6114bf0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109574,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "b63fcb97994ff7181f0b22fd47a368dca2f65806bf48cd3342b1d528ba8dd098",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111043,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "54b5f904d6fe6abf4cee0cc470d695fcdc13732300ab05463aa8c796128e2a16",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115102,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "3b8d94aeaf49e642ef85c5317dff78c0944cf994bb255b18496493ee8956738a",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 109641,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/06-invalid-cancel-after.png",
+      "sha256": "8d3ba3909159caec7f10ee378e6ea60402d07b650b4348d5e54bf2b64741c898",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115589,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-dense/06-invalid-cancel-before.png",
+      "sha256": "57acbc8bd7ca03b2742459c7b9434bc0403dc7f7056bfa9dae93f8db47ab2841",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115232,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-missinginput/00-open-furnace-after.png",
+      "sha256": "565c51bfa373fc046390a0ee10db86b6f28eebbc2562da73abf1a840ac173f38",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111469,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-missinginput/00-open-furnace-before.png",
+      "sha256": "88bbb1efc2277f08e42698eae18a4be97605db250ca5e60abb0fe0a2ee5e05f0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68045,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-outputfull/00-open-sorter-after.png",
+      "sha256": "12e1c48264d2c8b7fcb8288a010edc6d7f07c009667d11fafcb1c9da3eb62c7e",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 118099,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-outputfull/00-open-sorter-before.png",
+      "sha256": "5490272ffea990e47e3e8f0db1dd909dc1a8620b450acb850b65630cc7a1aa8d",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68717,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-outputfull/01-reveal-output-after.png",
+      "sha256": "f7e9ddea83af30970bd8d01f602633ba618e688e538ea2fcff7062634e4a6b57",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 120277,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-outputfull/01-reveal-output-before.png",
+      "sha256": "63b23b605af13eda480dd638f5af281ce8baffed95c20d7e84fe68a60ca6f944",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 118120,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/00-open-sorter-after.png",
+      "sha256": "7df70e0b7304626423e157411c601ec762b69434c026707a154bdbae4f8eb7e8",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112616,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/00-open-sorter-before.png",
+      "sha256": "8bc05448c85ec8790360ffde0fc37dde7075a697ac46dfc314c0905690fb82ad",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 66980,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/01-connect-preview-after.png",
+      "sha256": "00b106869f3c0aaf567f2d25d5d1c20531e02459b0cb20c002fac422ef79f880",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 104231,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/01-connect-preview-before.png",
+      "sha256": "31339faf3a8161960ef5954333afb6e540018ba6c4e1a81fe8133a96f31286f7",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112755,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/02-cancel-after.png",
+      "sha256": "228da41ec8096c8fcc5f1de2b272b7cd010ea9ee38b5325a297cae695d578883",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111712,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/02-cancel-before.png",
+      "sha256": "4c94f134aeb3ee6f4892bb6dde8c612b6cc055366ea03893ad71d80c2ab5dc5f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 104206,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/03-connect-confirm-after.png",
+      "sha256": "8ee849200d736a66fbf72cee92fedb3c005ff19caeb230809bc75af92a3eb159",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115591,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/03-connect-confirm-before.png",
+      "sha256": "6a54b6ee270917a5a3421f472e278b7b13ac2d2e9a01b8c285056c8fcf566662",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111865,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/04-disconnect-preview-after.png",
+      "sha256": "725ddfd65b9dcb5124da40359cdffba75dc1689f112d730477049d8139cac496",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111950,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/04-disconnect-preview-before.png",
+      "sha256": "ca84242f178c2257ab5f0502fd7f72cdf14e0021df4964ba216135352d840fa3",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115513,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/05-disconnect-confirm-after.png",
+      "sha256": "4738d8c25f463882be2473684208dc2ee27072c1aa3df3847cd6aa5dd1a3f632",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111620,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-refund/05-disconnect-confirm-before.png",
+      "sha256": "0e9acfdc1413105e7b0855faa2d32a718f3aa2e4c43a9bb33fbde32522308292",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 112074,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/desktop-zeropower/00-open-sorter-after.png",
+      "sha256": "a1a7af9448fde3c9a3b47753d30802e90b05e73ddf39614cc17668c096882a41",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 119500,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-zeropower/00-open-sorter-before.png",
+      "sha256": "a494d9237cff4959dc341a9d304331af07308e24f6a87d999fcefc9356f0bf50",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 68261,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-zeropower/01-reveal-power-after.png",
+      "sha256": "7f8760605565cd7acdd9ea3e6cfd242b336c3f207889054ea5c5669d09185a79",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 126087,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/desktop-zeropower/01-reveal-power-before.png",
+      "sha256": "a1a7af9448fde3c9a3b47753d30802e90b05e73ddf39614cc17668c096882a41",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 119500,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/00-open-sorter-after.png",
+      "sha256": "c9139bcde3d081b3dc312427ca66d0647e2500fb4122b0066f5412f5e4e4af94",
+      "width": 780,
+      "height": 1688,
+      "bytes": 158575,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/00-open-sorter-before.png",
+      "sha256": "2ed67c0d25fbf3d9485b3ae19b2430114c74e8f5d59121abf05af41f83e146d2",
+      "width": 780,
+      "height": 1688,
+      "bytes": 129900,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/01-hide-routes-after.png",
+      "sha256": "996d717bc4d0d93256e7857dc44a857c2a38cb70e86fa14993bd95078c756cdf",
+      "width": 780,
+      "height": 1688,
+      "bytes": 165537,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/01-hide-routes-before.png",
+      "sha256": "34274fa83b8a334717660759bbef8d9d13aa2344b9a0bdabddff6df2e6fb4b3d",
+      "width": 780,
+      "height": 1688,
+      "bytes": 158662,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/02-show-routes-after.png",
+      "sha256": "0b4ae052691f88093c02f70270700386eecf9cda47420b5b2c1a385c993ac770",
+      "width": 780,
+      "height": 1688,
+      "bytes": 170081,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/02-show-routes-before.png",
+      "sha256": "996d717bc4d0d93256e7857dc44a857c2a38cb70e86fa14993bd95078c756cdf",
+      "width": 780,
+      "height": 1688,
+      "bytes": 165537,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "a7834b27672cae01d1dbcfbf58f61d68657cfd70b3988c752f0373067b706785",
+      "width": 780,
+      "height": 1688,
+      "bytes": 168676,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "9516ec32b37317e0abd10ce5a04259537524938142c09eceea9042e559a46225",
+      "width": 780,
+      "height": 1688,
+      "bytes": 170078,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "3ca5ce761578c691a2a42906099401565c17d328dc7a5de35c086a4af1160ffe",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182277,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "ecbd5e331c6b39f533ab57b71554296b780b1fd458efcf672e4ca0f0b024a8a8",
+      "width": 780,
+      "height": 1688,
+      "bytes": 168682,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "a19d3dac624978d462bc12fb40c219da494b2944feee638e2e9688ed6c827eaa",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182494,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "1817f0b73d3c879acbf07838ca29b1b939a41a695a97232eec344419726a7736",
+      "width": 780,
+      "height": 1688,
+      "bytes": 181746,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/06-invalid-cancel-after.png",
+      "sha256": "4491fa6cd08e2c5dcd5e6fb5ea00e988780144619da607d0221656addb8fd448",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182684,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-dense/06-invalid-cancel-before.png",
+      "sha256": "542e416c7d837d70015f0005094665d6b31b43333eb3d2437e8f4120de256894",
+      "width": 780,
+      "height": 1688,
+      "bytes": 182551,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-missinginput/00-open-furnace-after.png",
+      "sha256": "475f1b2f2d4a7ae291d67fa69654a94c66ab0611890e4cf9b7ee6a7e53113185",
+      "width": 780,
+      "height": 1688,
+      "bytes": 148635,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-missinginput/00-open-furnace-before.png",
+      "sha256": "1d421aabf0ccdf6ee86e12f96e53acfb58941105b384543d21a363dbe292b7c5",
+      "width": 780,
+      "height": 1688,
+      "bytes": 128256,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-outputfull/00-open-sorter-after.png",
+      "sha256": "7b4a8a052f86c473909553e91f10306b9a753116c08ce3b977160096a56bf636",
+      "width": 780,
+      "height": 1688,
+      "bytes": 164843,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-outputfull/00-open-sorter-before.png",
+      "sha256": "03f004e6b30ed087abb2ded10a2d8fdd2c3150f9948f168021acce061e4f2a88",
+      "width": 780,
+      "height": 1688,
+      "bytes": 132559,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-outputfull/01-reveal-output-after.png",
+      "sha256": "576ba2caaba501fb26cb82f1cf09afac967bf7e34ad8898aa97c2b6aa2c05e74",
+      "width": 780,
+      "height": 1688,
+      "bytes": 191128,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-outputfull/01-reveal-output-before.png",
+      "sha256": "b6c6b4323d9571900b6ed6e2863cfd37485958ebffbcf816420b1d9fdc20840a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 164855,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/00-open-sorter-after.png",
+      "sha256": "45395e2151738909d599ace8913306bb2db53e22363c2d3290abf50c0097b758",
+      "width": 780,
+      "height": 1688,
+      "bytes": 155899,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/00-open-sorter-before.png",
+      "sha256": "a3168840546e7a89c2718de81df878d838bfb6e0496fe67ef731a54c3d5088a0",
+      "width": 780,
+      "height": 1688,
+      "bytes": 130481,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/01-connect-preview-after.png",
+      "sha256": "4bae0dee64a0455f284f1da81e9e21cb3f3ddc81d80debed6f213dd0b09e289f",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162298,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/01-connect-preview-before.png",
+      "sha256": "d23f7400529b4f7ca6e51349aeb8158303718e4284b1276a0d25c82ad5edc9d7",
+      "width": 780,
+      "height": 1688,
+      "bytes": 156146,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/02-cancel-after.png",
+      "sha256": "38c74d804d19f19c78c8bf932a77cb5b5fec730bf0d77a989bb06f02abac6cc6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 201924,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/02-cancel-before.png",
+      "sha256": "6ff0b9c5d76120403695ae216a5ee621d9584b936741fb8fd5d4fdf2e4ab6460",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162321,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/03-connect-confirm-after.png",
+      "sha256": "c6841df6a42ea9995176cef7229e69e252084ec22e6f6f7b99be1667b5653681",
+      "width": 780,
+      "height": 1688,
+      "bytes": 192804,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/03-connect-confirm-before.png",
+      "sha256": "1a6a66013ea1ae3c2d2b364a96a9df1d242987f0bba8380900cd37528507ed59",
+      "width": 780,
+      "height": 1688,
+      "bytes": 201923,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/04-disconnect-preview-after.png",
+      "sha256": "cddce5845a81cf2fbadacb653bd221ea5625d670161d3c948b21952a61024f51",
+      "width": 780,
+      "height": 1688,
+      "bytes": 173318,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/04-disconnect-preview-before.png",
+      "sha256": "c6841df6a42ea9995176cef7229e69e252084ec22e6f6f7b99be1667b5653681",
+      "width": 780,
+      "height": 1688,
+      "bytes": 192804,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/05-disconnect-confirm-after.png",
+      "sha256": "b715f38b4ed13237458671d402f93c454364c74970931ecb38a790a3fa5595cf",
+      "width": 780,
+      "height": 1688,
+      "bytes": 191161,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-refund/05-disconnect-confirm-before.png",
+      "sha256": "adc940aeb61917beff0387deff6159c9d6511108ee2a18d543ad178e8d831d9a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 173316,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phone-zeropower/00-open-sorter-after.png",
+      "sha256": "5a130c2363fbcb5736e6174483e564a5b837b92dcfe18ecef3eff79c9c5c2f09",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162601,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-zeropower/00-open-sorter-before.png",
+      "sha256": "ace81bd32d5da0a10c1ac25084d10390280743bd3b83201def1093c4c3262ff8",
+      "width": 780,
+      "height": 1688,
+      "bytes": 133075,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-zeropower/01-reveal-power-after.png",
+      "sha256": "cca7892fc6a77f1ac94e991d9279483f553b02aa4b7f7b12e6a8312ba3e51d69",
+      "width": 780,
+      "height": 1688,
+      "bytes": 194022,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phone-zeropower/01-reveal-power-before.png",
+      "sha256": "5a130c2363fbcb5736e6174483e564a5b837b92dcfe18ecef3eff79c9c5c2f09",
+      "width": 780,
+      "height": 1688,
+      "bytes": 162601,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/00-open-sorter-after.png",
+      "sha256": "f28c7aafdc198265a62e6310fe7d14ef4b87b16bf053348028ea10eaa24980c1",
+      "width": 1688,
+      "height": 780,
+      "bytes": 156675,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/00-open-sorter-before.png",
+      "sha256": "6bcfa8e4382220d30dcf1a4441126fd3b1ab991b6cd0ab4742e46129e655e369",
+      "width": 1688,
+      "height": 780,
+      "bytes": 97612,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/01-hide-routes-after.png",
+      "sha256": "0746da41eb02b2bfee3c529fc675db0d053fbae5c2af9bf555d19741a00fa410",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152512,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/01-hide-routes-before.png",
+      "sha256": "a4cc049de1bc6d844445cc32bd15f6dd0dadf2c55aa7f4e5a0d02d2799f7c463",
+      "width": 1688,
+      "height": 780,
+      "bytes": 157167,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/02-show-routes-after.png",
+      "sha256": "ef53b85d1f57298397d0ec1ab164bfe7b71d77d0b200ace6a00a1d7644c1cb9c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151759,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/02-show-routes-before.png",
+      "sha256": "24040fdd0f648aa8a322c562666f0965a7527478f094993db28c68fa3c4538bc",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152751,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/03-select-furnace-dims-unrelated-after.png",
+      "sha256": "0e47bcd04a82f53018a336c186c9a9373a2c24722ab2c01b90c0a4c3aad84121",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152425,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/03-select-furnace-dims-unrelated-before.png",
+      "sha256": "ef53b85d1f57298397d0ec1ab164bfe7b71d77d0b200ace6a00a1d7644c1cb9c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151759,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/04-custom-duplicate-preview-after.png",
+      "sha256": "e4736d9ab79e37e95bfe4d274b780fdbbde4298f3a9c20c3ab5fb71c1ed8e0ee",
+      "width": 1688,
+      "height": 780,
+      "bytes": 165329,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/04-custom-duplicate-preview-before.png",
+      "sha256": "0e47bcd04a82f53018a336c186c9a9373a2c24722ab2c01b90c0a4c3aad84121",
+      "width": 1688,
+      "height": 780,
+      "bytes": 152425,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/05-invalid-commit-rejected-after.png",
+      "sha256": "e6f1809c454f1b3a76a7f8790f8325579f23ee93d854e02b1222686cc1ce1d5b",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164110,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/05-invalid-commit-rejected-before.png",
+      "sha256": "3e9bc97ecf2b8355e586c58d910f276c7acc9f381d18d2943744243074075be5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 165558,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/06-invalid-cancel-after.png",
+      "sha256": "0ed62b5eb579c8ccff45b370cee546e01731fb518d4a050af7208d1d2cc4e797",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164723,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-dense/06-invalid-cancel-before.png",
+      "sha256": "c60469ed1368bb51938df5e207476ee219daed7bb37eff1e5155a57ce4ad9f0c",
+      "width": 1688,
+      "height": 780,
+      "bytes": 164342,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-missinginput/00-open-furnace-after.png",
+      "sha256": "67deec3aac2313e03ee929070fea1b3221dd0e1a801efc2f445a815b65c2193e",
+      "width": 1688,
+      "height": 780,
+      "bytes": 140622,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-missinginput/00-open-furnace-before.png",
+      "sha256": "19abc99df6d205926c7bc75086463ecba1e8922e7b22391c8c9e18ecf0ae1285",
+      "width": 1688,
+      "height": 780,
+      "bytes": 95999,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-outputfull/00-open-sorter-after.png",
+      "sha256": "ee7ec188a734e15cd5767c976c1ef706f17147ef07c8b631240a0dd11031afb3",
+      "width": 1688,
+      "height": 780,
+      "bytes": 162421,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-outputfull/00-open-sorter-before.png",
+      "sha256": "3525c89b3679969e080f6e967177ef71f088159f43610b7927d16f42fd1e5cea",
+      "width": 1688,
+      "height": 780,
+      "bytes": 99510,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-outputfull/01-reveal-output-after.png",
+      "sha256": "8ad711b63245b8db025b25a3c6af23ae453dcd7a89e878408d9d0febe7c5a700",
+      "width": 1688,
+      "height": 780,
+      "bytes": 184978,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-outputfull/01-reveal-output-before.png",
+      "sha256": "d647ec78ca437077401ed494dba4d375034e2e78d90767b7e465f5a8c3dca3cb",
+      "width": 1688,
+      "height": 780,
+      "bytes": 162430,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/00-open-sorter-after.png",
+      "sha256": "af578ec8b49ef910f0b18e3d322cba74c40b7de36ec061d3bc85139c20057088",
+      "width": 1688,
+      "height": 780,
+      "bytes": 147305,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/00-open-sorter-before.png",
+      "sha256": "6f26ef7a06e47e33403056ec20692c811ebd7a15c35c8f593540aa44f6d45ffb",
+      "width": 1688,
+      "height": 780,
+      "bytes": 97125,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/01-connect-preview-after.png",
+      "sha256": "68b603c15a4532524e7f687a3292a86d370b4e648d3d600ff63ebe2e6e4a8d03",
+      "width": 1688,
+      "height": 780,
+      "bytes": 145759,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/01-connect-preview-before.png",
+      "sha256": "7dc3f8613fd71e3623cbbcbf2d1a9d5bb40419057f7337028708b976f3a9b1b3",
+      "width": 1688,
+      "height": 780,
+      "bytes": 147410,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/02-cancel-after.png",
+      "sha256": "19c63bc36bdde6222c9d359c00dc73e887e627c56cd76731577ea5c60e13d8fe",
+      "width": 1688,
+      "height": 780,
+      "bytes": 170242,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/02-cancel-before.png",
+      "sha256": "28e292a4c6c800bc2caccfe3c34783321460acbbdecbdc993b685603141cdee5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 145774,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/03-connect-confirm-after.png",
+      "sha256": "ce5a00f0f834873eea93d90c5aaca48d26287e156409d93eed0b236ca3def71a",
+      "width": 1688,
+      "height": 780,
+      "bytes": 179287,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/03-connect-confirm-before.png",
+      "sha256": "c0c5378e56de774e26ff16ff9c9e0723fe495882868600905a1b06b06fea90fa",
+      "width": 1688,
+      "height": 780,
+      "bytes": 175598,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/04-disconnect-preview-after.png",
+      "sha256": "e29a6b635c9d1c0136912484d427fc6c75e479a3110b2ea54d7d6f56ea2e66a5",
+      "width": 1688,
+      "height": 780,
+      "bytes": 156918,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/04-disconnect-preview-before.png",
+      "sha256": "e507d9689380104c13a0a3b274ce38a316587acf49a9e6ccb778c72496a3bfdf",
+      "width": 1688,
+      "height": 780,
+      "bytes": 179894,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/05-disconnect-confirm-after.png",
+      "sha256": "545516430fd88c641a5ecc91cc64900ec3530099c3081466dda11f7742824f58",
+      "width": 1688,
+      "height": 780,
+      "bytes": 170756,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-refund/05-disconnect-confirm-before.png",
+      "sha256": "c0a3a09c098e4c42eda54b7b36945a3f21e5b21a1093c66178b21cad7c279b66",
+      "width": 1688,
+      "height": 780,
+      "bytes": 157534,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "logistics-59/frames/phoneland-zeropower/00-open-sorter-after.png",
+      "sha256": "81696f39b67386433cf5572543908f912f40e36ff13c2c35c0bec5f1317b6336",
+      "width": 1688,
+      "height": 780,
+      "bytes": 161656,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-zeropower/00-open-sorter-before.png",
+      "sha256": "1244cf3e0c1fad2aad2e6a50c3715b6daa29d8aa7df16892b0a8350e462c7bbe",
+      "width": 1688,
+      "height": 780,
+      "bytes": 100515,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-zeropower/01-reveal-power-after.png",
+      "sha256": "cc7ec5be33d05f416466e849283fb91314e642fe43ea6401e8d9bd256fd78883",
+      "width": 1688,
+      "height": 780,
+      "bytes": 185705,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "logistics-59/frames/phoneland-zeropower/01-reveal-power-before.png",
+      "sha256": "81696f39b67386433cf5572543908f912f40e36ff13c2c35c0bec5f1317b6336",
+      "width": 1688,
+      "height": 780,
+      "bytes": 161656,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-desktop-ts1-mature-reduced.png",
+      "sha256": "2bc3b8517a1d09040b1ae771aa0bd0733ccce1a216655c30b20d70a68c29aab6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 61983,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-desktop-ts1-mature.png",
+      "sha256": "2210bccecf3f30de326c0ac3741c30ee8916008945fea1b6bcb726bd01c124b6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 62112,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-desktop-ts1-opening.png",
+      "sha256": "246ceb49c985f873bd000cd6ec5138dccafbff9b7f2d5a1ea7664a131f008b6b",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 60455,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-desktop-ts2-mature-reduced.png",
+      "sha256": "6bc142cf6a4383255a2ca8304cfee1fd79a5cc2c3faf381c2dd77e8d1142f070",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 116112,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-desktop-ts2-mature.png",
+      "sha256": "74b24e65cd5c2b814f0ef804fea63fa637ebdf36d76414f20c6fc53b7e50e6c5",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 116189,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-landscape-ts1-mature-reduced.png",
+      "sha256": "9d933b00dfeefaa231b9dbffe9d79e6a0daa167882a15132812190c8bd7aaec6",
+      "width": 1688,
+      "height": 780,
+      "bytes": 106515,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-landscape-ts1-mature.png",
+      "sha256": "47ac33f446178f3068f95dafc02665fff0573b96e231979775df1ed9fa0488ba",
+      "width": 1688,
+      "height": 780,
+      "bytes": 106786,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-landscape-ts2-mature-reduced.png",
+      "sha256": "7c0d2346d6d15acab5f2117a82bea7182fcbabe07eb7d7f1cb78bf87ba1f988d",
+      "width": 1688,
+      "height": 780,
+      "bytes": 109578,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-landscape-ts2-mature.png",
+      "sha256": "3ff02296dbacea71cefcc5e88f65411c5318b0194362f3a962a55274635c3438",
+      "width": 1688,
+      "height": 780,
+      "bytes": 109716,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts1-catchup.png",
+      "sha256": "b14c421a0cb999d8cbc2f0dd7297a38a3170eaa7a63c680f131b85624dce4805",
+      "width": 780,
+      "height": 1688,
+      "bytes": 142834,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts1-mature-reduced.png",
+      "sha256": "498a662af3271d300fa395b07fccbdf2bc7661dc6e13453803be9013b15f5824",
+      "width": 780,
+      "height": 1688,
+      "bytes": 128865,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts1-mature.png",
+      "sha256": "a75a787617d43c64aff1c3b2450f437adab1fddfd21021021f033e169e95b6a6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 128357,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts1-opening.png",
+      "sha256": "e1f586c4f3a14334a17d859ad2a3e42e5308116107f1a2eebedf044384b4d8f5",
+      "width": 780,
+      "height": 1688,
+      "bytes": 128803,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts2-mature-reduced.png",
+      "sha256": "daec9603e20b037cf31b7fd381e93ac63581404f80bc74e3c7c4f42bf8af2307",
+      "width": 780,
+      "height": 1688,
+      "bytes": 138706,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "perf-67/frames/perf-67-after-phone-ts2-mature.png",
+      "sha256": "6597a5e9450930b3dece15f9ea6fa4440a0c171e52c0a8785d9c17fadb2bac83",
+      "width": 780,
+      "height": 1688,
+      "bytes": 137902,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-completed/00-open-after.png",
+      "sha256": "46d7f16d926a5ea8d1ee046b0d00d5bf2e46e6f827de42214ca5d8a939bda2a0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 128647,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-completed/00-open-before.png",
+      "sha256": "a3f88b410c488424b8ff5b369b07e7695589bd926b20e5ad4d3c12d187f8ef92",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69325,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-fresh/00-entry-gate-after.png",
+      "sha256": "0873d25511405255a6d748c657bb3523c1a36dbf34fb820a03fb0f700b59b3b6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 56857,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-fresh/00-entry-gate-before.png",
+      "sha256": "0873d25511405255a6d748c657bb3523c1a36dbf34fb820a03fb0f700b59b3b6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 56857,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "research-58/frames/desktop-large/00-open-after.png",
+      "sha256": "55b34d608734ea7ebe45459da61b76bcda439384cc875bdf8d4b7f220172600f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 215031,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/00-open-before.png",
+      "sha256": "23f7d6f1eb332ff96d2b334bd7984c3c741e50785aa025b1d1a5b3ebaf130ef7",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 121025,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/01-scroll-tail-after.png",
+      "sha256": "8d17e2e02248ded507bf1283295ad790efe1be4155b67255fa936b19c1a75eb4",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 181933,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/01-scroll-tail-before.png",
+      "sha256": "fbbbf957addf77580d21ac44c8ccea7a269e5171cb374421ee90cab1996f2613",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 215071,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/02-scroll-head-after.png",
+      "sha256": "1a369f9866e89d0a7d189be572710b0c96be1c70429ed35b3a97549073222342",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 180911,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/02-scroll-head-before.png",
+      "sha256": "6860faec969c2da56de46ba981422ec40353b7d4254bec2fd988e50afadadfb5",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 181570,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/03-buy-after.png",
+      "sha256": "43b3ce8d7ab6d5406a48c5505c8a0ff6e71c33cdb71b9a6105eddbef94613b34",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 170217,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-large/03-buy-before.png",
+      "sha256": "4ed791dd21ef554755abf8acc698b386eb3761379acbd7cb05ca1248c5aaf917",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 180916,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-nodata/00-open-after.png",
+      "sha256": "919c077e48993c66c1bbececbe9a583528996e4be10d5622a97f4b3088b8700c",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 142612,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-nodata/00-open-before.png",
+      "sha256": "2cf03fd4fdf0b43121004b43d91d1dbbf8e94f15b8430135ea8ed6b1d25419d0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 67570,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/00-open-after.png",
+      "sha256": "e52c7599902f065c40dd9a734422bb93a47fba4e3ec5857944640e59c3c77358",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 145509,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/00-open-before.png",
+      "sha256": "acbe84baf5b5cfc90ecf9f6149d056a1981cf23f1499d2b30343d0eb8db60db6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69257,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/01-buy-buffers-after.png",
+      "sha256": "9b9edd30d1310be706bcdedc2c2326e8062d40ab06afc26dadc0316b41f92125",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 139321,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/01-buy-buffers-before.png",
+      "sha256": "ebf17069bbf5514a27c5d784d20415c2d7dba36e759c757f8cc8e1dd3b0228fc",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 145119,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/02-scroll-overview-after.png",
+      "sha256": "fa7be2d80e11b85b5ba9c5376096e90eeea9dfdd1e555f69df7f69b0787ea62c",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 139191,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/02-scroll-overview-before.png",
+      "sha256": "769dd60001cfc6a43efa08b9cb93be924d1bb0be2cebee46bd8047be331b85e9",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 139631,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/03-details-dispatch-after.png",
+      "sha256": "15e1b8fe8960e5ad14777892b21e314e364e424a3e14d25813dc26b952ea7103",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 131379,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/03-details-dispatch-before.png",
+      "sha256": "51dc7639185587071dd890cc7cf455f312716707722e3e2a92783e79830df062",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 139443,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/04-close-after.png",
+      "sha256": "b5dac8f97091a0019c5205edd8e70e5cdac02b0f2b75163e2dc4619131bc487f",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 67203,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/desktop-partial/04-close-before.png",
+      "sha256": "a1563e1cfde1f1455cda1baa1e5359d34ba31b4a052d622f24f9f820a482129a",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 131276,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-completed/00-open-after.png",
+      "sha256": "49e1b9b76881fb7e0be20c563fd4640fa6df95fe379d3700a6e7a19baf1642da",
+      "width": 780,
+      "height": 1688,
+      "bytes": 224632,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-completed/00-open-before.png",
+      "sha256": "8ac376f3bc2adaa6ff63f0f26b6e818ef43f40edbaf659efbc65af0feb57b33d",
+      "width": 780,
+      "height": 1688,
+      "bytes": 131574,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-fresh/00-entry-gate-after.png",
+      "sha256": "233c92d186fea9593f287e7e15acfe2ece953f657a69f684a6bc5b18bed41595",
+      "width": 780,
+      "height": 1688,
+      "bytes": 116017,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-fresh/00-entry-gate-before.png",
+      "sha256": "233c92d186fea9593f287e7e15acfe2ece953f657a69f684a6bc5b18bed41595",
+      "width": 780,
+      "height": 1688,
+      "bytes": 116017,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "research-58/frames/phone-large/00-open-after.png",
+      "sha256": "4ce57cc62994932a523890677907b0615308300088cb6b3ca829f6e8b0f0e813",
+      "width": 780,
+      "height": 1688,
+      "bytes": 233044,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/00-open-before.png",
+      "sha256": "9d458a725dd90eed398bc2bb6cba196f8a1e1c3b99b392339203d3fb51d9e3f5",
+      "width": 780,
+      "height": 1688,
+      "bytes": 152286,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/01-scroll-tail-after.png",
+      "sha256": "dbeed0478ca1e1505744175b269d89b55343fe87b5faf81b70bdaa2a6dc6ad82",
+      "width": 780,
+      "height": 1688,
+      "bytes": 212036,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/01-scroll-tail-before.png",
+      "sha256": "a6c482b71fdb8e92c071c5a6b063fa3c04de6d1ff16ca9f21ba84fee1cbb8ef2",
+      "width": 780,
+      "height": 1688,
+      "bytes": 233431,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/02-scroll-head-after.png",
+      "sha256": "a7cc7cc4a79077bf469351ce3f2a6d8414e67a566be5d7d3ab48ece36bf4f185",
+      "width": 780,
+      "height": 1688,
+      "bytes": 207857,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/02-scroll-head-before.png",
+      "sha256": "4ed69cf8253b61490e909679451d1b3d5a17f1fa7edd0c0e1855e49b96a3895b",
+      "width": 780,
+      "height": 1688,
+      "bytes": 212285,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/03-buy-after.png",
+      "sha256": "03f4ec8aa7e923d2a10b09c5eb05b42bdbde53c1a29ebfd325b169344d0089fb",
+      "width": 780,
+      "height": 1688,
+      "bytes": 195328,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-large/03-buy-before.png",
+      "sha256": "872ca27cf397ce66cfe73e6259c8fec7ecc8d3863605ce6c3f0377f5a38c1eb1",
+      "width": 780,
+      "height": 1688,
+      "bytes": 207761,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-nodata/00-open-after.png",
+      "sha256": "02992cdd24828af36291272284ed94694d4006ed87d55a3afaed7d48dcd667a1",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245721,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-nodata/00-open-before.png",
+      "sha256": "590a594fe451cc8be6ed6ba2239c050edfbdfd6679cd5914a49c78e709e1e05a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 127794,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/00-open-after.png",
+      "sha256": "c7579f4069664abc05b91f94ab7042c6952beb55e9ac1d13da9260b52f455497",
+      "width": 780,
+      "height": 1688,
+      "bytes": 242209,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/00-open-before.png",
+      "sha256": "5b2d903b34dd840c83096d2202e0c1e44338caf9f52db5b79b09058839827668",
+      "width": 780,
+      "height": 1688,
+      "bytes": 129183,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/01-buy-buffers-after.png",
+      "sha256": "e0922170c84f790245b0b198c12a57e8c7b850bc4a5abcdff3dcb36f97218d4e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 176334,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/01-buy-buffers-before.png",
+      "sha256": "c1a4aa90e9245153bdf7a704e49108527a04e6c69c8e186f0c9512ffb0c9c863",
+      "width": 780,
+      "height": 1688,
+      "bytes": 242457,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/02-scroll-overview-after.png",
+      "sha256": "d5a5f3444ff4c7f08ba9609194363fb8df3dae02728006516fab11155967e3e3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 178539,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/02-scroll-overview-before.png",
+      "sha256": "696690eed992885c176e8131b60dbcc0d84bca7102ce33755bb39acd1aa7d0e1",
+      "width": 780,
+      "height": 1688,
+      "bytes": 176536,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/03-details-dispatch-after.png",
+      "sha256": "6de52f5bef64a8f19a52e83e7018c0dce405291fded447ec5fdc75347115ed65",
+      "width": 780,
+      "height": 1688,
+      "bytes": 177683,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/03-details-dispatch-before.png",
+      "sha256": "593793f10fdf539ad479305451776238e72da06df308c90d9bfc812c982639ce",
+      "width": 780,
+      "height": 1688,
+      "bytes": 178769,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/04-close-after.png",
+      "sha256": "df29e4f71e791aa832bedf4bb3e30d3623a245ef0f6366d0cfb3723f303188b5",
+      "width": 780,
+      "height": 1688,
+      "bytes": 126626,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "research-58/frames/phone-partial/04-close-before.png",
+      "sha256": "594614fc4091a5a681e470d76c45b136fbdd21fff615c0632e8540217f4c9ac3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 177592,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/desktop-short/00-boot-after.png",
+      "sha256": "70949d2e195ad216a423c2ba833eac0c1c684c0cf4cd7265cb388c1fc519a9f5",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111637,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/desktop-short/00-boot-before.png",
+      "sha256": "c1f6bf423506d190cfc142bccd4608da9f6caa90422ad7e8d137a55ca71822b8",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 110941,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/desktop-short/01-close-focus-after.png",
+      "sha256": "2a24fb7ab5d42fb48604da446f732257733cdabaf5e43e2e6bf4a385550f47e2",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69654,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/desktop-short/01-close-focus-before.png",
+      "sha256": "442caccff61dbbebdecc463bf4ab5035d2d776a8a957a7c4d230b391e0d83b77",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 111707,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/00-boot-after.png",
+      "sha256": "1ffdddf3edc9d4dbafbc8b3d8daac95370c5aa14befd03b73513239f845c83f1",
+      "width": 780,
+      "height": 1688,
+      "bytes": 186997,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/00-boot-before.png",
+      "sha256": "363cd6c877deda853922967a3fa94c341a1949bab41fe13935b211c5bb444c45",
+      "width": 780,
+      "height": 1688,
+      "bytes": 186966,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/01-scroll-recovery-after.png",
+      "sha256": "ea8ad2588ef52e7d905b4d3e9c0418fdc94db57c22ea57cb1af1be073ad63c2a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 198769,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/01-scroll-recovery-before.png",
+      "sha256": "2095a0155d95f28205fae544d2ddbe87d49b13355aa9e6254f7c95d75a54c143",
+      "width": 780,
+      "height": 1688,
+      "bytes": 187275,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/02-copy-report-after.png",
+      "sha256": "3d12b427363ebab3647a8983f6256c488827e22d43c2d10e533593d3873ce234",
+      "width": 780,
+      "height": 1688,
+      "bytes": 198813,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/02-copy-report-before.png",
+      "sha256": "5c2fcb13186d8b73211413224b633d6e93f6fa6a8181677f295414ca8d2140e0",
+      "width": 780,
+      "height": 1688,
+      "bytes": 198758,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/03-close-focus-after.png",
+      "sha256": "e198ed3ca3e70443af7e0c7b1657291cbf0b5ff9f3aee809399b14c168540749",
+      "width": 780,
+      "height": 1688,
+      "bytes": 142539,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/03-close-focus-before.png",
+      "sha256": "5bf7f2010488ed63431c8a804437877c0520abaf75c39def0eb86633cd5a56df",
+      "width": 780,
+      "height": 1688,
+      "bytes": 199198,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/04-menu-reopen-after.png",
+      "sha256": "627c538cad1fefeddfa98c7154fa61486b7ae5a52250219deab37c289a71152b",
+      "width": 780,
+      "height": 1688,
+      "bytes": 186550,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/04-menu-reopen-before.png",
+      "sha256": "39180f9096b979912f0725a4f8dfeb1e25a40a32a6608b77d380ed5d04a9753d",
+      "width": 780,
+      "height": 1688,
+      "bytes": 142622,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/05-escape-focus-after.png",
+      "sha256": "6bb92890f1fc6a4685bc4098ea947f9c224efcc3f59e7814f331d3145ba470f0",
+      "width": 780,
+      "height": 1688,
+      "bytes": 144542,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/05-escape-focus-before.png",
+      "sha256": "f05d25000229182c1a6b34f17a6cf9ddc236cee2d01f4972c328a771e5cd4f96",
+      "width": 780,
+      "height": 1688,
+      "bytes": 186669,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/06-reload-no-double-apply-after.png",
+      "sha256": "7ec9d116107cf438c5c6d7547606ebdb1cea526a4ebd9868d6a5f72349024f3e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 201684,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/06-reload-no-double-apply-before.png",
+      "sha256": "4459a390386c60a3bed25ec24693a06e18596a1a5fbeebd2641bc46293918005",
+      "width": 780,
+      "height": 1688,
+      "bytes": 144259,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-cap/reconcile.png",
+      "sha256": "39a4f2a8b3903371523b0ffac096fbf85f0f619dc080cab538b2490159ce40da",
+      "width": 780,
+      "height": 1688,
+      "bytes": 130610,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/00-boot-after.png",
+      "sha256": "faf88d9abf81048b601eb3d1665b10dbd6bbaf6a5be64b5ef2dbd642f15e4538",
+      "width": 1688,
+      "height": 780,
+      "bytes": 175052,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/00-boot-before.png",
+      "sha256": "f4a461ba4a2688839ef6c46dd804642edd2fe430177015f9a570f114b403877a",
+      "width": 1688,
+      "height": 780,
+      "bytes": 175328,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/01-scroll-recovery-after.png",
+      "sha256": "b48bb8aeb66c56cf57f4c772314a92a7dc8429ee821224ab2fb26d60250780b2",
+      "width": 1688,
+      "height": 780,
+      "bytes": 186964,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/01-scroll-recovery-before.png",
+      "sha256": "344288c3244afa166e680414d0ef2a16dd7c8be538d2a010ebf4aaf3ea5a43ef",
+      "width": 1688,
+      "height": 780,
+      "bytes": 175507,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/02-close-focus-after.png",
+      "sha256": "20bca962189f694a29433f010f225db1c2318830925feb64bcf5e0e5fea6f88e",
+      "width": 1688,
+      "height": 780,
+      "bytes": 109964,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/02-close-focus-before.png",
+      "sha256": "652f9162b0ea52f8a71f22d50cae128038736d34e6f9ac8825e1232371e56a8a",
+      "width": 1688,
+      "height": 780,
+      "bytes": 186940,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-landscape-long/reconcile.png",
+      "sha256": "78e751f3b8e0084f814e2a3426feda02a90f74c13a70b852897e6f530150124a",
+      "width": 1688,
+      "height": 780,
+      "bytes": 93848,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/00-boot-after.png",
+      "sha256": "60d031c92a02ec9ea1f9d3716859b26eeceea377fe68daaea39d3727ed049053",
+      "width": 780,
+      "height": 1688,
+      "bytes": 225150,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/00-boot-before.png",
+      "sha256": "4fca97887fd54bfc962f1eba0add4d9afad28dc991b3b156104ba602e8d442ed",
+      "width": 780,
+      "height": 1688,
+      "bytes": 224794,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/01-scroll-tail-after.png",
+      "sha256": "d7efa012a0e28003e6eb392ee73762188f374a530ed3b658bb0e46e2f3b54f0e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 218749,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/01-scroll-tail-before.png",
+      "sha256": "1433aceb8f522c0e994e68917af55ec416f9c51bcd1c7795ab938ddb9b6b25fb",
+      "width": 780,
+      "height": 1688,
+      "bytes": 224824,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/02-close-focus-after.png",
+      "sha256": "2fba20a8929ab12338c48f1e5e2c43fb1c096e7e92c7e238fa981f0b29a3fd6a",
+      "width": 780,
+      "height": 1688,
+      "bytes": 179525,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/02-close-focus-before.png",
+      "sha256": "b95b74b43032c72284ed173610ff6dbfeec98f85dd696cfc5fde68e371cbd1b8",
+      "width": 780,
+      "height": 1688,
+      "bytes": 218949,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-large/reconcile.png",
+      "sha256": "af74cbdd7af64d8df14457cb825b37ca5251105db5d12a176b64a505a6cb8041",
+      "width": 780,
+      "height": 1688,
+      "bytes": 150069,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-zero/00-boot-after.png",
+      "sha256": "feaef0efb49d09dc1f984f762d5a4fc87e3998a4c51786e4a8ce2aead7a3b229",
+      "width": 780,
+      "height": 1688,
+      "bytes": 183624,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-zero/00-boot-before.png",
+      "sha256": "feaef0efb49d09dc1f984f762d5a4fc87e3998a4c51786e4a8ce2aead7a3b229",
+      "width": 780,
+      "height": 1688,
+      "bytes": 183624,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "return-61/frames/phone-zero/01-reload-byte-equal-after.png",
+      "sha256": "e8c1ae62345e063e5ad3f0ab6a16ffe9f3de4ad4772a837812aaa41ecc95aa94",
+      "width": 780,
+      "height": 1688,
+      "bytes": 180710,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "return-61/frames/phone-zero/01-reload-byte-equal-before.png",
+      "sha256": "feaef0efb49d09dc1f984f762d5a4fc87e3998a4c51786e4a8ce2aead7a3b229",
+      "width": 780,
+      "height": 1688,
+      "bytes": 183624,
+      "nonEmpty": true,
+      "distinct": false
+    },
+    {
+      "file": "save-63/frames/desktop-failenv-01-notes.png",
+      "sha256": "8c00f756c2813808405cb9f11dec43f691ea0b4689e64c5d5075d40ddccaa3c8",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 72574,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-reader-01-refused.png",
+      "sha256": "9824d4ca654e00e2ad15a78cb35125f58465e79e0246ca63149bb67c096e525e",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 57593,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-01-record.png",
+      "sha256": "f5f6cb0e5e3aab8b5a61849c909b896826fdbe4aa8e4db5b7723c0a95107f614",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69566,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-02-backup.png",
+      "sha256": "c2609761e4fa43b7e42762a7b154bfa521edb8e3969d35e3f28cea0d4210af3a",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 72304,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-03-refusal.png",
+      "sha256": "5e49437ec6a4ac67e19ec771ba500faf405942c57af6690dd8ad99202c353305",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 72104,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-04-gate.png",
+      "sha256": "47b0f6b0280292af905660200f586c2a1a6e8c08991b1fd5969d3a23eb0a90d9",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 85231,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-05-after-import.png",
+      "sha256": "38a391002c97fa818282b0ed6af26ee88e3e01f42b12dbf899d85280ce2be3b6",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 87891,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-06-reload.png",
+      "sha256": "20b157c4ac632347919493d899cdb881b7a047d5cdae93807d7f3a3e24550e05",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 88135,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts1-07-hostile-clamp.png",
+      "sha256": "3594376700e70feb45075d03a940090c5e9d6339205eb9de6e2caa8b912e00af",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 143285,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-01-record.png",
+      "sha256": "34db39c3d5308a6ec0975ab21c6b971b4d3d4d8aa011f7edfc86f92a9f5bb196",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 140486,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-02-backup.png",
+      "sha256": "b58bc23b571e298c04e787218c47ebf2afe13d72eeaf61e2732a56f9f2ed6b43",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 148791,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-03-refusal.png",
+      "sha256": "b3a333d74ae5ca30603b6fccd5519d9bf824e2bcb87cb696d76b5b8fcdfd066e",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 141729,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-04-gate.png",
+      "sha256": "54ed149f40c949a68e868204b8c3a97849dfc0b5630f6d260ff200b47f9c7f6a",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 172383,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-05-after-import.png",
+      "sha256": "8ab7762cd910c38cbabfbc5f7a8717f10b7edf1eb8122bb45e7311bd4ab65093",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 87996,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-06-reload.png",
+      "sha256": "ae92049e2245fe1593430ef8f0fb07a4a8e33759ce72860c763a5f536ee68512",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 88056,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/desktop-ts2-07-hostile-clamp.png",
+      "sha256": "59308834c9f06fc69d7a5205155e9d32fdf949bf02eccbceee69f7cf80d52636",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 142515,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-failenv-01-notes.png",
+      "sha256": "b2382af5e641902d55c67ffd4dc0b146672bfd3e7b5d791b86ad82f79196bf0c",
+      "width": 780,
+      "height": 1688,
+      "bytes": 173317,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-failenv-01-notes.png",
+      "sha256": "4406df4407baf1f09af0ec4e09bf42a07015cb90e316c854df63d48072924811",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151497,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-reader-01-refused.png",
+      "sha256": "62be8af6850dcc86d213bbee2bbf4de1bca4952dfdf40cd8eac05b4b17b05e80",
+      "width": 1688,
+      "height": 780,
+      "bytes": 113007,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-01-record.png",
+      "sha256": "e02b983d8114cc1ce36a0559473a1932794de4f8698e2ffdb00c3b3e67fcb743",
+      "width": 1688,
+      "height": 780,
+      "bytes": 143740,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-02-backup.png",
+      "sha256": "cd6b1b29ad386b473bffebc2d14328864c62c5507ed5dbf39279540bbc6280ec",
+      "width": 1688,
+      "height": 780,
+      "bytes": 151578,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-03-refusal.png",
+      "sha256": "d6187a3b0245327f563b947ff0d93ee31e7c9015a75b8ebb3e611a1992c313ed",
+      "width": 1688,
+      "height": 780,
+      "bytes": 150780,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-04-gate.png",
+      "sha256": "58776f3e91c9064e1f62b71e2ca96df7e2e24673cc435a4b9c423037aa661d90",
+      "width": 1688,
+      "height": 780,
+      "bytes": 130770,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-05-after-import.png",
+      "sha256": "ce4dc619e07c83f7dc7ea2b0f6b0c597375a665d873abb757a5a3484e72a36eb",
+      "width": 1688,
+      "height": 780,
+      "bytes": 153858,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-06-reload.png",
+      "sha256": "887846f52cf48b2a3b6f7e8a0c66515c6b39786d3f23161521ba089f5a00792b",
+      "width": 1688,
+      "height": 780,
+      "bytes": 154262,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts1-07-hostile-clamp.png",
+      "sha256": "73f915b9a3d3fef0265310cfb9cb835c00c99a3b31d5bbed395f69ae383d62ab",
+      "width": 1688,
+      "height": 780,
+      "bytes": 170549,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-01-record.png",
+      "sha256": "127de14a4832de247153cf8be6eed60ee06385466cda3665c41da5e3d69e3e01",
+      "width": 1688,
+      "height": 780,
+      "bytes": 163380,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-02-backup.png",
+      "sha256": "c90a302765717238c7ad9ad637f0615b3e6f428bdca75abc4b4ef257b7831213",
+      "width": 1688,
+      "height": 780,
+      "bytes": 181767,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-03-refusal.png",
+      "sha256": "8282fc74dd8f58937c588c17144ccfd918a771cb13220c4f3028253f7272db7e",
+      "width": 1688,
+      "height": 780,
+      "bytes": 167653,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-04-gate.png",
+      "sha256": "44923f0542f977697e6b59fb8d588a32b3676c6aa58763e7611457ee8cc6c15b",
+      "width": 1688,
+      "height": 780,
+      "bytes": 179395,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-05-after-import.png",
+      "sha256": "92aef8597dcbfb99044f3c251b6c76af062940c09e1cbd7532951ed06e7d6834",
+      "width": 1688,
+      "height": 780,
+      "bytes": 153412,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-06-reload.png",
+      "sha256": "c51e281572c8119f3bf6a3321ed496bad12056491ab9bfad749464d987a822c7",
+      "width": 1688,
+      "height": 780,
+      "bytes": 154713,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-landscape-ts2-07-hostile-clamp.png",
+      "sha256": "f4b3bd98b1b191e452457cf80ca4e7650e63d00881328c0d0aab459fc82b3288",
+      "width": 1688,
+      "height": 780,
+      "bytes": 169727,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-reader-01-refused.png",
+      "sha256": "beebf0894f24e85ed9e9113a105758a77bc4898797e523870838f2df2bc13859",
+      "width": 780,
+      "height": 1688,
+      "bytes": 119910,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-01-record.png",
+      "sha256": "eeef0df8002d87010256b1e942fc0b621452f2732e3e63a8e61d3ff07e5309f6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 158855,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-02-backup.png",
+      "sha256": "f43b3a906837cb53496fffb77bb6553dc28f238458620dbf8d5aa801d24485f2",
+      "width": 780,
+      "height": 1688,
+      "bytes": 172551,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-03-refusal.png",
+      "sha256": "c0be59a2501f16ada4a56edbd6cc9289dbcbcffe62014a1385297d930c5f3d39",
+      "width": 780,
+      "height": 1688,
+      "bytes": 171340,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-04-gate.png",
+      "sha256": "c2f2062699d9b58dbaaa575fc489fadb982a640421ad6df21cd11c3a3bf7fd64",
+      "width": 780,
+      "height": 1688,
+      "bytes": 171109,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-05-after-import.png",
+      "sha256": "a61c2866eda93d445826dd1a2ceb906f281333e54d65b5951a95470e50fc6e2f",
+      "width": 780,
+      "height": 1688,
+      "bytes": 203321,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-06-reload.png",
+      "sha256": "364f07f46cf1a083c9612d5d046743183dc3e67ec41e1c0a2546285b78e603f6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 205394,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts1-07-hostile-clamp.png",
+      "sha256": "fddb2e04aeae4460b7f2039359983ffed900f1dea6079db140fef3362e143ddb",
+      "width": 780,
+      "height": 1688,
+      "bytes": 194863,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-01-record.png",
+      "sha256": "cc63d46f557ccfcf5faa772e33f8063fa00e4bf5d83684f174687f6be207319e",
+      "width": 780,
+      "height": 1688,
+      "bytes": 193731,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-02-backup.png",
+      "sha256": "b312b2ef30a305412342c79f04a7b58ae4aac37609f56c9bed94a2f368c1949b",
+      "width": 780,
+      "height": 1688,
+      "bytes": 199919,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-03-refusal.png",
+      "sha256": "e3cd66e2bf70c3eb38a2c99704af18d758e516361c3142fa0ca67c4062b045de",
+      "width": 780,
+      "height": 1688,
+      "bytes": 183020,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-04-gate.png",
+      "sha256": "5fe20b6545592b14179dd5eab569b1e3f262ae5f2d537ed22f0606057e2d90bc",
+      "width": 780,
+      "height": 1688,
+      "bytes": 212829,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-05-after-import.png",
+      "sha256": "356a7a1e48e4aa5e6b3cf2cbc7f726b7712335d7a775d0ea7f91396b7babf096",
+      "width": 780,
+      "height": 1688,
+      "bytes": 202482,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-06-reload.png",
+      "sha256": "5a1bb70302832a6bed5f1a83952d7880ecbe8260659029f6bc72556ceefd39c7",
+      "width": 780,
+      "height": 1688,
+      "bytes": 205933,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "save-63/frames/phone-ts2-07-hostile-clamp.png",
+      "sha256": "c976019ff62759483dd002d4a0affb52eba2f2a45d904211f0a71769e4a5cd9f",
+      "width": 780,
+      "height": 1688,
+      "bytes": 194188,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-desktop-mature-reduced.png",
+      "sha256": "6260d919606af61962f632ae3021d95e6706e47e7daf2adefa5e46502b7ea9b4",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 384530,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-desktop-mature.png",
+      "sha256": "b4bd29f09d212d5772970c23b211955ff310fd969e41f556667bac080aea36f0",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 384498,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-desktop-opening-reduced.png",
+      "sha256": "f7903bb805115eee6e972bc34e01d9e17aacf5355a17977cd2be1b9357ff38f2",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 384428,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-desktop-opening.png",
+      "sha256": "479f2cdb4d38126837868e5b26f03df6c8f84e892ab9576ac8f5cbc8e0b06d18",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 384437,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-phone-mature-reduced.png",
+      "sha256": "64374b3c991a93b285e712004e284fd8ff3c717707d8a2a4246bff98d3d30268",
+      "width": 780,
+      "height": 1688,
+      "bytes": 258744,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-phone-mature.png",
+      "sha256": "48cfaf0dfb0773d42b4d82b40b0239ee44fb5b7a76d7d08a151296360de21d7c",
+      "width": 780,
+      "height": 1688,
+      "bytes": 258570,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-phone-opening-reduced.png",
+      "sha256": "756633a7531edd882ef0f3c4385c9453cbf20a5e5ed43b3e68e558aa15994a62",
+      "width": 780,
+      "height": 1688,
+      "bytes": 258388,
+      "nonEmpty": true,
+      "distinct": true
+    },
+    {
+      "file": "world-60/world-60-after-phone-opening.png",
+      "sha256": "5e73d4b36f6087b79c37433473832cbea03fcda35ff47c47b0f64cf7f9e9be86",
+      "width": 780,
+      "height": 1688,
+      "bytes": 258418,
+      "nonEmpty": true,
+      "distinct": true
+    }
+  ]
+}

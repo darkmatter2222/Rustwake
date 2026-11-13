@@ -1,0 +1,328 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/68",
+  "role": "reviewer",
+  "persona": "reg-68",
+  "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "branch": "rw/68-regression",
+  "evidenceHead": "cc1146e740cf0871e14c4a1a87d1463313e583a2",
+  "generatedAt": "2026-11-13T09:38:14.230Z",
+  "method": "AGENT headless Chromium DOM/geometry/computed-style/console + canvas pixel checks only; NO vision. Reused #58/#59/#60/#61/#62/#63/#66/#67 probes verbatim at 7fcaea1c against a local vite preview of the verified build (home-62 against vite dev serving identical src). Full vitest suite (746) covers sim/engine/save/persistence correctness.",
+  "crossBrowser": {
+    "chrome": {
+      "version": "157.0.8103.50",
+      "available": true,
+      "used": "all probes"
+    },
+    "edge": {
+      "version": "157.0.4341.46",
+      "available": true,
+      "used": "access-66 full 16-cell + keyboard + reduced-motion subset (CHROME_PATH override)"
+    },
+    "firefox": {
+      "available": false,
+      "reason": "Not installed; reused probes launch chromium only (playwright-core chromium.launch). No Firefox probe variant. Recorded unavailable, NOT a pass."
+    },
+    "safari": {
+      "available": false,
+      "reason": "Safari/WebKit unavailable on Windows host; no webkit browser in playwright cache; probes are chromium-only. Recorded unavailable, NOT a pass."
+    }
+  },
+  "ladder": {
+    "typecheck": "exit 0",
+    "validate": "exit 0 (0 violations)",
+    "vitest": "60 files / 746 tests passed",
+    "build": "exit 0; required chunks match deployed baseline byte-for-byte + SHA256"
+  },
+  "probes": {
+    "access-66": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "browser": "Chrome 157.0.8103.50 (chromium, playwright-core)",
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:32:23.356Z",
+      "cells": 16,
+      "cellNames": [
+        "phone-small-ts1",
+        "phone-small-ts2",
+        "phone-ts1",
+        "phone-ts2",
+        "phone-large-ts1",
+        "phone-large-ts2",
+        "phone-landscape-ts1",
+        "phone-landscape-ts2",
+        "tablet-ts1",
+        "tablet-ts2",
+        "laptop-ts1",
+        "laptop-ts2",
+        "desktop-ts1",
+        "desktop-ts2",
+        "desktop-large-ts1",
+        "desktop-large-ts2"
+      ],
+      "cellErrors": 0,
+      "keyboardCells": 3,
+      "defectCount": 0,
+      "defectKinds": [],
+      "frames": 17,
+      "mirrorAllNonEmpty": true,
+      "mirrorAllDistinct": true,
+      "consoleErrors": 0,
+      "pass": true
+    },
+    "access-66-edge": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "browser": "Edge 157.0.4341.46 (chromium, playwright-core; CHROME_PATH override)",
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:33:45.531Z",
+      "cells": 16,
+      "cellNames": [
+        "phone-small-ts1",
+        "phone-small-ts2",
+        "phone-ts1",
+        "phone-ts2",
+        "phone-large-ts1",
+        "phone-large-ts2",
+        "phone-landscape-ts1",
+        "phone-landscape-ts2",
+        "tablet-ts1",
+        "tablet-ts2",
+        "laptop-ts1",
+        "laptop-ts2",
+        "desktop-ts1",
+        "desktop-ts2",
+        "desktop-large-ts1",
+        "desktop-large-ts2"
+      ],
+      "cellErrors": 0,
+      "keyboardCells": 3,
+      "defectCount": 0,
+      "defectKinds": [],
+      "frames": 17,
+      "mirrorAllNonEmpty": true,
+      "mirrorAllDistinct": true,
+      "consoleErrors": 0,
+      "pass": true,
+      "framesDifferingVsChrome": 15,
+      "framesCompared": 17,
+      "crossBrowserNote": "Edge genuinely launched (executablePath=msedge.exe); 15/17 frames render differently vs Chrome, confirming a distinct browser build. Same 16 cells / 0 errors / 0 defects."
+    },
+    "save-63": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:32:22.793Z",
+      "summary": {
+        "phone": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "phone-landscape": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "desktop": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "mirror": {
+          "assertions": 2,
+          "passed": 2,
+          "screenshots": 0
+        }
+      },
+      "failures": 0,
+      "multitabReader": "writer+reader share localStorage; reader Replace refused ('Another tab is writing this yard'), writer untouched, no console/page errors (runReader); hostile import sanitized + textScale clamped (runFailureEnv).",
+      "pass": true
+    },
+    "logistics-59": {
+      "mode": "full",
+      "runner": "node",
+      "present": true,
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:23:24.020Z",
+      "checks": 228,
+      "steps": 54,
+      "frames": 108,
+      "failedChecks": 6,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": false,
+      "rerun": {
+        "present": true,
+        "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+        "generatedAt": "2026-11-13T09:29:53.577Z",
+        "checks": 228,
+        "steps": 54,
+        "frames": 108,
+        "failedChecks": 5,
+        "blockers": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "frameAuditOk": true,
+        "pass": false
+      },
+      "deterministicFailures": [
+        "phoneland-dense/03-select-furnace-dims-unrelated/real tap selects the furnace",
+        "phoneland-dense/04-custom-duplicate-preview/inline custom preview flags the duplicate as invalid",
+        "phoneland-dense/04-custom-duplicate-preview/confirm preview repeats the invalid reason with a Cancel",
+        "phoneland-dense/05-invalid-commit-rejected/engine rejects the duplicate (no route laid)",
+        "phoneland-dense/06-invalid-cancel/cancel laid no belt (routes unchanged)"
+      ],
+      "flakyFailures": [
+        "phone-dense/02-show-routes/showing restores cyan rail pixels"
+      ],
+      "baseline": {
+        "sha": "937698e424232c395abf9f682edbafc3495239f2",
+        "source": "work/evidence/UI-RESET-59/results.json",
+        "failedChecks": 0,
+        "phonelandFurnaceSelection": "PASS"
+      },
+      "defectIssue": "https://github.com/darkmatter2222/Rustwake/issues/117",
+      "defectSummary": "phoneland-dense (844x390) furnace canvas-tap selection regressed: inspector aria stays 'Scrap sorter details' after 6 synchronous tap attempts; cascades into 04/05/06 duplicate-preview checks. Deterministic across run1+rerun (5 checks). Passed 228/228 at baseline 937698e4. phone/desktop furnace selection PASS at 7fcaea1c, so the duplicate engine is not implicated.",
+      "flakyNote": "phone-dense/02-show-routes 'showing restores cyan rail pixels' failed run1 only (live-sim cargo variance); PASSED rerun. Recorded flaky, NOT a defect."
+    },
+    "research-58": {
+      "mode": "full",
+      "runner": "node",
+      "present": true,
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:23:58.836Z",
+      "checks": 110,
+      "steps": 24,
+      "frames": 48,
+      "failedChecks": 0,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": true
+    },
+    "return-61": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "present": true,
+      "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "generatedAt": "2026-11-13T09:24:34.302Z",
+      "checks": 174,
+      "steps": 17,
+      "frames": 37,
+      "failedChecks": 0,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": true
+    },
+    "home-62": {
+      "mode": "full",
+      "runner": "pnpm exec tsx (vite dev server)",
+      "headSha": "b8b3ad1430db434c4ea1f8910af0a2b7dde9aceb",
+      "buildShaServed": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "note": "home-62 records git HEAD (evidence-only descendant of 7fcaea1c) and runs against a vite DEV server serving src at HEAD; src is byte-identical to 7fcaea1c (no src/ change in this PR). Fresh gate/menu/settings/reset journeys.",
+      "assertions": 229,
+      "passed": 229,
+      "generatedAt": "2026-11-13T09:32:22.834Z",
+      "pass": true
+    },
+    "world-60": {
+      "mode": "smoke/reference",
+      "runner": "node --import tsx",
+      "sha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "label": "after",
+      "generatedOn": "2026-11-13T09:32:22.359Z",
+      "devices": 4,
+      "deviceNames": [
+        "phone",
+        "phone",
+        "desktop",
+        "desktop"
+      ],
+      "pass": true,
+      "hardFailures": 0,
+      "note": "World art unchanged since #60; fresh after-capture at 7fcaea1c for parity (phone/desktop x opening/mature x normal/reduced). Full before/after delta referenced from committed tests/renderer/world-60-evidence."
+    },
+    "perf-67": {
+      "mode": "smoke (--quick)",
+      "runner": "pnpm exec tsx",
+      "sha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "label": "after",
+      "generatedOn": "2026-11-13T09:32:22.859Z",
+      "browser": {
+        "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "headless": true,
+        "engine": "chromium (playwright-core)"
+      },
+      "pass": true,
+      "hardFailures": 0,
+      "deviceRuns": 9,
+      "cpuThrottleRate": 6,
+      "buildInventory": [
+        {
+          "name": "catchup.worker-G_Jyr7uh.js",
+          "role": "lazyWorkerJs",
+          "bytes": 13406,
+          "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+        },
+        {
+          "name": "index-BBL5748F.js",
+          "role": "entryJs",
+          "bytes": 190988,
+          "sha256": "15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1"
+        },
+        {
+          "name": "index-Eo_6W0ie.css",
+          "role": "css",
+          "bytes": 61937,
+          "sha256": "d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8"
+        },
+        {
+          "name": "tables-KTf0wpwx.js",
+          "role": "tablesJs",
+          "bytes": 26691,
+          "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+        },
+        {
+          "name": "vendor-Bt4lNSbZ.js",
+          "role": "vendorJs",
+          "bytes": 141658,
+          "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+        }
+      ],
+      "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical device. Viewport/dpr/isMobile/hasTouch/reduced-motion emulated; CPU/GPU/thermal/real-touch/mobile-network are NOT. Frame-time and memory are host-relative; before/after compared under identical conditions.",
+      "budgetVerdicts": null,
+      "note": "Quick smoke: shortened sampling, budget verdicts skipped; latencies are host-relative and NOT comparable to the official #67 numbers. Official budgets referenced from committed tests/perf/perf-67.evidence. buildInventory chunk sha256 cross-matches build-verify.json."
+    }
+  },
+  "defects": [
+    {
+      "probe": "logistics-59",
+      "kind": "regression",
+      "issue": "https://github.com/darkmatter2222/Rustwake/issues/117",
+      "form": "phoneland-dense",
+      "viewport": "844x390 dsf2",
+      "baselineSha": "937698e424232c395abf9f682edbafc3495239f2",
+      "baselineFailedChecks": 0,
+      "mainSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+      "deterministicFailedChecks": 5,
+      "failedChecks": [
+        "phoneland-dense/03-select-furnace-dims-unrelated/real tap selects the furnace",
+        "phoneland-dense/04-custom-duplicate-preview/inline custom preview flags the duplicate as invalid",
+        "phoneland-dense/04-custom-duplicate-preview/confirm preview repeats the invalid reason with a Cancel",
+        "phoneland-dense/05-invalid-commit-rejected/engine rejects the duplicate (no route laid)",
+        "phoneland-dense/06-invalid-cancel/cancel laid no belt (routes unchanged)"
+      ],
+      "flakyExcluded": [
+        "phone-dense/02-show-routes/showing restores cyan rail pixels"
+      ],
+      "summary": "phoneland-dense (844x390) furnace canvas-tap selection regressed: inspector aria stays 'Scrap sorter details' after 6 synchronous tap attempts; cascades into 04/05/06 duplicate-preview checks. Deterministic across run1+rerun (5 checks). Passed 228/228 at baseline 937698e4. phone/desktop furnace selection PASS at 7fcaea1c, so the duplicate engine is not implicated.",
+      "disposition": "STOP-AND-REPORT: reg-68 made no src/ or probe change; coordinator assigns fix owner. Forbidden paths (sim/engine/save/geometry/a11y CSS) untouched."
+    }
+  ],
+  "overallPass": false
+}

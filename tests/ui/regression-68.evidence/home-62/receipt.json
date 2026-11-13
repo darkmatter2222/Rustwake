@@ -1,0 +1,1647 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/62",
+  "pr": "https://github.com/darkmatter2222/Rustwake/pull/105",
+  "headSha": "b8b3ad1430db434c4ea1f8910af0a2b7dde9aceb",
+  "branch": "rw/68-regression",
+  "server": "vite dev (this worktree) at http://127.0.0.1:5172/",
+  "capturedAt": "2026-11-13T09:32:22.834Z",
+  "seed": {
+    "tick": 372,
+    "machines": 1,
+    "lastSeenMs": "Date.now() at capture",
+    "via": "src encodeSave + engine applyCommand/advance"
+  },
+  "formFactors": {
+    "phone": {
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2,
+        "isMobile": true
+      },
+      "phases": [
+        {
+          "name": "fresh-gate",
+          "assertions": [
+            {
+              "name": "fresh gate: Begin recovery primary",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: no Continue / New game",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: Settings entry",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: fresh-yard line",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .gate",
+              "pass": true,
+              "detail": "[52,44,44]"
+            },
+            {
+              "name": "no page scroll",
+              "pass": true,
+              "detail": "{\"ok\":true,\"scrollHeight\":844,\"scrollWidth\":390,\"innerHeight\":844,\"innerWidth\":390}"
+            },
+            {
+              "name": "no autoplay warning pre-gesture",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":390,\"height\":844},\"card\":{\"left\":70.875,\"top\":278.234375,\"right\":319.125,\"bottom\":565.765625,\"width\":248.25,\"height\":287.53125},\"inner\":{\"w\":390,\"h\":844},\"children\":6}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":70.875,\"top\":278.234375,\"right\":319.125,\"bottom\":565.765625,\"width\":248.25,\"height\":287.53125}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0,\"dy\":0}"
+            },
+            {
+              "name": "pixel audit phone-01-fresh-gate.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":110,\"darkShare\":0.9561,\"brightShare\":0.0089,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}}"
+            },
+            {
+              "name": "pixel audit phone-01-fresh-gate.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=110"
+            },
+            {
+              "name": "pixel audit phone-01-fresh-gate.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":110,\"darkShare\":0.9561,\"brightShare\":0.0089,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}}"
+            },
+            {
+              "name": "pixel audit phone-01-fresh-gate.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132}"
+            },
+            {
+              "name": "pixel audit phone-01-fresh-gate.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-01-fresh-gate.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 110,
+              "darkShare": 0.9561,
+              "brightShare": 0.0089,
+              "samples": 27104,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 141,
+                  "y0": 556,
+                  "x1": 639,
+                  "y1": 1132
+                },
+                "brightShare": 0.0371,
+                "samples": 5976
+              }
+            }
+          ]
+        },
+        {
+          "name": "gate-settings",
+          "assertions": [
+            {
+              "name": "settings card centered in viewport (not the HUD gutter)",
+              "pass": true,
+              "detail": "{\"left\":16,\"top\":251.3125,\"right\":374.796875,\"bottom\":592.671875,\"w\":390,\"h\":844}"
+            },
+            {
+              "name": "Sound actual value On",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Text size actual value 1",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Reduced motion actual value Off",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Display actual value Windowed",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "display control graceful (enabled, or disabled + note)",
+              "pass": true,
+              "detail": "{\"disabled\":false,\"note\":\"Delete the saved yard and start fresh\"}"
+            },
+            {
+              "name": "touch targets >= 44px in .panel--settings",
+              "pass": true,
+              "detail": "[44,44,44,44,44,44]"
+            },
+            {
+              "name": "no page scroll with panel",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "pixel audit phone-02-gate-settings.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":91,\"darkShare\":0.9719,\"brightShare\":0.0044,\"samples\":27104,\"content\":\".gate-settings .panel\",\"region\":{\"box\":{\"x0\":32,\"y0\":502,\"x1\":750,\"y1\":1186},\"brightShare\":0.0131,\"samples\":10094}}"
+            },
+            {
+              "name": "pixel audit phone-02-gate-settings.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=91"
+            },
+            {
+              "name": "pixel audit phone-02-gate-settings.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":91,\"darkShare\":0.9719,\"brightShare\":0.0044,\"samples\":27104,\"content\":\".gate-settings .panel\",\"region\":{\"box\":{\"x0\":32,\"y0\":502,\"x1\":750,\"y1\":1186},\"brightShare\":0.0131,\"samples\":10094}}"
+            },
+            {
+              "name": "pixel audit phone-02-gate-settings.png: lit text in .gate-settings .panel",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":32,\"y0\":502,\"x1\":750,\"y1\":1186},\"brightShare\":0.0131,\"samples\":10094}"
+            },
+            {
+              "name": "mute writes through: value Off",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "mute persisted pre-start",
+              "pass": true,
+              "detail": "{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}"
+            },
+            {
+              "name": "text cycle writes through: 1.25",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "text persisted pre-start",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "motion writes through: On",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "motion persisted pre-start",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Escape returns to title",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-02-gate-settings.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 91,
+              "darkShare": 0.9719,
+              "brightShare": 0.0044,
+              "samples": 27104,
+              "content": ".gate-settings .panel",
+              "region": {
+                "box": {
+                  "x0": 32,
+                  "y0": 502,
+                  "x1": 750,
+                  "y1": 1186
+                },
+                "brightShare": 0.0131,
+                "samples": 10094
+              }
+            }
+          ]
+        },
+        {
+          "name": "keyboard-start",
+          "assertions": [
+            {
+              "name": "Enter on focused primary starts the yard",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "no console errors (context A)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no page errors (context A)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no autoplay warnings after gesture start",
+              "pass": true,
+              "detail": "[]"
+            }
+          ],
+          "screenshots": []
+        },
+        {
+          "name": "continue-gate",
+          "assertions": [
+            {
+              "name": "Continue primary",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Continue keeps Begin recovery accessible name",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "summary names the actual run",
+              "pass": true,
+              "detail": "Saved run found — Tick 372 · 1 machine · drone flying · 0 credits"
+            },
+            {
+              "name": "New game entry present",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .gate",
+              "pass": true,
+              "detail": "[52,44,44,44]"
+            },
+            {
+              "name": "no page scroll",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":390,\"height\":844},\"card\":{\"left\":15.59375,\"top\":240.625,\"right\":374.390625,\"bottom\":603.359375,\"width\":358.796875,\"height\":362.734375},\"inner\":{\"w\":390,\"h\":844},\"children\":7}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":15.59375,\"top\":240.625,\"right\":374.390625,\"bottom\":603.359375,\"width\":358.796875,\"height\":362.734375}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0.0078125,\"dy\":0.0078125}"
+            },
+            {
+              "name": "pixel audit phone-03-continue-gate.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":121,\"darkShare\":0.9529,\"brightShare\":0.0097,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":31,\"y0\":481,\"x1\":749,\"y1\":1207},\"brightShare\":0.0214,\"samples\":10712}}"
+            },
+            {
+              "name": "pixel audit phone-03-continue-gate.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=121"
+            },
+            {
+              "name": "pixel audit phone-03-continue-gate.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":121,\"darkShare\":0.9529,\"brightShare\":0.0097,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":31,\"y0\":481,\"x1\":749,\"y1\":1207},\"brightShare\":0.0214,\"samples\":10712}}"
+            },
+            {
+              "name": "pixel audit phone-03-continue-gate.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":31,\"y0\":481,\"x1\":749,\"y1\":1207}"
+            },
+            {
+              "name": "pixel audit phone-03-continue-gate.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":31,\"y0\":481,\"x1\":749,\"y1\":1207},\"brightShare\":0.0214,\"samples\":10712}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-03-continue-gate.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 121,
+              "darkShare": 0.9529,
+              "brightShare": 0.0097,
+              "samples": 27104,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 31,
+                  "y0": 481,
+                  "x1": 749,
+                  "y1": 1207
+                },
+                "brightShare": 0.0214,
+                "samples": 10712
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-dialog",
+          "assertions": [
+            {
+              "name": "warning names permanent loss",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "confirm disabled before acknowledgement",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Cancel owns initial focus",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "dialog topmost at its center",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":297.96875,\"left\":16,\"bottom\":546.015625,\"right\":374.796875},\"inner\":{\"w\":390,\"h\":844},\"menuUnder\":false}"
+            },
+            {
+              "name": "dialog inside viewport",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":297.96875,\"left\":16,\"bottom\":546.015625,\"right\":374.796875},\"inner\":{\"w\":390,\"h\":844},\"menuUnder\":false}"
+            },
+            {
+              "name": "touch targets >= 44px in .reset-dialog",
+              "pass": true,
+              "detail": "[44,44]"
+            },
+            {
+              "name": "no page scroll with dialog",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "pixel audit phone-04-reset-dialog.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":113,\"darkShare\":0.9731,\"brightShare\":0.007,\"samples\":27104,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}}"
+            },
+            {
+              "name": "pixel audit phone-04-reset-dialog.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=113"
+            },
+            {
+              "name": "pixel audit phone-04-reset-dialog.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":113,\"darkShare\":0.9731,\"brightShare\":0.007,\"samples\":27104,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}}"
+            },
+            {
+              "name": "pixel audit phone-04-reset-dialog.png: lit text in .reset-dialog",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}"
+            },
+            {
+              "name": "digit keys inert under dialog",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Cancel leaves save byte-identical",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Escape cancels, save untouched",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-04-reset-dialog.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 113,
+              "darkShare": 0.9731,
+              "brightShare": 0.007,
+              "samples": 27104,
+              "content": ".reset-dialog",
+              "region": {
+                "box": {
+                  "x0": 32,
+                  "y0": 595,
+                  "x1": 750,
+                  "y1": 1093
+                },
+                "brightShare": 0.0249,
+                "samples": 7416
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-confirm",
+          "assertions": [
+            {
+              "name": "acknowledgement enables confirm",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "save cleared",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "old writer lease cleared (fresh claim after reload)",
+              "pass": true,
+              "detail": "{\"oldLeaseOwner\":\"t1-a5vb\",\"newLeaseOwner\":\"t1-9hga\"}"
+            },
+            {
+              "name": "fresh title after reload",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "no Continue after reset",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":390,\"height\":844},\"card\":{\"left\":70.875,\"top\":278.234375,\"right\":319.125,\"bottom\":565.765625,\"width\":248.25,\"height\":287.53125},\"inner\":{\"w\":390,\"h\":844},\"children\":6}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":70.875,\"top\":278.234375,\"right\":319.125,\"bottom\":565.765625,\"width\":248.25,\"height\":287.53125}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0,\"dy\":0}"
+            },
+            {
+              "name": "pixel audit phone-05-after-reset.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":110,\"darkShare\":0.9561,\"brightShare\":0.0089,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}}"
+            },
+            {
+              "name": "pixel audit phone-05-after-reset.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=110"
+            },
+            {
+              "name": "pixel audit phone-05-after-reset.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":110,\"darkShare\":0.9561,\"brightShare\":0.0089,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}}"
+            },
+            {
+              "name": "pixel audit phone-05-after-reset.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132}"
+            },
+            {
+              "name": "pixel audit phone-05-after-reset.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":141,\"y0\":556,\"x1\":639,\"y1\":1132},\"brightShare\":0.0371,\"samples\":5976}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-05-after-reset.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 110,
+              "darkShare": 0.9561,
+              "brightShare": 0.0089,
+              "samples": 27104,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 141,
+                  "y0": 556,
+                  "x1": 639,
+                  "y1": 1132
+                },
+                "brightShare": 0.0371,
+                "samples": 5976
+              }
+            }
+          ]
+        },
+        {
+          "name": "post-start",
+          "assertions": [
+            {
+              "name": "camera face reads Recenter (aria Reset view)",
+              "pass": true,
+              "detail": "{\"text\":\"Recenter\",\"aria\":\"Reset view\"}"
+            },
+            {
+              "name": "menu (face) has Settings row",
+              "pass": true,
+              "detail": "[\"HomeBack to the yard overview; clears the selection\",\"YardAfter tutorial\",\"Return reportNo absence yet\",\"Sound ✓All sound\",\"A 1Cycle 1 / 1.25 / 1.5 / 2\",\"SettingsSound, text size, motion and display\",\"Reset gameDelete the saved yard and start fresh\"]"
+            },
+            {
+              "name": "menu (face) has Reset game row",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Home row is navigation-worded",
+              "pass": true,
+              "detail": "HomeBack to the yard overview; clears the selection"
+            },
+            {
+              "name": "touch targets >= 44px in .shell-menu",
+              "pass": true,
+              "detail": "[44,44,44,44,44,44,44,44]"
+            },
+            {
+              "name": "no page scroll with menu",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "menu content box measured",
+              "pass": true,
+              "detail": "{\"left\":23,\"top\":401.25,\"right\":367,\"bottom\":797.25}"
+            },
+            {
+              "name": "pixel audit phone-06-menu.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":141,\"darkShare\":0.7935,\"brightShare\":0.0159,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1595},\"brightShare\":0.0075,\"samples\":11286}}"
+            },
+            {
+              "name": "pixel audit phone-06-menu.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=141"
+            },
+            {
+              "name": "pixel audit phone-06-menu.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":141,\"darkShare\":0.7935,\"brightShare\":0.0159,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1595},\"brightShare\":0.0075,\"samples\":11286}}"
+            },
+            {
+              "name": "pixel audit phone-06-menu.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1595}"
+            },
+            {
+              "name": "pixel audit phone-06-menu.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":46,\"y0\":802,\"x1\":734,\"y1\":1595},\"brightShare\":0.0075,\"samples\":11286}"
+            },
+            {
+              "name": "menu retires under Settings",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "post-start Sound actual value",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "post-start Text actual value",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .panel--settings",
+              "pass": true,
+              "detail": "[44,44,44,44,44,44]"
+            },
+            {
+              "name": "settings content box measured",
+              "pass": true,
+              "detail": "{\"left\":23,\"top\":407.640625,\"right\":367,\"bottom\":714.203125}"
+            },
+            {
+              "name": "pixel audit phone-07-settings-poststart.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":147,\"darkShare\":0.7815,\"brightShare\":0.0179,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":46,\"y0\":815,\"x1\":734,\"y1\":1429},\"brightShare\":0.0133,\"samples\":8712}}"
+            },
+            {
+              "name": "pixel audit phone-07-settings-poststart.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=147"
+            },
+            {
+              "name": "pixel audit phone-07-settings-poststart.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":147,\"darkShare\":0.7815,\"brightShare\":0.0179,\"samples\":27104,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":46,\"y0\":815,\"x1\":734,\"y1\":1429},\"brightShare\":0.0133,\"samples\":8712}}"
+            },
+            {
+              "name": "pixel audit phone-07-settings-poststart.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":46,\"y0\":815,\"x1\":734,\"y1\":1429}"
+            },
+            {
+              "name": "pixel audit phone-07-settings-poststart.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":46,\"y0\":815,\"x1\":734,\"y1\":1429},\"brightShare\":0.0133,\"samples\":8712}"
+            },
+            {
+              "name": "Escape closes post-start settings",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-06-menu.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 141,
+              "darkShare": 0.7935,
+              "brightShare": 0.0159,
+              "samples": 27104,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 46,
+                  "y0": 802,
+                  "x1": 734,
+                  "y1": 1595
+                },
+                "brightShare": 0.0075,
+                "samples": 11286
+              }
+            },
+            {
+              "file": "phone-07-settings-poststart.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 147,
+              "darkShare": 0.7815,
+              "brightShare": 0.0179,
+              "samples": 27104,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 46,
+                  "y0": 815,
+                  "x1": 734,
+                  "y1": 1429
+                },
+                "brightShare": 0.0133,
+                "samples": 8712
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-over-menu",
+          "assertions": [
+            {
+              "name": "dialog layers above the open menu",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":297.96875,\"left\":16,\"bottom\":546.015625,\"right\":374.796875},\"inner\":{\"w\":390,\"h\":844},\"menuUnder\":true}"
+            },
+            {
+              "name": "warning names permanent loss",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .reset-dialog",
+              "pass": true,
+              "detail": "[44,44]"
+            },
+            {
+              "name": "pixel audit phone-08-reset-over-menu.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":125,\"darkShare\":0.9663,\"brightShare\":0.007,\"samples\":27104,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}}"
+            },
+            {
+              "name": "pixel audit phone-08-reset-over-menu.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=125"
+            },
+            {
+              "name": "pixel audit phone-08-reset-over-menu.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":780,\"height\":1688,\"distinctColors\":125,\"darkShare\":0.9663,\"brightShare\":0.007,\"samples\":27104,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}}"
+            },
+            {
+              "name": "pixel audit phone-08-reset-over-menu.png: lit text in .reset-dialog",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":32,\"y0\":595,\"x1\":750,\"y1\":1093},\"brightShare\":0.0249,\"samples\":7416}"
+            },
+            {
+              "name": "Cancel keeps menu and run",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "phone-08-reset-over-menu.png",
+              "width": 780,
+              "height": 1688,
+              "distinctColors": 125,
+              "darkShare": 0.9663,
+              "brightShare": 0.007,
+              "samples": 27104,
+              "content": ".reset-dialog",
+              "region": {
+                "box": {
+                  "x0": 32,
+                  "y0": 595,
+                  "x1": 750,
+                  "y1": 1093
+                },
+                "brightShare": 0.0249,
+                "samples": 7416
+              }
+            }
+          ]
+        },
+        {
+          "name": "console",
+          "assertions": [
+            {
+              "name": "no console errors (context B)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no page errors (context B)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no autoplay warnings (context B)",
+              "pass": true,
+              "detail": "[]"
+            }
+          ],
+          "screenshots": []
+        }
+      ],
+      "console": {
+        "errors": [],
+        "autoplay": [],
+        "pageerrors": []
+      }
+    },
+    "desktop": {
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "deviceScaleFactor": 1,
+        "isMobile": false
+      },
+      "phases": [
+        {
+          "name": "fresh-gate",
+          "assertions": [
+            {
+              "name": "fresh gate: Begin recovery primary",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: no Continue / New game",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: Settings entry",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "fresh gate: fresh-yard line",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .gate",
+              "pass": true,
+              "detail": "[52,44,44]"
+            },
+            {
+              "name": "no page scroll",
+              "pass": true,
+              "detail": "{\"ok\":true,\"scrollHeight\":1080,\"scrollWidth\":1920,\"innerHeight\":1080,\"innerWidth\":1920}"
+            },
+            {
+              "name": "no autoplay warning pre-gesture",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":1920,\"height\":1080},\"card\":{\"left\":804.84375,\"top\":390.96875,\"right\":1115.15625,\"bottom\":689.03125,\"width\":310.3125,\"height\":298.0625},\"inner\":{\"w\":1920,\"h\":1080},\"children\":6}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":804.84375,\"top\":390.96875,\"right\":1115.15625,\"bottom\":689.03125,\"width\":310.3125,\"height\":298.0625}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0,\"dy\":0}"
+            },
+            {
+              "name": "desktop card leaves wide side margins",
+              "pass": true,
+              "detail": "{\"margin\":804.84375,\"cardWidth\":310.3125,\"frameWidth\":1920}"
+            },
+            {
+              "name": "pixel audit desktop-01-fresh-gate.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":69,\"darkShare\":0.9921,\"brightShare\":0.0019,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}}"
+            },
+            {
+              "name": "pixel audit desktop-01-fresh-gate.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=69"
+            },
+            {
+              "name": "pixel audit desktop-01-fresh-gate.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":69,\"darkShare\":0.9921,\"brightShare\":0.0019,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}}"
+            },
+            {
+              "name": "pixel audit desktop-01-fresh-gate.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690}"
+            },
+            {
+              "name": "pixel audit desktop-01-fresh-gate.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-01-fresh-gate.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 69,
+              "darkShare": 0.9921,
+              "brightShare": 0.0019,
+              "samples": 42625,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 804,
+                  "y0": 390,
+                  "x1": 1116,
+                  "y1": 690
+                },
+                "brightShare": 0.0444,
+                "samples": 1935
+              }
+            }
+          ]
+        },
+        {
+          "name": "gate-settings",
+          "assertions": [
+            {
+              "name": "settings card centered in viewport (not the HUD gutter)",
+              "pass": true,
+              "detail": "{\"left\":680,\"top\":369.3125,\"right\":1240,\"bottom\":710.671875,\"w\":1920,\"h\":1080}"
+            },
+            {
+              "name": "Sound actual value On",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Text size actual value 1",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Reduced motion actual value Off",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Display actual value Windowed",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "display control graceful (enabled, or disabled + note)",
+              "pass": true,
+              "detail": "{\"disabled\":false,\"note\":\"Delete the saved yard and start fresh\"}"
+            },
+            {
+              "name": "touch targets >= 44px in .panel--settings",
+              "pass": true,
+              "detail": "[44,44,44,44,44,44]"
+            },
+            {
+              "name": "no page scroll with panel",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "pixel audit desktop-02-gate-settings.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":55,\"darkShare\":0.995,\"brightShare\":0.0005,\"samples\":42625,\"content\":\".gate-settings .panel\",\"region\":{\"box\":{\"x0\":680,\"y0\":369,\"x1\":1240,\"y1\":711},\"brightShare\":0.0077,\"samples\":3920}}"
+            },
+            {
+              "name": "pixel audit desktop-02-gate-settings.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=55"
+            },
+            {
+              "name": "pixel audit desktop-02-gate-settings.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":55,\"darkShare\":0.995,\"brightShare\":0.0005,\"samples\":42625,\"content\":\".gate-settings .panel\",\"region\":{\"box\":{\"x0\":680,\"y0\":369,\"x1\":1240,\"y1\":711},\"brightShare\":0.0077,\"samples\":3920}}"
+            },
+            {
+              "name": "pixel audit desktop-02-gate-settings.png: lit text in .gate-settings .panel",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":680,\"y0\":369,\"x1\":1240,\"y1\":711},\"brightShare\":0.0077,\"samples\":3920}"
+            },
+            {
+              "name": "mute writes through: value Off",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "mute persisted pre-start",
+              "pass": true,
+              "detail": "{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}"
+            },
+            {
+              "name": "text cycle writes through: 1.25",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "text persisted pre-start",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "motion writes through: On",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "motion persisted pre-start",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Escape returns to title",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-02-gate-settings.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 55,
+              "darkShare": 0.995,
+              "brightShare": 0.0005,
+              "samples": 42625,
+              "content": ".gate-settings .panel",
+              "region": {
+                "box": {
+                  "x0": 680,
+                  "y0": 369,
+                  "x1": 1240,
+                  "y1": 711
+                },
+                "brightShare": 0.0077,
+                "samples": 3920
+              }
+            }
+          ]
+        },
+        {
+          "name": "keyboard-start",
+          "assertions": [
+            {
+              "name": "Enter on focused primary starts the yard",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "no console errors (context A)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no page errors (context A)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no autoplay warnings after gesture start",
+              "pass": true,
+              "detail": "[]"
+            }
+          ],
+          "screenshots": []
+        },
+        {
+          "name": "continue-gate",
+          "assertions": [
+            {
+              "name": "Continue primary",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Continue keeps Begin recovery accessible name",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "summary names the actual run",
+              "pass": true,
+              "detail": "Saved run found — Tick 372 · 1 machine · drone flying · 0 credits"
+            },
+            {
+              "name": "New game entry present",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .gate",
+              "pass": true,
+              "detail": "[52,44,44,44]"
+            },
+            {
+              "name": "no page scroll",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":1920,\"height\":1080},\"card\":{\"left\":769.71875,\"top\":361.96875,\"right\":1150.28125,\"bottom\":718.03125,\"width\":380.5625,\"height\":356.0625},\"inner\":{\"w\":1920,\"h\":1080},\"children\":7}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":769.71875,\"top\":361.96875,\"right\":1150.28125,\"bottom\":718.03125,\"width\":380.5625,\"height\":356.0625}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0,\"dy\":0}"
+            },
+            {
+              "name": "desktop card leaves wide side margins",
+              "pass": true,
+              "detail": "{\"margin\":769.71875,\"cardWidth\":380.5625,\"frameWidth\":1920}"
+            },
+            {
+              "name": "pixel audit desktop-03-continue-gate.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":67,\"darkShare\":0.9915,\"brightShare\":0.0021,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":769,\"y0\":361,\"x1\":1151,\"y1\":719},\"brightShare\":0.0332,\"samples\":2860}}"
+            },
+            {
+              "name": "pixel audit desktop-03-continue-gate.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=67"
+            },
+            {
+              "name": "pixel audit desktop-03-continue-gate.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":67,\"darkShare\":0.9915,\"brightShare\":0.0021,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":769,\"y0\":361,\"x1\":1151,\"y1\":719},\"brightShare\":0.0332,\"samples\":2860}}"
+            },
+            {
+              "name": "pixel audit desktop-03-continue-gate.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":769,\"y0\":361,\"x1\":1151,\"y1\":719}"
+            },
+            {
+              "name": "pixel audit desktop-03-continue-gate.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":769,\"y0\":361,\"x1\":1151,\"y1\":719},\"brightShare\":0.0332,\"samples\":2860}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-03-continue-gate.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 67,
+              "darkShare": 0.9915,
+              "brightShare": 0.0021,
+              "samples": 42625,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 769,
+                  "y0": 361,
+                  "x1": 1151,
+                  "y1": 719
+                },
+                "brightShare": 0.0332,
+                "samples": 2860
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-dialog",
+          "assertions": [
+            {
+              "name": "warning names permanent loss",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "confirm disabled before acknowledgement",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Cancel owns initial focus",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "dialog topmost at its center",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":415.96875,\"left\":720,\"bottom\":664.015625,\"right\":1200},\"inner\":{\"w\":1920,\"h\":1080},\"menuUnder\":false}"
+            },
+            {
+              "name": "dialog inside viewport",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":415.96875,\"left\":720,\"bottom\":664.015625,\"right\":1200},\"inner\":{\"w\":1920,\"h\":1080},\"menuUnder\":false}"
+            },
+            {
+              "name": "touch targets >= 44px in .reset-dialog",
+              "pass": true,
+              "detail": "[44,44]"
+            },
+            {
+              "name": "no page scroll with dialog",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "pixel audit desktop-04-reset-dialog.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":67,\"darkShare\":0.9951,\"brightShare\":0.0011,\"samples\":42625,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0177,\"samples\":2484}}"
+            },
+            {
+              "name": "pixel audit desktop-04-reset-dialog.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=67"
+            },
+            {
+              "name": "pixel audit desktop-04-reset-dialog.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":67,\"darkShare\":0.9951,\"brightShare\":0.0011,\"samples\":42625,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0177,\"samples\":2484}}"
+            },
+            {
+              "name": "pixel audit desktop-04-reset-dialog.png: lit text in .reset-dialog",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0177,\"samples\":2484}"
+            },
+            {
+              "name": "digit keys inert under dialog",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Cancel leaves save byte-identical",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Escape cancels, save untouched",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-04-reset-dialog.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 67,
+              "darkShare": 0.9951,
+              "brightShare": 0.0011,
+              "samples": 42625,
+              "content": ".reset-dialog",
+              "region": {
+                "box": {
+                  "x0": 720,
+                  "y0": 415,
+                  "x1": 1200,
+                  "y1": 665
+                },
+                "brightShare": 0.0177,
+                "samples": 2484
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-confirm",
+          "assertions": [
+            {
+              "name": "acknowledgement enables confirm",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "save cleared",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "old writer lease cleared (fresh claim after reload)",
+              "pass": true,
+              "detail": "{\"oldLeaseOwner\":\"t1-k3fz\",\"newLeaseOwner\":\"t1-bpt9\"}"
+            },
+            {
+              "name": "fresh title after reload",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "no Continue after reset",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "gate overlay spans the full viewport",
+              "pass": true,
+              "detail": "{\"overlay\":{\"left\":0,\"top\":0,\"width\":1920,\"height\":1080},\"card\":{\"left\":804.84375,\"top\":390.96875,\"right\":1115.15625,\"bottom\":689.03125,\"width\":310.3125,\"height\":298.0625},\"inner\":{\"w\":1920,\"h\":1080},\"children\":6}"
+            },
+            {
+              "name": "title card strictly smaller than frame",
+              "pass": true,
+              "detail": "{\"left\":804.84375,\"top\":390.96875,\"right\":1115.15625,\"bottom\":689.03125,\"width\":310.3125,\"height\":298.0625}"
+            },
+            {
+              "name": "title card centered",
+              "pass": true,
+              "detail": "{\"dx\":0,\"dy\":0}"
+            },
+            {
+              "name": "desktop card leaves wide side margins",
+              "pass": true,
+              "detail": "{\"margin\":804.84375,\"cardWidth\":310.3125,\"frameWidth\":1920}"
+            },
+            {
+              "name": "pixel audit desktop-05-after-reset.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":69,\"darkShare\":0.9921,\"brightShare\":0.0019,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}}"
+            },
+            {
+              "name": "pixel audit desktop-05-after-reset.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=69"
+            },
+            {
+              "name": "pixel audit desktop-05-after-reset.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":69,\"darkShare\":0.9921,\"brightShare\":0.0019,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}}"
+            },
+            {
+              "name": "pixel audit desktop-05-after-reset.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690}"
+            },
+            {
+              "name": "pixel audit desktop-05-after-reset.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":804,\"y0\":390,\"x1\":1116,\"y1\":690},\"brightShare\":0.0444,\"samples\":1935}"
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-05-after-reset.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 69,
+              "darkShare": 0.9921,
+              "brightShare": 0.0019,
+              "samples": 42625,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 804,
+                  "y0": 390,
+                  "x1": 1116,
+                  "y1": 690
+                },
+                "brightShare": 0.0444,
+                "samples": 1935
+              }
+            }
+          ]
+        },
+        {
+          "name": "post-start",
+          "assertions": [
+            {
+              "name": "camera face reads Recenter (aria Reset view)",
+              "pass": true,
+              "detail": "{\"text\":\"Recenter\",\"aria\":\"Reset view\"}"
+            },
+            {
+              "name": "menu (rail) has Settings row",
+              "pass": true,
+              "detail": "[\"HomeBack to the yard overview; clears the selection\",\"YardAfter tutorial\",\"Return reportNo absence yet\",\"Sound ✓All sound\",\"A 1Cycle 1 / 1.25 / 1.5 / 2\",\"SettingsSound, text size, motion and display\",\"Reset gameDelete the saved yard and start fresh\"]"
+            },
+            {
+              "name": "menu (rail) has Reset game row",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "Home row is navigation-worded",
+              "pass": true,
+              "detail": "HomeBack to the yard overview; clears the selection"
+            },
+            {
+              "name": "touch targets >= 44px in .shell-menu",
+              "pass": true,
+              "detail": "[44,47,47,47,47,47,47,47]"
+            },
+            {
+              "name": "no page scroll with menu",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "menu content box measured",
+              "pass": true,
+              "detail": "{\"left\":1605,\"top\":142,\"right\":1899,\"bottom\":557.359375}"
+            },
+            {
+              "name": "pixel audit desktop-06-menu.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":137,\"darkShare\":0.6893,\"brightShare\":0.011,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":558},\"brightShare\":0.0071,\"samples\":2520}}"
+            },
+            {
+              "name": "pixel audit desktop-06-menu.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=137"
+            },
+            {
+              "name": "pixel audit desktop-06-menu.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":137,\"darkShare\":0.6893,\"brightShare\":0.011,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":558},\"brightShare\":0.0071,\"samples\":2520}}"
+            },
+            {
+              "name": "pixel audit desktop-06-menu.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":558}"
+            },
+            {
+              "name": "pixel audit desktop-06-menu.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":558},\"brightShare\":0.0071,\"samples\":2520}"
+            },
+            {
+              "name": "menu retires under Settings",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "post-start Sound actual value",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "post-start Text actual value",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .panel--settings",
+              "pass": true,
+              "detail": "[44,44,44,44,44,44]"
+            },
+            {
+              "name": "settings content box measured",
+              "pass": true,
+              "detail": "{\"left\":1605,\"top\":142,\"right\":1899,\"bottom\":448.5625}"
+            },
+            {
+              "name": "pixel audit desktop-07-settings-poststart.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":112,\"darkShare\":0.6898,\"brightShare\":0.011,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":449},\"brightShare\":0.0222,\"samples\":1848}}"
+            },
+            {
+              "name": "pixel audit desktop-07-settings-poststart.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=112"
+            },
+            {
+              "name": "pixel audit desktop-07-settings-poststart.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":112,\"darkShare\":0.6898,\"brightShare\":0.011,\"samples\":42625,\"content\":\"content-box\",\"region\":{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":449},\"brightShare\":0.0222,\"samples\":1848}}"
+            },
+            {
+              "name": "pixel audit desktop-07-settings-poststart.png: card region is NOT the full frame",
+              "pass": true,
+              "detail": "{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":449}"
+            },
+            {
+              "name": "pixel audit desktop-07-settings-poststart.png: lit text in content-box",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":1605,\"y0\":142,\"x1\":1899,\"y1\":449},\"brightShare\":0.0222,\"samples\":1848}"
+            },
+            {
+              "name": "Escape closes post-start settings",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-06-menu.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 137,
+              "darkShare": 0.6893,
+              "brightShare": 0.011,
+              "samples": 42625,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 1605,
+                  "y0": 142,
+                  "x1": 1899,
+                  "y1": 558
+                },
+                "brightShare": 0.0071,
+                "samples": 2520
+              }
+            },
+            {
+              "file": "desktop-07-settings-poststart.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 112,
+              "darkShare": 0.6898,
+              "brightShare": 0.011,
+              "samples": 42625,
+              "content": "content-box",
+              "region": {
+                "box": {
+                  "x0": 1605,
+                  "y0": 142,
+                  "x1": 1899,
+                  "y1": 449
+                },
+                "brightShare": 0.0222,
+                "samples": 1848
+              }
+            }
+          ]
+        },
+        {
+          "name": "reset-over-menu",
+          "assertions": [
+            {
+              "name": "dialog layers above the open menu",
+              "pass": true,
+              "detail": "{\"present\":true,\"topmost\":true,\"rect\":{\"top\":415.96875,\"left\":720,\"bottom\":664.015625,\"right\":1200},\"inner\":{\"w\":1920,\"h\":1080},\"menuUnder\":true}"
+            },
+            {
+              "name": "warning names permanent loss",
+              "pass": true,
+              "detail": ""
+            },
+            {
+              "name": "touch targets >= 44px in .reset-dialog",
+              "pass": true,
+              "detail": "[44,44]"
+            },
+            {
+              "name": "pixel audit desktop-08-reset-over-menu.png: full frame",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":82,\"darkShare\":0.9857,\"brightShare\":0.0011,\"samples\":42625,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0153,\"samples\":2484}}"
+            },
+            {
+              "name": "pixel audit desktop-08-reset-over-menu.png: not blank",
+              "pass": true,
+              "detail": "distinctColors=82"
+            },
+            {
+              "name": "pixel audit desktop-08-reset-over-menu.png: dark UI",
+              "pass": true,
+              "detail": "{\"width\":1920,\"height\":1080,\"distinctColors\":82,\"darkShare\":0.9857,\"brightShare\":0.0011,\"samples\":42625,\"content\":\".reset-dialog\",\"region\":{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0153,\"samples\":2484}}"
+            },
+            {
+              "name": "pixel audit desktop-08-reset-over-menu.png: lit text in .reset-dialog",
+              "pass": true,
+              "detail": "{\"box\":{\"x0\":720,\"y0\":415,\"x1\":1200,\"y1\":665},\"brightShare\":0.0153,\"samples\":2484}"
+            },
+            {
+              "name": "Cancel keeps menu and run",
+              "pass": true,
+              "detail": ""
+            }
+          ],
+          "screenshots": [
+            {
+              "file": "desktop-08-reset-over-menu.png",
+              "width": 1920,
+              "height": 1080,
+              "distinctColors": 82,
+              "darkShare": 0.9857,
+              "brightShare": 0.0011,
+              "samples": 42625,
+              "content": ".reset-dialog",
+              "region": {
+                "box": {
+                  "x0": 720,
+                  "y0": 415,
+                  "x1": 1200,
+                  "y1": 665
+                },
+                "brightShare": 0.0153,
+                "samples": 2484
+              }
+            }
+          ]
+        },
+        {
+          "name": "console",
+          "assertions": [
+            {
+              "name": "no console errors (context B)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no page errors (context B)",
+              "pass": true,
+              "detail": "[]"
+            },
+            {
+              "name": "no autoplay warnings (context B)",
+              "pass": true,
+              "detail": "[]"
+            }
+          ],
+          "screenshots": []
+        }
+      ],
+      "console": {
+        "errors": [],
+        "autoplay": [],
+        "pageerrors": []
+      }
+    }
+  },
+  "failures": [],
+  "summary": {
+    "phone": {
+      "assertions": 113,
+      "passed": 113,
+      "screenshots": 8
+    },
+    "desktop": {
+      "assertions": 116,
+      "passed": 116,
+      "screenshots": 8
+    }
+  },
+  "serverLogTail": "\n  \u001b[32m\u001b[1mVITE\u001b[22m v5.4.11\u001b[39m  \u001b[2mready in \u001b[0m\u001b[1m303\u001b[22m\u001b[2m\u001b[0m ms\u001b[22m\n\n  \u001b[32m➜\u001b[39m  \u001b[1mLocal\u001b[22m:   \u001b[36mhttp://127.0.0.1:\u001b[1m5172\u001b[22m/\u001b[39m\n"
+}

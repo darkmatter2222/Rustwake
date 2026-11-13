@@ -1,0 +1,5209 @@
+{
+ "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+ "port": 4194,
+ "url": "http://127.0.0.1:4194/",
+ "generatedAt": "2026-11-13T09:32:23.356Z",
+ "cells": {
+  "phone-small-ts1": {
+   "viewport": {
+    "width": 360,
+    "height": 640
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 272,
+      "width": 340,
+      "height": 264
+     },
+     "dock": {
+      "left": 10,
+      "top": 534,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 272,
+      "right": 350,
+      "bottom": 534,
+      "width": 340,
+      "height": 262
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 262,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 264,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 186,
+      "clientHeight": 186,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "262px",
+      "flexShrink": "1",
+      "panelScrollHeight": 260,
+      "hudClientHeight": 640,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 272,
+      "width": 340,
+      "height": 264
+     },
+     "dock": {
+      "left": 10,
+      "top": 534,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 272,
+      "right": 350,
+      "bottom": 534,
+      "width": 340,
+      "height": 262
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 262,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 264,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 186,
+      "clientHeight": 186,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "262px",
+      "flexShrink": "1",
+      "panelScrollHeight": 260,
+      "hudClientHeight": 640,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 272,
+      "width": 340,
+      "height": 264
+     },
+     "dock": {
+      "left": 10,
+      "top": 534,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 272,
+      "right": 350,
+      "bottom": 534,
+      "width": 340,
+      "height": 262
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 262,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 264,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 186,
+      "clientHeight": 186,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "262px",
+      "flexShrink": "1",
+      "panelScrollHeight": 260,
+      "hudClientHeight": 640,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "phone-small-ts2": {
+   "viewport": {
+    "width": 360,
+    "height": 640
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 208,
+      "width": 340,
+      "height": 200
+     },
+     "dock": {
+      "left": 10,
+      "top": 586,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 226,
+      "right": 350,
+      "bottom": 586,
+      "width": 340,
+      "height": 360
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 378,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 776,
+      "ch": 200,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 284,
+      "clientHeight": 284,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "calc(100% - 200px)",
+      "computedHeight": "360px",
+      "flexShrink": "1",
+      "panelScrollHeight": 358,
+      "hudClientHeight": 640,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 208,
+      "width": 340,
+      "height": 200
+     },
+     "dock": {
+      "left": 10,
+      "top": 586,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 226,
+      "right": 350,
+      "bottom": 586,
+      "width": 340,
+      "height": 360
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 378,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 776,
+      "ch": 200,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 284,
+      "clientHeight": 284,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "calc(100% - 200px)",
+      "computedHeight": "360px",
+      "flexShrink": "1",
+      "panelScrollHeight": 358,
+      "hudClientHeight": 640,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 350,
+      "bottom": 208,
+      "width": 340,
+      "height": 200
+     },
+     "dock": {
+      "left": 10,
+      "top": 586,
+      "right": 350,
+      "bottom": 632,
+      "width": 340,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 226,
+      "right": 350,
+      "bottom": 586,
+      "width": 340,
+      "height": 360
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 378,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 776,
+      "ch": 200,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 284,
+      "clientHeight": 284,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "calc(100% - 200px)",
+      "computedHeight": "360px",
+      "flexShrink": "1",
+      "panelScrollHeight": 358,
+      "hudClientHeight": 640,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "phone-ts1": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 392,
+      "width": 370,
+      "height": 384
+     },
+     "dock": {
+      "left": 10,
+      "top": 738,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 392,
+      "right": 380,
+      "bottom": 738,
+      "width": 370,
+      "height": 346
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 346,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 384,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 270,
+      "clientHeight": 270,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "345.828px",
+      "flexShrink": "1",
+      "panelScrollHeight": 344,
+      "hudClientHeight": 844,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 392,
+      "width": 370,
+      "height": 384
+     },
+     "dock": {
+      "left": 10,
+      "top": 738,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 392,
+      "right": 380,
+      "bottom": 738,
+      "width": 370,
+      "height": 346
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 346,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 384,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 270,
+      "clientHeight": 270,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "345.828px",
+      "flexShrink": "1",
+      "panelScrollHeight": 344,
+      "hudClientHeight": 844,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 392,
+      "width": 370,
+      "height": 384
+     },
+     "dock": {
+      "left": 10,
+      "top": 738,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 392,
+      "right": 380,
+      "bottom": 738,
+      "width": 370,
+      "height": 346
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 346,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 386,
+      "ch": 384,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 270,
+      "clientHeight": 270,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "345.828px",
+      "flexShrink": "1",
+      "panelScrollHeight": 344,
+      "hudClientHeight": 844,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 1",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 11.12,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 13.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 10.8,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 18.08,
+      "need": 4.5,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "phone-ts2": {
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 424,
+      "width": 370,
+      "height": 416
+     },
+     "dock": {
+      "left": 10,
+      "top": 790,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 442,
+      "right": 380,
+      "bottom": 790,
+      "width": 370,
+      "height": 348
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 366,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 747,
+      "ch": 416,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 271,
+      "clientHeight": 271,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "347.75px",
+      "flexShrink": "1",
+      "panelScrollHeight": 346,
+      "hudClientHeight": 844,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 424,
+      "width": 370,
+      "height": 416
+     },
+     "dock": {
+      "left": 10,
+      "top": 790,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 442,
+      "right": 380,
+      "bottom": 790,
+      "width": 370,
+      "height": 348
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 366,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 747,
+      "ch": 416,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 271,
+      "clientHeight": 271,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "347.75px",
+      "flexShrink": "1",
+      "panelScrollHeight": 346,
+      "hudClientHeight": 844,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 380,
+      "bottom": 424,
+      "width": 370,
+      "height": 416
+     },
+     "dock": {
+      "left": 10,
+      "top": 790,
+      "right": 380,
+      "bottom": 836,
+      "width": 370,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 442,
+      "right": 380,
+      "bottom": 790,
+      "width": 370,
+      "height": 348
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 366,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 747,
+      "ch": 416,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 271,
+      "clientHeight": 271,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "347.75px",
+      "flexShrink": "1",
+      "panelScrollHeight": 346,
+      "hudClientHeight": 844,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 2",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 11.12,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 22.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 21.6,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 18.08,
+      "need": 3,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "phone-large-ts1": {
+   "viewport": {
+    "width": 412,
+    "height": 915
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 353,
+      "width": 392,
+      "height": 345
+     },
+     "dock": {
+      "left": 10,
+      "top": 809,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 431,
+      "right": 402,
+      "bottom": 809,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 456,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 345,
+      "ch": 345,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 302,
+      "clientHeight": 302,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 353,
+      "width": 392,
+      "height": 345
+     },
+     "dock": {
+      "left": 10,
+      "top": 809,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 431,
+      "right": 402,
+      "bottom": 809,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 456,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 345,
+      "ch": 345,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 302,
+      "clientHeight": 302,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 353,
+      "width": 392,
+      "height": 345
+     },
+     "dock": {
+      "left": 10,
+      "top": 809,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 98
+     },
+     "panel": {
+      "left": 10,
+      "top": 431,
+      "right": 402,
+      "bottom": 809,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 456,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 345,
+      "ch": 345,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 302,
+      "clientHeight": 302,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "phone-large-ts2": {
+   "viewport": {
+    "width": 412,
+    "height": 915
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 465,
+      "width": 392,
+      "height": 457
+     },
+     "dock": {
+      "left": 10,
+      "top": 861,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 483,
+      "right": 402,
+      "bottom": 861,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 396,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 686,
+      "ch": 457,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 301,
+      "clientHeight": 301,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 465,
+      "width": 392,
+      "height": 457
+     },
+     "dock": {
+      "left": 10,
+      "top": 861,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 483,
+      "right": 402,
+      "bottom": 861,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 396,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 686,
+      "ch": 457,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 301,
+      "clientHeight": 301,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 402,
+      "bottom": 465,
+      "width": 392,
+      "height": 457
+     },
+     "dock": {
+      "left": 10,
+      "top": 861,
+      "right": 402,
+      "bottom": 907,
+      "width": 392,
+      "height": 46
+     },
+     "panel": {
+      "left": 10,
+      "top": 483,
+      "right": 402,
+      "bottom": 861,
+      "width": 392,
+      "height": 378
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 396,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 686,
+      "ch": 457,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 301,
+      "clientHeight": 301,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "377.578px",
+      "flexShrink": "1",
+      "panelScrollHeight": 376,
+      "hudClientHeight": 915,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "phone-landscape-ts1": {
+   "viewport": {
+    "width": 844,
+    "height": 390
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 328,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 328,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "{\"schemaVersion\":1,\"checksum\":",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 328,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [
+     {
+      "slot": "yard",
+      "label": "Yard1",
+      "named": true
+     },
+     {
+      "slot": "build",
+      "label": "Build2",
+      "named": true
+     },
+     {
+      "slot": "store",
+      "label": "Store3",
+      "named": true
+     },
+     {
+      "slot": "research",
+      "label": "ResearchNeeds data4",
+      "named": true
+     },
+     {
+      "slot": "menu",
+      "label": "Menu5",
+      "named": true
+     }
+    ],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 1",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 11.12,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 13.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 10.8,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".shell-rail__slot",
+      "fontSize": 11.7,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 18.08,
+      "need": 4.5,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "phone-landscape-ts2": {
+   "viewport": {
+    "width": 844,
+    "height": 390
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 652,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 652,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "254px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 510,
+      "bottom": 248,
+      "width": 400,
+      "height": 240
+     },
+     "dock": {
+      "left": 110,
+      "top": 336,
+      "right": 510,
+      "bottom": 382,
+      "width": 400,
+      "height": 46
+     },
+     "panel": {
+      "left": 516,
+      "top": 8,
+      "right": 836,
+      "bottom": 382,
+      "width": 320,
+      "height": 374
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 88,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 652,
+      "ch": 240,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 298,
+      "clientHeight": 298,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "374px",
+      "flexShrink": "1",
+      "panelScrollHeight": 372,
+      "hudClientHeight": 390,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [
+     {
+      "slot": "yard",
+      "label": "Yard1",
+      "named": true
+     },
+     {
+      "slot": "build",
+      "label": "Build2",
+      "named": true
+     },
+     {
+      "slot": "store",
+      "label": "Store3",
+      "named": true
+     },
+     {
+      "slot": "research",
+      "label": "ResearchNeeds data4",
+      "named": true
+     },
+     {
+      "slot": "menu",
+      "label": "Menu5",
+      "named": true
+     }
+    ],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 2",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 11.12,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 22.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 21.6,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".shell-rail__slot",
+      "fontSize": 23.4,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 18.08,
+      "need": 3,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "tablet-ts1": {
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 295,
+      "width": 748,
+      "height": 287
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 547,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 423
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 675,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 287,
+      "ch": 287,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 347,
+      "clientHeight": 347,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "423.359px",
+      "flexShrink": "1",
+      "panelScrollHeight": 421,
+      "hudClientHeight": 1024,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 295,
+      "width": 748,
+      "height": 287
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 547,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 423
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 675,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 287,
+      "ch": 287,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 347,
+      "clientHeight": 347,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "423.359px",
+      "flexShrink": "1",
+      "panelScrollHeight": 421,
+      "hudClientHeight": 1024,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 295,
+      "width": 748,
+      "height": 287
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 547,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 423
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 675,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 287,
+      "ch": 287,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 347,
+      "clientHeight": 347,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "423.359px",
+      "flexShrink": "1",
+      "panelScrollHeight": 421,
+      "hudClientHeight": 1024,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "tablet-ts2": {
+   "viewport": {
+    "width": 768,
+    "height": 1024
+   },
+   "dsf": 2,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 579,
+      "width": 748,
+      "height": 571
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 579,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 391
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 391,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 571,
+      "ch": 571,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 315,
+      "clientHeight": 315,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 17,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "391.375px",
+      "flexShrink": "1",
+      "panelScrollHeight": 389,
+      "hudClientHeight": 1024,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 579,
+      "width": 748,
+      "height": 571
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 579,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 391
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 391,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 571,
+      "ch": 571,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 315,
+      "clientHeight": 315,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "391.375px",
+      "flexShrink": "1",
+      "panelScrollHeight": 389,
+      "hudClientHeight": 1024,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "",
+     "lead": {
+      "left": 10,
+      "top": 8,
+      "right": 758,
+      "bottom": 579,
+      "width": 748,
+      "height": 571
+     },
+     "dock": {
+      "left": 104,
+      "top": 970,
+      "right": 664,
+      "bottom": 1016,
+      "width": 560,
+      "height": 46
+     },
+     "panel": {
+      "left": 104,
+      "top": 579,
+      "right": 664,
+      "bottom": 970,
+      "width": 560,
+      "height": 391
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 391,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 571,
+      "ch": 571,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 315,
+      "clientHeight": 315,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "42%",
+      "computedHeight": "391.375px",
+      "flexShrink": "1",
+      "panelScrollHeight": 389,
+      "hudClientHeight": 1024,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "laptop-ts1": {
+   "viewport": {
+    "width": 1366,
+    "height": 768
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 291,
+      "width": 1248,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 297,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 463
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 423,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 387,
+      "clientHeight": 387,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "463px",
+      "flexShrink": "1",
+      "panelScrollHeight": 461,
+      "hudClientHeight": 768,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 291,
+      "width": 1248,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 297,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 463
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 423,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 387,
+      "clientHeight": 387,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "{\"schemaVersion\":1,\"checksum\":",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "463px",
+      "flexShrink": "1",
+      "panelScrollHeight": 461,
+      "hudClientHeight": 768,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 291,
+      "width": 1248,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 297,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 463
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 423,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 387,
+      "clientHeight": 387,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "463px",
+      "flexShrink": "1",
+      "panelScrollHeight": 461,
+      "hudClientHeight": 768,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "laptop-ts2": {
+   "viewport": {
+    "width": 1366,
+    "height": 768
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "422px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 416,
+      "width": 1248,
+      "height": 408
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 422,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 338
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 298,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 481,
+      "ch": 408,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 262,
+      "clientHeight": 262,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "338px",
+      "flexShrink": "1",
+      "panelScrollHeight": 336,
+      "hudClientHeight": 768,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "422px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 416,
+      "width": 1248,
+      "height": 408
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 422,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 338
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 298,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 481,
+      "ch": 408,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 262,
+      "clientHeight": 262,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "338px",
+      "flexShrink": "1",
+      "panelScrollHeight": 336,
+      "hudClientHeight": 768,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "422px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1358,
+      "bottom": 416,
+      "width": 1248,
+      "height": 408
+     },
+     "dock": {
+      "left": 110,
+      "top": 714,
+      "right": 1032,
+      "bottom": 760,
+      "width": 922,
+      "height": 46
+     },
+     "panel": {
+      "left": 1038,
+      "top": 422,
+      "right": 1358,
+      "bottom": 760,
+      "width": 320,
+      "height": 338
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 298,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 481,
+      "ch": 408,
+      "oy": "auto"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 262,
+      "clientHeight": 262,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "338px",
+      "flexShrink": "1",
+      "panelScrollHeight": 336,
+      "hudClientHeight": 768,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "desktop-ts1": {
+   "viewport": {
+    "width": 1920,
+    "height": 1080
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 291,
+      "width": 1802,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 297,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 775
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 735,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 699,
+      "clientHeight": 699,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "775px",
+      "flexShrink": "1",
+      "panelScrollHeight": 773,
+      "hudClientHeight": 1080,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 291,
+      "width": 1802,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 297,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 775
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 735,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 699,
+      "clientHeight": 699,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "{\"schemaVersion\":1,\"checksum\":",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "775px",
+      "flexShrink": "1",
+      "panelScrollHeight": 773,
+      "hudClientHeight": 1080,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 291,
+      "width": 1802,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 297,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 775
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 735,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 699,
+      "clientHeight": 699,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "775px",
+      "flexShrink": "1",
+      "panelScrollHeight": 773,
+      "hudClientHeight": 1080,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [
+     {
+      "slot": "yard",
+      "label": "Yard1",
+      "named": true
+     },
+     {
+      "slot": "build",
+      "label": "Build2",
+      "named": true
+     },
+     {
+      "slot": "store",
+      "label": "Store3",
+      "named": true
+     },
+     {
+      "slot": "research",
+      "label": "ResearchNeeds data4",
+      "named": true
+     },
+     {
+      "slot": "menu",
+      "label": "Menu5",
+      "named": true
+     }
+    ],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 1",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 14.25,
+      "large": false,
+      "ratio": 11.12,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 13.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 12.6,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 10.8,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".shell-rail__slot",
+      "fontSize": 11.7,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 15,
+      "large": false,
+      "ratio": 18.08,
+      "need": 4.5,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "desktop-ts2": {
+   "viewport": {
+    "width": 1920,
+    "height": 1080
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 469,
+      "width": 1802,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 475,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 597
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 557,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 521,
+      "clientHeight": 521,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "597px",
+      "flexShrink": "1",
+      "panelScrollHeight": 595,
+      "hudClientHeight": 1080,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 469,
+      "width": 1802,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 475,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 597
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 557,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 521,
+      "clientHeight": 521,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "597px",
+      "flexShrink": "1",
+      "panelScrollHeight": 595,
+      "hudClientHeight": 1080,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 1912,
+      "bottom": 469,
+      "width": 1802,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1026,
+      "right": 1586,
+      "bottom": 1072,
+      "width": 1476,
+      "height": 46
+     },
+     "panel": {
+      "left": 1592,
+      "top": 475,
+      "right": 1912,
+      "bottom": 1072,
+      "width": 320,
+      "height": 597
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 557,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 521,
+      "clientHeight": 521,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "597px",
+      "flexShrink": "1",
+      "panelScrollHeight": 595,
+      "hudClientHeight": 1080,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": [],
+   "a11y": {
+    "canvasName": {
+     "ariaLabel": "Yard world view",
+     "role": "img",
+     "title": null
+    },
+    "dockBtns": [
+     {
+      "label": "Store",
+      "named": true
+     },
+     {
+      "label": "Yard",
+      "named": true
+     },
+     {
+      "label": "Connect",
+      "named": true
+     },
+     {
+      "label": "Build",
+      "named": true
+     }
+    ],
+    "railSlots": [
+     {
+      "slot": "yard",
+      "label": "Yard1",
+      "named": true
+     },
+     {
+      "slot": "build",
+      "label": "Build2",
+      "named": true
+     },
+     {
+      "slot": "store",
+      "label": "Store3",
+      "named": true
+     },
+     {
+      "slot": "research",
+      "label": "ResearchNeeds data4",
+      "named": true
+     },
+     {
+      "slot": "menu",
+      "label": "Menu5",
+      "named": true
+     }
+    ],
+    "iconBtns": [
+     {
+      "label": "Sound off",
+      "named": true
+     },
+     {
+      "label": "Text size 2",
+      "named": true
+     },
+     {
+      "label": "All resources",
+      "named": true
+     },
+     {
+      "label": "Return to yard view",
+      "named": true
+     },
+     {
+      "label": "Skip lessons and hide the yard",
+      "named": true
+     },
+     {
+      "label": "Close",
+      "named": true
+     },
+     {
+      "label": "Backup",
+      "named": true
+     },
+     {
+      "label": "Import",
+      "named": true
+     }
+    ],
+    "unnamedDock": 0,
+    "unnamedRail": 0,
+    "unnamedIcon": 0,
+    "contrast": [
+     {
+      "sel": ".objective__primary",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__title",
+      "fontSize": 28.5,
+      "large": true,
+      "ratio": 11.12,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".panel__body",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".dock button",
+      "fontSize": 22.2,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".resources__item strong",
+      "fontSize": 25.2,
+      "large": true,
+      "ratio": 17.42,
+      "need": 3,
+      "pass": true
+     },
+     {
+      "sel": ".status-line",
+      "fontSize": 21.6,
+      "large": false,
+      "ratio": 5.75,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".shell-rail__slot",
+      "fontSize": 23.4,
+      "large": false,
+      "ratio": 17.42,
+      "need": 4.5,
+      "pass": true
+     },
+     {
+      "sel": ".hud__top",
+      "fontSize": 30,
+      "large": true,
+      "ratio": 18.08,
+      "need": 3,
+      "pass": true
+     }
+    ],
+    "chips": [
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Scrap237"
+     },
+     {
+      "pressure": null,
+      "cue": null,
+      "text": "Credits0"
+     },
+     {
+      "pressure": "ok",
+      "cue": null,
+      "text": "Store 237/900"
+     },
+     {
+      "pressure": null,
+      "cue": "production",
+      "text": "1 need input · 1 cargo full"
+     }
+    ],
+    "chipsNonColor": true,
+    "live": [
+     {
+      "role": "status",
+      "ariaLive": null,
+      "text": "Copy this text, or open Import to paste one."
+     }
+    ],
+    "reducedMotionAttr": null,
+    "titled": []
+   }
+  },
+  "desktop-large-ts1": {
+   "viewport": {
+    "width": 2560,
+    "height": 1440
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 291,
+      "width": 2442,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 297,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 1135
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 1095,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 1059,
+      "clientHeight": 1059,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "1135px",
+      "flexShrink": "1",
+      "panelScrollHeight": 1133,
+      "hudClientHeight": 1440,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 291,
+      "width": 2442,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 297,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 1135
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 1095,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 1059,
+      "clientHeight": 1059,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "{\"schemaVersion\":1,\"checksum\":",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "1135px",
+      "flexShrink": "1",
+      "panelScrollHeight": 1133,
+      "hudClientHeight": 1440,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "1",
+     "textLarge": false,
+     "inspectorTop": "297px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 291,
+      "width": 2442,
+      "height": 283
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 297,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 1135
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 1095,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 283,
+      "ch": 283,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 1059,
+      "clientHeight": 1059,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": [
+       {
+        "tag": "textarea",
+        "cls": "panel__code save-code",
+        "label": "",
+        "w": 294,
+        "h": 26
+       }
+      ]
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "1135px",
+      "flexShrink": "1",
+      "panelScrollHeight": 1133,
+      "hudClientHeight": 1440,
+      "matchesCap": false,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  },
+  "desktop-large-ts2": {
+   "viewport": {
+    "width": 2560,
+    "height": 1440
+   },
+   "dsf": 1,
+   "geo": {
+    "record": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 469,
+      "width": 2442,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 475,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 957
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 917,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 881,
+      "clientHeight": 881,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 18,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "957px",
+      "flexShrink": "1",
+      "panelScrollHeight": 955,
+      "hudClientHeight": 1440,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "backup": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 469,
+      "width": 2442,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 475,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 957
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 917,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 881,
+      "clientHeight": 881,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 20,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "957px",
+      "flexShrink": "1",
+      "panelScrollHeight": 955,
+      "hudClientHeight": 1440,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    },
+    "replace": {
+     "scaleVar": "2",
+     "textLarge": true,
+     "inspectorTop": "475px",
+     "lead": {
+      "left": 110,
+      "top": 8,
+      "right": 2552,
+      "bottom": 469,
+      "width": 2442,
+      "height": 461
+     },
+     "dock": {
+      "left": 110,
+      "top": 1386,
+      "right": 2226,
+      "bottom": 1432,
+      "width": 2116,
+      "height": 46
+     },
+     "panel": {
+      "left": 2232,
+      "top": 475,
+      "right": 2552,
+      "bottom": 1432,
+      "width": 320,
+      "height": 957
+     },
+     "leadDockOverlapArea": 0,
+     "leadPanelOverlapArea": 0,
+     "dockPanelOverlapArea": 0,
+     "worldBand": 917,
+     "docScroll": 0,
+     "leadScroll": {
+      "sh": 461,
+      "ch": 461,
+      "oy": "visible"
+     },
+     "body": {
+      "scrollTop": 0,
+      "scrollHeight": 881,
+      "clientHeight": 881,
+      "overflow": 0,
+      "overflowY": "auto"
+     },
+     "touch": {
+      "count": 19,
+      "small": []
+     },
+     "panelCascade": {
+      "count": 1,
+      "parentClass": "hud",
+      "computedMaxHeight": "none",
+      "computedHeight": "957px",
+      "flexShrink": "1",
+      "panelScrollHeight": 955,
+      "hudClientHeight": 1440,
+      "matchesCap": true,
+      "hasSupport": true,
+      "hudClass": "hud"
+     }
+    }
+   },
+   "consoleErrors": []
+  }
+ },
+ "keyboard": {
+  "phone-ts1": {
+   "key": "phone-ts1",
+   "tabbable": [
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Store"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Yard"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Build"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-menu-face",
+     "label": "Menu"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    }
+   ],
+   "tabbableCount": 17,
+   "tabReachedDock": true,
+   "tabReachedIcon": true,
+   "tabCycleReturns": true,
+   "tabSequence": [
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "summary",
+     "cls": "onboard__summary",
+     "label": "Why this matters"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Store"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Yard"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Build"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-menu-face",
+     "label": "Menu"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    },
+    {
+     "tag": "body",
+     "cls": "",
+     "label": "Scrap245Credits0Store 245/9002"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    }
+   ],
+   "focusRing": {
+    "outlineWidth": "2px",
+    "outlineStyle": "solid",
+    "outlineColor": "rgb(95, 216, 232)",
+    "boxShadow": "none"
+   },
+   "menuOpener": "Menu",
+   "menuOpenBeforeEscape": true,
+   "menuSelfFocus": true,
+   "menuOpenAfterEscape": false,
+   "focusAfterEscape": {
+    "tag": "button",
+    "cls": "shell-menu-face",
+    "label": "Menu"
+   },
+   "focusRestoredToOpener": true,
+   "digit3OpensStore": true,
+   "escapeClosesStore": true,
+   "digit2OpensBuild": true,
+   "inputSuppress": {
+    "focusedTextarea": true,
+    "storeBefore": false,
+    "storeAfter": false,
+    "suppressed": true
+   },
+   "coreLoopKeyboard": {
+    "focused": true,
+    "buttonDisabled": false,
+    "scrapBefore": 245,
+    "scrapAfter": 250,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopTouch": {
+    "button": "Salvage",
+    "scrapBefore": 250,
+    "scrapAfter": 255,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopSalvageState": {
+    "disabled": false,
+    "label": "Salvage"
+   }
+  },
+  "phone-landscape-ts1": {
+   "key": "phone-landscape-ts1",
+   "tabbable": [
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Build2"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Store3"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Menu5"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    }
+   ],
+   "tabbableCount": 17,
+   "tabReachedDock": true,
+   "tabReachedIcon": true,
+   "tabCycleReturns": true,
+   "tabSequence": [
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Build2"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Store3"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Menu5"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "summary",
+     "cls": "onboard__summary",
+     "label": "Why this matters"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    },
+    {
+     "tag": "body",
+     "cls": "",
+     "label": "Yard1Build2Store3ResearchNeeds"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    }
+   ],
+   "focusRing": {
+    "outlineWidth": "2px",
+    "outlineStyle": "solid",
+    "outlineColor": "rgb(95, 216, 232)",
+    "boxShadow": "none"
+   },
+   "menuOpener": "Menu5",
+   "menuOpenBeforeEscape": true,
+   "menuSelfFocus": true,
+   "menuOpenAfterEscape": false,
+   "focusAfterEscape": {
+    "tag": "button",
+    "cls": "shell-rail__slot",
+    "label": "Menu5"
+   },
+   "focusRestoredToOpener": true,
+   "digit3OpensStore": true,
+   "escapeClosesStore": true,
+   "digit2OpensBuild": true,
+   "inputSuppress": {
+    "focusedTextarea": true,
+    "storeBefore": false,
+    "storeAfter": false,
+    "suppressed": true
+   },
+   "coreLoopKeyboard": {
+    "focused": true,
+    "buttonDisabled": false,
+    "scrapBefore": 245,
+    "scrapAfter": 250,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopTouch": {
+    "button": "Salvage",
+    "scrapBefore": 250,
+    "scrapAfter": 255,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopSalvageState": {
+    "disabled": false,
+    "label": "Salvage"
+   }
+  },
+  "desktop-ts1": {
+   "key": "desktop-ts1",
+   "tabbable": [
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Build2"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Store3"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Menu5"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    }
+   ],
+   "tabbableCount": 17,
+   "tabReachedDock": true,
+   "tabReachedIcon": true,
+   "tabCycleReturns": true,
+   "tabSequence": [
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Build2"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Store3"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Menu5"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective"
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard"
+    },
+    {
+     "tag": "summary",
+     "cls": "onboard__summary",
+     "label": "Why this matters"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Close"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Backup"
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Import"
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view"
+    },
+    {
+     "tag": "body",
+     "cls": "",
+     "label": "Yard1Build2Store3ResearchNeeds"
+    },
+    {
+     "tag": "button",
+     "cls": "shell-rail__slot",
+     "label": "Yard1"
+    }
+   ],
+   "focusRing": {
+    "outlineWidth": "2px",
+    "outlineStyle": "solid",
+    "outlineColor": "rgb(95, 216, 232)",
+    "boxShadow": "none"
+   },
+   "menuOpener": "Menu5",
+   "menuOpenBeforeEscape": true,
+   "menuSelfFocus": true,
+   "menuOpenAfterEscape": false,
+   "focusAfterEscape": {
+    "tag": "button",
+    "cls": "shell-rail__slot",
+    "label": "Menu5"
+   },
+   "focusRestoredToOpener": true,
+   "digit3OpensStore": true,
+   "escapeClosesStore": true,
+   "digit2OpensBuild": true,
+   "inputSuppress": {
+    "focusedTextarea": true,
+    "storeBefore": false,
+    "storeAfter": false,
+    "suppressed": true
+   },
+   "coreLoopKeyboard": {
+    "focused": true,
+    "buttonDisabled": false,
+    "scrapBefore": 245,
+    "scrapAfter": 250,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopTouch": {
+    "button": "Salvage",
+    "scrapBefore": 250,
+    "scrapAfter": 255,
+    "increased": true,
+    "changed": true
+   },
+   "coreLoopSalvageState": {
+    "disabled": false,
+    "label": "Salvage"
+   }
+  }
+ },
+ "reducedMotion": {
+  "attr": "true",
+  "ruleFound": true,
+  "ruleCount": 1,
+  "ruleText": ":root[data-reduced-motion=\"true\"] .wk-face, :root[data-reduced-motion=\"true\"] .wk-nav__face, :root[data-reduced-motion=\"true\"] .wk-sheet, :root[data-reduced-motion=\"true\"] .wk-dialog, :root[data-reduc",
+  "probeFound": true,
+  "transition": "all"
+ },
+ "defects": [],
+ "mirror": {
+  "count": 17,
+  "allNonEmpty": true,
+  "allDistinct": true,
+  "frames": [
+   {
+    "file": "phone-small-ts1.png",
+    "sha256": "21a2e14625357c35aee832798679195854315041d9b0dd85fe6b1763af5830d5",
+    "width": 720,
+    "height": 1280,
+    "bytes": 124532,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-small-ts2.png",
+    "sha256": "03e8c9a290ac46e1828b103581ae00736fb032f368e789ed267c8abcda7b866d",
+    "width": 720,
+    "height": 1280,
+    "bytes": 149177,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts1.png",
+    "sha256": "deb6bf142acf801cd68e1e35da1a7c1169eb955b150db6494b96e052e021650b",
+    "width": 780,
+    "height": 1688,
+    "bytes": 177524,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts2.png",
+    "sha256": "afd4f4394b003385fa06f65a0bc0af738ac04c944c0d3fe28d307853e4fb1a10",
+    "width": 780,
+    "height": 1688,
+    "bytes": 206551,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts1.png",
+    "sha256": "d09214f97035919c51e0dbb3d6542cb78e3d9c95a9aaf2aac8742dd2e1a6e1c0",
+    "width": 824,
+    "height": 1830,
+    "bytes": 163842,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts2.png",
+    "sha256": "37c3b4d257a51ab2e7621cb180f26bbd316e159d61230bae84c353ad2a56c186",
+    "width": 824,
+    "height": 1830,
+    "bytes": 218216,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts1.png",
+    "sha256": "b736d35756ff65a6133bbbefe39a498e63097798cb75fcb6f3d32360805785bf",
+    "width": 1688,
+    "height": 780,
+    "bytes": 144119,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts2.png",
+    "sha256": "d763674eaae58caa110e2ae07bd97d84acaac47822d19318f0ed702b7611bb0a",
+    "width": 1688,
+    "height": 780,
+    "bytes": 188386,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts1.png",
+    "sha256": "3251cf40ed3568fb7d2efa3aaee3afee9ea573edd8f31b8585a639239af210cc",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 172931,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts2.png",
+    "sha256": "637843e5179e5cd8d897c7d10ace5cad41e39ce3564998b557837776a670d902",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 297522,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts1.png",
+    "sha256": "35c42009e7e256a7b5a2dce430275f5372566251a3e3b8b0010ee4a4cad2cdc5",
+    "width": 1366,
+    "height": 768,
+    "bytes": 62984,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts2.png",
+    "sha256": "73270d2f5d18b59433c0020224e9ac860d21295e4759b92faebf38c21248bbba",
+    "width": 1366,
+    "height": 768,
+    "bytes": 130241,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts1.png",
+    "sha256": "5ac431bd772221a50ba7f9bd53198b2486aaee7ff991a614bd360dd80dfbb752",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 74063,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts2.png",
+    "sha256": "6330c3f021628d3948b71e2c496d40f89cc8b53e63bb449827f14d41d3a4fd0b",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 152683,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts1.png",
+    "sha256": "56f8b1597934de1708d3a86981475104dc9f5f6df64c609fb44917a9e70c9622",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 77848,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts2.png",
+    "sha256": "80d8c392b8d42b3bbddcf59384caebb0714da07b1ef34e64d907fb682fcf3dce",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 154007,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-reduced-motion.png",
+    "sha256": "89b0175de7921c29d1ca62f8761c40637ac702677d7a544d688d9db2e6b1d374",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 71585,
+    "nonEmpty": true,
+    "distinct": true
+   }
+  ]
+ },
+ "summary": {
+  "cells": 16,
+  "cellErrors": 0,
+  "keyboardCells": 3,
+  "defectCount": 0,
+  "defectKinds": [],
+  "frames": 17
+ }
+}

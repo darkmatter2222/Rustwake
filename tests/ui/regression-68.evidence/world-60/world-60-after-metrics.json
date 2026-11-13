@@ -1,0 +1,566 @@
+{
+  "label": "after",
+  "sha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+  "url": "http://127.0.0.1:4198/",
+  "generatedOn": "2026-11-13T09:32:22.359Z",
+  "devices": [
+    {
+      "device": "phone",
+      "fixture": "opening",
+      "tag": "phone-opening",
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 1.95,
+        "dpr": 2,
+        "deviceW": 780,
+        "deviceH": 1688,
+        "cssW": 390,
+        "cssH": 844
+      },
+      "cells": [
+        {
+          "tile": 8,
+          "bodyPx": 4076,
+          "total": 15625,
+          "pct": 26.09
+        },
+        {
+          "tile": 14,
+          "bodyPx": 2934,
+          "total": 15625,
+          "pct": 18.78
+        }
+      ],
+      "census": {
+        "total": 1316640,
+        "bodyPx": 60846,
+        "cyanPx": 1841,
+        "nonBlack": 1316640,
+        "bodyPct": 4.621,
+        "cyanPct": 0.14
+      },
+      "bar": {
+        "widths": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "distinct": 1
+      },
+      "reduced": {
+        "bar": {
+          "widths": [
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16,
+            16
+          ],
+          "distinct": 1
+        },
+        "cells": [
+          {
+            "tile": 8,
+            "bodyPx": 4076,
+            "total": 15625,
+            "pct": 26.09
+          },
+          {
+            "tile": 14,
+            "bodyPx": 3046,
+            "total": 15625,
+            "pct": 19.49
+          }
+        ],
+        "shot": {
+          "file": "world-60-after-phone-opening-reduced.png",
+          "bytes": 258388,
+          "fnv1a": "4fd427f5"
+        }
+      },
+      "controls": {
+        "total": 0,
+        "visible": 0,
+        "hidden": [],
+        "coveredByCanvas": 0
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "world-60-after-phone-opening.png",
+        "bytes": 258418,
+        "fnv1a": "b93709b9"
+      },
+      "assertions": {
+        "minCellBodyPx": 2934,
+        "controlsNotCoveredByArt": true,
+        "reducedRenders": true,
+        "barAnimated": false,
+        "barReducedFrozen": true
+      }
+    },
+    {
+      "device": "phone",
+      "fixture": "mature",
+      "tag": "phone-mature",
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 1.95,
+        "dpr": 2,
+        "deviceW": 780,
+        "deviceH": 1688,
+        "cssW": 390,
+        "cssH": 844
+      },
+      "cells": [
+        {
+          "tile": 1,
+          "bodyPx": 4046,
+          "total": 15625,
+          "pct": 25.89
+        },
+        {
+          "tile": 2,
+          "bodyPx": 5027,
+          "total": 15625,
+          "pct": 32.17
+        },
+        {
+          "tile": 3,
+          "bodyPx": 4435,
+          "total": 15625,
+          "pct": 28.38
+        },
+        {
+          "tile": 4,
+          "bodyPx": 3197,
+          "total": 15625,
+          "pct": 20.46
+        },
+        {
+          "tile": 5,
+          "bodyPx": 4110,
+          "total": 15500,
+          "pct": 26.52
+        },
+        {
+          "tile": 6,
+          "bodyPx": 3231,
+          "total": 15500,
+          "pct": 20.85
+        },
+        {
+          "tile": 7,
+          "bodyPx": 4448,
+          "total": 15625,
+          "pct": 28.47
+        },
+        {
+          "tile": 8,
+          "bodyPx": 4460,
+          "total": 15625,
+          "pct": 28.54
+        }
+      ],
+      "census": {
+        "total": 1316640,
+        "bodyPx": 78566,
+        "cyanPx": 6708,
+        "nonBlack": 1316640,
+        "bodyPct": 5.967,
+        "cyanPct": 0.509
+      },
+      "bar": {
+        "widths": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "distinct": 1
+      },
+      "reduced": {
+        "bar": {
+          "widths": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "distinct": 1
+        },
+        "cells": [
+          {
+            "tile": 1,
+            "bodyPx": 4038,
+            "total": 15625,
+            "pct": 25.84
+          },
+          {
+            "tile": 2,
+            "bodyPx": 5027,
+            "total": 15625,
+            "pct": 32.17
+          },
+          {
+            "tile": 3,
+            "bodyPx": 4435,
+            "total": 15625,
+            "pct": 28.38
+          },
+          {
+            "tile": 4,
+            "bodyPx": 3197,
+            "total": 15625,
+            "pct": 20.46
+          },
+          {
+            "tile": 5,
+            "bodyPx": 4110,
+            "total": 15500,
+            "pct": 26.52
+          },
+          {
+            "tile": 6,
+            "bodyPx": 3226,
+            "total": 15500,
+            "pct": 20.81
+          },
+          {
+            "tile": 7,
+            "bodyPx": 4472,
+            "total": 15625,
+            "pct": 28.62
+          },
+          {
+            "tile": 8,
+            "bodyPx": 4412,
+            "total": 15625,
+            "pct": 28.24
+          }
+        ],
+        "shot": {
+          "file": "world-60-after-phone-mature-reduced.png",
+          "bytes": 258744,
+          "fnv1a": "daa6ab0d"
+        }
+      },
+      "controls": {
+        "total": 0,
+        "visible": 0,
+        "hidden": [],
+        "coveredByCanvas": 0
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "world-60-after-phone-mature.png",
+        "bytes": 258570,
+        "fnv1a": "a32bc520"
+      },
+      "assertions": {
+        "minCellBodyPx": 3197,
+        "controlsNotCoveredByArt": true,
+        "reducedRenders": true,
+        "barAnimated": false,
+        "barReducedFrozen": true
+      }
+    },
+    {
+      "device": "desktop",
+      "fixture": "opening",
+      "tag": "desktop-opening",
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 4,
+        "dpr": 1,
+        "deviceW": 1920,
+        "deviceH": 1080,
+        "cssW": 1920,
+        "cssH": 1080
+      },
+      "cells": [
+        {
+          "tile": 8,
+          "bodyPx": 4368,
+          "total": 16384,
+          "pct": 26.66
+        },
+        {
+          "tile": 14,
+          "bodyPx": 3108,
+          "total": 16384,
+          "pct": 18.97
+        }
+      ],
+      "census": {
+        "total": 2073600,
+        "bodyPx": 51300,
+        "cyanPx": 1848,
+        "nonBlack": 2073600,
+        "bodyPct": 2.474,
+        "cyanPct": 0.089
+      },
+      "bar": {
+        "widths": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "distinct": 1
+      },
+      "reduced": {
+        "bar": {
+          "widths": [
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8,
+            8
+          ],
+          "distinct": 1
+        },
+        "cells": [
+          {
+            "tile": 8,
+            "bodyPx": 4368,
+            "total": 16384,
+            "pct": 26.66
+          },
+          {
+            "tile": 14,
+            "bodyPx": 3216,
+            "total": 16384,
+            "pct": 19.63
+          }
+        ],
+        "shot": {
+          "file": "world-60-after-desktop-opening-reduced.png",
+          "bytes": 384428,
+          "fnv1a": "b054c6ca"
+        }
+      },
+      "controls": {
+        "total": 0,
+        "visible": 0,
+        "hidden": [],
+        "coveredByCanvas": 0
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "world-60-after-desktop-opening.png",
+        "bytes": 384437,
+        "fnv1a": "e2f8d720"
+      },
+      "assertions": {
+        "minCellBodyPx": 3108,
+        "controlsNotCoveredByArt": true,
+        "reducedRenders": true,
+        "barAnimated": false,
+        "barReducedFrozen": true
+      }
+    },
+    {
+      "device": "desktop",
+      "fixture": "mature",
+      "tag": "desktop-mature",
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 4,
+        "dpr": 1,
+        "deviceW": 1920,
+        "deviceH": 1080,
+        "cssW": 1920,
+        "cssH": 1080
+      },
+      "cells": [
+        {
+          "tile": 1,
+          "bodyPx": 4432,
+          "total": 16384,
+          "pct": 27.05
+        },
+        {
+          "tile": 2,
+          "bodyPx": 5248,
+          "total": 16384,
+          "pct": 32.03
+        },
+        {
+          "tile": 3,
+          "bodyPx": 4580,
+          "total": 16384,
+          "pct": 27.95
+        },
+        {
+          "tile": 4,
+          "bodyPx": 3312,
+          "total": 16384,
+          "pct": 20.21
+        },
+        {
+          "tile": 5,
+          "bodyPx": 4496,
+          "total": 16384,
+          "pct": 27.44
+        },
+        {
+          "tile": 6,
+          "bodyPx": 3409,
+          "total": 16384,
+          "pct": 20.81
+        },
+        {
+          "tile": 7,
+          "bodyPx": 4544,
+          "total": 16384,
+          "pct": 27.73
+        },
+        {
+          "tile": 8,
+          "bodyPx": 4560,
+          "total": 16384,
+          "pct": 27.83
+        }
+      ],
+      "census": {
+        "total": 2073600,
+        "bodyPx": 69669,
+        "cyanPx": 6760,
+        "nonBlack": 2073600,
+        "bodyPct": 3.36,
+        "cyanPct": 0.326
+      },
+      "bar": {
+        "widths": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "distinct": 1
+      },
+      "reduced": {
+        "bar": {
+          "widths": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "distinct": 1
+        },
+        "cells": [
+          {
+            "tile": 1,
+            "bodyPx": 4432,
+            "total": 16384,
+            "pct": 27.05
+          },
+          {
+            "tile": 2,
+            "bodyPx": 5248,
+            "total": 16384,
+            "pct": 32.03
+          },
+          {
+            "tile": 3,
+            "bodyPx": 4580,
+            "total": 16384,
+            "pct": 27.95
+          },
+          {
+            "tile": 4,
+            "bodyPx": 3312,
+            "total": 16384,
+            "pct": 20.21
+          },
+          {
+            "tile": 5,
+            "bodyPx": 4496,
+            "total": 16384,
+            "pct": 27.44
+          },
+          {
+            "tile": 6,
+            "bodyPx": 3408,
+            "total": 16384,
+            "pct": 20.8
+          },
+          {
+            "tile": 7,
+            "bodyPx": 4576,
+            "total": 16384,
+            "pct": 27.93
+          },
+          {
+            "tile": 8,
+            "bodyPx": 4512,
+            "total": 16384,
+            "pct": 27.54
+          }
+        ],
+        "shot": {
+          "file": "world-60-after-desktop-mature-reduced.png",
+          "bytes": 384530,
+          "fnv1a": "efbcd344"
+        }
+      },
+      "controls": {
+        "total": 0,
+        "visible": 0,
+        "hidden": [],
+        "coveredByCanvas": 0
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "world-60-after-desktop-mature.png",
+        "bytes": 384498,
+        "fnv1a": "51d44d34"
+      },
+      "assertions": {
+        "minCellBodyPx": 3312,
+        "controlsNotCoveredByArt": true,
+        "reducedRenders": true,
+        "barAnimated": false,
+        "barReducedFrozen": true
+      }
+    }
+  ],
+  "hardFailures": [],
+  "pass": true
+}
