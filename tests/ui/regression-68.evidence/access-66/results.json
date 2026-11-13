@@ -1,8 +1,8 @@
 {
- "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
- "port": 4194,
- "url": "http://127.0.0.1:4194/",
- "generatedAt": "2026-11-13T09:32:23.356Z",
+ "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+ "port": 4197,
+ "url": "http://127.0.0.1:4197/",
+ "generatedAt": "2026-11-13T12:12:51.440Z",
  "cells": {
   "phone-small-ts1": {
    "viewport": {
@@ -1512,14 +1512,14 @@
     "record": {
      "scaleVar": "1",
      "textLarge": false,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -1540,11 +1540,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 328,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -1574,14 +1574,14 @@
     "backup": {
      "scaleVar": "1",
      "textLarge": false,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -1602,11 +1602,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 328,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -1644,14 +1644,14 @@
     "replace": {
      "scaleVar": "1",
      "textLarge": false,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -1672,11 +1672,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 328,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -1919,14 +1919,14 @@
     "record": {
      "scaleVar": "2",
      "textLarge": true,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -1947,11 +1947,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 652,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -1981,14 +1981,14 @@
     "backup": {
      "scaleVar": "2",
      "textLarge": true,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -2009,11 +2009,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 652,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -2043,14 +2043,14 @@
     "replace": {
      "scaleVar": "2",
      "textLarge": true,
-     "inspectorTop": "254px",
+     "inspectorTop": "124px",
      "lead": {
       "left": 110,
       "top": 8,
       "right": 510,
-      "bottom": 248,
+      "bottom": 118,
       "width": 400,
-      "height": 240
+      "height": 110
      },
      "dock": {
       "left": 110,
@@ -2071,11 +2071,11 @@
      "leadDockOverlapArea": 0,
      "leadPanelOverlapArea": 0,
      "dockPanelOverlapArea": 0,
-     "worldBand": 88,
+     "worldBand": 218,
      "docScroll": 0,
      "leadScroll": {
       "sh": 652,
-      "ch": 240,
+      "ch": 110,
       "oy": "auto"
      },
      "body": {
@@ -5045,37 +5045,37 @@
   "frames": [
    {
     "file": "phone-small-ts1.png",
-    "sha256": "21a2e14625357c35aee832798679195854315041d9b0dd85fe6b1763af5830d5",
+    "sha256": "efbfcebb2030b455adceea965db0c7f045ff0d19f499f613a3d8b443b2ce8fff",
     "width": 720,
     "height": 1280,
-    "bytes": 124532,
+    "bytes": 124230,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "phone-small-ts2.png",
-    "sha256": "03e8c9a290ac46e1828b103581ae00736fb032f368e789ed267c8abcda7b866d",
+    "sha256": "c4745850b865ca2e9c9b2297d2da0bc454773f6283ccf19c8217c200f4d520d2",
     "width": 720,
     "height": 1280,
-    "bytes": 149177,
+    "bytes": 149142,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "phone-ts1.png",
-    "sha256": "deb6bf142acf801cd68e1e35da1a7c1169eb955b150db6494b96e052e021650b",
+    "sha256": "d6780ab4c60df3b1bbd5f9b97758c52f9f85a18ec50c798525f18bcc3bfa36c3",
     "width": 780,
     "height": 1688,
-    "bytes": 177524,
+    "bytes": 175291,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "phone-ts2.png",
-    "sha256": "afd4f4394b003385fa06f65a0bc0af738ac04c944c0d3fe28d307853e4fb1a10",
+    "sha256": "1a4e147195aac8fd5ad7cbe1079876db90ef624b19ac3f7a868b492cbd0c27f5",
     "width": 780,
     "height": 1688,
-    "bytes": 206551,
+    "bytes": 207150,
     "nonEmpty": true,
     "distinct": true
    },
@@ -5090,52 +5090,52 @@
    },
    {
     "file": "phone-large-ts2.png",
-    "sha256": "37c3b4d257a51ab2e7621cb180f26bbd316e159d61230bae84c353ad2a56c186",
+    "sha256": "ab7bbf53997be3694d27bae79e2b9b0ad6f01b5a7afb740e554dc23e986ebef6",
     "width": 824,
     "height": 1830,
-    "bytes": 218216,
+    "bytes": 218188,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "phone-landscape-ts1.png",
-    "sha256": "b736d35756ff65a6133bbbefe39a498e63097798cb75fcb6f3d32360805785bf",
+    "sha256": "075c374aaffc1fc7bf820722f6066044f440b51d8c0e3aa39dbd2dbd2c6f45fe",
     "width": 1688,
     "height": 780,
-    "bytes": 144119,
+    "bytes": 106838,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "phone-landscape-ts2.png",
-    "sha256": "d763674eaae58caa110e2ae07bd97d84acaac47822d19318f0ed702b7611bb0a",
+    "sha256": "5f277a63433e0dcaf6d307a085ba2160ebf2c67158427671596dcd78fe245816",
     "width": 1688,
     "height": 780,
-    "bytes": 188386,
+    "bytes": 147941,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "tablet-ts1.png",
-    "sha256": "3251cf40ed3568fb7d2efa3aaee3afee9ea573edd8f31b8585a639239af210cc",
+    "sha256": "9756c88b620258f5e8698a05d90846d2e584ae299ad8c3f8bb321877f129e6f4",
     "width": 1536,
     "height": 2048,
-    "bytes": 172931,
+    "bytes": 172896,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "tablet-ts2.png",
-    "sha256": "637843e5179e5cd8d897c7d10ace5cad41e39ce3564998b557837776a670d902",
+    "sha256": "ca60bb33e11a0a73c488180e6e31553ac87d7907e6440f44b8d09fce71648558",
     "width": 1536,
     "height": 2048,
-    "bytes": 297522,
+    "bytes": 297530,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "laptop-ts1.png",
-    "sha256": "35c42009e7e256a7b5a2dce430275f5372566251a3e3b8b0010ee4a4cad2cdc5",
+    "sha256": "4ed2f319495325d588390b04b6b89ee89375072e844a085382dd8562165d6526",
     "width": 1366,
     "height": 768,
     "bytes": 62984,
@@ -5144,37 +5144,37 @@
    },
    {
     "file": "laptop-ts2.png",
-    "sha256": "73270d2f5d18b59433c0020224e9ac860d21295e4759b92faebf38c21248bbba",
+    "sha256": "610197c50156594a1afd91a63e81a09a0c5be9e68aa2aa2566c13f676850ff69",
     "width": 1366,
     "height": 768,
-    "bytes": 130241,
+    "bytes": 130261,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "desktop-ts1.png",
-    "sha256": "5ac431bd772221a50ba7f9bd53198b2486aaee7ff991a614bd360dd80dfbb752",
+    "sha256": "d18bea1b31a21562bc6a6573e269042efa6414918037b1ab72fb7ff87ff74c06",
     "width": 1920,
     "height": 1080,
-    "bytes": 74063,
+    "bytes": 74128,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "desktop-ts2.png",
-    "sha256": "6330c3f021628d3948b71e2c496d40f89cc8b53e63bb449827f14d41d3a4fd0b",
+    "sha256": "6e74de4f261337267c09b60b1aacc6b8da8c03c2de69da7d89cc7c250fc07982",
     "width": 1920,
     "height": 1080,
-    "bytes": 152683,
+    "bytes": 152753,
     "nonEmpty": true,
     "distinct": true
    },
    {
     "file": "desktop-large-ts1.png",
-    "sha256": "56f8b1597934de1708d3a86981475104dc9f5f6df64c609fb44917a9e70c9622",
+    "sha256": "b2767bbd88bff92693f84322bb3925270f75de7c13d3f3ff826430d0b90c9fd9",
     "width": 2560,
     "height": 1440,
-    "bytes": 77848,
+    "bytes": 77824,
     "nonEmpty": true,
     "distinct": true
    },
