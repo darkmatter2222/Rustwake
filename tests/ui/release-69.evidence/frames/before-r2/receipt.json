@@ -1,0 +1,174 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/69",
+  "role": "release-engineer",
+  "persona": "re-69",
+  "run": "before-r2",
+  "headSha": "b774404382b05a918d4e77d9578a9cfb939aa93e",
+  "branch": "rw/69-release",
+  "baselineSha": "1ba05f28baff16e40d34f2c5426b819916c964e9",
+  "codeSha": "b774404382b05a918d4e77d9578a9cfb939aa93e",
+  "servedDist": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw69-baseline-dist",
+  "distInventory": [
+    {
+      "file": "assets/catchup.worker-G_Jyr7uh.js",
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+    },
+    {
+      "file": "assets/index-CEQDUmwp.js",
+      "bytes": 191098,
+      "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+    },
+    {
+      "file": "assets/index-ekc2mZk4.css",
+      "bytes": 61957,
+      "sha256": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af"
+    },
+    {
+      "file": "assets/tables-KTf0wpwx.js",
+      "bytes": 26691,
+      "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+    },
+    {
+      "file": "assets/vendor-Bt4lNSbZ.js",
+      "bytes": 141658,
+      "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+    },
+    {
+      "file": "index.html",
+      "bytes": 1368,
+      "sha256": "7f8f45dded9c5b88b6e322eded92a62bcb1189788bc2fc6beb26ffe8b523dae3"
+    }
+  ],
+  "url": "http://127.0.0.1:4196/",
+  "t0": 1794571200000,
+  "t0Iso": "2026-11-13T12:00:00.000Z",
+  "seed": {
+    "tick": 372,
+    "machines": 1,
+    "tutorial": 5,
+    "lastSeenMs": 1794571200000,
+    "via": "src encodeSave + engine applyCommand/advance (home-62 seed recipe, fixed lastSeenMs)"
+  },
+  "method": "AGENT headless Chromium; playwright fake clock frozen at T0 with fixed runFor windows; reducedMotion:reduce; NO vision; emulation is NOT a physical device",
+  "formFactors": {
+    "phone": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    },
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  },
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "version": "157.0.8103.50"
+  },
+  "frames": [
+    {
+      "file": "before-r2/phone-home-fresh.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "bytes": 245202,
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 1951,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/phone-home-settings.png",
+      "sha256": "1732d64af4a0529af12bdaff3d9a5268623caf961e8143166797f014bf069f55",
+      "bytes": 106004,
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 1323,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/phone-yard.png",
+      "sha256": "edabad6189a75e8a2ddc37007f98b942f253c5b27dd80a751f58ebcc496f48c6",
+      "bytes": 116925,
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 2498,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/phone-build.png",
+      "sha256": "b650e1c279babc7d55de2a136c11f58bfe3b8760e9aa14c138d04cb8ce204f15",
+      "bytes": 181976,
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 4573,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/phone-store.png",
+      "sha256": "68a2765c5b3166a289f2a0180b28af7c10fb13c96cb5ee9c8b822358f7701362",
+      "bytes": 222477,
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 4195,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/desktop-home-fresh.png",
+      "sha256": "256eb45900a78955a977bb742b52f0ac28e956ded12022c4d914c162bd26e429",
+      "bytes": 260142,
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 649,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/desktop-home-settings.png",
+      "sha256": "9b1045a1dbca444b0695c16b09d5a3d9a5c793737efc8c0ab8afa7d4858b79b1",
+      "bytes": 104972,
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 420,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/desktop-yard.png",
+      "sha256": "5a87faced5f2ec61eb679253d39a064227d444c1605371d05965c92b98f91750",
+      "bytes": 53759,
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 1483,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/desktop-build.png",
+      "sha256": "32d0710a6fa0f7ab82276521a4281b10b9331ff5d37cbf5fcdc4e5ac6249d8fd",
+      "bytes": 93074,
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 2283,
+      "nonEmpty": true
+    },
+    {
+      "file": "before-r2/desktop-store.png",
+      "sha256": "25ee25660ba3584285ca4e3ffd85de70a23d3e85fd4db2391e5a75db7e8434b2",
+      "bytes": 105624,
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 1758,
+      "nonEmpty": true
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "autoplayNotes": [],
+  "capturedAt": "2026-11-13T13:42:04.644Z"
+}

@@ -1,0 +1,260 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/69",
+  "role": "release-engineer",
+  "persona": "re-69",
+  "generatedAt": "2026-11-13T13:44:56.880Z",
+  "baselineSha": "1ba05f28baff16e40d34f2c5426b819916c964e9",
+  "buildSha": "b774404382b05a918d4e77d9578a9cfb939aa93e",
+  "branch": "rw/69-release",
+  "change": {
+    "kind": "css-dead-rule-removal",
+    "removals": [
+      {
+        "file": "src/ui/styles.css",
+        "symbol": ".muted-corner",
+        "formerLines": "685-689 (rule) + 690 (adjacent blank line)",
+        "deletedLines": 6,
+        "referencesRepoWide": 0,
+        "confirmation": "git grep -n --untracked muted-corner -> only src/ui/styles.css:685 (definition); zero refs in src/, tests/, scripts/, work/ HTML; node_modules/dist are gitignored build artifacts"
+      }
+    ],
+    "preservedDeadExports": [
+      {
+        "file": "src/ui/shell/layout.ts",
+        "symbols": "SHELL_RAIL_MIN_WIDTH_PX, SHELL_LANDSCAPE_MIN_WIDTH_PX, SHELL_LANDSCAPE_MAX_HEIGHT_PX, SHELL_PHONE_MAX_WIDTH_PX (4 zero-ref constants)",
+        "reason": "spec-protected: accepted #47 navigation spec work/evidence/UI-RESET-47/navigation-spec.md section 3.6; SHELL_RAIL_QUERY embeds the same 1200/600/460 literals"
+      },
+      {
+        "file": "src/game/renderer/sprites.ts",
+        "symbols": "ATLAS_PLACE",
+        "reason": "referenced by work/development/ART-004-g1/handoff.md and work/review/ART-004-g1/QA.md (art pipeline contract)"
+      },
+      {
+        "file": "src/game/renderer/sprites.ts",
+        "symbols": "GRAY_STEPS",
+        "reason": "referenced by q002-handoff.md and work/review/rev-q002-g1.md"
+      }
+    ],
+    "forbiddenPathsUntouched": [
+      "src/game/content/tokens.ts (census incl chipsByPosition, #48 frozen)",
+      "src/game/content/text.ts pendingForStep",
+      "src/game/simulation/quantity.ts spec helpers",
+      "src/game/simulation/types.ts spendable/powerFor + commands.ts RESOURCE_ORDER",
+      "src/ui/panels/Panels.tsx facade (#95)",
+      "scripts/validate-content.mjs + src/game/simulation/invariants.ts (CI gate B-12)",
+      "save migration / schemaVersion 1 / #100 output mirror / renderer band-fit fallback / research+return legacyState DOM contracts",
+      "work/*.html"
+    ]
+  },
+  "ladder": [
+    {
+      "step": "pnpm typecheck",
+      "exit": 0,
+      "log": "typecheck.log"
+    },
+    {
+      "step": "pnpm validate",
+      "exit": 0,
+      "detail": "content 0 violations; behaviour 0 violations; validated: no violations",
+      "log": "validate.log",
+      "note": "work/evidence/UI-RESET-65/seeds.json restored/verified unmodified afterwards"
+    },
+    {
+      "step": "pnpm exec vitest run --minWorkers=4 --maxWorkers=4",
+      "exit": 0,
+      "detail": "60 test files passed, 746 tests passed (both worker flags required on 32-CPU host)",
+      "log": "vitest.log"
+    },
+    {
+      "step": "pnpm build",
+      "exit": 0,
+      "detail": "tsc --noEmit && vite build; 124 modules; entry 190.94 kB < 233000 B ceiling",
+      "log": "build.log"
+    }
+  ],
+  "dist": {
+    "note": "Bytes/sha256 measured on disk (fs + crypto), NOT vite console sizes. CSS-only change: JS entry bytes are IDENTICAL before/after; the entry FILENAME changes because Vite's chunk hash includes the CSS dependency hash. This is still a real src change requiring a real deploy.",
+    "before": {
+      "buildSha": "1ba05f28baff16e40d34f2c5426b819916c964e9",
+      "servedFrom": "C:/Users/ryans/AppData/Local/Temp/rw69-baseline-dist",
+      "files": [
+        {
+          "file": "assets/catchup.worker-G_Jyr7uh.js",
+          "bytes": 13406,
+          "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+        },
+        {
+          "file": "assets/index-CEQDUmwp.js",
+          "bytes": 191098,
+          "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+        },
+        {
+          "file": "assets/index-ekc2mZk4.css",
+          "bytes": 61957,
+          "sha256": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af"
+        },
+        {
+          "file": "assets/tables-KTf0wpwx.js",
+          "bytes": 26691,
+          "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+        },
+        {
+          "file": "assets/vendor-Bt4lNSbZ.js",
+          "bytes": 141658,
+          "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+        },
+        {
+          "file": "index.html",
+          "bytes": 1368,
+          "sha256": "7f8f45dded9c5b88b6e322eded92a62bcb1189788bc2fc6beb26ffe8b523dae3"
+        }
+      ]
+    },
+    "after": {
+      "buildSha": "b774404382b05a918d4e77d9578a9cfb939aa93e",
+      "servedFrom": "C:\\Users\\ryans\\AppData\\Local\\Temp\\opencode\\rw-69\\dist",
+      "files": [
+        {
+          "file": "assets/catchup.worker-G_Jyr7uh.js",
+          "bytes": 13406,
+          "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+        },
+        {
+          "file": "assets/index-BeYjlKhu.js",
+          "bytes": 191098,
+          "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+        },
+        {
+          "file": "assets/index-CC920g8J.css",
+          "bytes": 61844,
+          "sha256": "6f475fe0fe5543074770a364a31696a47dc219a1a8ca8940eb87a28a4a7e2a52"
+        },
+        {
+          "file": "assets/tables-KTf0wpwx.js",
+          "bytes": 26691,
+          "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+        },
+        {
+          "file": "assets/vendor-Bt4lNSbZ.js",
+          "bytes": 141658,
+          "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+        },
+        {
+          "file": "index.html",
+          "bytes": 1368,
+          "sha256": "7c16d3d4acc6f33316c75e6fea56981c3e418d1d914db2a32f8d4b6eef059303"
+        }
+      ]
+    },
+    "delta": {
+      "entryJs": {
+        "before": "assets/index-CEQDUmwp.js",
+        "after": "assets/index-BeYjlKhu.js",
+        "bytesBefore": 191098,
+        "bytesAfter": 191098,
+        "sha256Identical": true,
+        "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+      },
+      "css": {
+        "before": "assets/index-ekc2mZk4.css",
+        "after": "assets/index-CC920g8J.css",
+        "bytesBefore": 61957,
+        "bytesAfter": 61844,
+        "bytesDelta": -113,
+        "sha256Before": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af",
+        "sha256After": "6f475fe0fe5543074770a364a31696a47dc219a1a8ca8940eb87a28a4a7e2a52"
+      },
+      "indexHtml": {
+        "bytes": 1368,
+        "sha256Before": "7f8f45dded9c5b88b6e322eded92a62bcb1189788bc2fc6beb26ffe8b523dae3",
+        "sha256After": "7c16d3d4acc6f33316c75e6fea56981c3e418d1d914db2a32f8d4b6eef059303",
+        "reason": "asset filename references only"
+      },
+      "unchangedByteIdentical": [
+        "assets/tables-KTf0wpwx.js",
+        "assets/vendor-Bt4lNSbZ.js",
+        "assets/catchup.worker-G_Jyr7uh.js"
+      ]
+    }
+  },
+  "captures": {
+    "method": "AGENT headless Chromium; playwright fake clock frozen at T0 with fixed runFor windows; reducedMotion:reduce; NO vision; emulation is NOT a physical device",
+    "browser": {
+      "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "version": "157.0.8103.50"
+    },
+    "t0": "2026-11-13T12:00:00.000Z",
+    "formFactors": {
+      "phone": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "deviceScaleFactor": 2,
+        "isMobile": true,
+        "hasTouch": true
+      },
+      "desktop": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "deviceScaleFactor": 1,
+        "isMobile": false,
+        "hasTouch": false
+      }
+    },
+    "surfaces": [
+      "home-fresh (gate)",
+      "home-settings (pre-start settings overlay)",
+      "yard (seeded mature yard after Continue)",
+      "build (catalog, key 2)",
+      "store (panel, key 3)"
+    ],
+    "runs": {
+      "before-r1": {
+        "frames": 10,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "receipt": "frames/before-r1/receipt.json"
+      },
+      "before-r2": {
+        "frames": 10,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "receipt": "frames/before-r2/receipt.json"
+      },
+      "after": {
+        "frames": 10,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "receipt": "frames/after/receipt.json"
+      }
+    },
+    "mirror": {
+      "file": "mirror.json",
+      "count": 30,
+      "allNonEmpty": true,
+      "uniqueSha256": 10,
+      "expectedUniqueSha256": 10,
+      "determinismControlPass": true,
+      "parityPass": true,
+      "interpretation": "10 surfaces x 3 runs = 30 PNGs; exactly 10 unique sha256 (one per surface) means before-r1 == before-r2 (harness determinism control) AND before == after (zero visual regression from the removal)."
+    }
+  },
+  "auditMatrix": {
+    "query": "gh issue list --repo darkmatter2222/Rustwake --state all --limit 200 --json number,title,state,labels,milestone (single query)",
+    "range": "#45-#68",
+    "count": 24,
+    "closedWithStatusDone": 24,
+    "milestone1": 24,
+    "result": "24/24 CLOSED with status:done and milestone 1; no exceptions"
+  },
+  "limitations": [
+    "Project 1 membership cannot be verified with the current gh token (lacks read:org/read:project); recorded as a limitation, never invented. Canonical project: https://github.com/users/darkmatter2222/projects/1",
+    "Headless Chromium emulation (AGENT) is NOT a physical device; no vision used; parity is proven by byte-identical PNG sha256, not visual inspection.",
+    "CSS-only change: JS entry bytes unchanged; entry filename changes via CSS dependency hash. A real src deploy is still required (new css + index.html).",
+    "Draft PR only: no merge, no gate declaration, no label flip, no issue close, no deployment claim, no GitHub Release publication by this persona.",
+    "release-notes.md is a DRAFT with tag/CI/deploy placeholders for the release authority; nothing published."
+  ]
+}
