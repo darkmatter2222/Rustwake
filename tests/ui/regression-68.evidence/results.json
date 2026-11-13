@@ -1,0 +1,314 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/68",
+  "role": "reviewer",
+  "persona": "reg-68b",
+  "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+  "branch": "rw/68-regression",
+  "evidenceHead": "640aea36ee019351d92f95e81b070bcbe20c2eb0",
+  "generatedAt": "2026-11-13T12:22:18.326Z",
+  "method": "AGENT headless Chromium DOM/geometry/computed-style/console + canvas pixel checks only; NO vision. Reused #58/#59/#60/#61/#62/#63/#66/#67 probes verbatim at 3fd883c9 (post-#117-fix baseline) against a local vite preview of the verified build (home-62 against vite dev serving identical src). Full vitest suite (60 files / 746 tests) covers sim/engine/save/persistence correctness.",
+  "crossBrowser": {
+    "chrome": {
+      "version": "157.0.8103.50",
+      "available": true,
+      "used": "all probes"
+    },
+    "edge": {
+      "version": "157.0.4341.46",
+      "available": true,
+      "used": "access-66 full 16-cell + keyboard + reduced-motion subset (CHROME_PATH override)"
+    },
+    "firefox": {
+      "available": false,
+      "reason": "Not installed; reused probes launch chromium only (playwright-core chromium.launch). No Firefox probe variant. Recorded unavailable, NOT a pass."
+    },
+    "safari": {
+      "available": false,
+      "reason": "Safari/WebKit unavailable on Windows host; no webkit browser in playwright cache; probes are chromium-only. Recorded unavailable, NOT a pass."
+    }
+  },
+  "ladder": {
+    "typecheck": "exit 0",
+    "validate": "exit 0 (0 violations)",
+    "vitest": "60 files / 746 tests passed (--minWorkers=4 --maxWorkers=4)",
+    "build": "exit 0; entry index-CEQDUmwp.js 191098 B sha256 b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844 + all JS/CSS chunks match deployed baseline byte-for-byte; index.html local Windows CRLF variant (deployed Linux LF artifact authoritative, see build-verify.json docNote)"
+  },
+  "probes": {
+    "access-66": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "browser": "Chrome 157.0.8103.50 (chromium, playwright-core)",
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:12:51.440Z",
+      "cells": 16,
+      "cellNames": [
+        "phone-small-ts1",
+        "phone-small-ts2",
+        "phone-ts1",
+        "phone-ts2",
+        "phone-large-ts1",
+        "phone-large-ts2",
+        "phone-landscape-ts1",
+        "phone-landscape-ts2",
+        "tablet-ts1",
+        "tablet-ts2",
+        "laptop-ts1",
+        "laptop-ts2",
+        "desktop-ts1",
+        "desktop-ts2",
+        "desktop-large-ts1",
+        "desktop-large-ts2"
+      ],
+      "cellErrors": 0,
+      "keyboardCells": 3,
+      "defectCount": 0,
+      "defectKinds": [],
+      "frames": 17,
+      "mirrorAllNonEmpty": true,
+      "mirrorAllDistinct": true,
+      "consoleErrors": 0,
+      "pass": true
+    },
+    "access-66-edge": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "browser": "Edge 157.0.4341.46 (chromium, playwright-core; CHROME_PATH override)",
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:14:52.377Z",
+      "cells": 16,
+      "cellNames": [
+        "phone-small-ts1",
+        "phone-small-ts2",
+        "phone-ts1",
+        "phone-ts2",
+        "phone-large-ts1",
+        "phone-large-ts2",
+        "phone-landscape-ts1",
+        "phone-landscape-ts2",
+        "tablet-ts1",
+        "tablet-ts2",
+        "laptop-ts1",
+        "laptop-ts2",
+        "desktop-ts1",
+        "desktop-ts2",
+        "desktop-large-ts1",
+        "desktop-large-ts2"
+      ],
+      "cellErrors": 0,
+      "keyboardCells": 3,
+      "defectCount": 0,
+      "defectKinds": [],
+      "frames": 17,
+      "mirrorAllNonEmpty": true,
+      "mirrorAllDistinct": true,
+      "consoleErrors": 0,
+      "pass": true,
+      "framesDifferingVsChrome": 12,
+      "framesCompared": 17,
+      "crossBrowserNote": "Edge genuinely launched (executablePath=msedge.exe); 12/17 frames render differently vs Chrome, confirming a distinct browser build. Same 16 cells / 0 errors / 0 defects."
+    },
+    "save-63": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:17:06.901Z",
+      "summary": {
+        "phone": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "phone-landscape": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "desktop": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "mirror": {
+          "assertions": 2,
+          "passed": 2,
+          "screenshots": 0
+        }
+      },
+      "failures": 0,
+      "multitabReader": "writer+reader share localStorage; reader Replace refused ('Another tab is writing this yard'), writer untouched, no console/page errors (runReader); hostile import sanitized + textScale clamped (runFailureEnv).",
+      "pass": true
+    },
+    "logistics-59": {
+      "mode": "full",
+      "runner": "node",
+      "present": true,
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:00:51.311Z",
+      "checks": 228,
+      "steps": 54,
+      "frames": 108,
+      "failedChecks": 0,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": true,
+      "rerun": {
+        "present": true,
+        "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+        "generatedAt": "2026-11-13T12:02:42.588Z",
+        "checks": 228,
+        "steps": 54,
+        "frames": 108,
+        "failedChecks": 1,
+        "blockers": 0,
+        "consoleErrors": 0,
+        "pageErrors": 0,
+        "frameAuditOk": true,
+        "pass": false
+      },
+      "deterministicFailures": [],
+      "flakyFailures": [],
+      "rerunOnlyFailures": [
+        "phone-dense/02-show-routes/showing restores cyan rail pixels"
+      ],
+      "realFailures": [],
+      "baseline": {
+        "sha": "937698e424232c395abf9f682edbafc3495239f2",
+        "source": "work/evidence/UI-RESET-59/results.json",
+        "failedChecks": 0,
+        "phonelandFurnaceSelection": "PASS"
+      },
+      "rerunContext": "Re-run at 3fd883c9 after the #117 fix (phoneland-dense furnace canvas-tap selection regressed at 7fcaea1c; FIXED, merged, deployed). The #117 furnace checks (03-select-furnace-dims-unrelated 'real tap selects the furnace' + 04/05/06 cascades) are part of the verbatim 228-check matrix; any deterministic failure there is a REAL regression and lands in defects[] below.",
+      "carveOut": {
+        "checks": [
+          "phone-dense/02-show-routes/showing restores cyan rail pixels"
+        ],
+        "runPattern": [
+          {
+            "check": "phone-dense/02-show-routes/showing restores cyan rail pixels",
+            "failedRun1": false,
+            "failedRerun": true,
+            "deterministic": false
+          }
+        ],
+        "classification": "pre-existing unfaithful-probe artifact (broad cyan census), NOT a regression defect",
+        "citation": "https://github.com/darkmatter2222/Rustwake/issues/117#issuecomment-6851321851",
+        "note": "qa-117's independent baseline control @ 7fcaea1c reproduced the identical broad-census failure, proving it pre-exists #117. The faithful rail-band sibling check (rail-band diff >= RAIL_DIFF_MIN 10) PASSES in both runs and is the real visibility signal. A failure present in only ONE of the two runs is additionally non-deterministic (live-sim cargo timing variance between the 350ms snapshots). #117's fix is provably inert on phone (scale 1.510) / desktop (3.065), both >= 1.4. Frozen probe left VERBATIM; adjudication lives only in this evidence layer."
+      }
+    },
+    "research-58": {
+      "mode": "full",
+      "runner": "node",
+      "present": true,
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:04:00.215Z",
+      "checks": 110,
+      "steps": 24,
+      "frames": 48,
+      "failedChecks": 0,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": true
+    },
+    "return-61": {
+      "mode": "full",
+      "runner": "pnpm exec tsx",
+      "present": true,
+      "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "generatedAt": "2026-11-13T12:07:36.739Z",
+      "checks": 174,
+      "steps": 17,
+      "frames": 37,
+      "failedChecks": 0,
+      "blockers": 0,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "frameAuditOk": true,
+      "pass": true
+    },
+    "home-62": {
+      "mode": "full",
+      "runner": "pnpm exec tsx (vite dev server)",
+      "headSha": "32d6ed877e7a9948f01eea24bde58546f57fc155",
+      "buildShaServed": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "note": "home-62 records git HEAD (evidence-only descendant of 3fd883c9) and runs against a vite DEV server serving src at HEAD; src is byte-identical to 3fd883c9 (no src/ change in this PR: git diff 3fd883c9..HEAD -- src/ is EMPTY). Fresh gate/menu/settings/reset journeys.",
+      "assertions": 229,
+      "passed": 229,
+      "generatedAt": "2026-11-13T12:19:59.343Z",
+      "pass": true
+    },
+    "world-60": {
+      "mode": "smoke/reference",
+      "runner": "node --import tsx",
+      "sha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "label": "after",
+      "generatedOn": "2026-11-13T12:09:08.665Z",
+      "devices": 4,
+      "deviceNames": [
+        "phone",
+        "phone",
+        "desktop",
+        "desktop"
+      ],
+      "pass": true,
+      "hardFailures": 0,
+      "note": "World art unchanged since #60; fresh after-capture at 3fd883c9 for parity (phone/desktop x opening/mature x normal/reduced). Full before/after delta referenced from committed tests/renderer/world-60-evidence."
+    },
+    "perf-67": {
+      "mode": "smoke (--quick)",
+      "runner": "pnpm exec tsx",
+      "sha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+      "label": "after",
+      "generatedOn": "2026-11-13T12:10:36.858Z",
+      "browser": {
+        "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        "headless": true,
+        "engine": "chromium (playwright-core)"
+      },
+      "pass": true,
+      "hardFailures": 0,
+      "deviceRuns": 9,
+      "cpuThrottleRate": 6,
+      "buildInventory": [
+        {
+          "name": "catchup.worker-G_Jyr7uh.js",
+          "role": "lazyWorkerJs",
+          "bytes": 13406,
+          "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+        },
+        {
+          "name": "index-CEQDUmwp.js",
+          "role": "entryJs",
+          "bytes": 191098,
+          "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+        },
+        {
+          "name": "index-ekc2mZk4.css",
+          "role": "css",
+          "bytes": 61957,
+          "sha256": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af"
+        },
+        {
+          "name": "tables-KTf0wpwx.js",
+          "role": "tablesJs",
+          "bytes": 26691,
+          "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+        },
+        {
+          "name": "vendor-Bt4lNSbZ.js",
+          "role": "vendorJs",
+          "bytes": 141658,
+          "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+        }
+      ],
+      "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical device. Viewport/dpr/isMobile/hasTouch/reduced-motion emulated; CPU/GPU/thermal/real-touch/mobile-network are NOT. Frame-time and memory are host-relative; before/after compared under identical conditions.",
+      "budgetVerdicts": null,
+      "note": "Quick smoke: shortened sampling, budget verdicts skipped; latencies are host-relative and NOT comparable to the official #67 numbers. Official budgets referenced from committed tests/perf/perf-67.evidence. buildInventory chunk sha256 cross-matches build-verify.json."
+    }
+  },
+  "defects": [],
+  "overallPass": true
+}

@@ -1,0 +1,2520 @@
+{
+  "issue": 67,
+  "label": "after",
+  "sha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+  "url": "http://127.0.0.1:4196/",
+  "generatedOn": "2026-11-13T12:10:36.858Z",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": true,
+    "engine": "chromium (playwright-core)"
+  },
+  "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical device. Viewport/dpr/isMobile/hasTouch/reduced-motion emulated; CPU/GPU/thermal/real-touch/mobile-network are NOT. Frame-time and memory are host-relative; before/after compared under identical conditions.",
+  "durations": {
+    "idleMs": 900,
+    "openFrameMs": 500,
+    "reducedMs": 700,
+    "quick": true
+  },
+  "devices": [
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "phone-ts1-mature",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.6,
+          "domContentLoadedMs": 35.6,
+          "loadEventEndMs": 36.2,
+          "responseEndMs": 7.4,
+          "durationMs": 36.2,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.47,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.7
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.54,
+        "totalJSHeapMB": 10.01,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.2,
+            2,
+            9.1
+          ],
+          "medianMs": 9.1,
+          "p95Ms": 12.2,
+          "maxMs": 12.2,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            23,
+            9,
+            9
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 50,
+              "y": 424
+            },
+            {
+              "tile": 1,
+              "x": 96,
+              "y": 424
+            },
+            {
+              "tile": 3,
+              "x": 188,
+              "y": 424
+            }
+          ],
+          "medianMs": 9,
+          "p95Ms": 23,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.62,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.2
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            15.7,
+            14.5,
+            18.6
+          ],
+          "medianMs": 15.7,
+          "p95Ms": 18.6,
+          "maxMs": 18.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            77,
+            62,
+            83
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 50,
+              "y": 424
+            },
+            {
+              "tile": 1,
+              "x": 96,
+              "y": 424
+            },
+            {
+              "tile": 3,
+              "x": 188,
+              "y": 424
+            }
+          ],
+          "medianMs": 77,
+          "p95Ms": 83,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.35,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61.2
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 95,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.63,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.5,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.36,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.1
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.66,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 91,
+          "meanMs": 16.57,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        },
+        "churnFrame": {
+          "count": 73,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": {
+          "count": 61,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 1.2,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 6.63,
+          "totalJSHeapMB": 10.79,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 7.83,
+          "totalJSHeapMB": 12.56,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.63,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "memory": {
+          "usedJSHeapMB": 13.06,
+          "totalJSHeapMB": 18.23,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-phone-ts1-mature-reduced.png",
+          "bytes": 128865,
+          "sha256": "498a662af3271d300fa395b07fccbdf2bc7661dc6e13453803be9013b15f5824"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-ts1-mature.png",
+        "bytes": 128359,
+        "sha256": "5eb54d89ea452134cbcf9bd8af2781efd30bd345716ad6e849bf7e3c1ec474b6"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "phone-ts2-mature",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 13.5,
+          "domContentLoadedMs": 38.6,
+          "loadEventEndMs": 38.7,
+          "responseEndMs": 8.1,
+          "durationMs": 38.7,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.43,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.9
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.63,
+        "totalJSHeapMB": 9.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.8,
+            14.6,
+            3.9
+          ],
+          "medianMs": 12.8,
+          "p95Ms": 14.6,
+          "maxMs": 14.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            27,
+            10,
+            8
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 45,
+              "y": 463
+            },
+            {
+              "tile": 1,
+              "x": 93,
+              "y": 463
+            },
+            {
+              "tile": 3,
+              "x": 189,
+              "y": 463
+            }
+          ],
+          "medianMs": 10,
+          "p95Ms": 27,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.51,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.6
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            13.5,
+            16.7,
+            14.3
+          ],
+          "medianMs": 14.3,
+          "p95Ms": 16.7,
+          "maxMs": 16.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            83,
+            76,
+            71
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 45,
+              "y": 463
+            },
+            {
+              "tile": 1,
+              "x": 93,
+              "y": 463
+            },
+            {
+              "tile": 3,
+              "x": 189,
+              "y": 463
+            }
+          ],
+          "medianMs": 76,
+          "p95Ms": 83,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.55,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.19,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.8
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 95,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.44,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.8
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.38,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.16,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.9
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 91,
+          "meanMs": 16.64,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "churnFrame": {
+          "count": 73,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "resizeFrame": {
+          "count": 61,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 1.28,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 6.87,
+          "totalJSHeapMB": 11.29,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 8.15,
+          "totalJSHeapMB": 12.81,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "memory": {
+          "usedJSHeapMB": 10.15,
+          "totalJSHeapMB": 17.98,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-phone-ts2-mature-reduced.png",
+          "bytes": 138706,
+          "sha256": "daec9603e20b037cf31b7fd381e93ac63581404f80bc74e3c7c4f42bf8af2307"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-ts2-mature.png",
+        "bytes": 137892,
+        "sha256": "0dd59a51feeeb041862e4e43384364b55fa801c1cc1e8aa2bae42f089d456a3a"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "desktop-ts1-mature",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.6,
+          "domContentLoadedMs": 34.6,
+          "loadEventEndMs": 35.2,
+          "responseEndMs": 7.7,
+          "durationMs": 35.2,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.49,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.6
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.42,
+        "totalJSHeapMB": 9.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.6,
+            12.1,
+            4.6
+          ],
+          "medianMs": 12.1,
+          "p95Ms": 12.6,
+          "maxMs": 12.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            23,
+            10,
+            9
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 603,
+              "y": 364
+            },
+            {
+              "tile": 1,
+              "x": 701,
+              "y": 364
+            },
+            {
+              "tile": 3,
+              "x": 897,
+              "y": 364
+            }
+          ],
+          "medianMs": 10,
+          "p95Ms": 23,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.58,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            15.7,
+            14,
+            10.9
+          ],
+          "medianMs": 14,
+          "p95Ms": 15.7,
+          "maxMs": 15.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            85,
+            67,
+            81
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 603,
+              "y": 364
+            },
+            {
+              "tile": 1,
+              "x": 701,
+              "y": 364
+            },
+            {
+              "tile": 3,
+              "x": 897,
+              "y": 364
+            }
+          ],
+          "medianMs": 81,
+          "p95Ms": 85,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.32,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 17.3,
+          "maxMs": 17.3,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61.3
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.24,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.6
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 96,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.45,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.8
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 96,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.62,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.2
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.18,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.8
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 90,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 72,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": null,
+        "heapGrowthMB": 1.71,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 6.79,
+          "totalJSHeapMB": 11.04,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 8.5,
+          "totalJSHeapMB": 11.56,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.63,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "memory": {
+          "usedJSHeapMB": 11.49,
+          "totalJSHeapMB": 18.72,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-desktop-ts1-mature-reduced.png",
+          "bytes": 61983,
+          "sha256": "2bc3b8517a1d09040b1ae771aa0bd0733ccce1a216655c30b20d70a68c29aab6"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-desktop-ts1-mature.png",
+        "bytes": 62125,
+        "sha256": "f8c7289775c04f5707d7dbe77e8ddc5eb4e7d51b6ba5f40baf7375c80c838b1a"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "desktop-ts2-mature",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 13.4,
+          "domContentLoadedMs": 36.4,
+          "loadEventEndMs": 37.1,
+          "responseEndMs": 7.6,
+          "durationMs": 37.1,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 72,
+        "lcpMs": 72,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.42,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.9
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.41,
+        "totalJSHeapMB": 9.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13.4,
+            13.2,
+            17.1
+          ],
+          "medianMs": 13.4,
+          "p95Ms": 17.1,
+          "maxMs": 17.1,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            27,
+            9,
+            12
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 651,
+              "y": 492
+            },
+            {
+              "tile": 1,
+              "x": 730,
+              "y": 492
+            },
+            {
+              "tile": 3,
+              "x": 888,
+              "y": 492
+            }
+          ],
+          "medianMs": 12,
+          "p95Ms": 27,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.51,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.6
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            12.1,
+            12.4,
+            13.3
+          ],
+          "medianMs": 12.4,
+          "p95Ms": 13.3,
+          "maxMs": 13.3,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            82,
+            60,
+            77
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 651,
+              "y": 492
+            },
+            {
+              "tile": 1,
+              "x": 730,
+              "y": 492
+            },
+            {
+              "tile": 3,
+              "x": 888,
+              "y": 492
+            }
+          ],
+          "medianMs": 77,
+          "p95Ms": 82,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.39,
+          "p50Ms": 16.7,
+          "p95Ms": 16.9,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 94,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.32,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.3
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 96,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.2,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.7
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.45,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.8
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 8,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.39,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 90,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 73,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": null,
+        "heapGrowthMB": 1.89,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 7.12,
+          "totalJSHeapMB": 10.54,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 9.01,
+          "totalJSHeapMB": 11.56,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.49,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.6
+        },
+        "memory": {
+          "usedJSHeapMB": 11.8,
+          "totalJSHeapMB": 17.97,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-desktop-ts2-mature-reduced.png",
+          "bytes": 116112,
+          "sha256": "6bc142cf6a4383255a2ca8304cfee1fd79a5cc2c3faf381c2dd77e8d1142f070"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-desktop-ts2-mature.png",
+        "bytes": 116167,
+        "sha256": "97e26b954f67986a39c48d6a0d6e0b29ccf8ac8d1686b848fe00decc095399ec"
+      }
+    },
+    {
+      "device": "phone-landscape",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "phone-landscape-ts1-mature",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 12.2,
+          "domContentLoadedMs": 36.7,
+          "loadEventEndMs": 37.3,
+          "responseEndMs": 7.2,
+          "durationMs": 37.3,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 76,
+        "lcpMs": 76,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.41,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.9
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.65,
+        "totalJSHeapMB": 9.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13.9,
+            3.2,
+            9.6
+          ],
+          "medianMs": 9.6,
+          "p95Ms": 13.9,
+          "maxMs": 13.9,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            22,
+            8,
+            9
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 240,
+              "y": 143
+            },
+            {
+              "tile": 1,
+              "x": 268,
+              "y": 143
+            },
+            {
+              "tile": 3,
+              "x": 324,
+              "y": 143
+            }
+          ],
+          "medianMs": 9,
+          "p95Ms": 22,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.39,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            12.6,
+            15.1,
+            9.5
+          ],
+          "medianMs": 12.6,
+          "p95Ms": 15.1,
+          "maxMs": 15.1,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            67,
+            78,
+            86
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 240,
+              "y": 143
+            },
+            {
+              "tile": 1,
+              "x": 268,
+              "y": 143
+            },
+            {
+              "tile": 3,
+              "x": 324,
+              "y": 143
+            }
+          ],
+          "medianMs": 78,
+          "p95Ms": 86,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.56,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.21,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.7
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 96,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.49,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 93,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.25,
+            "p50Ms": 16.7,
+            "p95Ms": 16.9,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.5
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 8,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 30,
+            "meanMs": 16.67,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 90,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 72,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": {
+          "count": 61,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 2.49,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 6.76,
+          "totalJSHeapMB": 11.29,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 9.25,
+          "totalJSHeapMB": 14.06,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.33,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61.2
+        },
+        "memory": {
+          "usedJSHeapMB": 11.65,
+          "totalJSHeapMB": 17.98,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-phone-landscape-ts1-mature-reduced.png",
+          "bytes": 70408,
+          "sha256": "d377a95107f7fb3582c46ef7cbb1fd8feb92c2291d4d626c7e08adc4f83f9c9b"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-landscape-ts1-mature.png",
+        "bytes": 69834,
+        "sha256": "911215c52648b08dd21768c9c978b14151896080536f8fee13606b45c8073f76"
+      }
+    },
+    {
+      "device": "phone-landscape",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "phone-landscape-ts2-mature",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 12.9,
+          "domContentLoadedMs": 38.6,
+          "loadEventEndMs": 39.2,
+          "responseEndMs": 8,
+          "durationMs": 39.2,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 80,
+        "lcpMs": 80,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.55,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.4
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.83,
+        "totalJSHeapMB": 9.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13.1,
+            15.9,
+            6.6
+          ],
+          "medianMs": 13.1,
+          "p95Ms": 15.9,
+          "maxMs": 15.9,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            26,
+            9,
+            8
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 240,
+              "y": 143
+            },
+            {
+              "tile": 1,
+              "x": 268,
+              "y": 143
+            },
+            {
+              "tile": 3,
+              "x": 324,
+              "y": 143
+            }
+          ],
+          "medianMs": 9,
+          "p95Ms": 26,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 55,
+          "meanMs": 16.61,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.2
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            12.9,
+            15.6,
+            15
+          ],
+          "medianMs": 15,
+          "p95Ms": 15.6,
+          "maxMs": 15.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            95,
+            80,
+            79
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 240,
+              "y": 143
+            },
+            {
+              "tile": 1,
+              "x": 268,
+              "y": 143
+            },
+            {
+              "tile": 3,
+              "x": 324,
+              "y": 143
+            }
+          ],
+          "medianMs": 80,
+          "p95Ms": 95,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 31,
+          "meanMs": 16.31,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61.3
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 94,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.57,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.4
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 94,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.18,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.8
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 96,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.32,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.3
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 8,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 31,
+            "meanMs": 16.21,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61.7
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 91,
+          "meanMs": 16.54,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        },
+        "churnFrame": {
+          "count": 73,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": {
+          "count": 60,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 2.79,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 6.86,
+          "totalJSHeapMB": 11.79,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 9.65,
+          "totalJSHeapMB": 15.06,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 43,
+          "meanMs": 16.42,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.9
+        },
+        "memory": {
+          "usedJSHeapMB": 11.75,
+          "totalJSHeapMB": 18.48,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-after-phone-landscape-ts2-mature-reduced.png",
+          "bytes": 72478,
+          "sha256": "1840210f958d3a198a4da493426888e396aafad973927b8f6dad2ee000c210c0"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-landscape-ts2-mature.png",
+        "bytes": 72378,
+        "sha256": "60ee110b24e3d4e389a4512526516ad51a0a4a8eccdc3ccbf7530031d96cb43c"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "opening",
+      "tag": "phone-ts1-opening",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.8,
+          "domContentLoadedMs": 34.9,
+          "loadEventEndMs": 35.3,
+          "responseEndMs": 7.7,
+          "durationMs": 35.3,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 68,
+        "lcpMs": 68,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.57,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.4
+      },
+      "memoryIdle": {
+        "usedJSHeapMB": 7.34,
+        "totalJSHeapMB": 11.24,
+        "jsHeapLimitMB": 4192
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-ts1-opening.png",
+        "bytes": 128872,
+        "sha256": "5f0428f965a4deab233561c364f58b29abafcc2e961ea70d790ac57376ceb059"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 1,
+      "fixture": "opening",
+      "tag": "desktop-ts1-opening",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11,
+          "domContentLoadedMs": 33.2,
+          "loadEventEndMs": 33.3,
+          "responseEndMs": 7.2,
+          "durationMs": 33.3,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 80,
+        "lcpMs": 80,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124659,
+          "totalEncodedBodySize": 122442,
+          "totalDecodedBodySize": 422772,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 55,
+        "meanMs": 16.42,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.9
+      },
+      "memoryIdle": {
+        "usedJSHeapMB": 7.44,
+        "totalJSHeapMB": 10.49,
+        "jsHeapLimitMB": 4192
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-desktop-ts1-opening.png",
+        "bytes": 60455,
+        "sha256": "984f1809840507d4361f214e6b2fba3dde18963fa1975fc0369ffa6d6ba24ed0"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "mature-absence",
+      "tag": "phone-ts1-catchup",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.3,
+          "domContentLoadedMs": 34,
+          "loadEventEndMs": 34.6,
+          "responseEndMs": 7.2,
+          "durationMs": 34.6,
+          "transferSize": 1017,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 68,
+        "lcpMs": 68,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 5,
+          "totalTransferSize": 129203,
+          "totalEncodedBodySize": 126686,
+          "totalDecodedBodySize": 436178,
+          "document": {
+            "transferSize": 1017,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10711,
+              "encodedBodySize": 10411,
+              "decodedBodySize": 61957,
+              "names": [
+                "index-ekc2mZk4.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57188,
+              "encodedBodySize": 56888,
+              "decodedBodySize": 191098,
+              "names": [
+                "index-CEQDUmwp.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            },
+            "worker": {
+              "count": 1,
+              "transferSize": 4544,
+              "encodedBodySize": 4244,
+              "decodedBodySize": 13406,
+              "names": [
+                "catchup.worker-G_Jyr7uh.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "catchup": {
+        "workerLoaded": true,
+        "reportBefore": {
+          "panels": 0,
+          "dismiss": null
+        },
+        "reportAfterBegin": {
+          "panels": 1,
+          "dismiss": "Back to yard"
+        },
+        "catchupRan": true,
+        "camOk": true
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-after-phone-ts1-catchup.png",
+        "bytes": 142817,
+        "sha256": "444d93bffa7aa6d1054db4ab14d60ac325ccb6503b3ee192c4dc9524746616d5"
+      }
+    }
+  ],
+  "hardFailures": [],
+  "cpuThrottleRate": 6,
+  "buildInventory": [
+    {
+      "name": "catchup.worker-G_Jyr7uh.js",
+      "role": "lazyWorkerJs",
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+    },
+    {
+      "name": "index-CEQDUmwp.js",
+      "role": "entryJs",
+      "bytes": 191098,
+      "sha256": "b85367da838f1bcfa68d432d975035b0049fbf54e2c3a68083d452be3b304844"
+    },
+    {
+      "name": "index-ekc2mZk4.css",
+      "role": "css",
+      "bytes": 61957,
+      "sha256": "fa11d4ed9299a682dbcdaa1e18830fa027f5f74f20367eaff7fcdd5efb5f19af"
+    },
+    {
+      "name": "tables-KTf0wpwx.js",
+      "role": "tablesJs",
+      "bytes": 26691,
+      "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+    },
+    {
+      "name": "vendor-Bt4lNSbZ.js",
+      "role": "vendorJs",
+      "bytes": 141658,
+      "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+    }
+  ],
+  "pass": true
+}
