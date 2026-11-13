@@ -1,0 +1,393 @@
+{
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/67",
+  "pr": "https://github.com/darkmatter2222/Rustwake/pull/116",
+  "branch": "rw/67-perf",
+  "role": "developer | dev-67b",
+  "generatedBy": "build-results67.mjs from committed metrics + preservation receipts",
+  "buildSha": "2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f",
+  "headSha": "2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f",
+  "headShaConvention": "headSha == buildSha == frozen code head 2ac4213 (sibling convention). The final evidence-commit SHA is self-referentially impossible inside this file; it is recorded in the PR #116 body and the issue #67 handoff comment.",
+  "beforeSha": "f80726970287a9c6da96e0c475b77dc0daccd96b",
+  "codeFrozen": {
+    "srcDiffVsCodeHeadEmpty": true,
+    "forbiddenPathsUntouched": true,
+    "pnpmLockStaged": false
+  },
+  "probe": {
+    "file": "tests/perf/perf-67.evidence.mjs",
+    "gitHash": "6b9f121c88a75fa26db3cf0cff2dc099efdbbc89",
+    "committedEqualsRan": true
+  },
+  "method": {
+    "kind": "AGENT headless Chromium emulation (playwright-core) via vite preview of dist",
+    "physicalDevice": false,
+    "visionClaims": false,
+    "cpuThrottleRate": 6,
+    "notEmulated": [
+      "CPU",
+      "GPU",
+      "thermal",
+      "real-touch",
+      "mobile-network"
+    ],
+    "frameAndMemory": "host-relative; before/after under identical host conditions",
+    "browser": {
+      "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "headless": true,
+      "engine": "chromium (playwright-core)"
+    }
+  },
+  "frames": {
+    "recursiveTotal": 30,
+    "before": 15,
+    "after": 15,
+    "dir": "tests/perf/perf-67.evidence/frames"
+  },
+  "before": {
+    "sha": "f80726970287a9c6da96e0c475b77dc0daccd96b",
+    "pass": true,
+    "hardFailures": [],
+    "budgetVerdicts": {
+      "met": 104,
+      "unmet": 0,
+      "unknown": 4,
+      "total": 108,
+      "allMet": false
+    }
+  },
+  "after": {
+    "sha": "2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f",
+    "pass": true,
+    "hardFailures": [],
+    "budgetVerdicts": {
+      "met": 104,
+      "unmet": 0,
+      "unknown": 4,
+      "total": 108,
+      "allMet": false
+    }
+  },
+  "buildInventory": {
+    "after": [
+      {
+        "name": "catchup.worker-G_Jyr7uh.js",
+        "role": "lazyWorkerJs",
+        "bytes": 13406,
+        "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+      },
+      {
+        "name": "index-BBL5748F.js",
+        "role": "entryJs",
+        "bytes": 190988,
+        "sha256": "15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1"
+      },
+      {
+        "name": "index-Eo_6W0ie.css",
+        "role": "css",
+        "bytes": 61937,
+        "sha256": "d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8"
+      },
+      {
+        "name": "tables-KTf0wpwx.js",
+        "role": "tablesJs",
+        "bytes": 26691,
+        "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+      },
+      {
+        "name": "vendor-Bt4lNSbZ.js",
+        "role": "vendorJs",
+        "bytes": 141658,
+        "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+      }
+    ],
+    "entry": {
+      "before": {
+        "name": "index-DMXDbGe_.js",
+        "role": "entryJs",
+        "bytes": 190898,
+        "sha256": "d19ad82eb924fc6c8bfea2e42b10068c37e5941761f9bc9ec687853751fd73d5"
+      },
+      "after": {
+        "name": "index-BBL5748F.js",
+        "role": "entryJs",
+        "bytes": 190988,
+        "sha256": "15d2315635bfa92e2f4a7babe3ec2fae41a1e578a21ea77a7ecb4d3a3c73d7b1"
+      },
+      "deltaBytes": 90
+    },
+    "unchangedRoles": [
+      "vendorJs",
+      "tablesJs",
+      "css",
+      "lazyWorkerJs"
+    ],
+    "binaryMediaCount": 0
+  },
+  "coldLoad": {
+    "transferBytes": {
+      "before": 124530,
+      "after": 124600
+    },
+    "decodedBytes": {
+      "before": 422552,
+      "after": 422642
+    },
+    "fcpLcpMsRangeAfter": {
+      "min": 76,
+      "max": 88
+    }
+  },
+  "interaction": {
+    "throttledMachineTapMedian": [
+      {
+        "device": "phone-ts1-mature",
+        "beforeMs": 88,
+        "afterMs": 87,
+        "deltaMs": -1,
+        "improved": true
+      },
+      {
+        "device": "phone-ts2-mature",
+        "beforeMs": 70,
+        "afterMs": 69,
+        "deltaMs": -1,
+        "improved": true
+      },
+      {
+        "device": "desktop-ts1-mature",
+        "beforeMs": 78,
+        "afterMs": 71,
+        "deltaMs": -7,
+        "improved": true
+      },
+      {
+        "device": "desktop-ts2-mature",
+        "beforeMs": 83,
+        "afterMs": 80,
+        "deltaMs": -3,
+        "improved": true
+      }
+    ],
+    "allMeasurableImproved": true,
+    "unthrottledMachineTapMedian": [
+      {
+        "device": "phone-ts1-mature",
+        "beforeMs": 12,
+        "afterMs": 12
+      },
+      {
+        "device": "phone-ts2-mature",
+        "beforeMs": 11,
+        "afterMs": 11
+      },
+      {
+        "device": "desktop-ts1-mature",
+        "beforeMs": 12,
+        "afterMs": 10
+      },
+      {
+        "device": "desktop-ts2-mature",
+        "beforeMs": 11,
+        "afterMs": 10
+      }
+    ],
+    "unthrottledMenuOpenNote": "sub-15ms host scheduling noise; some went up (desktop-ts2 10.5->12.5, phone-landscape-ts2 6.8->12.6); NOT claimed as a win"
+  },
+  "frameTime": {
+    "idleP95MsDistinct": [
+      16.8
+    ],
+    "idleDroppedOver50msTotal": 0,
+    "throttledIdleDroppedOver50msTotal": 0,
+    "stressDroppedOver50msTotal": 0,
+    "stressLongTasksTotal": 0,
+    "reducedMotionDroppedOver50msTotal": 0,
+    "consoleErrorsTotal": 0,
+    "note": "0 dropped / 0 long tasks / 0 console errors on every device, before and after"
+  },
+  "memory": {
+    "idleUsedJSHeapMB": {
+      "minMB": 5.68,
+      "maxMB": 6.7
+    },
+    "hostRelative": true
+  },
+  "offlineCatchup": {
+    "device": "phone-ts1-catchup",
+    "transferBytes": {
+      "before": 129074,
+      "after": 129144
+    },
+    "decodedBytes": {
+      "before": 435958,
+      "after": 436048
+    },
+    "workerBytes": 13406
+  },
+  "unknownVerdicts": [
+    {
+      "metric": "machineTapMedian",
+      "scope": "phone-landscape-ts1-mature",
+      "value": null,
+      "limit": 120,
+      "unit": "ms",
+      "met": null,
+      "note": "not measured / no budget"
+    },
+    {
+      "metric": "throttledMachineTapMedian",
+      "scope": "phone-landscape-ts1-mature",
+      "value": null,
+      "limit": 250,
+      "unit": "ms",
+      "met": null,
+      "note": "not measured / no budget"
+    },
+    {
+      "metric": "machineTapMedian",
+      "scope": "phone-landscape-ts2-mature",
+      "value": null,
+      "limit": 120,
+      "unit": "ms",
+      "met": null,
+      "note": "not measured / no budget"
+    },
+    {
+      "metric": "throttledMachineTapMedian",
+      "scope": "phone-landscape-ts2-mature",
+      "value": null,
+      "limit": 250,
+      "unit": "ms",
+      "met": null,
+      "note": "not measured / no budget"
+    }
+  ],
+  "preservation": {
+    "access66": {
+      "receipt": "access66-preservation.json",
+      "buildSha": "2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f",
+      "port": 4194,
+      "cells": 16,
+      "cellErrors": 0,
+      "defectCount": 0,
+      "defects": [],
+      "phoneLandscapeTs2OverlapPx": {
+        "leadDock": 0,
+        "leadPanel": 0,
+        "dockPanel": 0,
+        "docScroll": 0,
+        "defectFixed": true
+      },
+      "contrast": {
+        "cells": 6,
+        "checks": 52,
+        "failures": 0,
+        "minRatio": 5.75
+      },
+      "unnamedControls": 0,
+      "keyboard": {
+        "cells": 3,
+        "allTrue": true
+      },
+      "reducedMotion": {
+        "ruleFound": true,
+        "probeFound": true
+      },
+      "mirror": {
+        "count": 17,
+        "allNonEmpty": true,
+        "allDistinct": true
+      },
+      "touchNote": "small-tap-target defect checked on record view only (0 on all 16 cells); 26px save-code textarea in backup/replace sub-views not flagged by probe design (text field), matches #66 baseline"
+    },
+    "save63": {
+      "receipt": "save63-preservation.json",
+      "headSha": "2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f",
+      "branch": "rw/67-perf",
+      "failures": [],
+      "summary": {
+        "phone": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "phone-landscape": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "desktop": {
+          "assertions": 394,
+          "passed": 394,
+          "screenshots": 16
+        },
+        "mirror": {
+          "assertions": 2,
+          "passed": 2,
+          "screenshots": 0
+        }
+      },
+      "framesRecursive": 48,
+      "assertionsTotal": 1184,
+      "restoredCommittedEvidence": {
+        "file": "tests/ui/save-63.evidence.json",
+        "committedHash": "f9366dfab5ed1fdfbad4b5b8aef71f2651fae3b6",
+        "restored": true
+      },
+      "seedsJsonCreated": false
+    },
+    "gameplay64_65": "no src changes; preserved by construction; vitest 746 green covers sim/save/lease/worker suites"
+  },
+  "ladder": {
+    "typecheck": {
+      "command": "pnpm exec tsc --noEmit",
+      "exit": 0,
+      "errors": 0,
+      "receipt": "typecheck.log"
+    },
+    "validate": {
+      "command": "pnpm validate",
+      "exit": 0,
+      "violations": 0,
+      "receipt": "validate.log"
+    },
+    "vitest": {
+      "command": "vitest run --minWorkers=4 --maxWorkers=4",
+      "exit": 0,
+      "files": 60,
+      "tests": 746,
+      "durationS": 20.63,
+      "receipt": "vitest.log"
+    },
+    "build": {
+      "command": "pnpm build",
+      "exit": 0,
+      "errors": 0,
+      "receipt": "build.log",
+      "byteSha256Addendum": true
+    }
+  },
+  "limitations": [
+    "AGENT headless Chromium emulation, NOT a physical device; CPU/GPU/thermal/real-touch/mobile-network not emulated beyond 6x CDP CPU throttle",
+    "No vision claims; all checks programmatic DOM/geometry/computed-style/console/pixel",
+    "4 landscape interaction unknowns (machineTapMedian/throttledMachineTapMedian on phone-landscape-ts1/ts2) are null=not measured, never silently passed; allMet=false reflects this",
+    "Memory is Chromium performance.memory, host-relative, not a device forecast",
+    "Unthrottled menu-open latency is single-digit-ms host noise, not claimed as a win",
+    "GitHub Project 1 / milestone 1 membership unverifiable from this worktree; recorded, not invented"
+  ],
+  "verdict": {
+    "performanceRegression": false,
+    "functionalRegression": false,
+    "hardFailures": 0,
+    "budgetVerdicts": {
+      "met": 104,
+      "unmet": 0,
+      "unknown": 4,
+      "total": 108,
+      "allMet": false
+    },
+    "readyForIndependentQA": true,
+    "mergeBlocked": true,
+    "note": "Independent QA ACCEPT + product acceptance required at immutable head SHA before release-engineer merge. Do NOT merge yet. No deployment claimed from a pushed branch."
+  }
+}
