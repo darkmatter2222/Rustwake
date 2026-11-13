@@ -1,0 +1,41 @@
+{
+  "_meta": {
+    "issue": "https://github.com/darkmatter2222/Rustwake/issues/67",
+    "purpose": "Experience-level performance budgets for the redesigned Rustwake game. These are ceilings a player should never feel exceed, NOT a byte-shaving contest. The historical 233000-byte entry ceiling is explicitly NOT a hard constraint here; entryDecodedBytes is a realistic headroom budget, and total transferred bytes are measured as decoded payload (this build ships procedural audio + procedural canvas sprites, so binary media is zero).",
+    "groundedIn": "Baseline measured at main f80726970287a9c6da96e0c475b77dc0daccd96b via tests/perf/perf-67.evidence.mjs (vite preview of the production build, headless Chromium, 6x CPU throttle for the low-end pass). See docs/PERF_BUDGETS.md for the full protocol and the device-vs-emulation limitation.",
+    "evaluationNote": "The probe compares interaction budgets against the MEDIAN open/tap latency (the budget keys retain the *P95Ms names the probe reads). Frame budgets use P95 of requestAnimationFrame deltas. 'met=null' means not measured (e.g. landscape machine-tap automation does not land) or no budget set; those are reported as unknown, never silently passed.",
+    "deviceLimitation": "All numbers are AGENT headless emulation on a fast host with a local preview (no real network, no real low-end GPU/compositor). Emulation is a necessary-but-not-sufficient floor: meeting a budget here does not prove a real mid/low-end phone meets it. Frame time stays at the 60Hz vsync floor (16.8ms) even at 6x CPU throttle on this host, so throttled interaction latency is the sensitive rerender-cost signal."
+  },
+  "budgets": {
+    "coldLoad": {
+      "mobileFcpMs": 1500,
+      "desktopFcpMs": 1000,
+      "mobileLoadMs": 2500,
+      "desktopLoadMs": 1800
+    },
+    "transferred": {
+      "entryDecodedBytes": 240000,
+      "totalColdDecodedBytes": 520000,
+      "imageAudioBinaryCount": 0
+    },
+    "interaction": {
+      "menuOpenP95Ms": 100,
+      "machineTapP95Ms": 120,
+      "throttledMenuOpenP95Ms": 200,
+      "throttledMachineTapP95Ms": 250
+    },
+    "frame": {
+      "idleP95Ms": 20,
+      "idleDroppedPct": 2,
+      "panelOpenP95Ms": 33,
+      "stressP95Ms": 50,
+      "throttledIdleP95Ms": 33,
+      "throttledIdleDroppedPct": 5,
+      "throttledStoreP95Ms": 50
+    },
+    "memory": {
+      "idleUsedHeapMB": 64,
+      "sessionGrowthMB": 16
+    }
+  }
+}
