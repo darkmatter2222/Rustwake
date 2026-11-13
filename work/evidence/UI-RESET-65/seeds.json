@@ -1,7 +1,7 @@
 {
   "issue": 65,
   "role": "developer",
-  "generatedAt": "2026-11-13T00:37:42.985Z",
+  "generatedAt": "2026-11-13T02:46:14.972Z",
   "fixture": "docs/evidence/yard-mature.json",
   "method": "Game's own encodeSave/decodeSave/repairRegistration/validateSim; no src modified; no invariant weakened.",
   "mature": {
