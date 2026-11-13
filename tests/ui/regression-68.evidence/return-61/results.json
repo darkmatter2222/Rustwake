@@ -1,10 +1,10 @@
 {
   "issue": 61,
   "role": "developer",
-  "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
-  "baseUrl": "http://127.0.0.1:4198/",
+  "buildSha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+  "baseUrl": "http://127.0.0.1:4196/",
   "branch": "rw/61-return",
-  "generatedAt": "2026-11-13T09:24:34.302Z",
+  "generatedAt": "2026-11-13T12:07:36.739Z",
   "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe",
   "method": "headless Chrome DOM + geometry + canvas-pixel + persisted-state mirror only; no vision. Screenshots are hashed mirrors, not inspected visually. Report parity anchored to the game's OWN catchUp oracle on a seed clone at the DOM's exact awayTicks.",
   "fixtureScrutiny": {
@@ -67,7 +67,7 @@
   },
   "counts": {
     "frames": 37,
-    "totalFrameBytes": 6317435,
+    "totalFrameBytes": 6121052,
     "steps": 17,
     "checks": 174,
     "failedChecks": 0,
@@ -87,10 +87,10 @@
     "frames": [
       {
         "frame": "desktop-short/00-boot-after.png",
-        "bytes": 111637,
+        "bytes": 111655,
         "width": 1920,
         "height": 1080,
-        "sha256": "70949d2e195ad216a423c2ba833eac0c1c684c0cf4cd7265cb388c1fc519a9f5",
+        "sha256": "63f42b1334cee78485dfc956f798b496d3801920799ca193087bb63324345f67",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -98,10 +98,10 @@
       },
       {
         "frame": "desktop-short/00-boot-before.png",
-        "bytes": 110941,
+        "bytes": 111538,
         "width": 1920,
         "height": 1080,
-        "sha256": "c1f6bf423506d190cfc142bccd4608da9f6caa90422ad7e8d137a55ca71822b8",
+        "sha256": "f59a74ac8f6f044d31ff6f8c755fa1bf086d3bb9b8dc393ca40f7059e2fc2be4",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -109,10 +109,10 @@
       },
       {
         "frame": "desktop-short/01-close-focus-after.png",
-        "bytes": 69654,
+        "bytes": 68912,
         "width": 1920,
         "height": 1080,
-        "sha256": "2a24fb7ab5d42fb48604da446f732257733cdabaf5e43e2e6bf4a385550f47e2",
+        "sha256": "89ef1ca962c69226fa3802f5abb0eb0b67263d52c7920a69b6328dbcc66e3749",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -120,10 +120,10 @@
       },
       {
         "frame": "desktop-short/01-close-focus-before.png",
-        "bytes": 111707,
+        "bytes": 111340,
         "width": 1920,
         "height": 1080,
-        "sha256": "442caccff61dbbebdecc463bf4ab5035d2d776a8a957a7c4d230b391e0d83b77",
+        "sha256": "49ce4d887fd8f47172f49aa3c0da187da0f446b26d2add487c9f5758a9560e96",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -131,10 +131,10 @@
       },
       {
         "frame": "phone-cap/00-boot-after.png",
-        "bytes": 186997,
+        "bytes": 187051,
         "width": 780,
         "height": 1688,
-        "sha256": "1ffdddf3edc9d4dbafbc8b3d8daac95370c5aa14befd03b73513239f845c83f1",
+        "sha256": "638d0512cdfba5cf31c156c246fb69d8d7343a178d07d5c32114dc8dea19c785",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -142,10 +142,10 @@
       },
       {
         "frame": "phone-cap/00-boot-before.png",
-        "bytes": 186966,
+        "bytes": 186979,
         "width": 780,
         "height": 1688,
-        "sha256": "363cd6c877deda853922967a3fa94c341a1949bab41fe13935b211c5bb444c45",
+        "sha256": "23bdfa74b97b941050ce96a4eb2c7ff163050509b7cdb1d41cae865bdf6c7447",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -153,10 +153,10 @@
       },
       {
         "frame": "phone-cap/01-scroll-recovery-after.png",
-        "bytes": 198769,
+        "bytes": 198684,
         "width": 780,
         "height": 1688,
-        "sha256": "ea8ad2588ef52e7d905b4d3e9c0418fdc94db57c22ea57cb1af1be073ad63c2a",
+        "sha256": "25aec9af44566187ae10fe1a2862b147355bef47b58a19a2dc9833c84731b862",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -164,10 +164,10 @@
       },
       {
         "frame": "phone-cap/01-scroll-recovery-before.png",
-        "bytes": 187275,
+        "bytes": 186706,
         "width": 780,
         "height": 1688,
-        "sha256": "2095a0155d95f28205fae544d2ddbe87d49b13355aa9e6254f7c95d75a54c143",
+        "sha256": "91ce2746be71860df79b2d13717a47a0fe61efeafe0166041f1ebedd65924469",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -175,10 +175,10 @@
       },
       {
         "frame": "phone-cap/02-copy-report-after.png",
-        "bytes": 198813,
+        "bytes": 198799,
         "width": 780,
         "height": 1688,
-        "sha256": "3d12b427363ebab3647a8983f6256c488827e22d43c2d10e533593d3873ce234",
+        "sha256": "ac67693f13143f992aada5b0f7860274ba3b69fbc2b860a08e573e788051386b",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -186,10 +186,10 @@
       },
       {
         "frame": "phone-cap/02-copy-report-before.png",
-        "bytes": 198758,
+        "bytes": 198545,
         "width": 780,
         "height": 1688,
-        "sha256": "5c2fcb13186d8b73211413224b633d6e93f6fa6a8181677f295414ca8d2140e0",
+        "sha256": "07259e3f2a89b5c43aaab5c797409a6bd2f109bbbf941db54f5b76abed765fe9",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -197,10 +197,10 @@
       },
       {
         "frame": "phone-cap/03-close-focus-after.png",
-        "bytes": 142539,
+        "bytes": 142497,
         "width": 780,
         "height": 1688,
-        "sha256": "e198ed3ca3e70443af7e0c7b1657291cbf0b5ff9f3aee809399b14c168540749",
+        "sha256": "2d0c59ebddd11abbdc5f09ed08fb6754bc9f46c27769514709c70c388f8bd8a1",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -208,10 +208,10 @@
       },
       {
         "frame": "phone-cap/03-close-focus-before.png",
-        "bytes": 199198,
+        "bytes": 198931,
         "width": 780,
         "height": 1688,
-        "sha256": "5bf7f2010488ed63431c8a804437877c0520abaf75c39def0eb86633cd5a56df",
+        "sha256": "f369fba753976f77b36e18ca9c6871814134334240692b366193f635ff329a6d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -219,10 +219,10 @@
       },
       {
         "frame": "phone-cap/04-menu-reopen-after.png",
-        "bytes": 186550,
+        "bytes": 186773,
         "width": 780,
         "height": 1688,
-        "sha256": "627c538cad1fefeddfa98c7154fa61486b7ae5a52250219deab37c289a71152b",
+        "sha256": "0f5bd7cbc9f93b8b7e34e45b98ad8d2b08bc10de9e6eb6fbca21f210ad1a39ef",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -230,10 +230,10 @@
       },
       {
         "frame": "phone-cap/04-menu-reopen-before.png",
-        "bytes": 142622,
+        "bytes": 142526,
         "width": 780,
         "height": 1688,
-        "sha256": "39180f9096b979912f0725a4f8dfeb1e25a40a32a6608b77d380ed5d04a9753d",
+        "sha256": "5032d6a45009ebd4f1530d902991c7b8c06584c08417136e105ee00450798bf7",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -241,10 +241,10 @@
       },
       {
         "frame": "phone-cap/05-escape-focus-after.png",
-        "bytes": 144542,
+        "bytes": 144149,
         "width": 780,
         "height": 1688,
-        "sha256": "6bb92890f1fc6a4685bc4098ea947f9c224efcc3f59e7814f331d3145ba470f0",
+        "sha256": "fdb28cc397836f08a234b12a75db52e1c72376b64969d7d5a698fc9497385943",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -252,10 +252,10 @@
       },
       {
         "frame": "phone-cap/05-escape-focus-before.png",
-        "bytes": 186669,
+        "bytes": 186925,
         "width": 780,
         "height": 1688,
-        "sha256": "f05d25000229182c1a6b34f17a6cf9ddc236cee2d01f4972c328a771e5cd4f96",
+        "sha256": "f378f2eab62fc23812c51f75db4fee68f5d1adf364a0f290413b2c41dadf42eb",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -263,10 +263,10 @@
       },
       {
         "frame": "phone-cap/06-reload-no-double-apply-after.png",
-        "bytes": 201684,
+        "bytes": 201590,
         "width": 780,
         "height": 1688,
-        "sha256": "7ec9d116107cf438c5c6d7547606ebdb1cea526a4ebd9868d6a5f72349024f3e",
+        "sha256": "335435986eaabba81d16d38128643d0d24d0dcb8367401ef6f10e04f1b6a5338",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -274,10 +274,10 @@
       },
       {
         "frame": "phone-cap/06-reload-no-double-apply-before.png",
-        "bytes": 144259,
+        "bytes": 144590,
         "width": 780,
         "height": 1688,
-        "sha256": "4459a390386c60a3bed25ec24693a06e18596a1a5fbeebd2641bc46293918005",
+        "sha256": "90ffa307bb9e2eb745948ae6cb21d0079a2db27e03ce67a98e6aba7cc4ab1e45",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -296,10 +296,10 @@
       },
       {
         "frame": "phone-landscape-long/00-boot-after.png",
-        "bytes": 175052,
+        "bytes": 146412,
         "width": 1688,
         "height": 780,
-        "sha256": "faf88d9abf81048b601eb3d1665b10dbd6bbaf6a5be64b5ef2dbd642f15e4538",
+        "sha256": "59ef2530b4e915db5dc1b838b15c2c95267f72a1e4f4ed273806913d39b7966f",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -307,10 +307,10 @@
       },
       {
         "frame": "phone-landscape-long/00-boot-before.png",
-        "bytes": 175328,
+        "bytes": 146369,
         "width": 1688,
         "height": 780,
-        "sha256": "f4a461ba4a2688839ef6c46dd804642edd2fe430177015f9a570f114b403877a",
+        "sha256": "e0bd8c2516afac853937fb934c0b55f66edd93072ca71470726c1b51c456adec",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -318,10 +318,10 @@
       },
       {
         "frame": "phone-landscape-long/01-scroll-recovery-after.png",
-        "bytes": 186964,
+        "bytes": 158757,
         "width": 1688,
         "height": 780,
-        "sha256": "b48bb8aeb66c56cf57f4c772314a92a7dc8429ee821224ab2fb26d60250780b2",
+        "sha256": "e74d2d8404a5e8526af106e70e95ff94a6086d0114eff47fa72545cec35d2a47",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -329,10 +329,10 @@
       },
       {
         "frame": "phone-landscape-long/01-scroll-recovery-before.png",
-        "bytes": 175507,
+        "bytes": 146318,
         "width": 1688,
         "height": 780,
-        "sha256": "344288c3244afa166e680414d0ef2a16dd7c8be538d2a010ebf4aaf3ea5a43ef",
+        "sha256": "cbf762c65506d52ac2b3a279f4ef899c1895cdc10fbefac30e681bc1f9878724",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -340,10 +340,10 @@
       },
       {
         "frame": "phone-landscape-long/02-close-focus-after.png",
-        "bytes": 109964,
+        "bytes": 82831,
         "width": 1688,
         "height": 780,
-        "sha256": "20bca962189f694a29433f010f225db1c2318830925feb64bcf5e0e5fea6f88e",
+        "sha256": "a8a6cbaaddc17d9abe3fd2b3493fd454399c5281edc83dcfa93868f5d61626e9",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -351,10 +351,10 @@
       },
       {
         "frame": "phone-landscape-long/02-close-focus-before.png",
-        "bytes": 186940,
+        "bytes": 158939,
         "width": 1688,
         "height": 780,
-        "sha256": "652f9162b0ea52f8a71f22d50cae128038736d34e6f9ac8825e1232371e56a8a",
+        "sha256": "b853388e5278e6f06b9944f54b9ffabb5fdee85ad874d590d0e1ea472576a07f",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -362,10 +362,10 @@
       },
       {
         "frame": "phone-landscape-long/reconcile.png",
-        "bytes": 93848,
+        "bytes": 69582,
         "width": 1688,
         "height": 780,
-        "sha256": "78e751f3b8e0084f814e2a3426feda02a90f74c13a70b852897e6f530150124a",
+        "sha256": "7f36955e22cc9bb2f82d11e65e931d7084755641457108d358e27d792408017d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -373,10 +373,10 @@
       },
       {
         "frame": "phone-large/00-boot-after.png",
-        "bytes": 225150,
+        "bytes": 225311,
         "width": 780,
         "height": 1688,
-        "sha256": "60d031c92a02ec9ea1f9d3716859b26eeceea377fe68daaea39d3727ed049053",
+        "sha256": "467216e9005b40c9408da6889772de7a1074ee3ee246d504cbe0c9f33f4f171d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -384,10 +384,10 @@
       },
       {
         "frame": "phone-large/00-boot-before.png",
-        "bytes": 224794,
+        "bytes": 224639,
         "width": 780,
         "height": 1688,
-        "sha256": "4fca97887fd54bfc962f1eba0add4d9afad28dc991b3b156104ba602e8d442ed",
+        "sha256": "7ce6b673d8ec5ef93d4cd665cc87b4f5f1ffc56b7050c3865187e40481cd0fe2",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -395,10 +395,10 @@
       },
       {
         "frame": "phone-large/01-scroll-tail-after.png",
-        "bytes": 218749,
+        "bytes": 218600,
         "width": 780,
         "height": 1688,
-        "sha256": "d7efa012a0e28003e6eb392ee73762188f374a530ed3b658bb0e46e2f3b54f0e",
+        "sha256": "a343a1d3ae8a307e07f45b60f3d9d014b61918860af2d34bd938d39489493312",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -406,10 +406,10 @@
       },
       {
         "frame": "phone-large/01-scroll-tail-before.png",
-        "bytes": 224824,
+        "bytes": 224761,
         "width": 780,
         "height": 1688,
-        "sha256": "1433aceb8f522c0e994e68917af55ec416f9c51bcd1c7795ab938ddb9b6b25fb",
+        "sha256": "eb35cf8ea7d7c8eb4aaf734943f75105e70d1a9aaabb9d0a3300ef41594ab64d",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -417,10 +417,10 @@
       },
       {
         "frame": "phone-large/02-close-focus-after.png",
-        "bytes": 179525,
+        "bytes": 179670,
         "width": 780,
         "height": 1688,
-        "sha256": "2fba20a8929ab12338c48f1e5e2c43fb1c096e7e92c7e238fa981f0b29a3fd6a",
+        "sha256": "c3fbe0efb1a3afb42ff37498f3eeed2f826e692215dd26a2440b2d86606786fb",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -428,10 +428,10 @@
       },
       {
         "frame": "phone-large/02-close-focus-before.png",
-        "bytes": 218949,
+        "bytes": 218412,
         "width": 780,
         "height": 1688,
-        "sha256": "b95b74b43032c72284ed173610ff6dbfeec98f85dd696cfc5fde68e371cbd1b8",
+        "sha256": "994bb7cfde60901c0f9a576a886679b565ce17c74f08f3cc4f508ce0974d2271",
         "dimsOk": true,
         "hashOk": true,
         "nonEmpty": true,
@@ -553,7 +553,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -573,7 +573,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -846,7 +846,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -866,7 +866,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -1239,7 +1239,7 @@
         {
           "name": "catch-up loading line painted once as role=status (no dialog)",
           "ok": true,
-          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794561840139}] live=false"
+          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794571621554}] live=false"
         }
       ]
     },
@@ -1271,7 +1271,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1291,7 +1291,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -1542,7 +1542,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450348,
+          "tick": 450358,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -1564,7 +1564,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1584,7 +1584,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -1857,7 +1857,7 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 450348,
+          "tick": 450358,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -1879,7 +1879,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -1899,7 +1899,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -2172,7 +2172,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2192,7 +2192,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -2485,7 +2485,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2505,7 +2505,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -2759,7 +2759,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450368,
+          "tick": 450378,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -2781,7 +2781,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2801,7 +2801,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -2853,7 +2853,7 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 450368,
+          "tick": 450378,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -2875,7 +2875,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2895,7 +2895,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -2925,7 +2925,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450378,
+          "tick": 450388,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -2947,7 +2947,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -2967,7 +2967,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -3240,7 +3240,7 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 450378,
+          "tick": 450388,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -3262,7 +3262,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3282,7 +3282,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -3555,7 +3555,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3575,7 +3575,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -3644,7 +3644,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3664,7 +3664,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561840139
+                "at": 1794571621554
               }
             ]
           },
@@ -3694,7 +3694,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450421,
+          "tick": 450423,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -3716,7 +3716,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -3760,8 +3760,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "zero-gain",
-            "dataAwayTicks": "23",
-            "dataCreditedTicks": "23",
+            "dataAwayTicks": "15",
+            "dataCreditedTicks": "15",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -3883,12 +3883,12 @@
         {
           "name": "reload reads the game's persisted save (lastSeen moves forward, no reseed)",
           "ok": true,
-          "detail": "lastSeen 1794561849327 -> 1794561852634"
+          "detail": "lastSeen 1794571630744 -> 1794571634301"
         },
         {
           "name": "no second cap credit: awayTicks collapses to the real reload gap",
           "ok": true,
-          "detail": "reloadAway=23 (must be < 1200, not 468003)"
+          "detail": "reloadAway=15 (must be < 1200, not 468003)"
         },
         {
           "name": "reload report is not capped again",
@@ -3930,7 +3930,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -3950,7 +3950,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -3980,7 +3980,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "2592134",
+            "dataAwayTicks": "2592137",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "true",
@@ -4228,7 +4228,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -4248,7 +4248,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -4278,7 +4278,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "2592134",
+            "dataAwayTicks": "2592137",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "true",
@@ -4526,7 +4526,7 @@
         {
           "name": "awayTicks within seed gap + drift bound",
           "ok": true,
-          "detail": "away=2592134 expected=2592000..2593200"
+          "detail": "away=2592137 expected=2592000..2593200"
         },
         {
           "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
@@ -4621,12 +4621,12 @@
         {
           "name": "yard canvas is painted (distinct colors + lit fraction)",
           "ok": true,
-          "detail": "canvas={\"ok\":true,\"w\":1688,\"h\":780,\"distinct\":46,\"litFraction\":0.1417178827382345,\"sampled\":188092}"
+          "detail": "canvas={\"ok\":true,\"w\":1688,\"h\":780,\"distinct\":45,\"litFraction\":0.09362439657189035,\"sampled\":188092}"
         },
         {
           "name": "catch-up loading line painted once as role=status (no dialog)",
           "ok": true,
-          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794561853232}] live=false"
+          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794571634917}] live=false"
         },
         {
           "name": "long absence reads day precision (3d)",
@@ -4683,7 +4683,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -4703,7 +4703,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -4733,7 +4733,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "2592134",
+            "dataAwayTicks": "2592137",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "true",
@@ -4981,7 +4981,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -5001,7 +5001,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -5031,7 +5031,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "2592134",
+            "dataAwayTicks": "2592137",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "true",
@@ -5301,7 +5301,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -5321,7 +5321,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -5351,7 +5351,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "2592134",
+            "dataAwayTicks": "2592137",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "true",
@@ -5577,7 +5577,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450358,
+          "tick": 450368,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -5599,7 +5599,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 844,
             "h": 390
@@ -5619,7 +5619,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561853232
+                "at": 1794571634917
               }
             ]
           },
@@ -5671,7 +5671,7 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 6209,
+          "tick": 6214,
           "credits": 0,
           "storeUnits": 0,
           "storeTotal": 0,
@@ -5682,7 +5682,7 @@
           "deliveries": 0
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -5726,8 +5726,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "zero-gain",
-            "dataAwayTicks": "6209",
-            "dataCreditedTicks": "6209",
+            "dataAwayTicks": "6214",
+            "dataCreditedTicks": "6214",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -5843,7 +5843,7 @@
       },
       "after": {
         "sim": {
-          "tick": 6209,
+          "tick": 6214,
           "credits": 0,
           "storeUnits": 0,
           "storeTotal": 0,
@@ -5854,7 +5854,7 @@
           "deliveries": 0
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -5898,8 +5898,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "zero-gain",
-            "dataAwayTicks": "6209",
-            "dataCreditedTicks": "6209",
+            "dataAwayTicks": "6214",
+            "dataCreditedTicks": "6214",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -6022,7 +6022,7 @@
         {
           "name": "seed loaded intact (machines/routes/tutorial preserved)",
           "ok": true,
-          "detail": "mirror machines=0 routes=0 tutorial=0 tick=6209 seedTick=0"
+          "detail": "mirror machines=0 routes=0 tutorial=0 tick=6214 seedTick=0"
         },
         {
           "name": "panel mount contract (class/role/aria/title)",
@@ -6037,7 +6037,7 @@
         {
           "name": "awayTicks within seed gap + drift bound",
           "ok": true,
-          "detail": "away=6209 expected=6000..7200"
+          "detail": "away=6214 expected=6000..7200"
         },
         {
           "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
@@ -6162,7 +6162,7 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 6209,
+          "tick": 6214,
           "credits": 0,
           "storeUnits": 0,
           "storeTotal": 0,
@@ -6173,7 +6173,7 @@
           "deliveries": 0
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6217,8 +6217,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "zero-gain",
-            "dataAwayTicks": "6209",
-            "dataCreditedTicks": "6209",
+            "dataAwayTicks": "6214",
+            "dataCreditedTicks": "6214",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -6334,7 +6334,7 @@
       },
       "after": {
         "sim": {
-          "tick": 6246,
+          "tick": 6251,
           "credits": 0,
           "storeUnits": 0,
           "storeTotal": 0,
@@ -6345,7 +6345,7 @@
           "deliveries": 0
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -6523,7 +6523,7 @@
         {
           "name": "lastSeen moves forward (persisted save, no reseed)",
           "ok": true,
-          "detail": "lastSeen 1794561860619 -> 1794561864410"
+          "detail": "lastSeen 1794571642546 -> 1794571646344"
         }
       ]
     },
@@ -6533,14 +6533,14 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 19150,
+          "tick": 19155,
           "credits": 82,
-          "storeUnits": 756,
-          "storeTotal": 756,
+          "storeUnits": 755,
+          "storeTotal": 755,
           "store": {
-            "scrap": 360,
+            "scrap": 358,
             "nonferrous": 10,
-            "ferrous": 45,
+            "ferrous": 46,
             "steel": 10,
             "copper": 10,
             "polymer": 10,
@@ -6555,7 +6555,7 @@
           "deliveries": 382
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -6599,8 +6599,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "852",
-            "dataCreditedTicks": "852",
+            "dataAwayTicks": "857",
+            "dataCreditedTicks": "857",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -6651,13 +6651,13 @@
               },
               "position": "sticky",
               "offsetFromBodyTop": 0,
-              "awayValue": "1m 25s",
+              "awayValue": "1m 26s",
               "awayValueFont": 22.5,
               "awayKey": "away from the yard",
               "chip": "Earned",
               "chipKind": "earned",
               "chipState": "Earned",
-              "headline": "+445 units across 6 resources",
+              "headline": "+444 units across 6 resources",
               "headlineFont": 14.25,
               "zero": null,
               "applied": "Catch-up finished. These gains are already in your stores — nothing to claim.",
@@ -6668,7 +6668,7 @@
               {
                 "id": "scrap",
                 "label": "Scrap",
-                "value": "+342",
+                "value": "+340",
                 "fillWidth": "100%",
                 "font": 12.6,
                 "rect": {
@@ -6698,7 +6698,7 @@
               {
                 "id": "ferrous",
                 "label": "Ferrous",
-                "value": "+24",
+                "value": "+25",
                 "fillWidth": "7%",
                 "font": 12.6,
                 "rect": {
@@ -6767,11 +6767,11 @@
             "detailRows": [
               {
                 "label": "Time",
-                "value": "Away 1m 25s"
+                "value": "Away 1m 26s"
               },
               {
                 "label": "Time",
-                "value": "Your operation worked for 1m 25s"
+                "value": "Your operation worked for 1m 26s"
               },
               {
                 "label": "Deliveries",
@@ -6805,20 +6805,20 @@
               },
               "note": null
             },
-            "text": "While you were awayBack to yard1m 25s away from the yardEarned+445 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+342Wire+52Ferrous+24Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 25sTimeYour operation worked for 1m 25sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
+            "text": "While you were awayBack to yard1m 26s away from the yardEarned+444 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+340Wire+52Ferrous+25Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 26sTimeYour operation worked for 1m 26sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
           }
         }
       },
       "after": {
         "sim": {
-          "tick": 19150,
+          "tick": 19155,
           "credits": 82,
-          "storeUnits": 756,
-          "storeTotal": 756,
+          "storeUnits": 755,
+          "storeTotal": 755,
           "store": {
-            "scrap": 360,
+            "scrap": 358,
             "nonferrous": 10,
-            "ferrous": 45,
+            "ferrous": 46,
             "steel": 10,
             "copper": 10,
             "polymer": 10,
@@ -6833,7 +6833,7 @@
           "deliveries": 382
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -6877,8 +6877,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "852",
-            "dataCreditedTicks": "852",
+            "dataAwayTicks": "857",
+            "dataCreditedTicks": "857",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -6929,13 +6929,13 @@
               },
               "position": "sticky",
               "offsetFromBodyTop": 0,
-              "awayValue": "1m 25s",
+              "awayValue": "1m 26s",
               "awayValueFont": 22.5,
               "awayKey": "away from the yard",
               "chip": "Earned",
               "chipKind": "earned",
               "chipState": "Earned",
-              "headline": "+445 units across 6 resources",
+              "headline": "+444 units across 6 resources",
               "headlineFont": 14.25,
               "zero": null,
               "applied": "Catch-up finished. These gains are already in your stores — nothing to claim.",
@@ -6946,7 +6946,7 @@
               {
                 "id": "scrap",
                 "label": "Scrap",
-                "value": "+342",
+                "value": "+340",
                 "fillWidth": "100%",
                 "font": 12.6,
                 "rect": {
@@ -6976,7 +6976,7 @@
               {
                 "id": "ferrous",
                 "label": "Ferrous",
-                "value": "+24",
+                "value": "+25",
                 "fillWidth": "7%",
                 "font": 12.6,
                 "rect": {
@@ -7045,11 +7045,11 @@
             "detailRows": [
               {
                 "label": "Time",
-                "value": "Away 1m 25s"
+                "value": "Away 1m 26s"
               },
               {
                 "label": "Time",
-                "value": "Your operation worked for 1m 25s"
+                "value": "Your operation worked for 1m 26s"
               },
               {
                 "label": "Deliveries",
@@ -7083,7 +7083,7 @@
               },
               "note": null
             },
-            "text": "While you were awayBack to yard1m 25s away from the yardEarned+445 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+342Wire+52Ferrous+24Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 25sTimeYour operation worked for 1m 25sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
+            "text": "While you were awayBack to yard1m 26s away from the yardEarned+444 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+340Wire+52Ferrous+25Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 26sTimeYour operation worked for 1m 26sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
           }
         }
       },
@@ -7096,7 +7096,7 @@
         {
           "name": "seed loaded intact (machines/routes/tutorial preserved)",
           "ok": true,
-          "detail": "mirror machines=8 routes=18 tutorial=9 tick=19150 seedTick=18298"
+          "detail": "mirror machines=8 routes=18 tutorial=9 tick=19155 seedTick=18298"
         },
         {
           "name": "panel mount contract (class/role/aria/title)",
@@ -7111,12 +7111,12 @@
         {
           "name": "awayTicks within seed gap + drift bound",
           "ok": true,
-          "detail": "away=852 expected=600..1800"
+          "detail": "away=857 expected=600..1800"
         },
         {
           "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
           "ok": true,
-          "detail": "dom=scrap+342,wire+52,ferrous+24,plates+15,data+8,circuits+4 oracle=scrap+342,wire+52,ferrous+24,plates+15,data+8,circuits+4"
+          "detail": "dom=scrap+340,wire+52,ferrous+25,plates+15,data+8,circuits+4 oracle=scrap+340,wire+52,ferrous+25,plates+15,data+8,circuits+4"
         },
         {
           "name": "credits line matches oracle (or absent when zero)",
@@ -7126,7 +7126,7 @@
         {
           "name": "headline derives from oracle totals",
           "ok": true,
-          "detail": "dom=\"+445 units across 6 resources\" expected=\"+445 units across 6 resources\""
+          "detail": "dom=\"+444 units across 6 resources\" expected=\"+444 units across 6 resources\""
         },
         {
           "name": "state chip matches oracle kind/state",
@@ -7136,7 +7136,7 @@
         {
           "name": "away hero shows day-precision label",
           "ok": true,
-          "detail": "dom=\"1m 25s\" expected=\"1m 25s\""
+          "detail": "dom=\"1m 26s\" expected=\"1m 26s\""
         },
         {
           "name": "applied status is role=status and says already-applied",
@@ -7156,7 +7156,7 @@
         {
           "name": "legacy detail rows verbatim (away/worked/deliveries/batches)",
           "ok": true,
-          "detail": "rows=[\"Away 1m 25s\",\"Your operation worked for 1m 25s\",\"86\",\"123\",\"Waiting for input\"]"
+          "detail": "rows=[\"Away 1m 26s\",\"Your operation worked for 1m 26s\",\"86\",\"123\",\"Waiting for input\"]"
         },
         {
           "name": "exactly one resume action, no claim, no dialog",
@@ -7206,7 +7206,7 @@
         {
           "name": "yard canvas is painted (distinct colors + lit fraction)",
           "ok": true,
-          "detail": "canvas={\"ok\":true,\"w\":1920,\"h\":1080,\"distinct\":70,\"litFraction\":0.18424597186636016,\"sampled\":296229}"
+          "detail": "canvas={\"ok\":true,\"w\":1920,\"h\":1080,\"distinct\":69,\"litFraction\":0.1843404933345486,\"sampled\":296229}"
         },
         {
           "name": "inline path: no intrusive loading dialog",
@@ -7231,14 +7231,14 @@
       "error": null,
       "before": {
         "sim": {
-          "tick": 19150,
+          "tick": 19155,
           "credits": 82,
-          "storeUnits": 756,
-          "storeTotal": 756,
+          "storeUnits": 755,
+          "storeTotal": 755,
           "store": {
-            "scrap": 360,
+            "scrap": 358,
             "nonferrous": 10,
-            "ferrous": 45,
+            "ferrous": 46,
             "steel": 10,
             "copper": 10,
             "polymer": 10,
@@ -7253,7 +7253,7 @@
           "deliveries": 382
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -7297,8 +7297,8 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "852",
-            "dataCreditedTicks": "852",
+            "dataAwayTicks": "857",
+            "dataCreditedTicks": "857",
             "dataCapped": "false",
             "dataLongAbsence": "false",
             "title": "While you were away",
@@ -7349,13 +7349,13 @@
               },
               "position": "sticky",
               "offsetFromBodyTop": 0,
-              "awayValue": "1m 25s",
+              "awayValue": "1m 26s",
               "awayValueFont": 22.5,
               "awayKey": "away from the yard",
               "chip": "Earned",
               "chipKind": "earned",
               "chipState": "Earned",
-              "headline": "+445 units across 6 resources",
+              "headline": "+444 units across 6 resources",
               "headlineFont": 14.25,
               "zero": null,
               "applied": "Catch-up finished. These gains are already in your stores — nothing to claim.",
@@ -7366,7 +7366,7 @@
               {
                 "id": "scrap",
                 "label": "Scrap",
-                "value": "+342",
+                "value": "+340",
                 "fillWidth": "100%",
                 "font": 12.6,
                 "rect": {
@@ -7396,7 +7396,7 @@
               {
                 "id": "ferrous",
                 "label": "Ferrous",
-                "value": "+24",
+                "value": "+25",
                 "fillWidth": "7%",
                 "font": 12.6,
                 "rect": {
@@ -7465,11 +7465,11 @@
             "detailRows": [
               {
                 "label": "Time",
-                "value": "Away 1m 25s"
+                "value": "Away 1m 26s"
               },
               {
                 "label": "Time",
-                "value": "Your operation worked for 1m 25s"
+                "value": "Your operation worked for 1m 26s"
               },
               {
                 "label": "Deliveries",
@@ -7503,13 +7503,13 @@
               },
               "note": null
             },
-            "text": "While you were awayBack to yard1m 25s away from the yardEarned+445 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+342Wire+52Ferrous+24Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 25sTimeYour operation worked for 1m 25sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
+            "text": "While you were awayBack to yard1m 26s away from the yardEarned+444 units across 6 resourcesCatch-up finished. These gains are already in your stores — nothing to claim.Scrap+340Wire+52Ferrous+25Plates+15Data+8Circuits+4Key bottleneckWaiting for inputMachines waited for input. Connect a supply route before your next break.Full recordTimeAway 1m 26sTimeYour operation worked for 1m 26sDeliveries86Batches123BottleneckWaiting for inputMissing progress?Menu → Yard record can export or import a save. Copy this report to compare what was credited.Copy report"
           }
         }
       },
       "after": {
         "sim": {
-          "tick": 19160,
+          "tick": 19165,
           "credits": 82,
           "storeUnits": 760,
           "storeTotal": 760,
@@ -7531,7 +7531,7 @@
           "deliveries": 382
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 1920,
             "h": 1080
@@ -7587,7 +7587,7 @@
         {
           "name": "no gains re-applied on close (store/credits unchanged by dismiss)",
           "ok": true,
-          "detail": "credits 82->82 storeTotal 756->760"
+          "detail": "credits 82->82 storeTotal 755->760"
         }
       ]
     },
@@ -7619,7 +7619,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -7639,7 +7639,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
@@ -7669,7 +7669,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "468271",
+            "dataAwayTicks": "468276",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "false",
@@ -7912,7 +7912,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -7932,7 +7932,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
@@ -7962,7 +7962,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "468271",
+            "dataAwayTicks": "468276",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "false",
@@ -8205,7 +8205,7 @@
         {
           "name": "awayTicks within seed gap + drift bound",
           "ok": true,
-          "detail": "away=468271 expected=468000..469200"
+          "detail": "away=468276 expected=468000..469200"
         },
         {
           "name": "gains match the game's own catchUp oracle (ids/order/values/bars)",
@@ -8300,12 +8300,12 @@
         {
           "name": "yard canvas is painted (distinct colors + lit fraction)",
           "ok": true,
-          "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":49,\"litFraction\":0.3381908853114433,\"sampled\":188092}"
+          "detail": "canvas={\"ok\":true,\"w\":780,\"h\":1688,\"distinct\":51,\"litFraction\":0.3381908853114433,\"sampled\":188092}"
         },
         {
           "name": "catch-up loading line painted once as role=status (no dialog)",
           "ok": true,
-          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794561866901}] live=false"
+          "detail": "reconcileHistory=[{\"text\":\"Catching your yard up\",\"role\":\"status\",\"at\":1794571648815}] live=false"
         },
         {
           "name": "text scale 2 engages .text-large and 30px root",
@@ -8352,7 +8352,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -8372,7 +8372,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
@@ -8402,7 +8402,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "468271",
+            "dataAwayTicks": "468276",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "false",
@@ -8645,7 +8645,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -8665,7 +8665,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
@@ -8695,7 +8695,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "468271",
+            "dataAwayTicks": "468276",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "false",
@@ -8960,7 +8960,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -8980,7 +8980,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
@@ -9010,7 +9010,7 @@
             "role": "group",
             "aria": "Return report",
             "dataState": "earned",
-            "dataAwayTicks": "468271",
+            "dataAwayTicks": "468276",
             "dataCreditedTicks": "432000",
             "dataCapped": "true",
             "dataLongAbsence": "false",
@@ -9231,7 +9231,7 @@
       },
       "after": {
         "sim": {
-          "tick": 450358,
+          "tick": 450368,
           "credits": 82,
           "storeUnits": 900,
           "storeTotal": 900,
@@ -9253,7 +9253,7 @@
           "deliveries": 514
         },
         "dom": {
-          "url": "http://127.0.0.1:4198/",
+          "url": "http://127.0.0.1:4196/",
           "viewport": {
             "w": 390,
             "h": 844
@@ -9273,7 +9273,7 @@
               {
                 "text": "Catching your yard up",
                 "role": "status",
-                "at": 1794561866901
+                "at": 1794571648815
               }
             ]
           },
