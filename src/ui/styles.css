@@ -199,6 +199,10 @@ body {
 }
 
 .objective__btn {
+  /* UI-RESET-66: the collapse/dismiss faces kept the 44 px height floor but
+     sized to their icon + padding (measured 36 px wide), below the spec 6.2
+     44 px touch-target minimum on every #43 viewport. Hold the width floor too. */
+  min-width: 44px;
   min-height: 44px;
   padding: 0 12px;
   border-radius: 8px;
@@ -896,6 +900,167 @@ body {
   /* The toast clears the 46 px band + 8 px edge instead of the phone's stack. */
   .toast {
     bottom: calc(62px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ---- UI-RESET-66: the inspector gutter on a short landscape rail viewport ----
+   At >= 600 px wide and <= 460 px tall the lead block (chips + objective + the
+   #64/#65 guidance/recovery lines) grows with the text scale until pinning the
+   inspector below it (--shell-inspector-top = lead.bottom + 6) leaves the panel
+   body a 1-94 px band that cannot fit the record/backup/replace pages — the spec
+   6.4 "0 px inner panel scroll" budget. #63 measured this at scale 2 (the routed
+   primary blocker, phone-landscape 383/394) and at scale 1 the same lead growth
+   regressed the formerly-passing record/backup pages, so the composition below
+   applies at EVERY text scale on this short rail band, not just .text-large.
+   Give the single inspector the full-height right gutter (the same composition
+   the tall desktop rail uses) and confine the lead to the left of that gutter,
+   bounded with its own declared scroller so every lead control stays reachable
+   (the lead already overflowed and clipped its own controls at this size). The
+   camera reads the bounded lead box (App chromeInsets), so a non-zero world band
+   remains above the dock. The tall desktop rail (height > 460) and phone portrait
+   (width < 600) keep their own compositions; the stacked two-panel 50/50 split is
+   left intact (only the single-panel gutter takes the full height). The lead
+   scroller borrows the same themed scrollbar as the inspector bodies so the
+   bounded scroll carries a visible affordance. `:root` lifts these above the rail
+   block's single-class selectors without depending on source order. */
+@media (min-width: 600px) and (max-height: 460px) {
+  :root .hud__lead {
+    right: 334px;
+    /* Reserve the primary band + a world band below the lead; the remainder is
+       the lead's own scroll area. Paint-truth: App reads this bounded box. */
+    max-height: calc(100% - 150px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+  }
+  :root .hud__lead::-webkit-scrollbar {
+    width: 8px;
+  }
+  :root .hud__lead::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(111, 147, 173, 0.55);
+  }
+  :root .hud__lead::-webkit-scrollbar-track {
+    background: rgba(9, 15, 26, 0.4);
+  }
+  :root .hud:not(:has(.panel ~ .panel)) > .panel {
+    top: max(8px, env(safe-area-inset-top));
+  }
+  :root .shell-menu {
+    top: max(8px, env(safe-area-inset-top));
+  }
+}
+
+/* ---- UI-RESET-66: lead growth on the laptop-class tall rail ----
+   The same #64/#65 lead growth that squeezed the short-landscape inspector also
+   reaches rail viewports taller than 460 px once the text scale lifts the lead
+   past the panel's content height. The all-#43-viewport audit measured laptop
+   1366x768 at scale 2: lead 481 px -> inspector top 495 -> panel 265 px, whose
+   backup body needed 250 px against 189 px (61 px inner scroll; replace 9 px).
+   Bound the lead with the same themed declared scroller so the inspector below
+   it keeps room for its tallest single panel. The 360 px reserve caps the lead at
+   408 px on 768 px tall (inspector top 422, panel 338, body 262 >= the 250 px
+   backup page). Scoped to the 461-900 px height band where the squeeze occurs:
+   the tall desktop rail (1920x1080 / 2560x1440) keeps its proven lead-on-top
+   composition untouched (its lead never reaches the cap and its panel already
+   fits), and laptop scale 1 (lead 283 px) sits under the cap. The two-panel 50/50
+   stack is left intact. Paint-truth: App reads the bounded lead box for
+   --shell-inspector-top and the camera insets. */
+@media (min-width: 1200px) and (min-height: 461px) and (max-height: 900px) {
+  :root .hud__lead {
+    max-height: calc(100% - 360px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+  }
+  :root .hud__lead::-webkit-scrollbar {
+    width: 8px;
+  }
+  :root .hud__lead::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(111, 147, 173, 0.55);
+  }
+  :root .hud__lead::-webkit-scrollbar-track {
+    background: rgba(9, 15, 26, 0.4);
+  }
+}
+
+/* ---- UI-RESET-66: lead growth in the phone column ----
+   Below 600 px the lead is a flow child of the .hud column, so the #64/#65
+   guidance/recovery content grows it with the text scale (measured 747 px of
+   lead on 390x844 at scale 2) and the panel — capped at 42 % of the column and
+   hugged to the dock by margin-top:auto — was squeezed to a band whose body
+   could not fit the record/backup/replace pages. #63 passed phone at scale 2
+   before that lead growth (394/394 at 3382cb6). The all-#43-viewport audit then
+   found the same squeeze at scale 1 on the shortest phone (360x640: lead 386 px,
+   panel 140 px, 80 px inner scroll), so the lead bound applies at EVERY text
+   scale, not just .text-large. Bound the lead and give it the same themed
+   declared scroller, so the panel keeps its band and the dock its row while every
+   lead control stays reachable with one flick. The cap reserves the panel's 42 %
+   band plus the dock row and gutters; on 390x844 / 412x915 the scale-1 lead
+   (~386 px) sits under the cap and is untouched, and the two-panel 26 % stack is
+   left intact. */
+@media (max-width: 599px) {
+  :root .hud__lead {
+    min-height: 0;
+    max-height: calc(100% - 42% - 64px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+  }
+  :root .hud__lead::-webkit-scrollbar {
+    width: 8px;
+  }
+  :root .hud__lead::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(111, 147, 173, 0.55);
+  }
+  :root .hud__lead::-webkit-scrollbar-track {
+    background: rgba(9, 15, 26, 0.4);
+  }
+}
+
+/* ---- UI-RESET-66: the shortest phone column (360x640) ----
+   At 360x640 the 42 % panel cap plus the objective lead and the dock row
+   over-subscribe the 624 px content column, so the single inspector was
+   flex-squeezed below its content and inner-scrolled (ts1 backup/replace
+   3/18 px; ts2 record/backup/replace 53/97/45 px). The inspector body is the
+   spec 6.1 "0 px inner-panel-scroll" surface; the objective lead is guidance,
+   so on this short column the lead yields height and scrolls (it already has
+   overflow-y:auto + a themed scrollbar + touch-action:pan-y from the phone
+   block above) while the single inspector takes the height its content needs.
+   ts1: lead <= 264 px leaves >= 256 px for the panel (replace body 170 + 76 px
+   chrome = 246 px). ts2: lead <= 200 px leaves >= 378 px (backup body 283 + 76
+   = 359 px) and the save panel's definite 42 % height is raised to a 360 px band. Scoped to <= 700 px
+   tall so 390x844 / 412x915 (taller) keep the proven 42 % composition, and the
+   two-panel 26 % stack is untouched. Paint-truth: App reads the same boxes. */
+@media (max-width: 599px) and (max-height: 700px) {
+  :root .hud__lead {
+    max-height: 264px;
+  }
+  :root.text-large .hud__lead {
+    max-height: 200px;
+  }
+  :root.text-large .hud:not(:has(.panel ~ .panel)) > .panel:has(.save-page) {
+    /* UI-RESET-66: save.css pins the Yard record to a DEFINITE height:42% (262 px)
+       so the body owns a real flex band and a page that fits never reads the
+       ceil/floor 1 px false-scroll. On this 624 px column the bounded 200 px lead
+       leaves a 378 px band, but 42 % = 262 px squeezed the body to 186 px and forced
+       an inner scroll (record/backup/replace 53/97/45 px). A max-height override alone
+       cannot move a definite height, so raise the DEFINITE band to calc(100% - 264px)
+       = 360 px (200 px lead + the same 64 px dock reserve the ts1 lead bound uses):
+       body 284 px >= tallest page 283 px, panel still 18 px clear of the dock, and
+       definite so the rounding boundary stays off the content edge. max-height clears
+       the 42 % cap so it cannot re-clamp the taller band. Scoped to .save-page; every
+       other panel keeps its proven 42 % composition. */
+    height: calc(100% - 264px);
+    max-height: calc(100% - 200px);
   }
 }
 
