@@ -1,0 +1,27 @@
+{
+  "headSha": "e12578ac8bcaab81a53d1e2fbd1fbb0ab3227eca",
+  "branch": "rw/66-access",
+  "summary": {
+    "phone": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "phone-landscape": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "desktop": {
+      "assertions": 394,
+      "passed": 394,
+      "screenshots": 16
+    },
+    "mirror": {
+      "assertions": 2,
+      "passed": 2,
+      "screenshots": 0
+    }
+  },
+  "failures": []
+}
