@@ -1,0 +1,413 @@
+{
+  "count": 30,
+  "allNonEmpty": true,
+  "uniqueSha256": 10,
+  "expectedUniqueSha256": 10,
+  "comparisons": [
+    {
+      "surface": "desktop-build.png",
+      "control": {
+        "a": "before-r1/desktop-build.png",
+        "b": "before-r2/desktop-build.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/desktop-build.png",
+        "b": "after/desktop-build.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "desktop-home-fresh.png",
+      "control": {
+        "a": "before-r1/desktop-home-fresh.png",
+        "b": "before-r2/desktop-home-fresh.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/desktop-home-fresh.png",
+        "b": "after/desktop-home-fresh.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "desktop-home-settings.png",
+      "control": {
+        "a": "before-r1/desktop-home-settings.png",
+        "b": "before-r2/desktop-home-settings.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/desktop-home-settings.png",
+        "b": "after/desktop-home-settings.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "desktop-store.png",
+      "control": {
+        "a": "before-r1/desktop-store.png",
+        "b": "before-r2/desktop-store.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/desktop-store.png",
+        "b": "after/desktop-store.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "desktop-yard.png",
+      "control": {
+        "a": "before-r1/desktop-yard.png",
+        "b": "before-r2/desktop-yard.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/desktop-yard.png",
+        "b": "after/desktop-yard.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "phone-build.png",
+      "control": {
+        "a": "before-r1/phone-build.png",
+        "b": "before-r2/phone-build.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/phone-build.png",
+        "b": "after/phone-build.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "phone-home-fresh.png",
+      "control": {
+        "a": "before-r1/phone-home-fresh.png",
+        "b": "before-r2/phone-home-fresh.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/phone-home-fresh.png",
+        "b": "after/phone-home-fresh.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "phone-home-settings.png",
+      "control": {
+        "a": "before-r1/phone-home-settings.png",
+        "b": "before-r2/phone-home-settings.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/phone-home-settings.png",
+        "b": "after/phone-home-settings.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "phone-store.png",
+      "control": {
+        "a": "before-r1/phone-store.png",
+        "b": "before-r2/phone-store.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/phone-store.png",
+        "b": "after/phone-store.png",
+        "identical": true
+      }
+    },
+    {
+      "surface": "phone-yard.png",
+      "control": {
+        "a": "before-r1/phone-yard.png",
+        "b": "before-r2/phone-yard.png",
+        "identical": true
+      },
+      "parity": {
+        "a": "before-r1/phone-yard.png",
+        "b": "after/phone-yard.png",
+        "identical": true
+      }
+    }
+  ],
+  "determinismControlPass": true,
+  "parityPass": true,
+  "note": "sha256 + PNG IHDR dims + bytes>0/valid-IHDR nonEmpty + decoded exact distinct-RGB count (from each run receipt). control = before-r1 vs before-r2 (same baseline build, independent browser runs) proves harness determinism; parity = before-r1 (baseline 1ba05f28 build) vs after (cleanup b774404 build). .muted-corner had zero references, so every surface must be byte-identical. Duplicate sha256 across runs is the EXPECTED pass condition here.",
+  "frames": [
+    {
+      "file": "after/desktop-build.png",
+      "sha256": "32d0710a6fa0f7ab82276521a4281b10b9331ff5d37cbf5fcdc4e5ac6249d8fd",
+      "width": 1440,
+      "height": 900,
+      "bytes": 93074,
+      "nonEmpty": true,
+      "distinctColors": 2283
+    },
+    {
+      "file": "after/desktop-home-fresh.png",
+      "sha256": "256eb45900a78955a977bb742b52f0ac28e956ded12022c4d914c162bd26e429",
+      "width": 1440,
+      "height": 900,
+      "bytes": 260142,
+      "nonEmpty": true,
+      "distinctColors": 649
+    },
+    {
+      "file": "after/desktop-home-settings.png",
+      "sha256": "9b1045a1dbca444b0695c16b09d5a3d9a5c793737efc8c0ab8afa7d4858b79b1",
+      "width": 1440,
+      "height": 900,
+      "bytes": 104972,
+      "nonEmpty": true,
+      "distinctColors": 420
+    },
+    {
+      "file": "after/desktop-store.png",
+      "sha256": "25ee25660ba3584285ca4e3ffd85de70a23d3e85fd4db2391e5a75db7e8434b2",
+      "width": 1440,
+      "height": 900,
+      "bytes": 105624,
+      "nonEmpty": true,
+      "distinctColors": 1758
+    },
+    {
+      "file": "after/desktop-yard.png",
+      "sha256": "5a87faced5f2ec61eb679253d39a064227d444c1605371d05965c92b98f91750",
+      "width": 1440,
+      "height": 900,
+      "bytes": 53759,
+      "nonEmpty": true,
+      "distinctColors": 1483
+    },
+    {
+      "file": "after/phone-build.png",
+      "sha256": "b650e1c279babc7d55de2a136c11f58bfe3b8760e9aa14c138d04cb8ce204f15",
+      "width": 780,
+      "height": 1688,
+      "bytes": 181976,
+      "nonEmpty": true,
+      "distinctColors": 4573
+    },
+    {
+      "file": "after/phone-home-fresh.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245202,
+      "nonEmpty": true,
+      "distinctColors": 1951
+    },
+    {
+      "file": "after/phone-home-settings.png",
+      "sha256": "1732d64af4a0529af12bdaff3d9a5268623caf961e8143166797f014bf069f55",
+      "width": 780,
+      "height": 1688,
+      "bytes": 106004,
+      "nonEmpty": true,
+      "distinctColors": 1323
+    },
+    {
+      "file": "after/phone-store.png",
+      "sha256": "68a2765c5b3166a289f2a0180b28af7c10fb13c96cb5ee9c8b822358f7701362",
+      "width": 780,
+      "height": 1688,
+      "bytes": 222477,
+      "nonEmpty": true,
+      "distinctColors": 4195
+    },
+    {
+      "file": "after/phone-yard.png",
+      "sha256": "edabad6189a75e8a2ddc37007f98b942f253c5b27dd80a751f58ebcc496f48c6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 116925,
+      "nonEmpty": true,
+      "distinctColors": 2498
+    },
+    {
+      "file": "before-r1/desktop-build.png",
+      "sha256": "32d0710a6fa0f7ab82276521a4281b10b9331ff5d37cbf5fcdc4e5ac6249d8fd",
+      "width": 1440,
+      "height": 900,
+      "bytes": 93074,
+      "nonEmpty": true,
+      "distinctColors": 2283
+    },
+    {
+      "file": "before-r1/desktop-home-fresh.png",
+      "sha256": "256eb45900a78955a977bb742b52f0ac28e956ded12022c4d914c162bd26e429",
+      "width": 1440,
+      "height": 900,
+      "bytes": 260142,
+      "nonEmpty": true,
+      "distinctColors": 649
+    },
+    {
+      "file": "before-r1/desktop-home-settings.png",
+      "sha256": "9b1045a1dbca444b0695c16b09d5a3d9a5c793737efc8c0ab8afa7d4858b79b1",
+      "width": 1440,
+      "height": 900,
+      "bytes": 104972,
+      "nonEmpty": true,
+      "distinctColors": 420
+    },
+    {
+      "file": "before-r1/desktop-store.png",
+      "sha256": "25ee25660ba3584285ca4e3ffd85de70a23d3e85fd4db2391e5a75db7e8434b2",
+      "width": 1440,
+      "height": 900,
+      "bytes": 105624,
+      "nonEmpty": true,
+      "distinctColors": 1758
+    },
+    {
+      "file": "before-r1/desktop-yard.png",
+      "sha256": "5a87faced5f2ec61eb679253d39a064227d444c1605371d05965c92b98f91750",
+      "width": 1440,
+      "height": 900,
+      "bytes": 53759,
+      "nonEmpty": true,
+      "distinctColors": 1483
+    },
+    {
+      "file": "before-r1/phone-build.png",
+      "sha256": "b650e1c279babc7d55de2a136c11f58bfe3b8760e9aa14c138d04cb8ce204f15",
+      "width": 780,
+      "height": 1688,
+      "bytes": 181976,
+      "nonEmpty": true,
+      "distinctColors": 4573
+    },
+    {
+      "file": "before-r1/phone-home-fresh.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245202,
+      "nonEmpty": true,
+      "distinctColors": 1951
+    },
+    {
+      "file": "before-r1/phone-home-settings.png",
+      "sha256": "1732d64af4a0529af12bdaff3d9a5268623caf961e8143166797f014bf069f55",
+      "width": 780,
+      "height": 1688,
+      "bytes": 106004,
+      "nonEmpty": true,
+      "distinctColors": 1323
+    },
+    {
+      "file": "before-r1/phone-store.png",
+      "sha256": "68a2765c5b3166a289f2a0180b28af7c10fb13c96cb5ee9c8b822358f7701362",
+      "width": 780,
+      "height": 1688,
+      "bytes": 222477,
+      "nonEmpty": true,
+      "distinctColors": 4195
+    },
+    {
+      "file": "before-r1/phone-yard.png",
+      "sha256": "edabad6189a75e8a2ddc37007f98b942f253c5b27dd80a751f58ebcc496f48c6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 116925,
+      "nonEmpty": true,
+      "distinctColors": 2498
+    },
+    {
+      "file": "before-r2/desktop-build.png",
+      "sha256": "32d0710a6fa0f7ab82276521a4281b10b9331ff5d37cbf5fcdc4e5ac6249d8fd",
+      "width": 1440,
+      "height": 900,
+      "bytes": 93074,
+      "nonEmpty": true,
+      "distinctColors": 2283
+    },
+    {
+      "file": "before-r2/desktop-home-fresh.png",
+      "sha256": "256eb45900a78955a977bb742b52f0ac28e956ded12022c4d914c162bd26e429",
+      "width": 1440,
+      "height": 900,
+      "bytes": 260142,
+      "nonEmpty": true,
+      "distinctColors": 649
+    },
+    {
+      "file": "before-r2/desktop-home-settings.png",
+      "sha256": "9b1045a1dbca444b0695c16b09d5a3d9a5c793737efc8c0ab8afa7d4858b79b1",
+      "width": 1440,
+      "height": 900,
+      "bytes": 104972,
+      "nonEmpty": true,
+      "distinctColors": 420
+    },
+    {
+      "file": "before-r2/desktop-store.png",
+      "sha256": "25ee25660ba3584285ca4e3ffd85de70a23d3e85fd4db2391e5a75db7e8434b2",
+      "width": 1440,
+      "height": 900,
+      "bytes": 105624,
+      "nonEmpty": true,
+      "distinctColors": 1758
+    },
+    {
+      "file": "before-r2/desktop-yard.png",
+      "sha256": "5a87faced5f2ec61eb679253d39a064227d444c1605371d05965c92b98f91750",
+      "width": 1440,
+      "height": 900,
+      "bytes": 53759,
+      "nonEmpty": true,
+      "distinctColors": 1483
+    },
+    {
+      "file": "before-r2/phone-build.png",
+      "sha256": "b650e1c279babc7d55de2a136c11f58bfe3b8760e9aa14c138d04cb8ce204f15",
+      "width": 780,
+      "height": 1688,
+      "bytes": 181976,
+      "nonEmpty": true,
+      "distinctColors": 4573
+    },
+    {
+      "file": "before-r2/phone-home-fresh.png",
+      "sha256": "cb58ff4dd3a11110bd19ea5f5b4c5fdf8c622a72b4bfc8797c11c3c4b674dba3",
+      "width": 780,
+      "height": 1688,
+      "bytes": 245202,
+      "nonEmpty": true,
+      "distinctColors": 1951
+    },
+    {
+      "file": "before-r2/phone-home-settings.png",
+      "sha256": "1732d64af4a0529af12bdaff3d9a5268623caf961e8143166797f014bf069f55",
+      "width": 780,
+      "height": 1688,
+      "bytes": 106004,
+      "nonEmpty": true,
+      "distinctColors": 1323
+    },
+    {
+      "file": "before-r2/phone-store.png",
+      "sha256": "68a2765c5b3166a289f2a0180b28af7c10fb13c96cb5ee9c8b822358f7701362",
+      "width": 780,
+      "height": 1688,
+      "bytes": 222477,
+      "nonEmpty": true,
+      "distinctColors": 4195
+    },
+    {
+      "file": "before-r2/phone-yard.png",
+      "sha256": "edabad6189a75e8a2ddc37007f98b942f253c5b27dd80a751f58ebcc496f48c6",
+      "width": 780,
+      "height": 1688,
+      "bytes": 116925,
+      "nonEmpty": true,
+      "distinctColors": 2498
+    }
+  ]
+}
