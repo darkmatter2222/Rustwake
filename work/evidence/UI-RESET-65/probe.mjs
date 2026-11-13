@@ -60,7 +60,7 @@
  */
 import { chromium } from "playwright-core";
 import {
-  existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync,
+  existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, statSync, rmSync,
 } from "node:fs";
 import { resolve, join, dirname } from "node:path";
 import { createHash } from "node:crypto";
@@ -287,6 +287,9 @@ async function exitBuild(page) {
   try { await clickButton(page, ".dock button", "Cancel", true); await page.waitForTimeout(200); } catch { /* no build */ }
 }
 async function deselect(page, touch) {
+  // Refit first: a zoomed camera maps empty cells under chrome / off-canvas, so taps miss and the
+  // dock stays on the branch row. Verify each tap lands on the CANVAS before firing it.
+  await resetView(page);
   const s = await readSim(page);
   const occupied = new Set((s.machines || []).map((m) => m.tile));
   occupied.add(2);
@@ -295,11 +298,21 @@ async function deselect(page, touch) {
   if (free.length === 0) return;
   const centerDist = (t) => Math.abs((t % 6) - 2.5) + Math.abs(Math.floor(t / 6) - 2.5);
   free.sort((a, b) => centerDist(a) - centerDist(b));
-  for (let attempt = 0; attempt < Math.min(8, free.length); attempt += 1) {
-    await tapTile(page, free[attempt], touch);
+  // Rest = the phone "Store" face is back, OR (rail forms) no branch row and no machine inspector.
+  const atRest = (d) => d.dockButtons.some((b) => b.text.trim() === "Store")
+    || (!d.dockButtons.some((b) => (b.cls || "").includes("dock__btn--branch")) && !(d.panel && (d.panel.cls || "").includes("panel--stack")));
+  for (let attempt = 0; attempt < Math.min(10, free.length); attempt += 1) {
+    const w = tileToWorld(free[attempt]);
+    const cam = await camInfo(page);
+    if (!cam) return;
+    const p = worldToScreen(cam, w.x, w.y);
+    const px = cam.left + p.x, py = cam.top + p.y;
+    const top = await page.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return e ? e.tagName : null; }, [px, py]);
+    if (top !== "CANVAS") continue;
+    if (touch) await page.touchscreen.tap(px, py); else await page.mouse.click(px, py);
     await page.waitForTimeout(200);
     const d = await dom(page);
-    if (d.dockButtons.some((b) => b.text.trim() === "Store")) return;
+    if (atRest(d)) return;
   }
 }
 async function openCatalog(page) {
@@ -552,18 +565,26 @@ function audioInit() {
 function reconcileWatch() {
   try {
     window.__rwReconcile = null;
+    // Record the FIRST non-empty reconcile text permanently. The <p class="reconcile"> only
+    // renders while started && reconciling, and the worker can adopt within a frame, so capture
+    // it three ways: inserted nodes, characterData edits, and a post-hoc querySelector on every
+    // mutation batch. An empty insert must not latch the slot (later text fills the same node).
+    const record = (text) => { const t = (text || "").trim(); if (t && !window.__rwReconcile) window.__rwReconcile = t; };
+    const capture = () => { const e = document.querySelector(".reconcile"); if (e) record(e.textContent); };
     const scan = (node) => {
       if (window.__rwReconcile || !node || node.nodeType !== 1) return;
-      if (node.matches && node.matches(".reconcile")) { window.__rwReconcile = node.textContent.trim(); return; }
-      if (node.querySelector) { const e = node.querySelector(".reconcile"); if (e) window.__rwReconcile = e.textContent.trim(); }
+      if (node.matches && node.matches(".reconcile")) { record(node.textContent); return; }
+      if (node.querySelector) { const e = node.querySelector(".reconcile"); if (e) record(e.textContent); }
     };
     const obs = new MutationObserver((muts) => {
       for (const m of muts) {
         for (const n of m.addedNodes) scan(n);
-        if (window.__rwReconcile) return;
+        if (m.type === "characterData" && m.target.parentElement && m.target.parentElement.matches && m.target.parentElement.matches(".reconcile")) record(m.target.textContent);
       }
+      capture();
     });
-    obs.observe(document, { childList: true, subtree: true });
+    obs.observe(document, { childList: true, subtree: true, characterData: true });
+    capture();
   } catch (e) { /* ignore */ }
 }
 
@@ -586,9 +607,13 @@ async function newPage(browser, formKey, seedVariant, opts = {}) {
   page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(`[${tag}] ${m.text()}`); });
   page.on("pageerror", (e) => pageErrors.push(`[${tag}] ${String(e)}`));
   const url = opts.ui48 ? BASE_URL + "?ui48" : BASE_URL;
+  // The loading loop must click Begin BEFORE the catch-up worker adopts, so it navigates with
+  // domcontentloaded (the gate is already mounted) rather than networkidle, which waits out the
+  // worker fetch + 500ms quiet and guarantees reconciling has already flipped false.
+  const waitUntil = opts.waitUntil || "networkidle";
   let nav = null;
   for (let attempt = 0; attempt < 2 && !nav; attempt += 1) {
-    try { nav = await page.goto(url, { waitUntil: "networkidle", timeout: 45000 }); }
+    try { nav = await page.goto(url, { waitUntil, timeout: 45000 }); }
     catch (e) { blockers.push(`${tag} goto attempt ${attempt}: ${String(e && e.message || e)}`); await page.waitForTimeout(1000); }
   }
   if (!nav) throw new Error(`${tag}: navigation to ${url} failed (see blockers)`);
@@ -812,27 +837,23 @@ async function matureLoop(browser, formKey) {
     { name: "c1 routes increased (input linked)", test: (b, a) => (a.sim?.routes ?? 0) > (b.sim?.routes ?? 0) },
   ]);
 
-  // 5) SELL through a real Store trade card (contract.sell).
-  let sellResource = null;
-  await runStep(page, form, "05-sell-resource", async () => {
-    await openStore(page, touch);
-    const card = await page.$(".store-trade");
-    sellResource = card ? await card.getAttribute("data-resource") : null;
-    const max = await page.$(".store-trade .store-trade__preset");
-    if (max) await max.click();
-    await page.waitForTimeout(150);
-    await clickSel(page, ".store-trade .store-trade__sell");
-  }, [
-    { name: "a sellable trade face was present", test: () => !!sellResource },
-    { name: "c1 credits increased by sale (real result)", test: (b, a) => (a.sim?.credits ?? 0) > (b.sim?.credits ?? 0) },
-  ]);
-
-  // 6) UPGRADE: re-inspect the furnace, choose a branch card, Buy (real machine.upgrade).
-  await runStep(page, form, "06-upgrade-furnace", async () => {
+  // 5) UPGRADE: re-inspect the furnace, choose a branch card, Buy (real machine.upgrade).
+  // Done before the sell so the yard ladder's upgrade fork clears: the new furnace is the only
+  // affordable upgrade in the mature yard, so spending the purse on it leaves no affordable
+  // upgrade and the dock returns to its rest faces (Store) for the sell step.
+  await runStep(page, form, "05-upgrade-furnace", async () => {
     await closePanel(page);
     const s = await readSim(page);
     const m = s.machines.find((x) => x.id === newMachineId);
-    await selectMachine(page, m.tile, touch);
+    // Landscape geometry can leave the furnace cell under chrome after the connect step's camera
+    // changes; retry selection (refitting between tries) until the Furnace inspector opens.
+    let opened = false;
+    for (let attempt = 0; attempt < 4 && !opened; attempt += 1) {
+      await selectMachine(page, m.tile, touch);
+      const panel = await page.$(".panel--stack");
+      if (panel) { const aria = await panel.getAttribute("aria-label"); opened = /Furnace/i.test(aria || ""); }
+      if (!opened) { await resetView(page); await page.waitForTimeout(200); }
+    }
     await page.waitForSelector(".panel--stack", { timeout: 4000 });
     await page.waitForTimeout(150);
     await clickSel(page, '.upgrade-card[data-branch="speed"]');
@@ -846,6 +867,22 @@ async function matureLoop(browser, formKey) {
     } },
     { name: "credits spent on upgrade", test: (b, a) => (a.sim?.credits ?? 0) < (b.sim?.credits ?? 0) },
     { name: "c1 upgrade read-back receipt shown", test: (b, a) => !!a.dom.upgradeReceipt },
+  ]);
+
+  // 6) SELL through a real Store trade card (contract.sell). The upgrade fork has cleared, so a
+  // real empty-cell deselect restores the dock rest faces (Store) on phone; rail forms use the slot.
+  let sellResource = null;
+  await runStep(page, form, "06-sell-resource", async () => {
+    await openStore(page, touch);
+    const card = await page.$(".store-trade");
+    sellResource = card ? await card.getAttribute("data-resource") : null;
+    const max = await page.$(".store-trade .store-trade__preset");
+    if (max) await max.click();
+    await page.waitForTimeout(150);
+    await clickSel(page, ".store-trade .store-trade__sell");
+  }, [
+    { name: "a sellable trade face was present", test: () => !!sellResource },
+    { name: "c1 credits increased by sale (real result)", test: (b, a) => (a.sim?.credits ?? 0) > (b.sim?.credits ?? 0) },
   ]);
 
   // c4: mute through the real in-game Settings; master gain must write 0 then back to 0.9.
@@ -1016,7 +1053,7 @@ async function readerLoop(browser, formKey) {
 // ============================ LOADING (long absence -> reconcile + report) ============================
 async function loadingLoop(browser, formKey) {
   const form = `${formKey}-loading`;
-  const { context, page } = await newPage(browser, formKey, "old", { tag: form });
+  const { context, page } = await newPage(browser, formKey, "old", { tag: form, waitUntil: "domcontentloaded" });
   // Begin, then poll for the reconcile status line and the adopted return report.
   let reconcileSeen = null, reportDom = null, catchupMarks = null;
   await runStep(page, form, "01-catchup-report", async () => {
@@ -1145,6 +1182,9 @@ function auditFrames(expectedDims) {
 }
 
 async function main() {
+  // Clear any stale frames from prior runs so the one-pass audit only mirrors
+  // this run's captures (orphan files have no frameMeta entry -> hashOk=false).
+  rmSync(FRAMES, { recursive: true, force: true });
   mkdirSync(FRAMES, { recursive: true });
   console.log("BASE_URL=", BASE_URL, "BUILD_SHA=", BUILD_SHA, "FORMS=", FORMS.join(","), "chrome=", executablePath);
   const browser = await chromium.launch({ executablePath, headless: true });
