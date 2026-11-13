@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import type { SaveSettings } from "../../game/persistence/save";
 import { t } from "../../game/content/strings";
 import { RESET_COPY, SETTINGS_COPY } from "../home/copy";
@@ -17,7 +17,7 @@ import { Row } from "./shared";
  * already requests it, the toggle is disabled with a note rather than pretending
  * the saved preference is in charge.
  */
-export function SettingsPanel(props: {
+export const SettingsPanel = memo(function SettingsPanel(props: {
   settings: SaveSettings;
   osReducedMotion: boolean;
   onToggleMute: () => void;
@@ -139,4 +139,4 @@ export function SettingsPanel(props: {
       </div>
     </div>
   );
-}
+});

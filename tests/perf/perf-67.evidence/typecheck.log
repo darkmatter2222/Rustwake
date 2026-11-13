@@ -1,0 +1,6 @@
+# Ladder receipt — typecheck (dev-67b, #67)
+# Command: pnpm exec tsc --noEmit
+# Code head (buildSha): 2ac4213b4f486555e4e29e8ccdb2022c8f0d8e6f
+# Exit code: 0
+# Result: 0 errors (tsc emitted no diagnostics; raw output below is empty)
+# --- raw tsc output ---

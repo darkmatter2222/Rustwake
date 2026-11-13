@@ -570,6 +570,10 @@ export function App({
     else openMenu();
   }, [menuOpen, openMenu, closeMenu]);
 
+  // UI-RESET-67: one stable close handler shared by every detail panel so their
+  // memoized onClose prop keeps a stable identity across the 10 Hz sim tick.
+  const closeSelection = useCallback(() => setSelected(null), []);
+
   /**
    * UI-RESET-52: opening the catalog arms the same ghost the old Build face
    * armed (first unlocked machine, first free tile) so the yard keeps a live
@@ -998,6 +1002,12 @@ export function App({
     intentRef.current = true;
   }, []);
 
+  // UI-RESET-67: stable zoom faces so the memoized ShellZoom never re-renders on
+  // the 10 Hz sim tick (its only props are these handlers). Same clamped math the
+  // wheel/pinch/keys use; identity is stable for the life of the component.
+  const zoomIn = useCallback(() => zoomBy(ZOOM_STEP), [zoomBy]);
+  const zoomOut = useCallback(() => zoomBy(1 / ZOOM_STEP), [zoomBy]);
+
   /** Home / Reset view: the fresh shell fit wins and the intent is retired. */
   const resetCamera = useCallback(() => {
     const parent = canvasRef.current?.parentElement;
@@ -1233,21 +1243,21 @@ export function App({
             tick={state.tick}
             powerRatio={state.powerRatio}
             dispatch={dispatch}
-            onClose={() => setSelected(null)}
+            onClose={closeSelection}
           />
         ) : null}
         {selected === -2 ? (
-          <StorePanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+          <StorePanel state={state} dispatch={dispatch} onClose={closeSelection} />
         ) : null}
         {selected === -3 ? (
-          <ResearchPanel state={state} dispatch={dispatch} onClose={() => setSelected(null)} />
+          <ResearchPanel state={state} dispatch={dispatch} onClose={closeSelection} />
         ) : null}
         {selected === -4 ? (
           <YardPanel
             state={state}
             exportText={store.exportSave()}
             onImport={(text) => store.importSave(text)}
-            onClose={() => setSelected(null)}
+            onClose={closeSelection}
           />
         ) : null}
         {/* UI-RESET-62: the settings inspector (-5). Same panel grammar as the
@@ -1260,7 +1270,7 @@ export function App({
             onCycleText={cycleTextScale}
             onToggleReducedMotion={toggleReducedMotion}
             onReset={openReset}
-            onClose={() => setSelected(null)}
+            onClose={closeSelection}
           />
         ) : null}
         {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
@@ -1380,8 +1390,8 @@ export function App({
             band; the camera fit reserves their gutter so they never cover
             yard cells. */}
         <ShellZoom
-          onZoomIn={() => zoomBy(ZOOM_STEP)}
-          onZoomOut={() => zoomBy(1 / ZOOM_STEP)}
+          onZoomIn={zoomIn}
+          onZoomOut={zoomOut}
           onReset={resetCamera}
         />
       </div>

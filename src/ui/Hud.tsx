@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { BLUEPRINTS, TUNING } from "../game/content/defs";
 import { t } from "../game/content/strings";
 import type { SimState } from "../game/simulation/types";
@@ -233,7 +233,7 @@ export function HudTop(props: {
  * icon-only (no text), so the resting-screen line/tier census is unchanged, and the
  * default mode paints the original DOM verbatim.
  */
-export function ObjectiveCard(props: {
+export const ObjectiveCard = memo(function ObjectiveCard(props: {
   text: string;
   phase?: string;
   numbers: string;
@@ -296,7 +296,7 @@ export function ObjectiveCard(props: {
       </div>
     </div>
   );
-}
+});
 
 export function DockButtons(props: {
   primary: PrimaryAction;

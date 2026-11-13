@@ -1,0 +1,3544 @@
+{
+  "issue": 67,
+  "label": "before",
+  "sha": "f80726970287a9c6da96e0c475b77dc0daccd96b",
+  "url": "http://localhost:4167/",
+  "generatedOn": "2026-11-13T07:33:43.146Z",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "headless": true,
+    "engine": "chromium (playwright-core)"
+  },
+  "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical device. Viewport/dpr/isMobile/hasTouch/reduced-motion emulated; CPU/GPU/thermal/real-touch/mobile-network are NOT. Frame-time and memory are host-relative; before/after compared under identical conditions.",
+  "durations": {
+    "idleMs": 1800,
+    "openFrameMs": 900,
+    "reducedMs": 1300,
+    "quick": false
+  },
+  "devices": [
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "phone-ts1-mature",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 12.5,
+          "domContentLoadedMs": 34.4,
+          "loadEventEndMs": 34.9,
+          "responseEndMs": 6.6,
+          "durationMs": 34.9,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 72,
+        "lcpMs": 72,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.59,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.3
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 6.4,
+        "totalJSHeapMB": 10.01,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13,
+            2.2,
+            14.8
+          ],
+          "medianMs": 13,
+          "p95Ms": 14.8,
+          "maxMs": 14.8,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            26,
+            10,
+            12
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 50,
+              "y": 424
+            },
+            {
+              "tile": 1,
+              "x": 96,
+              "y": 424
+            },
+            {
+              "tile": 3,
+              "x": 188,
+              "y": 424
+            }
+          ],
+          "medianMs": 12,
+          "p95Ms": 26,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.59,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 19.6,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            14.4,
+            21.6,
+            15.2
+          ],
+          "medianMs": 15.2,
+          "p95Ms": 21.6,
+          "maxMs": 21.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            90,
+            88,
+            87
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 50,
+              "y": 424
+            },
+            {
+              "tile": 1,
+              "x": 96,
+              "y": 424
+            },
+            {
+              "tile": 3,
+              "x": 188,
+              "y": 424
+            }
+          ],
+          "medianMs": 88,
+          "p95Ms": 90,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.4,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 61
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 158,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.56,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.4
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.54,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.4
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 158,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.57,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.4
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 8,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.62,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.2
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 241,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 21.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": {
+          "count": 120,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 1.74,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 8.06,
+          "totalJSHeapMB": 14.57,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 9.8,
+          "totalJSHeapMB": 15.12,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 78,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "memory": {
+          "usedJSHeapMB": 12.35,
+          "totalJSHeapMB": 19.56,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-phone-ts1-mature-reduced.png",
+          "bytes": 128659,
+          "sha256": "c247926ea3c877e996657a49dfff418cdd08918e3494ba20ec3b7595b93c0a97"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-ts1-mature.png",
+        "bytes": 128462,
+        "sha256": "079cdeac88d732113b8e8cdcae622178d71aa058d646acc18c40fc4ff6260303"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "phone-ts2-mature",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 10.6,
+          "domContentLoadedMs": 35.3,
+          "loadEventEndMs": 35.8,
+          "responseEndMs": 6.6,
+          "durationMs": 35.8,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.58,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.3
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.76,
+        "totalJSHeapMB": 9.51,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.2,
+            7.2,
+            17.3
+          ],
+          "medianMs": 12.2,
+          "p95Ms": 17.3,
+          "maxMs": 17.3,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            31,
+            10,
+            11
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 45,
+              "y": 463
+            },
+            {
+              "tile": 1,
+              "x": 93,
+              "y": 463
+            },
+            {
+              "tile": 3,
+              "x": 189,
+              "y": 463
+            }
+          ],
+          "medianMs": 11,
+          "p95Ms": 31,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.59,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            14.4,
+            14,
+            12.6
+          ],
+          "medianMs": 14,
+          "p95Ms": 14.4,
+          "maxMs": 14.4,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            70,
+            79,
+            67
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 45,
+              "y": 463
+            },
+            {
+              "tile": 1,
+              "x": 93,
+              "y": 463
+            },
+            {
+              "tile": 3,
+              "x": 189,
+              "y": 463
+            }
+          ],
+          "medianMs": 70,
+          "p95Ms": 79,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.59,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 156,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.47,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 22.1,
+            "maxMs": 22.1,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.7
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.47,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.7
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.41,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.9
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.49,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 241,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 19.7,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": {
+          "count": 120,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "heapGrowthMB": 2.07,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 7.47,
+          "totalJSHeapMB": 11.57,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 9.54,
+          "totalJSHeapMB": 15.37,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 79,
+          "meanMs": 16.57,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        },
+        "memory": {
+          "usedJSHeapMB": 12.32,
+          "totalJSHeapMB": 19.56,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-phone-ts2-mature-reduced.png",
+          "bytes": 138391,
+          "sha256": "1c30b4ea4437bcd7bf54ca93c40acb56f2e0caa4e8294d3f0bd76b35f256590a"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-ts2-mature.png",
+        "bytes": 137995,
+        "sha256": "a9b8aec7563959393dd318a9065ffb07e7f6c7841f0f38332824a73930fe713c"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "desktop-ts1-mature",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.2,
+          "domContentLoadedMs": 34.3,
+          "loadEventEndMs": 35,
+          "responseEndMs": 7.2,
+          "durationMs": 35,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 76,
+        "lcpMs": 76,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.65,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 18.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.1
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.52,
+        "totalJSHeapMB": 10.01,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.4,
+            16.1,
+            13
+          ],
+          "medianMs": 13,
+          "p95Ms": 16.1,
+          "maxMs": 16.1,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            25,
+            11,
+            12
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 603,
+              "y": 364
+            },
+            {
+              "tile": 1,
+              "x": 701,
+              "y": 364
+            },
+            {
+              "tile": 3,
+              "x": 897,
+              "y": 364
+            }
+          ],
+          "medianMs": 12,
+          "p95Ms": 25,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.58,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            12.5,
+            11.1,
+            15.6
+          ],
+          "medianMs": 12.5,
+          "p95Ms": 15.6,
+          "maxMs": 15.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            75,
+            82,
+            78
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 603,
+              "y": 364
+            },
+            {
+              "tile": 1,
+              "x": 701,
+              "y": 364
+            },
+            {
+              "tile": 3,
+              "x": 897,
+              "y": 364
+            }
+          ],
+          "medianMs": 78,
+          "p95Ms": 82,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.59,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 158,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 54,
+            "meanMs": 16.69,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 59.9
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 158,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.66,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.4,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 61
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.49,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 240,
+          "meanMs": 16.7,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": null,
+        "heapGrowthMB": -1.22,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 9.24,
+          "totalJSHeapMB": 14.82,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 8.02,
+          "totalJSHeapMB": 15.36,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 79,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "memory": {
+          "usedJSHeapMB": 12.77,
+          "totalJSHeapMB": 19.55,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-desktop-ts1-mature-reduced.png",
+          "bytes": 62098,
+          "sha256": "c3f9a8ab586d0af35d52870634407f9d1164cbde5a5286c1f0a9a9bb6f54c814"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-desktop-ts1-mature.png",
+        "bytes": 62156,
+        "sha256": "f0e2793107a2a604dcb7578cf0093c2942a1e8535bf23b5f7af6a4c2158cfa48"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "desktop-ts2-mature",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.9,
+          "domContentLoadedMs": 36.7,
+          "loadEventEndMs": 37.3,
+          "responseEndMs": 8,
+          "durationMs": 37.3,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 76,
+        "lcpMs": 76,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.58,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.3
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 6.76,
+        "totalJSHeapMB": 10.26,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            12.6,
+            10.5,
+            6
+          ],
+          "medianMs": 10.5,
+          "p95Ms": 12.6,
+          "maxMs": 12.6,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            30,
+            9,
+            11
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 651,
+              "y": 492
+            },
+            {
+              "tile": 1,
+              "x": 730,
+              "y": 492
+            },
+            {
+              "tile": 3,
+              "x": 888,
+              "y": 492
+            }
+          ],
+          "medianMs": 11,
+          "p95Ms": 30,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.62,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.2
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            11.3,
+            14.7,
+            12.1
+          ],
+          "medianMs": 12.1,
+          "p95Ms": 14.7,
+          "maxMs": 14.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            77,
+            84,
+            83
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 651,
+              "y": 492
+            },
+            {
+              "tile": 1,
+              "x": 730,
+              "y": 492
+            },
+            {
+              "tile": 3,
+              "x": 888,
+              "y": 492
+            }
+          ],
+          "medianMs": 83,
+          "p95Ms": 84,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.6,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.2
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 155,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.43,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.9
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.63,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 156,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.53,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.5
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 8,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.5,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 241,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 17.1,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "resizeFrame": null,
+        "heapGrowthMB": -1.37,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 9.17,
+          "totalJSHeapMB": 15.32,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 7.8,
+          "totalJSHeapMB": 15.86,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 79,
+          "meanMs": 16.63,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "memory": {
+          "usedJSHeapMB": 11.88,
+          "totalJSHeapMB": 19.55,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-desktop-ts2-mature-reduced.png",
+          "bytes": 116157,
+          "sha256": "6c4205e00e886ff7f46699a8d6b06bec30fa081cc6e2e5053c5709c4d09d2e49"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-desktop-ts2-mature.png",
+        "bytes": 116295,
+        "sha256": "15e3eece6f034a09cdf7cf01f36d98e32fd9b9a262ba4aaf8467be85caffff74"
+      }
+    },
+    {
+      "device": "phone-landscape",
+      "textScale": 1,
+      "fixture": "mature",
+      "tag": "phone-landscape-ts1-mature",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.4,
+          "domContentLoadedMs": 37.2,
+          "loadEventEndMs": 37.8,
+          "responseEndMs": 7.3,
+          "durationMs": 37.8,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 76,
+        "lcpMs": 76,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 108,
+        "meanMs": 16.69,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.9,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 59.9
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.49,
+        "totalJSHeapMB": 10.76,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13.7,
+            1.7,
+            12
+          ],
+          "medianMs": 12,
+          "p95Ms": 13.7,
+          "maxMs": 13.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            "timeout",
+            "timeout",
+            "timeout"
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 222,
+              "y": 186
+            },
+            {
+              "tile": 1,
+              "x": 257,
+              "y": 186
+            },
+            {
+              "tile": 3,
+              "x": 328,
+              "y": 186
+            }
+          ],
+          "medianMs": null,
+          "p95Ms": null,
+          "okCount": 0
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            15.7,
+            13,
+            11.7
+          ],
+          "medianMs": 13,
+          "p95Ms": 15.7,
+          "maxMs": 15.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            "timeout",
+            "timeout",
+            "timeout"
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 222,
+              "y": 186
+            },
+            {
+              "tile": 1,
+              "x": 257,
+              "y": 186
+            },
+            {
+              "tile": 3,
+              "x": 328,
+              "y": 186
+            }
+          ],
+          "medianMs": null,
+          "p95Ms": null,
+          "okCount": 0
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.64,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 171,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.64,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 155,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.43,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.9
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 156,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 54,
+            "meanMs": 16.68,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 7,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.51,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.6
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 240,
+          "meanMs": 16.69,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 17.1,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "resizeFrame": {
+          "count": 120,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "heapGrowthMB": 2.44,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 8.89,
+          "totalJSHeapMB": 16.31,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 11.33,
+          "totalJSHeapMB": 16.87,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 79,
+          "meanMs": 16.56,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 23.7,
+          "maxMs": 23.7,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.4
+        },
+        "memory": {
+          "usedJSHeapMB": 15.79,
+          "totalJSHeapMB": 29.55,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-phone-landscape-ts1-mature-reduced.png",
+          "bytes": 107050,
+          "sha256": "2c47b9d441b8b16e0352d1e66f4a4e484dc9f577cdea145cb13109c78abf38d0"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-landscape-ts1-mature.png",
+        "bytes": 106131,
+        "sha256": "9da0599cae56f8674db0b29a7ee000343496a173919a237102a6f604de1adb40"
+      }
+    },
+    {
+      "device": "phone-landscape",
+      "textScale": 2,
+      "fixture": "mature",
+      "tag": "phone-landscape-ts2-mature",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.8,
+          "domContentLoadedMs": 36.1,
+          "loadEventEndMs": 36.8,
+          "responseEndMs": 7.6,
+          "durationMs": 36.8,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 88,
+        "lcpMs": 88,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.63,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.1
+      },
+      "idleLongTasks": 0,
+      "memoryIdle": {
+        "usedJSHeapMB": 5.47,
+        "totalJSHeapMB": 10.51,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13,
+            6.8,
+            1.7
+          ],
+          "medianMs": 6.8,
+          "p95Ms": 13,
+          "maxMs": 13,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            "timeout",
+            "timeout",
+            "timeout"
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 222,
+              "y": 186
+            },
+            {
+              "tile": 1,
+              "x": 257,
+              "y": 186
+            },
+            {
+              "tile": 3,
+              "x": 328,
+              "y": 186
+            }
+          ],
+          "medianMs": null,
+          "p95Ms": null,
+          "okCount": 0
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 109,
+          "meanMs": 16.61,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.2
+        },
+        "idleLongTasks": 0,
+        "menuOpen": {
+          "samples": [
+            14.8,
+            16.8,
+            10.9
+          ],
+          "medianMs": 14.8,
+          "p95Ms": 16.8,
+          "maxMs": 16.8,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            "timeout",
+            "timeout",
+            "timeout"
+          ],
+          "points": [
+            {
+              "tile": 0,
+              "x": 222,
+              "y": 186
+            },
+            {
+              "tile": 1,
+              "x": 257,
+              "y": 186
+            },
+            {
+              "tile": 3,
+              "x": 328,
+              "y": 186
+            }
+          ],
+          "medianMs": null,
+          "p95Ms": null,
+          "okCount": 0
+        },
+        "storeFrame": {
+          "count": 55,
+          "meanMs": 16.59,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "openMs": 157,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 0,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.65,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        },
+        {
+          "name": "Research",
+          "openMs": 159,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 4,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.66,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        },
+        {
+          "name": "Yard",
+          "openMs": 156,
+          "attempts": [
+            {
+              "how": "face",
+              "index": 1,
+              "panels": 1
+            }
+          ],
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.65,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        },
+        {
+          "name": "Settings",
+          "openMs": 10,
+          "clicked": true,
+          "present": 1,
+          "frameWhileOpen": {
+            "count": 55,
+            "meanMs": 16.63,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 241,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 22.7,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "resizeFrame": {
+          "count": 120,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "heapGrowthMB": -0.54,
+        "longTasks": 0,
+        "memBeforeStress": {
+          "usedJSHeapMB": 9.34,
+          "totalJSHeapMB": 16.31,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 8.8,
+          "totalJSHeapMB": 16.87,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "reducedMotion": {
+        "idleFrame": {
+          "count": 79,
+          "meanMs": 16.58,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.3
+        },
+        "memory": {
+          "usedJSHeapMB": 13.54,
+          "totalJSHeapMB": 28.55,
+          "jsHeapLimitMB": 4192
+        },
+        "shot": {
+          "file": "frames/perf-67-before-phone-landscape-ts2-mature-reduced.png",
+          "bytes": 110341,
+          "sha256": "0f69b2b53790043bfa86c70a41682968f988142b6389bd51b39ef4f6bc56dd43"
+        }
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-landscape-ts2-mature.png",
+        "bytes": 108936,
+        "sha256": "e7440039d6bc866b8446d0eff7de66d5b0706100c22845947628ce6fc3455496"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "opening",
+      "tag": "phone-ts1-opening",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.6,
+          "domContentLoadedMs": 38.9,
+          "loadEventEndMs": 39,
+          "responseEndMs": 8.9,
+          "durationMs": 39,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 108,
+        "meanMs": 16.69,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 59.9
+      },
+      "memoryIdle": {
+        "usedJSHeapMB": 6.47,
+        "totalJSHeapMB": 11.25,
+        "jsHeapLimitMB": 4192
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-ts1-opening.png",
+        "bytes": 128873,
+        "sha256": "d7939891192ccc98018b85bbcc14d5936b9efd0767ba4a7e51311309e43e8117"
+      }
+    },
+    {
+      "device": "desktop",
+      "textScale": 1,
+      "fixture": "opening",
+      "tag": "desktop-ts1-opening",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 12.9,
+          "domContentLoadedMs": 35.8,
+          "loadEventEndMs": 35.8,
+          "responseEndMs": 8.4,
+          "durationMs": 35.8,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 84,
+        "lcpMs": 84,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 4,
+          "totalTransferSize": 124530,
+          "totalEncodedBodySize": 122310,
+          "totalDecodedBodySize": 422552,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 109,
+        "meanMs": 16.55,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.8,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60.4
+      },
+      "memoryIdle": {
+        "usedJSHeapMB": 6.39,
+        "totalJSHeapMB": 11,
+        "jsHeapLimitMB": 4192
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-desktop-ts1-opening.png",
+        "bytes": 60611,
+        "sha256": "48275b70b785e5a337cb171e26f092a7048eb1180c3c5aa8958dc030e5452026"
+      }
+    },
+    {
+      "device": "phone",
+      "textScale": 1,
+      "fixture": "mature-absence",
+      "tag": "phone-ts1-catchup",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 11.7,
+          "domContentLoadedMs": 36.7,
+          "loadEventEndMs": 37.4,
+          "responseEndMs": 7,
+          "durationMs": 37.4,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 76,
+        "lcpMs": 76,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 5,
+          "totalTransferSize": 129074,
+          "totalEncodedBodySize": 126554,
+          "totalDecodedBodySize": 435958,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "css": {
+              "count": 1,
+              "transferSize": 10706,
+              "encodedBodySize": 10406,
+              "decodedBodySize": 61937,
+              "names": [
+                "index-Eo_6W0ie.css"
+              ]
+            },
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10069,
+              "encodedBodySize": 9769,
+              "decodedBodySize": 26691,
+              "names": [
+                "tables-KTf0wpwx.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 57061,
+              "encodedBodySize": 56761,
+              "decodedBodySize": 190898,
+              "names": [
+                "index-DMXDbGe_.js"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            },
+            "worker": {
+              "count": 1,
+              "transferSize": 4544,
+              "encodedBodySize": 4244,
+              "decodedBodySize": 13406,
+              "names": [
+                "catchup.worker-G_Jyr7uh.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "catchup": {
+        "workerLoaded": true,
+        "reportBefore": {
+          "panels": 0,
+          "dismiss": null
+        },
+        "reportAfterBegin": {
+          "panels": 1,
+          "dismiss": "Back to yard"
+        },
+        "catchupRan": true,
+        "camOk": true
+      },
+      "consoleErrors": [],
+      "shot": {
+        "file": "frames/perf-67-before-phone-ts1-catchup.png",
+        "bytes": 142862,
+        "sha256": "5ea13943e6b763c12e14384247671e870cb657405034c44c39c11e0b1b6ec16e"
+      }
+    }
+  ],
+  "hardFailures": [],
+  "cpuThrottleRate": 6,
+  "buildInventory": [
+    {
+      "name": "catchup.worker-G_Jyr7uh.js",
+      "role": "lazyWorkerJs",
+      "bytes": 13406,
+      "sha256": "0c784f3e68570923a088c2449818efc64a65c88ccceb4c6c60931c756271dd50"
+    },
+    {
+      "name": "index-DMXDbGe_.js",
+      "role": "entryJs",
+      "bytes": 190898,
+      "sha256": "d19ad82eb924fc6c8bfea2e42b10068c37e5941761f9bc9ec687853751fd73d5"
+    },
+    {
+      "name": "index-Eo_6W0ie.css",
+      "role": "css",
+      "bytes": 61937,
+      "sha256": "d3845bbe72d85da6c74d158b573f81dde6cdd3b76d20224fba0fd6bce797abc8"
+    },
+    {
+      "name": "tables-KTf0wpwx.js",
+      "role": "tablesJs",
+      "bytes": 26691,
+      "sha256": "3a817e9984a6ef0e6a8940cc870d47ed38bb517f8fff2bb1accc58774a155142"
+    },
+    {
+      "name": "vendor-Bt4lNSbZ.js",
+      "role": "vendorJs",
+      "bytes": 141658,
+      "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+    }
+  ],
+  "pass": true,
+  "budgets": {
+    "_meta": {
+      "issue": "https://github.com/darkmatter2222/Rustwake/issues/67",
+      "purpose": "Experience-level performance budgets for the redesigned Rustwake game. These are ceilings a player should never feel exceed, NOT a byte-shaving contest. The historical 233000-byte entry ceiling is explicitly NOT a hard constraint here; entryDecodedBytes is a realistic headroom budget, and total transferred bytes are measured as decoded payload (this build ships procedural audio + procedural canvas sprites, so binary media is zero).",
+      "groundedIn": "Baseline measured at main f80726970287a9c6da96e0c475b77dc0daccd96b via tests/perf/perf-67.evidence.mjs (vite preview of the production build, headless Chromium, 6x CPU throttle for the low-end pass). See docs/PERF_BUDGETS.md for the full protocol and the device-vs-emulation limitation.",
+      "evaluationNote": "The probe compares interaction budgets against the MEDIAN open/tap latency (the budget keys retain the *P95Ms names the probe reads). Frame budgets use P95 of requestAnimationFrame deltas. 'met=null' means not measured (e.g. landscape machine-tap automation does not land) or no budget set; those are reported as unknown, never silently passed.",
+      "deviceLimitation": "All numbers are AGENT headless emulation on a fast host with a local preview (no real network, no real low-end GPU/compositor). Emulation is a necessary-but-not-sufficient floor: meeting a budget here does not prove a real mid/low-end phone meets it. Frame time stays at the 60Hz vsync floor (16.8ms) even at 6x CPU throttle on this host, so throttled interaction latency is the sensitive rerender-cost signal."
+    },
+    "budgets": {
+      "coldLoad": {
+        "mobileFcpMs": 1500,
+        "desktopFcpMs": 1000,
+        "mobileLoadMs": 2500,
+        "desktopLoadMs": 1800
+      },
+      "transferred": {
+        "entryDecodedBytes": 240000,
+        "totalColdDecodedBytes": 520000,
+        "imageAudioBinaryCount": 0
+      },
+      "interaction": {
+        "menuOpenP95Ms": 100,
+        "machineTapP95Ms": 120,
+        "throttledMenuOpenP95Ms": 200,
+        "throttledMachineTapP95Ms": 250
+      },
+      "frame": {
+        "idleP95Ms": 20,
+        "idleDroppedPct": 2,
+        "panelOpenP95Ms": 33,
+        "stressP95Ms": 50,
+        "throttledIdleP95Ms": 33,
+        "throttledIdleDroppedPct": 5,
+        "throttledStoreP95Ms": 50
+      },
+      "memory": {
+        "idleUsedHeapMB": 64,
+        "sessionGrowthMB": 16
+      }
+    }
+  },
+  "budgetVerdicts": {
+    "verdicts": [
+      {
+        "metric": "fcp",
+        "scope": "phone-ts1-mature",
+        "value": 72,
+        "limit": 1500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "phone-ts1-mature",
+        "value": 34.9,
+        "limit": 2500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "phone-ts1-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "phone-ts1-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "phone-ts1-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "phone-ts1-mature",
+        "value": 13,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "phone-ts1-mature",
+        "value": 12,
+        "limit": 120,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "phone-ts1-mature",
+        "value": 15.2,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "phone-ts1-mature",
+        "value": 88,
+        "limit": 250,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleP95",
+        "scope": "phone-ts1-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "phone-ts1-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "phone-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "phone-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "phone-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "phone-ts1-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "phone-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "phone-ts1-mature",
+        "value": 6.4,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "phone-ts1-mature",
+        "value": 1.74,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "fcp",
+        "scope": "phone-ts2-mature",
+        "value": 84,
+        "limit": 1500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "phone-ts2-mature",
+        "value": 35.8,
+        "limit": 2500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "phone-ts2-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "phone-ts2-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "phone-ts2-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "phone-ts2-mature",
+        "value": 12.2,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "phone-ts2-mature",
+        "value": 11,
+        "limit": 120,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "phone-ts2-mature",
+        "value": 14,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "phone-ts2-mature",
+        "value": 70,
+        "limit": 250,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleP95",
+        "scope": "phone-ts2-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "phone-ts2-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "phone-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "phone-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "phone-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "phone-ts2-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "phone-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "phone-ts2-mature",
+        "value": 5.76,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "phone-ts2-mature",
+        "value": 2.07,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "fcp",
+        "scope": "desktop-ts1-mature",
+        "value": 76,
+        "limit": 1000,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "desktop-ts1-mature",
+        "value": 35,
+        "limit": 1800,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "desktop-ts1-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "desktop-ts1-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "desktop-ts1-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "desktop-ts1-mature",
+        "value": 13,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "desktop-ts1-mature",
+        "value": 12,
+        "limit": 120,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "desktop-ts1-mature",
+        "value": 12.5,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "desktop-ts1-mature",
+        "value": 78,
+        "limit": 250,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleP95",
+        "scope": "desktop-ts1-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "desktop-ts1-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "desktop-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "desktop-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "desktop-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "desktop-ts1-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "desktop-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "desktop-ts1-mature",
+        "value": 5.52,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "desktop-ts1-mature",
+        "value": -1.22,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "fcp",
+        "scope": "desktop-ts2-mature",
+        "value": 76,
+        "limit": 1000,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "desktop-ts2-mature",
+        "value": 37.3,
+        "limit": 1800,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "desktop-ts2-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "desktop-ts2-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "desktop-ts2-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "desktop-ts2-mature",
+        "value": 10.5,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "desktop-ts2-mature",
+        "value": 11,
+        "limit": 120,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "desktop-ts2-mature",
+        "value": 12.1,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "desktop-ts2-mature",
+        "value": 83,
+        "limit": 250,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleP95",
+        "scope": "desktop-ts2-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "desktop-ts2-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "desktop-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "desktop-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "desktop-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "desktop-ts2-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "desktop-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "desktop-ts2-mature",
+        "value": 6.76,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "desktop-ts2-mature",
+        "value": -1.37,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "fcp",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 76,
+        "limit": 1500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 37.8,
+        "limit": 2500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 12,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "phone-landscape-ts1-mature",
+        "value": null,
+        "limit": 120,
+        "unit": "ms",
+        "met": null,
+        "note": "not measured / no budget"
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 13,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "phone-landscape-ts1-mature",
+        "value": null,
+        "limit": 250,
+        "unit": "ms",
+        "met": null,
+        "note": "not measured / no budget"
+      },
+      {
+        "metric": "idleP95",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 5.49,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "phone-landscape-ts1-mature",
+        "value": 2.44,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "fcp",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 88,
+        "limit": 1500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "loadEventEnd",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 36.8,
+        "limit": 2500,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "entryDecodedBytes",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 190898,
+        "limit": 240000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "totalColdDecodedBytes",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 422552,
+        "limit": 520000,
+        "unit": "B",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "binaryMediaCount",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 0,
+        "limit": 0,
+        "unit": "count",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "menuOpenMedian",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 6.8,
+        "limit": 100,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "machineTapMedian",
+        "scope": "phone-landscape-ts2-mature",
+        "value": null,
+        "limit": 120,
+        "unit": "ms",
+        "met": null,
+        "note": "not measured / no budget"
+      },
+      {
+        "metric": "throttledMenuOpenMedian",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 14.8,
+        "limit": 200,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledMachineTapMedian",
+        "scope": "phone-landscape-ts2-mature",
+        "value": null,
+        "limit": 250,
+        "unit": "ms",
+        "met": null,
+        "note": "not measured / no budget"
+      },
+      {
+        "metric": "idleP95",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 16.8,
+        "limit": 20,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleDroppedPct",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 0,
+        "limit": 2,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "panelOpenP95",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "stressLongSessionP95",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleP95",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 16.8,
+        "limit": 33,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledIdleDroppedPct",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 0,
+        "limit": 5,
+        "unit": "%",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "throttledStoreP95",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 16.8,
+        "limit": 50,
+        "unit": "ms",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "idleUsedHeap",
+        "scope": "phone-landscape-ts2-mature",
+        "value": 5.47,
+        "limit": 64,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      },
+      {
+        "metric": "sessionHeapGrowth",
+        "scope": "phone-landscape-ts2-mature",
+        "value": -0.54,
+        "limit": 16,
+        "unit": "MB",
+        "dir": "max",
+        "met": true
+      }
+    ],
+    "summary": {
+      "met": 104,
+      "unmet": 0,
+      "unknown": 4,
+      "total": 108,
+      "allMet": false
+    }
+  }
+}
