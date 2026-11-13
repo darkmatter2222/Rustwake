@@ -220,7 +220,7 @@ export function App({
    * separate from `lastReject` so the resting line's trailing "Last …" segment is untouched.
    */
   const [buildRefusal, setBuildRefusal] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ text: string; count: number } | null>(null);
   /**
    * PLAY-002 2 (TST-001, QA D-3): the last rejected command, kept after the 1.8 s toast
    * is gone. `null` while nothing has been refused. It is plain component state - never
@@ -261,6 +261,16 @@ export function App({
     return audioRef.current;
   }, [store]);
 
+  /**
+   * UI-RESET-65 (c2): group repeated identical readouts instead of re-firing a fresh
+   * toast for every refused tap. The same active sentence increments a count; a new
+   * sentence resets it to one. Event-driven — only called from a real command outcome
+   * — so the per-frame sim re-render never inflates the count.
+   */
+  const notify = useCallback((text: string) => {
+    setToast((prev) => (prev && prev.text === text ? { text, count: prev.count + 1 } : { text, count: 1 }));
+  }, []);
+
   /** The one real spend path: dispatch to the engine, then voice + readout the outcome. */
   const commit = useCallback(
     (command: Command): CommandResult => {
@@ -275,14 +285,14 @@ export function App({
       } else {
         audio().play("blocked");
         const text = labelForReject(result);
-        setToast(text);
+        notify(text);
         // One string, computed once: the transient toast and the resting line's trailing
         // segment are the same readout at two lifetimes (PLAY-002 2).
         setLastReject(text);
       }
       return result;
     },
-    [store, audio]
+    [store, audio, notify]
   );
 
   /**
@@ -466,6 +476,21 @@ export function App({
     mql.addEventListener?.("change", onChange);
     return () => mql.removeEventListener?.("change", onChange);
   }, []);
+
+  /**
+   * UI-RESET-65 (c3): the effective reduced-motion value (player setting OR live OS
+   * preference) reaches the CSS layer, not only the canvas. One root attribute lets a
+   * single stylesheet block disable every chrome transition when motion is reduced, so
+   * the in-app toggle and the OS media query behave identically. The canvas already reads
+   * the same effective value at the drawScene call; this never writes the save.
+   */
+  const reducedMotionEffective = settings.reducedMotion || osReducedMotion;
+  useEffect(() => {
+    const root = document.documentElement;
+    if (reducedMotionEffective) root.setAttribute("data-reduced-motion", "true");
+    else root.removeAttribute("data-reduced-motion");
+    return () => root.removeAttribute("data-reduced-motion");
+  }, [reducedMotionEffective]);
 
   const cycleTextScale = useCallback(() => {
     const steps = [1, 1.25, 1.5, 2];
@@ -1017,7 +1042,7 @@ export function App({
           run: () => {
             if (store.takeOver() === "reader") {
               audio().play("blocked");
-              setToast(t("reader.stuck"));
+              notify(t("reader.stuck"));
             }
           },
         }
@@ -1192,7 +1217,7 @@ export function App({
             />
           ) : null}
         </div>
-        {toast ? <Toast text={toast} onDone={() => setToast(null)} /> : null}
+        {toast ? <Toast text={toast.text} count={toast.count} onDone={() => setToast(null)} /> : null}
         {/* Panels are HUD-column children so the column keeps them between the
             objective and the dock at every text scale. */}
         {machine ? (
