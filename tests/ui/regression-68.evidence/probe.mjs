@@ -222,9 +222,10 @@ function aggregate() {
     if (carveOuts.length) {
       entry.carveOut = {
         checks: carveOuts,
+        runPattern: carveOuts.map((k) => ({ check: k, failedRun1: k1.has(k), failedRerun: k2.has(k), deterministic: k1.has(k) && k2.has(k) })),
         classification: "pre-existing unfaithful-probe artifact (broad cyan census), NOT a regression defect",
         citation: CARVE_OUT_CITATION,
-        note: "qa-117's independent baseline control @ 7fcaea1c reproduced the identical broad-census failure, proving it pre-exists #117. The faithful rail-band sibling check (rail-band diff >= RAIL_DIFF_MIN 10) PASSES in both runs and is the real visibility signal. #117's fix is provably inert on phone (scale 1.510) / desktop (3.065), both >= 1.4. Frozen probe left VERBATIM; adjudication lives only in this evidence layer.",
+        note: "qa-117's independent baseline control @ 7fcaea1c reproduced the identical broad-census failure, proving it pre-exists #117. The faithful rail-band sibling check (rail-band diff >= RAIL_DIFF_MIN 10) PASSES in both runs and is the real visibility signal. A failure present in only ONE of the two runs is additionally non-deterministic (live-sim cargo timing variance between the 350ms snapshots). #117's fix is provably inert on phone (scale 1.510) / desktop (3.065), both >= 1.4. Frozen probe left VERBATIM; adjudication lives only in this evidence layer.",
       };
     }
     if (realFailures.length) {
