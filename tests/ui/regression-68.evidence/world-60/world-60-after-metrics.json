@@ -1,8 +1,8 @@
 {
   "label": "after",
-  "sha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
-  "url": "http://127.0.0.1:4198/",
-  "generatedOn": "2026-11-13T09:32:22.359Z",
+  "sha": "3fd883c94d59f2772fc92118c7caf6d4d889887f",
+  "url": "http://127.0.0.1:4196/",
+  "generatedOn": "2026-11-13T12:09:08.665Z",
   "devices": [
     {
       "device": "phone",
@@ -83,8 +83,8 @@
         ],
         "shot": {
           "file": "world-60-after-phone-opening-reduced.png",
-          "bytes": 258388,
-          "fnv1a": "4fd427f5"
+          "bytes": 258400,
+          "fnv1a": "8d0d964e"
         }
       },
       "controls": {
@@ -258,8 +258,8 @@
         ],
         "shot": {
           "file": "world-60-after-phone-mature-reduced.png",
-          "bytes": 258744,
-          "fnv1a": "daa6ab0d"
+          "bytes": 258800,
+          "fnv1a": "9aa76340"
         }
       },
       "controls": {
@@ -361,8 +361,8 @@
         ],
         "shot": {
           "file": "world-60-after-desktop-opening-reduced.png",
-          "bytes": 384428,
-          "fnv1a": "b054c6ca"
+          "bytes": 384408,
+          "fnv1a": "9e55652a"
         }
       },
       "controls": {
@@ -536,8 +536,8 @@
         ],
         "shot": {
           "file": "world-60-after-desktop-mature-reduced.png",
-          "bytes": 384530,
-          "fnv1a": "efbcd344"
+          "bytes": 384467,
+          "fnv1a": "ad7d19a0"
         }
       },
       "controls": {
