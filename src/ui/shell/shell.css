@@ -332,6 +332,18 @@
     display: flex;
     flex-direction: row;
     left: 110px;
+    /* #117: the short-landscape rail band (>=600px wide, <=460px tall) ALSO
+       matches the column-mode block above, which pins top:76px / right:10px.
+       Without resetting them here the cluster is stretched between top:76px
+       and this bottom anchor, so each 44px face becomes a 252px-tall strip
+       covering the world region's left edge — the fitted yard's top-row
+       machines (sorter tile 0, furnace tile 1) land under it and lose every
+       clear canvas tap point. Reset top/right so the cluster is the intended
+       compact bottom-anchored row (44px faces) clear of the yard's top row.
+       The tall desktop rail (>=1200px) never matches column mode, so its
+       already-compact row is unchanged. */
+    top: auto;
+    right: auto;
     bottom: max(62px, calc(var(--shell-zoom-clear, 62px) + env(safe-area-inset-bottom)));
   }
 }
