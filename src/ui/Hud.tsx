@@ -413,17 +413,23 @@ function costText(blueprint: string): string {
   return costSummary(def);
 }
 
-export function Toast(props: { text: string; onDone: () => void }) {
+export function Toast(props: { text: string; count?: number; onDone: () => void }) {
   const done = useRef(props.onDone);
   done.current = props.onDone;
-  // Depend on the text only: the sim re-renders every animation frame, and a
-  // per-render dependency would restart the timer so it never fires.
+  const count = props.count ?? 1;
+  // Depend on the text and the event count only: the sim re-renders every animation
+  // frame, and a per-render dependency would restart the timer so it never fires.
+  // UI-RESET-65 (c2): a repeated identical readout bumps `count`, restarting the
+  // window once per group rather than firing a fresh toast for every refused tap.
+  // The count is painted by a ::after pseudo-element keyed on data-count, so the
+  // live-region text stays the single sentence — no re-announcement spam, and every
+  // pinned readout keeps reading the bare sentence. The ×N suffix is language-neutral.
   useEffect(() => {
     const timer = setTimeout(() => done.current(), 1800);
     return () => clearTimeout(timer);
-  }, [props.text]);
+  }, [props.text, count]);
   return (
-    <div className="toast" role="status">
+    <div className="toast" role="status" data-count={count}>
       {props.text}
     </div>
   );

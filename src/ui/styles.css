@@ -1065,3 +1065,55 @@ body {
   opacity: 0.55;
   cursor: not-allowed;
 }
+
+/* ---------------------------------------------------------------------------
+ * UI-RESET-65: interaction-feedback unification (additive; no layout shift).
+ * Press/hover washes for the faces that lacked them, a grouped-toast counter,
+ * and one reduced-motion override that reaches every chrome transition.
+ * ------------------------------------------------------------------------- */
+
+/* c1: the same pressed wash `.icon-btn:active` already uses, extended to the dock,
+ * gate, blueprint and objective faces. Background/border only — nothing moves under
+ * a finger. Disabled faces are excluded so a locked control never reads as pressable. */
+.dock__btn:active:not(:disabled),
+.gate__btn:active:not(:disabled),
+.blueprint:active:not(:disabled),
+.objective__btn:active:not(:disabled) {
+  background-color: rgba(95, 216, 232, 0.16);
+}
+
+.dock__btn:hover:not(:disabled),
+.gate__btn:hover:not(:disabled),
+.blueprint:hover:not(:disabled),
+.objective__btn:hover:not(:disabled) {
+  border-color: rgba(95, 216, 232, 0.65);
+}
+
+/* c2: the repeat counter on a grouped toast, painted as generated content keyed on
+ * data-count so the live-region text stays the single sentence (no re-announcement
+ * spam, and every pinned readout keeps reading the bare sentence). Tabular figures keep
+ * the width steady; the toast is pointer-events:none and centred, so the suffix never
+ * shifts an action under a finger. */
+.toast[data-count]:not([data-count="1"])::after {
+  content: " ×" attr(data-count);
+  font-variant-numeric: tabular-nums;
+  color: var(--cyan);
+}
+
+/* c3: the effective reduced-motion value (in-app toggle OR OS preference) is mirrored
+ * onto :root by App. This one block disables every chrome transition the primitives,
+ * inspector and logistics layers declare, so the in-app toggle behaves exactly like the
+ * OS media query. Specificity (0,3,0) outranks the base (0,1,0) rules regardless of
+ * stylesheet order. None of these transitions animates layout under a finger. */
+:root[data-reduced-motion="true"] .wk-face,
+:root[data-reduced-motion="true"] .wk-nav__face,
+:root[data-reduced-motion="true"] .wk-sheet,
+:root[data-reduced-motion="true"] .wk-dialog,
+:root[data-reduced-motion="true"] .wk-inspector__section,
+:root[data-reduced-motion="true"] .wk-amount,
+:root[data-reduced-motion="true"] .wk-help,
+:root[data-reduced-motion="true"] .wk-toast,
+:root[data-reduced-motion="true"] .inspector-progress__fill,
+:root[data-reduced-motion="true"] .logistics-gauge__fill {
+  transition: none;
+}
