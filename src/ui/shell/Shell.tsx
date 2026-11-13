@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, memo, useEffect, useRef, useState } from "react";
 import { t } from "../../game/content/strings";
 import { RESET_COPY } from "../home/copy";
 import { SHELL_RAIL_QUERY, SHELL_SLOTS, type ShellSlot } from "./layout";
@@ -47,7 +47,7 @@ const SLOT_LABEL: Record<ShellSlot, string> = {
  * R1: the destination rail. Five fixed slots in painted order; a slot the yard
  * has not earned yet stays on screen with its reason printed (E8), never hidden.
  */
-export function ShellRail(props: {
+export const ShellRail = memo(function ShellRail(props: {
   tutorial: number;
   research: boolean;
   selected: number | null;
@@ -91,14 +91,14 @@ export function ShellRail(props: {
       })}
     </nav>
   );
-}
+});
 
 /**
  * The phone/column Menu face. On phones it sits in the dock's reserved 72 px
  * thumb zone beside the nav row; in the column band it takes the corner the
  * deleted Home face (E2) left behind. Hidden in rail mode, where slot 5 owns it.
  */
-export const ShellMenuFace = forwardRef<
+export const ShellMenuFace = memo(forwardRef<
   HTMLButtonElement,
   { open: boolean; onToggle: () => void }
 >(function ShellMenuFace({ open, onToggle }, ref) {
@@ -115,7 +115,7 @@ export const ShellMenuFace = forwardRef<
       Menu
     </button>
   );
-});
+}));
 
 /**
  * UI-RESET-50: the visible camera controls — zoom in, zoom out, reset view.
@@ -125,7 +125,7 @@ export const ShellMenuFace = forwardRef<
  * paints a row above the primary band. Every face keeps the 44 px floor, and
  * the camera fit reserves their gutter, so no yard cell hides under a control.
  */
-export function ShellZoom(props: {
+export const ShellZoom = memo(function ShellZoom(props: {
   onZoomIn: () => void;
   onZoomOut: () => void;
   onReset: () => void;
@@ -161,7 +161,7 @@ export function ShellZoom(props: {
       </button>
     </div>
   );
-}
+});
 
 /**
  * E3/E5: the one bounded Menu sheet. `role="dialog"`, focus moves in on open
