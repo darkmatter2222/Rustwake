@@ -682,12 +682,6 @@ body {
   letter-spacing: 0.04em;
 }
 
-.muted-corner {
-  position: absolute;
-  top: max(8px, env(safe-area-inset-top));
-  right: max(10px, env(safe-area-inset-right));
-}
-
 .toast {
   position: absolute;
   left: 50%;
