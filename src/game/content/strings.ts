@@ -174,6 +174,11 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "aria.research": "Research",
   "aria.yardRecord": "Yard record",
   "aria.returnReport": "Return report",
+  // UI-RESET-66: the world canvas had no accessible name. Its core actions
+  // (salvage / build / connect / store / research) all have named button, rail
+  // and shortcut equivalents, so the canvas is labelled as the yard view it
+  // paints rather than left as an unnamed interactive surface.
+  "aria.canvas": "Yard world view",
 
   // ---- Panel row names -----------------------------------------------------------
   "row.status": "Status",

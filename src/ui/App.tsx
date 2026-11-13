@@ -1113,6 +1113,12 @@ export function App({
     <div className="game">
       <canvas
         ref={canvasRef}
+        /* UI-RESET-66: name the world view for assistive tech. Every core action
+           it paints (salvage / build / connect / store / research) has a named
+           button, rail and keyboard equivalent, so the canvas is exposed as the
+           yard image it renders rather than an unnamed interactive surface. */
+        role="img"
+        aria-label={t("aria.canvas")}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
