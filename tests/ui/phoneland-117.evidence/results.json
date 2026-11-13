@@ -1,0 +1,586 @@
+{
+ "issue": "https://github.com/darkmatter2222/Rustwake/issues/117",
+ "role": "developer | dev-117",
+ "branch": "rw/117-phoneland-tap",
+ "buildSha": "9fa33c674d3753c4c25e0f70bb13044723584753",
+ "baseSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+ "generatedAt": "2026-11-13T10:45:37.763Z",
+ "overallPass": true,
+ "method": "headless Chromium (playwright-core) DOM/geometry/computed-style/console + canvas PIXEL census only; NO vision; AGENT playtests; headless emulation is NOT a physical device",
+ "served": {
+  "url": "http://127.0.0.1:4195/",
+  "server": "vite preview of THIS worktree pnpm build (dist), --host 127.0.0.1 --strictPort; never the live deployment",
+  "entryJs": {
+   "file": "dist/assets/index-CEQDUmwp.js",
+   "bytes": 191098,
+   "sha256": "B85367DA838F1BCFA68D432D975035B0049FBF54E2C3A68083D452BE3B304844"
+  },
+  "entryCss": {
+   "file": "dist/assets/index-ekc2mZk4.css",
+   "bytes": 61957,
+   "sha256": "FA11D4ED9299A682DBCDAA1E18830FA027F5F74F20367EAFF7FCDD5EFB5F19AF"
+  },
+  "indexHtml": {
+   "file": "dist/index.html",
+   "bytes": 1368,
+   "sha256": "7F8F45DDED9C5B88B6E322EDED92A62BCB1189788BC2FC6BEB26FFE8B523DAE3"
+  }
+ },
+ "srcChange": {
+  "files": [
+   "src/ui/App.tsx (+22)",
+   "src/ui/shell/shell.css (+12)",
+   "src/ui/styles.css (+16/-2)"
+  ],
+  "insertions": 48,
+  "deletions": 2,
+  "frozenPathsUntouched": [
+   "src/game/renderer/scene.ts",
+   "src/game/renderer/camera.ts",
+   "tests/ui/logistics-59.probe.mjs",
+   "tests/ui/access-66.evidence.mjs",
+   "tests/ui/save-63.evidence.mjs"
+  ]
+ },
+ "probes": {
+  "logistics59": {
+   "oracle": "tests/ui/logistics-59.probe.mjs (VERBATIM, committed blob == ran)",
+   "before": {
+    "buildSha": "7fcaea1c12a9fa0cd8bc608f5b0ffadf0b903207",
+    "counts": {
+     "frames": 108,
+     "steps": 54,
+     "checks": 228,
+     "failedChecks": 6,
+     "consoleErrors": 0,
+     "pageErrors": 0,
+     "blockers": 0
+    },
+    "failedChecks": [
+     "phone-dense 02-show-routes: showing restores cyan rail pixels",
+     "phoneland-dense 03-select-furnace-dims-unrelated: real tap selects the furnace",
+     "phoneland-dense 04-custom-duplicate-preview: inline custom preview flags the duplicate as invalid",
+     "phoneland-dense 04-custom-duplicate-preview: confirm preview repeats the invalid reason with a Cancel",
+     "phoneland-dense 05-invalid-commit-rejected: engine rejects the duplicate (no route laid)",
+     "phoneland-dense 06-invalid-cancel: cancel laid no belt (routes unchanged)"
+    ]
+   },
+   "after": {
+    "buildSha": "9fa33c674d3753c4c25e0f70bb13044723584753",
+    "counts": {
+     "frames": 108,
+     "steps": 54,
+     "checks": 228,
+     "failedChecks": 0,
+     "consoleErrors": 0,
+     "pageErrors": 0,
+     "blockers": 0
+    },
+    "failedChecks": [],
+    "generatedAt": "2026-11-13T10:36:09.657Z"
+   },
+   "afterRobustnessRerun": {
+    "buildSha": "9fa33c674d3753c4c25e0f70bb13044723584753",
+    "counts": {
+     "frames": 108,
+     "steps": 54,
+     "checks": 228,
+     "failedChecks": 0,
+     "consoleErrors": 0,
+     "pageErrors": 0,
+     "blockers": 0
+    },
+    "failedChecks": [],
+    "generatedAt": "2026-11-13T10:37:42.768Z"
+   },
+   "phonelandDenseBefore": {
+    "00-open-sorter": [
+     {
+      "name": "seed loaded intact (8 machines, 18 routes)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "real tap selects the sorter (panel aria/title)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "selection changed the painted frame (reducedMotion static)",
+      "ok": true,
+      "detail": "before={\"cyan\":19552,\"orange\":696,\"amber\":641,\"rail\":427,\"railSet\":[626728,626729,626730,626731,626786,626798,626799,626800,626801,626802,626803,626863,626872,626873,626874,626879,626914,626915,626916,626917,626918,626919,626920,626921,626922,626923,626924,626925,626928,626929,626937,626938,626939,626940,626948,626949,626950,626951,626952,626953,626954,626955,626956,626959,626960,626961,626969,626970,626974,626975,626976,626977,626978,626979,626980,626989,626990,626991,626992,626993,626994,626995,627004,627005,627006,627007,627008,628416,628417,628418,628419,628474,628486,628487,628488,628489,628490,628491,628551,628560,628561,628562,628567,628591,628592,628593,628594,628595,628596,628597,628601,628602,628603,628604,628605,628606,628607,628608,628609,628610,628611,628612,628613,628616,628617,628625,628626,628627,628628,628636,628637,628638,628639,628640,628641,628642,628643,628644,628647,628648,628649,628657,628658,628662,628663,628664,628665,628666,628667,628668,628677,628678,628679,628680,628681,628682,628683,628692,628693,628694,628695,628696,630104,630105,630106,630107,630162,630174,630175,630176,630177,630178,630179,630239,630248,630249,630250,630255,630290,630291,630292,630293,630294,630295,630296,630297,630298,630299,630300,630301,630304,630305,630313,630314,630315,630316,630324,630325,630326,630327,630328,630329,630330,630331,630332,630335,630336,630337,630345,630346,630353,630354,630355,630356,630365,630366,630367,630368,630369,630370,630371,630380,630381,630382,630383,630384,631792,631793,631794,631795,631850,631862,631863,631864,631865,631866,631867,631927,631936,631937,631938,631943,631978,631979,631980,631981,631982,631983,631984,631985,631986,631987,631988,631989,631992,631993,632001,632002,632003,632004,632012,632013,632014,632015,632016,632017,632018,632019,632020,632023,632024,632025,632033,632042,632043,632044,632053,632054,632055,632056,632057,632058,632059,632068,632069,632070,632071,632072,652122,652123,653810,653811,655499,657187,670675,670693,670694,670695,670696,670697,672380,672381,672382,672383,672384,672385,674040,674068,674069,674070,674071,674072,675757,675758,675759,677446,682502,684189,684190,684191,685841,685842,685843,685876,685877,685878,685879,685880,687528,687529,687530,687531,687563,687564,687565,687566,687567,687568,689217,689218,689219,689220,689253,689254,689255,690905,690906,690907,690941,690942,692629,702749,704433,704434,704435,704436,704437,706120,706121,706122,706123,706124,706125,707807,707808,707809,707810,707811,707812,709494,709495,709496,709497,709498,709499,711136,711182,711183,711184,711185,711186,712824,712871,712872,712873,719616,719617,721303,721304,721305,721306,722990,722991,722992,722993,722994,724677,724678,724679,724680,724681,724682,726364,726365,726366,726367,726368,726369,728051,728052,728053,728054,728055,728056,729739,729740,729741,729742,731363,731428,731429,733049,733050,733051,733052,734738,734739,734740,736426,736427,736428,738114,743165,743166,744921,744922,744923,744924,744925,744926,746610,746611,746612,746613,748298,748299,748300],\"width\":1688,\"height\":780} after={\"cyan\":18916,\"orange\":640,\"amber\":593,\"rail\":159,\"railSet\":[618362,626731,626786,626798,626799,626864,626865,626866,626879,626880,626881,626919,626920,626921,626922,626923,626924,626925,626926,626927,626937,626938,626950,626951,626952,626953,626954,626955,626956,626957,626958,626965,626966,626967,626968,626969,626970,626971,626972,626973,628419,628474,628486,628487,628552,628553,628554,628567,628568,628569,628592,628593,628594,628607,628608,628609,628610,628611,628612,628613,628614,628615,628625,628626,628638,628639,628640,628641,628642,628643,628644,628645,628646,628653,628654,628655,628656,628657,628658,628659,628660,628661,630107,630162,630175,630240,630241,630242,630255,630256,630257,630295,630296,630297,630298,630299,630300,630301,630302,630303,630313,630314,630326,630327,630328,630329,630330,630331,630332,630333,630334,630341,630342,630343,630344,630345,630346,630347,630348,630349,631795,631850,631863,631928,631929,631930,631943,631944,631945,631983,631984,631985,631986,631987,631988,631989,631990,631991,632001,632002,632014,632015,632016,632017,632018,632019,632020,632021,632022,632029,632030,632031,632032,632033,632034,632035,632036,632037,638618],\"width\":1688,\"height\":780}"
+     },
+     {
+      "name": "seven inspector sections preserved",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "three context tabs preserved",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend present with working/idle/blocked + exact rail colors",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend lists the materials the yard actually carries",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "visibility toggle starts on (routes painted)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "overview derived from state (18 routes, power, machines)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "controls expose connect/disconnect/filter honestly",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "toggle keeps the 44px touch floor",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend states the direction convention",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "every laid link prints its direction (source → destination)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend lists exactly the 11 carried materials, scrap swatch first",
+      "ok": true,
+      "detail": "[\"Scrap\",\"Ferrous\",\"Nonferrous\",\"Steel\",\"Polymer\",\"Residue\",\"Copper\",\"Wire\",\"Plates\",\"Circuits\",\"Data\"]"
+     },
+     {
+      "name": "production overview derived from state (batches/s across 8 machines)",
+      "ok": true,
+      "detail": "{\"label\":\"Production\",\"value\":\"1.45 batches/s across 8 machines\"}"
+     },
+     {
+      "name": "shell rail matches the form factor (landscape/desktop rail, phone none)",
+      "ok": true,
+      "detail": "{\"top\":8,\"left\":8,\"right\":104,\"bottom\":382,\"width\":96,\"height\":374}"
+     }
+    ],
+    "01-hide-routes": [
+     {
+      "name": "toggle flips off and labels Show routes",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "hiding reduces rail-band pixels (strictly fewer)",
+      "ok": true,
+      "detail": "visible=163 hidden=0"
+     },
+     {
+      "name": "hiding removes working-rail route ink (rail-band set-diff >= floor)",
+      "ok": true,
+      "detail": "railRemoved=163 floor=10"
+     },
+     {
+      "name": "routes keep running while hidden (count unchanged)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "02-show-routes": [
+     {
+      "name": "toggle flips back on",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "showing restores cyan rail pixels",
+      "ok": true,
+      "detail": "hidden=18856 shown=19100"
+     },
+     {
+      "name": "showing restores working-rail ink (rail-band diff >= floor)",
+      "ok": true,
+      "detail": "railRestored=28 floor=10"
+     },
+     {
+      "name": "route count still 18 (presentation only)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "03-select-furnace-dims-unrelated": [
+     {
+      "name": "real tap selects the furnace",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "selection de-emphasizes unrelated working rails (bright cyan strictly decreases)",
+      "ok": true,
+      "detail": "sorter=19295 furnace=19023"
+     },
+     {
+      "name": "selection dispatches no command (routes unchanged)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "seven inspector sections preserved on the second machine",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "04-custom-duplicate-preview": [
+     {
+      "name": "inline custom preview flags the duplicate as invalid",
+      "ok": false,
+      "detail": "{\"note\":\"Valid — ready to lay. 3 tiles · 3 scraps.\",\"invalid\":false}"
+     },
+     {
+      "name": "confirm preview repeats the invalid reason with a Cancel",
+      "ok": false,
+      "detail": "{\"note\":\"Valid — ready to lay. 3 tiles · 3 scraps.\",\"invalid\":false,\"primary\":\"Connect\",\"hasCancel\":true}"
+     },
+     {
+      "name": "previewing dispatches nothing (routes unchanged)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "05-invalid-commit-rejected": [
+     {
+      "name": "engine rejects the duplicate (no route laid)",
+      "ok": false,
+      "detail": ""
+     },
+     {
+      "name": "preview cleared after the rejected commit",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "inline preview still reports the duplicate honestly",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "06-invalid-cancel": [
+     {
+      "name": "cancel closes the invalid preview",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "cancel laid no belt (routes unchanged)",
+      "ok": false,
+      "detail": ""
+     }
+    ]
+   },
+   "phonelandDenseAfter": {
+    "00-open-sorter": [
+     {
+      "name": "seed loaded intact (8 machines, 18 routes)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "real tap selects the sorter (panel aria/title)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "selection changed the painted frame (reducedMotion static)",
+      "ok": true,
+      "detail": "before={\"cyan\":17263,\"orange\":768,\"amber\":665,\"rail\":342,\"railSet\":[479900,479901,479902,479903,479908,479956,479957,479959,479960,480008,480015,480016,480017,480020,480049,480050,480051,480052,480053,480054,480055,480056,480057,480059,480060,480066,480067,480068,480069,480075,480076,480077,480078,480079,480080,480081,480088,480089,480090,480091,480092,480093,480096,480097,480098,480099,480100,480108,480109,480110,480111,480112,480120,480121,480122,480123,481588,481589,481590,481591,481596,481644,481645,481646,481647,481648,481696,481703,481704,481705,481708,481737,481738,481739,481740,481741,481742,481743,481744,481745,481747,481748,481754,481755,481756,481757,481763,481764,481765,481766,481767,481768,481769,481776,481777,481778,481779,481780,481781,481784,481785,481786,481787,481788,481796,481797,481798,481799,481800,481808,481809,481810,481811,483276,483277,483278,483279,483284,483332,483333,483334,483335,483336,483384,483391,483392,483393,483396,483425,483426,483427,483428,483429,483430,483431,483432,483433,483435,483436,483442,483443,483444,483445,483451,483452,483453,483454,483455,483456,483457,483464,483465,483466,483467,483468,483469,483472,483473,483474,483475,483476,483484,483485,483486,483487,483488,483496,483497,483498,483499,484964,484965,484966,484967,484972,485020,485021,485022,485023,485024,485072,485079,485080,485081,485084,485113,485114,485115,485116,485117,485118,485119,485120,485121,485123,485124,485130,485131,485132,485133,485139,485140,485141,485142,485143,485144,485145,485152,485153,485154,485155,485156,485163,485164,485172,485173,485174,485175,485176,485184,485185,485186,485187,500215,500216,501903,501904,503592,505280,517075,517097,517098,517099,517100,517101,518763,518785,518786,518787,518788,520474,520475,525532,525533,527219,527220,527221,527222,528878,528879,528880,528906,528907,528908,528909,528910,530567,530568,530569,530596,530597,532255,532256,532284,540717,542402,542403,542404,542405,542406,544089,544090,544091,544092,544093,545776,545777,545778,545779,545780,547427,547464,547465,547466,547467,549115,549153,549154,554211,555898,555899,555900,557585,557586,557587,557588,557589,559272,559273,559274,559275,559276,560959,560960,560961,560962,560963,562647,562648,562649,562650,564283,564284,564336,564337,565970,565971,565972,565973,567659,567660,567661,569347,569348,572713,574399,574400,574401,574402,574455,574456,574457,574458,574459,574460,576144,576145,576146,576147,577832,577833,577834],\"width\":1688,\"height\":780} after={\"cyan\":16961,\"orange\":747,\"amber\":643,\"rail\":119,\"railSet\":[474896,479903,479908,479956,479957,479958,480009,480010,480021,480022,480056,480057,480058,480066,480067,480068,480069,480077,480078,480079,480080,480081,480082,480083,480089,480090,480091,480092,480093,480094,480095,481591,481596,481644,481645,481646,481697,481698,481709,481710,481744,481745,481746,481754,481755,481756,481757,481765,481766,481767,481768,481769,481770,481771,481777,481778,481779,481780,481781,481782,481783,483279,483284,483333,483334,483385,483386,483397,483398,483432,483433,483434,483442,483443,483444,483445,483453,483454,483455,483456,483457,483458,483459,483465,483466,483467,483468,483469,483470,483471,484967,484972,485021,485022,485073,485074,485085,485086,485120,485121,485122,485130,485131,485132,485133,485141,485142,485143,485144,485145,485146,485147,485153,485154,485155,485156,485157,485158,485159],\"width\":1688,\"height\":780}"
+     },
+     {
+      "name": "seven inspector sections preserved",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "three context tabs preserved",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend present with working/idle/blocked + exact rail colors",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend lists the materials the yard actually carries",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "visibility toggle starts on (routes painted)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "overview derived from state (18 routes, power, machines)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "controls expose connect/disconnect/filter honestly",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "panel inside viewport, no horizontal overflow",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "toggle keeps the 44px touch floor",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend states the direction convention",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "every laid link prints its direction (source → destination)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "legend lists exactly the 11 carried materials, scrap swatch first",
+      "ok": true,
+      "detail": "[\"Scrap\",\"Ferrous\",\"Nonferrous\",\"Steel\",\"Polymer\",\"Residue\",\"Copper\",\"Wire\",\"Plates\",\"Circuits\",\"Data\"]"
+     },
+     {
+      "name": "production overview derived from state (batches/s across 8 machines)",
+      "ok": true,
+      "detail": "{\"label\":\"Production\",\"value\":\"1.45 batches/s across 8 machines\"}"
+     },
+     {
+      "name": "shell rail matches the form factor (landscape/desktop rail, phone none)",
+      "ok": true,
+      "detail": "{\"top\":8,\"left\":8,\"right\":104,\"bottom\":382,\"width\":96,\"height\":374}"
+     }
+    ],
+    "01-hide-routes": [
+     {
+      "name": "toggle flips off and labels Show routes",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "hiding reduces rail-band pixels (strictly fewer)",
+      "ok": true,
+      "detail": "visible=115 hidden=0"
+     },
+     {
+      "name": "hiding removes working-rail route ink (rail-band set-diff >= floor)",
+      "ok": true,
+      "detail": "railRemoved=115 floor=10"
+     },
+     {
+      "name": "routes keep running while hidden (count unchanged)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "02-show-routes": [
+     {
+      "name": "toggle flips back on",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "showing restores cyan rail pixels",
+      "ok": true,
+      "detail": "hidden=16861 shown=17042"
+     },
+     {
+      "name": "showing restores working-rail ink (rail-band diff >= floor)",
+      "ok": true,
+      "detail": "railRestored=19 floor=10"
+     },
+     {
+      "name": "route count still 18 (presentation only)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "03-select-furnace-dims-unrelated": [
+     {
+      "name": "real tap selects the furnace",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "selection de-emphasizes unrelated working rails (bright cyan strictly decreases)",
+      "ok": true,
+      "detail": "sorter=17155 furnace=16972"
+     },
+     {
+      "name": "selection dispatches no command (routes unchanged)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "seven inspector sections preserved on the second machine",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "04-custom-duplicate-preview": [
+     {
+      "name": "inline custom preview flags the duplicate as invalid",
+      "ok": true,
+      "detail": "{\"note\":\"Invalid — an identical belt already runs between these endpoints.\",\"invalid\":true}"
+     },
+     {
+      "name": "confirm preview repeats the invalid reason with a Cancel",
+      "ok": true,
+      "detail": "{\"note\":\"Invalid — an identical belt already runs between these endpoints.\",\"invalid\":true,\"primary\":\"Connect\",\"hasCancel\":true}"
+     },
+     {
+      "name": "previewing dispatches nothing (routes unchanged)",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "05-invalid-commit-rejected": [
+     {
+      "name": "engine rejects the duplicate (no route laid)",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "preview cleared after the rejected commit",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "inline preview still reports the duplicate honestly",
+      "ok": true,
+      "detail": ""
+     }
+    ],
+    "06-invalid-cancel": [
+     {
+      "name": "cancel closes the invalid preview",
+      "ok": true,
+      "detail": ""
+     },
+     {
+      "name": "cancel laid no belt (routes unchanged)",
+      "ok": true,
+      "detail": ""
+     }
+    ]
+   },
+   "censusMargin": {
+    "beforeScale1_1": {
+     "01-hide-routes hiding removes working-rail route ink (rail-band set-diff >= floor)": "railRemoved=163 floor=10",
+     "02-show-routes showing restores working-rail ink (rail-band diff >= floor)": "railRestored=28 floor=10"
+    },
+    "afterScale0_873_run1": {
+     "01-hide-routes hiding removes working-rail route ink (rail-band set-diff >= floor)": "railRemoved=115 floor=10",
+     "02-show-routes showing restores working-rail ink (rail-band diff >= floor)": "railRestored=19 floor=10"
+    },
+    "afterScale0_873_run2": {
+     "01-hide-routes hiding removes working-rail route ink (rail-band set-diff >= floor)": "railRemoved=115 floor=10",
+     "02-show-routes showing restores working-rail ink (rail-band diff >= floor)": "railRestored=133 floor=10"
+    }
+   }
+  },
+  "access66": {
+   "oracle": "tests/ui/access-66.evidence.mjs (VERBATIM)",
+   "buildSha": "9fa33c674d3753c4c25e0f70bb13044723584753",
+   "cells": 16,
+   "defectCount": 0,
+   "defects": [],
+   "generatedAt": "2026-11-13T10:38:21.384Z"
+  },
+  "save63": {
+   "oracle": "tests/ui/save-63.evidence.mjs (VERBATIM)",
+   "headSha": "9fa33c674d3753c4c25e0f70bb13044723584753",
+   "summary": {
+    "phone": {
+     "assertions": 394,
+     "passed": 394,
+     "screenshots": 16
+    },
+    "phone-landscape": {
+     "assertions": 394,
+     "passed": 394,
+     "screenshots": 16
+    },
+    "desktop": {
+     "assertions": 394,
+     "passed": 394,
+     "screenshots": 16
+    },
+    "mirror": {
+     "assertions": 2,
+     "passed": 2,
+     "screenshots": 0
+    }
+   },
+   "failures": [],
+   "totalAssertions": 1184
+  }
+ },
+ "ladder": {
+  "typecheck": {
+   "command": "pnpm typecheck (tsc --noEmit)",
+   "exit": 0,
+   "receipt": "receipts/typecheck.log"
+  },
+  "validate": {
+   "command": "pnpm validate (tsx scripts/validate-content.mjs)",
+   "exit": 0,
+   "violations": 0,
+   "receipt": "receipts/validate.log"
+  },
+  "vitest": {
+   "command": "pnpm test -- --minWorkers=4 --maxWorkers=4",
+   "exit": 0,
+   "files": 60,
+   "tests": 746,
+   "passed": 746,
+   "receipt": "receipts/vitest.log"
+  },
+  "build": {
+   "command": "pnpm build (tsc --noEmit && vite build)",
+   "exit": 0,
+   "modules": 124,
+   "receipt": "receipts/build.log"
+  }
+ },
+ "frames": {
+  "recursiveTotal": 187,
+  "byDir": {
+   "access-66": 17,
+   "logistics-59": 108,
+   "logistics-59-before-phoneland": 14,
+   "save-63": 48
+  }
+ }
+}
