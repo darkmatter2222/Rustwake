@@ -76,6 +76,22 @@ import {
   type LogisticsState,
   type Reservation,
 } from "../game/simulation/logistics";
+// T14 (#141): session-only traffic authority (path cost, bay/junction capacity,
+// bounded retry). Opt-in: the legacy one-cell-per-tick logistics path is the
+// default until a writer enables traffic. Never touches SAVE_KEY/migration/
+// recovery (#148 owns the cutover); traffic owns no cargo and never imports
+// logistics, so the conservation invariant (#140) is unchanged.
+import {
+  configureTruck,
+  createTraffic,
+  setBayCapacity,
+  setDefaultTruck,
+  setJunctionCapacity,
+  setJunctionCost,
+  setRetryPolicy,
+  type TrafficState,
+  type TruckConfig,
+} from "../game/simulation/traffic";
 
 export type StoreRole = LeaseRole;
 
@@ -208,6 +224,40 @@ export interface LogisticsApi {
   registerLogisticsCarrier(request: { capacity: number; cell: Cell }): Carrier | null;
 }
 
+/**
+ * T14 (#141): additive traffic capability, same session-only precedent as the
+ * road and logistics slices. Reads are pure (any role); every mutation is
+ * writer-gated exactly like `dispatch` and never calls `persist`. Traffic is
+ * OPT-IN: until a writer calls `enableTraffic`, `tickLogistics` runs the legacy
+ * one-cell-per-tick path byte-for-byte, so default behavior is unchanged.
+ * Config setters delegate validation to the traffic authority (false on
+ * invalid input, no mutation); they shape future ticks, not the cargo ledger.
+ */
+export interface TrafficApi {
+  /** Pure read: the session-only traffic authority (any role). */
+  getTraffic(): TrafficState;
+  /** Whether the traffic movement model is active (default false = legacy). */
+  isTrafficEnabled(): boolean;
+  /** Writer-only. Opt into the traffic movement model; idempotent. */
+  enableTraffic(): boolean;
+  /** Writer-only. Default truck profile (speed/loadTicks/unloadTicks). */
+  setTrafficDefaultTruck(config: Partial<TruckConfig>): boolean;
+  /** Writer-only. Override one carrier's truck profile. */
+  configureTrafficTruck(carrierId: number, config: Partial<TruckConfig>): boolean;
+  /** Writer-only. Cap a bay cell's simultaneous load/unload slots (>=1). */
+  setTrafficBayCapacity(cell: Cell, capacity: number): boolean;
+  /** Writer-only. Cap junction occupancy, or null for unlimited. */
+  setTrafficJunctionCapacity(capacity: number | null): boolean;
+  /** Writer-only. Extra movement-point cost to enter a junction cell (>=0). */
+  setTrafficJunctionCost(cost: number): boolean;
+  /** Writer-only. Bounded retry/backoff policy for blocked routes. */
+  setTrafficRetryPolicy(policy: {
+    maxRetries?: number;
+    baseBackoff?: number;
+    maxBackoff?: number;
+  }): boolean;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
 /** T12 (#139): fixed seed for the session-only world grid (deterministic yard). */
 const ROAD_SESSION_SEED = 139;
@@ -240,7 +290,7 @@ export interface StoreOptions {
  */
 export function createStore(
   options: StoreOptions = {},
-): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi {
+): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi & TrafficApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -315,6 +365,11 @@ export function createStore(
   // T13 (#140): session-only logistics ledger, disjoint from the SimState
   // snapshot for the same reason — catch-up adoption never touches it.
   const logistics = createLogistics();
+  // T14 (#141): session-only traffic authority, disjoint from the snapshot for
+  // the same reason. Opt-in (default off) so the legacy logistics tick is
+  // unchanged until a writer enables it; never persisted (#148 owns cutover).
+  const traffic = createTraffic();
+  let trafficEnabled = false;
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -482,7 +537,8 @@ export function createStore(
       // per tick). Session-only: never persisted, never advanced by a reader.
       tickRoadCargo(roadCargo, ticks);
       // T13 (#140): logistics jobs ride the same budget, after road cargo.
-      tickLogistics(logistics, roadNet, ticks);
+      // T14 (#141): traffic is opt-in; undefined keeps the legacy tick path.
+      tickLogistics(logistics, roadNet, ticks, trafficEnabled ? traffic : undefined);
       sinceSave += ticks * TICK_MS;
       if (sinceSave >= PERSIST_MS) {
         sinceSave = 0;
@@ -666,7 +722,8 @@ export function createStore(
       if (role !== "writer") return;
       advance(state, ticks);
       tickRoadCargo(roadCargo, ticks);
-      tickLogistics(logistics, roadNet, ticks);
+      // T14 (#141): traffic is opt-in; undefined keeps the legacy tick path.
+      tickLogistics(logistics, roadNet, ticks, trafficEnabled ? traffic : undefined);
       lastSeenMs = now();
       persist();
       notify();
@@ -737,6 +794,63 @@ export function createStore(
       const carrier = registerLogisticsCarrierFn(logistics, request);
       if (carrier !== null) notify();
       return carrier;
+    },
+    // T14 (#141): additive traffic capability. Reads are pure (any role);
+    // mutations are writer-gated exactly like `dispatch` and never call
+    // `persist` — traffic is session-only (#148 owns persistence). Opt-in:
+    // until a writer enables traffic the legacy tick path runs unchanged.
+    // Config setters delegate validation to the traffic authority (false on
+    // invalid input, no mutation); they shape future ticks, not the ledger.
+    getTraffic: () => traffic,
+    isTrafficEnabled: () => trafficEnabled,
+    enableTraffic(): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      trafficEnabled = true;
+      notify();
+      return true;
+    },
+    setTrafficDefaultTruck(config: Partial<TruckConfig>): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setDefaultTruck(traffic, config);
+      if (ok) notify();
+      return ok;
+    },
+    configureTrafficTruck(carrierId: number, config: Partial<TruckConfig>): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = configureTruck(traffic, carrierId, config);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficBayCapacity(cell: Cell, capacity: number): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setBayCapacity(traffic, cell, capacity);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficJunctionCapacity(capacity: number | null): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setJunctionCapacity(traffic, capacity);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficJunctionCost(cost: number): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setJunctionCost(traffic, cost);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficRetryPolicy(policy: { maxRetries?: number; baseBackoff?: number; maxBackoff?: number }): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setRetryPolicy(traffic, policy);
+      if (ok) notify();
+      return ok;
     },
   };
 }

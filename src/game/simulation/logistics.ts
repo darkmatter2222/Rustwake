@@ -55,6 +55,27 @@ import { sameCell } from "../world/geometry";
 import { isRoadCell, roadWalkValid, type RoadNetworkState } from "../world/roadGraph";
 import type { Cell } from "../world/types";
 import { findRoadPath, type CargoHoldReason } from "./roadPaths";
+// T14 (#141): additive traffic authority (path cost, speed, bay/intersection
+// capacity, bounded retry/backoff). Imported one-way: traffic never imports
+// logistics, so every cargo transition stays here and the #140 conservation
+// invariant is untouched. With no TrafficState attached the legacy one-cell-
+// per-tick movement below runs unchanged.
+import {
+  bayCapacityAt,
+  bayFree,
+  cellEntryCost,
+  clearRetry,
+  ensureTruck,
+  junctionFree,
+  recordRetry,
+  releaseBay,
+  releaseJobBays,
+  reserveBay,
+  retryDue,
+  type TrafficState,
+  type TruckRuntime,
+} from "./traffic";
+import { cellKey } from "../world/geometry";
 
 export const LOGISTICS_SCHEMA_VERSION = 1;
 
@@ -668,7 +689,7 @@ function tickJob(state: LogisticsState, net: RoadNetworkState, job: CargoJob): v
  * id. Route resolution backs off per (topology revision, carrier) so an
  * unreachable job stays inspectable without re-running BFS every tick.
  */
-function dispatch(state: LogisticsState, net: RoadNetworkState): void {
+function dispatch(state: LogisticsState, net: RoadNetworkState, traffic?: TrafficState): void {
   const pending = state.jobs
     .filter((job) => job.status === "pending")
     .sort((a, b) => b.priority - a.priority || a.createdTick - b.createdTick || a.id - b.id);
@@ -702,20 +723,301 @@ function dispatch(state: LogisticsState, net: RoadNetworkState): void {
     job.heldReason = null;
     job.routeCache = null;
     job.lastAttemptRevision = net.revision;
+    if (traffic !== undefined) {
+      // A freshly assigned truck starts its leg clean: no stale timers, budget,
+      // retry state or bay lease from a previous job (release on every path).
+      const runtime = ensureTruck(traffic, carrier.id);
+      runtime.moveBudget = 0;
+      runtime.loadRemaining = 0;
+      runtime.unloadRemaining = 0;
+      runtime.retryCount = 0;
+      runtime.backoffUntil = 0;
+      runtime.lastAttemptRevision = net.revision;
+      runtime.heldReason = null;
+      runtime.queuedSince = 0;
+      releaseBay(traffic, carrier.id);
+    }
+  }
+}
+
+/** cellKey -> count of OTHER carriers on each cell (junction occupancy multiset). */
+function carrierOccupancy(state: LogisticsState, excludeCarrierId: number): Map<string, number> {
+  const occupancy = new Map<string, number>();
+  for (const carrier of state.carriers) {
+    if (carrier.id === excludeCarrierId) continue;
+    const key = cellKey(carrier.cell);
+    occupancy.set(key, (occupancy.get(key) ?? 0) + 1);
+  }
+  return occupancy;
+}
+
+/** Queue a truck at a full bay with the exact, inspectable blocker (E04/E05). */
+function holdAtBay(traffic: TrafficState, runtime: TruckRuntime, cell: Cell, tick: number): void {
+  runtime.heldReason = { kind: "bay-full", at: { x: cell.x, y: cell.y }, capacity: bayCapacityAt(traffic, cell) };
+  if (runtime.queuedSince === 0) runtime.queuedSince = tick;
+}
+
+/**
+ * Leg-end arrival under traffic: claim a bay slot (queueing when full), honour
+ * the load/unload duration, then run the SAME conserved cargo transition the
+ * legacy `arrive` uses. Recall arrival returns cargo to source free stock.
+ */
+function arriveTraffic(
+  state: LogisticsState,
+  net: RoadNetworkState,
+  job: CargoJob,
+  carrier: Carrier,
+  traffic: TrafficState,
+  runtime: TruckRuntime,
+): void {
+  if (job.phase === "to-source") {
+    if (!bayFree(traffic, job.sourceCell, carrier.id)) {
+      holdAtBay(traffic, runtime, job.sourceCell, state.tick);
+      return;
+    }
+    const lease = reserveBay(traffic, job.sourceCell, carrier.id, job.id);
+    runtime.bayLeaseId = lease !== null ? lease.id : null;
+    runtime.queuedSince = 0;
+    runtime.heldReason = null;
+    if (runtime.config.loadTicks > 0) {
+      runtime.loadRemaining = runtime.config.loadTicks;
+      return;
+    }
+    // Immediate load (legacy parity): reserved units move onto the carrier.
+    job.inTransit += job.atSource;
+    job.atSource = 0;
+    job.phase = "to-dest";
+    job.legFrom = { x: job.sourceCell.x, y: job.sourceCell.y };
+    startLeg(net, job, findRoadPath(net, job.sourceCell, job.destCell), job.destCell);
+    releaseBay(traffic, carrier.id);
+    runtime.moveBudget = 0;
+    return;
+  }
+  if (job.phase === "to-dest") {
+    if (!bayFree(traffic, job.destCell, carrier.id)) {
+      holdAtBay(traffic, runtime, job.destCell, state.tick);
+      return;
+    }
+    const lease = reserveBay(traffic, job.destCell, carrier.id, job.id);
+    runtime.bayLeaseId = lease !== null ? lease.id : null;
+    runtime.queuedSince = 0;
+    runtime.heldReason = null;
+    if (runtime.config.unloadTicks > 0) {
+      runtime.unloadRemaining = runtime.config.unloadTicks;
+      return;
+    }
+    attemptUnload(state, job, carrier);
+    releaseBay(traffic, carrier.id);
+    return;
+  }
+  if (job.phase === "returning") {
+    // Recall arrival: cargo returns to source free stock, conserved (no bay).
+    addStock(state, job.sourceBuildingId, job.cargoType, job.inTransit);
+    job.returned += job.inTransit;
+    job.inTransit = 0;
+    finish(state, job, carrier, "cancelled");
+    releaseBay(traffic, carrier.id);
   }
 }
 
 /**
- * Advance the session logistics ledger. Per tick: move/load/unload/recall
- * every active job (id order), then dispatch pending jobs oldest-first. One
- * cell per tick, integer-only, deterministic. Never touches the 2D economy or
- * any persisted state; the store calls this beside tickRoadCargo.
+ * Traffic-aware movement for one active job. Shares every cargo transition with
+ * the legacy path (load/unload/recall/settle stay in this module), so the #140
+ * conservation invariant holds. Adds: speed/movement-budget gating, junction
+ * capacity queueing, bay leases with load/unload timers, and bounded retry/
+ * backoff for held jobs. With the default profile this reduces to `tickJob`.
  */
-export function tickLogistics(state: LogisticsState, net: RoadNetworkState, ticks: number): void {
+function tickJobTraffic(
+  state: LogisticsState,
+  net: RoadNetworkState,
+  job: CargoJob,
+  carrier: Carrier,
+  traffic: TrafficState,
+): void {
+  if (job.status !== "active" && job.status !== "partial") return;
+  const runtime = ensureTruck(traffic, carrier.id);
+
+  // A recall abandons any in-progress load/unload timer (cargo is recalled).
+  if (job.phase === "returning") {
+    runtime.loadRemaining = 0;
+    runtime.unloadRemaining = 0;
+  }
+
+  // (A) Loading at the source bay: count down, then move cargo onto the truck.
+  if (runtime.loadRemaining > 0 && job.phase === "to-source") {
+    runtime.loadRemaining -= 1;
+    if (runtime.loadRemaining === 0) {
+      job.inTransit += job.atSource;
+      job.atSource = 0;
+      job.phase = "to-dest";
+      job.legFrom = { x: job.sourceCell.x, y: job.sourceCell.y };
+      startLeg(net, job, findRoadPath(net, job.sourceCell, job.destCell), job.destCell);
+      releaseBay(traffic, carrier.id);
+      runtime.moveBudget = 0;
+      runtime.heldReason = null;
+    }
+    return;
+  }
+
+  // (B) Unloading at the destination bay: count down, then settle cargo.
+  if (runtime.unloadRemaining > 0 && job.phase === "to-dest") {
+    runtime.unloadRemaining -= 1;
+    if (runtime.unloadRemaining === 0) {
+      attemptUnload(state, job, carrier);
+      releaseBay(traffic, carrier.id);
+      runtime.heldReason = null;
+    }
+    return;
+  }
+
+  // (C) At the destination with a partial remainder: re-attempt unload (needs a bay).
+  if (job.phase === "to-dest" && job.path !== null && job.progress >= job.path.length - 1) {
+    if (!bayFree(traffic, job.destCell, carrier.id)) {
+      holdAtBay(traffic, runtime, job.destCell, state.tick);
+      return;
+    }
+    const lease = reserveBay(traffic, job.destCell, carrier.id, job.id);
+    runtime.bayLeaseId = lease !== null ? lease.id : null;
+    runtime.queuedSince = 0;
+    runtime.heldReason = null;
+    if (runtime.config.unloadTicks > 0) {
+      runtime.unloadRemaining = runtime.config.unloadTicks;
+      return;
+    }
+    attemptUnload(state, job, carrier);
+    releaseBay(traffic, carrier.id);
+    return;
+  }
+
+  // (D) Revalidate a stamped path against the live topology (shared with legacy).
+  if (job.path !== null && job.pathRevision !== net.revision) {
+    revalidate(net, job, carrier);
+    if (job.path !== null) clearRetry(runtime, net.revision);
+  }
+
+  // (E) Held: bounded backoff retry from the leg origin (E04 recoverable job).
+  if (job.path === null) {
+    if (retryDue(traffic, runtime, state.tick, net.revision)) {
+      const target = phaseTarget(job);
+      const walk = findRoadPath(net, job.legFrom, target);
+      if (walk !== null) {
+        job.path = walk;
+        job.progress = 0;
+        job.pathRevision = net.revision;
+        carrier.cell = { x: walk[0].x, y: walk[0].y };
+        clearRetry(runtime, net.revision);
+        runtime.moveBudget = 0;
+        runtime.queuedSince = 0;
+      } else {
+        recordRetry(traffic, runtime, state.tick, net.revision);
+        // Exact blocker: a cut under the carrier's physical cell is road-removed
+        // there (E04); otherwise a cut at the leg origin, else no walk exists.
+        job.heldReason = !isRoadCell(net, carrier.cell)
+          ? { kind: "road-removed", at: { x: carrier.cell.x, y: carrier.cell.y } }
+          : !isRoadCell(net, job.legFrom)
+            ? { kind: "road-removed", at: { x: job.legFrom.x, y: job.legFrom.y } }
+            : { kind: "no-route", from: { x: job.legFrom.x, y: job.legFrom.y }, to: { x: target.x, y: target.y } };
+        runtime.heldReason = job.heldReason;
+      }
+    }
+    if (job.path === null) return;
+  }
+
+  // (F) Movement: spend the speed budget on cell entries, gated by capacity.
+  const path = job.path as Cell[];
+  const last = path.length - 1;
+  runtime.moveBudget += runtime.config.speed;
+  const occupancy = carrierOccupancy(state, carrier.id);
+  while (runtime.moveBudget > 0 && job.progress < last) {
+    const next = path[job.progress + 1];
+    if (!isRoadCell(net, next)) {
+      // A cut under the path ahead: revalidate from the current cell (legacy parity).
+      revalidate(net, job, carrier);
+      break;
+    }
+    if (!junctionFree(traffic, net, next, occupancy)) {
+      runtime.heldReason = {
+        kind: "junction-full",
+        at: { x: next.x, y: next.y },
+        capacity: traffic.junctionCapacity ?? 0,
+      };
+      if (runtime.queuedSince === 0) runtime.queuedSince = state.tick;
+      // A truck idling at a full junction does NOT bank movement points: it
+      // resumes at its normal speed when the slot frees, so contention costs
+      // real throughput (E05). Budget is only saved across ticks when the block
+      // is an unaffordable cell entry below, never a capacity wait.
+      runtime.moveBudget = 0;
+      break;
+    }
+    const cost = cellEntryCost(traffic, net, next);
+    // Saving up for an expensive cell (junction surcharge > speed): keep budget.
+    if (runtime.moveBudget < cost) break;
+    runtime.moveBudget -= cost;
+    job.progress += 1;
+    carrier.cell = { x: next.x, y: next.y };
+    runtime.heldReason = null;
+    runtime.queuedSince = 0;
+  }
+  if (job.path === null) return; // held by revalidation during movement
+  if (job.progress >= last) arriveTraffic(state, net, job, carrier, traffic, runtime);
+}
+
+/**
+ * One traffic-aware tick: release terminal jobs' bay leases, grant capacity to
+ * active jobs in fair FIFO order (earliest waiter first, then moving trucks by
+ * carrier id), then dispatch pending jobs oldest-first. Deterministic; the fair
+ * order is independent of job creation order so a waiting truck never starves.
+ */
+function tickLogisticsTraffic(state: LogisticsState, net: RoadNetworkState, traffic: TrafficState): void {
+  for (const job of state.jobs) {
+    if (job.status === "complete" || job.status === "cancelled") releaseJobBays(traffic, job.id);
+  }
+  const active = state.jobs.filter((job) => job.status === "active" || job.status === "partial");
+  const runtimeOf = (job: CargoJob): TruckRuntime | null => {
+    const carrier = carrierById(state, job.carrierId);
+    return carrier === null ? null : ensureTruck(traffic, carrier.id);
+  };
+  active.sort((a, b) => {
+    const ra = runtimeOf(a);
+    const rb = runtimeOf(b);
+    const waitA = ra !== null && ra.queuedSince > 0 ? 0 : 1;
+    const waitB = rb !== null && rb.queuedSince > 0 ? 0 : 1;
+    const queueA = ra?.queuedSince ?? 0;
+    const queueB = rb?.queuedSince ?? 0;
+    const carrierA = carrierById(state, a.carrierId)?.id ?? 0;
+    const carrierB = carrierById(state, b.carrierId)?.id ?? 0;
+    return waitA - waitB || queueA - queueB || carrierA - carrierB;
+  });
+  for (const job of active) {
+    const carrier = carrierById(state, job.carrierId);
+    if (carrier !== null) tickJobTraffic(state, net, job, carrier, traffic);
+  }
+  dispatch(state, net, traffic);
+  traffic.tick += 1;
+}
+
+/**
+ * Advance the session logistics ledger. Per tick: move/load/unload/recall
+ * every active job, then dispatch pending jobs oldest-first. Integer-only,
+ * deterministic. With no TrafficState the legacy one-cell-per-tick movement
+ * runs unchanged (#140 parity); with one attached, traffic gates speed, bay and
+ * junction capacity and bounded retry/backoff (T14). Never touches the 2D
+ * economy or any persisted state; the store calls this beside tickRoadCargo.
+ */
+export function tickLogistics(
+  state: LogisticsState,
+  net: RoadNetworkState,
+  ticks: number,
+  traffic?: TrafficState,
+): void {
   if (!Number.isInteger(ticks) || ticks <= 0) return;
   for (let i = 0; i < ticks; i += 1) {
-    for (const job of state.jobs) tickJob(state, net, job);
-    dispatch(state, net);
+    if (traffic === undefined) {
+      for (const job of state.jobs) tickJob(state, net, job);
+      dispatch(state, net);
+    } else {
+      tickLogisticsTraffic(state, net, traffic);
+    }
     state.tick += 1;
   }
 }
