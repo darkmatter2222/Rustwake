@@ -12,11 +12,11 @@ Obsolete art assumptions retired by #132/T05 (enumerated from the T02 audit §6;
 
 | Retired pin | Where | Disposition |
 |---|---|---|
-| ART-003…007 silhouette distinctness, ink shares, contact shadows, paint-op counts, rasterized pixel rows; 233000 B entry-chunk ceiling | `tests/renderer/silhouette.test.ts` (37 its) | Retire with Canvas 2D art; byte ceiling re-declared against the ≤8 MB compressed first-playable budget, never silently lifted |
-| drawScene paint-operation/pixel characterization | `tests/renderer/scene-draw.test.ts` (46 its) | Retire |
+| ART-003…007 silhouette distinctness, ink shares, contact shadows, paint-op counts, rasterized pixel rows; 233000 B entry-chunk ceiling | `tests/renderer/silhouette.test.ts` (28 its) | Retire with Canvas 2D art; byte ceiling re-declared against the ≤8 MB compressed first-playable budget, never silently lifted |
+| drawScene paint-operation/pixel characterization | `tests/renderer/scene-draw.test.ts` (43 its) | Retire |
 | World paint pinning (apron/palette/part tuples) + capture tooling | `tests/renderer/world-60.test.ts` (16 its), `world-60.evidence.mjs` | Retire |
 | 2D belt extent line drawing | `tests/renderer/belt-extent.test.ts` (4 its) | Retire; belt economics stay in simulation tests |
-| Drawn-leg parameter (DEF-004) | `tests/renderer/drone-leg.test.ts` (11 its) | Retire; stale-anchor behavior stays in `tests/simulation/fleet.test.ts` |
+| Drawn-leg parameter (DEF-004) | `tests/renderer/drone-leg.test.ts` (5 its) | Retire; stale-anchor behavior stays in `tests/simulation/fleet.test.ts` |
 | 2D camera clamp/zoom math bound to WORLD_W/H | `tests/renderer/camera-50.test.ts` (18 its) | Retarget to the 3D camera contract |
 
 Retained (explicitly not retired): `tests/legacy/**` from #129 (22 byte-pinned characterization tests — the conservation/migration baseline), all economic invariants (`tests/simulation/**`, `tests/persistence/**`, `tests/content/validate.test.ts`), `tests/renderer/gestures-50.test.ts` (retarget inputs to the 3D view, keep the contract), UI command/settings/save-flow tests (retarget with the UI), `tests/perf/bench.test.ts` (re-baseline with declared 3D scene/hardware). Historical art evidence (`docs/evidence/*art*`, art scripts, renderer PROVENANCE) stays preserved. A grep of `docs/vision/BACKLOG.md` found no pixel-exact/old-byte art constraints (it is the issue crosswalk); the executive contract's acceptance-hierarchy clause already requires this deliberate replacement with outcome-based checks.
