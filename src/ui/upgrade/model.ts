@@ -10,7 +10,11 @@
  */
 import { BLUEPRINTS } from "../../game/content/defs";
 import { researchBonus } from "../../game/content/research";
-import { branchPrice } from "../../game/simulation/commands";
+import {
+  branchPrice,
+  upgradeComparison,
+  type UpgradeComparison,
+} from "../../game/simulation/commands";
 import {
   BUFFER_RANK_UNITS,
   UPGRADE_BRANCHES,
@@ -22,7 +26,7 @@ import {
   type SimState,
   type UpgradeBranch,
 } from "../../game/simulation/types";
-import { formatSeconds, plural, t, unit } from "../../game/content/strings";
+import { formatRate, formatSeconds, plural, t, unit } from "../../game/content/strings";
 import { UPGRADE_COPY } from "./copy";
 
 export interface BranchCardModel {
@@ -42,6 +46,43 @@ export interface BranchCardModel {
   readonly affordable: boolean;
   /** The engine's own shortfall phrasing, or null when the yard can pay. */
   readonly shortfallText: string | null;
+  /**
+   * T18 (#145, U05): the full before/after the engine itself measures for this exact
+   * purchase (`upgradeComparison`), so every card — not just its named metric — shows
+   * what the tap changes: throughput in completed batches per minute at full power,
+   * power units per running batch, and input capacity including research bonuses.
+   */
+  readonly rateNow: number;
+  readonly rateNext: number;
+  readonly powerNow: number;
+  readonly powerNext: number;
+  readonly capacityNow: number;
+  readonly capacityNext: number;
+  readonly throughputText: string;
+  readonly powerText: string;
+  readonly capacityText: string;
+}
+
+/**
+ * The engine's U05 comparison for one candidate purchase. The machine is normally in
+ * `state.machines` (the panel only opens on live machines); a detached shape from a
+ * pure read-model caller is priced inside a view that holds it, so the numbers still
+ * come from `upgradeComparison` itself — never a second copy of its formulas.
+ */
+function comparisonFor(
+  state: SimState,
+  machine: MachineState,
+  branch: UpgradeBranch,
+): UpgradeComparison {
+  const direct = upgradeComparison(state, machine.id, branch);
+  if (direct !== null) return direct;
+  const view: SimState = {
+    ...state,
+    machines: [...state.machines.filter((m) => m.id !== machine.id), machine],
+  };
+  const held = upgradeComparison(view, machine.id, branch);
+  if (held === null) throw new Error(`upgradeComparison lost machine ${machine.id}`);
+  return held;
 }
 
 /** One level deeper with one more named pick — the exact shape `upgradeMachine` writes. */
@@ -99,6 +140,9 @@ export function branchCards(state: SimState, machine: MachineState): BranchCardM
       deltaText = noEffect ? UPGRADE_COPY.noChange : `-1 ${UPGRADE_COPY.powerUnit}`;
     }
     const affordable = state.credits >= cost;
+    // T18 (#145, U05): the engine's own before/after for this exact purchase. The
+    // price above stays `branchPrice` — the same ladder `upgradeComparison` charges.
+    const comparison = comparisonFor(state, machine, branch);
     return {
       branch,
       title: UPGRADE_COPY.branches[branch].title,
@@ -120,6 +164,15 @@ export function branchCards(state: SimState, machine: MachineState): BranchCardM
             have: state.credits,
             word: plural(cost, t("unit.credit")),
           }),
+      rateNow: comparison.before.batchesPerMinute,
+      rateNext: comparison.after.batchesPerMinute,
+      powerNow: comparison.before.power,
+      powerNext: comparison.after.power,
+      capacityNow: comparison.before.inputCapacity,
+      capacityNext: comparison.after.inputCapacity,
+      throughputText: `${formatRate(comparison.before.batchesPerMinute)} → ${formatRate(comparison.after.batchesPerMinute)} ${UPGRADE_COPY.batchesPerMinute}`,
+      powerText: `${unit(comparison.before.power, t("unit.unit"))} → ${unit(comparison.after.power, t("unit.unit"))}`,
+      capacityText: `${unit(comparison.before.inputCapacity, t("unit.unit"))} → ${unit(comparison.after.inputCapacity, t("unit.unit"))}`,
     };
   });
 }

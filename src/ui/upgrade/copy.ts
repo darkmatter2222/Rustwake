@@ -21,6 +21,13 @@ export const UPGRADE_COPY = {
   perBatch: "per batch",
   inputUnits: "input units",
   powerUnit: "power unit",
+  /** T18 (#145, U05): the full before/after rows every card prints, in plain words. */
+  throughputWord: "Throughput",
+  powerDrawWord: "Power draw",
+  capacityWord: "Input capacity",
+  batchesPerMinute: "batches/min",
+  instantNote:
+    "Every branch applies instantly with no downtime: the machine keeps running, and the new values take effect from the next batch.",
   noChange: "no change",
   noEffectBadge: "No effect",
   drawFloor:
