@@ -20,7 +20,7 @@ import { advance } from "../../src/game/simulation/engine";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 import { DEFAULT_SETTINGS, SAVE_KEY, encodeSave } from "../../src/game/persistence/save";
 import { PARTS } from "../../src/game/renderer/sprites";
-import { SHELL_RAIL_QUERY } from "../../src/ui/shell/layout";
+import { SHELL_DESKTOP_QUERY } from "../../src/ui/shell/layout";
 import { costSummary } from "../../src/ui/text";
 import { CATEGORIES, catalogCards, lockLine } from "../../src/ui/build/catalog";
 import { FUNCTIONS } from "../../src/ui/build/copy";
@@ -185,9 +185,10 @@ const pressBack = () =>
   act(() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })));
 
 const realMatchMedia = window.matchMedia?.bind(window);
-function stubMedia(rail: boolean): void {
+/** T08 (#135): the rail query is retired; the shell switches on the desktop query. */
+function stubMedia(desktop: boolean): void {
   window.matchMedia = ((query: string) => ({
-    matches: rail && query === SHELL_RAIL_QUERY,
+    matches: desktop && query === SHELL_DESKTOP_QUERY,
     media: query,
     onchange: null,
     addEventListener: () => {},
@@ -227,9 +228,12 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     expect(node).not.toBeNull();
     expect(node!.getAttribute("role")).toBe("dialog");
     expect(node!.getAttribute("aria-label")).toBe("Build catalog");
-    // The catalog is not a panel: the overlay-stack census is untouched.
+    // The catalog is not a panel. T08 (#135) U03: it is the ONE major surface,
+    // so opening it clears the panel stack (the report stays in the store and
+    // re-opens from Settings → Return report).
     expect(node!.classList.contains("panel")).toBe(false);
-    expect(panelTitles()).toEqual(["While you were away"]);
+    expect(panelTitles()).toEqual([]);
+    expect(document.querySelector(".shell-host")).toBeNull();
 
     const groups = [...node!.querySelectorAll(".catalog__group-title")].map((n) =>
       (n.textContent ?? "").trim()
@@ -447,20 +451,40 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     expect(dockFaces()[1]).toContain("Build Furnace");
   });
 
-  it("retires catalog and ghost as one layer, leaving the report underneath", () => {
+  it("retires catalog and ghost as one layer; the report re-opens from Settings", () => {
     const store = matureStore();
     mount(store);
     begin();
     expect(panelTitles()).toEqual(["While you were away"]);
     tapDockExact("Build");
     expect(catalog()).not.toBeNull();
-    expect(panelTitles()).toEqual(["While you were away"]);
+    // T08 (#135) U03: the catalog is the one major surface, so it replaces the
+    // stack instead of painting over the report. Nothing is lost: the report
+    // lives in the store, not in the retired layer.
+    expect(panelTitles()).toEqual([]);
+    expect(document.querySelector(".shell-host")).toBeNull();
 
     pressBack();
     expect(catalog()).toBeNull();
     expect(statusLine()).not.toContain("Ghost on cell");
+    expect(panelTitles()).toEqual([]);
+
+    // Settings carries the retired Menu sheet's Return report row.
+    act(() => findButton("Settings")?.click());
+    const row = [...document.querySelectorAll<HTMLElement>(".panel--settings .panel__row")].find(
+      (node) => (node.querySelector("dt")?.textContent ?? "").trim() === "Return report"
+    );
+    expect(row).toBeDefined();
+    const open = [...row!.querySelectorAll("button")].find(
+      (node) => (node.textContent ?? "").trim() === "Open"
+    );
+    expect(open?.disabled).toBe(false);
+    act(() => open?.click());
     expect(panelTitles()).toEqual(["While you were away"]);
 
+    // Back pops one layer at a time: report → Settings → yard.
+    pressBack();
+    expect(panelTitles()).toEqual(["Settings"]);
     pressBack();
     expect(panelTitles()).toEqual([]);
     expect(document.querySelector(".dock")).not.toBeNull();
@@ -507,8 +531,9 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     expect(document.documentElement.scrollHeight).toBeLessThanOrEqual(window.innerHeight + 1);
     const body = document.querySelector<HTMLElement>(".catalog__body")!;
     expect(getComputedStyle(body).overflowY).toBe("auto");
-    // The report is still up: the paired budget, not the single-layer cap.
-    expect(getComputedStyle(catalog()!).maxHeight).toBe("26%");
+    // T08 (#135): the paired 26% budget retired with two painted layers; the
+    // catalog keeps its own phone budget while the host owns panel height.
+    expect(getComputedStyle(catalog()!).maxHeight).toBe("42%");
     expect(getComputedStyle(catalog()!).order).toBe("3");
   });
 

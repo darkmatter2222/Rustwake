@@ -164,14 +164,18 @@ describe("UI-RESET-51 resource grouping and all-resource access", () => {
     expect(host.querySelectorAll(".resources__item").length).toBe(chipCount);
   });
 
-  it("keeps Home the cluster's last child so the rail's hide rule still applies", () => {
+  it("keeps Home the cluster's last child so the hide rule still applies (T08)", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     const host = mount(store);
     start();
     const cluster = [...host.querySelectorAll<HTMLElement>(".cluster .icon-btn")];
-    expect(cluster.length).toBe(4);
+    // T08 (#135): the rail is retired; the cluster gained the Settings gear.
+    // Home stays the last child so `.cluster .icon-btn:last-child` keeps
+    // hiding it at every width.
+    expect(cluster.length).toBe(5);
     expect(cluster[cluster.length - 1].getAttribute("aria-label")).toBe("Return to yard view");
     expect(cluster[2].getAttribute("aria-label")).toBe("All resources");
+    expect(cluster[3].getAttribute("aria-label")).toBe("Settings");
   });
 });
 

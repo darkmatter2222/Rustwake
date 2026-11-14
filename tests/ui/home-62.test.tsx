@@ -53,11 +53,6 @@ function mount(
   return { host, root };
 }
 
-const menuFace = () => document.querySelector<HTMLButtonElement>(".shell-menu-face");
-const menuRow = (label: string) =>
-  [...document.querySelectorAll<HTMLButtonElement>(".shell-menu__row")].find((node) =>
-    (node.textContent ?? "").trim().startsWith(label)
-  );
 const dialog = () => document.querySelector<HTMLElement>('.reset-dialog[role="alertdialog"]');
 const pressKey = (key: string) =>
   act(() => {
@@ -224,17 +219,18 @@ describe("UI-RESET-62 title/continue and reset-game", () => {
     expect(window.localStorage.getItem(SAVE_KEY)).toBeNull();
   });
 
-  it("post-start Menu exposes Reset game; cancel keeps the run, confirm resets it", () => {
+  it("post-start Settings exposes Reset game; cancel keeps the run, confirm resets it", () => {
     seedProgress();
     const reload = vi.fn();
     const { host } = mount(createStore(), { reload });
     act(() => findButton("Begin recovery")?.click());
     expect(host.querySelector(".hud")).not.toBeNull();
 
-    act(() => menuFace()?.click());
-    const row = menuRow("Reset game");
-    expect(row).toBeDefined();
-    act(() => row?.click());
+    // T08 (#135): the Menu sheet is retired; the resource-strip gear opens
+    // Settings, which carries the Reset game danger row.
+    act(() => findButton("Settings")?.click());
+    expect(document.querySelector(".panel--settings")).not.toBeNull();
+    act(() => findButton("Reset game")?.click());
     expect(dialog()).not.toBeNull();
     expect(dialog()?.textContent).toContain("permanently deletes");
     act(() => findButton("Cancel")?.click());
@@ -243,9 +239,9 @@ describe("UI-RESET-62 title/continue and reset-game", () => {
     expect(window.localStorage.getItem(SAVE_KEY)).not.toBeNull();
     expect(reload).not.toHaveBeenCalled();
 
-    // Cancel leaves the menu sheet open underneath, so the row is still reachable.
-    expect(document.querySelector(".shell-menu")).not.toBeNull();
-    act(() => menuRow("Reset game")?.click());
+    // Cancel leaves Settings open underneath, so Reset game is still reachable.
+    expect(document.querySelector(".panel--settings")).not.toBeNull();
+    act(() => findButton("Reset game")?.click());
     const ack = document.querySelector<HTMLInputElement>(".reset-dialog__ack input");
     act(() => ack?.click());
     act(() => findButton("Delete save and reset")?.click());
