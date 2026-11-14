@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "original procedural references; not shipped production art",
+  "status": "T09 (#136): five buildings + wreckSections authored to production geometry from the approved kit; capable visual inspection pending (G1 #151). Remaining assets are original procedural references, not shipped production art.",
   "assets": [
     {
       "id": "warehouse",
@@ -10,14 +10,17 @@
         6,
         4
       ],
-      "parts": 12,
+      "parts": 18,
       "clips": [
         "assemble_structure",
         "assemble_roof",
         "door0_open",
-        "door1_open"
+        "door1_open",
+        "vent_fan",
+        "pallet_lift"
       ],
-      "status": "blockout"
+      "status": "production",
+      "visualReview": "pending"
     },
     {
       "id": "depot",
@@ -27,12 +30,15 @@
         4,
         4
       ],
-      "parts": 9,
+      "parts": 14,
       "clips": [
         "assemble_structure",
-        "assemble_roof"
+        "assemble_roof",
+        "door_open",
+        "vent_fan"
       ],
-      "status": "blockout"
+      "status": "production",
+      "visualReview": "pending"
     },
     {
       "id": "sorter",
@@ -42,11 +48,14 @@
         3,
         3
       ],
-      "parts": 4,
+      "parts": 10,
       "clips": [
-        "roller_work"
+        "roller_work",
+        "roller2_work",
+        "magnet_sweep"
       ],
-      "status": "blockout"
+      "status": "production",
+      "visualReview": "pending"
     },
     {
       "id": "furnace",
@@ -56,11 +65,15 @@
         3,
         3
       ],
-      "parts": 8,
+      "parts": 13,
       "clips": [
-        "intake"
+        "intake",
+        "fan_work",
+        "pour",
+        "vent_puff"
       ],
-      "status": "blockout"
+      "status": "production",
+      "visualReview": "pending"
     },
     {
       "id": "generator",
@@ -70,11 +83,17 @@
         2,
         2
       ],
-      "parts": 4,
+      "parts": 5,
       "clips": [
-        "fan_powered"
+        "fan_powered",
+        "shaft_drive",
+        "fan_idle",
+        "fan_load_high",
+        "fan_start",
+        "fan_spin_down"
       ],
-      "status": "blockout"
+      "status": "production",
+      "visualReview": "pending"
     },
     {
       "id": "crane",
@@ -181,6 +200,19 @@
         "gate_open"
       ],
       "status": "blockout"
+    },
+    {
+      "id": "wreckSections",
+      "recipe": "kit.json",
+      "gltf": "generated/wreckSections.gltf",
+      "footprint": [
+        3,
+        3
+      ],
+      "parts": 11,
+      "clips": [],
+      "status": "production",
+      "visualReview": "pending"
     }
   ],
   "additionalRequired": [
@@ -209,8 +241,7 @@
     "roadStraight",
     "roadCorner",
     "roadJunction",
-    "terrainShrub",
-    "wreckSections"
+    "terrainShrub"
   ],
   "productionAcceptance": "V01 V04 V05 V06; actual rendered review required"
 }
