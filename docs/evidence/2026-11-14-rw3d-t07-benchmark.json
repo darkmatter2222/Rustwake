@@ -1,0 +1,258 @@
+{
+  "meta": {
+    "issue": 134,
+    "role": "developer",
+    "seed": "rw3d-t07-bench-v1",
+    "sha": "ebf9b5414ace35014a18b7f9ca410bf37a1d1191",
+    "command": "node tests/renderer/rw3d-t07/bench.mjs",
+    "timestamp": "2026-11-14T06:25:34.195Z",
+    "state": "deep-yard.modern legacy fixture (decodeSave+migrate), real engine at fixed dt=1 tick/frame; 600-frame scripted timeline run twice; no RNG, no wall clock in the state path",
+    "qualityTier": "blockout-flat: no shadows, DPR cap 2, hemisphere 1.6 + directional 1.0, instanced batches",
+    "viewport": "1440x900 @1x"
+  },
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "gl": {
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "renderer": {
+    "name": "three.js",
+    "revision": "187",
+    "pinned": "0.187.0"
+  },
+  "fixture": {
+    "name": "deep-yard.modern",
+    "tick": 11704,
+    "machines": 7,
+    "drones": 2,
+    "credits": 1437
+  },
+  "frameTime": {
+    "renderMs": {
+      "p50": 0.1,
+      "p95": 0.2,
+      "p99": 0.5,
+      "max": 1
+    }
+  },
+  "determinism": {
+    "run1": {
+      "state": {
+        "tick": 12304,
+        "machines": 7,
+        "credits": 1437
+      },
+      "hash": "cc383fb2"
+    },
+    "run2": {
+      "state": {
+        "tick": 12304,
+        "machines": 7,
+        "credits": 1437
+      },
+      "hash": "cc383fb2"
+    }
+  },
+  "inputLatencyMs": {
+    "samples": 10,
+    "p50": 0.3,
+    "p95": 2.4,
+    "max": 2.4
+  },
+  "clicks": [
+    {
+      "target": 1,
+      "selected": 1,
+      "hit": true
+    },
+    {
+      "target": "empty",
+      "selected": null,
+      "hit": true
+    },
+    {
+      "target": 2,
+      "selected": 2,
+      "hit": true
+    },
+    {
+      "target": "empty",
+      "selected": null,
+      "hit": true
+    },
+    {
+      "target": 3,
+      "selected": 3,
+      "hit": true
+    },
+    {
+      "target": "empty",
+      "selected": null,
+      "hit": true
+    },
+    {
+      "target": 4,
+      "selected": 4,
+      "hit": true
+    },
+    {
+      "target": "empty",
+      "selected": null,
+      "hit": true
+    },
+    {
+      "target": 5,
+      "selected": 5,
+      "hit": true
+    },
+    {
+      "target": "empty",
+      "selected": null,
+      "hit": true
+    }
+  ],
+  "gestureSafety": {
+    "drag": {
+      "commits": 0,
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 4,
+        "yaw": 270,
+        "elev": 90
+      },
+      "phase": "idle",
+      "spoiled": false
+    },
+    "cancelled": {
+      "commits": 0,
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 4,
+        "yaw": 270,
+        "elev": 90
+      },
+      "phase": "idle",
+      "spoiled": false
+    },
+    "fresh": {
+      "commits": 1,
+      "camera": {
+        "x": 96,
+        "y": 112,
+        "scale": 4,
+        "yaw": 270,
+        "elev": 90
+      },
+      "phase": "idle",
+      "spoiled": false
+    }
+  },
+  "finalStats": {
+    "width": 1440,
+    "height": 900,
+    "uniqueColors": 62,
+    "luminanceMean": 35.75,
+    "luminanceStddev": 32.38,
+    "backgroundFraction": 0.4673,
+    "selectPixels": 112,
+    "amberPixels": 1212
+  },
+  "checks": [
+    {
+      "name": "frames completed (run 1)",
+      "expected": 600,
+      "actual": 600,
+      "pass": true
+    },
+    {
+      "name": "frames completed (run 2)",
+      "expected": 600,
+      "actual": 600,
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "3D world ready (not 2D fallback)",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "determinism: final state identical",
+      "expected": "{\"tick\":12304,\"machines\":7,\"credits\":1437}",
+      "actual": "{\"tick\":12304,\"machines\":7,\"credits\":1437}",
+      "pass": true
+    },
+    {
+      "name": "determinism: final pixel hash identical",
+      "expected": "cc383fb2",
+      "actual": "cc383fb2",
+      "pass": true
+    },
+    {
+      "name": "p95 render ms <= 250 (software-rasterizer tolerance)",
+      "expected": "<=250",
+      "actual": 0.2,
+      "pass": true
+    },
+    {
+      "name": "machine clicks select the aimed machine (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "empty clicks clear selection (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "selection latency samples >= 10",
+      "expected": ">=10",
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "name": "p95 input-to-selection <= 250ms (software tolerance)",
+      "expected": "<=250",
+      "actual": 2.4,
+      "pass": true
+    },
+    {
+      "name": "drag round-trip commits 0 taps",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "cancelled pinch commits 0 taps",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "fresh gesture after cancel taps once",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Headless rasterizer may be SwiftShader (CPU); GPU-path frame times on this device remain unverified (see gl.renderer).",
+    "Bounded 7-machine yard: P1 population stress targets are NOT measured here.",
+    "Latency is pointerdown-to-tap-commit inside the page; compositor present latency is not included.",
+    "No real phone attached: desktop only."
+  ]
+}

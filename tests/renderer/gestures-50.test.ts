@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import * as THREE from "three";
 import {
   TAP_THRESHOLD_PX,
   applyGesture,
@@ -7,6 +8,10 @@ import {
   type GestureOutput,
   type GestureState,
 } from "../../src/game/renderer/gestures";
+import { panCamera, zoomAtPoint } from "../../src/game/renderer/camera";
+import { screenToWorld, worldToScreen, type Camera, type ViewState } from "../../src/game/renderer/projection";
+import { CELL, WORLD_H, WORLD_W, tileToWorld, worldToTile } from "../../src/game/renderer/grid";
+import { castPick, syncOrthoCamera } from "../../src/game/renderer/three/cameraRig";
 
 /**
  * UI-RESET-50 (G2 wave 2): the gesture machine contract.
@@ -240,5 +245,142 @@ describe("purity and unknown pointers", () => {
     expect(first.state.pointers).not.toBe(second.state.pointers);
     expect(first.state.pointers.size).toBe(1);
     expect(second.state.pointers.size).toBe(2);
+  });
+});
+
+/**
+ * RW3D T07 (#134) retarget: the SAME reducer now steers the 3D view. The contract
+ * the issue pins is unchanged — only a cleared tap may select / salvage / place —
+ * but the outputs are applied through the orbit-aware camera and the tap is
+ * resolved through the production ground inverse + raycast pick path. A drag or
+ * a cancel must produce ZERO commit intents under any orbit.
+ */
+describe("RW3D T07 retarget: gestures steer the 3D view", () => {
+  const view: ViewState = { width: 960, height: 640 };
+  const fitted: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale: 1.4 };
+  const orbit: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale: 3, yaw: 45, elev: 35 };
+  // Zoomed-in phone region: both axes stay inside the pan clamp, so applied pans
+  // and pinch anchors move the camera instead of hitting the pin-to-fit rule.
+  const closeView: ViewState = { width: 320, height: 240 };
+  const closeOrbit: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale: 5, yaw: 45, elev: 35 };
+
+  /** The only output that may select / salvage / place is a cleared tap. */
+  const commits = (outputs: GestureOutput[]): number =>
+    outputs.filter((o) => o.tap !== null).length;
+
+  function pickRig(): { camera3: THREE.OrthographicCamera; raycaster: THREE.Raycaster; machines: THREE.InstancedMesh } {
+    const camera3 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 4096);
+    syncOrthoCamera(camera3, orbit, view);
+    const machines = new THREE.InstancedMesh(
+      new THREE.BoxGeometry(CELL * 0.8, 16, CELL * 0.8),
+      new THREE.MeshBasicMaterial(),
+      1
+    );
+    machines.userData.kind = "machine";
+    machines.userData.ids = [9];
+    const t = tileToWorld(9);
+    machines.setMatrixAt(0, new THREE.Matrix4().makeTranslation(t.x, 8, t.y));
+    machines.instanceMatrix.needsUpdate = true;
+    machines.updateMatrixWorld();
+    return { camera3, raycaster: new THREE.Raycaster(), machines };
+  }
+
+  it("a cleared tap under orbit selects the tile and body under the pointer", () => {
+    const t = tileToWorld(9);
+    const px = worldToScreen(orbit, view, t.x, t.y);
+    const outputs = run(idleGesture(), down(1, px.x, px.y), up(1, px.x, px.y));
+    expect(commits(outputs)).toBe(1);
+    const tap = outputs[1].tap!;
+    const ground = screenToWorld(orbit, view, tap.x, tap.y);
+    expect(worldToTile(ground.x, ground.y)).toBe(9);
+    const { camera3, raycaster, machines } = pickRig();
+    const hit = castPick(raycaster, camera3, view, tap.x, tap.y, [machines]);
+    expect(hit).not.toBeNull();
+    expect(hit!.id).toBe(9);
+  });
+
+  it("a drag that ends where it began commits nothing and pans the orbit camera", () => {
+    const outputs = run(
+      idleGesture(),
+      down(1, 160, 120),
+      move(1, 220, 160),
+      move(1, 160, 120),
+      up(1, 160, 120)
+    );
+    expect(commits(outputs)).toBe(0);
+    const pans = outputs.filter((o) => o.pan !== null);
+    expect(pans.length).toBeGreaterThan(0);
+    let camera = closeOrbit;
+    const trail: Camera[] = [];
+    for (const o of pans) {
+      camera = panCamera(camera, closeView, o.pan!.dx, o.pan!.dy, fitted);
+      trail.push(camera);
+    }
+    // The world followed the finger mid-drag...
+    expect(trail[0].x !== closeOrbit.x || trail[0].y !== closeOrbit.y).toBe(true);
+    // ...and the round trip returned home without ever committing a tap.
+    expect(camera.x).toBeCloseTo(closeOrbit.x, 6);
+    expect(camera.y).toBeCloseTo(closeOrbit.y, 6);
+    expect(camera.yaw).toBe(45);
+    expect(camera.elev).toBe(35);
+  });
+
+  it("a cancelled pointer spoils every remaining lift — zero purchase/salvage commits", () => {
+    const spoiled = run(
+      idleGesture(),
+      down(1, 100, 100),
+      down(2, 200, 100),
+      cancel(1),
+      up(2, 200, 100)
+    );
+    expect(commits(spoiled)).toBe(0);
+    // A fresh gesture after every pointer is up may tap again.
+    const fresh = run(spoiled[spoiled.length - 1].state, down(3, 150, 150), up(3, 150, 150));
+    expect(commits(fresh)).toBe(1);
+  });
+
+  it("a single-pointer cancel spoils the lift too", () => {
+    const outputs = run(idleGesture(), down(1, 100, 100), cancel(1), down(1, 100, 100), up(1, 100, 100));
+    // The cancel emptied the gesture; the new down/up is a fresh gesture and may tap.
+    expect(outputs[1].tap).toBeNull();
+    expect(commits(outputs)).toBe(1);
+    const spoiledMid = run(idleGesture(), down(1, 100, 100), down(2, 300, 100), cancel(2), up(1, 100, 100));
+    expect(commits(spoiledMid)).toBe(0);
+  });
+
+  it("pinch zooms through the orbit anchor and neither lift is a tap", () => {
+    const outputs = run(
+      idleGesture(),
+      down(1, 120, 120),
+      down(2, 160, 120),
+      move(2, 200, 120),
+      up(1, 120, 120),
+      up(2, 200, 120)
+    );
+    expect(commits(outputs)).toBe(0);
+    const pinch = outputs[2].pinch!;
+    expect(pinch.factor).toBe(2);
+    const anchor = screenToWorld(closeOrbit, closeView, pinch.x, pinch.y);
+    const zoomed = zoomAtPoint(closeOrbit, closeView, pinch.factor, pinch.x, pinch.y, fitted);
+    const after = screenToWorld(zoomed, closeView, pinch.x, pinch.y);
+    expect(after.x).toBeCloseTo(anchor.x, 6);
+    expect(after.y).toBeCloseTo(anchor.y, 6);
+  });
+
+  it("travel within the tap threshold still commits exactly once under orbit", () => {
+    const outputs = run(
+      idleGesture(),
+      down(1, 300, 200),
+      move(1, 300 + TAP_THRESHOLD_PX, 200),
+      up(1, 300 + TAP_THRESHOLD_PX, 200)
+    );
+    expect(commits(outputs)).toBe(1);
+    const over = run(
+      idleGesture(),
+      down(1, 300, 200),
+      move(1, 300 + TAP_THRESHOLD_PX + 1, 200),
+      up(1, 300 + TAP_THRESHOLD_PX + 1, 200)
+    );
+    expect(commits(over)).toBe(0);
   });
 });
