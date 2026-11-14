@@ -36,32 +36,35 @@ import {
   type PartTuple,
 } from "./sprites";
 import { effectiveReducedMotion } from "./motion";
+// RW3D T07 (#134): the yard grid, the orthographic projection and the three.js world
+// layer live in their own modules so the THREE renderer never imports the UI logistics
+// bridge. scene.ts re-exports the legacy surface (constants, types, tile mapping and
+// the screen<->world inverse) so src/ui and the frozen shell tests keep one import path.
+import {
+  CELL,
+  WORLD_H,
+  WORLD_W,
+  WRECK_POSITION,
+  tileToWorld,
+  worldToTile,
+} from "./grid";
+import {
+  screenToWorld,
+  worldToScreen,
+  type Camera,
+  type CameraInsets,
+  type ViewState,
+} from "./projection";
+import { blitWorld3D } from "./three";
+// RW3D T07 (#134): the drone flight parameter is pure and shared with the three.js world
+// layer; it lives in flight.ts so THREE never imports scene.ts (no import cycle, no UI
+// bridge across the boundary). Re-exported here to keep the legacy import surface.
+import { droneLeg } from "./flight";
 
-export const CELL = 32;
-export const WORLD_W = YARD_COLS * CELL;
-export const WORLD_H = YARD_ROWS * CELL + CELL;
-
-export interface Camera {
-  x: number;
-  y: number;
-  scale: number;
-}
-
-export interface ViewState {
-  width: number;
-  height: number;
-}
-
-/**
- * L-1: the unobstructed vertical band the world has to live in, as measured edges of
- * the chrome painted over the canvas - `top` is the bottom edge of the top cluster and
- * `bottom` the distance from the viewport's lower edge to the top of the dock. Without
- * them the fit is the legacy width-only term, byte for byte.
- */
-export interface CameraInsets {
-  top: number;
-  bottom: number;
-}
+export { CELL, WORLD_H, WORLD_W, WRECK_POSITION, tileToWorld, worldToTile };
+export { screenToWorld, worldToScreen };
+export { droneLeg };
+export type { Camera, CameraInsets, ViewState };
 
 /**
  * Floor of a band-fitted scale; the legacy unbanded floor is the original 1.4. E-3: the
@@ -101,40 +104,6 @@ export function fitCamera(view: ViewState, insets?: CameraInsets): Camera {
   // The band centre, not the canvas centre, is where the world's middle goes.
   const bandCentre = insets.top + usableH / 2;
   return { x: WORLD_W / 2, y: WORLD_H / 2 + (view.height / 2 - bandCentre) / scale, scale };
-}
-
-export function tileToWorld(tile: number): { x: number; y: number } {
-  const col = tile % YARD_COLS;
-  const row = Math.floor(tile / YARD_COLS);
-  return { x: col * CELL + CELL / 2, y: row * CELL + CELL / 2 };
-}
-
-export function worldToTile(x: number, y: number): number | null {
-  const col = Math.floor(x / CELL);
-  const row = Math.floor(y / CELL);
-  if (col < 0 || col >= YARD_COLS || row < 0 || row >= YARD_ROWS) return null;
-  return row * YARD_COLS + col;
-}
-
-export const WRECK_POSITION = { x: CELL * 2.5, y: WORLD_H - CELL * 0.55 };
-
-export function screenToWorld(
-  camera: Camera,
-  view: ViewState,
-  sx: number,
-  sy: number
-): { x: number; y: number } {
-  return {
-    x: (sx - view.width / 2) / camera.scale + camera.x,
-    y: (sy - view.height / 2) / camera.scale + camera.y,
-  };
-}
-
-export function worldToScreen(camera: Camera, view: ViewState, x: number, y: number) {
-  return {
-    x: (x - camera.x) * camera.scale + view.width / 2,
-    y: (y - camera.y) * camera.scale + view.height / 2,
-  };
 }
 
 export interface DrawOptions {
@@ -279,34 +248,50 @@ export function drawScene(
   // the renderer (no signature change, no new persisted setting). jsdom has no matchMedia,
   // so the unit tests keep the caller's option as the whole answer.
   const reducedMotion = effectiveReducedMotion(options.reducedMotion);
-  // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).
-  ctx.fillStyle = PALETTE.night;
-  ctx.fillRect(0, 0, view.width, view.height);
-  const origin = worldToScreen(camera, view, 0, 0);
-  ctx.fillStyle = PALETTE.nightDeep;
-  ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(WORLD_H * s));
-  ctx.fillStyle = PALETTE.floor;
-  ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(YARD_ROWS * CELL * s));
-  // ART-001: the distant plane first, then the pad and its kit, then the foreground apron.
-  drawBackdrop(ctx, camera, view, s);
-  drawFloorKit(ctx, camera, view, s);
-  drawForeground(ctx, camera, view, s);
+  // RW3D T07 (#134): try the three.js world first. In a real browser it renders the
+  // volumetric yard (ground + instanced bodies + drones) and blits it here, so the flat
+  // bodies below are skipped and only the 2D information overlay is painted on top. In
+  // jsdom / recording contexts the probe fails and blitWorld3D returns false WITHOUT
+  // touching ctx, so `bodies` stays true and the legacy paint runs byte for byte.
+  const used3D = blitWorld3D(ctx, state, camera, view, {
+    reducedMotion,
+    framePhase: phase,
+    selected: options.selected,
+  });
+  const bodies = !used3D;
+  if (bodies) {
+    // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).
+    ctx.fillStyle = PALETTE.night;
+    ctx.fillRect(0, 0, view.width, view.height);
+    const origin = worldToScreen(camera, view, 0, 0);
+    ctx.fillStyle = PALETTE.nightDeep;
+    ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(WORLD_H * s));
+    ctx.fillStyle = PALETTE.floor;
+    ctx.fillRect(snap(origin.x), snap(origin.y), snap(WORLD_W * s), snap(YARD_ROWS * CELL * s));
+    // ART-001: the distant plane first, then the pad and its kit, then the foreground apron.
+    drawBackdrop(ctx, camera, view, s);
+    drawFloorKit(ctx, camera, view, s);
+    drawForeground(ctx, camera, view, s);
+  }
   if (options.buildMode) drawGrid(ctx, camera, view);
   drawRoutes(ctx, state, camera, view, phase, options.selected, reducedMotion);
-  drawWreck(ctx, state, camera, view, options.selected === -1);
-  drawDock(ctx, state, camera, view, options.selected === -2);
+  drawWreck(ctx, state, camera, view, options.selected === -1, bodies);
+  drawDock(ctx, state, camera, view, options.selected === -2, bodies);
   const sheen: [number, number, number, number][] = [];
   const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, reducedMotion, phase);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, reducedMotion, phase, bodies);
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
   // ART-004 D1: the lit band rides at full alpha, so the brightest tone in the frame is the
   // facet edge itself (the top luminance bucket) instead of a 0.9 blend one step below it.
-  groupFill(ctx, sheen, "select", 1);
-  groupFill(ctx, shade, "path");
-  drawDrones(ctx, state, camera, view, reducedMotion, phase);
+  // The three.js bodies carry their own form, so the flat bevel is skipped on the 3D path.
+  if (bodies) {
+    groupFill(ctx, sheen, "select", 1);
+    groupFill(ctx, shade, "path");
+  }
+  drawDrones(ctx, state, camera, view, reducedMotion, phase, bodies);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
 }
 
@@ -403,45 +388,51 @@ function drawWreck(
   state: SimState,
   camera: Camera,
   view: ViewState,
-  selected: boolean
+  selected: boolean,
+  bodies: boolean
 ): void {
   const p = worldToScreen(camera, view, WRECK_POSITION.x, WRECK_POSITION.y);
   const s = camera.scale;
-  // W4/ART-003: the hulk sits on a contact shadow ellipse, one step under the floor,
-  // the same 0.35 ellipse every other static footprint carries.
-  ctx.fillStyle = PALETTE.shadow;
-  ctx.globalAlpha = 0.35;
-  ctx.beginPath();
-  ctx.ellipse(snap(p.x), snap(p.y + 14 * s), snap(14 * s), snap(2 * s), 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = PALETTE.wreck;
-  ctx.beginPath(); // W1 pentagon hull
-  WRECK_HULL.forEach(([dx, dy], i) => {
-    const x = snap(p.x + dx * s);
-    const y = snap(p.y + dy * s);
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.closePath();
-  ctx.fill();
-  ctx.strokeStyle = PALETTE.rust; // W2 1-unit outline
-  ctx.lineWidth = Math.max(1, snap(1 * s));
-  ctx.stroke();
-  // W3 remaining band as three 2x2 pips, quantised by the remaining ratio (B5).
+  if (bodies) {
+    // W4/ART-003: the hulk sits on a contact shadow ellipse, one step under the floor,
+    // the same 0.35 ellipse every other static footprint carries.
+    ctx.fillStyle = PALETTE.shadow;
+    ctx.globalAlpha = 0.35;
+    ctx.beginPath();
+    ctx.ellipse(snap(p.x), snap(p.y + 14 * s), snap(14 * s), snap(2 * s), 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = PALETTE.wreck;
+    ctx.beginPath(); // W1 pentagon hull
+    WRECK_HULL.forEach(([dx, dy], i) => {
+      const x = snap(p.x + dx * s);
+      const y = snap(p.y + dy * s);
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = PALETTE.rust; // W2 1-unit outline
+    ctx.lineWidth = Math.max(1, snap(1 * s));
+    ctx.stroke();
+  }
+  // W3 remaining band as three 2x2 pips, quantised by the remaining ratio (B5). Information
+  // overlay: kept on the three.js path so the salvage gauge still reads over the 3D hulk.
   const ratio = state.wreck.remaining / (TUNING.starterWreckPool || 1);
   pipRow(ctx, p.x - 3 * s, p.y - 1 * s, s, Math.min(3, Math.ceil(ratio * 3)), 3, "amber");
-  groupFill(
-    ctx,
-    WRECK_SHARDS.map(([sx, sy]) => [p.x + sx * s, p.y + sy * s, 3 * s, 3 * s] as [number, number, number, number]),
-    "rust"
-  );
-  // W6: the hull reads as a hulk now - two empty ports, three ribs, a snapped mast and a
-  // stub of rail on its near side. All four rows are one grouped path each.
-  paintTable(ctx, WRECK_VOIDS, p.x, p.y, s);
-  paintTable(ctx, WRECK_RIBS, p.x, p.y, s);
-  paintTable(ctx, WRECK_MAST, p.x, p.y, s);
-  paintTable(ctx, WRECK_STREAKS, p.x, p.y, s);
+  if (bodies) {
+    groupFill(
+      ctx,
+      WRECK_SHARDS.map(([sx, sy]) => [p.x + sx * s, p.y + sy * s, 3 * s, 3 * s] as [number, number, number, number]),
+      "rust"
+    );
+    // W6: the hull reads as a hulk now - two empty ports, three ribs, a snapped mast and a
+    // stub of rail on its near side. All four rows are one grouped path each.
+    paintTable(ctx, WRECK_VOIDS, p.x, p.y, s);
+    paintTable(ctx, WRECK_RIBS, p.x, p.y, s);
+    paintTable(ctx, WRECK_MAST, p.x, p.y, s);
+    paintTable(ctx, WRECK_STREAKS, p.x, p.y, s);
+  }
   if (selected) outline(ctx, p.x, p.y, snap(24 * s), snap(16 * s));
 }
 
@@ -450,14 +441,16 @@ function drawDock(
   state: SimState,
   camera: Camera,
   view: ViewState,
-  selected: boolean
+  selected: boolean,
+  bodies: boolean
 ): void {
   const c = tileToWorld(DOCK_TILE);
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
-  paintParts(ctx, p.x, p.y, s, PARTS.dock);
+  if (bodies) paintParts(ctx, p.x, p.y, s, PARTS.dock);
+  // D4 store gauge: information overlay, kept over the three.js dock blockout.
   const ratio = state.storeCapacity === 0 ? 0 : state.storeUnits / state.storeCapacity;
-  pipRow(ctx, p.x - 7 * s, p.y + 4 * s, s, Math.min(5, Math.ceil(ratio * 5)), 5, "amber"); // D4
+  pipRow(ctx, p.x - 7 * s, p.y + 4 * s, s, Math.min(5, Math.ceil(ratio * 5)), 5, "amber");
   if (selected) outline(ctx, p.x, p.y, snap(16 * s), snap(14 * s));
 }
 
@@ -470,26 +463,29 @@ function drawMachine(
   sheen: [number, number, number, number][],
   shade: [number, number, number, number][],
   reducedMotion: boolean,
-  phase: number
+  phase: number,
+  bodies: boolean
 ): void {
   const c = tileToWorld(machine.tile);
   const p = worldToScreen(camera, view, c.x, c.y);
   const s = camera.scale;
   const row = PARTS[machine.blueprint] ?? PARTS.generic;
-  // ART-004 g2: the part loop is the one path that paints a machine. The A-2 pilot atlas page
-  // is dropped - the reviewer's own bench prices it at no measurable CPU gain (+616 B of
-  // entry chunk for a 12-hour yard at 40.60 ms versus 41.36 ms on main), and its per-kind
-  // scale/shift put different pixels on the live frame than the unit-resolution witnesses
-  // read, so the phone census and the op-log table disagreed by construction.
-  paintParts(ctx, p.x, p.y, s, row);
-  // ART-001/ART-003 + UI-RESET-60: one light direction for the whole sheet - upper left
-  // lit, lower right dark - now on EVERY solid block of the glyph (>= 4 x 4, not the ground
-  // band or an ellipse), not just the largest body. The lit pair rides in the `select`
-  // group, the dark pair in the `path` group: still two grouped paths for the whole row,
-  // and every band is inset inside its part box so the union ink census is unchanged.
-  for (const part of row) {
-    if (part[5] === 1 || part[4] === 15 || part[2] < 4 || part[3] < 4) continue;
-    facetPart(sheen, shade, p.x, p.y, s, part);
+  if (bodies) {
+    // ART-004 g2: the part loop is the one path that paints a machine. The A-2 pilot atlas page
+    // is dropped - the reviewer's own bench prices it at no measurable CPU gain (+616 B of
+    // entry chunk for a 12-hour yard at 40.60 ms versus 41.36 ms on main), and its per-kind
+    // scale/shift put different pixels on the live frame than the unit-resolution witnesses
+    // read, so the phone census and the op-log table disagreed by construction.
+    paintParts(ctx, p.x, p.y, s, row);
+    // ART-001/ART-003 + UI-RESET-60: one light direction for the whole sheet - upper left
+    // lit, lower right dark - now on EVERY solid block of the glyph (>= 4 x 4, not the ground
+    // band or an ellipse), not just the largest body. The lit pair rides in the `select`
+    // group, the dark pair in the `path` group: still two grouped paths for the whole row,
+    // and every band is inset inside its part box so the union ink census is unchanged.
+    for (const part of row) {
+      if (part[5] === 1 || part[4] === 15 || part[2] < 4 || part[3] < 4) continue;
+      facetPart(sheen, shade, p.x, p.y, s, part);
+    }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
   // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
@@ -724,56 +720,6 @@ function endpointOf(state: SimState, endpoint: Endpoint): { x: number; y: number
 }
 
 /**
- * E-1: the drone's place on its own cycle as one continuous parameter. The loaded leg is
- * the in-flight record (wreck -> dock over `droneTravelTicks`); after the batch is counted
- * the unit holds at the dock for that tick and then runs the empty leg back, `t = 1 - u`,
- * finishing exactly at the next launch, so the position never teleports the whole leg.
- * The model's own spacing makes the last arrival recoverable without a new state field
- * (`nextDeliveryTick - arrive == droneDeliveryTicks - droneTravelTicks`), so the save
- * format and the checksum inputs are untouched.
- */
-export function droneLeg(unit: DroneState, tick: number, phase: number): number {
-  const travel = TUNING.droneTravelTicks;
-  const cycle = TUNING.droneDeliveryTicks - travel; // 40 ticks of empty leg + hold
-  const now = tick + phase;
-  if (unit.inFlight) {
-    // A1: position is a function of (arrive, framePhase), not of `state.tick` alone.
-    // The launch is recorded on the tick *before* the first frame that shows it and the
-    // cargo is counted on the tick *after* the last one, so the drawn frames of the leg
-    // are `arrive - travel + 1 .. arrive + 1`; that window is the parameter's 0..1.
-    // A9: the same sub-tick phase as the drone, over the 5-tick latency window.
-    const since = now - (unit.inFlight.arrive - travel + 1);
-    // Inside the recorded window the parameter is the accepted linear leg, unchanged.
-    if (since <= travel) return Math.min(1, Math.max(0, since / travel));
-    // DEF-004/DEF-005: an in-flight record whose `arrive` is stale (a caught-up save keeps it
-    // while the tick has run far ahead) used to clamp at exactly 1 forever. The wrap runs the
-    // loaded leg, one tick of dock hold, the empty leg and one tick of wreck hold, so the
-    // value is continuous through the seam instead of snapping the whole leg in one frame.
-    const period = 2 * travel + 2; // 10 + 1 + 10 + 1
-    const within = since % period;
-    if (within <= travel) return within / travel;
-    if (within <= travel + 1) return 1; // the dock dwell, cargo being counted
-    if (within <= 2 * travel + 1) return 1 - (within - (travel + 1)) / travel;
-    return 0; // the wreck dwell before the next launch
-  }
-  if (!(unit.deliveries > 0) || !(unit.nextDeliveryTick > 0)) return 0; // never launched
-  // The empty leg starts on the frame right after the cargo is counted and runs out
-  // exactly on the frame the next launch shows, so no seam between the two branches.
-  const lastArrive = unit.nextDeliveryTick - cycle;
-  // DEF-004: the leg wraps on its own `cycle` instead of clamping, so a unit whose recorded
-  // anchor is stale relative to `now` (the store sat at its cap, so no further launch was
-  // recorded) keeps cycling rather than holding one lattice position forever. Inside the
-  // first window the modulo is the identity, so the accepted frames are unchanged: at
-  // `now = lastArrive + 1` this and the loaded leg both give 1.
-  const sinceLast = now - (lastArrive + 1);
-  if (sinceLast <= cycle) return 1 - Math.min(1, Math.max(0, sinceLast / cycle));
-  // DEF-005: same eased shape as the loaded leg - out over `cycle`, back over `cycle`, so the
-  // value stays continuous at every joint and one frame never moves the whole leg.
-  const back = sinceLast % (2 * cycle);
-  return back <= cycle ? 1 - back / cycle : (back - cycle) / cycle;
-}
-
-/**
  * Every working drone: shadow, rotors (one group), body, cargo pod and a `select`
  * nose on the heading side; units keep a 4-unit lateral lean under reduced motion
  * so five units read as five (B7).
@@ -784,13 +730,16 @@ function drawDrones(
   camera: Camera,
   view: ViewState,
   reducedMotion: boolean,
-  phase: number
+  phase: number,
+  bodies: boolean
 ): void {
   const s = camera.scale;
   if (!state.drone.repaired) {
-    const c = tileToWorld(DOCK_TILE);
-    const p = worldToScreen(camera, view, c.x, c.y);
-    paintParts(ctx, p.x + 12 * s, p.y + 2 * s, s, PARTS.drone);
+    if (bodies) {
+      const c = tileToWorld(DOCK_TILE);
+      const p = worldToScreen(camera, view, c.x, c.y);
+      paintParts(ctx, p.x + 12 * s, p.y + 2 * s, s, PARTS.drone);
+    }
     return;
   }
   const dock = worldToScreen(camera, view, ...centerOf(DOCK_TILE));
@@ -812,14 +761,16 @@ function drawDrones(
     // frame step at the leg seam stays one frame's worth; off under reduced motion.
     const heavy = !reducedMotion && carrying ? Math.sin(Math.PI * t) * 2 * s : 0;
     const y = wreck.y + (dock.y - wreck.y) * t - Math.sin(Math.PI * t) * 10 * s + heavy;
-    // DR5 shadow ellipse, alpha 0.35.
-    ctx.fillStyle = PALETTE.shadow;
-    ctx.globalAlpha = 0.35;
-    ctx.beginPath();
-    ctx.ellipse(snap(x), snap(y + 4 * s), snap(5 * s), snap(2 * s), 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    paintParts(ctx, x, y, s, PARTS.drone);
+    if (bodies) {
+      // DR5 shadow ellipse, alpha 0.35.
+      ctx.fillStyle = PALETTE.shadow;
+      ctx.globalAlpha = 0.35;
+      ctx.beginPath();
+      ctx.ellipse(snap(x), snap(y + 4 * s), snap(5 * s), snap(2 * s), 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      paintParts(ctx, x, y, s, PARTS.drone);
+    }
     // D-2: the pod hangs below the body envelope (mask rows 3-5) so the two glyphs are
     // separable: 3-unit box on the left half of the body, one mask cell at row 6.
     rectOf(ctx, x - 3 * s, y + 8 * s, 3 * s, 3 * s, carrying ? "amber" : "bodyMid");
