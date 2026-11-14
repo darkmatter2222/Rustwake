@@ -25,8 +25,12 @@ import {
  * `nextYardStep` re-implemented with one swap (the affordable-upgrade check moved in
  * front of the unbuilt-blueprint loop); everything else, including the connect stage,
  * the research stage, the pending-skipping sell and the near-goal build probe, is in
- * the shipped position. Numbers land in `docs/evidence/2026-11-03-cadence.md`, which
- * `npx tsx scripts/probe-cadence.mjs` writes.
+ * the shipped position. Under the #214 retuned GAME_SYSTEMS seed plus the shared
+ * dismantle-refund recovery, order is a mild efficiency lever (60 batches, ~3.1 %,
+ * and purse timing), NOT a reachability lever: both orders complete the full yard
+ * (8 machines, fleet 5, 3 research nodes). The old identical-totals/0-ambiguous
+ * reading was an emergent coincidence of the old balanced numbers. Numbers land in
+ * `docs/evidence/2026-11-03-cadence.md`, which `npx tsx scripts/probe-cadence.mjs` writes.
  */
 const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
 
@@ -269,23 +273,40 @@ describe("build-versus-upgrade cadence (B-21)", () => {
     console.log("cadence:", JSON.stringify(runs));
   });
 
-  it("lands on the same yard whichever of the two stages is checked first", () => {
-    expect(second.machines).toBe(first.machines);
-    expect(second.fleet).toBe(first.fleet);
-    expect(second.totals).toBe(first.totals);
-    expect(second.credits).toBe(first.credits);
-    expect(second.research).toBe(first.research);
-    expect(second.levels).toBe(first.levels);
-    expect(second.kinds).toEqual(first.kinds);
+  it("both orders complete the full yard; the retuned seed makes order a mild efficiency lever", () => {
+    // Reachability is order-independent, and now asserted for BOTH runs explicitly
+    // (upgrade-first reachability was previously only implied by equality with
+    // build-first): each order builds all 8 machines, flies the full 5-drone fleet
+    // and buys all 3 research nodes inside the 30-minute window.
+    expect(first.machines).toBe(8);
+    expect(second.machines).toBe(8);
+    expect(first.fleet).toBe(5);
+    expect(second.fleet).toBe(5);
+    expect(first.research).toBe(3);
+    expect(second.research).toBe(3);
+    // #214 re-characterization: the GAME_SYSTEMS seed plus the shared dismantle-refund
+    // recovery introduce mild, benign path-dependence. Build-first finishes 60 batches
+    // ahead (1 910 vs 1 850, ~3.1 %) with a thinner purse (75 vs 145 credits): checking
+    // upgrades earlier shifts purse timing and the level mix (levels within 1; the
+    // per-order levels/kinds stay in the console.log characterization above), but
+    // neither order stalls. The old identical totals were an emergent coincidence of
+    // the old balanced numbers, not an invariant; the authoritative spec 23.2 gate
+    // (validateBehaviour) stays green on the shipped order. No game rule changed.
+    expect(first.totals).toBe(1910);
+    expect(second.totals).toBe(1850);
+    expect(first.credits).toBe(75);
+    expect(second.credits).toBe(145);
   });
 
-  it("almost never has both branches open, which is why the order is immaterial", () => {
-    // The ladder spends credits the moment they reach the cheapest upgrade price and
-    // materials pile up only while credits are short, so the two stages rarely claim
-    // the same round. Measured: 0 ambiguous rounds in 1 800.
-    for (const run of runs) {
-      expect(run.ambiguous, `ambiguous rounds at ${run.order}`).toBe(0);
-    }
+  it("both branches sometimes open under the retuned seed, so order is a mild lever", () => {
+    // #214: the retuned starter costs and the shared dismantle-refund recovery let
+    // materials and credits line up at the same time more often, so both swapped
+    // branches are genuinely open in some rounds (96 build-first, 32 upgrade-first of
+    // 1 800). That path-dependence is what makes order the mild efficiency lever
+    // characterized above. The old 0-ambiguous reading was an emergent coincidence of
+    // the old balanced numbers, not a rule; no game rule changed to produce these counts.
+    expect(first.ambiguous, `ambiguous rounds at ${first.order}`).toBe(96);
+    expect(second.ambiguous, `ambiguous rounds at ${second.order}`).toBe(32);
     expect(first.kinds["sell"] ?? 0).toBeGreaterThan(0);
     expect(first.kinds["build"] ?? 0).toBeGreaterThan(8); // near-goal probes included
   });
