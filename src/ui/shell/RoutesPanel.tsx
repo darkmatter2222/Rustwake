@@ -3,7 +3,10 @@ import type { Endpoint, SimState } from "../../game/simulation/types";
 import type { Command, CommandResult } from "../../game/simulation/commands";
 import { BLUEPRINTS } from "../../game/content/defs";
 import { resourceWord, t } from "../../game/content/strings";
+import type { Cell } from "../../game/world/types";
 import { Row, nextId } from "../panels/shared";
+import { RoadRoutes } from "../logistics/RoadRoutes";
+import type { RoadLogisticsApi } from "../logistics/fleetModel";
 import { ROUTES_COPY } from "./copy";
 
 /** One endpoint as the player reads it: the store, or the machine's own name. */
@@ -24,6 +27,9 @@ export const RoutesPanel = memo(function RoutesPanel(props: {
   state: SimState;
   dispatch: (command: Command) => CommandResult;
   onClose: () => void;
+  /** RW3D #147: additive road-logistics capability (optional, legacy-safe). */
+  road?: RoadLogisticsApi;
+  onFocusCell?: (cell: Cell) => void;
 }) {
   const { state } = props;
   const inFlight = state.routes.reduce((sum, route) => sum + route.inFlight, 0);
@@ -74,6 +80,9 @@ export const RoutesPanel = memo(function RoutesPanel(props: {
             })}
           </ul>
         )}
+        {props.road !== undefined ? (
+          <RoadRoutes api={props.road} onFocusCell={props.onFocusCell ?? (() => {})} />
+        ) : null}
       </div>
     </div>
   );
