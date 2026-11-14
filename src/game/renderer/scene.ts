@@ -60,6 +60,9 @@ import { blitWorld3D, getWorld3D, world3DStatus } from "./three";
 // layer; it lives in flight.ts so THREE never imports scene.ts (no import cycle, no UI
 // bridge across the boundary). Re-exported here to keep the legacy import surface.
 import { droneLeg } from "./flight";
+// RW3D T16 (#143): the fleet bridge carries presentation states derived only from real
+// cargo jobs. Empty by default, so the legacy paint is byte-identical until a publish.
+import { getFleetFrame } from "./fleet";
 
 export { CELL, WORLD_H, WORLD_W, WRECK_POSITION, tileToWorld, worldToTile };
 export { screenToWorld, worldToScreen };
@@ -320,6 +323,9 @@ export function drawScene(
     groupFill(ctx, shade, "path");
   }
   drawDrones(ctx, state, camera, view, reducedMotion, phase, bodies);
+  // T16: flat fleet tokens only on the 2D fallback path; the 3D path carries its own
+  // truck rigs. Zero paint when the bridge is empty (the default).
+  if (bodies) drawFleet(ctx, camera, view);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
   // RW3D T07 (#134): context-loss message. The 2D fallback above keeps the yard
   // playable, and the renderer holds no save bytes, so the save is untouched by
@@ -819,6 +825,47 @@ function drawDrones(
     const noseRight = reducedMotion ? t <= 0.5 : leg - droneLeg(unit, state.tick, phase - 1 / 6) >= 0; // F-1
     rectOf(ctx, noseRight ? x + 3 * s : x - 5 * s, y - 1 * s, 2 * s, 2 * s, "select");
   }
+}
+
+/**
+ * T16 (#143): flat fleet tokens for the 2D fallback, one grouped paint per colour.
+ * Every glyph is state-driven: the amber cargo box exists only while the real job
+ * carries units (inTransit > 0), the lift offset rides the real load/unload timers,
+ * and rust brake pips mark any non-parked stop. Positions come from the adapter's
+ * backward-looking interpolation, so a held or paused carrier cannot drift.
+ */
+function drawFleet(ctx: CanvasRenderingContext2D, camera: Camera, view: ViewState): void {
+  const frame = getFleetFrame();
+  if (frame.units.length === 0) return;
+  const s = camera.scale;
+  const body: [number, number, number, number][] = [];
+  const cab: [number, number, number, number][] = [];
+  const lifts: [number, number, number, number][] = [];
+  const cargo: [number, number, number, number][] = [];
+  const brake: [number, number, number, number][] = [];
+  for (const unit of frame.units) {
+    const p = worldToScreen(camera, view, unit.pos.x * CELL, unit.pos.y * CELL);
+    // Cardinal facing from the adapter heading (flat token, no free rotation).
+    const hx = Math.round(Math.cos(unit.heading));
+    const hy = Math.round(Math.sin(unit.heading));
+    body.push([p.x - 5 * s, p.y - 3 * s, 10 * s, 6 * s]);
+    if (hx !== 0) cab.push([p.x + (hx > 0 ? 2 : -5) * s, p.y - 3 * s, 3 * s, 6 * s]);
+    else cab.push([p.x - 3 * s, p.y + (hy > 0 ? 0 : -3) * s, 6 * s, 3 * s]);
+    const rise = unit.lift * 4 * s;
+    if (unit.lift > 0) lifts.push([p.x - 4 * s, p.y - 2 * s - rise, 8 * s, 1 * s]);
+    if (unit.cargo > 0) {
+      const fill = unit.capacity > 0 ? Math.min(1, Math.max(0.3, unit.cargo / unit.capacity)) : 1;
+      cargo.push([p.x - 3 * s * fill - hx * 1 * s, p.y - 2 * s - rise - hy * 1 * s, 6 * s * fill, 4 * s]);
+    }
+    if (!unit.moving && unit.stage !== "parked") {
+      brake.push([p.x - hx * 5 * s - 1 * s, p.y - hy * 3 * s - 1 * s, 2 * s, 2 * s]);
+    }
+  }
+  groupFill(ctx, body, "bodyMid");
+  groupFill(ctx, cab, "bodyLight");
+  groupFill(ctx, lifts, "steelLight");
+  groupFill(ctx, cargo, "amber");
+  groupFill(ctx, brake, "rust");
 }
 
 function outline(
