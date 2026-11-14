@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach } from "vitest";
 import { createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 import stylesRaw from "../../src/ui/styles.css?raw";
+import shellRaw from "../../src/ui/shell/shell.css?raw";
 import { App } from "../../src/ui/App";
 import { createStore, type GameStore } from "../../src/app/store";
 import { BLUEPRINTS, TUNING } from "../../src/game/content/defs";
@@ -18,20 +19,23 @@ import { createInitialState, type SimState } from "../../src/game/simulation/typ
 import { DEFAULT_SETTINGS, SAVE_KEY, encodeSave } from "../../src/game/persistence/save";
 
 /**
- * UI-002 g3, follow-up U-5: the overlay *stack*.
+ * UI-002 g3 U-5, retargeted for RW3D #135 (T08): the panel *stack* under the
+ * compact shell's ONE-surface rule.
  *
- * Two layers can be on the screen at once - the return report the boot left behind, plus the
- * panel the player opened last (the yard store, the yard record, research, a machine) - and
- * one `Back`/`Escape` press must retire exactly one of them, nearest first, so the stack
- * unwinds `2 -> 1 -> 0` and the last step is the plain yard with its canvas. Before this
- * pass the painted order of the two layers was the DOM order, which put the *older* layer's
- * dismiss target nearest the dock: the same thumb position therefore answered for a
- * different layer after every press.
+ * The 2D-era two-layer painted overlay (42% / 26% caps, `order` nearest the
+ * dock) is retired. The stack itself survives as session state: the return
+ * report the boot left behind is the first layer, Settings / yard record /
+ * machine layers push over it (dedupe-to-top), and exactly ONE major surface
+ * paints at a time — the top of the stack — inside `.shell-host`. One
+ * `Back`/`Escape` press still retires exactly one layer, nearest first, so the
+ * stack unwinds `2 -> 1 -> 0` and the last step is the plain yard with its
+ * canvas. The host's Back face is the painted dismiss target while the stack is
+ * deeper than one; at depth one the panel's own head face answers.
  *
- * jsdom answers the numbers the criterion is stated in (`order` and `max-height` come from
- * the shipped sheet, injected below, and `:has()` is evaluated by jsdom's own matcher), so
- * the stack is asserted at both levels: the press chain and the layer budget. The pixel
- * truth of the same chain is the chromium `stack` pass of `scripts/measure-ui002.mjs`.
+ * jsdom answers the numbers the criterion is stated in (`data-depth`, the sheet
+ * heights and the one-surface census come from the shipped sheets, injected
+ * below); the pixel truth of the same chain is the headless chromium capture in
+ * docs/evidence/2026-11-14-rw3d-t08-shell/.
  */
 
 /** Every blueprint the tables carry, in yard order: eight machines is the deepest ladder. */
@@ -124,66 +128,66 @@ function findButton(label: string): HTMLButtonElement | undefined {
 const panelNodes = () => [...document.querySelectorAll<HTMLElement>(".panel")];
 const panelTitles = () =>
   panelNodes().map((node) => (node.querySelector(".panel__title")?.textContent ?? "").trim());
-/** The painted layer nearest the dock: the greatest `order` among the visible layers. */
-function topmostPanel(): HTMLElement | null {
-  const nodes = panelNodes();
-  if (nodes.length === 0) return null;
-  return nodes.reduce((best, node) =>
-    Number(getComputedStyle(node).order || 0) >= Number(getComputedStyle(best).order || 0)
-      ? node
-      : best
-  );
-}
+const panelHost = () => document.querySelector<HTMLElement>(".shell-host");
+/** The stack depth the host publishes: one painted surface, N layers underneath. */
+const hostDepth = () => Number(panelHost()?.dataset.depth ?? 0);
+const backFace = () => panelHost()?.querySelector<HTMLButtonElement>(".shell-host__back") ?? null;
 const dismissOf = (node: HTMLElement | null) =>
   node?.querySelector<HTMLElement>(".panel__head button") ?? null;
 const canvasInRoot = () => document.querySelector("#root > .game > canvas");
 const pressBack = () =>
   act(() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" })));
-const tapFace = (label: string) => {
-  const faces = [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")];
-  const texts = faces.map((node) => (node.textContent ?? "").replace(/\s+/g, " ").trim());
-  const index = texts.indexOf(label);
-  act(() => faces[index]?.click());
-  return { index, faces: texts };
-};
+const tapSlot = (slot: string) =>
+  act(() => document.querySelector<HTMLButtonElement>(`.toolbar [data-slot="${slot}"]`)?.click());
+/** The gear pushes Settings as a stack layer (the retired Menu face's corner). */
+const openSettings = () => act(() => findButton("Settings")?.click());
+const settingsRowButton = (label: string) =>
+  [...document.querySelectorAll<HTMLElement>(".panel--settings .panel__row")]
+    .find((node) => (node.querySelector("dt")?.textContent ?? "").trim() === label)
+    ?.querySelector<HTMLButtonElement>("button");
 
-describe("UI-002 g3 U-5 the overlay stack", () => {
+describe("UI-002 g3 U-5 the panel stack (T08 one-surface shell)", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
-    const style = document.createElement("style");
-    style.textContent = stylesRaw;
-    document.head.appendChild(style);
+    document.documentElement.style.removeProperty("--shell-inspector-top");
+    document.documentElement.style.removeProperty("--shell-chrome-bottom");
+    for (const raw of [stylesRaw, shellRaw]) {
+      const style = document.createElement("style");
+      style.textContent = raw;
+      document.head.appendChild(style);
+    }
   });
 
   it("unwinds two layers one per Back press and leaves the yard with its canvas", () => {
     const store = storeWithReturnReport(8);
     mount(store);
     act(() => findButton("Begin recovery")?.click());
-    const chain: number[] = [panelNodes().length];
+    const chain: number[] = [hostDepth()];
     expect(panelTitles()).toEqual(["While you were away"]);
 
-    // One tap opens the yard store on top of the report: the stack is two deep.
-    const opened = tapFace("Store");
-    expect(opened.index, `dock faces ${JSON.stringify(opened.faces)}`).toBeGreaterThan(-1);
-    chain.push(panelNodes().length);
-    expect(panelTitles()).toEqual(["Yard store", "While you were away"]);
+    // The gear pushes Settings over the report: the stack is two deep, but only
+    // the newest layer paints (U03: one major surface at a time).
+    openSettings();
+    chain.push(hostDepth());
+    expect(panelTitles()).toEqual(["Settings"]);
+    expect(panelNodes()).toHaveLength(1);
     expect(canvasInRoot()).not.toBeNull();
 
-    // One press, one layer, nearest first: the store goes, the report stays.
+    // One press, one layer, nearest first: Settings goes, the report stays.
     pressBack();
-    chain.push(panelNodes().length);
+    chain.push(hostDepth());
     expect(panelTitles()).toEqual(["While you were away"]);
     expect(canvasInRoot()).not.toBeNull();
 
     // The second press retires the report and lands on the yard - the canvas is still
     // inside `#root`, the chrome and the objective line are the ones that were there first.
     pressBack();
-    chain.push(panelNodes().length);
+    chain.push(hostDepth());
     expect(chain).toEqual([1, 2, 1, 0]);
     expect(panelNodes()).toHaveLength(0);
     expect(canvasInRoot()).not.toBeNull();
     expect(document.querySelector(".hud")).not.toBeNull();
-    expect(document.querySelector(".dock .dock__btn")).not.toBeNull();
+    expect(document.querySelector(".toolbar .toolbar__btn")).not.toBeNull();
     const card = document.querySelector(".objective")?.textContent ?? "";
     expect(card).toContain("Drones");
     expect(document.documentElement.scrollHeight).toBeLessThanOrEqual(window.innerHeight + 1);
@@ -196,99 +200,102 @@ describe("UI-002 g3 U-5 the overlay stack", () => {
     expect(store.getState().tick).toBeGreaterThan(0);
   });
 
-  it("gives the newest layer the painted target nearest the dock and retires one layer per tap", () => {
+  it("paints only the newest layer and retires one layer per tap", () => {
     const store = storeWithReturnReport(8);
     mount(store);
     act(() => findButton("Begin recovery")?.click());
-    tapFace("Store");
-    expect(panelNodes()).toHaveLength(2);
+    openSettings();
+    expect(hostDepth()).toBe(2);
 
-    // The layer painted nearest the dock is the one the player opened last (LIFO): the same
-    // thumb spot keeps answering for the top of the stack, press after press.
-    const stacked = panelNodes().map((node) => ({
-      title: node.querySelector(".panel__title")?.textContent ?? "",
-      order: Number(getComputedStyle(node).order || 0),
-      maxHeight: getComputedStyle(node).maxHeight,
-    }));
-    console.log("UI-002 U-5 stack layers (jsdom computed)", JSON.stringify(stacked));
-    const nearest = topmostPanel();
-    expect(nearest?.querySelector(".panel__title")?.textContent).toBe("Yard store");
-    const report = panelNodes().find(
-      (node) => node.querySelector(".panel__title")?.textContent === "While you were away"
-    );
-    expect(Number(getComputedStyle(nearest as HTMLElement).order)).toBeGreaterThan(
-      Number(getComputedStyle(report as HTMLElement).order)
-    );
+    // The one painted surface is the layer the player opened last (LIFO): the
+    // host's Back face is the dismiss target while the stack is deeper than one.
+    expect(panelNodes()).toHaveLength(1);
+    expect(panelTitles()).toEqual(["Settings"]);
+    const back = backFace();
+    expect(back).not.toBeNull();
+    expect(back!.getAttribute("aria-label")).toBe("Back to previous panel");
 
     // Tap the painted target: one layer retires, the report is what is left.
-    act(() => dismissOf(topmostPanel())?.click());
+    act(() => back!.click());
     expect(panelTitles()).toEqual(["While you were away"]);
+    expect(hostDepth()).toBe(1);
+    expect(backFace()).toBeNull(); // depth one: the panel's own head face answers
     expect(canvasInRoot()).not.toBeNull();
-    // Same spot, one more layer: the yard, still with its canvas and its dock.
-    act(() => dismissOf(topmostPanel())?.click());
+    // Same spot, one more layer: the yard, still with its canvas and its toolbar.
+    act(() => dismissOf(panelNodes()[0])?.click());
     expect(panelNodes()).toHaveLength(0);
     expect(canvasInRoot()).not.toBeNull();
-    expect(document.querySelector(".dock")).not.toBeNull();
+    expect(document.querySelector(".toolbar")).not.toBeNull();
   });
 
-  it("retires the build ghost before the report and before the yard record", () => {
+  it("retires the build layer in one press and keeps the report reachable", () => {
     const store = storeWithReturnReport(8);
     mount(store);
     act(() => findButton("Begin recovery")?.click());
-    const yard = tapFace("Yard");
-    expect(yard.index, `dock faces ${JSON.stringify(yard.faces)}`).toBeGreaterThan(-1);
-    expect(panelTitles()).toEqual(["Yard record", "While you were away"]);
-    expect(panelNodes().length).toBe(2);
+    openSettings();
+    act(() => settingsRowButton("Yard record")!.click());
+    expect(panelTitles()).toEqual(["Yard record"]);
+    expect(hostDepth()).toBe(3);
 
-    // The yard record is the nearest layer, so one press retires it and the report stays.
+    // The yard record is the nearest layer, so one press retires it and Settings
+    // stays; the next press leaves the report. One press, one layer, down to it.
+    pressBack();
+    expect(panelTitles()).toEqual(["Settings"]);
     pressBack();
     expect(panelTitles()).toEqual(["While you were away"]);
+    expect(hostDepth()).toBe(1);
 
-    // The build ghost is the nearest layer while build mode is armed, so it too is retired
-    // before the report: the press that drops the ghost line leaves the report on screen
-    // (`onPickBlueprint` clears the panel slot, so the ghost is the only thing above it).
-    tapFace("Build");
+    // Build is a root: the catalog is the one major surface while it is up, with
+    // the ghost armed underneath it. No inspector paints beside it (U03).
+    tapSlot("build");
+    expect(document.querySelector(".hud")!.className).toContain("hud--build");
+    expect(panelNodes()).toHaveLength(0);
     expect(document.querySelector(".status-line")?.textContent).toContain("Ghost on cell");
-    expect(panelTitles()).toEqual(["While you were away"]);
+    // Escape retires catalog and ghost together as the ONE build layer.
     pressBack();
+    expect(document.querySelector(".hud")!.className).not.toContain("hud--build");
     expect(document.querySelector(".status-line")?.textContent).not.toContain("Ghost on cell");
-    expect(panelTitles()).toEqual(["While you were away"]);
-    expect(canvasInRoot()).not.toBeNull();
-
-    // And the last press leaves the plain yard, canvas and dock intact.
-    pressBack();
     expect(panelNodes()).toHaveLength(0);
     expect(canvasInRoot()).not.toBeNull();
-    expect(document.querySelector(".dock")).not.toBeNull();
+
+    // The report was never consumed: it stays reachable from the Settings face.
+    openSettings();
+    const reportButton = settingsRowButton("Return report")!;
+    expect(reportButton.disabled).toBe(false);
+    act(() => reportButton.click());
+    expect(panelTitles()).toEqual(["While you were away"]);
+    expect(canvasInRoot()).not.toBeNull();
   });
 
-  it("caps one layer at 42 % of the column and two stacked layers at 26 % each", () => {
+  it("bounds the phone sheet at 35vh collapsed / 70vh expanded and paints one layer", () => {
     const store = storeWithReturnReport(8);
     mount(store);
     act(() => findButton("Begin recovery")?.click());
-    const alone = panelNodes()[0];
-    expect(getComputedStyle(alone).maxHeight).toBe("42%");
-    expect(getComputedStyle(alone).order).toBe("2");
-    const single = { maxHeight: getComputedStyle(alone).maxHeight, order: getComputedStyle(alone).order };
+    const host = panelHost()!;
+    expect(getComputedStyle(host).height).toBe("35vh");
 
-    tapFace("Store");
-    const stacked = panelNodes().map((node) => ({
-      title: node.querySelector(".panel__title")?.textContent ?? "",
-      maxHeight: getComputedStyle(node).maxHeight,
-      order: getComputedStyle(node).order,
-    }));
-    console.log(
-      "UI-002 U-5 layer budget",
-      JSON.stringify({ single, stacked, sheetBytes: stylesRaw.length })
-    );
-    for (const layer of stacked) {
-      expect(layer.maxHeight).toBe("26%");
-      expect(Number(layer.order)).toBeLessThan(4); // stays above the dock's slot
-      expect(Number(layer.order)).toBeGreaterThan(0);
-    }
-    // Both caps are the shipped sheet's own declarations, not a copy in the test.
-    expect(stylesRaw).toContain("max-height: 42%");
-    expect(stylesRaw).toContain("max-height: 26%");
-    expect(stylesRaw).toContain(".hud:has(.panel ~ .panel) > .panel");
+    const expand = findButton("Expand panel")!;
+    expect(expand.getAttribute("aria-expanded")).toBe("false");
+    act(() => expand.click());
+    expect(getComputedStyle(panelHost()!).height).toBe("70vh");
+    expect(findButton("Collapse panel")!.getAttribute("aria-expanded")).toBe("true");
+
+    // A second layer never paints a second surface: the census stays at one.
+    openSettings();
+    expect(hostDepth()).toBe(2);
+    expect(panelNodes()).toHaveLength(1);
+    expect(panelTitles()).toEqual(["Settings"]);
+    pressBack();
+    expect(panelTitles()).toEqual(["While you were away"]);
+    act(() => findButton("Collapse panel")!.click());
+    expect(getComputedStyle(panelHost()!).height).toBe("35vh");
+
+    // Both bands are the shipped sheet's own declarations, not a copy in the test.
+    expect(shellRaw).toContain("height: 35vh");
+    expect(shellRaw).toContain("height: 70vh");
+    // The retired two-layer census rule is gone. The base `.panel` keeps its
+    // D-6/E-4 cap for the save page; the host overrides it to fill the surface.
+    expect(stylesRaw).not.toContain(".hud:has(.panel ~ .panel)");
+    expect(shellRaw).toContain("max-height: 100%");
   });
 });

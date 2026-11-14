@@ -18,31 +18,36 @@ import { advance } from "../../src/game/simulation/engine";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
 import { DEFAULT_SETTINGS, SAVE_KEY, encodeSave } from "../../src/game/persistence/save";
 import {
+  SHELL_COMPACT_LANDSCAPE_MAX_HEIGHT_PX,
+  SHELL_DESKTOP_MIN_WIDTH_PX,
+  SHELL_DESKTOP_QUERY,
   SHELL_EDGE_PX,
   SHELL_GUTTER_PX,
+  SHELL_INSPECTOR_TOP_PX,
   SHELL_INSPECTOR_WIDTH_PX,
-  SHELL_MENU_FACE_PX,
-  SHELL_MENU_ZONE_PX,
-  SHELL_RAIL_QUERY,
-  SHELL_RAIL_WIDTH_PX,
+  SHELL_PHONE_MAX_WIDTH_PX,
   SHELL_RIGHT_GUTTER_PX,
+  SHELL_SHEET_COLLAPSED_VH,
+  SHELL_SHEET_EXPANDED_VH,
   SHELL_SLOTS,
-  SHELL_WORLD_LEFT_PX,
+  SHELL_TOOLBAR_HEIGHT_PX,
+  SHELL_ZOOM_FACE_PX,
 } from "../../src/ui/shell/layout";
 
 /**
- * UI-RESET-49 (G2): the app shell contract.
- *
- * The shell's job is navigation, not simulation: switching a breakpoint, opening
- * the menu or cycling the text scale must keep the selected context and must
- * never issue a game command. jsdom ignores @media, so the painted rail/phone
- * geometry is asserted where it is declared (the two sheets' own literals) and
- * the rail is exercised through the same media gate the browser uses
- * (`useRailMode`); the pixel truth at all nine viewports is the chromium pass
- * in work/evidence/UI-RESET-49/capture-shell-49.mjs.
+ * RW3D #135 (T08): the compact shell contract, retargeted from UI-RESET-49's
+ * 2D-era rail/Menu census. The permanent left rail, the Menu face/sheet and the
+ * two-layer painted stack are retired; what this file pins now is the ONE
+ * six-destination toolbar, the ONE panel host (right inspector on desktop,
+ * bottom sheet on phones), the Settings surface that inherited the Menu's rows,
+ * and the navigation invariants that survive the rebuild: switching a
+ * breakpoint, opening Settings or cycling the text scale keeps the selected
+ * context and never issues a game command. jsdom ignores @media, so the painted
+ * geometry is asserted where it is declared (the sheets' own literals) and the
+ * desktop gate is exercised through the same media query the browser uses
+ * (`useDesktopMode`); the pixel truth is the headless chromium capture in
+ * docs/evidence/2026-11-14-rw3d-t08-shell/.
  */
-
-const RAIL_MEDIA = "(min-width: 1200px), (min-width: 600px) and (max-height: 460px)";
 
 /** A developed yard: past the tutorial, two connected machines, data and credits. */
 function matureState(): SimState {
@@ -121,43 +126,84 @@ const panelTitles = () =>
   [...document.querySelectorAll(".panel")].map((node) =>
     (node.querySelector(".panel__title")?.textContent ?? "").trim()
   );
-const menuSheet = () => document.querySelector<HTMLElement>('.shell-menu[role="dialog"]');
-const menuFace = () => document.querySelector<HTMLButtonElement>(".shell-menu-face");
-const railSlots = () => [...document.querySelectorAll<HTMLButtonElement>(".shell-rail [data-slot]")];
-const menuRow = (label: string) =>
-  [...document.querySelectorAll<HTMLButtonElement>(".shell-menu__row")].find((node) =>
-    (node.textContent ?? "").trim().startsWith(label)
+const panelHost = () => document.querySelector<HTMLElement>(".shell-host");
+const hostDepth = () => Number(panelHost()?.dataset.depth ?? 0);
+const toolbarSlots = () =>
+  [...document.querySelectorAll<HTMLButtonElement>(".toolbar [data-slot]")];
+const tapSlot = (slot: string) => {
+  const face = document.querySelector<HTMLButtonElement>(`.toolbar [data-slot="${slot}"]`);
+  act(() => face?.click());
+};
+/** The Settings rows inherited from the retired Menu sheet (label in the dt). */
+const settingsRow = (label: string) =>
+  [...document.querySelectorAll<HTMLElement>(".panel--settings .panel__row")].find(
+    (node) => (node.querySelector("dt")?.textContent ?? "").trim() === label
   );
+const settingsRowButton = (label: string) =>
+  settingsRow(label)?.querySelector<HTMLButtonElement>("button") ?? undefined;
+const openSettings = () => {
+  const gear = findButton("Settings");
+  act(() => {
+    gear?.focus();
+    gear?.click();
+  });
+};
 const pressKey = (key: string, target?: HTMLElement) =>
   act(() => {
     (target ?? window).dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
   });
-const tapDock = (label: string) => {
-  const faces = [...document.querySelectorAll<HTMLButtonElement>(".dock .dock__btn")];
-  const face = faces.find((node) => (node.textContent ?? "").trim().startsWith(label));
-  act(() => face?.click());
-};
 
-/** The rail gate reads one media query; stub it the way the viewport would answer. */
+/**
+ * The desktop gate reads one media query; stub it the way the viewport would
+ * answer and keep the change listeners so a resize can flip the gate exactly
+ * like the browser's own `change` event does.
+ */
+type MediaListener = (event: { matches: boolean }) => void;
+const mediaState = { desktop: false, listeners: new Map<string, Set<MediaListener>>() };
 const realMatchMedia = window.matchMedia?.bind(window);
-function stubMedia(rail: boolean) {
-  window.matchMedia = ((query: string) => ({
-    matches: rail && query === SHELL_RAIL_QUERY,
-    media: query,
-    onchange: null,
-    addEventListener: () => {},
-    removeEventListener: () => {},
-    addListener: () => {},
-    removeListener: () => {},
-    dispatchEvent: () => false,
-  })) as unknown as typeof window.matchMedia;
+function stubMedia(desktop: boolean) {
+  mediaState.desktop = desktop;
+  window.matchMedia = ((query: string) => {
+    let listeners = mediaState.listeners.get(query);
+    if (!listeners) {
+      listeners = new Set();
+      mediaState.listeners.set(query, listeners);
+    }
+    const bag = listeners;
+    return {
+      get matches() {
+        return query === SHELL_DESKTOP_QUERY ? mediaState.desktop : false;
+      },
+      media: query,
+      onchange: null,
+      addEventListener: (_type: string, fn: MediaListener) => bag.add(fn),
+      removeEventListener: (_type: string, fn: MediaListener) => bag.delete(fn),
+      addListener: (fn: MediaListener) => bag.add(fn),
+      removeListener: (fn: MediaListener) => bag.delete(fn),
+      dispatchEvent: () => false,
+    };
+  }) as unknown as typeof window.matchMedia;
 }
+function flipMedia(desktop: boolean) {
+  mediaState.desktop = desktop;
+  act(() => {
+    for (const fn of mediaState.listeners.get(SHELL_DESKTOP_QUERY) ?? []) {
+      fn({ matches: desktop });
+    }
+  });
+}
+
+/** CSS rule text with comments stripped, so retired selectors are countable. */
+const rulesOnly = (raw: string) => raw.replace(/\/\*[\s\S]*?\*\//g, "");
 
 beforeEach(() => {
   document.body.innerHTML = "";
+  mediaState.listeners = new Map();
   // The inspector-top variable lives on documentElement, which survives the
-  // body reset; a prior rail test would otherwise leak its measured value in.
+  // body reset; a prior test would otherwise leak its measured value in.
   document.documentElement.style.removeProperty("--shell-inspector-top");
+  document.documentElement.style.removeProperty("--shell-chrome-bottom");
+  document.documentElement.classList.remove("text-large");
   for (const raw of [stylesRaw, shellRaw]) {
     const style = document.createElement("style");
     style.textContent = raw;
@@ -171,143 +217,156 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("G2 shell geometry", () => {
-  it("pins the painted boxes of navigation-spec §3.6 and one shared rail query", () => {
+describe("G2 shell geometry (T08 compact shell)", () => {
+  it("pins the painted boxes of the compact contract and one shared desktop query", () => {
     expect(SHELL_EDGE_PX).toBe(8);
     expect(SHELL_GUTTER_PX).toBe(6);
-    expect(SHELL_RAIL_WIDTH_PX).toBe(96);
-    expect(SHELL_INSPECTOR_WIDTH_PX).toBe(320);
-    expect(SHELL_WORLD_LEFT_PX).toBe(110);
-    expect(SHELL_RIGHT_GUTTER_PX).toBe(334);
-    expect(SHELL_MENU_FACE_PX).toBe(66);
-    expect(SHELL_MENU_ZONE_PX).toBe(72);
-    expect([...SHELL_SLOTS]).toEqual(["yard", "build", "store", "research", "menu"]);
-    // The CSS rail block and the JS gate answer the same query, literally.
-    expect(SHELL_RAIL_QUERY).toBe(RAIL_MEDIA);
-    expect(stylesRaw).toContain(`@media ${RAIL_MEDIA}`);
-    expect(shellRaw).toContain(`@media ${RAIL_MEDIA}`);
-    // Phone split band + reserved thumb zone; column corner; Home retired (E2).
-    expect(stylesRaw).toContain("@media (max-width: 599px)");
-    expect(stylesRaw).toContain("padding-right: 72px");
-    expect(stylesRaw).toContain(".dock__btn--primary:not(.dock__btn--branch)");
-    expect(stylesRaw).toContain(
-      ".hud:not(.hud--build) .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch)"
+    expect(SHELL_INSPECTOR_WIDTH_PX).toBe(340);
+    expect(SHELL_RIGHT_GUTTER_PX).toBe(354);
+    expect(SHELL_INSPECTOR_TOP_PX).toBe(64);
+    expect(SHELL_TOOLBAR_HEIGHT_PX).toBe(60);
+    expect(SHELL_SHEET_COLLAPSED_VH).toBe(35);
+    expect(SHELL_SHEET_EXPANDED_VH).toBe(70);
+    expect(SHELL_ZOOM_FACE_PX).toBe(44);
+    expect([...SHELL_SLOTS]).toEqual(["build", "routes", "fleet", "research", "trade", "map"]);
+    // The CSS desktop block and the JS gate answer the same query, literally.
+    expect(SHELL_DESKTOP_QUERY).toBe("(min-width: 1024px)");
+    expect(SHELL_DESKTOP_MIN_WIDTH_PX).toBe(1024);
+    expect(SHELL_PHONE_MAX_WIDTH_PX).toBe(767);
+    expect(SHELL_COMPACT_LANDSCAPE_MAX_HEIGHT_PX).toBe(460);
+    expect(shellRaw).toContain("@media (min-width: 1024px)");
+    expect(shellRaw).toContain("@media (max-width: 767px)");
+    expect(shellRaw).toContain(
+      "@media (min-width: 600px) and (max-width: 1023px) and (max-height: 460px)"
     );
-    expect(stylesRaw).toContain(".cluster .icon-btn:last-child");
-    expect(shellRaw).toContain(".hud--menu > .panel");
+    // The toolbar, sheet bands and inspector width are the contract's own.
+    expect(shellRaw).toContain("min-height: 60px");
+    expect(shellRaw).toContain("height: 35vh");
+    expect(shellRaw).toContain("height: 70vh");
+    expect(shellRaw).toContain("width: 340px");
+    // The 2D-era rail, Menu sheet and two-layer painted stack are retired.
+    expect(rulesOnly(stylesRaw)).not.toContain(".shell-rail");
+    expect(rulesOnly(stylesRaw)).not.toContain(".shell-menu");
+    expect(rulesOnly(shellRaw)).not.toContain(".shell-rail");
+    expect(rulesOnly(shellRaw)).not.toContain(".shell-menu");
+    expect(rulesOnly(stylesRaw)).not.toContain(".hud:has(.panel ~ .panel)");
   });
 });
 
-describe("G2 destination rail", () => {
-  it("renders five slots in order and opens contexts without issuing commands", () => {
+describe("G2 destination toolbar", () => {
+  it("renders six slots in order and opens contexts without issuing commands", () => {
     stubMedia(true);
     const store = matureStore();
     const spy = vi.spyOn(store, "dispatch");
     mount(store);
     begin();
-    expect(railSlots().map((node) => node.dataset.slot)).toEqual([
-      "yard",
+    expect(toolbarSlots().map((node) => node.dataset.slot)).toEqual([
       "build",
-      "store",
+      "routes",
+      "fleet",
       "research",
-      "menu",
+      "trade",
+      "map",
     ]);
-    expect(railSlots().every((node) => !node.disabled)).toBe(true);
+    expect(toolbarSlots().every((node) => !node.disabled)).toBe(true);
 
-    act(() => railSlots()[2].click()); // Store
-    expect(panelTitles()).toContain("Yard store");
-    expect(railSlots()[2].getAttribute("aria-pressed")).toBe("true");
-    act(() => railSlots()[3].click()); // Research
-    expect(panelTitles()).toContain("Research");
-    act(() => railSlots()[0].click()); // Yard record
-    expect(panelTitles()).toContain("Yard record");
+    tapSlot("trade");
+    expect(panelTitles()).toEqual(["Yard store"]);
+    expect(toolbarSlots()[4].getAttribute("aria-pressed")).toBe("true");
+    tapSlot("research");
+    expect(panelTitles()).toEqual(["Research"]);
+    tapSlot("routes");
+    expect(panelTitles()).toEqual(["Routes"]);
+    tapSlot("fleet");
+    expect(panelTitles()).toEqual(["Fleet"]);
+    tapSlot("map");
+    expect(panelTitles()).toEqual(["Map"]);
+    // U03: exactly one major surface paints, whatever the destination.
+    expect(document.querySelectorAll(".shell-host .panel")).toHaveLength(1);
     expect(spy).not.toHaveBeenCalled();
     pressKey("Escape");
-    expect(panelTitles()).not.toContain("Yard record");
+    expect(panelTitles()).toEqual([]);
+    expect(panelHost()).toBeNull();
   });
 
-  it("keeps unearned slots on screen with their reason and inert (E8)", () => {
+  it("keeps unearned destinations on screen with their reason and inert (E8)", () => {
     stubMedia(true);
     const store = createStore();
     mount(store);
     begin();
-    const slots = railSlots();
-    expect(slots[0].disabled).toBe(true);
-    expect(slots[0].textContent).toContain("After tutorial");
-    expect(slots[3].disabled).toBe(true);
-    expect(slots[3].textContent).toContain("Needs data");
-    act(() => slots[0].click());
-    act(() => slots[3].click());
+    const slots = toolbarSlots();
+    const research = slots.find((node) => node.dataset.slot === "research")!;
+    expect(research.disabled).toBe(true);
+    expect(research.textContent).toContain("Needs data");
+    act(() => research.click());
+    pressKey("4"); // the key can never bypass the printed reason either
     expect(panelTitles()).toEqual([]);
     // The earned destinations still work at the first minute.
-    act(() => slots[2].click());
-    expect(panelTitles()).toContain("Yard store");
+    tapSlot("trade");
+    expect(panelTitles()).toEqual(["Yard store"]);
   });
 });
 
-describe("G2 menu sheet", () => {
-  it("opens with focus, yields the panels' slot, and Escape returns focus and context", () => {
+describe("G2 Settings surface (the retired Menu's rows)", () => {
+  it("opens as the one painted layer, and Escape unwinds focus and context", () => {
     stubMedia(false);
     const store = matureStore();
     const spy = vi.spyOn(store, "dispatch");
     mount(store);
     begin();
-    tapDock("Store");
-    const panel = document.querySelector<HTMLElement>(".panel");
-    expect(panel).not.toBeNull();
-
-    const face = menuFace();
-    expect(face).not.toBeNull();
-    act(() => {
-      face!.focus();
-      face!.click();
-    });
-    const sheet = menuSheet();
-    expect(sheet).not.toBeNull();
-    expect(sheet!.getAttribute("aria-label")).toBe("Menu");
-    expect(document.activeElement).toBe(sheet); // E5: focus moves in
-    expect(face!.getAttribute("aria-expanded")).toBe("true");
-    // E3: one sheet at a time — the panel yields its painted slot…
-    expect(getComputedStyle(panel!).display).toBe("none");
-    // …but E4: the selection underneath is untouched.
+    // Begin auto-pushes the absence report; pop it so this test's opener
+    // (the Trade slot) is the first layer the host captures.
     pressKey("Escape");
-    expect(menuSheet()).toBeNull();
-    expect(getComputedStyle(panel!).display).toBe("flex");
-    expect(panelTitles()).toContain("Yard store");
-    expect(document.activeElement).toBe(face); // E5: focus returns
+    expect(panelHost()).toBeNull();
+    const trade = toolbarSlots()[4];
+    act(() => {
+      trade.focus();
+      trade.click();
+    });
+    expect(panelTitles()).toEqual(["Yard store"]);
+
+    openSettings();
+    // Settings pushes over the store: ONE painted surface, stack two deep.
+    expect(panelTitles()).toEqual(["Settings"]);
+    expect(hostDepth()).toBe(2);
+    expect(document.querySelectorAll(".shell-host .panel")).toHaveLength(1);
+    expect(document.activeElement).toBe(panelHost()); // E5: focus moves in
+    // E4: one press pops exactly the Settings layer; the store underneath stays.
+    pressKey("Escape");
+    expect(panelTitles()).toEqual(["Yard store"]);
+    expect(hostDepth()).toBe(1);
+    pressKey("Escape");
+    expect(panelHost()).toBeNull();
+    expect(document.activeElement).toBe(trade); // E5: focus returns to the opener
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("acts on Home, Sound, Text, Yard record and the return report", () => {
+  it("acts on Sound, Text size, Yard record and the return report", () => {
     stubMedia(false);
     const store = matureStore();
     mount(store);
     begin();
-    tapDock("Store");
-    expect(panelTitles()).toContain("Yard store");
+    openSettings();
+    expect(panelTitles()).toEqual(["Settings"]);
 
-    act(() => menuFace()!.click());
-    act(() => menuRow("Home")!.click());
-    expect(menuSheet()).toBeNull();
-    expect(panelTitles()).toEqual(["While you were away"]); // selection cleared, report stays
-
-    act(() => menuFace()!.click());
     expect(store.getSettings().muted).toBe(true);
-    act(() => menuRow("Sound")!.click());
+    act(() => settingsRowButton("Sound")!.click());
     expect(store.getSettings().muted).toBe(false);
     expect(store.getSettings().textScale).toBe(1);
-    act(() => menuRow("A 1")!.click());
+    act(() => settingsRowButton("Text size")!.click());
     expect(store.getSettings().textScale).toBe(1.25);
-    act(() => menuRow("Yard")!.click());
-    expect(menuSheet()).toBeNull();
-    expect(panelTitles()).toContain("Yard record");
 
+    act(() => settingsRowButton("Yard record")!.click());
+    expect(panelTitles()).toEqual(["Yard record"]);
+    expect(hostDepth()).toBe(3); // pushed over Settings (over the Begin report)
     pressKey("Escape");
-    act(() => menuFace()!.click());
-    const reportRow = menuRow("Return report");
-    expect(reportRow!.disabled).toBe(false);
-    act(() => reportRow!.click());
-    expect(panelTitles()).toContain("While you were away");
+    expect(panelTitles()).toEqual(["Settings"]);
+
+    const reportButton = settingsRowButton("Return report")!;
+    expect(reportButton.disabled).toBe(false);
+    act(() => reportButton.click());
+    expect(panelTitles()).toEqual(["While you were away"]);
+    expect(hostDepth()).toBe(2); // the report already in the stack dedupes to the top
   });
 
   it("prints reasons for the rows a fresh yard has not earned", () => {
@@ -315,11 +374,11 @@ describe("G2 menu sheet", () => {
     const store = createStore();
     mount(store);
     begin();
-    act(() => menuFace()!.click());
-    expect(menuRow("Yard")!.disabled).toBe(true);
-    expect(menuRow("Yard")!.textContent).toContain("After tutorial");
-    expect(menuRow("Return report")!.disabled).toBe(true);
-    expect(menuRow("Return report")!.textContent).toContain("No absence yet");
+    openSettings();
+    expect(settingsRowButton("Yard record")!.disabled).toBe(true);
+    expect(settingsRow("Yard record")!.textContent).toContain("After tutorial");
+    expect(settingsRowButton("Return report")!.disabled).toBe(true);
+    expect(settingsRow("Return report")!.textContent).toContain("No absence yet");
   });
 });
 
@@ -330,65 +389,66 @@ describe("G2 selection stability", () => {
     const spy = vi.spyOn(store, "dispatch");
     mount(store);
     begin();
-    tapDock("Store");
-    expect(panelTitles()).toContain("Yard store");
+    tapSlot("trade");
+    expect(panelTitles()).toEqual(["Yard store"]);
 
     for (const width of [360, 768, 1280, 844, 1920]) {
       vi.stubGlobal("innerWidth", width);
       act(() => window.dispatchEvent(new Event("resize")));
-      expect(panelTitles()).toContain("Yard store");
+      expect(panelTitles()).toEqual(["Yard store"]);
     }
     act(() => findButton("Text size")!.click());
     act(() => findButton("Text size")!.click());
     expect(store.getSettings().textScale).toBe(1.5);
-    expect(panelTitles()).toContain("Yard store");
+    expect(panelTitles()).toEqual(["Yard store"]);
     act(() => findButton("Sound")!.click());
-    expect(panelTitles()).toContain("Yard store");
+    expect(panelTitles()).toEqual(["Yard store"]);
 
-    // The menu layer too: open, close, and the same context is still selected.
-    act(() => menuFace()!.click());
+    // The Settings layer too: open, close, and the same context is still selected.
+    openSettings();
     pressKey("Escape");
-    expect(panelTitles()).toContain("Yard store");
+    expect(panelTitles()).toEqual(["Yard store"]);
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("keeps the selection when the rail gate flips on resize", () => {
+  it("keeps the selection when the desktop gate flips on resize", () => {
     stubMedia(true);
     const store = matureStore();
     const spy = vi.spyOn(store, "dispatch");
     mount(store);
     begin();
-    act(() => railSlots()[2].click());
-    expect(panelTitles()).toContain("Yard store");
-    stubMedia(false);
-    act(() => window.dispatchEvent(new Event("resize")));
+    tapSlot("trade");
+    expect(panelTitles()).toEqual(["Yard store"]);
+    expect(panelHost()!.className).toContain("shell-inspector");
+    flipMedia(false);
     // The gate's listener answers the new query on its own change event; the
     // selection must survive whichever mode paints next.
-    expect(panelTitles()).toContain("Yard store");
-    stubMedia(true);
-    act(() => window.dispatchEvent(new Event("resize")));
-    expect(panelTitles()).toContain("Yard store");
+    expect(panelHost()!.className).toContain("shell-sheet");
+    expect(panelTitles()).toEqual(["Yard store"]);
+    flipMedia(true);
+    expect(panelHost()!.className).toContain("shell-inspector");
+    expect(panelTitles()).toEqual(["Yard store"]);
     expect(spy).not.toHaveBeenCalled();
   });
 });
 
 describe("G2 keyboard destinations", () => {
-  it("maps keys 1–5 to the five slots and keeps text fields' own keys", () => {
+  it("maps keys 1–6 to the six slots and keeps text fields' own keys", () => {
     stubMedia(true);
     const store = matureStore();
     mount(store);
     begin();
-    pressKey("3");
-    expect(panelTitles()).toContain("Yard store");
+    pressKey("5");
+    expect(panelTitles()).toEqual(["Yard store"]);
     pressKey("4");
-    expect(panelTitles()).toContain("Research");
-    pressKey("1");
-    expect(panelTitles()).toContain("Yard record");
-    pressKey("5");
-    expect(menuSheet()).not.toBeNull();
-    pressKey("5");
-    expect(menuSheet()).toBeNull();
+    expect(panelTitles()).toEqual(["Research"]);
     pressKey("2");
+    expect(panelTitles()).toEqual(["Routes"]);
+    pressKey("3");
+    expect(panelTitles()).toEqual(["Fleet"]);
+    pressKey("6");
+    expect(panelTitles()).toEqual(["Map"]);
+    pressKey("1");
     expect(document.querySelector(".hud")!.className).toContain("hud--build");
     const dockTexts = [...document.querySelectorAll(".dock .dock__btn")].map((node) =>
       (node.textContent ?? "").trim()
@@ -397,33 +457,33 @@ describe("G2 keyboard destinations", () => {
     expect(dockTexts[0]).toBe("Cancel");
     expect(dockTexts[1]).toContain("Build");
     expect(dockTexts[2]).toBe("Next");
-    pressKey("2"); // Build again cancels the phase
+    pressKey("1"); // Build again cancels the phase
     expect(document.querySelector(".hud")!.className).not.toContain("hud--build");
 
     // A save code typed into the yard record must never steer the shell.
-    pressKey("1");
-    // UI-RESET-63: the export code now lives on the labelled Backup page; the
-    // record page keeps every statistic and both transfer entries. The intent
+    openSettings();
+    act(() => settingsRowButton("Yard record")!.click());
+    // UI-RESET-63: the export code lives on the labelled Backup page; the intent
     // is unchanged — keys typed in the save code stay in the field.
     act(() => findButton("Backup")?.click());
     const field = document.querySelector<HTMLTextAreaElement>(".panel__code");
     expect(field).not.toBeNull();
-    pressKey("3", field!);
+    pressKey("5", field!);
     expect(panelTitles()).toContain("Yard record");
     expect(panelTitles()).not.toContain("Yard store");
   });
 });
 
 describe("G2 reachability and scroll", () => {
-  it("keeps the document flat and every shell target at the 44 px floor, menu open at scale 2", () => {
-    stubMedia(true);
+  it("keeps the document flat and every shell target at the 44 px floor, Settings open at scale 2", () => {
+    stubMedia(false);
     const store = matureStore();
     mount(store);
     begin();
     act(() => store.setSettings({ textScale: 2 }));
-    tapDock("Store");
-    act(() => railSlots()[4].click()); // Menu via slot 5
-    expect(menuSheet()).not.toBeNull();
+    tapSlot("trade");
+    openSettings();
+    expect(panelTitles()).toEqual(["Settings"]);
     expect(document.body.scrollHeight).toBeLessThanOrEqual(window.innerHeight + 1);
     expect(getComputedStyle(document.body).overflow).toBe("hidden");
     expect(getComputedStyle(document.documentElement).overflow).toBe("hidden");
@@ -433,15 +493,20 @@ describe("G2 reachability and scroll", () => {
       const floor = Number.parseFloat(getComputedStyle(button).minHeight);
       expect(floor, button.textContent ?? "").toBeGreaterThanOrEqual(44);
     }
-    // The sheet's own body is the declared scroller, bounded like a panel.
-    const body = document.querySelector<HTMLElement>(".shell-menu__body");
-    expect(getComputedStyle(body!).overflowY).toBe("auto");
-    expect(getComputedStyle(menuSheet()!).maxHeight).toBe("42%");
+    // The panel's own body is the declared scroller, bounded by the host.
+    // jsdom does not expand the `overflow` shorthand, so assert the shipped
+    // declaration itself rather than a computed longhand.
+    const body = panelHost()!.querySelector<HTMLElement>(".panel__body");
+    expect(body).not.toBeNull();
+    expect(stylesRaw).toMatch(/\.panel__body\s*\{[^}]*overflow:\s*hidden auto/);
+    // At 200% text the sheet stands in its tall band on its own (the expand
+    // toggle stands down), so the one surface never needs the page to scroll.
+    expect(getComputedStyle(panelHost()!).height).toBe("70vh");
   });
 });
 
-describe("G2 inspector top paint-truth (capture bug regressions)", () => {
-  it("measures the lead once the gate clears and sets --shell-inspector-top in rail mode", () => {
+describe("G2 inspector top paint-truth", () => {
+  it("floors at 64 px once the gate clears and re-measures with the text scale", () => {
     stubMedia(true);
     const store = matureStore();
     mount(store);
@@ -450,32 +515,27 @@ describe("G2 inspector top paint-truth (capture bug regressions)", () => {
     begin();
     // Regression: the effect's deps must include `started`, or this never runs
     // after the gate clears. jsdom rects are zero, so the one-shot measurement
-    // lands on the 104 px floor; the chromium pass proves the lifted values
-    // (ceil(lead.bottom + 6)) at every rail viewport and text scale.
-    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("104px");
+    // lands on the 64 px floor; the chromium pass proves the lifted values
+    // (ceil(lead.bottom + gutter)) at every desktop viewport and text scale.
+    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("64px");
+    act(() => store.setSettings({ textScale: 2 }));
+    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("64px");
   });
 
-  it("keeps the variable unset outside rail mode, where the panels stay in flow", () => {
-    stubMedia(false);
-    const store = matureStore();
-    mount(store);
-    begin();
-    expect(document.documentElement.style.getPropertyValue("--shell-inspector-top")).toBe("");
-  });
-
-  it("pins the rail stretch and the scaling column reserve in both sheets", () => {
-    // The base cascade centers absolutely-positioned sheets between their
-    // insets; without `align-self: stretch` in the rail blocks Chrome
-    // content-sizes them (measured: menu y=281 at 1280x800, panel y=0 spilling
-    // past the 844x390 viewport). Both rail blocks must carry the override.
-    const railOnward = (raw: string) => raw.slice(raw.indexOf(`@media ${RAIL_MEDIA}`));
-    expect(railOnward(stylesRaw)).toContain("align-self: stretch");
-    expect(railOnward(shellRaw)).toContain("align-self: stretch");
-    // The column lead's corner reserve scales with the text: the Menu face's
-    // rem label measured 52.1 px at scale 1 and 86.2 px at scale 2, so a fixed
-    // 56 px reserve let the face paint over the Text-size button at scale 2.
-    const reserve = "padding-right: calc(24px + 38px * var(--text-scale, 1))";
-    expect(stylesRaw).toContain(reserve);
-    expect(shellRaw).toContain(reserve);
+  it("pins the desktop insets in the sheet and keeps the phone bands free of them", () => {
+    const desktopOnward = shellRaw.slice(shellRaw.indexOf("@media (min-width: 1024px)"));
+    expect(desktopOnward).toContain("top: var(--shell-inspector-top, 64px)");
+    expect(desktopOnward).toContain("bottom: var(--shell-chrome-bottom, 132px)");
+    // The #49 lesson survives the rebuild: an absolute box with align-self:center
+    // content-sizes between its insets instead of filling them.
+    expect(desktopOnward).toContain("align-self: stretch");
+    // The phone band never reads the desktop inset. (The compact landscape
+    // drawer between the bands legitimately does, so scope this to 767px.)
+    const phoneStart = shellRaw.indexOf("@media (max-width: 767px)");
+    const phoneBand = shellRaw.slice(phoneStart, shellRaw.indexOf("@media (min-width: 600px)"));
+    expect(rulesOnly(phoneBand)).not.toContain("--shell-inspector-top");
+    const baseRules = rulesOnly(shellRaw.slice(0, phoneStart));
+    expect(baseRules).toContain("height: 35vh");
+    expect(baseRules).toContain("height: 70vh");
   });
 });
