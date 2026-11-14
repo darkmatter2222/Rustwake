@@ -21,6 +21,12 @@ import { createInitialState, type SimState } from "../../src/game/simulation/typ
 import { netRecipeUnits, systemTotals, unitTotal } from "../../src/game/simulation/invariants";
 import { fleetAccumulated, fleetDeliveries, fleetUnits } from "../../src/game/simulation/types";
 import { nextYardStep, stepForMachine, type YardStep } from "../../src/game/simulation/plan";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../../src/game/content/validate";
 import { planConnections } from "../../src/game/simulation/autoconnect";
 import { describeStep, objectiveFor, primaryFor } from "../../src/ui/text";
 import { firstFreeTile } from "../../src/ui/App";
@@ -56,10 +62,14 @@ interface Yard4 {
 /** Sorter, copper separator, wire mill, and polymer recycler with real routes. */
 function chainYard(): Yard4 {
   const state = boot();
+  // #214: the dock now holds 300 units, so the old 430-unit seed overflowed it and
+  // blocked every output tray (the sorter stalled at 13 batches). This leaner seed
+  // fits with headroom (191 in, 297 after 1 200 ticks) and restores the cycle-limited
+  // measurement below: sorter 29, separator 23, wire mill 12, polymer recycler 14.
   const seed: Partial<Record<ResourceId, number>> = {
-    scrap: 300,
-    ferrous: 40,
-    nonferrous: 60,
+    scrap: 100,
+    ferrous: 20,
+    nonferrous: 40,
     residue: 30,
   };
   let seeded = 0;
@@ -161,6 +171,7 @@ describe("copper and polymer chain", () => {
     const yard = chainYard();
     advance(yard.state, 900);
     const expected =
+      createInitialState().storeUnits + // #214: the seed's opening 144-unit store
       yard.seeded +
       TUNING.manualSalvagePerPulse * yard.state.wreck.pulses +
       fleetAccumulated(yard.state) +
@@ -194,6 +205,7 @@ describe("copper and polymer chain", () => {
 describe("repeatable export contracts", () => {
   function priced(): SimState {
     const state = boot();
+    state.credits = 0; // #214: isolate sale proceeds from the seed's 60 credits
     state.store["copper"] = 40;
     state.store["residue"] = 24;
     state.storeUnits += 64;
@@ -271,6 +283,7 @@ describe("repeatable export contracts", () => {
     const badQty = send(state, { type: "contract.sell", resource: "copper", qty: 0 });
     expect(badQty.ok).toBe(false);
     const empty = boot();
+    empty.credits = 0; // #214: the seed starts with 60 credits; zero them for this check
     empty.exportClaimed = true;
     empty.store["polymer"] = 2;
     empty.storeUnits = 2;
@@ -362,8 +375,11 @@ describe("yard ladder", () => {
 
   it("sells a surplus when a build is out of reach", () => {
     const state = ladderBase();
-    state.store["ferrous"] = 2; // every fragment-costing blueprint is out of reach
+    // #214: the furnace now costs steel (not ferrous), so clearing the fragments
+    // alone left it affordable; clear steel too so every build is out of reach.
+    state.store["ferrous"] = 2;
     state.store["nonferrous"] = 2;
+    state.store["steel"] = 0;
     state.storeUnits = 334;
     send(state, { type: "machine.build", blueprint: "sorter", tile: 0 });
     linkAll(state);
@@ -453,14 +469,23 @@ describe("build menu reveal", () => {
   /** The scripted browser session headlessly: apply the ladder's step, tick, repeat. */
   function runLadder(state: SimState, rounds: number): Record<string, number> {
     const histogram: Record<string, number> = {};
+    const recovery = newLadderRecovery();
     for (let round = 0; round < rounds; round += 1) {
       // T7's dock primary is the onboarding contract while steel is stocked, and the
-      // repeatable market stays locked until it is claimed (commands.ts:301). The
-      // scripted session therefore claims it here, exactly once.
-      if (!state.exportClaimed && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+      // repeatable market stays locked until it is claimed (commands.ts:301). #214:
+      // the seed's 12 steel pays for the sorter and furnace (4 + 4) first, so the
+      // claim waits for both starters, then fires once the furnace smelts 10 steel.
+      const startersBuilt =
+        state.machines.some((m) => m.blueprint === "sorter") &&
+        state.machines.some((m) => m.blueprint === "furnace");
+      if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
         send(state, { type: "contract.export" });
       }
-      const step = nextYardStep(state);
+      // The two dismantle-refund recoveries and the best-sell keep mirror the
+      // validateBehaviour gate exactly (#214, ADR d7/d8); they change no game rule,
+      // only the scripted session's play choices.
+      ladderRecoveryTriggers(state, recovery, round);
+      const step = ladderRecoveryAdjust(state, recovery, nextYardStep(state));
       const key =
         step.kind === "build"
           ? `build:${step.blueprint}`
@@ -498,13 +523,16 @@ describe("build menu reveal", () => {
           break;
       }
       advance(state, 10); // one second between taps, as the scripted session does
+      ladderRecoveryClear(state, recovery);
     }
     return histogram;
   }
 
   it("keeps building and spending through half an hour of self-play (B-19)", () => {
     const state = boot();
-    state.tutorial = 9; // the tutorial is complete, so every blueprint is known
+    // #214: leave the tutorial at the boot milestone and let it advance through play
+    // exactly as validateBehaviour does. Forcing step 9 skipped the progressive
+    // unlock, so the ladder never bought research and left the wire mill jammed.
     const histogram = runLadder(state, 1800); // 18 000 ticks = 30 minutes of play
     const levels = state.machines.map((m) => m.level);
     console.log(
