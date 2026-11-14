@@ -130,6 +130,7 @@ const panelTitles = () =>
     (node.querySelector(".panel__title")?.textContent ?? "").trim()
   );
 
+// #214 seed starts at 120 scrap; one manual salvage pulse adds manualSalvagePerPulse (2) → 122.
 const scrap = (store: GameStore) => store.getState().store["scrap"] ?? 0;
 
 /**
@@ -173,7 +174,7 @@ describe("G2 tap vs drag vs pinch vs cancel", () => {
     begin();
     await frame();
     tapWorld(WRECK_POSITION.x, WRECK_POSITION.y);
-    expect(scrap(store)).toBe(5);
+    expect(scrap(store)).toBe(122);
   });
 
   it("a drag across the wreck never salvages, even ending on it", async () => {
@@ -186,7 +187,7 @@ describe("G2 tap vs drag vs pinch vs cancel", () => {
     firePointer("pointermove", 1, p.x + 40, p.y);
     firePointer("pointermove", 1, p.x, p.y);
     firePointer("pointerup", 1, p.x, p.y);
-    expect(scrap(store)).toBe(0);
+    expect(scrap(store)).toBe(120);
   });
 
   it("a cancelled press never salvages; the late lift is inert; a fresh tap works", async () => {
@@ -198,9 +199,9 @@ describe("G2 tap vs drag vs pinch vs cancel", () => {
     firePointer("pointerdown", 1, p.x, p.y);
     firePointer("pointercancel", 1, p.x, p.y);
     firePointer("pointerup", 1, p.x, p.y);
-    expect(scrap(store)).toBe(0);
+    expect(scrap(store)).toBe(120);
     tapWorld(WRECK_POSITION.x, WRECK_POSITION.y);
-    expect(scrap(store)).toBe(5);
+    expect(scrap(store)).toBe(122);
   });
 
   it("a pinch never salvages on either lift, and zooms the camera", async () => {
@@ -215,13 +216,13 @@ describe("G2 tap vs drag vs pinch vs cancel", () => {
     firePointer("pointermove", 2, p.x + 80, p.y);
     firePointer("pointerup", 2, p.x + 80, p.y);
     firePointer("pointerup", 1, p.x, p.y);
-    expect(scrap(store)).toBe(0);
+    expect(scrap(store)).toBe(120);
     await frame();
     expect(cam().scale).toBeGreaterThan(before);
     // Hit testing follows the zoom: a fresh tap at the wreck's NEW screen
     // position still salvages.
     tapWorld(WRECK_POSITION.x, WRECK_POSITION.y);
-    expect(scrap(store)).toBe(5);
+    expect(scrap(store)).toBe(122);
   });
 
   it("a cancel mid-pinch spoils the remaining lift too", async () => {
@@ -234,7 +235,7 @@ describe("G2 tap vs drag vs pinch vs cancel", () => {
     firePointer("pointerdown", 2, p.x + 40, p.y);
     firePointer("pointercancel", 1, p.x, p.y);
     firePointer("pointerup", 2, p.x + 40, p.y);
-    expect(scrap(store)).toBe(0);
+    expect(scrap(store)).toBe(120);
   });
 });
 
