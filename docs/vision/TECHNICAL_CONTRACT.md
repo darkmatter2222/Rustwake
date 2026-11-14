@@ -4,7 +4,22 @@
 
 React/TypeScript remains UI. Preserve useful deterministic economy, command idempotency, resource invariants, content tables, save management and offline settlement. Replace Canvas 2D world presentation behind a renderer boundary with real WebGL 3D. Default candidate: Three.js with simple procedural/glTF assets; do a bounded P0 import/camera/performance spike and record the selected version after checking current official docs. A different engine requires evidence against the same scene, not a prolonged engine debate. Do not add a heavyweight full physics engine before a measured need.
 
+Renderer dependency policy (settled by #132/T05): three.js is pinned exactly to `0.187.0` project-wide. No floating ranges (`^`, `~`, `*`, `latest`); every package that depends on three.js declares the exact version with a committed lockfile. Any version bump requires a tracked issue and a re-benchmark (cold-load, frame/input timings, deterministic capture on the declared device) before merge. Decision record and scale-fixture alignment ruling: [architecture ADR-0001](architecture/adr-0001-renderer.md); integration boundary and conservation baseline: [architecture README](architecture/README.md).
+
 The existing renderer's exact pixel-count and paint-operation tests are historical characterization, not a mandate for the 3D renderer. Keep economic conservation, gesture correctness and migration coverage. New performance tests measure frame time, memory, draw calls and actual interaction under declared hardware. Do not merely lift failing budgets without documenting the scene and tradeoff.
+
+Obsolete art assumptions retired by #132/T05 (enumerated from the T02 audit §6; retirement takes effect when the 3D renderer lands — the architecture issue itself deletes no tests):
+
+| Retired pin | Where | Disposition |
+|---|---|---|
+| ART-003…007 silhouette distinctness, ink shares, contact shadows, paint-op counts, rasterized pixel rows; 233000 B entry-chunk ceiling | `tests/renderer/silhouette.test.ts` (37 its) | Retire with Canvas 2D art; byte ceiling re-declared against the ≤8 MB compressed first-playable budget, never silently lifted |
+| drawScene paint-operation/pixel characterization | `tests/renderer/scene-draw.test.ts` (46 its) | Retire |
+| World paint pinning (apron/palette/part tuples) + capture tooling | `tests/renderer/world-60.test.ts` (16 its), `world-60.evidence.mjs` | Retire |
+| 2D belt extent line drawing | `tests/renderer/belt-extent.test.ts` (4 its) | Retire; belt economics stay in simulation tests |
+| Drawn-leg parameter (DEF-004) | `tests/renderer/drone-leg.test.ts` (11 its) | Retire; stale-anchor behavior stays in `tests/simulation/fleet.test.ts` |
+| 2D camera clamp/zoom math bound to WORLD_W/H | `tests/renderer/camera-50.test.ts` (18 its) | Retarget to the 3D camera contract |
+
+Retained (explicitly not retired): `tests/legacy/**` from #129 (22 byte-pinned characterization tests — the conservation/migration baseline), all economic invariants (`tests/simulation/**`, `tests/persistence/**`, `tests/content/validate.test.ts`), `tests/renderer/gestures-50.test.ts` (retarget inputs to the 3D view, keep the contract), UI command/settings/save-flow tests (retarget with the UI), `tests/perf/bench.test.ts` (re-baseline with declared 3D scene/hardware). Historical art evidence (`docs/evidence/*art*`, art scripts, renderer PROVENANCE) stays preserved. A grep of `docs/vision/BACKLOG.md` found no pixel-exact/old-byte art constraints (it is the issue crosswalk); the executive contract's acceptance-hierarchy clause already requires this deliberate replacement with outcome-based checks.
 
 ## Modules and command contracts
 
