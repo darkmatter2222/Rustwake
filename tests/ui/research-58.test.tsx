@@ -218,7 +218,7 @@ describe("research-58: four states over the existing branch", () => {
     expect(focus.querySelector(".research-focus__title")?.textContent).toBe(
       "Just bought — live in the yard"
     );
-    expect(focus.textContent).toContain("7 scrap -> 7 scrap");
+    expect(focus.textContent).toContain("4 scrap -> 4 scrap");
 
     // The overview agrees with the cards.
     expect(host.querySelector(".research-progress")?.textContent).toBe("1 of 3 researched");
@@ -280,7 +280,7 @@ describe("research-58: four states over the existing branch", () => {
     expect(focus.querySelector(".research-focus__title")?.textContent).toBe(
       "Every node is active in the yard"
     );
-    expect(focus.textContent).toContain("7 scrap");
+    expect(focus.textContent).toContain("4 scrap");
     expect(focus.textContent).toContain("+6 units per machine");
     expect(focus.textContent).toContain("32 units");
     // No earn-more-data note once the path is complete, even at a zero balance.

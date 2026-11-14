@@ -118,6 +118,11 @@ function freshStore(): GameStore {
 function poorMatureStore(): GameStore {
   const state = createInitialState();
   state.tutorial = 9;
+  // #214: the starter seed ships stocked (120 scrap / 12 ferrous / 12 steel), so
+  // "empty-handed" drains it; the wreck and the tutorial stay as seeded. Without
+  // this drain the sorter is affordable and the have/need contract below is void.
+  state.store = { scrap: 0, ferrous: 0, steel: 0 };
+  state.storeUnits = 0;
   advance(state, 1);
   return storeFromState(state);
 }
@@ -320,7 +325,7 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
 
     const sorter = card("sorter")!;
     expect(sorter.dataset.affordable).toBe("false");
-    expect(sorter.textContent).toContain("Need 20 scrap · have 0");
+    expect(sorter.textContent).toContain("Need 30 scrap · have 0");
     // The footer Place is disabled while the choice cannot be paid.
     expect(catalogButton("Place Scrap sorter")!.disabled).toBe(true);
 
@@ -328,7 +333,7 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     act(() => catalogButton("Salvage")!.click());
     expect(store.getState().store.scrap).toBeGreaterThan(0);
     expect(card("sorter")!.textContent).toContain(
-      `Need 20 scrap · have ${store.getState().store.scrap}`
+      `Need 30 scrap · have ${store.getState().store.scrap}`
     );
     // Catalog still open: recovery never throws the player out of planning.
     expect(catalog()).not.toBeNull();
@@ -382,7 +387,7 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     const ghostTile = Number(/Ghost on cell (\d+)/.exec(statusLine())![1]);
     const before = store.getState();
     const scrapBefore = before.store.scrap ?? 0;
-    const ferrousBefore = before.store.ferrous ?? 0;
+    const steelBefore = before.store.steel ?? 0;
     const countBefore = before.machines.length;
     // The state object is mutated in place: snapshot the scalar before the tap.
     const revisionBefore = before.revision;
@@ -395,8 +400,9 @@ describe("UI-RESET-52 the catalog replaces cycling", () => {
     expect(built.blueprint).toBe("furnace");
     expect(built.tile).toBe(ghostTile);
     expect(after.revision).toBeGreaterThan(revisionBefore);
-    expect(scrapBefore - (after.store.scrap ?? 0)).toBe(10);
-    expect(ferrousBefore - (after.store.ferrous ?? 0)).toBe(5);
+    // #214: the furnace costs 35 scrap + 4 steel.
+    expect(scrapBefore - (after.store.scrap ?? 0)).toBe(35);
+    expect(steelBefore - (after.store.steel ?? 0)).toBe(4);
     // The phase is over: the catalog stays closed and the dock is the resting five.
     expect(catalog()).toBeNull();
     expect(document.querySelector(".hud")!.className).not.toContain("hud--build");

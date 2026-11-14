@@ -198,7 +198,7 @@ describe("STRAT-002/A1 the fork on the dock", () => {
         expect(document.documentElement.classList.contains("text-large")).toBe(true);
       }
       const card = document.querySelector(".objective")?.textContent ?? "";
-      expect(card).toMatch(/Power 8 · \d+ requested · \d+ %/);
+      expect(card).toMatch(/Power 6 · \d+ requested · \d+ %/);
       // The touch floor and the no-scroll gate hold with the extra line in place.
       for (const button of [...document.querySelectorAll<HTMLElement>(".dock .dock__btn")]) {
         expect(parseFloat(getComputedStyle(button).minHeight)).toBeGreaterThanOrEqual(44);

@@ -72,9 +72,14 @@ function walkToSorter(store: GameStore): void {
  */
 function fillStoreFull(store: GameStore, exportClaimed = true): void {
   const state = store.getState();
-  state.store.plates = 880;
-  state.store.scrap = 20;
-  state.storeUnits = 900;
+  // #214: the retuned sorter costs 30 scrap + 4 steel (was 20 scrap), so the fill keeps
+  // scrap at the sorter price and steel at its 4-unit line: the affordable-build step
+  // leads the dock (a Build face, never a Sell face) — the precondition the contract-first
+  // recovery test relies on. Steel stays below exportContractSteel (10) so the steel
+  // contract button is hidden before the claim, and plates fill the rest of the 300-unit
+  // capacity so the trade desk still holds a 60-unit tranche to sell once it opens.
+  state.store = { scrap: 30, steel: 4, plates: 266 };
+  state.storeUnits = 300;
   state.exportClaimed = exportClaimed;
   state.tutorial = 9;
   act(() => store.step(1));
@@ -110,9 +115,9 @@ describe("UI-RESET-51 resource grouping and all-resource access", () => {
     }
     const texts = chipTexts();
     // The pinned reads survive the rebuild verbatim.
-    expect(texts.some((line) => /^Scrap0$/.test(line))).toBe(true);
-    expect(texts.some((line) => /^Credits0$/.test(line))).toBe(true);
-    expect(texts.some((line) => /^Store 0\/900$/.test(line))).toBe(true);
+    expect(texts.some((line) => /^Scrap120$/.test(line))).toBe(true);
+    expect(texts.some((line) => /^Credits60$/.test(line))).toBe(true);
+    expect(texts.some((line) => /^Store 144\/300$/.test(line))).toBe(true);
 
     const storeChip = host.querySelector<HTMLElement>(".resources__item--store");
     expect(storeChip?.getAttribute("data-pressure")).toBe("ok");
@@ -190,14 +195,14 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     expect(storeChip?.getAttribute("data-pressure")).toBe("full");
     // Non-color cue: a warning glyph rides beside the numbers.
     expect(storeChip?.querySelector(".resources__warn")).not.toBeNull();
-    expect(storeChip?.querySelector("strong")?.textContent).toBe("900/900");
+    expect(storeChip?.querySelector("strong")?.textContent).toBe("300/300");
 
     const alert = host.querySelector<HTMLElement>(".hud-alert");
     expect(alert).not.toBeNull();
     expect(alert?.getAttribute("data-tier")).toBe("full");
     expect(alert?.getAttribute("role")).toBe("status");
     expect(alert?.querySelector(".hud-alert__text")?.textContent).toBe(
-      "Store full · 900/900 · sell to free space"
+      "Store full · 300/300 · sell to free space"
     );
     expect(alert?.querySelector("svg")).not.toBeNull();
     // The alert is a sibling of the dock, not a dock face.
@@ -216,7 +221,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     fillStoreFull(store, false);
 
     expect(host.querySelector(".hud-alert__text")?.textContent).toBe(
-      "Store full · 900/900 · finish the steel contract to sell"
+      "Store full · 300/300 · finish the steel contract to sell"
     );
     act(() => findButton("Open store")?.click());
     const panel = host.querySelector<HTMLElement>('[aria-label="Store contents"]');
@@ -230,8 +235,8 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     const host = mount(store);
     start();
     const state = store.getState();
-    state.store.scrap = 850;
-    state.storeUnits = 850;
+    state.store.scrap = 280;
+    state.storeUnits = 280;
     state.exportClaimed = true;
     state.tutorial = 9;
     act(() => store.step(1));
@@ -241,14 +246,14 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     // Static: no role, so a per-tick re-render never re-announces it.
     expect(alert?.getAttribute("role")).toBeNull();
     expect(alert?.querySelector(".hud-alert__text")?.textContent).toBe(
-      "Store nearly full · 850/900"
+      "Store nearly full · 280/300"
     );
     expect(host.querySelector<HTMLElement>(".resources__item--store")?.getAttribute("data-pressure")).toBe("high");
 
     // Overflow only persists while the store has no room for it: at capacity the
     // engine cannot drain it, and the alert names the units held outside.
-    state.store.plates = 50;
-    state.storeUnits = 900;
+    state.store.plates = 20;
+    state.storeUnits = 300;
     state.overflow = [{ resource: "scrap", qty: 40 }];
     act(() => store.step(1));
     expect(store.getState().overflow.length).toBe(1);
@@ -256,7 +261,7 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     expect(fullAlert?.getAttribute("data-tier")).toBe("full");
     expect(fullAlert?.getAttribute("role")).toBe("status");
     expect(fullAlert?.querySelector(".hud-alert__text")?.textContent).toBe(
-      "Store full · 900/900 · 40 held outside · sell to free space"
+      "Store full · 300/300 · 40 held outside · sell to free space"
     );
   });
 
@@ -275,19 +280,17 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     const sell = findButton("Sell");
     expect(sell?.textContent).toBe("Sell 60 · +900");
     act(() => sell?.click());
-    expect(store.getState().storeUnits).toBe(840);
-    expect(store.getState().credits).toBe(900);
-    // Full -> high: the alert steps down and stops being a live region.
-    const alert = host.querySelector<HTMLElement>(".hud-alert");
-    expect(alert?.getAttribute("data-tier")).toBe("high");
-    expect(alert?.getAttribute("role")).toBeNull();
-    expect(alert?.querySelector(".hud-alert__text")?.textContent).toBe(
-      "Store nearly full · 840/900"
-    );
+    expect(store.getState().storeUnits).toBe(240);
+    expect(store.getState().credits).toBe(960);
+    // #214: capacity is 300, so one 60-unit batch drops the store to 80% — below the
+    // ninety-percent band — and the alert retires straight to ok (the high band itself
+    // is covered by the static-warning test above).
+    expect(host.querySelector(".hud-alert")).toBeNull();
+    expect(host.querySelector<HTMLElement>(".resources__item--store")?.getAttribute("data-pressure")).toBe("ok");
 
     act(() => findButton("Sell")?.click());
-    expect(store.getState().storeUnits).toBe(780);
-    // Below ninety percent: the alert retires and the chip returns to ok.
+    expect(store.getState().storeUnits).toBe(180);
+    // Still below the band: the alert stays retired and the chip stays ok.
     expect(host.querySelector(".hud-alert")).toBeNull();
     expect(host.querySelector<HTMLElement>(".resources__item--store")?.getAttribute("data-pressure")).toBe("ok");
   });
@@ -300,17 +303,17 @@ describe("UI-RESET-51 capacity pressure and critical state cues", () => {
     // A comfortably powered yard shows no power chip at all.
     expect(host.querySelector('[data-cue="power"]')).toBeNull();
 
-    // One machine demanding 20 against the shared budget of 8: ratio 0.4, limited.
+    // One machine demanding 20 against the shared budget of 6: ratio 0.3, limited (#214).
     const machine = store.getState().machines[0];
     machine.batchPower = 20;
     machine.progress = 1;
     act(() => store.step(1));
-    expect(store.getState().powerRatio).toBeCloseTo(0.4, 5);
+    expect(store.getState().powerRatio).toBeCloseTo(0.3, 5);
     expect(store.getState().machines[0].status).toBe("powerLimited");
 
     const chip = host.querySelector<HTMLElement>('[data-cue="power"]');
     expect(chip).not.toBeNull();
-    expect(chip?.textContent?.trim()).toBe("Power 40 % · 1 limited");
+    expect(chip?.textContent?.trim()).toBe("Power 30 % · 1 limited");
     expect(chip?.querySelector("svg")).not.toBeNull();
     expect(chip?.querySelector(".resources__warn")).not.toBeNull();
   });
@@ -447,8 +450,10 @@ describe("UI-RESET-51 optional objective", () => {
     const state = store.getState();
     state.tutorial = 9;
     state.exportClaimed = true;
-    state.store.scrap = 20;
-    state.storeUnits = 20;
+    // #214: scrap sits at the retuned sorter price (30) so the affordable-build step
+    // leads the dock here too; the seed ferrous/steel (12 each) round the unit counter.
+    state.store.scrap = 30;
+    state.storeUnits = 54;
     act(() => store.step(1));
     // The face labels without their live price tails: the tails move with the
     // store by design, the set of faces must not.

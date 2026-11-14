@@ -162,7 +162,8 @@ describe("UI-RESET-64 command-id uniqueness across reloads (coordinator decision
     const r1 = applyCommand(state, build);
     expect(r1).toEqual({ ok: true, revision: 1 });
     expect(state.machines).toHaveLength(1);
-    expect(state.store.scrap).toBe(80);
+    // #214: the sorter costs 30 scrap, so the seeded 100 drops to 70.
+    expect(state.store.scrap).toBe(70);
 
     // The game's own encodeSave/decodeSave carries seenCommands through reload.
     const decoded = decodeSave(encodeSave(state, Date.now(), { ...DEFAULT_SETTINGS, muted: true }));
@@ -174,13 +175,13 @@ describe("UI-RESET-64 command-id uniqueness across reloads (coordinator decision
     const retry = applyCommand(reloaded, { id: "c1", type: "machine.build", blueprint: "sorter", tile: 9 });
     expect(retry).toEqual({ ok: true, revision: 1 });
     expect(reloaded.machines).toHaveLength(1);
-    expect(reloaded.store.scrap).toBe(80);
+    expect(reloaded.store.scrap).toBe(70);
 
     // ...but the unique ids a reloaded App now generates EXECUTE.
     const fresh = applyCommand(reloaded, { id: "epoch2-1", type: "machine.build", blueprint: "sorter", tile: 9 });
     expect(fresh).toEqual({ ok: true, revision: 2 });
     expect(reloaded.machines).toHaveLength(2);
-    expect(reloaded.store.scrap).toBe(60);
+    expect(reloaded.store.scrap).toBe(40);
     expect(reloaded.seenCommands["epoch2-1"]).toBe(2);
   });
 });
