@@ -76,14 +76,14 @@ const ROAD_COPY = {
  * single cell (the preview rejects it as too-short, with a typed reason).
  */
 export function orthogonalRoute(from: Cell, to: Cell): Cell[] {
-  const route: Cell[] = [];
+  const route: Cell[] = [{ x: from.x, y: from.y }];
   const stepX = Math.sign(to.x - from.x);
   const stepY = Math.sign(to.y - from.y);
-  for (let x = from.x; ; x += stepX) {
+  for (let x = from.x + stepX; stepX !== 0; x += stepX) {
     route.push({ x, y: from.y });
     if (x === to.x) break;
   }
-  for (let y = from.y + stepY; ; y += stepY) {
+  for (let y = from.y + stepY; stepY !== 0; y += stepY) {
     route.push({ x: to.x, y });
     if (y === to.y) break;
   }
