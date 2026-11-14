@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { GameStore, RoadApi } from "../app/store";
+import type { GameStore, RoadApi, SaveRecoveryApi } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
 import { TUNING, unlockedBlueprints, BLUEPRINTS } from "../game/content/defs";
 import {
@@ -65,6 +65,7 @@ import {
 import { clearSave, hasSaveProgress } from "../game/persistence/save";
 import { saveSummary } from "./home/copy";
 import { ResetDialog } from "./shell/ResetDialog";
+import { RecoveryNotice } from "./shell/RecoveryNotice";
 import { DockButtons, Gate, HudTop, ObjectiveCard, Toast } from "./Hud";
 import { BuildCatalog } from "./build/BuildCatalog";
 import { DismantleCard, MoveStrip, PlacementStrip } from "./place/PlacePreview";
@@ -221,7 +222,8 @@ export function App({
   audioApi,
   reload,
 }: {
-  store: GameStore;
+  /** G1 (#202): additive recovery capability; plain GameStore doubles stay assignable. */
+  store: GameStore & Partial<SaveRecoveryApi>;
   audioApi?: AudioApi;
   reload?: () => void;
 }) {
@@ -1206,6 +1208,11 @@ export function App({
     const summary = progress ? saveSummary(state) : null;
     return (
       <div className="game">
+        {/* G1 (#202): the save-recovery banner sits outside the panel stack and
+            the HUD census, on the gate as well as in play. First child in both
+            branches = one reconciliation slot, so dismissal survives Begin.
+            Dismiss is local; Escape and Back keep their existing chains. */}
+        <RecoveryNotice store={store} />
         <canvas ref={canvasRef} />
         <Gate
           onBegin={() => {
@@ -1250,6 +1257,10 @@ export function App({
 
   return (
     <div className="game">
+      {/* G1 (#202): same banner contract as the gate branch — outside `.hud`,
+          no census node, no Escape layer, no focus trap, same first-child
+          reconciliation slot so its state survives the gate -> play switch. */}
+      <RecoveryNotice store={store} />
       <canvas
         ref={canvasRef}
         /* UI-RESET-66: name the world view for assistive tech. Every core action

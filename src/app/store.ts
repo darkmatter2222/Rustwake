@@ -104,7 +104,8 @@ export interface SaveRecoveryApi {
    * durably writes the recovered yard to `SAVE_KEY` BEFORE clearing the slot.
    * Any failure changes nothing and keeps the slot. If the yard lands but the
    * slot clear is refused, the success carries `slotClearFailed: true` (#203):
-   * the slot is kept and its notice re-surfaces instead of a silent full success.
+   * the slot is kept and the flag is the player-visible surface — a decodable
+   * residual slot raises no notice — instead of a silent full success.
    */
   retrySaveRecovery(): RecoveryResult;
   /** The exact retained raw text (slot, or held `SAVE_KEY`), for export/backup. */
