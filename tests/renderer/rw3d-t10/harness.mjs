@@ -202,5 +202,42 @@ window.__RW3D__ = {
       };
     });
   },
+  /**
+   * Camera-line-of-sight probe: raycast from the camera to each named mesh's
+   * world center through the whole building scene graph. The mesh is visible
+   * from the camera iff it is the first fully-visible surface hit. This is a
+   * numerical occlusion check, not a visual-fidelity verdict.
+   */
+  moduleProbe(names) {
+    view.root.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+    const ray = new THREE.Raycaster();
+    const origin = camera.position.clone();
+    const chainVisible = (obj) => {
+      let cur = obj;
+      while (cur) {
+        if (!cur.visible) return false;
+        cur = cur.parent;
+      }
+      return true;
+    };
+    return names.map((name) => {
+      const mesh = view.root.getObjectByName(name);
+      if (!mesh) return { name, missing: true };
+      const center = new THREE.Vector3();
+      mesh.getWorldPosition(center);
+      ray.set(origin, center.clone().sub(origin).normalize());
+      const hits = ray.intersectObject(view.root, true).filter((h) => chainVisible(h.object));
+      const first = hits.length > 0 ? hits[0] : null;
+      return {
+        name,
+        center: [center.x, center.y, center.z],
+        firstHit: first ? first.object.name : null,
+        firstHitDistance: first ? first.distance : null,
+        visibleFromCamera: first !== null && first.object === mesh,
+        hitCount: hits.length,
+      };
+    });
+  },
   sample,
 };

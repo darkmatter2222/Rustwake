@@ -9,7 +9,7 @@
  * Writes docs/evidence/2026-11-14-rw3d-t10-* (JSON + PNGs).
  */
 import { spawn, spawnSync } from "node:child_process";
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { launchBrowser, headSha, evidenceDir, repoRoot } from "../rw3d-t07/lib.mjs";
 
@@ -147,7 +147,23 @@ async function main() {
     await call("earn", null);
     const eUp2 = await call("upgrade", null);
     check("E.second distinct upgrade -> two modules", eUp2.res.ok && eUp2.sample.sim.level === 3 && eUp2.sample.report[0].upgradeModules === 2);
+    // Camera line-of-sight: both modules must be the first visible surface
+    // along the camera ray (not buried inside the shell). Numerical occlusion
+    // check; visual fidelity remains a capable reviewer's verdict.
+    const modProbe = await call("moduleProbe", ["upgradeModule1", "upgradeModule2"]);
+    const modVisible = modProbe.every((m) => m.visibleFromCamera === true && m.firstHit === m.name);
+    check("E.upgrade modules visible from camera (raycast first-hit)", modVisible,
+      modProbe.map((m) => `${m.name}:${m.visibleFromCamera ? "visible" : `occluded by ${m.firstHit}`}`).join(", "));
+    scenarios.upgradeModuleProbe = modProbe;
     await shot("upgrade-modules");
+    // Pixel-level proof the upgrade frame is NOT the level-1 completion frame:
+    // the round-7 defect was a byte-identical PNG (modules occluded inside the
+    // shell). Compare the two captured frames directly.
+    const upBuf = readFileSync(resolve(evidenceDir, `${PREFIX}-upgrade-modules.png`));
+    const doneBuf = readFileSync(resolve(evidenceDir, `${PREFIX}-stage-5-activation-complete.png`));
+    const framesDiffer = !upBuf.equals(doneBuf);
+    check("E.upgrade frame differs from level-1 completion (pixels)", framesDiffer,
+      `upgrade ${upBuf.length}B vs complete ${doneBuf.length}B`);
     scenarios.upgrades = { eBase, eUp1, eDup, eUp2 };
 
     // ---- F: idle mechanisms run on framePhase, static under reduced motion ----

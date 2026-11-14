@@ -7,6 +7,7 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  ANIMATED_KIT_GROUPS,
   ASSEMBLY_STAGES,
   assemblyStageAt,
   buildingStageReport,
@@ -186,6 +187,114 @@ describe("upgrade modules (presentation of sim level, never a cost)", () => {
 
   it("is deterministic for identical (asset, level)", () => {
     expect(JSON.stringify(upgradeModulesFor("depot", 4))).toEqual(JSON.stringify(upgradeModulesFor("depot", 4)));
+  });
+
+  it("modules never intersect any kit part and rest supported, for every asset", () => {
+    const eps = 1e-9;
+    // Resolve every static kit part to a world-space AABB through its groups.
+    const partBoxes = (asset: (typeof WORLD_ASSET_IDS)[number]) => {
+      const geo = KIT_GEOMETRY[asset];
+      const pos = (name: string): [number, number, number] => {
+        if (name === "root") return [0, 0, 0];
+        const g = geo.groups.find((x) => x.name === name)!;
+        const b = pos(g.parent);
+        return [b[0] + g.position[0], b[1] + g.position[1], b[2] + g.position[2]];
+      };
+      return geo.parts.map((p) => {
+        const b = pos(p.parent);
+        const c = [b[0] + p.center[0], b[1] + p.center[1], b[2] + p.center[2]];
+        return {
+          name: p.name,
+          min: [c[0] - p.size[0] / 2, c[1] - p.size[1] / 2, c[2] - p.size[2] / 2],
+          max: [c[0] + p.size[0] / 2, c[1] + p.size[1] / 2, c[2] + p.size[2] / 2],
+        };
+      });
+    };
+    for (const asset of WORLD_ASSET_IDS) {
+      const boxes = partBoxes(asset);
+      const mods = upgradeModulesFor(asset, 1 + UPGRADE_MODULE_CAP);
+      mods.forEach((m, i) => {
+        const min = [m.center[0] - m.size[0] / 2, m.center[1] - m.size[1] / 2, m.center[2] - m.size[2] / 2];
+        const max = [m.center[0] + m.size[0] / 2, m.center[1] + m.size[1] / 2, m.center[2] + m.size[2] / 2];
+        for (const b of boxes) {
+          const overlap =
+            min[0] < b.max[0] - eps && max[0] > b.min[0] + eps &&
+            min[1] < b.max[1] - eps && max[1] > b.min[1] + eps &&
+            min[2] < b.max[2] - eps && max[2] > b.min[2] + eps;
+          expect(overlap, `${asset} module ${i + 1} intersects ${b.name}`).toBe(false);
+        }
+        if (i === 0) {
+          // Grounded or resting exactly on a part top face it overlaps.
+          const supported = min[1] <= eps || boxes.some((b) =>
+            Math.abs(b.max[1] - min[1]) <= eps &&
+            min[0] < b.max[0] - eps && max[0] > b.min[0] + eps &&
+            min[2] < b.max[2] - eps && max[2] > b.min[2] + eps);
+          expect(supported, `${asset} module 1 floats unsupported`).toBe(true);
+        } else {
+          // Contiguous vertical stack: each module sits on the previous one.
+          expect(min[1]).toBeCloseTo(mods[i - 1].center[1] + mods[i - 1].size[1] / 2, 9);
+        }
+      });
+    }
+  });
+
+  it("roofed buildings carry the first module above the roofline (visible annex)", () => {
+    // Warehouse/depot ridge top is 2.8; the level-2 module must clear it so
+    // the upgrade reads as added structure, not interior furniture.
+    for (const asset of ["warehouse", "depot"] as const) {
+      const [m] = upgradeModulesFor(asset, 2);
+      expect(m.center[1] + m.size[1] / 2).toBeGreaterThan(2.8);
+    }
+    // Furnace mounts on its back deck (top 1.95), not inside the shell.
+    const [f] = upgradeModulesFor("furnace", 2);
+    expect(f.center[1] - f.size[1] / 2).toBeCloseTo(1.95, 9);
+  });
+
+  it("modules never mount on animated kit groups", () => {
+    // The stack anchor must not ride a rotating/idle pivot: for every asset
+    // the module column overlaps no animated-group part at its resting pose
+    // beyond the support face it rests on.
+    for (const asset of WORLD_ASSET_IDS) {
+      const geo = KIT_GEOMETRY[asset];
+      const animatedNames = new Set<string>();
+      const isAnimated = (name: string): boolean => {
+        let cur = name;
+        while (cur !== "root") {
+          if (ANIMATED_KIT_GROUPS.has(cur)) return true;
+          const g = geo.groups.find((x) => x.name === cur);
+          if (g === undefined) return false;
+          cur = g.parent;
+        }
+        return false;
+      };
+      for (const p of geo.parts) if (isAnimated(p.parent)) animatedNames.add(p.name);
+      const mods = upgradeModulesFor(asset, 1 + UPGRADE_MODULE_CAP);
+      // A module may rest ON an animated part's top face (turret housing) but
+      // must never be buried inside one: vertical overlap with any animated
+      // part is forbidden (resting contact has zero interior overlap).
+      const pos = (name: string): [number, number, number] => {
+        if (name === "root") return [0, 0, 0];
+        const g = geo.groups.find((x) => x.name === name)!;
+        const b = pos(g.parent);
+        return [b[0] + g.position[0], b[1] + g.position[1], b[2] + g.position[2]];
+      };
+      for (const p of geo.parts) {
+        if (!animatedNames.has(p.name)) continue;
+        const b = pos(p.parent);
+        const c = [b[0] + p.center[0], b[1] + p.center[1], b[2] + p.center[2]];
+        const bmin = [c[0] - p.size[0] / 2, c[1] - p.size[1] / 2, c[2] - p.size[2] / 2];
+        const bmax = [c[0] + p.size[0] / 2, c[1] + p.size[1] / 2, c[2] + p.size[2] / 2];
+        for (const m of mods) {
+          const mmin = [m.center[0] - m.size[0] / 2, m.center[1] - m.size[1] / 2, m.center[2] - m.size[2] / 2];
+          const mmax = [m.center[0] + m.size[0] / 2, m.center[1] + m.size[1] / 2, m.center[2] + m.size[2] / 2];
+          const overlap =
+            mmin[0] < bmax[0] - 1e-9 && mmax[0] > bmin[0] + 1e-9 &&
+            mmin[1] < bmax[1] - 1e-9 && mmax[1] > bmin[1] + 1e-9 &&
+            mmin[2] < bmax[2] - 1e-9 && mmax[2] > bmin[2] + 1e-9;
+          expect(overlap, `${asset} module inside animated part ${p.name}`).toBe(false);
+        }
+      }
+    }
   });
 });
 

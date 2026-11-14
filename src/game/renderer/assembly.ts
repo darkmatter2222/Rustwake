@@ -260,9 +260,16 @@ export function partAssemblyPose(
 
 /**
  * Upgrade modules: one named annex module per level above 1, capped for
- * presentation sanity. Pure function of (asset footprint, level) — the sim
- * already charged exactly once per upgrade (commands.ts upgradeMachine,
+ * presentation sanity. Pure function of (asset kit geometry, level) — the
+ * sim already charged exactly once per upgrade (commands.ts upgradeMachine,
  * idempotent by command id); this never replays or triggers any cost.
+ *
+ * Placement: modules stack on the highest kit "deck" (a part top face large
+ * enough to host them) so added capacity reads above the roofline from the
+ * default elevated camera instead of hiding inside the shell. The stack is
+ * supported (each module rests on the deck or the module below), never
+ * intersects kit parts, and stays inside the footprint. Assets with no
+ * hostable deck rest on the highest overlapping surface instead.
  */
 export const UPGRADE_MODULE_CAP = 4;
 
@@ -273,21 +280,120 @@ export interface UpgradeModuleSpec {
   readonly material: KitMaterialToken;
 }
 
+const MODULE_SIZE: readonly [number, number, number] = [0.7, 0.5, 0.7];
+/** Smallest part top face treated as a mountable deck (square units). */
+const MIN_DECK_AREA = 0.25;
+const DECK_EPS = 1e-9;
+
+/**
+ * Kit groups that move (idle mechanisms in three/assemblyView.ts, plus
+ * event-driven doors/spouts/gates). Modules never mount on them: a static
+ * annex must not ride a rotating pivot. Rest-pose tops of their parts still
+ * count for support so modules never intersect the shell.
+ */
+export const ANIMATED_KIT_GROUPS: ReadonlySet<string> = new Set([
+  "ventFan", "fan", "shaft", "roller", "roller2", "magnet", "palletLift",
+  "slew", "hoist", "yaw", "pitch",
+  "door", "door0", "door1", "intakeDoor", "pourSpout", "ventPuff", "gate",
+]);
+
+interface KitFace {
+  readonly top: number;
+  readonly minX: number;
+  readonly maxX: number;
+  readonly minZ: number;
+  readonly maxZ: number;
+}
+
+function clampRange(v: number, lo: number, hi: number): number {
+  return Math.min(Math.max(v, lo), Math.max(lo, hi));
+}
+
+/** Part top faces resolved through the kit group hierarchy. */
+function kitFaces(asset: WorldAssetId): { hosts: KitFace[]; all: KitFace[] } {
+  const geo = KIT_GEOMETRY[asset];
+  const cache = new Map<string, readonly [number, number, number]>();
+  const groupPos = (name: string): readonly [number, number, number] => {
+    if (name === "root") return [0, 0, 0];
+    const hit = cache.get(name);
+    if (hit !== undefined) return hit;
+    const g = geo.groups.find((x) => x.name === name);
+    if (g === undefined) return [0, 0, 0];
+    const base = groupPos(g.parent);
+    const out: readonly [number, number, number] = [
+      base[0] + g.position[0],
+      base[1] + g.position[1],
+      base[2] + g.position[2],
+    ];
+    cache.set(name, out);
+    return out;
+  };
+  const animated = (name: string): boolean => {
+    let cur = name;
+    while (cur !== "root") {
+      if (ANIMATED_KIT_GROUPS.has(cur)) return true;
+      const g = geo.groups.find((x) => x.name === cur);
+      if (g === undefined) return false;
+      cur = g.parent;
+    }
+    return false;
+  };
+  const hosts: KitFace[] = [];
+  const all: KitFace[] = [];
+  for (const p of geo.parts) {
+    const base = groupPos(p.parent);
+    const cx = base[0] + p.center[0];
+    const cy = base[1] + p.center[1];
+    const cz = base[2] + p.center[2];
+    const face: KitFace = {
+      top: cy + p.size[1] / 2,
+      minX: cx - p.size[0] / 2,
+      maxX: cx + p.size[0] / 2,
+      minZ: cz - p.size[2] / 2,
+      maxZ: cz + p.size[2] / 2,
+    };
+    all.push(face);
+    if (p.size[0] * p.size[2] >= MIN_DECK_AREA && !animated(p.parent)) hosts.push(face);
+  }
+  hosts.sort((a, b) => b.top - a.top);
+  return { hosts, all };
+}
+
 export function upgradeModulesFor(asset: WorldAssetId, level: number): UpgradeModuleSpec[] {
   const lv = Math.max(1, Math.floor(level));
   const count = Math.min(UPGRADE_MODULE_CAP, lv - 1);
   if (count <= 0) return [];
   const [w, d] = KIT_GEOMETRY[asset].footprint;
-  const xOff = Math.min(w / 4, 1.2);
+  const { hosts, all } = kitFaces(asset);
+  const hx = MODULE_SIZE[0] / 2;
+  const hz = MODULE_SIZE[2] / 2;
+  // Preferred stack anchor: back-left of the footprint, clear of doors.
+  let x = clampRange(-Math.min(w / 4, 1.2), -(w / 2 - hx), w / 2 - hx);
+  let z = clampRange(-(d / 2) + 0.5, -(d / 2 - hz), d / 2 - hz);
+  // Host: the highest static deck whose top face can fully contain a module.
+  for (const deck of hosts) {
+    if (deck.maxX - deck.minX < MODULE_SIZE[0] - DECK_EPS) continue;
+    if (deck.maxZ - deck.minZ < MODULE_SIZE[2] - DECK_EPS) continue;
+    x = clampRange(x, deck.minX + hx, deck.maxX - hx);
+    z = clampRange(z, deck.minZ + hz, deck.maxZ - hz);
+    break;
+  }
+  x = clampRange(x, -(w / 2 - hx), w / 2 - hx);
+  z = clampRange(z, -(d / 2 - hz), d / 2 - hz);
+  // Support: rest above every kit part the stack overlaps, so modules are
+  // never buried in the shell nor floating through it.
+  let support = 0;
+  for (const face of all) {
+    const overlapsX = x - hx < face.maxX - DECK_EPS && x + hx > face.minX + DECK_EPS;
+    const overlapsZ = z - hz < face.maxZ - DECK_EPS && z + hz > face.minZ + DECK_EPS;
+    if (overlapsX && overlapsZ && face.top > support) support = face.top;
+  }
   const specs: UpgradeModuleSpec[] = [];
   for (let n = 0; n < count; n += 1) {
-    const x = (n % 2 === 0 ? -1 : 1) * xOff;
-    const y = 0.45 + Math.floor(n / 2) * 0.55;
-    const z = -(d / 2) + 0.5;
     specs.push({
       name: `upgradeModule${n + 1}`,
-      center: [x, y, z],
-      size: [0.7, 0.5, 0.7],
+      center: [x, support + MODULE_SIZE[1] / 2 + n * MODULE_SIZE[1], z],
+      size: MODULE_SIZE,
       material: n % 2 === 0 ? "steel" : "oxideLight",
     });
   }
