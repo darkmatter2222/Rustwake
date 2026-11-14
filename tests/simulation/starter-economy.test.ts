@@ -73,6 +73,10 @@ function bootstrapChain(): SimState {
   const sorter = state.machines[0];
   send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
   send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "ferrous" });
+  // #214 re-pin: the seeded scrap lets the sorter run at full rate, so both R01
+  // outputs must be routed. Without a nonferrous return the byproduct clogs the
+  // tray (or rides a ferrous belt), starving the furnace of ferrous.
+  send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
   advance(state, 400);
   expect(send(state, { type: "machine.build", blueprint: "furnace", tile: 9 }).ok).toBe(true);
   const furnace = state.machines[1];
@@ -92,10 +96,15 @@ function bootstrapToExport(): SimState {
 function conservationSeed(): SimState {
   const state = bootstrapToExport();
   advance(state, 300);
-  addToStore(state, "scrap", 120);
-  addToStore(state, "ferrous", 60);
-  addToStore(state, "steel", 40);
-  addToStore(state, "data", 30);
+  // #214 re-pin: dockCapacity is now 300 (was 900). Blindly adding 250 units on
+  // top of a running yard overfilled the store to 447, so dismantle refused with
+  // "no-room" and the full dock made the sorter's nonferrous ride a ferrous belt.
+  // Fund a deliberate ledger with headroom under the 300 warehouse; data stays 30
+  // (the research comparison pins 30 - cost) and steel stays above the reserve
+  // floor so the sell/conservation assertions are unchanged.
+  state.store = { scrap: 100, ferrous: 40, steel: 30, data: 30 };
+  state.storeUnits = 200;
+  state.overflow = [];
   state.credits = 1000;
   return state;
 }
@@ -354,6 +363,10 @@ describe("#144 E06 free slow recovery prevents bankrupt deadlock", () => {
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
     send(state, { type: "route.connect", from: sorter.id, to: furnace.id, filter: "ferrous" });
     send(state, { type: "route.connect", from: furnace.id, to: 0, filter: "steel" });
+    // #214 re-pin: route the sorter's nonferrous byproduct back to the dock so it
+    // neither clogs the sorter tray nor rides the ferrous belt into the furnace
+    // input buffer (which starved the furnace and stalled recovery at 9 steel).
+    send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
     advance(state, 4000);
     expect(state.store.steel ?? 0).toBeGreaterThanOrEqual(TUNING.exportContractSteel);
     expect(send(state, { type: "contract.export" }).ok).toBe(true);

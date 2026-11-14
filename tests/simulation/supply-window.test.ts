@@ -89,8 +89,12 @@ async function runFloor(floor: number): Promise<Run> {
   for (let round = 0; round < ROUNDS; round += 1) {
     // T7's dock primary claims the onboarding contract once steel is stocked, and
     // every repeatable sell stays locked until then (commands.ts:301), so the
-    // driver mirrors that one press.
-    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
+    // driver mirrors that one press. #214: the seed's 12 steel pays for the sorter
+    // and furnace (4 + 4) first, so the claim waits for both starters.
+    const startersBuilt =
+      state.machines.some((m) => m.blueprint === "sorter") &&
+      state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
       send(state, { type: "contract.export" });
     }
     const step = nextYardStep(state);

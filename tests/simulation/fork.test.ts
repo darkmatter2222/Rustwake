@@ -152,7 +152,9 @@ function tutorialBodies(s: SimState): CommandBody[] | null {
     }
     const furnace = s.machines.find((m) => m.blueprint === "furnace");
     if (!furnace) {
-      if ((s.store["scrap"] ?? 0) >= 10 && (s.store["ferrous"] ?? 0) >= 5) {
+      // #214: gate on the shipped furnace buildCost (35 scrap + 4 steel), not the
+      // pre-retune 10 scrap + 5 ferrous. Mirrors scripts/probe-belt.mjs.
+      if (BLUEPRINTS.furnace.buildCost.every((item) => (s.store[item.resource] ?? 0) >= item.qty)) {
         return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
       }
       return [{ type: "manual.salvage" }];
@@ -202,7 +204,13 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
   advance(s, 262);
   taps += 7;
   for (let round = 0; round < 1800; round += 1) {
-    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    // #214: the seed's 12 steel pays for the sorter and furnace (4 + 4) first; the
+    // 10-steel contract waits for both starters, matching validateBehaviour and
+    // scripts/probe-belt.mjs so the in-test mirror reconciles with the golden.
+    const startersBuilt =
+      s.machines.some((m) => m.blueprint === "sorter") &&
+      s.machines.some((m) => m.blueprint === "furnace");
+    if (!s.exportClaimed && startersBuilt && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       send({ type: "contract.export" });
       taps += 1;
     }

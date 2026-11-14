@@ -180,7 +180,9 @@ function tutorialBodies(s) {
     }
     const furnace = s.machines.find((m) => m.blueprint === "furnace");
     if (!furnace) {
-      if ((s.store["scrap"] ?? 0) >= 10 && (s.store["ferrous"] ?? 0) >= 5) {
+      // #214: affordability follows the shipped furnace buildCost (35 scrap + 4
+      // steel), not the pre-retune 10 scrap + 5 ferrous the mirror used to gate on.
+      if (BLUEPRINTS.furnace.buildCost.every((item) => (s.store[item.resource] ?? 0) >= item.qty)) {
         return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
       }
       return [{ type: "manual.salvage" }];
@@ -239,7 +241,14 @@ export function ladderRow(branch, ladder, tileOrder) {
   advance(s, 262);
   taps += 7;
   for (let round = 0; round < ROUNDS; round += 1) {
-    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    // #214: the seed's 12 steel first pays for the sorter and furnace (4 + 4).
+    // Claiming the 10-steel contract before both stand would leave 2 steel and no
+    // steel source, so the claim waits for the two starter machines — the same
+    // taught order validateBehaviour uses (src/game/content/validate.ts).
+    const startersBuilt =
+      s.machines.some((m) => m.blueprint === "sorter") &&
+      s.machines.some((m) => m.blueprint === "furnace");
+    if (!s.exportClaimed && startersBuilt && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       sendRow({ type: "contract.export" });
       taps += 1;
     }

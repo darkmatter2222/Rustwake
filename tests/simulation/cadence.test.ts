@@ -172,7 +172,13 @@ function runOrder(order: string): Run {
   let ambiguous = 0;
   const kinds: Record<string, number> = {};
   for (let round = 0; round < ROUNDS; round += 1) {
-    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    // #214: the seed's 12 steel pays for the sorter and furnace (4 + 4) first; the
+    // 10-steel contract waits for both starters so the yard is not left with 2 steel
+    // and no steel source (same taught order as validateBehaviour).
+    const startersBuilt =
+      state.machines.some((m) => m.blueprint === "sorter") &&
+      state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       send(state, { type: "contract.export" }); // T7's one press opens the market
     }
     const step = nextStep(state, upgradeFirst);
