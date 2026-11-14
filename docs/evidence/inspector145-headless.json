@@ -1,0 +1,2603 @@
+{
+  "generatedBy": "scripts/probe-inspector145.mjs",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/145",
+  "headSha": "e467fc22b4f18125098e8cf7476a52402e5b49e5",
+  "url": "http://localhost:4295/",
+  "tuning": {
+    "yardPowerCapacity": 8,
+    "reserveFloor": 10,
+    "manualPulseTicks": 6
+  },
+  "cameraStampPrecision": {
+    "scaleEpsilon": 0.0005,
+    "stampPad": 0.011
+  },
+  "fixtureDeterminism": {
+    "starvedSourceYard": {
+      "byteIdentical": true,
+      "checksum": "f38c54ef"
+    },
+    "liveRouteYard": {
+      "byteIdentical": true,
+      "checksum": "e85b6f28"
+    },
+    "powerYard": {
+      "byteIdentical": true,
+      "checksum": "3ba96436"
+    },
+    "upgradeYard-500": {
+      "byteIdentical": true,
+      "checksum": "f635e1d0"
+    },
+    "upgradeYard-0": {
+      "byteIdentical": true,
+      "checksum": "dfddda05"
+    }
+  },
+  "cells": [
+    {
+      "label": "390x844",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    },
+    {
+      "label": "1920x1080",
+      "width": 1920,
+      "height": 1080,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  ],
+  "results": {
+    "390x844": {
+      "starved-source": {
+        "preShot": "docs/evidence/inspector145/390x844-starved-source-pre.png",
+        "postShot": "docs/evidence/inspector145/390x844-starved-source-post.png",
+        "expected": {
+          "tile": 2,
+          "label": "the dock store"
+        },
+        "camera": {
+          "before": {
+            "x": 96.26,
+            "y": 112,
+            "scale": 6
+          },
+          "after": {
+            "x": 80,
+            "y": 70.33,
+            "scale": 6
+          }
+        }
+      },
+      "live-route": {
+        "preShot": "docs/evidence/inspector145/390x844-live-route-pre.png",
+        "postShot": "docs/evidence/inspector145/390x844-live-route-post.png",
+        "expected": {
+          "routeId": 1,
+          "tile": 8,
+          "label": "dock → scrap sorter"
+        },
+        "camera": {
+          "before": {
+            "x": 96.26,
+            "y": 112,
+            "scale": 6
+          },
+          "after": {
+            "x": 80,
+            "y": 70.33,
+            "scale": 6
+          }
+        }
+      },
+      "power": {
+        "preShot": "docs/evidence/inspector145/390x844-power-pre.png",
+        "postShot": "docs/evidence/inspector145/390x844-power-pane.png",
+        "expectedRows": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      },
+      "upgrade-buy": {
+        "cardsShot": "docs/evidence/inspector145/390x844-upgrade-buy-cards.png",
+        "selectedShot": "docs/evidence/inspector145/390x844-upgrade-buy-selected.png",
+        "receiptShot": "docs/evidence/inspector145/390x844-upgrade-buy-receipt.png",
+        "paid": 40,
+        "revision": [
+          1,
+          2
+        ]
+      },
+      "upgrade-blocked": {
+        "preShot": "docs/evidence/inspector145/390x844-upgrade-blocked-pre.png",
+        "postShot": "docs/evidence/inspector145/390x844-upgrade-blocked-receipt.png",
+        "expectedReceipt": "Not applied: Need 40 credits · have 0. Nothing was spent."
+      },
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    "1920x1080": {
+      "starved-source": {
+        "preShot": "docs/evidence/inspector145/1920x1080-starved-source-pre.png",
+        "postShot": "docs/evidence/inspector145/1920x1080-starved-source-post.png",
+        "expected": {
+          "tile": 2,
+          "label": "the dock store"
+        },
+        "camera": {
+          "before": {
+            "x": 258.53,
+            "y": 112.89,
+            "scale": 4.86
+          },
+          "after": {
+            "x": 258.53,
+            "y": 111.11,
+            "scale": 4.86
+          }
+        }
+      },
+      "live-route": {
+        "preShot": "docs/evidence/inspector145/1920x1080-live-route-pre.png",
+        "postShot": "docs/evidence/inspector145/1920x1080-live-route-post.png",
+        "expected": {
+          "routeId": 1,
+          "tile": 8,
+          "label": "dock → scrap sorter"
+        },
+        "camera": {
+          "before": {
+            "x": 258.53,
+            "y": 112.89,
+            "scale": 4.86
+          },
+          "after": {
+            "x": 258.53,
+            "y": 111.11,
+            "scale": 4.86
+          }
+        }
+      },
+      "power": {
+        "preShot": "docs/evidence/inspector145/1920x1080-power-pre.png",
+        "postShot": "docs/evidence/inspector145/1920x1080-power-pane.png",
+        "expectedRows": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      },
+      "upgrade-buy": {
+        "cardsShot": "docs/evidence/inspector145/1920x1080-upgrade-buy-cards.png",
+        "selectedShot": "docs/evidence/inspector145/1920x1080-upgrade-buy-selected.png",
+        "receiptShot": "docs/evidence/inspector145/1920x1080-upgrade-buy-receipt.png",
+        "paid": 40,
+        "revision": [
+          1,
+          2
+        ]
+      },
+      "upgrade-blocked": {
+        "preShot": "docs/evidence/inspector145/1920x1080-upgrade-blocked-pre.png",
+        "postShot": "docs/evidence/inspector145/1920x1080-upgrade-blocked-receipt.png",
+        "expectedReceipt": "Not applied: Need 40 credits · have 0. Nothing was spent."
+      },
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  },
+  "checks": [
+    {
+      "scenario": "fixture",
+      "cell": "node",
+      "name": "starved yard: machine starved, inert 40-unit balance, dock supplier",
+      "ok": true,
+      "detail": {
+        "status": "starved",
+        "storeUnits": 40,
+        "source": {
+          "tile": 2,
+          "label": "the dock store"
+        }
+      }
+    },
+    {
+      "scenario": "fixture",
+      "cell": "node",
+      "name": "live yard: non-zero measured rate and a derived route focus",
+      "ok": true,
+      "detail": {
+        "rate": {
+          "rate": 0.15,
+          "windowSeconds": 40
+        },
+        "focus": {
+          "routeId": 1,
+          "tile": 8,
+          "label": "dock → scrap sorter"
+        }
+      }
+    },
+    {
+      "scenario": "fixture",
+      "cell": "node",
+      "name": "power yard: 10/8 demand, 0.8 ratio, every furnace mid-batch, trays below capacity",
+      "ok": true,
+      "detail": {
+        "requested": 10,
+        "ratio": 0.8,
+        "machines": [
+          {
+            "progress": 36201,
+            "tray": 0,
+            "status": "powerLimited"
+          },
+          {
+            "progress": 36201,
+            "tray": 0,
+            "status": "powerLimited"
+          },
+          {
+            "progress": 36201,
+            "tray": 0,
+            "status": "powerLimited"
+          },
+          {
+            "progress": 36201,
+            "tray": 0,
+            "status": "powerLimited"
+          },
+          {
+            "progress": 36201,
+            "tray": 0,
+            "status": "powerLimited"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "fixture",
+      "cell": "node",
+      "name": "sorter anchors: speed 15→16.5 bpm, buffer +6 capacity, draw maxed at 1 unit",
+      "ok": true,
+      "detail": {
+        "speed": [
+          15,
+          16.499835001649984
+        ],
+        "buffer": [
+          12,
+          18
+        ],
+        "draw": true
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "only the source face shows (no links, full power)",
+      "ok": true,
+      "detail": {
+        "present": true,
+        "buttons": [
+          {
+            "kind": "source",
+            "text": "Focus source · the dock store"
+          }
+        ],
+        "hint": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source face names the dock store",
+      "ok": true,
+      "detail": {
+        "got": "Focus source · the dock store",
+        "expected": "Focus source · the dock store"
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "focus hint says the machine stays selected",
+      "ok": true,
+      "detail": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "pre-click mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source pan: camera x inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 80,
+        "interval": [
+          79.989,
+          80.011
+        ],
+        "tile": 2,
+        "world": 80
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source pan: camera y inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 70.33,
+        "interval": [
+          70.31647271060746,
+          70.35019493291107
+        ],
+        "tile": 2,
+        "world": 16
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source pan: zoom preserved",
+      "ok": true,
+      "detail": {
+        "before": 6,
+        "after": 6
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "source pan: the camera actually panned",
+      "ok": true,
+      "detail": {
+        "before": {
+          "x": 96.26,
+          "y": 112,
+          "scale": 6
+        },
+        "after": {
+          "x": 80,
+          "y": 70.33,
+          "scale": 6
+        }
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Scrap sorter",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "no dispatch: revision unchanged",
+      "ok": true,
+      "detail": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "390x844",
+      "name": "inert yard: store balance unchanged",
+      "ok": true,
+      "detail": {
+        "storeUnits": 40,
+        "expected": 40,
+        "scrap": 40
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route face names the busiest belt's endpoints",
+      "ok": true,
+      "detail": {
+        "got": "Focus route · dock → scrap sorter",
+        "expected": "Focus route · dock → scrap sorter"
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "pre-click mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route pan: camera x inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 80,
+        "interval": [
+          79.989,
+          80.011
+        ],
+        "tile": 8,
+        "world": 80
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route pan: camera y inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 70.33,
+        "interval": [
+          70.31647271060746,
+          70.35019493291107
+        ],
+        "tile": 8,
+        "world": 48
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route pan: zoom preserved",
+      "ok": true,
+      "detail": {
+        "before": 6,
+        "after": 6
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "route pan: the camera actually panned",
+      "ok": true,
+      "detail": {
+        "before": {
+          "x": 96.26,
+          "y": 112,
+          "scale": 6
+        },
+        "after": {
+          "x": 80,
+          "y": 70.33,
+          "scale": 6
+        }
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Scrap sorter",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "390x844",
+      "name": "no dispatch in a LIVE yard: revision unchanged (ticks never bump it)",
+      "ok": true,
+      "detail": {
+        "before": 10,
+        "after": 10
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "tap opens the furnace panel",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "panel title is Furnace",
+      "ok": true,
+      "detail": "Furnace"
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "power face present while the yard is capped",
+      "ok": true,
+      "detail": {
+        "present": true,
+        "buttons": [
+          {
+            "kind": "route",
+            "text": "Focus route · dock → furnace"
+          },
+          {
+            "kind": "power",
+            "text": "Focus power"
+          }
+        ],
+        "hint": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "Power tab starts closed",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          {
+            "label": "Storage",
+            "pressed": "false"
+          },
+          {
+            "label": "Routes",
+            "pressed": "false"
+          },
+          {
+            "label": "Power",
+            "pressed": "false"
+          }
+        ],
+        "paneRows": null
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "power face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "Power tab opened by the focus face",
+      "ok": true,
+      "detail": [
+        {
+          "label": "Storage",
+          "pressed": "false"
+        },
+        {
+          "label": "Routes",
+          "pressed": "false"
+        },
+        {
+          "label": "Power",
+          "pressed": "true"
+        }
+      ]
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "pane rows are the engine's exact demand/draw/speed",
+      "ok": true,
+      "detail": {
+        "got": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ],
+        "expected": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "Power tab clicked closed",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "manual close works",
+      "ok": true,
+      "detail": [
+        {
+          "label": "Storage",
+          "pressed": "false"
+        },
+        {
+          "label": "Routes",
+          "pressed": "false"
+        },
+        {
+          "label": "Power",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "power face re-clicked",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "focus face re-opens the pane after a manual close",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          {
+            "label": "Storage",
+            "pressed": "false"
+          },
+          {
+            "label": "Routes",
+            "pressed": "false"
+          },
+          {
+            "label": "Power",
+            "pressed": "true"
+          }
+        ],
+        "paneRows": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Furnace",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "390x844",
+      "name": "no dispatch: revision unchanged",
+      "ok": true,
+      "detail": {
+        "before": 15,
+        "after": 15
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "comparison is inline immediately (no Upgrade action needed)",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "three cards in dock order, none auto-selected",
+      "ok": true,
+      "detail": [
+        {
+          "branch": "speed",
+          "pressed": "false"
+        },
+        {
+          "branch": "buffer",
+          "pressed": "false"
+        },
+        {
+          "branch": "draw",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "speed: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            16.499835001649984
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 40
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "speed",
+          "cost": 40,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 3.6364,
+            "batchesPerMinute": 16.499835001649984,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 1,
+              "buffer": 0,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "speed: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "speed",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 16.50 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Batch time: 4.00s → 3.64s",
+        "delta": "-0.36s per batch",
+        "cost": "Cost: 40 credits · Affordable now",
+        "tradeoff": "Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder.",
+        "text": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "buffer: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            18
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "buffer",
+          "cost": 30,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 18,
+            "ranks": {
+              "speed": 0,
+              "buffer": 1,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "buffer: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "buffer",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 18 units",
+        "metric": "Input capacity: 12 units → 18 units",
+        "delta": "+6 input units",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged.",
+        "text": "Input bufferRank 0 → 1Input capacity: 12 units → 18 unitsThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "draw: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "draw",
+          "cost": 30,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "draw: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "sorter draw card is the honest maxed no-effect state",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "buy disabled until a deliberate selection; hint shown",
+      "ok": true,
+      "detail": {
+        "disabled": true,
+        "text": "Buy selected"
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "instant-apply note printed (no downtime promised)",
+      "ok": true,
+      "detail": [
+        "Choose what the next level buys. Each card prints the current and proposed value with its unit, the price and the tradeoff. Nothing is selected until you tap a card.",
+        "Every branch applies instantly with no downtime: the machine keeps running, and the new values take effect from the next batch.",
+        "Select a branch card above to enable the purchase. Tapping a card never spends anything.",
+        "The plain Upgrade face below buys an unnamed level at the plain price: it counts as one speed rank and changes nothing else.",
+        "No named upgrade to re-pick yet. Buy a branch above first; a plain unnamed level cannot be re-picked.",
+        "Free: moves only the most recent named rank to another branch. The level, the credits and every older pick stay exactly as they are."
+      ]
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "pre-purchase mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "speed card clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "selection is explicit: speed pressed, buy enabled and named",
+      "ok": true,
+      "detail": {
+        "card": "true",
+        "buy": {
+          "disabled": false,
+          "text": "Buy selected · Speed · 40 credits"
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "buy clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "applied receipt read back from the engine state",
+      "ok": true,
+      "detail": {
+        "kind": "applied",
+        "role": "status",
+        "text": "Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 40 credits (500 → 460)"
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "mirror: level+1, speed branch, exact price, revision+1",
+      "ok": true,
+      "detail": {
+        "level": 2,
+        "branch": [
+          "speed"
+        ],
+        "credits": 460,
+        "expectedCredits": 460,
+        "revision": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "inert yard: store untouched by the purchase",
+      "ok": true,
+      "detail": {
+        "storeUnits": 40,
+        "expected": 40
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "390x844",
+      "name": "card re-renders the applied before/after",
+      "ok": true,
+      "detail": {
+        "got": "Throughput: 16.50 → 18.00 batches/min",
+        "expected": "Throughput: 16.50 → 18.00 batches/min"
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "three cards in dock order, none auto-selected",
+      "ok": true,
+      "detail": [
+        {
+          "branch": "speed",
+          "pressed": "false"
+        },
+        {
+          "branch": "buffer",
+          "pressed": "false"
+        },
+        {
+          "branch": "draw",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "speed: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            16.499835001649984
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 40
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "speed",
+          "cost": 40,
+          "affordable": false,
+          "shortfall": 40,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 3.6364,
+            "batchesPerMinute": 16.499835001649984,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 1,
+              "buffer": 0,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "speed: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "speed",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 16.50 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Batch time: 4.00s → 3.64s",
+        "delta": "-0.36s per batch",
+        "cost": "Cost: 40 credits · Need 40 credits · have 0",
+        "tradeoff": "Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder.",
+        "text": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Need 40 credits · have 0Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "buffer: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            18
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "buffer",
+          "cost": 30,
+          "affordable": false,
+          "shortfall": 30,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 18,
+            "ranks": {
+              "speed": 0,
+              "buffer": 1,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "buffer: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "buffer",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 18 units",
+        "metric": "Input capacity: 12 units → 18 units",
+        "delta": "+6 input units",
+        "cost": "Cost: 30 credits · Need 30 credits · have 0",
+        "tradeoff": "Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged.",
+        "text": "Input bufferRank 0 → 1Input capacity: 12 units → 18 unitsThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Need 30 credits · have 0Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "draw: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "draw",
+          "cost": 30,
+          "affordable": false,
+          "shortfall": 30,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "draw: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Need 30 credits · have 0",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Need 30 credits · have 0Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "unaffordable card prints the engine's shortfall",
+      "ok": true,
+      "detail": {
+        "shortfall": "Need 40 credits · have 0",
+        "card": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Need 40 credits · have 0Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "speed card clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "buy clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "short receipt reports the engine's exact numbers",
+      "ok": true,
+      "detail": {
+        "got": {
+          "kind": "short",
+          "role": "status",
+          "text": "Not applied: Need 40 credits · have 0. Nothing was spent."
+        },
+        "expected": "Not applied: Need 40 credits · have 0. Nothing was spent."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "390x844",
+      "name": "refusal before mutation: revision, credits, level untouched",
+      "ok": true,
+      "detail": {
+        "revision": [
+          1,
+          1
+        ],
+        "credits": 0,
+        "level": 1
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "only the source face shows (no links, full power)",
+      "ok": true,
+      "detail": {
+        "present": true,
+        "buttons": [
+          {
+            "kind": "source",
+            "text": "Focus source · the dock store"
+          }
+        ],
+        "hint": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source face names the dock store",
+      "ok": true,
+      "detail": {
+        "got": "Focus source · the dock store",
+        "expected": "Focus source · the dock store"
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "focus hint says the machine stays selected",
+      "ok": true,
+      "detail": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "pre-click mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source pan: camera x inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 258.53,
+        "interval": [
+          258.51899999999995,
+          258.541
+        ],
+        "tile": 2,
+        "world": 80
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source pan: camera y inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 111.11,
+        "interval": [
+          111.08868110276721,
+          111.13354347155055
+        ],
+        "tile": 2,
+        "world": 16
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source pan: zoom preserved",
+      "ok": true,
+      "detail": {
+        "before": 4.86,
+        "after": 4.86
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "source pan: the camera actually panned",
+      "ok": true,
+      "detail": {
+        "before": {
+          "x": 258.53,
+          "y": 112.89,
+          "scale": 4.86
+        },
+        "after": {
+          "x": 258.53,
+          "y": 111.11,
+          "scale": 4.86
+        }
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Scrap sorter",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "no dispatch: revision unchanged",
+      "ok": true,
+      "detail": {
+        "before": 1,
+        "after": 1
+      }
+    },
+    {
+      "scenario": "starved-source",
+      "cell": "1920x1080",
+      "name": "inert yard: store balance unchanged",
+      "ok": true,
+      "detail": {
+        "storeUnits": 40,
+        "expected": 40,
+        "scrap": 40
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "panel title is Scrap sorter",
+      "ok": true,
+      "detail": "Scrap sorter"
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route face names the busiest belt's endpoints",
+      "ok": true,
+      "detail": {
+        "got": "Focus route · dock → scrap sorter",
+        "expected": "Focus route · dock → scrap sorter"
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "pre-click mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route pan: camera x inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 258.53,
+        "interval": [
+          258.51899999999995,
+          258.541
+        ],
+        "tile": 8,
+        "world": 80
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route pan: camera y inside the clamp interval",
+      "ok": true,
+      "detail": {
+        "got": 111.11,
+        "interval": [
+          111.08868110276721,
+          111.13354347155055
+        ],
+        "tile": 8,
+        "world": 48
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route pan: zoom preserved",
+      "ok": true,
+      "detail": {
+        "before": 4.86,
+        "after": 4.86
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "route pan: the camera actually panned",
+      "ok": true,
+      "detail": {
+        "before": {
+          "x": 258.53,
+          "y": 112.89,
+          "scale": 4.86
+        },
+        "after": {
+          "x": 258.53,
+          "y": 111.11,
+          "scale": 4.86
+        }
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Scrap sorter",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "live-route",
+      "cell": "1920x1080",
+      "name": "no dispatch in a LIVE yard: revision unchanged (ticks never bump it)",
+      "ok": true,
+      "detail": {
+        "before": 10,
+        "after": 10
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "tap opens the furnace panel",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "panel title is Furnace",
+      "ok": true,
+      "detail": "Furnace"
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "power face present while the yard is capped",
+      "ok": true,
+      "detail": {
+        "present": true,
+        "buttons": [
+          {
+            "kind": "route",
+            "text": "Focus route · dock → furnace"
+          },
+          {
+            "kind": "power",
+            "text": "Focus power"
+          }
+        ],
+        "hint": "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched."
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "Power tab starts closed",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          {
+            "label": "Storage",
+            "pressed": "false"
+          },
+          {
+            "label": "Routes",
+            "pressed": "false"
+          },
+          {
+            "label": "Power",
+            "pressed": "false"
+          }
+        ],
+        "paneRows": null
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "power face clicked",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "Power tab opened by the focus face",
+      "ok": true,
+      "detail": [
+        {
+          "label": "Storage",
+          "pressed": "false"
+        },
+        {
+          "label": "Routes",
+          "pressed": "false"
+        },
+        {
+          "label": "Power",
+          "pressed": "true"
+        }
+      ]
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "pane rows are the engine's exact demand/draw/speed",
+      "ok": true,
+      "detail": {
+        "got": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ],
+        "expected": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "Power tab clicked closed",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "manual close works",
+      "ok": true,
+      "detail": [
+        {
+          "label": "Storage",
+          "pressed": "false"
+        },
+        {
+          "label": "Routes",
+          "pressed": "false"
+        },
+        {
+          "label": "Power",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "power face re-clicked",
+      "ok": true
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "focus face re-opens the pane after a manual close",
+      "ok": true,
+      "detail": {
+        "tabs": [
+          {
+            "label": "Storage",
+            "pressed": "false"
+          },
+          {
+            "label": "Routes",
+            "pressed": "false"
+          },
+          {
+            "label": "Power",
+            "pressed": "true"
+          }
+        ],
+        "paneRows": [
+          {
+            "label": "Yard demand",
+            "value": "10/8"
+          },
+          {
+            "label": "This machine",
+            "value": "2 units"
+          },
+          {
+            "label": "Shared speed",
+            "value": "80%"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "selection intact: title and cell unchanged",
+      "ok": true,
+      "detail": {
+        "title": "Furnace",
+        "cell": "8"
+      }
+    },
+    {
+      "scenario": "power",
+      "cell": "1920x1080",
+      "name": "no dispatch: revision unchanged",
+      "ok": true,
+      "detail": {
+        "before": 15,
+        "after": 15
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "comparison is inline immediately (no Upgrade action needed)",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "three cards in dock order, none auto-selected",
+      "ok": true,
+      "detail": [
+        {
+          "branch": "speed",
+          "pressed": "false"
+        },
+        {
+          "branch": "buffer",
+          "pressed": "false"
+        },
+        {
+          "branch": "draw",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "speed: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            16.499835001649984
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 40
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "speed",
+          "cost": 40,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 3.6364,
+            "batchesPerMinute": 16.499835001649984,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 1,
+              "buffer": 0,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "speed: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "speed",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 16.50 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Batch time: 4.00s → 3.64s",
+        "delta": "-0.36s per batch",
+        "cost": "Cost: 40 credits · Affordable now",
+        "tradeoff": "Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder.",
+        "text": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Affordable nowShortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "buffer: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            18
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "buffer",
+          "cost": 30,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 18,
+            "ranks": {
+              "speed": 0,
+              "buffer": 1,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "buffer: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "buffer",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 18 units",
+        "metric": "Input capacity: 12 units → 18 units",
+        "delta": "+6 input units",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged.",
+        "text": "Input bufferRank 0 → 1Input capacity: 12 units → 18 unitsThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Affordable nowAdds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "draw: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "draw",
+          "cost": 30,
+          "affordable": true,
+          "shortfall": 0,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "draw: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "sorter draw card is the honest maxed no-effect state",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Affordable now",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Affordable nowAlready at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "buy disabled until a deliberate selection; hint shown",
+      "ok": true,
+      "detail": {
+        "disabled": true,
+        "text": "Buy selected"
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "instant-apply note printed (no downtime promised)",
+      "ok": true,
+      "detail": [
+        "Choose what the next level buys. Each card prints the current and proposed value with its unit, the price and the tradeoff. Nothing is selected until you tap a card.",
+        "Every branch applies instantly with no downtime: the machine keeps running, and the new values take effect from the next batch.",
+        "Select a branch card above to enable the purchase. Tapping a card never spends anything.",
+        "The plain Upgrade face below buys an unnamed level at the plain price: it counts as one speed rank and changes nothing else.",
+        "No named upgrade to re-pick yet. Buy a branch above first; a plain unnamed level cannot be re-picked.",
+        "Free: moves only the most recent named rank to another branch. The level, the credits and every older pick stay exactly as they are."
+      ]
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "pre-purchase mirror decodes",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "speed card clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "selection is explicit: speed pressed, buy enabled and named",
+      "ok": true,
+      "detail": {
+        "card": "true",
+        "buy": {
+          "disabled": false,
+          "text": "Buy selected · Speed · 40 credits"
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "buy clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "applied receipt read back from the engine state",
+      "ok": true,
+      "detail": {
+        "kind": "applied",
+        "role": "status",
+        "text": "Applied: Speed Rank 1 · level 2 · Batch time 4.00s → 3.64s · paid 40 credits (500 → 460)"
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "mirror: level+1, speed branch, exact price, revision+1",
+      "ok": true,
+      "detail": {
+        "level": 2,
+        "branch": [
+          "speed"
+        ],
+        "credits": 460,
+        "expectedCredits": 460,
+        "revision": [
+          1,
+          2
+        ]
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "inert yard: store untouched by the purchase",
+      "ok": true,
+      "detail": {
+        "storeUnits": 40,
+        "expected": 40
+      }
+    },
+    {
+      "scenario": "upgrade-buy",
+      "cell": "1920x1080",
+      "name": "card re-renders the applied before/after",
+      "ok": true,
+      "detail": {
+        "got": "Throughput: 16.50 → 18.00 batches/min",
+        "expected": "Throughput: 16.50 → 18.00 batches/min"
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "tap opens the sorter panel",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "three cards in dock order, none auto-selected",
+      "ok": true,
+      "detail": [
+        {
+          "branch": "speed",
+          "pressed": "false"
+        },
+        {
+          "branch": "buffer",
+          "pressed": "false"
+        },
+        {
+          "branch": "draw",
+          "pressed": "false"
+        }
+      ]
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "speed: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            16.499835001649984
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 40
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "speed",
+          "cost": 40,
+          "affordable": false,
+          "shortfall": 40,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 3.6364,
+            "batchesPerMinute": 16.499835001649984,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 1,
+              "buffer": 0,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "speed: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "speed",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 16.50 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Batch time: 4.00s → 3.64s",
+        "delta": "-0.36s per batch",
+        "cost": "Cost: 40 credits · Need 40 credits · have 0",
+        "tradeoff": "Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder.",
+        "text": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Need 40 credits · have 0Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "buffer: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            18
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "buffer",
+          "cost": 30,
+          "affordable": false,
+          "shortfall": 30,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 18,
+            "ranks": {
+              "speed": 0,
+              "buffer": 1,
+              "draw": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "buffer: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "buffer",
+        "pressed": "false",
+        "disabled": false,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 18 units",
+        "metric": "Input capacity: 12 units → 18 units",
+        "delta": "+6 input units",
+        "cost": "Cost: 30 credits · Need 30 credits · have 0",
+        "tradeoff": "Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged.",
+        "text": "Input bufferRank 0 → 1Input capacity: 12 units → 18 unitsThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 18 units+6 input unitsCost: 30 credits · Need 30 credits · have 0Adds 6 input units so a bursty supply can keep batches starting. Leaves batch time and power draw unchanged."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "draw: read model == upgradeComparison",
+      "ok": true,
+      "detail": {
+        "model": {
+          "rate": [
+            15,
+            15
+          ],
+          "power": [
+            1,
+            1
+          ],
+          "capacity": [
+            12,
+            12
+          ],
+          "cost": 30
+        },
+        "engine": {
+          "machineId": 1,
+          "branch": "draw",
+          "cost": 30,
+          "affordable": false,
+          "shortfall": 30,
+          "before": {
+            "level": 1,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 0
+            }
+          },
+          "after": {
+            "level": 2,
+            "batchSeconds": 4,
+            "batchesPerMinute": 15,
+            "power": 1,
+            "inputCapacity": 12,
+            "ranks": {
+              "speed": 0,
+              "buffer": 0,
+              "draw": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "draw: painted spans == the model's texts",
+      "ok": true,
+      "detail": {
+        "branch": "draw",
+        "pressed": "false",
+        "disabled": true,
+        "rate": "Throughput: 15.00 → 15.00 batches/min",
+        "power": "Power draw: 1 unit → 1 unit",
+        "capacity": "Input capacity: 12 units → 12 units",
+        "metric": "Power per batch: 1 unit → 1 unit",
+        "delta": "no change",
+        "cost": "Cost: 30 credits · Need 30 credits · have 0",
+        "tradeoff": "Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought.",
+        "text": "Power drawNo effectPower per batch: 1 unit → 1 unitThroughput: 15.00 → 15.00 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 unitsno changeCost: 30 credits · Need 30 credits · have 0Already at the 1-unit power floor: another draw rank changes nothing, so this card cannot be bought."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "unaffordable card prints the engine's shortfall",
+      "ok": true,
+      "detail": {
+        "shortfall": "Need 40 credits · have 0",
+        "card": "SpeedRank 0 → 1Batch time: 4.00s → 3.64sThroughput: 15.00 → 16.50 batches/minPower draw: 1 unit → 1 unitInput capacity: 12 units → 12 units-0.36s per batchCost: 40 credits · Need 40 credits · have 0Shortens every batch by one speed step. Adds no input space and cuts no power draw. Priced 10 credits above the plain ladder."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "speed card clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "buy clicked",
+      "ok": true
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "short receipt reports the engine's exact numbers",
+      "ok": true,
+      "detail": {
+        "got": {
+          "kind": "short",
+          "role": "status",
+          "text": "Not applied: Need 40 credits · have 0. Nothing was spent."
+        },
+        "expected": "Not applied: Need 40 credits · have 0. Nothing was spent."
+      }
+    },
+    {
+      "scenario": "upgrade-blocked",
+      "cell": "1920x1080",
+      "name": "refusal before mutation: revision, credits, level untouched",
+      "ok": true,
+      "detail": {
+        "revision": [
+          1,
+          1
+        ],
+        "credits": 0,
+        "level": 1
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "summary": {
+    "total": 150,
+    "passed": 150,
+    "failed": 0
+  }
+}
