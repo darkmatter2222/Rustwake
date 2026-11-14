@@ -74,7 +74,9 @@ export interface SaveRecoveryApi {
   /**
    * Writer-only. Re-decodes the retained raw payload and, if it now decodes,
    * durably writes the recovered yard to `SAVE_KEY` BEFORE clearing the slot.
-   * Any failure changes nothing and keeps the slot.
+   * Any failure changes nothing and keeps the slot. If the yard lands but the
+   * slot clear is refused, the success carries `slotClearFailed: true` (#203):
+   * the slot is kept and its notice re-surfaces instead of a silent full success.
    */
   retrySaveRecovery(): RecoveryResult;
   /** The exact retained raw text (slot, or held `SAVE_KEY`), for export/backup. */
@@ -475,10 +477,16 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
       state = next.sim;
       settings = nextSettings;
       lastSeenMs = now();
-      if (slotRaw !== null) clearRecoverySlot(storage);
+      // G1 (#203): the yard is durable, but a refused slot clear must not be a
+      // silent full success. Keep the write-once slot and surface the failure;
+      // refreshRecovery re-derives the notice from the still-occupied slot, so
+      // retry/discard stay available and the raw bytes are never lost.
+      const slotClearFailed = slotRaw !== null && !clearRecoverySlot(storage);
       refreshRecovery();
       notify();
-      return { ok: true, tick: state.tick, machines: state.machines.length };
+      const result: RecoveryResult = { ok: true, tick: state.tick, machines: state.machines.length };
+      if (slotClearFailed) result.slotClearFailed = true;
+      return result;
     },
     exportSaveRecovery(): string | null {
       if (!storage) return null;
