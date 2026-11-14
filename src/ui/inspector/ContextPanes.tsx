@@ -6,13 +6,23 @@
  * existing page toggle precedent. No command is dispatched, `onClose` is never called,
  * and the App's `selected` machine id is untouched while a pane is open.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { MachineState, SimState } from "../../game/simulation/types";
 import { Row } from "../panels/shared";
 import { COPY } from "./copy";
 import { powerContext, routesContext, storageContext } from "./model";
 
 type ContextKind = "storage" | "routes" | "power";
+
+/**
+ * T18 (#145, U06): an explicit "open this pane" request from the focus row. `seq`
+ * increments on every request so clicking the same face twice re-opens the pane even
+ * after the player closed it. Pure presentation: no command, no selection change.
+ */
+export interface ContextFocusRequest {
+  readonly kind: ContextKind;
+  readonly seq: number;
+}
 
 const CONTEXTS: readonly { kind: ContextKind; label: string }[] = [
   { kind: "storage", label: COPY.context.storage },
@@ -24,9 +34,16 @@ export function ContextPanes(props: {
   state: SimState;
   machine: MachineState;
   powerRatio: number;
+  focusRequest?: ContextFocusRequest | null;
 }) {
   const [open, setOpen] = useState<ContextKind | null>(null);
-  const { state, machine, powerRatio } = props;
+  const { state, machine, powerRatio, focusRequest } = props;
+
+  // A focus request opens (never closes) its pane; the local toggle keeps working
+  // afterwards. Mounts without the prop are untouched — seq/kind are undefined.
+  useEffect(() => {
+    if (focusRequest != null) setOpen(focusRequest.kind);
+  }, [focusRequest?.seq, focusRequest?.kind]);
   const pane =
     open === "storage"
       ? storageContext(state, machine)

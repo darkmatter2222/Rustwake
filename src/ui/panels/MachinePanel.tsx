@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BLUEPRINTS,
   RECIPES,
@@ -35,12 +36,19 @@ import {
 } from "../../game/content/strings";
 import { Row, nextId } from "./shared";
 import { COPY } from "../inspector/copy";
-import { ContextPanes } from "../inspector/ContextPanes";
-import { constraintCards, primaryActionNote, recipeFlow } from "../inspector/model";
+import { ContextPanes, type ContextFocusRequest } from "../inspector/ContextPanes";
+import {
+  constraintCards,
+  focusRoute,
+  focusSource,
+  primaryActionNote,
+  recipeFlow,
+} from "../inspector/model";
 import { UpgradeCompare } from "../upgrade/UpgradeCompare";
 import { LogisticsLegend } from "../logistics/LogisticsLegend";
 import { LogisticsOverview } from "../logistics/LogisticsOverview";
 import { RouteControls } from "../logistics/RouteControls";
+import { setFocusedRoute } from "../logistics/view";
 import "../inspector/inspector.css";
 import "../logistics/logistics.css";
 
@@ -80,6 +88,13 @@ export function MachinePanel(props: {
   powerRatio: number;
   dispatch: (command: Command) => unknown;
   onClose: () => void;
+  /**
+   * T18 (#145, U06): center the yard camera on a world cell. App owns the camera and
+   * the panel stack; this callback only pans the camera, so the inspected machine
+   * stays selected. Optional — pinned mounts without it keep the old behavior, and
+   * the route/power faces still work through the view bridge and local pane state.
+   */
+  onFocus?: (tile: number) => void;
 }) {
   const { machine } = props;
   const def = BLUEPRINTS[machine.blueprint];
@@ -136,6 +151,17 @@ export function MachinePanel(props: {
     Math.round((machine.progress / Math.max(1, machine.batchMilli)) * 100),
   );
   const constraints = constraintCards(props.state, machine, props.powerRatio);
+  /**
+   * T18 (#145, U06): the focus row's targets, derived read-only from the same state
+   * the constraint cards read. The source face appears only while the machine is
+   * actually starved AND a supplier exists; the route face only when a belt touches
+   * the machine; the power face only while the yard budget is capped. Each face is
+   * pure presentation — camera pan, belt highlight or context pane — and never
+   * dispatches a command or clears the selection.
+   */
+  const source = machine.status === "starved" ? focusSource(props.state, machine) : null;
+  const route = focusRoute(props.state, machine);
+  const [powerFocus, setPowerFocus] = useState<ContextFocusRequest | null>(null);
 
   return (
     <div
@@ -256,6 +282,55 @@ export function MachinePanel(props: {
               <p className="inspector-note inspector-note--constraint">{card.detail}</p>
             </details>
           ))}
+          {/* T18 (#145, U06): explicit focus faces for the exact bottleneck above.
+              Source pans the camera to the dock store or the producing machine; Route
+              highlights the busiest touching belt through the shared view bridge (the
+              same bridge LogisticsOverview's "Show route" uses) and pans to it; Power
+              opens the power context pane in Recovery below. No new section landmark,
+              no `.panel__actions` child, no command — the machine stays selected. */}
+          {source !== null || route !== null || props.powerRatio < 0.999 ? (
+            <div className="inspector-focus" role="group" aria-label={COPY.focus.group}>
+              {source !== null ? (
+                <button
+                  type="button"
+                  className="inspector-focus__btn"
+                  data-focus="source"
+                  onClick={() => props.onFocus?.(source.tile)}
+                >
+                  {`${COPY.focus.source} · ${source.label}`}
+                </button>
+              ) : null}
+              {route !== null ? (
+                <button
+                  type="button"
+                  className="inspector-focus__btn"
+                  data-focus="route"
+                  onClick={() => {
+                    setFocusedRoute(route.routeId);
+                    props.onFocus?.(route.tile);
+                  }}
+                >
+                  {`${COPY.focus.route} · ${route.label}`}
+                </button>
+              ) : null}
+              {props.powerRatio < 0.999 ? (
+                <button
+                  type="button"
+                  className="inspector-focus__btn"
+                  data-focus="power"
+                  onClick={() =>
+                    setPowerFocus((prev) => ({
+                      kind: "power",
+                      seq: (prev?.seq ?? 0) + 1,
+                    }))
+                  }
+                >
+                  {COPY.focus.power}
+                </button>
+              ) : null}
+              <p className="inspector-note">{COPY.focus.hint}</p>
+            </div>
+          ) : null}
           {/* UI-RESET-59 (G3): the yard production/power overview and the bottleneck list,
               embedded in this section (no new landmark). Each bottleneck reveals a belt
               touching the affected machine on the canvas through the shared view bridge. */}
@@ -296,7 +371,12 @@ export function MachinePanel(props: {
 
         <section className="inspector-section">
           <h3 className="inspector-section__title">{COPY.sections.recovery}</h3>
-          <ContextPanes state={props.state} machine={machine} powerRatio={props.powerRatio} />
+          <ContextPanes
+            state={props.state}
+            machine={machine}
+            powerRatio={props.powerRatio}
+            focusRequest={powerFocus}
+          />
         </section>
 
         <section className="inspector-section">

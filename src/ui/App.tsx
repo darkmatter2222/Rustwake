@@ -28,6 +28,7 @@ import {
   type ViewState,
 } from "../game/renderer/scene";
 import {
+  clampCamera,
   panCamera,
   refitCamera,
   zoomAtPoint,
@@ -637,6 +638,24 @@ export function App({
   // memoized onClose prop keeps a stable identity across the 10 Hz sim tick.
   // RW3D #135: Close pops exactly one stack layer — the panel underneath survives.
   const closeSelection = backPanel;
+
+  /**
+   * T18 (#145, U06): the inspector's focus callback. Pans the yard camera so the
+   * named cell is centered, through the same clamp the gestures use, and records
+   * the pan as player intent so a later refit keeps it. It touches ONLY the camera
+   * refs — never the panel stack, the selection or the store — so focusing the
+   * source, a route or power cannot lose the inspected machine. Session state
+   * only; the save shape is untouched.
+   */
+  const focusInspectorTile = useCallback((tile: number) => {
+    const world = tileToWorld(tile);
+    cameraRef.current = clampCamera(
+      { ...cameraRef.current, x: world.x, y: world.y },
+      viewRef.current,
+      fittedRef.current,
+    );
+    intentRef.current = true;
+  }, []);
 
   /**
    * UI-RESET-52: opening the catalog arms the same ghost the old Build face
@@ -1401,6 +1420,7 @@ export function App({
               powerRatio={state.powerRatio}
               dispatch={dispatch}
               onClose={closeSelection}
+              onFocus={focusInspectorTile}
             />
           ) : null}
           {selected === PANEL_TRADE ? (

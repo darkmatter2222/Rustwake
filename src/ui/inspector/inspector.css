@@ -128,6 +128,35 @@
   min-width: 0;
 }
 
+/* T18 (#145, U06): the bottleneck focus row. Same 44 px touch floor and palette as
+   the context tabs, but no pressed state — these faces pan the camera or open a
+   pane once; they are not toggles. The hint wraps to its own line beneath them. */
+.inspector-focus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+  min-width: 0;
+}
+
+.inspector-focus__btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--steel);
+  background: var(--well);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.inspector-focus .inspector-note {
+  flex-basis: 100%;
+  margin: 0;
+}
+
 /* Consequence sentences under the command faces. */
 .inspector-actions-note {
   margin: 6px 0 0;

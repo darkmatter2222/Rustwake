@@ -15,7 +15,7 @@ import {
   type SimState,
 } from "../../game/simulation/types";
 import { requestedPower } from "../../game/simulation/diagnostics";
-import { beltCost } from "../../game/simulation/commands";
+import { DOCK_TILE, beltCost } from "../../game/simulation/commands";
 import type { ConnectionPlan } from "../../game/simulation/autoconnect";
 import { RESOURCE_LABEL, beltExtentLine } from "../text";
 import {
@@ -229,6 +229,86 @@ export function powerContext(
       },
     ],
     help: COPY.context.powerHelp,
+  };
+}
+
+/**
+ * T18 (#145, U06): a focus target is a world cell the camera can center on, plus the
+ * plain-language name of what sits there. Deriving it is pure — the panel decides
+ * whether to move the camera (App's `onFocus`) or highlight a belt (the logistics
+ * view bridge); neither path dispatches a command or changes the selection.
+ */
+export interface FocusSource {
+  readonly tile: number;
+  readonly label: string;
+}
+
+export interface FocusRoute {
+  readonly routeId: number;
+  readonly tile: number;
+  readonly label: string;
+}
+
+/**
+ * The cell that can refill this machine's first missing input, mirroring the
+ * diagnostics' supplier rule: the dock store when it holds the resource, otherwise
+ * the first OTHER machine whose recipe produces it. Null when the yard holds no
+ * supplier at all — the button is then honestly absent, not a dead end.
+ */
+export function focusSource(state: SimState, machine: MachineState): FocusSource | null {
+  const recipe = RECIPES[BLUEPRINTS[machine.blueprint].recipeId];
+  const missing = recipe.inputs.find(
+    (item) => (machine.inBuf[item.resource] ?? 0) < item.qty,
+  );
+  const resource = (missing ?? recipe.inputs[0])?.resource;
+  if (resource === undefined) return null;
+  if ((state.store[resource] ?? 0) > 0) {
+    return { tile: DOCK_TILE, label: t("value.dockStore") };
+  }
+  for (const producer of state.machines) {
+    if (producer.id === machine.id) continue;
+    const produced = RECIPES[BLUEPRINTS[producer.blueprint].recipeId];
+    if (produced.outputs.some((output) => output.resource === resource)) {
+      return {
+        tile: producer.tile,
+        label: BLUEPRINTS[producer.blueprint].label.toLocaleLowerCase(),
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * The busiest belt touching this machine — derived output links first (the same
+ * table `outputRouteIds` reads), then input links — with a cell on that belt for
+ * the camera: the middle of its laid run, or the machine's own cell when the belt
+ * predates runs. Ties keep the first candidate, so the choice is deterministic.
+ */
+export function focusRoute(state: SimState, machine: MachineState): FocusRoute | null {
+  const outRoutes = outputRouteIds(state, machine.id)
+    .map((id) => state.routes.find((route) => route.id === id))
+    .filter((route): route is RouteState => route !== undefined);
+  const inRoutes = state.routes.filter((route) => route.to.id === machine.id);
+  const candidates = [...outRoutes, ...inRoutes];
+  if (candidates.length === 0) return null;
+  let best = candidates[0];
+  let bestBusy = -1;
+  for (const route of candidates) {
+    const busy = wholePercent(route.busyTicks / Math.max(1, route.ageTicks));
+    if (busy > bestBusy) {
+      bestBusy = busy;
+      best = route;
+    }
+  }
+  const run = best.run;
+  const tile =
+    run !== undefined && run !== null && run.length > 0
+      ? run[Math.floor(run.length / 2)]
+      : machine.tile;
+  return {
+    routeId: best.id,
+    tile,
+    label: `${endpointName(state, best.from.id)} ${COPY.recipe.arrow} ${endpointName(state, best.to.id)}`,
   };
 }
 
