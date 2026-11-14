@@ -381,3 +381,102 @@
     right: 360px;
   }
 }
+/* ---- G1 (#202): the save-recovery banner ----
+   Rendered outside `.hud` and the one panel stack (same contract as the reset
+   dialog): no `.panel` node for the HUD census, no chrome-inset class, no
+   Escape layer, no focus trap or autofocus. z-index 35 sits above the shell
+   hosts (5/6) and the menu sheet (30) and below the reset dialog scrim (40).
+   Dismissal is an explicit button; the banner is transient, dismissible
+   chrome, so the camera fit reserves no inset for it. rem sizes follow the
+   player's text scale like every other control. */
+.recovery-notice {
+  position: absolute;
+  top: max(8px, env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 35;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(92vw, 560px);
+  max-height: min(60vh, 420px);
+  overflow: hidden auto;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid rgba(95, 216, 232, 0.45);
+  border-radius: var(--radius);
+  color: var(--paper);
+  text-align: left;
+  /* Scrollbar in the shell's own language when a large text scale or a small
+     viewport forces the banner to scroll. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--steel-light) var(--night);
+}
+
+.recovery-notice::-webkit-scrollbar {
+  width: 8px;
+}
+
+.recovery-notice::-webkit-scrollbar-track {
+  background: var(--night);
+}
+
+.recovery-notice::-webkit-scrollbar-thumb {
+  background: var(--steel);
+  border-radius: 4px;
+}
+
+.recovery-notice::-webkit-scrollbar-thumb:hover {
+  background: var(--steel-light);
+}
+
+.recovery-notice__title {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  color: var(--cyan);
+}
+
+.recovery-notice__body,
+.recovery-notice__residual,
+.recovery-notice__detail,
+.recovery-notice__note,
+.recovery-notice__warning {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* The residual-slot line is a warning, not a failure: the yard is safe. */
+.recovery-notice__residual {
+  color: var(--furnace);
+}
+
+.recovery-notice__detail {
+  color: var(--steel-light);
+}
+
+.recovery-notice__note {
+  color: var(--cyan);
+}
+
+.recovery-notice__warning {
+  color: var(--furnace);
+}
+
+.recovery-notice__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The armed discard borrows the reset dialog's rust treatment. */
+.recovery-notice__confirm:not(:disabled) {
+  border-color: rgba(201, 113, 58, 0.8);
+  background: linear-gradient(180deg, rgba(201, 113, 58, 0.5), rgba(201, 113, 58, 0.24));
+  color: var(--paper);
+}
+
+.recovery-notice__dismiss {
+  margin-left: auto;
+}

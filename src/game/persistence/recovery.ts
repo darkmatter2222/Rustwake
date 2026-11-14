@@ -43,8 +43,9 @@ export interface SaveRecoveryNotice {
  *
  * G1 (#203): a success may carry `slotClearFailed: true` when the recovered yard
  * landed durably in SAVE_KEY but storage refused the slot clear. The write-once
- * slot is kept and the notice re-surfaces, so retry/discard stay available; a
- * partial success is never reported as a silent full success.
+ * slot is kept and the flag — not a re-raised notice — is the surface the UI
+ * must consume (a decodable residual slot raises no notice); a partial success
+ * is never reported as a silent full success.
  */
 export type RecoveryResult =
   | { ok: true; tick: number; machines: number; slotClearFailed?: boolean }
