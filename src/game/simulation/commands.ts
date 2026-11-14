@@ -11,12 +11,14 @@ import { RESEARCH, researchBonus } from "../content/research";
 import { plural, resourceWord, t } from "../content/strings";
 import {
   SCHEMA_VERSION,
+  UPGRADE_BRANCHES,
   batchMilliOf,
   createUnit,
   inputCapacityOf,
   machineById,
   manhattanRun,
   outputRouteIds,
+  powerOf,
   pushLog,
   upgradeRanks,
   type MachineState,
@@ -290,6 +292,13 @@ function upgradeMachine(
 ): CommandResult {
   const machine = machineById(s, machineId);
   if (!machine) return { ok: false, reason: "not-found" };
+  // Plan-selection guard (U05/E06): a purchase may name only a plan that exists in
+  // the dock set. An unknown branch is refused before any credit moves, so a blind
+  // prominent-action tap can never commit a plan the player did not deliberately
+  // choose, and one command still selects at most one named plan.
+  if (branch !== undefined && !UPGRADE_BRANCHES.includes(branch)) {
+    return { ok: false, reason: "not-found" };
+  }
   const def = BLUEPRINTS[machine.blueprint];
   const cost =
     branch === undefined
@@ -595,6 +604,96 @@ export const BRANCH_PRICE_OFFSET: Readonly<Record<UpgradeBranch, number>> = {
 /** The price of the next level for one named plan: the plain ladder plus its premium. */
 export function branchPrice(baseUpgradeCost: number, level: number, branch: UpgradeBranch): number {
   return upgradeCost(baseUpgradeCost, level) + BRANCH_PRICE_OFFSET[branch];
+}
+
+/** One machine's measured quantities at a fixed level: the rows a U05 comparison prints. */
+export interface UpgradeMetrics {
+  readonly level: number;
+  /** Batch clock in seconds (`batchMilliOf` / 10000), the same unit the dock shows. */
+  readonly batchSeconds: number;
+  /** Completed batches per minute at full power: 60 / batchSeconds. */
+  readonly batchesPerMinute: number;
+  /** Power units one running batch draws (`powerOf`). */
+  readonly power: number;
+  /** Input capacity in units, including Smart Buffers and buffer ranks. */
+  readonly inputCapacity: number;
+  readonly ranks: { readonly speed: number; readonly buffer: number; readonly draw: number };
+}
+
+/** Actual before/after cost, power and rate for one candidate purchase (U05). */
+export interface UpgradeComparison {
+  readonly machineId: number;
+  /** The named plan priced, or null for the unnamed plain ladder. */
+  readonly branch: UpgradeBranch | null;
+  readonly cost: number;
+  readonly affordable: boolean;
+  readonly shortfall: number;
+  readonly before: UpgradeMetrics;
+  readonly after: UpgradeMetrics;
+}
+
+function upgradeMetrics(s: SimState, m: MachineState): UpgradeMetrics {
+  const batchSeconds = batchMilliOf(m) / 10000;
+  return {
+    level: m.level,
+    batchSeconds,
+    batchesPerMinute: batchSeconds > 0 ? 60 / batchSeconds : 0,
+    power: powerOf(m),
+    inputCapacity: inputCapacityOf(m, researchBonus(s).inputBuffer),
+    ranks: upgradeRanks(m),
+  };
+}
+
+/**
+ * The U05 comparison for one candidate level: the same price ladder the command
+ * charges and the same `batchMilliOf`/`powerOf`/`inputCapacityOf` the engine runs,
+ * measured on the machine as it is and as it would be after exactly this one
+ * purchase. A named plan moves one rank; the unnamed ladder moves the batch clock
+ * only. Nothing here selects a plan — it only reports what each deliberate choice
+ * would cost and change, so the dock can show a real before/after (U05).
+ */
+export function upgradeComparison(
+  s: SimState,
+  machineId: number,
+  branch?: UpgradeBranch
+): UpgradeComparison | null {
+  const machine = machineById(s, machineId);
+  if (!machine) return null;
+  if (branch !== undefined && !UPGRADE_BRANCHES.includes(branch)) return null;
+  const def = BLUEPRINTS[machine.blueprint];
+  const cost =
+    branch === undefined
+      ? upgradeCost(def.baseUpgradeCost, machine.level)
+      : branchPrice(def.baseUpgradeCost, machine.level, branch);
+  const after: MachineState =
+    branch === undefined
+      ? { ...machine, level: machine.level + 1 }
+      : { ...machine, level: machine.level + 1, branch: [...(machine.branch ?? []), branch] };
+  return {
+    machineId,
+    branch: branch ?? null,
+    cost,
+    affordable: s.credits >= cost,
+    shortfall: Math.max(0, cost - s.credits),
+    before: upgradeMetrics(s, machine),
+    after: upgradeMetrics(s, after),
+  };
+}
+
+/**
+ * The deliberate plan set at the fork, in dock order (U05/E06). A single
+ * `machine.upgrade` command selects at most one of these (a named branch) or none
+ * (the unnamed ladder); it can never auto-select every plan. The guard in
+ * `upgradeMachine` rejects any branch outside this set, so a blind prominent-action
+ * tap cannot commit a plan the player did not choose.
+ */
+export function upgradePlans(s: SimState, machineId: number): UpgradeComparison[] {
+  const plans: UpgradeComparison[] = [];
+  for (const branch of UPGRADE_BRANCHES) {
+    const comparison = upgradeComparison(s, machineId, branch);
+    if (comparison) plans.push(comparison);
+  }
+  return plans;
 }
 
 function validTile(s: SimState, tile: number): boolean {
