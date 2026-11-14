@@ -388,7 +388,10 @@ describe("G1 discard and multi-tab semantics (#191)", () => {
     store.stop();
   });
 
-  it("introduces no payload size cap: a large corrupt payload is preserved verbatim", () => {
+  // G2 (#148) added a 1M-character size cap in decodeSave; this 200k payload is
+  // below it, so it still fails on checksum and is preserved verbatim. The
+  // oversized-rejection coverage lives in tests/persistence/size-cap-148.test.ts.
+  it("preserves a large below-cap corrupt payload verbatim", () => {
     const env = JSON.parse(yardText(60)) as { payload: { sim: Record<string, unknown> } };
     env.payload.sim.note = "x".repeat(200_000);
     const corrupt = tamperChecksum(JSON.stringify(env));
