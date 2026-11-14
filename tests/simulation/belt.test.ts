@@ -93,7 +93,8 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     expect(nearRun).toEqual([DOCK_TILE, 1, 0]); // dock tile 2 -> tile 1 -> tile 0
     expect(nearRun).toHaveLength(3);
     expect(nearRun && beltCost(nearRun.length)).toBe(3);
-    expect(scrapOf(near)).toBe(200 - 20 - 20 - 3);
+    // #214: the sorter now costs 30 scrap (+4 steel from the seed), not 20.
+    expect(scrapOf(near)).toBe(200 - 30 - 30 - 3);
 
     const far = twoSorters();
     expect(send(far, { type: "route.connect", from: 0, to: 2, filter: "scrap" })).toBe(true);
@@ -101,7 +102,7 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     expect(farRun).toEqual([2, 8, 14, 20, 26, 32, 33, 34, 35]);
     expect(farRun).toHaveLength(9);
     expect(farRun && beltCost(farRun.length)).toBe(9);
-    expect(scrapOf(far)).toBe(200 - 20 - 20 - 9);
+    expect(scrapOf(far)).toBe(200 - 30 - 30 - 9);
     // Same blueprint, same endpoints by kind, different tile distance: the far link
     // costs three times the near one, both paid from the same purse.
     expect(beltCost(farRun!.length)).toBe(3 * beltCost(nearRun!.length));
@@ -156,8 +157,8 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
   it("refuses one tap on a priced link with the numbered shortfall and no state change", () => {
     const state = createInitialState();
     state.tutorial = 9;
-    state.store["scrap"] = 22; // the sorter's 20 fits, the 3-scrap belt does not
-    state.storeUnits = 22;
+    state.store["scrap"] = 32; // #214: the sorter's 30 fits, the 3-scrap belt does not
+    state.storeUnits = 32;
     expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 0 })).toBe(true);
     expect(scrapOf(state)).toBe(2);
     const revision = state.revision;
@@ -250,11 +251,14 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     send(state, { type: "route.connect", from: 1, to: 2, filter: "steel" });
     expect(routeTo(state, 2).run).toEqual([0, 6, 7, 8]);
     const scrapBefore = scrapOf(state);
+    const steelBefore = state.store["steel"] ?? 0;
     const ferrousBefore = state.store["ferrous"] ?? 0;
-    // 50 % of the furnace's own price: 10 scrap -> 5 and 5 ferrous -> 3, round(2.5).
+    // #214: 50 % of the furnace's own price (35 scrap + 4 steel): 35 -> 18 (round 17.5)
+    // and 4 steel -> 2. The furnace no longer costs ferrous, so ferrous is untouched.
     expect(send(state, { type: "machine.move", machineId: 2, tile: 35 })).toBe(true);
-    expect(scrapBefore - scrapOf(state)).toBe(5);
-    expect(ferrousBefore - (state.store["ferrous"] ?? 0)).toBe(3);
+    expect(scrapBefore - scrapOf(state)).toBe(18);
+    expect(steelBefore - (state.store["steel"] ?? 0)).toBe(2);
+    expect(ferrousBefore - (state.store["ferrous"] ?? 0)).toBe(0);
     const moved = routeTo(state, 2);
     expect(moved.run).toEqual([0, 6, 12, 18, 24, 30, 31, 32, 33, 34, 35]);
     expect(moved.run).toHaveLength(11);
@@ -272,8 +276,8 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
   it("refuses a move whose penalty the purse cannot cover, unchanged", () => {
     const state = createInitialState();
     state.tutorial = 9;
-    state.store["scrap"] = 25; // a sorter (20) plus its link, nothing left for a move
-    state.storeUnits = 25;
+    state.store["scrap"] = 35; // #214: a sorter (30) leaves 5, nothing left for a move
+    state.storeUnits = 35;
     send(state, { type: "machine.build", blueprint: "sorter", tile: 0 });
     expect(scrapOf(state)).toBe(5);
     const encoded = JSON.stringify(state);
@@ -286,7 +290,7 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     expect(refused.ok).toBe(false);
     if (!refused.ok) {
       expect(refused.reason).toBe("insufficient");
-      expect(refused.need).toBe(10); // 50 % of the 20-scrap sorter
+      expect(refused.need).toBe(15); // #214: 50 % of the 30-scrap sorter
       expect(refused.have).toBe(5);
     }
     expect(JSON.stringify(state)).toBe(encoded);
@@ -302,16 +306,18 @@ describe("B-1 a connection has an extent, a price and a refund", () => {
     machine.trayUnits = 4;
     const unitsBefore = unitTotal(state);
     const scrapBefore = scrapOf(state);
-    // 90 % of the 20-scrap price is 18, and 90 % of that machine's 3-scrap link is 3.
+    // #214: 90 % of the 30-scrap price is 27 (plus 90 % of 4 steel = 4), and 90 % of
+    // that machine's 3-scrap link is 3.
     expect(send(state, { type: "machine.dismantle", machineId: 1 })).toBe(true);
-    expect(scrapOf(state) - scrapBefore).toBe(18 + 3);
-    // The tray's 4 units come back whole on top of the two discounted prices.
-    expect(unitTotal(state) - unitsBefore).toBe(18 + 3 + 4);
+    expect(scrapOf(state) - scrapBefore).toBe(27 + 3);
+    // The tray's 4 units come back whole on top of the discounted build (27 scrap +
+    // 4 steel) and link (3 scrap) refunds.
+    expect(unitTotal(state) - unitsBefore).toBe(27 + 4 + 3 + 4);
     expect(state.machines).toHaveLength(1);
     expect(state.routes).toHaveLength(1); // the far link survived, and was not paid twice
     const farPrice = beltCost(routeTo(state, 2).run!.length);
     expect(farPrice).toBe(9);
-    expect(scrapOf(state)).toBe(scrapBefore + 21);
+    expect(scrapOf(state)).toBe(scrapBefore + 30);
   });
 });
 
@@ -420,13 +426,13 @@ describe("B-2 two deliberate layouts on the scored columns", () => {
     }
     // Counted over both ladders, each layout is in front somewhere: that is the clause's
     // own test, so it did not fire and the price ships together with the two layouts.
-    // Cost-only variant readings: irregular gives spread `inputStallPct` (106 against 120,
-    // gap 14 over a 3-point floor) and compact `creditsPer1000Batches` (7256.444 against
-    // 6345.575); gap6 gives compact `creditsPer1000Batches` (7445.462 against 7199.040,
-    // gap 246.422 = 3.4 % over the 3 % / 100-unit floor). Every other column is a miss or
-    // a tie, i.e. 5 of 7 columns are inside noise on both patterns — the negative reading
-    // product records for B-2 stands: pricing alone moves money columns, not timing.
-    expect(harnessJson.layouts.leads).toEqual({ compact: 2, spread: 1 });
+    // #214 regenerated readings (300-unit dock, retuned export prices): irregular gives
+    // spread `starvedMean` (60 against 63, gap 3 = the 3-point floor) and compact
+    // `creditsPer1000Batches` (10355.519 against 9763.064, gap 592.455 = 6.1 % over the
+    // 3 % / 100-unit floor); gap6 gives compact `inputStallPct` (7.1 against 17.8, gap
+    // 10.7) and compact `creditsPer1000Batches` (10000.535 against 9606.014, gap 394.521
+    // = 4.1 %). Every other column is a miss or a tie. Compact leads 3 columns, spread 1.
+    expect(harnessJson.layouts.leads).toEqual({ compact: 3, spread: 1 });
     // The pre-armed clause did not fire, so the price change ships with the layouts.
     expect(harnessJson.layouts.dropClause).toEqual({
       armed: true,
@@ -460,8 +466,9 @@ describe("B-2 two deliberate layouts on the scored columns", () => {
       const spread = rows.find((row) => row.name === "spread")!.beltScrap;
       console.log(`B-2 ${pattern} belt scrap compact ${compact} spread ${spread}`);
       expect(spread).toBeGreaterThan(compact);
-      // Same link count in both, so the whole difference is tile extent.
-      expect(rows.every((row) => row.links === 17)).toBe(true);
+      // Same link count in both, so the whole difference is tile extent. #214: the
+      // retuned ladder stands one more link (18) than the pre-retune 17.
+      expect(rows.every((row) => row.links === 18)).toBe(true);
     }
   });
 });
@@ -538,7 +545,7 @@ describe("B-3 an old save still runs on a priced model", () => {
     expect(route.latency).toBe(TUNING.routeLatencyTicks);
     expect(TUNING.beltLatencyPerTile * route.run!.length).toBe(6);
     expect(loaded.store["scrap"]).toBe(scrapAtEncode);
-    expect(loaded.store["scrap"]).toBe(267); // 300 - 20 sorter - 10 furnace - 3 link
+    expect(loaded.store["scrap"]).toBe(232); // #214: 300 - 30 sorter - 35 furnace - 3 link
     // One tap after the load: the priced refund comes back, exactly as computed by hand
     // and exactly as the in-session tap returned it.
     const runLength = route.run!.length;
@@ -585,14 +592,17 @@ describe("B-3 an old save still runs on a priced model", () => {
       };
     });
     console.log("B-3 pre-price replay", JSON.stringify(runs[0]));
-    // 1 902 / 18 298 / 18 links are the fixture's own pinned readings and the base
-    // tree's replay numbers; the price cannot move them because no route has a run.
+    // 1 902 / 21 898 / 18 links are the fixture's own decode readings, unchanged by the
+    // retune (no route has a run, so the price cannot move them). The forward replay now
+    // runs under the 300-unit dock and retuned export prices, so the batch total and the
+    // state hash move (#214: 2 314 batches, f1c97244); determinism — both runs identical —
+    // is the invariant this test guards.
     expect(runs[0]).toEqual(runs[1]);
     expect(runs[0]!.atDecode).toBe(1902);
     expect(runs[0]!.tick).toBe(21898);
     expect(runs[0]!.links).toBe(18);
-    expect(runs[0]!.hash).toBe("1493c153");
-    expect(runs[0]!.batches).toBe(2356);
+    expect(runs[0]!.hash).toBe("f1c97244");
+    expect(runs[0]!.batches).toBe(2314);
   });
 
   it("refuses a damaged run list instead of renumbering it", () => {
@@ -611,7 +621,7 @@ describe("B-4 the harness is reproducible", () => {
   it("prints one checksum for the stored body, twice read", () => {
     const hash = checksum(JSON.stringify(harnessJson));
     console.log("B-4 harness checksum", hash);
-    expect(hash).toBe("7fe91647");
+    expect(hash).toBe("ca46f8a0"); // #214: regenerated harness (retuned seed + refusal probe)
     expect(hash).toBe(checksum(JSON.stringify(harnessJson)));
     expect(harnessJson.generatedBy).toBe("scripts/probe-belt.mjs");
     expect(harnessJson.tuning).toEqual({
