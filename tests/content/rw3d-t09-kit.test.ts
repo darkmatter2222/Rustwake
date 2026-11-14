@@ -9,7 +9,8 @@ import path from "node:path";
  * validator (V06) as CI would and pins the authored contracts directly:
  * palette preservation, manifest production status, the depot door pivot
  * coverage (product ruling d on PR #188), the new wreck asset, and untouched
- * baseline vehicle/structure recipes.
+ * baseline vehicle/structure recipes. T15 (#142) re-authored the five unit
+ * rigs; their contracts now live in rw3d-t15-rigs.test.ts and validator S8.
  */
 const root = path.resolve(__dirname, "..", "..");
 const assetsDir = path.join(root, "docs", "vision", "assets");
@@ -30,7 +31,7 @@ describe("rw3d kit validator (T09 #136, V06)", () => {
     expect(report.summary.fail).toBe(0);
     expect(report.summary.pass).toBe(report.summary.total);
     expect(report.summary.total).toBeGreaterThanOrEqual(1147);
-    expect(report.summary.extendedBy).toBe(136);
+    expect(report.summary.extendedBy).toEqual([136, 142]);
     expect(report.summary.exitCode).toBe(0);
     expect(report.summary.assets).toEqual(expect.arrayContaining(T09));
   });
@@ -104,12 +105,10 @@ describe("rw3d T09 authored contracts (#136)", () => {
   });
 
   it("keeps untouched baseline recipes intact (part counts)", () => {
+    // T15 (#142) re-authored crane/truck/forklift/drone/worker; their part
+    // counts are pinned in rw3d-t15-rigs.test.ts. Only turret/wall_gate remain
+    // untouched baseline recipes after T09 + T15.
     const expected: Record<string, number> = {
-      crane: 5,
-      truck: 11,
-      forklift: 5,
-      drone: 8,
-      worker: 7,
       turret: 3,
       wall_gate: 3,
     };

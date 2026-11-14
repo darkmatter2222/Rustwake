@@ -1,8 +1,15 @@
 // RW3D T04 (#131) scale fixture — acceptance V06.
 // Renders every kit.json recipe at canonical scale (1 unit = 1 grid cell,
 // 2 m conceptual) in rest pose, orthographic front / side / iso views, with a
-// 1-unit grid, scale bar and the worker as scale references. No animation is
-// played: this fixture validates geometry scale, not motion.
+// 1-unit grid, scale bar and the worker as scale references. The rest pass
+// plays no animation: it validates geometry scale.
+//
+// T15 (#142) adds a MOTION pass (acceptance V04): each rig clip is played
+// independently with glTF channel semantics (the channel REPLACES the target
+// node's local TRS; LINEAR rotation interpolates via slerp). The browser
+// returns world transforms for every pivot group so the node-side driver can
+// prove motion isolation numerically (target moves, non-subtree bit-stable),
+// and motion poses are rendered + silhouette-checked like the rest pass.
 //
 // The capture driver (capture.mjs) uses two passes per view:
 //   beauty: helpers visible, paper background -> evidence PNG
@@ -71,7 +78,13 @@ function buildAsset(asset) {
     nodes[p.parent ?? "root"].add(mesh);
     partMeshes.push({ mesh, part: p });
   }
-  return { asset, root, partMeshes, bounds: localBounds(asset), groundCenter: [0, 0, 0] };
+  // T15: rest TRS per pivot group, so motion clips can REPLACE local TRS and
+  // reset deterministically (glTF channels target node TRS, not deltas).
+  const rest = {};
+  for (const g of asset.groups ?? []) {
+    rest[g.name] = { p: [...g.position], q: [0, 0, 0, 1] };
+  }
+  return { asset, root, nodes, rest, partMeshes, bounds: localBounds(asset), groundCenter: [0, 0, 0] };
 }
 
 const built = kit.assets.map(buildAsset);
@@ -184,7 +197,7 @@ function labelSprite(text, sub) {
   }, 512, 128, 3.4);
 }
 
-function rebuildHelpers(viewName, frame) {
+function rebuildHelpers(viewName, frame, poseLabel = "rest pose") {
   for (const child of [...helpers.children]) {
     child.material?.map?.dispose();
     child.material?.dispose();
@@ -233,7 +246,7 @@ function rebuildHelpers(viewName, frame) {
     ctx.fillStyle = "#f2efe8";
     ctx.font = "600 40px system-ui, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText(`RW3D kit scale fixture · ${viewName} · rest pose · orthographic`, cw / 2, 60);
+    ctx.fillText(`RW3D kit scale fixture · ${viewName} · ${poseLabel} · orthographic`, cw / 2, 60);
     ctx.font = "30px system-ui, sans-serif";
     ctx.fillStyle = "#d6c7a3";
     ctx.fillText("kit.json blockout recipes · 1 unit = 1 grid cell · worker = scale reference", cw / 2, 108);
@@ -243,12 +256,12 @@ function rebuildHelpers(viewName, frame) {
 }
 
 // ---- views -----------------------------------------------------------------
-function setView(name, { showHelpers = true, background = BEAUTY_BG } = {}) {
+function setView(name, { showHelpers = true, background = BEAUTY_BG, poseLabel = "rest pose" } = {}) {
   const view = VIEWS[name];
   if (!view) throw new Error(`unknown view ${name}`);
   layout(view.layout);
   const frame = fitCamera(view.dir);
-  rebuildHelpers(name, frame);
+  rebuildHelpers(name, frame, poseLabel);
   helpers.visible = showHelpers;
   scene.background = new THREE.Color(background);
   for (const b of built) b.root.visible = true;
@@ -329,9 +342,103 @@ function maskPass(name) {
   return { view: name, ppu, assets };
 }
 
+// ---- T15 motion pass: independent clip playback + numeric isolation --------
+const RIG_IDS = ["truck", "forklift", "crane", "drone", "worker"];
+const qa = new THREE.Quaternion();
+const qb = new THREE.Quaternion();
+function sampleChannel(an, t) {
+  const ts = an.times;
+  const vs = an.values;
+  if (t <= ts[0]) return [...vs[0]];
+  if (t >= ts[ts.length - 1]) return [...vs[vs.length - 1]];
+  let i = 0;
+  while (i < ts.length - 2 && ts[i + 1] < t) i += 1;
+  const f = (t - ts[i]) / (ts[i + 1] - ts[i]);
+  if (an.path === "rotation") {
+    // glTF LINEAR rotation = slerp (shortest path; authored keys have dot >= 0).
+    qa.fromArray(vs[i]);
+    qb.fromArray(vs[i + 1]);
+    qa.slerp(qb, f);
+    return qa.toArray();
+  }
+  return vs[i].map((c, k) => c + (vs[i + 1][k] - c) * f);
+}
+function resetPose(assetId) {
+  const b = built.find((x) => x.asset.id === assetId);
+  for (const [name, r] of Object.entries(b.rest)) {
+    const n = b.nodes[name];
+    n.position.fromArray(r.p);
+    n.quaternion.fromArray(r.q);
+    n.scale.set(1, 1, 1);
+  }
+}
+function worldTransforms(assetId) {
+  const b = built.find((x) => x.asset.id === assetId);
+  scene.updateMatrixWorld(true);
+  const v = new THREE.Vector3();
+  const q = new THREE.Quaternion();
+  return Object.keys(b.rest).map((name) => {
+    const n = b.nodes[name];
+    return { name, pos: n.getWorldPosition(v).toArray(), quat: n.getWorldQuaternion(q).toArray() };
+  });
+}
+function applyClip(assetId, clipName, t) {
+  const b = built.find((x) => x.asset.id === assetId);
+  const an = b.asset.animations.find((x) => x.name === clipName);
+  if (!an) throw new Error(`unknown clip ${assetId}/${clipName}`);
+  resetPose(assetId);
+  const node = b.nodes[an.target];
+  const value = sampleChannel(an, t);
+  if (an.path === "translation") node.position.fromArray(value);
+  else if (an.path === "rotation") node.quaternion.fromArray(value).normalize();
+  else if (an.path === "scale") node.scale.fromArray(value);
+  else throw new Error(`unsupported path ${an.path}`);
+  return { asset: assetId, clip: clipName, t, target: an.target, groups: worldTransforms(assetId) };
+}
+function applyPose(spec) {
+  for (const id of RIG_IDS) resetPose(id);
+  for (const s of spec) applyClip(s.asset, s.clip, s.t);
+  scene.updateMatrixWorld(true);
+}
+function motionMeta() {
+  return RIG_IDS.map((id) => {
+    const a = kit.assets.find((x) => x.id === id);
+    return {
+      id,
+      clips: a.animations.map((an) => ({ name: an.name, target: an.target, path: an.path, times: an.times, loop: an.loop, duration: an.times[an.times.length - 1] - an.times[0] })),
+    };
+  });
+}
+function showMotion(viewName, spec, label) {
+  setView(viewName, { poseLabel: `motion ${label}` });
+  applyPose(spec);
+  renderer.render(scene, camera);
+}
+function motionMaskPass(viewName, spec) {
+  setView(viewName, { showHelpers: false, background: MASK_BG, poseLabel: "motion" });
+  applyPose(spec);
+  const assets = [];
+  for (const b of built.filter((x) => RIG_IDS.includes(x.asset.id))) {
+    for (const other of built) other.root.visible = other === b;
+    renderer.render(scene, camera);
+    assets.push({ id: b.asset.id, expected: expectedBounds(b), actual: measureSilhouette() });
+  }
+  for (const b of built) b.root.visible = true;
+  for (const id of RIG_IDS) resetPose(id);
+  return { view: viewName, ppu, assets };
+}
+
 window.__fixture = {
   ready: true,
   meta: { W, H, threeRevision: THREE.REVISION, order: built.map((b) => b.asset.id), hover: HOVER, views: Object.keys(VIEWS) },
   show: (name) => setView(name),
   maskPass,
+  // T15 motion API
+  motionMeta,
+  applyClip,
+  resetPose,
+  worldTransforms,
+  applyPose,
+  showMotion,
+  motionMaskPass,
 };

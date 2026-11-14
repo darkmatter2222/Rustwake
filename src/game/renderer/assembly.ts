@@ -162,9 +162,15 @@ export const PART_STAGE: Readonly<Record<WorldAssetId, Readonly<Record<string, n
   crane: {
     base: 0,
     tower: 1,
+    counterweight: 1,
+    supportArm: 1,
     boom: 2,
     cable: 3,
+    cab: 3,
+    cabWindow: 3,
     grip: 4,
+    clawLBlade: 4,
+    clawRBlade: 4,
   },
   turret: {
     base: 0,

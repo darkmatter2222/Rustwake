@@ -78,6 +78,8 @@ Delta report: ZERO pixel delta. All three beauty-pass PNGs are byte-for-byte ide
 - Iso view: 55 numeric fields differ across `expected` projected corners, `groundPx` and derived `deltas` for all 12 assets. Maximum absolute difference: **2.27e-13 px** (e.g. warehouse `expected.y0` 71.30524451495909 -> 71.30524451495924). This is last-ULP floating-point noise in three's projection math path between r160 and r187, ~11 orders of magnitude below the 2 px tolerance.
 - `actual` measured silhouettes: 0 of 36 asset measurements differ in any view. `ppu` identical in all views (iso 31.2747443536306). All pass/fail outcomes identical.
 
+> **Erratum (2026-11-14, applied in the #142 evidence pass; original text preserved above by reference).** The "55 numeric fields" count in the iso bullet covers only the *source* fields: **44 `expected` projected-corner fields + 11 `groundPx` source fields**. The full leaf diff is **84 numeric fields, including 29 derived `deltas` fields** recomputed from those sources; the original wording conflated the source-field count with the full diff. Re-verified for #142 by leaf-comparing the committed [2026-11-14-rw3d-t04-fixture-checks.json](2026-11-14-rw3d-t04-fixture-checks.json) against [2026-11-14-rw3d-t05a-fixture-checks.json](2026-11-14-rw3d-t05a-fixture-checks.json) (iso view): 44 `expected` + 11 `groundPx` + 29 `deltas` = 84 differing numeric leaves, 0 other-field diffs, max |Δ| 2.2737e-13 px. Measured values, tolerances and conclusions are unchanged. Carried obligation from the #194/#200 release (product verdict 6874338930, receipts 6874774272 / 6874774454), authorized by coordinator guidance 6874976933.
+
 ### 4.5 Root gates (isolation proof)
 
 | Gate | Command | Result | Exit code |

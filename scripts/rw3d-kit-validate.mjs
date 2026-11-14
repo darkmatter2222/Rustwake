@@ -5,6 +5,9 @@
 // geometry, motion-inventory coverage and channel semantics. Manifest status
 // vocabulary now includes "production" (requires visualReview pending|accepted;
 // capable visual inspection remains an open gate until G1 #151).
+// Extended by T15 (#142): unit-rig production checks (S8) — motion-group
+// independence (numerical scene-graph proof), cargo envelopes vs bays and
+// worker scale, rig reparent contracts, re-authored baseline geometry pins.
 //
 // Inputs (read-only): docs/vision/assets/kit.json, asset-manifest.json, generated/*.gltf.
 // Contract sources: docs/vision/ART_AND_MOTION.md (spatial grammar), ACCEPTANCE.md V06,
@@ -631,8 +634,9 @@ const PALETTE_BASELINE = {
 check("t09", "palette preserved exactly (10 tokens, no additions)", deepEqual(kit.palette, PALETTE_BASELINE), PALETTE_BASELINE, kit.palette);
 
 // Baseline contracts pinned from T04 merged kit (4acf7ef). The five buildings
-// are extended additively (baseline entries must remain a prefix); the other
-// seven assets are untouched by T09 and must match exactly.
+// are extended additively by T09 (baseline entries must remain a prefix); T15
+// (#142) extends the five unit rigs additively (names prefix-pinned; geometry
+// re-authoring and reparenting pinned in S8). turret and wall_gate stay untouched.
 const BASELINE_PARTS = {
   warehouse: ["foundation", "back", "side-1", "side1", "roofBase", "roofStep-1", "roofStep1", "ridge", "frontLintel", "centerPier", "doorPanel0", "doorPanel1"],
   depot: ["foundation", "back", "side-1", "side1", "roofBase", "roofStep-1", "roofStep1", "ridge", "lintel"],
@@ -665,7 +669,7 @@ const BASELINE_SOCKETS = {
   warehouse: ["bay0", "bay1"], depot: ["serviceBay"], sorter: ["output"], furnace: ["input"],
   generator: [], crane: [], truck: ["cargo"], forklift: [], drone: ["hook"], worker: [], turret: [], wall_gate: ["passage"],
 };
-const UNTOUCHED = ["crane", "truck", "forklift", "drone", "worker", "turret", "wall_gate"];
+const UNTOUCHED = ["turret", "wall_gate"];
 for (const [id, names] of Object.entries(BASELINE_PARTS)) {
   const a = kit.assets.find((x) => x.id === id);
   const s = `t09:baseline:${id}`;
@@ -829,14 +833,405 @@ const zAngleDeg = (q) => { let a = (2 * Math.atan2(q[2], q[3]) * 180) / Math.PI;
   check(s, "salvage socket kind pallet", sk?.kind === "pallet", "pallet", sk?.kind ?? null);
 }
 
+// ---------------------------------------------------------------------------
+// S8: T15 (#142) unit-rig production contracts.
+// Doors/wheels/forks/rotors/hoist must be separately animatable pivot groups;
+// cargo envelopes must fit bays and worker scale (V04/V06, ART_AND_MOTION
+// vehicle + worker rows). Baseline part NAMES stay prefix-pinned (S7); the
+// deliberate T15 geometry re-authoring and reparenting are pinned exactly here
+// so motion transmission paths cannot drift silently.
+// ---------------------------------------------------------------------------
+const T15_NEW = {
+  truck: {
+    parts: ["bedMount", "doorPanel-1", "doorPanel1", "tailgatePanel", "brakeLight-1", "brakeLight1"],
+    groups: ["body", "door-1", "door1", "tailgate"],
+    anims: ["door_open-1", "door_open1", "tailgate_open", "suspension_bounce", "wheel_-1_0_steer", "wheel_1_0_steer", "load_pallet"],
+  },
+  forklift: {
+    parts: ["wheel_-1_0Mesh", "wheel_1_0Mesh", "wheel_-1_1Mesh", "wheel_1_1Mesh", "postRear-1", "postRear1", "postFront-1", "postFront1", "roof", "counterweight", "seat", "backrest", "column", "steeringWheel"],
+    groups: ["tilt", "forkL", "forkR", "wheel_-1_0", "wheel_1_0", "wheel_-1_1", "wheel_1_1"],
+    anims: ["wheel_-1_0_roll", "wheel_1_0_roll", "wheel_-1_1_roll", "wheel_1_1_roll", "mast_tilt", "fork_spread_L", "fork_spread_R"],
+  },
+  crane: {
+    parts: ["counterweight", "supportArm", "cab", "cabWindow", "clawLBlade", "clawRBlade"],
+    groups: ["clawL", "clawR"],
+    anims: ["slew_rotate", "hoist_place", "grip_openL", "grip_openR"],
+  },
+  drone: {
+    parts: ["skidRail-1", "skidRail1", "skidStrut-1", "skidStrut1", "beaconMast", "beacon"],
+    groups: ["load"],
+    anims: ["cargo_attach"],
+  },
+  worker: {
+    // Personal-scale detail parts match the grandfathered T04 worker scale
+    // (0.09 legs, 0.18 head): sub-quantum by verified exception, checked below.
+    parts: ["boot-1", "boot1", "vestFront", "vestBack", "torch", "torchTip"],
+    groups: [], // all four worker pivots are T04 baseline
+    anims: ["walk_leg-1", "walk_arm1", "walk_arm-1", "carry_arm-1", "carry_arm1", "operate_arm1", "weld_arm1"],
+  },
+};
+// T04 baseline pivot positions that T15 must NOT move (rigs animate around them).
+const T15_BASELINE_GROUPS = {
+  truck: { cargo: [0, 0.8, -0.45], "wheel_-1_0": [-0.5, 0.3, 0.8], "wheel_-1_1": [-0.5, 0.3, -0.4], "wheel_-1_2": [-0.5, 0.3, -0.95], "wheel_1_0": [0.5, 0.3, 0.8], "wheel_1_1": [0.5, 0.3, -0.4], "wheel_1_2": [0.5, 0.3, -0.95] },
+  forklift: { lift: [0, 0.25, 0.6] },
+  crane: { slew: [0, 0.6, 0], hoist: [2.2, 1.2, 0] },
+  drone: { rotor0: [-0.6, 0.55, 0], rotor1: [0.6, 0.55, 0], rotor2: [0, 0.55, -0.6], rotor3: [0, 0.55, 0.6] },
+  worker: { "leg-1": [-0.07, 0.32, 0], "arm-1": [-0.17, 0.6, 0], leg1: [0.07, 0.32, 0], arm1: [0.17, 0.6, 0] },
+};
+// Deliberate T15 re-authoring of baseline parts (parent/center/size pinned).
+// Rationale: cab narrowed to 0.75 so door panels sit flush on the cab sides;
+// windshield moved onto the cab front face; bed shortened to the tailgate
+// hinge; pallet raised to 0.5 cargo height; worker legs lengthened so boots
+// ground the feet (resolves the T04 0.040 float finding). Fork/crossbar/cargo
+// reparenting preserves world geometry via pivot offsets (checked below).
+const T15_REAUTHORED = {
+  truck: {
+    chassis: { parent: "body", center: [0, 0.35, 0], size: [0.9, 0.2, 2.5] },
+    cab: { parent: "body", center: [0, 0.85, 0.75], size: [0.75, 0.9, 0.85] },
+    windshield: { parent: "body", center: [0, 1, 1.125], size: [0.625, 0.375, 0.125] },
+    bed: { parent: "body", center: [0, 0.65, -0.375], size: [1, 0.2, 1.25] },
+    pallet: { parent: "cargo", center: [0, 0.2, 0], size: [0.8, 0.5, 1.1] },
+  },
+  forklift: {
+    crossbar: { parent: "tilt", center: [0, 0, 0], size: [0.8, 0.15, 0.15] },
+    "fork-0.25": { parent: "forkL", center: [0, 0, 0], size: [0.12, 0.1, 0.9] },
+    "fork0.25": { parent: "forkR", center: [0, 0, 0], size: [0.12, 0.1, 0.9] },
+  },
+  drone: { cargo: { parent: "load", center: [0, 0.05, 0], size: [0.45, 0.35, 0.45] } },
+  worker: {
+    "legMesh-1": { parent: "leg-1", center: [0, -0.16, 0], size: [0.09, 0.32, 0.1] },
+    legMesh1: { parent: "leg1", center: [0, -0.16, 0], size: [0.09, 0.32, 0.1] },
+  },
+};
+// Mechanism -> dedicated pivot group -> clips (ART_AND_MOTION vehicle/worker
+// rows). Every required mechanism owns a distinct group; multi-channel groups
+// (front wheel roll+steer, hoist lift+place, arm1 task poses) are one mechanism.
+const T15_MECHANISMS = {
+  truck: {
+    "door-1": ["door_open-1"], door1: ["door_open1"], tailgate: ["tailgate_open"],
+    body: ["suspension_bounce"], cargo: ["load_pallet"],
+    "wheel_-1_0": ["wheel_-1_0_roll", "wheel_-1_0_steer"], "wheel_1_0": ["wheel_1_0_roll", "wheel_1_0_steer"],
+    "wheel_-1_1": ["wheel_-1_1_roll"], "wheel_-1_2": ["wheel_-1_2_roll"],
+    "wheel_1_1": ["wheel_1_1_roll"], "wheel_1_2": ["wheel_1_2_roll"],
+  },
+  forklift: {
+    lift: ["lift_pallet"], tilt: ["mast_tilt"], forkL: ["fork_spread_L"], forkR: ["fork_spread_R"],
+    "wheel_-1_0": ["wheel_-1_0_roll"], "wheel_1_0": ["wheel_1_0_roll"],
+    "wheel_-1_1": ["wheel_-1_1_roll"], "wheel_1_1": ["wheel_1_1_roll"],
+  },
+  crane: { slew: ["slew_rotate"], hoist: ["hoist_lift", "hoist_place"], clawL: ["grip_openL"], clawR: ["grip_openR"] },
+  drone: { rotor0: ["rotor0_spin"], rotor1: ["rotor1_spin"], rotor2: ["rotor2_spin"], rotor3: ["rotor3_spin"], load: ["cargo_attach"] },
+  worker: { leg1: ["walk_leg"], "leg-1": ["walk_leg-1"], arm1: ["walk_arm1", "carry_arm1", "operate_arm1", "weld_arm1"], "arm-1": ["walk_arm-1", "carry_arm-1"] },
+};
+for (const [id, reg] of Object.entries(T15_NEW)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const s = `t15:authored:${id}`;
+  const partNames = a.parts.map((p) => p.name);
+  const groupNames = a.groups.map((g) => g.name);
+  const animNames = a.animations.map((x) => x.name);
+  check(s, "registered parts present", reg.parts.every((n) => partNames.includes(n)), reg.parts, reg.parts.filter((n) => !partNames.includes(n)));
+  check(s, "registered pivot groups present", reg.groups.every((n) => groupNames.includes(n)), reg.groups, reg.groups.filter((n) => !groupNames.includes(n)));
+  check(s, "registered clips present", reg.anims.every((n) => animNames.includes(n)), reg.anims, reg.anims.filter((n) => !animNames.includes(n)));
+
+  // Quantum discipline for NEW geometry (worker detail parts exempt, below).
+  const bad = [];
+  if (id !== "worker") {
+    for (const p of a.parts.filter((p) => reg.parts.includes(p.name))) {
+      p.center.forEach((v, i) => { if (!isQuantum(v)) bad.push(`${p.name}.center[${i}]=${v}`); });
+      p.size.forEach((v, i) => { if (!isQuantum(v)) bad.push(`${p.name}.size[${i}]=${v}`); });
+    }
+  }
+  for (const g of a.groups.filter((g) => reg.groups.includes(g.name))) {
+    // Verified exception: forkL/forkR carry the relocated T04 fork part centers
+    // (world geometry preserved); pinned exactly in the reparent checks below.
+    if (id === "forklift" && (g.name === "forkL" || g.name === "forkR")) continue;
+    g.position.forEach((v, i) => { if (!isQuantum(v)) bad.push(`${g.name}.position[${i}]=${v}`); });
+  }
+  check(s, `new geometry on ${SPEC.detailQuantum} detail quantum`, bad.length === 0, [], bad);
+
+  // New translation clips: absolute values may inherit the target pivot's
+  // baseline rest offset (grandfathered T04 positions), but every OFFSET from
+  // rest and every net travel component must be on the detail quantum.
+  const tbad = [];
+  for (const an of a.animations.filter((x) => reg.anims.includes(x.name) && x.path === "translation")) {
+    const rest = a.groups.find((g) => g.name === an.target).position;
+    an.values.forEach((v, ti) => v.forEach((c, i) => {
+      if (!isQuantum(c - rest[i])) tbad.push(`${an.name}.values[${ti}][${i}]=${c} (offset ${c - rest[i]})`);
+    }));
+    const delta = sub(an.values[an.values.length - 1], an.values[0]);
+    delta.forEach((c, i) => { if (!isQuantum(c)) tbad.push(`${an.name}.delta[${i}]=${c}`); });
+  }
+  check(s, "new translation channels: rest-relative offsets and travel on quantum", tbad.length === 0, [], tbad);
+}
+{
+  // Verified sub-quantum exception: worker personal-scale detail. The T04
+  // worker (0.09 legs, 0.18 head, 0.32 pivot height) is grandfathered; boots
+  // must ground the feet, which is impossible on-quantum under a 0.32 pivot.
+  const s = "t15:authored:worker";
+  const m = models.get("worker");
+  const bootL = m.parts.find((p) => p.name === "boot-1");
+  const bootR = m.parts.find((p) => p.name === "boot1");
+  check(s, "boots ground the feet (min Y == 0, resolves T04 float)", near(m.min[1], 0), 0, +m.min[1].toFixed(6));
+  check(s, "boot pair mirrored", near(bootL.worldCenter[0], -bootR.worldCenter[0]) && deepEqual(bootL.size, bootR.size), "mirrored x, equal size", [bootL.worldCenter, bootR.worldCenter]);
+  const vf = m.parts.find((p) => p.name === "vestFront");
+  const vb = m.parts.find((p) => p.name === "vestBack");
+  check(s, "vest front/back mirrored about z", near(vf.center[2], -vb.center[2]) && deepEqual(vf.size, vb.size), "mirrored z, equal size", [vf.center, vb.center]);
+  const torch = m.parts.find((p) => p.name === "torch");
+  const tip = m.parts.find((p) => p.name === "torchTip");
+  check(s, "torch + tip ride the weld arm (arm1)", torch.parent === "arm1" && tip.parent === "arm1", "arm1", [torch.parent, tip.parent]);
+  finding("worker T15 detail parts (boots, vest, torch) are sub-quantum by verified exception: personal-scale detail matching the grandfathered T04 worker; grounding/mirroring checked instead of quantum snap.");
+}
+// Baseline pivots unmoved + re-authored baseline geometry pinned.
+for (const [id, pins] of Object.entries(T15_BASELINE_GROUPS)) {
+  const a = kit.assets.find((x) => x.id === id);
+  for (const [name, pos] of Object.entries(pins)) {
+    const g = a.groups.find((x) => x.name === name);
+    check(`t15:baseline:${id}`, `T04 pivot ${name} position preserved`, deepEqual(g?.position, pos), pos, g?.position ?? null);
+  }
+}
+for (const [id, pins] of Object.entries(T15_REAUTHORED)) {
+  const a = kit.assets.find((x) => x.id === id);
+  for (const [name, want] of Object.entries(pins)) {
+    const p = a.parts.find((x) => x.name === name);
+    const got = p ? { parent: p.parent, center: p.center, size: p.size } : null;
+    check(`t15:reauthored:${id}`, `${name} parent/center/size pinned`, deepEqual(got, want), want, got);
+  }
+}
+{
+  // Fork pivot relocation preserves T04 world geometry: forkL/forkR positions
+  // equal the T04 fork part centers, and the parts now sit at the pivot origin.
+  const a = kit.assets.find((x) => x.id === "forklift");
+  const fl = a.groups.find((g) => g.name === "forkL");
+  const fr = a.groups.find((g) => g.name === "forkR");
+  check("t15:reauthored:forklift", "forkL pivot == T04 fork-0.25 center (verified relocation exception)", deepEqual(fl.position, [-0.25, -0.05, 0.4]), [-0.25, -0.05, 0.4], fl.position);
+  check("t15:reauthored:forklift", "forkR pivot == T04 fork0.25 center (verified relocation exception)", deepEqual(fr.position, [0.25, -0.05, 0.4]), [0.25, -0.05, 0.4], fr.position);
+  finding("forklift forkL/forkR pivot offsets are the relocated T04 fork part centers (sub-quantum y=-0.05/z=0.4 inherited); world geometry preserved, pinned exactly.");
+}
+// Mechanism coverage: each mechanism's clips target exactly its dedicated group.
+for (const [id, mechs] of Object.entries(T15_MECHANISMS)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const s = `t15:mechanisms:${id}`;
+  for (const [group, want] of Object.entries(mechs)) {
+    const got = a.animations.filter((x) => x.target === group).map((x) => x.name).sort();
+    check(s, `${group} driven by exactly [${want.join(", ")}]`, deepEqual(got, [...want].sort()), [...want].sort(), got);
+  }
+  const targeted = new Set(a.animations.map((x) => x.target));
+  const orphans = [...targeted].filter((g) => !mechs[g]);
+  check(s, "no clip targets an unregistered group", orphans.length === 0, [], orphans);
+}
+// Numerical motion-independence proof: evaluate the rig scene graph at rest,
+// mid-clip and end-clip with glTF channel semantics (channel REPLACES the
+// target's local TRS). The target mechanism must move; every group outside
+// the target's subtree must be bit-stable. Independent of any renderer.
+function quatMul(a, b) {
+  const [ax, ay, az, aw] = a; const [bx, by, bz, bw] = b;
+  return [
+    aw * bx + ax * bw + ay * bz - az * by,
+    aw * by - ax * bz + ay * bw + az * bx,
+    aw * bz + ax * by - ay * bx + az * bw,
+    aw * bw - ax * bx - ay * by - az * bz,
+  ];
+}
+const quatAngleDeg = (q) => (2 * Math.acos(Math.min(1, Math.abs(q[3]))) * 180) / Math.PI;
+const dist3 = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+function sampleClip(an, t) {
+  const ts = an.times; const vs = an.values;
+  if (t <= ts[0]) return vs[0];
+  if (t >= ts[ts.length - 1]) return vs[vs.length - 1];
+  let i = 0;
+  while (i < ts.length - 2 && ts[i + 1] < t) i += 1;
+  const f = (t - ts[i]) / (ts[i + 1] - ts[i]);
+  return vs[i].map((c, k) => c + (vs[i + 1][k] - c) * f);
+}
+function rigWorld(a, override) {
+  const groups = new Map(a.groups.map((g) => [g.name, g]));
+  const world = new Map();
+  const evalGroup = (name) => {
+    if (world.has(name)) return world.get(name);
+    const g = groups.get(name);
+    const parent = g.parent === "root" ? { pos: [0, 0, 0], rot: [0, 0, 0, 1] } : evalGroup(g.parent);
+    let localPos = g.position; let localRot = [0, 0, 0, 1];
+    if (override && override.group === name) {
+      if (override.path === "translation") localPos = override.value;
+      else if (override.path === "rotation") localRot = override.value;
+    }
+    const w = { pos: add(parent.pos, quatRotate(parent.rot, localPos)), rot: quatMul(parent.rot, localRot) };
+    world.set(name, w);
+    return w;
+  };
+  for (const g of a.groups) evalGroup(g.name);
+  return world;
+}
+const groupIsDescendant = (a, name, anc) => {
+  const groups = new Map(a.groups.map((g) => [g.name, g]));
+  let cur = groups.get(name)?.parent;
+  let guard = 0;
+  while (cur && cur !== "root" && ++guard < 64) {
+    if (cur === anc) return true;
+    cur = groups.get(cur)?.parent;
+  }
+  return false;
+};
+for (const id of Object.keys(T15_MECHANISMS)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const rest = rigWorld(a, null);
+  for (const an of a.animations) {
+    const s = `t15:independence:${id}`;
+    const tMid = (an.times[0] + an.times[an.times.length - 1]) / 2;
+    let moved = false;
+    const leaks = [];
+    for (const t of [tMid, an.times[an.times.length - 1]]) {
+      const pose = rigWorld(a, { group: an.target, path: an.path, value: sampleClip(an, t) });
+      const r0 = rest.get(an.target); const r1 = pose.get(an.target);
+      if (dist3(r0.pos, r1.pos) > 1e-6 || quatAngleDeg(quatMul(r1.rot, [r0.rot[0], r0.rot[1], r0.rot[2], -r0.rot[3]])) > 1e-6) moved = true;
+      for (const [name, w0] of rest) {
+        if (name === an.target || groupIsDescendant(a, name, an.target)) continue;
+        const w1 = pose.get(name);
+        if (dist3(w0.pos, w1.pos) > 1e-9 || quatAngleDeg(quatMul(w1.rot, [w0.rot[0], w0.rot[1], w0.rot[2], -w0.rot[3]])) > 1e-9) leaks.push(`${name}@t=${t}`);
+      }
+    }
+    check(s, `${an.name} moves its target ${an.target}`, moved, "target transform changes mid/end clip", moved);
+    check(s, `${an.name} leaves all non-subtree groups fixed`, leaks.length === 0, [], leaks);
+  }
+}
+// Loop flags: continuous channels loop; event/state channels do not (V04).
+{
+  const s = "t15:motion";
+  const loopExpected = {
+    "truck:wheel_-1_0_roll": true, "truck:wheel_-1_1_roll": true, "truck:wheel_-1_2_roll": true,
+    "truck:wheel_1_0_roll": true, "truck:wheel_1_1_roll": true, "truck:wheel_1_2_roll": true,
+    "truck:door_open-1": false, "truck:door_open1": false, "truck:tailgate_open": false,
+    "truck:suspension_bounce": false, "truck:wheel_-1_0_steer": false, "truck:wheel_1_0_steer": false, "truck:load_pallet": false,
+    "forklift:lift_pallet": false, "forklift:mast_tilt": false, "forklift:fork_spread_L": false, "forklift:fork_spread_R": false,
+    "forklift:wheel_-1_0_roll": true, "forklift:wheel_1_0_roll": true, "forklift:wheel_-1_1_roll": true, "forklift:wheel_1_1_roll": true,
+    "crane:hoist_lift": false, "crane:hoist_place": false, "crane:slew_rotate": false, "crane:grip_openL": false, "crane:grip_openR": false,
+    "drone:rotor0_spin": true, "drone:rotor1_spin": true, "drone:rotor2_spin": true, "drone:rotor3_spin": true, "drone:cargo_attach": false,
+    "worker:walk_leg": true, "worker:walk_leg-1": true, "worker:walk_arm1": true, "worker:walk_arm-1": true,
+    "worker:carry_arm-1": false, "worker:carry_arm1": false, "worker:operate_arm1": true, "worker:weld_arm1": true,
+  };
+  const loopBad = [];
+  for (const [key, want] of Object.entries(loopExpected)) {
+    const [id, name] = key.split(":");
+    const an = clip(id, name);
+    if (!an || an.loop !== want) loopBad.push(`${key}=${an ? an.loop : "missing"}`);
+  }
+  check(s, "loop flags match channel semantics (continuous vs event-driven)", loopBad.length === 0, [], loopBad);
+}
+// Motion direction / angle semantics (sign-verified, renderer-independent).
+{
+  const s = "t15:motion";
+  const pitchDeg = (q) => (2 * Math.atan2(q[0], q[3]) * 180) / Math.PI;
+  // Truck doors swing OUTWARD from the cab sides (hinges at x=+/-0.375).
+  const dl = clip("truck", "door_open-1"); const dr = clip("truck", "door_open1");
+  check(s, "truck doors open +/-60 deg yaw", near(yawDeg(dl.values[1]), 60, 1e-4) && near(yawDeg(dr.values[1]), 300, 1e-4), "[60, 300]", [yawDeg(dl.values[1]), yawDeg(dr.values[1])]);
+  const tipL = quatRotate(dl.values[1], [0, 0, -0.5]);
+  const tipR = quatRotate(dr.values[1], [0, 0, -0.5]);
+  check(s, "door panels swing outward (left -X, right +X)", tipL[0] < -0.4 && tipR[0] > 0.4, "tip x < -0.4 / > 0.4", [+tipL[0].toFixed(4), +tipR[0].toFixed(4)]);
+  // Tailgate folds DOWN and out about its bottom hinge.
+  const tg = clip("truck", "tailgate_open");
+  const top = quatRotate(tg.values[1], [0, 0.5, -0.125]);
+  check(s, "tailgate top folds down/out (-90 deg X)", near(top[1], -0.125, 1e-4) && near(top[2], -0.5, 1e-4), "y=-0.125 z=-0.5", top.map((v) => +v.toFixed(6)));
+  // Steering: both front wheels yaw the SAME direction (-30 deg).
+  const sl = clip("truck", "wheel_-1_0_steer"); const sr = clip("truck", "wheel_1_0_steer");
+  check(s, "front wheels steer together (-30 deg)", near(yawDeg(sl.values[1]), 330, 1e-4) && near(yawDeg(sr.values[1]), 330, 1e-4), "[330, 330]", [yawDeg(sl.values[1]), yawDeg(sr.values[1])]);
+  // Suspension dips one quantum and returns; load_pallet lowers onto the bed.
+  const sus = clip("truck", "suspension_bounce");
+  check(s, "suspension dips -0.125 and returns to rest", deepEqual(sus.values[1], [0, -0.125, 0]) && deepEqual(sus.values[2], [0, 0, 0]), "[0,-0.125,0] then rest", sus.values);
+  const lp = clip("truck", "load_pallet");
+  const cargoRest = kit.assets.find((x) => x.id === "truck").groups.find((g) => g.name === "cargo").position;
+  check(s, "load_pallet lowers pallet 0.75 (6 quanta) onto cargo rest", deepEqual(lp.values[0], add(cargoRest, [0, 0.75, 0])) && deepEqual(lp.values[1], cargoRest), "rest+[0,0.75,0] -> rest", lp.values);
+  // Wheel rolls: full turn about the X axle; rotors: full turn about Y.
+  // A 360 deg rotation is the identity orientation (q and -q coincide), so the
+  // proof is: identity start, 180 deg mid on the correct axis, +/-identity end.
+  // Consecutive key dot products are 0, so glTF LINEAR (slerp) sweeps 0->180->360
+  // continuously without a shortest-path flip.
+  for (const [id, names, axis] of [["truck", ["wheel_-1_0_roll", "wheel_1_2_roll"], 0], ["forklift", ["wheel_-1_0_roll", "wheel_1_1_roll"], 0], ["drone", ["rotor0_spin", "rotor3_spin"], 1]]) {
+    for (const name of names) {
+      const an = clip(id, name);
+      const start = an.values[0]; const mid = an.values[1]; const end = an.values[an.values.length - 1];
+      const ok = deepEqual(start, [0, 0, 0, 1]) && Math.abs(mid[axis]) > 0.999
+        && near(quatAngleDeg(mid), 180, 1e-4) && Math.abs(end[3]) > 0.999 && near(quatAngleDeg(end), 0, 1e-4);
+      check(s, `${id}.${name} full 360 turn about ${axis === 0 ? "X" : "Y"}`, ok, "identity start, 180 mid on axis, +/-identity end", [start, mid, end]);
+    }
+  }
+  // Forklift: forks spread OUTWARD one quantum each; mast tilts +5 deg.
+  const fsl = clip("forklift", "fork_spread_L"); const fsr = clip("forklift", "fork_spread_R");
+  check(s, "fork spread outward (+/-0.125 travel)", near(fsl.values[1][0] - fsl.values[0][0], -0.125) && near(fsr.values[1][0] - fsr.values[0][0], 0.125), "[-0.125, +0.125]", [fsl.values[1][0] - fsl.values[0][0], fsr.values[1][0] - fsr.values[0][0]]);
+  check(s, "mast tilt +10 deg about X", near(pitchDeg(clip("forklift", "mast_tilt").values[1]), 10, 1e-4), 10, +pitchDeg(clip("forklift", "mast_tilt").values[1]).toFixed(4));
+  // Crane: slew 0->90->hold->0; hoist_place lowers 0.2; grip opens outward.
+  const slew = clip("crane", "slew_rotate");
+  check(s, "crane slew 0/90/90/0 yaw", deepEqual(slew.values.map((q) => +yawDeg(q).toFixed(4)), [0, 90, 90, 0]), [0, 90, 90, 0], slew.values.map((q) => +yawDeg(q).toFixed(4)));
+  const hp = clip("crane", "hoist_place");
+  check(s, "hoist_place lowers 0.125 (one quantum travel)", near(hp.values[1][1] - hp.values[0][1], -0.125), -0.125, hp.values[1][1] - hp.values[0][1]);
+  const gl = clip("crane", "grip_openL"); const gr = clip("crane", "grip_openR");
+  check(s, "grip claws open outward (+/-0.125)", near(gl.values[1][0] - gl.values[0][0], -0.125) && near(gr.values[1][0] - gr.values[0][0], 0.125), "[-0.125, +0.125]", [gl.values[1][0] - gl.values[0][0], gr.values[1][0] - gr.values[0][0]]);
+  // Drone cargo attach lowers the load 0.5 (assumes airborne hover >= 0.625).
+  const ca = clip("drone", "cargo_attach");
+  check(s, "cargo_attach lowers load 0.5", deepEqual(ca.values[1], [0, -0.5, 0]), [0, -0.5, 0], ca.values[1]);
+  // Worker: contralateral walk (arm opposite ipsilateral leg), mirrored carry,
+  // operate/weld oscillate about a raised forward pose and return to start.
+  const wl = clip("worker", "walk_leg"); const wln = clip("worker", "walk_leg-1");
+  const wa1 = clip("worker", "walk_arm1"); const wan = clip("worker", "walk_arm-1");
+  const opp = wl.values.every((q, i) => near(q[0], -wln.values[i][0]) && near(q[3], wln.values[i][3]));
+  check(s, "walk legs opposite phase", opp, "leg-1 = -leg1 pitch", [wl.values.map((q) => q[0]), wln.values.map((q) => q[0])]);
+  check(s, "walk arms contralateral (arm1 == leg-1, arm-1 == leg1)", deepEqual(wa1.values, wln.values) && deepEqual(wan.values, wl.values), "contralateral", [wa1.values, wan.values]);
+  const c1 = clip("worker", "carry_arm1"); const cn = clip("worker", "carry_arm-1");
+  check(s, "carry raises both arms forward ~-68.75 deg", deepEqual(c1.values, cn.values) && near(pitchDeg(c1.values[1]), -68.7549, 0.01), -68.7549, +pitchDeg(c1.values[1]).toFixed(4));
+  for (const name of ["operate_arm1", "weld_arm1"]) {
+    const an = clip("worker", name);
+    const ok = an.values.every((q) => q[0] < 0) && !near(an.values[1][0], an.values[0][0]) && deepEqual(an.values[2], an.values[0]);
+    check(s, `${name} oscillates about raised pose, returns to start`, ok, "forward pitch, oscillate, return", an.values.map((q) => +pitchDeg(q).toFixed(3)));
+  }
+}
+// Cargo envelopes: crane -> truck pallet -> forklift forks -> bay chain, and
+// worker-scale cargo (V06). S5 already gates the truck envelope against the
+// warehouse/depot bays using ACTUAL bounds; these pin the cargo interfaces.
+{
+  const s = "t15:cargo";
+  const tm = models.get("truck");
+  const pallet = tm.parts.find((p) => p.name === "pallet");
+  const bed = tm.parts.find((p) => p.name === "bed");
+  const cargoSocket = tm.asset.sockets.find((x) => x.name === "cargo");
+  check(s, "pallet rests on bed (pallet bottom == bed top)", near(pallet.min[1], bed.max[1]), +bed.max[1].toFixed(6), +pallet.min[1].toFixed(6));
+  const fitsXZ = pallet.min[0] >= bed.min[0] - EPS && pallet.max[0] <= bed.max[0] + EPS && pallet.min[2] >= bed.min[2] - EPS && pallet.max[2] <= bed.max[2] + EPS;
+  check(s, "pallet footprint inside bed", fitsXZ, "pallet XZ within bed XZ", { pallet: [pallet.min, pallet.max], bed: [bed.min, bed.max] });
+  check(s, "pallet width <= cargo socket clearanceWidth", pallet.size[0] <= cargoSocket.clearanceWidth + EPS, cargoSocket.clearanceWidth, pallet.size[0]);
+  check(s, "pallet longest dim <= truck nominal length", Math.max(...pallet.size) <= SPEC.truckEnvelope.length, SPEC.truckEnvelope.length, Math.max(...pallet.size));
+  const dm = models.get("drone");
+  const crate = dm.parts.find((p) => p.name === "cargo");
+  const hook = dm.asset.sockets.find((x) => x.name === "hook");
+  const crateMax = Math.max(...crate.size);
+  check(s, "drone crate is worker-scale (<= workerHeight 0.85)", crateMax <= SPEC.workerHeight, SPEC.workerHeight, crateMax);
+  check(s, "drone crate <= hook clearanceWidth", crateMax <= hook.clearanceWidth + EPS, hook.clearanceWidth, crateMax);
+  // Forklift forks at full spread must engage the truck pallet edges.
+  const fm = models.get("forklift");
+  const forkL = fm.parts.find((p) => p.name === "fork-0.25");
+  const spread = Math.abs(clip("forklift", "fork_spread_L").values[1][0]);
+  const outerEdge = spread + forkL.size[0] / 2;
+  check(s, "full-spread fork outer edge reaches pallet half-width", outerEdge >= pallet.size[0] / 2 - EPS, pallet.size[0] / 2, +outerEdge.toFixed(6));
+  // Crane at hoist_place low point: cable stays attached to the boom underside
+  // and the claw clears the loaded truck pallet top.
+  const cm = models.get("crane");
+  const cable = cm.parts.find((p) => p.name === "cable");
+  const boom = cm.parts.find((p) => p.name === "boom");
+  const hoistRest = T15_BASELINE_GROUPS.crane.hoist[1];
+  const hoistLow = clip("crane", "hoist_place").values[1][1];
+  const cableTopLow = cable.max[1] + (hoistLow - hoistRest);
+  check(s, "cable reaches boom underside at lowest hoist", cableTopLow >= boom.min[1] - EPS, +boom.min[1].toFixed(6), +cableTopLow.toFixed(6));
+  const claw = cm.parts.find((p) => p.name === "clawLBlade");
+  const clawBottomLow = claw.min[1] + (hoistLow - hoistRest);
+  check(s, "claw clears loaded pallet top at lowest hoist", clawBottomLow >= pallet.max[1] - EPS, +pallet.max[1].toFixed(6), +clawBottomLow.toFixed(6));
+}
+
 // Known limitations / coverage gaps requiring reviewer attention (non-failing).
-finding("forklift recipe has no wheel parts although inventory lists wheel turns; blockout sample-coverage gap (production wheels owned by #142).");
+// T15 (#142) resolved the former forklift wheel-coverage gap: four wheel
+// pivots + roll clips are now authored and pinned in S8.
 finding("furnace inventory lists 'subtle emissive variation'; kit schema has no emissive/material animation channel (color tokens only). Static amber glow authored; emissive variation deferred to renderer/material schema.");
 finding("entity-level inventory sequences (warehouse forklift service, depot chassis assembly / vehicle departure) are represented by vehicle assets and entity transforms (forklift lift_pallet, truck wheel rolls), not building clips.");
 {
   const g = JSON.parse(readFileSync(join(assetsDir, "generated", "warehouse.gltf"), "utf8"));
   const rootNode = (g.nodes ?? []).find((n) => n.name === "warehouse");
-  finding(`build-vision-assets.py hardcodes glTF root extras.status='${rootNode?.extras?.status}' and rewrites manifest status='blockout' on every run; T09 post-patches the manifest to 'production' (authoritative). Generator is outside #136 write paths; glTF extras wording is a known limitation.`);
+  finding(`build-vision-assets.py hardcodes glTF root extras.status='${rootNode?.extras?.status}' and rewrites manifest status='blockout' on every run; T09/T15 post-patch the manifest to 'production' (authoritative) via docs/vision/assets/postpatch-manifest.mjs. Generator is outside #136/#142 write paths; glTF extras wording is a known limitation.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -846,7 +1241,7 @@ const fails = results.filter((r) => !r.ok);
 const summary = {
   tool: "scripts/rw3d-kit-validate.mjs",
   issue: 131,
-  extendedBy: 136,
+  extendedBy: [136, 142],
   acceptance: "V06",
   kitSha256,
   manifestSha256,
