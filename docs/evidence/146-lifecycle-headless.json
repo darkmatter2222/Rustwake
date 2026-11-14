@@ -1,0 +1,1202 @@
+{
+  "generatedBy": "scripts/probe-lifecycle146.mjs",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/146",
+  "headSha": "14bf805b4ad75602e01b2d6dd2e738b45523ca17",
+  "url": "http://localhost:4296/",
+  "methodology": "Real app booted from the Vite dev server in headless Chrome; the shipped src/app/store.ts, src/game/world and logistics modules are imported IN THE PAGE and the LifecycleApi driven against isolated in-memory storage. Numeric readbacks computed by the shipped code in Chrome; asserted in Node. T19 has no lifecycle UI yet; the boot render + numeric DOM readback are runtime-health proof, NOT visual acceptance (visual fidelity PENDING G1 #151).",
+  "cells": [
+    {
+      "label": "390x844",
+      "width": 390,
+      "height": 844,
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    },
+    {
+      "label": "1920x1080",
+      "width": 1920,
+      "height": 1080,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  ],
+  "results": {
+    "390x844": {
+      "move": {
+        "role": "writer",
+        "previewRejection": null,
+        "previewFee": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "expectedFee": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "affectedJobs": [
+          1
+        ],
+        "previewPure": true,
+        "ok": true,
+        "recalledJobIds": [
+          1
+        ],
+        "jobStatus": "cancelled",
+        "movedCell": {
+          "x": 0,
+          "y": 0
+        },
+        "targetCell": {
+          "x": 0,
+          "y": 0
+        },
+        "movedRotation": 90,
+        "targetRotation": 90,
+        "completedTickPreserved": true,
+        "approachCell": {
+          "x": 0,
+          "y": 0
+        },
+        "cargoConserved": true,
+        "worldConserved": true,
+        "saveUntouched": true,
+        "exportUntouched": true
+      },
+      "blockers": {
+        "reasons": [
+          "cargo-not-drained",
+          "inventory-present",
+          "unknown-recovery",
+          "recovery-full"
+        ],
+        "atomic": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "recoveryRoom": {
+          "buildingId": 3,
+          "room": 0
+        }
+      },
+      "dismantle": {
+        "ok": true,
+        "blocker": null,
+        "previewRefund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ],
+        "expectedRefund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ],
+        "recovery": {
+          "buildingId": 1,
+          "room": 30
+        },
+        "previewPure": true,
+        "refundTotal": 30,
+        "buildingRemoved": true,
+        "overflowTotal": 30,
+        "overflowSources": [
+          2,
+          2
+        ],
+        "overflowFormulaVersions": [
+          1,
+          1
+        ],
+        "cargoConserved": true,
+        "worldConserved": true,
+        "saveUntouched": true,
+        "exportUntouched": true
+      },
+      "recall": {
+        "overflowTotal": 22,
+        "noRoom": 0,
+        "fullRoom": 22,
+        "ok": true,
+        "recovered": 22,
+        "recalledJobIds": [],
+        "ledgerEmpty": true,
+        "secondRecovered": 0,
+        "worldConserved": true,
+        "cargoUntouched": true
+      },
+      "gate": {
+        "writerRole": "writer",
+        "readerRole": "reader",
+        "moveReason": "read-only",
+        "dismantleReason": "read-only",
+        "recallReason": "read-only",
+        "previewsThrow": false,
+        "writerJobIntact": true,
+        "writerBuildings": 2
+      },
+      "session": {
+        "freshBuildings": 0,
+        "freshOverflow": 0,
+        "freshJobs": 0
+      },
+      "atomicity": {
+        "samePosReason": "same-position",
+        "samePosAtomic": true,
+        "badCellReason": "outside-land",
+        "badCellAtomic": true
+      },
+      "home": {
+        "title": "Rustwake",
+        "buttons": [
+          "Begin recovery",
+          "Settings",
+          "Sound on"
+        ],
+        "hasCanvas": true,
+        "rootChildren": 1,
+        "freshYardVisible": true,
+        "newGameLabel": "New game…"
+      },
+      "bootShot": "docs/evidence/lifecycle146/390x844-boot.png",
+      "pageErrors": [],
+      "consoleErrors": []
+    },
+    "1920x1080": {
+      "move": {
+        "role": "writer",
+        "previewRejection": null,
+        "previewFee": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "expectedFee": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "affectedJobs": [
+          1
+        ],
+        "previewPure": true,
+        "ok": true,
+        "recalledJobIds": [
+          1
+        ],
+        "jobStatus": "cancelled",
+        "movedCell": {
+          "x": 0,
+          "y": 0
+        },
+        "targetCell": {
+          "x": 0,
+          "y": 0
+        },
+        "movedRotation": 90,
+        "targetRotation": 90,
+        "completedTickPreserved": true,
+        "approachCell": {
+          "x": 0,
+          "y": 0
+        },
+        "cargoConserved": true,
+        "worldConserved": true,
+        "saveUntouched": true,
+        "exportUntouched": true
+      },
+      "blockers": {
+        "reasons": [
+          "cargo-not-drained",
+          "inventory-present",
+          "unknown-recovery",
+          "recovery-full"
+        ],
+        "atomic": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "recoveryRoom": {
+          "buildingId": 3,
+          "room": 0
+        }
+      },
+      "dismantle": {
+        "ok": true,
+        "blocker": null,
+        "previewRefund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ],
+        "expectedRefund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ],
+        "recovery": {
+          "buildingId": 1,
+          "room": 30
+        },
+        "previewPure": true,
+        "refundTotal": 30,
+        "buildingRemoved": true,
+        "overflowTotal": 30,
+        "overflowSources": [
+          2,
+          2
+        ],
+        "overflowFormulaVersions": [
+          1,
+          1
+        ],
+        "cargoConserved": true,
+        "worldConserved": true,
+        "saveUntouched": true,
+        "exportUntouched": true
+      },
+      "recall": {
+        "overflowTotal": 22,
+        "noRoom": 0,
+        "fullRoom": 22,
+        "ok": true,
+        "recovered": 22,
+        "recalledJobIds": [],
+        "ledgerEmpty": true,
+        "secondRecovered": 0,
+        "worldConserved": true,
+        "cargoUntouched": true
+      },
+      "gate": {
+        "writerRole": "writer",
+        "readerRole": "reader",
+        "moveReason": "read-only",
+        "dismantleReason": "read-only",
+        "recallReason": "read-only",
+        "previewsThrow": false,
+        "writerJobIntact": true,
+        "writerBuildings": 2
+      },
+      "session": {
+        "freshBuildings": 0,
+        "freshOverflow": 0,
+        "freshJobs": 0
+      },
+      "atomicity": {
+        "samePosReason": "same-position",
+        "samePosAtomic": true,
+        "badCellReason": "outside-land",
+        "badCellAtomic": true
+      },
+      "home": {
+        "title": "Rustwake",
+        "buttons": [
+          "Begin recovery",
+          "Settings",
+          "Sound on"
+        ],
+        "hasCanvas": true,
+        "rootChildren": 1,
+        "freshYardVisible": true,
+        "newGameLabel": "New game…"
+      },
+      "bootShot": "docs/evidence/lifecycle146/1920x1080-boot.png",
+      "pageErrors": [],
+      "consoleErrors": []
+    }
+  },
+  "checks": [
+    {
+      "scenario": "runtime",
+      "cell": "390x844",
+      "name": "real app booted (root mounted)",
+      "ok": true,
+      "detail": {
+        "rootChildren": 1,
+        "title": "Rustwake"
+      }
+    },
+    {
+      "scenario": "runtime",
+      "cell": "390x844",
+      "name": "home screen offers New game (fresh session)",
+      "ok": false,
+      "detail": [
+        "Begin recovery",
+        "Settings",
+        "Sound on"
+      ]
+    },
+    {
+      "scenario": "runtime",
+      "cell": "390x844",
+      "name": "fresh-yard indicator visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "writer role",
+      "ok": true,
+      "detail": "writer"
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "preview rejection null",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "preview fee == moveFeeOf(generator)",
+      "ok": true,
+      "detail": {
+        "got": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "expected": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "preview names affected job 1",
+      "ok": true,
+      "detail": [
+        1
+      ]
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "preview is pure (both fingerprints)",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "commit ok + recalled job 1",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "recalled": [
+          1
+        ]
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "affected cargo job cancelled",
+      "ok": true,
+      "detail": "cancelled"
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "building moved to target cell/rotation",
+      "ok": true,
+      "detail": {
+        "cell": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation": 90
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "completedTick preserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "logistics approach retargeted",
+      "ok": true,
+      "detail": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "cargo conserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "world material+credits conserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "SAVE_KEY untouched (session-only)",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "390x844",
+      "name": "exportSave untouched",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "390x844",
+      "name": "blocker sequence",
+      "ok": true,
+      "detail": [
+        "cargo-not-drained",
+        "inventory-present",
+        "unknown-recovery",
+        "recovery-full"
+      ]
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "390x844",
+      "name": "every refusal atomic (both fingerprints)",
+      "ok": true,
+      "detail": [
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "390x844",
+      "name": "recovery-full reports zero room",
+      "ok": true,
+      "detail": {
+        "buildingId": 3,
+        "room": 0
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "preview clear + refund == dismantleRefundOf(warehouse)",
+      "ok": true,
+      "detail": {
+        "blocker": null,
+        "refund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "preview pure",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "commit ok",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "building removed from both ledgers",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "full store: refund overflows visibly (total == refund)",
+      "ok": true,
+      "detail": {
+        "overflow": 30,
+        "refund": 30
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "overflow tagged to source building 2",
+      "ok": true,
+      "detail": [
+        2,
+        2
+      ]
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "overflow stamped formulaVersion 1 (E09)",
+      "ok": true,
+      "detail": [
+        1,
+        1
+      ]
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "cargo conserved across recovery transfer",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "world conserved incl. overflow",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "390x844",
+      "name": "save/export untouched",
+      "ok": true
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "overflow created by dismantle",
+      "ok": true,
+      "detail": 22
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "no room -> preview recovers 0",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "free room -> preview predicts full recovery",
+      "ok": true,
+      "detail": {
+        "predicted": 22,
+        "overflow": 22
+      }
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "recall recovers exactly the overflow once",
+      "ok": true,
+      "detail": {
+        "recovered": 22,
+        "ledgerEmpty": true
+      }
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "no non-terminal jobs remain",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "second recall recovers 0 (no duplication)",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "world conserved after recall",
+      "ok": true
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "390x844",
+      "name": "cargo ledger untouched by overflow recall",
+      "ok": true
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "390x844",
+      "name": "writer/reader roles",
+      "ok": true,
+      "detail": {
+        "writer": "writer",
+        "reader": "reader"
+      }
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "390x844",
+      "name": "reader refused move/dismantle/recall (read-only)",
+      "ok": true,
+      "detail": {
+        "move": "read-only",
+        "dismantle": "read-only",
+        "recall": "read-only"
+      }
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "390x844",
+      "name": "reader previews are pure reads (no throw)",
+      "ok": true
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "390x844",
+      "name": "writer yard untouched by reader",
+      "ok": true,
+      "detail": {
+        "jobIntact": true,
+        "buildings": 2
+      }
+    },
+    {
+      "scenario": "session-only",
+      "cell": "390x844",
+      "name": "fresh tab inherits no yard/overflow/cargo",
+      "ok": true,
+      "detail": {
+        "freshBuildings": 0,
+        "freshOverflow": 0,
+        "freshJobs": 0
+      }
+    },
+    {
+      "scenario": "world-atomicity",
+      "cell": "390x844",
+      "name": "same-position move refused + fingerprint identical",
+      "ok": true,
+      "detail": {
+        "samePosReason": "same-position",
+        "samePosAtomic": true,
+        "badCellReason": "outside-land",
+        "badCellAtomic": true
+      }
+    },
+    {
+      "scenario": "world-atomicity",
+      "cell": "390x844",
+      "name": "out-of-bounds move refused + fingerprint identical",
+      "ok": true,
+      "detail": {
+        "reason": "outside-land",
+        "atomic": true
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "390x844",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "runtime",
+      "cell": "1920x1080",
+      "name": "real app booted (root mounted)",
+      "ok": true,
+      "detail": {
+        "rootChildren": 1,
+        "title": "Rustwake"
+      }
+    },
+    {
+      "scenario": "runtime",
+      "cell": "1920x1080",
+      "name": "home screen offers New game (fresh session)",
+      "ok": false,
+      "detail": [
+        "Begin recovery",
+        "Settings",
+        "Sound on"
+      ]
+    },
+    {
+      "scenario": "runtime",
+      "cell": "1920x1080",
+      "name": "fresh-yard indicator visible",
+      "ok": true,
+      "detail": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "writer role",
+      "ok": true,
+      "detail": "writer"
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "preview rejection null",
+      "ok": true,
+      "detail": null
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "preview fee == moveFeeOf(generator)",
+      "ok": true,
+      "detail": {
+        "got": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ],
+        "expected": [
+          {
+            "resource": "scrap",
+            "qty": 2
+          },
+          {
+            "resource": "steel",
+            "qty": 1
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "preview names affected job 1",
+      "ok": true,
+      "detail": [
+        1
+      ]
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "preview is pure (both fingerprints)",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "commit ok + recalled job 1",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "recalled": [
+          1
+        ]
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "affected cargo job cancelled",
+      "ok": true,
+      "detail": "cancelled"
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "building moved to target cell/rotation",
+      "ok": true,
+      "detail": {
+        "cell": {
+          "x": 0,
+          "y": 0
+        },
+        "rotation": 90
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "completedTick preserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "logistics approach retargeted",
+      "ok": true,
+      "detail": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "cargo conserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "world material+credits conserved",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "SAVE_KEY untouched (session-only)",
+      "ok": true
+    },
+    {
+      "scenario": "move",
+      "cell": "1920x1080",
+      "name": "exportSave untouched",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "1920x1080",
+      "name": "blocker sequence",
+      "ok": true,
+      "detail": [
+        "cargo-not-drained",
+        "inventory-present",
+        "unknown-recovery",
+        "recovery-full"
+      ]
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "1920x1080",
+      "name": "every refusal atomic (both fingerprints)",
+      "ok": true,
+      "detail": [
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "scenario": "dismantle-block",
+      "cell": "1920x1080",
+      "name": "recovery-full reports zero room",
+      "ok": true,
+      "detail": {
+        "buildingId": 3,
+        "room": 0
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "preview clear + refund == dismantleRefundOf(warehouse)",
+      "ok": true,
+      "detail": {
+        "blocker": null,
+        "refund": [
+          {
+            "resource": "scrap",
+            "qty": 24
+          },
+          {
+            "resource": "steel",
+            "qty": 6
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "preview pure",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "commit ok",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "building removed from both ledgers",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "full store: refund overflows visibly (total == refund)",
+      "ok": true,
+      "detail": {
+        "overflow": 30,
+        "refund": 30
+      }
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "overflow tagged to source building 2",
+      "ok": true,
+      "detail": [
+        2,
+        2
+      ]
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "overflow stamped formulaVersion 1 (E09)",
+      "ok": true,
+      "detail": [
+        1,
+        1
+      ]
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "cargo conserved across recovery transfer",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "world conserved incl. overflow",
+      "ok": true
+    },
+    {
+      "scenario": "dismantle-overflow",
+      "cell": "1920x1080",
+      "name": "save/export untouched",
+      "ok": true
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "overflow created by dismantle",
+      "ok": true,
+      "detail": 22
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "no room -> preview recovers 0",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "free room -> preview predicts full recovery",
+      "ok": true,
+      "detail": {
+        "predicted": 22,
+        "overflow": 22
+      }
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "recall recovers exactly the overflow once",
+      "ok": true,
+      "detail": {
+        "recovered": 22,
+        "ledgerEmpty": true
+      }
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "no non-terminal jobs remain",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "second recall recovers 0 (no duplication)",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "world conserved after recall",
+      "ok": true
+    },
+    {
+      "scenario": "recall-overflow",
+      "cell": "1920x1080",
+      "name": "cargo ledger untouched by overflow recall",
+      "ok": true
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "1920x1080",
+      "name": "writer/reader roles",
+      "ok": true,
+      "detail": {
+        "writer": "writer",
+        "reader": "reader"
+      }
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "1920x1080",
+      "name": "reader refused move/dismantle/recall (read-only)",
+      "ok": true,
+      "detail": {
+        "move": "read-only",
+        "dismantle": "read-only",
+        "recall": "read-only"
+      }
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "1920x1080",
+      "name": "reader previews are pure reads (no throw)",
+      "ok": true
+    },
+    {
+      "scenario": "writer-gate",
+      "cell": "1920x1080",
+      "name": "writer yard untouched by reader",
+      "ok": true,
+      "detail": {
+        "jobIntact": true,
+        "buildings": 2
+      }
+    },
+    {
+      "scenario": "session-only",
+      "cell": "1920x1080",
+      "name": "fresh tab inherits no yard/overflow/cargo",
+      "ok": true,
+      "detail": {
+        "freshBuildings": 0,
+        "freshOverflow": 0,
+        "freshJobs": 0
+      }
+    },
+    {
+      "scenario": "world-atomicity",
+      "cell": "1920x1080",
+      "name": "same-position move refused + fingerprint identical",
+      "ok": true,
+      "detail": {
+        "samePosReason": "same-position",
+        "samePosAtomic": true,
+        "badCellReason": "outside-land",
+        "badCellAtomic": true
+      }
+    },
+    {
+      "scenario": "world-atomicity",
+      "cell": "1920x1080",
+      "name": "out-of-bounds move refused + fingerprint identical",
+      "ok": true,
+      "detail": {
+        "reason": "outside-land",
+        "atomic": true
+      }
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "1920x1080",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "summary": {
+    "total": 94,
+    "passed": 92,
+    "failed": 2
+  }
+}

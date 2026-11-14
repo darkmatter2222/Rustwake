@@ -60,6 +60,7 @@ import {
 // Jobs/reservations never touch SAVE_KEY, migration or recovery (#148 owns the
 // cutover); the ledger is rebuilt per session and advanced beside tickRoadCargo.
 import {
+  buildingUnits as logisticsBuildingUnits,
   cancelJob as cancelLogisticsJobFn,
   createJob as createLogisticsJobFn,
   createLogistics,
@@ -71,6 +72,8 @@ import {
   type CargoJob,
   type Carrier,
   type CreateJobResult,
+  type JobPhase,
+  type JobStatus,
   type LogisticsBuilding,
   type LogisticsJobRequest,
   type LogisticsState,
@@ -89,6 +92,14 @@ import { advanceWorld } from "../game/world/engine";
 import { isWorldAssetId, type WorldAssetId } from "../game/world/kit";
 import {
   applyWorldCommand,
+  previewDismantle,
+  previewMove,
+  previewRecall,
+  validateDismantle,
+  validateMove,
+  type DismantlePreview,
+  type MovePreview,
+  type RecallPreview,
   type WorldCommandResult,
   type WorldRejection,
 } from "../game/world/transactions";
@@ -342,6 +353,102 @@ export interface TrafficApi {
   }): boolean;
 }
 
+/**
+ * T19 (#146): additive lifecycle capability — safe MOVE, DISMANTLE and CARGO
+ * RECALL — same session-only precedent as the road/logistics/build slices.
+ * Reads/previews are pure (any role); every commit is writer-gated exactly like
+ * `dispatch` and never calls `persist`. The world ledger (buildWorld) and the
+ * logistics ledger are mutated together only after ALL validation is pure and
+ * complete, so a refusal changes neither. Cargo is conserved across recall:
+ * in-transit goods return to their source building, dismantle inventory moves
+ * to a declared recovery building, and overflow construction material returns
+ * to free stock via `world.recall`. Nothing here touches SAVE_KEY/migration/
+ * recovery (#148 owns the cutover).
+ *
+ * Convention: a logistics building id matches the buildWorld building id, and
+ * its approach cell is the building's footprint-origin cell. Session fixtures
+ * establish this; the #148 cutover will wire exact socket approaches.
+ */
+export interface LifecycleAffectedJob {
+  readonly jobId: number;
+  readonly sourceBuildingId: number;
+  readonly destBuildingId: number;
+  readonly cargoType: ResourceId;
+  readonly status: JobStatus;
+  readonly phase: JobPhase;
+  readonly atSource: number;
+  readonly inTransit: number;
+}
+
+/** Typed, recoverable blockers for lifecycle commits (matched on `reason`). */
+export type LifecycleBlocker =
+  | { reason: "read-only" }
+  | { reason: "cargo-not-drained"; buildingId: number; jobIds: number[] }
+  | { reason: "inventory-present"; buildingId: number; units: number }
+  | { reason: "unknown-recovery"; buildingId: number }
+  | { reason: "recovery-full"; buildingId: number; need: number; have: number };
+
+export interface MoveBuildingPreview {
+  /** Pure world preview: fee + placement-law rejection. */
+  readonly world: MovePreview;
+  /** Non-terminal jobs that a move would recall first. */
+  readonly affectedJobs: LifecycleAffectedJob[];
+}
+
+export interface DismantleBuildingPreview {
+  /** Pure world preview: refund, lost share, overflow split. */
+  readonly world: DismantlePreview;
+  readonly affectedJobs: LifecycleAffectedJob[];
+  /** True when every job touching the building is terminal (safe to dismantle). */
+  readonly cargoDrained: boolean;
+  /** Free logistics inventory still held by the building. */
+  readonly inventoryUnits: number;
+  /** Recovery room when a recovery building is declared, else null. */
+  readonly recovery: { readonly buildingId: number; readonly room: number } | null;
+  /** The exact blocker a commit would hit right now, or null when clear. */
+  readonly blocker: LifecycleBlocker | null;
+}
+
+export interface RecallCargoPreview {
+  readonly affectedJobs: LifecycleAffectedJob[];
+  /** Pure world overflow-recovery preview. */
+  readonly overflow: RecallPreview;
+}
+
+export type LifecycleResult =
+  | { ok: true; revision: number; recalledJobIds: number[] }
+  | { ok: false; rejection: WorldRejection | LifecycleBlocker };
+
+export type RecallCargoResult =
+  | { ok: true; revision: number; recalledJobIds: number[]; recoveredOverflowUnits: number }
+  | { ok: false; rejection: LifecycleBlocker };
+
+export interface LifecycleApi {
+  /** Pure preview (any role): move fee, validity and the jobs a move recalls. */
+  previewMoveBuilding(buildingId: number, cell: Cell, rotation: number): MoveBuildingPreview;
+  /** Pure preview (any role): refund/lost/overflow + cargo-drain/recovery blockers. */
+  previewDismantleBuilding(buildingId: number, recoveryBuildingId?: number): DismantleBuildingPreview;
+  /** Pure preview (any role): jobs a recall cancels + overflow units it recovers. */
+  previewRecallCargo(buildingId?: number): RecallCargoPreview;
+  /**
+   * Writer-only. Recalls affected cargo, moves the building (preserving id and
+   * completedTick), then re-registers its logistics approach cell. Idempotent by
+   * command id; a refusal changes nothing.
+   */
+  moveBuilding(buildingId: number, cell: Cell, rotation: number): LifecycleResult;
+  /**
+   * Writer-only. Requires cargo drained (all touching jobs terminal) and any
+   * inventory transferred to a declared recovery building with room; then
+   * refunds build materials and removes the building from both ledgers.
+   */
+  dismantleBuilding(buildingId: number, recoveryBuildingId?: number): LifecycleResult;
+  /**
+   * Writer-only. Cancels non-terminal jobs touching the building (or all), and
+   * recovers overflow construction material into free stock (`world.recall`).
+   */
+  recallCargo(buildingId?: number): RecallCargoResult;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
 /** T12 (#139): fixed seed for the session-only world grid (deterministic yard). */
 const ROAD_SESSION_SEED = 139;
@@ -376,7 +483,7 @@ export interface StoreOptions {
  */
 export function createStore(
   options: StoreOptions = {},
-): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi & BuildPlacementApi & TrafficApi {
+): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi & BuildPlacementApi & TrafficApi & LifecycleApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -466,6 +573,8 @@ export function createStore(
     placedCount: 0,
   };
   let buildCommandSeq = 0;
+  // T19 (#146): idempotent command ids for lifecycle world transactions.
+  let lifecycleCommandSeq = 0;
   const buildUnlockContext = (): BuildUnlockContext => ({
     research: state.research ?? {},
     milestoneTokens: buildWorld.milestoneTokens,
@@ -653,6 +762,63 @@ export function createStore(
       notify();
     }
     frame = requestAnimationFrame(tickLoop);
+  };
+
+  // T19 (#146): lifecycle helpers. Pure reads feed the previews; the commit
+  // methods validate EVERYTHING (world law + cargo drain + recovery room)
+  // before the first mutation, so a refusal leaves both ledgers byte-identical.
+  const isTerminalJob = (job: CargoJob): boolean => job.status === "complete" || job.status === "cancelled";
+  const affectedJobs = (buildingId?: number): CargoJob[] =>
+    logistics.jobs.filter(
+      (job) =>
+        !isTerminalJob(job) &&
+        (buildingId === undefined || job.sourceBuildingId === buildingId || job.destBuildingId === buildingId),
+    );
+  const toAffectedJob = (job: CargoJob): LifecycleAffectedJob => ({
+    jobId: job.id,
+    sourceBuildingId: job.sourceBuildingId,
+    destBuildingId: job.destBuildingId,
+    cargoType: job.cargoType,
+    status: job.status,
+    phase: job.phase,
+    atSource: job.atSource,
+    inTransit: job.inTransit,
+  });
+  /** Cancel each non-terminal job; cargo is conserved by cancelJob itself. */
+  const recallJobs = (jobs: CargoJob[]): number[] => {
+    const ids: number[] = [];
+    for (const job of jobs) {
+      cancelLogisticsJobFn(logistics, roadNet, job.id);
+      ids.push(job.id);
+    }
+    return ids;
+  };
+  /** The exact dismantle blocker right now; shared by preview and commit. */
+  const dismantleBlocker = (buildingId: number, recoveryBuildingId?: number): LifecycleBlocker | null => {
+    const jobs = affectedJobs(buildingId);
+    if (jobs.length > 0) return { reason: "cargo-not-drained", buildingId, jobIds: jobs.map((j) => j.id) };
+    const units = logisticsBuildingUnits(logistics, buildingId);
+    if (units > 0) {
+      if (recoveryBuildingId === undefined) return { reason: "inventory-present", buildingId, units };
+      if (recoveryBuildingId === buildingId || logistics.buildings[recoveryBuildingId] === undefined) {
+        return { reason: "unknown-recovery", buildingId: recoveryBuildingId };
+      }
+      const room = logistics.buildings[recoveryBuildingId].capacity - logisticsBuildingUnits(logistics, recoveryBuildingId);
+      if (room < units) return { reason: "recovery-full", buildingId: recoveryBuildingId, need: units, have: room };
+    }
+    return null;
+  };
+  /** Move all free inventory between buildings (deduct+add in one step). */
+  const transferInventory = (from: number, to: number): void => {
+    const stock = logistics.stocks[from];
+    if (stock === undefined) return;
+    const dest = logistics.stocks[to] ?? (logistics.stocks[to] = {});
+    for (const key of Object.keys(stock) as ResourceId[]) {
+      const qty = stock[key] ?? 0;
+      if (qty <= 0) continue;
+      dest[key] = (dest[key] ?? 0) + qty;
+      stock[key] = 0;
+    }
   };
 
   return {
@@ -1064,6 +1230,105 @@ export function createStore(
       const ok = setRetryPolicy(traffic, policy);
       if (ok) notify();
       return ok;
+    },
+    // T19 (#146): safe move / dismantle / cargo recall. Session-only slice over
+    // the world build yard + logistics ledger (#148 owns persistence); commits
+    // are writer-gated and never call persist. Previews are pure reads for any
+    // role. Every commit validates world law AND cargo/recovery state before
+    // the first mutation, so a refusal leaves both ledgers byte-identical.
+    previewMoveBuilding(buildingId: number, cell: Cell, rotation: number): MoveBuildingPreview {
+      return {
+        world: previewMove(buildWorld, buildingId, cell, rotation),
+        affectedJobs: affectedJobs(buildingId).map(toAffectedJob),
+      };
+    },
+    previewDismantleBuilding(buildingId: number, recoveryBuildingId?: number): DismantleBuildingPreview {
+      const jobs = affectedJobs(buildingId);
+      const recoveryBuilding = recoveryBuildingId !== undefined ? logistics.buildings[recoveryBuildingId] : undefined;
+      const recovery =
+        recoveryBuilding !== undefined
+          ? { buildingId: recoveryBuildingId as number, room: recoveryBuilding.capacity - logisticsBuildingUnits(logistics, recoveryBuildingId as number) }
+          : null;
+      return {
+        world: previewDismantle(buildWorld, buildingId),
+        affectedJobs: jobs.map(toAffectedJob),
+        cargoDrained: jobs.length === 0,
+        inventoryUnits: logisticsBuildingUnits(logistics, buildingId),
+        recovery,
+        blocker: dismantleBlocker(buildingId, recoveryBuildingId),
+      };
+    },
+    previewRecallCargo(buildingId?: number): RecallCargoPreview {
+      return {
+        affectedJobs: affectedJobs(buildingId).map(toAffectedJob),
+        overflow: previewRecall(buildWorld, buildingId),
+      };
+    },
+    moveBuilding(buildingId: number, cell: Cell, rotation: number): LifecycleResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, rejection: { reason: "read-only" } };
+      const rejection = validateMove(buildWorld, buildingId, cell, rotation);
+      if (rejection !== null) return { ok: false, rejection };
+      // Validation complete. Recall affected cargo first (cancelJob conserves
+      // it), then apply the atomic world move, then retarget the approach cell.
+      const recalledJobIds = recallJobs(affectedJobs(buildingId));
+      lifecycleCommandSeq += 1;
+      const result = applyWorldCommand(buildWorld, {
+        id: `lifecycle-146-${lifecycleCommandSeq}`,
+        type: "world.move",
+        buildingId,
+        cell,
+        rotation,
+      });
+      if (!result.ok) return { ok: false, rejection: result.rejection };
+      const lb = logistics.buildings[buildingId];
+      if (lb !== undefined) {
+        registerLogisticsBuildingFn(logistics, { id: buildingId, cell: { x: cell.x, y: cell.y }, capacity: lb.capacity });
+      }
+      notify();
+      return { ok: true, revision: result.revision, recalledJobIds };
+    },
+    dismantleBuilding(buildingId: number, recoveryBuildingId?: number): LifecycleResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, rejection: { reason: "read-only" } };
+      const worldRejection = validateDismantle(buildWorld, buildingId);
+      if (worldRejection !== null) return { ok: false, rejection: worldRejection };
+      const blocker = dismantleBlocker(buildingId, recoveryBuildingId);
+      if (blocker !== null) return { ok: false, rejection: blocker };
+      // Validation complete. Move free inventory to recovery (deduct+add), then
+      // settle the atomic world dismantle (refund + overflow, exactly once).
+      if (recoveryBuildingId !== undefined && logisticsBuildingUnits(logistics, buildingId) > 0) {
+        transferInventory(buildingId, recoveryBuildingId);
+      }
+      lifecycleCommandSeq += 1;
+      const result = applyWorldCommand(buildWorld, {
+        id: `lifecycle-146-${lifecycleCommandSeq}`,
+        type: "world.dismantle",
+        buildingId,
+      });
+      if (!result.ok) return { ok: false, rejection: result.rejection };
+      // logistics.ts (read-only) exposes no unregister API; drop the now-empty
+      // registry entry so no future job can target a dismantled building.
+      delete logistics.buildings[buildingId];
+      delete logistics.stocks[buildingId];
+      notify();
+      return { ok: true, revision: result.revision, recalledJobIds: [] };
+    },
+    recallCargo(buildingId?: number): RecallCargoResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, rejection: { reason: "read-only" } };
+      const recoveredOverflowUnits = previewRecall(buildWorld, buildingId).recoveredUnits;
+      const recalledJobIds = recallJobs(affectedJobs(buildingId));
+      lifecycleCommandSeq += 1;
+      const result = applyWorldCommand(buildWorld, {
+        id: `lifecycle-146-${lifecycleCommandSeq}`,
+        type: "world.recall",
+        buildingId,
+      });
+      // world.recall has no failure mode (drains overflow to free stock).
+      const revision = result.ok ? result.revision : buildWorld.revision;
+      notify();
+      return { ok: true, revision, recalledJobIds, recoveredOverflowUnits };
     },
   };
 }

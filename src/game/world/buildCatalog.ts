@@ -205,6 +205,13 @@ export function labelForBuildReject(rejection: WorldRejection): string {
       return "Expansion must touch owned land.";
     case "milestone-locked":
       return "Expansion requires a milestone token.";
+    // Lifecycle reasons (issue #146). Labels only — no cost numbers here.
+    case "building-not-found":
+      return "Building no longer exists.";
+    case "under-construction":
+      return "Still under construction — cancel the site to recover materials.";
+    case "same-position":
+      return "Already at that position and rotation — aim the move elsewhere.";
   }
 }
 

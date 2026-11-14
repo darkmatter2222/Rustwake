@@ -114,6 +114,39 @@ export interface MaterialReservation {
  */
 export type ClearanceMode = "blockout" | "production";
 
+/**
+ * Lifecycle formula version (issue #146). Move fees, dismantle refunds and
+ * overflow entries are stamped with it so a later content bump (#148) can
+ * migrate or re-price old purchases without double-paying refunds (E09:
+ * "upgrade/refund formulas are versioned").
+ */
+export const LIFECYCLE_FORMULA_VERSION = 1;
+
+/** Provenance of one overflow ledger entry; recovery never erases the source. */
+export type OverflowSource = {
+  readonly kind: "dismantle";
+  readonly buildingId: number;
+  readonly asset: string;
+};
+
+/**
+ * Visible overflow cargo (GAME_SYSTEMS: "Overflow is a non-spend-duplicating
+ * ledger with visible recovery, not deleted material"). Units here are real
+ * cargo held outside free stock: they count in conservation
+ * (stock + reserved + committed + overflow = initial stock) and can only leave
+ * via `world.recall` into free stock room. Never spendable while overflowed.
+ */
+export interface OverflowEntry {
+  readonly id: number;
+  readonly resource: ResourceId;
+  /** Mutable: a partial recall drains the entry in place, never duplicates. */
+  qty: number;
+  readonly source: OverflowSource;
+  /** World tick the overflow was created. */
+  readonly tick: number;
+  readonly formulaVersion: number;
+}
+
 export interface WorldState {
   schemaVersion: number;
   contentVersion: number;
@@ -135,7 +168,8 @@ export interface WorldState {
   /**
    * Material permanently committed: embedded in completed buildings plus the
    * non-refunded share of cancelled work. The closed-system conservation law
-   * is stock + reserved + committed = initial stock, per resource.
+   * is stock + reserved + committed (+ overflow, issue #146) = initial stock,
+   * per resource.
    */
   committed: Partial<Record<ResourceId, number>>;
   committedCredits: number;
@@ -148,6 +182,17 @@ export interface WorldState {
   nextSiteId: number;
   nextReservationId: number;
   seenCommands: Record<string, number>;
+  /**
+   * Issue #146 lifecycle seam, all optional and lazily initialized by the
+   * lifecycle transactions. `createWorld` (terrain.ts) does not set them and
+   * JSON.stringify omits undefined, so worlds untouched by lifecycle commands
+   * keep byte-identical fingerprints (run/branch optional-field precedent).
+   * Undefined capacity = unlimited stock (legacy behavior); overflow entries
+   * only exist once a capacity is declared and a refund cannot fit.
+   */
+  storageCapacity?: number;
+  overflow?: OverflowEntry[];
+  nextOverflowId?: number;
 }
 
 export { CONTENT_VERSION };
