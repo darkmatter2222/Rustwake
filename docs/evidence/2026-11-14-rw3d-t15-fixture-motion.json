@@ -1,0 +1,3296 @@
+{
+  "role": "developer",
+  "issue": 142,
+  "acceptance": "V04 V06",
+  "generatedBy": "prototypes/rw3d-scale-fixture/capture.mjs",
+  "meta": {
+    "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "three": "0.187.0",
+    "threeRevision": "187",
+    "canvas": {
+      "w": 1600,
+      "h": 900
+    },
+    "port": 4312,
+    "kitSha256": "e27cd00f52644454785f4f5b39fe5ec82f5729b14adf4684b8a82c1c070f42c5",
+    "tolerancePx": 2,
+    "hoverUnits": 1,
+    "assetOrder": [
+      "warehouse",
+      "depot",
+      "sorter",
+      "furnace",
+      "generator",
+      "crane",
+      "truck",
+      "forklift",
+      "drone",
+      "worker",
+      "turret",
+      "wall_gate",
+      "wreckSections"
+    ],
+    "poses": [
+      {
+        "label": "a",
+        "spec": [
+          {
+            "asset": "truck",
+            "clip": "door_open-1",
+            "t": 0.8
+          },
+          {
+            "asset": "forklift",
+            "clip": "lift_pallet",
+            "t": 1.4
+          },
+          {
+            "asset": "crane",
+            "clip": "hoist_place",
+            "t": 1.8
+          },
+          {
+            "asset": "drone",
+            "clip": "cargo_attach",
+            "t": 1
+          },
+          {
+            "asset": "worker",
+            "clip": "carry_arm1",
+            "t": 0.5
+          }
+        ]
+      },
+      {
+        "label": "b",
+        "spec": [
+          {
+            "asset": "truck",
+            "clip": "tailgate_open",
+            "t": 0.9
+          },
+          {
+            "asset": "forklift",
+            "clip": "fork_spread_R",
+            "t": 0.6
+          },
+          {
+            "asset": "crane",
+            "clip": "slew_rotate",
+            "t": 2.5
+          },
+          {
+            "asset": "drone",
+            "clip": "rotor1_spin",
+            "t": 0.075
+          },
+          {
+            "asset": "worker",
+            "clip": "walk_leg",
+            "t": 0.35
+          }
+        ]
+      }
+    ],
+    "note": "glTF channel semantics: REPLACE target node local TRS; LINEAR rotation = slerp. Isolation: target moves >1e-6 (pos or rad) at mid; at end, displaced clips stay moved and return clips (loop rolls/spins, slew, suspension, load_pallet) match rest <=1e-9; every non-subtree pivot <=1e-9 at both samples. Posed frames: silhouette bounds/aspect vs projected part corners, TOL_PX=2, mask threshold <250. Non-vision authoring: capable visual inspection PENDING (G1 #151)."
+  },
+  "inventory": [
+    {
+      "id": "truck",
+      "setPass": true,
+      "clips": [
+        {
+          "name": "wheel_-1_0_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_0_roll",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_-1_0_roll",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_1_roll",
+            "target": "wheel_-1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_-1_1_roll",
+            "target": "wheel_-1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_-1_2_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_2_roll",
+            "target": "wheel_-1_2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_-1_2_roll",
+            "target": "wheel_-1_2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_0_roll",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_1_0_roll",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_1_roll",
+            "target": "wheel_1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_1_1_roll",
+            "target": "wheel_1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_1_2_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_2_roll",
+            "target": "wheel_1_2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_1_2_roll",
+            "target": "wheel_1_2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "door_open-1",
+          "pass": true,
+          "expected": {
+            "name": "door_open-1",
+            "target": "door-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          },
+          "actual": {
+            "name": "door_open-1",
+            "target": "door-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          }
+        },
+        {
+          "name": "door_open1",
+          "pass": true,
+          "expected": {
+            "name": "door_open1",
+            "target": "door1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          },
+          "actual": {
+            "name": "door_open1",
+            "target": "door1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          }
+        },
+        {
+          "name": "tailgate_open",
+          "pass": true,
+          "expected": {
+            "name": "tailgate_open",
+            "target": "tailgate",
+            "path": "rotation",
+            "times": [
+              0,
+              0.9
+            ],
+            "loop": false,
+            "duration": 0.9
+          },
+          "actual": {
+            "name": "tailgate_open",
+            "target": "tailgate",
+            "path": "rotation",
+            "times": [
+              0,
+              0.9
+            ],
+            "loop": false,
+            "duration": 0.9
+          }
+        },
+        {
+          "name": "suspension_bounce",
+          "pass": true,
+          "expected": {
+            "name": "suspension_bounce",
+            "target": "body",
+            "path": "translation",
+            "times": [
+              0,
+              0.4,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          },
+          "actual": {
+            "name": "suspension_bounce",
+            "target": "body",
+            "path": "translation",
+            "times": [
+              0,
+              0.4,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          }
+        },
+        {
+          "name": "wheel_-1_0_steer",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_0_steer",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          },
+          "actual": {
+            "name": "wheel_-1_0_steer",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          }
+        },
+        {
+          "name": "wheel_1_0_steer",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_0_steer",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          },
+          "actual": {
+            "name": "wheel_1_0_steer",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          }
+        },
+        {
+          "name": "load_pallet",
+          "pass": true,
+          "expected": {
+            "name": "load_pallet",
+            "target": "cargo",
+            "path": "translation",
+            "times": [
+              0,
+              1.2
+            ],
+            "loop": false,
+            "duration": 1.2
+          },
+          "actual": {
+            "name": "load_pallet",
+            "target": "cargo",
+            "path": "translation",
+            "times": [
+              0,
+              1.2
+            ],
+            "loop": false,
+            "duration": 1.2
+          }
+        }
+      ]
+    },
+    {
+      "id": "forklift",
+      "setPass": true,
+      "clips": [
+        {
+          "name": "lift_pallet",
+          "pass": true,
+          "expected": {
+            "name": "lift_pallet",
+            "target": "lift",
+            "path": "translation",
+            "times": [
+              0,
+              1.4
+            ],
+            "loop": false,
+            "duration": 1.4
+          },
+          "actual": {
+            "name": "lift_pallet",
+            "target": "lift",
+            "path": "translation",
+            "times": [
+              0,
+              1.4
+            ],
+            "loop": false,
+            "duration": 1.4
+          }
+        },
+        {
+          "name": "wheel_-1_0_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_0_roll",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_-1_0_roll",
+            "target": "wheel_-1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_0_roll",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_1_0_roll",
+            "target": "wheel_1_0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_-1_1_roll",
+            "target": "wheel_-1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_-1_1_roll",
+            "target": "wheel_-1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "pass": true,
+          "expected": {
+            "name": "wheel_1_1_roll",
+            "target": "wheel_1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          },
+          "actual": {
+            "name": "wheel_1_1_roll",
+            "target": "wheel_1_1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5,
+              1
+            ],
+            "loop": true,
+            "duration": 1
+          }
+        },
+        {
+          "name": "mast_tilt",
+          "pass": true,
+          "expected": {
+            "name": "mast_tilt",
+            "target": "tilt",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          },
+          "actual": {
+            "name": "mast_tilt",
+            "target": "tilt",
+            "path": "rotation",
+            "times": [
+              0,
+              0.8
+            ],
+            "loop": false,
+            "duration": 0.8
+          }
+        },
+        {
+          "name": "fork_spread_L",
+          "pass": true,
+          "expected": {
+            "name": "fork_spread_L",
+            "target": "forkL",
+            "path": "translation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          },
+          "actual": {
+            "name": "fork_spread_L",
+            "target": "forkL",
+            "path": "translation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          }
+        },
+        {
+          "name": "fork_spread_R",
+          "pass": true,
+          "expected": {
+            "name": "fork_spread_R",
+            "target": "forkR",
+            "path": "translation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          },
+          "actual": {
+            "name": "fork_spread_R",
+            "target": "forkR",
+            "path": "translation",
+            "times": [
+              0,
+              0.6
+            ],
+            "loop": false,
+            "duration": 0.6
+          }
+        }
+      ]
+    },
+    {
+      "id": "crane",
+      "setPass": true,
+      "clips": [
+        {
+          "name": "hoist_lift",
+          "pass": true,
+          "expected": {
+            "name": "hoist_lift",
+            "target": "hoist",
+            "path": "translation",
+            "times": [
+              0,
+              1.8
+            ],
+            "loop": false,
+            "duration": 1.8
+          },
+          "actual": {
+            "name": "hoist_lift",
+            "target": "hoist",
+            "path": "translation",
+            "times": [
+              0,
+              1.8
+            ],
+            "loop": false,
+            "duration": 1.8
+          }
+        },
+        {
+          "name": "slew_rotate",
+          "pass": true,
+          "expected": {
+            "name": "slew_rotate",
+            "target": "slew",
+            "path": "rotation",
+            "times": [
+              0,
+              2,
+              3,
+              5
+            ],
+            "loop": false,
+            "duration": 5
+          },
+          "actual": {
+            "name": "slew_rotate",
+            "target": "slew",
+            "path": "rotation",
+            "times": [
+              0,
+              2,
+              3,
+              5
+            ],
+            "loop": false,
+            "duration": 5
+          }
+        },
+        {
+          "name": "hoist_place",
+          "pass": true,
+          "expected": {
+            "name": "hoist_place",
+            "target": "hoist",
+            "path": "translation",
+            "times": [
+              0,
+              1.8
+            ],
+            "loop": false,
+            "duration": 1.8
+          },
+          "actual": {
+            "name": "hoist_place",
+            "target": "hoist",
+            "path": "translation",
+            "times": [
+              0,
+              1.8
+            ],
+            "loop": false,
+            "duration": 1.8
+          }
+        },
+        {
+          "name": "grip_openL",
+          "pass": true,
+          "expected": {
+            "name": "grip_openL",
+            "target": "clawL",
+            "path": "translation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          },
+          "actual": {
+            "name": "grip_openL",
+            "target": "clawL",
+            "path": "translation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          }
+        },
+        {
+          "name": "grip_openR",
+          "pass": true,
+          "expected": {
+            "name": "grip_openR",
+            "target": "clawR",
+            "path": "translation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          },
+          "actual": {
+            "name": "grip_openR",
+            "target": "clawR",
+            "path": "translation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "drone",
+      "setPass": true,
+      "clips": [
+        {
+          "name": "rotor0_spin",
+          "pass": true,
+          "expected": {
+            "name": "rotor0_spin",
+            "target": "rotor0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          },
+          "actual": {
+            "name": "rotor0_spin",
+            "target": "rotor0",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          }
+        },
+        {
+          "name": "rotor1_spin",
+          "pass": true,
+          "expected": {
+            "name": "rotor1_spin",
+            "target": "rotor1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          },
+          "actual": {
+            "name": "rotor1_spin",
+            "target": "rotor1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          }
+        },
+        {
+          "name": "rotor2_spin",
+          "pass": true,
+          "expected": {
+            "name": "rotor2_spin",
+            "target": "rotor2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          },
+          "actual": {
+            "name": "rotor2_spin",
+            "target": "rotor2",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          }
+        },
+        {
+          "name": "rotor3_spin",
+          "pass": true,
+          "expected": {
+            "name": "rotor3_spin",
+            "target": "rotor3",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          },
+          "actual": {
+            "name": "rotor3_spin",
+            "target": "rotor3",
+            "path": "rotation",
+            "times": [
+              0,
+              0.15,
+              0.3
+            ],
+            "loop": true,
+            "duration": 0.3
+          }
+        },
+        {
+          "name": "cargo_attach",
+          "pass": true,
+          "expected": {
+            "name": "cargo_attach",
+            "target": "load",
+            "path": "translation",
+            "times": [
+              0,
+              1
+            ],
+            "loop": false,
+            "duration": 1
+          },
+          "actual": {
+            "name": "cargo_attach",
+            "target": "load",
+            "path": "translation",
+            "times": [
+              0,
+              1
+            ],
+            "loop": false,
+            "duration": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "setPass": true,
+      "clips": [
+        {
+          "name": "walk_leg",
+          "pass": true,
+          "expected": {
+            "name": "walk_leg",
+            "target": "leg1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          },
+          "actual": {
+            "name": "walk_leg",
+            "target": "leg1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          }
+        },
+        {
+          "name": "walk_leg-1",
+          "pass": true,
+          "expected": {
+            "name": "walk_leg-1",
+            "target": "leg-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          },
+          "actual": {
+            "name": "walk_leg-1",
+            "target": "leg-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          }
+        },
+        {
+          "name": "walk_arm1",
+          "pass": true,
+          "expected": {
+            "name": "walk_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          },
+          "actual": {
+            "name": "walk_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          }
+        },
+        {
+          "name": "walk_arm-1",
+          "pass": true,
+          "expected": {
+            "name": "walk_arm-1",
+            "target": "arm-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          },
+          "actual": {
+            "name": "walk_arm-1",
+            "target": "arm-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.35,
+              0.7
+            ],
+            "loop": true,
+            "duration": 0.7
+          }
+        },
+        {
+          "name": "carry_arm-1",
+          "pass": true,
+          "expected": {
+            "name": "carry_arm-1",
+            "target": "arm-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          },
+          "actual": {
+            "name": "carry_arm-1",
+            "target": "arm-1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          }
+        },
+        {
+          "name": "carry_arm1",
+          "pass": true,
+          "expected": {
+            "name": "carry_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          },
+          "actual": {
+            "name": "carry_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.5
+            ],
+            "loop": false,
+            "duration": 0.5
+          }
+        },
+        {
+          "name": "operate_arm1",
+          "pass": true,
+          "expected": {
+            "name": "operate_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.4,
+              0.8
+            ],
+            "loop": true,
+            "duration": 0.8
+          },
+          "actual": {
+            "name": "operate_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.4,
+              0.8
+            ],
+            "loop": true,
+            "duration": 0.8
+          }
+        },
+        {
+          "name": "weld_arm1",
+          "pass": true,
+          "expected": {
+            "name": "weld_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.3,
+              0.6
+            ],
+            "loop": true,
+            "duration": 0.6
+          },
+          "actual": {
+            "name": "weld_arm1",
+            "target": "arm1",
+            "path": "rotation",
+            "times": [
+              0,
+              0.3,
+              0.6
+            ],
+            "loop": true,
+            "duration": 0.6
+          }
+        }
+      ]
+    }
+  ],
+  "isolation": [
+    {
+      "id": "truck",
+      "clips": [
+        {
+          "name": "wheel_-1_0_roll",
+          "target": "wheel_-1_0",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "target": "wheel_-1_1",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_-1_2_roll",
+          "target": "wheel_-1_2",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "target": "wheel_1_0",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "target": "wheel_1_1",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_2_roll",
+          "target": "wheel_1_2",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "door_open-1",
+          "target": "door-1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.4,
+              "dPos": 0,
+              "dAng": 0.5235987755982978,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.8,
+              "dPos": 0,
+              "dAng": 1.0471975511965983,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "door_open1",
+          "target": "door1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.4,
+              "dPos": 0,
+              "dAng": 0.5235987755982978,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.8,
+              "dPos": 0,
+              "dAng": 1.0471975511965983,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "tailgate_open",
+          "target": "tailgate",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.45,
+              "dPos": 0,
+              "dAng": 0.7853981633974484,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.9,
+              "dPos": 0,
+              "dAng": 1.5707963267948966,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "suspension_bounce",
+          "target": "body",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.4,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.8,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_-1_0_steer",
+          "target": "wheel_-1_0",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0.2617993877991516,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.6,
+              "dPos": 0,
+              "dAng": 0.5235987755982978,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_0_steer",
+          "target": "wheel_1_0",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0.2617993877991516,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.6,
+              "dPos": 0,
+              "dAng": 0.5235987755982978,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "load_pallet",
+          "target": "cargo",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.6,
+              "dPos": 0.375,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1.2,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "forklift",
+      "clips": [
+        {
+          "name": "lift_pallet",
+          "target": "lift",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.7,
+              "dPos": 0.475,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1.4,
+              "dPos": 0.95,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_-1_0_roll",
+          "target": "wheel_-1_0",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "target": "wheel_1_0",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "target": "wheel_-1_1",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "target": "wheel_1_1",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "mast_tilt",
+          "target": "tilt",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.4,
+              "dPos": 0,
+              "dAng": 0.08726646259971484,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.8,
+              "dPos": 0,
+              "dAng": 0.17453292519943267,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "fork_spread_L",
+          "target": "forkL",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.3,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.6,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "fork_spread_R",
+          "target": "forkR",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.3,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.6,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "crane",
+      "clips": [
+        {
+          "name": "hoist_lift",
+          "target": "hoist",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.9,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1.8,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "slew_rotate",
+          "target": "slew",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 2.5,
+              "dPos": 0,
+              "dAng": 1.5707963267948966,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 5,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "hoist_place",
+          "target": "hoist",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.9,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1.8,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "grip_openL",
+          "target": "clawL",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.25,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.5,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "grip_openR",
+          "target": "clawR",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.25,
+              "dPos": 0.0625,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.5,
+              "dPos": 0.125,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "drone",
+      "clips": [
+        {
+          "name": "rotor0_spin",
+          "target": "rotor0",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.15,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "rotor1_spin",
+          "target": "rotor1",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.15,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "rotor2_spin",
+          "target": "rotor2",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.15,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "rotor3_spin",
+          "target": "rotor3",
+          "returns": true,
+          "samples": {
+            "mid": {
+              "t": 0.15,
+              "dPos": 0,
+              "dAng": 3.141592653589793,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 0,
+              "moved": false,
+              "exactRest": true,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "cargo_attach",
+          "target": "load",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.5,
+              "dPos": 0.25,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 1,
+              "dPos": 0.5,
+              "dAng": 0,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "clips": [
+        {
+          "name": "walk_leg",
+          "target": "leg1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.35,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.7,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "walk_leg-1",
+          "target": "leg-1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.35,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.7,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "walk_arm1",
+          "target": "arm1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.35,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.7,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "walk_arm-1",
+          "target": "arm-1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.35,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.7,
+              "dPos": 0,
+              "dAng": 0.5053605102841562,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "carry_arm-1",
+          "target": "arm-1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.25,
+              "dPos": 0,
+              "dAng": 0.5999999999999995,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 1.2000000000000002,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "carry_arm1",
+          "target": "arm1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.25,
+              "dPos": 0,
+              "dAng": 0.5999999999999995,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.5,
+              "dPos": 0,
+              "dAng": 1.2000000000000002,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "operate_arm1",
+          "target": "arm1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.4,
+              "dPos": 0,
+              "dAng": 1.1000000000000003,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.8,
+              "dPos": 0,
+              "dAng": 0.8999999999999997,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        },
+        {
+          "name": "weld_arm1",
+          "target": "arm1",
+          "returns": false,
+          "samples": {
+            "mid": {
+              "t": 0.3,
+              "dPos": 0,
+              "dAng": 1.1499999999999997,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            },
+            "end": {
+              "t": 0.6,
+              "dPos": 0,
+              "dAng": 0.9999999999999998,
+              "moved": true,
+              "exactRest": false,
+              "maxDev": 0,
+              "worst": null,
+              "fixedPass": true
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "frames": [
+    {
+      "pose": "a",
+      "view": "front",
+      "ppu": 25.058426177031205,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-a-front.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "door_open-1",
+          "t": 0.8
+        },
+        {
+          "asset": "forklift",
+          "clip": "lift_pallet",
+          "t": 1.4
+        },
+        {
+          "asset": "crane",
+          "clip": "hoist_place",
+          "t": 1.8
+        },
+        {
+          "asset": "drone",
+          "clip": "cargo_attach",
+          "t": 1
+        },
+        {
+          "asset": "worker",
+          "clip": "carry_arm1",
+          "t": 0.5
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 768.9901970084843,
+            "y0": 426.5077251603135,
+            "x1": 867.6577500805447,
+            "y1": 495.41839714714934,
+            "w": 98.6675530720604,
+            "h": 68.91067198683584
+          },
+          "actual": {
+            "x0": 769,
+            "y0": 426,
+            "x1": 867,
+            "y1": 495,
+            "w": 99,
+            "h": 70
+          },
+          "deltas": {
+            "x0": 0.009802991515698523,
+            "y0": -0.5077251603134982,
+            "x1": -0.6577500805447016,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 911.5284714205538,
+            "y0": 462.84244311700877,
+            "x1": 947.343545323504,
+            "y1": 494.1654758382977,
+            "w": 35.81507390295019,
+            "h": 31.32303272128894
+          },
+          "actual": {
+            "x0": 911,
+            "y0": 462,
+            "x1": 947,
+            "y1": 494,
+            "w": 37,
+            "h": 33
+          },
+          "deltas": {
+            "x0": -0.5284714205538421,
+            "y0": -0.8424431170087701,
+            "x1": -0.34354532350403133,
+            "y1": -0.1654758382977093
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 997.4603976775664,
+            "y0": 445.3015447930869,
+            "x1": 1022.5188238545975,
+            "y1": 495.41839714714934,
+            "w": 25.058426177031038,
+            "h": 50.11685235406242
+          },
+          "actual": {
+            "x0": 997,
+            "y0": 445,
+            "x1": 1022,
+            "y1": 495,
+            "w": 26,
+            "h": 51
+          },
+          "deltas": {
+            "x0": -0.4603976775664478,
+            "y0": -0.3015447930869186,
+            "x1": -0.5188238545974855,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 1072.63567620866,
+            "y0": 453.1323029734092,
+            "x1": 1115.235000709613,
+            "y1": 486.0214873307626,
+            "w": 42.59932450095289,
+            "h": 32.88918435735343
+          },
+          "actual": {
+            "x0": 1072,
+            "y0": 453,
+            "x1": 1115,
+            "y1": 485,
+            "w": 44,
+            "h": 33
+          },
+          "deltas": {
+            "x0": -0.6356762086600156,
+            "y0": -0.13230297340919606,
+            "x1": -0.23500070961290476,
+            "y1": -1.0214873307626249
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 1165.3518530636757,
+            "y0": 473.36698211136184,
+            "x1": 1175.8763920580286,
+            "y1": 495.41839714714934,
+            "w": 10.524538994352952,
+            "h": 22.0514150357875
+          },
+          "actual": {
+            "x0": 1165,
+            "y0": 473,
+            "x1": 1175,
+            "y1": 495,
+            "w": 11,
+            "h": 23
+          },
+          "deltas": {
+            "x0": -0.35185306367566227,
+            "y0": -0.36698211136183545,
+            "x1": -0.876392058028614,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    },
+    {
+      "pose": "a",
+      "view": "side",
+      "ppu": 26.218084965806714,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-a-side.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "door_open-1",
+          "t": 0.8
+        },
+        {
+          "asset": "forklift",
+          "clip": "lift_pallet",
+          "t": 1.4
+        },
+        {
+          "asset": "crane",
+          "clip": "hoist_place",
+          "t": 1.8
+        },
+        {
+          "asset": "drone",
+          "clip": "cargo_attach",
+          "t": 1
+        },
+        {
+          "asset": "worker",
+          "clip": "carry_arm1",
+          "t": 0.5
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 774.5684582082547,
+            "y0": 425.4205450320123,
+            "x1": 832.2482451330295,
+            "y1": 497.52027868798075,
+            "w": 57.67978692477482,
+            "h": 72.09973365596846
+          },
+          "actual": {
+            "x0": 774,
+            "y0": 425,
+            "x1": 832,
+            "y1": 497,
+            "w": 59,
+            "h": 73
+          },
+          "deltas": {
+            "x0": -0.5684582082546967,
+            "y0": -0.420545032012285,
+            "x1": -0.24824513302951345,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 656.5870758621245,
+            "y0": 463.4367682324321,
+            "x1": 722.1322882766412,
+            "y1": 496.2093744396904,
+            "w": 65.54521241451675,
+            "h": 32.77260620725832
+          },
+          "actual": {
+            "x0": 656,
+            "y0": 463,
+            "x1": 721,
+            "y1": 496,
+            "w": 66,
+            "h": 34
+          },
+          "deltas": {
+            "x0": -0.5870758621244931,
+            "y0": -0.43676823243208673,
+            "x1": -1.1322882766412476,
+            "y1": -0.20937443969040714
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 539.9165977642846,
+            "y0": 445.08410875636736,
+            "x1": 604.1509059305109,
+            "y1": 497.52027868798075,
+            "w": 64.23430816622636,
+            "h": 52.43616993161339
+          },
+          "actual": {
+            "x0": 540,
+            "y0": 445,
+            "x1": 603,
+            "y1": 497,
+            "w": 64,
+            "h": 53
+          },
+          "deltas": {
+            "x0": 0.08340223571542538,
+            "y0": -0.08410875636735682,
+            "x1": -1.1509059305109304,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 450.7751088805416,
+            "y0": 453.2772603081819,
+            "x1": 487.480427832671,
+            "y1": 487.6884968258032,
+            "w": 36.7053189521294,
+            "h": 34.41123651762132
+          },
+          "actual": {
+            "x0": 450,
+            "y0": 453,
+            "x1": 487,
+            "y1": 487,
+            "w": 38,
+            "h": 35
+          },
+          "deltas": {
+            "x0": -0.7751088805416089,
+            "y0": -0.2772603081818943,
+            "x1": -0.48042783267101186,
+            "y1": -0.6884968258032131
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 387.1379458181181,
+            "y0": 474.44836391807087,
+            "x1": 398.3389389489282,
+            "y1": 497.52027868798075,
+            "w": 11.200993130810105,
+            "h": 23.07191476990988
+          },
+          "actual": {
+            "x0": 387,
+            "y0": 474,
+            "x1": 398,
+            "y1": 497,
+            "w": 12,
+            "h": 24
+          },
+          "deltas": {
+            "x0": -0.13794581811811213,
+            "y0": -0.44836391807086784,
+            "x1": -0.33893894892821663,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    },
+    {
+      "pose": "a",
+      "view": "iso",
+      "ppu": 28.712252016722026,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-a-iso.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "door_open-1",
+          "t": 0.8
+        },
+        {
+          "asset": "forklift",
+          "clip": "lift_pallet",
+          "t": 1.4
+        },
+        {
+          "asset": "crane",
+          "clip": "hoist_place",
+          "t": 1.8
+        },
+        {
+          "asset": "drone",
+          "clip": "cargo_attach",
+          "t": 1
+        },
+        {
+          "asset": "worker",
+          "clip": "carry_arm1",
+          "t": 0.5
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 759.3947433076249,
+            "y0": 408.97395213688395,
+            "x1": 858.8776210180151,
+            "y1": 520.6234094432604,
+            "w": 99.4828777103902,
+            "h": 111.6494573063764
+          },
+          "actual": {
+            "x0": 759,
+            "y0": 409,
+            "x1": 858,
+            "y1": 520,
+            "w": 100,
+            "h": 112
+          },
+          "deltas": {
+            "x0": -0.39474330762493537,
+            "y0": 0.02604786311604812,
+            "x1": -0.8776210180151338,
+            "y1": -0.623409443260357
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 872.8864344098866,
+            "y0": 508.78446436405414,
+            "x1": 943.7426064934094,
+            "y1": 572.5506636025515,
+            "w": 70.85617208352278,
+            "h": 63.766199238497336
+          },
+          "actual": {
+            "x0": 872,
+            "y0": 509,
+            "x1": 943,
+            "y1": 572,
+            "w": 72,
+            "h": 64
+          },
+          "deltas": {
+            "x0": -0.8864344098866468,
+            "y0": 0.21553563594585512,
+            "x1": -0.7426064934094256,
+            "y1": -0.5506636025514808
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 934.4033975654952,
+            "y0": 526.2498387878337,
+            "x1": 1000.589965185061,
+            "y1": 602.1480263005673,
+            "w": 66.18656761956584,
+            "h": 75.89818751273356
+          },
+          "actual": {
+            "x0": 934,
+            "y0": 526,
+            "x1": 1000,
+            "y1": 601,
+            "w": 67,
+            "h": 76
+          },
+          "deltas": {
+            "x0": -0.40339756549519734,
+            "y0": -0.24983878783370983,
+            "x1": -0.5899651850610326,
+            "y1": -1.1480263005672668
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 1020.0804881650558,
+            "y0": 582.7485667895907,
+            "x1": 1056.2191661904628,
+            "y1": 626.4706114880456,
+            "w": 36.13867802540699,
+            "h": 43.722044698454965
+          },
+          "actual": {
+            "x0": 1020,
+            "y0": 583,
+            "x1": 1056,
+            "y1": 626,
+            "w": 37,
+            "h": 44
+          },
+          "deltas": {
+            "x0": -0.08048816505584,
+            "y0": 0.2514332104093455,
+            "x1": -0.21916619046282904,
+            "y1": -0.4706114880456198
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 1095.0986990099316,
+            "y0": 642.41216129767,
+            "x1": 1105.1484999214915,
+            "y1": 668.0827451822856,
+            "w": 10.049800911559942,
+            "h": 25.670583884615667
+          },
+          "actual": {
+            "x0": 1095,
+            "y0": 642,
+            "x1": 1104,
+            "y1": 667,
+            "w": 10,
+            "h": 26
+          },
+          "deltas": {
+            "x0": -0.09869900993157898,
+            "y0": -0.412161297669968,
+            "x1": -1.1484999214915206,
+            "y1": -1.0827451822856347
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    },
+    {
+      "pose": "b",
+      "view": "front",
+      "ppu": 25.058426177031205,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-b-front.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "tailgate_open",
+          "t": 0.9
+        },
+        {
+          "asset": "forklift",
+          "clip": "fork_spread_R",
+          "t": 0.6
+        },
+        {
+          "asset": "crane",
+          "clip": "slew_rotate",
+          "t": 2.5
+        },
+        {
+          "asset": "drone",
+          "clip": "rotor1_spin",
+          "t": 0.075
+        },
+        {
+          "asset": "worker",
+          "clip": "walk_leg",
+          "t": 0.35
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 777.4474158432324,
+            "y0": 425.25480385146193,
+            "x1": 832.5759534327011,
+            "y1": 495.41839714714934,
+            "w": 55.12853758946869,
+            "h": 70.1635932956874
+          },
+          "actual": {
+            "x0": 777,
+            "y0": 425,
+            "x1": 832,
+            "y1": 495,
+            "w": 56,
+            "h": 71
+          },
+          "deltas": {
+            "x0": -0.44741584323242023,
+            "y0": -0.2548038514619293,
+            "x1": -0.5759534327011124,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 917.7746024346072,
+            "y0": 462.84244311700877,
+            "x1": 947.343545323504,
+            "y1": 495.41839714714934,
+            "w": 29.5689428888968,
+            "h": 32.575954030140565
+          },
+          "actual": {
+            "x0": 917,
+            "y0": 462,
+            "x1": 947,
+            "y1": 495,
+            "w": 31,
+            "h": 34
+          },
+          "deltas": {
+            "x0": -0.7746024346072318,
+            "y0": -0.8424431170087701,
+            "x1": -0.34354532350403133,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 997.4603976775664,
+            "y0": 445.3015447930869,
+            "x1": 1022.5188238545975,
+            "y1": 495.41839714714934,
+            "w": 25.058426177031038,
+            "h": 50.11685235406242
+          },
+          "actual": {
+            "x0": 997,
+            "y0": 445,
+            "x1": 1022,
+            "y1": 495,
+            "w": 26,
+            "h": 51
+          },
+          "deltas": {
+            "x0": -0.4603976775664478,
+            "y0": -0.3015447930869186,
+            "x1": -0.5188238545974855,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 1072.63567620866,
+            "y0": 453.1323029734092,
+            "x1": 1111.4762367830583,
+            "y1": 473.49227424224705,
+            "w": 38.840560574398296,
+            "h": 20.359971268837853
+          },
+          "actual": {
+            "x0": 1072,
+            "y0": 453,
+            "x1": 1111,
+            "y1": 473,
+            "w": 40,
+            "h": 21
+          },
+          "deltas": {
+            "x0": -0.6356762086600156,
+            "y0": -0.13230297340919606,
+            "x1": -0.47623678305831163,
+            "y1": -0.4922742422470492
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 1165.3518530636757,
+            "y0": 473.36698211136184,
+            "x1": 1175.8763920580286,
+            "y1": 495.41839714714934,
+            "w": 10.524538994352952,
+            "h": 22.0514150357875
+          },
+          "actual": {
+            "x0": 1165,
+            "y0": 473,
+            "x1": 1175,
+            "y1": 495,
+            "w": 11,
+            "h": 23
+          },
+          "deltas": {
+            "x0": -0.35185306367566227,
+            "y0": -0.36698211136183545,
+            "x1": -0.876392058028614,
+            "y1": -0.41839714714933507
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    },
+    {
+      "pose": "b",
+      "view": "side",
+      "ppu": 26.218084965806714,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-b-side.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "tailgate_open",
+          "t": 0.9
+        },
+        {
+          "asset": "forklift",
+          "clip": "fork_spread_R",
+          "t": 0.6
+        },
+        {
+          "asset": "crane",
+          "clip": "slew_rotate",
+          "t": 2.5
+        },
+        {
+          "asset": "drone",
+          "clip": "rotor1_spin",
+          "t": 0.075
+        },
+        {
+          "asset": "worker",
+          "clip": "walk_leg",
+          "t": 0.35
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 765.7198545322949,
+            "y0": 424.10964078372194,
+            "x1": 868.9535640851589,
+            "y1": 497.52027868798075,
+            "w": 103.23370955286396,
+            "h": 73.4106379042588
+          },
+          "actual": {
+            "x0": 765,
+            "y0": 424,
+            "x1": 868,
+            "y1": 497,
+            "w": 104,
+            "h": 74
+          },
+          "deltas": {
+            "x0": -0.719854532294903,
+            "y0": -0.10964078372194308,
+            "x1": -0.9535640851588596,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 656.5870758621245,
+            "y0": 463.4367682324321,
+            "x1": 731.9640701388188,
+            "y1": 497.52027868798075,
+            "w": 75.37699427669429,
+            "h": 34.08351045554866
+          },
+          "actual": {
+            "x0": 656,
+            "y0": 463,
+            "x1": 731,
+            "y1": 497,
+            "w": 76,
+            "h": 35
+          },
+          "deltas": {
+            "x0": -0.5870758621244931,
+            "y0": -0.43676823243208673,
+            "x1": -0.9640701388187836,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 539.9165977642846,
+            "y0": 445.08410875636736,
+            "x1": 604.1509059305109,
+            "y1": 497.52027868798075,
+            "w": 64.23430816622636,
+            "h": 52.43616993161339
+          },
+          "actual": {
+            "x0": 540,
+            "y0": 445,
+            "x1": 603,
+            "y1": 497,
+            "w": 64,
+            "h": 53
+          },
+          "deltas": {
+            "x0": 0.08340223571542538,
+            "y0": -0.08410875636735682,
+            "x1": -1.1509059305109304,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 450.7751088805416,
+            "y0": 453.2772603081819,
+            "x1": 487.480427832671,
+            "y1": 474.57945434289985,
+            "w": 36.7053189521294,
+            "h": 21.302194034717957
+          },
+          "actual": {
+            "x0": 450,
+            "y0": 453,
+            "x1": 487,
+            "y1": 474,
+            "w": 38,
+            "h": 22
+          },
+          "deltas": {
+            "x0": -0.7751088805416089,
+            "y0": -0.2772603081818943,
+            "x1": -0.48042783267101186,
+            "y1": -0.5794543428998509
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 389.65631321602405,
+            "y0": 474.44836391807087,
+            "x1": 398.3389389489282,
+            "y1": 497.52027868798075,
+            "w": 8.682625732904171,
+            "h": 23.07191476990988
+          },
+          "actual": {
+            "x0": 389,
+            "y0": 474,
+            "x1": 398,
+            "y1": 497,
+            "w": 10,
+            "h": 24
+          },
+          "deltas": {
+            "x0": -0.6563132160240457,
+            "y0": -0.44836391807086784,
+            "x1": -0.33893894892821663,
+            "y1": -0.520278687980749
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    },
+    {
+      "pose": "b",
+      "view": "iso",
+      "ppu": 28.53165424381276,
+      "png": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-142\\docs\\evidence\\2026-11-14-rw3d-t15-fixture-motion-b-iso.png",
+      "spec": [
+        {
+          "asset": "truck",
+          "clip": "tailgate_open",
+          "t": 0.9
+        },
+        {
+          "asset": "forklift",
+          "clip": "fork_spread_R",
+          "t": 0.6
+        },
+        {
+          "asset": "crane",
+          "clip": "slew_rotate",
+          "t": 2.5
+        },
+        {
+          "asset": "drone",
+          "clip": "rotor1_spin",
+          "t": 0.075
+        },
+        {
+          "asset": "worker",
+          "clip": "walk_leg",
+          "t": 0.35
+        }
+      ],
+      "assets": [
+        {
+          "id": "crane",
+          "expected": {
+            "x0": 755.110788255734,
+            "y0": 401.6608035853482,
+            "x1": 853.9679266076566,
+            "y1": 522.7999939044311,
+            "w": 98.85713835192269,
+            "h": 121.13919031908284
+          },
+          "actual": {
+            "x0": 755,
+            "y0": 402,
+            "x1": 853,
+            "y1": 522,
+            "w": 99,
+            "h": 121
+          },
+          "deltas": {
+            "x0": -0.11078825573395079,
+            "y0": 0.33919641465178074,
+            "x1": -0.9679266076566364,
+            "y1": -0.7999939044310622
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "truck",
+          "expected": {
+            "x0": 867.888625681703,
+            "y0": 511.0355148445971,
+            "x1": 943.7967854876437,
+            "y1": 574.4006297807327,
+            "w": 75.90815980594061,
+            "h": 63.365114936135626
+          },
+          "actual": {
+            "x0": 867,
+            "y0": 511,
+            "x1": 943,
+            "y1": 574,
+            "w": 77,
+            "h": 64
+          },
+          "deltas": {
+            "x0": -0.8886256817030471,
+            "y0": -0.035514844597116735,
+            "x1": -0.7967854876436604,
+            "y1": -0.4006297807327428
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "forklift",
+          "expected": {
+            "x0": 929.0186520503407,
+            "y0": 528.3910334576195,
+            "x1": 994.7889114436609,
+            "y1": 610.9171068624947,
+            "w": 65.7702593933202,
+            "h": 82.5260734048752
+          },
+          "actual": {
+            "x0": 929,
+            "y0": 528,
+            "x1": 994,
+            "y1": 610,
+            "w": 66,
+            "h": 83
+          },
+          "deltas": {
+            "x0": -0.018652050340733695,
+            "y0": -0.39103345761952824,
+            "x1": -0.7889114436609361,
+            "y1": -0.9171068624947338
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "drone",
+          "expected": {
+            "x0": 1014.1568405901602,
+            "y0": 584.5343889708868,
+            "x1": 1050.0682092159605,
+            "y1": 616.9158263831032,
+            "w": 35.911368625800264,
+            "h": 32.38143741221643
+          },
+          "actual": {
+            "x0": 1014,
+            "y0": 584,
+            "x1": 1049,
+            "y1": 616,
+            "w": 36,
+            "h": 33
+          },
+          "deltas": {
+            "x0": -0.15684059016018637,
+            "y0": -0.5343889708867664,
+            "x1": -1.0682092159604508,
+            "y1": -0.9158263831031945
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        },
+        {
+          "id": "worker",
+          "expected": {
+            "x0": 1088.7031928779877,
+            "y0": 643.8227042328226,
+            "x1": 1098.9924052370652,
+            "y1": 669.4434289611985,
+            "w": 10.28921235907751,
+            "h": 25.620724728375876
+          },
+          "actual": {
+            "x0": 1088,
+            "y0": 644,
+            "x1": 1098,
+            "y1": 669,
+            "w": 11,
+            "h": 26
+          },
+          "deltas": {
+            "x0": -0.7031928779877035,
+            "y0": 0.17729576717738382,
+            "x1": -0.9924052370652134,
+            "y1": -0.4434289611984923
+          },
+          "boundsPass": true,
+          "aspectPass": true
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total": 260,
+    "pass": 260,
+    "fail": 0
+  }
+}
