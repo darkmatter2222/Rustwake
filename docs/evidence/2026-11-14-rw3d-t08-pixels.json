@@ -1,0 +1,646 @@
+{
+  "role": "developer (implementation author; NOT an independent review)",
+  "issue": 135,
+  "branch": "rw/135-shell-nav",
+  "headSha": "7c0abd335605b87923da914e03e34fae4ccc461a",
+  "treeCleanAtStart": true,
+  "capturedAt": "2026-11-14T07:10:39.479Z",
+  "method": "production build (dist/) served on a throwaway static server; playwright-core headless; pixel stats decoded from the actual screenshot bytes in-browser; numeric DOM census; phone context is DESKTOP EMULATION, not a real handset",
+  "visualInspection": "PENDING — non-vision author; owed at G1 (#151)",
+  "browser": {
+    "version": "157.0.8103.51",
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+  },
+  "server": {
+    "port": 4318,
+    "distIndexBytes": 1368
+  },
+  "seed": {
+    "file": "docs/evidence/yard-mature.json",
+    "sha256": "47a8b0a733a834d1f0931a8ce534c48ded7d25f8d1561b1a323cd0cb5ac90967",
+    "gapHours": 247.64
+  },
+  "thresholds": {
+    "uniqueColors": ">200 per frame",
+    "luminanceStddev": ">8",
+    "backgroundFraction": "<0.97",
+    "canvasUniqueColors": ">40",
+    "frameDiff": ">0.02",
+    "sheetBands": "35vh/70vh +/-2px",
+    "inspectorWidth": "340 +/-1px",
+    "slotFloor": "44x44"
+  },
+  "canvas": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 745
+    },
+    "phone": {
+      "width": 780,
+      "height": 1688,
+      "uniqueColors": 693
+    }
+  },
+  "captures": [
+    {
+      "file": "2026-11-14-rw3d-t08-desktop-report.png",
+      "state": "return report in inspector",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stats": {
+        "width": 1440,
+        "height": 900,
+        "uniqueColors": 2131,
+        "luminanceMean": 23.42,
+        "luminanceStddev": 26.12,
+        "backgroundFraction": 0.8661,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-desktop-yard.png",
+      "state": "yard + toolbar, no panel",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stats": {
+        "width": 1440,
+        "height": 900,
+        "uniqueColors": 1712,
+        "luminanceMean": 22.48,
+        "luminanceStddev": 23.77,
+        "backgroundFraction": 0.9011,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-desktop-inspector.png",
+      "state": "Yard store inspector",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stats": {
+        "width": 1440,
+        "height": 900,
+        "uniqueColors": 2014,
+        "luminanceMean": 23.15,
+        "luminanceStddev": 25.01,
+        "backgroundFraction": 0.8666,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-desktop-settings.png",
+      "state": "Settings over store (one surface)",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stats": {
+        "width": 1440,
+        "height": 900,
+        "uniqueColors": 1772,
+        "luminanceMean": 22.72,
+        "luminanceStddev": 24.36,
+        "backgroundFraction": 0.8917,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-phone-report.png",
+      "state": "return report sheet 35vh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stats": {
+        "width": 780,
+        "height": 1688,
+        "uniqueColors": 4268,
+        "luminanceMean": 37.95,
+        "luminanceStddev": 46.44,
+        "backgroundFraction": 0.4103,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-phone-yard.png",
+      "state": "yard + toolbar, no sheet",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stats": {
+        "width": 780,
+        "height": 1688,
+        "uniqueColors": 2946,
+        "luminanceMean": 39.12,
+        "luminanceStddev": 44.65,
+        "backgroundFraction": 0.5837,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-phone-sheet.png",
+      "state": "Yard store sheet 35vh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stats": {
+        "width": 780,
+        "height": 1688,
+        "uniqueColors": 4366,
+        "luminanceMean": 35.97,
+        "luminanceStddev": 42.63,
+        "backgroundFraction": 0.4067,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-phone-expanded.png",
+      "state": "Yard store sheet 70vh",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stats": {
+        "width": 780,
+        "height": 1688,
+        "uniqueColors": 2804,
+        "luminanceMean": 32.11,
+        "luminanceStddev": 37.51,
+        "backgroundFraction": 0.3579,
+        "modeColor": "#0b1220"
+      }
+    },
+    {
+      "file": "2026-11-14-rw3d-t08-phone-settings.png",
+      "state": "Settings sheet over store",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stats": {
+        "width": 780,
+        "height": 1688,
+        "uniqueColors": 3453,
+        "luminanceMean": 34.27,
+        "luminanceStddev": 41.48,
+        "backgroundFraction": 0.4297,
+        "modeColor": "#0b1220"
+      }
+    }
+  ],
+  "consoleErrors": [],
+  "checks": [
+    {
+      "name": "desktop: Begin opens the return report",
+      "expected": "depth 1 / 1 painted / While you were away",
+      "actual": "1/1/While you were away",
+      "pass": true
+    },
+    {
+      "name": "desktop: report paints in the inspector",
+      "expected": "inspector present",
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "desktop-report: dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "desktop-report: unique colors > 200",
+      "expected": ">200",
+      "actual": 2131,
+      "pass": true
+    },
+    {
+      "name": "desktop-report: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 26.12,
+      "pass": true
+    },
+    {
+      "name": "desktop-report: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.8661,
+      "pass": true
+    },
+    {
+      "name": "desktop: six toolbar slots in order",
+      "expected": "build,routes,fleet,research,trade,map",
+      "actual": "build,routes,fleet,research,trade,map",
+      "pass": true
+    },
+    {
+      "name": "desktop: every slot >= 44x44",
+      "expected": "0 undersized",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "desktop: retired rail/menu absent",
+      "expected": "false/false",
+      "actual": "false/false",
+      "pass": true
+    },
+    {
+      "name": "desktop: page stays flat",
+      "expected": "scrollHeight<=901, overflow hidden",
+      "actual": "900, hidden",
+      "pass": true
+    },
+    {
+      "name": "desktop: yard view has no panel",
+      "expected": "depth 0 / 0 painted",
+      "actual": "0/0",
+      "pass": true
+    },
+    {
+      "name": "desktop: research earned on mature yard",
+      "expected": "enabled",
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "desktop: save envelope alive",
+      "expected": "tick>0, 8-char checksum",
+      "actual": "{\"tick\":450308,\"checksumChars\":8}",
+      "pass": true
+    },
+    {
+      "name": "desktop-yard: dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "desktop-yard: unique colors > 200",
+      "expected": ">200",
+      "actual": 1712,
+      "pass": true
+    },
+    {
+      "name": "desktop-yard: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 23.77,
+      "pass": true
+    },
+    {
+      "name": "desktop-yard: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.9011,
+      "pass": true
+    },
+    {
+      "name": "desktop: yard canvas non-blank",
+      "expected": ">40 unique colors",
+      "actual": 745,
+      "pass": true
+    },
+    {
+      "name": "desktop: Trade opens ONE inspector surface",
+      "expected": "depth 1 / 1 painted / Yard store",
+      "actual": "1/1/Yard store",
+      "pass": true
+    },
+    {
+      "name": "desktop: inspector width 340",
+      "expected": "340",
+      "actual": 340,
+      "pass": true
+    },
+    {
+      "name": "desktop: inspector top honours --shell-inspector-top",
+      "expected": "301px",
+      "actual": 301,
+      "pass": true
+    },
+    {
+      "name": "desktop: inspector stays above the bottom toolbar",
+      "expected": "bottom<=832",
+      "actual": 531,
+      "pass": true
+    },
+    {
+      "name": "desktop-inspector: dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "desktop-inspector: unique colors > 200",
+      "expected": ">200",
+      "actual": 2014,
+      "pass": true
+    },
+    {
+      "name": "desktop-inspector: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 25.01,
+      "pass": true
+    },
+    {
+      "name": "desktop-inspector: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.8666,
+      "pass": true
+    },
+    {
+      "name": "desktop: inspector visibly changes the frame",
+      "expected": ">0.02 diff",
+      "actual": 0.1087,
+      "pass": true
+    },
+    {
+      "name": "desktop: Settings pushes, still ONE surface",
+      "expected": "depth 2 / 1 painted / Settings",
+      "actual": "2/1/Settings",
+      "pass": true
+    },
+    {
+      "name": "desktop-settings: dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "desktop-settings: unique colors > 200",
+      "expected": ">200",
+      "actual": 1772,
+      "pass": true
+    },
+    {
+      "name": "desktop-settings: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 24.36,
+      "pass": true
+    },
+    {
+      "name": "desktop-settings: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.8917,
+      "pass": true
+    },
+    {
+      "name": "desktop: Escape pops exactly one",
+      "expected": "depth 1 / Yard store",
+      "actual": "1/Yard store",
+      "pass": true
+    },
+    {
+      "name": "desktop: second Escape empties the stack",
+      "expected": "depth 0",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "desktop: digit 3 opens Fleet",
+      "expected": "depth 1 / fleet pressed",
+      "actual": "1/true",
+      "pass": true
+    },
+    {
+      "name": "phone: Begin opens the report sheet",
+      "expected": "depth 1 / 1 painted",
+      "actual": "1/1",
+      "pass": true
+    },
+    {
+      "name": "phone: report sheet in 35vh band",
+      "expected": "295.4 +/-2",
+      "actual": 295.4,
+      "pass": true
+    },
+    {
+      "name": "phone-report: dimensions",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-report: unique colors > 200",
+      "expected": ">200",
+      "actual": 4268,
+      "pass": true
+    },
+    {
+      "name": "phone-report: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 46.44,
+      "pass": true
+    },
+    {
+      "name": "phone-report: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.4103,
+      "pass": true
+    },
+    {
+      "name": "phone: six toolbar slots in order",
+      "expected": "build,routes,fleet,research,trade,map",
+      "actual": "build,routes,fleet,research,trade,map",
+      "pass": true
+    },
+    {
+      "name": "phone: every slot >= 44x44",
+      "expected": "0 undersized",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "phone: retired rail/menu absent",
+      "expected": "false/false",
+      "actual": "false/false",
+      "pass": true
+    },
+    {
+      "name": "phone: page stays flat",
+      "expected": "scrollHeight<=845, overflow hidden",
+      "actual": "844, hidden",
+      "pass": true
+    },
+    {
+      "name": "phone: yard view has no sheet",
+      "expected": "depth 0 / no sheet",
+      "actual": "0/false",
+      "pass": true
+    },
+    {
+      "name": "phone-yard: dimensions",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-yard: unique colors > 200",
+      "expected": ">200",
+      "actual": 2946,
+      "pass": true
+    },
+    {
+      "name": "phone-yard: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 44.65,
+      "pass": true
+    },
+    {
+      "name": "phone-yard: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.5837,
+      "pass": true
+    },
+    {
+      "name": "phone: yard canvas non-blank",
+      "expected": ">40 unique colors",
+      "actual": 693,
+      "pass": true
+    },
+    {
+      "name": "phone: Trade opens ONE sheet surface",
+      "expected": "depth 1 / 1 painted / Yard store",
+      "actual": "1/1/Yard store",
+      "pass": true
+    },
+    {
+      "name": "phone: sheet collapsed at 35vh",
+      "expected": "295.4 +/-2",
+      "actual": 295.4,
+      "pass": true
+    },
+    {
+      "name": "phone-sheet: dimensions",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-sheet: unique colors > 200",
+      "expected": ">200",
+      "actual": 4366,
+      "pass": true
+    },
+    {
+      "name": "phone-sheet: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 42.63,
+      "pass": true
+    },
+    {
+      "name": "phone-sheet: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.4067,
+      "pass": true
+    },
+    {
+      "name": "phone: expand reaches 70vh",
+      "expected": "590.8 +/-2",
+      "actual": 590.8,
+      "pass": true
+    },
+    {
+      "name": "phone-expanded: dimensions",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-expanded: unique colors > 200",
+      "expected": ">200",
+      "actual": 2804,
+      "pass": true
+    },
+    {
+      "name": "phone-expanded: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 37.51,
+      "pass": true
+    },
+    {
+      "name": "phone-expanded: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.3579,
+      "pass": true
+    },
+    {
+      "name": "phone: expansion visibly changes the frame",
+      "expected": ">0.02 diff",
+      "actual": 0.415,
+      "pass": true
+    },
+    {
+      "name": "phone: collapse returns to 35vh",
+      "expected": "295.4 +/-2",
+      "actual": 295.4,
+      "pass": true
+    },
+    {
+      "name": "phone: Settings pushes, still ONE surface",
+      "expected": "depth 2 / 1 painted / Settings",
+      "actual": "2/1/Settings",
+      "pass": true
+    },
+    {
+      "name": "phone-settings: dimensions",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-settings: unique colors > 200",
+      "expected": ">200",
+      "actual": 3453,
+      "pass": true
+    },
+    {
+      "name": "phone-settings: luminance stddev > 8",
+      "expected": ">8",
+      "actual": 41.48,
+      "pass": true
+    },
+    {
+      "name": "phone-settings: not a flat fill",
+      "expected": "<0.97",
+      "actual": 0.4297,
+      "pass": true
+    },
+    {
+      "name": "phone: Escape pops exactly one",
+      "expected": "depth 1 / Yard store",
+      "actual": "1/Yard store",
+      "pass": true
+    },
+    {
+      "name": "phone: second Escape empties the stack",
+      "expected": "depth 0",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "phone: sheet visibly changes the frame",
+      "expected": ">0.02 diff",
+      "actual": 0.4713,
+      "pass": true
+    },
+    {
+      "name": "runtime: zero page/console errors",
+      "expected": "0",
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 73,
+    "passed": 73,
+    "failed": 0
+  }
+}

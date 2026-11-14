@@ -9,7 +9,7 @@
 //
 // Usage:  npm run build
 //         node docs/evidence/2026-11-14-rw3d-t08-capture.mjs
-// Writes  2026-11-14-rw3d-t08-pixels.json + six PNGs; exits 0/1 on the
+// Writes  2026-11-14-rw3d-t08-pixels.json + nine PNGs; exits 0/1 on the
 // pre-registered checks below (thresholds fixed before the first run).
 import { chromium } from "playwright-core";
 import { createServer } from "node:http";
