@@ -8,6 +8,10 @@
  * plus the caller's framePhase; it never writes state, never reads a clock, never imports
  * the UI logistics bridge or scene.ts. Simulation and UI never import THREE.
  *
+ * RW3D T16 (#143): the fleet truck pool reads the renderer-root fleet bridge
+ * (renderer/fleet.ts), which is derived ONLY from real cargo jobs. An empty bridge
+ * (the default) hides every rig, so the pre-T16 frame is unchanged.
+ *
  * Quality is blockout-flat (§1.5 / T03 ADR): no shadow maps, DPR capped at 2, an
  * ambient-dominant hemisphere fill. Selection is a real THREE.Raycaster pick whose ground
  * intersection agrees with projection.screenToWorld, so a tap maps to the same cell under
@@ -25,6 +29,7 @@
 import * as THREE from "three";
 import { TUNING } from "../../content/defs";
 import type { MachineState, SimState } from "../../simulation/types";
+import { getFleetFrame, type FleetFrame, type FleetUnit } from "../fleet";
 import { droneLeg } from "../flight";
 import {
   CELL,
@@ -52,6 +57,22 @@ import {
 export const MAX_DPR = 2;
 /** Bounded drone pool (§5): the fleet is small; never allocate per-frame objects. */
 const MAX_DRONES = 16;
+/** Bounded truck pool (T16): same discipline as the drone pool. */
+const MAX_TRUCKS = 16;
+/** Truck blockout dimensions in world units (CELL = 32). Faces local +X. */
+const TRUCK = {
+  chassisL: 15,
+  chassisH: 3,
+  chassisW: 9,
+  cabL: 4.5,
+  cabH: 5,
+  wheelR: 1.6,
+  cargoL: 8,
+  cargoH: 4,
+  cargoW: 7,
+  liftH: 5,
+  groundY: 1.6,
+};
 /** Blockout extrusion base height in world units, grown one step per machine level. */
 const BODY_BASE_HEIGHT = 16;
 const BODY_LEVEL_HEIGHT = 2;
@@ -97,6 +118,17 @@ interface ArchetypeBatch {
   box: { w: number; d: number; color: string };
 }
 
+/** One pooled truck rig (T16). Every part is a scaled shared unit box; the cargo
+ * box exists only while real units ride the carrier, the lift only moves while a
+ * real load/unload timer runs, and the wheels only turn over cells actually walked. */
+interface TruckRig {
+  group: THREE.Group;
+  cargo: THREE.Mesh;
+  lift: THREE.Mesh;
+  wheels: THREE.Mesh[];
+  brakes: THREE.Mesh[];
+}
+
 /**
  * The yard world. One instance renders one canvas; the lazy singleton in index.ts owns the
  * lifetime for the blit path, and the bench harness constructs its own for direct capture.
@@ -114,6 +146,9 @@ export class YardWorld {
   private batches = new Map<string, ArchetypeBatch>();
   private drones: THREE.Mesh[] = [];
   private droneGroup: THREE.Group;
+  private trucks: TruckRig[] = [];
+  private truckGroup: THREE.Group;
+  private lastFleet: FleetFrame = { tick: 0, units: [] };
   private unitBox = new THREE.BoxGeometry(1, 1, 1);
   private machineSignature = "";
   private view: ViewState = { width: 1, height: 1 };
@@ -187,6 +222,9 @@ export class YardWorld {
 
     this.droneGroup = new THREE.Group();
     this.scene.add(this.droneGroup);
+
+    this.truckGroup = new THREE.Group();
+    this.scene.add(this.truckGroup);
 
     canvas.addEventListener("webglcontextlost", this.handleContextLost, false);
     canvas.addEventListener("webglcontextrestored", this.handleContextRestored, false);
@@ -366,6 +404,115 @@ export class YardWorld {
     }
   }
 
+  /** Build one pooled truck rig from the shared unit box (T16). Faces local +X:
+   * cab forward, cargo bed aft, brake lights on the rear face. */
+  private buildTruckRig(): TruckRig {
+    const group = new THREE.Group();
+    const part = (color: string): THREE.Mesh =>
+      new THREE.Mesh(this.unitBox, new THREE.MeshLambertMaterial({ color: new THREE.Color(color) }));
+    const chassis = part(PALETTE.bodyMid);
+    chassis.scale.set(TRUCK.chassisL, TRUCK.chassisH, TRUCK.chassisW);
+    chassis.position.set(0, TRUCK.groundY + TRUCK.wheelR + TRUCK.chassisH / 2, 0);
+    group.add(chassis);
+    const cab = part(PALETTE.bodyLight);
+    cab.scale.set(TRUCK.cabL, TRUCK.cabH, TRUCK.chassisW);
+    cab.position.set(
+      TRUCK.chassisL / 2 - TRUCK.cabL / 2,
+      TRUCK.groundY + TRUCK.wheelR + TRUCK.chassisH + TRUCK.cabH / 2,
+      0
+    );
+    group.add(cab);
+    const bedY = TRUCK.groundY + TRUCK.wheelR + TRUCK.chassisH;
+    const lift = part(PALETTE.steelLight);
+    lift.scale.set(TRUCK.cargoL + 1, 0.8, TRUCK.cargoW + 1);
+    lift.position.set(-TRUCK.chassisL / 2 + TRUCK.cargoL / 2 + 0.5, bedY + 0.4, 0);
+    group.add(lift);
+    const cargo = part(PALETTE.amber);
+    cargo.scale.set(TRUCK.cargoL, TRUCK.cargoH, TRUCK.cargoW);
+    cargo.position.set(lift.position.x, bedY + 0.8 + TRUCK.cargoH / 2, 0);
+    cargo.visible = false; // no real cargo, no box (E05)
+    group.add(cargo);
+    const wheels: THREE.Mesh[] = [];
+    for (const [wx, wz] of [
+      [TRUCK.chassisL / 2 - 2.5, TRUCK.chassisW / 2],
+      [TRUCK.chassisL / 2 - 2.5, -TRUCK.chassisW / 2],
+      [-TRUCK.chassisL / 2 + 2.5, TRUCK.chassisW / 2],
+      [-TRUCK.chassisL / 2 + 2.5, -TRUCK.chassisW / 2],
+    ]) {
+      const wheel = part(PALETTE.well);
+      wheel.scale.set(TRUCK.wheelR * 2, TRUCK.wheelR * 2, 1.4);
+      wheel.position.set(wx, TRUCK.groundY + TRUCK.wheelR, wz);
+      group.add(wheel);
+      wheels.push(wheel);
+    }
+    const brakes: THREE.Mesh[] = [];
+    for (const bz of [TRUCK.chassisW / 2 - 1.5, -TRUCK.chassisW / 2 + 1.5]) {
+      const lamp = part(PALETTE.rust);
+      lamp.scale.set(0.8, 1.2, 1.6);
+      lamp.position.set(-TRUCK.chassisL / 2 - 0.4, bedY - 0.5, bz);
+      lamp.visible = false;
+      group.add(lamp);
+      brakes.push(lamp);
+    }
+    group.visible = false;
+    this.truckGroup.add(group);
+    return { group, cargo, lift, wheels, brakes };
+  }
+
+  /**
+   * T16 (#143): place the bounded truck pool from the fleet bridge. The bridge is
+   * derived only from real cargo jobs; when it is empty (the default) every rig
+   * stays hidden and the frame is exactly the pre-T16 frame. Motion is bounded
+   * and state-driven: wheels turn over walked cells only, the cargo box exists
+   * only while job.inTransit > 0, the lift rides the real load/unload timers,
+   * and brake lamps mark any non-parked stop (held, queued, aligning, idle).
+   */
+  private updateFleet(): void {
+    const frame = getFleetFrame();
+    this.lastFleet = frame;
+    for (let i = 0; i < MAX_TRUCKS; i += 1) {
+      const unit: FleetUnit | undefined = frame.units[i];
+      let rig = this.trucks[i];
+      if (!unit) {
+        if (rig) rig.group.visible = false;
+        continue;
+      }
+      if (!rig) {
+        rig = this.buildTruckRig();
+        this.trucks[i] = rig;
+      }
+      rig.group.visible = true;
+      rig.group.position.set(unit.pos.x * CELL, 0, unit.pos.y * CELL);
+      rig.group.rotation.y = -unit.heading;
+      // Wheels roll over the cumulative walked distance; frozen when k = 0.
+      const roll = (unit.wheelTurns * CELL) / TRUCK.wheelR;
+      for (const wheel of rig.wheels) wheel.rotation.z = -roll;
+      // Cargo box strictly from the real ledger; partial loads read smaller.
+      const carrying = unit.cargo > 0;
+      rig.cargo.visible = carrying;
+      if (carrying) {
+        const fill = unit.capacity > 0 ? Math.min(1, Math.max(0.3, unit.cargo / unit.capacity)) : 1;
+        rig.cargo.scale.set(TRUCK.cargoL * fill, TRUCK.cargoH, TRUCK.cargoW);
+      }
+      // Lift platform + cargo rise together while a real timer runs.
+      const bedY = TRUCK.groundY + TRUCK.wheelR + TRUCK.chassisH;
+      const rise = unit.lift * TRUCK.liftH;
+      rig.lift.position.y = bedY + 0.4 + rise;
+      rig.cargo.position.y = bedY + 0.8 + TRUCK.cargoH / 2 + rise;
+      const braking = !unit.moving && unit.stage !== "parked";
+      for (const lamp of rig.brakes) lamp.visible = braking;
+    }
+  }
+
+  /** Numeric fleet accessor for the evidence harness (stageReport precedent). */
+  fleetReport(): { tick: number; units: readonly FleetUnit[]; visibleRigs: number } {
+    return {
+      tick: this.lastFleet.tick,
+      units: this.lastFleet.units,
+      visibleRigs: this.trucks.filter((r) => r.group.visible).length,
+    };
+  }
+
   /** Push one immutable snapshot + camera + view into the world. No state is mutated. */
   sync(state: SimState, camera: Camera, view: ViewState, opts: WorldSyncOptions): void {
     if (this.disposed || this.contextLost) return;
@@ -375,6 +522,7 @@ export class YardWorld {
     this.syncBatches(state.machines);
     this.updateInstances(state.machines, opts.selected);
     this.updateDrones(state, opts);
+    this.updateFleet();
     this.grid.visible = true;
   }
 
@@ -437,6 +585,12 @@ export class YardWorld {
     this.batches.clear();
     for (const d of this.drones) (d.material as THREE.Material).dispose();
     this.drones = [];
+    for (const rig of this.trucks) {
+      rig.group.traverse((obj) => {
+        if (obj instanceof THREE.Mesh) (obj.material as THREE.Material).dispose();
+      });
+    }
+    this.trucks = [];
     this.unitBox.dispose();
     this.ground.geometry.dispose();
     (this.ground.material as THREE.Material).dispose();
