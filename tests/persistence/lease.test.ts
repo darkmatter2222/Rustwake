@@ -136,7 +136,8 @@ describe("multi-tab lease", () => {
     expect(second.getState().tick).toBe(ownerTick + gapTicks);
     expect(second.getReturnReport()?.creditedTicks).toBe(gapTicks);
     expect(second.getState().revision).toBe(first.getState().revision);
-    expect(second.getState().store["scrap"]).toBe(10);
+    // #214: seed scrap 120 + two manual pulses × 2 scrap = 124 (was 0 + 2×5 = 10).
+    expect(second.getState().store["scrap"]).toBe(124);
 
     second.step(60);
     expect(second.getState().tick).toBe(ownerTick + gapTicks + 60);
@@ -154,6 +155,7 @@ describe("multi-tab lease", () => {
 
     const second = createStore({ storage, now: () => 10, leaseId: "tab-b" });
     expect(second.getRole()).toBe("writer");
-    expect(second.getState().store["scrap"]).toBe(10);
+    // #214: seed scrap 120 + two manual pulses × 2 scrap = 124 (was 0 + 2×5 = 10).
+    expect(second.getState().store["scrap"]).toBe(124);
   });
 });

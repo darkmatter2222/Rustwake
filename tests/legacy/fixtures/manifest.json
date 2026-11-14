@@ -13,21 +13,23 @@
       "seed": "scriptEarly: 6x(manual.salvage+6t), drone.repair, 262t",
       "shape": "legacy-v1-stripped",
       "kind": "save",
-      "sha256": "89629a19640b819bf67cf5d0a4a4b23976268d7c657ae6da427238e19fea3f7c",
+      "sha256": "fa24b2af972248a240c93ac821c802551a4e82cbf61d4eef5f944801c713eaa4",
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -39,8 +41,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     },
@@ -51,24 +53,24 @@
       "seed": "scriptChain: early + sorter@8 + 2 routes + 400t + furnace@9 + 2 routes + 900t + contract.export",
       "shape": "modern",
       "kind": "save",
-      "sha256": "01a19ee2b6582cbc1c1398159846897d761fdba040604d6b3e2a0c0128456e64",
+      "sha256": "1722949624683b70c7ea1b2702f4d3d966a6bcdb5b642c660bc28b412f1ec59e",
       "meta": {
-        "tick": 1598,
+        "tick": 1682,
         "revision": 14,
-        "credits": 30,
-        "tutorial": 7,
-        "storeUnits": 90,
-        "storeCapacity": 900,
-        "unitTotal": 98,
+        "credits": 110,
+        "tutorial": 8,
+        "storeUnits": 171,
+        "storeCapacity": 300,
+        "unitTotal": 178,
         "totals": {
-          "scrap": 60,
-          "ferrous": 3,
-          "nonferrous": 28,
-          "steel": 7
+          "scrap": 119,
+          "ferrous": 22,
+          "steel": 5,
+          "nonferrous": 32
         },
         "wreck": {
-          "remaining": 25,
-          "generation": 7,
+          "remaining": 73,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -80,8 +82,8 @@
         "routes": 4,
         "exportClaimed": true,
         "research": {},
-        "checksum": "ddded8ec",
-        "byteLength": 2998,
+        "checksum": "ea34c714",
+        "byteLength": 2972,
         "lastSeenMs": 1700000000000
       }
     },
@@ -92,36 +94,36 @@
       "seed": "scriptDeep: chain + sells + upgrade(speed) + temp nonferrous belt + fund loop + 5 builds + 2 route.remove + 9 routes (store-fed assembler) + settle/sell loop + research.cutters + drone.add + upgrade(buffer) + boosted pulse + 600t",
       "shape": "modern",
       "kind": "save",
-      "sha256": "5e9269975edc29463eef2e068bbca820ab9610640cd3fa9ae49535a847cb250d",
+      "sha256": "359441c2af5ffc80028303b7e9c34ea8c78b43f763857ccea9107bdf47a562dc",
       "meta": {
-        "tick": 11704,
-        "revision": 47,
-        "credits": 1437,
+        "tick": 8302,
+        "revision": 52,
+        "credits": 997,
         "tutorial": 9,
-        "storeUnits": 396,
-        "storeCapacity": 900,
-        "unitTotal": 418,
+        "storeUnits": 191,
+        "storeCapacity": 300,
+        "unitTotal": 208,
         "totals": {
-          "scrap": 111,
-          "ferrous": 48,
-          "nonferrous": 167,
-          "steel": 31,
-          "wire": 34,
+          "scrap": 116,
+          "ferrous": 5,
+          "steel": 28,
+          "nonferrous": 4,
+          "wire": 31,
           "polymer": 10,
-          "data": 12,
+          "data": 10,
           "copper": 1,
-          "residue": 3,
+          "residue": 2,
           "circuits": 1
         },
         "wreck": {
-          "remaining": 30,
-          "generation": 43,
+          "remaining": 71,
+          "generation": 4,
           "pulses": 7
         },
         "fleet": {
           "units": 2,
-          "deliveries": 244,
-          "accumulated": 1225
+          "deliveries": 175,
+          "accumulated": 873
         },
         "machines": 7,
         "routes": 12,
@@ -129,8 +131,8 @@
         "research": {
           "cutters": 1
         },
-        "checksum": "ad2e3682",
-        "byteLength": 7704,
+        "checksum": "bcc4609d",
+        "byteLength": 7745,
         "lastSeenMs": 1700000000000
       }
     },
@@ -141,29 +143,29 @@
       "seed": "scriptOrphan: chain + 2t + snapshot belts + machine.dismantle(furnace) + restore belts/mirror",
       "shape": "damaged-orphan",
       "kind": "save",
-      "sha256": "1e62fe6c4d9c3c01cfb6004efe6a78953dad52ea1960a3239fbf7f0e0c5ea17e",
+      "sha256": "67addccad574d1611f62952ec776adaa1370e52779c497991e76c40361d4b56b",
       "repair": {
         "droppedRoutes": 2,
         "returnedItems": {},
         "scrapRefund": 5
       },
       "meta": {
-        "tick": 1600,
+        "tick": 1684,
         "revision": 15,
-        "credits": 30,
+        "credits": 110,
         "tutorial": 8,
-        "storeUnits": 111,
-        "storeCapacity": 900,
-        "unitTotal": 117,
+        "storeUnits": 213,
+        "storeCapacity": 300,
+        "unitTotal": 219,
         "totals": {
-          "scrap": 74,
-          "ferrous": 8,
-          "nonferrous": 28,
-          "steel": 7
+          "scrap": 156,
+          "ferrous": 22,
+          "steel": 9,
+          "nonferrous": 32
         },
         "wreck": {
-          "remaining": 25,
-          "generation": 7,
+          "remaining": 73,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -175,8 +177,8 @@
         "routes": 4,
         "exportClaimed": true,
         "research": {},
-        "checksum": "94c37cc1",
-        "byteLength": 2614,
+        "checksum": "69d7fed3",
+        "byteLength": 2621,
         "lastSeenMs": 1700000000000
       }
     },
@@ -187,29 +189,29 @@
       "seed": "scriptOrphan + stripLegacyShape (run/counters/research/spares removed)",
       "shape": "damaged-orphan-legacy",
       "kind": "save",
-      "sha256": "0fa600f152651c8537acfa60c2d24ff9eb319f3bfd0f18b0023a2ee6c03ba51d",
+      "sha256": "3dd3ce7f3fd04c6f47d8b094a72bcf46a844b626229b7577d4b2a54c74c99485",
       "repair": {
         "droppedRoutes": 2,
         "returnedItems": {},
         "scrapRefund": 0
       },
       "meta": {
-        "tick": 1600,
+        "tick": 1684,
         "revision": 15,
-        "credits": 30,
+        "credits": 110,
         "tutorial": 8,
-        "storeUnits": 111,
-        "storeCapacity": 900,
-        "unitTotal": 117,
+        "storeUnits": 213,
+        "storeCapacity": 300,
+        "unitTotal": 219,
         "totals": {
-          "scrap": 74,
-          "ferrous": 8,
-          "nonferrous": 28,
-          "steel": 7
+          "scrap": 156,
+          "ferrous": 22,
+          "steel": 9,
+          "nonferrous": 32
         },
         "wreck": {
-          "remaining": 25,
-          "generation": 7,
+          "remaining": 73,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -221,8 +223,8 @@
         "routes": 4,
         "exportClaimed": true,
         "research": {},
-        "checksum": "3e72493e",
-        "byteLength": 2282,
+        "checksum": "ec20b7eb",
+        "byteLength": 2291,
         "lastSeenMs": 1700000000000
       }
     },
@@ -233,22 +235,24 @@
       "seed": "salvage-early.legacy + checksum[7] flip",
       "shape": "adversarial",
       "kind": "reject",
-      "sha256": "7c7155444094af9b8618e94a799d0adf7bdbf15f086fa5f5136c855ada9ecd91",
+      "sha256": "4da6bcf4da7e6ac437cd853dc21fc2114e7723d6662d7ade7d1fdbd02f3414b4",
       "expectedReason": "checksum",
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -260,8 +264,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     },
@@ -272,22 +276,24 @@
       "seed": "salvage-early.legacy text.slice(0, 60%)",
       "shape": "adversarial",
       "kind": "reject",
-      "sha256": "6cd54fb99a1b764ad3c1aa22cd031352adf120ee77b280578368227c11450156",
+      "sha256": "38c4fa3e807d55dad6f0a7c562c99c343db1a5e913dd7ee5793f0c509568cd20",
       "expectedReason": "parse",
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -299,8 +305,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     },
@@ -311,26 +317,26 @@
       "seed": "chain-export.modern + machines[1].id = machines[0].id + reseed checksum",
       "shape": "adversarial",
       "kind": "reject",
-      "sha256": "bc7660f24605f4a13d9ac94a929746641216fff85bd132826fe64bd935f63d6e",
+      "sha256": "13ffe1cce8eb901bec94773f1a5b745be6a2d385f80603fbf36b4c264a606ab4",
       "expectedReason": "invalid",
       "expectedDetail": "machineId:1",
       "meta": {
-        "tick": 1598,
+        "tick": 1682,
         "revision": 14,
-        "credits": 30,
-        "tutorial": 7,
-        "storeUnits": 90,
-        "storeCapacity": 900,
-        "unitTotal": 98,
+        "credits": 110,
+        "tutorial": 8,
+        "storeUnits": 171,
+        "storeCapacity": 300,
+        "unitTotal": 178,
         "totals": {
-          "scrap": 60,
-          "ferrous": 3,
-          "nonferrous": 28,
-          "steel": 7
+          "scrap": 119,
+          "ferrous": 22,
+          "steel": 5,
+          "nonferrous": 32
         },
         "wreck": {
-          "remaining": 25,
-          "generation": 7,
+          "remaining": 73,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -342,8 +348,8 @@
         "routes": 4,
         "exportClaimed": true,
         "research": {},
-        "checksum": "ddded8ec",
-        "byteLength": 2998,
+        "checksum": "ea34c714",
+        "byteLength": 2972,
         "lastSeenMs": 1700000000000
       }
     },
@@ -354,23 +360,25 @@
       "seed": "salvage-early.legacy + store.scrap = -5 + reseed checksum",
       "shape": "adversarial",
       "kind": "reject",
-      "sha256": "00e85229a7f1c0a713aeef7de9d770cadff053a2d08fd7bc063d475ba348f51a",
+      "sha256": "ee393c21735d5f48ecc71c59d318714208b327b57478c5539f93c0db37ce0783",
       "expectedReason": "invalid",
       "expectedDetail": "store",
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -382,8 +390,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     },
@@ -394,22 +402,24 @@
       "seed": "salvage-early.legacy + schemaVersion = 2",
       "shape": "adversarial",
       "kind": "reject",
-      "sha256": "038511abdcfdc514fd7383729d828de002727aff7b8921123b81d73abed00481",
+      "sha256": "74649b89e94a6fe7562a72dc2f374a05ab45781afde5641d109ff400947547aa",
       "expectedReason": "schema",
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -421,8 +431,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     },
@@ -433,26 +443,28 @@
       "seed": "salvage-early.legacy + settings {muted:'yes',reducedMotion:1,textScale:99} + reseed checksum",
       "shape": "adversarial",
       "kind": "sanitize",
-      "sha256": "ca02b98e212062a661d26e6770f15c966831c18294cc9ec7aee4ec7d572a756b",
+      "sha256": "196d18643d1dcb338aab568d1c8b92a0f40cae987da81a6311fdd89f12660726",
       "expectedSettings": {
         "muted": false,
         "reducedMotion": false,
         "textScale": 2
       },
       "meta": {
-        "tick": 298,
+        "tick": 382,
         "revision": 7,
-        "credits": 0,
+        "credits": 60,
         "tutorial": 4,
-        "storeUnits": 25,
-        "storeCapacity": 900,
-        "unitTotal": 25,
+        "storeUnits": 151,
+        "storeCapacity": 300,
+        "unitTotal": 151,
         "totals": {
-          "scrap": 25
+          "scrap": 127,
+          "ferrous": 12,
+          "steel": 12
         },
         "wreck": {
-          "remaining": 5,
-          "generation": 2,
+          "remaining": 203,
+          "generation": 1,
           "pulses": 6
         },
         "fleet": {
@@ -464,8 +476,8 @@
         "routes": 0,
         "exportClaimed": false,
         "research": {},
-        "checksum": "06c4a886",
-        "byteLength": 974,
+        "checksum": "a22a2cdd",
+        "byteLength": 1007,
         "lastSeenMs": 1700000000000
       }
     }

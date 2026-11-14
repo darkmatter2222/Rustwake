@@ -56,7 +56,11 @@ describe("save envelope", () => {
 
   it("detects a corrupted payload", () => {
     const text = encodeSave(createInitialState(), 1, DEFAULT_SETTINGS);
-    const broken = text.replace('"storeUnits":0', '"storeUnits":1');
+    // #214: the seed store is no longer empty (storeUnits 144, not 0), so corrupt a
+    // seed-independent field instead. tick is 0 on a fresh yard and unchanged by the
+    // retune; flipping it still breaks the checksum exactly as before.
+    const broken = text.replace('"tick":0', '"tick":1');
+    expect(broken).not.toBe(text);
     expect(decodeSave(broken)).toEqual({ ok: false, reason: "checksum" });
   });
 
