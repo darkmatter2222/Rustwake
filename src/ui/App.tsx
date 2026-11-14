@@ -1152,6 +1152,23 @@ export function App({
     selected !== null && selected > 0 ? state.machines.find((m) => m.id === selected) : undefined;
   const report = store.getReturnReport();
   /**
+   * RW3D #135 (round 10 rework): the absence report can settle AFTER Begin was
+   * tapped. A long catch-up is adopted off-thread (store.ts `adoptCatchUp`), so a
+   * cold click at domcontentloaded starts the yard while `returnReport` is still
+   * null and the one-shot check in Gate's onBegin (below) misses it — the report
+   * then arrives with nothing to re-open it. The store notifies on adoption, which
+   * re-renders this component; react to the report's arrival here and open it as
+   * the first stack layer, but only while the stack is untouched, so a destination
+   * the player opened in the meantime is never clobbered and a report they already
+   * dismissed is never re-opened (the effect's deps do not include the stack). The
+   * functional update keeps the settled-click path byte-identical: onBegin has
+   * already pushed PANEL_REPORT, so the non-empty stack is returned unchanged.
+   */
+  useEffect(() => {
+    if (!started || report === null) return;
+    setPanelStack((stack) => (stack.length === 0 ? [PANEL_REPORT] : stack));
+  }, [started, report]);
+  /**
    * RW3D #135: the host paints exactly one panel — the top of the stack — or
    * nothing. A wreck hit (-1) and a stale machine id occupy a stack layer (so
    * Back/Escape still unwinds them) but paint no host; a report layer without a
