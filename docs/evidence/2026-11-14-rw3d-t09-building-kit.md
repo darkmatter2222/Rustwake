@@ -42,6 +42,10 @@ All commands run in the isolated worktree `C:/Users/ryans/AppData/Local/Temp/rw-
 
 kit.json sha256 `6ab465385e61250aa7e9c16fec7117b4d8cd9786eda886e7423f988e5cde0b82`; asset-manifest.json sha256 `8a75a95cb5ba5c536213ea46d3e1b3d6ac7d14b782d325b91e67dad79aafa4e6` (identical in validator and capture reports).
 
+### Final gate re-verification (handoff)
+
+All five gates re-run on the final working tree (2026-11-14, after WIP checkpoint `f22bcce`): kit validator exit 0 (total=1147 pass=1147 fail=0 findings=25), `npm test` exit 0 (64 files / 774 tests), `npm run typecheck` exit 0, `npm run validate` exit 0 (content 0, behaviour 0), `npm run build` exit 0. Results identical to the table above; kit/manifest sha256 unchanged. `git diff --name-only a51c4a6..HEAD` confirms only allowed write paths changed; `tests/legacy/**` and all forbidden paths untouched.
+
 Capture checks (47): three revision; 0 page errors (×2); per asset: scene AABB vs independent Node AABB, silhouette bounds ±2 px in front/side/iso (expected = union of projected part-box corners, computed Node-side without three.js), ground contact minY=0 in front/side; 8 motion strips with per-frame transforms vs an independent clip sampler (max delta < 1e-6). Mask binarization uses the 50% coverage midpoint (>128) so antialiased iso corners stay within ±1 px.
 
 ## Rendered evidence (running build, headless)
