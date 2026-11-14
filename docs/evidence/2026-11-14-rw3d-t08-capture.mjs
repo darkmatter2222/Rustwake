@@ -11,6 +11,11 @@
 //         node docs/evidence/2026-11-14-rw3d-t08-capture.mjs
 // Writes  2026-11-14-rw3d-t08-pixels.json + nine PNGs; exits 0/1 on the
 // pre-registered checks below (thresholds fixed before the first run).
+//
+// Round 8 (#135 deltas 1/3): the census also reads the yard canvas paint-truth
+// stamps (data-cam / data-anchor / data-world3d) into report.provenance. These
+// are recorded observations, NOT extra pass/fail checks — the 73 pre-registered
+// checks and every threshold are unchanged.
 import { chromium } from "playwright-core";
 import { createServer } from "node:http";
 import { createHash } from "node:crypto";
@@ -154,6 +159,7 @@ const census = (page) =>
     const host = document.querySelector(".shell-host");
     const sheet = document.querySelector(".shell-sheet");
     const panel = document.querySelector(".shell-host .panel");
+    const yard = document.querySelector("canvas");
     let save = null;
     try {
       const raw = localStorage.getItem("rustwake.save.v1");
@@ -183,6 +189,14 @@ const census = (page) =>
         bodyOverflow: getComputedStyle(document.body).overflow,
       },
       save,
+      // Paint-truth stamps written by the App render loop (src/ui/App.tsx):
+      // data-cam = camera sync, data-anchor = projected selection anchor,
+      // data-world3d = "unavailable" | "lost" | "ready".
+      canvasTruth: yard ? {
+        cam: yard.dataset.cam ?? null,
+        anchor: yard.dataset.anchor ?? null,
+        world3d: yard.dataset.world3d ?? null,
+      } : null,
     };
   });
 
@@ -275,6 +289,7 @@ if (!probeRenderer) {
   if (!probeRenderer) { await browser.close(); throw new Error("WebGL unavailable even with SwiftShader"); }
 }
 const canvasCensuses = {};
+const provenance = [];
 try {
   // ---------------- Desktop 1440x900 @1x: right inspector ----------------
   const dView = { width: 1440, height: 900 };
@@ -302,11 +317,13 @@ try {
     (c.save?.tick ?? 0) > 0 && c.save?.checksumChars === 8);
   const dYard = await shoot(dp, "desktop-yard", "yard + toolbar, no panel", dView, 1);
   canvasCensuses.desktop = await canvasStats(dp);
+  provenance.push({ state: "desktop-yard", truth: c.canvasTruth });
   check("desktop: yard canvas non-blank", ">40 unique colors", canvasCensuses.desktop?.uniqueColors,
     (canvasCensuses.desktop?.uniqueColors ?? 0) > 40);
 
   await tapSlot(dp, "trade");
   c = await census(dp);
+  provenance.push({ state: "desktop-trade", truth: c.canvasTruth });
   check("desktop: Trade opens ONE inspector surface", "depth 1 / 1 painted / Yard store",
     `${c.depth}/${c.paintedPanels}/${c.panelTitle}`,
     c.depth === 1 && c.paintedPanels === 1 && c.panelTitle === "Yard store");
@@ -368,11 +385,13 @@ try {
     c.depth === 0 && !c.sheet);
   const pYard = await shoot(pp, "phone-yard", "yard + toolbar, no sheet", pView, 2);
   canvasCensuses.phone = await canvasStats(pp);
+  provenance.push({ state: "phone-yard", truth: c.canvasTruth });
   check("phone: yard canvas non-blank", ">40 unique colors", canvasCensuses.phone?.uniqueColors,
     (canvasCensuses.phone?.uniqueColors ?? 0) > 40);
 
   await tapSlot(pp, "trade");
   c = await census(pp);
+  provenance.push({ state: "phone-trade", truth: c.canvasTruth });
   check("phone: Trade opens ONE sheet surface", "depth 1 / 1 painted / Yard store",
     `${c.depth}/${c.paintedPanels}/${c.panelTitle}`,
     c.depth === 1 && c.paintedPanels === 1 && c.panelTitle === "Yard store");
@@ -439,6 +458,7 @@ const report = {
     inspectorWidth: "340 +/-1px", slotFloor: "44x44",
   },
   canvas: canvasCensuses,
+  provenance,
   captures,
   consoleErrors,
   checks,
