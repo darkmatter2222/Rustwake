@@ -1,4 +1,4 @@
-import { TICK_MS } from "../game/content/defs";
+import { TICK_MS, type ResourceId } from "../game/content/defs";
 import { advance } from "../game/simulation/engine";
 import { type ReturnReport } from "../game/simulation/offline";
 import {
@@ -56,6 +56,26 @@ import {
   type RoadCargoState,
   type RoadTransactionResult,
 } from "../game/simulation/roadPaths";
+// T13 (#140): session-only logistics slice, same precedent as the road slice.
+// Jobs/reservations never touch SAVE_KEY, migration or recovery (#148 owns the
+// cutover); the ledger is rebuilt per session and advanced beside tickRoadCargo.
+import {
+  cancelJob as cancelLogisticsJobFn,
+  createJob as createLogisticsJobFn,
+  createLogistics,
+  registerBuilding as registerLogisticsBuildingFn,
+  registerCarrier as registerLogisticsCarrierFn,
+  seedStock as seedLogisticsStockFn,
+  tickLogistics,
+  type CancelJobResult,
+  type CargoJob,
+  type Carrier,
+  type CreateJobResult,
+  type LogisticsBuilding,
+  type LogisticsJobRequest,
+  type LogisticsState,
+  type Reservation,
+} from "../game/simulation/logistics";
 
 export type StoreRole = LeaseRole;
 
@@ -150,6 +170,44 @@ export interface RoadApi {
   spawnRoadCargo(request: CargoRequest): CargoBatch | null;
 }
 
+/**
+ * T13 (#140): additive logistics capability (G1 pattern, like `RoadApi`).
+ * Kept off `GameStore` so existing consumers and test doubles are untouched;
+ * `createStore` returns the intersection.
+ *
+ * SESSION-ONLY: jobs, reservations, carriers and the per-building stock ledger
+ * are not in the save envelope (the 2D -> 3D cutover #148 owns persistence).
+ * Nothing here reads or writes SAVE_KEY, migration or recovery. Reads are safe
+ * for any role; every mutation is writer-gated exactly like `dispatch` and
+ * never calls `persist`. Jobs advance on the same authoritative tick budget as
+ * the economy and road cargo, only in the owning tab.
+ */
+export interface LogisticsApi {
+  getLogistics(): LogisticsState;
+  /** All jobs, including terminal ones (inspectable history). */
+  getLogisticsJobs(): CargoJob[];
+  /** Active reservations only; terminal jobs release theirs. */
+  getLogisticsReservations(): Reservation[];
+  /**
+   * Writer-only. Creates a job and reserves source stock + destination room
+   * (unique reservation ids; no double-booking). Idempotent by request.id.
+   * A rejection changes nothing and carries a typed reason.
+   */
+  createLogisticsJob(request: LogisticsJobRequest): CreateJobResult;
+  /**
+   * Writer-only. Cancels a job: unloaded cargo returns to source stock at
+   * once; loaded cargo is recalled along the road network and returns on
+   * arrival (conserved in transit if the route is cut). Idempotent.
+   */
+  cancelLogisticsJob(jobId: number): CancelJobResult;
+  /** Writer-only session setup: register a building approach cell + capacity. */
+  registerLogisticsBuilding(site: LogisticsBuilding): boolean;
+  /** Writer-only session setup: the single cargo entry boundary (fixtures). */
+  seedLogisticsStock(buildingId: number, resource: ResourceId, qty: number): boolean;
+  /** Writer-only session setup: add a carrier; null when read-only/invalid. */
+  registerLogisticsCarrier(request: { capacity: number; cell: Cell }): Carrier | null;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
 /** T12 (#139): fixed seed for the session-only world grid (deterministic yard). */
 const ROAD_SESSION_SEED = 139;
@@ -180,7 +238,9 @@ export interface StoreOptions {
  * (spec 21.1 separation). With several tabs open, only the lease holder
  * advances and writes; the others mirror the persisted revision.
  */
-export function createStore(options: StoreOptions = {}): GameStore & SaveRecoveryApi & RoadApi {
+export function createStore(
+  options: StoreOptions = {},
+): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -252,6 +312,9 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
   const roadWorld = createWorld(ROAD_SESSION_SEED);
   const roadNet = createRoadNetwork();
   const roadCargo = createRoadCargo();
+  // T13 (#140): session-only logistics ledger, disjoint from the SimState
+  // snapshot for the same reason — catch-up adoption never touches it.
+  const logistics = createLogistics();
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -418,6 +481,8 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
       // T12 (#139): cargo rides the same authoritative tick budget (one cell
       // per tick). Session-only: never persisted, never advanced by a reader.
       tickRoadCargo(roadCargo, ticks);
+      // T13 (#140): logistics jobs ride the same budget, after road cargo.
+      tickLogistics(logistics, roadNet, ticks);
       sinceSave += ticks * TICK_MS;
       if (sinceSave >= PERSIST_MS) {
         sinceSave = 0;
@@ -601,6 +666,7 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
       if (role !== "writer") return;
       advance(state, ticks);
       tickRoadCargo(roadCargo, ticks);
+      tickLogistics(logistics, roadNet, ticks);
       lastSeenMs = now();
       persist();
       notify();
@@ -630,6 +696,47 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
       const batch = spawnCargoBatch(roadCargo, roadNet, request);
       notify();
       return batch;
+    },
+    // T13 (#140): additive logistics capability. Reads are pure (any role);
+    // mutations are writer-gated exactly like `dispatch` and never call
+    // `persist` — the logistics ledger is session-only (#148 owns persistence).
+    getLogistics: () => logistics,
+    getLogisticsJobs: () => logistics.jobs,
+    getLogisticsReservations: () => logistics.reservations,
+    createLogisticsJob(request: LogisticsJobRequest): CreateJobResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, reason: { reason: "read-only" } };
+      const result = createLogisticsJobFn(logistics, request);
+      if (result.ok) notify();
+      return result;
+    },
+    cancelLogisticsJob(jobId: number): CancelJobResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, reason: { reason: "read-only" } };
+      const result = cancelLogisticsJobFn(logistics, roadNet, jobId);
+      if (result.ok) notify();
+      return result;
+    },
+    registerLogisticsBuilding(site: LogisticsBuilding): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = registerLogisticsBuildingFn(logistics, site);
+      if (ok) notify();
+      return ok;
+    },
+    seedLogisticsStock(buildingId: number, resource: ResourceId, qty: number): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = seedLogisticsStockFn(logistics, buildingId, resource, qty);
+      if (ok) notify();
+      return ok;
+    },
+    registerLogisticsCarrier(request: { capacity: number; cell: Cell }): Carrier | null {
+      if (reconcile()) notify();
+      if (role !== "writer") return null;
+      const carrier = registerLogisticsCarrierFn(logistics, request);
+      if (carrier !== null) notify();
+      return carrier;
     },
   };
 }
