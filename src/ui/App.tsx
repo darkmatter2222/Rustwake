@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { GameStore, RoadApi, SaveRecoveryApi } from "../app/store";
+import type { BuildPlacementApi, GameStore, RoadApi, SaveRecoveryApi } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
 import { TUNING, unlockedBlueprints, BLUEPRINTS } from "../game/content/defs";
 import {
@@ -77,6 +77,7 @@ import { RoutesPanel } from "./shell/RoutesPanel";
 import { FleetPanel } from "./shell/FleetPanel";
 import { MapPanel } from "./shell/MapPanel";
 import { RoadToolPanel, PANEL_ROAD } from "./RoadTool";
+import { BuildToolPanel, PANEL_BUILD_TOOL } from "./BuildTool";
 import {
   PANEL_FLEET,
   PANEL_MAP,
@@ -1338,6 +1339,21 @@ export function App({
           >
             Roads
           </button>
+          {/* T11 (#138): the build catalog entry face. The six toolbar slots are
+              fixed (#135), so the world-grid catalog opens from this additive
+              lead-block button into the same one-panel stack (PANEL_BUILD_TOOL
+              = -11). Label-based censuses are untouched; the camera's chrome
+              insets auto-measure the lead box. It is independent of the legacy
+              2D build ghost above — the two never share state. */}
+          <button
+            type="button"
+            className="icon-btn build-entry"
+            aria-label="Open build catalog"
+            aria-pressed={selected === PANEL_BUILD_TOOL}
+            onClick={() => openPanel(PANEL_BUILD_TOOL)}
+          >
+            Build catalog
+          </button>
           {/* UI-RESET-53: the explicit placement / move / dismantle previews. They paint
               inside the lead block so the camera's chrome insets reserve their band, and
               they are not `.panel`s, so the overlay census and dock faces are untouched.
@@ -1406,6 +1422,16 @@ export function App({
           {selected === PANEL_ROAD ? (
             <RoadToolPanel
               road={store as GameStore & RoadApi}
+              locked={role === "reader"}
+              onClose={closeSelection}
+            />
+          ) : null}
+          {/* T11 (#138): world-grid build catalog. Same additive registration
+              grammar as the road tool — a negative sentinel inside the one-panel
+              stack, reader sessions see the catalog read-only. */}
+          {selected === PANEL_BUILD_TOOL ? (
+            <BuildToolPanel
+              build={store as GameStore & BuildPlacementApi}
               locked={role === "reader"}
               onClose={closeSelection}
             />
