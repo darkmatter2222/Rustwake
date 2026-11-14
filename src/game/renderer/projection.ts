@@ -173,7 +173,7 @@ export function groundHalfExtents(
  */
 export function screenDeltaToWorld(
   camera: Camera,
-  view: ViewState,
+  _view: ViewState,
   dxScreen: number,
   dyScreen: number
 ): { dx: number; dy: number } {

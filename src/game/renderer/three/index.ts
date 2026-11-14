@@ -14,8 +14,9 @@
  * information overlay (routes, status, ghost, grid, selection).
  *
  * The renderer reads immutable snapshots + the caller's framePhase only. It holds no save
- * bytes, so a context loss leaves the save unchanged by construction; the shell shows the
- * message via the onContextLost hook (#135 wiring delta).
+ * bytes, so a context loss leaves the save unchanged by construction; drawScene paints the
+ * context-loss banner itself (world3DStatus), and the onContextLost hook remains available
+ * for the shell (#135 wiring delta).
  */
 import type { SimState } from "../../simulation/types";
 import type { Camera, ViewState } from "../projection";
@@ -71,6 +72,17 @@ export function disposeWorld3D(): void {
 /** Reset the cached probe so a test can re-evaluate availability. */
 export function resetWorld3DProbe(): void {
   glAvailable = null;
+}
+
+/**
+ * The world layer's health, for the context-loss message: "unavailable" (no WebGL —
+ * the legacy 2D paint is the whole renderer), "lost" (context lost — 2D fallback plus
+ * the banner in drawScene) or "ready". Never throws.
+ */
+export function world3DStatus(): "unavailable" | "lost" | "ready" {
+  const w = getWorld3D();
+  if (!w) return "unavailable";
+  return w.isContextLost() ? "lost" : "ready";
 }
 
 export interface BlitOptions {

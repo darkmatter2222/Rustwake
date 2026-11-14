@@ -36,22 +36,20 @@ import {
   YARD_ROWS,
   tileToWorld,
 } from "../grid";
-import {
-  clampElev,
-  elevOf,
-  normalizeYaw,
-  yawOf,
-  type Camera,
-  type ViewState,
-} from "../projection";
+import type { Camera, ViewState } from "../projection";
 import { COLOR_KEYS, LEAN_UNITS, PALETTE, PARTS, type PartTuple } from "../sprites";
+import {
+  CAMERA_FAR,
+  CAMERA_NEAR,
+  castGround,
+  castPick,
+  projectToScreen,
+  syncOrthoCamera,
+  type PickResult,
+} from "./cameraRig";
 
 /** DPR cap (§1.5): never render above 2 device pixels per CSS pixel. */
 export const MAX_DPR = 2;
-/** A large camera stand-off keeps the whole yard inside [near, far] under any orbit. */
-const CAMERA_RADIUS = 1024;
-const CAMERA_NEAR = 0.1;
-const CAMERA_FAR = 4096;
 /** Bounded drone pool (§5): the fleet is small; never allocate per-frame objects. */
 const MAX_DRONES = 16;
 /** Blockout extrusion base height in world units, grown one step per machine level. */
@@ -64,12 +62,7 @@ export interface WorldSyncOptions {
   selected: number | null;
 }
 
-export interface PickResult {
-  /** Machine id, -1 wreck, -2 dock; null when the ray hits nothing pickable. */
-  id: number | null;
-  /** World-space hit point (x = yard x, y = up, z = yard y). */
-  point: { x: number; y: number; z: number };
-}
+export type { PickResult };
 
 /** The footprint + dominant colour of one archetype, derived from its authored 2D row so
  * the 3D blockout sits on exactly the silhouette the overlay paints. Solid parts only. */
@@ -245,30 +238,10 @@ export class YardWorld {
     this.renderer.setSize(this.view.width, this.view.height, false);
   }
 
-  /** Sync the orthographic camera to the shared projection (reproduces worldToScreen). */
+  /** Sync the orthographic camera to the shared projection (reproduces worldToScreen).
+   * The basis math lives in cameraRig.ts so the unit suite can exercise it without GL. */
   private syncCamera(camera: Camera): void {
-    const theta = (normalizeYaw(yawOf(camera)) * Math.PI) / 180;
-    const phi = (clampElev(elevOf(camera)) * Math.PI) / 180;
-    const cosT = Math.cos(theta);
-    const sinT = Math.sin(theta);
-    const sinP = Math.sin(phi);
-    const cosP = Math.cos(phi);
-    // right R = (cosT, 0, -sinT) is implicit in lookAt(up, out); only up and out are set.
-    const up = new THREE.Vector3(-sinT * sinP, cosP, -cosT * sinP);
-    const out = new THREE.Vector3(sinT * cosP, sinP, cosT * cosP);
-    const target = new THREE.Vector3(camera.x, 0, camera.y);
-    this.camera3.position.copy(target).addScaledVector(out, CAMERA_RADIUS);
-    this.camera3.up.copy(up);
-    this.camera3.lookAt(target);
-    const halfW = this.view.width / (2 * camera.scale);
-    const halfH = this.view.height / (2 * camera.scale);
-    this.camera3.left = -halfW;
-    this.camera3.right = halfW;
-    this.camera3.top = halfH;
-    this.camera3.bottom = -halfH;
-    this.camera3.near = CAMERA_NEAR;
-    this.camera3.far = CAMERA_FAR;
-    this.camera3.updateProjectionMatrix();
+    syncOrthoCamera(this.camera3, camera, this.view);
   }
 
   /** Rebuild the per-archetype instanced batches when the machine set changes. */
@@ -411,56 +384,28 @@ export class YardWorld {
     this.renderer.render(this.scene, this.camera3);
   }
 
-  private ndc(sx: number, sy: number): THREE.Vector2 {
-    return new THREE.Vector2(
-      (sx / this.view.width) * 2 - 1,
-      -((sy / this.view.height) * 2 - 1)
-    );
-  }
-
   private pickables(): THREE.Object3D[] {
     const list: THREE.Object3D[] = [this.wreck, this.dock];
     for (const batch of this.batches.values()) list.push(batch.mesh);
     return list;
   }
 
-  /** Raycast selection: the nearest pickable body under a canvas-local CSS pixel. */
+  /** Raycast selection: the nearest pickable body under a canvas-local CSS pixel.
+   * The pick path itself is cameraRig.castPick — shared with the unit suite. */
   pick(sx: number, sy: number): PickResult | null {
     if (this.disposed || this.contextLost) return null;
-    this.raycaster.setFromCamera(this.ndc(sx, sy), this.camera3);
-    const hits = this.raycaster.intersectObjects(this.pickables(), false);
-    for (const hit of hits) {
-      const obj = hit.object;
-      let id: number | null = null;
-      if (obj.userData.kind === "machine" && hit.instanceId !== undefined) {
-        const ids = obj.userData.ids as number[];
-        id = ids[hit.instanceId] ?? null;
-      } else if (typeof obj.userData.pickId === "number") {
-        id = obj.userData.pickId;
-      }
-      if (id !== null) {
-        return { id, point: { x: hit.point.x, y: hit.point.y, z: hit.point.z } };
-      }
-    }
-    return null;
+    return castPick(this.raycaster, this.camera3, this.view, sx, sy, this.pickables());
   }
 
   /** The ground-plane point under a pixel — agrees with projection.screenToWorld. */
   pickGround(sx: number, sy: number): { x: number; y: number } | null {
     if (this.disposed || this.contextLost) return null;
-    this.raycaster.setFromCamera(this.ndc(sx, sy), this.camera3);
-    const hits = this.raycaster.intersectObject(this.ground, false);
-    if (hits.length === 0) return null;
-    return { x: hits[0].point.x, y: hits[0].point.z };
+    return castGround(this.raycaster, this.camera3, this.view, sx, sy, this.ground);
   }
 
   /** The ground point a machine/wreck/dock body projects to, for selection-latency checks. */
   projectWorld(x: number, y: number, z: number): { x: number; y: number } {
-    const v = new THREE.Vector3(x, y, z).project(this.camera3);
-    return {
-      x: ((v.x + 1) / 2) * this.view.width,
-      y: ((1 - v.y) / 2) * this.view.height,
-    };
+    return projectToScreen(this.camera3, this.view, x, y, z);
   }
 
   stats(): { calls: number; triangles: number; archetypes: number; instances: number; drones: number } {

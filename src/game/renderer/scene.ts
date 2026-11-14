@@ -55,7 +55,7 @@ import {
   type CameraInsets,
   type ViewState,
 } from "./projection";
-import { blitWorld3D } from "./three";
+import { blitWorld3D, world3DStatus } from "./three";
 // RW3D T07 (#134): the drone flight parameter is pure and shared with the three.js world
 // layer; it lives in flight.ts so THREE never imports scene.ts (no import cycle, no UI
 // bridge across the boundary). Re-exported here to keep the legacy import surface.
@@ -240,6 +240,9 @@ export function drawScene(
   view: ViewState,
   options: DrawOptions
 ): void {
+  // RW3D T07 (#134): hidden-tab render pause. A backgrounded tab paints nothing —
+  // neither the 3D render nor the 2D fallback — so a hidden frame costs zero work.
+  if (typeof document !== "undefined" && document.hidden) return;
   ctx.imageSmoothingEnabled = false;
   const s = camera.scale;
   // A1: one phase for the whole frame, shared by every moving group (Q-004 C-1).
@@ -293,6 +296,20 @@ export function drawScene(
   }
   drawDrones(ctx, state, camera, view, reducedMotion, phase, bodies);
   if (options.ghostTile !== null) drawGhost(ctx, camera, view, options.ghostTile, options.ghostValid);
+  // RW3D T07 (#134): context-loss message. The 2D fallback above keeps the yard
+  // playable, and the renderer holds no save bytes, so the save is untouched by
+  // construction. jsdom never reaches this (the probe reports "unavailable").
+  if (world3DStatus() === "lost") {
+    const msg = "Graphics context lost - save untouched. Running 2D fallback.";
+    ctx.font = "12px monospace";
+    const bw = ctx.measureText(msg).width + 16;
+    const bx = (view.width - bw) / 2;
+    const by = view.height - 28;
+    ctx.fillStyle = PALETTE.nightDeep;
+    ctx.fillRect(bx, by, bw, 20);
+    ctx.fillStyle = PALETTE.select;
+    ctx.fillText(msg, bx + 8, by + 14);
+  }
 }
 
 /** Paint one fixed world-coord table as one path per colour group (ART-001 depth planes). */
