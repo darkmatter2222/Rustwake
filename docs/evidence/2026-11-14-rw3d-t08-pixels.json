@@ -2,9 +2,9 @@
   "role": "developer (implementation author; NOT an independent review)",
   "issue": 135,
   "branch": "rw/135-shell-nav",
-  "headSha": "125548b84bd8f56090eeba22aebdb618dcce9d56",
+  "headSha": "0c40871de4d92ffcde7c15285b8dcc4b6ed8e402",
   "treeCleanAtStart": true,
-  "capturedAt": "2026-11-14T09:02:05.955Z",
+  "capturedAt": "2026-11-14T10:01:27.529Z",
   "method": "production build (dist/) served on a throwaway static server; playwright-core headless; three.js renderer (#198) blits offscreen WebGL into the 2D yard canvas; pixel stats decoded from the actual screenshot bytes in-browser; numeric DOM census; phone context is DESKTOP EMULATION, not a real handset",
   "visualInspection": "PENDING — non-vision author; owed at G1 (#151)",
   "browser": {
@@ -20,7 +20,7 @@
   "seed": {
     "file": "docs/evidence/yard-mature.json",
     "sha256": "47a8b0a733a834d1f0931a8ce534c48ded7d25f8d1561b1a323cd0cb5ac90967",
-    "gapHours": 249.5
+    "gapHours": 250.49
   },
   "thresholds": {
     "uniqueColors": ">200 per frame",
@@ -36,12 +36,12 @@
     "desktop": {
       "width": 1440,
       "height": 900,
-      "uniqueColors": 477
+      "uniqueColors": 464
     },
     "phone": {
       "width": 780,
       "height": 1688,
-      "uniqueColors": 432
+      "uniqueColors": 417
     }
   },
   "provenance": [
@@ -89,9 +89,9 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1803,
-        "luminanceMean": 19.83,
-        "luminanceStddev": 26.5,
+        "uniqueColors": 1788,
+        "luminanceMean": 19.84,
+        "luminanceStddev": 26.52,
         "backgroundFraction": 0.7038,
         "modeColor": "#080d18"
       }
@@ -106,8 +106,8 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1450,
-        "luminanceMean": 18.6,
+        "uniqueColors": 1445,
+        "luminanceMean": 18.59,
         "luminanceStddev": 24.07,
         "backgroundFraction": 0.7624,
         "modeColor": "#080d18"
@@ -123,9 +123,9 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1621,
-        "luminanceMean": 19.54,
-        "luminanceStddev": 25.34,
+        "uniqueColors": 1678,
+        "luminanceMean": 19.55,
+        "luminanceStddev": 25.36,
         "backgroundFraction": 0.7038,
         "modeColor": "#080d18"
       }
@@ -140,9 +140,9 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1434,
+        "uniqueColors": 1452,
         "luminanceMean": 19.07,
-        "luminanceStddev": 24.65,
+        "luminanceStddev": 24.64,
         "backgroundFraction": 0.7137,
         "modeColor": "#080d18"
       }
@@ -157,9 +157,9 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 3954,
-        "luminanceMean": 36.4,
-        "luminanceStddev": 46.74,
+        "uniqueColors": 3952,
+        "luminanceMean": 36.44,
+        "luminanceStddev": 46.79,
         "backgroundFraction": 0.2574,
         "modeColor": "#0b121f"
       }
@@ -174,9 +174,9 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 2937,
+        "uniqueColors": 2924,
         "luminanceMean": 36.45,
-        "luminanceStddev": 44.59,
+        "luminanceStddev": 44.58,
         "backgroundFraction": 0.3228,
         "modeColor": "#0b121f"
       }
@@ -208,7 +208,7 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 2726,
+        "uniqueColors": 2729,
         "luminanceMean": 31.11,
         "luminanceStddev": 37.8,
         "backgroundFraction": 0.3493,
@@ -225,7 +225,7 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 3180,
+        "uniqueColors": 3202,
         "luminanceMean": 32.47,
         "luminanceStddev": 41.6,
         "backgroundFraction": 0.2677,
@@ -256,13 +256,13 @@
     {
       "name": "desktop-report: unique colors > 200",
       "expected": ">200",
-      "actual": 1803,
+      "actual": 1788,
       "pass": true
     },
     {
       "name": "desktop-report: luminance stddev > 8",
       "expected": ">8",
-      "actual": 26.5,
+      "actual": 26.52,
       "pass": true
     },
     {
@@ -322,7 +322,7 @@
     {
       "name": "desktop-yard: unique colors > 200",
       "expected": ">200",
-      "actual": 1450,
+      "actual": 1445,
       "pass": true
     },
     {
@@ -340,7 +340,7 @@
     {
       "name": "desktop: yard canvas non-blank",
       "expected": ">40 unique colors",
-      "actual": 477,
+      "actual": 464,
       "pass": true
     },
     {
@@ -376,13 +376,13 @@
     {
       "name": "desktop-inspector: unique colors > 200",
       "expected": ">200",
-      "actual": 1621,
+      "actual": 1678,
       "pass": true
     },
     {
       "name": "desktop-inspector: luminance stddev > 8",
       "expected": ">8",
-      "actual": 25.34,
+      "actual": 25.36,
       "pass": true
     },
     {
@@ -412,13 +412,13 @@
     {
       "name": "desktop-settings: unique colors > 200",
       "expected": ">200",
-      "actual": 1434,
+      "actual": 1452,
       "pass": true
     },
     {
       "name": "desktop-settings: luminance stddev > 8",
       "expected": ">8",
-      "actual": 24.65,
+      "actual": 24.64,
       "pass": true
     },
     {
@@ -466,13 +466,13 @@
     {
       "name": "phone-report: unique colors > 200",
       "expected": ">200",
-      "actual": 3954,
+      "actual": 3952,
       "pass": true
     },
     {
       "name": "phone-report: luminance stddev > 8",
       "expected": ">8",
-      "actual": 46.74,
+      "actual": 46.79,
       "pass": true
     },
     {
@@ -520,13 +520,13 @@
     {
       "name": "phone-yard: unique colors > 200",
       "expected": ">200",
-      "actual": 2937,
+      "actual": 2924,
       "pass": true
     },
     {
       "name": "phone-yard: luminance stddev > 8",
       "expected": ">8",
-      "actual": 44.59,
+      "actual": 44.58,
       "pass": true
     },
     {
@@ -538,7 +538,7 @@
     {
       "name": "phone: yard canvas non-blank",
       "expected": ">40 unique colors",
-      "actual": 432,
+      "actual": 417,
       "pass": true
     },
     {
@@ -592,7 +592,7 @@
     {
       "name": "phone-expanded: unique colors > 200",
       "expected": ">200",
-      "actual": 2726,
+      "actual": 2729,
       "pass": true
     },
     {
@@ -634,7 +634,7 @@
     {
       "name": "phone-settings: unique colors > 200",
       "expected": ">200",
-      "actual": 3180,
+      "actual": 3202,
       "pass": true
     },
     {
