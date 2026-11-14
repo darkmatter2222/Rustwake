@@ -19,6 +19,13 @@ import { catchUp } from "../../src/game/simulation/offline";
 import { nextYardStep } from "../../src/game/simulation/plan";
 import { describeStep, primaryFor } from "../../src/ui/text";
 import { firstFreeTile } from "../../src/ui/App";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+  type LadderRecoveryState,
+} from "../../src/game/content/validate";
 
 /**
  * B-28: a second recovery drone so the store keeps a build-sized surplus while the
@@ -44,14 +51,27 @@ function boot(): SimState {
   return state;
 }
 
-/** The scripted session: one ladder command per second, as the browser driver does. */
-function runLadder(state: SimState, rounds: number): Record<string, number> {
+/** The scripted session: one ladder command per second, as the browser driver does.
+ * #214: plays the shared dismantle-refund recovery in the gate's three-phase order
+ * (triggers before the step, adjust after it is chosen, clear after the advance), and
+ * waits for both starter machines before claiming the 10-steel contract — the same
+ * taught order as `validateBehaviour` and the chain/fork mirrors. The recovery context
+ * is passed in so a session split across two calls keeps one continuous play order. */
+function runLadder(
+  state: SimState,
+  rounds: number,
+  recovery: LadderRecoveryState = newLadderRecovery()
+): Record<string, number> {
   const histogram: Record<string, number> = {};
   for (let round = 0; round < rounds; round += 1) {
-    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    const startersBuilt =
+      state.machines.some((m) => m.blueprint === "sorter") &&
+      state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       send(state, { type: "contract.export" });
     }
-    const step = nextYardStep(state);
+    ladderRecoveryTriggers(state, recovery, round);
+    const step = ladderRecoveryAdjust(state, recovery, nextYardStep(state));
     const key = step.kind === "build" ? `build:${step.blueprint}` : step.kind;
     histogram[key] = (histogram[key] ?? 0) + 1;
     switch (step.kind) {
@@ -79,6 +99,7 @@ function runLadder(state: SimState, rounds: number): Record<string, number> {
         send(state, { type: "manual.salvage" });
     }
     advance(state, 10);
+    ladderRecoveryClear(state, recovery);
   }
   return histogram;
 }
@@ -132,8 +153,19 @@ describe("recovery drone fleet (B-28)", () => {
 
   it("lands about twice the scrap with two units on the same route", () => {
     const solo = boot();
-    advance(solo, 1_000);
     const doubled = boot();
+    // #214: the starter seed now occupies 144 of the dock's 300 units. This fixture has
+    // no machines to consume scrap, so a full store would block the spare's deliveries
+    // (engine `updateUnit` lands only into free room) and cap the ratio below the fleet's
+    // true lift rate. Empty the store on both runs so the 1 000-tick window measures the
+    // unchanged delivery mechanic, not the seed's store occupancy.
+    for (const state of [solo, doubled]) {
+      state.store.scrap = 0;
+      state.store.ferrous = 0;
+      state.store.steel = 0;
+      state.storeUnits = 0;
+    }
+    advance(solo, 1_000);
     doubled.credits = 200;
     send(doubled, { type: "drone.add" });
     advance(doubled, 1_000);
@@ -199,6 +231,14 @@ describe("recovery drone fleet (B-28)", () => {
     const state = createInitialState();
     state.drone.repaired = true;
     state.credits = 45;
+    // #214: `unlockedBlueprints` floors at tutorial 4, so the sorter is revealed even
+    // here, and the starter seed (120 scrap, 12 steel) now covers its 30 scrap + 4 steel
+    // price — the build stage would lead. Empty the store so no build is affordable and
+    // the fleet step is the only open action, which is the isolation this check needs.
+    state.store.scrap = 0;
+    state.store.ferrous = 0;
+    state.store.steel = 0;
+    state.storeUnits = 0;
     // Nothing else is open: no machine, no link, no data, so the fleet step leads.
     expect(nextYardStep(state)).toEqual({ kind: "drone" });
     const step = nextYardStep(state);
@@ -214,7 +254,8 @@ describe("recovery drone fleet (B-28)", () => {
   it("reaches six machines by 240 rounds and buys its first spare inside 900", () => {
     const state = boot();
     state.tutorial = 9;
-    const histogram = runLadder(state, 240);
+    const recovery = newLadderRecovery();
+    const histogram = runLadder(state, 240, recovery);
     console.log(
       "fleet-session-240:",
       JSON.stringify({
@@ -231,9 +272,12 @@ describe("recovery drone fleet (B-28)", () => {
     // enough surplus for two more blueprint prices inside the same 240 seconds.
     // BELT-001 restated 6 -> 5 at this mark: the laid belts spend 1 scrap per tile
     // from the same store, so the sixth blueprint price lands a few rounds later.
+    // #214: the shared dismantle-refund recovery (ferrous refill -> signal lab, wire
+    // monopoly -> assembler rebuild) now reaches the full 8-machine yard by this mark,
+    // so the floor holds with margin; the fleet keeps delivering throughout.
     expect(state.machines.length).toBeGreaterThanOrEqual(5);
     expect(fleetDeliveries(state)).toBeGreaterThan(40);
-    runLadder(state, 660); // 900 rounds in total
+    runLadder(state, 660, recovery); // 900 rounds in total
     console.log(
       "fleet-session-900:",
       JSON.stringify({
