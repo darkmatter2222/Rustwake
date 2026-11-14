@@ -1,0 +1,2374 @@
+{
+  "prefix": "2026-11-14-rw3d-t10",
+  "role": "developer",
+  "issue": 137,
+  "head": "7025023d6bb7a231e3b50e6b5b3256c51ce5d77b",
+  "seed": 137,
+  "capturedAt": "2026-11-14T08:57:06.024Z",
+  "method": "vite dev server :4317 + playwright-core system browser; real renderer/engine/sim modules; scripted fixed-dt frames; numerical checks only",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "baseline": {
+    "testFiles": 68,
+    "tests": 880,
+    "base": "dff3e352301d4ac7054024076a9609286f28849a"
+  },
+  "checks": [
+    {
+      "name": "A.init places warehouse and renders",
+      "pass": true,
+      "detail": "cell {\"x\":8,\"y\":0}"
+    },
+    {
+      "name": "A.t0 stage=base visible=1 done=false",
+      "pass": true,
+      "detail": "got base/1/false"
+    },
+    {
+      "name": "A.t10 stage=frame visible=3 done=false",
+      "pass": true,
+      "detail": "got frame/3/false"
+    },
+    {
+      "name": "A.t20 stage=walls visible=6 done=false",
+      "pass": true,
+      "detail": "got walls/6/false"
+    },
+    {
+      "name": "A.t30 stage=roof visible=11 done=false",
+      "pass": true,
+      "detail": "got roof/11/false"
+    },
+    {
+      "name": "A.t40 stage=activation visible=18 done=false",
+      "pass": true,
+      "detail": "got activation/18/false"
+    },
+    {
+      "name": "A.t50 stage=activation visible=18 done=true",
+      "pass": true,
+      "detail": "got activation/18/true"
+    },
+    {
+      "name": "A.visible part count monotone",
+      "pass": true,
+      "detail": "1,3,6,11,18,18"
+    },
+    {
+      "name": "A.stage index monotone 0..4",
+      "pass": true,
+      "detail": "0,1,2,3,4,4"
+    },
+    {
+      "name": "A.foundation settles +0.25u -> rest",
+      "pass": true,
+      "detail": "0.35 -> 0.1"
+    },
+    {
+      "name": "A.frame rises mid-stage (0 < scaleY < full)",
+      "pass": true,
+      "detail": "scaleY=0.7040000000000002"
+    },
+    {
+      "name": "A.parts hidden before their stage",
+      "pass": true
+    },
+    {
+      "name": "B.full motion interpolates mid-base",
+      "pass": true,
+      "detail": "y=0.225"
+    },
+    {
+      "name": "B.reduced motion rests at kit center",
+      "pass": true,
+      "detail": "y=0.1"
+    },
+    {
+      "name": "B.reduced motion discrete full-size frame",
+      "pass": true,
+      "detail": "scaleY=2"
+    },
+    {
+      "name": "B.motion setting never changes economy",
+      "pass": true,
+      "detail": "215e9db6"
+    },
+    {
+      "name": "C.reload at tick 25 preserves state byte-for-byte",
+      "pass": true,
+      "detail": "eafa0a60"
+    },
+    {
+      "name": "C.reload resumes walls stage",
+      "pass": true
+    },
+    {
+      "name": "C.reloaded world completes identically to control",
+      "pass": true,
+      "detail": "82f13124"
+    },
+    {
+      "name": "D.tick-by-tick 25 matches event-jump 25",
+      "pass": true,
+      "detail": "eafa0a60"
+    },
+    {
+      "name": "D.tick-by-tick 50 matches control",
+      "pass": true,
+      "detail": "82f13124"
+    },
+    {
+      "name": "E.upgrade charges once (30 credits)",
+      "pass": true,
+      "detail": "credits 30 -> 0"
+    },
+    {
+      "name": "E.level 2 shows exactly one module",
+      "pass": true
+    },
+    {
+      "name": "E.duplicate command id charges/levels again never",
+      "pass": true
+    },
+    {
+      "name": "E.sim upgrade never touches world economy",
+      "pass": true
+    },
+    {
+      "name": "E.second distinct upgrade -> two modules",
+      "pass": true
+    },
+    {
+      "name": "E.upgrade modules visible from camera (raycast first-hit)",
+      "pass": true,
+      "detail": "upgradeModule1:visible, upgradeModule2:visible"
+    },
+    {
+      "name": "E.upgrade frame differs from level-1 completion (pixels)",
+      "pass": true,
+      "detail": "upgrade 11918B vs complete 11497B"
+    },
+    {
+      "name": "F.idle fan advances with framePhase",
+      "pass": true,
+      "detail": "5.9136 -> 6.0984"
+    },
+    {
+      "name": "F.reduced motion idles are identity",
+      "pass": true
+    },
+    {
+      "name": "Z.no page errors",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "Z.shared resources (1 geometry, 10 materials)",
+      "pass": true,
+      "detail": "{\"geometries\":1,\"materials\":10,\"meshes\":20}"
+    }
+  ],
+  "scenarios": {
+    "partProbe_t0": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.35,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": false,
+        "position": [
+          0,
+          1,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          2,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": false,
+        "position": [
+          0,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": false,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": false,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "partProbe_t10": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": true,
+        "position": [
+          0,
+          0.3520000000000001,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          0.7040000000000002,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": false,
+        "position": [
+          0,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": false,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": false,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "partProbe_t20": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": true,
+        "position": [
+          0,
+          1,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          2,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": true,
+        "position": [
+          0.4447110443999999,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": false,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": false,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "partProbe_t30": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": true,
+        "position": [
+          0,
+          1,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          2,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": true,
+        "position": [
+          0,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": true,
+        "position": [
+          0,
+          0.8168000000000001,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": false,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "partProbe_t40": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": true,
+        "position": [
+          0,
+          1,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          2,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": true,
+        "position": [
+          0,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": true,
+        "position": [
+          0,
+          0.463240296,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "partProbe_t50": [
+      {
+        "name": "foundation",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6,
+          0.2,
+          4
+        ]
+      },
+      {
+        "name": "centerPier",
+        "visible": true,
+        "position": [
+          0,
+          1,
+          1.85
+        ],
+        "scale": [
+          0.35,
+          2,
+          0.25
+        ]
+      },
+      {
+        "name": "back",
+        "visible": true,
+        "position": [
+          0,
+          1.1,
+          -1.85
+        ],
+        "scale": [
+          5.8,
+          2.2,
+          0.25
+        ]
+      },
+      {
+        "name": "roofBase",
+        "visible": true,
+        "position": [
+          0,
+          0.1,
+          0
+        ],
+        "scale": [
+          6.1,
+          0.2,
+          4.1
+        ]
+      },
+      {
+        "name": "doorPanel0",
+        "visible": true,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          2.2,
+          1.7,
+          0.12
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "tick": 0,
+        "fingerprint": "28882e2e",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 0,
+            "stageName": "base",
+            "done": false,
+            "visibleParts": 1,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      {
+        "tick": 10,
+        "fingerprint": "570f20bc",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 1,
+            "stageName": "frame",
+            "done": false,
+            "visibleParts": 3,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      {
+        "tick": 20,
+        "fingerprint": "215e9db6",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      {
+        "tick": 30,
+        "fingerprint": "07166538",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 3,
+            "stageName": "roof",
+            "done": false,
+            "visibleParts": 11,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      {
+        "tick": 40,
+        "fingerprint": "1f88686e",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": false,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      }
+    ],
+    "reducedMotion": {
+      "rmMid": [
+        {
+          "name": "foundation",
+          "visible": true,
+          "position": [
+            0,
+            0.1,
+            0
+          ],
+          "scale": [
+            6,
+            0.2,
+            4
+          ]
+        }
+      ],
+      "rm10": {
+        "tick": 10,
+        "fingerprint": "570f20bc",
+        "reducedMotion": true,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 1,
+            "stageName": "frame",
+            "done": false,
+            "visibleParts": 3,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "rm20": {
+        "tick": 20,
+        "fingerprint": "215e9db6",
+        "reducedMotion": true,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "fm20": {
+        "tick": 20,
+        "fingerprint": "215e9db6",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      }
+    },
+    "reload": {
+      "c25": {
+        "tick": 25,
+        "fingerprint": "eafa0a60",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "cReload": {
+        "tick": 25,
+        "fingerprint": "eafa0a60",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "c50": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "control50": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      }
+    },
+    "fastForward": {
+      "d25": {
+        "tick": 25,
+        "fingerprint": "eafa0a60",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 2,
+            "stageName": "walls",
+            "done": false,
+            "visibleParts": 6,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 1,
+          "buildings": 0,
+          "reservations": 1,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {}
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "d50": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      }
+    },
+    "upgradeModuleProbe": [
+      {
+        "name": "upgradeModule1",
+        "center": [
+          10.3,
+          3.0500000000000003,
+          0.5
+        ],
+        "firstHit": "upgradeModule1",
+        "firstHitDistance": 16.114179982859813,
+        "visibleFromCamera": true,
+        "hitCount": 1
+      },
+      {
+        "name": "upgradeModule2",
+        "center": [
+          10.3,
+          3.5500000000000003,
+          0.5
+        ],
+        "firstHit": "upgradeModule2",
+        "firstHitDistance": 15.975803945967789,
+        "visibleFromCamera": true,
+        "hitCount": 1
+      }
+    ],
+    "upgrades": {
+      "eBase": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 0,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 18
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 30,
+          "level": 1
+        }
+      },
+      "eUp1": {
+        "res": {
+          "ok": true,
+          "revision": 15
+        },
+        "sample": {
+          "tick": 50,
+          "fingerprint": "82f13124",
+          "reducedMotion": false,
+          "framePhase": 0,
+          "report": [
+            {
+              "id": 1,
+              "asset": "warehouse",
+              "stage": 4,
+              "stageName": "activation",
+              "done": true,
+              "visibleParts": 18,
+              "totalParts": 18,
+              "upgradeModules": 1,
+              "groups": [
+                "structure",
+                "roof",
+                "door0",
+                "door1",
+                "ventFan",
+                "palletLift"
+              ],
+              "idleGroups": [
+                {
+                  "name": "ventFan",
+                  "position": [
+                    1.75,
+                    0.75,
+                    -1
+                  ],
+                  "rotation": [
+                    0,
+                    5.91358617146314,
+                    0
+                  ]
+                },
+                {
+                  "name": "palletLift",
+                  "position": [
+                    1.5,
+                    0.17499999999999996,
+                    -1.5
+                  ],
+                  "rotation": [
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ]
+            }
+          ],
+          "resources": {
+            "geometries": 1,
+            "materials": 10,
+            "meshes": 19
+          },
+          "economy": {
+            "credits": 40,
+            "sites": 0,
+            "buildings": 1,
+            "reservations": 0,
+            "stock": {
+              "scrap": 90,
+              "ferrous": 12,
+              "steel": 4
+            },
+            "committed": {
+              "scrap": 30,
+              "steel": 8
+            }
+          },
+          "sim": {
+            "credits": 0,
+            "level": 2
+          }
+        }
+      },
+      "eDup": {
+        "res": {
+          "ok": true,
+          "revision": 15
+        },
+        "sample": {
+          "tick": 50,
+          "fingerprint": "82f13124",
+          "reducedMotion": false,
+          "framePhase": 0,
+          "report": [
+            {
+              "id": 1,
+              "asset": "warehouse",
+              "stage": 4,
+              "stageName": "activation",
+              "done": true,
+              "visibleParts": 18,
+              "totalParts": 18,
+              "upgradeModules": 1,
+              "groups": [
+                "structure",
+                "roof",
+                "door0",
+                "door1",
+                "ventFan",
+                "palletLift"
+              ],
+              "idleGroups": [
+                {
+                  "name": "ventFan",
+                  "position": [
+                    1.75,
+                    0.75,
+                    -1
+                  ],
+                  "rotation": [
+                    0,
+                    5.91358617146314,
+                    0
+                  ]
+                },
+                {
+                  "name": "palletLift",
+                  "position": [
+                    1.5,
+                    0.17499999999999996,
+                    -1.5
+                  ],
+                  "rotation": [
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ]
+            }
+          ],
+          "resources": {
+            "geometries": 1,
+            "materials": 10,
+            "meshes": 19
+          },
+          "economy": {
+            "credits": 40,
+            "sites": 0,
+            "buildings": 1,
+            "reservations": 0,
+            "stock": {
+              "scrap": 90,
+              "ferrous": 12,
+              "steel": 4
+            },
+            "committed": {
+              "scrap": 30,
+              "steel": 8
+            }
+          },
+          "sim": {
+            "credits": 0,
+            "level": 2
+          }
+        }
+      },
+      "eUp2": {
+        "res": {
+          "ok": true,
+          "revision": 17
+        },
+        "sample": {
+          "tick": 50,
+          "fingerprint": "82f13124",
+          "reducedMotion": false,
+          "framePhase": 0,
+          "report": [
+            {
+              "id": 1,
+              "asset": "warehouse",
+              "stage": 4,
+              "stageName": "activation",
+              "done": true,
+              "visibleParts": 18,
+              "totalParts": 18,
+              "upgradeModules": 2,
+              "groups": [
+                "structure",
+                "roof",
+                "door0",
+                "door1",
+                "ventFan",
+                "palletLift"
+              ],
+              "idleGroups": [
+                {
+                  "name": "ventFan",
+                  "position": [
+                    1.75,
+                    0.75,
+                    -1
+                  ],
+                  "rotation": [
+                    0,
+                    5.91358617146314,
+                    0
+                  ]
+                },
+                {
+                  "name": "palletLift",
+                  "position": [
+                    1.5,
+                    0.17499999999999996,
+                    -1.5
+                  ],
+                  "rotation": [
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ]
+            }
+          ],
+          "resources": {
+            "geometries": 1,
+            "materials": 10,
+            "meshes": 20
+          },
+          "economy": {
+            "credits": 40,
+            "sites": 0,
+            "buildings": 1,
+            "reservations": 0,
+            "stock": {
+              "scrap": 90,
+              "ferrous": 12,
+              "steel": 4
+            },
+            "committed": {
+              "scrap": 30,
+              "steel": 8
+            }
+          },
+          "sim": {
+            "credits": 195,
+            "level": 3
+          }
+        }
+      }
+    },
+    "idle": {
+      "f0": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 2,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  5.91358617146314,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.17499999999999996,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 20
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 195,
+          "level": 3
+        }
+      },
+      "f1": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": false,
+        "framePhase": 0.5,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 2,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  6.098385739321363,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0.18873034175237283,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 20
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 195,
+          "level": 3
+        }
+      },
+      "fRm": {
+        "tick": 50,
+        "fingerprint": "82f13124",
+        "reducedMotion": true,
+        "framePhase": 0.5,
+        "report": [
+          {
+            "id": 1,
+            "asset": "warehouse",
+            "stage": 4,
+            "stageName": "activation",
+            "done": true,
+            "visibleParts": 18,
+            "totalParts": 18,
+            "upgradeModules": 2,
+            "groups": [
+              "structure",
+              "roof",
+              "door0",
+              "door1",
+              "ventFan",
+              "palletLift"
+            ],
+            "idleGroups": [
+              {
+                "name": "ventFan",
+                "position": [
+                  1.75,
+                  0.75,
+                  -1
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              },
+              {
+                "name": "palletLift",
+                "position": [
+                  1.5,
+                  0,
+                  -1.5
+                ],
+                "rotation": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            ]
+          }
+        ],
+        "resources": {
+          "geometries": 1,
+          "materials": 10,
+          "meshes": 20
+        },
+        "economy": {
+          "credits": 40,
+          "sites": 0,
+          "buildings": 1,
+          "reservations": 0,
+          "stock": {
+            "scrap": 90,
+            "ferrous": 12,
+            "steel": 4
+          },
+          "committed": {
+            "scrap": 30,
+            "steel": 8
+          }
+        },
+        "sim": {
+          "credits": 195,
+          "level": 3
+        }
+      }
+    },
+    "resources": {
+      "geometries": 1,
+      "materials": 10,
+      "meshes": 20
+    }
+  },
+  "limitations": [
+    "Non-vision agent: numerical phase/transform checks only; capable visual inspection PENDING (architecture G1 #151).",
+    "Small assets hold some stages (no new parts in that window); warehouse shows all five distinct stages.",
+    "World<->sim level join is harness-side; production wiring owed to #148 cutover / #199 shell.",
+    "Per-building named groups instead of full instancing for animated pivots (P1 scale tradeoff, #151 P02)."
+  ]
+}
