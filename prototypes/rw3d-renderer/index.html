@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RW3D T03 renderer spike (#130)</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #292C29; }
+  #scene { display: block; width: 100vw; height: 100vh; touch-action: none; }
+  #hud {
+    position: fixed; top: 12px; left: 12px; max-width: 340px;
+    background: rgba(41,44,41,0.92); color: #F4EBD8;
+    font: 13px/1.5 system-ui, sans-serif; padding: 12px 14px; border-radius: 8px;
+  }
+  #hud h1 { font-size: 14px; margin: 0 0 6px; }
+  #hud .row { white-space: pre-wrap; }
+  #hud .sel-on { color: #FFB348; font-weight: 600; }
+  #hud button {
+    min-height: 44px; min-width: 44px; margin: 8px 6px 0 0; padding: 8px 12px;
+    background: #7C8078; color: #F4EBD8; border: 1px solid #C0B69F; border-radius: 6px;
+    font: 13px system-ui, sans-serif; cursor: pointer;
+  }
+  #hud .note { color: #C0B69F; font-size: 11px; margin-top: 8px; }
+  #fatal {
+    position: fixed; inset: 0; display: none; place-items: center;
+    background: #292C29; color: #F4EBD8; font: 15px system-ui, sans-serif; text-align: center; padding: 24px;
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div id="hud">
+  <h1>RW3D T03 spike &mdash; crane blockout</h1>
+  <div class="row" id="hud-asset">asset: loading&hellip;</div>
+  <div class="row" id="hud-selection">selection: none</div>
+  <div class="row" id="hud-pivot">hoist: idle</div>
+  <div class="row" id="hud-camera">camera: default</div>
+  <div class="row" id="hud-fps">fps: &ndash;</div>
+  <div class="row" id="hud-tier">tier: blockout-flat (no shadows, DPR cap 2)</div>
+  <button id="btn-cycle" type="button">Run lift cycle</button>
+  <button id="btn-reset-pivot" type="button">Reset pivot</button>
+  <button id="btn-reset-camera" type="button">Reset camera</button>
+  <div class="note">Reference blockout, not accepted art. Drag = orbit, right-drag = pan, wheel = zoom, click = select.</div>
+</div>
+<div id="fatal"></div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
