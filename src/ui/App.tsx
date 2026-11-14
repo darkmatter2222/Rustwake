@@ -16,8 +16,12 @@ import {
   WRECK_POSITION,
   drawScene,
   fitCamera,
+  pickWorld3D,
+  projectWorld3D,
   screenToWorld,
   tileToWorld,
+  world3DStatus,
+  worldToScreen,
   worldToTile,
   type Camera,
   type CameraInsets,
@@ -915,6 +919,33 @@ export function App({
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
       });
+      // RW3D #135 delta 3: world-anchored paint truth for the selection. The anchor is
+      // projected through the SAME cameraRig.projectToScreen the blit uses (scene.ts
+      // bridge), so an overlay pinned to data-anchor agrees with the 3D frame by
+      // construction; without WebGL it falls back to worldToScreen, identical under the
+      // default top-down camera. Stamped after drawScene so the singleton camera is
+      // freshly synced. Ground centre (x, 0, y) matches the 2D outline centre.
+      const anchorId = moveFlow !== null ? moveFlow.machineId : selected;
+      let anchorWorld: { x: number; y: number } | null = null;
+      if (anchorId === -1) anchorWorld = WRECK_POSITION;
+      else if (anchorId === -2) anchorWorld = tileToWorld(DOCK_TILE);
+      else if (anchorId !== null) {
+        const m = snapshot.machines.find((mm) => mm.id === anchorId);
+        if (m) anchorWorld = tileToWorld(m.tile);
+      }
+      const anchor = anchorWorld
+        ? projectWorld3D(anchorWorld.x, 0, anchorWorld.y) ??
+          worldToScreen(cameraRef.current, viewRef.current, anchorWorld.x, anchorWorld.y)
+        : null;
+      const anchorStamp = anchor ? `${anchor.x.toFixed(1)},${anchor.y.toFixed(1)}` : "";
+      if ((canvas.dataset.anchor ?? "") !== anchorStamp) {
+        if (anchorStamp === "") delete canvas.dataset.anchor;
+        else canvas.dataset.anchor = anchorStamp;
+      }
+      // Health provenance for the capture harness: "unavailable" | "lost" | "ready".
+      // The visible context-loss banner stays drawScene's — no duplicate shell surface.
+      const health = world3DStatus();
+      if (canvas.dataset.world3d !== health) canvas.dataset.world3d = health;
       // Q-005 S-14: the machine-state cues come from the state diff itself, so a
       // working sorter, a working furnace and the first data unit each get their
       // declared voice without a per-machine timer. Near/far is the tile distance
@@ -993,7 +1024,12 @@ export function App({
       if (tile !== null) setMoveFlow((flow) => (flow === null ? flow : { ...flow, tile }));
       return;
     }
-    const hit = pickTarget(store.getState(), world.x, world.y);
+    // RW3D #135 delta 1: raycast the last-synced three.js world first — an orbit-correct
+    // body hit. Null without WebGL or on context loss, so the ground inverse + pickTarget
+    // fallback keeps the jsdom / legacy path byte-identical. `??` passes -1 (wreck) and
+    // -2 (dock) through: those ids are valid hits, not misses.
+    const pick3 = pickWorld3D(out.tap.x, out.tap.y);
+    const hit = pick3?.id ?? pickTarget(store.getState(), world.x, world.y);
     if (hit === null) {
       clearPanels();
       return;

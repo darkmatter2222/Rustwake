@@ -3,13 +3,23 @@ import { createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 import { App } from "../../src/ui/App";
 import { createStore, type GameStore } from "../../src/app/store";
-import { fitCamera, tileToWorld, type Camera } from "../../src/game/renderer/scene";
+import {
+  fitCamera,
+  pickWorld3D,
+  projectWorld3D,
+  tileToWorld,
+  world3DStatus,
+  worldToScreen,
+  WRECK_POSITION,
+  type Camera,
+} from "../../src/game/renderer/scene";
 import { refitCamera } from "../../src/game/renderer/camera";
+import { DOCK_TILE } from "../../src/game/simulation/commands";
 import { SHELL_GUTTER_PX, SHELL_ZOOM_GUTTER_PX } from "../../src/ui/shell/layout";
 
 /**
- * RW3D #135 (round 7): the chrome-inset wiring delta, pinned through the real
- * App in jsdom after the rebase onto the #198 three.js renderer (dff3e35).
+ * RW3D #135 (rounds 7-8): the three renderer wiring deltas, pinned through the
+ * real App in jsdom after the rebase onto the #198 three.js renderer (dff3e35).
  *
  * Delta 2 — the measured chrome band (in-flow phone sheet / absolute desktop
  * inspector) flows through fitCamera(view, insets) and its returned camera into
@@ -18,20 +28,37 @@ import { SHELL_GUTTER_PX, SHELL_ZOOM_GUTTER_PX } from "../../src/ui/shell/layout
  * tests pin it against the rebased renderer so a future edit cannot silently
  * drop the insets. fitCamera is byte-identical across the rebase.
  *
- * Deltas 1 (pickWorld3D tap selection) and 3 (projectToScreen anchor stamp) are
- * BLOCKED this round: the frozen tests/renderer/boundary-3d.test.ts forbids any
- * src/ui import of renderer/three, and the sanctioned bridge (a re-export in
- * renderer/scene.ts) lives in forbidden src/game/**. See the PR #199 handoff.
+ * Delta 1 — the tap path raycasts the last-synced three.js world (pickWorld3D)
+ * before the ground inverse; null (jsdom / no WebGL / context loss) falls back
+ * to screenToWorld + pickTarget byte-identically, and the -1 (wreck) / -2 (dock)
+ * ids pass through the `??` unchanged.
  *
- * fitCamera/refitCamera are spied WITH their real math so the camera assertions
- * stay honest. jsdom paints no boxes by default, so the frozen camera-50 /
- * logistics-59 fallback behaviour is untouched; the insets tests mock the chrome
- * rects and the parent box explicitly.
+ * Delta 3 — the selection anchor is projected through the renderer camera
+ * (projectWorld3D, the scene.ts bridge to cameraRig.projectToScreen via
+ * YardWorld.projectWorld) and stamped on canvas.dataset.anchor, with
+ * worldToScreen as the null fallback; canvas.dataset.world3d carries the
+ * world3DStatus provenance. The visible context-loss banner stays drawScene's.
+ *
+ * The deltas 1/3 bridge is additive in renderer/scene.ts (the sanctioned
+ * exception): src/ui never imports renderer/three, so the frozen
+ * tests/renderer/boundary-3d.test.ts stays green.
+ *
+ * fitCamera/refitCamera/pickWorld3D/projectWorld3D/world3DStatus are spied WITH
+ * their real implementations so the assertions stay honest; the mocked-path
+ * tests override one spy at a time. jsdom paints no boxes by default, so the
+ * frozen camera-50 / logistics-59 fallback behaviour is untouched; the insets
+ * tests mock the chrome rects and the parent box explicitly.
  */
 
 vi.mock("../../src/game/renderer/scene", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../../src/game/renderer/scene")>();
-  return { ...actual, fitCamera: vi.fn(actual.fitCamera) };
+  return {
+    ...actual,
+    fitCamera: vi.fn(actual.fitCamera),
+    pickWorld3D: vi.fn(actual.pickWorld3D),
+    projectWorld3D: vi.fn(actual.projectWorld3D),
+    world3DStatus: vi.fn(actual.world3DStatus),
+  };
 });
 
 vi.mock("../../src/game/renderer/camera", async (importOriginal) => {
@@ -100,10 +127,17 @@ const tap = (x: number, y: number, id = 1) => {
   firePointer("pointerup", id, x, y);
 };
 
-/** jsdom's view is 0x0 unless the insets tests mock the parent box. */
+/** The render loop's view: the parent box in CSS px (0x0 in jsdom unless mocked). */
+function viewOf() {
+  return {
+    width: canvas().parentElement?.clientWidth ?? 0,
+    height: canvas().parentElement?.clientHeight ?? 0,
+  };
+}
+
 function screenOf(worldX: number, worldY: number) {
   const c = cam();
-  const view = { width: canvas().parentElement?.clientWidth ?? 0, height: canvas().parentElement?.clientHeight ?? 0 };
+  const view = viewOf();
   return { x: (worldX - c.x) * c.scale + view.width / 2, y: (worldY - c.y) * c.scale + view.height / 2 };
 }
 
@@ -213,8 +247,14 @@ beforeEach(async () => {
   );
   vi.mocked(fitCamera).mockImplementation(actualScene.fitCamera);
   vi.mocked(refitCamera).mockImplementation(actualCamera.refitCamera);
+  vi.mocked(pickWorld3D).mockImplementation(actualScene.pickWorld3D);
+  vi.mocked(projectWorld3D).mockImplementation(actualScene.projectWorld3D);
+  vi.mocked(world3DStatus).mockImplementation(actualScene.world3DStatus);
   vi.mocked(fitCamera).mockClear();
   vi.mocked(refitCamera).mockClear();
+  vi.mocked(pickWorld3D).mockClear();
+  vi.mocked(projectWorld3D).mockClear();
+  vi.mocked(world3DStatus).mockClear();
 });
 
 afterEach(() => {
@@ -358,5 +398,213 @@ describe("RW3D #135 delta 2: chrome insets flow through fitCamera/refitCamera", 
     });
     const refitCalls = vi.mocked(refitCamera).mock.calls;
     expect(refitCalls[refitCalls.length - 1][1]).toBe(fit.value);
+  });
+});
+
+describe("RW3D #135 delta 1: tap selection raycasts the 3D world first", () => {
+  it("falls back to screenToWorld + pickTarget when the real 3D pick is null (jsdom)", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const w = tileToWorld(35);
+    const p = screenOf(w.x, w.y);
+    tap(p.x, p.y);
+    // The raycast was attempted with the tap's canvas-local pixels...
+    expect(vi.mocked(pickWorld3D)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(pickWorld3D)).toHaveBeenCalledWith(p.x, p.y);
+    // ...returned null (jsdom's WebGL probe fails), and the ground-inverse
+    // fallback still opened the sorter panel — the frozen path, byte-identical.
+    expect(vi.mocked(pickWorld3D).mock.results[0].value).toBeNull();
+    expect(panelTitles()).toContain("Scrap sorter");
+  });
+
+  it("the dock fallback still opens the store (id -2 passes through ??)", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const w = tileToWorld(DOCK_TILE);
+    tapWorld(w.x, w.y);
+    expect(panelTitles()).toContain("Yard store");
+  });
+
+  it("a mocked 3D body hit selects where the ground fallback finds nothing", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    const sorterId = yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    // Precondition: (40, 40) is outside every pickable body — the real null
+    // pick + ground inverse clears the stack instead of opening a panel.
+    tap(40, 40);
+    expect(panelTitles()).toEqual([]);
+    vi.mocked(pickWorld3D).mockReturnValue({ id: sorterId, point: { x: 0, y: 0, z: 0 } });
+    tap(40, 40);
+    expect(panelTitles()).toContain("Scrap sorter");
+  });
+
+  it("a 3D hit without an id falls back to the ground inverse", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    vi.mocked(pickWorld3D).mockReturnValue({ id: null, point: { x: 0, y: 0, z: 0 } });
+    const w = tileToWorld(35);
+    tapWorld(w.x, w.y);
+    expect(panelTitles()).toContain("Scrap sorter");
+  });
+
+  it("a mocked dock hit (-2) opens the store panel", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    vi.mocked(pickWorld3D).mockReturnValue({ id: -2, point: { x: 0, y: 0, z: 0 } });
+    tap(40, 40);
+    expect(panelTitles()).toContain("Yard store");
+  });
+
+  it("a mocked wreck hit (-1) selects the wreck without painting a host panel", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    vi.mocked(pickWorld3D).mockReturnValue({
+      id: -1,
+      point: { x: WRECK_POSITION.x, y: 0, z: WRECK_POSITION.y },
+    });
+    tap(40, 40);
+    await frame();
+    // The wreck occupies a stack layer but paints no host panel (hostKey null);
+    // the delta-3 anchor stamp is the paint truth that the selection landed.
+    expect(panelTitles()).toEqual([]);
+    const expected = worldToScreen(cam(), viewOf(), WRECK_POSITION.x, WRECK_POSITION.y);
+    expect(canvas().dataset.anchor).toBe(`${expected.x.toFixed(1)},${expected.y.toFixed(1)}`);
+  });
+
+  it("build-mode taps never raycast (the ground inverse places the ghost)", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const build = document.querySelector('[data-slot="build"]') as HTMLButtonElement;
+    act(() => build.click());
+    tap(700, 400);
+    expect(vi.mocked(pickWorld3D)).not.toHaveBeenCalled();
+  });
+});
+
+describe("RW3D #135 delta 3: the selection anchor projects through the renderer camera", () => {
+  it("stamps the worldToScreen fallback when the 3D world is unavailable", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    // jsdom: no WebGL, nothing selected — provenance stamped, no anchor yet.
+    expect(canvas().dataset.world3d).toBe("unavailable");
+    expect(canvas().dataset.anchor).toBeUndefined();
+    const w = tileToWorld(35);
+    tapWorld(w.x, w.y);
+    await frame();
+    // The bridge was asked for the machine's ground centre (x, 0, y)...
+    expect(vi.mocked(projectWorld3D)).toHaveBeenCalledWith(w.x, 0, w.y);
+    // ...returned null, and the stamp equals the 2D worldToScreen fallback.
+    expect(vi.mocked(projectWorld3D).mock.results[0].value).toBeNull();
+    const expected = worldToScreen(cam(), viewOf(), w.x, w.y);
+    expect(canvas().dataset.anchor).toBe(`${expected.x.toFixed(1)},${expected.y.toFixed(1)}`);
+  });
+
+  it("a projected 3D anchor wins over the 2D fallback", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const w = tileToWorld(35);
+    tapWorld(w.x, w.y);
+    await frame();
+    vi.mocked(projectWorld3D).mockReturnValue({ x: 123.4, y: 567.8 });
+    await frame();
+    expect(canvas().dataset.anchor).toBe("123.4,567.8");
+  });
+
+  it("clears the anchor when the selection clears", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const w = tileToWorld(35);
+    tapWorld(w.x, w.y);
+    await frame();
+    expect(canvas().dataset.anchor).toBeDefined();
+    tap(40, 40);
+    await frame();
+    expect(canvas().dataset.anchor).toBeUndefined();
+  });
+
+  it("the anchor follows the camera zoom", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    yardWithSorter(store);
+    await frame();
+    mockChrome();
+    forceLayoutChange();
+    await frame();
+    const w = tileToWorld(35);
+    tapWorld(w.x, w.y);
+    await frame();
+    const before = canvas().dataset.anchor;
+    click("Zoom in");
+    await frame();
+    const expected = worldToScreen(cam(), viewOf(), w.x, w.y);
+    expect(canvas().dataset.anchor).toBe(`${expected.x.toFixed(1)},${expected.y.toFixed(1)}`);
+    expect(canvas().dataset.anchor).not.toBe(before);
+  });
+
+  it("stamps world3DStatus provenance, including context loss", async () => {
+    const store = createStore({ storage: memoryStorage(), now: () => 10 });
+    mount(store);
+    begin();
+    await frame();
+    expect(canvas().dataset.world3d).toBe("unavailable");
+    vi.mocked(world3DStatus).mockReturnValue("lost");
+    await frame();
+    expect(canvas().dataset.world3d).toBe("lost");
   });
 });

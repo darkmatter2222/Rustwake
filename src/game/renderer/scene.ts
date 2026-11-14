@@ -55,7 +55,7 @@ import {
   type CameraInsets,
   type ViewState,
 } from "./projection";
-import { blitWorld3D, world3DStatus } from "./three";
+import { blitWorld3D, getWorld3D, world3DStatus } from "./three";
 // RW3D T07 (#134): the drone flight parameter is pure and shared with the three.js world
 // layer; it lives in flight.ts so THREE never imports scene.ts (no import cycle, no UI
 // bridge across the boundary). Re-exported here to keep the legacy import surface.
@@ -65,6 +65,31 @@ export { CELL, WORLD_H, WORLD_W, WRECK_POSITION, tileToWorld, worldToTile };
 export { screenToWorld, worldToScreen };
 export { droneLeg };
 export type { Camera, CameraInsets, ViewState };
+
+// RW3D T08 (#135) wiring deltas 1/3 — additive bridge only. The frozen boundary tests
+// allow the relative "./three" specifier here; src/ui keeps importing scene.ts alone.
+//
+// Delta 1: raycast selection against the last-synced singleton world. Returns null when
+// WebGL is unavailable (jsdom / context loss), so the shell falls back to
+// screenToWorld + pickTarget and the legacy path stays byte-identical.
+export { pickWorld3D, world3DStatus } from "./three";
+export type { PickResult } from "./three";
+
+/**
+ * Delta 3: project a world point (x = yard x, y = up, z = yard y) to canvas-local CSS px
+ * through the SAME cameraRig.projectToScreen the renderer uses. three/index.ts does not
+ * re-export projectToScreen, and its raw signature takes the private
+ * THREE.OrthographicCamera — which the UI must never import or construct — so this bridge
+ * delegates to YardWorld.projectWorld, the public wrapper that runs projectToScreen on
+ * the last-synced camera + view. Anchors therefore agree with the blitted frame by
+ * construction. Returns null when the 3D world is unavailable or lost; the caller falls
+ * back to projection.worldToScreen.
+ */
+export function projectWorld3D(x: number, y: number, z: number): { x: number; y: number } | null {
+  const w = getWorld3D();
+  if (!w || w.isContextLost()) return null;
+  return w.projectWorld(x, y, z);
+}
 
 /**
  * Floor of a band-fitted scale; the legacy unbanded floor is the original 1.4. E-3: the
