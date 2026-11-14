@@ -2,14 +2,16 @@
   "role": "developer (implementation author; NOT an independent review)",
   "issue": 135,
   "branch": "rw/135-shell-nav",
-  "headSha": "7c0abd335605b87923da914e03e34fae4ccc461a",
+  "headSha": "125548b84bd8f56090eeba22aebdb618dcce9d56",
   "treeCleanAtStart": true,
-  "capturedAt": "2026-11-14T07:10:39.479Z",
-  "method": "production build (dist/) served on a throwaway static server; playwright-core headless; pixel stats decoded from the actual screenshot bytes in-browser; numeric DOM census; phone context is DESKTOP EMULATION, not a real handset",
+  "capturedAt": "2026-11-14T09:02:05.955Z",
+  "method": "production build (dist/) served on a throwaway static server; playwright-core headless; three.js renderer (#198) blits offscreen WebGL into the 2D yard canvas; pixel stats decoded from the actual screenshot bytes in-browser; numeric DOM census; phone context is DESKTOP EMULATION, not a real handset",
   "visualInspection": "PENDING — non-vision author; owed at G1 (#151)",
   "browser": {
     "version": "157.0.8103.51",
-    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
   },
   "server": {
     "port": 4318,
@@ -18,7 +20,7 @@
   "seed": {
     "file": "docs/evidence/yard-mature.json",
     "sha256": "47a8b0a733a834d1f0931a8ce534c48ded7d25f8d1561b1a323cd0cb5ac90967",
-    "gapHours": 247.64
+    "gapHours": 249.5
   },
   "thresholds": {
     "uniqueColors": ">200 per frame",
@@ -34,14 +36,48 @@
     "desktop": {
       "width": 1440,
       "height": 900,
-      "uniqueColors": 745
+      "uniqueColors": 477
     },
     "phone": {
       "width": 780,
       "height": 1688,
-      "uniqueColors": 693
+      "uniqueColors": 432
     }
   },
+  "provenance": [
+    {
+      "state": "desktop-yard",
+      "truth": {
+        "cam": "128.80,146.79,0.977",
+        "anchor": null,
+        "world3d": "ready"
+      }
+    },
+    {
+      "state": "desktop-trade",
+      "truth": {
+        "cam": "307.85,146.79,0.977",
+        "anchor": "497.3,322.2",
+        "world3d": "ready"
+      }
+    },
+    {
+      "state": "phone-yard",
+      "truth": {
+        "cam": "122.06,31.67,1.230",
+        "anchor": null,
+        "world3d": "ready"
+      }
+    },
+    {
+      "state": "phone-trade",
+      "truth": {
+        "cam": "115.68,112.00,1.629",
+        "anchor": "136.9,265.6",
+        "world3d": "ready"
+      }
+    }
+  ],
   "captures": [
     {
       "file": "2026-11-14-rw3d-t08-desktop-report.png",
@@ -53,11 +89,11 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 2131,
-        "luminanceMean": 23.42,
-        "luminanceStddev": 26.12,
-        "backgroundFraction": 0.8661,
-        "modeColor": "#0b1220"
+        "uniqueColors": 1803,
+        "luminanceMean": 19.83,
+        "luminanceStddev": 26.5,
+        "backgroundFraction": 0.7038,
+        "modeColor": "#080d18"
       }
     },
     {
@@ -70,11 +106,11 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1712,
-        "luminanceMean": 22.48,
-        "luminanceStddev": 23.77,
-        "backgroundFraction": 0.9011,
-        "modeColor": "#0b1220"
+        "uniqueColors": 1450,
+        "luminanceMean": 18.6,
+        "luminanceStddev": 24.07,
+        "backgroundFraction": 0.7624,
+        "modeColor": "#080d18"
       }
     },
     {
@@ -87,11 +123,11 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 2014,
-        "luminanceMean": 23.15,
-        "luminanceStddev": 25.01,
-        "backgroundFraction": 0.8666,
-        "modeColor": "#0b1220"
+        "uniqueColors": 1621,
+        "luminanceMean": 19.54,
+        "luminanceStddev": 25.34,
+        "backgroundFraction": 0.7038,
+        "modeColor": "#080d18"
       }
     },
     {
@@ -104,11 +140,11 @@
       "stats": {
         "width": 1440,
         "height": 900,
-        "uniqueColors": 1772,
-        "luminanceMean": 22.72,
-        "luminanceStddev": 24.36,
-        "backgroundFraction": 0.8917,
-        "modeColor": "#0b1220"
+        "uniqueColors": 1434,
+        "luminanceMean": 19.07,
+        "luminanceStddev": 24.65,
+        "backgroundFraction": 0.7137,
+        "modeColor": "#080d18"
       }
     },
     {
@@ -121,11 +157,11 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 4268,
-        "luminanceMean": 37.95,
-        "luminanceStddev": 46.44,
-        "backgroundFraction": 0.4103,
-        "modeColor": "#0b1220"
+        "uniqueColors": 3954,
+        "luminanceMean": 36.4,
+        "luminanceStddev": 46.74,
+        "backgroundFraction": 0.2574,
+        "modeColor": "#0b121f"
       }
     },
     {
@@ -138,11 +174,11 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 2946,
-        "luminanceMean": 39.12,
-        "luminanceStddev": 44.65,
-        "backgroundFraction": 0.5837,
-        "modeColor": "#0b1220"
+        "uniqueColors": 2937,
+        "luminanceMean": 36.45,
+        "luminanceStddev": 44.59,
+        "backgroundFraction": 0.3228,
+        "modeColor": "#0b121f"
       }
     },
     {
@@ -155,11 +191,11 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 4366,
-        "luminanceMean": 35.97,
-        "luminanceStddev": 42.63,
-        "backgroundFraction": 0.4067,
-        "modeColor": "#0b1220"
+        "uniqueColors": 4086,
+        "luminanceMean": 34.37,
+        "luminanceStddev": 42.93,
+        "backgroundFraction": 0.2593,
+        "modeColor": "#0b121f"
       }
     },
     {
@@ -172,11 +208,11 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 2804,
-        "luminanceMean": 32.11,
-        "luminanceStddev": 37.51,
-        "backgroundFraction": 0.3579,
-        "modeColor": "#0b1220"
+        "uniqueColors": 2726,
+        "luminanceMean": 31.11,
+        "luminanceStddev": 37.8,
+        "backgroundFraction": 0.3493,
+        "modeColor": "#0e1726"
       }
     },
     {
@@ -189,11 +225,11 @@
       "stats": {
         "width": 780,
         "height": 1688,
-        "uniqueColors": 3453,
-        "luminanceMean": 34.27,
-        "luminanceStddev": 41.48,
-        "backgroundFraction": 0.4297,
-        "modeColor": "#0b1220"
+        "uniqueColors": 3180,
+        "luminanceMean": 32.47,
+        "luminanceStddev": 41.6,
+        "backgroundFraction": 0.2677,
+        "modeColor": "#0b121f"
       }
     }
   ],
@@ -220,19 +256,19 @@
     {
       "name": "desktop-report: unique colors > 200",
       "expected": ">200",
-      "actual": 2131,
+      "actual": 1803,
       "pass": true
     },
     {
       "name": "desktop-report: luminance stddev > 8",
       "expected": ">8",
-      "actual": 26.12,
+      "actual": 26.5,
       "pass": true
     },
     {
       "name": "desktop-report: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.8661,
+      "actual": 0.7038,
       "pass": true
     },
     {
@@ -286,25 +322,25 @@
     {
       "name": "desktop-yard: unique colors > 200",
       "expected": ">200",
-      "actual": 1712,
+      "actual": 1450,
       "pass": true
     },
     {
       "name": "desktop-yard: luminance stddev > 8",
       "expected": ">8",
-      "actual": 23.77,
+      "actual": 24.07,
       "pass": true
     },
     {
       "name": "desktop-yard: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.9011,
+      "actual": 0.7624,
       "pass": true
     },
     {
       "name": "desktop: yard canvas non-blank",
       "expected": ">40 unique colors",
-      "actual": 745,
+      "actual": 477,
       "pass": true
     },
     {
@@ -340,25 +376,25 @@
     {
       "name": "desktop-inspector: unique colors > 200",
       "expected": ">200",
-      "actual": 2014,
+      "actual": 1621,
       "pass": true
     },
     {
       "name": "desktop-inspector: luminance stddev > 8",
       "expected": ">8",
-      "actual": 25.01,
+      "actual": 25.34,
       "pass": true
     },
     {
       "name": "desktop-inspector: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.8666,
+      "actual": 0.7038,
       "pass": true
     },
     {
       "name": "desktop: inspector visibly changes the frame",
       "expected": ">0.02 diff",
-      "actual": 0.1087,
+      "actual": 0.1282,
       "pass": true
     },
     {
@@ -376,19 +412,19 @@
     {
       "name": "desktop-settings: unique colors > 200",
       "expected": ">200",
-      "actual": 1772,
+      "actual": 1434,
       "pass": true
     },
     {
       "name": "desktop-settings: luminance stddev > 8",
       "expected": ">8",
-      "actual": 24.36,
+      "actual": 24.65,
       "pass": true
     },
     {
       "name": "desktop-settings: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.8917,
+      "actual": 0.7137,
       "pass": true
     },
     {
@@ -430,19 +466,19 @@
     {
       "name": "phone-report: unique colors > 200",
       "expected": ">200",
-      "actual": 4268,
+      "actual": 3954,
       "pass": true
     },
     {
       "name": "phone-report: luminance stddev > 8",
       "expected": ">8",
-      "actual": 46.44,
+      "actual": 46.74,
       "pass": true
     },
     {
       "name": "phone-report: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.4103,
+      "actual": 0.2574,
       "pass": true
     },
     {
@@ -484,25 +520,25 @@
     {
       "name": "phone-yard: unique colors > 200",
       "expected": ">200",
-      "actual": 2946,
+      "actual": 2937,
       "pass": true
     },
     {
       "name": "phone-yard: luminance stddev > 8",
       "expected": ">8",
-      "actual": 44.65,
+      "actual": 44.59,
       "pass": true
     },
     {
       "name": "phone-yard: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.5837,
+      "actual": 0.3228,
       "pass": true
     },
     {
       "name": "phone: yard canvas non-blank",
       "expected": ">40 unique colors",
-      "actual": 693,
+      "actual": 432,
       "pass": true
     },
     {
@@ -526,19 +562,19 @@
     {
       "name": "phone-sheet: unique colors > 200",
       "expected": ">200",
-      "actual": 4366,
+      "actual": 4086,
       "pass": true
     },
     {
       "name": "phone-sheet: luminance stddev > 8",
       "expected": ">8",
-      "actual": 42.63,
+      "actual": 42.93,
       "pass": true
     },
     {
       "name": "phone-sheet: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.4067,
+      "actual": 0.2593,
       "pass": true
     },
     {
@@ -556,25 +592,25 @@
     {
       "name": "phone-expanded: unique colors > 200",
       "expected": ">200",
-      "actual": 2804,
+      "actual": 2726,
       "pass": true
     },
     {
       "name": "phone-expanded: luminance stddev > 8",
       "expected": ">8",
-      "actual": 37.51,
+      "actual": 37.8,
       "pass": true
     },
     {
       "name": "phone-expanded: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.3579,
+      "actual": 0.3493,
       "pass": true
     },
     {
       "name": "phone: expansion visibly changes the frame",
       "expected": ">0.02 diff",
-      "actual": 0.415,
+      "actual": 0.4619,
       "pass": true
     },
     {
@@ -598,19 +634,19 @@
     {
       "name": "phone-settings: unique colors > 200",
       "expected": ">200",
-      "actual": 3453,
+      "actual": 3180,
       "pass": true
     },
     {
       "name": "phone-settings: luminance stddev > 8",
       "expected": ">8",
-      "actual": 41.48,
+      "actual": 41.6,
       "pass": true
     },
     {
       "name": "phone-settings: not a flat fill",
       "expected": "<0.97",
-      "actual": 0.4297,
+      "actual": 0.2677,
       "pass": true
     },
     {
@@ -628,7 +664,7 @@
     {
       "name": "phone: sheet visibly changes the frame",
       "expected": ">0.02 diff",
-      "actual": 0.4713,
+      "actual": 0.4698,
       "pass": true
     },
     {
