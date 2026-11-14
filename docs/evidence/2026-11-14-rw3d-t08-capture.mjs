@@ -121,7 +121,14 @@ const pixelDiff = (page, a, b) =>
     return +(diff / n).toFixed(4);
   }, [a.toString("base64"), b.toString("base64")]);
 
-/** Direct yard-canvas census (Canvas2D renderer on this branch). */
+/**
+ * Direct yard-canvas census. After the #198 rebase the yard canvas is still a
+ * 2D canvas: three.js renders offscreen WebGL and blitWorld3D copies it into
+ * this context, so getImageData reads the blitted three.js pixels. If WebGL is
+ * unavailable the renderer falls back to the legacy 2D yard (byte-identical to
+ * the pre-#198 path); the probeRenderer/swiftshaderForced fields below record
+ * which rasterizer actually ran.
+ */
 const canvasStats = (page) =>
   page.evaluate(() => {
     const c = document.querySelector("canvas");
@@ -236,7 +243,37 @@ const slotChecks = (tag, c) => {
     c.page.scrollHeight <= c.page.innerHeight + 1 && c.page.bodyOverflow === "hidden");
 };
 
-const browser = await chromium.launch({ executablePath });
+// House pattern (tests/renderer/rw3d-t07/lib.mjs): probe headless WebGL first;
+// only force SwiftShader if the native headless rasterizer is unavailable, and
+// record which one actually produced the pixels (the re-baseline differs from
+// the Canvas2D captures, so the rasterizer is load-bearing provenance).
+const probeGl = async (b) => {
+  const page = await b.newPage();
+  try {
+    return await page.evaluate(() => {
+      const c = document.createElement("canvas");
+      const gl = c.getContext("webgl2") || c.getContext("webgl");
+      if (!gl) return null;
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      return dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : "unknown";
+    });
+  } finally {
+    await page.close();
+  }
+};
+let browser = await chromium.launch({ executablePath, headless: true });
+let probeRenderer = await probeGl(browser);
+let swiftshaderForced = false;
+if (!probeRenderer) {
+  await browser.close();
+  browser = await chromium.launch({
+    executablePath, headless: true,
+    args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+  });
+  probeRenderer = await probeGl(browser);
+  swiftshaderForced = true;
+  if (!probeRenderer) { await browser.close(); throw new Error("WebGL unavailable even with SwiftShader"); }
+}
 const canvasCensuses = {};
 try {
   // ---------------- Desktop 1440x900 @1x: right inspector ----------------
@@ -389,10 +426,11 @@ const report = {
   treeCleanAtStart,
   capturedAt: new Date().toISOString(),
   method: "production build (dist/) served on a throwaway static server; playwright-core headless; " +
+    "three.js renderer (#198) blits offscreen WebGL into the 2D yard canvas; " +
     "pixel stats decoded from the actual screenshot bytes in-browser; numeric DOM census; " +
     "phone context is DESKTOP EMULATION, not a real handset",
   visualInspection: "PENDING — non-vision author; owed at G1 (#151)",
-  browser: { version: browser.version(), executablePath: executablePath ?? null },
+  browser: { version: browser.version(), executablePath: executablePath ?? null, probeRenderer, swiftshaderForced },
   server: { port: PORT, distIndexBytes: readFileSync(resolve(dist, "index.html")).length },
   seed: { file: "docs/evidence/yard-mature.json", sha256: seedSha256, gapHours: +seedGapHours.toFixed(2) },
   thresholds: {
