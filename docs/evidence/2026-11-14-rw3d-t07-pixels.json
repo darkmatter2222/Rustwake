@@ -1,0 +1,272 @@
+{
+  "meta": {
+    "issue": 134,
+    "role": "developer",
+    "seed": "rw3d-t07-capture-v1",
+    "sha": "ebf9b5414ace35014a18b7f9ca410bf37a1d1191",
+    "command": "node tests/renderer/rw3d-t07/capture.mjs",
+    "timestamp": "2026-11-14T06:25:38.569Z",
+    "browser": {
+      "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "swiftshaderForced": false
+    },
+    "selection": {
+      "selected": 1,
+      "lastTap": {
+        "x": 821.8233642578125,
+        "y": 332.42535400390625,
+        "id": 1
+      }
+    },
+    "dragSafety": {
+      "before": 1,
+      "afterDrag": 1
+    },
+    "quarter": {
+      "x": 96,
+      "y": 112,
+      "scale": 3,
+      "yaw": 135,
+      "elev": 35.264
+    },
+    "resized": {
+      "x": 96,
+      "y": 117.1027027027027,
+      "scale": 3,
+      "yaw": 135,
+      "elev": 35.264
+    },
+    "hidden": {
+      "whileHidden": 0,
+      "afterRestore": 0
+    },
+    "motion": {
+      "reducedDiff": 0,
+      "motionDiff": 0.0024
+    },
+    "contextLoss": {
+      "lostStatus": "lost",
+      "restoredStatus": "ready",
+      "saveUnchanged": true
+    },
+    "note": "Numeric pixel sanity only. Capable visual inspection PENDING (mandatory at G1 #151). phone-emulation.png is desktop emulation, NOT real phone evidence."
+  },
+  "images": {
+    "open": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 59,
+      "luminanceMean": 35.84,
+      "luminanceStddev": 32.49,
+      "backgroundFraction": 0.4673,
+      "selectPixels": 120,
+      "amberPixels": 1256
+    },
+    "orbit": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 603,
+      "luminanceMean": 21.63,
+      "luminanceStddev": 24.49,
+      "backgroundFraction": 0.8243,
+      "selectPixels": 66,
+      "amberPixels": 707
+    },
+    "selected": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 1075,
+      "luminanceMean": 21.97,
+      "luminanceStddev": 26.33,
+      "backgroundFraction": 0.8243,
+      "selectPixels": 642,
+      "amberPixels": 838
+    },
+    "quarter": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 996,
+      "luminanceMean": 21.8,
+      "luminanceStddev": 25.63,
+      "backgroundFraction": 0.8224,
+      "selectPixels": 489,
+      "amberPixels": 760
+    },
+    "inspector-resize": {
+      "width": 1000,
+      "height": 900,
+      "uniqueColors": 1030,
+      "luminanceMean": 25.78,
+      "luminanceStddev": 29.9,
+      "backgroundFraction": 0.7443,
+      "selectPixels": 588,
+      "amberPixels": 752
+    },
+    "context-lost": {
+      "width": 1000,
+      "height": 900,
+      "uniqueColors": 682,
+      "luminanceMean": 24.63,
+      "luminanceStddev": 30.16,
+      "backgroundFraction": 0.0082,
+      "selectPixels": 3800,
+      "amberPixels": 549
+    },
+    "restored": {
+      "width": 1000,
+      "height": 900,
+      "uniqueColors": 1030,
+      "luminanceMean": 25.78,
+      "luminanceStddev": 29.9,
+      "backgroundFraction": 0.7443,
+      "selectPixels": 588,
+      "amberPixels": 752
+    },
+    "phoneEmulation": {
+      "width": 780,
+      "height": 1688,
+      "uniqueColors": 202,
+      "luminanceMean": 34.41,
+      "luminanceStddev": 32.03,
+      "backgroundFraction": 0.5016,
+      "selectPixels": 128,
+      "amberPixels": 1280
+    }
+  },
+  "orbitVsTopDownDiffFraction": 0.6264,
+  "checks": [
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "open dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "open not blank (top-down flat: stddev>10, bg<0.9, amber>500)",
+      "expected": "stddev>10, bg<0.9, amber>500",
+      "actual": "32.49, 0.4673, 1256",
+      "pass": true
+    },
+    {
+      "name": "orbit not blank",
+      "expected": "colors>200, stddev>10",
+      "actual": "603, 24.49",
+      "pass": true
+    },
+    {
+      "name": "orbit vs top-down pixel diff > 0.005",
+      "expected": ">0.005",
+      "actual": 0.6264,
+      "pass": true
+    },
+    {
+      "name": "raycast click selects the aimed machine",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "selected shot has selection ink (select pixels > 50)",
+      "expected": ">50",
+      "actual": 642,
+      "pass": true
+    },
+    {
+      "name": "real drag round-trip keeps selection",
+      "expected": 1,
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "quarter turn yaw 45 -> 135",
+      "expected": 135,
+      "actual": 135,
+      "pass": true
+    },
+    {
+      "name": "quarter shot not blank",
+      "expected": "colors>200, stddev>10",
+      "actual": "996, 25.63",
+      "pass": true
+    },
+    {
+      "name": "inspector resize keeps intent (scale 3 survives)",
+      "expected": 3,
+      "actual": 3,
+      "pass": true
+    },
+    {
+      "name": "inspector shot dimensions",
+      "expected": "1000x900",
+      "actual": "1000x900",
+      "pass": true
+    },
+    {
+      "name": "hidden tab paints nothing (diff = 0)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "reduced motion: two phases paint identically (diff = 0)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "full motion: phases differ (diff > 0)",
+      "expected": ">0",
+      "actual": 0.0024,
+      "pass": true
+    },
+    {
+      "name": "context loss reported",
+      "expected": "lost",
+      "actual": "lost",
+      "pass": true
+    },
+    {
+      "name": "save bytes unchanged across context loss",
+      "expected": "identical",
+      "actual": "identical",
+      "pass": true
+    },
+    {
+      "name": "context-lost shot not blank (2D fallback + banner)",
+      "expected": "colors>200, stddev>10",
+      "actual": "682, 30.16",
+      "pass": true
+    },
+    {
+      "name": "context restored",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "restored shot not blank",
+      "expected": "colors>200, stddev>10",
+      "actual": "1030, 29.9",
+      "pass": true
+    },
+    {
+      "name": "phone-emulation dimensions (390x844 @2x)",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-emulation not blank",
+      "expected": "colors>200, stddev>10",
+      "actual": "202, 32.03",
+      "pass": true
+    }
+  ]
+}
