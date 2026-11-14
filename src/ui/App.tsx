@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { GameStore } from "../app/store";
+import type { GameStore, RoadApi } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
 import { TUNING, unlockedBlueprints, BLUEPRINTS } from "../game/content/defs";
 import {
@@ -75,6 +75,7 @@ import { PanelHost, ShellZoom, Toolbar, useDesktopMode } from "./shell/Shell";
 import { RoutesPanel } from "./shell/RoutesPanel";
 import { FleetPanel } from "./shell/FleetPanel";
 import { MapPanel } from "./shell/MapPanel";
+import { RoadToolPanel, PANEL_ROAD } from "./RoadTool";
 import {
   PANEL_FLEET,
   PANEL_MAP,
@@ -1313,6 +1314,19 @@ export function App({
             onSalvage={() => dispatch({ id: nextCommandId(), type: "manual.salvage" })}
             onStore={() => rootPanel(PANEL_TRADE)}
           />
+          {/* T12 (#139): the road tool entry face. The six toolbar slots are fixed
+              (#135), so roads open from this additive lead-block button into the
+              same one-panel stack (PANEL_ROAD = -10). Label-based censuses are
+              untouched; the camera's chrome insets auto-measure the lead box. */}
+          <button
+            type="button"
+            className="icon-btn road-entry"
+            aria-label="Open road tool"
+            aria-pressed={selected === PANEL_ROAD}
+            onClick={() => openPanel(PANEL_ROAD)}
+          >
+            Roads
+          </button>
           {/* UI-RESET-53: the explicit placement / move / dismantle previews. They paint
               inside the lead block so the camera's chrome insets reserve their band, and
               they are not `.panel`s, so the overlay census and dock faces are untouched.
@@ -1375,6 +1389,16 @@ export function App({
             <FleetPanel state={state} dispatch={dispatch} onClose={closeSelection} />
           ) : null}
           {selected === PANEL_MAP ? <MapPanel state={state} onClose={closeSelection} /> : null}
+          {/* T12 (#139): the road destination. The store's road slice is an additive
+              capability (RoadApi) kept off the GameStore surface, so the cast lives
+              only at this registration site; existing store doubles stay untouched. */}
+          {selected === PANEL_ROAD ? (
+            <RoadToolPanel
+              road={store as GameStore & RoadApi}
+              locked={role === "reader"}
+              onClose={closeSelection}
+            />
+          ) : null}
           {selected === PANEL_YARD ? (
             <YardPanel
               state={state}
