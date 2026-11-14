@@ -2,9 +2,9 @@
   "prefix": "2026-11-14-rw3d-t23",
   "role": "developer",
   "issue": 150,
-  "head": "74a17a8db11cdd7f38c7740599b3fb92acf668e5",
+  "head": "473fed2274fd1b309dc3c92e883f2fecb6ab8600",
   "seed": 150,
-  "capturedAt": "2026-11-14T18:15:11.467Z",
+  "capturedAt": "2026-11-14T18:18:38.101Z",
   "method": "vite dev server :4323 + playwright-core system browser; real drawScene (three.js blit + 2D overlay) at scripted (tick, framePhase); real createAudio graph offline-rendered via the additive contextFactory seam; numerical checks only",
   "browser": {
     "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -921,10 +921,10 @@
       },
       "bedsAudible": {
         "peak": 0.06258422881364822,
-        "rms": 0.02500543530064944,
+        "rms": 0.025005435299805225,
         "clip": 0,
-        "rmsL": 0.02500543530064944,
-        "rmsR": 0.02500543530064944,
+        "rmsL": 0.025005435299805225,
+        "rmsR": 0.025005435299805225,
         "peakL": 0.06258422881364822,
         "peakR": 0.06258422881364822
       }
@@ -998,10 +998,10 @@
       ],
       "whole": {
         "peak": 0.4952699840068817,
-        "rms": 0.09864037126165565,
+        "rms": 0.09864037125731245,
         "clip": 0,
-        "rmsL": 0.09845733703189095,
-        "rmsR": 0.09882306648684383,
+        "rmsL": 0.09845733696939764,
+        "rmsR": 0.09882306654043553,
         "peakL": 0.4802112877368927,
         "peakR": 0.4952699840068817
       },
