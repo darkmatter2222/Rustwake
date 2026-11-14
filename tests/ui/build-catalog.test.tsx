@@ -124,7 +124,7 @@ describe("T11 build catalog through the real App (U01/U02/U03)", () => {
     expect(card("warehouse")!.textContent).toContain("Warehouse");
     expect(card("warehouse")!.textContent).toContain("6×4");
     expect(card("warehouse")!.textContent).toContain("30 scrap + 8 steel · 20 credits");
-    expect(card("sorter")!.textContent).toContain("20 scrap");
+    expect(card("sorter")!.textContent).toContain("30 scrap + 4 steel");
     // Locked entries are never hidden — the reason prints on the card (U03).
     expect(card("crane")!.dataset.locked).toBe("true");
     expect(text("build-lock-crane")).toBe("Requires Route Dispatch research");
@@ -218,7 +218,7 @@ describe("T11 build catalog through the real App (U01/U02/U03)", () => {
     expect(store.getBuildPlacement().mode).toBe("repeating");
     press("build-confirm");
     expect(store.getBuildWorld().sites).toHaveLength(1);
-    expect(store.getBuildWorld().stock.scrap).toBe(100);
+    expect(store.getBuildWorld().stock.scrap).toBe(90);
     expect(store.getBuildPlacement().mode).toBe("repeating");
     expect(card("sorter")!.getAttribute("aria-pressed")).toBe("true");
     expect(testId("build-ghost")).not.toBeNull();
@@ -231,7 +231,7 @@ describe("T11 build catalog through the real App (U01/U02/U03)", () => {
     expect(confirmBtn().disabled).toBe(false);
     press("build-confirm");
     expect(store.getBuildWorld().sites).toHaveLength(2);
-    expect(store.getBuildWorld().stock.scrap).toBe(80);
+    expect(store.getBuildWorld().stock.scrap).toBe(60);
     expect(store.getBuildPlacement().placedCount).toBe(2);
     expect(store.getBuildPlacement().mode).toBe("repeating");
     press("build-cancel");

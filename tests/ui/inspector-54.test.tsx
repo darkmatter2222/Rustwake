@@ -47,7 +47,7 @@ import {
  *
  * Fixture economy note: `yardWithASorter` mirrors the shipped panel-rows fixture — six
  * salvage pulses fund the drone repair, and the repaired drone then delivers wreck scrap
- * every `droneDeliveryTicks` (engine `updateUnit`), which is what funds the 20-scrap
+ * every `droneDeliveryTicks` (engine `updateUnit`), which is what funds the 30-scrap
  * sorter during `advance(262)`. All state mutations below happen in this test file only;
  * every action under test goes through the real UI path: click → dispatch → applyCommand
  * → state change, with the printed number checked against the engine's own arithmetic.
@@ -460,13 +460,23 @@ describe("UI-RESET-54 actions: primary cost, consequence and real command paths"
     const charge = Number(printed?.[2]);
     expect(tile).toBe(nextFreeTile(state));
     const scrapBefore = state.store.scrap ?? 0;
+    const steelBefore = state.store.steel ?? 0;
     const routeIds = state.routes.map((route) => route.id);
     act(() => face?.click());
     expect(machine.tile).toBe(tile);
     expect(machine.level).toBe(1);
     expect(state.machines.length).toBe(1);
     expect(state.routes.map((route) => route.id)).toEqual(routeIds);
-    expect((state.store.scrap ?? 0) - scrapBefore).toBe(-charge);
+    // #214: the sorter's move price spans two build-cost lines — round(30×50%) = 15
+    // scrap and round(4×50%) = 2 steel — and the face prints their sum (17 units).
+    // Each resource moves by its own rounded line, exactly as `moveMachine` spends.
+    const moveLine = (resource: "scrap" | "steel") => {
+      const item = BLUEPRINTS.sorter.buildCost.find((entry) => entry.resource === resource);
+      return item ? Math.round((item.qty * TUNING.movePenaltyPct) / 100) : 0;
+    };
+    expect((state.store.scrap ?? 0) - scrapBefore).toBe(-moveLine("scrap"));
+    expect((state.store.steel ?? 0) - steelBefore).toBe(-moveLine("steel"));
+    expect(moveLine("scrap") + moveLine("steel")).toBe(charge);
   });
 
   it("Dismantle click removes the machine and returns exactly the printed units", () => {

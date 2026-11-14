@@ -152,7 +152,8 @@ describe("BELT-001 g4: the printed extent equals the charged price", () => {
     act(() => face?.click());
     expect(state.storeUnits - before).toBe(printed);
     // And that total is the engine's own parts: 90 % of the build cost, plus the link.
+    // #214: the sorter costs 30 scrap + 4 steel, each line refunded separately.
     expect(refundOf(beltCost(7))).toBe(6);
-    expect(printed).toBe(refundOf(20) + 6);
+    expect(printed).toBe(refundOf(30) + refundOf(4) + 6);
   });
 });
