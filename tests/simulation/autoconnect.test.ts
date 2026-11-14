@@ -44,9 +44,13 @@ function yard(
 
 describe("connection plans (spec 10.1, B-23)", () => {
   it("takes a stocked material from the store even though a producer exists", () => {
-    // Furnace: 2 ferrous per batch. Ferrous is left at 1 by the build costs, so
-    // this is the case where the sorter's own tray is the only source.
+    // Furnace: 2 ferrous per batch. #214: the seed now stocks 12 ferrous and the
+    // furnace spends scrap + steel (no ferrous), so the build costs no longer drain
+    // ferrous to 1. Drain the store below one batch explicitly to keep this the
+    // producer-only case the assertion characterizes (sorter tray is the source).
     const state = yard("furnace", { ferrous: 6, nonferrous: 1 });
+    state.storeUnits -= (state.store["ferrous"] ?? 0) - 1;
+    state.store["ferrous"] = 1;
     const furnace = state.machines[1];
     const plans = planConnections(state, furnace.id);
     // BELT-001: each plan reports its tile run length so the dock can print the

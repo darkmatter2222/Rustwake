@@ -218,7 +218,9 @@ function tutorialAction(state) {
       { type: "route.connect", from: 1, to: 0, filter: "ferrous" },
     ];
     if (!state.machines.some((m) => m.blueprint === "furnace")) {
-      const ready = (state.store.scrap ?? 0) >= 10 && (state.store.ferrous ?? 0) >= 5;
+      // #214: gate on the shipped furnace buildCost (35 scrap + 4 steel), not the
+      // pre-retune 10 scrap + 5 ferrous.
+      const ready = BLUEPRINTS.furnace.buildCost.every((item) => (state.store[item.resource] ?? 0) >= item.qty);
       if (ready) return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
     }
     const furnace = state.machines.find((m) => m.blueprint === "furnace");
@@ -281,7 +283,10 @@ function run(rowName, branch, patternName) {
   const branchByLevel = [];
 
   for (let round = 0; round < ROUNDS; round += 1) {
-    if (!state.exportClaimed && (state.store.steel ?? 0) >= TUNING.exportContractSteel) { send({ type: "contract.export" }); taps += 1; }
+    // #214: the seed's 12 steel pays for the sorter and furnace (4 + 4) first; the
+    // 10-steel contract waits for both starters, matching validateBehaviour.
+    const startersBuilt = state.machines.some((m) => m.blueprint === "sorter") && state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store.steel ?? 0) >= TUNING.exportContractSteel) { send({ type: "contract.export" }); taps += 1; }
     // The one difference between the tables: the gated wreck pulse.
     if (spec !== null && pulseThisRound(round, spec)) { send({ type: "manual.salvage" }); pulses += 1; taps += 1; }
     const tutorial = tutorialAction(state);
