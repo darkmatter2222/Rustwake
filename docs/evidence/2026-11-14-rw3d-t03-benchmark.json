@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "issue": 130,
+    "role": "developer",
+    "seed": "rw3d-t03-bench-v1",
+    "sha": "8b78d09f6a1227916fede780eb1682969c49ff1e",
+    "command": "pnpm --dir prototypes/rw3d-renderer bench",
+    "timestamp": "2026-11-14T03:05:18.767Z",
+    "state": "static crane blockout on 12x12 sand patch; scripted 900-frame timeline, fixed dt=1/60; no economy simulation",
+    "qualityTier": "blockout-flat: no shadows, DPR cap 2, shared glTF materials, antialias on",
+    "viewport": "1440x900 @1x"
+  },
+  "device": {
+    "capturedAt": "2026-11-14T03:02:53.8201037Z",
+    "role": "developer",
+    "issue": 130,
+    "note": "Declared reference device census for RW3D T03. AdapterRAM is the WMI-reported value (uint32, may under-report >4GB). Headless browser rasterizer is recorded separately in benchmark.json.",
+    "os": {
+      "Caption": "Microsoft Windows 11 Pro",
+      "Version": "10.0.26200",
+      "BuildNumber": "26200",
+      "OSArchitecture": "64-bit"
+    },
+    "cpu": {
+      "Name": "AMD Ryzen 9 9950X 16-Core Processor            ",
+      "NumberOfCores": 16,
+      "NumberOfLogicalProcessors": 32,
+      "MaxClockSpeed": 4300
+    },
+    "gpu": [
+      {
+        "Name": "AMD Radeon(TM) Graphics",
+        "DriverVersion": "32.0.21043.5001",
+        "AdapterRAM": 2147483648,
+        "VideoModeDescription": null
+      },
+      {
+        "Name": "NVIDIA GeForce RTX 5090",
+        "DriverVersion": "32.0.15.9186",
+        "AdapterRAM": 4293918720,
+        "VideoModeDescription": "2560 x 1440 x 4294967296 colors"
+      }
+    ],
+    "system": {
+      "Manufacturer": "ASUS",
+      "Model": "System Product Name",
+      "TotalPhysicalMemory": 66187476992
+    }
+  },
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "gl": {
+    "vendor": "Google Inc. (NVIDIA)",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "renderer": {
+    "name": "three.js",
+    "revision": "187",
+    "pinned": "0.187.0"
+  },
+  "scene": {
+    "asset": "crane.gltf (reference blockout, 8 box meshes)",
+    "meshes": 7,
+    "textures": 1,
+    "drawCalls": {
+      "min": 7,
+      "max": 11
+    },
+    "triangles": {
+      "min": 62,
+      "max": 98
+    }
+  },
+  "frameTime": {
+    "renderMs": {
+      "p50": 0.2,
+      "p95": 0.4,
+      "p99": 0.5,
+      "max": 5.6
+    },
+    "rafMs": {
+      "p50": 16.7,
+      "p95": 16.8,
+      "max": 16.9
+    },
+    "achievedFps": 59.87
+  },
+  "inputLatencyMs": {
+    "samples": 10,
+    "p50": 0.2,
+    "p95": 1.3,
+    "max": 1.3
+  },
+  "memory": {
+    "heapBefore": 4717851,
+    "heapAfter": 6602157,
+    "geometries": 7,
+    "textures": 1
+  },
+  "startup": {
+    "firstFrameMs": 116.3,
+    "gltfLoadMs": 22.1
+  },
+  "coldLoad": {
+    "network": "CDP 20Mbps down / 50ms latency, cache disabled",
+    "firstFrameMs": 333,
+    "gltfLoadMs": 80.9,
+    "navTransferBytes": 1288,
+    "resourceTransferBytes": 172294,
+    "resourceEncodedBytes": 171694,
+    "resourceCount": 2,
+    "totalTransferBytes": 173582
+  },
+  "pivotAfter": {
+    "state": "raising",
+    "y": 1.1557925926349777,
+    "reducedMotion": false
+  },
+  "checks": [
+    {
+      "name": "frames completed",
+      "expected": 900,
+      "actual": 900,
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "max draw calls <= 32 (spike sanity)",
+      "expected": "<=32",
+      "actual": 11,
+      "pass": true
+    },
+    {
+      "name": "max triangles <= 5000 (spike sanity)",
+      "expected": "<=5000",
+      "actual": 98,
+      "pass": true
+    },
+    {
+      "name": "p95 rAF delta <= 250ms (not frozen; software rasterizer tolerance)",
+      "expected": "<=250",
+      "actual": 16.8,
+      "pass": true
+    },
+    {
+      "name": "selection samples >= 10",
+      "expected": ">=10",
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "name": "p95 input-to-feedback <= 100ms (contract)",
+      "expected": "<=100",
+      "actual": 1.3,
+      "pass": true
+    },
+    {
+      "name": "cold first frame <= 5000ms @20Mbps/50ms (contract P03)",
+      "expected": "<=5000",
+      "actual": 333,
+      "pass": true
+    },
+    {
+      "name": "cold transferred payload <= 8MB (contract P03)",
+      "expected": "<=8388608",
+      "actual": 173582,
+      "pass": true
+    },
+    {
+      "name": "warm startup first frame <= 5000ms (sanity)",
+      "expected": "<=5000",
+      "actual": 116.3,
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Single-asset blockout scene: P1 normal/stress/battle population targets (20/100 buildings etc.) are NOT measured here.",
+    "Headless Chrome rasterized on the declared GPU via ANGLE/D3D11 (see gl.renderer); no headed interactive run was performed.",
+    "No real phone attached: no handset evidence; desktop emulation is not phone evidence.",
+    "performance.memory is Chromium-only and approximate."
+  ]
+}

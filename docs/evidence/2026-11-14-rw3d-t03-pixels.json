@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "issue": 130,
+    "role": "developer",
+    "seed": "rw3d-t03-capture-v1",
+    "sha": "8b78d09f6a1227916fede780eb1682969c49ff1e",
+    "command": "pnpm --dir prototypes/rw3d-renderer capture",
+    "timestamp": "2026-11-14T03:05:22.259Z",
+    "browser": {
+      "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "swiftshaderForced": false
+    },
+    "stateAfter": {
+      "pivot": {
+        "state": "lowering",
+        "y": 0.7546222222222225,
+        "reducedMotion": false
+      },
+      "selection": "SELECTED: crane (3x3)",
+      "camera": "camera: yaw 75.0 zoom 1.00",
+      "stats": {
+        "frame": 69,
+        "resizeCount": 0,
+        "drawCalls": 11,
+        "triangles": 98,
+        "geometries": 7,
+        "textures": 1
+      }
+    },
+    "note": "Numeric pixel sanity only. Capable visual inspection pending. phone-emulation.png is desktop emulation, NOT real phone evidence."
+  },
+  "images": {
+    "open": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 338,
+      "luminanceMean": 137.57,
+      "luminanceStddev": 35.78,
+      "backgroundFraction": 0.3186,
+      "amberPixels": 0,
+      "sandNearFraction": 0.551,
+      "paletteNearFraction": 0.9917
+    },
+    "interactive": {
+      "width": 1440,
+      "height": 900,
+      "uniqueColors": 516,
+      "luminanceMean": 136.64,
+      "luminanceStddev": 35.22,
+      "backgroundFraction": 0.2974,
+      "amberPixels": 2178,
+      "sandNearFraction": 0.579,
+      "paletteNearFraction": 0.9912
+    },
+    "phoneEmulation": {
+      "width": 780,
+      "height": 1688,
+      "uniqueColors": 1004,
+      "luminanceMean": 105.92,
+      "luminanceStddev": 35.78,
+      "backgroundFraction": 0.0264,
+      "amberPixels": 0,
+      "sandNearFraction": 0.5114,
+      "paletteNearFraction": 0.9751
+    },
+    "openVsInteractiveDiffFraction": 0.2153
+  },
+  "checks": [
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "open dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "open not blank (unique colors > 200)",
+      "expected": ">200",
+      "actual": 338,
+      "pass": true
+    },
+    {
+      "name": "open luminance stddev > 10",
+      "expected": ">10",
+      "actual": 35.78,
+      "pass": true
+    },
+    {
+      "name": "open background (muted token) fraction in [0.02,0.9]",
+      "expected": "0.02..0.9",
+      "actual": 0.3186,
+      "pass": true
+    },
+    {
+      "name": "open sand-family terrain fraction > 0.01",
+      "expected": ">0.01",
+      "actual": 0.551,
+      "pass": true
+    },
+    {
+      "name": "open palette-near fraction > 0.3",
+      "expected": ">0.3",
+      "actual": 0.9917,
+      "pass": true
+    },
+    {
+      "name": "interactive dimensions",
+      "expected": "1440x900",
+      "actual": "1440x900",
+      "pass": true
+    },
+    {
+      "name": "selection amber pixels > 100 (box + HUD, not color-only)",
+      "expected": ">100",
+      "actual": 2178,
+      "pass": true
+    },
+    {
+      "name": "selection HUD text present",
+      "expected": "SELECTED: crane",
+      "actual": "SELECTED: crane (3x3)",
+      "pass": true
+    },
+    {
+      "name": "pivot mid-cycle after 60 frames (y < 1.2)",
+      "expected": "<1.2",
+      "actual": 0.7546222222222225,
+      "pass": true
+    },
+    {
+      "name": "open vs interactive diff fraction > 0.005",
+      "expected": ">0.005",
+      "actual": 0.2153,
+      "pass": true
+    },
+    {
+      "name": "phone-emulation dimensions (390x844 @2x)",
+      "expected": "780x1688",
+      "actual": "780x1688",
+      "pass": true
+    },
+    {
+      "name": "phone-emulation not blank",
+      "expected": ">200",
+      "actual": 1004,
+      "pass": true
+    }
+  ]
+}

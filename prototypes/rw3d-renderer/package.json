@@ -1,0 +1,23 @@
+{
+  "name": "rw3d-renderer-spike",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Issue #130 (RW3D T03) bounded 3D renderer spike. Isolated prototype: no root app, save or migration impact.",
+  "scripts": {
+    "dev": "vite --port 4300 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --port 4310 --strictPort",
+    "test": "node --test test/pivot.test.mjs test/palette.test.mjs",
+    "bench": "node scripts/bench.mjs",
+    "capture": "node scripts/capture.mjs"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "playwright-core": "1.65.1",
+    "pngjs": "7.0.0",
+    "vite": "7.3.8"
+  }
+}
