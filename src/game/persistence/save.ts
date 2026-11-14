@@ -38,10 +38,26 @@ export const DEFAULT_SETTINGS: SaveSettings = {
 /** Why an envelope was refused; `detail` carries the first violated invariant. */
 export type DecodeFailure =
   | "empty"
+  | "oversized"
   | "parse"
   | "schema"
   | "checksum"
   | "invalid";
+
+/**
+ * G2 (#148): bounded-size gate, checked BEFORE `JSON.parse` (contract "Saves and
+ * migration": validate bounded sizes before importing/migrating). Measured in
+ * UTF-16 code units — localStorage's native unit, the same unit `textLength`
+ * reports. 1,000,000 characters (~2 MB) is orders of magnitude above any
+ * legitimate yard (the deepest checked-in fixture is a few KB, and even an
+ * unpruned `seenCommands` ledger of 100k ids stays well under it) yet far below
+ * the typical 5 MiB origin quota, so the writer lease and the G1 recovery slot
+ * still fit alongside a maximum-size save. An oversized envelope is refused
+ * with the typed reason `oversized` and changes nothing: a manual import keeps
+ * the live yard, and a corrupt boot retains the raw bytes in the recovery slot
+ * exactly like every other decode failure (G1, #191).
+ */
+export const MAX_SAVE_TEXT_LENGTH = 1_000_000;
 
 export type DecodeResult =
   | { ok: true; payload: SavePayload }
@@ -86,6 +102,10 @@ export function encodeSave(
 
 export function decodeSave(text: string | null): DecodeResult {
   if (!text) return { ok: false, reason: "empty" };
+  // G2 (#148): refuse oversized text before parsing, so a hostile multi-megabyte
+  // envelope can never reach JSON.parse. Even a checksum-valid envelope is
+  // refused for size alone; the caller's state is untouched either way.
+  if (text.length > MAX_SAVE_TEXT_LENGTH) return { ok: false, reason: "oversized" };
   let parsed: unknown;
   try {
     parsed = JSON.parse(text);
