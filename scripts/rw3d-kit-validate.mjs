@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 // RW3D T04 (#131): validate the procedural asset kit against the grid/scale contract.
+// Extended by T09 (#136): production building authoring checks (S7) — palette
+// preservation, baseline recipe contracts, detail-quantum discipline for new
+// geometry, motion-inventory coverage and channel semantics. Manifest status
+// vocabulary now includes "production" (requires visualReview pending|accepted;
+// capable visual inspection remains an open gate until G1 #151).
 //
 // Inputs (read-only): docs/vision/assets/kit.json, asset-manifest.json, generated/*.gltf.
 // Contract sources: docs/vision/ART_AND_MOTION.md (spatial grammar), ACCEPTANCE.md V06,
@@ -272,7 +277,13 @@ for (const m of manifest.assets) {
   check(s, "footprint matches kit", deepEqual(m.footprint, a.footprint), a.footprint, m.footprint);
   check(s, "parts count matches kit", m.parts === a.parts.length, a.parts.length, m.parts);
   check(s, "clips match kit animations", deepEqual([...m.clips].sort(), a.animations.map((x) => x.name).sort()), a.animations.map((x) => x.name), m.clips);
-  check(s, "status honest (blockout)", m.status === "blockout", "blockout", m.status);
+  const statusOk = m.status === "blockout" || m.status === "production";
+  check(s, "status vocabulary (blockout|production)", statusOk, "blockout|production", m.status);
+  if (m.status === "production") {
+    const vrOk = m.visualReview === "pending" || m.visualReview === "accepted";
+    check(s, "production declares visualReview (pending|accepted)", vrOk, "pending|accepted", m.visualReview ?? null);
+    if (m.visualReview === "pending") finding(`${m.id} is production geometry; capable visual inspection PENDING (open gate, G1 #151). Not visually accepted.`);
+  }
   const gltfPath = join(assetsDir, m.gltf);
   if (!existsSync(gltfPath)) { check(s, "gltf file exists", false, m.gltf, "missing"); continue; }
   const g = JSON.parse(readFileSync(gltfPath, "utf8"));
@@ -495,7 +506,7 @@ function openingHeight(id) {
 const bayTargets = [
   { building: "warehouse", socket: "bay0", door: "door0", panel: "doorPanel0" },
   { building: "warehouse", socket: "bay1", door: "door1", panel: "doorPanel1" },
-  { building: "depot", socket: "serviceBay", door: null, panel: null },
+  { building: "depot", socket: "serviceBay", door: "door", panel: "doorPanel" },
   { building: "wall_gate", socket: "passage", door: "gate", panel: "panel" },
 ];
 
@@ -508,7 +519,7 @@ for (const t of bayTargets) {
   check(s, "open clear height >= actual truck height", open.clear >= truckSize[1] - EPS, `>= ${truckSize[1].toFixed(4)}`, +open.clear.toFixed(4));
   check(s, "open clear height >= nominal truck height", open.clear >= NOMINAL.height - EPS, `>= ${NOMINAL.height}`, +open.clear.toFixed(4));
 
-  if (t.building === "warehouse") {
+  if (t.building === "warehouse" || t.building === "depot") {
     const panel = m.parts.find((p) => p.name === t.panel);
     const anim = m.asset.animations.find((x) => x.name === `${t.door}_open`);
     const openY = anim.values[anim.values.length - 1][1];
@@ -606,9 +617,227 @@ for (const t of bayTargets) {
   finding(`truck wheel-inclusive width ${truckSize[0].toFixed(3)} vs nominal 1.0 (+${(truckSize[0] - 1).toFixed(3)}); cab roof height ${truckSize[1].toFixed(3)} vs nominal 1.15 (+${(truckSize[1] - 1.15).toFixed(3)}). Within "approximately" tolerance; clearance checks above use ACTUAL bounds.`);
 }
 
-// Animation-inventory coverage gaps (README: sample channels, not full coverage).
-finding("depot recipe has no door pivot group although ART_AND_MOTION inventory lists depot door opening; blockout sample-coverage gap, owner decision (kit.json is not a T04 write path).");
-finding("forklift recipe has no wheel parts although inventory lists wheel turns; blockout sample-coverage gap.");
+// ---------------------------------------------------------------------------
+// S7: T09 (#136) production authoring contracts.
+// Palette preservation, baseline recipe integrity, detail-quantum discipline
+// for NEW geometry only (legacy blockout values are grandfathered), motion
+// inventory coverage (ART_AND_MOTION.md) and channel semantics.
+// ---------------------------------------------------------------------------
+const PALETTE_BASELINE = {
+  sand: "#BA8054", oxide: "#A34F32", oxideLight: "#C47746", cream: "#D6C7A3",
+  charcoal: "#292C29", steel: "#7C8078", olive: "#777746", yellow: "#C99A35",
+  amber: "#FFB348", rubber: "#33332F",
+};
+check("t09", "palette preserved exactly (10 tokens, no additions)", deepEqual(kit.palette, PALETTE_BASELINE), PALETTE_BASELINE, kit.palette);
+
+// Baseline contracts pinned from T04 merged kit (4acf7ef). The five buildings
+// are extended additively (baseline entries must remain a prefix); the other
+// seven assets are untouched by T09 and must match exactly.
+const BASELINE_PARTS = {
+  warehouse: ["foundation", "back", "side-1", "side1", "roofBase", "roofStep-1", "roofStep1", "ridge", "frontLintel", "centerPier", "doorPanel0", "doorPanel1"],
+  depot: ["foundation", "back", "side-1", "side1", "roofBase", "roofStep-1", "roofStep1", "ridge", "lintel"],
+  sorter: ["body", "hopper", "belt", "rollerMesh"],
+  furnace: ["base", "back", "left", "right", "lintel", "glow", "chimney", "door"],
+  generator: ["housing", "fanFrame", "fanX", "fanY"],
+  crane: ["base", "tower", "boom", "cable", "grip"],
+  truck: ["chassis", "cab", "windshield", "bed", "pallet", "wheel_-1_0Mesh", "wheel_-1_1Mesh", "wheel_-1_2Mesh", "wheel_1_0Mesh", "wheel_1_1Mesh", "wheel_1_2Mesh"],
+  forklift: ["body", "mast", "crossbar", "fork-0.25", "fork0.25"],
+  drone: ["body", "armX", "armZ", "blade0", "blade1", "blade2", "blade3", "cargo"],
+  worker: ["torso", "head", "helmet", "legMesh-1", "armMesh-1", "legMesh1", "armMesh1"],
+  turret: ["base", "housing", "barrel"],
+  wall_gate: ["left", "right", "panel"],
+};
+const BASELINE_ANIMS = {
+  warehouse: ["assemble_structure", "assemble_roof", "door0_open", "door1_open"],
+  depot: ["assemble_structure", "assemble_roof"],
+  sorter: ["roller_work"],
+  furnace: ["intake"],
+  generator: ["fan_powered"],
+  crane: ["hoist_lift"],
+  truck: ["wheel_-1_0_roll", "wheel_-1_1_roll", "wheel_-1_2_roll", "wheel_1_0_roll", "wheel_1_1_roll", "wheel_1_2_roll"],
+  forklift: ["lift_pallet"],
+  drone: ["rotor0_spin", "rotor1_spin", "rotor2_spin", "rotor3_spin"],
+  worker: ["walk_leg"],
+  turret: ["scan"],
+  wall_gate: ["gate_open"],
+};
+const BASELINE_SOCKETS = {
+  warehouse: ["bay0", "bay1"], depot: ["serviceBay"], sorter: ["output"], furnace: ["input"],
+  generator: [], crane: [], truck: ["cargo"], forklift: [], drone: ["hook"], worker: [], turret: [], wall_gate: ["passage"],
+};
+const UNTOUCHED = ["crane", "truck", "forklift", "drone", "worker", "turret", "wall_gate"];
+for (const [id, names] of Object.entries(BASELINE_PARTS)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const s = `t09:baseline:${id}`;
+  const prefix = a.parts.slice(0, names.length).map((p) => p.name);
+  check(s, "baseline part names preserved as prefix", deepEqual(prefix, names), names, prefix);
+  const animPrefix = a.animations.slice(0, BASELINE_ANIMS[id].length).map((x) => x.name);
+  check(s, "baseline clips preserved as prefix", deepEqual(animPrefix, BASELINE_ANIMS[id]), BASELINE_ANIMS[id], animPrefix);
+  check(s, "socket names preserved", deepEqual(a.sockets.map((x) => x.name), BASELINE_SOCKETS[id]), BASELINE_SOCKETS[id], a.sockets.map((x) => x.name));
+  if (UNTOUCHED.includes(id)) {
+    check(s, "untouched asset: no parts added", a.parts.length === names.length, names.length, a.parts.length);
+    check(s, "untouched asset: no clips added", a.animations.length === BASELINE_ANIMS[id].length, BASELINE_ANIMS[id].length, a.animations.length);
+  }
+}
+
+// Explicit registry of T09-authored geometry. Quantum discipline applies to
+// these entries only; legacy blockout values (0.35 pier, 1.85 door z, 0.18
+// roller, ...) are grandfathered and documented in the T04 evidence.
+const T09 = {
+  warehouse: { parts: ["ventHousing", "ventAxle", "ventBladeX", "ventBladeZ", "liftPlatform", "liftPallet"], groups: ["ventFan", "palletLift"], anims: ["vent_fan", "pallet_lift"] },
+  depot: { parts: ["doorPanel", "ventHousing", "ventAxle", "ventBladeX", "ventBladeZ"], groups: ["door", "ventFan"], anims: ["door_open", "vent_fan"] },
+  sorter: { parts: ["rollerMesh2", "gantryPostL", "gantryPostR", "gantryBar", "magnetBody", "magnetTip"], groups: ["roller2", "magnet"], anims: ["roller2_work", "magnet_sweep"] },
+  furnace: { parts: ["fanHousing", "fanBladeY", "fanBladeZ", "spout", "puff"], groups: ["fan", "pourSpout", "ventPuff"], anims: ["fan_work", "pour", "vent_puff"] },
+  generator: { parts: ["shaftBar"], groups: ["shaft"], anims: ["shaft_drive", "fan_idle", "fan_load_high", "fan_start", "fan_spin_down"] },
+};
+const isQuantum = (v) => Math.abs(v / SPEC.detailQuantum - Math.round(v / SPEC.detailQuantum)) < 1e-9;
+for (const [id, reg] of Object.entries(T09)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const s = `t09:authored:${id}`;
+  const partNames = a.parts.map((p) => p.name);
+  const groupNames = a.groups.map((g) => g.name);
+  const animNames = a.animations.map((x) => x.name);
+  check(s, "registered parts present", reg.parts.every((n) => partNames.includes(n)), reg.parts, reg.parts.filter((n) => !partNames.includes(n)));
+  check(s, "registered pivot groups present", reg.groups.every((n) => groupNames.includes(n)), reg.groups, reg.groups.filter((n) => !groupNames.includes(n)));
+  check(s, "registered clips present", reg.anims.every((n) => animNames.includes(n)), reg.anims, reg.anims.filter((n) => !animNames.includes(n)));
+
+  const bad = [];
+  for (const p of a.parts.filter((p) => reg.parts.includes(p.name))) {
+    p.center.forEach((v, i) => { if (!isQuantum(v)) bad.push(`${p.name}.center[${i}]=${v}`); });
+    p.size.forEach((v, i) => {
+      // Verified exception: depot doorPanel width is clearance-locked to the
+      // serviceBay socket contract (3.2), checked separately below.
+      if (id === "depot" && p.name === "doorPanel" && i === 0) return;
+      if (!isQuantum(v)) bad.push(`${p.name}.size[${i}]=${v}`);
+    });
+  }
+  for (const g of a.groups.filter((g) => reg.groups.includes(g.name))) {
+    g.position.forEach((v, i) => { if (!isQuantum(v)) bad.push(`${g.name}.position[${i}]=${v}`); });
+  }
+  for (const an of a.animations.filter((x) => reg.anims.includes(x.name) && x.path === "translation")) {
+    an.values.forEach((v, ti) => v.forEach((c, i) => { if (!isQuantum(c)) bad.push(`${an.name}.values[${ti}][${i}]=${c}`); }));
+  }
+  check(s, `new geometry on ${SPEC.detailQuantum} detail quantum`, bad.length === 0, [], bad);
+}
+{
+  // Verified quantum exception: depot doorPanel width == serviceBay clearanceWidth.
+  const dm = models.get("depot");
+  const panel = dm.parts.find((p) => p.name === "doorPanel");
+  const sk = dm.asset.sockets.find((x) => x.name === "serviceBay");
+  check("t09:authored:depot", "doorPanel width locked to serviceBay clearanceWidth (verified quantum exception)", near(panel.size[0], sk.clearanceWidth), sk.clearanceWidth, panel.size[0]);
+}
+
+// Motion inventory coverage (ART_AND_MOTION.md building rows). Entity-level
+// sequences (forklift service, chassis assembly, vehicle departure) live on the
+// vehicle assets / entity transforms, not building clips — see findings.
+const INVENTORY = {
+  warehouse: ["door0_open", "door1_open", "pallet_lift", "vent_fan"],
+  depot: ["door_open", "vent_fan"],
+  sorter: ["roller_work", "roller2_work", "magnet_sweep"],
+  furnace: ["intake", "pour", "fan_work", "vent_puff"],
+  generator: ["fan_powered", "fan_idle", "fan_load_high", "fan_start", "fan_spin_down", "shaft_drive"],
+};
+for (const [id, required] of Object.entries(INVENTORY)) {
+  const a = kit.assets.find((x) => x.id === id);
+  const have = a.animations.map((x) => x.name);
+  const missing = required.filter((n) => !have.includes(n));
+  check(`t09:inventory:${id}`, "ART_AND_MOTION building channels covered", missing.length === 0, required, missing.length ? { missing, have } : have);
+}
+
+// Channel semantics: independent periods (no global sync), spec fan/vent
+// periods, 5s assembly timeline, loop flags, and motion direction checks.
+function clip(id, name) {
+  return kit.assets.find((x) => x.id === id).animations.find((x) => x.name === name);
+}
+const duration = (an) => an.times[an.times.length - 1] - an.times[0];
+{
+  const s = "t09:motion";
+  const wv = duration(clip("warehouse", "vent_fan"));
+  const dv = duration(clip("depot", "vent_fan"));
+  check(s, "warehouse vent period within 11-19s", wv >= 11 && wv <= 19, "[11,19]", wv);
+  check(s, "depot vent period within 11-19s", dv >= 11 && dv <= 19, "[11,19]", dv);
+  check(s, "vent channels independent (no global sync)", wv !== dv, "different periods", [wv, dv]);
+  for (const [id, name] of [["furnace", "fan_work"], ["generator", "fan_powered"], ["generator", "shaft_drive"]]) {
+    check(s, `${id}.${name} fan period 1.7s`, near(duration(clip(id, name)), 1.7), 1.7, duration(clip(id, name)));
+  }
+  for (const id of ["warehouse", "depot"]) {
+    check(s, `${id} assembly timeline ends at 5s`, near(duration(clip(id, "assemble_structure")), 5) && near(duration(clip(id, "assemble_roof")), 5), 5, [duration(clip(id, "assemble_structure")), duration(clip(id, "assemble_roof"))]);
+  }
+  const loadHigh = duration(clip("generator", "fan_load_high"));
+  const idle = duration(clip("generator", "fan_idle"));
+  check(s, "generator load response spins faster than idle", loadHigh < idle, "< idle period", { loadHigh, idle });
+  const loopExpected = {
+    "warehouse:vent_fan": true, "warehouse:pallet_lift": false,
+    "depot:door_open": false, "depot:vent_fan": true,
+    "sorter:roller2_work": true, "sorter:magnet_sweep": true,
+    "furnace:fan_work": true, "furnace:pour": false, "furnace:vent_puff": true,
+    "generator:shaft_drive": true, "generator:fan_idle": true, "generator:fan_load_high": true,
+    "generator:fan_start": false, "generator:fan_spin_down": false,
+  };
+  const loopBad = [];
+  for (const [key, want] of Object.entries(loopExpected)) {
+    const [id, name] = key.split(":");
+    const an = clip(id, name);
+    if (!an || an.loop !== want) loopBad.push(`${key}=${an ? an.loop : "missing"}`);
+  }
+  check(s, "loop flags match channel semantics", loopBad.length === 0, [], loopBad);
+}
+// Quaternion helpers for direction/angle checks (independent of the renderer).
+function quatRotate(q, v) {
+  const [x, y, z, w] = q;
+  const tx = 2 * (y * v[2] - z * v[1]);
+  const ty = 2 * (z * v[0] - x * v[2]);
+  const tz = 2 * (x * v[1] - y * v[0]);
+  return [
+    v[0] + w * tx + (y * tz - z * ty),
+    v[1] + w * ty + (z * tx - x * tz),
+    v[2] + w * tz + (x * ty - y * tx),
+  ];
+}
+const yawDeg = (q) => { let a = (2 * Math.atan2(q[1], q[3]) * 180) / Math.PI; if (a < 0) a += 360; return a; };
+const zAngleDeg = (q) => { let a = (2 * Math.atan2(q[2], q[3]) * 180) / Math.PI; if (a < 0) a += 360; return a; };
+{
+  const s = "t09:motion";
+  // Furnace pour: +30 deg about X must LOWER the spout tip toward the mouth.
+  const pour = clip("furnace", "pour");
+  const tip = quatRotate(pour.values[1], [0, 0, 0.5]); // spout tip in pivot-local space
+  check(s, "pour rotation lowers spout tip (sign verified)", near(tip[1], -0.25, 1e-4) && near(tip[2], 0.4330127, 1e-4), "tip y=-0.25 z=0.4330 (down/forward)", tip.map((v) => +v.toFixed(6)));
+  // Sorter magnet sweep reaches +/-45 deg and returns to identity each batch.
+  const sweep = clip("sorter", "magnet_sweep");
+  const angles = sweep.values.map(yawDeg);
+  check(s, "magnet sweep +/-45 deg, returns to rest", near(angles[1], 45, 1e-4) && near(angles[3], 315, 1e-4) && near(angles[0], 0, 1e-6) && near(angles[2], 0, 1e-6) && near(angles[4], 0, 1e-6), "[0,45,0,315,0]", angles.map((v) => +v.toFixed(4)));
+  // Generator start accelerates, spin-down decelerates; both end at a full turn.
+  for (const [name, want] of [["fan_start", "increasing"], ["fan_spin_down", "decreasing"]]) {
+    const an = clip("generator", name);
+    const ang = an.values.map(zAngleDeg);
+    const speeds = ang.slice(1).map((a, i) => (a - ang[i]) / (an.times[i + 1] - an.times[i]));
+    const monotone = speeds.every((v, i) => i === 0 || (want === "increasing" ? v > speeds[i - 1] : v < speeds[i - 1]));
+    check(s, `${name} angular speed strictly ${want}`, monotone && ang.every((a, i) => i === 0 || a > ang[i - 1]), `strictly ${want} deg/s`, speeds.map((v) => +v.toFixed(2)));
+    check(s, `${name} ends at full turn (rest orientation)`, near(ang[ang.length - 1], 360, 1e-4), 360, +ang[ang.length - 1].toFixed(4));
+  }
+}
+
+// Wreck asset: static sectioned husk; reveal/stage animation is owned by #169.
+{
+  const a = kit.assets.find((x) => x.id === "wreckSections");
+  const s = "t09:wreck";
+  check(s, "footprint [3,3]", deepEqual(a.footprint, [3, 3]), [3, 3], a.footprint);
+  check(s, "static asset (reveal stages owned by #169)", a.animations.length === 0, 0, a.animations.length);
+  const sections = ["sectionHull", "sectionCab", "sectionBed", "sectionDebris"];
+  check(s, "four named section pivots", deepEqual(a.groups.map((g) => g.name), sections), sections, a.groups.map((g) => g.name));
+  const sk = a.sockets.find((x) => x.name === "salvage");
+  check(s, "salvage socket kind pallet", sk?.kind === "pallet", "pallet", sk?.kind ?? null);
+}
+
+// Known limitations / coverage gaps requiring reviewer attention (non-failing).
+finding("forklift recipe has no wheel parts although inventory lists wheel turns; blockout sample-coverage gap (production wheels owned by #142).");
+finding("furnace inventory lists 'subtle emissive variation'; kit schema has no emissive/material animation channel (color tokens only). Static amber glow authored; emissive variation deferred to renderer/material schema.");
+finding("entity-level inventory sequences (warehouse forklift service, depot chassis assembly / vehicle departure) are represented by vehicle assets and entity transforms (forklift lift_pallet, truck wheel rolls), not building clips.");
+{
+  const g = JSON.parse(readFileSync(join(assetsDir, "generated", "warehouse.gltf"), "utf8"));
+  const rootNode = (g.nodes ?? []).find((n) => n.name === "warehouse");
+  finding(`build-vision-assets.py hardcodes glTF root extras.status='${rootNode?.extras?.status}' and rewrites manifest status='blockout' on every run; T09 post-patches the manifest to 'production' (authoritative). Generator is outside #136 write paths; glTF extras wording is a known limitation.`);
+}
 
 // ---------------------------------------------------------------------------
 // Summary
@@ -617,6 +846,7 @@ const fails = results.filter((r) => !r.ok);
 const summary = {
   tool: "scripts/rw3d-kit-validate.mjs",
   issue: 131,
+  extendedBy: 136,
   acceptance: "V06",
   kitSha256,
   manifestSha256,

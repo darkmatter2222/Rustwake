@@ -1,0 +1,2748 @@
+{
+  "role": "developer",
+  "issue": 136,
+  "acceptance": "V01/V06 numeric + rendered capture evidence; capable visual inspection PENDING (G1 #151)",
+  "generatedBy": "prototypes/rw3d-buildings/capture.mjs",
+  "note": "Non-vision agent: numeric/pixel checks only. No visual fidelity acceptance claimed.",
+  "meta": {
+    "browser": "C:/Program Files/Google/Chrome/Application/chrome.exe",
+    "three": "0.187.0",
+    "threeRevision": "187",
+    "canvas": {
+      "w": 1600,
+      "h": 900
+    },
+    "port": 4316,
+    "kitSha256": "6ab465385e61250aa7e9c16fec7117b4d8cd9786eda886e7423f988e5cde0b82",
+    "manifestSha256": "8a75a95cb5ba5c536213ea46d3e1b3d6ac7d14b782d325b91e67dad79aafa4e6",
+    "tolerancePx": 2
+  },
+  "assets": {
+    "warehouse": {
+      "footprint": [
+        6,
+        4
+      ],
+      "envelope": {
+        "min": [
+          -3.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          3.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "sockets": [
+        {
+          "name": "bay0",
+          "kind": "truck",
+          "position": [
+            -1.55,
+            0,
+            2.15
+          ]
+        },
+        {
+          "name": "bay1",
+          "kind": "truck",
+          "position": [
+            1.55,
+            0,
+            2.15
+          ]
+        }
+      ],
+      "pivots": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        },
+        {
+          "name": "door0",
+          "parent": "root",
+          "position": [
+            -1.55,
+            1,
+            1.85
+          ]
+        },
+        {
+          "name": "door1",
+          "parent": "root",
+          "position": [
+            1.55,
+            1,
+            1.85
+          ]
+        },
+        {
+          "name": "ventFan",
+          "parent": "roof",
+          "position": [
+            1.75,
+            0.75,
+            -1
+          ]
+        },
+        {
+          "name": "palletLift",
+          "parent": "root",
+          "position": [
+            1.5,
+            0,
+            -1.5
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "charcoal",
+        "cream",
+        "oxide",
+        "oxideLight",
+        "steel",
+        "yellow"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 400,
+            "y0": 219,
+            "x1": 1334,
+            "y1": 680,
+            "w": 935,
+            "h": 462,
+            "pixels": 378842
+          },
+          "expected": {
+            "x0": 399.4448979591838,
+            "y0": 218.83673469387756,
+            "x1": 1335.6081632653058,
+            "y1": 681.1632653061224
+          },
+          "ppu": 153.46938775510202,
+          "groundPx": 681.1632653061224
+        },
+        "side": {
+          "bounds": {
+            "x0": 253,
+            "y0": 48,
+            "x1": 1346,
+            "y1": 851,
+            "w": 1094,
+            "h": 804,
+            "pixels": 800459
+          },
+          "expected": {
+            "x0": 252.87966804979249,
+            "y0": 48.00000000000006,
+            "x1": 1347.1203319502076,
+            "y1": 852
+          },
+          "ppu": 266.8879668049792,
+          "groundPx": 852
+        },
+        "iso": {
+          "bounds": {
+            "x0": 474,
+            "y0": 184,
+            "x1": 1186,
+            "y1": 790,
+            "w": 713,
+            "h": 607,
+            "pixels": 280159
+          },
+          "expected": {
+            "x0": 474.3101210705216,
+            "y0": 183.37867001254705,
+            "x1": 1187.1935470535,
+            "y1": 791.0695106649937
+          },
+          "ppu": 98.84013817805145,
+          "groundPx": 598.87795813069
+        }
+      }
+    },
+    "depot": {
+      "footprint": [
+        4,
+        4
+      ],
+      "envelope": {
+        "min": [
+          -2.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          2.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "sockets": [
+        {
+          "name": "serviceBay",
+          "kind": "truck",
+          "position": [
+            0,
+            0,
+            2.2
+          ]
+        }
+      ],
+      "pivots": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        },
+        {
+          "name": "door",
+          "parent": "root",
+          "position": [
+            0,
+            1,
+            1.875
+          ]
+        },
+        {
+          "name": "ventFan",
+          "parent": "roof",
+          "position": [
+            1,
+            0.75,
+            -1
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "charcoal",
+        "cream",
+        "oxide",
+        "oxideLight",
+        "steel",
+        "yellow"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 490,
+            "y0": 160,
+            "x1": 1279,
+            "y1": 739,
+            "w": 790,
+            "h": 580,
+            "pixels": 399796
+          },
+          "expected": {
+            "x0": 489.5589743589744,
+            "y0": 159.56410256410254,
+            "x1": 1280.123076923077,
+            "y1": 740.4358974358975
+          },
+          "ppu": 192.82051282051282,
+          "groundPx": 740.4358974358975
+        },
+        "side": {
+          "bounds": {
+            "x0": 253,
+            "y0": 48,
+            "x1": 1346,
+            "y1": 851,
+            "w": 1094,
+            "h": 804,
+            "pixels": 802657
+          },
+          "expected": {
+            "x0": 252.87966804979249,
+            "y0": 48.00000000000006,
+            "x1": 1347.1203319502074,
+            "y1": 852
+          },
+          "ppu": 266.8879668049792,
+          "groundPx": 852
+        },
+        "iso": {
+          "bounds": {
+            "x0": 516,
+            "y0": 195,
+            "x1": 1152,
+            "y1": 783,
+            "w": 637,
+            "h": 589,
+            "pixels": 253033
+          },
+          "expected": {
+            "x0": 515.6595822379647,
+            "y0": 194.89539748953976,
+            "x1": 1152.706419846896,
+            "y1": 784.271129707113
+          },
+          "ppu": 109.86832653822455,
+          "groundPx": 615.4891668482007
+        }
+      }
+    },
+    "sorter": {
+      "footprint": [
+        3,
+        3
+      ],
+      "envelope": {
+        "min": [
+          -1.3,
+          0,
+          -1.3
+        ],
+        "max": [
+          1.3,
+          2,
+          1.9000000000000001
+        ]
+      },
+      "sockets": [
+        {
+          "name": "output",
+          "kind": "belt",
+          "position": [
+            0,
+            0,
+            1.6
+          ]
+        }
+      ],
+      "pivots": [
+        {
+          "name": "roller",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            1.3
+          ]
+        },
+        {
+          "name": "roller2",
+          "parent": "root",
+          "position": [
+            0,
+            0.5,
+            1.375
+          ]
+        },
+        {
+          "name": "magnet",
+          "parent": "root",
+          "position": [
+            0,
+            1.125,
+            1.125
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "amber",
+        "charcoal",
+        "olive",
+        "rubber",
+        "steel",
+        "yellow"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 610,
+            "y0": 229,
+            "x1": 1184,
+            "y1": 670,
+            "w": 575,
+            "h": 442,
+            "pixels": 238574
+          },
+          "expected": {
+            "x0": 609.7882352941176,
+            "y0": 228.8235294117647,
+            "x1": 1184.8470588235296,
+            "y1": 671.1764705882354
+          },
+          "ppu": 221.1764705882353,
+          "groundPx": 671.1764705882354
+        },
+        "side": {
+          "bounds": {
+            "x0": 157,
+            "y0": 48,
+            "x1": 1442,
+            "y1": 851,
+            "w": 1286,
+            "h": 804,
+            "pixels": 671687
+          },
+          "expected": {
+            "x0": 156.79999999999995,
+            "y0": 48,
+            "x1": 1443.2000000000003,
+            "y1": 852
+          },
+          "ppu": 402,
+          "groundPx": 852
+        },
+        "iso": {
+          "bounds": {
+            "x0": 635,
+            "y0": 194,
+            "x1": 1131,
+            "y1": 679,
+            "w": 497,
+            "h": 486,
+            "pixels": 165152
+          },
+          "expected": {
+            "x0": 634.8811221561623,
+            "y0": 193.86857142857139,
+            "x1": 1132.227139758083,
+            "y1": 680.5757142857143
+          },
+          "ppu": 140.67069665697682,
+          "groundPx": 590.6706966569768
+        }
+      }
+    },
+    "furnace": {
+      "footprint": [
+        3,
+        3
+      ],
+      "envelope": {
+        "min": [
+          -1.5,
+          0,
+          -1.5
+        ],
+        "max": [
+          1.5,
+          3.625,
+          1.5
+        ]
+      },
+      "sockets": [
+        {
+          "name": "input",
+          "kind": "pallet",
+          "position": [
+            0,
+            0,
+            1.7
+          ]
+        }
+      ],
+      "pivots": [
+        {
+          "name": "intakeDoor",
+          "parent": "root",
+          "position": [
+            0,
+            1,
+            1.2
+          ]
+        },
+        {
+          "name": "fan",
+          "parent": "root",
+          "position": [
+            -1.375,
+            0.875,
+            0.375
+          ]
+        },
+        {
+          "name": "pourSpout",
+          "parent": "root",
+          "position": [
+            0,
+            1.75,
+            0.875
+          ]
+        },
+        {
+          "name": "ventPuff",
+          "parent": "root",
+          "position": [
+            0.625,
+            3.5,
+            -0.625
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "amber",
+        "charcoal",
+        "cream",
+        "oxide",
+        "steel"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 566,
+            "y0": 49,
+            "x1": 1228,
+            "y1": 850,
+            "w": 663,
+            "h": 802,
+            "pixels": 293576
+          },
+          "expected": {
+            "x0": 565.5529411764705,
+            "y0": 49.117647058823536,
+            "x1": 1229.0823529411764,
+            "y1": 850.8823529411765
+          },
+          "ppu": 221.1764705882353,
+          "groundPx": 850.8823529411765
+        },
+        "side": {
+          "bounds": {
+            "x0": 467,
+            "y0": 48,
+            "x1": 1132,
+            "y1": 851,
+            "w": 666,
+            "h": 804,
+            "pixels": 278959
+          },
+          "expected": {
+            "x0": 467.31034482758616,
+            "y0": 48,
+            "x1": 1132.689655172414,
+            "y1": 852
+          },
+          "ppu": 221.79310344827587,
+          "groundPx": 852
+        },
+        "iso": {
+          "bounds": {
+            "x0": 591,
+            "y0": 282,
+            "x1": 1080,
+            "y1": 782,
+            "w": 490,
+            "h": 501,
+            "pixels": 141618
+          },
+          "expected": {
+            "x0": 590.9104836263598,
+            "y0": 282.1266862170088,
+            "x1": 1080.964037627079,
+            "y1": 783.1530791788856
+          },
+          "ppu": 115.50673039282553,
+          "groundPx": 659.3559488369963
+        }
+      }
+    },
+    "generator": {
+      "footprint": [
+        2,
+        2
+      ],
+      "envelope": {
+        "min": [
+          -0.85,
+          0,
+          -0.8
+        ],
+        "max": [
+          0.85,
+          1.3,
+          1
+        ]
+      },
+      "sockets": [],
+      "pivots": [
+        {
+          "name": "fan",
+          "parent": "root",
+          "position": [
+            0,
+            0.75,
+            0.93
+          ]
+        },
+        {
+          "name": "shaft",
+          "parent": "root",
+          "position": [
+            0,
+            0.75,
+            0.875
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "charcoal",
+        "cream",
+        "olive",
+        "steel"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 694,
+            "y0": 282,
+            "x1": 1133,
+            "y1": 617,
+            "w": 440,
+            "h": 336,
+            "pixels": 147840
+          },
+          "expected": {
+            "x0": 693.6827586206896,
+            "y0": 281.44827586206895,
+            "x1": 1134.5103448275863,
+            "y1": 618.551724137931
+          },
+          "ppu": 259.3103448275862,
+          "groundPx": 618.551724137931
+        },
+        "side": {
+          "bounds": {
+            "x0": 198,
+            "y0": 59,
+            "x1": 1280,
+            "y1": 840,
+            "w": 1083,
+            "h": 782,
+            "pixels": 810032
+          },
+          "expected": {
+            "x0": 198.40000000000043,
+            "y0": 58.96000000000021,
+            "x1": 1281.28,
+            "y1": 841.0399999999997
+          },
+          "ppu": 601.5999999999997,
+          "groundPx": 841.0399999999997
+        },
+        "iso": {
+          "bounds": {
+            "x0": 646,
+            "y0": 265,
+            "x1": 1066,
+            "y1": 699,
+            "w": 421,
+            "h": 435,
+            "pixels": 131842
+          },
+          "expected": {
+            "x0": 645.4120818683205,
+            "y0": 264.8587155963303,
+            "x1": 1067.015494954719,
+            "y1": 700.051376146789
+          },
+          "ppu": 180.67795900896104,
+          "groundPx": 567.4406733558246
+        }
+      }
+    },
+    "wreckSections": {
+      "footprint": [
+        3,
+        3
+      ],
+      "envelope": {
+        "min": [
+          -1.5,
+          0,
+          -1.375
+        ],
+        "max": [
+          1.4375,
+          1.0625,
+          1.5
+        ]
+      },
+      "sockets": [
+        {
+          "name": "salvage",
+          "kind": "pallet",
+          "position": [
+            0,
+            0,
+            1.6
+          ]
+        }
+      ],
+      "pivots": [
+        {
+          "name": "sectionHull",
+          "parent": "root",
+          "position": [
+            0,
+            0.25,
+            0
+          ]
+        },
+        {
+          "name": "sectionCab",
+          "parent": "root",
+          "position": [
+            -0.75,
+            0.25,
+            0.75
+          ]
+        },
+        {
+          "name": "sectionBed",
+          "parent": "root",
+          "position": [
+            0.75,
+            0.25,
+            -0.75
+          ]
+        },
+        {
+          "name": "sectionDebris",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "paletteTokens": [
+        "charcoal",
+        "cream",
+        "oxide",
+        "oxideLight",
+        "rubber",
+        "steel"
+      ],
+      "views": {
+        "front": {
+          "bounds": {
+            "x0": 566,
+            "y0": 359,
+            "x1": 1214,
+            "y1": 593,
+            "w": 649,
+            "h": 235,
+            "pixels": 132045
+          },
+          "expected": {
+            "x0": 565.5529411764705,
+            "y0": 358.7647058823529,
+            "x1": 1215.2588235294118,
+            "y1": 593.7647058823529
+          },
+          "ppu": 221.1764705882353,
+          "groundPx": 593.7647058823529
+        },
+        "side": {
+          "bounds": {
+            "x0": 48,
+            "y0": 234,
+            "x1": 1551,
+            "y1": 789,
+            "w": 1504,
+            "h": 556,
+            "pixels": 688406
+          },
+          "expected": {
+            "x0": 48.00000000000057,
+            "y0": 234.20869565217404,
+            "x1": 1551.9999999999998,
+            "y1": 790.0347826086954
+          },
+          "ppu": 523.1304347826084,
+          "groundPx": 790.0347826086954
+        },
+        "iso": {
+          "bounds": {
+            "x0": 545,
+            "y0": 290,
+            "x1": 1168,
+            "y1": 739,
+            "w": 624,
+            "h": 450,
+            "pixels": 171627
+          },
+          "expected": {
+            "x0": 545.0265996929625,
+            "y0": 289.6912423625255,
+            "x1": 1168.9882022240886,
+            "y1": 739.9967413441955
+          },
+          "ppu": 160.43908376355805,
+          "groundPx": 554.2854044463128
+        }
+      }
+    }
+  },
+  "motion": [
+    {
+      "asset": "depot",
+      "clip": "door_open",
+      "view": "front",
+      "times": [
+        0,
+        0.3,
+        0.6,
+        0.9,
+        1.2
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-depot-door_open.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            1,
+            1.875
+          ],
+          "actual": [
+            0,
+            1,
+            1.875
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.3,
+          "expected": [
+            0,
+            1.40625,
+            1.875
+          ],
+          "actual": [
+            0,
+            1.40625,
+            1.875
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.6,
+          "expected": [
+            0,
+            1.8125,
+            1.875
+          ],
+          "actual": [
+            0,
+            1.8125,
+            1.875
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.9,
+          "expected": [
+            0,
+            2.21875,
+            1.875
+          ],
+          "actual": [
+            0,
+            2.21875,
+            1.875
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.2,
+          "expected": [
+            0,
+            2.625,
+            1.875
+          ],
+          "actual": [
+            0,
+            2.625,
+            1.875
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "warehouse",
+      "clip": "vent_fan",
+      "view": "iso",
+      "times": [
+        0,
+        3.25,
+        6.5,
+        9.75,
+        13
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-warehouse-vent_fan.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 3.25,
+          "expected": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865475
+          ],
+          "actual": [
+            0,
+            0.7071067811865475,
+            0,
+            0.7071067811865475
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 6.5,
+          "expected": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "actual": [
+            0,
+            1,
+            0,
+            0
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 9.75,
+          "expected": [
+            0,
+            0.7071067811865475,
+            0,
+            -0.7071067811865475
+          ],
+          "actual": [
+            0,
+            0.7071067811865475,
+            0,
+            -0.7071067811865475
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 13,
+          "expected": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "warehouse",
+      "clip": "pallet_lift",
+      "view": "side",
+      "times": [
+        0,
+        0.75,
+        1.5,
+        2.25,
+        3
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-warehouse-pallet_lift.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            1.5,
+            0,
+            -1.5
+          ],
+          "actual": [
+            1.5,
+            0,
+            -1.5
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.75,
+          "expected": [
+            1.5,
+            0.46875,
+            -1.5
+          ],
+          "actual": [
+            1.5,
+            0.46875,
+            -1.5
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.5,
+          "expected": [
+            1.5,
+            0.625,
+            -1.5
+          ],
+          "actual": [
+            1.5,
+            0.625,
+            -1.5
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2.25,
+          "expected": [
+            1.5,
+            0.46875,
+            -1.5
+          ],
+          "actual": [
+            1.5,
+            0.46875,
+            -1.5
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 3,
+          "expected": [
+            1.5,
+            0,
+            -1.5
+          ],
+          "actual": [
+            1.5,
+            0,
+            -1.5
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "sorter",
+      "clip": "magnet_sweep",
+      "view": "front",
+      "times": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-sorter-magnet_sweep.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1,
+          "expected": [
+            0,
+            0.382683432398878,
+            0,
+            0.923879532497291
+          ],
+          "actual": [
+            0,
+            0.382683432398878,
+            0,
+            0.923879532497291
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 3,
+          "expected": [
+            0,
+            -0.382683432398878,
+            0,
+            0.923879532497291
+          ],
+          "actual": [
+            0,
+            -0.382683432398878,
+            0,
+            0.923879532497291
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 4,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "furnace",
+      "clip": "pour",
+      "view": "side",
+      "times": [
+        0,
+        0.6,
+        1.2,
+        1.8,
+        2.4
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-furnace-pour.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.6,
+          "expected": [
+            0.195366475102864,
+            0,
+            0,
+            0.9807303097212211
+          ],
+          "actual": [
+            0.195366475102864,
+            0,
+            0,
+            0.9807303097212211
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.2,
+          "expected": [
+            0.25881904509743586,
+            0,
+            0,
+            0.9659258262904307
+          ],
+          "actual": [
+            0.25881904509743586,
+            0,
+            0,
+            0.9659258262904307
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.8,
+          "expected": [
+            0.19536647510286403,
+            0,
+            0,
+            0.9807303097212211
+          ],
+          "actual": [
+            0.19536647510286403,
+            0,
+            0,
+            0.9807303097212211
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2.4,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "furnace",
+      "clip": "vent_puff",
+      "view": "iso",
+      "times": [
+        0,
+        0.5,
+        1,
+        1.5,
+        2
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-furnace-vent_puff.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "actual": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.5,
+          "expected": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "actual": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1,
+          "expected": [
+            1,
+            1,
+            1
+          ],
+          "actual": [
+            1,
+            1,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.5,
+          "expected": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "actual": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2,
+          "expected": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "actual": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "generator",
+      "clip": "fan_spin_down",
+      "view": "front",
+      "times": [
+        0,
+        0.9,
+        1.8,
+        2.7,
+        3.6
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-generator-fan_spin_down.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.9,
+          "expected": [
+            0,
+            0,
+            0.8219949365219961,
+            -0.5694947974584138
+          ],
+          "actual": [
+            0,
+            0,
+            0.8219949365219961,
+            -0.5694947974584138
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.8,
+          "expected": [
+            0,
+            0,
+            0.2581653636161921,
+            -0.966100742691423
+          ],
+          "actual": [
+            0,
+            0,
+            0.2581653636161921,
+            -0.966100742691423
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2.7,
+          "expected": [
+            0,
+            0,
+            0.05607770635575444,
+            -0.9984264073279903
+          ],
+          "actual": [
+            0,
+            0,
+            0.05607770635575444,
+            -0.9984264073279903
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 3.6,
+          "expected": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    },
+    {
+      "asset": "generator",
+      "clip": "fan_start",
+      "view": "front",
+      "times": [
+        0,
+        0.9,
+        1.8,
+        2.7,
+        3.6
+      ],
+      "file": "2026-11-14-rw3d-t09-motion-generator-fan_start.png",
+      "frames": [
+        {
+          "t": 0,
+          "expected": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 0.9,
+          "expected": [
+            0,
+            0,
+            0.33074481848020254,
+            0.9437202260460978
+          ],
+          "actual": [
+            0,
+            0,
+            0.33074481848020254,
+            0.9437202260460978
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 1.8,
+          "expected": [
+            0,
+            0,
+            0.9176629354796436,
+            0.3973597071255259
+          ],
+          "actual": [
+            0,
+            0,
+            0.9176629354796436,
+            0.3973597071255259
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 2.7,
+          "expected": [
+            0,
+            0,
+            0.8741572761215377,
+            -0.4856429311786321
+          ],
+          "actual": [
+            0,
+            0,
+            0.8741572761215377,
+            -0.4856429311786321
+          ],
+          "maxDelta": 0
+        },
+        {
+          "t": 3.6,
+          "expected": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "actual": [
+            0,
+            0,
+            0,
+            -1
+          ],
+          "maxDelta": 0
+        }
+      ],
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 47,
+    "pass": 47,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "name": "three revision (ADR-0001 exact 0.187.0)",
+      "expected": "187",
+      "actual": "187",
+      "pass": true
+    },
+    {
+      "name": "page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "warehouse scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -3.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          3.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "actual": {
+        "min": [
+          -3.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          3.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "warehouse/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 399.4448979591838,
+        "y0": 218.83673469387756,
+        "x1": 1335.6081632653058,
+        "y1": 681.1632653061224
+      },
+      "actual": {
+        "x0": 400,
+        "y0": 219,
+        "x1": 1334,
+        "y1": 680,
+        "w": 935,
+        "h": 462,
+        "pixels": 378842
+      },
+      "pass": true
+    },
+    {
+      "name": "warehouse/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 680.1632653061224
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 680
+      },
+      "pass": true
+    },
+    {
+      "name": "warehouse/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 252.87966804979249,
+        "y0": 48.00000000000006,
+        "x1": 1347.1203319502076,
+        "y1": 852
+      },
+      "actual": {
+        "x0": 253,
+        "y0": 48,
+        "x1": 1346,
+        "y1": 851,
+        "w": 1094,
+        "h": 804,
+        "pixels": 800459
+      },
+      "pass": true
+    },
+    {
+      "name": "warehouse/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 851
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 851
+      },
+      "pass": true
+    },
+    {
+      "name": "warehouse/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 474.3101210705216,
+        "y0": 183.37867001254705,
+        "x1": 1187.1935470535,
+        "y1": 791.0695106649937
+      },
+      "actual": {
+        "x0": 474,
+        "y0": 184,
+        "x1": 1186,
+        "y1": 790,
+        "w": 713,
+        "h": 607,
+        "pixels": 280159
+      },
+      "pass": true
+    },
+    {
+      "name": "depot scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -2.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          2.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "actual": {
+        "min": [
+          -2.05,
+          0,
+          -2.05
+        ],
+        "max": [
+          2.05,
+          3.0125,
+          2.05
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "depot/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 489.5589743589744,
+        "y0": 159.56410256410254,
+        "x1": 1280.123076923077,
+        "y1": 740.4358974358975
+      },
+      "actual": {
+        "x0": 490,
+        "y0": 160,
+        "x1": 1279,
+        "y1": 739,
+        "w": 790,
+        "h": 580,
+        "pixels": 399796
+      },
+      "pass": true
+    },
+    {
+      "name": "depot/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 739.4358974358975
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 739
+      },
+      "pass": true
+    },
+    {
+      "name": "depot/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 252.87966804979249,
+        "y0": 48.00000000000006,
+        "x1": 1347.1203319502074,
+        "y1": 852
+      },
+      "actual": {
+        "x0": 253,
+        "y0": 48,
+        "x1": 1346,
+        "y1": 851,
+        "w": 1094,
+        "h": 804,
+        "pixels": 802657
+      },
+      "pass": true
+    },
+    {
+      "name": "depot/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 851
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 851
+      },
+      "pass": true
+    },
+    {
+      "name": "depot/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 515.6595822379647,
+        "y0": 194.89539748953976,
+        "x1": 1152.706419846896,
+        "y1": 784.271129707113
+      },
+      "actual": {
+        "x0": 516,
+        "y0": 195,
+        "x1": 1152,
+        "y1": 783,
+        "w": 637,
+        "h": 589,
+        "pixels": 253033
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -1.3,
+          0,
+          -1.3
+        ],
+        "max": [
+          1.3,
+          2,
+          1.9000000000000001
+        ]
+      },
+      "actual": {
+        "min": [
+          -1.3,
+          0,
+          -1.3
+        ],
+        "max": [
+          1.3,
+          2,
+          1.9000000000000001
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 609.7882352941176,
+        "y0": 228.8235294117647,
+        "x1": 1184.8470588235296,
+        "y1": 671.1764705882354
+      },
+      "actual": {
+        "x0": 610,
+        "y0": 229,
+        "x1": 1184,
+        "y1": 670,
+        "w": 575,
+        "h": 442,
+        "pixels": 238574
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 670.1764705882354
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 670
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 156.79999999999995,
+        "y0": 48,
+        "x1": 1443.2000000000003,
+        "y1": 852
+      },
+      "actual": {
+        "x0": 157,
+        "y0": 48,
+        "x1": 1442,
+        "y1": 851,
+        "w": 1286,
+        "h": 804,
+        "pixels": 671687
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 851
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 851
+      },
+      "pass": true
+    },
+    {
+      "name": "sorter/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 634.8811221561623,
+        "y0": 193.86857142857139,
+        "x1": 1132.227139758083,
+        "y1": 680.5757142857143
+      },
+      "actual": {
+        "x0": 635,
+        "y0": 194,
+        "x1": 1131,
+        "y1": 679,
+        "w": 497,
+        "h": 486,
+        "pixels": 165152
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -1.5,
+          0,
+          -1.5
+        ],
+        "max": [
+          1.5,
+          3.625,
+          1.5
+        ]
+      },
+      "actual": {
+        "min": [
+          -1.5,
+          0,
+          -1.5
+        ],
+        "max": [
+          1.5,
+          3.625,
+          1.5
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 565.5529411764705,
+        "y0": 49.117647058823536,
+        "x1": 1229.0823529411764,
+        "y1": 850.8823529411765
+      },
+      "actual": {
+        "x0": 566,
+        "y0": 49,
+        "x1": 1228,
+        "y1": 850,
+        "w": 663,
+        "h": 802,
+        "pixels": 293576
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 849.8823529411765
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 850
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 467.31034482758616,
+        "y0": 48,
+        "x1": 1132.689655172414,
+        "y1": 852
+      },
+      "actual": {
+        "x0": 467,
+        "y0": 48,
+        "x1": 1132,
+        "y1": 851,
+        "w": 666,
+        "h": 804,
+        "pixels": 278959
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 851
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 851
+      },
+      "pass": true
+    },
+    {
+      "name": "furnace/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 590.9104836263598,
+        "y0": 282.1266862170088,
+        "x1": 1080.964037627079,
+        "y1": 783.1530791788856
+      },
+      "actual": {
+        "x0": 591,
+        "y0": 282,
+        "x1": 1080,
+        "y1": 782,
+        "w": 490,
+        "h": 501,
+        "pixels": 141618
+      },
+      "pass": true
+    },
+    {
+      "name": "generator scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -0.85,
+          0,
+          -0.8
+        ],
+        "max": [
+          0.85,
+          1.3,
+          1
+        ]
+      },
+      "actual": {
+        "min": [
+          -0.85,
+          0,
+          -0.8
+        ],
+        "max": [
+          0.85,
+          1.3,
+          1
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "generator/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 693.6827586206896,
+        "y0": 281.44827586206895,
+        "x1": 1134.5103448275863,
+        "y1": 618.551724137931
+      },
+      "actual": {
+        "x0": 694,
+        "y0": 282,
+        "x1": 1133,
+        "y1": 617,
+        "w": 440,
+        "h": 336,
+        "pixels": 147840
+      },
+      "pass": true
+    },
+    {
+      "name": "generator/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 617.551724137931
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 617
+      },
+      "pass": true
+    },
+    {
+      "name": "generator/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 198.40000000000043,
+        "y0": 58.96000000000021,
+        "x1": 1281.28,
+        "y1": 841.0399999999997
+      },
+      "actual": {
+        "x0": 198,
+        "y0": 59,
+        "x1": 1280,
+        "y1": 840,
+        "w": 1083,
+        "h": 782,
+        "pixels": 810032
+      },
+      "pass": true
+    },
+    {
+      "name": "generator/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 840.0399999999997
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 840
+      },
+      "pass": true
+    },
+    {
+      "name": "generator/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 645.4120818683205,
+        "y0": 264.8587155963303,
+        "x1": 1067.015494954719,
+        "y1": 700.051376146789
+      },
+      "actual": {
+        "x0": 646,
+        "y0": 265,
+        "x1": 1066,
+        "y1": 699,
+        "w": 421,
+        "h": 435,
+        "pixels": 131842
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections scene AABB vs independent Node AABB",
+      "expected": {
+        "min": [
+          -1.5,
+          0,
+          -1.375
+        ],
+        "max": [
+          1.4375,
+          1.0625,
+          1.5
+        ]
+      },
+      "actual": {
+        "min": [
+          -1.5,
+          0,
+          -1.375
+        ],
+        "max": [
+          1.4375,
+          1.0625,
+          1.5
+        ]
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections/front silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 565.5529411764705,
+        "y0": 358.7647058823529,
+        "x1": 1215.2588235294118,
+        "y1": 593.7647058823529
+      },
+      "actual": {
+        "x0": 566,
+        "y0": 359,
+        "x1": 1214,
+        "y1": 593,
+        "w": 649,
+        "h": 235,
+        "pixels": 132045
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections/front ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 592.7647058823529
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 593
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections/side silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 48.00000000000057,
+        "y0": 234.20869565217404,
+        "x1": 1551.9999999999998,
+        "y1": 790.0347826086954
+      },
+      "actual": {
+        "x0": 48,
+        "y0": 234,
+        "x1": 1551,
+        "y1": 789,
+        "w": 1504,
+        "h": 556,
+        "pixels": 688406
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections/side ground contact (minY=0)",
+      "expected": {
+        "minY": 0,
+        "groundY": 789.0347826086954
+      },
+      "actual": {
+        "minY": 0,
+        "maskBottom": 789
+      },
+      "pass": true
+    },
+    {
+      "name": "wreckSections/iso silhouette bounds (+/-2px)",
+      "expected": {
+        "x0": 545.0265996929625,
+        "y0": 289.6912423625255,
+        "x1": 1168.9882022240886,
+        "y1": 739.9967413441955
+      },
+      "actual": {
+        "x0": 545,
+        "y0": 290,
+        "x1": 1168,
+        "y1": 739,
+        "w": 624,
+        "h": 450,
+        "pixels": 171627
+      },
+      "pass": true
+    },
+    {
+      "name": "motion depot/door_open frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          1,
+          1.875
+        ],
+        [
+          0,
+          1.40625,
+          1.875
+        ],
+        [
+          0,
+          1.8125,
+          1.875
+        ],
+        [
+          0,
+          2.21875,
+          1.875
+        ],
+        [
+          0,
+          2.625,
+          1.875
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          1,
+          1.875
+        ],
+        [
+          0,
+          1.40625,
+          1.875
+        ],
+        [
+          0,
+          1.8125,
+          1.875
+        ],
+        [
+          0,
+          2.21875,
+          1.875
+        ],
+        [
+          0,
+          2.625,
+          1.875
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion warehouse/vent_fan frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0.7071067811865475,
+          0,
+          0.7071067811865475
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0.7071067811865475,
+          0,
+          -0.7071067811865475
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0.7071067811865475,
+          0,
+          0.7071067811865475
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0.7071067811865475,
+          0,
+          -0.7071067811865475
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion warehouse/pallet_lift frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          1.5,
+          0,
+          -1.5
+        ],
+        [
+          1.5,
+          0.46875,
+          -1.5
+        ],
+        [
+          1.5,
+          0.625,
+          -1.5
+        ],
+        [
+          1.5,
+          0.46875,
+          -1.5
+        ],
+        [
+          1.5,
+          0,
+          -1.5
+        ]
+      ],
+      "actual": [
+        [
+          1.5,
+          0,
+          -1.5
+        ],
+        [
+          1.5,
+          0.46875,
+          -1.5
+        ],
+        [
+          1.5,
+          0.625,
+          -1.5
+        ],
+        [
+          1.5,
+          0.46875,
+          -1.5
+        ],
+        [
+          1.5,
+          0,
+          -1.5
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion sorter/magnet_sweep frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0.382683432398878,
+          0,
+          0.923879532497291
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          -0.382683432398878,
+          0,
+          0.923879532497291
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0.382683432398878,
+          0,
+          0.923879532497291
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          -0.382683432398878,
+          0,
+          0.923879532497291
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion furnace/pour frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0.195366475102864,
+          0,
+          0,
+          0.9807303097212211
+        ],
+        [
+          0.25881904509743586,
+          0,
+          0,
+          0.9659258262904307
+        ],
+        [
+          0.19536647510286403,
+          0,
+          0,
+          0.9807303097212211
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0.195366475102864,
+          0,
+          0,
+          0.9807303097212211
+        ],
+        [
+          0.25881904509743586,
+          0,
+          0,
+          0.9659258262904307
+        ],
+        [
+          0.19536647510286403,
+          0,
+          0,
+          0.9807303097212211
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion furnace/vent_puff frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0.5,
+          0.5,
+          0.5
+        ],
+        [
+          0.75,
+          0.75,
+          0.75
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          0.75,
+          0.75,
+          0.75
+        ],
+        [
+          0.5,
+          0.5,
+          0.5
+        ]
+      ],
+      "actual": [
+        [
+          0.5,
+          0.5,
+          0.5
+        ],
+        [
+          0.75,
+          0.75,
+          0.75
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          0.75,
+          0.75,
+          0.75
+        ],
+        [
+          0.5,
+          0.5,
+          0.5
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion generator/fan_spin_down frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0.8219949365219961,
+          -0.5694947974584138
+        ],
+        [
+          0,
+          0,
+          0.2581653636161921,
+          -0.966100742691423
+        ],
+        [
+          0,
+          0,
+          0.05607770635575444,
+          -0.9984264073279903
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0.8219949365219961,
+          -0.5694947974584138
+        ],
+        [
+          0,
+          0,
+          0.2581653636161921,
+          -0.966100742691423
+        ],
+        [
+          0,
+          0,
+          0.05607770635575444,
+          -0.9984264073279903
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "motion generator/fan_start frames vs independent sampler (1e-6)",
+      "expected": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0.33074481848020254,
+          0.9437202260460978
+        ],
+        [
+          0,
+          0,
+          0.9176629354796436,
+          0.3973597071255259
+        ],
+        [
+          0,
+          0,
+          0.8741572761215377,
+          -0.4856429311786321
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "actual": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0.33074481848020254,
+          0.9437202260460978
+        ],
+        [
+          0,
+          0,
+          0.9176629354796436,
+          0.3973597071255259
+        ],
+        [
+          0,
+          0,
+          0.8741572761215377,
+          -0.4856429311786321
+        ],
+        [
+          0,
+          0,
+          0,
+          -1
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "page errors after captures",
+      "expected": 0,
+      "actual": 0,
+      "pass": true,
+      "detail": []
+    }
+  ]
+}

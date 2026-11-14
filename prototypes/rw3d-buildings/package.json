@@ -1,0 +1,16 @@
+{
+  "name": "rw3d-buildings",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "RW3D T09 (#136) production building capture harness: gameplay-scale renders, silhouette bounds and deterministic motion frame strips. Own pinned dependencies per ADR-0001 (three 0.187.0 EXACT).",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "playwright-core": "1.49.1"
+  }
+}
