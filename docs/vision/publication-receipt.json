@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-11-14",
+  "planningCommit": "dd5ae048607a83813452e59ce914f037b0f49774",
+  "project": "https://github.com/users/darkmatter2222/projects/2",
+  "issueCount": 65,
+  "blockerEdges": 133,
+  "onlyReadyIssue": 128,
+  "autoCloseOnDone": false,
+  "notes": "Publication snapshot, not live status authority. Backend reasoning and host adoption remain commissioning work.",
+  "relationships": [
+    {
+      "issue": 128,
+      "key": "T01",
+      "blockedBy": [],
+      "matches": true
+    },
+    {
+      "issue": 129,
+      "key": "T02",
+      "blockedBy": [
+        128
+      ],
+      "matches": true
+    },
+    {
+      "issue": 130,
+      "key": "T03",
+      "blockedBy": [
+        128
+      ],
+      "matches": true
+    },
+    {
+      "issue": 131,
+      "key": "T04",
+      "blockedBy": [
+        128
+      ],
+      "matches": true
+    },
+    {
+      "issue": 132,
+      "key": "T05",
+      "blockedBy": [
+        129,
+        130,
+        131
+      ],
+      "matches": true
+    },
+    {
+      "issue": 133,
+      "key": "T06",
+      "blockedBy": [
+        132
+      ],
+      "matches": true
+    },
+    {
+      "issue": 134,
+      "key": "T07",
+      "blockedBy": [
+        132
+      ],
+      "matches": true
+    },
+    {
+      "issue": 135,
+      "key": "T08",
+      "blockedBy": [
+        132
+      ],
+      "matches": true
+    },
+    {
+      "issue": 136,
+      "key": "T09",
+      "blockedBy": [
+        131,
+        132
+      ],
+      "matches": true
+    },
+    {
+      "issue": 137,
+      "key": "T10",
+      "blockedBy": [
+        133,
+        136
+      ],
+      "matches": true
+    },
+    {
+      "issue": 138,
+      "key": "T11",
+      "blockedBy": [
+        133,
+        134,
+        135
+      ],
+      "matches": true
+    },
+    {
+      "issue": 139,
+      "key": "T12",
+      "blockedBy": [
+        133,
+        134
+      ],
+      "matches": true
+    },
+    {
+      "issue": 140,
+      "key": "T13",
+      "blockedBy": [
+        133,
+        139
+      ],
+      "matches": true
+    },
+    {
+      "issue": 141,
+      "key": "T14",
+      "blockedBy": [
+        139,
+        140
+      ],
+      "matches": true
+    },
+    {
+      "issue": 142,
+      "key": "T15",
+      "blockedBy": [
+        131,
+        136
+      ],
+      "matches": true
+    },
+    {
+      "issue": 143,
+      "key": "T16",
+      "blockedBy": [
+        141,
+        142
+      ],
+      "matches": true
+    },
+    {
+      "issue": 144,
+      "key": "T17",
+      "blockedBy": [
+        133,
+        140
+      ],
+      "matches": true
+    },
+    {
+      "issue": 145,
+      "key": "T18",
+      "blockedBy": [
+        135,
+        138,
+        144
+      ],
+      "matches": true
+    },
+    {
+      "issue": 146,
+      "key": "T19",
+      "blockedBy": [
+        140,
+        145
+      ],
+      "matches": true
+    },
+    {
+      "issue": 147,
+      "key": "T20",
+      "blockedBy": [
+        135,
+        141,
+        143
+      ],
+      "matches": true
+    },
+    {
+      "issue": 148,
+      "key": "T21",
+      "blockedBy": [
+        129,
+        140,
+        144,
+        146
+      ],
+      "matches": true
+    },
+    {
+      "issue": 149,
+      "key": "T22",
+      "blockedBy": [
+        145,
+        147,
+        148
+      ],
+      "matches": true
+    },
+    {
+      "issue": 150,
+      "key": "T23",
+      "blockedBy": [
+        137,
+        143,
+        144
+      ],
+      "matches": true
+    },
+    {
+      "issue": 151,
+      "key": "T24",
+      "blockedBy": [
+        145,
+        146,
+        147,
+        148,
+        149,
+        150
+      ],
+      "matches": true
+    },
+    {
+      "issue": 152,
+      "key": "T25",
+      "blockedBy": [
+        151
+      ],
+      "matches": true
+    },
+    {
+      "issue": 153,
+      "key": "T26",
+      "blockedBy": [
+        151,
+        152
+      ],
+      "matches": true
+    },
+    {
+      "issue": 154,
+      "key": "T27",
+      "blockedBy": [
+        151,
+        152
+      ],
+      "matches": true
+    },
+    {
+      "issue": 155,
+      "key": "T28",
+      "blockedBy": [
+        152,
+        154
+      ],
+      "matches": true
+    },
+    {
+      "issue": 156,
+      "key": "T29",
+      "blockedBy": [
+        151,
+        154
+      ],
+      "matches": true
+    },
+    {
+      "issue": 157,
+      "key": "T30",
+      "blockedBy": [
+        151,
+        154
+      ],
+      "matches": true
+    },
+    {
+      "issue": 158,
+      "key": "T31",
+      "blockedBy": [
+        152,
+        155
+      ],
+      "matches": true
+    },
+    {
+      "issue": 159,
+      "key": "T32",
+      "blockedBy": [
+        152,
+        153,
+        155
+      ],
+      "matches": true
+    },
+    {
+      "issue": 160,
+      "key": "T33",
+      "blockedBy": [
+        153,
+        157,
+        158
+      ],
+      "matches": true
+    },
+    {
+      "issue": 161,
+      "key": "T34",
+      "blockedBy": [
+        151,
+        160
+      ],
+      "matches": true
+    },
+    {
+      "issue": 162,
+      "key": "T35",
+      "blockedBy": [
+        153,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161
+      ],
+      "matches": true
+    },
+    {
+      "issue": 163,
+      "key": "T36",
+      "blockedBy": [
+        162
+      ],
+      "matches": true
+    },
+    {
+      "issue": 164,
+      "key": "T37",
+      "blockedBy": [
+        162
+      ],
+      "matches": true
+    },
+    {
+      "issue": 165,
+      "key": "T38",
+      "blockedBy": [
+        163,
+        164
+      ],
+      "matches": true
+    },
+    {
+      "issue": 166,
+      "key": "T39",
+      "blockedBy": [
+        152,
+        154,
+        165
+      ],
+      "matches": true
+    },
+    {
+      "issue": 167,
+      "key": "T40",
+      "blockedBy": [
+        165,
+        166
+      ],
+      "matches": true
+    },
+    {
+      "issue": 168,
+      "key": "T41",
+      "blockedBy": [
+        155,
+        158,
+        160,
+        163
+      ],
+      "matches": true
+    },
+    {
+      "issue": 169,
+      "key": "T42",
+      "blockedBy": [
+        153,
+        159,
+        168
+      ],
+      "matches": true
+    },
+    {
+      "issue": 170,
+      "key": "T43",
+      "blockedBy": [
+        153,
+        167
+      ],
+      "matches": true
+    },
+    {
+      "issue": 171,
+      "key": "T44",
+      "blockedBy": [
+        167,
+        168,
+        169,
+        170
+      ],
+      "matches": true
+    },
+    {
+      "issue": 172,
+      "key": "T45",
+      "blockedBy": [
+        166,
+        167,
+        168,
+        169,
+        170,
+        171
+      ],
+      "matches": true
+    },
+    {
+      "issue": 173,
+      "key": "T46",
+      "blockedBy": [
+        172
+      ],
+      "matches": true
+    },
+    {
+      "issue": 174,
+      "key": "T47",
+      "blockedBy": [
+        173
+      ],
+      "matches": true
+    },
+    {
+      "issue": 175,
+      "key": "T48",
+      "blockedBy": [
+        174
+      ],
+      "matches": true
+    },
+    {
+      "issue": 176,
+      "key": "T49",
+      "blockedBy": [
+        160,
+        175
+      ],
+      "matches": true
+    },
+    {
+      "issue": 177,
+      "key": "T50",
+      "blockedBy": [
+        169,
+        174
+      ],
+      "matches": true
+    },
+    {
+      "issue": 178,
+      "key": "T51",
+      "blockedBy": [
+        161,
+        174
+      ],
+      "matches": true
+    },
+    {
+      "issue": 179,
+      "key": "T52",
+      "blockedBy": [
+        167,
+        168,
+        174
+      ],
+      "matches": true
+    },
+    {
+      "issue": 180,
+      "key": "T53",
+      "blockedBy": [
+        163,
+        179
+      ],
+      "matches": true
+    },
+    {
+      "issue": 181,
+      "key": "T54",
+      "blockedBy": [
+        175,
+        180
+      ],
+      "matches": true
+    },
+    {
+      "issue": 182,
+      "key": "T55",
+      "blockedBy": [
+        176,
+        177,
+        178,
+        181
+      ],
+      "matches": true
+    },
+    {
+      "issue": 183,
+      "key": "T56",
+      "blockedBy": [
+        182
+      ],
+      "matches": true
+    },
+    {
+      "issue": 184,
+      "key": "T57",
+      "blockedBy": [
+        182
+      ],
+      "matches": true
+    },
+    {
+      "issue": 185,
+      "key": "T58",
+      "blockedBy": [
+        183,
+        184
+      ],
+      "matches": true
+    }
+  ],
+  "hierarchy": [
+    {
+      "issue": 121,
+      "children": [
+        122,
+        123,
+        124,
+        125,
+        126,
+        127
+      ]
+    },
+    {
+      "issue": 122,
+      "children": [
+        128,
+        129,
+        130,
+        131,
+        132
+      ]
+    },
+    {
+      "issue": 123,
+      "children": [
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151
+      ]
+    },
+    {
+      "issue": 124,
+      "children": [
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162
+      ]
+    },
+    {
+      "issue": 125,
+      "children": [
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172
+      ]
+    },
+    {
+      "issue": 126,
+      "children": [
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182
+      ]
+    },
+    {
+      "issue": 127,
+      "children": [
+        183,
+        184,
+        185
+      ]
+    }
+  ]
+}
