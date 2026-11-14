@@ -1,0 +1,473 @@
+{
+  "issue": 129,
+  "generatedBy": "tests/legacy/generate-fixtures.mjs",
+  "baseSha": "8b78d09f6a1227916fede780eb1682969c49ff1e",
+  "schemaVersion": 1,
+  "contentVersion": 1,
+  "saveKey": "rustwake.save.v1",
+  "fixtures": [
+    {
+      "name": "salvage-early.legacy",
+      "file": "salvage-early.legacy.json",
+      "scenario": "Six pulses, repaired starter drone, 262 ticks of deliveries; pre-machine yard.",
+      "seed": "scriptEarly: 6x(manual.salvage+6t), drone.repair, 262t",
+      "shape": "legacy-v1-stripped",
+      "kind": "save",
+      "sha256": "89629a19640b819bf67cf5d0a4a4b23976268d7c657ae6da427238e19fea3f7c",
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "chain-export.modern",
+      "file": "chain-export.modern.json",
+      "scenario": "Sorter+furnace yard, four priced belts, export contract claimed (30 credits).",
+      "seed": "scriptChain: early + sorter@8 + 2 routes + 400t + furnace@9 + 2 routes + 900t + contract.export",
+      "shape": "modern",
+      "kind": "save",
+      "sha256": "01a19ee2b6582cbc1c1398159846897d761fdba040604d6b3e2a0c0128456e64",
+      "meta": {
+        "tick": 1598,
+        "revision": 14,
+        "credits": 30,
+        "tutorial": 7,
+        "storeUnits": 90,
+        "storeCapacity": 900,
+        "unitTotal": 98,
+        "totals": {
+          "scrap": 60,
+          "ferrous": 3,
+          "nonferrous": 28,
+          "steel": 7
+        },
+        "wreck": {
+          "remaining": 25,
+          "generation": 7,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 31,
+          "accumulated": 155
+        },
+        "machines": 2,
+        "routes": 4,
+        "exportClaimed": true,
+        "research": {},
+        "checksum": "ddded8ec",
+        "byteLength": 2998,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "deep-yard.modern",
+      "file": "deep-yard.modern.json",
+      "scenario": "Seven-machine research chain, cutters purchased, one spare drone, speed+buffer branches.",
+      "seed": "scriptDeep: chain + sells + upgrade(speed) + temp nonferrous belt + fund loop + 5 builds + 2 route.remove + 9 routes (store-fed assembler) + settle/sell loop + research.cutters + drone.add + upgrade(buffer) + boosted pulse + 600t",
+      "shape": "modern",
+      "kind": "save",
+      "sha256": "5e9269975edc29463eef2e068bbca820ab9610640cd3fa9ae49535a847cb250d",
+      "meta": {
+        "tick": 11704,
+        "revision": 47,
+        "credits": 1437,
+        "tutorial": 9,
+        "storeUnits": 396,
+        "storeCapacity": 900,
+        "unitTotal": 418,
+        "totals": {
+          "scrap": 111,
+          "ferrous": 48,
+          "nonferrous": 167,
+          "steel": 31,
+          "wire": 34,
+          "polymer": 10,
+          "data": 12,
+          "copper": 1,
+          "residue": 3,
+          "circuits": 1
+        },
+        "wreck": {
+          "remaining": 30,
+          "generation": 43,
+          "pulses": 7
+        },
+        "fleet": {
+          "units": 2,
+          "deliveries": 244,
+          "accumulated": 1225
+        },
+        "machines": 7,
+        "routes": 12,
+        "exportClaimed": true,
+        "research": {
+          "cutters": 1
+        },
+        "checksum": "ad2e3682",
+        "byteLength": 7704,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "orphan-route.modern",
+      "file": "orphan-route.modern.json",
+      "scenario": "Dismantled furnace's two belts left orphaned with live cargo (pre-#100 defect, priced runs).",
+      "seed": "scriptOrphan: chain + 2t + snapshot belts + machine.dismantle(furnace) + restore belts/mirror",
+      "shape": "damaged-orphan",
+      "kind": "save",
+      "sha256": "1e62fe6c4d9c3c01cfb6004efe6a78953dad52ea1960a3239fbf7f0e0c5ea17e",
+      "repair": {
+        "droppedRoutes": 2,
+        "returnedItems": {},
+        "scrapRefund": 5
+      },
+      "meta": {
+        "tick": 1600,
+        "revision": 15,
+        "credits": 30,
+        "tutorial": 8,
+        "storeUnits": 111,
+        "storeCapacity": 900,
+        "unitTotal": 117,
+        "totals": {
+          "scrap": 74,
+          "ferrous": 8,
+          "nonferrous": 28,
+          "steel": 7
+        },
+        "wreck": {
+          "remaining": 25,
+          "generation": 7,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 31,
+          "accumulated": 155
+        },
+        "machines": 1,
+        "routes": 4,
+        "exportClaimed": true,
+        "research": {},
+        "checksum": "94c37cc1",
+        "byteLength": 2614,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "orphan-route.legacy",
+      "file": "orphan-route.legacy.json",
+      "scenario": "Same orphan damage on a pre-price save: no `run`, so the belt refund is zero.",
+      "seed": "scriptOrphan + stripLegacyShape (run/counters/research/spares removed)",
+      "shape": "damaged-orphan-legacy",
+      "kind": "save",
+      "sha256": "0fa600f152651c8537acfa60c2d24ff9eb319f3bfd0f18b0023a2ee6c03ba51d",
+      "repair": {
+        "droppedRoutes": 2,
+        "returnedItems": {},
+        "scrapRefund": 0
+      },
+      "meta": {
+        "tick": 1600,
+        "revision": 15,
+        "credits": 30,
+        "tutorial": 8,
+        "storeUnits": 111,
+        "storeCapacity": 900,
+        "unitTotal": 117,
+        "totals": {
+          "scrap": 74,
+          "ferrous": 8,
+          "nonferrous": 28,
+          "steel": 7
+        },
+        "wreck": {
+          "remaining": 25,
+          "generation": 7,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 31,
+          "accumulated": 155
+        },
+        "machines": 1,
+        "routes": 4,
+        "exportClaimed": true,
+        "research": {},
+        "checksum": "3e72493e",
+        "byteLength": 2282,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-checksum",
+      "file": "bad-checksum.json",
+      "scenario": "Healthy early yard with one checksum digit flipped.",
+      "seed": "salvage-early.legacy + checksum[7] flip",
+      "shape": "adversarial",
+      "kind": "reject",
+      "sha256": "7c7155444094af9b8618e94a799d0adf7bdbf15f086fa5f5136c855ada9ecd91",
+      "expectedReason": "checksum",
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-truncated",
+      "file": "bad-truncated.json",
+      "scenario": "Early yard envelope cut at 60% of its bytes (interrupted write).",
+      "seed": "salvage-early.legacy text.slice(0, 60%)",
+      "shape": "adversarial",
+      "kind": "reject",
+      "sha256": "6cd54fb99a1b764ad3c1aa22cd031352adf120ee77b280578368227c11450156",
+      "expectedReason": "parse",
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-duplicate-id",
+      "file": "bad-duplicate-id.json",
+      "scenario": "Chain yard whose furnace carries the sorter's id, re-checksummed.",
+      "seed": "chain-export.modern + machines[1].id = machines[0].id + reseed checksum",
+      "shape": "adversarial",
+      "kind": "reject",
+      "sha256": "bc7660f24605f4a13d9ac94a929746641216fff85bd132826fe64bd935f63d6e",
+      "expectedReason": "invalid",
+      "expectedDetail": "machineId:1",
+      "meta": {
+        "tick": 1598,
+        "revision": 14,
+        "credits": 30,
+        "tutorial": 7,
+        "storeUnits": 90,
+        "storeCapacity": 900,
+        "unitTotal": 98,
+        "totals": {
+          "scrap": 60,
+          "ferrous": 3,
+          "nonferrous": 28,
+          "steel": 7
+        },
+        "wreck": {
+          "remaining": 25,
+          "generation": 7,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 31,
+          "accumulated": 155
+        },
+        "machines": 2,
+        "routes": 4,
+        "exportClaimed": true,
+        "research": {},
+        "checksum": "ddded8ec",
+        "byteLength": 2998,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-negative-store",
+      "file": "bad-negative-store.json",
+      "scenario": "Early yard with a negative store quantity, re-checksummed.",
+      "seed": "salvage-early.legacy + store.scrap = -5 + reseed checksum",
+      "shape": "adversarial",
+      "kind": "reject",
+      "sha256": "00e85229a7f1c0a713aeef7de9d770cadff053a2d08fd7bc063d475ba348f51a",
+      "expectedReason": "invalid",
+      "expectedDetail": "store",
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-schema",
+      "file": "bad-schema.json",
+      "scenario": "Early yard envelope declaring schemaVersion 2.",
+      "seed": "salvage-early.legacy + schemaVersion = 2",
+      "shape": "adversarial",
+      "kind": "reject",
+      "sha256": "038511abdcfdc514fd7383729d828de002727aff7b8921123b81d73abed00481",
+      "expectedReason": "schema",
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    },
+    {
+      "name": "bad-settings",
+      "file": "bad-settings.json",
+      "scenario": "Early yard with attacker-controlled settings (textScale 99, non-boolean flags).",
+      "seed": "salvage-early.legacy + settings {muted:'yes',reducedMotion:1,textScale:99} + reseed checksum",
+      "shape": "adversarial",
+      "kind": "sanitize",
+      "sha256": "ca02b98e212062a661d26e6770f15c966831c18294cc9ec7aee4ec7d572a756b",
+      "expectedSettings": {
+        "muted": false,
+        "reducedMotion": false,
+        "textScale": 2
+      },
+      "meta": {
+        "tick": 298,
+        "revision": 7,
+        "credits": 0,
+        "tutorial": 4,
+        "storeUnits": 25,
+        "storeCapacity": 900,
+        "unitTotal": 25,
+        "totals": {
+          "scrap": 25
+        },
+        "wreck": {
+          "remaining": 5,
+          "generation": 2,
+          "pulses": 6
+        },
+        "fleet": {
+          "units": 1,
+          "deliveries": 5,
+          "accumulated": 25
+        },
+        "machines": 0,
+        "routes": 0,
+        "exportClaimed": false,
+        "research": {},
+        "checksum": "06c4a886",
+        "byteLength": 974,
+        "lastSeenMs": 1700000000000
+      }
+    }
+  ]
+}
