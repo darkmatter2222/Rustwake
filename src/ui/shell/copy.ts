@@ -29,6 +29,10 @@ export const ROUTES_COPY = {
   remove: "Remove",
   removed: "Route removed",
   overview: "Network",
+  store: "Store",
+  cargo: "In transit",
+  filter: "Carries",
+  any: "Any resource",
 } as const;
 
 export const FLEET_COPY = {
@@ -66,10 +70,14 @@ export const SHELL_COPY = {
   expandSheet: "Expand panel",
   collapseSheet: "Collapse panel",
   closePanel: "Close panel",
+  backPanel: "Back to previous panel",
+  back: "Back",
+  open: "Open",
   yardRecord: "Yard record",
   yardRecordHint: "Save, export and import",
   returnReport: "Return report",
   returnReportHint: "What the yard did while you were away",
   noAbsence: "No absence yet",
   afterTutorial: "After tutorial",
+  fleetSize: "Fleet",
 } as const;

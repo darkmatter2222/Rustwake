@@ -1,10 +1,13 @@
-/* UI-RESET-52: the build catalog's own sheet. The catalog is a HUD-column
-   overlay, deliberately NOT a `.panel`: the report/stack/dock census, the
-   paired-layer budget and the camera's chrome insets all keep reading the
-   inspectors only. The layout grammar is the panel's (same fill, border,
-   radius, 560 px cap, margin-top auto, declared internal scroller) so the two
-   surfaces speak one visual language, and the rail-mode block mirrors the
-   inspector gutter exactly (right 8, width 320, top --shell-inspector-top). */
+/* UI-RESET-52 / RW3D #135: the build catalog's own sheet. The catalog is a
+   HUD-column overlay, deliberately NOT a `.panel`: the one-panel census reads
+   the host's inspectors only. The layout grammar is the panel's (same fill,
+   border, radius, 560 px cap, margin-top auto, declared internal scroller) so
+   the surfaces speak one visual language. Opening the catalog clears the panel
+   stack (and opening any panel closes the catalog), so the two major surfaces
+   are mutually exclusive — the contract's one-panel invariant covers both. On
+   desktop / compact landscape the catalog takes the same right gutter the
+   inspector uses; App.chromeInsets measures its painted absolute box, so the
+   camera reserves it while it is up. */
 
 .catalog {
   display: flex;
@@ -13,11 +16,11 @@
   align-self: center;
   width: 100%;
   max-width: min(100%, 560px);
-  /* Hug the dock like a panel does; order 3 keeps it above the report (2)
-     and below the dock (4) in the painted stack. */
+  /* Hug the dock like the panel host does; order 3 sits below the dock (4)
+     and toolbar (5) in the painted column. */
   margin-top: auto;
   order: 3;
-  /* The single-layer panel budget: the yard keeps its band underneath. */
+  /* The single-surface budget on phone: the yard keeps its band underneath. */
   max-height: 42%;
   min-height: 0;
   padding: 10px 12px 12px;
@@ -27,20 +30,11 @@
   pointer-events: auto;
 }
 
-/* A report (or any inspector) still up: each surface spends half the column,
-   the same paired budget two panels share, so the yard band survives. */
-.hud:has(.panel) > .catalog {
-  max-height: 26%;
-}
-.hud:has(.catalog) > .panel {
-  max-height: 26%;
-}
-
-/* E3: the Menu sheet owns the screen while it is up; the catalog yields its
-   slot exactly like the panels do, and the build state underneath survives. */
-.hud--menu > .catalog {
-  display: none;
-}
+/* RETIRED (RW3D #135, one-panel invariant): the paired 26 % budget
+   (.hud:has(.panel) > .catalog / .hud:has(.catalog) > .panel) and the
+   .hud--menu yield rule. The catalog and the panel host are now mutually
+   exclusive (opening one clears the other), so no paired budget is needed and
+   the Menu sheet no longer exists. */
 
 .catalog__head {
   display: flex;
@@ -292,32 +286,40 @@
   line-height: 1.1;
 }
 
-/* Rail mode: the catalog takes the inspector gutter, bounded by the viewport
-   instead of a percentage cap, with the same paint-truth top the panels read.
-   The camera never measures it (chromeInsets reads lead/dock/rail only). */
-@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
+/* Desktop (>= 1024 px): the catalog takes the inspector gutter, bounded by the
+   viewport instead of a percentage cap, with the same paint-truth top/bottom
+   the host reads (--shell-inspector-top / --shell-chrome-bottom). The camera
+   measures its painted absolute box (App.chromeInsets), so the world reserves
+   the gutter while the catalog is up. The old report 50/50 split is retired
+   with the one-panel invariant. */
+@media (min-width: 1024px) {
   .catalog {
     position: absolute;
     left: auto;
     right: max(8px, env(safe-area-inset-right));
-    top: var(--shell-inspector-top, 104px);
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: 320px;
-    max-width: 320px;
+    top: var(--shell-inspector-top, 64px);
+    bottom: var(--shell-chrome-bottom, 132px);
+    width: 340px;
+    max-width: 340px;
     max-height: none;
     margin-top: 0;
     align-self: stretch;
   }
-  /* Report still up: the older layer keeps the top half, the catalog the
-     bottom half — the same vertical split two panels use. */
-  .hud:has(.catalog) > .panel--report {
-    top: var(--shell-inspector-top, 104px);
-    bottom: 50%;
+}
+
+/* Compact landscape (600..1023 px wide, <= 460 px tall): the catalog takes the
+   side-drawer gutter (300 px), matching the host's compact composition. */
+@media (min-width: 600px) and (max-width: 1023px) and (max-height: 460px) {
+  .catalog {
+    position: absolute;
+    left: auto;
+    right: max(8px, env(safe-area-inset-right));
+    top: var(--shell-inspector-top, 64px);
+    bottom: var(--shell-chrome-bottom, 132px);
+    width: 300px;
+    max-width: 300px;
     max-height: none;
-  }
-  .hud:has(.panel--report) > .catalog {
-    top: 50%;
-    bottom: max(8px, env(safe-area-inset-bottom));
-    max-height: none;
+    margin-top: 0;
+    align-self: stretch;
   }
 }

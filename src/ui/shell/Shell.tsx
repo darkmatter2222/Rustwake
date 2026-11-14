@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState, type ReactNode } from "react";
 import {
   PANEL_FLEET,
   PANEL_MAP,
@@ -82,6 +82,103 @@ export const Toolbar = memo(function Toolbar(props: {
         );
       })}
     </nav>
+  );
+});
+
+/**
+ * RW3D #135 (U03/U04): the ONE panel host. Exactly one major surface paints at
+ * a time — a right-docked inspector on desktop, a bottom sheet on phones, a
+ * compact side drawer on short landscape (the CSS owns which, from the same
+ * breakpoints the camera fit measures). The host owns the stack chrome: a Back
+ * face whenever the stack is deeper than one layer, and the sheet expand /
+ * collapse toggle on phones. Focus enters the host when a layer opens and
+ * returns to the opener when the last layer closes, so keyboard and switch
+ * users never drop to the body.
+ */
+export const PanelHost = memo(function PanelHost(props: {
+  desktop: boolean;
+  /** Top of the panel stack, or null when no panel is painted. */
+  activeKey: number | null;
+  depth: number;
+  expanded: boolean;
+  onBack: () => void;
+  onToggleExpand: () => void;
+  children: ReactNode;
+}) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const prevKeyRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const prev = prevKeyRef.current;
+    prevKeyRef.current = props.activeKey;
+    if (props.activeKey !== null) {
+      if (prev === null) {
+        openerRef.current = (document.activeElement as HTMLElement | null) ?? null;
+      }
+      // Focus enters the panel layer on every top change. A panel that focused
+      // its own control on mount (the report's Resume face) keeps it: the host
+      // only takes focus when nothing inside already holds it.
+      const host = hostRef.current;
+      if (host && !host.contains(document.activeElement)) host.focus();
+      return;
+    }
+    if (prev !== null) {
+      // The stack emptied: restore the opener, else the first enabled toolbar
+      // destination. Hidden/disconnected openers are skipped, never focused.
+      const opener = openerRef.current;
+      const usable = (el: HTMLElement | null): el is HTMLElement => {
+        if (!el || !el.isConnected || (el as HTMLButtonElement).disabled) return false;
+        const cs = getComputedStyle(el);
+        return cs.display !== "none" && cs.visibility !== "hidden";
+      };
+      const fallback = document.querySelector<HTMLElement>(".toolbar__btn:not([disabled])");
+      const target = usable(opener) ? opener : usable(fallback) ? fallback : null;
+      if (target && typeof target.focus === "function") target.focus();
+      openerRef.current = null;
+    }
+  }, [props.activeKey]);
+
+  if (props.activeKey === null) return null;
+  const sheet = !props.desktop;
+  return (
+    <div
+      ref={hostRef}
+      tabIndex={-1}
+      data-depth={props.depth}
+      className={
+        "shell-host " +
+        (props.desktop ? "shell-inspector" : "shell-sheet") +
+        (sheet && props.expanded ? " shell-sheet--expanded" : "")
+      }
+    >
+      <div className="shell-host__bar">
+        {props.depth > 1 ? (
+          <button
+            type="button"
+            className="icon-btn shell-host__back"
+            aria-label={SHELL_COPY.backPanel}
+            onClick={props.onBack}
+          >
+            {SHELL_COPY.back}
+          </button>
+        ) : (
+          <span className="shell-host__spacer" aria-hidden="true" />
+        )}
+        {sheet ? (
+          <button
+            type="button"
+            className="icon-btn shell-host__expand"
+            aria-expanded={props.expanded}
+            aria-label={props.expanded ? SHELL_COPY.collapseSheet : SHELL_COPY.expandSheet}
+            onClick={props.onToggleExpand}
+          >
+            {props.expanded ? "–" : "+"}
+          </button>
+        ) : null}
+      </div>
+      {props.children}
+    </div>
   );
 });
 

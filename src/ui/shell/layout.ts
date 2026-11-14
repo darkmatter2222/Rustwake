@@ -71,3 +71,10 @@ export const PANEL_SETTINGS = -5;
 export const PANEL_ROUTES = -6;
 export const PANEL_FLEET = -7;
 export const PANEL_MAP = -8;
+/**
+ * The return report is a stack layer like any other panel (U03: one major
+ * surface at a time). It is pushed on Begin when the store holds an absence
+ * report, and any destination opened over it sits on top; Back/Escape unwinds
+ * one layer at a time down to the yard.
+ */
+export const PANEL_REPORT = -9;

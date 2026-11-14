@@ -375,32 +375,13 @@ body {
   pointer-events: auto;
 }
 
-/* U-5 (UI-002 g3): the painted order of the overlay stack. `.panel--stack` is the layer the
-   player opened last (store / research / yard record / machine), `.panel--report` the layer
-   the boot left behind. One `Back`/`Escape` press retires one layer, nearest first, so the
-   newest layer takes the slot nearest the dock - where the thumb already is - and the older
-   one sits above it; repeated presses then unwind the stack down to the yard instead of
-   jumping the thumb between two buttons. The dock keeps the last slot (order 4), so the
-   single-layer case paints exactly as it did before (all other `.hud` children stay 0). */
-.hud > .panel--report {
-  order: 2;
-}
-
-.hud > .panel--stack {
-  order: 3;
-}
-
+/* RW3D #135 (U03): the two-painted-layer order rules (.hud > .panel--report /
+   .panel--stack) and the two-layer 26 % budget are RETIRED. The UI contract's
+   one-panel invariant replaces them: panels now live inside the ONE .shell-host
+   (order 3), which paints only the top of the panel stack; Back/Escape pops one
+   layer. The dock keeps its slot above the toolbar. */
 .hud > .dock {
   order: 4;
-}
-
-/* Two layers are up: each spends half the single-layer budget, so the yard keeps its band
-   between the objective card and the dock and both panel heads stay inside the viewport.
-   The body of each panel is the declared scroller (`.panel__body`), so the rows a cap hides
-   are still reachable with one flick. `:has()` is the flat form of "a second `.panel`
-   follows this one", which is the stack being two deep. */
-.hud:has(.panel ~ .panel) > .panel {
-  max-height: 26%;
 }
 
 /* D-6/E-4 on the wide sizes: the inspector column now lives in the G2 rail-mode
@@ -775,165 +756,64 @@ body {
 }
 
 /* ===========================================================================
-   UI-RESET-49 (G2): the shell modes, from navigation-spec §3.6.
-   Layout-only overrides of the legacy classes — no census selector
-   (.objective__primary, .status-line, .dock__btn, .dock__cost,
-   .resources__item, .icon-btn) redeclares its type or target floor here, so
-   the legibility census and every jsdom contract (which ignores @media) keep
-   reading the pinned base rules above. The shell's own faces (.shell-*) are
-   styled in shell/shell.css.
+   RW3D #135 (U03/U04): the compact shell, from docs/vision/UI_CONTRACT.md.
+   Replaces the UI-RESET-49 rail/Menu composition. RETIRED with the contract's
+   one-panel + persistent-toolbar spine: the permanent left destination rail,
+   the Menu face/sheet, the column corner reserve, the absolute rail-mode dock
+   band, the absolute .panel gutter and the two-layer 50/50 / 26 % splits. The
+   toolbar and the ONE .shell-host (phone bottom sheet / desktop right inspector
+   / compact side drawer) are styled in shell/shell.css; the legacy overrides
+   below keep the lead, dock and toast inside that composition. Layout-only: no
+   census selector (.objective__primary, .status-line, .dock__btn, .dock__cost,
+   .resources__item, .icon-btn) redeclares its type or target floor here, so the
+   legibility census and every jsdom contract (which ignores @media) keep reading
+   the pinned base rules above.
    =========================================================================== */
 
-/* E2: the Home face leaves the cluster; Home lives in the Menu sheet, so the
-   cluster keeps two faces at every width and the corner goes to navigation. */
+/* The Home face leaves the cluster (Home is the gate / camera reset); the
+   cluster keeps Sound + Text + all-resources + the Settings gear. Home stays the
+   LAST child so this selector keeps hiding it at every width. */
 .cluster .icon-btn:last-child {
   display: none;
 }
 
-/* Phone mode (<= 599 px): the primary action takes a full-width band above the
-   nav row, both inside the thumb zone. The dock reserves 72 px on the right for
-   the Menu face (66 px + 6 px gutter, painted in shell.css); the primary's
-   negative margin spends that reserve so its band spans the full width while
-   the nav faces share the row beside the Menu face. Declared after the
-   `.text-large .dock` rule on purpose: at scale 2 on a real phone the split
-   band still wraps (jsdom ignores this block, so the L-3 census keeps its
-   single-row `nowrap` measurement). */
-@media (max-width: 599px) {
+/* Phone band (<= 767 px): the primary action takes a full-width band above the
+   nav row, both inside the thumb zone. The old 72 px Menu-face reserve is
+   retired with the face itself. Declared after the `.text-large .dock` rule on
+   purpose: at scale 2 on a real phone the split band still wraps (jsdom ignores
+   this block, so the L-3 census keeps its single-row `nowrap` measurement). */
+@media (max-width: 767px) {
   .dock {
     flex-wrap: wrap;
     max-width: none;
-    padding-right: 72px;
   }
   .dock__btn--primary:not(.dock__btn--branch) {
     order: -1;
     flex: 1 1 100%;
-    margin-right: -72px;
   }
   .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch) {
     flex: 1 1 0;
   }
 }
 
-/* Column mode (600..1199 px): the Menu face takes the top-right corner the
-   deleted Home face left behind; the lead block keeps clear of it. The reserve
-   scales with the text: the face's rem label measured 52.1 px at scale 1 but
-   86.2 px at scale 2 (768x1024 captures 19/23), and a fixed 56 px reserve let
-   the face paint over the Text-size button at scale 2. 24 + 38*scale clears the
-   measured face (16 px padding + ~36 px label per scale) plus a gutter. */
-@media (min-width: 600px) and (max-width: 1199px) {
-  .hud__top {
-    padding-right: calc(24px + 38px * var(--text-scale, 1));
-  }
+/* The toast clears the painted bottom chrome (the sheet when open, else the
+   dock + toolbar). App measures the same boxes into --shell-zoom-clear, so the
+   toast and the zoom stack lift together and never cover an open sheet. */
+.toast {
+  bottom: calc(var(--shell-zoom-clear, 132px) + env(safe-area-inset-bottom));
 }
 
-/* Rail mode (>= 1200 px, or >= 600 px and <= 460 px tall): the painted boxes of
-   spec §3.6 — rail x8 w96, lead x110 y8, primary band x110..(sheet left - 6)
-   at the bottom, inspector right 8 w320 top 104 bottom 8. The world region
-   between them is what the camera fits (App reads these same boxes). */
-@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
-  .hud__lead {
-    position: absolute;
-    left: 110px;
-    right: 8px;
-    top: max(8px, env(safe-area-inset-top));
-  }
-  .hud__top {
-    padding-right: 0;
-  }
-  .objective {
-    max-width: min(100%, 560px);
-  }
-  /* The primary band: one action wide, between the rail and the inspector.
-     The dock's nav faces stand down here — the rail owns the destinations —
-     but build mode keeps its Cancel / Build / Next row in the same band. */
-  .dock {
-    position: absolute;
-    left: 110px;
-    right: 334px;
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: auto;
-    max-width: none;
-  }
-  .hud:not(.hud--build) .dock__btn:not(.dock__btn--primary):not(.dock__btn--branch) {
-    display: none;
-  }
-  /* The inspector column: every panel takes the right gutter, bounded by the
-     viewport instead of a percentage cap, with its own declared scroller.
-     The top is the spec's 104 px at scale 1; at larger text the lead block
-     grows past it, so App measures the painted lead and lifts the floor via
-     --shell-inspector-top (the same paint-truth the camera insets read). */
-  .panel {
-    position: absolute;
-    left: auto;
-    right: max(8px, env(safe-area-inset-right));
-    top: var(--shell-inspector-top, 104px);
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: 320px;
-    max-width: 320px;
-    max-height: none;
-    margin-top: 0;
-    /* Measured (UI-RESET-49 captures 27/28, 844x390): the base `align-self:
-       center` survives into the absolute box, so Chrome sized the panel to its
-       content and centred it between the insets — a tall machine card landed at
-       y=0 and spilled past the viewport bottom. Stretch lets top/bottom own the
-       height; `.panel__body` stays the declared scroller inside it. */
-    align-self: stretch;
-  }
-  /* Two layers share the gutter vertically: the older report up top, the
-     newest context below it, matching the phone's nearest-first order. */
-  .hud:has(.panel ~ .panel) > .panel--report {
-    top: var(--shell-inspector-top, 104px);
-    bottom: 50%;
-    max-height: none;
-  }
-  .hud:has(.panel ~ .panel) > .panel--stack {
-    top: 50%;
-    bottom: max(8px, env(safe-area-inset-bottom));
-    max-height: none;
-  }
-  /* The toast clears the 46 px band + 8 px edge instead of the phone's stack. */
-  .toast {
-    bottom: calc(62px + env(safe-area-inset-bottom));
-  }
-}
-
-/* ---- UI-RESET-66: the inspector gutter on a short landscape rail viewport ----
-   At >= 600 px wide and <= 460 px tall the lead block (chips + objective + the
-   #64/#65 guidance/recovery lines) grows with the text scale until pinning the
-   inspector below it (--shell-inspector-top = lead.bottom + 6) leaves the panel
-   body a 1-94 px band that cannot fit the record/backup/replace pages — the spec
-   6.4 "0 px inner panel scroll" budget. #63 measured this at scale 2 (the routed
-   primary blocker, phone-landscape 383/394) and at scale 1 the same lead growth
-   regressed the formerly-passing record/backup pages, so the composition below
-   applies at EVERY text scale on this short rail band, not just .text-large.
-   Give the single inspector the full-height right gutter (the same composition
-   the tall desktop rail uses) and confine the lead to the left of that gutter,
-   bounded with its own declared scroller so every lead control stays reachable
-   (the lead already overflowed and clipped its own controls at this size). The
-   camera reads the bounded lead box (App chromeInsets), so a non-zero world band
-   remains above the dock. The tall desktop rail (height > 460) and phone portrait
-   (width < 600) keep their own compositions; the stacked two-panel 50/50 split is
-   left intact (only the single-panel gutter takes the full height). The lead
-   scroller borrows the same themed scrollbar as the inspector bodies so the
-   bounded scroll carries a visible affordance. `:root` lifts these above the rail
-   block's single-class selectors without depending on source order. */
-@media (min-width: 600px) and (max-height: 460px) {
+/* ---- Compact landscape (600..1023 px wide, <= 460 px tall) ----
+   The side drawer (shell.css) owns the right gutter; the lead keeps clear of it
+   (margin-right = 300 drawer + 8 edge + 6 gutter) and stays bounded with its own
+   declared scroller so every lead control stays reachable (the #66 lesson: an
+   unbounded lead clipped its own controls at this size). The 280 px reserve
+   keeps a world band for the #117 BAND_MIN_SCALE fit — App.fitToShell fits the
+   whole yard to the measured band, so the toolbar's added height shrinks the
+   yard rather than clipping it. Paint-truth: App reads the bounded lead box. */
+@media (min-width: 600px) and (max-width: 1023px) and (max-height: 460px) {
   :root .hud__lead {
-    right: 334px;
-    /* Reserve the primary band + a world band below the lead; the remainder is
-       the lead's own scroll area. Paint-truth: App reads this bounded box.
-       #117: the original 150px reserve left only a ~76px world band on the
-       390px-tall phoneland rail. The frozen scene floor (BAND_MIN_SCALE 1.1)
-       needs a 246px yard, so the fitted yard overflowed back up under this
-       opaque lead and the top-row furnace lost every clear canvas tap point.
-       App.fitToShell now fits the whole yard to the measured band, but a 76px
-       band renders the yard so small (~0.32 scale) that the logistics-59
-       working-rail ink set-diff falls to the 10px census floor. Reserve 280px
-       instead so the band holds the yard at ~0.87 scale: every machine stays
-       canvas-reachable AND the route-ink census keeps a robust margin. The
-       full-height inspector gutter is independent of this lead cap, so the #66
-       record/backup/replace 0-inner-scroll budget is unchanged; the lead keeps
-       its own declared scroller for the guidance content below the cap. */
+    margin-right: 314px;
     max-height: calc(100% - 280px);
     overflow-x: hidden;
     overflow-y: auto;
@@ -951,30 +831,17 @@ body {
   :root .hud__lead::-webkit-scrollbar-track {
     background: rgba(9, 15, 26, 0.4);
   }
-  :root .hud:not(:has(.panel ~ .panel)) > .panel {
-    top: max(8px, env(safe-area-inset-top));
-  }
-  :root .shell-menu {
-    top: max(8px, env(safe-area-inset-top));
-  }
 }
 
-/* ---- UI-RESET-66: lead growth on the laptop-class tall rail ----
-   The same #64/#65 lead growth that squeezed the short-landscape inspector also
-   reaches rail viewports taller than 460 px once the text scale lifts the lead
-   past the panel's content height. The all-#43-viewport audit measured laptop
-   1366x768 at scale 2: lead 481 px -> inspector top 495 -> panel 265 px, whose
-   backup body needed 250 px against 189 px (61 px inner scroll; replace 9 px).
-   Bound the lead with the same themed declared scroller so the inspector below
-   it keeps room for its tallest single panel. The 360 px reserve caps the lead at
-   408 px on 768 px tall (inspector top 422, panel 338, body 262 >= the 250 px
-   backup page). Scoped to the 461-900 px height band where the squeeze occurs:
-   the tall desktop rail (1920x1080 / 2560x1440) keeps its proven lead-on-top
-   composition untouched (its lead never reaches the cap and its panel already
-   fits), and laptop scale 1 (lead 283 px) sits under the cap. The two-panel 50/50
-   stack is left intact. Paint-truth: App reads the bounded lead box for
-   --shell-inspector-top and the camera insets. */
-@media (min-width: 1200px) and (min-height: 461px) and (max-height: 900px) {
+/* ---- Laptop-class desktop (>= 1024 px, 461..900 px tall) ----
+   The #64/#65 guidance/recovery lead grows with the text scale; bound it with
+   the same themed declared scroller so the inspector below it (top =
+   --shell-inspector-top = lead.bottom + 6) keeps room for its tallest single
+   panel. The 360 px reserve caps the lead at 408 px on 768 px tall. Scoped to
+   the 461-900 px height band where the squeeze occurs: taller desktops keep
+   their lead-on-top composition (the lead never reaches the cap). Paint-truth:
+   App reads the bounded lead box for --shell-inspector-top and the camera. */
+@media (min-width: 1024px) and (min-height: 461px) and (max-height: 900px) {
   :root .hud__lead {
     max-height: calc(100% - 360px);
     overflow-x: hidden;
@@ -995,30 +862,26 @@ body {
   }
 }
 
-/* ---- UI-RESET-66: lead growth in the phone column ----
-   Below 600 px the lead is a flow child of the .hud column, so the #64/#65
-   guidance/recovery content grows it with the text scale (measured 747 px of
-   lead on 390x844 at scale 2) and the panel — capped at 42 % of the column and
-   hugged to the dock by margin-top:auto — was squeezed to a band whose body
-   could not fit the record/backup/replace pages. #63 passed phone at scale 2
-   before that lead growth (394/394 at 3382cb6). The all-#43-viewport audit then
-   found the same squeeze at scale 1 on the shortest phone (360x640: lead 386 px,
-   panel 140 px, 80 px inner scroll), so the lead bound applies at EVERY text
-   scale, not just .text-large. Bound the lead and give it the same themed
-   declared scroller, so the panel keeps its band and the dock its row while every
-   lead control stays reachable with one flick. The cap reserves the panel's 42 %
-   band plus the dock row and gutters; on 390x844 / 412x915 the scale-1 lead
-   (~386 px) sits under the cap and is untouched, and the two-panel 26 % stack is
-   left intact. */
-@media (max-width: 599px) {
+/* ---- Phone column (<= 767 px) ----
+   The lead is a flow child of the .hud column; the #64/#65 guidance/recovery
+   content grows it with the text scale. Bound it with the same themed declared
+   scroller so the sheet keeps its band and the dock + toolbar their rows while
+   every lead control stays reachable with one flick. The cap reserves the
+   sheet's 35 vh band plus the dock + toolbar rows and gutters (~140 px); at
+   200 % text the sheet takes its 70 vh band and the lead yields further. The
+   bound applies at EVERY text scale (the #63 shortest-phone squeeze). */
+@media (max-width: 767px) {
   :root .hud__lead {
     min-height: 0;
-    max-height: calc(100% - 42% - 64px);
+    max-height: calc(100% - 35vh - 140px);
     overflow-x: hidden;
     overflow-y: auto;
     touch-action: pan-y;
     scrollbar-width: thin;
     scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+  }
+  :root.text-large .hud__lead {
+    max-height: calc(100% - 70vh - 140px);
   }
   :root .hud__lead::-webkit-scrollbar {
     width: 8px;
@@ -1032,41 +895,20 @@ body {
   }
 }
 
-/* ---- UI-RESET-66: the shortest phone column (360x640) ----
-   At 360x640 the 42 % panel cap plus the objective lead and the dock row
-   over-subscribe the 624 px content column, so the single inspector was
-   flex-squeezed below its content and inner-scrolled (ts1 backup/replace
-   3/18 px; ts2 record/backup/replace 53/97/45 px). The inspector body is the
-   spec 6.1 "0 px inner-panel-scroll" surface; the objective lead is guidance,
-   so on this short column the lead yields height and scrolls (it already has
-   overflow-y:auto + a themed scrollbar + touch-action:pan-y from the phone
-   block above) while the single inspector takes the height its content needs.
-   ts1: lead <= 264 px leaves >= 256 px for the panel (replace body 170 + 76 px
-   chrome = 246 px). ts2: lead <= 200 px leaves >= 378 px (backup body 283 + 76
-   = 359 px) and the save panel's definite 42 % height is raised to a 360 px band. Scoped to <= 700 px
-   tall so 390x844 / 412x915 (taller) keep the proven 42 % composition, and the
-   two-panel 26 % stack is untouched. Paint-truth: App reads the same boxes. */
-@media (max-width: 599px) and (max-height: 700px) {
+/* ---- The shortest phone column (360x640) ----
+   On this short column the lead yields height and scrolls (it already has the
+   themed scroller from the phone block above) while the sheet takes the height
+   its content needs. ts1: lead <= 264 px; ts2: lead <= 200 px. Scoped to
+   <= 700 px tall so 390x844 / 412x915 keep the taller composition. The old
+   save-page definite-height override is retired: the Yard record now fills the
+   ONE host band (.shell-host .panel:has(.save-page){height:100%}), so it no
+   longer needs a per-viewport height rescue. */
+@media (max-width: 767px) and (max-height: 700px) {
   :root .hud__lead {
     max-height: 264px;
   }
   :root.text-large .hud__lead {
     max-height: 200px;
-  }
-  :root.text-large .hud:not(:has(.panel ~ .panel)) > .panel:has(.save-page) {
-    /* UI-RESET-66: save.css pins the Yard record to a DEFINITE height:42% (262 px)
-       so the body owns a real flex band and a page that fits never reads the
-       ceil/floor 1 px false-scroll. On this 624 px column the bounded 200 px lead
-       leaves a 378 px band, but 42 % = 262 px squeezed the body to 186 px and forced
-       an inner scroll (record/backup/replace 53/97/45 px). A max-height override alone
-       cannot move a definite height, so raise the DEFINITE band to calc(100% - 264px)
-       = 360 px (200 px lead + the same 64 px dock reserve the ts1 lead bound uses):
-       body 284 px >= tallest page 283 px, panel still 18 px clear of the dock, and
-       definite so the rounding boundary stays off the content edge. max-height clears
-       the 42 % cap so it cannot re-clamp the taller band. Scoped to .save-page; every
-       other panel keeps its proven 42 % composition. */
-    height: calc(100% - 264px);
-    max-height: calc(100% - 200px);
   }
 }
 

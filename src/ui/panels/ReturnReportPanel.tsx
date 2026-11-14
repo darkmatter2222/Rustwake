@@ -64,11 +64,10 @@ export function ReturnReportPanel(props: {
     resumeRef.current?.focus();
     return () => {
       // Synchronous with the unmount commit (Escape included), so focus never
-      // drops to the body. A disconnected opener (the boot gate, a closed menu
-      // row) falls back to a VISIBLE shell control. The Menu face is display:none
-      // in rail mode (wide desktop / phone landscape), where slot 5 owns the
-      // menu, so focusing it would no-op: skip hidden/disabled faces and prefer
-      // the rail's menu slot, then the first dock button.
+      // drops to the body. A disconnected opener (the boot gate) falls back to a
+      // VISIBLE shell control: RW3D #135 retired the Menu face / rail, so prefer
+      // the first enabled toolbar destination, then the first dock button. Skip
+      // hidden/disabled faces so the fallback never no-ops.
       const opener = openerRef.current;
       const usable = (el: HTMLElement | null): el is HTMLElement => {
         if (!el || !el.isConnected || (el as HTMLButtonElement).disabled) return false;
@@ -83,8 +82,7 @@ export function ReturnReportPanel(props: {
       };
       const target =
         (usable(opener) ? opener : null) ??
-        firstVisible(".shell-menu-face") ??
-        firstVisible('.shell-rail__slot[data-slot="menu"]') ??
+        firstVisible(".toolbar__btn:not([disabled])") ??
         firstVisible(".dock button");
       if (target && typeof target.focus === "function") target.focus();
     };
