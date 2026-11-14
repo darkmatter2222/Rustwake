@@ -1,0 +1,16 @@
+{
+  "name": "rw3d-scale-fixture",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "RW3D T04 (#131): canonical-scale orthographic fixture for the procedural asset kit (acceptance V06). Self-contained; does not modify the root package.",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "three": "0.160.0"
+  },
+  "devDependencies": {
+    "playwright-core": "1.49.1"
+  }
+}
