@@ -403,15 +403,19 @@ export function previewRoadRemove(
   };
 }
 
+/** Internal outcome: `changed` distinguishes real topology edits from no-ops. */
+type ExecuteOutcome = { ok: true; changed: boolean } | { ok: false; rejection: RoadRejection };
+
 function executePlace(
   world: WorldState,
   net: RoadNetworkState,
   cmd: Extract<RoadCommand, { type: "road.place" }>,
-): RoadCommandResult {
+): ExecuteOutcome {
   const lanes: RoadLanes = cmd.lanes ?? 1;
   const preview = previewRoadPlace(world, net, cmd.cells, lanes);
   if (!preview.valid) return { ok: false, rejection: preview.rejection as RoadRejection };
   // Past this point every check passed; mutations are total and cannot fail.
+  let changed = false;
   for (let i = 1; i < preview.route.length; i += 1) {
     const from = preview.route[i - 1];
     const to = preview.route[i];
@@ -419,9 +423,13 @@ function executePlace(
     const existing = net.edges[key];
     if (existing !== undefined) {
       // Lane upgrade only; direction/flow of an existing segment is preserved.
-      if (existing.lanes < lanes) existing.lanes = lanes;
+      if (existing.lanes < lanes) {
+        existing.lanes = lanes;
+        changed = true;
+      }
       continue;
     }
+    changed = true;
     const ka = cellKey(from);
     const kb = cellKey(to);
     const a = ka <= kb ? from : to;
@@ -442,14 +450,14 @@ function executePlace(
   }
   world.stock.scrap = (world.stock.scrap ?? 0) - preview.costScrap;
   world.committed.scrap = (world.committed.scrap ?? 0) + preview.costScrap;
-  return { ok: true, revision: net.revision + 1 };
+  return { ok: true, changed };
 }
 
 function executeRemove(
   world: WorldState,
   net: RoadNetworkState,
   cmd: Extract<RoadCommand, { type: "road.remove" }>,
-): RoadCommandResult {
+): ExecuteOutcome {
   const preview = previewRoadRemove(world, net, cmd.cells);
   if (!preview.valid) return { ok: false, rejection: preview.rejection as RoadRejection };
   for (const key of preview.removedEdgeKeys) delete net.edges[key];
@@ -460,14 +468,17 @@ function executeRemove(
     world.committed.scrap = (world.committed.scrap ?? 0) - refund;
     delete net.cells[key];
   }
-  return { ok: true, revision: net.revision + 1 };
+  // A valid remove always cuts at least one edge (targets carry road).
+  return { ok: true, changed: true };
 }
 
 /**
  * Apply a road command to the world ledger and the network. Idempotent by
  * command id: a replayed id returns the original topology revision without
- * charging or mutating anything. The topology revision increments only on
- * success; world.revision tracks the material ledger change in the same step.
+ * charging or mutating anything. The topology revision increments only on a
+ * REAL topology change (new segment, lane upgrade, cut); a free reuse no-op
+ * leaves both revisions untouched so valid cargo paths are not invalidated.
+ * world.revision tracks the material ledger change in the same step.
  *
  * Cargo path invalidation is orchestrated one layer up
  * (simulation/roadPaths.ts applyRoadTransaction) so the world module stays
@@ -480,19 +491,23 @@ export function applyRoadCommand(
 ): RoadCommandResult {
   const seen = net.seenCommands[command.id];
   if (seen !== undefined) return { ok: true, revision: seen };
-  let result: RoadCommandResult;
+  let outcome: ExecuteOutcome;
   switch (command.type) {
     case "road.place":
-      result = executePlace(world, net, command);
+      outcome = executePlace(world, net, command);
       break;
     case "road.remove":
-      result = executeRemove(world, net, command);
+      outcome = executeRemove(world, net, command);
       break;
   }
-  if (result.ok) {
+  if (!outcome.ok) return { ok: false, rejection: outcome.rejection };
+  // A pure reuse (no new segment, no lane upgrade) is a free no-op: it must
+  // NOT bump the topology version, or every idempotent repaint would
+  // invalidate cargo paths that are still perfectly valid.
+  if (outcome.changed) {
     net.revision += 1;
-    net.seenCommands[command.id] = net.revision;
     world.revision += 1;
   }
-  return result;
+  net.seenCommands[command.id] = net.revision;
+  return { ok: true, revision: net.revision };
 }
