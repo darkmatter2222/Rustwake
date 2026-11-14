@@ -195,7 +195,10 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     id: "sorter",
     label: "Scrap sorter",
     recipeId: "R01",
-    buildCost: [{ resource: "scrap", qty: 20 }],
+    buildCost: [
+      { resource: "scrap", qty: 30 },
+      { resource: "steel", qty: 4 },
+    ],
     footprint: [1, 1],
     inputBuffer: 12,
     outputBuffer: 12,
@@ -207,8 +210,8 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
     label: "Furnace",
     recipeId: "R02",
     buildCost: [
-      { resource: "scrap", qty: 10 },
-      { resource: "ferrous", qty: 5 },
+      { resource: "scrap", qty: 35 },
+      { resource: "steel", qty: 4 },
     ],
     footprint: [1, 1],
     inputBuffer: 12,
@@ -310,10 +313,10 @@ export const BLUEPRINTS: Readonly<Record<string, BlueprintDef>> = {
  */
 export const EXPORT_PRICES: Readonly<Partial<Record<ResourceId, number>>> = {
   scrap: 1,
-  ferrous: 2,
+  ferrous: 1,
   nonferrous: 2,
   residue: 1,
-  steel: 10,
+  steel: 4,
   copper: 6,
   polymer: 8,
   wire: 4,
@@ -342,9 +345,9 @@ export function unlockedBlueprints(tutorial: number): string[] {
 
 /** Design defaults for the starter yard (spec 4.3, 8.3, 10.4). */
 export const TUNING = {
-  manualSalvagePerPulse: 5,
-  manualPulseTicks: 6, // 0.6 s feedback cycle
-  starterWreckPool: 30,
+  manualSalvagePerPulse: 2,
+  manualPulseTicks: 20, // 2 s feedback cycle (GAME_SYSTEMS P1 seed, #214)
+  starterWreckPool: 240,
   droneScrapPerSecond: 1,
   droneDeliveryUnits: 5,
   droneDeliveryTicks: 5 * TICKS_PER_SECOND,
@@ -353,11 +356,11 @@ export const TUNING = {
   fleetCap: 5,
   /** First spare's price; each later one doubles (B-28, spec 8.6 curve family). */
   droneAddBaseCost: 45,
-  dockCapacity: 900, // ~15 min of starter output
-  yardPowerCapacity: 8,
+  dockCapacity: 300, // the warehouse starts at 300 units (GAME_SYSTEMS P1 seed, #214)
+  yardPowerCapacity: 6, // the initial generator supplies 6 power units
   repairCostScrap: 30,
-  exportContractSteel: 3,
-  exportContractCredits: 30,
+  exportContractSteel: 10,
+  exportContractCredits: 50,
   routeCapacity: 24,
   routeLatencyTicks: 5,
   /** BELT-001: scrap charged per tile a connection's run crosses (beltCostPerTile × run length). */
