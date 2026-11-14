@@ -1,0 +1,1048 @@
+{
+  "prefix": "2026-11-14-rw3d-t23",
+  "role": "developer",
+  "issue": 150,
+  "head": "74a17a8db11cdd7f38c7740599b3fb92acf668e5",
+  "seed": 150,
+  "capturedAt": "2026-11-14T18:15:11.467Z",
+  "method": "vite dev server :4323 + playwright-core system browser; real drawScene (three.js blit + 2D overlay) at scripted (tick, framePhase); real createAudio graph offline-rendered via the additive contextFactory seam; numerical checks only",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "checks": [
+    {
+      "name": "S1.running accent reaches the canvas",
+      "pass": true,
+      "detail": "rgb=95,216,232"
+    },
+    {
+      "name": "S1.starved accent reaches the canvas",
+      "pass": true,
+      "detail": "rgb=138,122,216"
+    },
+    {
+      "name": "S1.outputFull accent reaches the canvas",
+      "pass": true,
+      "detail": "rgb=201,113,58"
+    },
+    {
+      "name": "S1.powerLimited accent reaches the canvas",
+      "pass": true,
+      "detail": "rgb=127,214,194"
+    },
+    {
+      "name": "S1.four statuses are four distinct colours",
+      "pass": true,
+      "detail": "4 distinct"
+    },
+    {
+      "name": "S1.powerLimited carries the shape tick",
+      "pass": true,
+      "detail": "rgb=244,247,251"
+    },
+    {
+      "name": "S1.running core is amber",
+      "pass": true,
+      "detail": "rgb=255,183,101"
+    },
+    {
+      "name": "S1.starved core is quiet bodyMid, not amber",
+      "pass": true,
+      "detail": "quiet=127,159,187"
+    },
+    {
+      "name": "S1.outputFull core is not amber (no fake work)",
+      "pass": true,
+      "detail": "rgb=94,120,130"
+    },
+    {
+      "name": "S1.outputFull retains held cargo (static mark)",
+      "pass": true,
+      "detail": "rgb=127,159,187"
+    },
+    {
+      "name": "S1.powerLimited core is not amber (no fake work)",
+      "pass": true,
+      "detail": "rgb=94,120,130"
+    },
+    {
+      "name": "S1.render never mutates sim state",
+      "pass": true
+    },
+    {
+      "name": "S2.every frame leaves sim state untouched",
+      "pass": true
+    },
+    {
+      "name": "S2.fan blade painted solid at the model position (both sorters + furnace)",
+      "pass": true,
+      "detail": "minCount=16/16"
+    },
+    {
+      "name": "S2.running machines show motion (ring region changes)",
+      "pass": true,
+      "detail": "rings=16/20/20"
+    },
+    {
+      "name": "S2.core swell visits both phases per machine (no stuck pulse)",
+      "pass": true,
+      "detail": "swellFrames=178/210/210 of 600"
+    },
+    {
+      "name": "S2.starved/blocked/unpowered frames are byte-identical (no fake production)",
+      "pass": true,
+      "detail": "rings=1/1/1"
+    },
+    {
+      "name": "S2.fan phases are independent (>=4 pair combos, >50% disagreement)",
+      "pass": true,
+      "detail": "pairs=16, disagree=600/600"
+    },
+    {
+      "name": "S2.swell phases are independent (mixed swell frames exist)",
+      "pass": true,
+      "detail": "mixed=388/600"
+    },
+    {
+      "name": "S2.motion never locks in unison (solo changes both ways, both<90%)",
+      "pass": true,
+      "detail": "only1=212, only2=281, both=71/564"
+    },
+    {
+      "name": "S2.furnace vent puffs appear and stay pool-bounded (<=2)",
+      "pass": true,
+      "detail": "puffFrames=135, max=2"
+    },
+    {
+      "name": "S2.vent puffs change the vent region vs the quiet frame",
+      "pass": true,
+      "detail": "distinctVentHashes=4"
+    },
+    {
+      "name": "S2.three motion frames captured with disagreeing fans",
+      "pass": true,
+      "detail": "ticks=0/1/2"
+    },
+    {
+      "name": "S3.RM fan holds one discrete position",
+      "pass": true,
+      "detail": "positions=1"
+    },
+    {
+      "name": "S3.RM ring regions byte-identical across 600 ticks",
+      "pass": true
+    },
+    {
+      "name": "S3.RM never emits moving vent puffs",
+      "pass": true
+    },
+    {
+      "name": "S3.RM keeps the vent stage readable (static mark when stage>0)",
+      "pass": true,
+      "detail": "stageFrames=16/21"
+    },
+    {
+      "name": "S3.RM retains all four status accents",
+      "pass": true
+    },
+    {
+      "name": "S3.RM suppresses the swell (no amber at the swell probe)",
+      "pass": true
+    },
+    {
+      "name": "S3.RM render never mutates sim state",
+      "pass": true
+    },
+    {
+      "name": "S4.far zoom keeps all four status accents",
+      "pass": true
+    },
+    {
+      "name": "S4.far zoom keeps the amber working core",
+      "pass": true,
+      "detail": "rgb=255,183,101"
+    },
+    {
+      "name": "S4.far zoom throttles the fine activity layer",
+      "pass": true
+    },
+    {
+      "name": "S5.roller walks 0..3 with batch progress",
+      "pass": true,
+      "detail": "steps=0,1,2,3"
+    },
+    {
+      "name": "S5.roller dot painted at the model position",
+      "pass": true
+    },
+    {
+      "name": "S5.magnet sweep only in the first batch quarter",
+      "pass": true,
+      "detail": "sweep=true,false,false,false"
+    },
+    {
+      "name": "S5.sweep mark painted only while sweeping",
+      "pass": true
+    },
+    {
+      "name": "A1.mix never clips and stays under the documented ceiling",
+      "pass": true,
+      "detail": "peak=0.1601, rms=0.0100, clip=0"
+    },
+    {
+      "name": "A1.drone pans left (restrained, gentle)",
+      "pass": true,
+      "detail": "L=0.0066 R=0.0037 peak=0.0218"
+    },
+    {
+      "name": "A1.sorter pans right (restrained, gentle)",
+      "pass": true,
+      "detail": "L=0.0054 R=0.0096 peak=0.0446"
+    },
+    {
+      "name": "A1.furnace at pan 0 renders centre-balanced",
+      "pass": true,
+      "detail": "balance=0.00000, peak=0.1153"
+    },
+    {
+      "name": "A1.non-machinery cue ignores pan (centre, unchanged grammar)",
+      "pass": true,
+      "detail": "balance=0.00000"
+    },
+    {
+      "name": "A2.raw +5 clamps to +PANNER_MAX (identical render)",
+      "pass": true,
+      "detail": "hard L/R=0.00222/0.00397, max L/R=0.00222/0.00397"
+    },
+    {
+      "name": "A2.NaN pan falls back to centre",
+      "pass": true,
+      "detail": "balance=0.00000"
+    },
+    {
+      "name": "A2.clamped voice stays gentle",
+      "pass": true,
+      "detail": "peak=0.0227 (PANNER_MAX=0.35)"
+    },
+    {
+      "name": "A3.late mute silences cues AND beds (peak exactly 0)",
+      "pass": true,
+      "detail": "peak=0"
+    },
+    {
+      "name": "A3.muted-from-start renders digital silence",
+      "pass": true,
+      "detail": "peak=0"
+    },
+    {
+      "name": "A3.unmuted control: beds-on graph is audible and gentle",
+      "pass": true,
+      "detail": "rms=0.0250, peak=0.0626"
+    },
+    {
+      "name": "A4.voice ledger stays capped at 16 and is actually used",
+      "pass": true,
+      "detail": "maxVoices=15, marks=16"
+    },
+    {
+      "name": "A4.pan hops never outnumber their voices",
+      "pass": true,
+      "detail": "maxPans=12"
+    },
+    {
+      "name": "A4.saturated mix never clips and stays under the ceiling",
+      "pass": true,
+      "detail": "peak=0.4953, rms=0.0986"
+    },
+    {
+      "name": "A5.machinery voice records gain->pan->machinery",
+      "pass": true,
+      "detail": "pan=v1-pan, voice=v1"
+    },
+    {
+      "name": "A5.non-machinery voice has no pan hop",
+      "pass": true,
+      "detail": "nodes=10"
+    },
+    {
+      "name": "Z.no page errors",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "scenarios": {
+    "distinct": {
+      "tick": 344,
+      "phase": 0,
+      "reducedMotion": false,
+      "scale": 3,
+      "machines": [
+        {
+          "id": 1,
+          "tile": 13,
+          "status": "running",
+          "blueprint": "sorter",
+          "fanStep": 5,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "a450f9f7",
+          "fanBox": {
+            "x": 324.5,
+            "y": 201.5,
+            "bodyLightCount": 16,
+            "allBodyLight": true
+          },
+          "rollerDot": [
+            127,
+            159,
+            187
+          ],
+          "sweepMark": [
+            117,
+            138,
+            147
+          ]
+        },
+        {
+          "id": 2,
+          "tile": 15,
+          "status": "running",
+          "blueprint": "sorter",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "0c08342a",
+          "fanBox": {
+            "x": 537,
+            "y": 207,
+            "bodyLightCount": 16,
+            "allBodyLight": true
+          },
+          "rollerDot": [
+            127,
+            159,
+            187
+          ],
+          "sweepMark": [
+            117,
+            138,
+            147
+          ]
+        },
+        {
+          "id": 3,
+          "tile": 17,
+          "status": "outputFull",
+          "blueprint": "furnace",
+          "fanStep": 1,
+          "pulse": true,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            201,
+            113,
+            58
+          ],
+          "coreCenter": [
+            94,
+            120,
+            130
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "e299cdc5",
+          "heldCargo": [
+            127,
+            159,
+            187
+          ],
+          "ventHash": "c3c42d4d"
+        },
+        {
+          "id": 4,
+          "tile": 19,
+          "status": "powerLimited",
+          "blueprint": "furnace",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 0,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            127,
+            214,
+            194
+          ],
+          "coreCenter": [
+            94,
+            120,
+            130
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "e299cdc5",
+          "powerTick": [
+            244,
+            247,
+            251
+          ],
+          "ventHash": "ad69a619"
+        },
+        {
+          "id": 5,
+          "tile": 21,
+          "status": "running",
+          "blueprint": "furnace",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "c16768b4",
+          "ventHash": "ad69a619",
+          "fanBox": {
+            "x": 537,
+            "y": 303,
+            "bodyLightCount": 16,
+            "allBodyLight": true
+          }
+        },
+        {
+          "id": 6,
+          "tile": 23,
+          "status": "starved",
+          "blueprint": "sorter",
+          "fanStep": 4,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            138,
+            122,
+            216
+          ],
+          "coreCenter": [
+            127,
+            159,
+            187
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "7a4beccd",
+          "quietCore": [
+            127,
+            159,
+            187
+          ]
+        }
+      ],
+      "stateIdentical": true
+    },
+    "independence": {
+      "frames": 600,
+      "span": [
+        0,
+        599
+      ],
+      "step": 1,
+      "ringDistinct": {
+        "m1": 16,
+        "m2": 20,
+        "m5": 20
+      },
+      "quietRingDistinct": {
+        "m3": 1,
+        "m4": 1,
+        "m6": 1
+      },
+      "fanPairs": 16,
+      "fanDisagree": 600,
+      "swellDisagree": 388,
+      "only1": 212,
+      "only2": 281,
+      "both": 71,
+      "changed": 564,
+      "ventPuffFrames": 135,
+      "motionTicks": [
+        0,
+        1,
+        2
+      ],
+      "sample": [
+        {
+          "tick": 0,
+          "m1": {
+            "fanStep": 3,
+            "pulse": true,
+            "ringHash": "72f61330"
+          },
+          "m2": {
+            "fanStep": 6,
+            "pulse": false,
+            "ringHash": "160e9736"
+          }
+        },
+        {
+          "tick": 120,
+          "m1": {
+            "fanStep": 4,
+            "pulse": true,
+            "ringHash": "f9be7d2d"
+          },
+          "m2": {
+            "fanStep": 6,
+            "pulse": false,
+            "ringHash": "96a6e54d"
+          }
+        },
+        {
+          "tick": 240,
+          "m1": {
+            "fanStep": 4,
+            "pulse": true,
+            "ringHash": "f9be7d2d"
+          },
+          "m2": {
+            "fanStep": 7,
+            "pulse": false,
+            "ringHash": "9f347281"
+          }
+        },
+        {
+          "tick": 360,
+          "m1": {
+            "fanStep": 5,
+            "pulse": false,
+            "ringHash": "cb49008d"
+          },
+          "m2": {
+            "fanStep": 7,
+            "pulse": false,
+            "ringHash": "9f347281"
+          }
+        },
+        {
+          "tick": 480,
+          "m1": {
+            "fanStep": 5,
+            "pulse": false,
+            "ringHash": "cb49008d"
+          },
+          "m2": {
+            "fanStep": 0,
+            "pulse": false,
+            "ringHash": "774b04bd"
+          }
+        }
+      ]
+    },
+    "reducedMotion": {
+      "frames": 21,
+      "fanPositions": 1,
+      "ventStageFrames": 16
+    },
+    "farZoom": {
+      "tick": 344,
+      "phase": 0,
+      "reducedMotion": false,
+      "scale": 1.4,
+      "machines": [
+        {
+          "id": 1,
+          "tile": 13,
+          "status": "running",
+          "blueprint": "sorter",
+          "fanStep": 5,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "46bbc511"
+        },
+        {
+          "id": 2,
+          "tile": 15,
+          "status": "running",
+          "blueprint": "sorter",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "90bf21fd"
+        },
+        {
+          "id": 3,
+          "tile": 17,
+          "status": "outputFull",
+          "blueprint": "furnace",
+          "fanStep": 1,
+          "pulse": true,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            201,
+            113,
+            58
+          ],
+          "coreCenter": [
+            94,
+            120,
+            130
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "68796f4f",
+          "heldCargo": [
+            94,
+            120,
+            130
+          ],
+          "ventHash": "62d3b9eb"
+        },
+        {
+          "id": 4,
+          "tile": 19,
+          "status": "powerLimited",
+          "blueprint": "furnace",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 0,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            127,
+            214,
+            194
+          ],
+          "coreCenter": [
+            94,
+            120,
+            130
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "aa40f224",
+          "powerTick": [
+            114,
+            181,
+            192
+          ],
+          "ventHash": "84a1b659"
+        },
+        {
+          "id": 5,
+          "tile": 21,
+          "status": "running",
+          "blueprint": "furnace",
+          "fanStep": 0,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 2,
+          "sweep": false,
+          "accent": [
+            95,
+            216,
+            232
+          ],
+          "coreCenter": [
+            255,
+            183,
+            101
+          ],
+          "swellProbe": [
+            94,
+            120,
+            130
+          ],
+          "ringHash": "194d6b12",
+          "ventHash": "10acd1b5"
+        },
+        {
+          "id": 6,
+          "tile": 23,
+          "status": "starved",
+          "blueprint": "sorter",
+          "fanStep": 4,
+          "pulse": false,
+          "ventStage": 3,
+          "ventPuffs": 0,
+          "rollerStep": 0,
+          "sweep": false,
+          "accent": [
+            138,
+            122,
+            216
+          ],
+          "coreCenter": [
+            127,
+            159,
+            187
+          ],
+          "swellProbe": [
+            117,
+            138,
+            147
+          ],
+          "ringHash": "47c954bc",
+          "quietCore": [
+            121,
+            149,
+            167
+          ]
+        }
+      ],
+      "stateIdentical": true
+    },
+    "batch": {
+      "progress": [
+        60,
+        180,
+        300,
+        480
+      ],
+      "steps": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "sweepFlags": [
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    "audioPan": {
+      "whole": {
+        "peak": 0.16009071469306946,
+        "rms": 0.009953601210055032,
+        "clip": 0,
+        "rmsL": 0.009721624366763047,
+        "rmsR": 0.010180293402902343,
+        "peakL": 0.16009071469306946,
+        "peakR": 0.16009071469306946
+      },
+      "droneLeft": {
+        "peak": 0.02180945873260498,
+        "rms": 0.0053709770639316255,
+        "clip": 0,
+        "rmsL": 0.006627225453991573,
+        "rmsR": 0.0037114245276612255,
+        "peakL": 0.02180945873260498,
+        "peakR": 0.012213882990181446
+      },
+      "sorterRight": {
+        "peak": 0.044625379145145416,
+        "rms": 0.0077904718099257725,
+        "clip": 0,
+        "rmsL": 0.0053833311248156985,
+        "rmsR": 0.009612629611250338,
+        "peakL": 0.024991411715745926,
+        "peakR": 0.044625379145145416
+      },
+      "furnaceCentre": {
+        "peak": 0.11531296372413635,
+        "rms": 0.021377315337960282,
+        "clip": 0,
+        "rmsL": 0.021377315337960282,
+        "rmsR": 0.021377315337960282,
+        "peakL": 0.11531296372413635,
+        "peakR": 0.11531296372413635
+      },
+      "collectNonMachinery": {
+        "peak": 0.08273076266050339,
+        "rms": 0.015341589128095886,
+        "clip": 0,
+        "rmsL": 0.015341589128095886,
+        "rmsR": 0.015341589128095886,
+        "peakL": 0.08273076266050339,
+        "peakR": 0.08273076266050339
+      }
+    },
+    "audioClamp": {
+      "hardRight": {
+        "peak": 0.022676151245832443,
+        "rms": 0.0032187706643568917,
+        "clip": 0,
+        "rmsL": 0.002224218096398959,
+        "rmsR": 0.003971627253293088,
+        "peakL": 0.012699253857135773,
+        "peakR": 0.022676151245832443
+      },
+      "maxRight": {
+        "peak": 0.022676151245832443,
+        "rms": 0.0032187706643568917,
+        "clip": 0,
+        "rmsL": 0.002224218096398959,
+        "rmsR": 0.003971627253293088,
+        "peakL": 0.012699253857135773,
+        "peakR": 0.022676151245832443
+      },
+      "nan": {
+        "peak": 0.01837768964469433,
+        "rms": 0.003218770618815446,
+        "clip": 0,
+        "rmsL": 0.003218770618815446,
+        "rmsR": 0.003218770618815446,
+        "peakL": 0.01837768964469433,
+        "peakR": 0.01837768964469433
+      }
+    },
+    "audioMute": {
+      "late": {
+        "peak": 0,
+        "rms": 0,
+        "clip": 0,
+        "rmsL": 0,
+        "rmsR": 0,
+        "peakL": 0,
+        "peakR": 0
+      },
+      "fromStart": {
+        "peak": 0,
+        "rms": 0,
+        "clip": 0,
+        "rmsL": 0,
+        "rmsR": 0,
+        "peakL": 0,
+        "peakR": 0
+      },
+      "bedsAudible": {
+        "peak": 0.06258422881364822,
+        "rms": 0.02500543530064944,
+        "clip": 0,
+        "rmsL": 0.02500543530064944,
+        "rmsR": 0.02500543530064944,
+        "peakL": 0.06258422881364822,
+        "peakR": 0.06258422881364822
+      }
+    },
+    "audioPool": {
+      "marks": [
+        {
+          "voices": 4,
+          "pans": 3
+        },
+        {
+          "voices": 8,
+          "pans": 6
+        },
+        {
+          "voices": 10,
+          "pans": 8
+        },
+        {
+          "voices": 13,
+          "pans": 10
+        },
+        {
+          "voices": 14,
+          "pans": 11
+        },
+        {
+          "voices": 13,
+          "pans": 11
+        },
+        {
+          "voices": 14,
+          "pans": 12
+        },
+        {
+          "voices": 15,
+          "pans": 12
+        },
+        {
+          "voices": 15,
+          "pans": 12
+        },
+        {
+          "voices": 13,
+          "pans": 11
+        },
+        {
+          "voices": 14,
+          "pans": 12
+        },
+        {
+          "voices": 15,
+          "pans": 12
+        },
+        {
+          "voices": 15,
+          "pans": 12
+        },
+        {
+          "voices": 15,
+          "pans": 12
+        },
+        {
+          "voices": 14,
+          "pans": 12
+        },
+        {
+          "voices": 14,
+          "pans": 12
+        }
+      ],
+      "whole": {
+        "peak": 0.4952699840068817,
+        "rms": 0.09864037126165565,
+        "clip": 0,
+        "rmsL": 0.09845733703189095,
+        "rmsR": 0.09882306648684383,
+        "peakL": 0.4802112877368927,
+        "peakR": 0.4952699840068817
+      },
+      "maxVoices": 15,
+      "maxPans": 12
+    },
+    "audioGraph": {
+      "panEntry": {
+        "id": "v1-pan",
+        "kind": "voice",
+        "level": 1,
+        "inputIds": [
+          "v1"
+        ],
+        "outputId": "machinery"
+      },
+      "voiceEntry": {
+        "id": "v1",
+        "kind": "voice",
+        "level": 0.2,
+        "inputIds": [],
+        "outputId": "v1-pan"
+      },
+      "machineryBus": {
+        "id": "machinery",
+        "kind": "bus",
+        "level": 0.44999998807907104,
+        "inputIds": [
+          "v1-pan"
+        ],
+        "outputId": "master"
+      },
+      "collectHasPan": false,
+      "totalNodes": 10
+    },
+    "glRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "limitations": [
+    "Non-vision agent: numerical pixel/hash/offline-audio checks only; capable visual inspection PENDING (architecture G1 #151).",
+    "Audio is verified by offline render (peak/RMS/clip/pan balance), not by listening; gentle-by-construction bounds are asserted, loudness perception is owed to capable review.",
+    "Session-only/additive: no save shape, migration or simulation change; the activity model reads sim state and never writes it (state-identity witness on every frame).",
+    "The fan/roller/vent overlay paints on BOTH the 2D and three.js paths; the recording census contexts (no setLineDash) keep the pinned legacy op census."
+  ]
+}
