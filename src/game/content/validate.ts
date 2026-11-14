@@ -433,6 +433,69 @@ function ladderBestSell(s: SimState, keep: Partial<Record<ResourceId, number>>):
 }
 
 /**
+ * Shared dismantle-refund recovery for the ladder mirrors (#214, ADR d7/d8). The
+ * characterization harnesses (scripts/probe-belt.mjs, work/feedback/strat002-harness.mjs,
+ * tests/simulation/{fork,cadence,supply-window}.test.ts) play the same recovery the
+ * `validateBehaviour` gate uses, so the seeded economy reaches the full yard at power 6.
+ * Split into three phases to preserve the gate's ordering: triggers run before the
+ * plan step, the step is adjusted after it is chosen, and the flags clear after the
+ * round's advance. These change no game rule — only the harness's play choices.
+ */
+export interface LadderRecoveryState {
+  recovery: boolean;
+  caRecovery: boolean;
+}
+
+export function newLadderRecovery(): LadderRecoveryState {
+  return { recovery: false, caRecovery: false };
+}
+
+export function ladderRecoveryTriggers(s: SimState, ctx: LadderRecoveryState, round: number): void {
+  const has = (id: string) => s.machines.some((machine) => machine.blueprint === id);
+  if (!ctx.recovery && s.exportClaimed && has("circuitAssembler") && has("furnace") && !has("signalLab") && (s.store["ferrous"] ?? 0) < 12) {
+    const furnace = s.machines.find((machine) => machine.blueprint === "furnace");
+    if (furnace && commit(s, { type: "machine.dismantle", machineId: furnace.id })) ctx.recovery = true;
+  }
+  if (!ctx.caRecovery && has("circuitAssembler") && round > 130) {
+    const ca = s.machines.find((machine) => machine.blueprint === "circuitAssembler");
+    if (ca && ca.batchesDone === 0 && (ca.inBuf["wire"] ?? 0) >= 14) {
+      if (commit(s, { type: "machine.dismantle", machineId: ca.id })) ctx.caRecovery = true;
+    }
+  }
+}
+
+export function ladderRecoveryAdjust(s: SimState, ctx: LadderRecoveryState, step: YardStep): YardStep {
+  const keep = ladderKeep(s, ctx.recovery, ctx.caRecovery);
+  const fallback = (): YardStep => {
+    const m = s.machines[0];
+    return m && s.credits >= upgradeCost(BLUEPRINTS[m.blueprint].baseUpgradeCost, m.level)
+      ? { kind: "upgrade", machineId: m.id }
+      : { kind: "salvage" };
+  };
+  if (ctx.recovery && step.kind === "build" && step.blueprint === "furnace") {
+    const labAffordable = BLUEPRINTS["signalLab"].buildCost.every(
+      (item) => (s.store[item.resource] ?? 0) >= item.qty,
+    );
+    if (labAffordable) step = { kind: "build", blueprint: "signalLab" };
+    else if (s.drone.repaired && 1 + s.spares.length < TUNING.fleetCap && s.credits >= droneAddCost(s))
+      step = { kind: "drone" };
+    else step = ladderBestSell(s, keep) ?? fallback();
+  }
+  if (ctx.caRecovery && step.kind === "build" && step.blueprint === "circuitAssembler") {
+    if ((s.store["wire"] ?? 0) < 2 || (s.store["polymer"] ?? 0) < 11)
+      step = ladderBestSell(s, keep) ?? fallback();
+  }
+  if (step.kind === "sell") step = ladderBestSell(s, keep) ?? fallback();
+  return step;
+}
+
+export function ladderRecoveryClear(s: SimState, ctx: LadderRecoveryState): void {
+  const has = (id: string) => s.machines.some((machine) => machine.blueprint === id);
+  if (ctx.recovery && has("signalLab")) ctx.recovery = false;
+  if (ctx.caRecovery && has("circuitAssembler")) ctx.caRecovery = false;
+}
+
+/**
  * Runs the real ladder from a fresh tutorial state and checks the yard reaches every
  * stage inside the window, that the ledger balances, and that no quantity leaves the safe
  * integer range. This is the "unreachable tutorial goal" gate of spec 23.2.

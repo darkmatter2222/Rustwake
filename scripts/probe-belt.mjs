@@ -27,6 +27,12 @@ import { SELL_ORDER } from "../src/game/simulation/plan";
 import { advance } from "../src/game/simulation/engine";
 import { createInitialState } from "../src/game/simulation/types";
 import { checksum, decodeSave, encodeSave, validateSim } from "../src/game/persistence/save";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../src/game/content/validate";
 
 const TARGET = "work/feedback/belt001-harness.json";
 const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
@@ -213,6 +219,7 @@ export function ladderRow(branch, ladder, tileOrder) {
   let firstResearch = null;
   let inputStallTicks = 0;
   let placed = 0;
+  const recovery = newLadderRecovery();
   const kinds = {};
   const sendRow = (body) => {
     const before = s.credits;
@@ -257,13 +264,14 @@ export function ladderRow(branch, ladder, tileOrder) {
       pulses += 1;
       taps += 1;
     }
+    ladderRecoveryTriggers(s, recovery, round);
     const taught = tutorialBodies(s);
     if (taught !== null) {
       for (const body of taught) sendRow(body);
       taps += 1;
       if (taught.some((body) => body.type === "machine.build")) placed += 1;
     } else {
-      const step = nextYardStepLocal(s);
+      const step = ladderRecoveryAdjust(s, recovery, nextYardStepLocal(s));
       if (step && step.kind) {
         if (step.kind !== "salvage" && step.kind !== "upgrade") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
         switch (step.kind) {
@@ -333,6 +341,7 @@ export function ladderRow(branch, ladder, tileOrder) {
         }
       }
     }
+    ladderRecoveryClear(s, recovery);
     if (s.powerRatio < 1) powerLimitedRounds += 1;
     if (s.powerRatio < minPowerRatio) minPowerRatio = s.powerRatio;
   }
