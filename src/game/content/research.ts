@@ -89,3 +89,38 @@ export function nextResearchNode(s: SimState): ResearchDef | null {
   }
   return null;
 }
+
+/** Actual before/after effect of one research node: the U05 research comparison. */
+export interface ResearchComparison {
+  readonly node: string;
+  /** Data units the purchase spends once. */
+  readonly cost: number;
+  readonly affordable: boolean;
+  readonly prereqMet: boolean;
+  readonly alreadyKnown: boolean;
+  readonly before: ResearchBonus;
+  readonly after: ResearchBonus;
+}
+
+/**
+ * Reports what buying one node would change, from the same `researchBonus` the
+ * engine applies: the three integer quantities before and after exactly this one
+ * rank, plus the price and gate status. It selects nothing and spends nothing, so
+ * the panel can show a real before/after without a universal auto-choice (U05).
+ */
+export function researchComparison(s: SimState, node: string): ResearchComparison | null {
+  const def = RESEARCH[node];
+  if (!def) return null;
+  const owned = s.research ?? {};
+  const rank = rankOf(owned, def.id);
+  const afterState: SimState = { ...s, research: { ...owned, [def.id]: rank + 1 } };
+  return {
+    node: def.id,
+    cost: def.cost,
+    affordable: (s.store.data ?? 0) >= def.cost,
+    prereqMet: !def.requires || rankOf(owned, def.requires) > 0,
+    alreadyKnown: rank >= def.maxRank,
+    before: researchBonus(s),
+    after: researchBonus(afterState),
+  };
+}
