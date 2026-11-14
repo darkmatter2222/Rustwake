@@ -827,7 +827,8 @@ export function createStore(
       if (role !== "writer") return;
       advance(state, ticks);
       tickRoadCargo(roadCargo, ticks);
-      tickLogistics(logistics, roadNet, ticks);
+      // T14 (#141): traffic is opt-in; undefined keeps the legacy tick path.
+      tickLogistics(logistics, roadNet, ticks, trafficEnabled ? traffic : undefined);
       // T11 (#138): construction sites advance with the same authoritative
       // ticks (5 s assembly, #133 engine). Session-only: never persisted.
       advanceWorld(buildWorld, ticks);
@@ -1006,6 +1007,63 @@ export function createStore(
           buildPlacement.selectedAsset === null ? "idle" : repeat ? "repeating" : "placing",
       };
       notify();
+    },
+    // T14 (#141): additive traffic capability. Reads are pure (any role);
+    // mutations are writer-gated exactly like `dispatch` and never call
+    // `persist` — traffic is session-only (#148 owns persistence). Opt-in:
+    // until a writer enables traffic the legacy tick path runs unchanged.
+    // Config setters delegate validation to the traffic authority (false on
+    // invalid input, no mutation); they shape future ticks, not the ledger.
+    getTraffic: () => traffic,
+    isTrafficEnabled: () => trafficEnabled,
+    enableTraffic(): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      trafficEnabled = true;
+      notify();
+      return true;
+    },
+    setTrafficDefaultTruck(config: Partial<TruckConfig>): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setDefaultTruck(traffic, config);
+      if (ok) notify();
+      return ok;
+    },
+    configureTrafficTruck(carrierId: number, config: Partial<TruckConfig>): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = configureTruck(traffic, carrierId, config);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficBayCapacity(cell: Cell, capacity: number): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setBayCapacity(traffic, cell, capacity);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficJunctionCapacity(capacity: number | null): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setJunctionCapacity(traffic, capacity);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficJunctionCost(cost: number): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setJunctionCost(traffic, cost);
+      if (ok) notify();
+      return ok;
+    },
+    setTrafficRetryPolicy(policy: { maxRetries?: number; baseBackoff?: number; maxBackoff?: number }): boolean {
+      if (reconcile()) notify();
+      if (role !== "writer") return false;
+      const ok = setRetryPolicy(traffic, policy);
+      if (ok) notify();
+      return ok;
     },
   };
 }
