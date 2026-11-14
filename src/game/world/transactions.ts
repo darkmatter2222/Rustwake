@@ -1,5 +1,5 @@
 /**
- * Atomic world transactions (issue #133).
+ * Atomic world transactions (issue #133, lifecycle extension issue #146).
  *
  * Every command runs validate -> reserve -> commit with ALL validation pure
  * and complete before the first mutation: a rejected command leaves the state
@@ -9,6 +9,18 @@
  * never again at completion (reservation -> committed) or cancellation
  * (refund + committed). Credits use the same ledger shape, kept separate
  * from cargo quantities (architecture README section 1).
+ *
+ * Lifecycle commands (#146) follow the SAME pattern:
+ * - world.move: re-runs the full placement law with the moving building
+ *   excluded from occupancy/keep-out/entrance checks, charges a service fee
+ *   (ceil 10% of build cost per material) stock -> committed, and repositions
+ *   the building preserving its id and completedTick.
+ * - world.dismantle: completed buildings only (sites use world.cancel).
+ *   Refunds floor 80% of build materials committed -> stock; whatever does
+ *   not fit free storage goes to the visible overflow ledger, never deleted.
+ *   The non-refunded share stays committed (lost, listed in the preview).
+ * - world.recall: drains overflow entries back into free stock room, exactly
+ *   once per unit, optionally filtered by source building. Never duplicates.
  *
  * Rejections are a stable discriminated union: UI and tests match on the
  * `reason` tag, never on prose. Validation order is fixed and deterministic:
@@ -39,7 +51,15 @@ import {
   type WorldAssetId,
 } from "./kit";
 import { cellOwned, terrainAt } from "./terrain";
-import type { Cell, ConstructionSite, Rotation, WorldState } from "./types";
+import {
+  LIFECYCLE_FORMULA_VERSION,
+  type Cell,
+  type ConstructionSite,
+  type OverflowEntry,
+  type PlacedBuilding,
+  type Rotation,
+  type WorldState,
+} from "./types";
 
 /** Stable, typed rejection reasons. Tags are API; payloads carry recovery data. */
 export type WorldRejection =
@@ -64,12 +84,18 @@ export type WorldRejection =
   | { reason: "parcel-not-found"; parcelId: number }
   | { reason: "already-owned"; parcelId: number }
   | { reason: "not-contiguous"; parcelId: number }
-  | { reason: "milestone-locked"; parcelId: number };
+  | { reason: "milestone-locked"; parcelId: number }
+  | { reason: "building-not-found"; buildingId: number }
+  | { reason: "under-construction"; buildingId: number; siteId: number }
+  | { reason: "same-position"; buildingId: number };
 
 export type WorldCommand =
   | { id: string; type: "world.place"; asset: string; cell: Cell; rotation: number }
   | { id: string; type: "world.cancel"; siteId: number }
-  | { id: string; type: "world.expand"; parcelId: number };
+  | { id: string; type: "world.expand"; parcelId: number }
+  | { id: string; type: "world.move"; buildingId: number; cell: Cell; rotation: number }
+  | { id: string; type: "world.dismantle"; buildingId: number }
+  | { id: string; type: "world.recall"; buildingId?: number };
 
 export type WorldCommandResult =
   | { ok: true; revision: number }
@@ -88,6 +114,19 @@ export const PARCEL_MILESTONE_COST = 1;
 export const CANCEL_REFUND_BEFORE_PCT = 100;
 export const CANCEL_REFUND_STARTED_PCT = 90;
 
+/**
+ * Lifecycle percentages (GAME_SYSTEMS "Buildings and lifecycle", issue #146).
+ * Move: 10% of the ORIGINAL build cost, rounded UP per material, charged as a
+ * service sink (stock -> committed). The first-teaching-placement waiver is a
+ * tutorial-system concern and is not modeled in the world yet (follow-up).
+ * Dismantle: 80% of build materials refunded, rounded DOWN per material;
+ * credits are not refunded (the spec refunds materials only).
+ * Costs are read dynamically from the kit/defs at call time, never hardcoded,
+ * so the #214 economy retune applies without code changes here.
+ */
+export const MOVE_FEE_PCT = 10;
+export const DISMANTLE_REFUND_PCT = 80;
+
 interface Occupant {
   readonly id: number;
   readonly asset: string;
@@ -96,9 +135,10 @@ interface Occupant {
   readonly cells: Cell[];
 }
 
-function occupants(w: WorldState): Occupant[] {
+function occupants(w: WorldState, excludeBuildingId?: number): Occupant[] {
   const list: Occupant[] = [];
   for (const b of w.buildings) {
+    if (b.id === excludeBuildingId) continue;
     list.push({
       id: b.id,
       asset: b.asset,
@@ -133,15 +173,19 @@ function craneDiscs(list: Occupant[]): { id: number; cx: number; cz: number; r: 
 }
 
 /**
- * Pure placement validation. Returns the first rejection in the fixed order,
- * or null when the placement is legal. Exported so the UI (#138) can preview
- * validity without touching state.
+ * The geometry half of the placement law, shared by place and move (#146).
+ * `excludeBuildingId` removes one completed building from occupancy, keep-out
+ * and entrance checks (a move must not collide with its own footprint); sites
+ * are never excluded. Order is fixed: asset -> rotation -> cell -> land ->
+ * terrain -> occupancy -> keep-out -> entrances -> entrance obstruction ->
+ * vertical clearance.
  */
-export function validatePlacement(
+function validatePlacementGeometry(
   w: WorldState,
   assetId: string,
   cell: Cell,
   rotation: number,
+  excludeBuildingId?: number,
 ): WorldRejection | null {
   if (!isWorldAssetId(assetId)) return { reason: "unknown-asset", asset: assetId };
   if (!isRotation(rotation)) return { reason: "invalid-rotation", rotation };
@@ -161,7 +205,7 @@ export function validatePlacement(
     }
   }
 
-  const others = occupants(w);
+  const others = occupants(w, excludeBuildingId);
   const byCell = new Map<string, Occupant>();
   for (const o of others) {
     for (const c of o.cells) byCell.set(cellKey(c), o);
@@ -187,7 +231,9 @@ export function validatePlacement(
       const [cx, cz] = centerMu(cell, asset.footprint, rotation);
       for (const o of others) {
         const hit = o.cells.filter((c) => rectIntersectsDisc(cellRectMu(c), cx, cz, r));
-        if (hit.length > 0) return { reason: "keepout", craneId: w.nextBuildingId, cells: hit };
+        // A move keeps the building's id; a fresh placement gets the next one.
+        const craneId = excludeBuildingId ?? w.nextBuildingId;
+        if (hit.length > 0) return { reason: "keepout", craneId, cells: hit };
       }
     }
   }
@@ -279,7 +325,23 @@ export function validatePlacement(
       };
     }
   }
+  return null;
+}
 
+/**
+ * Pure placement validation. Returns the first rejection in the fixed order,
+ * or null when the placement is legal. Exported so the UI (#138) can preview
+ * validity without touching state.
+ */
+export function validatePlacement(
+  w: WorldState,
+  assetId: string,
+  cell: Cell,
+  rotation: number,
+): WorldRejection | null {
+  const geometry = validatePlacementGeometry(w, assetId, cell, rotation);
+  if (geometry !== null) return geometry;
+  const asset: KitAsset = WORLD_KIT[assetId as WorldAssetId];
   for (const item of asset.buildCost) {
     const have = w.stock[item.resource] ?? 0;
     if (have < item.qty) {
@@ -399,6 +461,285 @@ function executeExpand(w: WorldState, cmd: Extract<WorldCommand, { type: "world.
   return { ok: true, revision: w.revision + 1 };
 }
 
+// ---------------------------------------------------------------------------
+// Lifecycle transactions (issue #146): move, dismantle, cargo recall.
+// Same atomic validate -> commit pattern; previews are pure and share their
+// arithmetic with the executors so what is shown is exactly what is charged.
+// ---------------------------------------------------------------------------
+
+/** Move service fee per material: ceil(pct% of the current kit build cost). */
+export function moveFeeOf(assetId: WorldAssetId): ItemStack[] {
+  return WORLD_KIT[assetId].buildCost.map((item) => ({
+    resource: item.resource,
+    qty: Math.ceil((item.qty * MOVE_FEE_PCT) / 100),
+  }));
+}
+
+/** Dismantle refund per material: floor(pct% of the current kit build cost). */
+export function dismantleRefundOf(assetId: WorldAssetId): ItemStack[] {
+  return WORLD_KIT[assetId].buildCost.map((item) => ({
+    resource: item.resource,
+    qty: Math.floor((item.qty * DISMANTLE_REFUND_PCT) / 100),
+  }));
+}
+
+/** Total free-stock units across all resources (integer cargo units). */
+export function stockUnits(w: WorldState): number {
+  let total = 0;
+  for (const key of Object.keys(w.stock) as ResourceId[]) total += w.stock[key] ?? 0;
+  return total;
+}
+
+/**
+ * Free storage room. Undefined capacity = unlimited (legacy worlds created
+ * before #146); MAX_SAFE_INTEGER keeps the arithmetic in integer space.
+ */
+function freeRoom(w: WorldState): number {
+  if (w.storageCapacity === undefined) return Number.MAX_SAFE_INTEGER;
+  return Math.max(0, w.storageCapacity - stockUnits(w));
+}
+
+/**
+ * Pure refund split used by BOTH preview and commit: fill free stock room in
+ * build-cost order, the remainder becomes visible overflow. Never deletes or
+ * duplicates a unit.
+ */
+function splitRefund(
+  w: WorldState,
+  refund: ItemStack[],
+): { toStock: ItemStack[]; toOverflow: ItemStack[] } {
+  let room = freeRoom(w);
+  const toStock: ItemStack[] = [];
+  const toOverflow: ItemStack[] = [];
+  for (const item of refund) {
+    const intoStock = Math.min(item.qty, room);
+    room -= intoStock;
+    if (intoStock > 0) toStock.push({ resource: item.resource, qty: intoStock });
+    if (item.qty - intoStock > 0) toOverflow.push({ resource: item.resource, qty: item.qty - intoStock });
+  }
+  return { toStock, toOverflow };
+}
+
+/** One overflow entry's recall plan; `recovered` units move overflow -> stock. */
+export interface RecallPlanEntry {
+  readonly id: number;
+  readonly resource: ResourceId;
+  readonly qty: number;
+  readonly recovered: number;
+}
+
+/** Pure recall plan shared by preview and commit (id order, room in order). */
+function planRecall(w: WorldState, buildingId?: number): RecallPlanEntry[] {
+  let room = freeRoom(w);
+  const plan: RecallPlanEntry[] = [];
+  for (const entry of w.overflow ?? []) {
+    if (buildingId !== undefined && entry.source.buildingId !== buildingId) continue;
+    const recovered = Math.min(entry.qty, room);
+    room -= recovered;
+    plan.push({ id: entry.id, resource: entry.resource, qty: entry.qty, recovered });
+  }
+  return plan;
+}
+
+/**
+ * Pure move validation (#146): lookup -> same-position -> the full placement
+ * law with the moving building excluded -> fee affordability. A building under
+ * construction must be cancelled (world.cancel), not moved.
+ */
+export function validateMove(
+  w: WorldState,
+  buildingId: number,
+  cell: Cell,
+  rotation: number,
+): WorldRejection | null {
+  const site = w.sites.find((s) => s.buildingId === buildingId);
+  if (site !== undefined) return { reason: "under-construction", buildingId, siteId: site.id };
+  const building = w.buildings.find((b) => b.id === buildingId);
+  if (building === undefined) return { reason: "building-not-found", buildingId };
+  if (building.cell.x === cell.x && building.cell.y === cell.y && building.rotation === rotation) {
+    return { reason: "same-position", buildingId };
+  }
+  const geometry = validatePlacementGeometry(w, building.asset, cell, rotation, buildingId);
+  if (geometry !== null) return geometry;
+  for (const item of moveFeeOf(building.asset as WorldAssetId)) {
+    const have = w.stock[item.resource] ?? 0;
+    if (have < item.qty) {
+      return { reason: "insufficient-material", resource: item.resource, need: item.qty, have };
+    }
+  }
+  return null;
+}
+
+/** Pure dismantle validation: completed buildings only, never sites. */
+export function validateDismantle(w: WorldState, buildingId: number): WorldRejection | null {
+  const site = w.sites.find((s) => s.buildingId === buildingId);
+  if (site !== undefined) return { reason: "under-construction", buildingId, siteId: site.id };
+  const building = w.buildings.find((b) => b.id === buildingId);
+  if (building === undefined) return { reason: "building-not-found", buildingId };
+  return null;
+}
+
+export interface MovePreview {
+  readonly buildingId: number;
+  readonly asset: string | null;
+  readonly rejection: WorldRejection | null;
+  /** Service charge per material (stock -> committed) on success. */
+  readonly fee: ItemStack[];
+  readonly formulaVersion: number;
+}
+
+export interface DismantlePreview {
+  readonly buildingId: number;
+  readonly asset: string | null;
+  readonly rejection: WorldRejection | null;
+  /** Materials returned (committed -> stock/overflow), floor pct per item. */
+  readonly refund: ItemStack[];
+  /** Non-refunded share permanently lost; listed before confirmation. */
+  readonly lost: ItemStack[];
+  /** Exact split at current free room: into stock vs into overflow. */
+  readonly toStock: ItemStack[];
+  readonly toOverflow: ItemStack[];
+  readonly formulaVersion: number;
+}
+
+export interface RecallPreview {
+  readonly buildingId: number | null;
+  readonly entries: RecallPlanEntry[];
+  readonly recoveredUnits: number;
+  readonly remainingOverflowUnits: number;
+}
+
+/** Pure move preview: fee and validity BEFORE any commit (issue #146). */
+export function previewMove(
+  w: WorldState,
+  buildingId: number,
+  cell: Cell,
+  rotation: number,
+): MovePreview {
+  const rejection = validateMove(w, buildingId, cell, rotation);
+  const building = w.buildings.find((b) => b.id === buildingId);
+  return {
+    buildingId,
+    asset: building?.asset ?? null,
+    rejection,
+    fee: building !== undefined ? moveFeeOf(building.asset as WorldAssetId) : [],
+    formulaVersion: LIFECYCLE_FORMULA_VERSION,
+  };
+}
+
+/** Pure dismantle preview: refund, lost share and overflow split BEFORE commit. */
+export function previewDismantle(w: WorldState, buildingId: number): DismantlePreview {
+  const rejection = validateDismantle(w, buildingId);
+  const building = w.buildings.find((b) => b.id === buildingId);
+  if (building === undefined) {
+    return {
+      buildingId,
+      asset: null,
+      rejection,
+      refund: [],
+      lost: [],
+      toStock: [],
+      toOverflow: [],
+      formulaVersion: LIFECYCLE_FORMULA_VERSION,
+    };
+  }
+  const cost = WORLD_KIT[building.asset as WorldAssetId].buildCost;
+  const refund = dismantleRefundOf(building.asset as WorldAssetId);
+  const lost = cost.map((item, i) => ({ resource: item.resource, qty: item.qty - refund[i].qty }));
+  const split = splitRefund(w, refund);
+  return {
+    buildingId,
+    asset: building.asset,
+    rejection,
+    refund,
+    lost,
+    toStock: split.toStock,
+    toOverflow: split.toOverflow,
+    formulaVersion: LIFECYCLE_FORMULA_VERSION,
+  };
+}
+
+/** Pure recall preview: exactly which overflow units return to free stock. */
+export function previewRecall(w: WorldState, buildingId?: number): RecallPreview {
+  const entries = planRecall(w, buildingId);
+  let recoveredUnits = 0;
+  let remainingOverflowUnits = 0;
+  for (const e of entries) {
+    recoveredUnits += e.recovered;
+    remainingOverflowUnits += e.qty - e.recovered;
+  }
+  return { buildingId: buildingId ?? null, entries, recoveredUnits, remainingOverflowUnits };
+}
+
+function executeMove(w: WorldState, cmd: Extract<WorldCommand, { type: "world.move" }>): WorldCommandResult {
+  const rejection = validateMove(w, cmd.buildingId, cmd.cell, cmd.rotation);
+  if (rejection !== null) return { ok: false, rejection };
+  // Past this point every check passed; mutations are total and cannot fail.
+  const building = w.buildings.find((b) => b.id === cmd.buildingId) as PlacedBuilding;
+  for (const item of moveFeeOf(building.asset as WorldAssetId)) {
+    if (item.qty === 0) continue;
+    w.stock[item.resource] = (w.stock[item.resource] ?? 0) - item.qty;
+    addToCommitted(w, item.resource, item.qty); // service sink, like expansion
+  }
+  const rotation = cmd.rotation as Rotation;
+  // Preserve id, asset and completedTick; only position/orientation change.
+  w.buildings = w.buildings.map((b) =>
+    b.id === building.id
+      ? { id: b.id, asset: b.asset, cell: { x: cmd.cell.x, y: cmd.cell.y }, rotation, completedTick: b.completedTick }
+      : b,
+  );
+  return { ok: true, revision: w.revision + 1 };
+}
+
+function pushOverflow(w: WorldState, item: ItemStack, building: PlacedBuilding): void {
+  if (item.qty <= 0) return;
+  if (w.overflow === undefined) w.overflow = [];
+  const id = w.nextOverflowId ?? 1;
+  w.nextOverflowId = id + 1;
+  const entry: OverflowEntry = {
+    id,
+    resource: item.resource,
+    qty: item.qty,
+    source: { kind: "dismantle", buildingId: building.id, asset: building.asset },
+    tick: w.tick,
+    formulaVersion: LIFECYCLE_FORMULA_VERSION,
+  };
+  w.overflow.push(entry);
+}
+
+function executeDismantle(w: WorldState, cmd: Extract<WorldCommand, { type: "world.dismantle" }>): WorldCommandResult {
+  const rejection = validateDismantle(w, cmd.buildingId);
+  if (rejection !== null) return { ok: false, rejection };
+  const building = w.buildings.find((b) => b.id === cmd.buildingId) as PlacedBuilding;
+  const refund = dismantleRefundOf(building.asset as WorldAssetId);
+  const split = splitRefund(w, refund);
+  // The refunded share leaves committed exactly once; the lost share stays.
+  for (const item of refund) {
+    w.committed[item.resource] = (w.committed[item.resource] ?? 0) - item.qty;
+  }
+  for (const item of split.toStock) addToStock(w, item.resource, item.qty);
+  for (const item of split.toOverflow) pushOverflow(w, item, building);
+  w.buildings = w.buildings.filter((b) => b.id !== building.id);
+  return { ok: true, revision: w.revision + 1 };
+}
+
+function executeRecall(w: WorldState, cmd: Extract<WorldCommand, { type: "world.recall" }>): WorldCommandResult {
+  // Recall moves overflow -> free stock only; it has no failure mode. A recall
+  // with nothing to recover is a successful no-op (still idempotent by id).
+  const plan = planRecall(w, cmd.buildingId);
+  const recoveredById = new Map<number, number>();
+  for (const p of plan) recoveredById.set(p.id, p.recovered);
+  for (const entry of w.overflow ?? []) {
+    const recovered = recoveredById.get(entry.id) ?? 0;
+    if (recovered > 0) {
+      entry.qty -= recovered;
+      addToStock(w, entry.resource, recovered);
+    }
+  }
+  if (w.overflow !== undefined) w.overflow = w.overflow.filter((e) => e.qty > 0);
+  return { ok: true, revision: w.revision + 1 };
+}
+
 /**
  * Apply a world command. Idempotent by command id, mirroring the sim core's
  * applyCommand: a replayed id returns the original revision without charging
@@ -417,6 +758,15 @@ export function applyWorldCommand(w: WorldState, command: WorldCommand): WorldCo
       break;
     case "world.expand":
       result = executeExpand(w, command);
+      break;
+    case "world.move":
+      result = executeMove(w, command);
+      break;
+    case "world.dismantle":
+      result = executeDismantle(w, command);
+      break;
+    case "world.recall":
+      result = executeRecall(w, command);
       break;
   }
   if (result.ok) {
