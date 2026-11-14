@@ -8,7 +8,7 @@
     "capture": "node capture.mjs"
   },
   "dependencies": {
-    "three": "0.160.0"
+    "three": "0.187.0"
   },
   "devDependencies": {
     "playwright-core": "1.49.1"
