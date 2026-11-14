@@ -12,6 +12,10 @@
  * The adversarial envelopes reuse the pinned T02 fixtures (byte-for-byte); the
  * round-trip and quota cases construct envelopes from the real encode/checksum
  * path so the recovery transaction is exercised against genuine save bytes.
+ *
+ * G1 (#203): the retry transaction must also be honest when storage refuses the
+ * slot clear AFTER the recovered yard landed — explicit partial success, the
+ * write-once slot kept, and every later resolution path still lossless.
  */
 import { describe, expect, it } from "vitest";
 import {
@@ -59,6 +63,34 @@ function quotaStorage(fail: { recovery?: boolean; save?: boolean } = {}) {
     raw: map,
     flags,
   };
+}
+
+/**
+ * Storage whose recovery-slot clear can be refused at runtime (#203). With
+ * `withRemoveItem` the refusal throws from removeItem; without it, removeItem is
+ * absent so clearRecoverySlot falls back to an empty write, which then throws.
+ * Only RECOVERY_KEY is affected — SAVE_KEY writes and clears stay healthy.
+ */
+function clearRefusalStorage(withRemoveItem = true) {
+  const map = new Map<string, string>();
+  const flags = { clear: false };
+  const storage = {
+    getItem: (key: string) => map.get(key) ?? null,
+    setItem: (key: string, value: string) => {
+      if (!withRemoveItem && key === RECOVERY_KEY && flags.clear) throw new Error("refused: recovery clear");
+      map.set(key, value);
+    },
+    removeItem: undefined as ((key: string) => void) | undefined,
+    raw: map,
+    flags,
+  };
+  if (withRemoveItem) {
+    storage.removeItem = (key: string) => {
+      if (key === RECOVERY_KEY && flags.clear) throw new Error("refused: recovery clear");
+      map.delete(key);
+    };
+  }
+  return storage;
 }
 
 function yardText(ticks = 60): string {
@@ -366,6 +398,133 @@ describe("G1 discard and multi-tab semantics (#191)", () => {
     expect(store.getSaveRecovery()?.textLength).toBe(corrupt.length);
     expect(storage.raw.get(RECOVERY_KEY)).toBe(corrupt);
     expect(store.exportSaveRecovery()).toBe(corrupt);
+    store.stop();
+  });
+});
+
+describe("G1 retry slot-clear failure (#203)", () => {
+  it("surfaces a refused removeItem: yard durable, slot byte-intact, retry heals", () => {
+    const storage = clearRefusalStorage();
+    const recovered = yardText(90);
+    storage.setItem(RECOVERY_KEY, recovered);
+    const store = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
+    storage.flags.clear = true;
+    const result = store.retrySaveRecovery();
+    // Explicit partial success: the yard landed durably, the clear did not.
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.slotClearFailed).toBe(true);
+    const decoded = decodeSave(recovered);
+    expect(decoded.ok).toBe(true);
+    if (decoded.ok) {
+      expect(store.getState().tick).toBe(decoded.payload.sim.tick);
+      expect(store.getState().machines.length).toBe(decoded.payload.sim.machines.length);
+      expect(decodeSave(storage.raw.get(SAVE_KEY) ?? null).ok).toBe(true);
+    }
+    // The write-once slot survives verbatim; export stays byte-exact. A decodable
+    // slot raises no notice (pinned invariant), so the result flag is the surface.
+    expect(storage.raw.get(RECOVERY_KEY)).toBe(recovered);
+    expect(store.exportSaveRecovery()).toBe(recovered);
+    expect(store.getSaveRecovery()).toBeNull();
+    // Once storage heals, a second retry completes fully and clears the slot.
+    storage.flags.clear = false;
+    const healed = store.retrySaveRecovery();
+    expect(healed).toEqual({
+      ok: true,
+      tick: store.getState().tick,
+      machines: store.getState().machines.length,
+    });
+    expect(storage.raw.get(RECOVERY_KEY)).toBeUndefined();
+    expect(store.getSaveRecovery()).toBeNull();
+    const tick = store.getState().tick;
+    store.stop();
+    const reopened = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
+    expect(reopened.getState().tick).toBe(tick);
+    expect(reopened.getSaveRecovery()).toBeNull();
+    reopened.stop();
+  });
+
+  it("surfaces a refused empty-write fallback on a minimal double without removeItem", () => {
+    const storage = clearRefusalStorage(false);
+    const recovered = yardText(45);
+    storage.setItem(RECOVERY_KEY, recovered);
+    const store = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
+    storage.flags.clear = true;
+    const result = store.retrySaveRecovery();
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.slotClearFailed).toBe(true);
+    expect(storage.raw.get(RECOVERY_KEY)).toBe(recovered);
+    expect(decodeSave(storage.raw.get(SAVE_KEY) ?? null).ok).toBe(true);
+    expect(store.exportSaveRecovery()).toBe(recovered);
+    // Healed: the empty-write fallback reads as an absent slot afterwards.
+    storage.flags.clear = false;
+    const healed = store.retrySaveRecovery();
+    expect(healed.ok).toBe(true);
+    if (healed.ok) expect(healed.slotClearFailed).toBeUndefined();
+    expect(storage.raw.get(RECOVERY_KEY)).toBe("");
+    expect(store.exportSaveRecovery()).toBeNull();
+    expect(store.getSaveRecovery()).toBeNull();
+    store.stop();
+  });
+
+  it("keeps the live yard writable and repeated refused retries lossless", () => {
+    const storage = clearRefusalStorage();
+    const recovered = yardText(60);
+    storage.setItem(RECOVERY_KEY, recovered);
+    const store = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
+    storage.flags.clear = true;
+    expect(store.retrySaveRecovery().ok).toBe(true);
+    // The recovered yard is live, not held: checkpoints keep landing in SAVE_KEY.
+    store.step(120);
+    store.dispatch({ id: "a", type: "manual.salvage" });
+    const live = storage.raw.get(SAVE_KEY);
+    expect(decodeSave(live ?? null).ok).toBe(true);
+    expect(store.getState().tick).toBeGreaterThanOrEqual(180);
+    // Repeated refused retries never degrade the slot nor silently succeed.
+    for (let i = 0; i < 3; i += 1) {
+      const again = store.retrySaveRecovery();
+      expect(again.ok).toBe(true);
+      if (again.ok) expect(again.slotClearFailed).toBe(true);
+      expect(storage.raw.get(RECOVERY_KEY)).toBe(recovered);
+      expect(store.exportSaveRecovery()).toBe(recovered);
+    }
+    expect(decodeSave(storage.raw.get(SAVE_KEY) ?? null).ok).toBe(true);
+    store.stop();
+  });
+
+  it("a residual slot still forces held mode on a later corruption; resolution stays lossless", () => {
+    const storage = clearRefusalStorage();
+    const recovered = yardText(90);
+    storage.setItem(RECOVERY_KEY, recovered);
+    const store = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
+    storage.flags.clear = true;
+    const first = store.retrySaveRecovery();
+    expect(first.ok).toBe(true);
+    if (first.ok) expect(first.slotClearFailed).toBe(true);
+    // A newer external corruption lands in SAVE_KEY while the slot is occupied.
+    const newer = tamperChecksum(yardText(80));
+    storage.setItem(SAVE_KEY, newer);
+    store.takeOver();
+    expect(storage.raw.get(RECOVERY_KEY)).toBe(recovered); // write-once, never overwritten
+    expect(storage.raw.get(SAVE_KEY)).toBe(newer); // held in place
+    const notice = store.getSaveRecovery();
+    expect(notice?.preserved).toBe(false);
+    expect(notice?.reason).toBe("checksum");
+    // The double-corruption guard refuses the slot retry; nothing changes.
+    expect(store.retrySaveRecovery()).toEqual({ ok: false, reason: "storage", detail: "save-key-corrupt" });
+    expect(storage.raw.get(SAVE_KEY)).toBe(newer);
+    expect(store.exportSaveRecovery()).toBe(recovered);
+    // Confirmed discard erases only the held corruption; the slot re-surfaces.
+    store.discardSaveRecovery();
+    expect(storage.raw.get(SAVE_KEY)).toBeUndefined();
+    expect(storage.raw.get(RECOVERY_KEY)).toBe(recovered);
+    // The residual slot is decodable, so no notice remains; a healed retry resolves it.
+    expect(store.getSaveRecovery()).toBeNull();
+    storage.flags.clear = false;
+    const healed = store.retrySaveRecovery();
+    expect(healed.ok).toBe(true);
+    if (healed.ok) expect(healed.slotClearFailed).toBeUndefined();
+    expect(storage.raw.get(RECOVERY_KEY)).toBeUndefined();
+    expect(decodeSave(storage.raw.get(SAVE_KEY) ?? null).ok).toBe(true);
     store.stop();
   });
 });

@@ -40,9 +40,14 @@ export interface SaveRecoveryNotice {
  * Outcome of a recovery retry. A failure changes nothing: the corrupt slot is kept
  * and the live yard is untouched. `storage` means the recovered yard could not be
  * durably written, so the slot was deliberately not cleared.
+ *
+ * G1 (#203): a success may carry `slotClearFailed: true` when the recovered yard
+ * landed durably in SAVE_KEY but storage refused the slot clear. The write-once
+ * slot is kept and the notice re-surfaces, so retry/discard stay available; a
+ * partial success is never reported as a silent full success.
  */
 export type RecoveryResult =
-  | { ok: true; tick: number; machines: number }
+  | { ok: true; tick: number; machines: number; slotClearFailed?: boolean }
   | {
       ok: false;
       reason: DecodeFailure | "read-only" | "no-slot" | "storage";
