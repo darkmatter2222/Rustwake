@@ -74,6 +74,18 @@ export const COPY = {
     busyLink: "Output belt is at capacity",
     noLinks: "No routes connected yet",
   },
+  /**
+   * T18 (#145, U06): the focus row under the bottleneck cards. Each face centers the
+   * yard camera (or opens the matching context pane) without touching the selection;
+   * the hint says so explicitly, because the player must never fear losing the machine.
+   */
+  focus: {
+    group: "Focus the bottleneck",
+    source: "Focus source",
+    route: "Focus route",
+    power: "Focus power",
+    hint: "Focus moves the yard camera or opens context below; the machine stays selected and nothing is dispatched.",
+  },
   actions: {
     connectPrimary: "Connect is the primary action: it lays belt for",
     connectPrimaryEnd: "and starts the flow immediately.",

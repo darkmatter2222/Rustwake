@@ -75,6 +75,18 @@
   overflow-wrap: anywhere;
 }
 
+/* T18 (#145, U05): the full before/after rows on every card share the metric's
+   tabular numerals so the three branches line up for a deliberate comparison. */
+.upgrade-card__rate,
+.upgrade-card__power,
+.upgrade-card__capacity {
+  display: block;
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--body-light);
+  overflow-wrap: anywhere;
+}
+
 .upgrade-card__delta {
   display: block;
   font-size: 0.74rem;

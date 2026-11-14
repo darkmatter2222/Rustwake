@@ -173,6 +173,18 @@ export function UpgradeCompare(props: {
             <span className="upgrade-card__metric">
               {card.metric}: {card.currentText} → {card.proposedText}
             </span>
+            {/* T18 (#145, U05): the engine's full before/after for this exact purchase —
+                throughput, power draw and input capacity — so the comparison is complete
+                on every card, not only on the branch's own named metric. */}
+            <span className="upgrade-card__rate">
+              {UPGRADE_COPY.throughputWord}: {card.throughputText}
+            </span>
+            <span className="upgrade-card__power">
+              {UPGRADE_COPY.powerDrawWord}: {card.powerText}
+            </span>
+            <span className="upgrade-card__capacity">
+              {UPGRADE_COPY.capacityWord}: {card.capacityText}
+            </span>
             <span className="upgrade-card__delta">{card.deltaText}</span>
             <span className="upgrade-card__cost">
               {UPGRADE_COPY.costWord}: {card.costText}
@@ -186,6 +198,9 @@ export function UpgradeCompare(props: {
           </button>
         ))}
       </div>
+      {/* T18 (#145): the engine applies upgrades instantly — no downtime is modeled,
+          so the comparison says exactly that instead of promising a pause. */}
+      <p className="upgrade-note">{UPGRADE_COPY.instantNote}</p>
       <button
         type="button"
         className="upgrade-buy"
