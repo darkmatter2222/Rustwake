@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
-import type { BuildPlacementApi, GameStore, RoadApi, SaveRecoveryApi } from "../app/store";
+import type { BuildPlacementApi, GameStore, LogisticsApi, RoadApi, SaveRecoveryApi, TrafficApi } from "../app/store";
 import { suggestedAction } from "../game/simulation/offline";
 import { TUNING, unlockedBlueprints, BLUEPRINTS } from "../game/content/defs";
 import {
@@ -651,6 +651,27 @@ export function App({
     const world = tileToWorld(tile);
     cameraRef.current = clampCamera(
       { ...cameraRef.current, x: world.x, y: world.y },
+      viewRef.current,
+      fittedRef.current,
+    );
+    intentRef.current = true;
+  }, []);
+
+  /**
+   * RW3D #147 (U06): the road fleet/routes focus callback. Centers the yard
+   * camera on a world-grid cell (the same cell space the fleet adapter and
+   * road renderer paint in: cell * CELL), through the same clamp the gestures
+   * use, and records player intent. Camera refs only — never the panel stack,
+   * the selection or the store — so focusing a blocker cannot lose the open
+   * panel. Session state only; the save shape is untouched.
+   */
+  const focusWorldCell = useCallback((cell: { x: number; y: number }) => {
+    cameraRef.current = clampCamera(
+      {
+        ...cameraRef.current,
+        x: cell.x * CELL + CELL / 2,
+        y: cell.y * CELL + CELL / 2,
+      },
       viewRef.current,
       fittedRef.current,
     );
@@ -1429,11 +1450,27 @@ export function App({
           {selected === PANEL_RESEARCH ? (
             <ResearchPanel state={state} dispatch={dispatch} onClose={closeSelection} />
           ) : null}
+          {/* RW3D #147: road jobs + dispatch policy ride the Routes destination.
+              The store's logistics/traffic slices are additive capabilities kept
+              off GameStore, so the cast lives only at this registration site
+              (same grammar as the #139 road tool below). */}
           {selected === PANEL_ROUTES ? (
-            <RoutesPanel state={state} dispatch={dispatch} onClose={closeSelection} />
+            <RoutesPanel
+              state={state}
+              dispatch={dispatch}
+              onClose={closeSelection}
+              road={store as GameStore & LogisticsApi & TrafficApi & RoadApi}
+              onFocusCell={focusWorldCell}
+            />
           ) : null}
           {selected === PANEL_FLEET ? (
-            <FleetPanel state={state} dispatch={dispatch} onClose={closeSelection} />
+            <FleetPanel
+              state={state}
+              dispatch={dispatch}
+              onClose={closeSelection}
+              road={store as GameStore & LogisticsApi & TrafficApi & RoadApi}
+              onFocusCell={focusWorldCell}
+            />
           ) : null}
           {selected === PANEL_MAP ? <MapPanel state={state} onClose={closeSelection} /> : null}
           {/* T12 (#139): the road destination. The store's road slice is an additive

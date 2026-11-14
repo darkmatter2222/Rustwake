@@ -3,7 +3,10 @@ import { TUNING } from "../../game/content/defs";
 import { droneAddCost, type Command, type CommandResult } from "../../game/simulation/commands";
 import { fleetUnits, type DroneState, type SimState } from "../../game/simulation/types";
 import { resourceWord, t } from "../../game/content/strings";
+import type { Cell } from "../../game/world/types";
 import { Row, nextId } from "../panels/shared";
+import { RoadFleet } from "../logistics/RoadFleet";
+import type { RoadLogisticsApi } from "../logistics/fleetModel";
 import { FLEET_COPY, SHELL_COPY } from "./copy";
 
 function statusOf(unit: DroneState): string {
@@ -22,6 +25,13 @@ export const FleetPanel = memo(function FleetPanel(props: {
   state: SimState;
   dispatch: (command: Command) => CommandResult;
   onClose: () => void;
+  /**
+   * RW3D #147: the additive road-logistics capability. Optional so legacy
+   * mounts (and their test doubles) keep working unchanged; when present the
+   * road fleet renders below the drone ladder.
+   */
+  road?: RoadLogisticsApi;
+  onFocusCell?: (cell: Cell) => void;
 }) {
   const { state } = props;
   const units = fleetUnits(state);
@@ -73,6 +83,9 @@ export const FleetPanel = memo(function FleetPanel(props: {
             </li>
           ))}
         </ul>
+        {props.road !== undefined ? (
+          <RoadFleet api={props.road} onFocusCell={props.onFocusCell ?? (() => {})} />
+        ) : null}
       </div>
     </div>
   );

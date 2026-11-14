@@ -626,3 +626,117 @@
 .build-controls .icon-btn {
   min-height: 44px;
 }
+
+/* ---- RW3D #147 (T20): road fleet / routes sections, scoped to the panels ----
+ * Session-only road logistics faces inside the Fleet and Routes destinations.
+ * Everything is namespaced under .road-fleet / .road-routes so the legacy
+ * drone ladder and conveyor list keep their shipped composition untouched. */
+.road-fleet,
+.road-routes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(111, 147, 173, 0.3);
+}
+.road-fleet .panel__subtitle,
+.road-routes .panel__subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+}
+.road-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 6px;
+  border: 1px solid rgba(111, 147, 173, 0.25);
+  border-radius: 8px;
+  background: rgba(9, 15, 26, 0.4);
+}
+.road-form--inline {
+  padding: 2px 0;
+  border: 0;
+  background: none;
+}
+.road-form__title {
+  flex-basis: 100%;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: rgba(159, 180, 199, 0.95);
+}
+.road-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.7rem;
+  color: rgba(159, 180, 199, 0.9);
+}
+.road-form input,
+.road-form select {
+  min-height: 30px;
+  max-width: 110px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.7);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.78rem;
+}
+.road-form input:disabled,
+.road-form select:disabled {
+  opacity: 0.5;
+}
+.road-fleet__select {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  width: 100%;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--paper);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.road-fleet__select:hover {
+  background: rgba(95, 216, 232, 0.08);
+}
+.road-fleet__row--selected > .road-fleet__select {
+  background: rgba(95, 216, 232, 0.14);
+  outline: 1px solid rgba(95, 216, 232, 0.5);
+}
+.road-fleet__hold {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  color: #c9713a;
+}
+.road-policy__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid rgba(111, 147, 173, 0.25);
+  border-radius: 8px;
+}
+.road-policy__filters legend {
+  font-size: 0.7rem;
+  color: rgba(159, 180, 199, 0.9);
+}
+.road-policy__filter {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--paper);
+}
