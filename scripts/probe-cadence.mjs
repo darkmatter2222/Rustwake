@@ -10,6 +10,12 @@ import { nextResearchNode } from "../src/game/content/research";
 import { sellableAmount, upgradeCost } from "../src/game/simulation/commands";
 import { planConnections } from "../src/game/simulation/autoconnect";
 import { SELL_ORDER } from "../src/game/simulation/plan";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../src/game/content/validate";
 
 const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
 const TARGET = "docs/evidence/2026-11-03-cadence.md";
@@ -177,7 +183,9 @@ async function singleRun(order) {
   }
   send(state, { type: "drone.repair" });
   advance(state, 262);
-  state.tutorial = 9;
+  // #214: leave the tutorial at the boot milestone and let it advance through play,
+  // exactly as validateBehaviour and the chain B-19 session do. Forcing step 9 skipped
+  // the progressive unlock, so the ladder never bought research and jammed the wire mill.
 
   /** Round index at which each count was first reached, for the ramp table. */
   const ramp = { machines: {}, credits: {}, batches: {} };
@@ -188,14 +196,23 @@ async function singleRun(order) {
   /** Rounds where both swapped branches were available, and the step-kind tally. */
   const kinds = {};
   let ambiguous = 0;
+  // #214: play the same dismantle-refund recovery as validateBehaviour and the
+  // cadence/fork/chain mirrors, so the seeded economy reaches the full yard at power 6.
+  const recovery = newLadderRecovery();
 
   for (let round = 0; round < ROUNDS; round += 1) {
     // T7's dock primary claims the onboarding contract once steel is stocked, and
-    // every repeatable sell stays locked until then (commands.ts:301).
-    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
+    // every repeatable sell stays locked until then (commands.ts:301). #214: the
+    // seed's 12 steel pays for the sorter and furnace (4 + 4) first, so the claim
+    // waits for both starters (same taught order as validateBehaviour).
+    const startersBuilt =
+      state.machines.some((m) => m.blueprint === "sorter") &&
+      state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
       send(state, { type: "contract.export" });
     }
-    const step = nextStep(state, upgradeFirst);
+    ladderRecoveryTriggers(state, recovery, round);
+    const step = ladderRecoveryAdjust(state, recovery, nextStep(state, upgradeFirst));
     // Count how often the yard could have taken the other branch of the swapped pair
     // at this instant; those are the only rounds where the order can differ at all.
     const canBuild = unlockedBlueprints(state.tutorial)
@@ -241,6 +258,7 @@ async function singleRun(order) {
         send(state, { type: "manual.salvage" });
     }
     advance(state, 10);
+    ladderRecoveryClear(state, recovery);
     mark("machines", state.machines.length, round);
     mark("credits", Math.floor(state.credits / 100) * 100, round);
     mark(

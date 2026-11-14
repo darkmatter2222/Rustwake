@@ -10,9 +10,15 @@ import {
   type Command,
 } from "../../src/game/simulation/commands";
 import { planConnections } from "../../src/game/simulation/autoconnect";
-import { SELL_ORDER } from "../../src/game/simulation/plan";
+import { SELL_ORDER, type YardStep } from "../../src/game/simulation/plan";
 import { advance } from "../../src/game/simulation/engine";
 import { createInitialState, type SimState } from "../../src/game/simulation/types";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../../src/game/content/validate";
 
 /**
  * B-21: is the ladder's build-before-upgrade order a lever? The two runs below are
@@ -24,14 +30,8 @@ import { createInitialState, type SimState } from "../../src/game/simulation/typ
  */
 const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
 
-type LooseStep =
-  | { kind: "connect"; plans: ReturnType<typeof planConnections> }
-  | { kind: "build"; blueprint: string }
-  | { kind: "sell"; resource: Parameters<typeof sellableAmount>[1]; qty: number }
-  | { kind: "research"; node: string }
-  | { kind: "drone" }
-  | { kind: "upgrade"; machineId: number }
-  | { kind: "salvage" };
+// The mirror speaks the shipped `YardStep` so the shared recovery adjuster
+// (ladderRecoveryAdjust) can rewrite a chosen step exactly as validateBehaviour does.
 
 interface Run {
   order: string;
@@ -52,7 +52,7 @@ function affordable(state: SimState, blueprint: string): boolean {
 }
 
 /** Cheapest affordable upgrade: lowest level, then the busiest machine (spec 8.6). */
-function upgradeStep(state: SimState): LooseStep | null {
+function upgradeStep(state: SimState): YardStep | null {
   let best: { machineId: number; level: number; busy: number } | null = null;
   for (const machine of state.machines) {
     const def = BLUEPRINTS[machine.blueprint];
@@ -97,10 +97,10 @@ function nearest(state: SimState, unbuilt: readonly string[]): string {
 }
 
 /** The shipped ladder with one knob: which of `build` and `upgrade` is checked first. */
-function nextStep(state: SimState, upgradeFirst: boolean): LooseStep {
+function nextStep(state: SimState, upgradeFirst: boolean): YardStep {
   for (const machine of state.machines) {
     const plans = planConnections(state, machine.id);
-    if (plans.length > 0) return { kind: "connect", plans };
+    if (plans.length > 0) return { kind: "connect", machineId: machine.id, plans };
   }
   const unbuilt = unlockedBlueprints(state.tutorial).filter(
     (id) => !state.machines.some((m) => m.blueprint === id)
@@ -112,21 +112,21 @@ function nextStep(state: SimState, upgradeFirst: boolean): LooseStep {
   const makeResearch = () => {
     const node = nextResearchNode(state);
     return node && (state.store.data ?? 0) >= node.cost
-      ? ({ kind: "research", node: node.id } as LooseStep)
+      ? ({ kind: "research", node: node.id } as YardStep)
       : null;
   };
   const makeDrone = () => {
     if (!state.drone.repaired) return null;
     if (1 + state.spares.length >= TUNING.fleetCap) return null;
     if (state.credits < TUNING.droneAddBaseCost * 2 ** state.spares.length) return null;
-    return { kind: "drone" } as LooseStep;
+    return { kind: "drone" } as YardStep;
   };
   const makeSell = (skipPending: boolean) => {
     const blocked = skipPending ? pending(state, unbuilt) : new Set<string>();
     for (const resource of SELL_ORDER) {
       if (blocked.has(resource)) continue;
       const qty = sellableAmount(state, resource);
-      if (qty > 0) return { kind: "sell", resource, qty } as LooseStep;
+      if (qty > 0) return { kind: "sell", resource, qty } as YardStep;
     }
     return null;
   };
@@ -138,7 +138,7 @@ function nextStep(state: SimState, upgradeFirst: boolean): LooseStep {
     : [makeBuild, makeResearch, makeDrone, () => upgradeStep(state), () => makeSell(true), makeNearBuild, () => makeSell(false)];
   for (const stage of stages) {
     const step = stage();
-    if (step) return step as LooseStep;
+    if (step) return step as YardStep;
   }
   const machine = state.machines[0];
   if (machine) return { kind: "upgrade", machineId: machine.id };
@@ -167,8 +167,14 @@ function runOrder(order: string): Run {
   }
   send(state, { type: "drone.repair" });
   advance(state, 262);
-  state.tutorial = 9;
+  // #214: leave the tutorial at the boot milestone and let it advance through play
+  // exactly as validateBehaviour and the chain B-19 session do. Forcing step 9 skipped
+  // the progressive unlock, so the ladder never bought research and left the wire mill
+  // jammed (the same fidelity fix chain.test.ts records).
 
+  // #214: play the same dismantle-refund recovery as validateBehaviour and the
+  // fork/chain mirrors, so the seeded economy reaches the full yard at power 6.
+  const recovery = newLadderRecovery();
   let ambiguous = 0;
   const kinds: Record<string, number> = {};
   for (let round = 0; round < ROUNDS; round += 1) {
@@ -181,7 +187,8 @@ function runOrder(order: string): Run {
     if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       send(state, { type: "contract.export" }); // T7's one press opens the market
     }
-    const step = nextStep(state, upgradeFirst);
+    ladderRecoveryTriggers(state, recovery, round);
+    const step = ladderRecoveryAdjust(state, recovery, nextStep(state, upgradeFirst));
     const canBuild = unlockedBlueprints(state.tutorial)
       .filter((id) => !state.machines.some((m) => m.blueprint === id))
       .some((id) => affordable(state, id));
@@ -217,6 +224,7 @@ function runOrder(order: string): Run {
         send(state, { type: "manual.salvage" });
     }
     advance(state, 10);
+    ladderRecoveryClear(state, recovery);
   }
 
   return {
@@ -246,11 +254,12 @@ describe("build-versus-upgrade cadence (B-21)", () => {
     expect(first.machines).toBe(8);
     expect(first.research).toBe(3);
     // The same number the probe prints, so the fixture and the evidence table cannot
-    // drift apart. BELT-001 restated 1 902 -> 1 838 on the priced tree: the ladder's
-    // connections now charge `beltCostPerTile` per tile of their run, which moves the
-    // purse timing. The clock is untouched (`routeLatencyTicks` 5), so the pull cadence
-    // per tick is the pre-change one and only the purchase order shifted.
-    expect(first.totals).toBe(1838);
+    // drift apart. #214 re-pin: the GAME_SYSTEMS seed plus the shared dismantle-refund
+    // recovery (the same play validateBehaviour and chain B-19 use) lands build-first at
+    // 1 910 batches. BELT-001 had restated 1 902 -> 1 838 on the priced tree; the retuned
+    // starter costs and the recovery's furnace->signalLab rebuild shift the purse timing
+    // again. The clock is untouched (`routeLatencyTicks` 5).
+    expect(first.totals).toBe(1910);
     // The fleet step is a real stage: the ladder bought spare drones in both orders,
     // which is what lifts the batch total above the one-drone 1 757 (B-28, D-38).
     expect(first.fleet).toBeGreaterThan(1);
