@@ -422,7 +422,7 @@ describe("first-feel shell", () => {
     const opened = panel();
     // Every node states its exact effect and cost before it is bought (12.2).
     expect(opened).toContain("Efficient Cutters");
-    expect(opened).toContain("One cutting pulse gives 7 scrap instead of 5.");
+    expect(opened).toContain("One cutting pulse gives 4 scrap instead of 2.");
     expect(opened).toContain("Buy · 4 Data");
     expect(opened).toContain("Needs Efficient Cutters first");
 
