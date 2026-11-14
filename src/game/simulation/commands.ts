@@ -588,7 +588,7 @@ export function upgradeCost(baseUpgradeCost: number, level: number): number {
  * own first-step quantity, not fitted:
  * - `speed` moves the batch-clock denominator of `batchMilliOf` by one of ten
  *   (10 -> 11), a +10 % throughput step at the first rank: +10 credits.
- * - `draw` removes exactly one of the yard's 8 power units (`TUNING.yardPowerCapacity`)
+ * - `draw` removes exactly one of the yard's 6 power units (`TUNING.yardPowerCapacity`)
  *   from the machine's draw: the baseline unit step, +0 credits, so the budget plan
  *   keeps the plain ladder as its reference price.
  * - `buffer` (off the dock since the A1-2v3 drop; still decodes from saves) keeps

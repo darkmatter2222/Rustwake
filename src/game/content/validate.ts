@@ -183,7 +183,10 @@ export function validateContent(): string[] {
   }
 
   // 7. Every build cost is payable from materials an earlier-or-equal step produces.
-  const available = new Set<ResourceId>(["scrap"]);
+  // The walk starts from the starter seed's own store (scrap, ferrous, steel under the
+  // GAME_SYSTEMS P1 seed, #214), not from scrap alone.
+  const seed = createInitialState();
+  const available = new Set<ResourceId>(Object.keys(seed.store) as ResourceId[]);
   const byUnlock = Object.values(BLUEPRINTS).sort((a, b) => a.unlockAt - b.unlockAt);
   for (const def of byUnlock) {
     for (const item of def.buildCost) {
@@ -200,6 +203,19 @@ export function validateContent(): string[] {
     }
     const recipe = RECIPES[def.recipeId];
     if (recipe) for (const output of recipe.outputs) available.add(output.resource);
+  }
+  // The two starter machines must be affordable together from the seed alone (#214):
+  // sorter 30 scrap + 4 steel and furnace 35 scrap + 4 steel = 65 scrap + 8 steel.
+  const starterNeed: Partial<Record<ResourceId, number>> = {};
+  for (const id of ["sorter", "furnace"] as const) {
+    for (const item of BLUEPRINTS[id].buildCost) {
+      starterNeed[item.resource] = (starterNeed[item.resource] ?? 0) + item.qty;
+    }
+  }
+  for (const [resource, need] of Object.entries(starterNeed)) {
+    const have = seed.store[resource as ResourceId] ?? 0;
+    if (have < need)
+      say(`the starter seed holds ${have} ${resource}, below the ${need} the sorter and furnace need together`);
   }
   const lastStep = OBJECTIVES.length - 1;
   if (unlockedBlueprints(lastStep).length !== Object.keys(BLUEPRINTS).length)
@@ -247,8 +263,11 @@ export function validateContent(): string[] {
   if (TUNING.droneDeliveryTicks <= TUNING.droneTravelTicks)
     say("a delivery lands before the drone reaches the dock");
   if (TUNING.fleetCap < 2) say("the fleet cap leaves no room for a second drone");
-  if (TUNING.dockCapacity < 15 * 60 * TUNING.droneScrapPerSecond)
-    say(`dock capacity ${TUNING.dockCapacity} is below 15 minutes of starter output (spec 8.3)`);
+  // The dock must hold the starter seed plus one minute of drone output (#214):
+  // 144 seeded units + 60 x droneScrapPerSecond = 204 under the P1 seed.
+  const seedUnits = Object.values(seed.store).reduce((sum, value) => sum + (value ?? 0), 0);
+  if (TUNING.dockCapacity < seedUnits + 60 * TUNING.droneScrapPerSecond)
+    say(`dock capacity ${TUNING.dockCapacity} cannot hold the starter seed plus one minute of drone output`);
   if (TUNING.reserveFloor > TUNING.dockCapacity / 10) say("the reserve floor is more than a tenth of the store");
   const maxPower = Math.max(...Object.values(RECIPES).map((recipe) => recipe.power));
   if (TUNING.yardPowerCapacity < maxPower) say(`the yard cannot power its largest machine (${maxPower} units)`);
@@ -356,8 +375,16 @@ export function validateBehaviour(
   const note = (key: string, round: number) => {
     if (marks[key] === undefined) marks[key] = round + 1;
   };
+  // The auto-player claims the onboarding contract in the taught order (#214): the
+  // seed's 12 steel first pays for the sorter and furnace (4 + 4). Claiming the
+  // 10-steel contract before both stand would leave 2 steel and no steel source,
+  // so the claim waits for the two starter machines, then fires as soon as the
+  // furnace has smelted the contract's 10 steel.
+  const startersBuilt = () =>
+    s.machines.some((machine) => machine.blueprint === "sorter") &&
+    s.machines.some((machine) => machine.blueprint === "furnace");
   for (let round = 0; round < rounds; round += 1) {
-    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel)
+    if (!s.exportClaimed && startersBuilt() && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel)
       commit(s, { type: "contract.export" });
     const step = nextYardStep(s);
     note(`step:${step.kind}`, round);

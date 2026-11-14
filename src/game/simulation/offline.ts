@@ -87,7 +87,7 @@ export function suggestedAction(s: SimState): string {
   if (s.routes.length === 0) return "objective.connect-route";
   for (const m of s.machines) if (m.status === "starved") return "hint.starved";
   for (const m of s.machines) if (m.status === "outputFull") return "hint.cargo-full";
-  if (!s.exportClaimed && (s.store["steel"] ?? 0) >= 3) return "objective.export";
+  if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) return "objective.export";
   const node = nextResearchNode(s);
   if (node && (s.store["data"] ?? 0) >= node.cost) return "objective.research";
   if (s.powerRatio < 0.999) return "hint.power";

@@ -7,13 +7,12 @@
  * parity test is the guard against drift.
  *
  * Costs:
- *  - sorter/furnace reuse the audited v1 content tables (BLUEPRINTS) read-only.
- *    The GAME_SYSTEMS P1 table lists different numbers (sorter 30 scrap etc.);
- *    those belong to the #148 content-version bump and must not silently
- *    reprice the v1 economy here (architecture README section 2/3).
+ *  - sorter/furnace reuse the content tables (BLUEPRINTS) read-only; #214 retuned
+ *    those to the GAME_SYSTEMS P1 seed (sorter 30 scrap + 4 steel, furnace
+ *    35 scrap + 4 steel), so the kit and the yard now share one price list.
  *  - warehouse/depot/generator use the GAME_SYSTEMS P1 expansion cost table.
- *  - crane/turret/wall_gate have no authored cost yet; the values below are
- *    prototype tuning defaults, flagged for #148.
+ *  - crane/turret/wall_gate carry the #214 C2 seed numbers; they are P3-measured
+ *    tuning candidates, not authored final costs.
  *
  * Vehicles (truck, forklift, drone) and the worker are entities, not placed
  * assets; they are excluded from the placement kit.
@@ -203,12 +202,12 @@ export const WORLD_KIT: Readonly<Record<WorldAssetId, KitAsset>> = {
     id: "crane",
     footprint: [3, 3],
     sockets: [],
-    // Prototype tuning default: no authored cost yet (#148 content bump).
+    // #214 C2 seed cost; P3-measured tuning candidate.
     buildCost: [
-      { resource: "scrap", qty: 25 },
-      { resource: "steel", qty: 6 },
+      { resource: "scrap", qty: 40 },
+      { resource: "steel", qty: 10 },
     ],
-    creditCost: 0,
+    creditCost: 20,
     constructionTicks: P1_CONSTRUCTION_TICKS,
     keepoutRadiusMu: CRANE_SWING_RADIUS_MU,
   },
@@ -216,12 +215,12 @@ export const WORLD_KIT: Readonly<Record<WorldAssetId, KitAsset>> = {
     id: "turret",
     footprint: [2, 2],
     sockets: [],
-    // Prototype tuning default: defense content lands in P3 (#148).
+    // #214 C2 seed cost; P3-measured tuning candidate (defense content lands in P3).
     buildCost: [
-      { resource: "scrap", qty: 20 },
-      { resource: "steel", qty: 5 },
+      { resource: "scrap", qty: 30 },
+      { resource: "steel", qty: 6 },
     ],
-    creditCost: 15,
+    creditCost: 25,
     constructionTicks: P1_CONSTRUCTION_TICKS,
   },
   wall_gate: {
@@ -230,10 +229,10 @@ export const WORLD_KIT: Readonly<Record<WorldAssetId, KitAsset>> = {
     sockets: [
       { name: "passage", x: u(0), z: u(0.7), kind: "road", clearanceWidth: u(1.8) },
     ],
-    // Prototype tuning default: perimeter content lands with walls (#148).
+    // #214 C2 seed cost; P3-measured tuning candidate (perimeter content lands with walls).
     buildCost: [
-      { resource: "scrap", qty: 10 },
-      { resource: "steel", qty: 2 },
+      { resource: "scrap", qty: 15 },
+      { resource: "steel", qty: 3 },
     ],
     creditCost: 0,
     constructionTicks: P1_CONSTRUCTION_TICKS,
