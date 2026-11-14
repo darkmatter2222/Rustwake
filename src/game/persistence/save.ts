@@ -456,6 +456,15 @@ function flightOf(value: DroneState["inFlight"]): DroneState["inFlight"] {
 }
 
 /**
+ * #214: the GAME_SYSTEMS starter seed grants credits up front, so a fresh yard
+ * is no longer `credits === 0`. Re-anchor the credits progress marker to the
+ * seed's starting balance: only credits beyond the seed signal a played yard.
+ * Any spend below the seed implies a purchase (machine/spare/research marker)
+ * or an advanced tick/revision, so those markers still catch it.
+ */
+const SEED_CREDITS = createInitialState().credits;
+
+/**
  * UI-RESET-62: whether a loaded payload carries real yard progress, as opposed to
  * a settings-only envelope. Pre-start settings changes persist a fresh sim, so the
  * mere presence of a save is not evidence of a run worth continuing: the title
@@ -469,7 +478,7 @@ export function hasSaveProgress(sim: SimState | null | undefined): boolean {
   if (Number.isSafeInteger(sim.tutorial) && sim.tutorial > 0) return true;
   if (Array.isArray(sim.machines) && sim.machines.length > 0) return true;
   if (Array.isArray(sim.routes) && sim.routes.length > 0) return true;
-  if (Number.isSafeInteger(sim.credits) && sim.credits > 0) return true;
+  if (Number.isSafeInteger(sim.credits) && sim.credits > SEED_CREDITS) return true;
   if (sim.drone && sim.drone.repaired === true) return true;
   if (Array.isArray(sim.spares) && sim.spares.length > 0) return true;
   if (sim.research && Object.keys(sim.research).length > 0) return true;
