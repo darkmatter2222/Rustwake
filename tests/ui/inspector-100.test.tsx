@@ -65,9 +65,12 @@ function send(state: SimState, body: CommandBody): boolean {
 function twoOutputYard(blueprint: string, tile = 8): SimState {
   const state = createInitialState();
   state.tutorial = 9;
-  state.store["scrap"] = 300;
+  // #214: dockCapacity retuned 900 -> 300, so the yard stays well under the cap to leave
+  // free room for the dismantle refund (the face must fit). 120 scrap + 20 ferrous + the
+  // seed's 12 steel = 152 units, with headroom for the build, the belts and the refund.
+  state.store["scrap"] = 120;
   state.store["ferrous"] = 20;
-  state.storeUnits = 320;
+  state.storeUnits = 152;
   expect(send(state, { type: "machine.build", blueprint, tile })).toBe(true);
   const machine = state.machines[state.machines.length - 1];
   const input = RECIPES[BLUEPRINTS[blueprint].recipeId].inputs[0].resource;
@@ -84,9 +87,12 @@ function twoOutputYard(blueprint: string, tile = 8): SimState {
 function inputOnlyYard(blueprint: string): SimState {
   const state = createInitialState();
   state.tutorial = 9;
-  state.store["scrap"] = 300;
+  // #214: dockCapacity retuned 900 -> 300, so the yard stays well under the cap to leave
+  // free room for the dismantle refund (the face must fit). 120 scrap + 20 ferrous + the
+  // seed's 12 steel = 152 units, with headroom for the build, the belts and the refund.
+  state.store["scrap"] = 120;
   state.store["ferrous"] = 20;
-  state.storeUnits = 320;
+  state.storeUnits = 152;
   expect(send(state, { type: "machine.build", blueprint, tile: 8 })).toBe(true);
   const machine = state.machines[state.machines.length - 1];
   const input = RECIPES[BLUEPRINTS[blueprint].recipeId].inputs[0].resource;

@@ -27,6 +27,12 @@ import { SELL_ORDER } from "../src/game/simulation/plan";
 import { advance } from "../src/game/simulation/engine";
 import { createInitialState } from "../src/game/simulation/types";
 import { checksum, decodeSave, encodeSave, validateSim } from "../src/game/persistence/save";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../src/game/content/validate";
 
 const TARGET = "work/feedback/belt001-harness.json";
 const ROUNDS = 1800; // 18 000 ticks = 30 minutes of active play
@@ -90,8 +96,10 @@ function pricesSection() {
   // belt, so the refusal carries the numbered shortfall and the state is unchanged.
   const poor = createInitialState();
   poor.tutorial = 9;
-  poor.store["scrap"] = 22;
-  poor.storeUnits = 22;
+  // #214: the sorter now costs 30 scrap (+4 steel from the seed), so 32 leaves exactly
+  // 2 scrap after the build — the 3-scrap belt still fails with the numbered shortfall.
+  poor.store["scrap"] = 32;
+  poor.storeUnits = 32;
   send(poor, { type: "machine.build", blueprint: "sorter", tile: 0 });
   const refusedRun = beltRun(poor, 0, 1);
   const refusedPrice = beltCost(refusedRun.length);
@@ -180,7 +188,9 @@ function tutorialBodies(s) {
     }
     const furnace = s.machines.find((m) => m.blueprint === "furnace");
     if (!furnace) {
-      if ((s.store["scrap"] ?? 0) >= 10 && (s.store["ferrous"] ?? 0) >= 5) {
+      // #214: affordability follows the shipped furnace buildCost (35 scrap + 4
+      // steel), not the pre-retune 10 scrap + 5 ferrous the mirror used to gate on.
+      if (BLUEPRINTS.furnace.buildCost.every((item) => (s.store[item.resource] ?? 0) >= item.qty)) {
         return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
       }
       return [{ type: "manual.salvage" }];
@@ -211,6 +221,7 @@ export function ladderRow(branch, ladder, tileOrder) {
   let firstResearch = null;
   let inputStallTicks = 0;
   let placed = 0;
+  const recovery = newLadderRecovery();
   const kinds = {};
   const sendRow = (body) => {
     const before = s.credits;
@@ -239,7 +250,14 @@ export function ladderRow(branch, ladder, tileOrder) {
   advance(s, 262);
   taps += 7;
   for (let round = 0; round < ROUNDS; round += 1) {
-    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    // #214: the seed's 12 steel first pays for the sorter and furnace (4 + 4).
+    // Claiming the 10-steel contract before both stand would leave 2 steel and no
+    // steel source, so the claim waits for the two starter machines — the same
+    // taught order validateBehaviour uses (src/game/content/validate.ts).
+    const startersBuilt =
+      s.machines.some((m) => m.blueprint === "sorter") &&
+      s.machines.some((m) => m.blueprint === "furnace");
+    if (!s.exportClaimed && startersBuilt && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       sendRow({ type: "contract.export" });
       taps += 1;
     }
@@ -248,13 +266,14 @@ export function ladderRow(branch, ladder, tileOrder) {
       pulses += 1;
       taps += 1;
     }
+    ladderRecoveryTriggers(s, recovery, round);
     const taught = tutorialBodies(s);
     if (taught !== null) {
       for (const body of taught) sendRow(body);
       taps += 1;
       if (taught.some((body) => body.type === "machine.build")) placed += 1;
     } else {
-      const step = nextYardStepLocal(s);
+      const step = ladderRecoveryAdjust(s, recovery, nextYardStepLocal(s));
       if (step && step.kind) {
         if (step.kind !== "salvage" && step.kind !== "upgrade") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
         switch (step.kind) {
@@ -324,6 +343,7 @@ export function ladderRow(branch, ladder, tileOrder) {
         }
       }
     }
+    ladderRecoveryClear(s, recovery);
     if (s.powerRatio < 1) powerLimitedRounds += 1;
     if (s.powerRatio < minPowerRatio) minPowerRatio = s.powerRatio;
   }

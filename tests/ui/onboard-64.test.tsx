@@ -89,7 +89,9 @@ function progressedState(opts: { data?: number; empty?: boolean; scrap?: number 
     state.storeUnits = sumStore(state.store);
     send({ type: "machine.build", blueprint: "sorter", tile: 8 });
   }
-  state.store.scrap = (state.store.scrap ?? 0) + (opts.scrap ?? 100);
+  // #214: the starter seed now ships scrap, so `scrap` sets the yard's absolute purse
+  // (the earn-trap fixtures need a precise shortfall), not an addition to the seed.
+  state.store.scrap = opts.scrap ?? 100;
   if (opts.data) state.store.data = (state.store.data ?? 0) + opts.data;
   state.storeUnits = sumStore(state.store);
   return state;
@@ -409,10 +411,10 @@ describe("UI-RESET-64 (4) reachable recovery from the place-mode earn trap (#41)
     mount(store);
     begin();
     await frame();
-    armPlacement("sorter"); // 5 scrap < 20 price → ghost stays armed, shortfall named
+    armPlacement("sorter"); // 5 scrap < 30 price → ghost stays armed, shortfall named
     tapTile(20); // aim a free cell: the real earn-trap window (cell fine, purse short)
     expect(recoverEl()).not.toBeNull();
-    expect(recoverEl()!.querySelector(".onboard__recover-short")?.textContent).toContain("Need 20");
+    expect(recoverEl()!.querySelector(".onboard__recover-short")?.textContent).toContain("Need 30");
     const earn = findButton("Earn scrap now");
     const trade = findButton("Trade at the store");
     expect(earn).toBeDefined();

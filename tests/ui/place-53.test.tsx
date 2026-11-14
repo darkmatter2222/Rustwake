@@ -57,7 +57,8 @@ const sumStore = (store: Record<string, number>): number =>
 interface YardOpts {
   blueprint?: string;
   tile?: number;
-  /** Extra scrap headroom after the seed build (default 100). */
+  /** Scrap the yard holds after the seed build (default 100). Set absolutely so
+   * `scrap: 0` is a genuinely unaffordable yard under the #214 seed (which keeps 120 scrap). */
   scrap?: number;
   /** Fill the store to capacity so a dismantle refund cannot fit. */
   fill?: boolean;
@@ -91,7 +92,7 @@ function yardState(opts: YardOpts = {}): SimState {
     state.store.scrap = state.storeCapacity;
     state.storeUnits = state.storeCapacity;
   } else {
-    state.store.scrap = (state.store.scrap ?? 0) + (opts.scrap ?? 100);
+    state.store.scrap = opts.scrap ?? 100;
     state.storeUnits = sumStore(state.store);
   }
   if (opts.connect && !opts.empty) {
@@ -270,7 +271,7 @@ describe("UI-RESET-53 engine parity of the printed numbers", () => {
       qty: Math.round((item.qty * TUNING.movePenaltyPct) / 100),
     }));
     expect(cost).toEqual(expected);
-    expect(cost[0].qty).toBe(10); // 20 scrap * 50%
+    expect(cost[0].qty).toBe(15); // 30 scrap * 50% (#214)
     // The engine spends exactly this on a real move.
     const id = state.machines[0].id;
     const before = state.store.scrap ?? 0;
@@ -285,7 +286,7 @@ describe("UI-RESET-53 engine parity of the printed numbers", () => {
     const impact = dismantleImpact(state, id);
     const buildRefund = BLUEPRINTS.sorter.buildCost.reduce((sum, item) => sum + refundOf(item.qty), 0);
     expect(impact.buildRefund).toBe(buildRefund);
-    expect(impact.buildRefund).toBe(18); // round(20 * 90%)
+    expect(impact.buildRefund).toBe(31); // refundOf(30) + refundOf(4) = 27 + 4 (#214)
     const machine = state.machines[0];
     // Issue #100: the registered set is every output link plus every input link, deduped.
     const routeIds = [...new Set([...outputRouteIds(state, machine.id), ...machine.inRoutes])];
@@ -296,10 +297,12 @@ describe("UI-RESET-53 engine parity of the printed numbers", () => {
     expect(impact.beltRefundUnits).toBe(beltRefund);
     expect(impact.refundUnits).toBe(machine.trayUnits + machine.inBufUnits + buildRefund + beltRefund);
     // The real commit pays refundUnits + the active batch (idle here, so just refundUnits).
-    const before = state.store.scrap ?? 0;
+    // #214: the refund spans scrap AND steel (each build-cost line returns as its own resource),
+    // so the whole payout is measured in store units, not scrap alone.
+    const beforeUnits = state.storeUnits;
     const result = applyCommand(state, { id: "d", type: "machine.dismantle", machineId: id });
     expect(result.ok).toBe(true);
-    expect((state.store.scrap ?? 0) - before).toBe(impact.refundUnits + impact.batchUnits);
+    expect(state.storeUnits - beforeUnits).toBe(impact.refundUnits + impact.batchUnits);
   });
 });
 
@@ -315,7 +318,7 @@ describe("UI-RESET-53 (a) the placement preview", () => {
     expect(preview.dataset.valid).toBe("true");
     expect(preview.dataset.verdict).toBe("ok");
     expect(stripText("placement", ".place-strip__cell")).toContain("Cell 20");
-    expect(stripText("placement", ".place-strip__cost")).toContain("20 scrap");
+    expect(stripText("placement", ".place-strip__cost")).toContain("30 scrap");
     expect(stripText("placement", ".place-strip__reason")).toContain("Clear cell");
 
     const before = store.getState();
@@ -326,7 +329,7 @@ describe("UI-RESET-53 (a) the placement preview", () => {
     const after = store.getState();
     expect(after.machines.length).toBe(countBefore + 1);
     expect(after.machines.some((m) => m.tile === 20 && m.blueprint === "sorter")).toBe(true);
-    expect(scrapBefore - scrapOf(store)).toBe(20);
+    expect(scrapBefore - scrapOf(store)).toBe(30);
     expect(after.revision).toBeGreaterThan(revBefore);
     // A real spend retires the preview.
     expect(strip("placement")).toBeNull();
@@ -401,7 +404,7 @@ describe("UI-RESET-53 (a) the placement preview", () => {
     const preview = strip("placement")!;
     expect(preview.dataset.valid).toBe("false");
     expect(preview.dataset.verdict).toBe("ok"); // the cell is fine; the purse is not
-    expect(stripText("placement", ".place-strip__short")).toContain("Need 20 scrap");
+    expect(stripText("placement", ".place-strip__short")).toContain("Need 30 scrap");
     const countBefore = store.getState().machines.length;
     const scrapBefore = scrapOf(store);
     act(() => primaryBtn()!.click());
@@ -444,7 +447,7 @@ describe("UI-RESET-53 (b) the move flow", () => {
     expect(store.getState().revision).toBe(revBefore);
     expect(scrapOf(store)).toBe(scrapBefore);
     expect(stripText("move", ".place-strip__dest")).toContain("Destination: cell");
-    expect(stripText("move", ".place-strip__cost")).toContain("10 scrap");
+    expect(stripText("move", ".place-strip__cost")).toContain("15 scrap");
 
     tapTile(20); // aim a free destination
     expect(strip("move")!.dataset.valid).toBe("true");
@@ -452,7 +455,7 @@ describe("UI-RESET-53 (b) the move flow", () => {
     act(() => stripConfirm("move")!.click());
     const after = store.getState();
     expect(after.machines.find((m) => m.id === id)!.tile).toBe(20);
-    expect(scrapBefore - scrapOf(store)).toBe(10);
+    expect(scrapBefore - scrapOf(store)).toBe(15);
     expect(after.revision).toBeGreaterThan(revBefore);
     expect(strip("move")).toBeNull();
   });
@@ -498,14 +501,14 @@ describe("UI-RESET-53 (b) the move flow", () => {
   });
 
   it("an unaffordable move prints the shortfall and keeps Confirm disabled", async () => {
-    const store = yard({ scrap: 3 }); // 3 scrap < the 10-scrap move charge
+    const store = yard({ scrap: 3 }); // 3 scrap < the 15-scrap move charge (#214)
     mount(store);
     begin();
     await frame();
     openFlow(8, "Move");
     tapTile(20);
     expect(strip("move")!.dataset.valid).toBe("false");
-    expect(stripText("move", ".place-strip__short")).toContain("Need 10 scrap");
+    expect(stripText("move", ".place-strip__short")).toContain("Need 15 scrap");
     expect(stripConfirm("move")!.disabled).toBe(true);
     const scrapBefore = scrapOf(store);
     act(() => stripConfirm("move")!.click());
@@ -555,8 +558,8 @@ describe("UI-RESET-53 (c) the dismantle safeguard", () => {
     const cardEl = strip("dismantle")!;
     expect(cardEl.dataset.armed).toBe("false");
     expect(cardEl.dataset.fits).toBe("true");
-    expect(stripText("dismantle", ".place-strip__impact")).toContain("Build price returns +18");
-    expect(stripText("dismantle", ".place-strip__total")).toContain("+18");
+    expect(stripText("dismantle", ".place-strip__impact")).toContain("Build price returns +31");
+    expect(stripText("dismantle", ".place-strip__total")).toContain("+31");
     expect(stripConfirm("dismantle")!.textContent).toBe(COPY.dismantleFirst);
     // Opening the card removed nothing.
     expect(store.getState().machines.some((m) => m.id === id)).toBe(true);
@@ -564,6 +567,7 @@ describe("UI-RESET-53 (c) the dismantle safeguard", () => {
 
     // First tap arms; still nothing removed.
     const scrapBefore = scrapOf(store);
+    const unitsBefore = store.getState().storeUnits;
     act(() => stripConfirm("dismantle")!.click());
     expect(strip("dismantle")!.dataset.armed).toBe("true");
     expect(stripConfirm("dismantle")!.textContent).toBe(COPY.dismantleArmed);
@@ -574,7 +578,8 @@ describe("UI-RESET-53 (c) the dismantle safeguard", () => {
     // Second tap commits: machine gone, refund paid, revision up.
     act(() => stripConfirm("dismantle")!.click());
     expect(store.getState().machines.some((m) => m.id === id)).toBe(false);
-    expect(scrapOf(store) - scrapBefore).toBe(18);
+    // #214: the refund spans scrap (27) + steel (4); measure the whole payout in store units.
+    expect(store.getState().storeUnits - unitsBefore).toBe(31);
     expect(store.getState().revision).toBeGreaterThan(revBefore);
     expect(strip("dismantle")).toBeNull();
   });
@@ -608,10 +613,11 @@ describe("UI-RESET-53 (c) the dismantle safeguard", () => {
     expect(stripText("dismantle", ".place-strip__impact")).toContain("Belt links return");
     const total = impact.refundUnits + impact.batchUnits;
     expect(stripText("dismantle", ".place-strip__total")).toContain(`+${total}`);
-    const scrapBefore = scrapOf(store);
+    const unitsBefore = store.getState().storeUnits;
     act(() => stripConfirm("dismantle")!.click()); // arm
     act(() => stripConfirm("dismantle")!.click()); // commit
-    expect(scrapOf(store) - scrapBefore).toBe(total);
+    // #214: the refund spans scrap + steel, so the whole payout is measured in store units.
+    expect(store.getState().storeUnits - unitsBefore).toBe(total);
     expect(store.getState().machines.some((m) => m.id === id)).toBe(false);
   });
 

@@ -33,6 +33,7 @@ import {
   wholePercent,
 } from "../../src/game/content/strings";
 import { costSummary, describeStep, objectiveFor } from "../../src/ui/text";
+import { dismantleImpact } from "../../src/ui/place/flow";
 
 /**
  * B-10: one string table with defaults, one formatter layer, and no raw key on screen
@@ -195,10 +196,10 @@ describe("string table (B-10)", () => {
     );
     state.tutorial = 4;
     expect(objectiveFor(state)).toBe(`Build a sorter · ${costSummary(BLUEPRINTS.sorter)}`);
-    expect(objectiveFor(state)).toBe("Build a sorter · 20 scrap");
+    expect(objectiveFor(state)).toBe("Build a sorter · 30 scrap + 4 steel");
     state.tutorial = 7;
     expect(objectiveFor(state)).toBe(
-      "Sell your first steel · 3 steel for 30 credits"
+      "Sell your first steel · 10 steel for 50 credits"
     );
     // The card's ten lines and the ten hint ids are both present in the table.
     expect(OBJECTIVE_KEYS).toHaveLength(10);
@@ -210,7 +211,7 @@ describe("string table (B-10)", () => {
     expect(resourceName("ferrous")).toBe("Ferrous");
     expect(resourceWord("ferrous")).toBe("ferrous");
     // The lowercased name is the resource id for every shipped material.
-    expect(costSummary(BLUEPRINTS.furnace)).toBe("10 scrap + 5 ferrous");
+    expect(costSummary(BLUEPRINTS.furnace)).toBe("35 scrap + 4 steel");
     for (const [id, name] of Object.entries({
       scrap: "scrap",
       ferrous: "ferrous",
@@ -301,10 +302,12 @@ describe("string table (B-10)", () => {
     // OPS-106: a digit-prefixed total ("23 units") is correctly pluralised and must
     // not trip the bare "1 units" check, so anchor it to a word boundary only.
     expect(machineText).not.toMatch(/(^|[^0-9])1 units\b/);
-    // BELT-001 g4 merge resolution: the face is engine-derived — refundOf(20)=18 build
-    // refund + 1 input-buffer unit + refundOf(beltCost(2))=2 per each of the two links
-    // = 23, exactly what the dismantle tap returns (main's pre-g4 face printed 21).
-    expect(machineText).toContain("Dismantle · +23 units");
+    // BELT-001 g4 merge resolution: the face is engine-derived. `dismantleImpact` mirrors
+    // the dismantle commit's pre-check refund (build refundOf + tray + input buffer + one
+    // belt refund per registered link) and `batchUnits` is the active batch returned in
+    // full; MachinePanel prints their sum, so the face cannot drift from the retuned seed.
+    const impact = dismantleImpact(state, machine.id);
+    expect(machineText).toContain(`Dismantle · +${impact.refundUnits + impact.batchUnits} units`);
     expect(machineText).toContain("Working ");
     expect(machineText).toContain("batches/s");
     expect(machinePanel.querySelector("[aria-label]")?.getAttribute("aria-label")).toBe(

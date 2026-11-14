@@ -31,9 +31,23 @@ import {
 const INITIAL_STOCK = { scrap: 120, ferrous: 12, steel: 12 };
 const INITIAL_CREDITS = 60;
 
-function check(w: WorldState, label: string): void {
+/**
+ * #214 GAME_SYSTEMS seed: the scripted lifecycle reserves warehouse 8 + depot 8
+ * + furnace 4 steel, and the started warehouse cancel refunds only
+ * floor(8 * 90%) = 7 (committing 1), so peak steel demand is 1 + 8 + 4 = 13
+ * against the 12-steel starter stock. Fund exactly the 1-steel shortfall so the
+ * full lifecycle stays reachable; conservation is checked against this funded
+ * total after every transition (the law is unchanged, only the baseline).
+ */
+const FUNDED_STOCK = { ...INITIAL_STOCK, steel: INITIAL_STOCK.steel + 1 };
+
+function check(
+  w: WorldState,
+  label: string,
+  initial: typeof INITIAL_STOCK = INITIAL_STOCK,
+): void {
   try {
-    expectConserved(w, INITIAL_STOCK);
+    expectConserved(w, initial);
     expectCreditsConserved(w, INITIAL_CREDITS);
   } catch (err) {
     throw new Error(`${label}: ${(err as Error).message}`);
@@ -43,44 +57,45 @@ function check(w: WorldState, label: string): void {
 describe("E01: scripted lifecycle conserves every container", () => {
   it("place -> work -> cancel(90%) -> place -> complete -> expand", () => {
     const w = newWorld();
-    check(w, "initial");
+    w.stock.steel = (w.stock.steel ?? 0) + 1; // fund the 1-steel shortfall (see FUNDED_STOCK)
+    check(w, "initial", FUNDED_STOCK);
 
     const c1 = findLegalCell(w, "warehouse");
     expectOk(place(w, "a1", "warehouse", c1.x, c1.y));
-    check(w, "after warehouse reservation");
+    check(w, "after warehouse reservation", FUNDED_STOCK);
 
     advanceWorld(w, 20);
-    check(w, "mid construction");
+    check(w, "mid construction", FUNDED_STOCK);
 
     expectOk(applyWorldCommand(w, { id: "a2", type: "world.cancel", siteId: 1 }));
-    check(w, "after 90% cancel");
+    check(w, "after 90% cancel", FUNDED_STOCK);
 
     const c2 = findLegalCell(w, "depot");
     expectOk(place(w, "a3", "depot", c2.x, c2.y));
-    check(w, "after depot reservation");
+    check(w, "after depot reservation", FUNDED_STOCK);
 
     advanceWorldTo(w, w.tick + 50);
-    check(w, "after depot completion");
+    check(w, "after depot completion", FUNDED_STOCK);
     expect(w.buildings.length).toBe(1);
 
     w.milestoneTokens = 1;
     expectOk(applyWorldCommand(w, { id: "a4", type: "world.expand", parcelId: 2 }));
-    check(w, "after expansion purchase");
+    check(w, "after expansion purchase", FUNDED_STOCK);
 
     const c3 = findLegalCell(w, "furnace");
     expectOk(place(w, "a5", "furnace", c3.x, c3.y));
-    check(w, "after furnace reservation");
+    check(w, "after furnace reservation", FUNDED_STOCK);
     // Site ids are never reused: the furnace is site 3 (warehouse 1, depot 2).
     const furnaceSiteId = w.sites[0].id;
     expectOk(applyWorldCommand(w, { id: "a6", type: "world.cancel", siteId: furnaceSiteId }));
-    check(w, "after 100% cancel");
+    check(w, "after 100% cancel", FUNDED_STOCK);
 
     // Rejections move nothing.
     const fp = worldFingerprint(w);
     applyWorldCommand(w, { id: "a7", type: "world.cancel", siteId: 999 });
     applyWorldCommand(w, { id: "a8", type: "world.place", asset: "ghost", cell: { x: 0, y: 0 }, rotation: 0 });
     expect(worldFingerprint(w)).toBe(fp);
-    check(w, "after rejections");
+    check(w, "after rejections", FUNDED_STOCK);
   });
 });
 

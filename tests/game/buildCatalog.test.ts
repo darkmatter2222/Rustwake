@@ -367,7 +367,9 @@ describe("T11 store slice: session-only placement state machine", () => {
     expect(first.selectedAsset).toBe("sorter");
     expect(first.ghostCell).not.toBeNull();
     expect(first.placedCount).toBe(1);
-    expect(store.getBuildWorld().stock.scrap).toBe(100);
+    // #214 retuned the sorter to the GAME_SYSTEMS seed (30 scrap + 4 steel),
+    // so one sorter off the seed-138 ledger (120 scrap) leaves 90, not 100.
+    expect(store.getBuildWorld().stock.scrap).toBe(90);
 
     // Re-aim at the next fitting cell: the second placement validates on its own.
     const next = firstFitCell(store.getBuildWorld(), "sorter", 0);
@@ -376,7 +378,8 @@ describe("T11 store slice: session-only placement state machine", () => {
     expectBuildOk(store.confirmBuildPlacement());
     const w = store.getBuildWorld();
     expect(w.sites).toHaveLength(2);
-    expect(w.stock.scrap).toBe(80);
+    // Second sorter charges another 30 scrap: 90 - 30 = 60.
+    expect(w.stock.scrap).toBe(60);
     expect(store.getBuildPlacement().placedCount).toBe(2);
     expect(store.getBuildPlacement().mode).toBe("repeating");
   });

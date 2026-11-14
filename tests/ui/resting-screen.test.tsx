@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { act } from "react-dom/test-utils";
 import { App, labelForReject } from "../../src/ui/App";
 import { createStore, type GameStore } from "../../src/app/store";
-import { TUNING } from "../../src/game/content/defs";
+import { RESOURCES, TUNING } from "../../src/game/content/defs";
 import { pipLine } from "../../src/ui/text";
 import stylesRaw from "../../src/ui/styles.css?raw";
 
@@ -13,7 +13,7 @@ import stylesRaw from "../../src/ui/styles.css?raw";
  * P-1 the blocked toast carries its own shortfall, P-2 the power budget and the drone
  * count are printed from the first tick, P-3 one committed choice keeps one primary label
  * while the phase detail moves to `.status-line`, P-4 the pip row names what it counts,
- * P-5 the credits chip survives its own charge down to zero.
+ * P-5 the credits chip reads the starter purse from the first tick.
  */
 
 function memoryStorage() {
@@ -54,6 +54,15 @@ function repairTheDrone(store: GameStore): void {
   act(() => store.step(1));
 }
 
+/** #214: the starter seed is funded (120 scrap, 12 steel, 60 credits), so the blocked-tap
+ * scenarios construct an empty yard explicitly instead of inheriting one from the seed. */
+function emptyStore(store: GameStore): void {
+  const state = store.getState();
+  for (const resource of RESOURCES) state.store[resource] = 0;
+  state.storeUnits = 0;
+  state.overflow = [];
+}
+
 describe("PLAY-001 the resting screen", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
@@ -69,11 +78,12 @@ describe("PLAY-001 the resting screen", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     repairTheDrone(store);
+    emptyStore(store);
     // One tap enters the build phase, the second one is the place tap itself.
     act(() => findButton("Build Scrap sorter")?.click());
     expect(document.querySelector(".status-line")?.textContent).toContain("Ghost on cell");
     act(() => findButton("Build Scrap sorter")?.click());
-    expect(document.querySelector(".toast")?.textContent).toBe("Need 20 scrap · have 0");
+    expect(document.querySelector(".toast")?.textContent).toBe("Need 30 scrap · have 0");
     expect(store.getState().machines.length).toBe(0);
     expect(store.getState().store["scrap"]).toBe(0);
   });
@@ -100,11 +110,11 @@ describe("PLAY-001 the resting screen", () => {
     mount(store);
     act(() => findButton("Begin recovery")?.click());
     const resting = () => document.querySelector(".objective")?.textContent ?? "";
-    expect(resting()).toContain("Power 8 · 0 requested · 100 %");
+    expect(resting()).toContain("Power 6 · 0 requested · 100 %");
     expect(resting()).toContain("Drones 0");
     repairTheDrone(store);
     expect(resting()).toContain("Drones 1");
-    expect(resting()).toContain("Power 8 · 0 requested · 100 %");
+    expect(resting()).toContain("Power 6 · 0 requested · 100 %");
     expect(store.getState().machines.length).toBe(0);
   });
 
@@ -113,6 +123,7 @@ describe("PLAY-001 the resting screen", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     repairTheDrone(store);
+    emptyStore(store);
     const primary = () =>
       document.querySelector<HTMLElement>(".dock__btn--primary")?.textContent ?? "";
     const goal = () => document.querySelector(".objective > span")?.textContent ?? "";
@@ -149,6 +160,9 @@ describe("PLAY-001 the resting screen", () => {
     expect(store.getState().machines.length).toBe(1);
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(400));
+    // #214: the funded seed carries steel and credits above zero, so the tutorial skips to
+    // step 8 and the yard ladder lays the sorter's nonferrous link before the furnace.
+    act(() => findButton("Connect")?.click());
     // UI-002: the legend is a pure readout now. The five marks per machine are painted on
     // the tiles themselves, so the card no longer repeats them - the world outranks the
     // text - and its own two lines carry the choice plus the numeric readout.
@@ -189,16 +203,16 @@ describe("PLAY-001 the resting screen", () => {
     expect(Math.max(primaryPx, secondaryPx) / Math.min(primaryPx, secondaryPx)).toBeGreaterThanOrEqual(1.25);
   });
 
-  /** P-5: the credits chip survives its own charge down to zero. */
-  it("P-5 the credits chip stays at zero", () => {
+  /** P-5: the credits chip reads the starter purse from the first tick. */
+  it("P-5 the credits chip reads the starter purse", () => {
     const store = createStore({ storage: memoryStorage(), now: () => 10 });
     mount(store);
     act(() => findButton("Begin recovery")?.click());
     const chips = [...document.querySelectorAll<HTMLElement>(".resources__item")].map(
       (node) => (node.textContent ?? "").trim()
     );
-    expect(chips.some((line) => /^Credits0$/.test(line))).toBe(true);
-    expect(store.getState().credits).toBe(0);
+    expect(chips.some((line) => /^Credits60$/.test(line))).toBe(true);
+    expect(store.getState().credits).toBe(60);
   });
 
   /**
@@ -217,6 +231,9 @@ describe("PLAY-001 the resting screen", () => {
       act(() => findButton("Build Scrap sorter")?.click());
       act(() => findButton("Connect dock to sorter")?.click());
       act(() => store.step(400));
+      // #214: the funded seed skips the tutorial to step 8, so the yard ladder lays
+      // the sorter's nonferrous link before the furnace.
+      act(() => findButton("Connect")?.click());
       act(() => findButton("Build Furnace")?.click());
       act(() => findButton("Build Furnace")?.click());
       act(() => store.step(300));
@@ -266,7 +283,7 @@ describe("PLAY-001 the resting screen", () => {
       // the dock↔tile-0 run (the 25-scrap separator price still follows it), so the
       // numbered shortfall names the priced connection. Written out so a rewording
       // cannot pass by accident.
-      expect(carried).toBe("Drones 1 · Power 8 · 1 requested · 100 % · Last need 3 scrap · have 0");
+      expect(carried).toBe("Drones 1 · Power 6 · 1 requested · 100 % · Last need 3 scrap · have 0");
     } finally {
       vi.useRealTimers();
     }
@@ -288,6 +305,9 @@ describe("PLAY-001 the resting screen", () => {
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
     act(() => store.step(400));
+    // #214: the funded seed skips the tutorial to step 8, so the yard ladder lays
+    // the sorter's nonferrous link before the furnace.
+    act(() => findButton("Connect")?.click());
     act(() => findButton("Build Furnace")?.click());
     act(() => findButton("Build Furnace")?.click());
     act(() => store.step(300));
@@ -352,7 +372,7 @@ describe("PLAY-001 the resting screen", () => {
 
     // 900 further taps: the stale pair never returns as residue. (A fresh reject may
     // print its own newest pair; the old one had `have 13`, a value the funded yard
-    // does not sit at while the pulse keeps adding fives.)
+    // does not sit at while the pulse keeps adding twos.)
     let staleAt = -1;
     for (let tap = 1; tap <= 900; tap += 1) {
       act(() => store.step(10));

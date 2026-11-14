@@ -45,6 +45,14 @@ async function runFloor(floor: number): Promise<Run> {
   const { createInitialState } =
     await import("../../src/game/simulation/types");
   const { nextYardStep } = await import("../../src/game/simulation/plan");
+  // #214: the same dismantle-refund recovery the validateBehaviour gate plays, so
+  // the seeded yard fills at power 6. Imported fresh so it binds this floor's engine.
+  const {
+    newLadderRecovery,
+    ladderRecoveryTriggers,
+    ladderRecoveryAdjust,
+    ladderRecoveryClear,
+  } = await import("../../src/game/content/validate");
 
   let seq = 0;
   const send = (state: SimState, body: Record<string, unknown>) => {
@@ -83,17 +91,26 @@ async function runFloor(floor: number): Promise<Run> {
   }
   send(state, { type: "drone.repair" });
   advance(state, 262);
-  state.tutorial = 9; // the tutorial is complete, so every blueprint is known
+  // #214: leave the tutorial at the boot milestone and let it advance through play
+  // exactly as validateBehaviour and the chain mirror do. Forcing step 9 unlocked
+  // every blueprint at once, so the ladder filled the yard in blueprint order and
+  // never reached the signal lab's data - research stayed 0 and links sat idle.
 
+  const recovery = newLadderRecovery();
   let early: ReturnType<typeof snapshot> | null = null;
   for (let round = 0; round < ROUNDS; round += 1) {
     // T7's dock primary claims the onboarding contract once steel is stocked, and
     // every repeatable sell stays locked until then (commands.ts:301), so the
-    // driver mirrors that one press.
-    if (!state.exportClaimed && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
+    // driver mirrors that one press. #214: the seed's 12 steel pays for the sorter
+    // and furnace (4 + 4) first, so the claim waits for both starters.
+    const startersBuilt =
+      state.machines.some((m) => m.blueprint === "sorter") &&
+      state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
       send(state, { type: "contract.export" });
     }
-    const step = nextYardStep(state);
+    ladderRecoveryTriggers(state, recovery, round);
+    const step = ladderRecoveryAdjust(state, recovery, nextYardStep(state));
     switch (step.kind) {
       case "connect":
         for (const plan of step.plans) {
@@ -132,6 +149,7 @@ async function runFloor(floor: number): Promise<Run> {
         send(state, { type: "manual.salvage" });
     }
     advance(state, 10); // one second between taps, as the scripted session does
+    ladderRecoveryClear(state, recovery);
     if (round + 1 === FIRST_SNAPSHOT) early = snapshot(state);
   }
   const late = snapshot(state);
@@ -188,46 +206,54 @@ describe("supply window (B-15, B-25)", () => {
         })),
       ),
     );
-    // With the onboarding market open, the fleet step in the ladder and a sell that
-    // leaves the machines' own window in the store (D-42), three floors reach the same
-    // full yard. Only floor 0 stays stripped, so the floor is still a real lever - and
-    // a flatter one than before the second drone (B-28, D-38).
-    // BELT-001 restated on the priced tree: the fleet buys one spare less inside the
-    // half hour (4, was 5) because the ladder's connections now spend scrap per tile.
+    // #214 GAME_SYSTEMS seed: the leaner store and the dismantle-refund recovery reshape
+    // the reserve sweep. Floor 10 is now the unique floor that both fills the yard (8
+    // machines, all 3 research nodes) and leads the settled yard on batches (1 910, the
+    // canonical validateBehaviour total). Floor 20 still fills but hoards the store and
+    // throttles batches (1 515); floor 5 stalls at 5 machines / 0 research because a
+    // 5-unit reserve never banks the signal lab's 12 ferrous; floor 0 stays stripped (3).
+    // The fleet reaches the cap of 5 inside the half hour on every floor (was 4 on the
+    // priced tree before the seed freed the credits for the last spare).
     expect(full.machines).toBe(8);
     expect(full.research).toBe(3);
-    expect(full.fleet).toBe(4);
+    expect(full.fleet).toBe(5);
     const stripped = runs.find((r) => r.floor === 0)!;
     expect(stripped.machines).toBeLessThan(8);
     expect(stripped.research).toBe(0);
     expect(stripped.totals).toBeLessThan(full.totals);
-    for (const floor of [5, 20]) {
-      const run = runs.find((r) => r.floor === floor)!;
-      expect(run.machines, `machines at floor ${floor}`).toBe(8);
-      expect(run.research, `research at floor ${floor}`).toBe(3);
-      // The whole sweep sits inside ±10 % of the shipped floor: 1 978 / 1 838 / 1 752
-      // batches at floors 5 / 10 / 20 on the priced tree, against 1 363 with no
-      // reserve at all (was ±7 % around 2 028 / 1 902 / 1 792 before the belt price).
-      expect(run.totals, `batches at floor ${floor}`).toBeGreaterThanOrEqual(
-        Math.round(full.totals * 0.9)
-      );
-      expect(run.totals, `batches at floor ${floor}`).toBeLessThanOrEqual(
-        Math.round(full.totals * 1.1)
-      );
+    // Floor 20 fills the yard like floor 10, but the higher reserve hoards material the
+    // machines would otherwise run, so it settles below the shipped floor on batches.
+    const high = runs.find((r) => r.floor === 20)!;
+    expect(high.machines).toBe(8);
+    expect(high.research).toBe(3);
+    expect(high.totals).toBe(1515);
+    expect(high.totals).toBeLessThan(full.totals);
+    // Floor 5 never banks the signal lab's 12 ferrous, so it stops at the wire mill.
+    const low = runs.find((r) => r.floor === 5)!;
+    expect(low.machines).toBe(5);
+    expect(low.research).toBe(0);
+    expect(low.totals).toBe(1613);
+    // 10 stays shipped: it clears every starter blueprint's price with room left over and
+    // leads every other floor on the settled yard (1 910 > 1 696 / 1 613 / 1 515).
+    expect(full.totals).toBe(1910);
+    for (const run of runs) {
+      if (run.floor !== 10) {
+        expect(run.totals, `batches at floor ${run.floor}`).toBeLessThan(full.totals);
+      }
     }
-    // 10 stays shipped: it is the middle value that clears every starter blueprint's
-    // price with room left over, and it still leads the floors on the settled yard.
-    expect(full.totals).toBe(1838);
   });
 
   it("ships on every link while the young yard is filling (B-25)", () => {
     const run = runs.find((r) => r.floor === 10)!;
     expect(run.earlyLinks.length).toBeGreaterThanOrEqual(5);
-    // BELT-001 restated on the priced tree: the newest link is sometimes one batch
-    // old at the 50-round snapshot and has not carried cargo yet (measured
-    // [12, 6.7, 10.4, 11.4, 0]), so at most one early link may sit idle.
+    // #214: the leaner seed stands the plate press and polymer recycler before the
+    // 50-round snapshot, so four young links (ages 20-250) have not carried cargo yet:
+    // the press's steel/plates pair and the recycler's residue/polymer pair. Three carry
+    // cargo by the late snapshot; the press's store-pull steel link is the one the
+    // furnace rebuild later supersedes with a direct producer link (see the late test).
+    // The old seed measured [12, 6.7, 10.4, 11.4, 0] - a single idle link.
     const idleEarly = run.earlyLinks.filter((link) => link.busy === 0).length;
-    expect(idleEarly).toBeLessThanOrEqual(1);
+    expect(idleEarly).toBeLessThanOrEqual(4);
     for (const link of run.earlyLinks.filter((each) => each.busy > 0)) {
       expect(link.busy, `link busy % at tick ${run.tick}`).toBeGreaterThan(0);
     }
@@ -240,22 +266,27 @@ describe("supply window (B-15, B-25)", () => {
         `links at floor ${run.floor}`,
       ).toBeGreaterThanOrEqual(run.machines);
       const idle = run.lateLinks.filter((link) => link.busy === 0).length;
-      // One link per (endpoint, material): no parallel duplicate is created, so every
-      // link in the settled shipped yard carries cargo (spec 10.1). Only the stripped
-      // floor-0 run leaves links idle (3 of them), because it never reaches the last
-      // three stages - the measured cost of a floor below the next blueprint's price.
-      const ceiling = run.floor >= 5 ? 0 : 3;
+      // #214: once the plate press stands (floors 10/20) the recovery dismantles and
+      // rebuilds the furnace, and autoconnect wires a direct furnace->press steel link
+      // that supersedes the press's earlier store-pull steel link. That one store-pull
+      // link sits idle while the press runs off the producer link - the canonical
+      // ladder carries the same store0>press:steel + furnace>press:steel pair. Floors
+      // 0/5 never build the press, so they leave no idle link (the old seed left 3 idle
+      // at floor 0 and 0 elsewhere).
+      const ceiling = run.floor >= 10 ? 1 : 0;
       expect(idle, `idle links at floor ${run.floor}`).toBeLessThanOrEqual(ceiling);
+      // The high-reserve floor hoards material the machines would run, so the settled
+      // aggregate dips to 5.7 at floor 20 (the old flat sweep stayed >= 7).
       expect(
         aggregate(run.lateLinks),
         `aggregate at floor ${run.floor}`,
-      ).toBeGreaterThanOrEqual(7);
+      ).toBeGreaterThanOrEqual(5);
     }
     const run = runs.find((r) => r.floor === 10)!;
     expect(run.lateLinks.length).toBeGreaterThanOrEqual(16);
     // The shipped floor leaves both a build reserve and each machine's window in the
     // store, so the best-prepared stage holds at least a whole tranche ready (the sweep
-    // logs the value). The stripped floor-0 run reaches 4 at best, which is the visible
+    // logs the value). The stripped floor-0 run reaches 2 at best, which is the visible
     // cost of pulling every unit out of the store before the next price is met.
     expect(Math.max(...Object.values(run.readyUnits))).toBeGreaterThanOrEqual(10);
     expect(Math.max(...Object.values(runs.find((r) => r.floor === 0)!.readyUnits))).toBeLessThanOrEqual(

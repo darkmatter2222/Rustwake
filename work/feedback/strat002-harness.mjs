@@ -19,7 +19,10 @@
 //    by-construction speed twin and excluded from the lead census (R1),
 //  - the residual rows[].credits is reported but is not a primary column (R2),
 //  - pick attribution is printed per row: kinds.upgrade = command attempts,
-//    sum(level-1) = purchased levels, branchByLevel.length = recorded picks (R4),
+//    sum(level-1) = purchased levels, branchByLevel.length = recorded picks (R4);
+//    #214 recovery can dismantle an already-upgraded machine, so the levels/picks
+//    lost to dismantling are counted separately and attempts reconcile against
+//    purchased + dismantled (the same play order as scripts/probe-belt.mjs),
 //  - `buffer` is judged on exactly one mechanism column, `inputStallPct`, by the
 //    per-column minimum meaningful gap declared once in the `gaps` block and read by
 //    tests/simulation/fork.test.ts,
@@ -37,6 +40,12 @@ import { planConnections } from "../../src/game/simulation/autoconnect";
 import { SELL_ORDER, nextYardStep } from "../../src/game/simulation/plan";
 import { advance } from "../../src/game/simulation/engine";
 import { createInitialState } from "../../src/game/simulation/types";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../../src/game/content/validate";
 
 const ROUNDS = 1800;
 const TARGET = "work/feedback/strat002-harness.json";
@@ -218,7 +227,9 @@ function tutorialAction(state) {
       { type: "route.connect", from: 1, to: 0, filter: "ferrous" },
     ];
     if (!state.machines.some((m) => m.blueprint === "furnace")) {
-      const ready = (state.store.scrap ?? 0) >= 10 && (state.store.ferrous ?? 0) >= 5;
+      // #214: gate on the shipped furnace buildCost (35 scrap + 4 steel), not the
+      // pre-retune 10 scrap + 5 ferrous.
+      const ready = BLUEPRINTS.furnace.buildCost.every((item) => (state.store[item.resource] ?? 0) >= item.qty);
       if (ready) return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
     }
     const furnace = state.machines.find((m) => m.blueprint === "furnace");
@@ -279,18 +290,35 @@ function run(rowName, branch, patternName) {
   // addendum's "3 percentage points" reads as the integer 3 in `gaps.mmg`.
   let inputStallTicks = 0;
   const branchByLevel = [];
+  // #214: the shared ladder recovery (validate.ts) plays the same choices as
+  // validateBehaviour and scripts/probe-belt.mjs. It changes no game rule; when it
+  // dismantles an already-upgraded machine, the paid levels/picks leave the
+  // surviving sums, so they are counted here for the R4 reconciliation.
+  const recovery = newLadderRecovery();
+  let dismantledLevels = 0, dismantledPicks = 0;
 
   for (let round = 0; round < ROUNDS; round += 1) {
-    if (!state.exportClaimed && (state.store.steel ?? 0) >= TUNING.exportContractSteel) { send({ type: "contract.export" }); taps += 1; }
+    // #214: the seed's 12 steel pays for the sorter and furnace (4 + 4) first; the
+    // 10-steel contract waits for both starters, matching validateBehaviour.
+    const startersBuilt = state.machines.some((m) => m.blueprint === "sorter") && state.machines.some((m) => m.blueprint === "furnace");
+    if (!state.exportClaimed && startersBuilt && (state.store.steel ?? 0) >= TUNING.exportContractSteel) { send({ type: "contract.export" }); taps += 1; }
     // The one difference between the tables: the gated wreck pulse.
     if (spec !== null && pulseThisRound(round, spec)) { send({ type: "manual.salvage" }); pulses += 1; taps += 1; }
+    const beforeRecovery = new Map(state.machines.map((m) => [m.id, { level: m.level, picks: (m.branch ?? []).length }]));
+    ladderRecoveryTriggers(state, recovery, round);
+    for (const [id, info] of beforeRecovery) {
+      if (!state.machines.some((m) => m.id === id)) {
+        dismantledLevels += info.level - 1;
+        dismantledPicks += info.picks;
+      }
+    }
     const tutorial = tutorialAction(state);
     let chosen;
     if (tutorial) {
       for (const body of tutorial) send(body);
       taps += 1;
     } else {
-      chosen = ladderStep(state);
+      chosen = ladderRecoveryAdjust(state, recovery, ladderStep(state));
       if (chosen && chosen.kind) {
         if (chosen.kind !== "salvage" && chosen.kind !== "upgrade") kinds[chosen.kind] = (kinds[chosen.kind] ?? 0) + 1;
         switch (chosen.kind) {
@@ -363,6 +391,7 @@ function run(rowName, branch, patternName) {
         }
       }
     }
+    ladderRecoveryClear(state, recovery);
     if (state.powerRatio < 1) powerLimitedRounds += 1;
     if (state.powerRatio < minPowerRatio) minPowerRatio = state.powerRatio;
     const scrap = state.store.scrap ?? 0;
@@ -420,6 +449,8 @@ function run(rowName, branch, patternName) {
     legacyAmbiguous,
     pricedGe2,
     purchasedLevels,
+    dismantledLevels,
+    dismantledPicks,
     scrapMin: Number.isFinite(scrapMin) ? scrapMin : 0,
     scrapMax,
     floorRounds,
@@ -654,8 +685,12 @@ function attribution(rows) {
     out[r.policy] = {
       "kinds.upgrade": r.kinds.upgrade ?? 0,
       "sum(level-1)": r.purchasedLevels,
+      dismantledLevels: r.dismantledLevels ?? 0,
+      dismantledPicks: r.dismantledPicks ?? 0,
       branchByLevel: r.branchByLevel.length,
-      reconciles: (r.kinds.upgrade ?? 0) === r.purchasedLevels,
+      // #214: recovery may dismantle an upgraded machine; its paid levels leave the
+      // surviving sum, so attempts reconcile against purchased + dismantled.
+      reconciles: (r.kinds.upgrade ?? 0) === r.purchasedLevels + (r.dismantledLevels ?? 0),
     };
   }
   return out;
@@ -683,7 +718,7 @@ function table(rows) {
     lines.push("   levels: " + r.levels);
     lines.push(
       "   picks: kinds.upgrade=" + (r.kinds.upgrade ?? 0) + " sum(level-1)=" + r.purchasedLevels +
-        " branchByLevel=" + r.branchByLevel.length
+        " dismantled=" + (r.dismantledLevels ?? 0) + " branchByLevel=" + r.branchByLevel.length
     );
   }
   return lines;
@@ -757,7 +792,7 @@ const autoExec = {
 mkdirSync("work/feedback", { recursive: true });
 writeFileSync(TARGET, JSON.stringify({
   baseSha: BASE_SHA,
-  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row plus one policy row, three supply tables (regular, irregular 5-on/4-off, gap6 3-on/3-off)",
+  method: "harness: deterministic simulation, one command per round, 10 ticks apart, 1800 rounds = 18 000 ticks, shared boot, one named outcome per row plus one policy row, three supply tables (regular, irregular 5-on/4-off, gap6 3-on/3-off); #214 GAME_SYSTEMS seed with the shared ladder recovery (validate.ts) in the validateBehaviour play order, as in scripts/probe-belt.mjs",
   criteria: "A1-2v3 (g2 addendum) plus STRAT-003 distinct prices: the two live plans carry different prices at the same level (plain ladder + BRANCH_PRICE_OFFSET: speed +10, draw +0, buffer +0); the `priced` row buys under the power-line signal (throttled -> draw, else speed) with a cheapest-affordable fallback; leaders under MMG reported for the named three and for the live pair",
   primaryColumns: Object.keys(PRIMARY),
   gaps: gapsBlock(),

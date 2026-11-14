@@ -190,7 +190,10 @@ describe("E08 adversarial imports change nothing", () => {
     // (only the behavior assertion moved). See docs/evidence/2026-11-14-rw3d-g1fix-*.
     expect(store.getState().tick).toBe(0);
     expect(store.getState().machines.length).toBe(0);
-    expect(store.getState().credits).toBe(0);
+    // #214: the fresh-yard fallback now seeds the GAME_SYSTEMS starter credits (60),
+    // not 0. The corrupt-boot still falls back to a fresh yard (tick 0, no machines);
+    // only the seeded credit balance moved with the retune.
+    expect(store.getState().credits).toBe(60);
     const notice = store.getSaveRecovery();
     expect(notice).not.toBeNull();
     expect(notice?.reason).toBe(bad.expectedReason);

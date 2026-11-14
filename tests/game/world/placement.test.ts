@@ -129,7 +129,8 @@ describe("typed rejections are atomic (fingerprint unchanged)", () => {
     const c = findLegalCell(w, "sorter");
     w.stock.scrap = 5;
     const r = expectAtomicRejection(w, "sorter", c, 0, "insufficient-material");
-    expect(r).toEqual({ reason: "insufficient-material", resource: "scrap", need: 20, have: 5 });
+    // #214: sorter costs 30 scrap (was 20); steel 4 is covered by the seed, so scrap is the shortfall.
+    expect(r).toEqual({ reason: "insufficient-material", resource: "scrap", need: 30, have: 5 });
   });
 
   it("insufficient-credits reports need/have", () => {
@@ -166,7 +167,7 @@ describe("crane keep-out zone (clearance, not occupancy)", () => {
     const w = newWorld();
     const c = findLegalCell(w, "crane");
     expectOk(place(w, "crane1", "crane", c.x, c.y));
-    w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the scenario: crane 6 + generator 8 > seed steel 12
+    w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the scenario: crane 10 + generator 8 > seed steel 12
     const [cx, cz] = centerMu(c, WORLD_KIT.crane.footprint, 0);
     const r = WORLD_KIT.crane.keepoutRadiusMu!;
     const outside = findLegalCell(w, "generator", 0, (cell) => {
@@ -253,7 +254,7 @@ describe("entrance corridors", () => {
     // bay1's corridor (x 8200..10700, z 11000..14000) reaches dz = 2500 mu:
     // 2500^2 = 6250000 <= 2508^2 = 6290064, so the swing blocks the entrance.
     expectOk(place(w, "crane1", "crane", 9, 7));
-    w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the scenario: crane 6 + warehouse 8 > seed steel 12
+    w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the scenario: crane 10 + warehouse 8 > seed steel 12
     const cell = { x: 8, y: 14 };
     expect(validatePlacement(w, "warehouse", cell, 180)).toMatchObject({
       reason: "entrance-blocked",

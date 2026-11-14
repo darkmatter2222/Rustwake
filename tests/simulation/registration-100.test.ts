@@ -99,11 +99,14 @@ const scrapOf = (state: SimState): number => state.store["scrap"] ?? 0;
 function twoOutputYard(blueprint: string, tile = 8): SimState {
   const state = createInitialState();
   state.tutorial = 9;
-  // Fund every build-cost resource (the sorter needs scrap; the copper separator also
-  // needs ferrous), with scrap headroom for the belts and refunds.
-  state.store["scrap"] = 300;
+  // Fund every build-cost resource (the sorter needs scrap + the seed's steel; the
+  // copper separator also needs ferrous), with scrap headroom for the belts and refunds.
+  // #214: the dock now holds 300 units, so the old 300-scrap seed left no room for the
+  // dismantle refund (`no-room`). A leaner 150-scrap seed funds the build and belts and
+  // still leaves the full refund inside the dock; storeUnits tracks the real contents.
+  state.store["scrap"] = 150;
   state.store["ferrous"] = 20;
-  state.storeUnits = 320;
+  state.storeUnits = Object.values(state.store).reduce((sum, qty) => sum + (qty ?? 0), 0);
   expect(send(state, { type: "machine.build", blueprint, tile })).toBe(true);
   const machine = state.machines[state.machines.length - 1];
   const input = RECIPES[BLUEPRINTS[blueprint].recipeId].inputs[0].resource;
@@ -294,6 +297,17 @@ describe("REG-100 gate 2: a loaded belt conserves every unit on dismantle", () =
 
     const refund = expectedRefund(state, machine);
     const created = createdScrapRefund(state, machine);
+    // #214: the sorter build now costs steel too, so the dismantle creates a steel refund
+    // alongside the scrap one. Track the new matter per resource (build refunds + scrap
+    // belts), the same accounting the gates 2 + 6 case uses, captured before the drop.
+    const createdByKey: Partial<Record<ResourceId, number>> = {};
+    for (const item of BLUEPRINTS[machine.blueprint].buildCost) {
+      createdByKey[item.resource] = (createdByKey[item.resource] ?? 0) + refundOf(item.qty);
+    }
+    const beltSum = state.routes
+      .filter((route) => registeredIdsOf(state, machine).includes(route.id))
+      .reduce((total, route) => total + beltRefundOf(route), 0);
+    createdByKey.scrap = (createdByKey.scrap ?? 0) + beltSum;
     // `dropRoute` also returns each belt's in-flight cargo to the store, on top of the face.
     const cargoUnits = state.routes
       .filter((route) => registeredIdsOf(state, machine).includes(route.id))
@@ -306,12 +320,16 @@ describe("REG-100 gate 2: a loaded belt conserves every unit on dismantle", () =
     // The store delta is the face refund PLUS the relocated belt cargo (the face itself prints
     // only build/tray/buffer/batch/belt-refund; the cargo return is engine behaviour on top).
     expect(state.storeUnits - storeBefore).toBe(refund + cargoUnits);
-    // Whole-system conservation: cargo merely relocates, so only the priced scrap refund is new matter.
+    // Whole-system conservation: cargo merely relocates, so only the priced build + belt
+    // refund is new matter (scrap and, since #214, the sorter's steel build refund).
     expect(unitTotal(state) - unitBefore).toBe(created);
     const totalsAfter = systemTotals(state);
-    for (const key of Object.keys(totalsBefore) as ResourceId[]) {
-      if (key === "scrap") continue;
-      expect(totalsAfter[key] ?? 0).toBe(totalsBefore[key] ?? 0);
+    const keys = new Set([
+      ...(Object.keys(totalsBefore) as ResourceId[]),
+      ...(Object.keys(totalsAfter) as ResourceId[]),
+    ]);
+    for (const key of keys) {
+      expect((totalsAfter[key] ?? 0) - (totalsBefore[key] ?? 0)).toBe(createdByKey[key] ?? 0);
     }
     expect(state.routes.length).toBe(0);
     expect(validateSim(state)).toBeNull();

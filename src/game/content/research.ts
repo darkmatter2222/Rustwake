@@ -23,7 +23,7 @@ export const RESEARCH: Readonly<Record<string, ResearchDef>> = {
   cutters: {
     id: "cutters",
     label: "Efficient Cutters",
-    effect: "One cutting pulse gives 7 scrap instead of 5.",
+    effect: "One cutting pulse gives 4 scrap instead of 2.",
     cost: 4,
     requires: null,
     maxRank: 1,

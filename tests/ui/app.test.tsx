@@ -8,7 +8,7 @@ import { MachinePanel } from "../../src/ui/Panels";
 import { createStore, type GameStore } from "../../src/app/store";
 import { SAVE_KEY } from "../../src/game/persistence/save";
 import { LEASE_TTL_MS } from "../../src/game/persistence/lease";
-import { TUNING } from "../../src/game/content/defs";
+import { RESOURCES, TUNING } from "../../src/game/content/defs";
 
 function memoryStorage() {
   const map = new Map<string, string>();
@@ -26,6 +26,17 @@ function findButton(label: string): HTMLButtonElement | undefined {
   return [...document.querySelectorAll("button")].find((node) =>
     (node.getAttribute("aria-label") ?? node.textContent ?? "").trim().startsWith(label)
   ) as HTMLButtonElement | undefined;
+}
+
+/** #214: the starter seed carries 12 steel and 60 credits, so the tutorial cascade
+ * (steel>0 -> 7, credits>0 -> 8) skips the authored build-furnace / sell-steel frames
+ * straight to the step-8 yard ladder. Draining both lets a test rest on the authored
+ * line it means to measure; the furnace's 4-steel price is topped up just before it builds. */
+function drainSteelAndCredits(store: GameStore): void {
+  const state = store.getState();
+  state.storeUnits -= state.store["steel"] ?? 0;
+  state.store["steel"] = 0;
+  state.credits = 0;
 }
 
 function mount(store: GameStore): HTMLDivElement {
@@ -86,7 +97,8 @@ describe("first-feel shell", () => {
     const salvage = findButton("Salvage");
     expect(salvage).toBeDefined();
     act(() => salvage?.click());
-    expect(store.getState().store["scrap"]).toBe(5);
+    // #214: the starter yard ships 120 scrap; one pulse adds manualSalvagePerPulse (2).
+    expect(store.getState().store["scrap"]).toBe(120 + TUNING.manualSalvagePerPulse);
     // No-scroll gate: the document does not exceed the visual viewport.
     expect(document.documentElement.scrollHeight).toBeLessThanOrEqual(window.innerHeight + 1);
   });
@@ -184,8 +196,12 @@ describe("first-feel shell", () => {
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
+    drainSteelAndCredits(store);
     act(() => store.step(400));
     expect(findButton("Build Furnace")).toBeDefined();
+    // The retuned furnace prices 4 steel; the drained yard tops it up just before the build.
+    store.getState().store["steel"] = 4;
+    store.getState().storeUnits += 4;
     act(() => findButton("Build Furnace")?.click());
     act(() => findButton("Build Furnace")?.click());
     const connectFurnace = findButton("Connect sorter to furnace");
@@ -220,9 +236,11 @@ describe("first-feel shell", () => {
     state.tutorial = 9;
     state.exportClaimed = true;
     state.credits = 200;
-    state.store["scrap"] = 60;
+    // #214: the sorter prices 30 scrap + 4 steel and the furnace 35 scrap + 4 steel,
+    // so the yard funds both builds (100 scrap) on top of the seed's 12 steel.
+    state.store["scrap"] = 100;
     state.store["ferrous"] = 20;
-    state.storeUnits = 80;
+    state.storeUnits = 132;
     act(() => store.step(1));
     const actions: string[] = [];
     act(() => findButton("Store")?.click());
@@ -267,11 +285,16 @@ describe("first-feel shell", () => {
     act(() => findButton("Repair drone")?.click());
     expect(store.getState().drone.repaired).toBe(true);
     act(() => store.step(1));
+    // #214: the funded seed would afford the sorter, so empty the yard to construct the
+    // blocked tap (the sorter now prices 30 scrap).
+    const empty = store.getState();
+    for (const resource of RESOURCES) empty.store[resource] = 0;
+    empty.storeUnits = 0;
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Build Scrap sorter")?.click());
     const toast = document.querySelector(".toast");
     // PLAY-001 P-1: the same blocked tap now states its own shortfall.
-    expect(toast?.textContent).toBe("Need 20 scrap · have 0");
+    expect(toast?.textContent).toBe("Need 30 scrap · have 0");
     expect(store.getState().machines.length).toBe(0);
   });
 
@@ -377,6 +400,7 @@ describe("first-feel shell", () => {
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Build Scrap sorter")?.click());
     act(() => findButton("Connect dock to sorter")?.click());
+    drainSteelAndCredits(store);
     act(() => store.step(300));
 
     // The card's first line, not the secondary hint beneath it. During the tutorial the
@@ -422,7 +446,7 @@ describe("first-feel shell", () => {
     const opened = panel();
     // Every node states its exact effect and cost before it is bought (12.2).
     expect(opened).toContain("Efficient Cutters");
-    expect(opened).toContain("One cutting pulse gives 7 scrap instead of 5.");
+    expect(opened).toContain("One cutting pulse gives 4 scrap instead of 2.");
     expect(opened).toContain("Buy · 4 Data");
     expect(opened).toContain("Needs Efficient Cutters first");
 

@@ -27,6 +27,12 @@ import { checksum, decodeSave, encodeSave, validateSim } from "../../src/game/pe
 import { branchOptions } from "../../src/ui/text";
 import { SELL_ORDER, nextYardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../../src/game/content/validate";
 
 /**
  * STRAT-002/A1: the named-outcome fork. One paid level buys exactly one of three
@@ -75,8 +81,9 @@ import beltHarnessJson from "../../work/feedback/belt001-harness.json";
 
 /**
  * BELT-001: the priced-connection tree re-ran the same mirror (scripts/probe-belt.mjs),
- * so the in-test mirror below reconciles against `ladderRows` from that run. The
- * strat002 file stays the untouched historical record of the pre-price readings.
+ * so the in-test mirror below reconciles against `ladderRows` from that run. #214:
+ * work/feedback/strat002-harness.mjs was re-run on the GAME_SYSTEMS seed with the same
+ * shared recovery play order, so its scored columns equal the belt rows again.
  */
 const beltTable = (pattern: "regular" | "irregular" | "gap6") =>
   (beltHarnessJson as { ladderRows: Record<string, unknown[]> }).ladderRows[pattern] as unknown as StoredRow[];
@@ -152,7 +159,9 @@ function tutorialBodies(s: SimState): CommandBody[] | null {
     }
     const furnace = s.machines.find((m) => m.blueprint === "furnace");
     if (!furnace) {
-      if ((s.store["scrap"] ?? 0) >= 10 && (s.store["ferrous"] ?? 0) >= 5) {
+      // #214: gate on the shipped furnace buildCost (35 scrap + 4 steel), not the
+      // pre-retune 10 scrap + 5 ferrous. Mirrors scripts/probe-belt.mjs.
+      if (BLUEPRINTS.furnace.buildCost.every((item) => (s.store[item.resource] ?? 0) >= item.qty)) {
         return [{ type: "machine.build", blueprint: "furnace", tile: 9 }];
       }
       return [{ type: "manual.salvage" }];
@@ -185,6 +194,13 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
   let minPowerRatio = 1;
   let firstResearch: number | null = null;
   let inputStallTicks = 0;
+  const recovery = newLadderRecovery();
+  // #214: recovery can dismantle an already-upgraded machine (the stalled circuit
+  // assembler, the furnace replaced by the signal lab). Its paid levels/picks leave
+  // the surviving sums, so they are counted for the R4 reconciliation, exactly as
+  // work/feedback/strat002-harness.mjs counts them.
+  let dismantledLevels = 0;
+  let dismantledPicks = 0;
   const kinds: Record<string, number> = {};
   const send = (body: CommandBody): boolean => {
     const before = s.credits;
@@ -202,7 +218,13 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
   advance(s, 262);
   taps += 7;
   for (let round = 0; round < 1800; round += 1) {
-    if (!s.exportClaimed && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
+    // #214: the seed's 12 steel pays for the sorter and furnace (4 + 4) first; the
+    // 10-steel contract waits for both starters, matching validateBehaviour and
+    // scripts/probe-belt.mjs so the in-test mirror reconciles with the golden.
+    const startersBuilt =
+      s.machines.some((m) => m.blueprint === "sorter") &&
+      s.machines.some((m) => m.blueprint === "furnace");
+    if (!s.exportClaimed && startersBuilt && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel) {
       send({ type: "contract.export" });
       taps += 1;
     }
@@ -211,12 +233,22 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
       pulses += 1;
       taps += 1;
     }
+    const beforeRecovery = new Map(
+      s.machines.map((m) => [m.id, { level: m.level, picks: (m.branch ?? []).length }])
+    );
+    ladderRecoveryTriggers(s, recovery, round);
+    for (const [id, info] of beforeRecovery) {
+      if (!s.machines.some((m) => m.id === id)) {
+        dismantledLevels += info.level - 1;
+        dismantledPicks += info.picks;
+      }
+    }
     const taught = tutorialBodies(s);
     if (taught !== null) {
       for (const body of taught) send(body);
       taps += 1;
     } else {
-      const step = nextYardStep(s);
+      const step = ladderRecoveryAdjust(s, recovery, nextYardStep(s));
       if (step && step.kind) {
         if (step.kind !== "salvage" && step.kind !== "upgrade") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
         switch (step.kind) {
@@ -293,6 +325,7 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
         }
       }
     }
+    ladderRecoveryClear(s, recovery);
     if (s.powerRatio < 1) powerLimitedRounds += 1;
     if (s.powerRatio < minPowerRatio) minPowerRatio = s.powerRatio;
   }
@@ -319,10 +352,13 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
     firstResearch,
     kinds,
     ...(branch === "policy" ? { policyMix } : {}),
-    // R4: the three pick counts, each named by its own field.
+    // R4: the three pick counts, each named by its own field, plus the levels/picks
+    // the #214 recovery dismantled out of the surviving sums.
     attempts: kinds.upgrade ?? 0,
     purchasedLevels: s.machines.reduce((sum, m) => sum + (m.level - 1), 0),
     picksRecorded: s.machines.reduce((sum, m) => sum + (m.branch ? m.branch.length : 0), 0),
+    dismantledLevels,
+    dismantledPicks,
     tick: s.tick,
     machines: s.machines.length,
   };
@@ -671,17 +707,21 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
       expect(speed.batches).not.toBe(twin.batches);
       expect(draw.batches).not.toBe(twin.batches);
       // R4 now reconciles *exactly* on the named rows: under the buy-when-affordable
-      // policy the attempt counter, the purchased levels and the recorded picks
-      // are one number (the rejected-attempt noise of g3 is gone). The unnamed row
+      // policy every attempt purchases one level (the rejected-attempt noise of g3 is
+      // gone). #214: the shared recovery may dismantle an already-upgraded machine,
+      // so the attempt counter equals the surviving purchased levels plus the levels
+      // lost to dismantling - and likewise for the recorded picks. The unnamed row
       // keeps the old semantics (it always attempts the plain price).
       for (const row of [speed, draw, buffer]) {
-        expect(row.kinds.upgrade).toBe(row.purchasedLevels);
+        expect(row.kinds.upgrade).toBe(row.purchasedLevels + row.dismantledLevels);
+        expect(row.kinds.upgrade).toBe(row.picksRecorded + row.dismantledPicks);
         expect(Number.isFinite(row.creditsPer1000Batches)).toBe(true);
       }
-      // The named mechanisms still separate as in g3: clock leads batches, the
-      // budget plan never throttles.
+      // The named mechanisms still separate as in g3: clock leads batches. The budget
+      // plan holds zero throttled rounds on both gap ladders; on the ungated ladder
+      // the new seed's power line dips for exactly 2 rounds.
       expect(buffer.batches).not.toBe(speed.batches);
-      expect(draw.powerLimitedRounds).toBe(0);
+      expect(draw.powerLimitedRounds).toBe(ladder === "regular" ? 2 : 0);
       expect(speed.powerLimitedRounds).toBeGreaterThan(0);
     }
   }, 30_000);
@@ -709,43 +749,48 @@ describe("STRAT-002/A1-2v2 the scored table and the pick counts", () => {
   });
 
   it("scores the 5-on/4-off ladder by the per-column MMG, not the retired disjunction", () => {
-    // BELT-001 restated on the priced tree (rows in belt001-harness.json). The
-    // column leaders are: speed owns `batches` and the starved pair, draw owns
-    // `minPowerRatio`, and `powerLimitedRounds` sits under its 200-unit floor -
-    // the same shape the g3 record shows for the period-6 ladder.
+    // BELT-001 restated on the priced tree (rows in belt001-harness.json), #214 seed.
+    // The column leaders under the MMG are now: speed owns only `starvedMean`, draw
+    // owns the power pair; `batches` (872 < 900), `starvedMax` (2 < 3) and
+    // `inputStallPct` (0.4 < 3) all sit under their floors, so they name no leader.
     const speed = a12Row("speed", "gap9");
     const buffer = a12Row("buffer", "gap9");
     const draw = a12Row("draw", "gap9");
     const mmg = harnessJson.gaps.mmg;
-    // speed owns `batches` by >= 900: 2 179 over the best named rival 1 191 (988).
-    expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBeGreaterThanOrEqual(
-      mmg.batches.absolute
-    );
-    // draw keeps the zero row, but buffer's 127 throttled rounds hold the rival value
-    // under the 200-unit floor, so this column names no leader under the MMG.
+    // speed still leads `batches` outright - 1 895 over the best named rival 1 023 -
+    // but the new seed's lead is 872, under the 900-unit MMG floor: the column keeps
+    // its raw leader and names no leader under the MMG. The gap is pinned exactly.
+    expect(speed.batches - Math.max(buffer.batches, draw.batches)).toBe(872);
+    expect(872).toBeLessThan(mmg.batches.absolute);
+    // draw keeps the zero row, and buffer's 274 throttled rounds now clear the
+    // 200-unit floor, so this column names draw under the MMG (the pre-#214 seed
+    // parked the rival at 127, under the floor).
     expect(draw.powerLimitedRounds).toBe(0);
-    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(127);
-    expect(127).toBeLessThan(mmg.powerLimitedRounds.absolute);
+    expect(Math.min(speed.powerLimitedRounds, buffer.powerLimitedRounds)).toBe(274);
+    expect(274).toBeGreaterThanOrEqual(mmg.powerLimitedRounds.absolute);
     expect(draw.minPowerRatio - Math.max(speed.minPowerRatio, buffer.minPowerRatio)).toBeGreaterThanOrEqual(
       mmg.minPowerRatio.absolute
     );
-    // The mechanism columns (starved %) stay with speed: 85 - 81 and 58 - 53.
-    expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBeGreaterThanOrEqual(
-      mmg.starvedMax.absolute
-    );
+    // starvedMean stays with speed (67 - 61 = 6 >= 3); starvedMax compresses to
+    // 93 - 91 = 2 on the new seed, under the 3-point floor, so it names no leader.
+    expect(Math.max(buffer.starvedMax, draw.starvedMax) - speed.starvedMax).toBe(2);
+    expect(2).toBeLessThan(mmg.starvedMax.absolute);
     expect(Math.max(buffer.starvedMean, draw.starvedMean) - speed.starvedMean).toBeGreaterThanOrEqual(
       mmg.starvedMean.absolute
     );
-    // buffer's single A1-2v3 column, still not its: buffer 136.7 sits behind the
-    // best rival 93.5 (speed) - lead -43.2 points, well under the 3-point floor.
-    expect(buffer.inputStallPct).toBe(136.7);
+    // buffer's single A1-2v3 column: recovery collapses its stall to 4.0, now the raw
+    // best, but the best rival 4.4 (draw) leaves a lead of only +0.4 points - still
+    // under the 3-point floor, so the column is still not buffer's under the MMG.
+    expect(buffer.inputStallPct).toBe(4);
+    expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeCloseTo(0.4, 3);
     expect(Math.min(speed.inputStallPct, draw.inputStallPct) - buffer.inputStallPct).toBeLessThan(
       mmg.inputStallPct.absolute
     );
-    // R4 at ladder scale: under the buy-when-affordable policy the three pick
-    // counts reconcile in one number (attempts = purchased levels = recorded picks).
+    // R4 at ladder scale: every attempt purchased one level; recovery dismantled one
+    // upgraded machine, so attempts = surviving purchased levels + dismantled levels.
     expect(buffer.picksRecorded).toBe(buffer.purchasedLevels);
-    expect(buffer.attempts).toBe(buffer.purchasedLevels);
+    expect(buffer.attempts).toBe(buffer.purchasedLevels + buffer.dismantledLevels);
+    expect(buffer.dismantledLevels).toBe(1);
     expect(buffer.purchasedLevels).toBeGreaterThan(90);
   }, 30_000);
 });
@@ -869,25 +914,30 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
   it("names the leading branch per column under MMG, named rows only, on both ladders", () => {
     const irregular = storedTable("irregular");
     const gap6 = storedTable("gap6");
-    // 5-on/4-off: speed owns the stall/starvation/throughput columns, draw the power pair;
-    // the 10^4 ratio clears neither term of its MMG (22.457 < 100 units).
-    expect(leaderUnderMmg(irregular, "inputStallPct")).toBe("speed");
-    expect(leaderUnderMmg(irregular, "starvedMax")).toBe("speed");
+    // 5-on/4-off, #214 seed: speed keeps only starvedMean (6-point lead); the batches
+    // lead compresses to 872 (< 900), starvedMax to 2 (< 3), and buffer's raw-best
+    // stall 4.0 leads draw's 4.4 by only 0.4 (< 3) - those three name no leader. Draw
+    // owns the power pair (274 throttled rival rounds clear the 200 floor); the 10^4
+    // ratio clears neither term of its MMG on this ladder.
+    expect(leaderUnderMmg(irregular, "inputStallPct")).toBeNull();
+    expect(leaderUnderMmg(irregular, "starvedMax")).toBeNull();
     expect(leaderUnderMmg(irregular, "starvedMean")).toBe("speed");
-    expect(leaderUnderMmg(irregular, "batches")).toBe("speed");
+    expect(leaderUnderMmg(irregular, "batches")).toBeNull();
     expect(leaderUnderMmg(irregular, "powerLimitedRounds")).toBe("draw");
     expect(leaderUnderMmg(irregular, "minPowerRatio")).toBe("draw");
     expect(leaderUnderMmg(irregular, "creditsPer1000Batches")).toBeNull();
-    // Period-6 3-on/3-off: the stall column moves to draw, the power column drops out
-    // (buffer's 127 power-limited rounds keep draw's gap under the 200 floor), and only
-    // now does the ratio column clear both terms - reported, but unable to satisfy R1.
-    expect(leaderUnderMmg(gap6, "inputStallPct")).toBe("draw");
-    expect(leaderUnderMmg(gap6, "starvedMax")).toBe("speed");
+    // Period-6 3-on/3-off, #214 seed: draw's stall 4.1 is the raw best but leads
+    // buffer's 4.3 by only 0.2 (< 3), so the stall column names no leader either;
+    // batches 796 (< 900) and starvedMax 1 (< 3) drop out the same way. The power
+    // column now names draw (buffer's 274 throttled rounds clear the 200 floor), and
+    // the ratio column clears both terms - reported, but unable to satisfy R1.
+    expect(leaderUnderMmg(gap6, "inputStallPct")).toBeNull();
+    expect(leaderUnderMmg(gap6, "starvedMax")).toBeNull();
     expect(leaderUnderMmg(gap6, "starvedMean")).toBe("speed");
-    expect(leaderUnderMmg(gap6, "batches")).toBe("speed");
-    expect(leaderUnderMmg(gap6, "powerLimitedRounds")).toBeNull();
+    expect(leaderUnderMmg(gap6, "batches")).toBeNull();
+    expect(leaderUnderMmg(gap6, "powerLimitedRounds")).toBe("draw");
     expect(leaderUnderMmg(gap6, "minPowerRatio")).toBe("draw");
-    expect(leaderUnderMmg(gap6, "creditsPer1000Batches")).toBe("buffer");
+    expect(leaderUnderMmg(gap6, "creditsPer1000Batches")).toBe("draw");
     // The harness' own leadersUnderMmg maps agree with this recomputation, ladder for ladder.
     for (const pattern of ["irregular", "gap6"] as const) {
       const rows = storedTable(pattern);
@@ -901,55 +951,60 @@ describe("STRAT-002/A1-2v3 the per-column MMG and the auto-executing drop clause
   /**
    * STRAT-003: with the two plans priced differently, the same MMG census over just
    * the pair on the dock (speed vs draw, buffer excluded as off the dock) still puts
-   * different columns on different names on both scored ladders: batches and the
-   * starved pair stay with `speed`, the power pair leaves `draw`; on gap6 the stall
-   * column stays `draw`'s. No scored column collapsed below its MMG.
+   * different columns on different names on both scored ladders: starvedMean stays
+   * with `speed`, the stall column and the power pair stay with `draw`. #214 finding:
+   * the batches column collapses below its MMG on both gap ladders (872 and 796,
+   * floor 900) and starvedMax compresses under its 3-point floor - recorded as null,
+   * never re-scored.
    */
   it("keeps the two live plans leading different columns under the pair census", () => {
-    // 5-on/4-off: every column but the 10^4 ratio reproduces the g3 leaders.
+    // 5-on/4-off: draw keeps the stall column (4.4 vs 28.6) and the power pair; speed
+    // keeps starvedMean; batches (872 < 900) and starvedMax (2 < 3) name no leader.
     expect(harnessJson.irregular.leadersTwoPlans).toEqual({
-      inputStallPct: "speed",
-      starvedMax: "speed",
+      inputStallPct: "draw",
+      starvedMax: null,
       starvedMean: "speed",
-      batches: "speed",
+      batches: null,
       powerLimitedRounds: "draw",
       minPowerRatio: "draw",
       creditsPer1000Batches: "draw",
     });
-    // Period 6: the stall column belongs to draw there as recorded; the power column
-    // now clears its floor against the sole rival (speed 425 throttled rounds).
+    // Period 6: the same shape - draw's stall 4.1 vs speed's 20.5, the power pair
+    // against speed's 441 throttled rounds, and batches 796 < 900, starvedMax 1 < 3.
     expect(harnessJson.gap6.leadersTwoPlans).toEqual({
       inputStallPct: "draw",
-      starvedMax: "speed",
+      starvedMax: null,
       starvedMean: "speed",
-      batches: "speed",
+      batches: null,
       powerLimitedRounds: "draw",
       minPowerRatio: "draw",
       creditsPer1000Batches: "draw",
     });
-    // The batches column of the PAIR census: irregular 2267 - 1191 = 1076 >= 900,
-    // gap6 2193 - 1191 = 1002 >= 900 - both above the MMG floor.
+    // The batches column of the PAIR census, pinned exactly: irregular 1895 - 1023
+    // = 872, gap6 1821 - 1025 = 796 - both under the 900 MMG floor on the new seed,
+    // which is why the maps above record null for that column.
     const at = (p: "irregular" | "gap6", name: string) =>
       (storedTable(p).find((r) => r.policy === name) as StoredRow).batches;
-    expect(at("irregular", "speed") - at("irregular", "draw")).toBeGreaterThanOrEqual(
-      harnessJson.gaps.mmg.batches.absolute
-    );
-    expect(at("gap6", "speed") - at("gap6", "draw")).toBeGreaterThanOrEqual(
-      harnessJson.gaps.mmg.batches.absolute
-    );
+    expect(at("irregular", "speed") - at("irregular", "draw")).toBe(872);
+    expect(at("gap6", "speed") - at("gap6", "draw")).toBe(796);
+    expect(872).toBeLessThan(harnessJson.gaps.mmg.batches.absolute);
+    expect(796).toBeLessThan(harnessJson.gaps.mmg.batches.absolute);
   });
 
-  it("executes the drop clause: buffer leads inputStallPct on neither gap ladder", () => {
+  it("executes the drop clause: buffer's inputStallPct lead clears the MMG on neither gap ladder", () => {
     const irregular = storedTable("irregular");
     const gap6 = storedTable("gap6");
     const at = (rows: StoredRow[], policy: string) =>
       (rows.find((r) => r.policy === policy) as StoredRow).inputStallPct;
-    // 5-on/4-off: buffer 186.9 vs best rival 128.8 (speed) -> lead -58.1 points (< 3).
-    expect(at(irregular, "buffer")).toBe(186.9);
-    expect(Math.min(at(irregular, "speed"), at(irregular, "draw")) - at(irregular, "buffer")).toBeCloseTo(-58.1, 3);
-    // Period-6: buffer 181.5 vs best rival 123.3 -> lead -58.2 points (< 3).
-    expect(at(gap6, "buffer")).toBe(181.5);
-    expect(Math.min(at(gap6, "speed"), at(gap6, "draw")) - at(gap6, "buffer")).toBeCloseTo(-58.2, 3);
+    // 5-on/4-off, #214 seed: recovery collapses buffer's stall to 4.0, the raw best,
+    // but the best rival 4.4 (draw) leaves a lead of only +0.4 points (< 3).
+    expect(at(irregular, "buffer")).toBe(4);
+    expect(Math.min(at(irregular, "speed"), at(irregular, "draw")) - at(irregular, "buffer")).toBeCloseTo(0.4, 3);
+    expect(Math.min(at(irregular, "speed"), at(irregular, "draw")) - at(irregular, "buffer")).toBeLessThan(3);
+    // Period-6: buffer 4.3 sits behind the best rival 4.1 (draw) -> lead -0.2 (< 3).
+    expect(at(gap6, "buffer")).toBe(4.3);
+    expect(Math.min(at(gap6, "speed"), at(gap6, "draw")) - at(gap6, "buffer")).toBeCloseTo(-0.2, 3);
+    expect(Math.min(at(gap6, "speed"), at(gap6, "draw")) - at(gap6, "buffer")).toBeLessThan(3);
     // The auto-executing question from the addendum, answered by the same run: NO on
     // both ladders, so the drop executes and the fork ships two plans (speed, draw).
     expect(harnessJson.autoExec.irregular).toBe(false);

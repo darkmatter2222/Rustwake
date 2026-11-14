@@ -34,8 +34,9 @@ function seed(state: SimState): void {
   state.store["ferrous"] = 40;
   state.store["nonferrous"] = 40;
   state.store["polymer"] = 20;
+  state.store["steel"] = 20; // #214: furnaces now cost 4 steel each (the power budget builds 4)
   state.store["wire"] = 0;
-  state.storeUnits = 300;
+  state.storeUnits = 320;
   state.credits = 500;
 }
 
@@ -76,12 +77,14 @@ describe("route ledger", () => {
 
   it("routes returned material to the overflow hold when the store is full (spec 28.2)", () => {
     const state = boot();
-    state.storeCapacity = 25;
-    state.store["scrap"] = 25;
-    state.storeUnits = 25;
+    // #214: the sorter now costs 30 scrap + 4 steel, so build it from the boot store
+    // before clamping the store to a small full capacity (25 scrap no longer pays for it).
     send(state, { type: "machine.build", blueprint: "sorter", tile: 8 });
     const sorter = state.machines[0];
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
+    state.storeCapacity = 25;
+    state.store["scrap"] = 25;
+    state.storeUnits = 25;
     advance(state, 60);
     const before = unitTotal(state);
     const removedPrice = beltCost(state.routes[0].run?.length ?? 0);
@@ -94,13 +97,14 @@ describe("route ledger", () => {
 
   it("does not lose production when the store is full (spec 8.3)", () => {
     const state = boot();
-    state.storeCapacity = 20;
-    state.store["scrap"] = 20;
-    state.storeUnits = 20;
+    // #214: build the sorter (30 scrap + 4 steel) before clamping the store full.
     send(state, { type: "machine.build", blueprint: "sorter", tile: 8 });
     const sorter = state.machines[0];
     send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
     send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "ferrous" });
+    state.storeCapacity = 20;
+    state.store["scrap"] = 20;
+    state.storeUnits = 20;
     advance(state, 200);
     expect(state.storeUnits).toBeLessThanOrEqual(state.storeCapacity);
     const totals = systemTotals(state);
@@ -160,9 +164,10 @@ describe("conservation", () => {
     advance(state, 200);
     const spent =
       TUNING.repairCostScrap +
-      20 + // one sorter
+      34 + // one sorter (#214: 30 scrap + 4 steel)
       state.routes.reduce((sum, route) => sum + beltCost(route.run?.length ?? 0), 0); // belts
     const expected =
+      createInitialState().storeUnits + // #214: the seed's opening 144-unit store
       TUNING.manualSalvagePerPulse * state.wreck.pulses +
       state.drone.accumulated +
       netRecipeUnits(state) -
@@ -178,32 +183,31 @@ describe("power budget", () => {
     send(state, { type: "machine.build", blueprint: "furnace", tile: 3 });
     send(state, { type: "machine.build", blueprint: "furnace", tile: 4 });
     send(state, { type: "machine.build", blueprint: "furnace", tile: 5 });
-    send(state, { type: "machine.build", blueprint: "furnace", tile: 6 });
     for (const machine of state.machines) {
       machine.inBuf = { ferrous: 12 };
       machine.inBufUnits = 12;
     }
     advance(state, 10);
-    // Four furnaces request 8 units total, exactly the starter capacity.
+    // #214: three furnaces request 6 units total, exactly the starter capacity.
     expect(state.powerRatio).toBe(1);
     const fullSpeed = state.machines.map((m) => m.progress);
     expect(new Set(fullSpeed).size).toBe(1);
     expect(fullSpeed[0]).toBeGreaterThanOrEqual(10000);
-    const fifth = send(state, { type: "machine.build", blueprint: "furnace", tile: 7 });
-    expect(fifth.ok).toBe(true);
-    state.machines[4].inBuf = { ferrous: 12 };
-    state.machines[4].inBufUnits = 12;
+    const fourth = send(state, { type: "machine.build", blueprint: "furnace", tile: 6 });
+    expect(fourth.ok).toBe(true);
+    state.machines[3].inBuf = { ferrous: 12 };
+    state.machines[3].inBufUnits = 12;
     advance(state, 1);
     const before = state.machines.map((m) => m.progress);
     advance(state, 10);
     expect(state.powerRatio).toBeLessThan(1);
-    expect(state.powerRatio).toBeCloseTo(8 / 10, 6);
-    for (let i = 0; i < 4; i += 1) {
+    expect(state.powerRatio).toBeCloseTo(6 / 8, 6);
+    for (let i = 0; i < 3; i += 1) {
       const machine = state.machines[i];
       expect(machine.status).toBe("powerLimited");
-      // 8/10 of a tick, ten times, in milli-ticks.
-      expect(machine.progress - before[i]).toBe(8000);
+      // 6/8 of a tick, ten times, in milli-ticks.
+      expect(machine.progress - before[i]).toBe(7500);
     }
-    expect(state.machines[4].progress).toBeGreaterThan(0);
+    expect(state.machines[3].progress).toBeGreaterThan(0);
   });
 });

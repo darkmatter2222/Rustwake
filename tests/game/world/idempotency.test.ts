@@ -124,7 +124,7 @@ describe("E02: duplicate command IDs charge once", () => {
   it("command streams are reproducible: same seed + stream = same fingerprint", () => {
     const run = (): string => {
       const w = newWorld(2026);
-      w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the stream: warehouse 8 + crane 6 > seed steel 12
+      w.stock.steel = (w.stock.steel ?? 0) + 10; // fund the stream: warehouse 8 + crane 10 > seed steel 12
       const c1 = findLegalCell(w, "warehouse");
       expectOk(place(w, "s1", "warehouse", c1.x, c1.y));
       advanceWorld(w, 20);
@@ -148,7 +148,8 @@ describe("E02: duplicate command IDs charge once", () => {
     expectOk(replay);
     expect(replay.revision).toBe(1);
     expect(reloaded.reservations.length).toBe(1);
-    expect(reloaded.stock.scrap).toBe(110);
+    // #214: furnace costs 35 scrap (was 10), so the single reservation leaves 120 - 35.
+    expect(reloaded.stock.scrap).toBe(85);
     advanceWorld(reloaded, 50);
     expect(reloaded.buildings.length).toBe(1);
     expectConserved(reloaded, INITIAL_STOCK);

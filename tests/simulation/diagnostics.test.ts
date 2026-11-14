@@ -36,7 +36,10 @@ function chainBase(): SimState {
   }
   send(state, { type: "drone.repair" });
   advance(state, 262);
-  seed(state, { scrap: 300, ferrous: 40, nonferrous: 60, residue: 30 });
+  // #214: the dock holds 300 units; the old 430-unit seed overflowed it and jammed
+  // every output tray. This lean seed fits with headroom so the recycler is
+  // residue-limited (the dock is the limiter) rather than full-blocked.
+  seed(state, { scrap: 100, ferrous: 20, nonferrous: 40, residue: 30 });
   const tiles = [0, 1, 3, 4];
   CHAIN_PLAN.forEach(([blueprint, input], index) => {
     send(state, { type: "machine.build", blueprint, tile: tiles[index] });
@@ -117,7 +120,9 @@ describe("bottleneck assistant (spec 10.5)", () => {
   it("explains an unlinked machine as a missing connection", () => {
     const state = createInitialState();
     state.tutorial = 9;
-    seed(state, { scrap: 300, ferrous: 40 });
+    // #214: lean seed so the 300-cap dock is not full. The sorter still has no
+    // input link, so it starves and the advice names the missing connection.
+    seed(state, { scrap: 40, ferrous: 10 });
     send(state, { type: "machine.build", blueprint: "sorter", tile: 0 });
     advance(state, 200);
     const d = diagnoseMachine(state, only(state, "sorter"));
@@ -137,8 +142,10 @@ describe("bottleneck assistant (spec 10.5)", () => {
   it("reports the shared power budget as the limiter when machines oversubscribe", () => {
     const state = createInitialState();
     state.tutorial = 9;
-    seed(state, { scrap: 400, ferrous: 40, nonferrous: 40, residue: 30 });
-    // 6×1 + 2 + 2 + 1 = 11 requested units against a capacity of 8.
+    // #214: sorter/furnace now cost steel, so seed enough to build the whole
+    // plan within the 300-cap dock. Tile 2 is the dock, so 5 sorters build:
+    // 5×1 + 2 + 2 + 1 = 10 requested units against a capacity of 6.
+    seed(state, { scrap: 200, steel: 30, ferrous: 20, nonferrous: 20, residue: 20 });
     const plan: [string, ResourceId][] = [
       ["sorter", "scrap"],
       ["sorter", "scrap"],

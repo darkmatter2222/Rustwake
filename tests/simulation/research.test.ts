@@ -70,7 +70,10 @@ function peakReady(state: SimState, machine: MachineState, link: RouteState): nu
 function labYard(): { state: SimState; lab: number } {
   const state = boot();
   state.tutorial = 9;
-  seed(state, { scrap: 300, ferrous: 40, circuits: 20 });
+  // #214: the dock holds 300 units; the old 360-unit seed overflowed it and blocked
+  // the lab's data output. This lean seed pays the lab's 50 scrap + 12 ferrous build
+  // and leaves headroom for the data to land (4 by tick 400, 8 by 700).
+  seed(state, { scrap: 60, ferrous: 20, circuits: 20 });
   send(state, { type: "machine.build", blueprint: "signalLab", tile: 8 });
   const built = state.machines[state.machines.length - 1];
   expect(built?.blueprint).toBe("signalLab");

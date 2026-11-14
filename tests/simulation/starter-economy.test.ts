@@ -61,7 +61,8 @@ function sixPulses(state: SimState): void {
 /**
  * The live starter bootstrap up to (but not including) the first export: free pulses
  * fund the drone repair, the drone funds the sorter, the sorter's ferrous funds the
- * furnace, and the furnace makes the first steel. Reproducible from the empty seed.
+ * furnace, and the furnace makes the first steel. Reproducible from the #214
+ * starter seed (120 scrap / 12 ferrous / 12 steel, 60 credits).
  */
 function bootstrapChain(): SimState {
   const state = createInitialState();
@@ -72,6 +73,10 @@ function bootstrapChain(): SimState {
   const sorter = state.machines[0];
   send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
   send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "ferrous" });
+  // #214 re-pin: the seeded scrap lets the sorter run at full rate, so both R01
+  // outputs must be routed. Without a nonferrous return the byproduct clogs the
+  // tray (or rides a ferrous belt), starving the furnace of ferrous.
+  send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
   advance(state, 400);
   expect(send(state, { type: "machine.build", blueprint: "furnace", tile: 9 }).ok).toBe(true);
   const furnace = state.machines[1];
@@ -91,10 +96,15 @@ function bootstrapToExport(): SimState {
 function conservationSeed(): SimState {
   const state = bootstrapToExport();
   advance(state, 300);
-  addToStore(state, "scrap", 120);
-  addToStore(state, "ferrous", 60);
-  addToStore(state, "steel", 40);
-  addToStore(state, "data", 30);
+  // #214 re-pin: dockCapacity is now 300 (was 900). Blindly adding 250 units on
+  // top of a running yard overfilled the store to 447, so dismantle refused with
+  // "no-room" and the full dock made the sorter's nonferrous ride a ferrous belt.
+  // Fund a deliberate ledger with headroom under the 300 warehouse; data stays 30
+  // (the research comparison pins 30 - cost) and steel stays above the reserve
+  // floor so the sell/conservation assertions are unchanged.
+  state.store = { scrap: 100, ferrous: 40, steel: 30, data: 30 };
+  state.storeUnits = 200;
+  state.overflow = [];
   state.credits = 1000;
   return state;
 }
@@ -134,17 +144,19 @@ function expectConserved(
 }
 
 describe("#144 starter affordance and the first steel choice", () => {
-  it("the empty seed buys both first processors through free recovery only", () => {
+  it("the starter seed affords both first processors and still claims the first export (#214)", () => {
     const seed = createInitialState();
-    expect(seed.store).toEqual({});
-    expect(seed.credits).toBe(0);
+    // #214 re-pin: the GAME_SYSTEMS starter seed (was an empty store / 0 credits).
+    expect(seed.store).toEqual({ scrap: 120, ferrous: 12, steel: 12 });
+    expect(seed.credits).toBe(60);
     expect(seed.wreck.remaining).toBe(TUNING.starterWreckPool);
 
     const state = bootstrapToExport();
     expect(state.machines.map((m) => m.blueprint)).toEqual(["sorter", "furnace"]);
     // The first steel choice paid the onboarding contract and left credits to fork with.
     expect(state.exportClaimed).toBe(true);
-    expect(state.credits).toBe(TUNING.exportContractCredits);
+    // #214 re-pin: seed 60 + contract 50 = 110 (no credits spent on the way).
+    expect(state.credits).toBe(createInitialState().credits + TUNING.exportContractCredits);
     expect(state.exportSteelDelivered).toBe(TUNING.exportContractSteel);
     expect(state.tutorial).toBeGreaterThanOrEqual(7);
     // No credit was spent to reach the first export: recovery was free (E06).
@@ -314,7 +326,9 @@ describe("#144 E06 free slow recovery prevents bankrupt deadlock", () => {
     expect(state.credits).toBe(0);
 
     // Repeat pulses bank enough scrap to sell back into credits: no deadlock.
-    for (let i = 0; i < 6; i += 1) {
+    // #214 re-pin: pulses now give 2 scrap (was 5) while the reserve floor stays
+    // 10, so bank 20 pulses instead of 6 to clear floor + sorter demand.
+    for (let i = 0; i < 20; i += 1) {
       advance(state, TUNING.manualPulseTicks);
       send(state, { type: "manual.salvage" });
     }
@@ -323,6 +337,40 @@ describe("#144 E06 free slow recovery prevents bankrupt deadlock", () => {
     const sold = send(state, { type: "contract.sell", resource: "scrap", qty: sellable });
     expect(sold.ok).toBe(true);
     expect(state.credits).toBeGreaterThan(0);
+  });
+
+  it("E06 spend-all-steel corner: builds can spend every seed steel and the chain still recovers (#214)", () => {
+    const state = createInitialState();
+    sixPulses(state);
+    expect(send(state, { type: "drone.repair" }).ok).toBe(true);
+    advance(state, 262);
+    // Steel is now a build material (#214): sorter 4 + furnace 4 + a spare
+    // sorter 4 spends the seed's entire 12 steel.
+    expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 8 }).ok).toBe(true);
+    expect(send(state, { type: "machine.build", blueprint: "furnace", tile: 9 }).ok).toBe(true);
+    expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 10 }).ok).toBe(true);
+    expect(state.store.steel ?? 0).toBe(0);
+    // refundOf(4) = 4: the 90% refund rounds back to the full 4 steel, so
+    // processor steel stays recoverable even at a zero balance.
+    expect(refundOf(4)).toBe(4);
+    const spare = state.machines[2];
+    expect(send(state, { type: "machine.dismantle", machineId: spare.id }).ok).toBe(true);
+    expect(state.store.steel ?? 0).toBe(4);
+    // Wire pulse -> sorter -> furnace -> steel -> contract and let it re-earn
+    // the 10-steel contract from ferrous alone: no steel source was added.
+    const sorter = state.machines[0];
+    const furnace = state.machines[1];
+    send(state, { type: "route.connect", from: 0, to: sorter.id, filter: "scrap" });
+    send(state, { type: "route.connect", from: sorter.id, to: furnace.id, filter: "ferrous" });
+    send(state, { type: "route.connect", from: furnace.id, to: 0, filter: "steel" });
+    // #214 re-pin: route the sorter's nonferrous byproduct back to the dock so it
+    // neither clogs the sorter tray nor rides the ferrous belt into the furnace
+    // input buffer (which starved the furnace and stalled recovery at 9 steel).
+    send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
+    advance(state, 4000);
+    expect(state.store.steel ?? 0).toBeGreaterThanOrEqual(TUNING.exportContractSteel);
+    expect(send(state, { type: "contract.export" }).ok).toBe(true);
+    expect(state.exportClaimed).toBe(true);
   });
 
   it("the wreck regenerates, so recovery never runs out", () => {

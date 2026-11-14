@@ -67,17 +67,19 @@ function runScript(chunk: number): SimState {
 }
 
 describe("tutorial starter economy", () => {
-  it("awards exactly 30 scrap for six manual pulses", () => {
+  it("awards exactly 12 pulse scrap on top of the 120-scrap seed (#214)", () => {
+    const seed = createInitialState();
     const state = createInitialState();
     for (let i = 0; i < 6; i += 1) {
       expect(send(state, { type: "manual.salvage" }).ok).toBe(true);
       advance(state, TUNING.manualPulseTicks);
     }
-    expect(state.store["scrap"]).toBe(30);
+    // #214 re-pin: the seed starts at 120 scrap and each pulse gives 2 (was 0 + 5).
+    expect(state.store["scrap"]).toBe((seed.store["scrap"] ?? 0) + 6 * TUNING.manualSalvagePerPulse);
     expect(state.tutorial).toBe(2);
   });
 
-  it("enforces the 0.6s cutting pulse cooldown", () => {
+  it("enforces the 2s cutting pulse cooldown (#214)", () => {
     const state = createInitialState();
     expect(send(state, { type: "manual.salvage" }).ok).toBe(true);
     const second = send(state, { type: "manual.salvage" });
@@ -95,7 +97,10 @@ describe("tutorial starter economy", () => {
     }
     expect(send(state, { type: "drone.repair" }).ok).toBe(true);
     expect(state.drone.repaired).toBe(true);
-    expect(state.store["scrap"]).toBe(0);
+    // #214 re-pin: 120 seed + 12 pulse - 30 repair = 102 (was 0).
+    expect(state.store["scrap"]).toBe(
+      (createInitialState().store["scrap"] ?? 0) + 6 * TUNING.manualSalvagePerPulse - TUNING.repairCostScrap
+    );
     expect(send(state, { type: "drone.repair" }).ok).toBe(false);
     expect(state.drone.repaired).toBe(true);
   });
@@ -107,16 +112,22 @@ describe("tutorial starter economy", () => {
       advance(state, TUNING.manualPulseTicks);
     }
     send(state, { type: "drone.repair" });
+    // #214 re-pin: deliveries land on top of the post-repair seed balance (102).
+    const bank =
+      (createInitialState().store["scrap"] ?? 0) +
+      6 * TUNING.manualSalvagePerPulse -
+      TUNING.repairCostScrap;
     advance(state, TUNING.droneDeliveryTicks + TUNING.droneTravelTicks + 1);
     expect(state.drone.deliveries).toBe(1);
-    expect(state.store["scrap"]).toBe(TUNING.droneDeliveryUnits);
+    expect(state.store["scrap"]).toBe(bank + TUNING.droneDeliveryUnits);
     advance(state, TUNING.droneDeliveryTicks);
-    expect(state.store["scrap"]).toBe(TUNING.droneDeliveryUnits * 2);
+    expect(state.store["scrap"]).toBe(bank + TUNING.droneDeliveryUnits * 2);
   });
 
   it("reaches the first export contract through a real processing chain", () => {
     const state = tutorialToExport();
-    expect(state.credits).toBe(TUNING.exportContractCredits);
+    // #214 re-pin: the seed starts with 60 credits, so the claim lands at 110.
+    expect(state.credits).toBe(createInitialState().credits + TUNING.exportContractCredits);
     expect(state.exportClaimed).toBe(true);
     expect(state.tutorial).toBeGreaterThanOrEqual(7);
     expect(send(state, { type: "contract.export" }).ok).toBe(false);
@@ -124,6 +135,10 @@ describe("tutorial starter economy", () => {
 
   it("rejects builds without enough material and charges nothing", () => {
     const state = createInitialState();
+    // #214 re-pin: the starter seed now funds the sorter (120 scrap, 12 steel),
+    // so the refusal corner must drain the store first (bankrupt state).
+    state.store = {};
+    state.storeUnits = 0;
     const before = send(state, { type: "machine.build", blueprint: "sorter", tile: 8 });
     expect(before.ok).toBe(false);
     if (!before.ok) expect(before.reason).toBe("insufficient");
@@ -155,7 +170,10 @@ describe("tutorial starter economy", () => {
     expect(first.ok).toBe(true);
     expect(second).toEqual(first);
     expect(state.revision).toBe(revision);
-    expect(state.store["scrap"]).toBe(0);
+    // #214 re-pin: one repair is charged against the seed (120 + 12 - 30 = 102).
+    expect(state.store["scrap"]).toBe(
+      (createInitialState().store["scrap"] ?? 0) + 6 * TUNING.manualSalvagePerPulse - TUNING.repairCostScrap
+    );
   });
 });
 

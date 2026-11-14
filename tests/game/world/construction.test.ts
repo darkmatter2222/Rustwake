@@ -130,8 +130,10 @@ describe("completion settles exactly once", () => {
     advanceWorldTo(reloaded, 50);
     expect(reloaded.buildings.length).toBe(1);
     expect(reloaded.reservations.length).toBe(0);
-    expect(reloaded.committed.scrap).toBe(10);
-    expect(reloaded.committed.ferrous).toBe(5);
+    // #214: furnace now costs 35 scrap + 4 steel (was 10 scrap + 5 ferrous);
+    // completion commits the full build cost, steel replacing ferrous.
+    expect(reloaded.committed.scrap).toBe(35);
+    expect(reloaded.committed.steel).toBe(4);
     // Advancing again after a second reload changes no ledger entry.
     const again = cloneWorld(reloaded);
     advanceWorldTo(again, 500);
@@ -184,11 +186,11 @@ describe("cancellation refunds (GAME_SYSTEMS: 100% before work, 90% after)", () 
     expectOk(place(w, "p1", "furnace", c.x, c.y));
     advanceWorld(w, 25);
     expectOk(applyWorldCommand(w, { id: "c1", type: "world.cancel", siteId: 1 }));
-    // furnace cost 10 scrap / 5 ferrous: floor(9)=9, floor(4.5)=4
-    expect(w.stock.scrap).toBe(120 - 10 + 9);
-    expect(w.stock.ferrous).toBe(12 - 5 + 4);
-    expect(w.committed.scrap).toBe(1);
-    expect(w.committed.ferrous).toBe(1);
+    // furnace cost 35 scrap / 4 steel (#214 seed): floor(35*.9)=31, floor(4*.9)=3
+    expect(w.stock.scrap).toBe(120 - 35 + 31);
+    expect(w.stock.steel).toBe(12 - 4 + 3);
+    expect(w.committed.scrap).toBe(4);
+    expect(w.committed.steel).toBe(1);
     for (const qty of Object.values(w.stock)) expect(Number.isInteger(qty)).toBe(true);
     expectConserved(w, INITIAL_STOCK);
   });

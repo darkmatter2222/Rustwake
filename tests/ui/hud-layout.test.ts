@@ -64,6 +64,7 @@ describe("HUD resource chips (spec 5.4)", () => {
     const stocked = createInitialState();
     stocked.store = { scrap: 20, steel: 5 };
     expect(visibleResources(stocked, 5)).toEqual(["scrap", "steel"]);
-    expect(visibleResources(createInitialState(), 3)).toEqual(["scrap"]);
+    // #214: the seed stocks ferrous and steel too, so all three chips show.
+    expect(visibleResources(createInitialState(), 3)).toEqual(["scrap", "ferrous", "steel"]);
   });
 });

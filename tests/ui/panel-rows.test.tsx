@@ -263,7 +263,7 @@ describe("UI-002 panel rows and printed costs", () => {
     );
     expect(t("btn.dismantleRefund", { refund: "18 units" })).toBe("Dismantle · +18 units");
     // The blueprint the yard opens with is priced from the same table the faces print.
-    expect(BLUEPRINTS.sorter.buildCost.reduce((total, item) => total + item.qty, 0)).toBe(20);
+    expect(BLUEPRINTS.sorter.buildCost.reduce((total, item) => total + item.qty, 0)).toBe(34);
     expect(planConnections(state0(), 1)).toHaveLength(0);
   });
 });

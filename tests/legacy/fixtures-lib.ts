@@ -243,15 +243,29 @@ function scriptDeep(): SimState {
   // the yard banks the build costs; it is removed (and refunded) below.
   send(state, { type: "route.connect", from: sorter.id, to: 0, filter: "nonferrous" });
   const tempNonferrous = state.routes[state.routes.length - 1];
+  // #214: the seed dock holds 300 units, so the fund targets must fit it AND the
+  // loop must keep the dock clear. The five builds below cost 170 scrap + 27 ferrous
+  // + 11 nonferrous; 180/30/14 banks them with headroom. Nonferrous has no consumer
+  // until those builds stand, so without selling it piles up and saturates the dock,
+  // blocking the scrap deliveries the loop waits for (the old 900 dock hid this).
+  // Each chunk, sell steel/ferrous/nonferrous back down to their fund keeps so scrap
+  // has room to land; scrap itself is never sold here.
+  const fundKeep: Partial<Record<ResourceId, number>> = { steel: 30, ferrous: 30, nonferrous: 14 };
   let guard = 0;
   while (
-    (state.store.scrap ?? 0) < 260 ||
+    (state.store.scrap ?? 0) < 180 ||
     (state.store.ferrous ?? 0) < 30 ||
     (state.store.nonferrous ?? 0) < 14
   ) {
     guard += 1;
     if (guard > 60) throw new Error("fixture script: build funds did not accumulate");
     advance(state, 500);
+    for (const [resource, keep] of Object.entries(fundKeep)) {
+      const held = state.store[resource as ResourceId] ?? 0;
+      if (held > keep) {
+        send(state, { type: "contract.sell", resource: resource as ResourceId, qty: Math.min(TUNING.sellBatchCap, held - keep) });
+      }
+    }
   }
 
   send(state, { type: "machine.build", blueprint: "copperSeparator", tile: 10 });
