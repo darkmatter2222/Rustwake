@@ -23,11 +23,16 @@ function seed(state: SimState, amounts: Partial<Record<ResourceId, number>>) {
   }
 }
 
-/** Empty yard at a chosen unlock step, with the ledger set by the test. */
+/** Empty yard at a chosen unlock step, with the ledger set by the test.
+ * #214: the store starts empty so the test's literal IS the ledger; the old
+ * helper added onto the seed's 120 scrap / 12 ferrous / 12 steel, which made
+ * every machine affordable and hid the nearest-goal ranking. */
 function yard(tutorial: number, store: Partial<Record<ResourceId, number>>, credits = 0): SimState {
   const state = createInitialState();
   state.tutorial = tutorial;
   state.credits = credits;
+  state.store = {};
+  state.storeUnits = 0;
   seed(state, store);
   return state;
 }
@@ -46,22 +51,23 @@ describe("yard ladder (spec 3.3, 10.5)", () => {
   });
 
   it("prefers an affordable machine over a surplus sell", () => {
-    const state = yard(7, { scrap: 30, ferrous: 6, nonferrous: 6, residue: 14 });
+    const state = yard(7, { scrap: 30, steel: 4, ferrous: 6, nonferrous: 6, residue: 14 });
     expect(nextYardStep(state)).toEqual({ kind: "build", blueprint: "sorter" });
     expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 0 }).ok).toBe(true);
     expect(state.machines[state.machines.length - 1].blueprint).toBe("sorter");
   });
 
   it("names the unbuilt machine whose inputs are closest to complete", () => {
-    // Furnace lacks 1 ferrous, sorter 8 scrap, separator 14, recycler 17, so the
-    // furnace is the nearer goal and the card should point at it.
+    // #214 shortfalls at this ledger: copper separator 14 (13 scrap + 1 ferrous),
+    // recycler 17, sorter 22, furnace 27, so the separator is the nearer goal and
+    // the card should point at it.
     const state = yard(7, { scrap: 12, ferrous: 4, nonferrous: 1 });
     const step = nextYardStep(state);
-    expect(step).toEqual({ kind: "build", blueprint: "furnace" });
+    expect(step).toEqual({ kind: "build", blueprint: "copperSeparator" });
   });
 
   it("upgrades the busiest stage at equal level, then the lower level", () => {
-    const state = yard(9, { scrap: 60, residue: 14 }, 80);
+    const state = yard(9, { scrap: 110, steel: 8, residue: 14 }, 80);
     expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 0 }).ok).toBe(true);
     expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 1 }).ok).toBe(true);
     const [a, b] = state.machines;
