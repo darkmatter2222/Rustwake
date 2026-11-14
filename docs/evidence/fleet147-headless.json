@@ -1,0 +1,502 @@
+{
+  "generatedBy": "scripts/probe-fleet147.mjs",
+  "issue": "https://github.com/darkmatter2222/Rustwake/issues/147",
+  "headSha": "a64c6efb08a3ae9aef0df93bc1ae99cf6d153cd2",
+  "url": "http://localhost:4297/",
+  "cellSize": 32,
+  "sessionOnly": "Road logistics (#140) and traffic (#141) are session-only; no save seeded, no SAVE_KEY/migration/recovery touched (#148 owns the cutover).",
+  "refinement": "#217 — production loading sockets stay empty until the #148 cutover; the bay editor prints the honest empty state.",
+  "cells": [
+    {
+      "label": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  ],
+  "results": {
+    "desktop": {
+      "fleetInitial": {
+        "trafficStatus": "Traffic model: legacy (opt-in, default off)",
+        "enablePresent": true,
+        "enableDisabled": false,
+        "rowCount": 0,
+        "rows": [],
+        "emptyText": "No trucks yet. Add one below — session setup, reset on reload.",
+        "defaultProfileDisabled": true,
+        "addMessage": null,
+        "readerNote": null
+      },
+      "fleetOneTruck": {
+        "trafficStatus": "Traffic model: legacy (opt-in, default off)",
+        "enablePresent": true,
+        "enableDisabled": false,
+        "rowCount": 1,
+        "rows": [
+          {
+            "selectAria": "Select truck 1",
+            "selected": false,
+            "labelText": "Truck 1Idle · Cargo 0/12 · Destination —",
+            "holdText": null,
+            "recoveryText": null,
+            "focusAria": null,
+            "profilePresent": false,
+            "profileInputDisabled": null
+          }
+        ],
+        "emptyText": null,
+        "defaultProfileDisabled": true,
+        "addMessage": "Truck added.",
+        "readerNote": null
+      },
+      "fleetTrafficOn": {
+        "trafficStatus": "Traffic model: active",
+        "enablePresent": false,
+        "enableDisabled": null,
+        "rowCount": 1,
+        "rows": [
+          {
+            "selectAria": "Select truck 1",
+            "selected": false,
+            "labelText": "Truck 1Idle · Cargo 0/12 · Destination —",
+            "holdText": null,
+            "recoveryText": null,
+            "focusAria": null,
+            "profilePresent": false,
+            "profileInputDisabled": null
+          }
+        ],
+        "emptyText": null,
+        "defaultProfileDisabled": false,
+        "addMessage": "Truck added.",
+        "readerNote": null
+      },
+      "fleetSelected": {
+        "trafficStatus": "Traffic model: active",
+        "enablePresent": false,
+        "enableDisabled": null,
+        "rowCount": 1,
+        "rows": [
+          {
+            "selectAria": "Select truck 1",
+            "selected": true,
+            "labelText": "Truck 1Idle · Cargo 0/12 · Destination —",
+            "holdText": null,
+            "recoveryText": null,
+            "focusAria": null,
+            "profilePresent": true,
+            "profileInputDisabled": false
+          }
+        ],
+        "emptyText": null,
+        "defaultProfileDisabled": false,
+        "addMessage": "Truck added.",
+        "readerNote": null
+      },
+      "fleetTwoTrucks": {
+        "trafficStatus": "Traffic model: active",
+        "enablePresent": false,
+        "enableDisabled": null,
+        "rowCount": 2,
+        "rows": [
+          {
+            "selectAria": "Select truck 1",
+            "selected": true,
+            "labelText": "Truck 1Idle · Cargo 0/12 · Destination —",
+            "holdText": null,
+            "recoveryText": null,
+            "focusAria": null,
+            "profilePresent": true,
+            "profileInputDisabled": false
+          },
+          {
+            "selectAria": "Select truck 2",
+            "selected": false,
+            "labelText": "Truck 2Idle · Cargo 0/8 · Destination —",
+            "holdText": null,
+            "recoveryText": null,
+            "focusAria": null,
+            "profilePresent": false,
+            "profileInputDisabled": null
+          }
+        ],
+        "emptyText": null,
+        "defaultProfileDisabled": false,
+        "addMessage": "Truck added.",
+        "readerNote": null
+      },
+      "routesInitial": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "0",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": "No buildings registered. Register an approach cell below to dispatch.",
+        "setupMessage": null,
+        "readerNote": null
+      },
+      "registerOne": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "0",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": null,
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      },
+      "registerTwo": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "0",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": null,
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      },
+      "routesZeroStock": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "0",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": "Reserve floor keeps 0 scrap at the source; only 0 free, so 5 cannot move.",
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      },
+      "routesMinFill": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "0",
+        "minFill": "10",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": "Minimum fill is 10; 5 is too small.",
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      },
+      "routesFiltered": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 14,
+        "reserveFloor": "0",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": "scrap is filtered out by the dispatch policy.",
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      },
+      "routesFloor": {
+        "policyPresent": true,
+        "filterCount": 15,
+        "checkedFilters": 15,
+        "reserveFloor": "7",
+        "minFill": "1",
+        "jobRowCount": 0,
+        "jobs": [],
+        "emptyJobsText": "No road jobs yet. Create one above.",
+        "baysEmptyText": "No declared loading sockets yet. Complete a road-taking building to expose its bays.",
+        "bayRowCount": 0,
+        "newJobMessage": "scrap is filtered out by the dispatch policy.",
+        "setupMessage": "Building registered.",
+        "readerNote": null
+      }
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "checks": [
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "road-fleet section paints",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "traffic default-OFF (#140 parity)",
+      "ok": true,
+      "detail": "Traffic model: legacy (opt-in, default off)"
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "Enable traffic face present and enabled",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "empty fleet honest state",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "default profile gated until traffic on",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "add truck creates one row",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "add truck receipt",
+      "ok": true,
+      "detail": "Truck added."
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "truck row select face named",
+      "ok": true,
+      "detail": "Select truck 1"
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "opt-in enable activates traffic",
+      "ok": true,
+      "detail": "Traffic model: active"
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "enable face retires once active",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "default profile unlocked after enable",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "select marks row pressed",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "select reveals per-truck profile",
+      "ok": true
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "zoom reached max scale (yard pan-able)",
+      "ok": true,
+      "detail": 6
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "select focus pans camera to truck cell (0,0)",
+      "ok": true,
+      "detail": {
+        "pre": {
+          "x": 327.96,
+          "y": 116.49,
+          "scale": 6
+        },
+        "post": {
+          "x": 327.96,
+          "y": 75,
+          "scale": 6
+        },
+        "target": {
+          "x": 16,
+          "y": 16
+        },
+        "cell": {
+          "x": 0,
+          "y": 0
+        },
+        "distanceBefore": 327.75,
+        "distanceAfter": 317.49,
+        "moved": true,
+        "closer": true
+      }
+    },
+    {
+      "scenario": "fleet",
+      "cell": "1440x900",
+      "name": "second truck appended",
+      "ok": true,
+      "detail": 2
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "road-routes section paints",
+      "ok": true
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "dispatch policy controls paint",
+      "ok": true
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "15 material filters, all allowed by default",
+      "ok": true,
+      "detail": {
+        "count": 15,
+        "checked": 15
+      }
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "default reserve floor 0 / min fill 1",
+      "ok": true,
+      "detail": {
+        "floor": "0",
+        "fill": "1"
+      }
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "empty jobs honest state",
+      "ok": true
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "#217 honest empty-socket bay state",
+      "ok": true,
+      "detail": "No declared loading sockets yet. Complete a road-taking building to expose its bays."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "register building 1 receipt",
+      "ok": true,
+      "detail": "Building registered."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "register building 2 receipt",
+      "ok": true,
+      "detail": "Building registered."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "reserve-floor gate surfaces zero-stock session reality",
+      "ok": true,
+      "detail": "Reserve floor keeps 0 scrap at the source; only 0 free, so 5 cannot move."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "no job minted from zero stock",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "min-fill policy gate refuses small job",
+      "ok": true,
+      "detail": "Minimum fill is 10; 5 is too small."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "min-fill refusal creates no row",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "material filter gate refuses filtered cargo",
+      "ok": true,
+      "detail": "scrap is filtered out by the dispatch policy."
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "filtered refusal creates no row",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "filter checkbox narrows allowed set",
+      "ok": true,
+      "detail": 14
+    },
+    {
+      "scenario": "routes",
+      "cell": "1440x900",
+      "name": "reserve floor edits live",
+      "ok": true,
+      "detail": "7"
+    },
+    {
+      "scenario": "console",
+      "cell": "1440x900",
+      "name": "zero page errors",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "scenario": "console",
+      "cell": "1440x900",
+      "name": "zero console errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "summary": {
+    "total": 34,
+    "passed": 34,
+    "failed": 0
+  }
+}
