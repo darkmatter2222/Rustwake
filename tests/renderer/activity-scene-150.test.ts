@@ -53,7 +53,7 @@ function makeCtx(dash: boolean) {
     set globalAlpha(v: number) { alpha = v; },
     fillRect: (...a: number[]) => log.push({ op: "fillRect", style: fillStyle, args: a, alpha }),
     strokeRect: (...a: number[]) => log.push({ op: "strokeRect", style: strokeStyle, args: a, alpha }),
-    fillText: (text: string, ...a: number[]) => log.push({ op: "fillText", style: fillStyle, args: a, alpha }),
+    fillText: (_text: string, ...a: number[]) => log.push({ op: "fillText", style: fillStyle, args: a, alpha }),
     beginPath: () => undefined,
     closePath: () => undefined,
     moveTo: (...a: number[]) => log.push({ op: "moveTo", style: "", args: a, alpha }),
