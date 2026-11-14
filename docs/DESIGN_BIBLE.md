@@ -1,3 +1,5 @@
+> **Historical baseline:** superseded where incompatible by [Living Voxel World](vision/README.md), mandate #121. Retain useful implementation history; do not schedule old scope or apply obsolete art/performance constraints. New benchmark targets must be measured in P0.
+
 # Rustwake — spirit, style and experiential quality
 
 ## Product authority
@@ -88,4 +90,5 @@ First-feel acceptance requires each observed category ≥3, no critical defect, 
 Describe what is seen/heard/experienced, why it harms the player, the proposed change, measurable acceptance, evidence path and candidate SHA. Reject generic “make it better” tasks. Propose at least one bounded experiment when uncertain. Recheck the result independently; a developer's completion statement is not acceptance.
 
 Do not loop forever on ratings. Once a task passes its scoped criteria, accept it and move to the next highest-value gap. After style is coherent, preserve it as the mechanics grow.
+
 

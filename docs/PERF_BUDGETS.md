@@ -1,3 +1,5 @@
+> **Historical baseline:** superseded where incompatible by [Living Voxel World](vision/README.md), mandate #121. Retain useful implementation history; do not schedule old scope or apply obsolete art/performance constraints. New benchmark targets must be measured in P0.
+
 # Performance budgets & measurement protocol — UI restart (#67)
 
 Issue: <https://github.com/darkmatter2222/Rustwake/issues/67> (parent release #43, Gate G4, Milestone 1 "UI Restart — Mobile + Desktop").
@@ -199,3 +201,4 @@ Unthrottled menu-open (median of 3) improved on phone-ts1 (13 → 8.1 ms) and de
 - Frame time stays at the 60 Hz vsync floor (16.8 ms, 0 dropped, 0 long tasks) even at 6× throttle on this host — the sensitive signal is throttled interaction latency, where memoization is judged.
 
 Full per-device data, frames, stress/6×/reduced-motion/offline-catch-up coverage and explicit limitations are in [`tests/perf/perf-67.evidence/evidence.md`](../tests/perf/perf-67.evidence/evidence.md) and `results.json` (`buildSha == 2ac4213`).
+

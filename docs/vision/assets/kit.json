@@ -1,0 +1,2508 @@
+{
+  "schemaVersion": 1,
+  "units": "world units; 1 unit = 1 cell, conceptual 2m",
+  "axes": "right handed Y-up; forward +Z",
+  "detailQuantum": 0.125,
+  "palette": {
+    "sand": "#BA8054",
+    "oxide": "#A34F32",
+    "oxideLight": "#C47746",
+    "cream": "#D6C7A3",
+    "charcoal": "#292C29",
+    "steel": "#7C8078",
+    "olive": "#777746",
+    "yellow": "#C99A35",
+    "amber": "#FFB348",
+    "rubber": "#33332F"
+  },
+  "assets": [
+    {
+      "id": "warehouse",
+      "footprint": [
+        6,
+        4
+      ],
+      "description": "Cream warehouse, two unobstructed front bays, stepped oxide roof. Doors lift independently.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "foundation",
+          "parent": "root",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            6,
+            0.2,
+            4
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "structure",
+          "center": [
+            0,
+            1.1,
+            -1.85
+          ],
+          "size": [
+            5.8,
+            2.2,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "side-1",
+          "parent": "structure",
+          "center": [
+            -2.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "side1",
+          "parent": "structure",
+          "center": [
+            2.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "roofBase",
+          "parent": "roof",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            6.1,
+            0.2,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep-1",
+          "parent": "roof",
+          "center": [
+            -1.32,
+            0.3,
+            0
+          ],
+          "size": [
+            2.88,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep1",
+          "parent": "roof",
+          "center": [
+            1.32,
+            0.3,
+            0
+          ],
+          "size": [
+            2.88,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "ridge",
+          "parent": "roof",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            2.0999999999999996,
+            0.2,
+            4.1
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "frontLintel",
+          "parent": "structure",
+          "center": [
+            0,
+            2.0,
+            1.85
+          ],
+          "size": [
+            5.8,
+            0.4,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "centerPier",
+          "parent": "structure",
+          "center": [
+            0,
+            1.0,
+            1.85
+          ],
+          "size": [
+            0.35,
+            2,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "doorPanel0",
+          "parent": "door0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2.2,
+            1.7,
+            0.12
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "doorPanel1",
+          "parent": "door1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2.2,
+            1.7,
+            0.12
+          ],
+          "material": "yellow"
+        }
+      ],
+      "groups": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        },
+        {
+          "name": "door0",
+          "parent": "root",
+          "position": [
+            -1.55,
+            1.0,
+            1.85
+          ]
+        },
+        {
+          "name": "door1",
+          "parent": "root",
+          "position": [
+            1.55,
+            1.0,
+            1.85
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "bay0",
+          "position": [
+            -1.55,
+            0,
+            2.15
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 2.2
+        },
+        {
+          "name": "bay1",
+          "position": [
+            1.55,
+            0,
+            2.15
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 2.2
+        }
+      ],
+      "animations": [
+        {
+          "name": "assemble_structure",
+          "target": "structure",
+          "path": "scale",
+          "times": [
+            0,
+            0.6,
+            2.8,
+            5
+          ],
+          "values": [
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "assemble_roof",
+          "target": "roof",
+          "path": "translation",
+          "times": [
+            0,
+            2.8,
+            3.8,
+            5
+          ],
+          "values": [
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door0_open",
+          "target": "door0",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              -1.55,
+              1,
+              1.85
+            ],
+            [
+              -1.55,
+              2.7,
+              1.85
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door1_open",
+          "target": "door1",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              1.55,
+              1,
+              1.85
+            ],
+            [
+              1.55,
+              2.7,
+              1.85
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "depot",
+      "footprint": [
+        4,
+        4
+      ],
+      "description": "Yellow garage with wide front opening and simple tool sign.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "foundation",
+          "parent": "root",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            4,
+            0.2,
+            4
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "structure",
+          "center": [
+            0,
+            1.1,
+            -1.85
+          ],
+          "size": [
+            3.8,
+            2.2,
+            0.25
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "side-1",
+          "parent": "structure",
+          "center": [
+            -1.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "side1",
+          "parent": "structure",
+          "center": [
+            1.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "roofBase",
+          "parent": "roof",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            4.1,
+            0.2,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep-1",
+          "parent": "roof",
+          "center": [
+            -0.88,
+            0.3,
+            0
+          ],
+          "size": [
+            1.92,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep1",
+          "parent": "roof",
+          "center": [
+            0.88,
+            0.3,
+            0
+          ],
+          "size": [
+            1.92,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "ridge",
+          "parent": "roof",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            1.4,
+            0.2,
+            4.1
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "lintel",
+          "parent": "structure",
+          "center": [
+            0,
+            2,
+            1.85
+          ],
+          "size": [
+            3.8,
+            0.4,
+            0.2
+          ],
+          "material": "cream"
+        }
+      ],
+      "groups": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "serviceBay",
+          "position": [
+            0,
+            0,
+            2.2
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 3.2
+        }
+      ],
+      "animations": [
+        {
+          "name": "assemble_structure",
+          "target": "structure",
+          "path": "scale",
+          "times": [
+            0,
+            0.6,
+            2.8,
+            5
+          ],
+          "values": [
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "assemble_roof",
+          "target": "roof",
+          "path": "translation",
+          "times": [
+            0,
+            2.8,
+            3.8,
+            5
+          ],
+          "values": [
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "sorter",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Olive hopper with short dark belt emerging at front.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.8,
+            -0.3
+          ],
+          "size": [
+            2.4,
+            1.6,
+            1.8
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "hopper",
+          "parent": "root",
+          "center": [
+            0,
+            1.8,
+            -0.3
+          ],
+          "size": [
+            2.6,
+            0.4,
+            2
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "belt",
+          "parent": "root",
+          "center": [
+            0,
+            0.6,
+            1.1
+          ],
+          "size": [
+            1,
+            0.2,
+            1.6
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "rollerMesh",
+          "parent": "roller",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            0.18,
+            0.18
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "roller",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            1.3
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "output",
+          "position": [
+            0,
+            0,
+            1.6
+          ],
+          "kind": "belt",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1
+        }
+      ],
+      "animations": [
+        {
+          "name": "roller_work",
+          "target": "roller",
+          "path": "rotation",
+          "times": [
+            0,
+            1,
+            2
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "furnace",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Oxide furnace with open amber mouth and single tall chimney.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.15,
+            0
+          ],
+          "size": [
+            3,
+            0.3,
+            3
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "root",
+          "center": [
+            0,
+            1.05,
+            -0.7
+          ],
+          "size": [
+            2.5,
+            1.8,
+            1.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "left",
+          "parent": "root",
+          "center": [
+            -0.9,
+            0.85,
+            0.4
+          ],
+          "size": [
+            0.5,
+            1.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "right",
+          "parent": "root",
+          "center": [
+            0.9,
+            0.85,
+            0.4
+          ],
+          "size": [
+            0.5,
+            1.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "lintel",
+          "parent": "root",
+          "center": [
+            0,
+            1.6,
+            0.4
+          ],
+          "size": [
+            2.3,
+            0.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "glow",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0.55
+          ],
+          "size": [
+            1.2,
+            0.25,
+            1.1
+          ],
+          "material": "amber"
+        },
+        {
+          "name": "chimney",
+          "parent": "root",
+          "center": [
+            0.65,
+            2.4,
+            -0.65
+          ],
+          "size": [
+            0.55,
+            2,
+            0.55
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "door",
+          "parent": "intakeDoor",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1.3,
+            0.9,
+            0.12
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "intakeDoor",
+          "parent": "root",
+          "position": [
+            0,
+            1.0,
+            1.2
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "input",
+          "position": [
+            0,
+            0,
+            1.7
+          ],
+          "kind": "pallet",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1.3
+        }
+      ],
+      "animations": [
+        {
+          "name": "intake",
+          "target": "intakeDoor",
+          "path": "translation",
+          "times": [
+            0,
+            0.6,
+            1.4,
+            2
+          ],
+          "values": [
+            [
+              0,
+              1,
+              1.2
+            ],
+            [
+              0,
+              1.9,
+              1.2
+            ],
+            [
+              0,
+              1.9,
+              1.2
+            ],
+            [
+              0,
+              1,
+              1.2
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "generator",
+      "footprint": [
+        2,
+        2
+      ],
+      "description": "Olive generator with visible cream fan in charcoal frame.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "housing",
+          "parent": "root",
+          "center": [
+            0,
+            0.65,
+            0
+          ],
+          "size": [
+            1.7,
+            1.3,
+            1.6
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "fanFrame",
+          "parent": "root",
+          "center": [
+            0,
+            0.75,
+            0.84
+          ],
+          "size": [
+            1,
+            1,
+            0.12
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "fanX",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.8,
+            0.12,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "fanY",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.12,
+            0.8,
+            0.08
+          ],
+          "material": "cream"
+        }
+      ],
+      "groups": [
+        {
+          "name": "fan",
+          "parent": "root",
+          "position": [
+            0,
+            0.75,
+            0.93
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "fan_powered",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.85,
+            1.7
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "crane",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Yellow crane with rotating upper assembly, boom and vertical hoist.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.3,
+            0
+          ],
+          "size": [
+            2.2,
+            0.6,
+            2.2
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "tower",
+          "parent": "slew",
+          "center": [
+            0,
+            1,
+            0
+          ],
+          "size": [
+            0.8,
+            2,
+            0.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "boom",
+          "parent": "slew",
+          "center": [
+            1,
+            2,
+            0
+          ],
+          "size": [
+            3,
+            0.3,
+            0.4
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "cable",
+          "parent": "hoist",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            0.06,
+            1,
+            0.06
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "grip",
+          "parent": "hoist",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.2,
+            0.5
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "slew",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "hoist",
+          "parent": "slew",
+          "position": [
+            2.2,
+            1.2,
+            0
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "hoist_lift",
+          "target": "hoist",
+          "path": "translation",
+          "times": [
+            0,
+            1.8
+          ],
+          "values": [
+            [
+              2.2,
+              0.4,
+              0
+            ],
+            [
+              2.2,
+              1.2,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "truck",
+      "footprint": [
+        1,
+        3
+      ],
+      "description": "Cream cab, oxide cargo bed, six chunky wheels. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "chassis",
+          "parent": "root",
+          "center": [
+            0,
+            0.35,
+            0
+          ],
+          "size": [
+            0.9,
+            0.2,
+            2.5
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "cab",
+          "parent": "root",
+          "center": [
+            0,
+            0.85,
+            0.75
+          ],
+          "size": [
+            1,
+            0.9,
+            0.85
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "windshield",
+          "parent": "root",
+          "center": [
+            0,
+            1,
+            0.96
+          ],
+          "size": [
+            0.78,
+            0.3,
+            0.05
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "bed",
+          "parent": "root",
+          "center": [
+            0,
+            0.65,
+            -0.45
+          ],
+          "size": [
+            1,
+            0.2,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "pallet",
+          "parent": "cargo",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.8,
+            0.4,
+            1.1
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "wheel_-1_0Mesh",
+          "parent": "wheel_-1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_-1_1Mesh",
+          "parent": "wheel_-1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_-1_2Mesh",
+          "parent": "wheel_-1_2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_0Mesh",
+          "parent": "wheel_1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_1Mesh",
+          "parent": "wheel_1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_2Mesh",
+          "parent": "wheel_1_2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        }
+      ],
+      "groups": [
+        {
+          "name": "cargo",
+          "parent": "root",
+          "position": [
+            0,
+            0.8,
+            -0.45
+          ]
+        },
+        {
+          "name": "wheel_-1_0",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            0.8
+          ]
+        },
+        {
+          "name": "wheel_-1_1",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            -0.4
+          ]
+        },
+        {
+          "name": "wheel_-1_2",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            -0.95
+          ]
+        },
+        {
+          "name": "wheel_1_0",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            0.8
+          ]
+        },
+        {
+          "name": "wheel_1_1",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            -0.4
+          ]
+        },
+        {
+          "name": "wheel_1_2",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            -0.95
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "cargo",
+          "position": [
+            0,
+            0.8,
+            -0.45
+          ],
+          "kind": "cargo",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 0.8
+        }
+      ],
+      "animations": [
+        {
+          "name": "wheel_-1_0_roll",
+          "target": "wheel_-1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "target": "wheel_-1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_-1_2_roll",
+          "target": "wheel_-1_2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "target": "wheel_1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "target": "wheel_1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_2_roll",
+          "target": "wheel_1_2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "forklift",
+      "footprint": [
+        1,
+        2
+      ],
+      "description": "Yellow compact forklift with separate mast lift and two forks.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            -0.3
+          ],
+          "size": [
+            0.9,
+            0.7,
+            1.1
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "mast",
+          "parent": "root",
+          "center": [
+            0,
+            1,
+            0.5
+          ],
+          "size": [
+            0.8,
+            2,
+            0.15
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "crossbar",
+          "parent": "lift",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.8,
+            0.15,
+            0.15
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "fork-0.25",
+          "parent": "lift",
+          "center": [
+            -0.25,
+            -0.05,
+            0.4
+          ],
+          "size": [
+            0.12,
+            0.1,
+            0.9
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "fork0.25",
+          "parent": "lift",
+          "center": [
+            0.25,
+            -0.05,
+            0.4
+          ],
+          "size": [
+            0.12,
+            0.1,
+            0.9
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "lift",
+          "parent": "root",
+          "position": [
+            0,
+            0.25,
+            0.6
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "lift_pallet",
+          "target": "lift",
+          "path": "translation",
+          "times": [
+            0,
+            1.4
+          ],
+          "values": [
+            [
+              0,
+              0.25,
+              0.6
+            ],
+            [
+              0,
+              1.2,
+              0.6
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "drone",
+      "footprint": [
+        1,
+        1
+      ],
+      "description": "Yellow four-rotor cargo drone, crate attached under center.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.4,
+            0
+          ],
+          "size": [
+            0.6,
+            0.25,
+            0.6
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "armX",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            1.4,
+            0.1,
+            0.12
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armZ",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            0.12,
+            0.1,
+            1.4
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "blade0",
+          "parent": "rotor0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade1",
+          "parent": "rotor1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade2",
+          "parent": "rotor2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade3",
+          "parent": "rotor3",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "cargo",
+          "parent": "root",
+          "center": [
+            0,
+            0.05,
+            0
+          ],
+          "size": [
+            0.45,
+            0.35,
+            0.45
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "rotor0",
+          "parent": "root",
+          "position": [
+            -0.6,
+            0.55,
+            0
+          ]
+        },
+        {
+          "name": "rotor1",
+          "parent": "root",
+          "position": [
+            0.6,
+            0.55,
+            0
+          ]
+        },
+        {
+          "name": "rotor2",
+          "parent": "root",
+          "position": [
+            0,
+            0.55,
+            -0.6
+          ]
+        },
+        {
+          "name": "rotor3",
+          "parent": "root",
+          "position": [
+            0,
+            0.55,
+            0.6
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "hook",
+          "position": [
+            0,
+            -0.15,
+            0
+          ],
+          "kind": "cargo",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 0.45
+        }
+      ],
+      "animations": [
+        {
+          "name": "rotor0_spin",
+          "target": "rotor0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor1_spin",
+          "target": "rotor1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor2_spin",
+          "target": "rotor2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor3_spin",
+          "target": "rotor3",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "footprint": [
+        1,
+        1
+      ],
+      "description": "Hardhat worker; simple limb groups for walk/carry, 0.85 units tall.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "torso",
+          "parent": "root",
+          "center": [
+            0,
+            0.48,
+            0
+          ],
+          "size": [
+            0.25,
+            0.3,
+            0.18
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "center": [
+            0,
+            0.73,
+            0
+          ],
+          "size": [
+            0.18,
+            0.18,
+            0.18
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "helmet",
+          "parent": "root",
+          "center": [
+            0,
+            0.84,
+            0
+          ],
+          "size": [
+            0.25,
+            0.08,
+            0.23
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "legMesh-1",
+          "parent": "leg-1",
+          "center": [
+            0,
+            -0.14,
+            0
+          ],
+          "size": [
+            0.09,
+            0.28,
+            0.1
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armMesh-1",
+          "parent": "arm-1",
+          "center": [
+            0,
+            -0.12,
+            0
+          ],
+          "size": [
+            0.08,
+            0.24,
+            0.09
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "legMesh1",
+          "parent": "leg1",
+          "center": [
+            0,
+            -0.14,
+            0
+          ],
+          "size": [
+            0.09,
+            0.28,
+            0.1
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armMesh1",
+          "parent": "arm1",
+          "center": [
+            0,
+            -0.12,
+            0
+          ],
+          "size": [
+            0.08,
+            0.24,
+            0.09
+          ],
+          "material": "cream"
+        }
+      ],
+      "groups": [
+        {
+          "name": "leg-1",
+          "parent": "root",
+          "position": [
+            -0.07,
+            0.32,
+            0
+          ]
+        },
+        {
+          "name": "arm-1",
+          "parent": "root",
+          "position": [
+            -0.17,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "leg1",
+          "parent": "root",
+          "position": [
+            0.07,
+            0.32,
+            0
+          ]
+        },
+        {
+          "name": "arm1",
+          "parent": "root",
+          "position": [
+            0.17,
+            0.6,
+            0
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "walk_leg",
+          "target": "leg1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.35,
+            0.7
+          ],
+          "values": [
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "turret",
+      "footprint": [
+        2,
+        2
+      ],
+      "description": "Olive kinetic defense turret with separate yaw mount and pitch barrel.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            1.8,
+            0.4,
+            1.8
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "housing",
+          "parent": "yaw",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            1,
+            0.6,
+            1
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "barrel",
+          "parent": "pitch",
+          "center": [
+            0,
+            0,
+            0.6
+          ],
+          "size": [
+            0.25,
+            0.25,
+            1.3
+          ],
+          "material": "charcoal"
+        }
+      ],
+      "groups": [
+        {
+          "name": "yaw",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "pitch",
+          "parent": "yaw",
+          "position": [
+            0,
+            0.3,
+            0.35
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "scan",
+          "target": "yaw",
+          "path": "rotation",
+          "times": [
+            0,
+            2,
+            4
+          ],
+          "values": [
+            [
+              0,
+              -0.25,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0,
+              0.25,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0,
+              -0.25,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "wall_gate",
+      "footprint": [
+        3,
+        1
+      ],
+      "description": "Original modular wall gate; friendly road passage opens center.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "left",
+          "parent": "root",
+          "center": [
+            -1.2,
+            0.7,
+            0
+          ],
+          "size": [
+            0.6,
+            1.4,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "right",
+          "parent": "root",
+          "center": [
+            1.2,
+            0.7,
+            0
+          ],
+          "size": [
+            0.6,
+            1.4,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "panel",
+          "parent": "gate",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1.8,
+            1.3,
+            0.18
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "gate",
+          "parent": "root",
+          "position": [
+            0,
+            0.65,
+            0
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "passage",
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "kind": "road",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1.8
+        }
+      ],
+      "animations": [
+        {
+          "name": "gate_open",
+          "target": "gate",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              0,
+              0.65,
+              0
+            ],
+            [
+              0,
+              2,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    }
+  ]
+}

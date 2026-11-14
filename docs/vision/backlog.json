@@ -1,0 +1,1340 @@
+{
+  "schemaVersion": 1,
+  "masterIssue": 121,
+  "projectUrl": "https://github.com/users/darkmatter2222/projects/2",
+  "statusAuthority": "Live GitHub only; this is a planning seed",
+  "tasks": [
+    {
+      "key": "T01",
+      "phase": "P0",
+      "title": "Commission one runtime, load new mandate and tune role reasoning",
+      "depends_on": [],
+      "role": "coordinator",
+      "spec": "EXECUTION.md",
+      "checks": [
+        "R02",
+        "R03"
+      ],
+      "scope": "Runtime cutover, role profiles and effective configuration only",
+      "acceptance": [
+        "Identify actual Qwen Code/OpenCode version and supported controls; never run both",
+        "Preserve workers/worktrees and prove cancellation before fresh dispatch",
+        "Load Project2/#121 and post loaded SHA plus bounded execution receipt",
+        "Verify low-effort routine role versus deep developer without changing global provider or approvals"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T02",
+      "phase": "P0",
+      "title": "Audit reusable simulation and preserve legacy save fixtures",
+      "depends_on": [
+        "T01"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "E01",
+        "E08"
+      ],
+      "scope": "Existing simulation/persistence characterization; no UI polishing",
+      "acceptance": [
+        "Inventory actual command/state boundaries and content versions",
+        "Check in representative legacy fixtures and quantify preserved balances",
+        "Identify obsolete renderer tests separately from economic invariants"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T03",
+      "phase": "P0",
+      "title": "Prove 3D renderer and benchmark on a declared reference device",
+      "depends_on": [
+        "T01"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "P01",
+        "P03",
+        "V03"
+      ],
+      "scope": "Small engine spike using one reference asset",
+      "acceptance": [
+        "Import reference glTF, orbit/select and animate a component",
+        "Measure actual device and choose renderer/version with short ADR",
+        "Do not claim phone evidence from desktop emulation; identify available phone"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T04",
+      "phase": "P0",
+      "title": "Validate procedural asset kit and author scale fixture",
+      "depends_on": [
+        "T01"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V06"
+      ],
+      "scope": "Asset import/schema/scale fixture, no cinematic replacement art",
+      "acceptance": [
+        "Load kit recipes and named pivot groups",
+        "Verify all four rotations of ports/footprints and vehicle clearance",
+        "Render front/side/isometric fixture for capable review"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T05",
+      "phase": "P0",
+      "title": "Approve integration architecture and replace obsolete art constraints",
+      "depends_on": [
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "role": "reviewer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "E01",
+        "V06",
+        "P01"
+      ],
+      "scope": "P0 integration gate; evidence and specific necessary fixes",
+      "acceptance": [
+        "Accept renderer/state boundary with conservation baseline",
+        "Retire exact pixel/old byte assumptions explicitly, retaining useful tests",
+        "Publish accepted SHA and unblock P1 only after genuine evidence"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T06",
+      "phase": "P1",
+      "title": "Build versioned world grid, occupancy and construction transactions",
+      "depends_on": [
+        "T05"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E01",
+        "E02",
+        "U01"
+      ],
+      "scope": "World state and commands",
+      "acceptance": [
+        "Validate parcels, rotated footprint, terrain and entrance clearance atomically",
+        "Reserve material once and implement building construction ticks",
+        "Reject invalid placement with stable typed reasons"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T07",
+      "phase": "P1",
+      "title": "Implement orthographic camera and reliable selection",
+      "depends_on": [
+        "T05"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "V03",
+        "U02"
+      ],
+      "scope": "Renderer camera/raycast/input boundary",
+      "acceptance": [
+        "Pan, pointer-centered zoom, orbit and quarter-turn controls work",
+        "Inspector resize uses usable world rectangle",
+        "Touch cancel and drag never trigger purchase or salvage"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T08",
+      "phase": "P1",
+      "title": "Implement compact mobile/desktop shell and navigation",
+      "depends_on": [
+        "T05"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U03",
+        "U04"
+      ],
+      "scope": "UI shell and responsive layout",
+      "acceptance": [
+        "World dominates with top resource strip and six-destination toolbar",
+        "One panel at a time; phone sheets and desktop inspector",
+        "No page scroll; keyboard/focus/back and 200% text work"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T09",
+      "phase": "P1",
+      "title": "Author five production buildings and wreck from approved kit",
+      "depends_on": [
+        "T04",
+        "T05"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V01",
+        "V06"
+      ],
+      "scope": "Warehouse/depot/sorter/furnace/generator/wreck assets",
+      "acceptance": [
+        "Preserve primitive palette and clear silhouettes at actual gameplay scale",
+        "Deliver editable parts and named sockets/pivots",
+        "Vision-capable reviewer checks actual rendered assets, not only numeric bounds"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T10",
+      "phase": "P1",
+      "title": "Implement mechanical building assembly and upgrades presentation",
+      "depends_on": [
+        "T06",
+        "T09"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V05",
+        "E02",
+        "U07"
+      ],
+      "scope": "Construction and assembly animation controller",
+      "acceptance": [
+        "Five-stage mechanical assembly uses named groups",
+        "Reload/fast-forward and reduced motion retain economy timing",
+        "Upgrade visually adds modules without replaying costs"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T11",
+      "phase": "P1",
+      "title": "Build explicit catalog and placement/rotation controls",
+      "depends_on": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U01",
+        "U02",
+        "U03"
+      ],
+      "scope": "Build catalog and placement state machine",
+      "acceptance": [
+        "Ghost shows footprint, orientation, clearance, cost and reason",
+        "Explicit confirm/cancel and repeated-placement mode have no accidental buys",
+        "Locked/unaffordable options preserve recoverable context"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T12",
+      "phase": "P1",
+      "title": "Build road graph, loading sockets and atomic road tool",
+      "depends_on": [
+        "T06",
+        "T07"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E04",
+        "U01"
+      ],
+      "scope": "Road topology and road placement UI",
+      "acceptance": [
+        "Preview orthogonal route, cost and crossings before atomic commit",
+        "Connect road lanes to declared bay approach sockets",
+        "Topology revisions invalidate affected paths without deleting cargo"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T13",
+      "phase": "P1",
+      "title": "Implement conserved logistics jobs and reservations",
+      "depends_on": [
+        "T06",
+        "T12"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E01",
+        "E03",
+        "E04"
+      ],
+      "scope": "Cargo job lifecycle",
+      "acceptance": [
+        "Reserve source/destination/carrier with unique IDs",
+        "Partial unload, canceled route and full storage preserve remaining cargo",
+        "Stable tie-breaks and fairness prevent double reservation/starvation"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T14",
+      "phase": "P1",
+      "title": "Implement road pathfinding, bay queues and stuck recovery",
+      "depends_on": [
+        "T12",
+        "T13"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "E04",
+        "E05"
+      ],
+      "scope": "Traffic simulation",
+      "acceptance": [
+        "Path costs affect arrival ticks and throughput",
+        "Intersections and bays reserve capacity without rigid-body pileups",
+        "Blocked roads yield visible recoverable jobs with bounded retry/backoff"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T15",
+      "phase": "P1",
+      "title": "Author truck, forklift, crane, drone and worker rigs",
+      "depends_on": [
+        "T04",
+        "T09"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V06",
+        "V04"
+      ],
+      "scope": "Moving asset geometry and pivots",
+      "acceptance": [
+        "Doors/wheels/forks/rotors/hoist groups are separately animatable",
+        "Cargo envelopes fit bays and worker scale",
+        "Supply original editable recipes plus rendered fixture"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T16",
+      "phase": "P1",
+      "title": "Connect fleet movement and loading animations to real jobs",
+      "depends_on": [
+        "T14",
+        "T15"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "E05",
+        "V04"
+      ],
+      "scope": "Visual transport adapter",
+      "acceptance": [
+        "Every visible load belongs to real cargo job",
+        "Brake, align, lift/load, depart and unload follow state transitions",
+        "Paused/blocked jobs do not continue fake delivery animation"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T17",
+      "phase": "P1",
+      "title": "Implement starter economy, processors and first steel choice",
+      "depends_on": [
+        "T06",
+        "T13"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E01",
+        "E06",
+        "U05"
+      ],
+      "scope": "P1 content and deterministic production",
+      "acceptance": [
+        "Starting seed buys first processors and leaves meaningful later fork",
+        "Sorter/furnace power and buffers reconcile",
+        "Free slow recovery prevents bankrupt deadlock; clicking cannot auto-select every plan"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T18",
+      "phase": "P1",
+      "title": "Build building inspector and explicit upgrade comparison",
+      "depends_on": [
+        "T08",
+        "T11",
+        "T17"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U05",
+        "U06"
+      ],
+      "scope": "Entity inspector and upgrade UI",
+      "acceptance": [
+        "Show actual/potential rate, input/output and exact bottleneck",
+        "Compare throughput/efficiency/buffer branches with costs",
+        "Focus route/source/power without losing selected entity"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T19",
+      "phase": "P1",
+      "title": "Implement safe move, dismantle and cargo recall",
+      "depends_on": [
+        "T13",
+        "T18"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E04",
+        "E09"
+      ],
+      "scope": "Topology-changing lifecycle transactions",
+      "acceptance": [
+        "Preview fees/refunds/affected jobs and settle reservations once",
+        "Full storage uses visible overflow ledger",
+        "Cancel/refund/old-version sequences cannot mint goods"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T20",
+      "phase": "P1",
+      "title": "Build fleet/routes panel and dispatch policy controls",
+      "depends_on": [
+        "T08",
+        "T14",
+        "T16"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "E03",
+        "E05",
+        "U06"
+      ],
+      "scope": "Fleet and routes UI",
+      "acceptance": [
+        "Show job/cargo/destination/wait reason with focus",
+        "Set material filters, reserve floors and minimum fill",
+        "Recovery path handles unreachable destination and occupied bay"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T21",
+      "phase": "P1",
+      "title": "Implement save migration and exact offline transport settlement",
+      "depends_on": [
+        "T02",
+        "T13",
+        "T17",
+        "T19"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "E07",
+        "E08",
+        "E02"
+      ],
+      "scope": "Save/catch-up adapter",
+      "acceptance": [
+        "Versioned old fixtures retain balances or explicit legacy slot",
+        "Tickwise and event-jump settlement agree under 12h cap",
+        "Two tabs/clock rollback/partial write/import failure preserve state"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T22",
+      "phase": "P1",
+      "title": "Build contextual onboarding, storage trade and return summary",
+      "depends_on": [
+        "T18",
+        "T20",
+        "T21"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U05",
+        "U06",
+        "E12"
+      ],
+      "scope": "First session and return flow",
+      "acceptance": [
+        "Teach in-world salvage/build/route/first sale without universal next-button ladder",
+        "Sell quantity honors reserve and displays exact total",
+        "Return report shows actual bottleneck and does not interrupt brief tab switch"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T23",
+      "phase": "P1",
+      "title": "Implement layered machine activity and restrained spatial sound",
+      "depends_on": [
+        "T10",
+        "T16",
+        "T17"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V04",
+        "U07"
+      ],
+      "scope": "Motion/audio behavior",
+      "acceptance": [
+        "Independent timing avoids synchronized yard reset",
+        "Working/starved/blocked/unpowered have distinct truthful states",
+        "Mute/reduced motion and bounded voice/particle pools retain information"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T24",
+      "phase": "P1",
+      "title": "Verify accessibility, performance and complete first playable gate",
+      "depends_on": [
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23"
+      ],
+      "role": "reviewer",
+      "spec": "ACCEPTANCE.md",
+      "checks": [
+        "V01",
+        "V02",
+        "U03",
+        "U04",
+        "P01",
+        "P02",
+        "P03",
+        "R01"
+      ],
+      "scope": "P1 independent integrated gate",
+      "acceptance": [
+        "Inspect actual opening/mature scenes and 60s motion on desktop/phone",
+        "Run both transport-limited and processing-limited strategies from same seed",
+        "Publish current-SHA ACCEPT only with complete playable loop and save evidence"
+      ],
+      "priority": "P0"
+    },
+    {
+      "key": "T25",
+      "phase": "P2",
+      "title": "Add advanced recipes, material tiers and alternate processing",
+      "depends_on": [
+        "T24"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E01",
+        "E10"
+      ],
+      "scope": "Content-driven advanced manufacturing",
+      "acceptance": [
+        "Motors/batteries/chassis and alternate yield/time recipes reachable",
+        "No free conversion or buy/sell loops",
+        "Byproducts have useful sinks and readable storage behavior"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T26",
+      "phase": "P2",
+      "title": "Build research branches and gradual currency unlocks",
+      "depends_on": [
+        "T24",
+        "T25"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E10",
+        "U05"
+      ],
+      "scope": "Research/data/marks progression",
+      "acceptance": [
+        "Capability unlocks precede repetitive percentages",
+        "Every new currency has taught source and sink",
+        "Research purchase/completion/reload is idempotent"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T27",
+      "phase": "P2",
+      "title": "Implement fuel, charging, power priorities and recovery service",
+      "depends_on": [
+        "T24",
+        "T25"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E11",
+        "E07"
+      ],
+      "scope": "Energy logistics",
+      "acceptance": [
+        "Fuel/charge consumed by actual work, power capacity allocated per tick",
+        "Brownout prioritization and electric/diesel tradeoffs readable",
+        "Empty fleet with no discretionary money can recover"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T28",
+      "phase": "P2",
+      "title": "Implement vehicle manufacture, modules, repair and upgrade bays",
+      "depends_on": [
+        "T25",
+        "T27"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E09",
+        "E11"
+      ],
+      "scope": "Fleet progression",
+      "acceptance": [
+        "Vehicle produced from real materials exits depot",
+        "Upgrade requires parked unloaded vehicle and shows tradeoffs",
+        "Installed mission equipment locked to dispatch snapshot"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T29",
+      "phase": "P2",
+      "title": "Add worker/forklift/drone jobs and utility service cars",
+      "depends_on": [
+        "T24",
+        "T27"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E03",
+        "E05",
+        "V04"
+      ],
+      "scope": "Specialized transport roles",
+      "acceptance": [
+        "Payload/route/energy differences create actual use cases",
+        "Workers automatically receive bounded tasks without individual babysitting",
+        "Utility cars serve maintenance/scouting, not meaningless traffic"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T30",
+      "phase": "P2",
+      "title": "Implement bridges, ramps, elevated belts and bulk rail",
+      "depends_on": [
+        "T24",
+        "T27"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E04",
+        "E05",
+        "V03"
+      ],
+      "scope": "Advanced topology and transport",
+      "acceptance": [
+        "Crossing/height/clearance validation and repairable topology",
+        "Train bulk capacity and terminal loading modeled",
+        "All modes share conserved cargo lifecycle"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T31",
+      "phase": "P2",
+      "title": "Add material-specific salvage and intact component recovery",
+      "depends_on": [
+        "T25",
+        "T28"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E01",
+        "E10"
+      ],
+      "scope": "Salvage quality/approach",
+      "acceptance": [
+        "Sites have differentiated outputs and depletion/regrowth rules",
+        "Careful extraction trades speed for intact parts",
+        "Recovered machines have restore/dismantle/sell choices"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T32",
+      "phase": "P2",
+      "title": "Implement contract board and specialization economy",
+      "depends_on": [
+        "T25",
+        "T26",
+        "T28"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E10",
+        "E12"
+      ],
+      "scope": "NPC contracts and production roles",
+      "acceptance": [
+        "Bulk/urgent/specialist contracts favor distinct yard plans",
+        "Partial delivery/deadline/retry settlement cannot duplicate rewards",
+        "Fallback buyer and recovery remain available"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T33",
+      "phase": "P2",
+      "title": "Implement regional map, parcels, chartered outposts and freight",
+      "depends_on": [
+        "T26",
+        "T30",
+        "T31"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E07",
+        "E08",
+        "E05"
+      ],
+      "scope": "Multi-settlement progression",
+      "acceptance": [
+        "Outposts have resource niches and owned expansion",
+        "Only selected scene fully renders; background state continues",
+        "Freight travel/cargo/charter spending settle exactly once"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T34",
+      "phase": "P2",
+      "title": "Add blueprint layouts, decoration, naming and collections foundation",
+      "depends_on": [
+        "T24",
+        "T33"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U01",
+        "E08"
+      ],
+      "scope": "Player attachment and reusable layouts",
+      "acceptance": [
+        "Import layout checks land/unlocks/materials and previews cost",
+        "Decorations do not create invisible navigation blockers",
+        "Names/layouts survive migration and are bounded/validated"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T35",
+      "phase": "P2",
+      "title": "Validate multi-day economy, outposts and P2 depth gate",
+      "depends_on": [
+        "T26",
+        "T28",
+        "T29",
+        "T30",
+        "T31",
+        "T32",
+        "T33",
+        "T34"
+      ],
+      "role": "reviewer",
+      "spec": "ACCEPTANCE.md",
+      "checks": [
+        "E07",
+        "E10",
+        "E11",
+        "E12",
+        "U05",
+        "R01"
+      ],
+      "scope": "P2 integrated balance/retention hypotheses",
+      "acceptance": [
+        "Compare at least two specializations under different contracts",
+        "Simulate multi-day returns with outages/full storage and no loss",
+        "Document measured bottlenecks and tuning, not invented retention claims"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T36",
+      "phase": "P3",
+      "title": "Implement seeded combat resolver and damage/ammo ledger",
+      "depends_on": [
+        "T35"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D01",
+        "E01"
+      ],
+      "scope": "Deterministic combat core",
+      "acceptance": [
+        "Target selection, armor, projectiles and damage resolve by tick/seed",
+        "Render FPS cannot change result",
+        "Versioned combat replay schema records all economic effects"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T37",
+      "phase": "P3",
+      "title": "Author defense and enemy asset/animation kit",
+      "depends_on": [
+        "T35"
+      ],
+      "role": "developer",
+      "spec": "ART_AND_MOTION.md",
+      "checks": [
+        "V01",
+        "V06",
+        "V04"
+      ],
+      "scope": "Turrets/walls/gates/repair station/enemies",
+      "acceptance": [
+        "Reuse approved palette/component detail level",
+        "Aim/fire/reload/empty/unpowered/damaged groups readable",
+        "Original assets only; no copied franchise art"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T38",
+      "phase": "P3",
+      "title": "Implement turret families, walls, gates and enemy navigation",
+      "depends_on": [
+        "T36",
+        "T37"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D02",
+        "D06"
+      ],
+      "scope": "Defense placement and targeting",
+      "acceptance": [
+        "Kinetic/arc/mortar trade power/ammo/coverage",
+        "Prevent invalid seals or provide explicit siege behavior",
+        "Friendly logistics keeps usable gate paths"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T39",
+      "phase": "P3",
+      "title": "Connect ammunition, repair kits and power to defense logistics",
+      "depends_on": [
+        "T25",
+        "T27",
+        "T38"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D03",
+        "E01"
+      ],
+      "scope": "Factory-to-defense supply",
+      "acceptance": [
+        "Turrets consume real ammunition/energy",
+        "Repairs consume delivered kits and reserve policies",
+        "Rerouting supplies visibly changes battle resilience"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T40",
+      "phase": "P3",
+      "title": "Implement threat forecast, PvE waves and protected failure rules",
+      "depends_on": [
+        "T38",
+        "T39"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D04",
+        "D06"
+      ],
+      "scope": "PvE wave director",
+      "acceptance": [
+        "Visible threat and warning precede unlocked counter requirements",
+        "Beginner protection and finite opted-in offline defense enforced",
+        "Failure respects reserves/loss cap and permits recovery"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T41",
+      "phase": "P3",
+      "title": "Implement scouting, convoy loadout and finite expeditions",
+      "depends_on": [
+        "T28",
+        "T31",
+        "T33",
+        "T36"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D05",
+        "E02"
+      ],
+      "scope": "PvE mission lifecycle",
+      "acceptance": [
+        "Scouting/approach/loadout costs and risk preview",
+        "Snapshot equipment at dispatch; bounded decisions/retreat",
+        "Return/retry/reload settle loot and damage once"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T42",
+      "phase": "P3",
+      "title": "Add wreck stages, salvage cores, faction contracts and scrip",
+      "depends_on": [
+        "T26",
+        "T32",
+        "T41"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E10",
+        "D05"
+      ],
+      "scope": "Discovery and faction progression",
+      "acceptance": [
+        "Wreck sections reveal capabilities and alter landmark state",
+        "Cores/scrip have concrete distinct sources and sinks",
+        "No currency introduced before its reachable use"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T43",
+      "phase": "P3",
+      "title": "Add defense challenge runs, merits and doctrine branches",
+      "depends_on": [
+        "T26",
+        "T40"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "D06",
+        "E10"
+      ],
+      "scope": "Optional incremental defense progression",
+      "acceptance": [
+        "Wave choices/extraction checkpoint preserve home progress",
+        "Merits emphasize first-clear/efficiency with repeat-farm limits",
+        "At least two viable doctrine compositions under different enemy mixes"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T44",
+      "phase": "P3",
+      "title": "Build battle/expedition UI, replay and readable risk feedback",
+      "depends_on": [
+        "T40",
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "U03",
+        "U04",
+        "D04",
+        "D05"
+      ],
+      "scope": "Combat presentation and control",
+      "acceptance": [
+        "Forecast, coverage, ammo, retreat and loss cap visible",
+        "Replay reflects authoritative events and supports speed/pause",
+        "Reduced motion/audio alternatives remain usable"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T45",
+      "phase": "P3",
+      "title": "Validate industry-defense-expedition integration and P3 gate",
+      "depends_on": [
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43",
+        "T44"
+      ],
+      "role": "reviewer",
+      "spec": "ACCEPTANCE.md",
+      "checks": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "P01",
+        "R01"
+      ],
+      "scope": "P3 integrated release",
+      "acceptance": [
+        "Demonstrate supply shortage and recovery changing battle outcome",
+        "Verify offline finite settlement and safe failure",
+        "Inspect actual scenes/motion and benchmark battle population"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T46",
+      "phase": "P4",
+      "title": "Implement authoritative account/realm inventory and transaction boundary",
+      "depends_on": [
+        "T45"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "N01",
+        "N06"
+      ],
+      "scope": "Backend foundation in staging",
+      "acceptance": [
+        "Server owns balances/time/ownership with transactional persistent storage",
+        "Local save imports cannot create online wealth",
+        "Secrets absent from repo; backups and versioning established"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T47",
+      "phase": "P4",
+      "title": "Implement authenticated commands, idempotency and abuse limits",
+      "depends_on": [
+        "T46"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "N01",
+        "N02"
+      ],
+      "scope": "Online integrity",
+      "acceptance": [
+        "Reject forged ownership/rewards and stale revisions",
+        "Command retries and disconnects settle once",
+        "Rate-limit and bound payloads without exposing private data"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T48",
+      "phase": "P4",
+      "title": "Implement market escrow, buy/sell orders and fees",
+      "depends_on": [
+        "T47"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N02",
+        "E10"
+      ],
+      "scope": "Player market",
+      "acceptance": [
+        "Atomic reserve/fill/cancel and disclosed fees",
+        "Concurrent fills cannot oversell or overdraw",
+        "NPC/market conversion abuse checked with adversarial scenarios"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T49",
+      "phase": "P4",
+      "title": "Implement trade shipments and visible freight arrivals",
+      "depends_on": [
+        "T48",
+        "T33"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N02",
+        "E05"
+      ],
+      "scope": "Transported online trade",
+      "acceptance": [
+        "Purchased goods reserve physical shipment state",
+        "Distance/speed/capacity and arrivals are server-time based",
+        "Retry/restart cannot duplicate delivery"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T50",
+      "phase": "P4",
+      "title": "Implement co-op infrastructure and contribution entitlements",
+      "depends_on": [
+        "T47",
+        "T42"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N05",
+        "N06"
+      ],
+      "scope": "Crew/co-op projects",
+      "acceptance": [
+        "Unique contribution IDs and atomic rewards",
+        "Membership changes preserve earned entitlement",
+        "Shared project visibly unlocks infrastructure without compulsory attendance"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T51",
+      "phase": "P4",
+      "title": "Implement read-only yard visits and safe blueprint exchange",
+      "depends_on": [
+        "T47",
+        "T34"
+      ],
+      "role": "developer",
+      "spec": "UI_CONTRACT.md",
+      "checks": [
+        "N01",
+        "U01"
+      ],
+      "scope": "Social visiting/sharing",
+      "acceptance": [
+        "Visit cannot mutate owner inventory",
+        "Shared plans transfer layout only, not unlocks/materials",
+        "Validate names/content and bound imports"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T52",
+      "phase": "P4",
+      "title": "Implement exposed outposts, scouting and raid defense snapshots",
+      "depends_on": [
+        "T47",
+        "T40",
+        "T41"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N03",
+        "N04"
+      ],
+      "scope": "Player raid preparation",
+      "acceptance": [
+        "Explicit opt-in, protected reserves and risk preview",
+        "Server locks exposed pool and versions snapshot",
+        "Defender edits affect later raids only"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T53",
+      "phase": "P4",
+      "title": "Implement asynchronous raid resolution, replay and atomic loot",
+      "depends_on": [
+        "T52",
+        "T36"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N03",
+        "N04",
+        "D05"
+      ],
+      "scope": "Raid execution/settlement",
+      "acceptance": [
+        "Server resolves battle using versioned deterministic rules",
+        "Loot equals removed exposed goods under cap",
+        "Duplicate/stale/tampered replay never awards resources"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T54",
+      "phase": "P4",
+      "title": "Implement raid protection, recovery and anti-collusion safeguards",
+      "depends_on": [
+        "T53",
+        "T48"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "N04",
+        "D04"
+      ],
+      "scope": "Fairness and abuse control",
+      "acceptance": [
+        "Newcomer/same-target cooldown/post-loss protection tested",
+        "Simultaneous raids cannot exceed reserved stock",
+        "No permanent home destruction; recovery and clear reports"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T55",
+      "phase": "P4",
+      "title": "Validate backups, concurrency, networking and online release gate",
+      "depends_on": [
+        "T49",
+        "T50",
+        "T51",
+        "T54"
+      ],
+      "role": "reviewer",
+      "spec": "ACCEPTANCE.md",
+      "checks": [
+        "N01",
+        "N02",
+        "N03",
+        "N04",
+        "N05",
+        "N06",
+        "R01"
+      ],
+      "scope": "Real staging integration and operations",
+      "acceptance": [
+        "Run concurrent transaction/disconnect/restart/restore drills",
+        "Verify rollback/content version behavior and raid fairness",
+        "Record actual deployment readiness; do not claim public launch without authorization"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T56",
+      "phase": "P5",
+      "title": "Implement optional frontier seasons and permanent mastery",
+      "depends_on": [
+        "T55"
+      ],
+      "role": "developer",
+      "spec": "GAME_SYSTEMS.md",
+      "checks": [
+        "E08",
+        "E10",
+        "N06"
+      ],
+      "scope": "Long-term progression",
+      "acceptance": [
+        "Permanent home and collection retained",
+        "Season entry/exit/import rewards idempotent",
+        "New regions add different constraints, not mandatory wipe"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T57",
+      "phase": "P5",
+      "title": "Build versioned content pipeline for machinery, encounters and rewards",
+      "depends_on": [
+        "T55"
+      ],
+      "role": "developer",
+      "spec": "TECHNICAL_CONTRACT.md",
+      "checks": [
+        "E10",
+        "N06"
+      ],
+      "scope": "Content operations",
+      "acceptance": [
+        "Validate recipe/mission/currency references and conversion cycles",
+        "Active missions retain resolver version through updates",
+        "Produce reproducible content release and rollback fixture"
+      ],
+      "priority": "P1"
+    },
+    {
+      "key": "T58",
+      "phase": "P5",
+      "title": "Validate long-term goals, collections and sustainable economy",
+      "depends_on": [
+        "T56",
+        "T57"
+      ],
+      "role": "product-owner",
+      "spec": "ACCEPTANCE.md",
+      "checks": [
+        "E10",
+        "E12",
+        "N04"
+      ],
+      "scope": "P5 integrated product gate",
+      "acceptance": [
+        "Measure multi-week simulated progression and market sinks",
+        "Preserve alternative playstyles and intermittent idle play",
+        "No fabricated human retention, required daily logins or pay-to-win"
+      ],
+      "priority": "P1"
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+> **Historical baseline:** superseded where incompatible by [Living Voxel World](vision/README.md), mandate #121. Retain useful implementation history; do not schedule old scope or apply obsolete art/performance constraints. New benchmark targets must be measured in P0.
+
 # Architecture
 
 ## Layers
@@ -126,3 +128,4 @@ The simulation is a pure function of `(initialState, [commands with tick positio
 An authoritative server can replay the same list, compare the checksum, and reject
 mismatches. The renderer and camera live outside the state object, so presentation
 changes never alter the revision.
+

@@ -1,3 +1,5 @@
+> **Historical baseline:** superseded where incompatible by [Living Voxel World](vision/README.md), mandate #121. Retain useful implementation history; do not schedule old scope or apply obsolete art/performance constraints. New benchmark targets must be measured in P0.
+
 # Rustwake game design specification
 
 ## The complete game specification and implementation mandate
@@ -1449,4 +1451,5 @@ Do not rebuild the old dashboard. Do not add page scroll. Do not show every syst
 ## Do these things on every meaningful pass
 
 Read the checkpoint. Choose useful work. Make a coherent improvement. Verify it. Update the README and relevant evidence. Commit. Push to the authorized main branch when safe. Record the actual result. Leave the next pass ready to continue.
+
 

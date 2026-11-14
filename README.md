@@ -1,3 +1,19 @@
+# Rustwake — Living Voxel World rebuild
+
+The approved direction is a modest, animated voxel industrial world with physical logistics, deep automation, factory-supplied defense and later realm trading/raids. **Rustwake remains the product name.**
+
+- [Executive master plan](docs/vision/README.md)
+- [GitHub Project](https://github.com/users/darkmatter2222/projects/2) and [master issue #121](https://github.com/darkmatter2222/Rustwake/issues/121)
+- [58-task dependency/acceptance crosswalk](docs/vision/BACKLOG.md)
+- [Asset recipes and glTF blockouts](docs/vision/assets/README.md)
+- [Qwen startup](QWEN.md) and [role efficiency](docs/vision/AGENT_EFFICIENCY.md)
+
+![Approved style target, not a shipped game screenshot](docs/vision/reference/approved-yard.png)
+
+Planning/reference package only; the rebuild is not yet shipped. Start with commissioning #128. Existing implementation information follows as historical baseline and may describe the prior UI.
+
+---
+
 # Rustwake
 
 **[Product & Releases Project](https://github.com/users/darkmatter2222/projects/1)** · **[UI restart milestone](https://github.com/darkmatter2222/Rustwake/milestone/1)** · [Goal #43](https://github.com/darkmatter2222/Rustwake/issues/43) · [Project/release operating contract](docs/GITHUB_PROJECT.md)
@@ -152,4 +168,5 @@ node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs tools/team-su
 The current policy permits five total model sessions: coordinator plus at most four workers. Queue role `ui-ux` to invoke `rustwake-ui-ux`; its workflow lives at `.opencode/skills/rustwake-ui-ux/SKILL.md`. It owns mobile and desktop interaction design, first-use clarity, navigation, visual hierarchy, accessibility and implementation-ready briefs. Product prioritizes, developers implement, and reviewers independently accept. Give it a scoped `work/design/<ticket>/` output. Do not turn design into endless audit reports or block ready releases.
 
 For existing teams, queue one bounded UI/UX assignment at the next useful free slot; do not recreate completed startup work or discard active leases. Fresh startup selects dependency-ready work from live GitHub issues; UI/UX is assigned when ready. Five is a ceiling, not a requirement to invent work. Maintain release priority and feature publication cadence. Startup failures are now recorded in the dispatcher status and shown as START BLOCKED; preserve the exact error and existing session IDs rather than deleting runtime state. This improves diagnostics but does not establish the cause of an unreported host error.
+
 

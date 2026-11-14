@@ -1,33 +1,12 @@
-# Rustwake agent instructions
+# Rustwake agent contract
 
-**Before any task, read [docs/GITHUB_WORKFLOW.md](docs/GITHUB_WORKFLOW.md) and the role file in .opencode/agents.** This policy is authoritative over older docs, prompts and archived task boards.
+Current mandate: [#121](https://github.com/darkmatter2222/Rustwake/issues/121), [Living Voxel World / Project 2](https://github.com/users/darkmatter2222/projects/2). Read `docs/vision/README.md`, the assigned live issue, and only the specification sections it cites. `docs/vision/EXECUTIVE_CONTRACT.md` supersedes earlier UI-only scope, #43 priorities, Project 1 scheduling and incompatible art rules, including old skill references. Preserve legacy evidence and reusable simulation.
 
-- GitHub Issues: only current work tracking system, role-labeled comments, linked PR URLs. `work/backlog.json`, `work/BOARD.md` and `work/board.html` are historical.
-- Same GitHub account for every AI persona. Distinguish roles by explicit comments/labels and immutable head SHA, not by GitHub usernames or self-review approvals.
-- Five concurrent model agents TOTAL: one coordinator and at most four children. Preserve in-flight leases; never launch an extra session.
-- Developer: one Issue, own `rw/` branch/worktree, push checkpoint via `scripts/publish-feature.mjs --issue <url> ...`; helper creates draft PR, then make PR ready with evidence.
-- QA: review exact PR head SHA, comment ACCEPT or REWORK with independent evidence.
-- Product: record acceptance in Issue and/or PR; no self-acceptance.
-- Release engineer: review the actual PR and CI; send it back for fixes or merge via PR. No direct main pushes, cherry-picking around PRs or merged-less deploys.
-- Deployment: only from main after successful CI. Never claim deployment merely from a pushed branch.
-- Agent task handoffs: always include the GitHub Issue URL and linked PR URL when one exists. Never reconstitute a local Jira.
-
-
-## Native Project and release authority
-
-## GitHub delivery contract
-
-Read `AGENTS.md`, `docs/GITHUB_WORKFLOW.md` and `docs/GITHUB_PROJECT.md` before every assignment. GitHub Issues and the native Project are the only authoritative planning and handoff system. Read the live assigned issue, labels, dependencies, comments, milestone and linked PRs before acting. Never schedule from `work/backlog.json`, `work/BOARD.md`, `work/board.html`, archived reports or local scheduler recommendations. Files under `work/` may hold evidence linked from GitHub, never a competing work ledger. Runtime queues/leases are ephemeral execution state derived from verified GitHub work.
-
-Current sponsor goal is #43, complete mobile AND desktop UI restart; at least 90% planned capacity. Read #44 for live cutover. Deferred, blocked and superseded issues are ineligible until the coordinator records a reason, resolves dependencies and updates GitHub labels. UI-reset issues belong to Project 1 and milestone 1. No hidden fallback when GitHub or Projects access fails: record the exact blocker in the issue; never invent membership or status.
-
-Use role-stamped issue/PR comments, issue URLs, branch and immutable head SHA. All personas share one GitHub login; do not invent accounts or claim self-review is independent account approval. Five total model sessions: coordinator plus at most four children. Only coordinator dispatches through the installed team plugin. No recursive delegation or extra forever loops.
-
-Every tracked change, including prompts/docs, uses Issue → isolated rw/ branch/worktree → linked draft PR → independent QA/product verdict at current head SHA → release-engineer merge → main CI/CD. Never direct-push main, merge your own unreviewed work, or bypass CI. GitHub Project Done is accepted issue completion, not proof of deployment. A release needs a real tag/SHA, Release notes linking Project/milestone/issues/PRs, successful CI/deployment receipts and rollback reference.
-
-Retain unfinished branches and evidence. Respect cancellation and scope ownership. No routine sponsor permission loops. Report facts, tests, limitations and exact GitHub links. A prompt change takes effect only after the local host reloads it; never claim live agent adoption from a repository commit alone.
-
-
-## Bounded runtime coordination
-
-Follow `docs/TEAM_DISPATCH.md` runtime health and quiet-wait contract. Only the dispatcher launches children. When no actionable work remains, use `rustwake_wait` with the current dispatcher revision. Do not repeatedly poll CPU, file timestamps, GitHub comments or team.query; none proves delivery. Preserve unknown leases, reconcile exact host child IDs, and never silently replace uncertain work. Treat unrelated reasoning as a context-drift blocker. Every completed handoff requires a GitHub issue/PR URL and evidence at the immutable head SHA. Local plugin reload and an observed execution receipt are required before claiming this contract is live.
+- GitHub issues, labels, dependencies and linked PRs are the live work ledger. `docs/vision/backlog.json` is a specification seed, never a local status board. Project 1 may contain auto-added duplicates; Project 2 is the rebuild board.
+- Start with runtime commissioning #128. Never assume OpenCode plugin functions exist in Qwen Code. One verified runtime, one coordinator, at most four children (five total sessions). Only coordinator dispatches. No recursive delegation, duplicate forever loops or uncertain lease replacement. Preserve existing worktrees and in-flight work.
+- Every subsequent implementation change follows issue -> isolated `rw/` branch/worktree -> linked draft PR -> independent QA and product verdict on immutable head SHA -> release engineer merges -> main CI/CD verification. No self-acceptance, unreviewed merges or direct main pushes. Sponsor authorized the initial planning publication directly on main as a one-time exception only.
+- Same GitHub account, separate role-stamped evidence. A username is not independent review. Evidence includes issue, PR, head SHA, tests, limitations and deployment receipt when applicable. Done never means deployed by itself.
+- Follow `docs/vision/AGENT_EFFICIENCY.md`: short coordination/release passes, medium targeted reviews, deep developer work. Do not repeatedly load whole docs, re-plan settled scope or rerun unchanged tests. Escalate on concrete uncertainty. No fabricated token savings or runtime-adoption claims.
+- Check live dependencies and phase gate before dispatch. Keep at most five ready tasks. Blocked work stays blocked. If GitHub/runtime access fails, record the exact blocker; never substitute an internal board.
+- Preserve saves, cancellation, approval settings and security. Follow runtime health/quiet-wait guidance in `docs/TEAM_DISPATCH.md` only where supported by the commissioned runtime. Two identical no-progress checks -> checkpoint/block/event wait, not another thinking loop.
+- Visual evidence must come from the running build. Generated references are style targets, not implementation proof. Non-vision agents use geometric recipes and numerical checks but cannot self-certify visual fidelity.

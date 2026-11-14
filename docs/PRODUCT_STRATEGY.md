@@ -1,3 +1,5 @@
+> **Historical baseline:** superseded where incompatible by [Living Voxel World](vision/README.md), mandate #121. Retain useful implementation history; do not schedule old scope or apply obsolete art/performance constraints. New benchmark targets must be measured in P0.
+
 # Evolving product strategy
 
 ## Stable essence, flexible design
@@ -38,3 +40,4 @@ Presentation test protocol:
 Product owner updates this file when a hypothesis is tested or replaced, with decision link and expected player benefit. Preserve the previous conclusion in a dated decision record. Reprioritize after owner feedback, actual playtest failure, deployment incidents or three releases. Retain successful ideas, delete unnecessary complexity and park speculative features in the backlog with revisit triggers.
 
 Never optimize only metrics that are easiest for an agent to count. Bundle budgets include all loaded chunks, sprites/audio and loading behavior; splitting JS does not reduce total bytes. Performance targets reflect measured mobile interaction and frame costs, not a sacred historical byte ceiling. A new budget must be justified before implementation and reviewed for actual performance, not merely made large enough to pass.
+
