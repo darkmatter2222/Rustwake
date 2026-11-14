@@ -15,6 +15,7 @@ import * as THREE from "three";
 import fixture from "../../legacy/fixtures/deep-yard.modern.json";
 import { decodeSave, migrate, encodeSave } from "../../../src/game/persistence/save";
 import { advance } from "../../../src/game/simulation/engine";
+import { fleetUnits } from "../../../src/game/simulation/types";
 import { drawScene, fitCamera } from "../../../src/game/renderer/scene";
 import {
   panCamera, zoomAtPoint, quarterTurn, clampCamera, refitCamera,
@@ -190,10 +191,10 @@ globalThis.__RW3D__ = {
     dpr,
     tick: state.tick,
     machines: state.machines.length,
-    drones: 1 + state.drones.length,
+    drones: fleetUnits(state).length,
     credits: state.credits,
   }),
-  state: () => ({ tick: state.tick, machines: state.machines.length, drones: 1 + state.drones.length, credits: state.credits }),
+  state: () => ({ tick: state.tick, machines: state.machines.length, drones: fleetUnits(state).length, credits: state.credits }),
   saveText: () => encodeSave(state, 0, settings),
   camera: () => ({ ...camera }),
   selected: () => selected,

@@ -92,9 +92,14 @@ try {
   await phoneContext.close();
 
   const notBlank = (s) => s.uniqueColors > 200 && s.luminanceStddev > 10;
+  // Top-down blockout-flat view: flat top faces, no shadows, limited palette =>
+  // ~60 unique colors measured (bench final frame: 62). Color count is the wrong
+  // blankness proxy here; require luminance variance, mostly non-background and
+  // substantial yard ink instead. Orbit/quarter shots keep the >200-color bar.
+  const notBlankTopDown = (s) => s.luminanceStddev > 10 && s.backgroundFraction < 0.9 && s.amberPixels > 500;
   check("no page errors", 0, pageErrors.length, pageErrors.length === 0);
   check("open dimensions", "1440x900", `${stats.open.width}x${stats.open.height}`, stats.open.width === 1440 && stats.open.height === 900);
-  check("open not blank", "colors>200, stddev>10", `${stats.open.uniqueColors}, ${stats.open.luminanceStddev}`, notBlank(stats.open));
+  check("open not blank (top-down flat: stddev>10, bg<0.9, amber>500)", "stddev>10, bg<0.9, amber>500", `${stats.open.luminanceStddev}, ${stats.open.backgroundFraction}, ${stats.open.amberPixels}`, notBlankTopDown(stats.open));
   check("orbit not blank", "colors>200, stddev>10", `${stats.orbit.uniqueColors}, ${stats.orbit.luminanceStddev}`, notBlank(stats.orbit));
   await page.evaluate(() => window.__RW3D__.reset());
   await page.evaluate(() => window.__RW3D__.render());
