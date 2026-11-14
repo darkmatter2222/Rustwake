@@ -45,6 +45,14 @@ async function runFloor(floor: number): Promise<Run> {
   const { createInitialState } =
     await import("../../src/game/simulation/types");
   const { nextYardStep } = await import("../../src/game/simulation/plan");
+  // #214: the same dismantle-refund recovery the validateBehaviour gate plays, so
+  // the seeded yard fills at power 6. Imported fresh so it binds this floor's engine.
+  const {
+    newLadderRecovery,
+    ladderRecoveryTriggers,
+    ladderRecoveryAdjust,
+    ladderRecoveryClear,
+  } = await import("../../src/game/content/validate");
 
   let seq = 0;
   const send = (state: SimState, body: Record<string, unknown>) => {
@@ -85,6 +93,7 @@ async function runFloor(floor: number): Promise<Run> {
   advance(state, 262);
   state.tutorial = 9; // the tutorial is complete, so every blueprint is known
 
+  const recovery = newLadderRecovery();
   let early: ReturnType<typeof snapshot> | null = null;
   for (let round = 0; round < ROUNDS; round += 1) {
     // T7's dock primary claims the onboarding contract once steel is stocked, and
@@ -97,7 +106,8 @@ async function runFloor(floor: number): Promise<Run> {
     if (!state.exportClaimed && startersBuilt && (state.store["steel"] ?? 0) >= defs.TUNING.exportContractSteel) {
       send(state, { type: "contract.export" });
     }
-    const step = nextYardStep(state);
+    ladderRecoveryTriggers(state, recovery, round);
+    const step = ladderRecoveryAdjust(state, recovery, nextYardStep(state));
     switch (step.kind) {
       case "connect":
         for (const plan of step.plans) {
@@ -136,6 +146,7 @@ async function runFloor(floor: number): Promise<Run> {
         send(state, { type: "manual.salvage" });
     }
     advance(state, 10); // one second between taps, as the scripted session does
+    ladderRecoveryClear(state, recovery);
     if (round + 1 === FIRST_SNAPSHOT) early = snapshot(state);
   }
   const late = snapshot(state);

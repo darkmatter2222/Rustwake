@@ -27,6 +27,12 @@ import { checksum, decodeSave, encodeSave, validateSim } from "../../src/game/pe
 import { branchOptions } from "../../src/ui/text";
 import { SELL_ORDER, nextYardStep } from "../../src/game/simulation/plan";
 import { planConnections } from "../../src/game/simulation/autoconnect";
+import {
+  newLadderRecovery,
+  ladderRecoveryTriggers,
+  ladderRecoveryAdjust,
+  ladderRecoveryClear,
+} from "../../src/game/content/validate";
 
 /**
  * STRAT-002/A1: the named-outcome fork. One paid level buys exactly one of three
@@ -187,6 +193,7 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
   let minPowerRatio = 1;
   let firstResearch: number | null = null;
   let inputStallTicks = 0;
+  const recovery = newLadderRecovery();
   const kinds: Record<string, number> = {};
   const send = (body: CommandBody): boolean => {
     const before = s.credits;
@@ -219,12 +226,13 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
       pulses += 1;
       taps += 1;
     }
+    ladderRecoveryTriggers(s, recovery, round);
     const taught = tutorialBodies(s);
     if (taught !== null) {
       for (const body of taught) send(body);
       taps += 1;
     } else {
-      const step = nextYardStep(s);
+      const step = ladderRecoveryAdjust(s, recovery, nextYardStep(s));
       if (step && step.kind) {
         if (step.kind !== "salvage" && step.kind !== "upgrade") kinds[step.kind] = (kinds[step.kind] ?? 0) + 1;
         switch (step.kind) {
@@ -301,6 +309,7 @@ function a12Row(branch: UpgradeBranch | null | "policy", ladder: Ladder) {
         }
       }
     }
+    ladderRecoveryClear(s, recovery);
     if (s.powerRatio < 1) powerLimitedRounds += 1;
     if (s.powerRatio < minPowerRatio) minPowerRatio = s.powerRatio;
   }
