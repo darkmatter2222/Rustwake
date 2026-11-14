@@ -28,6 +28,34 @@ import {
   type RecoveryResult,
   type SaveRecoveryNotice,
 } from "../game/persistence/recovery";
+// T12 (#139): session-only road slice. The world grid (#133) is not in the save
+// envelope (cutover #148), so road state never touches SAVE_KEY, migration or
+// recovery — it is rebuilt per session from a fixed seed.
+import { createWorld } from "../game/world/terrain";
+import type { Cell, WorldState } from "../game/world/types";
+import {
+  createRoadNetwork,
+  type RoadLanes,
+  type RoadNetworkState,
+} from "../game/world/roadGraph";
+import { roadSocketLinks, type RoadSocketLink } from "../game/world/roadSockets";
+import {
+  previewRoadPlace,
+  previewRoadRemove,
+  type RoadCommand,
+  type RoadPlacePreview,
+  type RoadRemovePreview,
+} from "../game/world/roadTool";
+import {
+  applyRoadTransaction,
+  createRoadCargo,
+  spawnCargoBatch,
+  tickRoadCargo,
+  type CargoBatch,
+  type CargoRequest,
+  type RoadCargoState,
+  type RoadTransactionResult,
+} from "../game/simulation/roadPaths";
 
 export type StoreRole = LeaseRole;
 
@@ -85,7 +113,45 @@ export interface SaveRecoveryApi {
   discardSaveRecovery(): void;
 }
 
+/**
+ * T12 (#139): additive road capability (G1 pattern, like `SaveRecoveryApi`).
+ * Kept off `GameStore` so existing consumers and test doubles are untouched;
+ * `createStore` returns the intersection.
+ *
+ * SESSION-ONLY: the world grid, road network and cargo are not in the save
+ * envelope (the 2D -> 3D cutover #148 owns persistence). Nothing here reads or
+ * writes SAVE_KEY, migration or recovery; the slice is rebuilt per session
+ * from a fixed seed, so every tab starts from the same yard.
+ */
+export interface RoadApi {
+  getWorld(): WorldState;
+  getRoadNetwork(): RoadNetworkState;
+  getRoadCargo(): RoadCargoState;
+  /** Loading sockets of completed buildings, deterministic order. */
+  getRoadSockets(): RoadSocketLink[];
+  /** Pure preview: route, cost, crossings, sockets, typed rejection. */
+  previewRoadPlace(cells: readonly Cell[], lanes?: RoadLanes): RoadPlacePreview;
+  /** Pure dismantle preview: exact cut, refund, disconnected bays. */
+  previewRoadRemove(cells: readonly Cell[]): RoadRemovePreview;
+  /**
+   * Writer-only atomic commit (world ledger + network + cargo paths in one
+   * step). A rejected command changes nothing; the caller owns the command id
+   * (idempotent replay by id, mirroring `dispatch`). Never persists: road state
+   * is session-only.
+   */
+  commitRoad(command: RoadCommand): RoadTransactionResult;
+  /**
+   * Writer-only. Registers and routes a cargo batch; an unreachable request
+   * still creates it (held, inspectable — E04). Returns null when the tab is
+   * read-only or the amount is not a positive integer (caller validation,
+   * mirroring the command layer).
+   */
+  spawnRoadCargo(request: CargoRequest): CargoBatch | null;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
+/** T12 (#139): fixed seed for the session-only world grid (deterministic yard). */
+const ROAD_SESSION_SEED = 139;
 /** Follower tabs adopt the owner's snapshot at this cadence. */
 const RECONCILE_MS = 100;
 /** Authoritative checkpoint cadence for the owning tab. */
@@ -113,7 +179,7 @@ export interface StoreOptions {
  * (spec 21.1 separation). With several tabs open, only the lease holder
  * advances and writes; the others mirror the persisted revision.
  */
-export function createStore(options: StoreOptions = {}): GameStore & SaveRecoveryApi {
+export function createStore(options: StoreOptions = {}): GameStore & SaveRecoveryApi & RoadApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -178,6 +244,13 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
     preserveCorruptSave(storage, bootRaw);
   }
   refreshRecovery();
+
+  // T12 (#139): session-only road slice. A fixed seed rebuilds the identical
+  // world grid in every tab; no storage read/write happens here. Road state is
+  // disjoint from the SimState snapshot, so catch-up adoption never touches it.
+  const roadWorld = createWorld(ROAD_SESSION_SEED);
+  const roadNet = createRoadNetwork();
+  const roadCargo = createRoadCargo();
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -341,6 +414,9 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
     if (ticks > 0) {
       accumulator -= ticks * TICK_MS;
       advance(state, ticks);
+      // T12 (#139): cargo rides the same authoritative tick budget (one cell
+      // per tick). Session-only: never persisted, never advanced by a reader.
+      tickRoadCargo(roadCargo, ticks);
       sinceSave += ticks * TICK_MS;
       if (sinceSave >= PERSIST_MS) {
         sinceSave = 0;
@@ -523,9 +599,36 @@ export function createStore(options: StoreOptions = {}): GameStore & SaveRecover
       if (reconcile()) notify();
       if (role !== "writer") return;
       advance(state, ticks);
+      tickRoadCargo(roadCargo, ticks);
       lastSeenMs = now();
       persist();
       notify();
+    },
+    // T12 (#139): additive road capability. Previews are pure (safe for any
+    // role); commits are writer-gated exactly like `dispatch` and never call
+    // `persist` — road state is session-only (#148 owns persistence).
+    getWorld: () => roadWorld,
+    getRoadNetwork: () => roadNet,
+    getRoadCargo: () => roadCargo,
+    getRoadSockets: () => roadSocketLinks(roadNet, roadWorld),
+    previewRoadPlace: (cells, lanes = 1) => previewRoadPlace(roadWorld, roadNet, cells, lanes),
+    previewRoadRemove: (cells) => previewRoadRemove(roadWorld, roadNet, cells),
+    commitRoad(command: RoadCommand): RoadTransactionResult {
+      if (reconcile()) notify();
+      if (role !== "writer") {
+        return { result: { ok: false, rejection: { reason: "read-only" } }, invalidation: null };
+      }
+      const outcome = applyRoadTransaction(roadWorld, roadNet, roadCargo, command);
+      if (outcome.result.ok) notify();
+      return outcome;
+    },
+    spawnRoadCargo(request: CargoRequest): CargoBatch | null {
+      if (reconcile()) notify();
+      if (role !== "writer") return null;
+      if (!Number.isInteger(request.amount) || request.amount <= 0) return null;
+      const batch = spawnCargoBatch(roadCargo, roadNet, request);
+      notify();
+      return batch;
     },
   };
 }
