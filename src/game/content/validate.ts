@@ -32,7 +32,7 @@ import {
   t,
   unit,
 } from "./strings";
-import { applyCommand, upgradeCost, DOCK_TILE, YARD_TILES, type Command, type CommandBody } from "../simulation/commands";
+import { applyCommand, upgradeCost, sellableAmount, droneAddCost, DOCK_TILE, YARD_TILES, type Command, type CommandBody } from "../simulation/commands";
 import { advance } from "../simulation/engine";
 import { systemTotals, allQuantities } from "../simulation/invariants";
 import { nextYardStep, SELL_ORDER, type YardStep } from "../simulation/plan";
@@ -362,6 +362,77 @@ export function validateContent(): string[] {
 }
 
 /**
+ * Recovery keep-targets for the ladder auto-player (#214, ADR d7/d8). The seeded
+ * store makes autoconnect choose store-pull links (stocked >= one batch) instead of
+ * producer links, and two structural starvations follow at power 6:
+ *
+ *  1. The furnace's store-pull ferrous link drains the store to the reserve floor
+ *     (10), below the signal lab's 12-ferrous price, while the furnace eats every
+ *     surplus unit. Dismantling the furnace (refundOf(4) = 4 returns its steel) lets
+ *     the sorter refill ferrous past the floor so the lab can be built, then the
+ *     plan rebuilds the furnace from the refund.
+ *  2. The circuit assembler gets a producer wire link (dumps until its 16-unit
+ *     buffer is full) and a store-pull polymer link (floor-starved), so wire
+ *     monopolises the buffer and polymer can never enter (destinationRoom = 0).
+ *     Dismantling the assembler and rebuilding once BOTH wire and polymer are
+ *     stocked gives window-capped store-pull links for both (pullNeed caps wire at
+ *     four batches' worth), so the buffer stays shared and the assembler runs.
+ *
+ * These keep-targets hold the lab's price and the furnace refund's steel while the
+ * furnace is down, and the assembler's rebuild stock while it is down.
+ */
+const LADDER_KEEP_TARGET: Partial<Record<ResourceId, number>> = { scrap: 50, ferrous: 12, steel: 4 };
+
+/**
+ * A store-pull-fed machine draws only stock ABOVE the reserve floor, so selling a
+ * recipe input down to the floor starves it even while the store looks full. Keep
+ * one batch (+1 headroom) above the floor for every input a BUILT machine consumes,
+ * plus the active recovery stock. This is the auto-player keeping its own machines
+ * fed; it changes no game rule, only which surplus the harness chooses to sell.
+ */
+function ladderKeep(
+  s: SimState,
+  recovering: boolean,
+  caRecovering: boolean,
+): Partial<Record<ResourceId, number>> {
+  const keep: Partial<Record<ResourceId, number>> = {};
+  const raise = (r: ResourceId, want: number) => {
+    keep[r] = Math.max(keep[r] ?? 0, want);
+  };
+  for (const machine of s.machines) {
+    for (const item of RECIPES[BLUEPRINTS[machine.blueprint].recipeId].inputs) {
+      raise(item.resource, TUNING.reserveFloor + item.qty + 1);
+    }
+  }
+  if (recovering) {
+    for (const [r, target] of Object.entries(LADDER_KEEP_TARGET)) {
+      raise(r as ResourceId, target as number);
+    }
+  }
+  if (caRecovering) {
+    raise("polymer", 12);
+    raise("wire", 4);
+    raise("scrap", 40);
+    raise("ferrous", 10);
+  }
+  return keep;
+}
+
+/**
+ * Sell the first SELL_ORDER resource with surplus above its working keep. Picking
+ * the most-surplus good (rather than the plan's choice, which may be a protected
+ * intermediate) keeps the 300-unit store from clogging with plates and blocking
+ * scrap deliveries.
+ */
+function ladderBestSell(s: SimState, keep: Partial<Record<ResourceId, number>>): YardStep | null {
+  for (const r of SELL_ORDER) {
+    const surplus = Math.min(sellableAmount(s, r), (s.store[r] ?? 0) - (keep[r] ?? 0));
+    if (surplus > 0) return { kind: "sell", resource: r, qty: surplus };
+  }
+  return null;
+}
+
+/**
  * Runs the real ladder from a fresh tutorial state and checks the yard reaches every
  * stage inside the window, that the ledger balances, and that no quantity leaves the safe
  * integer range. This is the "unreachable tutorial goal" gate of spec 23.2.
@@ -383,10 +454,57 @@ export function validateBehaviour(
   const startersBuilt = () =>
     s.machines.some((machine) => machine.blueprint === "sorter") &&
     s.machines.some((machine) => machine.blueprint === "furnace");
+  const has = (id: string) => s.machines.some((machine) => machine.blueprint === id);
+  // Two dismantle-refund recoveries keep the seeded economy reachable at power 6
+  // (#214, ADR d7/d8); see ladderKeep for the full rationale. Both use the existing
+  // dismantle/refund path — no new material source, no power or recipe change.
+  let recovery = false; // furnace down, waiting for the signal lab
+  let caRecovery = false; // circuit assembler down, waiting for wire+polymer stock
   for (let round = 0; round < rounds; round += 1) {
     if (!s.exportClaimed && startersBuilt() && (s.store["steel"] ?? 0) >= TUNING.exportContractSteel)
       commit(s, { type: "contract.export" });
-    const step = nextYardStep(s);
+    // Ferrous recovery: once the contract is claimed and the assembler stands
+    // (tutorial 9), dismantle the furnace so the sorter refills ferrous past the
+    // reserve floor to the signal lab's 12.
+    if (!recovery && s.exportClaimed && has("circuitAssembler") && has("furnace") && !has("signalLab") && (s.store["ferrous"] ?? 0) < 12) {
+      const furnace = s.machines.find((machine) => machine.blueprint === "furnace");
+      if (furnace && commit(s, { type: "machine.dismantle", machineId: furnace.id })) recovery = true;
+    }
+    // Wire-monopoly recovery: a producer wire link has filled the assembler's
+    // 16-unit buffer while the store-pull polymer link stays floor-starved, so the
+    // assembler never ran. Dismantle it; the rebuild below waits for both stocks.
+    if (!caRecovery && has("circuitAssembler") && round > 130) {
+      const ca = s.machines.find((machine) => machine.blueprint === "circuitAssembler");
+      if (ca && ca.batchesDone === 0 && (ca.inBuf["wire"] ?? 0) >= 14) {
+        if (commit(s, { type: "machine.dismantle", machineId: ca.id })) caRecovery = true;
+      }
+    }
+    let step: YardStep = nextYardStep(s);
+    const keep = ladderKeep(s, recovery, caRecovery);
+    const fallback = (): YardStep => {
+      const m = s.machines[0];
+      return m && s.credits >= upgradeCost(BLUEPRINTS[m.blueprint].baseUpgradeCost, m.level)
+        ? { kind: "upgrade", machineId: m.id }
+        : { kind: "salvage" };
+    };
+    // Hold the furnace rebuild until the signal lab stands; keep the yard earning.
+    if (recovery && step.kind === "build" && step.blueprint === "furnace") {
+      const labAffordable = BLUEPRINTS["signalLab"].buildCost.every(
+        (item) => (s.store[item.resource] ?? 0) >= item.qty,
+      );
+      if (labAffordable) step = { kind: "build", blueprint: "signalLab" };
+      else if (s.drone.repaired && 1 + s.spares.length < TUNING.fleetCap && s.credits >= droneAddCost(s))
+        step = { kind: "drone" };
+      else step = ladderBestSell(s, keep) ?? fallback();
+    }
+    // Hold the assembler rebuild until BOTH wire and polymer are stocked, so
+    // autoconnect gives window-capped store-pull links for both.
+    if (caRecovery && step.kind === "build" && step.blueprint === "circuitAssembler") {
+      if ((s.store["wire"] ?? 0) < 2 || (s.store["polymer"] ?? 0) < 11)
+        step = ladderBestSell(s, keep) ?? fallback();
+    }
+    // Never sell a recipe input below its working keep; sell the most-surplus good.
+    if (step.kind === "sell") step = ladderBestSell(s, keep) ?? fallback();
     note(`step:${step.kind}`, round);
     switch (step.kind) {
       case "connect":
@@ -412,6 +530,8 @@ export function validateBehaviour(
         commit(s, { type: "manual.salvage" });
     }
     advance(s, 10);
+    if (recovery && has("signalLab")) recovery = false;
+    if (caRecovery && has("circuitAssembler")) caRecovery = false;
     if (round % 200 === 0) {
       for (const [key, value] of Object.entries(systemTotals(s))) {
         if (!Number.isSafeInteger(value) || value < 0) bad.push(`ledger value ${key} = ${value} at round ${round}`);
