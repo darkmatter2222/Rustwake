@@ -96,8 +96,10 @@ function pricesSection() {
   // belt, so the refusal carries the numbered shortfall and the state is unchanged.
   const poor = createInitialState();
   poor.tutorial = 9;
-  poor.store["scrap"] = 22;
-  poor.storeUnits = 22;
+  // #214: the sorter now costs 30 scrap (+4 steel from the seed), so 32 leaves exactly
+  // 2 scrap after the build — the 3-scrap belt still fails with the numbered shortfall.
+  poor.store["scrap"] = 32;
+  poor.storeUnits = 32;
   send(poor, { type: "machine.build", blueprint: "sorter", tile: 0 });
   const refusedRun = beltRun(poor, 0, 1);
   const refusedPrice = beltCost(refusedRun.length);
