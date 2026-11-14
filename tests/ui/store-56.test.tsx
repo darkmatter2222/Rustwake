@@ -38,12 +38,12 @@ function seeded(mutate: (state: SimState) => void): SimState {
   return state;
 }
 
-/** The full-storage seed: plates 880 + scrap 20 = 900/900, 40 scrap outside. */
+/** The full-storage seed: plates 294 + scrap 6 = 300/300 (#214), 40 scrap outside. */
 function fullStore(): SimState {
   return seeded((s) => {
-    s.store.plates = 880;
-    s.store.scrap = 20;
-    s.storeUnits = 900;
+    s.store.plates = 294;
+    s.store.scrap = 6;
+    s.storeUnits = 300;
     s.overflow = [{ resource: "scrap", qty: 40 }];
   });
 }
@@ -53,7 +53,9 @@ function yardWithMachines(): SimState {
   const state = seeded((s) => {
     s.store.scrap = 100;
     s.store.ferrous = 20;
-    s.storeUnits = 120;
+    // #214: sorter and furnace each price 4 steel, so the seed carries enough for both.
+    s.store.steel = 20;
+    s.storeUnits = 140;
   });
   expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 8 })).toMatchObject({ ok: true });
   expect(send(state, { type: "machine.build", blueprint: "furnace", tile: 9 })).toMatchObject({ ok: true });
@@ -140,7 +142,7 @@ describe("UI-RESET-56 store structure, groups and diagnostics", () => {
 
     const text = host.textContent ?? "";
     expect(text).toContain("Capacity");
-    expect(text.split("900/900").length - 1).toBe(1);
+    expect(text.split("300/300").length - 1).toBe(1);
   });
 
   it("groups every resource raw / intermediate / finished with glyph, stock, share and cue", () => {
@@ -183,7 +185,7 @@ describe("UI-RESET-56 store structure, groups and diagnostics", () => {
       expect(row.querySelector(".store-row__cue")?.textContent).toMatch(/ · /);
     }
 
-    // The full seed's shares: plates 880/900 = 98%, scrap 20/900 = 2%, zero rows 0%.
+    // The full seed's shares: plates 294/300 = 98%, scrap 6/300 = 2%, zero rows 0%.
     expect(rowFor(host, "plates").querySelector(".store-row__share")?.textContent).toBe("98% of capacity");
     expect(rowFor(host, "scrap").querySelector(".store-row__share")?.textContent).toBe("2% of capacity");
     expect(rowFor(host, "chassis").getAttribute("data-stock")).toBe("0");
@@ -206,13 +208,13 @@ describe("UI-RESET-56 store structure, groups and diagnostics", () => {
     expect(diag).not.toBeNull();
     expect(diag?.querySelector("button")).toBeNull(); // no trade action lives in diagnostics
 
-    expect(diagValue(host, "Capacity")).toBe("900/900");
+    expect(diagValue(host, "Capacity")).toBe("300/300");
     expect(diagValue(host, "Sell floor")).toBe("10 units kept per material");
     expect(diagValue(host, "Overflow hold")).toBe("40");
     expect(diagValue(host, "Storage cause")).toBe(
       "Storage is full at 100%. Sell a surplus in the yard store to free room.",
     );
-    expect(diagValue(host, "Largest holds")).toBe("Plates 880 · Scrap 20");
+    expect(diagValue(host, "Largest holds")).toBe("Plates 294 · Scrap 6");
     expect(diagValue(host, "Recovery")).toBe(
       "Sell a tranche in the trade desk · 40 units held outside return as space frees",
     );
@@ -225,7 +227,7 @@ describe("UI-RESET-56 store structure, groups and diagnostics", () => {
         s.storeUnits = 100;
       }),
     );
-    expect(diagValue(host, "Capacity")).toBe("100/900");
+    expect(diagValue(host, "Capacity")).toBe("100/300");
     expect(diagValue(host, "Storage cause")).toBeNull();
     expect(diagValue(host, "Largest holds")).toBeNull();
     expect(diagValue(host, "Recovery")).toBeNull();
