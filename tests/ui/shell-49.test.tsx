@@ -534,6 +534,9 @@ describe("G2 inspector top paint-truth", () => {
     const phoneStart = shellRaw.indexOf("@media (max-width: 767px)");
     const phoneBand = shellRaw.slice(phoneStart, shellRaw.indexOf("@media (min-width: 600px)"));
     expect(rulesOnly(phoneBand)).not.toContain("--shell-inspector-top");
+    // The camera stack stands down under the 70vh band (no sky left above the
+    // painted chrome) and returns when the sheet collapses.
+    expect(phoneBand).toContain(".hud:has(.shell-sheet--expanded) .shell-zoom");
     const baseRules = rulesOnly(shellRaw.slice(0, phoneStart));
     expect(baseRules).toContain("height: 35vh");
     expect(baseRules).toContain("height: 70vh");

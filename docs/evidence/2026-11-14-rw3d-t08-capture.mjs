@@ -15,7 +15,7 @@ import { chromium } from "playwright-core";
 import { createServer } from "node:http";
 import { createHash } from "node:crypto";
 import { execSync } from "node:child_process";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -44,7 +44,9 @@ const dist = resolve(root, "dist");
 const server = createServer((req, res) => {
   const path = decodeURIComponent(new URL(req.url, URL_BASE).pathname);
   let file = resolve(dist, "." + path);
-  if (!file.startsWith(dist) || !existsSync(file)) file = resolve(dist, "index.html");
+  if (!file.startsWith(dist) || !existsSync(file) || !statSync(file).isFile()) {
+    file = resolve(dist, "index.html");
+  }
   res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
   res.end(readFileSync(file));
 });
@@ -199,8 +201,10 @@ const installSeed = (context) =>
   context.addInitScript((value) => localStorage.setItem("rustwake.save.v1", value), seedText);
 const begin = async (page) => {
   await page.goto(URL_BASE, { waitUntil: "networkidle" });
-  await page.waitForSelector("text=Begin recovery");
-  await page.click("text=Begin recovery");
+  // With a seeded save the primary reads "Continue" (aria keeps the
+  // "Begin recovery" prefix); the class is stable in both cases.
+  await page.waitForSelector(".gate__btn");
+  await page.click(".gate__btn");
   await page.waitForTimeout(700);
 };
 const closeReport = async (page) => {
@@ -273,8 +277,11 @@ try {
   const topPx = Number.parseFloat(c.inspectorTopVar);
   check("desktop: inspector top honours --shell-inspector-top", c.inspectorTopVar, c.inspector?.y,
     Math.abs((c.inspector?.y ?? 0) - topPx) <= 1);
-  check("desktop: inspector clears the toolbar", `top>=${(c.toolbar?.y ?? 0) + (c.toolbar?.h ?? 0)}`, c.inspector?.y,
-    (c.inspector?.y ?? 0) >= (c.toolbar?.y ?? 0) + (c.toolbar?.h ?? 0) - 1);
+  // The toolbar is the BOTTOM bar; the inspector must stay vertically clear
+  // of it (its bottom inset reserves the chrome band above the toolbar).
+  const inspBottom = (c.inspector?.y ?? 0) + (c.inspector?.h ?? 0);
+  check("desktop: inspector stays above the bottom toolbar", `bottom<=${c.toolbar?.y}`,
+    +inspBottom.toFixed(1), inspBottom <= (c.toolbar?.y ?? 0) + 1);
   const dInspector = await shoot(dp, "desktop-inspector", "Yard store inspector", dView, 1);
   const dDiff = await pixelDiff(dp, dYard, dInspector);
   check("desktop: inspector visibly changes the frame", ">0.02 diff", dDiff, dDiff > 0.02);

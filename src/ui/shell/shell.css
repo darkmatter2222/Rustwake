@@ -151,6 +151,12 @@
 .shell-sheet {
   height: 35vh;
   margin-top: auto;
+  /* The band is the contract: as a shrinkable flex item the sheet shared the
+     HUD column's shortfall with the lead and rendered 32.5/44.8vh instead of
+     35/70vh (measured in the T08 capture). The lead already has min-height:0
+     and its own declared scroller, so it yields first; the sheet keeps its
+     band. The absolute inspector/landscape drawers are unaffected. */
+  flex-shrink: 0;
 }
 
 .shell-sheet--expanded {
@@ -298,6 +304,16 @@
     /* App measures the painted bottom chrome (sheet + dock + toolbar) into
        --shell-zoom-clear, so the stack lifts above an open sheet too. */
     bottom: max(76px, calc(var(--shell-zoom-clear, 76px) + env(safe-area-inset-bottom)));
+  }
+  /* The 70vh band + dock/toolbar leave no sky above the painted chrome, so
+     the camera stack stands down while the sheet is expanded (measured in
+     the T08 capture: it would sit off-screen). Collapse brings it back; the
+     text-large sheet is tall on its own, so it stands down there too. */
+  .hud:has(.shell-sheet--expanded) .shell-zoom {
+    display: none;
+  }
+  :root.text-large .shell-zoom {
+    display: none;
   }
 }
 
