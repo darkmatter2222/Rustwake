@@ -35,7 +35,11 @@ import {
   type PaletteKey,
   type PartTuple,
 } from "./sprites";
-import { effectiveReducedMotion } from "./motion";
+import {
+  FAN_STEPS,
+  effectiveReducedMotion,
+  machineActivity,
+} from "./motion";
 // RW3D T07 (#134): the yard grid, the orthographic projection and the three.js world
 // layer live in their own modules so the THREE renderer never imports the UI logistics
 // bridge. scene.ts re-exports the legacy surface (constants, types, tile mapping and
@@ -311,7 +315,7 @@ export function drawScene(
   const sheen: [number, number, number, number][] = [];
   const shade: [number, number, number, number][] = [];
   for (const machine of state.machines) {
-    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, reducedMotion, phase, bodies);
+    drawMachine(ctx, machine, camera, view, options.selected === machine.id, sheen, shade, reducedMotion, phase, state.tick, bodies);
   }
   // Two grouped paths for the whole machine row: the bevel that gives every body the same
   // upper-left light, plus its underside. Existing hues, so no new paint group appears.
@@ -512,6 +516,7 @@ function drawMachine(
   shade: [number, number, number, number][],
   reducedMotion: boolean,
   phase: number,
+  tick: number,
   bodies: boolean
 ): void {
   const c = tileToWorld(machine.tile);
@@ -536,13 +541,14 @@ function drawMachine(
     }
   }
   // S5/F5 status reading: one accent bar, plus the furnace rust band over the chimney.
-  // ART-003 named motion states - anticipation and settle, not a uniform crawl. One
-  // quantised 6-frame step drives each: frames 1-2 of the cycle move, the rest hold.
+  // RW3D T23 (#150): the swell/settle pair is now PER MACHINE. Each machine runs its
+  // own 1.7 s cycle offset by a stable id seed (motion.ts), so the yard never resets
+  // in unison, and every channel is truthful - only a `running` machine moves.
   // `working` = two-step amber core that swells one step per cycle; `starved` = the
   // visibly quiet core (one dim square, frozen); `output-blocked` = the accent bar
   // settling between its 6-unit and 4-unit widths. Reduced motion keeps step 0 only.
-  const q = reducedMotion ? 0 : Math.min(5, Math.floor(phase * 6));
-  const pulse = q === 2 || q === 3; // the single swell/settle frame pair of the cycle
+  const act = machineActivity(machine, tick, phase, reducedMotion);
+  const pulse = act.pulse; // the machine's own swell/settle frame pair
   // ART-006: the accent bar is ONE paint with the computed width. The unconditional 6-unit
   // rect and the animated 4-unit rect used to be emitted separately in the same colour, so
   // the 4-unit draw sat entirely under the 6-unit one and the settle had zero visible
@@ -567,6 +573,41 @@ function drawMachine(
     rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "amber");
   } else if (machine.status === "starved") {
     rectOf(ctx, p.x - 1 * s, p.y + 1 * s, 2 * s, 2 * s, "bodyMid"); // quiet core, no pulse
+  }
+  // RW3D T23 (#150): the layered activity marks. Capability-guarded exactly like the
+  // route dash flow: the recording census contexts have no `setLineDash`, so the
+  // legacy frame keeps its pinned op census; a real browser paints this layer over
+  // BOTH the 2D bodies and the three.js world (the overlay runs on both paths).
+  // Every mark is state-derived: fan/rollers/vent move only while `running`, the
+  // blocked cargo mark is static, and reduced motion holds discrete stages (the
+  // fan keeps its seed angle, the roller its batch position, the vent its stage).
+  if (typeof ctx.setLineDash === "function") {
+    const fine = s >= 2; // distance throttle: a far zoom keeps only the status marks
+    if (act.active && fine) {
+      // Fan blade: one quantised position on the core's own ellipse, never a blur.
+      const angle = (act.fanStep / FAN_STEPS) * Math.PI * 2;
+      rectOf(ctx, p.x + Math.cos(angle) * 4 * s - 1 * s, p.y + 2 * s + Math.sin(angle) * 2.5 * s - 1 * s, 2 * s, 2 * s, "bodyLight");
+      if (machine.blueprint === "sorter") {
+        // Batch-driven roller dot: walks the body only while a batch is live.
+        rectOf(ctx, p.x - 6 * s + act.rollerStep * 3 * s, p.y + 6 * s, 2 * s, 1 * s, "bodyMid");
+        // Magnet sweep: the first quarter of each batch, once per batch.
+        if (act.sweep) rectOf(ctx, p.x - 6 * s + act.rollerStep * 3 * s, p.y + 3 * s, 1 * s, 3 * s, "select");
+      }
+      if (machine.blueprint === "furnace" && act.ventPuffs.length > 0) {
+        // Sparse vent puff: the bounded pool (<= 2 slots) rises in discrete stages.
+        groupFill(ctx, act.ventPuffs.map((puff) => [
+          p.x + (5 + puff.slot) * s, p.y - (16 + puff.stage * 2) * s, 2 * s, 2 * s,
+        ] as [number, number, number, number]), "bodyLight", 0.5);
+      }
+    }
+    if (machine.status === "outputFull") {
+      // Blocked = cargo retained: one static held-cargo mark, never fake motion.
+      rectOf(ctx, p.x + 8 * s, p.y - 10 * s, 3 * s, 2 * s, "bodyMid");
+    }
+    if (reducedMotion && fine && machine.blueprint === "furnace" && act.ventStage > 0) {
+      // Reduced motion suppresses the moving puffs but keeps the vent stage readable.
+      rectOf(ctx, p.x + 5 * s, p.y - 16 * s, 2 * s, 2 * s, "bodyLight");
+    }
   }
   // ART-006: `outputFull` needs no second bar - the single `barW` paint above already
   // carries the settle, so the frame holds exactly one accent rect per machine.

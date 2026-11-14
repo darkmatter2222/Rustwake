@@ -27,10 +27,36 @@ export interface GraphNode {
 export interface Distance {
   distance?: number;
   zoom?: number;
+  /**
+   * RW3D T23 (#150): optional directional hint in [-1, 1] (left..right of the
+   * camera centre). Additive: callers that pass only distance/zoom keep the
+   * centre-panned, distance-attenuated voice they had before.
+   */
+  pan?: number;
 }
+
+/**
+ * RW3D T23 (#150): the restrained stereo spread. Machinery voices pan at most
+ * this far from centre - enough to place a machine in the yard, never enough to
+ * startle. The panner is capability-guarded: contexts without createStereoPanner
+ * (the pinned stub world) keep the exact previous graph.
+ */
+export const PANNER_MAX = 0.35;
 
 /** Minimal shape `link()` needs from a real node, stub or native (A-17). */
 type Linkable = { connect(target: unknown): void };
+
+/**
+ * RW3D T23 (#150): the structural context the engine drives. A live AudioContext
+ * and an OfflineAudioContext both satisfy it, so the offline render harness can
+ * supply the latter through `contextFactory` without a second code path. `close`
+ * is optional because an offline context has no lifetime to end.
+ */
+export type AudioEngineContext = BaseAudioContext & {
+  resume(): Promise<void>;
+  suspend(time?: number): Promise<void>;
+  close?(): Promise<void>;
+};
 
 export interface AudioApi {
   resume(): void;
@@ -75,7 +101,11 @@ export const CUE_TABLE: Readonly<Record<CueName, CueSpec>> = {
   repair: { bus: "effects", freq: 320, to: 720, duration: 0.22, type: "sawtooth", gain: 0.28, attack: 0.008, tail: true },
   drone: { bus: "machinery", freq: 190, duration: 0.16, type: "sine", gain: 0.18, attack: 0.01 },
   sorter: { bus: "machinery", freq: 260, to: 210, duration: 0.06, type: "square", gain: 0.16, attack: 0.003, tail: true },
-  furnace: { bus: "machinery", freq: 120, duration: 0.24, type: "sine", gain: 0.2, attack: 0.014 },
+  // T23 (#150): the furnace batch voice is layered like the other metallic cues -
+  // the low sine tone plus one soft vent-hiss tail (0.7 x peak, S-09 grammar), so a
+  // completed batch reads as tone + breath, not a bare beep. Gentle by construction:
+  // the tail rides the same machinery bus and the same headroom invariant.
+  furnace: { bus: "machinery", freq: 120, duration: 0.24, type: "sine", gain: 0.2, attack: 0.014, tail: true },
   upgrade: { bus: "ui", freq: 520, to: 780, duration: 0.14, type: "triangle", gain: 0.28, attack: 0.006 },
   blocked: { bus: "ui", freq: 200, duration: 0.05, type: "square", gain: 0.16, attack: 0.002 },
   return: { bus: "ui", freq: 660, to: 990, duration: 0.18, type: "sine", gain: 0.26, attack: 0.005 },
@@ -216,8 +246,18 @@ interface VoiceRecord {
   nodes: { disconnect(): void }[];
 }
 
-export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
-  let ctx: AudioContext | null = null;
+/**
+ * RW3D T23 (#150): `contextFactory` is an additive offline-render seam. The live
+ * app passes nothing and keeps the gesture-created AudioContext; a verification
+ * harness can supply an OfflineAudioContext so the SAME mix graph is rendered to
+ * a buffer and checked numerically (peak/RMS/clipping) without listening.
+ */
+export function createAudio(
+  muted: boolean,
+  voiceBudget = 16,
+  contextFactory?: () => AudioEngineContext
+): AudioApi {
+  let ctx: AudioEngineContext | null = null;
   let isMuted = muted;
   let masterNode: GainNode | null = null;
   let bedsStarted = false;
@@ -266,12 +306,16 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     return node;
   };
 
-  const ensure = (): AudioContext | null => {
+  const ensure = (): AudioEngineContext | null => {
     if (ctx) return ctx;
-    const Ctor: typeof AudioContext | undefined =
-      typeof AudioContext !== "undefined" ? AudioContext : undefined;
-    if (!Ctor) return null;
-    ctx = new Ctor();
+    if (contextFactory) {
+      ctx = contextFactory();
+    } else {
+      const Ctor: typeof AudioContext | undefined =
+        typeof AudioContext !== "undefined" ? AudioContext : undefined;
+      if (!Ctor) return null;
+      ctx = new Ctor();
+    }
     // Output stage first so the chain has somewhere to land (S-05). It is part of the
     // `destination` entry, hence the same table id (A-17).
     const output = ctx.createDynamicsCompressor();
@@ -317,7 +361,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     return live === undefined ? node.level : live;
   };
 
-  const startBeds = (context: AudioContext, now: number): void => {
+  const startBeds = (context: BaseAudioContext, now: number): void => {
     if (bedsStarted) return;
     bedsStarted = true;
     const specs: { bus: BusName; gain: number; freq: number; id: string; loopBuffer: boolean }[] = [
@@ -359,7 +403,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
 
   /** One noise buffer per length, reused by every debris tail and the room tone (S-09). */
   const buffers = new Map<number, AudioBuffer>();
-  const noiseBuffer = (context: AudioContext, seconds = 0.06): AudioBuffer => {
+  const noiseBuffer = (context: BaseAudioContext, seconds = 0.06): AudioBuffer => {
     const cached = buffers.get(seconds);
     if (cached) return cached;
     const rate = context.sampleRate || 44100;
@@ -401,6 +445,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
     for (const source of victim.sources) source.stop(now);
     for (const node of victim.nodes) node.disconnect();
     table.delete(victim.id);
+    table.delete(`${victim.id}-pan`); // T23: the spatial hop goes with its voice
     voices.splice(worst, 1);
   };
 
@@ -443,6 +488,25 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       const sources: { stop(time: number): void }[] = [];
       const nodes: { disconnect(): void }[] = [gain];
 
+      // T23 (#150): restrained spatial placement, machinery voices only. The
+      // panner is capability-guarded (the pinned stub world has no
+      // createStereoPanner, so its graph is byte-identical) and clamped to
+      // +/-PANNER_MAX, so a machine sits in the yard without ever startling.
+      // The voice's tail rides the same panner, keeping the layers coherent.
+      const bus = busNodes.get(spec.bus) ?? (masterNode as GainNode);
+      let panner: StereoPannerNode | null = null;
+      if (spec.bus === "machinery" && typeof context.createStereoPanner === "function") {
+        panner = context.createStereoPanner();
+        const rawPan = at?.pan ?? 0;
+        panner.pan.value = Number.isFinite(rawPan)
+          ? Math.max(-PANNER_MAX, Math.min(PANNER_MAX, rawPan))
+          : 0;
+        const panId = `${id}-pan`;
+        nodeIds.set(panner, panId);
+        table.set(panId, { id: panId, kind: "voice", level: 1, inputIds: [], outputId: null });
+        nodes.push(panner);
+      }
+
       const osc = context.createOscillator();
       osc.type = spec.type;
       osc.frequency.setValueAtTime(variant.freq, now);
@@ -460,7 +524,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
         const source = context.createBufferSource();
         source.buffer = noiseBuffer(context);
         source.connect(tailGain);
-        tailGain.connect(busNodes.get(spec.bus) ?? (masterNode as GainNode));
+        tailGain.connect(panner ?? bus);
         envelope(tailGain.gain, Math.round(peak * 0.7 * 10000) / 10000, now, 0.002, spec.duration * 0.8);
         source.start(now);
         if (!spec.loop) source.stop(now + spec.duration);
@@ -473,7 +537,14 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       // the edge on both sides of the table.
       table.set(id, { id, kind: "voice", level: peak, inputIds: [], outputId: null });
       nodeIds.set(gain, id);
-      link(gain as unknown as Linkable, (busNodes.get(spec.bus) ?? masterNode) as unknown as Linkable);
+      if (panner) {
+        // gain -> panner -> bus: both hops are recorded, so the snapshot stays a
+        // read-back of the real wiring (A-17 grammar) on panner-capable contexts.
+        link(gain as unknown as Linkable, panner as unknown as Linkable);
+        link(panner as unknown as Linkable, bus as unknown as Linkable);
+      } else {
+        link(gain as unknown as Linkable, bus as unknown as Linkable);
+      }
       voices.push({
         id,
         priority: CUE_PRIORITY[spec.bus],
@@ -485,6 +556,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
         const position = voices.findIndex((voice) => voice.id === id);
         if (position >= 0) voices.splice(position, 1);
         table.delete(id);
+        table.delete(`${id}-pan`); // T23: the spatial hop goes with its voice
         for (const node of nodes) node.disconnect();
       };
     },
@@ -520,7 +592,7 @@ export function createAudio(muted: boolean, voiceBudget = 16): AudioApi {
       // the buses and never re-creates the two sustained voices.
       bedsStarted = false;
       if (ctx) {
-        const closing = ctx.close();
+        const closing = ctx.close?.();
         void closing;
         ctx = null;
       }
