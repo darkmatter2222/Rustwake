@@ -4,14 +4,17 @@
 // (the main repo's copy was an incomplete install: lib/ only, no package.json),
 // then falls back to the main repo. No root files are modified.
 //
-// Usage: pnpm install && pnpm capture   (from prototypes/rw3d-scale-fixture)
+// Usage: npm install && npm run capture   (from prototypes/rw3d-scale-fixture)
 // Env:   RUSTWAKE_MAIN_REPO (default C:/Users/ryans/source/repos/Rustwake)
 //        PORT (default 4311; legacy previews occupy 4164-4198/5161/8462)
 //        CHROME_PATH (optional browser override)
+//        FIXTURE_PREFIX (optional evidence filename prefix; default keeps the
+//        T04 names. T05a (#194) re-runs use 2026-11-14-rw3d-t05a-fixture so the
+//        prior T04 evidence is preserved for byte-compare.)
 //
 // Outputs (worktree docs/evidence/):
-//   2026-11-14-rw3d-t04-fixture-{front,side,iso}.png  beauty pass
-//   2026-11-14-rw3d-t04-fixture-checks.json           expected/actual per check
+//   <prefix>-{front,side,iso}.png  beauty pass
+//   <prefix>-checks.json           expected/actual per check
 // Exit code 0 iff every check passes. Deterministic: static rest pose, fixed
 // camera fit, fixed canvas size; no RNG, no clock-dependent scene state.
 import { createRequire } from "node:module";
@@ -38,7 +41,15 @@ const { chromium } = loadPlaywright();
 
 const PORT = Number(process.env.PORT ?? 4311);
 const EVIDENCE = join(worktree, "docs", "evidence");
-const PREFIX = "2026-11-14-rw3d-t04-fixture";
+const PREFIX = process.env.FIXTURE_PREFIX ?? "2026-11-14-rw3d-t04-fixture";
+// Report the INSTALLED three version (ground truth), and refuse to run if it
+// drifts from the fixture's exact pin (ADR-0001). Was hardcoded "0.160.0".
+const pinnedThree = JSON.parse(readFileSync(join(here, "package.json"), "utf8")).dependencies.three;
+const threeVersion = JSON.parse(readFileSync(join(here, "node_modules", "three", "package.json"), "utf8")).version;
+if (threeVersion !== pinnedThree) {
+  console.error(`FAIL three version mismatch: installed ${threeVersion} vs pinned ${pinnedThree}`);
+  process.exit(1);
+}
 const TOL_PX = 2;
 const VIEWS = ["front", "side", "iso"];
 const MIME = {
@@ -189,7 +200,7 @@ const out = {
   generatedBy: "prototypes/rw3d-scale-fixture/capture.mjs",
   meta: {
     browser: executablePath,
-    three: "0.160.0",
+    three: threeVersion,
     threeRevision: meta?.threeRevision ?? null,
     canvas: { w: 1600, h: 900 },
     port: PORT,
