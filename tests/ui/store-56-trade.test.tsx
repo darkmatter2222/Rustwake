@@ -358,11 +358,13 @@ describe("UI-RESET-56 trade desk", () => {
     const state = seeded((s) => {
       s.store.scrap = 60;
       s.store.ferrous = 20;
-      s.storeUnits = 80;
+      // #214: the sorter prices 30 scrap + 4 steel, so the seed carries the steel too.
+      s.store.steel = 4;
+      s.storeUnits = 84;
     });
     expect(send(state, { type: "machine.build", blueprint: "sorter", tile: 8 })).toMatchObject({ ok: true });
     const before = state.credits;
-    const held = state.store.scrap ?? 0; // 40 after the sorter's build cost
+    const held = state.store.scrap ?? 0; // 30 after the sorter's build cost
     const expected = sellableAmount(state, "scrap"); // engine authority, not a guess
     const demand = held - TUNING.reserveFloor - expected;
     expect(expected).toBeGreaterThan(0);
