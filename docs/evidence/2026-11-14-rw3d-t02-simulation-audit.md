@@ -134,6 +134,21 @@ Retire/replace when the 3D renderer lands:
 | `tests/renderer/drone-leg.test.ts` | 11 | Drawn-leg parameter for the 2D painter (DEF-004). Underlying stale-anchor simulation behavior stays covered by `tests/simulation/fleet.test.ts`. |
 | `tests/renderer/camera-50.test.ts` | 18 | 2D camera clamp/zoom math bound to `WORLD_W/H`; retarget to the 3D camera contract rather than keep as-is. |
 
+> **Erratum (2026-11-14, issue [#195](https://github.com/darkmatter2222/Rustwake/issues/195); original §6 table preserved above by reference — not rewritten).** The `its` column is wrong for three of the six retirement candidates. Corrected counts: **silhouette 37 → 28**, **scene-draw 46 → 43**, **drone-leg 11 → 5**. The other three are confirmed correct: world-60 16, belt-extent 4, camera-50 18. Independently verified by the PR #192 reviewer (comment [6871705424](https://github.com/darkmatter2222/Rustwake/issues/192#issuecomment-6871705424)) and re-verified here for #195 (dispatched by coordinator guidance 6876145505).
+>
+> **Verification method — historical SHA, because the files no longer exist at main.** All six `tests/renderer/*.test.ts` retirement candidates were retired by #198 and are absent at current main (`9a31ffc`), so counts were taken at the audit's merge SHA `1b83c58bd103a1a4a0f4529e820a7e4409685def` via `MSYS_NO_PATHCONV=1 git show 1b83c58:tests/renderer/<file>` and counting `it(` declarations (regex `(^|[^A-Za-z0-9_.])it\(` — a bare `it(` not preceded by an identifier character or `.`). No `it.each`, `it.skip`, `it.only` or `it.todo` occurs in any of the six files, so each `it(` is exactly one vitest test (no parameterized expansion, no skipped tests). Per-file results at `1b83c58`:
+>
+> | File | §6 as written | Verified `it(` | Δ |
+> |---|---|---|---|
+> | `silhouette.test.ts` | 37 | **28** | −9 |
+> | `scene-draw.test.ts` | 46 | **43** | −3 |
+> | `drone-leg.test.ts` | 11 | **5** | −6 |
+> | `world-60.test.ts` | 16 | 16 | 0 (control) |
+> | `belt-extent.test.ts` | 4 | 4 | 0 (control) |
+> | `camera-50.test.ts` | 18 | 18 | 0 (control) |
+>
+> Honesty notes: (1) `silhouette.test.ts` also contains one `test(` at line 898, but it is a local predicate parameter (`const band = (test: (x: number, y: number) => boolean) => …`, line 897), not a vitest test — the file imports only `{ describe, expect, it }` from vitest, so it is excluded from the count. (2) The three corrected blobs are byte-identical between the audit's base `8b78d09f` and its merge `1b83c58` (silhouette `9f645769`, scene-draw `f261a68f`, drone-leg `f290ab03`), so §6 was inaccurate at the audit's own base rather than a later drift — matching the PR #192 reviewer's empty `git diff 8b78d09 HEAD -- tests/renderer/` finding. (3) This is a docs-only correction by reference: no test, source or contract file is touched, and the §6 retirement verdicts are unchanged (only the counts). The corrected counts are carried independently by G0 / PR #192.
+
 Keep (explicitly NOT retirement candidates):
 - `tests/renderer/gestures-50.test.ts` (16 its) — gesture state machine is presentation-agnostic; the contract mandates keeping gesture correctness. Retarget inputs to the 3D view, keep the contract.
 - All economic invariants: `tests/simulation/**` (17 files: economy, belt, chain, fleet, fork, logistics, offline, catchup-worker, registration-100, research, cadence, rate-window, supply-window, plan, autoconnect, diagnostics), `tests/persistence/**` (save, lease, transfer), `tests/content/validate.test.ts`, `tests/perf/bench.test.ts` (headless CPU core timings — keep, re-baseline with declared 3D scene/hardware), and the new `tests/legacy/**`.
