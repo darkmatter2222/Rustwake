@@ -88,10 +88,17 @@ describe("content validator (B-12)", () => {
     // batches 1 902 -> 1 838, credits 82 -> 157; tick/machines/links/nodes unmoved.
     // The price is the only new input: the clock is still `routeLatencyTicks` 5, so the
     // drift is purse timing (links now take scrap) rather than a different cadence.
-    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 4, batches: 1838, nodes: 3 });
-    expect(marks["firstDrone"]).toBe(379);
-    expect(marks["firstResearch"]).toBe(527);
-    expect(marks["credits"]).toBe(157);
+    // #214 GAME_SYSTEMS P1 seed + power 6 (before -> after): firstDrone 379 -> 7,
+    // firstResearch 527 -> 705, drones 4 -> 5, batches 1 838 -> 1 910, credits 157 -> 75;
+    // machines/links/nodes unmoved (8/18/3). The seeded store funds the first drone almost
+    // immediately; research lands later because the ladder auto-player now runs two
+    // dismantle-refund recoveries (furnace for the ferrous floor, circuit assembler for the
+    // wire-buffer monopoly) before the data chain flows. See validate.ts ladderKeep and
+    // docs/vision/evidence/214-economy-retune.md. Rounds stay at 1 800 (research by 1 143).
+    expect(machines(marks)).toEqual({ machines: 8, links: 18, drones: 5, batches: 1910, nodes: 3 });
+    expect(marks["firstDrone"]).toBe(7);
+    expect(marks["firstResearch"]).toBe(705);
+    expect(marks["credits"]).toBe(75);
   });
 });
 
