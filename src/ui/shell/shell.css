@@ -480,3 +480,149 @@
 .recovery-notice__dismiss {
   margin-left: auto;
 }
+
+/* ---------------------------------------------------------------------------
+   T11 (#138): the build catalog panel and its geometric placement ghost.
+   Additive only: the six-slot toolbar, the panel stack grammar and the census
+   faces are untouched. Buttons reuse `.icon-btn` / `.btn` (44 px tap floors);
+   these rules only lay out the catalog grid, the card states and the SVG
+   minimap. Session-only UI — no persistence classes involved.
+--------------------------------------------------------------------------- */
+.build-entry {
+  /* The lead-block entry face sits with the other lead actions; the camera's
+     chrome insets auto-measure it, so no fixed geometry is declared here. */
+  min-height: 44px;
+}
+
+.panel--build-tool .panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.build-catalog {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.build-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  text-align: left;
+  font: inherit;
+  color: var(--paper);
+  background: var(--panel);
+  border: 1px solid var(--steel);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.build-card:hover:not(:disabled) {
+  border-color: var(--steel-light);
+}
+
+.build-card--selected {
+  border-color: var(--cyan);
+  box-shadow: inset 0 0 0 1px var(--cyan);
+}
+
+/* Locked and unaffordable cards stay on screen (U03): dimmed, never hidden,
+   and their reason line keeps full contrast. */
+.build-card--locked,
+.build-card[data-affordable="false"] {
+  opacity: 0.82;
+}
+
+.build-card__name {
+  font-weight: 600;
+}
+
+.build-card__foot,
+.build-card__cost {
+  font-size: 0.78rem;
+  color: var(--steel-light);
+}
+
+.build-card__reason {
+  font-size: 0.72rem;
+  color: var(--furnace);
+}
+
+.build-ghost {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--steel);
+  border-radius: var(--radius);
+}
+
+.build-grid {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  align-self: center;
+  border: 1px solid var(--steel);
+  border-radius: 6px;
+  background: var(--night-deep);
+  cursor: crosshair;
+}
+
+/* Terrain tints mirror the world's three kinds; cells stay clickable so a tap
+   only re-aims the ghost (never places). */
+.build-grid__cell--flat {
+  fill: var(--floor);
+}
+.build-grid__cell--salvage {
+  fill: #3a4a3a;
+}
+.build-grid__cell--rough {
+  fill: #4a3a3a;
+}
+
+/* The footprint overlay and the orientation arrow must not swallow the cell
+   clicks underneath them. */
+.build-grid__foot {
+  pointer-events: none;
+  fill: rgba(95, 216, 232, 0.35);
+  stroke: var(--cyan);
+  stroke-width: 0.06;
+}
+.build-grid__foot[data-valid="false"] {
+  fill: rgba(201, 113, 58, 0.4);
+  stroke: var(--rust);
+}
+
+.build-grid__arrow {
+  pointer-events: none;
+  fill: var(--paper);
+}
+
+.build-nudge {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+.build-nudge .icon-btn {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.build-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.build-controls .icon-btn {
+  min-height: 44px;
+}

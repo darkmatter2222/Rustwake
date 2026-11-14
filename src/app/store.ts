@@ -32,7 +32,7 @@ import {
 // envelope (cutover #148), so road state never touches SAVE_KEY, migration or
 // recovery — it is rebuilt per session from a fixed seed.
 import { createWorld } from "../game/world/terrain";
-import type { Cell, WorldState } from "../game/world/types";
+import type { Cell, Rotation, WorldState } from "../game/world/types";
 import {
   createRoadNetwork,
   type RoadLanes,
@@ -76,6 +76,22 @@ import {
   type LogisticsState,
   type Reservation,
 } from "../game/simulation/logistics";
+// T11 (#138): session-only build placement slice. The world grid (#133) is the
+// placement authority; the catalog/preview helpers are pure reads of it. Nothing
+// here touches the save envelope (#148 owns world persistence).
+import {
+  firstFitCell,
+  rotateQuarter,
+  unlockStatusFor,
+  type BuildUnlockContext,
+} from "../game/world/buildCatalog";
+import { advanceWorld } from "../game/world/engine";
+import { isWorldAssetId, type WorldAssetId } from "../game/world/kit";
+import {
+  applyWorldCommand,
+  type WorldCommandResult,
+  type WorldRejection,
+} from "../game/world/transactions";
 
 export type StoreRole = LeaseRole;
 
@@ -208,9 +224,79 @@ export interface LogisticsApi {
   registerLogisticsCarrier(request: { capacity: number; cell: Cell }): Carrier | null;
 }
 
+/** T11 (#138): the placement state machine's session state (U01/U02). */
+export type BuildPlacementMode = "idle" | "placing" | "repeating";
+
+export interface BuildPlacementState {
+  /** The armed catalog entry, or null while browsing. */
+  readonly selectedAsset: WorldAssetId | null;
+  readonly rotation: Rotation;
+  /** The ghost's anchor cell, or null when nothing is armed. */
+  readonly ghostCell: Cell | null;
+  readonly mode: BuildPlacementMode;
+  /** Repeat-placement preference: survives cancel, toggled explicitly (U02). */
+  readonly repeat: boolean;
+  /** The last refused confirm, kept while the ghost stays armed (U03). */
+  readonly lastRejection: WorldRejection | null;
+  /** Successful placements this session (evidence/telemetry, never persisted). */
+  readonly placedCount: number;
+}
+
+/** Selection is free; a locked entry refuses with its reason and keeps context. */
+export type BuildSelectResult =
+  | { ok: true }
+  | { ok: false; reason: "locked" | "unknown-asset"; detail: string };
+
+/** Confirm outcomes: the world transaction result, or a pre-transaction guard. */
+export type BuildConfirmResult =
+  | WorldCommandResult
+  | { ok: false; reason: "no-selection" | "no-ghost" | "locked" | "read-only" };
+
+/**
+ * T11 (#138): additive build placement capability (G1 pattern, like
+ * `SaveRecoveryApi`). Kept off `GameStore` so existing consumers and test
+ * doubles are untouched; `createStore` returns the intersection.
+ *
+ * SESSION-ONLY: the world grid is not in the save envelope (the 2D -> 3D
+ * cutover #148 owns persistence). Nothing here reads or writes SAVE_KEY,
+ * migration or recovery; the slice is rebuilt per session from a fixed seed,
+ * so every tab starts from the same yard. Selection/rotation/ghost are UI
+ * intent (no spend); only `confirmBuildPlacement` touches the world ledger,
+ * and it is writer-gated exactly like `dispatch`.
+ */
+export interface BuildPlacementApi {
+  getBuildWorld(): WorldState;
+  getBuildPlacement(): BuildPlacementState;
+  /**
+   * Arm a catalog entry. Locked entries refuse with the unlock reason and the
+   * previous selection stays armed (U03). Unaffordable entries DO arm — the
+   * ghost shows the exact shortfall and Confirm refuses until it is resolved.
+   * Arms the ghost at the first fitting cell (deterministic).
+   */
+  selectBuildAsset(asset: WorldAssetId): BuildSelectResult;
+  /** Quarter-turn the armed ghost (R key / Rotate face). No-op while idle. */
+  rotateBuildAsset(): void;
+  /** Re-aim the ghost. Integer cells only; never confirms anything (U02). */
+  setBuildGhostCell(cell: Cell): void;
+  /**
+   * Writer-only atomic commit through `applyWorldCommand` (#133): validate ->
+   * reserve -> commit in one step, idempotent by command id. A refusal changes
+   * nothing and keeps the ghost armed with the typed rejection (U03). Success
+   * retires the placement unless repeat mode is on, in which case the selection
+   * stays armed and every next placement is validated separately (U02).
+   */
+  confirmBuildPlacement(): BuildConfirmResult;
+  /** Explicit cancel: disarm without any command or spend (U02). */
+  cancelBuildPlacement(): void;
+  /** Toggle repeated-placement mode; clearly reflected in `mode` (U02). */
+  toggleBuildRepeat(): void;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
 /** T12 (#139): fixed seed for the session-only world grid (deterministic yard). */
 const ROAD_SESSION_SEED = 139;
+/** T11 (#138): fixed seed for the session-only build yard (deterministic). */
+const BUILD_SESSION_SEED = 138;
 /** Follower tabs adopt the owner's snapshot at this cadence. */
 const RECONCILE_MS = 100;
 /** Authoritative checkpoint cadence for the owning tab. */
@@ -240,7 +326,7 @@ export interface StoreOptions {
  */
 export function createStore(
   options: StoreOptions = {},
-): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi {
+): GameStore & SaveRecoveryApi & RoadApi & LogisticsApi & BuildPlacementApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -315,6 +401,25 @@ export function createStore(
   // T13 (#140): session-only logistics ledger, disjoint from the SimState
   // snapshot for the same reason — catch-up adoption never touches it.
   const logistics = createLogistics();
+  // T11 (#138): session-only build slice. A fixed seed rebuilds the identical
+  // world grid in every tab; no storage read/write happens here. The build yard
+  // is disjoint from the SimState snapshot, so catch-up adoption never touches
+  // it, and `persist` never serializes it (#148 owns the cutover).
+  const buildWorld = createWorld(BUILD_SESSION_SEED);
+  let buildPlacement: BuildPlacementState = {
+    selectedAsset: null,
+    rotation: 0,
+    ghostCell: null,
+    mode: "idle",
+    repeat: false,
+    lastRejection: null,
+    placedCount: 0,
+  };
+  let buildCommandSeq = 0;
+  const buildUnlockContext = (): BuildUnlockContext => ({
+    research: state.research ?? {},
+    milestoneTokens: buildWorld.milestoneTokens,
+  });
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -667,6 +772,9 @@ export function createStore(
       advance(state, ticks);
       tickRoadCargo(roadCargo, ticks);
       tickLogistics(logistics, roadNet, ticks);
+      // T11 (#138): construction sites advance with the same authoritative
+      // ticks (5 s assembly, #133 engine). Session-only: never persisted.
+      advanceWorld(buildWorld, ticks);
       lastSeenMs = now();
       persist();
       notify();
@@ -737,6 +845,111 @@ export function createStore(
       const carrier = registerLogisticsCarrierFn(logistics, request);
       if (carrier !== null) notify();
       return carrier;
+    },
+    // T11 (#138): additive build placement capability. Selection/rotation/ghost
+    // are UI intent (no spend, any role); the confirm is writer-gated exactly
+    // like `dispatch` and never calls `persist` — the build yard is session-only
+    // (#148 owns persistence). Previews stay pure reads of `getBuildWorld()`.
+    getBuildWorld: () => buildWorld,
+    getBuildPlacement: () => buildPlacement,
+    selectBuildAsset(asset: WorldAssetId): BuildSelectResult {
+      if (!isWorldAssetId(asset)) {
+        return { ok: false, reason: "unknown-asset", detail: `Unknown asset: ${String(asset)}` };
+      }
+      const unlock = unlockStatusFor(asset, buildUnlockContext());
+      if (!unlock.unlocked) {
+        // U03: refuse with the reason; the previous selection stays armed.
+        return { ok: false, reason: "locked", detail: unlock.reason ?? "Locked" };
+      }
+      const ghost = firstFitCell(buildWorld, asset, buildPlacement.rotation) ?? { x: 0, y: 0 };
+      buildPlacement = {
+        ...buildPlacement,
+        selectedAsset: asset,
+        ghostCell: ghost,
+        mode: buildPlacement.repeat ? "repeating" : "placing",
+        lastRejection: null,
+      };
+      notify();
+      return { ok: true };
+    },
+    rotateBuildAsset(): void {
+      if (buildPlacement.selectedAsset === null) return;
+      buildPlacement = {
+        ...buildPlacement,
+        rotation: rotateQuarter(buildPlacement.rotation),
+        lastRejection: null,
+      };
+      notify();
+    },
+    setBuildGhostCell(cell: Cell): void {
+      if (!Number.isInteger(cell.x) || !Number.isInteger(cell.y)) return;
+      buildPlacement = {
+        ...buildPlacement,
+        ghostCell: { x: cell.x, y: cell.y },
+        lastRejection: null,
+      };
+      notify();
+    },
+    confirmBuildPlacement(): BuildConfirmResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, reason: "read-only" };
+      const { selectedAsset, ghostCell, rotation } = buildPlacement;
+      if (selectedAsset === null) return { ok: false, reason: "no-selection" };
+      if (ghostCell === null) return { ok: false, reason: "no-ghost" };
+      const unlock = unlockStatusFor(selectedAsset, buildUnlockContext());
+      if (!unlock.unlocked) return { ok: false, reason: "locked" };
+      buildCommandSeq += 1;
+      const result = applyWorldCommand(buildWorld, {
+        id: `build-138-${buildCommandSeq}`,
+        type: "world.place",
+        asset: selectedAsset,
+        cell: ghostCell,
+        rotation,
+      });
+      if (result.ok) {
+        buildPlacement = buildPlacement.repeat
+          ? {
+              ...buildPlacement,
+              mode: "repeating",
+              lastRejection: null,
+              placedCount: buildPlacement.placedCount + 1,
+            }
+          : {
+              ...buildPlacement,
+              selectedAsset: null,
+              ghostCell: null,
+              mode: "idle",
+              lastRejection: null,
+              placedCount: buildPlacement.placedCount + 1,
+            };
+      } else {
+        // Preserve-on-refusal: the ghost stays armed with the typed reason so
+        // the player can re-aim or top up and try again (U03).
+        buildPlacement = { ...buildPlacement, lastRejection: result.rejection };
+      }
+      notify();
+      return result;
+    },
+    cancelBuildPlacement(): void {
+      buildPlacement = {
+        ...buildPlacement,
+        selectedAsset: null,
+        ghostCell: null,
+        rotation: 0,
+        mode: "idle",
+        lastRejection: null,
+      };
+      notify();
+    },
+    toggleBuildRepeat(): void {
+      const repeat = !buildPlacement.repeat;
+      buildPlacement = {
+        ...buildPlacement,
+        repeat,
+        mode:
+          buildPlacement.selectedAsset === null ? "idle" : repeat ? "repeating" : "placing",
+      };
+      notify();
     },
   };
 }
