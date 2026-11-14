@@ -182,6 +182,8 @@ export const KIT_GEOMETRY: Readonly<Record<WorldAssetId, KitAssetGeometry>> = {
     groups: [
       { name: "slew", parent: "root", position: [0, 0.6, 0] },
       { name: "hoist", parent: "slew", position: [2.2, 1.2, 0] },
+      { name: "clawL", parent: "hoist", position: [-0.125, -0.125, 0] },
+      { name: "clawR", parent: "hoist", position: [0.125, -0.125, 0] },
     ],
     parts: [
       { name: "base", parent: "root", center: [0, 0.3, 0], size: [2.2, 0.6, 2.2], material: "steel" },
@@ -189,6 +191,12 @@ export const KIT_GEOMETRY: Readonly<Record<WorldAssetId, KitAssetGeometry>> = {
       { name: "boom", parent: "slew", center: [1, 2, 0], size: [3, 0.3, 0.4], material: "yellow" },
       { name: "cable", parent: "hoist", center: [0, 0.5, 0], size: [0.06, 1, 0.06], material: "charcoal" },
       { name: "grip", parent: "hoist", center: [0, 0, 0], size: [0.5, 0.2, 0.5], material: "steel" },
+      { name: "counterweight", parent: "slew", center: [-1.125, 1.875, 0], size: [0.625, 0.5, 0.875], material: "charcoal" },
+      { name: "supportArm", parent: "slew", center: [-0.625, 1.75, 0], size: [0.75, 0.375, 0.375], material: "steel" },
+      { name: "cab", parent: "slew", center: [0.625, 1.375, 0.5], size: [0.5, 0.625, 0.5], material: "cream" },
+      { name: "cabWindow", parent: "slew", center: [0.625, 1.5, 0.75], size: [0.375, 0.25, 0.125], material: "charcoal" },
+      { name: "clawLBlade", parent: "clawL", center: [0, 0, 0], size: [0.125, 0.375, 0.375], material: "steel" },
+      { name: "clawRBlade", parent: "clawR", center: [0, 0, 0], size: [0.125, 0.375, 0.375], material: "steel" },
     ],
   },
   "turret": {
