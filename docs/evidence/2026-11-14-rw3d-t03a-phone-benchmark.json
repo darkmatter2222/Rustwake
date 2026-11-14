@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "issue": 190,
+    "role": "developer",
+    "seed": "rw3d-t03-bench-v1",
+    "sha": "1b83c58bd103a1a4a0f4529e820a7e4409685def",
+    "command": "node docs/evidence/2026-11-14-rw3d-t03a-phone-bench.mjs",
+    "timestamp": "2026-11-14T04:14:10.236Z",
+    "evidenceClass": "REAL physical handset over adb + Chrome remote CDP (not desktop emulation)",
+    "state": "static crane blockout on 12x12 sand patch; scripted 900-frame timeline, fixed dt=1/60; no economy simulation",
+    "qualityTier": "blockout-flat: no shadows, DPR cap 2, shared glTF materials, antialias on",
+    "viewport": "448x867 CSS @ devicePixelRatio 2.25 (effective 2)",
+    "inputMethod": "CDP Input.dispatchTouchEvent (real touch -> pointerdown/pointerup)"
+  },
+  "device": {
+    "source": "adb shell getprop / wm / proc / dumpsys (collected by this runner at run time)",
+    "serial": "37260DLJG003LN",
+    "model": "Pixel 8 Pro",
+    "brand": "google",
+    "manufacturer": "Google",
+    "device": "husky",
+    "socModel": "Tensor G3",
+    "hardware": "husky",
+    "androidRelease": "16",
+    "sdk": "36",
+    "buildId": "CP1A.260505.005",
+    "securityPatch": "2026-05-05",
+    "chromeVersion": "157.0.8103.48",
+    "wmSizeRaw": "Physical size: 1008x2244",
+    "wmDensityRaw": "Physical density: 360",
+    "screenWidthPx": 1008,
+    "screenHeightPx": 2244,
+    "densityDpi": 360,
+    "memTotalKb": 11850652,
+    "batteryTempC": 25.5,
+    "batteryLevelPct": 75,
+    "raw": "MODEL=Pixel 8 Pro\r\nBRAND=google\r\nMANUFACTURER=Google\r\nDEVICE=husky\r\nANDROID_RELEASE=16\r\nSDK=36\r\nBUILD_ID=CP1A.260505.005\r\nSECURITY_PATCH=2026-05-05\r\nSOC=Tensor G3\r\nHARDWARE=husky\r\nWM_SIZE=Physical size: 1008x2244\r\nWM_DENSITY=Physical density: 360\r\nMEMTOTAL=MemTotal: 11850652 kB\r\nBATT_TEMP= temperature: 255\r\nBATT_LEVEL= level: 75 Capacity level: 3\r\nCHROME_VER= versionName=157.0.8103.48\r\n"
+  },
+  "browser": {
+    "cdpUrl": "http://localhost:9222",
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Mobile Safari/537.36",
+    "note": "Android Chrome navigator.userAgent is reduced/frozen ('Android 10; K'); authoritative OS/build come from adb getprop above.",
+    "hardwareConcurrency": 9,
+    "deviceMemoryGb": 8
+  },
+  "display": {
+    "devicePixelRatio": 2.25,
+    "effectivePixelRatio": 2,
+    "cssWidth": 448,
+    "cssHeight": 867,
+    "screenW": 448,
+    "screenH": 998,
+    "drawingBufferWidth": 896,
+    "drawingBufferHeight": 1734
+  },
+  "gl": {
+    "vendor": "Google Inc. (ARM)",
+    "renderer": "ANGLE (ARM, Mali-G715, OpenGL ES 3.2)",
+    "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)"
+  },
+  "renderer": {
+    "name": "three.js",
+    "revision": "187",
+    "pinned": "0.187.0"
+  },
+  "scene": {
+    "asset": "crane.gltf (reference blockout, 8 box meshes)",
+    "meshes": 7,
+    "textures": 1,
+    "drawCalls": {
+      "min": 7,
+      "max": 9
+    },
+    "triangles": {
+      "min": 50,
+      "max": 86
+    }
+  },
+  "frameTime": {
+    "renderMs": {
+      "p50": 0.7,
+      "p95": 1.2,
+      "p99": 1.9,
+      "max": 25.1
+    },
+    "rafMs": {
+      "p50": 16.7,
+      "p95": 16.8,
+      "max": 25
+    },
+    "achievedFps": 59.97
+  },
+  "inputLatencyMs": {
+    "samples": 10,
+    "p50": 12.4,
+    "p95": 22.1,
+    "max": 22.1
+  },
+  "memory": {
+    "heapBefore": 10000000,
+    "heapAfter": 10000000,
+    "geometries": 7,
+    "textures": 1
+  },
+  "startup": {
+    "firstFrameMs": 404.1,
+    "gltfLoadMs": 43
+  },
+  "coldLoad": {
+    "network": "CDP 20Mbps down / 50ms latency, cache disabled",
+    "firstFrameMs": 453.6,
+    "gltfLoadMs": 95.7,
+    "navTransferBytes": 1297,
+    "resourceTransferBytes": 172294,
+    "resourceEncodedBytes": 171694,
+    "resourceCount": 2,
+    "totalTransferBytes": 173591
+  },
+  "pivotAfter": {
+    "state": "idle",
+    "y": 1.2,
+    "reducedMotion": false
+  },
+  "pageErrors": [],
+  "checks": [
+    {
+      "name": "frames completed",
+      "expected": 900,
+      "actual": 900,
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "max draw calls <= 32 (spike sanity)",
+      "expected": "<=32",
+      "actual": 9,
+      "pass": true
+    },
+    {
+      "name": "max triangles <= 5000 (spike sanity)",
+      "expected": "<=5000",
+      "actual": 86,
+      "pass": true
+    },
+    {
+      "name": "p95 rAF delta <= 250ms (not frozen)",
+      "expected": "<=250",
+      "actual": 16.8,
+      "pass": true
+    },
+    {
+      "name": "selection samples >= 10",
+      "expected": ">=10",
+      "actual": 10,
+      "pass": true
+    },
+    {
+      "name": "p95 input-to-feedback <= 100ms (contract)",
+      "expected": "<=100",
+      "actual": 22.1,
+      "pass": true
+    },
+    {
+      "name": "cold first frame <= 5000ms @20Mbps/50ms (contract P03)",
+      "expected": "<=5000",
+      "actual": 453.6,
+      "pass": true
+    },
+    {
+      "name": "cold transferred payload <= 8MB (contract P03)",
+      "expected": "<=8388608",
+      "actual": 173591,
+      "pass": true
+    },
+    {
+      "name": "warm startup first frame <= 5000ms (sanity)",
+      "expected": "<=5000",
+      "actual": 404.1,
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    "2026-11-14-rw3d-t03a-phone-open.png",
+    "2026-11-14-rw3d-t03a-phone-selected.png"
+  ],
+  "limitations": [
+    "Primary declared device is a Pixel 8 Pro FLAGSHIP (Tensor G3 / Mali-G715 MP7), not a mid-range phone; these numbers do NOT establish mid-range (e.g. Galaxy A54 / Mali-G68) compliance. Mid-range floor measurement is owed.",
+    "Single-asset blockout scene: P1 normal/stress/battle population targets are NOT measured here.",
+    "P02 warmed three-10-minute bounded-memory loops and hidden-tab/context-loss save integrity are NOT run here (deferred to #151 per product verdict); only P01 initial measurement + P03 cold load are covered.",
+    "Input-to-feedback is the app's pointerup-handler metric (performance.now() - event.timeStamp); it excludes display scan-out/compositor presentation latency.",
+    "Device display was set to 1008x2244 (not the panel's native 1344x2992); results reflect the active resolution setting.",
+    "Thermal throttle not stressed: short 900-frame run from a cool start; sustained-load throttling unverified.",
+    "performance.memory is Chromium-only and approximate; cold-load shaping is CDP emulation of network conditions on the real device (the renderer/GPU/input are real)."
+  ]
+}
