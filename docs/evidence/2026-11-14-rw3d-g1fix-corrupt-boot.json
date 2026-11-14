@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "issue": 191,
+    "role": "developer",
+    "baseSha": "ab5e9193121ba1338a79f5e2dfe10e44e9b9a85d",
+    "worktreeHeadAtRun": "ab5e9193121ba1338a79f5e2dfe10e44e9b9a85d",
+    "note": "Probe ran against the working tree that becomes the PR head (fix uncommitted at run time).",
+    "command": "node docs/evidence/2026-11-14-rw3d-g1fix-corrupt-boot.mjs",
+    "timestamp": "2026-11-14T07:58:04.928Z",
+    "url": "http://localhost:4173/",
+    "evidenceClass": "headless Chrome against the real built app (vite preview); storage-level assertions only",
+    "browserVersion": "157.0.8103.51",
+    "gate": "start gate .gate__btn clicked to run the sim loop; boot-time preservation asserted with the loop stopped"
+  },
+  "corruptPayloads": {
+    "checksum": {
+      "reason": "checksum",
+      "bytes": 112,
+      "sha256": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5"
+    },
+    "parse": {
+      "reason": "parse",
+      "bytes": 56,
+      "sha256": "ec031aba118049e7e7ede169da505f2341e38ba96aaf1d353d0b6dd0570b441a"
+    }
+  },
+  "scenarios": {
+    "A": {
+      "immediate": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim\":{\"tick\":42},\"lastSeenMs\":1763100000000,\"settings\":{}}}",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim\":{\"tick\":42},\"lastSeenMs\":1763100000000,\"settings\":{}}}",
+        "lease": "{\"owner\":\"t1-ef9u\",\"heartbeatMs\":1794643070235,\"revision\":0}"
+      },
+      "afterPersist": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"b39bbe31\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":0,\"tick\":10,\"store\":{},\"storeUnits\":0,\"storeCapacity\":900,\"overflow\":[],\"machines\":[],\"routes\":[],\"wreck\":{\"remaining\":30,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":false,\"accumulated\":0,\"nextDeliveryTick\":0,\"inFlight\":null,\"deliveries\":0},\"spares\":[],\"credits\":0,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":0,\"nextMachineId\":1,\"nextRouteId\":1,\"machineCursor\":0,\"routeCursor\":0,\"powerRatio\":1,\"log\":[],\"seenCommands\":{},\"research\":{}},\"lastSeenMs\":1794643072757,\"settings\":{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}}}",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim\":{\"tick\":42},\"lastSeenMs\":1763100000000,\"settings\":{}}}",
+        "lease": "{\"owner\":\"t1-2sc7\",\"heartbeatMs\":1794643073175,\"revision\":0}"
+      },
+      "afterReload": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"2e5e8543\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":0,\"tick\":39,\"store\":{},\"storeUnits\":0,\"storeCapacity\":900,\"overflow\":[],\"machines\":[],\"routes\":[],\"wreck\":{\"remaining\":30,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":false,\"accumulated\":0,\"nextDeliveryTick\":0,\"deliveries\":0,\"inFlight\":null},\"spares\":[],\"credits\":0,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":0,\"nextMachineId\":1,\"nextRouteId\":1,\"machineCursor\":0,\"routeCursor\":0,\"powerRatio\":1,\"log\":[],\"seenCommands\":{},\"research\":{}},\"lastSeenMs\":1794643075713,\"settings\":{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}}}",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim\":{\"tick\":42},\"lastSeenMs\":1763100000000,\"settings\":{}}}",
+        "lease": "{\"owner\":\"t1-irn5\",\"heartbeatMs\":1794643076047,\"revision\":0}"
+      }
+    },
+    "C": {
+      "afterRemovalBoot": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"27f5b9d3\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":0,\"tick\":20,\"store\":{},\"storeUnits\":0,\"storeCapacity\":900,\"overflow\":[],\"machines\":[],\"routes\":[],\"wreck\":{\"remaining\":30,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":false,\"accumulated\":0,\"nextDeliveryTick\":0,\"inFlight\":null,\"deliveries\":0},\"spares\":[],\"credits\":0,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":0,\"nextMachineId\":1,\"nextRouteId\":1,\"machineCursor\":0,\"routeCursor\":0,\"powerRatio\":1,\"log\":[],\"seenCommands\":{},\"research\":{}},\"lastSeenMs\":1794643078402,\"settings\":{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}}}",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim\":{\"tick\":42},\"lastSeenMs\":1763100000000,\"settings\":{}}}",
+        "lease": "{\"owner\":\"t1-d1dl\",\"heartbeatMs\":1794643079004,\"revision\":0}"
+      }
+    },
+    "B": {
+      "immediate": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim",
+        "lease": "{\"owner\":\"t1-d1dl\",\"heartbeatMs\":1794643079004,\"revision\":0}"
+      },
+      "afterReload": {
+        "save": "{\"schemaVersion\":1,\"checksum\":\"c69c14a2\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":0,\"tick\":39,\"store\":{},\"storeUnits\":0,\"storeCapacity\":900,\"overflow\":[],\"machines\":[],\"routes\":[],\"wreck\":{\"remaining\":30,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":false,\"accumulated\":0,\"nextDeliveryTick\":0,\"deliveries\":0,\"inFlight\":null},\"spares\":[],\"credits\":0,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":0,\"nextMachineId\":1,\"nextRouteId\":1,\"machineCursor\":0,\"routeCursor\":0,\"powerRatio\":1,\"log\":[],\"seenCommands\":{},\"research\":{}},\"lastSeenMs\":1794643084516,\"settings\":{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}}}",
+        "recovery": "{\"schemaVersion\":1,\"checksum\":\"deadbeef\",\"payload\":{\"sim",
+        "lease": "{\"owner\":\"t1-kw5w\",\"heartbeatMs\":1794643084849,\"revision\":0}"
+      }
+    }
+  },
+  "pageErrors": [],
+  "checks": [
+    {
+      "name": "A0 healthy boot persists a checksum-valid save",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "A1 corrupt boot preserves raw payload verbatim (immediate)",
+      "expected": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "actual": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "pass": true
+    },
+    {
+      "name": "A2 corrupt boot does not overwrite SAVE_KEY before first persist",
+      "expected": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "actual": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "pass": true
+    },
+    {
+      "name": "A3 fresh yard boots and persists a checksum-valid save",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "A4 recovery slot still verbatim after fresh-yard persist",
+      "expected": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "actual": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "pass": true
+    },
+    {
+      "name": "A5 repeated boot idempotent: slot unchanged",
+      "expected": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "actual": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "pass": true
+    },
+    {
+      "name": "A6 repeated boot keeps checksum-valid yard",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "C1 save+lease removal boot leaves recovery slot intact",
+      "expected": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "actual": "08f2089d8ff8bcb19250aa006f003b607bfdb7cab41cf5a7d20a780f87f9aee5",
+      "pass": true
+    },
+    {
+      "name": "C2 removal boot persists a checksum-valid yard",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "B1 parse-failure boot preserves raw payload verbatim",
+      "expected": "ec031aba118049e7e7ede169da505f2341e38ba96aaf1d353d0b6dd0570b441a",
+      "actual": "ec031aba118049e7e7ede169da505f2341e38ba96aaf1d353d0b6dd0570b441a",
+      "pass": true
+    },
+    {
+      "name": "B2 parse-failure idempotent across reloads",
+      "expected": "ec031aba118049e7e7ede169da505f2341e38ba96aaf1d353d0b6dd0570b441a",
+      "actual": "ec031aba118049e7e7ede169da505f2341e38ba96aaf1d353d0b6dd0570b441a",
+      "pass": true
+    },
+    {
+      "name": "B3 parse-failure boot keeps checksum-valid yard",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "Z no page errors across all boots",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "Storage-level evidence: the player-visible notice is store state (SaveRecoveryApi.getSaveRecovery); no src/ui surface consumes it yet. UI wiring is owed before G1 (#151).",
+    "Visual inspection of any notice/recovery surface is PENDING (standing reservation).",
+    "Retry/export/discard flows are covered by tests/persistence/recovery.test.ts, not by this browser probe (no UI buttons exist yet to drive them).",
+    "Quota-failure (held) path is covered by unit tests with a throwing storage double, not in a real browser.",
+    "In-page decodability mirrors decodeSave's parse/schema/checksum stages; full validateSim is exercised by the unit suite, not re-implemented here."
+  ]
+}

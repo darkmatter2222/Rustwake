@@ -7,10 +7,12 @@
  * refused by importSave without touching the live yard; hostile settings sanitize;
  * two tabs sharing one storage retain a single writer until the lease expires.
  *
- * Known gaps are characterized honestly rather than papered over: a corrupt boot
- * falls back to a fresh yard (no legacy slot is retained), and decodeSave imposes
- * no payload size cap (see the audit doc). Offline catch-up cap/rollback are already
- * covered by tests/simulation/offline.test.ts and are not duplicated here.
+ * G1 (#191) is now FIXED and pinned below: a corrupt boot retains the raw payload
+ * in a parallel recovery slot and raises a player-visible notice instead of silently
+ * discarding it; the fresh yard remains only a fallback. The remaining honest gap is
+ * that decodeSave imposes no payload size cap (G2, #148 territory — deliberately not
+ * preempted here). Offline catch-up cap/rollback are already covered by
+ * tests/simulation/offline.test.ts and are not duplicated here.
  */
 import { describe, expect, it } from "vitest";
 import {
@@ -175,15 +177,25 @@ describe("E08 adversarial imports change nothing", () => {
     store.stop();
   });
 
-  it("characterizes the corrupt-boot fallback: a fresh yard, no legacy slot retained", () => {
+  it("pins the G1 fix (#191): a corrupt boot retains the raw slot and raises a notice", () => {
     const storage = memoryStorage();
-    storage.setItem(SAVE_KEY, fixture("bad-checksum").text);
+    const bad = fixture("bad-checksum");
+    storage.setItem(SAVE_KEY, bad.text);
     const store = createStore({ storage, now: () => LAST_SEEN_MS, leaseId: "tab-a" });
-    // Known recovery gap vs the executive contract: the damaged save is discarded
-    // silently rather than preserved in an explicit legacy slot.
+    // The fresh yard is still the fallback, but the damaged save is no longer
+    // discarded silently: its raw bytes are retained verbatim in the parallel
+    // recovery slot and a player-visible notice is exposed (executive contract:
+    // never silently reset a player's yard). This DELIBERATELY replaces the pre-#191
+    // pin that characterized the silent discard; the fixture JSON bytes are unchanged
+    // (only the behavior assertion moved). See docs/evidence/2026-11-14-rw3d-g1fix-*.
     expect(store.getState().tick).toBe(0);
     expect(store.getState().machines.length).toBe(0);
     expect(store.getState().credits).toBe(0);
+    const notice = store.getSaveRecovery();
+    expect(notice).not.toBeNull();
+    expect(notice?.reason).toBe(bad.expectedReason);
+    expect(notice?.preserved).toBe(true);
+    expect(store.exportSaveRecovery()).toBe(bad.text);
     store.stop();
   });
 });

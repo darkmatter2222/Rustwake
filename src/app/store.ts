@@ -20,6 +20,14 @@ import {
   type SaveSettings,
 } from "../game/persistence/save";
 import { createLease, nextLeaseId, type LeaseRole } from "../game/persistence/lease";
+import {
+  clearRecoverySlot,
+  preserveCorruptSave,
+  readRecoverySlot,
+  recoveryNoticeFor,
+  type RecoveryResult,
+  type SaveRecoveryNotice,
+} from "../game/persistence/recovery";
 
 export type StoreRole = LeaseRole;
 
@@ -54,6 +62,27 @@ export interface GameStore {
   step(ticks: number): void;
 }
 
+/**
+ * G1 (#191): additive recovery capability. Kept off `GameStore` so existing
+ * consumers and test doubles are untouched; `createStore` returns the intersection.
+ * The UI notice/retry/discard wiring is owed (see the #191 handoff): the store
+ * exposes the state and the actions, but no `src/ui` surface consumes them yet.
+ */
+export interface SaveRecoveryApi {
+  /** The unresolved corrupt-save notice, or null when there is nothing to recover. */
+  getSaveRecovery(): SaveRecoveryNotice | null;
+  /**
+   * Writer-only. Re-decodes the retained raw payload and, if it now decodes,
+   * durably writes the recovered yard to `SAVE_KEY` BEFORE clearing the slot.
+   * Any failure changes nothing and keeps the slot.
+   */
+  retrySaveRecovery(): RecoveryResult;
+  /** The exact retained raw text (slot, or held `SAVE_KEY`), for export/backup. */
+  exportSaveRecovery(): string | null;
+  /** Writer-only, explicit player confirmation: erase the active corrupt payload. */
+  discardSaveRecovery(): void;
+}
+
 const MAX_TICKS_PER_FRAME = 20;
 /** Follower tabs adopt the owner's snapshot at this cadence. */
 const RECONCILE_MS = 100;
@@ -82,7 +111,7 @@ export interface StoreOptions {
  * (spec 21.1 separation). With several tabs open, only the lease holder
  * advances and writes; the others mirror the persisted revision.
  */
-export function createStore(options: StoreOptions = {}): GameStore {
+export function createStore(options: StoreOptions = {}): GameStore & SaveRecoveryApi {
   const storage = options.storage === undefined ? defaultStorage() : options.storage;
   // Two clocks on purpose: `now` is the absolute wall clock shared by every tab
   // and by reloads (epoch ms), while the frame delta uses the monotonic
@@ -92,10 +121,61 @@ export function createStore(options: StoreOptions = {}): GameStore {
   const frameClock =
     options.frameClock ?? (() => (typeof performance !== "undefined" ? performance.now() : Date.now()));
   const lease = storage ? createLease(storage, now, options.leaseId ?? nextLeaseId()) : null;
-  const loaded = storage ? decodeSave(safeGet(storage, SAVE_KEY)) : { ok: false as const, reason: "empty" as const };
+  const bootRaw = storage ? safeGet(storage, SAVE_KEY) : null;
+  const loaded = decodeSave(bootRaw);
   let state: SimState = loaded.ok ? migrate(loaded.payload).sim : createInitialState();
   let settings: SaveSettings = loaded.ok ? { ...DEFAULT_SETTINGS, ...loaded.payload.settings } : { ...DEFAULT_SETTINGS };
   let lastSeenMs = loaded.ok ? loaded.payload.lastSeenMs : now();
+
+  // G1 (#191): a corrupt boot must never erase the player's history. Retain the raw
+  // bytes write-once in a parallel recovery slot BEFORE anything can overwrite
+  // SAVE_KEY, then derive a player-visible notice. A fresh yard is only a fallback,
+  // and while the raw bytes could not be copied (`recoveryHeld`) SAVE_KEY writes are
+  // suppressed so the original survives in place. The notice and hold are pure
+  // functions of storage content, re-derived after every resolution so they cannot
+  // drift; an older occupied slot re-surfaces once the active one is resolved.
+  let recoveryNotice: SaveRecoveryNotice | null = null;
+  let recoveryHeld = false;
+  const recoverySignature = (notice: SaveRecoveryNotice | null, held: boolean): string =>
+    notice
+      ? `${notice.preserved ? 1 : 0}|${notice.reason}|${notice.detail ?? ""}|${notice.textLength}`
+      : held
+        ? "held"
+        : "";
+  const refreshRecovery = (): boolean => {
+    const previous = recoverySignature(recoveryNotice, recoveryHeld);
+    if (!storage) {
+      recoveryNotice = null;
+      recoveryHeld = false;
+    } else {
+      const saveRaw = safeGet(storage, SAVE_KEY);
+      const slotRaw = readRecoverySlot(storage);
+      const saveDecoded = decodeSave(saveRaw);
+      const saveCorrupt =
+        saveRaw !== null && saveRaw.length > 0 && !saveDecoded.ok && saveDecoded.reason !== "empty";
+      if (slotRaw !== null) {
+        if (saveCorrupt && saveRaw !== slotRaw) {
+          // A newer corruption sits in SAVE_KEY that the occupied slot does not hold.
+          recoveryHeld = true;
+          recoveryNotice = recoveryNoticeFor(saveRaw, false);
+        } else {
+          recoveryHeld = false;
+          recoveryNotice = recoveryNoticeFor(slotRaw, true);
+        }
+      } else if (saveCorrupt) {
+        recoveryHeld = true;
+        recoveryNotice = recoveryNoticeFor(saveRaw, false);
+      } else {
+        recoveryHeld = false;
+        recoveryNotice = null;
+      }
+    }
+    return recoverySignature(recoveryNotice, recoveryHeld) !== previous;
+  };
+  if (storage && !loaded.ok && loaded.reason !== "empty") {
+    preserveCorruptSave(storage, bootRaw);
+  }
+  refreshRecovery();
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -117,6 +197,10 @@ export function createStore(options: StoreOptions = {}): GameStore {
   const persist = () => {
     if (!storage) return;
     if (lease) role = lease.claim(state.revision);
+    // G1 (#191): while a corrupt payload is held in place (the recovery copy could
+    // not be written), never overwrite SAVE_KEY — that raw text is the only copy.
+    // The fresh yard stays session-only until the player recovers or discards.
+    if (recoveryHeld) return;
     try {
       storage.setItem(SAVE_KEY, encodeSave(state, lastSeenMs, settings));
     } catch {
@@ -204,7 +288,8 @@ export function createStore(options: StoreOptions = {}): GameStore {
       }
     }
     if (storage) {
-      const incoming = decodeSave(safeGet(storage, SAVE_KEY));
+      const incomingRaw = safeGet(storage, SAVE_KEY);
+      const incoming = decodeSave(incomingRaw);
       if (
         incoming.ok &&
         (incoming.payload.sim.tick > state.tick || incoming.payload.sim.revision > state.revision)
@@ -215,7 +300,13 @@ export function createStore(options: StoreOptions = {}): GameStore {
         // measures the gap that snapshot actually left (spec 18.1).
         lastSeenMs = Math.max(lastSeenMs, incoming.payload.lastSeenMs);
         changed = true;
+      } else if (!incoming.ok && incoming.reason !== "empty") {
+        // G1 (#191): an externally corrupted checkpoint is retained write-once here
+        // too, so a follower or a later reconcile never lets the raw bytes vanish.
+        // This is a safety write, not an economy write, so it is not writer-gated.
+        preserveCorruptSave(storage, incomingRaw);
       }
+      if (refreshRecovery()) changed = true;
     }
     // A tab promoted from follower to writer settles the gap itself, which is how
     // a refresh inside the lease window still credits one absence (spec 18.4).
@@ -347,6 +438,73 @@ export function createStore(options: StoreOptions = {}): GameStore {
       persist();
       notify();
       return { ok: true, tick: state.tick, machines: state.machines.length };
+    },
+    getSaveRecovery(): SaveRecoveryNotice | null {
+      return recoveryNotice;
+    },
+    retrySaveRecovery(): RecoveryResult {
+      if (reconcile()) notify();
+      if (role !== "writer") return { ok: false, reason: "read-only" };
+      if (!storage) return { ok: false, reason: "no-slot" };
+      const slotRaw = readRecoverySlot(storage);
+      const saveRaw = safeGet(storage, SAVE_KEY);
+      // Prefer the recovery slot; with no slot, a held SAVE_KEY raw is the target.
+      const target = slotRaw !== null ? slotRaw : recoveryHeld ? saveRaw : null;
+      if (target === null || target.length === 0) return { ok: false, reason: "no-slot" };
+      // Guard the rare double-corruption case: adopting the slot must not overwrite a
+      // DIFFERENT corrupt raw that is only held in place in SAVE_KEY. Refuse; nothing
+      // changes. The player resolves the held payload first (export/discard).
+      if (slotRaw !== null && recoveryHeld && saveRaw !== null && saveRaw.length > 0 && saveRaw !== slotRaw) {
+        const saveDecoded = decodeSave(saveRaw);
+        if (!saveDecoded.ok && saveDecoded.reason !== "empty") {
+          return { ok: false, reason: "storage", detail: "save-key-corrupt" };
+        }
+      }
+      const decoded = decodeSave(target);
+      if (!decoded.ok) return { ok: false, reason: decoded.reason, detail: decoded.detail };
+      // Transactional: the recovered yard must be durably written to SAVE_KEY BEFORE
+      // the corrupt slot is cleared, so a storage failure loses nothing. The raw
+      // slot text is never rewritten — only the freshly encoded, valid yard lands.
+      const next = migrate(decoded.payload);
+      const nextSettings = { ...DEFAULT_SETTINGS, ...next.settings };
+      try {
+        storage.setItem(SAVE_KEY, encodeSave(next.sim, now(), nextSettings));
+      } catch {
+        return { ok: false, reason: "storage" };
+      }
+      state = next.sim;
+      settings = nextSettings;
+      lastSeenMs = now();
+      if (slotRaw !== null) clearRecoverySlot(storage);
+      refreshRecovery();
+      notify();
+      return { ok: true, tick: state.tick, machines: state.machines.length };
+    },
+    exportSaveRecovery(): string | null {
+      if (!storage) return null;
+      const slotRaw = readRecoverySlot(storage);
+      if (slotRaw !== null) return slotRaw;
+      return recoveryHeld ? safeGet(storage, SAVE_KEY) : null;
+    },
+    discardSaveRecovery(): void {
+      if (reconcile()) notify();
+      if (role !== "writer" || !storage || !recoveryNotice) return;
+      const target = recoveryNotice.preserved ? readRecoverySlot(storage) : safeGet(storage, SAVE_KEY);
+      // Erase exactly the confirmed text from wherever it lives. An older unresolved
+      // slot (the occupied case) is left intact and re-surfaces via refreshRecovery.
+      if (target !== null) {
+        if (readRecoverySlot(storage) === target) clearRecoverySlot(storage);
+        if (safeGet(storage, SAVE_KEY) === target) {
+          try {
+            if (typeof storage.removeItem === "function") storage.removeItem(SAVE_KEY);
+            else storage.setItem(SAVE_KEY, "");
+          } catch {
+            // Best-effort: the notice re-derives honestly if storage refused.
+          }
+        }
+      }
+      refreshRecovery();
+      notify();
     },
     step(ticks: number) {
       if (reconciling) {
