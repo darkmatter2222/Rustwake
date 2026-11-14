@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useState } from "react";
 import type { SaveSettings } from "../../game/persistence/save";
 import { t } from "../../game/content/strings";
 import { RESET_COPY, SETTINGS_COPY } from "../home/copy";
+import { SHELL_COPY } from "../shell/copy";
 import { Row } from "./shared";
 
 /**
@@ -25,6 +26,15 @@ export const SettingsPanel = memo(function SettingsPanel(props: {
   onToggleReducedMotion: () => void;
   onReset: () => void;
   onClose: () => void;
+  /**
+   * RW3D #135: the retired Menu sheet's yard-record and return-report rows now
+   * live here, so the two surfaces stay reachable from the one Settings face.
+   * Optional so the pre-start gate settings (no yard yet) omit them.
+   */
+  onOpenYard?: () => void;
+  yardEnabled?: boolean;
+  onOpenReport?: () => void;
+  reportAvailable?: boolean;
 }) {
   const [fullscreenSupported] = useState<boolean>(
     () => typeof document !== "undefined" && document.fullscreenEnabled === true
@@ -119,6 +129,34 @@ export const SettingsPanel = memo(function SettingsPanel(props: {
               {isFullscreen ? SETTINGS_COPY.displayExit : SETTINGS_COPY.displayEnter}
             </button>
           </Row>
+          {props.onOpenYard ? (
+            <Row
+              label={SHELL_COPY.yardRecord}
+              value={props.yardEnabled ? SHELL_COPY.yardRecordHint : SHELL_COPY.afterTutorial}
+            >
+              <button
+                className="icon-btn"
+                disabled={!props.yardEnabled}
+                onClick={props.onOpenYard}
+              >
+                {SHELL_COPY.open}
+              </button>
+            </Row>
+          ) : null}
+          {props.onOpenReport ? (
+            <Row
+              label={SHELL_COPY.returnReport}
+              value={props.reportAvailable ? SHELL_COPY.returnReportHint : SHELL_COPY.noAbsence}
+            >
+              <button
+                className="icon-btn"
+                disabled={!props.reportAvailable}
+                onClick={props.onOpenReport}
+              >
+                {SHELL_COPY.open}
+              </button>
+            </Row>
+          ) : null}
         </dl>
         {props.osReducedMotion ? (
           <p className="status-line" role="note">

@@ -1,29 +1,46 @@
 /*
- * UI-RESET-49 (G2): styles for the shell's own faces only (.shell-*).
- * Overrides of the legacy classes (.dock, .panel, .hud__lead, ...) live at the
- * END of styles.css so they win the cascade in the browser; the unit census
- * injects styles.css alone, and jsdom ignores @media, so the pinned base
- * contract is untouched by every mode below.
+ * RW3D #135 (U03/U04): the compact shell's own faces (.toolbar, .shell-host,
+ * .shell-zoom), from docs/vision/UI_CONTRACT.md.
  *
- * Modes (spec §3.6):
- *   column  — base, 600..1199 px: the existing HUD column, Menu face top-right.
- *   phone   — <= 599 px: split primary band + nav row, Menu face in thumb zone.
- *   rail    — >= 1200 px, or >= 600 px and <= 460 px tall: 96 px destination
- *             rail left, primary band bottom, 320 px inspector right.
+ * Retired here — the 2D-era assumptions the contract forbids: the permanent
+ * left destination rail (.shell-rail), the Menu face/sheet (.shell-menu-face,
+ * .shell-menu) and the two-layer painted panel stack. What replaces them:
+ *   - one persistent six-destination toolbar (Build / Routes / Fleet /
+ *     Research / Trade / Map), the navigation spine on EVERY viewport;
+ *   - ONE panel host painting the top of the panel stack: a bottom sheet on
+ *     phones (the base rules below — jsdom ignores @media, so the unit census
+ *     reads the phone composition), a right-docked inspector at >= 1024 px,
+ *     and a compact side drawer on short landscape (600..1023 x <= 460).
+ *
+ * Overrides of the legacy classes (.dock, .hud__lead, .toast, ...) live at the
+ * END of styles.css so they win the cascade in the browser. The constants in
+ * shell/layout.ts are the shared source of truth; the px literals below mirror
+ * them (CSS cannot import TS): edge 8, gutter 6, inspector 340, toolbar 60,
+ * sheet 35vh / 70vh, zoom face 44.
  */
 
-/* ---- Rail (R1): hidden until rail mode paints it ---- */
-.shell-rail {
-  display: none;
+/* ---- The toolbar: six destinations, always painted ---- */
+.toolbar {
+  order: 5;
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
+  /* Contract: 56-64 px tall on phone and desktop. */
+  min-height: 60px;
+  margin-top: 6px;
+  pointer-events: auto;
 }
 
-.shell-rail__slot {
+.toolbar__btn {
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  width: 100%;
   min-width: 44px;
   min-height: 44px;
   padding: 4px 2px;
@@ -37,148 +54,125 @@
   pointer-events: auto;
 }
 
-.shell-rail__slot:active {
+.toolbar__btn:active {
   background: rgba(95, 216, 232, 0.16);
 }
 
 /* The active destination reads by its cyan edge, not by the amber accent:
-   one accent-filled primary per screen stays the dock's alone (P1). */
-.shell-rail__slot[aria-pressed="true"] {
+   one accent-filled primary per screen stays the dock's alone. */
+.toolbar__btn[aria-pressed="true"] {
   border-color: var(--cyan);
   background: rgba(95, 216, 232, 0.12);
 }
 
-.shell-rail__slot:disabled {
+.toolbar__btn:disabled {
   opacity: 0.8;
 }
 
-.shell-rail__reason {
+.toolbar__reason {
   font-size: 0.62rem;
   line-height: 1.1;
   color: var(--steel-light);
 }
 
-.shell-rail__key {
+.toolbar__key {
   font-size: 0.6rem;
   line-height: 1;
   color: var(--steel-light);
   opacity: 0.75;
 }
 
-/* ---- Menu face: hidden until a mode places it ---- */
-.shell-menu-face {
+/* 200% text: the key hints yield first so the six labels and the printed
+   reason keep their 44 px targets inside one row. */
+.text-large .toolbar__key {
   display: none;
-  position: absolute;
-  z-index: 6;
-  min-width: 44px;
-  min-height: 46px;
-  padding: 0 8px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(111, 147, 173, 0.4);
-  background: var(--panel);
-  color: var(--paper);
-  font: inherit;
-  font-size: 0.85rem;
-  letter-spacing: 0.03em;
-  pointer-events: auto;
+}
+.text-large .toolbar__btn {
+  font-size: 0.7rem;
+  padding: 2px 1px;
 }
 
-.shell-menu-face:active {
-  background: rgba(95, 216, 232, 0.16);
-}
-
-.shell-menu-face--open {
-  border-color: var(--cyan);
-}
-
-/* ---- Menu sheet (E3/E5): one bounded sheet, never a .panel ---- */
-.shell-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* ---- The ONE panel host ---- */
+.shell-host {
   order: 3;
-  z-index: 30;
-  align-self: center;
-  width: 100%;
-  max-width: min(100%, 560px);
-  margin-top: auto;
-  max-height: 42%;
-  min-height: 0;
-  padding: 10px 12px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(111, 147, 173, 0.4);
-  background: var(--panel);
-  pointer-events: auto;
-}
-
-/* E3: one sheet at a time. The panels yield their painted slot while the menu
-   is up; the selection state underneath is untouched (E4), so closing the menu
-   restores the same context. Higher specificity than `.panel`, so file order
-   against styles.css does not matter. */
-.hud--menu > .panel {
-  display: none;
-}
-
-.shell-menu__head {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.shell-menu__title {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--cyan);
-}
-
-.shell-menu__body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  align-self: center;
+  width: 100%;
+  max-width: min(100%, 560px);
   min-height: 0;
-  /* Longhands, not the `hidden auto` shorthand: jsdom's style engine drops the
-     two-value form, and the bounded-scroller contract is asserted in jsdom. */
-  overflow-x: hidden;
-  overflow-y: auto;
-  touch-action: pan-y;
-}
-
-.shell-menu__row {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(111, 147, 173, 0.4);
-  background: rgba(9, 15, 26, 0.55);
-  color: var(--paper);
-  font: inherit;
-  font-size: 0.88rem;
-  text-align: left;
   pointer-events: auto;
 }
 
-.shell-menu__row:active {
-  background: rgba(95, 216, 232, 0.16);
+/* The host takes programmatic focus when a layer opens; the ring belongs to
+   the controls inside it, not the container. */
+.shell-host:focus {
+  outline: none;
 }
 
-.shell-menu__row:disabled {
-  opacity: 0.8;
+.shell-host__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
-.shell-menu__hint {
-  font-size: 0.72rem;
-  line-height: 1.2;
-  color: var(--steel-light);
+.shell-host__spacer {
+  flex: 1 1 auto;
+}
+
+.shell-host__back,
+.shell-host__expand {
+  flex: 0 0 auto;
+}
+
+/* The panel inside the host fills the host: the host owns the outer geometry
+   (sheet height / inspector insets), the panel keeps its own head + declared
+   scroller. Higher specificity than the base `.panel`, so file order against
+   styles.css does not matter. */
+.shell-host .panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  margin-top: 0;
+  width: 100%;
+  max-width: none;
+  align-self: stretch;
+}
+
+/* The Yard record's DEFINITE height (save.css pins 42% of the old HUD column)
+   becomes the host's full band: the sheet/inspector already bounds it. */
+.shell-host .panel:has(.save-page) {
+  height: 100%;
+}
+
+/* ---- Phone sheet (base): ~35% collapsed, ~70% expanded ---- */
+.shell-sheet {
+  height: 35vh;
+  margin-top: auto;
+  /* The band is the contract: as a shrinkable flex item the sheet shared the
+     HUD column's shortfall with the lead and rendered 32.5/44.8vh instead of
+     35/70vh (measured in the T08 capture). The lead already has min-height:0
+     and its own declared scroller, so it yields first; the sheet keeps its
+     band. The absolute inspector/landscape drawers are unaffected. */
+  flex-shrink: 0;
+}
+
+.shell-sheet--expanded {
+  height: 70vh;
+}
+
+/* 200% text: the sheet expands to its tall band on its own and the toggle
+   stands down — the contract's "sheet expands / scrolls internally". */
+:root.text-large .shell-sheet {
+  height: 70vh;
+}
+:root.text-large .shell-host__expand {
+  display: none;
 }
 
 /* ---- Zoom controls (UI-RESET-50): visible in every mode, 44 px faces ---- */
-/* Hidden until a mode places the stack; the faces keep their target floor in
-   the base rule so the jsdom reachability census reads it without @media. */
 .shell-zoom {
   display: none;
   position: absolute;
@@ -210,157 +204,180 @@
 }
 
 .shell-zoom__face--reset {
-  /* UI-RESET-62: the face reads "Recenter" (camera, not navigation). A fixed-px
-     label keeps the longer word inside the reserved 60 px camera gutter at every
-     text scale; the accessible name ("Reset view") is unchanged. */
+  /* The face reads "Recenter" (camera, not navigation). A fixed-px label keeps
+     the longer word inside the reserved 60 px camera gutter at every text
+     scale; the accessible name ("Reset view") is unchanged. */
   font-size: 10px;
   letter-spacing: 0.02em;
   padding: 0 3px;
 }
 
-/* The bounded scrollers (inspector bodies, the Menu sheet) get a thin themed
-   scrollbar instead of the platform default, on both engines that ship here. */
+/* The bounded scrollers (panel bodies, the lead on short bands) get a thin
+   themed scrollbar instead of the platform default, on both engines. */
 .panel__body,
-.shell-menu__body {
+.shell-list {
   scrollbar-width: thin;
   scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
 }
 
 .panel__body::-webkit-scrollbar,
-.shell-menu__body::-webkit-scrollbar {
+.shell-list::-webkit-scrollbar {
   width: 8px;
 }
 
 .panel__body::-webkit-scrollbar-thumb,
-.shell-menu__body::-webkit-scrollbar-thumb {
+.shell-list::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background: rgba(111, 147, 173, 0.55);
 }
 
 .panel__body::-webkit-scrollbar-track,
-.shell-menu__body::-webkit-scrollbar-track {
+.shell-list::-webkit-scrollbar-track {
   background: rgba(9, 15, 26, 0.4);
 }
 
-/* ---- Phone mode: the Menu face owns the dock's reserved thumb zone ---- */
-@media (max-width: 599px) {
-  .shell-menu-face {
-    display: block;
+/* ---- The destination panels' shared list grammar ---- */
+.shell-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+
+.shell-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.32);
+  background: rgba(9, 15, 26, 0.45);
+}
+
+.shell-list__label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 0.85rem;
+}
+
+.shell-list__status {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--steel-light);
+}
+
+.shell-region {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.4);
+  background: rgba(9, 15, 26, 0.45);
+  font-size: 0.88rem;
+}
+
+.shell-region--active {
+  border-color: var(--cyan);
+}
+
+.shell-region__state {
+  font-size: 0.72rem;
+  color: var(--cyan);
+}
+
+/* ---- Phone band (< 768 px): the zoom stack clears the painted chrome ---- */
+@media (max-width: 767px) {
+  .shell-zoom {
+    display: flex;
     right: max(10px, env(safe-area-inset-right));
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: 66px;
+    /* App measures the painted bottom chrome (sheet + dock + toolbar) into
+       --shell-zoom-clear, so the stack lifts above an open sheet too. */
+    bottom: max(76px, calc(var(--shell-zoom-clear, 76px) + env(safe-area-inset-bottom)));
   }
-  /* The stack clears the dock (App measures it into --shell-zoom-clear) and
-     the Menu face (8 px edge + 46 px face + gutter); the camera fit reserves
-     this same right gutter, so the stack never covers a yard cell. */
+  /* The 70vh band + dock/toolbar leave no sky above the painted chrome, so
+     the camera stack stands down while the sheet is expanded (measured in
+     the T08 capture: it would sit off-screen). Collapse brings it back; the
+     text-large sheet is tall on its own, so it stands down there too. */
+  .hud:has(.shell-sheet--expanded) .shell-zoom {
+    display: none;
+  }
+  :root.text-large .shell-zoom {
+    display: none;
+  }
+}
+
+/* ---- Compact landscape (600..1023 px wide, <= 460 px tall): side drawer ----
+   The sheet becomes a right-docked drawer bounded by the viewport; the lead
+   keeps its own bounded scroller to the left of it (styles.css). */
+@media (min-width: 600px) and (max-width: 1023px) and (max-height: 460px) {
+  .shell-sheet {
+    position: absolute;
+    z-index: 6;
+    right: max(8px, env(safe-area-inset-right));
+    top: var(--shell-inspector-top, 64px);
+    bottom: var(--shell-chrome-bottom, 132px);
+    width: 300px;
+    max-width: 300px;
+    height: auto;
+    margin-top: 0;
+    align-self: stretch;
+  }
+  .shell-sheet--expanded {
+    height: auto;
+  }
+  :root.text-large .shell-sheet {
+    height: auto;
+  }
   .shell-zoom {
     display: flex;
     right: max(10px, env(safe-area-inset-right));
     bottom: max(76px, calc(var(--shell-zoom-clear, 76px) + env(safe-area-inset-bottom)));
   }
-}
-
-/* ---- Column mode: the Menu face takes the corner Home (E2) left behind ---- */
-@media (min-width: 600px) and (max-width: 1199px) {
-  .shell-menu-face {
-    display: block;
-    top: max(8px, env(safe-area-inset-top));
-    right: max(10px, env(safe-area-inset-right));
-  }
-  /* Keep the cluster clear of the face at every text scale. The face's rem
-     label grows with the scale (measured 52.1 px at 1, 86.2 px at 2), so the
-     reserve grows with it — same value as the styles.css column block. */
-  .hud__top {
-    padding-right: calc(24px + 38px * var(--text-scale, 1));
-  }
-  /* Below the corner Menu face (8 px edge + 46 px face + gutter), in the
-     right gutter the camera fit reserves for the stack. */
-  .shell-zoom {
-    display: flex;
-    top: 76px;
-    right: max(10px, env(safe-area-inset-right));
+  /* The drawer owns the right gutter; the zoom stack steps left of it. */
+  .hud:has(.shell-sheet) .shell-zoom {
+    right: 320px;
   }
 }
 
-/* ---- Rail mode: rail left, primary band bottom, inspector right ---- */
-@media (min-width: 1200px), (min-width: 600px) and (max-height: 460px) {
-  .shell-rail {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+/* ---- Desktop (>= 1024 px): the right inspector ---- */
+@media (min-width: 1024px) {
+  .shell-inspector {
     position: absolute;
-    z-index: 5;
-    left: max(8px, env(safe-area-inset-left));
-    top: max(8px, env(safe-area-inset-top));
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: 96px;
-    padding: 6px;
-    border-radius: 12px;
-    border: 1px solid rgba(111, 147, 173, 0.35);
-    background: var(--panel);
-    pointer-events: auto;
-  }
-  /* Slot 5 owns the menu here; the floating face stands down. */
-  .shell-menu-face {
-    display: none;
-  }
-  /* The menu takes the inspector slot, bounded like every other sheet, with
-     the same measured top floor the panels use (App lifts it past 104 px
-     when the lead block grows at large text scales). */
-  .shell-menu {
-    position: absolute;
-    left: auto;
+    z-index: 6;
     right: max(8px, env(safe-area-inset-right));
-    top: var(--shell-inspector-top, 104px);
-    bottom: max(8px, env(safe-area-inset-bottom));
-    width: 320px;
-    max-width: 320px;
-    max-height: none;
+    /* App lifts the top past the painted lead at large text scales
+       (--shell-inspector-top) and the bottom past the dock + toolbar
+       (--shell-chrome-bottom); the floors are the contract's own. */
+    top: var(--shell-inspector-top, 64px);
+    bottom: var(--shell-chrome-bottom, 132px);
+    width: 340px;
+    max-width: 340px;
     margin-top: 0;
-    /* Measured (debug-geometry STEPS, 1280x800): the base `align-self: center`
-       survives into the absolute box — Chrome then sizes it to its content and
-       centres it between the insets (y=281 instead of filling 104..792; at
-       844x390 the content is taller than the gap and the sheet spilled over the
-       lead, y=56). Stretch makes top/bottom own the height, like every panel. */
+    /* Stretch lets top/bottom own the height of the absolute box (the #49
+       lesson: align-self:center survives into absolute boxes and centres a
+       content-sized box between the insets instead of filling them). */
     align-self: stretch;
   }
-  /* The zoom row sits above the primary band, at the world region's left
-     edge — the inspector owns the right gutter here. --shell-zoom-clear is
-     the measured dock clearance, so the row lifts with the band at large
-     text scales instead of overlapping it. */
   .shell-zoom {
     display: flex;
-    flex-direction: row;
-    left: 110px;
-    /* #117: the short-landscape rail band (>=600px wide, <=460px tall) ALSO
-       matches the column-mode block above, which pins top:76px / right:10px.
-       Without resetting them here the cluster is stretched between top:76px
-       and this bottom anchor, so each 44px face becomes a 252px-tall strip
-       covering the world region's left edge — the fitted yard's top-row
-       machines (sorter tile 0, furnace tile 1) land under it and lose every
-       clear canvas tap point. Reset top/right so the cluster is the intended
-       compact bottom-anchored row (44px faces) clear of the yard's top row.
-       The tall desktop rail (>=1200px) never matches column mode, so its
-       already-compact row is unchanged. */
-    top: auto;
-    right: auto;
-    bottom: max(62px, calc(var(--shell-zoom-clear, 62px) + env(safe-area-inset-bottom)));
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(76px, calc(var(--shell-zoom-clear, 76px) + env(safe-area-inset-bottom)));
   }
-}
-
-/* ---- UI-RESET-62: the destructive menu entry ----
-   Appended after every pinned block. The Reset game row keeps the shared row
-   geometry (44 px floor, bounded scroller) and only borrows the rust accent so
-   it reads as dangerous next to the navigation rows. */
-.shell-menu__row--danger {
-  border-color: rgba(201, 113, 58, 0.6);
-  color: var(--furnace);
-}
-
-.shell-menu__row--danger:active {
-  background: rgba(201, 113, 58, 0.18);
-}
-
-.shell-menu__row--danger .shell-menu__hint {
-  color: rgba(255, 183, 101, 0.72);
+  /* The inspector owns the right gutter; the zoom stack steps left of it
+     (8 edge + 340 width + 6 gutter + 6 breathing room). The camera fit
+     measures the painted boxes, so the world never lands under either. */
+  .hud:has(.shell-inspector) .shell-zoom {
+    right: 360px;
+  }
 }

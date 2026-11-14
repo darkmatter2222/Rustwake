@@ -38,6 +38,16 @@ function mount(store: GameStore): HTMLDivElement {
 }
 
 /**
+ * Dock-scoped face lookup. T08 (#135) added a persistent toolbar whose
+ * destination labels can collide with dock faces in a document-wide search.
+ */
+function dockFace(label: string): HTMLButtonElement | undefined {
+  return [...document.querySelectorAll<HTMLButtonElement>(".dock .dock__btn")].find((node) =>
+    (node.textContent ?? "").trim().startsWith(label)
+  );
+}
+
+/**
  * React tracks the value it wrote, so assigning `.value` directly makes it treat the
  * following input event as its own and drop the change. The prototype setter is the
  * documented way to drive a controlled field from a test.
@@ -396,15 +406,17 @@ describe("first-feel shell", () => {
     }
     act(() => findButton("Repair drone")?.click());
     act(() => store.step(262));
-    // Nothing to spend yet, so the dock stays at three targets.
-    expect(findButton("Research")).toBeUndefined();
+    // Nothing to spend yet, so the dock stays at three targets. The toolbar's
+    // Research destination is always present but disabled until data exists (T08).
+    expect(dockFace("Research")).toBeUndefined();
+    expect(findButton("Research")?.disabled).toBe(true);
 
     const state = store.getState();
     state.store["data"] = 6;
     state.storeUnits += 6;
     act(() => store.step(1));
-    expect(findButton("Research")).toBeDefined();
-    act(() => findButton("Research")?.click());
+    expect(dockFace("Research")).toBeDefined();
+    act(() => dockFace("Research")?.click());
 
     const panel = () => document.querySelector(".panel")?.textContent ?? "";
     const opened = panel();

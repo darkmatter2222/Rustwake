@@ -459,20 +459,20 @@ describe("return-61 focus: restore on every close path", () => {
     expect(document.activeElement).toBe(opener);
   });
 
-  it("falls back to the Menu face when the opener is gone (boot gate, closed menu)", () => {
+  it("falls back to a toolbar destination when the opener is gone (T08)", () => {
     const face = document.createElement("button");
-    face.className = "shell-menu-face";
+    face.className = "toolbar__btn";
     document.body.appendChild(face);
     const opener = document.createElement("button");
     document.body.appendChild(opener);
     opener.focus();
     const { root } = mountPanel(LEGACY_REPORT);
-    opener.remove(); // the boot gate / menu row unmounted before the report closes
+    opener.remove(); // the boot gate / settings row unmounted before the report closes
     unmount(root);
     expect(document.activeElement).toBe(face);
   });
 
-  it("falls back to the first dock button when no Menu face exists", () => {
+  it("falls back to the first dock button when no toolbar destination exists", () => {
     const dock = document.createElement("div");
     dock.className = "dock";
     const dockBtn = document.createElement("button");

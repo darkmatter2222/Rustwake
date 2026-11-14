@@ -24,6 +24,7 @@ import {
 } from "./hud/Icons";
 import { powerCue, productionCue, storagePressure } from "./hud/pressure";
 import { StorageAlert } from "./hud/StorageAlert";
+import { SHELL_COPY } from "./shell/copy";
 import "./hud/hud.css";
 
 /* STRAT-004 byte trim: the dock's class fragments are painted from one literal each
@@ -165,6 +166,8 @@ export function HudTop(props: {
   onCycleText: () => void;
   onToggleMute: () => void;
   onHome: () => void;
+  /** RW3D #135: the Settings face replaces the retired Menu face's corner. */
+  onOpenSettings?: () => void;
 }) {
   // UI-RESET-51: the all-resource drawer is a local toggle; the chip budget is unchanged.
   const [expanded, setExpanded] = useState(false);
@@ -211,6 +214,15 @@ export function HudTop(props: {
         >
           <GridIcon className="cluster__glyph" size={16} />
         </button>
+        {props.onOpenSettings ? (
+          <button
+            className="icon-btn"
+            onClick={props.onOpenSettings}
+            aria-label={SHELL_COPY.settings}
+          >
+            <GearIcon className="cluster__glyph" size={16} />
+          </button>
+        ) : null}
         <button className="icon-btn" onClick={props.onHome} aria-label={t("aria.home")}>
           {t("btn.home")}
         </button>

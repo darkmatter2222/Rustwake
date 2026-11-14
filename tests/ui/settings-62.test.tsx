@@ -33,11 +33,6 @@ function mount(store: GameStore, extras: { reload?: () => void } = {}): { host: 
 }
 
 const settingsPanel = () => document.querySelector<HTMLElement>(".panel--settings");
-const menuFace = () => document.querySelector<HTMLButtonElement>(".shell-menu-face");
-const menuRow = (label: string) =>
-  [...document.querySelectorAll<HTMLButtonElement>(".shell-menu__row")].find((node) =>
-    (node.textContent ?? "").trim().startsWith(label)
-  );
 const pressKey = (key: string) =>
   act(() => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
@@ -60,9 +55,9 @@ function savedSettings(): { muted: boolean; reducedMotion: boolean; textScale: n
 function openGateSettings() {
   act(() => findButton("Settings")?.click());
 }
-function openMenuSettings() {
-  act(() => menuFace()?.click());
-  act(() => menuRow("Settings")?.click());
+/** T08 (#135): the Menu sheet is retired; the resource-strip gear opens Settings directly. */
+function openPostStartSettings() {
+  act(() => findButton("Settings")?.click());
 }
 function begin() {
   act(() => findButton("Begin recovery")?.click());
@@ -162,25 +157,29 @@ describe("UI-RESET-62 settings experience", () => {
     expect(rowValue("Text size")).toBe("1.25");
   });
 
-  it("post-start Menu opens Settings; Close and Escape return to the yard", () => {
+  it("post-start Settings gear opens Settings; Close and Escape return to the yard", () => {
     const store = createStore();
     const { host } = mount(store);
     begin();
-    openMenuSettings();
+    openPostStartSettings();
     expect(settingsPanel()).not.toBeNull();
-    // The menu sheet retires when Settings takes over the panel slot.
+    // T08 (#135): one major surface at a time — Settings is the only painted
+    // panel inside the host, and no Menu sheet exists anywhere in the shell.
+    expect(document.querySelectorAll(".shell-host .panel").length).toBe(1);
     expect(document.querySelector(".shell-menu")).toBeNull();
     expect(host.querySelector(".hud")).not.toBeNull();
     expect(rowValue("Sound")).toBe("On");
 
     act(() => findButton("Close settings")?.click());
     expect(settingsPanel()).toBeNull();
+    expect(host.querySelector(".shell-host")).toBeNull();
     expect(host.querySelector(".hud")).not.toBeNull();
 
-    openMenuSettings();
+    openPostStartSettings();
     expect(settingsPanel()).not.toBeNull();
     pressKey("Escape");
     expect(settingsPanel()).toBeNull();
+    expect(host.querySelector(".shell-host")).toBeNull();
     expect(host.querySelector(".hud")).not.toBeNull();
   });
 
@@ -188,7 +187,7 @@ describe("UI-RESET-62 settings experience", () => {
     const first = createStore();
     const one = mount(first);
     begin();
-    openMenuSettings();
+    openPostStartSettings();
     act(() => findButton("Sound off")?.click());
     expect(first.getSettings().muted).toBe(true);
     expect(savedSettings()?.muted).toBe(true);

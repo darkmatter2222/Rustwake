@@ -16,8 +16,12 @@ import {
   WRECK_POSITION,
   drawScene,
   fitCamera,
+  pickWorld3D,
+  projectWorld3D,
   screenToWorld,
   tileToWorld,
+  world3DStatus,
+  worldToScreen,
   worldToTile,
   type Camera,
   type CameraInsets,
@@ -67,11 +71,21 @@ import { DismantleCard, MoveStrip, PlacementStrip } from "./place/PlacePreview";
 import { OnboardCoach } from "./onboard/OnboardCoach";
 import { Primitives48 } from "./primitives";
 import { bandFor } from "./tokens";
-import { MenuSheet, ShellMenuFace, ShellRail, ShellZoom, useRailMode } from "./shell/Shell";
+import { PanelHost, ShellZoom, Toolbar, useDesktopMode } from "./shell/Shell";
+import { RoutesPanel } from "./shell/RoutesPanel";
+import { FleetPanel } from "./shell/FleetPanel";
+import { MapPanel } from "./shell/MapPanel";
 import {
+  PANEL_FLEET,
+  PANEL_MAP,
+  PANEL_REPORT,
+  PANEL_RESEARCH,
+  PANEL_ROUTES,
+  PANEL_SETTINGS,
+  PANEL_TRADE,
+  PANEL_YARD,
   SHELL_GUTTER_PX,
   SHELL_INSPECTOR_TOP_PX,
-  SHELL_RIGHT_GUTTER_PX,
   SHELL_SLOTS,
   SHELL_ZOOM_GUTTER_PX,
   type ShellSlot,
@@ -100,20 +114,20 @@ let commandSeq = 0;
 const nextCommandId = (): string => `${commandEpoch}-${++commandSeq}`;
 
 /**
- * L-1 / UI-RESET-49 G2: the chrome band the world is fitted into, read from the
- * boxes the layout actually paints — the bottom edge of the lead block (chips +
- * objective) and the gap above the dock. In rail mode the painted rail box also
- * reserves the left edge and the inspector gutter reserves the right, so the
- * world fits the region between them instead of the whole canvas. The canvas
- * covers the viewport, so every box is already in the canvas' own CSS-px space.
- * An empty measurement (a jsdom box of 0) yields no band and the legacy fit.
+ * L-1 / RW3D #135: the chrome band the world is fitted into, read from the boxes
+ * the layout actually paints — the bottom edge of the lead block (resource strip
+ * + objective + coach) and the first painted bottom chrome (an open phone sheet,
+ * the dock or the toolbar). On desktop the painted inspector reserves the right
+ * edge, so the world fits beside it instead of under it. The canvas covers the
+ * viewport, so every box is already in the canvas' own CSS-px space. An empty
+ * measurement (a jsdom box of 0) yields no band and the legacy fit.
  */
 interface ShellInsets extends CameraInsets {
   left: number;
   right: number;
 }
 
-function chromeInsets(cssHeight: number): ShellInsets | undefined {
+function chromeInsets(cssWidth: number, cssHeight: number): ShellInsets | undefined {
   if (cssHeight <= 0) return undefined;
   const lead = document.querySelector(".hud__lead") ?? document.querySelector(".hud__top");
   const dock = document.querySelector(".dock");
@@ -121,20 +135,40 @@ function chromeInsets(cssHeight: number): ShellInsets | undefined {
   const topEdge = lead.getBoundingClientRect().bottom;
   const dockTop = dock.getBoundingClientRect().top;
   if (!(topEdge > 0) || !(dockTop > 0)) return undefined;
-  // Paint truth, not a second matchMedia: the rail reserves the left edge only
-  // while its box is actually on screen (rail mode), so the camera and the CSS
-  // can never disagree about which mode the viewport is in.
-  const rail = document.querySelector(".shell-rail");
-  const railBox = rail ? rail.getBoundingClientRect() : null;
-  const railActive = railBox !== null && railBox.width > 0;
+  // Paint truth, not a second matchMedia: a face reserves the band it actually
+  // occupies, so the camera and the CSS can never disagree about which mode
+  // the viewport is in. An IN-FLOW sheet/catalog reserves the bottom band; an
+  // absolute/fixed host (desktop inspector, compact side drawer, desktop
+  // catalog) reserves the right gutter instead — reserving its top as a bottom
+  // band would collapse the world on short landscape.
+  const toolbar = document.querySelector(".toolbar");
+  const toolbarTop = toolbar ? toolbar.getBoundingClientRect().top : 0;
+  let bottomEdge = Math.min(dockTop, toolbarTop > 0 ? toolbarTop : cssHeight);
+  let right = SHELL_ZOOM_GUTTER_PX;
+  const hosts = document.querySelectorAll(".shell-sheet, .shell-inspector, .catalog");
+  for (const host of hosts) {
+    const box = host.getBoundingClientRect();
+    if (box.width <= 0 || box.height <= 0) continue;
+    const position = window.getComputedStyle(host).position;
+    if (position === "absolute" || position === "fixed") {
+      right = Math.max(right, cssWidth - box.left + SHELL_GUTTER_PX);
+    } else {
+      // In-flow sheet or catalog hugs the dock: it reserves the bottom band.
+      bottomEdge = Math.min(bottomEdge, box.top);
+    }
+  }
+  // The zoom stack's own gutter keeps the visible camera controls off the
+  // yard cells the player must tap.
+  const zoom = document.querySelector(".shell-zoom");
+  const zoomBox = zoom ? zoom.getBoundingClientRect() : null;
+  if (zoomBox !== null && zoomBox.width > 0) {
+    right = Math.max(right, cssWidth - zoomBox.left + SHELL_GUTTER_PX);
+  }
   return {
-    top: topEdge + 6,
-    bottom: Math.max(0, cssHeight - dockTop) + 6,
-    left: railActive ? railBox.right + 6 : 0,
-    // UI-RESET-50: rail mode reserves the inspector gutter; phone/column
-    // reserve the zoom stack's right gutter instead, so the visible camera
-    // controls never cover a yard cell the player must tap or build on.
-    right: railActive ? SHELL_RIGHT_GUTTER_PX : SHELL_ZOOM_GUTTER_PX,
+    top: topEdge + SHELL_GUTTER_PX,
+    bottom: Math.max(0, cssHeight - bottomEdge) + SHELL_GUTTER_PX,
+    left: 0,
+    right,
   };
 }
 
@@ -145,7 +179,7 @@ function chromeInsets(cssHeight: number): ShellInsets | undefined {
  * centre — the yard lands between the rail and the inspector, not under them.
  */
 function fitToShell(cssWidth: number, cssHeight: number): Camera {
-  const insets = chromeInsets(cssHeight);
+  const insets = chromeInsets(cssWidth, cssHeight);
   const left = insets?.left ?? 0;
   const right = insets?.right ?? 0;
   const regionWidth = Math.max(1, cssWidth - left - right);
@@ -211,7 +245,15 @@ export function App({
   const intentRef = useRef(false);
 
   const [started, setStarted] = useState(false);
-  const [selected, setSelected] = useState<number | null>(null);
+  /**
+   * RW3D #135 (U03): the one panel stack. `selected` is always the top layer;
+   * exactly one major surface paints at a time. Toolbar roots replace the stack,
+   * dock faces and world taps push (dedupe-to-top), Back/Escape/Close pop one
+   * layer, and an empty-ground tap clears to the yard. Session state only — the
+   * save shape is untouched.
+   */
+  const [panelStack, setPanelStack] = useState<number[]>([]);
+  const selected = panelStack.length > 0 ? panelStack[panelStack.length - 1] : null;
   const [buildBlueprint, setBuildBlueprint] = useState<string | null>(null);
   const [ghostTile, setGhostTile] = useState<number | null>(null);
   /**
@@ -249,16 +291,33 @@ export function App({
    * written into the save - so the two surfaces share one string and the sim stays pure.
    */
   const [lastReject, setLastReject] = useState<string | null>(null);
-  const [reportOpen, setReportOpen] = useState(true);
   /**
-   * G2 (E3): the one bounded Menu sheet. Navigation state only — opening,
-   * closing or switching a destination never issues a game command, and the
-   * selection underneath survives the sheet (E4).
+   * RW3D #135: desktop mode from the same query the CSS paints with (the
+   * inspector docks right there; below it the host is a sheet/drawer), and the
+   * phone sheet's expanded state (~35% -> ~70% of the viewport).
    */
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuOpenerRef = useRef<HTMLElement | null>(null);
-  const menuFaceRef = useRef<HTMLButtonElement | null>(null);
-  const railMode = useRailMode();
+  const desktopMode = useDesktopMode();
+  const [sheetExpanded, setSheetExpanded] = useState(false);
+
+  /** Push one layer (dedupe-to-top): a dock face or world tap over an open panel. */
+  const openPanel = useCallback((id: number) => {
+    setPanelStack((stack) => [...stack.filter((entry) => entry !== id), id]);
+  }, []);
+  /** A toolbar destination is a root: it replaces the stack, never piles up. */
+  const rootPanel = useCallback((id: number) => {
+    setPanelStack([id]);
+    setCatalogOpen(false);
+    setSheetExpanded(false);
+  }, []);
+  /** Back/Escape/Close: pop exactly one layer; the one underneath survives. */
+  const backPanel = useCallback(() => {
+    setPanelStack((stack) => stack.slice(0, -1));
+  }, []);
+  /** Empty-ground tap / Home: clear to the yard. */
+  const clearPanels = useCallback(() => {
+    setPanelStack([]);
+    setSheetExpanded(false);
+  }, []);
   /**
    * UI-RESET-62: the settings surface and the reset confirmation. `gateSettings`
    * is the pre-start settings overlay (the yard has not begun); after start the
@@ -337,7 +396,7 @@ export function App({
           setBuildBlueprint(null);
           setGhostTile(null);
           setCatalogOpen(false);
-          setSelected(command.machineId);
+          openPanel(command.machineId);
           if (command.type === "machine.move") {
             setDismantleFlow(null);
             setMoveFlow((prev) =>
@@ -360,7 +419,7 @@ export function App({
       }
       return commit(command);
     },
-    [store, commit]
+    [store, commit, openPanel]
   );
 
   /**
@@ -396,7 +455,8 @@ export function App({
     });
     if (result.ok) {
       setDismantleFlow(null);
-      setSelected(null);
+      // The machine is gone: drop its layer wherever it sits in the stack.
+      setPanelStack((stack) => stack.filter((entry) => entry !== dismantleFlow.machineId));
     } else {
       setDismantleFlow({ ...dismantleFlow, armed: false });
     }
@@ -440,20 +500,19 @@ export function App({
   }, [settings.textScale]);
 
   useEffect(() => {
-    // G2: the inspector/menu top is the spec's 104 px at scale 1, but the lead
-    // block (chips + objective) grows with the text scale and would overlap a
-    // fixed top in rail mode. Measure the painted lead and lift the floor to
-    // its bottom edge + gutter — the same paint-truth the camera insets read.
-    // The variable is only consumed by the rail media block, so phone/column
-    // (in-flow panels) are untouched. jsdom has no ResizeObserver; the one-shot
-    // measurement still runs and the 104 px floor holds.
+    // RW3D #135: the desktop inspector top floors at the contract's 64 px, but
+    // the lead block (resource strip + objective + coach) grows with the text
+    // scale and would overlap a fixed top. Measure the painted lead and lift the
+    // floor to its bottom edge + gutter — the same paint-truth the camera insets
+    // read. The variable is only consumed by the desktop inspector block, so the
+    // in-flow phone sheets are untouched. jsdom has no ResizeObserver; the
+    // one-shot measurement still runs and the 64 px floor holds.
     const root = document.documentElement;
-    if (!railMode) {
+    const lead = document.querySelector<HTMLElement>(".hud__lead");
+    if (!lead) {
       root.style.removeProperty("--shell-inspector-top");
       return;
     }
-    const lead = document.querySelector<HTMLElement>(".hud__lead");
-    if (!lead) return;
     const measure = () => {
       const bottom = lead.getBoundingClientRect().bottom;
       const top = Math.max(SHELL_INSPECTOR_TOP_PX, Math.ceil(bottom + SHELL_GUTTER_PX));
@@ -466,9 +525,8 @@ export function App({
     return () => observer.disconnect();
     // `started` is load-bearing: at mount the gate is still up and `.hud__lead`
     // does not exist, so the first run bails. Without it in the deps the effect
-    // never re-ran once the yard painted and --shell-inspector-top stayed unset
-    // (the rail sheets fell back to 104 px and overlapped the lead block).
-  }, [railMode, started, settings.textScale, state.tutorial]);
+    // never re-ran once the yard painted and --shell-inspector-top stayed unset.
+  }, [started, settings.textScale, state.tutorial]);
 
   useEffect(() => {
     // Q-005 S-17: the store is the one source of truth for mute. An import or a
@@ -565,36 +623,16 @@ export function App({
     else window.location.reload();
   }, [store, reload]);
 
-  /** The settings panel's reset entry closes nothing underneath; the dialog layers on top. */
-  const openSettingsFromMenu = useCallback(() => {
-    setSelected(-5);
-    setMenuOpen(false);
+  /** RW3D #135: Settings opens from the resource strip's gear as a stack layer. */
+  const openSettings = useCallback(() => {
+    openPanel(PANEL_SETTINGS);
     setCatalogOpen(false);
-  }, []);
-
-  const openMenu = useCallback(() => {
-    menuOpenerRef.current = (document.activeElement as HTMLElement | null) ?? null;
-    setMenuOpen(true);
-  }, []);
-
-  const closeMenu = useCallback(() => {
-    setMenuOpen(false);
-    // E5: focus returns to the face that opened the sheet. Restored synchronously,
-    // before React unmounts the dialog, so focus never drops to the body; a
-    // keyboard-opened menu (no focused opener) lands on the Menu face itself.
-    const opener = menuOpenerRef.current;
-    const target = opener && opener !== document.body ? opener : menuFaceRef.current;
-    if (target && typeof target.focus === "function") target.focus();
-  }, []);
-
-  const toggleMenu = useCallback(() => {
-    if (menuOpen) closeMenu();
-    else openMenu();
-  }, [menuOpen, openMenu, closeMenu]);
+  }, [openPanel]);
 
   // UI-RESET-67: one stable close handler shared by every detail panel so their
   // memoized onClose prop keeps a stable identity across the 10 Hz sim tick.
-  const closeSelection = useCallback(() => setSelected(null), []);
+  // RW3D #135: Close pops exactly one stack layer — the panel underneath survives.
+  const closeSelection = backPanel;
 
   /**
    * UI-RESET-52: opening the catalog arms the same ghost the old Build face
@@ -612,28 +650,23 @@ export function App({
       setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(snapshot)));
     }
     setCatalogOpen(true);
-    setSelected(null);
-    setMenuOpen(false);
+    // RW3D #135: the catalog is the one major surface while it is up — the
+    // panel stack yields so no inspector paints underneath it (U03).
+    setPanelStack([]);
+    setSheetExpanded(false);
   }, [store, buildBlueprint]);
 
   /**
-   * The five destinations (spec §3.1), shared by the rail, the Menu face's
-   * sheet and keys 1–5. Each reads the freshest state from the store; disabled
-   * destinations are inert here too, so a key press can never bypass the rail's
-   * printed reason (E8). Opening a context closes the menu (E3) but never
-   * clears another context's selection.
+   * RW3D #135 (U03): the six toolbar destinations, shared by the toolbar and
+   * keys 1–6. Each reads the freshest state from the store; a disabled
+   * destination is inert here too, so a key press can never bypass the printed
+   * reason. Navigation issues no game command — Build arms the ghost/catalog,
+   * every other destination roots the one panel stack.
    */
   const onSlot = useCallback(
     (slot: ShellSlot) => {
       const snapshot = store.getState();
       switch (slot) {
-        case "yard":
-          if (snapshot.tutorial >= 9) {
-            setSelected(-4);
-            setMenuOpen(false);
-            setCatalogOpen(false);
-          }
-          return;
         case "build": {
           if (buildBlueprint !== null) {
             setBuildBlueprint(null);
@@ -644,33 +677,31 @@ export function App({
           openCatalog();
           return;
         }
-        case "store":
-          setSelected(-2);
-          setMenuOpen(false);
-          setCatalogOpen(false);
+        case "routes":
+          rootPanel(PANEL_ROUTES);
+          return;
+        case "fleet":
+          rootPanel(PANEL_FLEET);
           return;
         case "research":
-          if (showResearch(snapshot)) {
-            setSelected(-3);
-            setMenuOpen(false);
-            setCatalogOpen(false);
-          }
+          if (showResearch(snapshot)) rootPanel(PANEL_RESEARCH);
           return;
-        case "menu":
-          if (menuOpen) closeMenu();
-          else openMenu();
+        case "trade":
+          rootPanel(PANEL_TRADE);
+          return;
+        case "map":
+          rootPanel(PANEL_MAP);
           return;
       }
     },
-    [store, buildBlueprint, menuOpen, openMenu, closeMenu, openCatalog]
+    [store, buildBlueprint, openCatalog, rootPanel]
   );
 
   useEffect(() => {
-    // Spec 5.5 / UI-002 U-5: Escape closes the *nearest* context first - the menu
-    // sheet (the newest layer), then the panel the player just opened, then the
-    // build ghost, and only then the return report, which is the oldest overlay
-    // on the screen. One press, one overlay retired, so no press can clear the
-    // whole stack at once and no pile-up can survive a thumb.
+    // Spec 5.5 / UI-002 U-5 / RW3D #135: Escape closes the *nearest* context
+    // first — the reset dialog, the pre-start settings overlay, the move/dismantle
+    // flow, then ONE panel-stack layer, then the build ghost. One press, one
+    // overlay retired, so no press can clear the whole stack at once.
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
       // UI-RESET-62: the reset confirmation is the newest layer — one press
@@ -684,10 +715,6 @@ export function App({
         setGateSettings(false);
         return;
       }
-      if (menuOpen) {
-        closeMenu();
-        return;
-      }
       // UI-RESET-53: the move/dismantle flow is the newest intent layer, so one press
       // retires it (and disarms) before the inspector underneath. No spend, no loop.
       if (moveFlow !== null) {
@@ -698,31 +725,24 @@ export function App({
         setDismantleFlow(null);
         return;
       }
-      if (selected !== null) {
-        setSelected(null);
+      if (panelStack.length > 0) {
+        backPanel();
         return;
       }
       if (buildBlueprint !== null) {
         setBuildBlueprint(null);
         setGhostTile(null);
         // UI-RESET-52: the catalog is part of the one build layer, so the press
-        // that drops the ghost retires it too — the report underneath survives.
+        // that drops the ghost retires it too.
         setCatalogOpen(false);
-        return;
-      }
-      if (reportOpen && store.getReturnReport()) {
-        setReportOpen(false);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [
-    reportOpen,
-    selected,
+    panelStack,
+    backPanel,
     buildBlueprint,
-    menuOpen,
-    closeMenu,
-    store,
     moveFlow,
     dismantleFlow,
     resetOpen,
@@ -826,7 +846,7 @@ export function App({
       const w = Math.round(cssWidth * dpr);
       const h = Math.round(cssHeight * dpr);
       viewRef.current = { width: cssWidth, height: cssHeight };
-      const insets = chromeInsets(cssHeight);
+      const insets = chromeInsets(cssWidth, cssHeight);
       // L-1 / G2: the chrome band changes with the text scale, with an open panel
       // and with the shell mode (the rail and inspector reserve horizontal edges),
       // so the fit is redone whenever the canvas box or any band edge moved.
@@ -854,6 +874,22 @@ export function App({
         const rootStyle = document.documentElement.style;
         if (insets) rootStyle.setProperty("--shell-zoom-clear", `${Math.round(insets.bottom + 2)}px`);
         else rootStyle.removeProperty("--shell-zoom-clear");
+        // RW3D #135: the desktop inspector's bottom edge clears the painted dock
+        // and toolbar (not the sheet — the inspector only paints on desktop).
+        const dockTop = document.querySelector(".dock")?.getBoundingClientRect().top ?? 0;
+        const toolbarTop = document.querySelector(".toolbar")?.getBoundingClientRect().top ?? 0;
+        const chromeEdge = Math.min(
+          dockTop > 0 ? dockTop : cssHeight,
+          toolbarTop > 0 ? toolbarTop : cssHeight
+        );
+        if (chromeEdge < cssHeight) {
+          rootStyle.setProperty(
+            "--shell-chrome-bottom",
+            `${Math.round(cssHeight - chromeEdge + SHELL_GUTTER_PX)}px`
+          );
+        } else {
+          rootStyle.removeProperty("--shell-chrome-bottom");
+        }
       }
       // One stamped attribute the headless probes and jsdom tests read as the
       // camera's paint truth; written only when the camera actually moved.
@@ -883,6 +919,33 @@ export function App({
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
       });
+      // RW3D #135 delta 3: world-anchored paint truth for the selection. The anchor is
+      // projected through the SAME cameraRig.projectToScreen the blit uses (scene.ts
+      // bridge), so an overlay pinned to data-anchor agrees with the 3D frame by
+      // construction; without WebGL it falls back to worldToScreen, identical under the
+      // default top-down camera. Stamped after drawScene so the singleton camera is
+      // freshly synced. Ground centre (x, 0, y) matches the 2D outline centre.
+      const anchorId = moveFlow !== null ? moveFlow.machineId : selected;
+      let anchorWorld: { x: number; y: number } | null = null;
+      if (anchorId === -1) anchorWorld = WRECK_POSITION;
+      else if (anchorId === -2) anchorWorld = tileToWorld(DOCK_TILE);
+      else if (anchorId !== null) {
+        const m = snapshot.machines.find((mm) => mm.id === anchorId);
+        if (m) anchorWorld = tileToWorld(m.tile);
+      }
+      const anchor = anchorWorld
+        ? projectWorld3D(anchorWorld.x, 0, anchorWorld.y) ??
+          worldToScreen(cameraRef.current, viewRef.current, anchorWorld.x, anchorWorld.y)
+        : null;
+      const anchorStamp = anchor ? `${anchor.x.toFixed(1)},${anchor.y.toFixed(1)}` : "";
+      if ((canvas.dataset.anchor ?? "") !== anchorStamp) {
+        if (anchorStamp === "") delete canvas.dataset.anchor;
+        else canvas.dataset.anchor = anchorStamp;
+      }
+      // Health provenance for the capture harness: "unavailable" | "lost" | "ready".
+      // The visible context-loss banner stays drawScene's — no duplicate shell surface.
+      const health = world3DStatus();
+      if (canvas.dataset.world3d !== health) canvas.dataset.world3d = health;
       // Q-005 S-14: the machine-state cues come from the state diff itself, so a
       // working sorter, a working furnace and the first data unit each get their
       // declared voice without a per-machine timer. Near/far is the tile distance
@@ -961,12 +1024,17 @@ export function App({
       if (tile !== null) setMoveFlow((flow) => (flow === null ? flow : { ...flow, tile }));
       return;
     }
-    const hit = pickTarget(store.getState(), world.x, world.y);
+    // RW3D #135 delta 1: raycast the last-synced three.js world first — an orbit-correct
+    // body hit. Null without WebGL or on context loss, so the ground inverse + pickTarget
+    // fallback keeps the jsdom / legacy path byte-identical. `??` passes -1 (wreck) and
+    // -2 (dock) through: those ids are valid hits, not misses.
+    const pick3 = pickWorld3D(out.tap.x, out.tap.y);
+    const hit = pick3?.id ?? pickTarget(store.getState(), world.x, world.y);
     if (hit === null) {
-      setSelected(null);
+      clearPanels();
       return;
     }
-    setSelected(hit);
+    openPanel(hit);
     if (hit === -1 && (state.tutorial <= 1 || !state.drone.repaired)) {
       dispatch({ id: nextCommandId(), type: "manual.salvage" });
     }
@@ -1082,7 +1150,42 @@ export function App({
 
   const machine =
     selected !== null && selected > 0 ? state.machines.find((m) => m.id === selected) : undefined;
-  const report = reportOpen ? store.getReturnReport() : null;
+  const report = store.getReturnReport();
+  /**
+   * RW3D #135 (round 10 rework): the absence report can settle AFTER Begin was
+   * tapped. A long catch-up is adopted off-thread (store.ts `adoptCatchUp`), so a
+   * cold click at domcontentloaded starts the yard while `returnReport` is still
+   * null and the one-shot check in Gate's onBegin (below) misses it — the report
+   * then arrives with nothing to re-open it. The store notifies on adoption, which
+   * re-renders this component; react to the report's arrival here and open it as
+   * the first stack layer, but only while the stack is untouched, so a destination
+   * the player opened in the meantime is never clobbered and a report they already
+   * dismissed is never re-opened (the effect's deps do not include the stack). The
+   * functional update keeps the settled-click path byte-identical: onBegin has
+   * already pushed PANEL_REPORT, so the non-empty stack is returned unchanged.
+   */
+  useEffect(() => {
+    if (!started || report === null) return;
+    setPanelStack((stack) => (stack.length === 0 ? [PANEL_REPORT] : stack));
+  }, [started, report]);
+  /**
+   * RW3D #135: the host paints exactly one panel — the top of the stack — or
+   * nothing. A wreck hit (-1) and a stale machine id occupy a stack layer (so
+   * Back/Escape still unwinds them) but paint no host; a report layer without a
+   * report likewise paints nothing.
+   */
+  const hostKey =
+    selected === null || selected === -1
+      ? null
+      : selected > 0
+        ? machine
+          ? selected
+          : null
+        : selected === PANEL_REPORT
+          ? report
+            ? selected
+            : null
+          : selected;
 
   // UI-RESET/TOKENS (#48): `?ui48` paints the shared primitive slice inside the shipped shell,
   // so the captures and the unit tests read exactly one cascade. Without the flag every line
@@ -1109,6 +1212,9 @@ export function App({
             audio().play("upgrade");
             setStarted(true);
             store.start();
+            // RW3D #135: the absence report is the first stack layer, not a
+            // separate overlay — destinations open over it, Back unwinds to it.
+            if (store.getReturnReport() !== null) setPanelStack([PANEL_REPORT]);
           }}
           muted={settings.muted}
           onToggleMute={() => {
@@ -1156,26 +1262,7 @@ export function App({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerCancel}
       />
-      <div
-        className={
-          "hud" +
-          (buildBlueprint !== null ? " hud--build" : "") +
-          (menuOpen ? " hud--menu" : "")
-        }
-      >
-        {/* G2 R1: the destination rail, rendered exactly where it is painted
-            (wide desktops and short landscape). Phone/column modes keep their
-            destinations in the dock row plus the Menu face — no hidden copies. */}
-        {railMode ? (
-          <ShellRail
-            tutorial={state.tutorial}
-            research={showResearch(state)}
-            selected={selected}
-            buildActive={buildBlueprint !== null}
-            menuOpen={menuOpen}
-            onSlot={onSlot}
-          />
-        ) : null}
+      <div className={"hud" + (buildBlueprint !== null ? " hud--build" : "")}>
         <div className="hud__lead">
           <HudTop
             state={state}
@@ -1183,9 +1270,10 @@ export function App({
             textScale={settings.textScale}
             onCycleText={cycleTextScale}
             onToggleMute={toggleMute}
+            onOpenSettings={openSettings}
             onHome={() => {
               resetCamera();
-              setSelected(null);
+              clearPanels();
             }}
           />
           <ObjectiveCard
@@ -1223,11 +1311,7 @@ export function App({
             ghostTile={ghostTile}
             reader={role === "reader"}
             onSalvage={() => dispatch({ id: nextCommandId(), type: "manual.salvage" })}
-            onStore={() => {
-              setSelected(-2);
-              setMenuOpen(false);
-              setCatalogOpen(false);
-            }}
+            onStore={() => rootPanel(PANEL_TRADE)}
           />
           {/* UI-RESET-53: the explicit placement / move / dismantle previews. They paint
               inside the lead block so the camera's chrome insets reserve their band, and
@@ -1256,46 +1340,71 @@ export function App({
           ) : null}
         </div>
         {toast ? <Toast text={toast.text} count={toast.count} onDone={() => setToast(null)} /> : null}
-        {/* Panels are HUD-column children so the column keeps them between the
-            objective and the dock at every text scale. */}
-        {machine ? (
-          <MachinePanel
-            state={state}
-            machine={machine}
-            tick={state.tick}
-            powerRatio={state.powerRatio}
-            dispatch={dispatch}
-            onClose={closeSelection}
-          />
-        ) : null}
-        {selected === -2 ? (
-          <StorePanel state={state} dispatch={dispatch} onClose={closeSelection} />
-        ) : null}
-        {selected === -3 ? (
-          <ResearchPanel state={state} dispatch={dispatch} onClose={closeSelection} />
-        ) : null}
-        {selected === -4 ? (
-          <YardPanel
-            state={state}
-            exportText={store.exportSave()}
-            onImport={(text) => store.importSave(text)}
-            onClose={closeSelection}
-          />
-        ) : null}
-        {/* UI-RESET-62: the settings inspector (-5). Same panel grammar as the
-            other inspectors; Escape closes it through the shared selection path. */}
-        {selected === -5 ? (
-          <SettingsPanel
-            settings={settings}
-            osReducedMotion={osReducedMotion}
-            onToggleMute={toggleMute}
-            onCycleText={cycleTextScale}
-            onToggleReducedMotion={toggleReducedMotion}
-            onReset={openReset}
-            onClose={closeSelection}
-          />
-        ) : null}
-        {report ? <ReturnReportPanel report={report} onClose={() => setReportOpen(false)} /> : null}
+        {/* RW3D #135 (U03/U04): the ONE panel host. Exactly one major surface
+            paints at a time — the top of the stack — as a right inspector on
+            desktop or a bottom sheet / compact drawer below it. The host owns
+            Back (one layer), the sheet expand toggle and focus in/out. */}
+        <PanelHost
+          desktop={desktopMode}
+          activeKey={hostKey}
+          depth={panelStack.length}
+          expanded={sheetExpanded}
+          onBack={backPanel}
+          onToggleExpand={() => setSheetExpanded((value) => !value)}
+        >
+          {machine ? (
+            <MachinePanel
+              state={state}
+              machine={machine}
+              tick={state.tick}
+              powerRatio={state.powerRatio}
+              dispatch={dispatch}
+              onClose={closeSelection}
+            />
+          ) : null}
+          {selected === PANEL_TRADE ? (
+            <StorePanel state={state} dispatch={dispatch} onClose={closeSelection} />
+          ) : null}
+          {selected === PANEL_RESEARCH ? (
+            <ResearchPanel state={state} dispatch={dispatch} onClose={closeSelection} />
+          ) : null}
+          {selected === PANEL_ROUTES ? (
+            <RoutesPanel state={state} dispatch={dispatch} onClose={closeSelection} />
+          ) : null}
+          {selected === PANEL_FLEET ? (
+            <FleetPanel state={state} dispatch={dispatch} onClose={closeSelection} />
+          ) : null}
+          {selected === PANEL_MAP ? <MapPanel state={state} onClose={closeSelection} /> : null}
+          {selected === PANEL_YARD ? (
+            <YardPanel
+              state={state}
+              exportText={store.exportSave()}
+              onImport={(text) => store.importSave(text)}
+              onClose={closeSelection}
+            />
+          ) : null}
+          {/* UI-RESET-62: the settings inspector. Same panel grammar as the other
+              inspectors; Escape pops it through the shared stack path. Yard record
+              and the return report open as layers over it (Back returns here). */}
+          {selected === PANEL_SETTINGS ? (
+            <SettingsPanel
+              settings={settings}
+              osReducedMotion={osReducedMotion}
+              onToggleMute={toggleMute}
+              onCycleText={cycleTextScale}
+              onToggleReducedMotion={toggleReducedMotion}
+              onReset={openReset}
+              onClose={closeSelection}
+              onOpenYard={() => openPanel(PANEL_YARD)}
+              yardEnabled={state.tutorial >= 9}
+              onOpenReport={() => openPanel(PANEL_REPORT)}
+              reportAvailable={report !== null}
+            />
+          ) : null}
+          {selected === PANEL_REPORT && report ? (
+            <ReturnReportPanel report={report} onClose={closeSelection} />
+          ) : null}
+        </PanelHost>
         {/* UI-RESET-52: the build catalog. Not a `.panel`: it never joins the
             overlay-stack census, and the camera's chrome insets never measure
             it. Selecting a card re-aims the ghost; Place closes the catalog
@@ -1307,46 +1416,12 @@ export function App({
             onSelect={(id) => {
               setBuildBlueprint(id);
               setGhostTile((tile) => (tile !== null ? tile : firstFreeTile(store.getState())));
-              setSelected(null);
+              clearPanels();
             }}
             onPlace={() => setCatalogOpen(false)}
             onClose={() => setCatalogOpen(false)}
             onSalvage={() => dispatch({ id: nextCommandId(), type: "manual.salvage" })}
-            onStore={() => {
-              setSelected(-2);
-              setCatalogOpen(false);
-              setMenuOpen(false);
-            }}
-          />
-        ) : null}
-        {/* G2 E3: the one bounded Menu sheet. While it is up the panels yield
-            their slot, but `selected` is untouched (E4) — closing it restores
-            the same context. It is not a `.panel`, so the overlay-stack census
-            keeps counting inspectors only. */}
-        {menuOpen ? (
-          <MenuSheet
-            onClose={closeMenu}
-            onHome={() => {
-              resetCamera();
-              setSelected(null);
-              closeMenu();
-            }}
-            onYard={() => {
-              setSelected(-4);
-              setMenuOpen(false);
-            }}
-            yardEnabled={state.tutorial >= 9}
-            onReport={() => {
-              setReportOpen(true);
-              setMenuOpen(false);
-            }}
-            reportAvailable={store.getReturnReport() !== null}
-            muted={settings.muted}
-            onToggleMute={toggleMute}
-            textScale={settings.textScale}
-            onCycleText={cycleTextScale}
-            onSettings={openSettingsFromMenu}
-            onReset={openReset}
+            onStore={() => rootPanel(PANEL_TRADE)}
           />
         ) : null}
         <DockButtons
@@ -1387,27 +1462,21 @@ export function App({
             // ghost intact — planning again, never a spend and never a dead end.
             setCatalogOpen(true);
           }}
-          onInventory={() => {
-            setSelected(-2);
-            setMenuOpen(false);
-            setCatalogOpen(false);
-          }}
+          onInventory={() => rootPanel(PANEL_TRADE)}
           research={showResearch(state)}
-          onResearch={() => {
-            setSelected(-3);
-            setMenuOpen(false);
-            setCatalogOpen(false);
-          }}
+          onResearch={() => rootPanel(PANEL_RESEARCH)}
           yard={state.tutorial >= 9}
-          onYard={() => {
-            setSelected(-4);
-            setMenuOpen(false);
-            setCatalogOpen(false);
-          }}
+          onYard={() => rootPanel(PANEL_YARD)}
         />
-        {/* G2: the Menu face — thumb zone on phones, the corner Home left in the
-            column band; rail mode hides it because slot 5 owns the menu there. */}
-        <ShellMenuFace ref={menuFaceRef} open={menuOpen} onToggle={toggleMenu} />
+        {/* RW3D #135 (U03): the persistent six-destination toolbar — the
+            navigation spine on every viewport, centred on desktop, full-width
+            labelled bottom nav on phones. Keys 1–6 share the same handlers. */}
+        <Toolbar
+          research={showResearch(state)}
+          selected={selected}
+          buildActive={buildBlueprint !== null}
+          onSlot={onSlot}
+        />
         {/* G2 #50: visible zoom + reset controls. Positioned by shell.css per
             band; the camera fit reserves their gutter so they never cover
             yard cells. */}
