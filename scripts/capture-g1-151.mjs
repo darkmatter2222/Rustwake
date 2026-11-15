@@ -49,6 +49,7 @@ import {
   SAVE_KEY, DEFAULT_SETTINGS, decodeSave, encodeSave,
 } from "../src/game/persistence/save.ts";
 import { BLUEPRINTS } from "../src/game/content/defs.ts";
+import { fleetUnits } from "../src/game/simulation/types.ts";
 import { tileToWorld, worldToScreen } from "../src/game/renderer/scene.ts";
 import { ASSEMBLY_STAGES } from "../src/game/renderer/assembly.ts";
 
@@ -173,7 +174,7 @@ async function readSave(page) {
   return {
     ok: true, raw, sha: sha256(Buffer.from(raw, "utf8")),
     tick: s.tick, credits: s.credits,
-    machines: s.machines.length, drones: s.drones.length, routes: s.routes.length,
+    machines: s.machines.length, drones: fleetUnits(s).length, routes: s.routes.length,
     scrap: s.store.scrap, steel: s.store.steel,
     storeUnits: s.storeUnits, storeCapacity: s.storeCapacity,
     machineList: s.machines.map((m) => ({ id: m.id, blueprint: m.blueprint, tile: m.tile, status: m.status, ageTicks: m.ageTicks })),
@@ -620,7 +621,7 @@ async function captureRoundTrip(browser, report) {
   const shotInvalid = await shot(page, "roundtrip-invalid-desktop");
   await closePanel();
   const d1 = decodeSave(D1), d2 = decodeSave(D2);
-  const economy = (s) => JSON.stringify({ machines: s.machines, routes: s.routes, store: s.store, credits: s.credits, drones: s.drones, storeUnits: s.storeUnits });
+  const economy = (s) => JSON.stringify({ machines: s.machines, routes: s.routes, store: s.store, credits: s.credits, drones: fleetUnits(s), storeUnits: s.storeUnits });
   const invalidDelta = {
     confirmPresent: invalid.confirmPresent, note: invalid.note,
     economyIdentical: economy(d1.payload.sim) === economy(d2.payload.sim),
