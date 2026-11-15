@@ -14,15 +14,25 @@
  * host, NOT a physical phone (#190 blocker): viewport/dpr/isMobile/hasTouch are
  * emulated; CPU/GPU/thermal/real-touch/mobile-network are NOT.
  *
- * V05 HONESTY NOTE: at this SHA the sim's machine.build is INSTANT
- * (src/game/simulation/commands.ts buildMachine) and the staged assembly
- * presentation (src/game/renderer/assembly.ts + three/assemblyView.ts, T10
- * #137) is unit-tested but NOT imported by the running renderer
- * (three/worldRenderer.ts / three/index.ts); the shell wiring join is owned by
- * #199. This script therefore captures what the running build ACTUALLY does
- * (instant placement, exact single charge, reload persistence, 0-5 s frame
- * sequence) and records the missing staged-construction clip as a GAP finding
- * for pass 4 / the sponsor. It never fabricates stage frames.
+ * V05 METHOD (pass 8): the build-yard join is DONE at this SHA — the store
+ * restores a persisted WorldState (src/app/store.ts buildWorld), advances it by
+ * the live sim ticks (settleBuildWorld -> advanceWorld) and feeds
+ * getAssemblySnapshot -> worldAssemblySnapshot into blitWorld3D -> YardWorld.sync
+ * -> AssemblyView. This script seeds an IN-PROGRESS warehouse site through the
+ * save envelope (encodeSave 4th arg, world), boots the REAL built app, and
+ * samples the staged construction (base/frame/walls/roof/activation) two ways:
+ *   (1) the pure buildingStageReport()/assemblyStageAt() stage index computed
+ *       from the persisted progressTicks (the exact data assemblyReport reads), and
+ *   (2) the LIVE three.js scene graph reached through the sanctioned
+ *       __THREE_DEVTOOLS__ 'observe' hook (WebGLRenderer constructor) + a
+ *       render() wrap that stashes scene/camera: actual mesh.visible per kit
+ *       part, from which the live stage index is derived via PART_STAGE.
+ * The two must agree at every sample, and the building's in-page 2D
+ * backing-store crop hash must change stage by stage. Mid-build reload resumes
+ * progressTicks and settles exactly once (world ledger conservation). The sim's
+ * instant machine.build dock path is a DIFFERENT feature; V05's subject is the
+ * staged build yard. It never fabricates stage frames: a stage that does not
+ * advance in the running build is recorded as a GAP, not a pass.
  *
  * Usage (tsx resolves the .ts fixture/save imports):
  *   npm run build                      # once, produces dist/
@@ -48,10 +58,14 @@ import {
 import {
   SAVE_KEY, DEFAULT_SETTINGS, decodeSave, encodeSave,
 } from "../src/game/persistence/save.ts";
-import { BLUEPRINTS } from "../src/game/content/defs.ts";
 import { fleetUnits } from "../src/game/simulation/types.ts";
 import { tileToWorld, worldToScreen } from "../src/game/renderer/scene.ts";
-import { ASSEMBLY_STAGES } from "../src/game/renderer/assembly.ts";
+import {
+  ASSEMBLY_STAGES, PART_STAGE, worldAssemblySnapshot, buildingStageReport, assemblyStageAt,
+} from "../src/game/renderer/assembly.ts";
+import { createWorld } from "../src/game/world/index.ts";
+import { buildCostOf } from "../src/game/world/kit.ts";
+import { findLegalCell, place, totals } from "../tests/game/world/helpers.ts";
 
 const SHA = headSha();
 const GENERATED = new Date().toISOString();
@@ -133,9 +147,14 @@ const SEED_AHEAD_MS = 5000;
  *  The hidden/visibilityState getters are the SAME emulation the coordinator-
  *  verified T07 harness hiddenPause() uses (Object.defineProperty on document);
  *  the app's own document.hidden guard (scene.ts) does the rest. */
-async function newSeededContext(browser, device, sim) {
+async function newSeededContext(browser, device, sim, world) {
   const context = await browser.newContext({ ...device, reducedMotion: "no-preference" });
-  const seed = appSeed(sim);
+  // Pass 8 (V05): an optional WorldState rides the save envelope's 4th arg so the
+  // running app restores an in-progress build yard (store.ts buildWorld). Absent
+  // world keeps the exact pre-join seed every other capture uses.
+  const seed = world === undefined
+    ? appSeed(sim)
+    : encodeSave(sim, Date.now(), { ...DEFAULT_SETTINGS, muted: true }, world);
   if (!decodeSave(seed).ok) throw new Error("fixture seed rejected by decodeSave");
   // CALIBRATION (pass 3, area 1 + V05 reload): seed ONLY when the slot is empty,
   // and stamp lastSeenMs slightly AHEAD of wall-clock at DOCUMENT START.
@@ -186,11 +205,35 @@ async function newSeededContext(browser, device, sim) {
     window.__rwHidden = false;
     Object.defineProperty(document, "hidden", { configurable: true, get: () => window.__rwHidden === true });
     Object.defineProperty(document, "visibilityState", { configurable: true, get: () => (window.__rwHidden === true ? "hidden" : "visible") });
+    // Pass 8 (V05): reach the LIVE three.js scene graph without any app debug
+    // global. three 0.187.0's WebGLRenderer constructor dispatches an 'observe'
+    // CustomEvent (detail = renderer) to the global __THREE_DEVTOOLS__ EventTarget
+    // (three.module.js:19490). The production app exposes no window handle to the
+    // YardWorld singleton (three/index.ts `let world` is module-private), so this
+    // sanctioned devtools seam is the only way to read the running scene. We wrap
+    // renderer.render(scene, camera) to stash the live scene + camera; the reader
+    // then walks assemblyRoot's building groups for actual mesh.visible. Read-only:
+    // the wrap delegates to the original render unchanged.
+    window.__rwScenes = [];
+    window.__rwCamera = null;
+    window.__rwRenderers = [];
+    window.__THREE_DEVTOOLS__ = new EventTarget();
+    window.__THREE_DEVTOOLS__.addEventListener("observe", (e) => {
+      const r = e.detail;
+      if (!r || typeof r.render !== "function" || window.__rwRenderers.includes(r)) return;
+      window.__rwRenderers.push(r);
+      const orig = r.render.bind(r);
+      r.render = function (scene, camera) {
+        if (scene && !window.__rwScenes.includes(scene)) window.__rwScenes.push(scene);
+        if (camera) window.__rwCamera = camera;
+        return orig(scene, camera);
+      };
+    });
   });
   return context;
 }
 
-async function openApp(context) {
+async function openApp(context, settleMs = 2500) {
   const page = await context.newPage();
   page.setDefaultTimeout(60000);
   const pageErrors = [];
@@ -208,7 +251,7 @@ async function openApp(context) {
     const c = document.querySelector(".game canvas");
     return c && (c.dataset.world3d === "ready" || c.dataset.world3d === "unavailable");
   }, { timeout: 30000 });
-  await page.waitForTimeout(2500); // settle: camera fit + first batches
+  await page.waitForTimeout(settleMs); // settle: camera fit + first batches
   return { page, pageErrors, gate };
 }
 
@@ -234,6 +277,9 @@ async function readSave(page) {
     fleet: fleetUnits(s).map((u) => ({ accumulated: u.accumulated, inFlightQty: u.inFlight ? u.inFlight.qty : 0, deliveries: u.deliveries })),
     wreckRemaining: s.wreck.remaining,
     lastSeenMs: d.payload.lastSeenMs, settings: d.payload.settings,
+    // Pass 8 (V05): the restored build yard (sites/reservations/buildings/ledger).
+    // Null for pre-join saves; the staged-construction capture reads progress here.
+    world: d.payload.world ?? null,
   };
 }
 
@@ -271,6 +317,68 @@ async function refreshLastSeen(page) {
     localStorage.setItem(k, JSON.stringify(env));
   }, [SAVE_KEY, SEED_AHEAD_MS]);
 }
+
+/* ---- V05 live scene-graph reader (pass 8) ---------------------------------- */
+/** Derive the live stage index from the running scene graph's visible kit parts.
+ *  partAssemblyPose marks a part visible iff done OR stage >= PART_STAGE[part],
+ *  so for the warehouse (a part in every stage) the max visible part-stage equals
+ *  assemblyStageAt(progressTicks,durationTicks).stage — the exact index
+ *  assemblyReport() reports. Read purely from mesh.visible, no persisted tick. */
+function liveStageOf(asset, parts) {
+  const table = PART_STAGE[asset] ?? {};
+  let stage = -1;
+  let visibleParts = 0;
+  const visibleNames = [];
+  for (const p of parts) {
+    if (!p.visible) continue;
+    visibleParts += 1;
+    visibleNames.push(p.name);
+    const s = table[p.name];
+    if (typeof s === "number" && s > stage) stage = s;
+  }
+  return { stage, visibleParts, visibleNames };
+}
+
+/** Read the LIVE assembly layer through the __THREE_DEVTOOLS__ render-wrap seam:
+ *  every building group's mesh.visible, plus the target group's projected screen
+ *  centre (actual running camera) for an exact pixel crop. Read-only. */
+const readLiveAssembly = (page, buildingId, asset) => page.evaluate(([id, ast]) => {
+  const scenes = window.__rwScenes || [];
+  const cam = window.__rwCamera || null;
+  for (const scene of scenes) {
+    if (!scene || typeof scene.getObjectByName !== "function") continue;
+    const root = scene.getObjectByName("assemblyRoot");
+    if (!root) continue;
+    const out = { found: true, hasGroup: false, buildings: [], center: null };
+    for (const child of root.children) {
+      const m = /^building-(\d+)-(.+)$/.exec(child.name || "");
+      if (!m) continue;
+      const parts = [];
+      child.traverse((o) => { if (o.isMesh) parts.push({ name: o.name, visible: o.visible === true }); });
+      out.buildings.push({ id: Number(m[1]), asset: m[2], parts });
+    }
+    const group = root.getObjectByName(`building-${id}-${ast}`);
+    if (group) {
+      out.hasGroup = true;
+      if (cam && typeof group.getWorldPosition === "function") {
+        const target = group.position.clone();
+        group.getWorldPosition(target);
+        target.y += 1.0; // aim at the building's mid-height, not its footprint floor
+        target.project(cam);
+        const c = document.querySelector(".game canvas");
+        if (c) {
+          out.center = {
+            x: ((target.x + 1) / 2) * c.clientWidth,
+            y: ((1 - target.y) / 2) * c.clientHeight,
+            ndcZ: target.z,
+          };
+        }
+      }
+    }
+    return out;
+  }
+  return { found: false, hasGroup: false, buildings: [], center: null };
+}, [buildingId, asset]);
 
 async function shot(page, name) {
   const path = resolve(shotDir, `151-${name}.png`);
@@ -433,146 +541,261 @@ async function captureScenes(browser, report) {
   report.scenes = scenes;
 }
 
-/* ---- V05: construction reality at this SHA --------------------------------- */
+/* ---- V05: staged build-yard construction from the running build (pass 8) ---- */
 async function captureV05(browser, report) {
-  const mature = buildMature();
   const v05 = {};
-  for (const [devName, device] of Object.entries(DEVICES)) {
-    const context = await newSeededContext(browser, device, mature.sim);
-    const { page, pageErrors } = await openApp(context);
-    const before = await readSave(page);
-    const beforeShot = await shot(page, `v05-before-${devName}`);
-    // Dock Build face -> catalog (arms first unlocked blueprint + first free tile).
-    const dock = await clickDock(page, "Build");
-    await page.waitForSelector(".catalog", { timeout: 10000 });
-    await page.waitForTimeout(400);
-    const catalogShot = await shot(page, `v05-catalog-${devName}`);
-    const armed = await page.evaluate(() => {
-      const b = document.querySelector(".catalog__place");
-      return b ? { label: (b.textContent || "").trim(), disabled: b.disabled } : null;
-    });
-    // CALIBRATION (pass 3, area 2): the catalog Place button ONLY closes the
-    // catalog into the armed placement preview (App.tsx onPlace -> setCatalogOpen
-    // (false)). The actual spend is the dock's armed primary face "Build {machine}"
-    // (Hud.tsx DockButtons -> App.tsx onPlace -> dispatch machine.build). The old
-    // script stopped at Place, so nothing was ever built (placed:null) and the
-    // -2 scrap it saw was natural route feed. Commit through the shipped dock
-    // face, then POLL the persisted envelope until the build flushes (PERSIST_MS
-    // 1000) instead of reading a stale 350 ms snapshot.
-    await page.evaluate(() => document.querySelector(".catalog__place")?.click());
-    await page.waitForTimeout(250);
-    const commitFace = await page.evaluate(() => {
-      const b = document.querySelector(".dock .dock__btn--primary");
-      return b ? { label: (b.textContent || "").replace(/\s+/g, " ").trim(), disabled: b.disabled } : null;
-    });
-    const beforeCommit = await readSave(page);
-    await page.evaluate(() => {
-      const b = document.querySelector(".dock .dock__btn--primary");
-      if (b && !b.disabled) b.click();
-    });
-    const t0 = await shot(page, `v05-t0-${devName}`);
-    let after = await readSave(page);
-    for (let i = 0; i < 16 && after.machines !== beforeCommit.machines + 1; i += 1) {
-      await page.waitForTimeout(200);
-      after = await readSave(page);
-    }
-    const placed = after.machineList.find((m) => !beforeCommit.machineList.some((b) => b.id === m.id)) ?? null;
-    const cost = placed ? BLUEPRINTS[placed.blueprint]?.buildCost ?? [] : [];
-    const costOf = (r) => cost.find((c) => c.resource === r)?.qty ?? 0;
-    const scrapDelta = after.scrap - beforeCommit.scrap;
-    const steelDelta = after.steel - beforeCommit.steel;
-    // Exact drone-scrap correction (conservation, see droneScrapArrived). The
-    // remaining natural scrap drift is route feed into the sorter (<= a few units
-    // over the <=2 s bracket); steel has NO natural source/sink in this window
-    // (the only furnace is starved and a batch takes 40 ticks), so steel is exact.
-    const droneArrived = droneScrapArrived(beforeCommit, after);
-    const scrapCorrected = droneArrived === null ? null : scrapDelta - droneArrived;
-    const tickBracket = after.tick - beforeCommit.tick;
-    check(`v05-${devName}: catalog opened`, true, armed !== null && !armed.disabled, armed !== null && armed.disabled === false);
-    check(`v05-${devName}: armed dock commit face`, "Build {machine}, enabled", commitFace, commitFace !== null && commitFace.disabled === false && commitFace.label.startsWith("Build"));
-    check(`v05-${devName}: machine added`, beforeCommit.machines + 1, after.machines, after.machines === beforeCommit.machines + 1);
-    check(`v05-${devName}: scrap charged exactly once (drone-corrected)`, `${-costOf("scrap")} +/-6`, scrapCorrected, placed !== null && scrapCorrected !== null && scrapCorrected <= -costOf("scrap") + 6 && scrapCorrected >= -costOf("scrap") - 6);
-    check(`v05-${devName}: steel charged exactly once`, -costOf("steel"), steelDelta, placed !== null && steelDelta === -costOf("steel"));
-    // 0-5 s frame sequence after placement (the V05 acceptance timeline).
-    const seq = [{ t: 0, ...t0 }];
-    for (let t = 1; t <= 5; t += 1) {
-      await page.waitForTimeout(1000);
-      seq.push({ t, ...(await shot(page, `v05-t${t}-${devName}`)) });
-    }
-    const seqUnique = new Set(seq.map((f) => f.sha256)).size;
-    // Crop the placed machine tile across the sequence: staged construction
-    // would change its pixels stage by stage; instant build paints the full
-    // kit at t0. Occlusion tolerance: drones/overlay may cross the crop.
-    let crop = null;
-    if (placed) {
-      const hashes = [];
-      let firstClip = null;
-      for (let i = 0; i < 6; i += 1) {
-        const geom = await canvasGeom(page);
-        if (geom.cam.length >= 3 && geom.cam.every((v) => Number.isFinite(v))) {
-          const { rect, clip } = tileCrop(geom, placed.tile);
-          if (rect.w > 8 && rect.h > 8) {
-            hashes.push(await cropPixelHash(page, rect));
-            if (i === 0) {
-              firstClip = clip;
-              const buf = await page.screenshot({ clip });
-              const cp = resolve(shotDir, `151-v05-crop-${devName}.png`); writeFileSync(cp, buf); artifacts.push(cp);
-            }
-          }
+  const INITIAL_STOCK = { scrap: 120, ferrous: 12, steel: 12 };
+  const INITIAL_CREDITS = 60;
+  const ASSET = "warehouse"; // the V05 subject: shows all five distinct stages
+  const COST = buildCostOf(ASSET); // [{scrap,30},{steel,8}]
+  const costOf = (r) => COST.find((c) => c.resource === r)?.qty ?? 0;
+  const DURATION = 50; // P1_CONSTRUCTION_TICKS; 50 ticks x TICK_MS 100 = 5 s
+  const HALF = 46; // CSS px half-window around the projected building centre
+
+  /** Seed a fresh opening sim + a yard with ONE in-progress warehouse site
+   *  (progressTicks 0, material reserved exactly once), boot the real app. */
+  const seedYard = async (device) => {
+    const opening = buildOpening(); // no machines, no drones -> sim store is static
+    const world = createWorld(138); // BUILD_SESSION_SEED
+    const cell = findLegalCell(world, ASSET);
+    const res = place(world, "v05-warehouse", ASSET, cell.x, cell.y);
+    if (!res.ok) throw new Error(`V05 seed placement rejected: ${JSON.stringify(res.rejection)}`);
+    const buildingId = world.sites[0].buildingId;
+    const context = await newSeededContext(browser, device, opening.sim, world);
+    // Short settle so the 0-5 s window starts near the base stage: the yard
+    // advances with the live sim ticks, so a 2.5 s settle would burn half the build.
+    const { page, pageErrors, gate } = await openApp(context, 400);
+    const bootSave = await readSave(page);
+    return { context, page, pageErrors, gate, buildingId, cell, bootSave, world };
+  };
+
+  /** One observation: persisted progress -> pure stage report, LIVE scene-graph
+   *  stage (mesh.visible), and the building's in-page backing-store crop hash. */
+  const observe = async (page, buildingId, start, label, cropState) => {
+    const save = await readSave(page);
+    const w = save.world;
+    const site = w?.sites?.find((s) => s.buildingId === buildingId) ?? null;
+    const building = w?.buildings?.find((b) => b.id === buildingId) ?? null;
+    const snap = w ? worldAssemblySnapshot(w, () => 1) : { tick: 0, buildings: [] };
+    const bSnap = snap.buildings.find((b) => b.id === buildingId) ?? null;
+    const pure = bSnap ? buildingStageReport(bSnap) : null;
+    const live = await readLiveAssembly(page, buildingId, ASSET);
+    const liveB = live.buildings.find((b) => b.id === buildingId) ?? null;
+    const liveObs = liveB ? liveStageOf(ASSET, liveB.parts) : null;
+    let cropHash = null;
+    let cropRect = null;
+    if (live.center && Number.isFinite(live.center.x) && Number.isFinite(live.center.y)) {
+      const geom = await canvasGeom(page);
+      const x = Math.max(0, Math.min(geom.width - 2 * HALF, live.center.x - HALF));
+      const y = Math.max(0, Math.min(geom.height - 2 * HALF, live.center.y - HALF));
+      cropRect = { x, y, w: Math.min(2 * HALF, geom.width - x), h: Math.min(2 * HALF, geom.height - y) };
+      if (cropRect.w > 8 && cropRect.h > 8) {
+        cropHash = await cropPixelHash(page, cropRect);
+        if (cropState.clip === null) {
+          cropState.clip = { x: geom.left + x, y: geom.top + y, width: cropRect.w, height: cropRect.h };
         }
-        await page.waitForTimeout(900);
-      }
-      if (hashes.length) {
-        const mode = hashes.sort((a, b) => hashes.filter((h) => h === b).length - hashes.filter((h) => h === a).length)[0];
-        crop = { tile: placed.tile, measurement: "in-page 2D backing-store FNV (getImageData)", hashes, identicalToMode: hashes.filter((h) => h === mode).length, samples: hashes.length, clip: firstClip };
       }
     }
-    // Reload mid-"build": persistence + no second charge. Refresh lastSeenMs
-    // first so the reload is a persistence test, not an offline catch-up test.
-    await refreshLastSeen(page);
-    const preReload = await readSave(page);
-    await page.reload({ waitUntil: "load" });
-    await page.waitForSelector(".game canvas", { timeout: 30000 });
-    await page.evaluate(() => document.querySelector(".gate__btn")?.click());
-    await page.waitForFunction(() => {
+    const stageIdx = pure ? pure.stage : null;
+    if (stageIdx !== null && cropHash) (cropState.byStage[stageIdx] ??= []).push(cropHash);
+    const ledger = w ? {
+      scrap: totals(w, "scrap"), steel: totals(w, "steel"), ferrous: totals(w, "ferrous"),
+      credits: w.credits,
+      reservedCredits: w.reservations.reduce((a, r) => a + r.credits, 0),
+      committedCredits: w.committedCredits,
+    } : null;
+    return {
+      label, tMs: Date.now() - start, simTick: save.tick,
+      progressTicks: site ? site.progressTicks : (building ? DURATION : null),
+      sitePresent: !!site, buildingPresent: !!building,
+      pure, live: liveObs, liveFound: live.found, liveHasGroup: live.hasGroup,
+      cropHash, cropRect, ledger,
+      simStore: { scrap: save.scrap, steel: save.steel },
+      sites: w?.sites?.length ?? 0, buildings: w?.buildings?.length ?? 0,
+      reservations: w?.reservations?.length ?? 0,
+    };
+  };
+
+  const conserved = (l) => l !== null
+    && l.scrap.stock + l.scrap.reserved + l.scrap.committed === INITIAL_STOCK.scrap
+    && l.steel.stock + l.steel.reserved + l.steel.committed === INITIAL_STOCK.steel
+    && l.ferrous.stock + l.ferrous.reserved + l.ferrous.committed === INITIAL_STOCK.ferrous
+    && l.credits + l.reservedCredits + l.committedCredits === INITIAL_CREDITS;
+
+  for (const [devName, device] of Object.entries(DEVICES)) {
+    /* ---- Phase A: uninterrupted 0-5 s staged sequence + single charge -------- */
+    const a = await seedYard(device);
+    const beforeShot = await shot(a.page, `v05-before-${devName}`);
+    const bootSite = a.bootSave.world?.sites?.find((s) => s.buildingId === a.buildingId) ?? null;
+    const cropState = { byStage: {}, clip: null };
+    const samples = [];
+    const canonical = [];
+    const start = Date.now();
+    let nextCanonical = 0;
+    let completedAt = null;
+    let tail = 0;
+    for (let i = 0; i < 60; i += 1) {
+      const wait = start + i * 250 - Date.now();
+      if (wait > 0) await a.page.waitForTimeout(wait);
+      const elapsed = Date.now() - start;
+      const isCanon = nextCanonical <= 5 && elapsed >= nextCanonical * 1000;
+      const rec = await observe(a.page, a.buildingId, start, isCanon ? `t${nextCanonical}` : `trace-${i}`, cropState);
+      samples.push(rec);
+      if (rec.buildingPresent && completedAt === null) completedAt = rec.tMs;
+      if (isCanon) {
+        const s = await shot(a.page, `v05-t${nextCanonical}-${devName}`);
+        canonical.push({ t: nextCanonical, ...s, progressTicks: rec.progressTicks, stage: rec.pure?.stage ?? null, stageName: rec.pure?.stageName ?? null, cropHash: rec.cropHash });
+        nextCanonical += 1;
+      }
+      if (rec.buildingPresent) { tail += 1; if (tail >= 2 && nextCanonical > 5) break; }
+      if (elapsed > 9000) break;
+    }
+    while (nextCanonical <= 5) {
+      const rec = await observe(a.page, a.buildingId, start, `t${nextCanonical}`, cropState);
+      samples.push(rec);
+      const s = await shot(a.page, `v05-t${nextCanonical}-${devName}`);
+      canonical.push({ t: nextCanonical, ...s, progressTicks: rec.progressTicks, stage: rec.pure?.stage ?? null, stageName: rec.pure?.stageName ?? null, cropHash: rec.cropHash });
+      nextCanonical += 1;
+      await a.page.waitForTimeout(250);
+    }
+    const afterComplete = await readSave(a.page);
+    const completeShot = await shot(a.page, `v05-complete-${devName}`);
+    if (cropState.clip) {
+      const buf = await a.page.screenshot({ clip: cropState.clip });
+      const cp = resolve(shotDir, `151-v05-crop-${devName}.png`); writeFileSync(cp, buf); artifacts.push(cp);
+    }
+
+    const withObs = samples.filter((s) => s.pure && s.live);
+    const stageSequence = [...new Set(samples.map((s) => s.pure?.stage).filter((x) => x !== null && x !== undefined))].sort((x, y) => x - y);
+    const liveAgrees = withObs.length > 0 && withObs.every((s) => s.live.stage === s.pure.stage);
+    const visiblePartsAgree = withObs.length > 0 && withObs.every((s) => s.live.visibleParts === s.pure.visibleParts);
+    const liveObserved = samples.filter((s) => s.sitePresent || s.buildingPresent).every((s) => s.liveFound && s.liveHasGroup);
+    const monotone = samples.every((s, i) => i === 0 || s.pure === null || samples[i - 1].pure === null || s.pure.visibleParts >= samples[i - 1].pure.visibleParts);
+    const modeByStage = {};
+    for (const [st, hs] of Object.entries(cropState.byStage)) {
+      modeByStage[st] = [...hs].sort((x, y) => hs.filter((h) => h === y).length - hs.filter((h) => h === x).length)[0];
+    }
+    const stageModes = Object.values(modeByStage);
+    const uniqueCropHashes = new Set(samples.map((s) => s.cropHash).filter(Boolean)).size;
+    const cropDistinctAcrossStages = stageModes.length >= 5 && new Set(stageModes).size === stageModes.length;
+    const allConserved = samples.every((s) => conserved(s.ledger));
+    const finalLedger = samples[samples.length - 1]?.ledger ?? null;
+    const steelCommittedOnce = finalLedger !== null && finalLedger.steel.committed === costOf("steel") && finalLedger.steel.reserved === 0 && finalLedger.steel.stock === INITIAL_STOCK.steel - costOf("steel");
+    const completedOnce = completedAt !== null && samples.filter((s) => s.buildingPresent).length > 0 && samples.every((s) => s.buildings <= 1) && afterComplete.world?.buildings?.length === 1 && afterComplete.world?.sites?.length === 0;
+    const simSteelDelta = afterComplete.steel - a.bootSave.steel;
+    const simScrapDelta = afterComplete.scrap - a.bootSave.scrap;
+
+    check(`v05-${devName}: yard site restored at boot`, "in-progress site", bootSite ? `progress ${bootSite.progressTicks}` : null, bootSite !== null && bootSite.progressTicks < DURATION);
+    check(`v05-${devName}: live assembly scene observed`, true, liveObserved, liveObserved === true);
+    check(`v05-${devName}: live stage matches persisted stage`, "agree at every sample", `${withObs.length} samples`, liveAgrees === true);
+    check(`v05-${devName}: live visibleParts matches persisted`, "agree at every sample", `${withObs.length} samples`, visiblePartsAgree === true);
+    check(`v05-${devName}: stage sequence covers base/frame/walls/roof/activation`, "[0,1,2,3,4]", JSON.stringify(stageSequence), stageSequence.length === 5 && stageSequence.every((s, i) => s === i));
+    check(`v05-${devName}: visibleParts monotone non-decreasing`, true, monotone, monotone === true);
+    check(`v05-${devName}: crop hash distinct across all five stages`, "5 distinct stage hashes", `${stageModes.length} stages, ${new Set(stageModes).size} distinct, ${uniqueCropHashes} total unique`, cropDistinctAcrossStages === true);
+    check(`v05-${devName}: completes exactly once`, "1 building, 0 sites", `buildings ${afterComplete.world?.buildings?.length}, sites ${afterComplete.world?.sites?.length}`, completedOnce === true);
+    check(`v05-${devName}: world ledger conserved (single charge)`, "stock+reserved+committed=initial", allConserved, allConserved === true);
+    check(`v05-${devName}: steel reserved then committed exactly once`, `committed ${costOf("steel")}, stock ${INITIAL_STOCK.steel - costOf("steel")}`, finalLedger ? `committed ${finalLedger.steel.committed}, reserved ${finalLedger.steel.reserved}, stock ${finalLedger.steel.stock}` : null, steelCommittedOnce === true);
+    check(`v05-${devName}: sim store steel unchanged by yard build`, 0, simSteelDelta, simSteelDelta === 0);
+    check(`v05-${devName}: sim store scrap unchanged by yard build`, 0, simScrapDelta, simScrapDelta === 0);
+    check(`v05-${devName}: no page errors (sequence)`, 0, a.pageErrors.length, a.pageErrors.length === 0);
+
+    const phaseA = {
+      gate: a.gate, cell: a.cell, buildingId: a.buildingId, cost: COST, durationTicks: DURATION,
+      bootSite: bootSite ? { progressTicks: bootSite.progressTicks, durationTicks: bootSite.durationTicks } : null,
+      stageSequence, liveAgrees, visiblePartsAgree, liveObserved, monotone,
+      modeByStage, uniqueCropHashes, cropDistinctAcrossStages, allConserved, steelCommittedOnce, completedOnce, completedAt,
+      simSteelDelta, simScrapDelta,
+      canonical: canonical.map(({ t, sha256, name, progressTicks, stage, stageName, cropHash }) => ({ t, sha256, name, progressTicks, stage, stageName, cropHash })),
+      samples: samples.map((s) => ({ label: s.label, tMs: s.tMs, simTick: s.simTick, progressTicks: s.progressTicks, stage: s.pure?.stage ?? null, stageName: s.pure?.stageName ?? null, done: s.pure?.done ?? null, visibleParts: s.pure?.visibleParts ?? null, liveStage: s.live?.stage ?? null, liveVisibleParts: s.live?.visibleParts ?? null, cropHash: s.cropHash, sites: s.sites, buildings: s.buildings, reservations: s.reservations, ledger: s.ledger })),
+      finalLedger, beforeShot, completeShot, cropClip: cropState.clip, pageErrors: a.pageErrors,
+    };
+    await a.context.close();
+
+    /* ---- Phase B: mid-build reload -> resume, completes once, single charge -- */
+    const b = await seedYard(device);
+    const bStart = Date.now();
+    const bCrop = { byStage: {}, clip: null };
+    // Poll the PERSISTED site progress until mid-build (frame stage, >= 12 ticks),
+    // then reload. readSave is persisted truth (PERSIST_MS 1000), so the restored
+    // yard resumes from exactly this progress.
+    let preReload = await readSave(b.page);
+    let preProgress = preReload.world?.sites?.find((s) => s.buildingId === b.buildingId)?.progressTicks ?? 0;
+    for (let i = 0; i < 30 && preProgress < 12; i += 1) {
+      await b.page.waitForTimeout(200);
+      preReload = await readSave(b.page);
+      preProgress = preReload.world?.sites?.find((s) => s.buildingId === b.buildingId)?.progressTicks ?? 0;
+    }
+    const preReloadShot = await shot(b.page, `v05-preload-${devName}`);
+    await refreshLastSeen(b.page); // pure persistence, zero offline catch-up
+    await b.page.reload({ waitUntil: "load" });
+    await b.page.waitForSelector(".game canvas", { timeout: 30000 });
+    await b.page.evaluate(() => document.querySelector(".gate__btn")?.click());
+    await b.page.waitForFunction(() => {
       const c = document.querySelector(".game canvas");
       return c && (c.dataset.world3d === "ready" || c.dataset.world3d === "unavailable");
     }, { timeout: 30000 });
-    await page.waitForTimeout(1500);
-    const reloaded = await readSave(page);
-    const reloadShot = await shot(page, `v05-reload-${devName}`);
-    const reloadScrapDelta = reloaded.scrap - preReload.scrap;
-    const reloadSteelDelta = reloaded.steel - preReload.steel;
-    const reloadTickDelta = reloaded.tick - preReload.tick;
-    const reloadDroneArrived = droneScrapArrived(preReload, reloaded);
-    const reloadScrapCorrected = reloadDroneArrived === null ? null : reloadScrapDelta - reloadDroneArrived;
-    check(`v05-${devName}: reload keeps machine`, after.machines, reloaded.machines, reloaded.machines === after.machines);
-    // No second charge: drone-corrected scrap drift is natural route feed only
-    // (a second build would be -30); steel has no natural sink, so it is unchanged.
-    check(`v05-${devName}: reload no second build charge (drone-corrected scrap)`, "[-6,+6]", reloadScrapCorrected, reloadScrapCorrected !== null && reloadScrapCorrected >= -6 && reloadScrapCorrected <= 6);
-    check(`v05-${devName}: reload steel unchanged`, 0, reloadSteelDelta, reloadSteelDelta === 0);
-    check(`v05-${devName}: no page errors`, 0, pageErrors.length, pageErrors.length === 0);
-    v05[devName] = {
-      before: { machines: before.machines, scrap: before.scrap, steel: before.steel },
-      beforeCommit: { machines: beforeCommit.machines, scrap: beforeCommit.scrap, steel: beforeCommit.steel, tick: beforeCommit.tick },
-      placed, cost, scrapDelta, steelDelta, droneArrived, scrapCorrected, tickBracket,
-      armed, commitFace, dockFaces: dock.faces,
-      sequence: seq.map(({ t, sha256, name }) => ({ t, sha256, name })), seqUnique,
-      placedMachineCrop: crop,
-      reload: { machines: reloaded.machines, scrapDelta: reloadScrapDelta, droneArrived: reloadDroneArrived, scrapCorrected: reloadScrapCorrected, steelDelta: reloadSteelDelta, tickDelta: reloadTickDelta, shot: reloadShot },
-      beforeShot, catalogShot, pageErrors,
+    await b.page.waitForTimeout(200);
+    const resumed = await readSave(b.page);
+    const resumedSite = resumed.world?.sites?.find((s) => s.buildingId === b.buildingId) ?? null;
+    const resumedProgress = resumedSite?.progressTicks ?? null;
+    const reloadShot = await shot(b.page, `v05-reload-${devName}`);
+    // Continue sampling to completion after the resume.
+    const bSamples = [];
+    let bCompleted = false;
+    for (let i = 0; i < 50; i += 1) {
+      const rec = await observe(b.page, b.buildingId, bStart, `post-${i}`, bCrop);
+      bSamples.push(rec);
+      if (rec.buildingPresent) { bCompleted = true; break; }
+      await b.page.waitForTimeout(200);
+    }
+    const bAfter = await readSave(b.page);
+    const bFinalLedger = bSamples[bSamples.length - 1]?.ledger ?? null;
+    const bAllConserved = bSamples.every((s) => conserved(s.ledger)) && conserved(preReload.world ? {
+      scrap: totals(preReload.world, "scrap"), steel: totals(preReload.world, "steel"), ferrous: totals(preReload.world, "ferrous"),
+      credits: preReload.world.credits, reservedCredits: preReload.world.reservations.reduce((x, r) => x + r.credits, 0), committedCredits: preReload.world.committedCredits,
+    } : null);
+    const bSteelOnce = bFinalLedger !== null && bFinalLedger.steel.committed === costOf("steel") && bFinalLedger.steel.reserved === 0 && bFinalLedger.steel.stock === INITIAL_STOCK.steel - costOf("steel");
+    const bCompletedOnce = bCompleted && bAfter.world?.buildings?.length === 1 && bAfter.world?.sites?.length === 0 && bSamples.every((s) => s.buildings <= 1);
+    const bSimSteelDelta = bAfter.steel - b.bootSave.steel;
+    const progressSurvived = resumedProgress !== null && preProgress > 0 && resumedProgress >= preProgress && resumedProgress < DURATION;
+
+    check(`v05-${devName}: reload mid-build keeps site`, "site present, still building", resumedSite ? `progress ${resumedProgress}` : "absent", resumedSite !== null && resumedProgress < DURATION);
+    check(`v05-${devName}: reload progressTicks survives`, `>= ${preProgress} (mid-build)`, resumedProgress, progressSurvived === true);
+    check(`v05-${devName}: reload completes exactly once`, "1 building, 0 sites", `buildings ${bAfter.world?.buildings?.length}, sites ${bAfter.world?.sites?.length}`, bCompletedOnce === true);
+    check(`v05-${devName}: reload no second charge (world ledger conserved)`, "stock+reserved+committed=initial", bAllConserved, bAllConserved === true);
+    check(`v05-${devName}: reload steel committed exactly once`, `committed ${costOf("steel")}, stock ${INITIAL_STOCK.steel - costOf("steel")}`, bFinalLedger ? `committed ${bFinalLedger.steel.committed}, stock ${bFinalLedger.steel.stock}` : null, bSteelOnce === true);
+    check(`v05-${devName}: reload sim store steel unchanged`, 0, bSimSteelDelta, bSimSteelDelta === 0);
+    check(`v05-${devName}: no page errors (reload)`, 0, b.pageErrors.length, b.pageErrors.length === 0);
+
+    const phaseB = {
+      preProgress, resumedProgress, progressSurvived, bCompletedOnce, bAllConserved, bSteelOnce, bSimSteelDelta,
+      preReloadLedger: preReload.world ? { scrap: totals(preReload.world, "scrap"), steel: totals(preReload.world, "steel") } : null,
+      bFinalLedger, preReloadShot, reloadShot,
+      postSamples: bSamples.map((s) => ({ label: s.label, progressTicks: s.progressTicks, stage: s.pure?.stage ?? null, visibleParts: s.pure?.visibleParts ?? null, liveStage: s.live?.stage ?? null, sites: s.sites, buildings: s.buildings, reservations: s.reservations })),
+      pageErrors: b.pageErrors,
     };
-    await context.close();
+    await b.context.close();
+
+    v05[devName] = { asset: ASSET, sequence: phaseA, reload: phaseB };
   }
-  finding("V05 staged construction GAP",
-    "ACCEPTANCE V05 requires a 0/1/2/3/4/5 s base/frame/walls/roof/activation clip and mid-build reload resume. " +
-    "At this SHA machine.build is INSTANT (src/game/simulation/commands.ts buildMachine: no construction stages in SimState) " +
-    "and the running renderer paints the full kit at t0. The staged assembly controller EXISTS " +
-    "(src/game/renderer/assembly.ts ASSEMBLY_STAGES=" + JSON.stringify(ASSEMBLY_STAGES) + ", three/assemblyView.ts, " +
-    "unit-tested by tests/renderer/assembly-stage.test.ts / assembly-timing.test.ts / assembly-view.test.ts and the rw3d-t10 harness) " +
-    "but is NOT imported by three/worldRenderer.ts or three/index.ts; the app join is owned by shell wiring #199. " +
-    "Captured instead: instant placement, exact single charge, 0-5 s frame sequence, reload persistence. " +
-    "The staged clip CANNOT be produced from the running build at this SHA — pass 4 must record this as unmet/pending, not pass.");
+
+  // Honest verdict derived from the numeric checks above — never a placeholder.
+  const v05Checks = checks.filter((c) => c.name.startsWith("v05-"));
+  const v05Pass = v05Checks.length > 0 && v05Checks.every((c) => c.pass);
+  const summary = Object.entries(v05).map(([dev, d]) =>
+    `${dev}: stages [${d.sequence.stageSequence.join("->")}], live==persisted ${d.sequence.liveAgrees}, ` +
+    `distinctStageCrops ${d.sequence.cropDistinctAcrossStages}, completedOnce ${d.sequence.completedOnce}, ` +
+    `ledgerConserved ${d.sequence.allConserved}, reloadResume ${d.reload.progressSurvived}, reloadSingleCharge ${d.reload.bSteelOnce}`).join("; ");
+  finding(v05Pass ? "V05 staged construction MET (numeric, running build)" : "V05 staged construction GAP",
+    "ACCEPTANCE V05: a 0/1/2/3/4/5 s base/frame/walls/roof/activation clip + mid-build reload resume that charges once. " +
+    "Method: seeded an in-progress warehouse WorldState site through the save envelope (encodeSave 4th arg), booted the real built app, " +
+    "and sampled the staged build two ways — the pure buildingStageReport()/assemblyStageAt() index from persisted progressTicks AND the " +
+    "LIVE three.js scene graph (mesh.visible via the __THREE_DEVTOOLS__ render-wrap seam), cross-checked at every sample, plus the " +
+    "building's in-page 2D backing-store crop hash. ASSEMBLY_STAGES=" + JSON.stringify(ASSEMBLY_STAGES) + ". " +
+    `Result: ${summary}. ` +
+    (v05Pass
+      ? "All numeric stage/charge/reload checks PASS at this SHA. NUMERIC evidence only; visual fidelity ACCEPT remains PENDING the sponsor at the live URL (headless emulation != physical phone, #190)."
+      : "One or more numeric checks FAILED — recorded as a real GAP, not a pass. See the per-check results and samples."));
   report.v05 = v05;
 }
 
