@@ -61,6 +61,14 @@ OPENING: starter seed and economic state in GAME_SYSTEMS. CHOICE-LOCAL: short tr
 - G4/P4: N01-06 and real staging operational drill, D04/D05, R01. Public launch requires actual environment authorization and release decision.
 - P5: all affected migration/economy checks plus repeatable content pipeline and permanent-home preservation.
 
+## G1/P1 measurement status (annotation only — #151, developer pass 4/4)
+
+Status annotation, not a criterion change: no row above was rewritten, weakened or re-scoped, and no budget was lifted. Full row-by-row proof, heads, numbers and limitations: `docs/vision/evidence/151-first-playable.md` (immutable measurement head `e75ecf3e95dcd86564e5adc216974b6fdc0c6089`; gates `tsc`/`validate-content`/`vitest`/`build` all exit 0, 110 files / 1495 tests).
+
+- Measured at this head: P1 population (MATURE 20/30/200, STRESS 100/100/1000), the P02 3×10 min loop (38/38, heap growth ≤5.44%, world textures 0), full V03 camera resize + edge-cell projection, U04 keyboard/entity-list walkthrough (28/28 steps, 16/16 census).
+- Still owed at G1/P1: capable visual inspection (V01, V02, V04 and the visual halves of V03/V05/V06) at the live URL; **V05 BLOCKED** — the staged-assembly controller is not joined into the running renderer, so the 0/1/2/3/4/5 s clip cannot be produced; **P03 6 byte budgets UNMET + 4 interaction medians UNKNOWN**; U02 shortcut suppression and the current-head U03 8-viewport × 200% census unproven; E08 real-player corpus absent (product ruling 6871192050) with two strict invalid-import capture sub-checks failing (78/80, measurement-window triage recorded); P01 battle benchmark deferred to G3; R01 QA/product verdicts, CI and served-SHA deployment verification outstanding.
+- All device-labelled numbers are headless Chrome emulation, not a physical phone (#190). G1/P1 cannot pass until independent QA + product APPROVE on the immutable head, release merge with CI/delivery green, and sponsor visual ACCEPT.
+
 ## Evidence template
 
 Role / issue / PR / immutable SHA; scenario+seed+save hash; device/browser/quality; commands; expected and actual; tests with exit codes; screenshot paths; motion/audio evidence; capability gaps; ACCEPT or REWORK with actionable defects. Distinguish simulated agent usability from human research. Reviewer cannot be the implementation author, even though all GitHub posts share one account. No one must expose private reasoning; report decisions, evidence and outcomes.

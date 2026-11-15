@@ -601,9 +601,12 @@ describe("REV-LAYOUT-g1 chrome rows", () => {
         rowDisplay: rowStyle?.display ?? null,
         text: hint?.textContent ?? null,
       }));
-      // The hint is a direct child of the card and stays a block in both rules' band,
-      // so the collapsed chip row cannot take its height with it.
-      expect(hintStyle?.display).toBe("block");
+      // The hint is a direct child of the card. At normal scales it stays a block; at a
+      // large text scale (text-large) spec 6.4 / CHRM-002 (pass 14) steps it back via
+      // `.text-large .objective__hint` so the card keeps its essential primary + numbers
+      // lines within the 42% chrome cap. It is display:none, not removed: the node stays
+      // in the DOM with its text, so this witness still reads it at every scale.
+      expect(hintStyle?.display).toBe(textScale >= 1.5 ? "none" : "block");
       expect(hint?.parentElement?.className).toBe("objective");
       expect((hint?.textContent ?? "").length).toBeGreaterThan(0);
       expect(rowStyle?.display).toBe(textScale >= 1.5 ? "none" : "flex");

@@ -124,6 +124,11 @@ import {
   type TrafficState,
   type TruckConfig,
 } from "../game/simulation/traffic";
+// G1 (#228): the world<->sim assembly join. worldAssemblySnapshot is a pure renderer
+// adapter (no THREE); the store derives the build-yard snapshot the running renderer
+// consumes, joining each completed build-yard building to its sim level (#148/#199 seam).
+import { worldAssemblySnapshot, type AssemblySnapshot } from "../game/renderer/assembly";
+import { YARD_COLS } from "../game/renderer/grid";
 
 export type StoreRole = LeaseRole;
 
@@ -298,6 +303,14 @@ export type BuildConfirmResult =
  */
 export interface BuildPlacementApi {
   getBuildWorld(): WorldState;
+  /**
+   * G1 (#228): the build-yard assembly snapshot the running 3D renderer consumes,
+   * derived from `worldAssemblySnapshot(buildWorld, levelOf)`. `levelOf` joins each
+   * completed build-yard building to the level of a sim machine on its anchor cell
+   * (the #148/#199 cutover seam); while the build yard and the sim machines are
+   * disjoint it returns 1. Pure read — safe for any role, never mutates either state.
+   */
+  getAssemblySnapshot(): AssemblySnapshot;
   getBuildPlacement(): BuildPlacementState;
   /**
    * Arm a catalog entry. Locked entries refuse with the unlock reason and the
@@ -572,11 +585,14 @@ export function createStore(
   // T13 (#140): session-only logistics ledger, disjoint from the SimState
   // snapshot for the same reason — catch-up adoption never touches it.
   const logistics = createLogistics();
-  // T11 (#138): session-only build slice. A fixed seed rebuilds the identical
-  // world grid in every tab; no storage read/write happens here. The build yard
-  // is disjoint from the SimState snapshot, so catch-up adoption never touches
-  // it, and `persist` never serializes it (#148 owns the cutover).
-  const buildWorld = createWorld(BUILD_SESSION_SEED);
+  // T11 (#138): the build slice. A fixed seed rebuilds the identical world grid
+  // in every tab. #228 (G1 persistence join): the yard now rides the save envelope
+  // as an OPTIONAL world field — a decoded save restores it (sites, reservations,
+  // committed material), while old saves and fresh sessions start from the seed.
+  // The yard stays disjoint from the SimState economy; catch-up adoption of the
+  // sim never rewinds it, and `persist` serializes both together.
+  let buildWorld =
+    loaded.ok && loaded.payload.world ? loaded.payload.world : createWorld(BUILD_SESSION_SEED);
   let buildPlacement: BuildPlacementState = {
     selectedAsset: null,
     rotation: 0,
@@ -609,10 +625,7 @@ export function createStore(
   // Bounded (the scan runs only on a tick that settled a site), idempotent
   // (already-registered buildings are skipped, preserving manual capacity), and
   // never persisted — the logistics ledger stays disjoint from the save (#148).
-  const settleBuildWorld = (ticks: number): void => {
-    const before = buildWorld.buildings.length;
-    advanceWorld(buildWorld, ticks);
-    if (buildWorld.buildings.length === before) return;
+  const registerCompletedBuildings = (): void => {
     for (const building of buildWorld.buildings) {
       if (logistics.buildings[building.id] !== undefined) continue;
       if (!buildingTakesRoadLane(building)) continue;
@@ -623,6 +636,15 @@ export function createStore(
       });
     }
   };
+  const settleBuildWorld = (ticks: number): void => {
+    const before = buildWorld.buildings.length;
+    advanceWorld(buildWorld, ticks);
+    if (buildWorld.buildings.length === before) return;
+    registerCompletedBuildings();
+  };
+  // #228: a restored yard's completed buildings must reach the session logistics
+  // ledger exactly like freshly settled ones (idempotent; manual capacity wins).
+  if (loaded.ok && loaded.payload.world) registerCompletedBuildings();
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -649,7 +671,7 @@ export function createStore(
     // The fresh yard stays session-only until the player recovers or discards.
     if (recoveryHeld) return;
     try {
-      storage.setItem(SAVE_KEY, encodeSave(state, lastSeenMs, settings));
+      storage.setItem(SAVE_KEY, encodeSave(state, lastSeenMs, settings, buildWorld));
     } catch {
       // Quota or unavailable storage: the in-memory session remains valid.
     }
@@ -665,6 +687,11 @@ export function createStore(
   /** Adopts a settled catch-up, then applies what the player typed while it ran. */
   const adoptCatchUp = (settled: CatchUpResponse) => {
     state = settled.sim;
+    // #228: the yard advances by exactly the credited absence ticks — the same
+    // window the sim just settled (offline equivalence). Progress is derived
+    // from integer ticks and settlement is idempotent, so a repeat adoption
+    // (creditedTicks 0 after the reference moved) never double-charges.
+    settleBuildWorld(settled.report.creditedTicks);
     adoptedAtFrame = frameClock();
     lastSeenMs = Math.max(lastSeenMs, settled.nextLastSeenMs);
     if (settled.report.creditedTicks > 0) returnReport = settled.report;
@@ -677,6 +704,9 @@ export function createStore(
     }
     if (deferredTicks > 0) {
       advance(state, deferredTicks);
+      // Live ticks deferred during the worker run reach the yard exactly once,
+      // after the absence window: disjoint windows, chronological order.
+      settleBuildWorld(deferredTicks);
       deferredTicks = 0;
     }
     lastFrameMs = frameClock();
@@ -742,6 +772,13 @@ export function createStore(
         (incoming.payload.sim.tick > state.tick || incoming.payload.sim.revision > state.revision)
       ) {
         state = migrate(incoming.payload).sim;
+        // #228: adopt the writer's yard with the snapshot so multi-tab mirrors
+        // stay coherent. An older writer without a world field leaves the local
+        // yard untouched (additive seam, never a destructive reset).
+        if (incoming.payload.world !== undefined) {
+          buildWorld = incoming.payload.world;
+          registerCompletedBuildings();
+        }
         settings = { ...DEFAULT_SETTINGS, ...incoming.payload.settings };
         // The adopted snapshot carries the newest write time, so a later credit
         // measures the gap that snapshot actually left (spec 18.1).
@@ -924,7 +961,8 @@ export function createStore(
     exportSave(): string {
       // The exact text the checkpoint writes, so an exported file is byte-identical
       // to what this tab persists and re-imports without a translation layer.
-      return encodeSave(state, lastSeenMs, settings);
+      // #228: that includes the build yard now that `persist` carries it.
+      return encodeSave(state, lastSeenMs, settings, buildWorld);
     },
     importSave(text: string): ImportResult {
       const decoded = decodeSave(text);
@@ -946,6 +984,12 @@ export function createStore(
       // device actually saw rather than the sum of both devices' windows.
       const next = migrate(decoded.payload);
       state = next.sim;
+      // #228: the imported yard swaps with the snapshot when present; an older
+      // world-less envelope keeps the session yard (never a destructive reset).
+      if (next.world !== undefined) {
+        buildWorld = next.world;
+        registerCompletedBuildings();
+      }
       settings = { ...DEFAULT_SETTINGS, ...next.settings };
       lastSeenMs = now();
       persist();
@@ -981,11 +1025,17 @@ export function createStore(
       const next = migrate(decoded.payload);
       const nextSettings = { ...DEFAULT_SETTINGS, ...next.settings };
       try {
-        storage.setItem(SAVE_KEY, encodeSave(next.sim, now(), nextSettings));
+        storage.setItem(SAVE_KEY, encodeSave(next.sim, now(), nextSettings, next.world));
       } catch {
         return { ok: false, reason: "storage" };
       }
       state = next.sim;
+      // #228: recovery restores the yard too, so construction survives a corrupt
+      // checkpoint exactly like the sim economy does.
+      if (next.world !== undefined) {
+        buildWorld = next.world;
+        registerCompletedBuildings();
+      }
       settings = nextSettings;
       lastSeenMs = now();
       // G1 (#203): the yard is durable, but a refused slot clear must not be a
@@ -1121,6 +1171,24 @@ export function createStore(
     // like `dispatch` and never calls `persist` — the build yard is session-only
     // (#148 owns persistence). Previews stay pure reads of `getBuildWorld()`.
     getBuildWorld: () => buildWorld,
+    getAssemblySnapshot(): AssemblySnapshot {
+      // G1 (#228): the world<->sim join. Index sim levels by tile and build-yard anchor
+      // cells by building id once per call (O(machines + buildings)), then hand the adapter
+      // a levelOf lookup. The build yard and the sim machines are disjoint today —
+      // confirmBuildPlacement writes only buildWorld, never buildMachine — so a completed
+      // yard building has no sim machine on its cell and the join returns 1. The seam is
+      // wired now so the #148/#199 cutover only populates the mapping; the running renderer
+      // already consumes the level (upgrade modules) without any further change.
+      const levelByTile = new Map<number, number>();
+      for (const m of state.machines) levelByTile.set(m.tile, m.level);
+      const tileByBuilding = new Map<number, number>();
+      for (const b of buildWorld.buildings) {
+        tileByBuilding.set(b.id, b.cell.y * YARD_COLS + b.cell.x);
+      }
+      const levelOf = (buildingId: number): number =>
+        levelByTile.get(tileByBuilding.get(buildingId) ?? -1) ?? 1;
+      return worldAssemblySnapshot(buildWorld, levelOf);
+    },
     getBuildPlacement: () => buildPlacement,
     selectBuildAsset(asset: WorldAssetId): BuildSelectResult {
       if (!isWorldAssetId(asset)) {

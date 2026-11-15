@@ -962,6 +962,10 @@ export function App({
         selected: moveFlow !== null ? moveFlow.machineId : selected,
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
+        // G1 (#228): the staged build-yard assembly the running 3D renderer draws on top
+        // of the instanced sim bodies. Derived from the same store snapshot tick, so the
+        // construction stages advance with the sim. Absent WebGL the 2D fallback is unchanged.
+        assembly: (store as GameStore & BuildPlacementApi).getAssemblySnapshot(),
       });
       // RW3D #135 delta 3: world-anchored paint truth for the selection. The anchor is
       // projected through the SAME cameraRig.projectToScreen the blit uses (scene.ts
@@ -1472,7 +1476,20 @@ export function App({
               onFocusCell={focusWorldCell}
             />
           ) : null}
-          {selected === PANEL_MAP ? <MapPanel state={state} onClose={closeSelection} /> : null}
+          {/* RW3D #151 (U04): the Map destination carries the accessible entity
+              list — buildings open the inspector through the same openPanel
+              stack push a canvas tap uses, units pan the camera through the
+              same focusWorldCell FleetPanel/RoadFleet use, and the road slice
+              is the same capability instance FleetPanel gets. */}
+          {selected === PANEL_MAP ? (
+            <MapPanel
+              state={state}
+              onClose={closeSelection}
+              onSelectMachine={openPanel}
+              onFocusCell={focusWorldCell}
+              road={store as GameStore & LogisticsApi & TrafficApi & RoadApi}
+            />
+          ) : null}
           {/* T12 (#139): the road destination. The store's road slice is an additive
               capability (RoadApi) kept off the GameStore surface, so the cast lives
               only at this registration site; existing store doubles stay untouched. */}

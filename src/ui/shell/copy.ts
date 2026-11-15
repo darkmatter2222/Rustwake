@@ -64,6 +64,26 @@ export const MAP_COPY = {
   lockedHint: "Continue the recovery to unlock new regions.",
 } as const;
 
+/**
+ * RW3D #151 (U04): the accessible entity enumeration inside the Map destination.
+ * Every building and unit is a named button; status is always WORDED (the
+ * engine's STATUS_LABEL / fleet words), never color alone. Status words reuse
+ * the existing tables — only the list's own framing lives here.
+ */
+export const ENTITY_COPY = {
+  title: "Entities",
+  lead: "Every building and unit in the yard. Buildings open the inspector; units focus the camera.",
+  buildings: "Buildings",
+  units: "Units",
+  level: "level",
+  cell: "cell",
+  truck: "Truck",
+  emptyBuildings: "No buildings yet. Open Build to place the first machine.",
+  emptyUnits: "No units yet. Repair the starter drone in Fleet.",
+  inspecting: "Inspecting",
+  focused: "Focused",
+} as const;
+
 export const SHELL_COPY = {
   destinations: "Destinations",
   settings: "Settings",

@@ -1,0 +1,462 @@
+{
+  "mode": "P01",
+  "issue": 151,
+  "sha": "df796ef9e0a7c706db088e7372304cd0310d1348",
+  "generatedOn": "2026-11-15T03:26:21.035Z",
+  "command": "npx tsx tests/perf/perf-151.evidence.mjs --mode p01",
+  "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
+  "protocol": "rw3d-t07 harness pattern (bench.mjs): REAL renderer modules at fixed dt=1 tick/frame, 1200-frame scripted timeline (quarter turns + anchored zoom pulses) run TWICE from a fresh fixture decode; real pointer clicks through the production gesture reducer + raycast; renderer.info read from the live three.js singleton. Release fixtures MATURE (normal) and STRESS installed via route swap.",
+  "battle": "DEFINED, measurement DEFERRED: see tests/perf/battle-protocol-151.md — defense structures D01-06 are G3 scope and unbuilt at this SHA.",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "devices": [
+    {
+      "fixture": "MATURE",
+      "info": {
+        "fixture": "deep-yard.modern",
+        "threeRevision": "187",
+        "dpr": 1,
+        "tick": 100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325,
+        "gl": {
+          "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "status": "ready",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+        "hardwareConcurrency": 32,
+        "deviceMemory": 32
+      },
+      "heapBefore": {
+        "usedJSHeapMB": 8.95,
+        "totalJSHeapMB": 12.4,
+        "jsHeapLimitMB": 4192
+      },
+      "heapAfter": {
+        "usedJSHeapMB": 30.05,
+        "totalJSHeapMB": 35.93,
+        "jsHeapLimitMB": 4192
+      },
+      "frameTime": {
+        "renderMs": {
+          "p50": 0.1,
+          "p95": 0.3,
+          "p99": 0.4,
+          "max": 0.9
+        }
+      },
+      "inputLatencyMs": {
+        "samples": 10,
+        "p50": 0.3,
+        "p95": 1.8,
+        "max": 1.8
+      },
+      "clicks": [
+        {
+          "target": 1,
+          "selected": 1,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 2,
+          "selected": 2,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 3,
+          "selected": 3,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 4,
+          "selected": 4,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 5,
+          "selected": 5,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        }
+      ],
+      "determinism": {
+        "run1": {
+          "state": {
+            "tick": 1300,
+            "machines": 20,
+            "credits": 325
+          },
+          "hash": "b07d69f7"
+        },
+        "run2": {
+          "state": {
+            "tick": 1300,
+            "machines": 20,
+            "credits": 325
+          },
+          "hash": "b07d69f7"
+        }
+      },
+      "rendererInfo": {
+        "before": {
+          "stats": {
+            "calls": 11,
+            "triangles": 326,
+            "archetypes": 2,
+            "instances": 20,
+            "drones": 5
+          },
+          "memory": {
+            "geometries": 3,
+            "textures": 0
+          },
+          "programs": 3,
+          "render": {
+            "calls": 11,
+            "triangles": 326,
+            "frame": 1
+          }
+        },
+        "after": {
+          "stats": {
+            "calls": 11,
+            "triangles": 326,
+            "archetypes": 2,
+            "instances": 20,
+            "drones": 5
+          },
+          "memory": {
+            "geometries": 3,
+            "textures": 0
+          },
+          "programs": 3,
+          "render": {
+            "calls": 11,
+            "triangles": 326,
+            "frame": 2422
+          }
+        }
+      },
+      "qualityTier": "blockout-flat: no shadows, DPR cap 2, hemisphere 1.6 + directional 1.0, instanced batches (no quality auto-tuner exists yet)",
+      "pageErrors": []
+    },
+    {
+      "fixture": "STRESS",
+      "info": {
+        "fixture": "deep-yard.modern",
+        "threeRevision": "187",
+        "dpr": 1,
+        "tick": 6,
+        "machines": 100,
+        "drones": 5,
+        "credits": 99325,
+        "gl": {
+          "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+        },
+        "status": "ready",
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+        "hardwareConcurrency": 32,
+        "deviceMemory": 32
+      },
+      "heapBefore": {
+        "usedJSHeapMB": 8.71,
+        "totalJSHeapMB": 11.94,
+        "jsHeapLimitMB": 4192
+      },
+      "heapAfter": {
+        "usedJSHeapMB": 31.26,
+        "totalJSHeapMB": 35.46,
+        "jsHeapLimitMB": 4192
+      },
+      "frameTime": {
+        "renderMs": {
+          "p50": 0.2,
+          "p95": 0.4,
+          "p99": 0.6,
+          "max": 7.3
+        }
+      },
+      "inputLatencyMs": {
+        "samples": 10,
+        "p50": 0.4,
+        "p95": 1.8,
+        "max": 1.8
+      },
+      "clicks": [
+        {
+          "target": 1,
+          "selected": 1,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 2,
+          "selected": 2,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 3,
+          "selected": 3,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 4,
+          "selected": 4,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        },
+        {
+          "target": 5,
+          "selected": 5,
+          "hit": true
+        },
+        {
+          "target": "empty",
+          "selected": null,
+          "hit": true
+        }
+      ],
+      "determinism": {
+        "run1": {
+          "state": {
+            "tick": 1206,
+            "machines": 100,
+            "credits": 99325
+          },
+          "hash": "459955df"
+        },
+        "run2": {
+          "state": {
+            "tick": 1206,
+            "machines": 100,
+            "credits": 99325
+          },
+          "hash": "459955df"
+        }
+      },
+      "rendererInfo": {
+        "before": {
+          "stats": {
+            "calls": 11,
+            "triangles": 1286,
+            "archetypes": 2,
+            "instances": 100,
+            "drones": 5
+          },
+          "memory": {
+            "geometries": 3,
+            "textures": 0
+          },
+          "programs": 3,
+          "render": {
+            "calls": 11,
+            "triangles": 1286,
+            "frame": 1
+          }
+        },
+        "after": {
+          "stats": {
+            "calls": 11,
+            "triangles": 1286,
+            "archetypes": 2,
+            "instances": 100,
+            "drones": 5
+          },
+          "memory": {
+            "geometries": 3,
+            "textures": 0
+          },
+          "programs": 3,
+          "render": {
+            "calls": 11,
+            "triangles": 1286,
+            "frame": 2422
+          }
+        }
+      },
+      "qualityTier": "blockout-flat: no shadows, DPR cap 2, hemisphere 1.6 + directional 1.0, instanced batches (no quality auto-tuner exists yet)",
+      "pageErrors": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "MATURE: fixture machine count",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "MATURE: 3D world ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "MATURE: frames run 1",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true
+    },
+    {
+      "name": "MATURE: frames run 2",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true
+    },
+    {
+      "name": "MATURE: determinism state",
+      "expected": "{\"tick\":1300,\"machines\":20,\"credits\":325}",
+      "actual": "{\"tick\":1300,\"machines\":20,\"credits\":325}",
+      "pass": true
+    },
+    {
+      "name": "MATURE: determinism pixel hash",
+      "expected": "b07d69f7",
+      "actual": "b07d69f7",
+      "pass": true
+    },
+    {
+      "name": "MATURE: p95 render <= 250 ms (software-rasterizer tolerance, house bench)",
+      "expected": "<=250",
+      "actual": 0.3,
+      "pass": true
+    },
+    {
+      "name": "MATURE: machine clicks select (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "MATURE: empty clicks clear (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "MATURE: input p95 <= 250 ms (software tolerance)",
+      "expected": "<=250",
+      "actual": 1.8,
+      "pass": true
+    },
+    {
+      "name": "MATURE: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "STRESS: fixture machine count",
+      "expected": 100,
+      "actual": 100,
+      "pass": true
+    },
+    {
+      "name": "STRESS: 3D world ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "STRESS: frames run 1",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true
+    },
+    {
+      "name": "STRESS: frames run 2",
+      "expected": 1200,
+      "actual": 1200,
+      "pass": true
+    },
+    {
+      "name": "STRESS: determinism state",
+      "expected": "{\"tick\":1206,\"machines\":100,\"credits\":99325}",
+      "actual": "{\"tick\":1206,\"machines\":100,\"credits\":99325}",
+      "pass": true
+    },
+    {
+      "name": "STRESS: determinism pixel hash",
+      "expected": "459955df",
+      "actual": "459955df",
+      "pass": true
+    },
+    {
+      "name": "STRESS: p95 render <= 250 ms (software-rasterizer tolerance, house bench)",
+      "expected": "<=250",
+      "actual": 0.4,
+      "pass": true
+    },
+    {
+      "name": "STRESS: machine clicks select (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "STRESS: empty clicks clear (5/5)",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "STRESS: input p95 <= 250 ms (software tolerance)",
+      "expected": "<=250",
+      "actual": 1.8,
+      "pass": true
+    },
+    {
+      "name": "STRESS: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

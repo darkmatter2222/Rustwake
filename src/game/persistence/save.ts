@@ -1,4 +1,4 @@
-import { BLUEPRINTS, RECIPES, TUNING, type ResourceId } from "../content/defs";
+import { BLUEPRINTS, RECIPES, RESOURCES, TUNING, type ResourceId } from "../content/defs";
 import { RESEARCH } from "../content/research";
 import { LEASE_KEY } from "./lease";
 import {
@@ -8,6 +8,15 @@ import {
   type RouteState,
   type SimState,
 } from "../simulation/types";
+import { isWorldAssetId } from "../world/kit";
+import {
+  GRID_MAX,
+  GRID_MIN,
+  GRID_SIZE,
+  ROTATIONS,
+  WORLD_SCHEMA_VERSION,
+  type WorldState,
+} from "../world/types";
 
 export const SAVE_KEY = "rustwake.save.v1";
 
@@ -21,6 +30,15 @@ export interface SavePayload {
   readonly sim: SimState;
   readonly lastSeenMs: number;
   readonly settings: SaveSettings;
+  /**
+   * #228 (G1 persistence join): the 3D build yard, attached ADDITIVELY through
+   * the optional-field seam (`run`/`branch` precedent). No schema-version bump:
+   * `decodeSave` refuses any other version before migrate, so a bump would
+   * orphan every existing save. Old saves simply have no yard (fresh grid on
+   * boot); new saves carry sites, reservations and committed material so
+   * construction resumes exactly where it stopped.
+   */
+  readonly world?: WorldState;
 }
 
 export interface SaveSettings {
@@ -89,8 +107,12 @@ export function encodeSave(
   sim: SimState,
   lastSeenMs: number,
   settings: SaveSettings,
+  world?: WorldState,
 ): string {
-  const payload: SavePayload = { sim, lastSeenMs, settings };
+  // #228: the yard is included only when provided, so every existing 3-arg
+  // caller keeps writing the exact pre-join envelope shape.
+  const payload: SavePayload =
+    world === undefined ? { sim, lastSeenMs, settings } : { sim, lastSeenMs, settings, world };
   const body = JSON.stringify(payload);
   const envelope: SaveEnvelope = {
     schemaVersion: SCHEMA_VERSION,
@@ -130,12 +152,26 @@ export function decodeSave(text: string | null): DecodeResult {
   repairRegistration(envelope.payload.sim);
   const invalid = validateSim(envelope.payload.sim);
   if (invalid) return { ok: false, reason: "invalid", detail: invalid };
+  // #228: the optional build yard is untrusted input too. Validate BEFORE
+  // trusting it (same typed failure path as validateSim), then hand back a
+  // sanitized clone so the decoded world can never alias the parsed envelope.
+  // Absent world -> ok: every pre-join save boots a fresh yard unchanged.
+  let world: WorldState | undefined;
+  if (envelope.payload.world !== undefined) {
+    const worldInvalid = validateWorld(envelope.payload.world);
+    if (worldInvalid) return { ok: false, reason: "invalid", detail: `world:${worldInvalid}` };
+    world = sanitizeWorld(envelope.payload.world);
+  }
   // UI-RESET-63: settings are untrusted input too. Sanitizing HERE protects both
   // readers of a decode — boot and manual import — without either call site
   // having to remember it. Healthy saves round-trip unchanged.
   return {
     ok: true,
-    payload: { ...envelope.payload, settings: sanitizeSettings(envelope.payload.settings) },
+    payload: {
+      ...envelope.payload,
+      settings: sanitizeSettings(envelope.payload.settings),
+      ...(world !== undefined ? { world } : {}),
+    },
   };
 }
 
@@ -160,6 +196,250 @@ export function sanitizeSettings(settings: unknown): SaveSettings {
     reducedMotion: raw.reducedMotion === true,
     textScale: scale,
   };
+}
+
+/**
+ * #228: bounded caps for the optional build-yard slice. The full parcel plan
+ * holds 25 parcels on a 40x40 grid, so 4096 records is orders of magnitude
+ * above any legitimate yard yet keeps a hostile envelope's decode work bounded
+ * (the text-length gate above already refuses multi-megabyte payloads).
+ */
+export const MAX_WORLD_RECORDS = 4096;
+export const MAX_WORLD_PARCELS = 64;
+export const MAX_WORLD_ITEMS = 64;
+/** Same ceiling the sim's command ledger comment cites for `seenCommands`. */
+export const MAX_WORLD_LEDGER = 100_000;
+
+const RESOURCE_SET: ReadonlySet<string> = new Set(RESOURCES);
+const TERRAIN_KINDS: ReadonlySet<string> = new Set(["flat", "salvage", "rough"]);
+
+function isNonNegInt(value: unknown): value is number {
+  return Number.isSafeInteger(value) && (value as number) >= 0;
+}
+
+function isPositiveInt(value: unknown): value is number {
+  return Number.isSafeInteger(value) && (value as number) > 0;
+}
+
+function isGridCell(value: unknown): value is { x: number; y: number } {
+  if (typeof value !== "object" || value === null) return false;
+  const c = value as { x: unknown; y: unknown };
+  return (
+    Number.isInteger(c.x) &&
+    Number.isInteger(c.y) &&
+    (c.x as number) >= GRID_MIN &&
+    (c.x as number) < GRID_MAX &&
+    (c.y as number) >= GRID_MIN &&
+    (c.y as number) < GRID_MAX
+  );
+}
+
+function isRotation(value: unknown): boolean {
+  return typeof value === "number" && (ROTATIONS as readonly number[]).includes(value);
+}
+
+/** A quantity map whose keys are KNOWN resources (hostile keys are refused). */
+function isWorldQuantityMap(value: unknown): boolean {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  for (const [key, quantity] of Object.entries(value as Record<string, unknown>)) {
+    if (!RESOURCE_SET.has(key)) return false;
+    if (!isNonNegInt(quantity)) return false;
+  }
+  return true;
+}
+
+/**
+ * #228: returns the first violated invariant name, or null when the yard is
+ * sound. Total on adversarial input: every access is guarded, so a crafted
+ * envelope can never throw out of decode. Structural checks only — the engine
+ * remains the authority for placement law; this gate keeps hostile records
+ * (unknown assets, negative cargo, unbounded arrays, out-of-grid cells) from
+ * ever reaching the live world.
+ */
+export function validateWorld(state: unknown): string | null {
+  if (typeof state !== "object" || state === null || Array.isArray(state)) return "state";
+  const w = state as WorldState;
+  if (!Number.isSafeInteger(w.schemaVersion) || w.schemaVersion !== WORLD_SCHEMA_VERSION)
+    return "schemaVersion";
+  if (!isNonNegInt(w.contentVersion)) return "contentVersion";
+  if (!isNonNegInt(w.revision)) return "revision";
+  if (!isNonNegInt(w.tick)) return "tick";
+  if (!isNonNegInt(w.seed) || w.seed > 0xffffffff) return "seed";
+  if (w.clearanceMode !== "blockout" && w.clearanceMode !== "production")
+    return "clearanceMode";
+  if (!Array.isArray(w.parcels) || w.parcels.length > MAX_WORLD_PARCELS) return "parcels";
+  for (const p of w.parcels) {
+    if (!p || typeof p !== "object") return "parcel";
+    if (!isNonNegInt(p.id) || !Number.isInteger(p.x) || !Number.isInteger(p.y))
+      return `parcel:${p.id}`;
+    if (p.x < GRID_MIN || p.y < GRID_MIN || p.x >= GRID_MAX || p.y >= GRID_MAX)
+      return `parcelCell:${p.id}`;
+    if (!isPositiveInt(p.size) || p.size > GRID_SIZE) return `parcelSize:${p.id}`;
+    if (typeof p.owned !== "boolean") return `parcelOwned:${p.id}`;
+  }
+  if (!Array.isArray(w.terrain) || w.terrain.length !== GRID_SIZE * GRID_SIZE)
+    return "terrain";
+  for (const kind of w.terrain) {
+    if (typeof kind !== "string" || !TERRAIN_KINDS.has(kind)) return "terrainKind";
+  }
+  if (!Array.isArray(w.buildings) || w.buildings.length > MAX_WORLD_RECORDS)
+    return "buildings";
+  const buildingIds = new Set<number>();
+  for (const b of w.buildings) {
+    if (!b || typeof b !== "object") return "building";
+    if (!isPositiveInt(b.id) || buildingIds.has(b.id)) return `buildingId:${b.id}`;
+    buildingIds.add(b.id);
+    if (!isWorldAssetId(b.asset)) return `buildingAsset:${b.id}`;
+    if (!isGridCell(b.cell)) return `buildingCell:${b.id}`;
+    if (!isRotation(b.rotation)) return `buildingRotation:${b.id}`;
+    if (!isNonNegInt(b.completedTick)) return `buildingCompletedTick:${b.id}`;
+  }
+  if (!Array.isArray(w.sites) || w.sites.length > MAX_WORLD_RECORDS) return "sites";
+  const siteIds = new Set<number>();
+  for (const s of w.sites) {
+    if (!s || typeof s !== "object") return "site";
+    if (!isPositiveInt(s.id) || siteIds.has(s.id)) return `siteId:${s.id}`;
+    siteIds.add(s.id);
+    if (!isPositiveInt(s.buildingId)) return `siteBuildingId:${s.id}`;
+    if (!isWorldAssetId(s.asset)) return `siteAsset:${s.id}`;
+    if (!isGridCell(s.cell)) return `siteCell:${s.id}`;
+    if (!isRotation(s.rotation)) return `siteRotation:${s.id}`;
+    if (!isNonNegInt(s.startTick)) return `siteStartTick:${s.id}`;
+    if (!isPositiveInt(s.durationTicks)) return `siteDuration:${s.id}`;
+    if (!isNonNegInt(s.progressTicks) || s.progressTicks > s.durationTicks)
+      return `siteProgress:${s.id}`;
+    if (!isPositiveInt(s.reservationId)) return `siteReservation:${s.id}`;
+  }
+  if (!Array.isArray(w.reservations) || w.reservations.length > MAX_WORLD_RECORDS)
+    return "reservations";
+  const reservationIds = new Set<number>();
+  for (const r of w.reservations) {
+    if (!r || typeof r !== "object") return "reservation";
+    if (!isPositiveInt(r.id) || reservationIds.has(r.id)) return `reservationId:${r.id}`;
+    reservationIds.add(r.id);
+    if (!isPositiveInt(r.siteId)) return `reservationSite:${r.id}`;
+    if (!Array.isArray(r.items) || r.items.length > MAX_WORLD_ITEMS)
+      return `reservationItems:${r.id}`;
+    for (const item of r.items) {
+      if (!item || typeof item !== "object") return `reservationItem:${r.id}`;
+      if (typeof item.resource !== "string" || !RESOURCE_SET.has(item.resource))
+        return `reservationResource:${r.id}`;
+      if (!isNonNegInt(item.qty)) return `reservationQty:${r.id}`;
+    }
+    if (!isNonNegInt(r.credits)) return `reservationCredits:${r.id}`;
+  }
+  if (!isWorldQuantityMap(w.stock)) return "stock";
+  if (!isNonNegInt(w.credits)) return "credits";
+  if (!isWorldQuantityMap(w.committed)) return "committed";
+  if (!isNonNegInt(w.committedCredits)) return "committedCredits";
+  if (!isNonNegInt(w.milestoneTokens)) return "milestoneTokens";
+  if (!isPositiveInt(w.nextBuildingId)) return "nextBuildingId";
+  if (!isPositiveInt(w.nextSiteId)) return "nextSiteId";
+  if (!isPositiveInt(w.nextReservationId)) return "nextReservationId";
+  if (
+    typeof w.seenCommands !== "object" ||
+    w.seenCommands === null ||
+    Array.isArray(w.seenCommands)
+  )
+    return "seenCommands";
+  const ledger = Object.entries(w.seenCommands);
+  if (ledger.length > MAX_WORLD_LEDGER) return "seenCommands";
+  for (const [, revision] of ledger) {
+    if (!isNonNegInt(revision)) return "seenCommands";
+  }
+  // Issue #146 lifecycle seam: optional, but present must be sound.
+  if (w.storageCapacity !== undefined && !isPositiveInt(w.storageCapacity))
+    return "storageCapacity";
+  if (w.overflow !== undefined) {
+    if (!Array.isArray(w.overflow) || w.overflow.length > MAX_WORLD_RECORDS)
+      return "overflow";
+    for (const e of w.overflow) {
+      if (!e || typeof e !== "object") return "overflowEntry";
+      if (!isPositiveInt(e.id)) return `overflowId:${e.id}`;
+      if (typeof e.resource !== "string" || !RESOURCE_SET.has(e.resource))
+        return `overflowResource:${e.id}`;
+      if (!isNonNegInt(e.qty)) return `overflowQty:${e.id}`;
+      if (
+        !e.source ||
+        typeof e.source !== "object" ||
+        e.source.kind !== "dismantle" ||
+        !isPositiveInt(e.source.buildingId) ||
+        !isWorldAssetId(e.source.asset)
+      )
+        return `overflowSource:${e.id}`;
+      if (!isNonNegInt(e.tick)) return `overflowTick:${e.id}`;
+      if (!isNonNegInt(e.formulaVersion)) return `overflowFormula:${e.id}`;
+    }
+  }
+  if (w.nextOverflowId !== undefined && !isPositiveInt(w.nextOverflowId))
+    return "nextOverflowId";
+  return null;
+}
+
+/**
+ * #228: a fresh, own-property-only clone of a VALIDATED yard. Rebuilding every
+ * record (instead of handing back the parsed graph) means the decoded world
+ * can never alias attacker object graphs, and unknown extra keys are dropped.
+ * `Object.fromEntries` defines own data properties, so a hostile `__proto__`
+ * ledger key becomes an ordinary entry instead of touching any prototype.
+ */
+export function sanitizeWorld(w: WorldState): WorldState {
+  const clean: WorldState = {
+    schemaVersion: w.schemaVersion,
+    contentVersion: w.contentVersion,
+    revision: w.revision,
+    tick: w.tick,
+    seed: w.seed,
+    clearanceMode: w.clearanceMode,
+    parcels: w.parcels.map((p) => ({ id: p.id, x: p.x, y: p.y, size: p.size, owned: p.owned })),
+    terrain: [...w.terrain],
+    buildings: w.buildings.map((b) => ({
+      id: b.id,
+      asset: b.asset,
+      cell: { x: b.cell.x, y: b.cell.y },
+      rotation: b.rotation,
+      completedTick: b.completedTick,
+    })),
+    sites: w.sites.map((s) => ({
+      id: s.id,
+      buildingId: s.buildingId,
+      asset: s.asset,
+      cell: { x: s.cell.x, y: s.cell.y },
+      rotation: s.rotation,
+      startTick: s.startTick,
+      durationTicks: s.durationTicks,
+      progressTicks: s.progressTicks,
+      reservationId: s.reservationId,
+    })),
+    reservations: w.reservations.map((r) => ({
+      id: r.id,
+      siteId: r.siteId,
+      items: r.items.map((i) => ({ resource: i.resource, qty: i.qty })),
+      credits: r.credits,
+    })),
+    stock: Object.fromEntries(Object.entries(w.stock)),
+    credits: w.credits,
+    committed: Object.fromEntries(Object.entries(w.committed)),
+    committedCredits: w.committedCredits,
+    milestoneTokens: w.milestoneTokens,
+    nextBuildingId: w.nextBuildingId,
+    nextSiteId: w.nextSiteId,
+    nextReservationId: w.nextReservationId,
+    seenCommands: Object.fromEntries(Object.entries(w.seenCommands)),
+  };
+  if (w.storageCapacity !== undefined) clean.storageCapacity = w.storageCapacity;
+  if (w.overflow !== undefined) {
+    clean.overflow = w.overflow.map((e) => ({
+      id: e.id,
+      resource: e.resource,
+      qty: e.qty,
+      source: { kind: "dismantle", buildingId: e.source.buildingId, asset: e.source.asset },
+      tick: e.tick,
+      formulaVersion: e.formulaVersion,
+    }));
+  }
+  if (w.nextOverflowId !== undefined) clean.nextOverflowId = w.nextOverflowId;
+  return clean;
 }
 
 /**

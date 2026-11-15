@@ -257,10 +257,12 @@ export const ObjectiveCard = memo(function ObjectiveCard(props: {
   return (
     <div className={className}>
       {!dismissed ? <span className="objective__primary">{props.text}</span> : null}
-      {/* L-2: the guidance line is its own block, a sibling of the chip row, so the two
-          "step the secondary row back" rules (large text scale, short viewport) -
-          which now narrow to the chip row - cannot collapse it to zero height. */}
-      {mode === "full" && props.phase ? <span className="status-line">{props.phase}</span> : null}
+      {/* L-2: the guidance line is its own block, a sibling of the chip row. Spec 6.4 /
+          G1 #151 pass 14 (CHRM-002): at a large text scale this secondary hint steps back
+          (`.text-large .objective__hint`) so the card keeps its one essential primary line
+          and the numbers/shortfall line below within the 42% chrome cap. The hint stays a
+          block at normal scales; the shortfall readout is on the numbers line, never here. */}
+      {mode === "full" && props.phase ? <span className="status-line objective__hint">{props.phase}</span> : null}
       {/* A1-4 / PLAY-002 2: one secondary line carries the fleet, the power budget and the
           last shortfall, all from the same readout, so the card never grows a fourth row. */}
       {mode === "full" ? <span className="status-line">{props.numbers}</span> : null}

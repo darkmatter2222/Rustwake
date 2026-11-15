@@ -9,7 +9,9 @@
  *  - cargo is conserved across recall/move/dismantle (logisticsTotals), and
  *    construction material is conserved across the world lifecycle including
  *    the visible overflow ledger;
- *  - session-only (G1): no lifecycle commit touches SAVE_KEY or the export.
+ *  - checkpoint-only writes: no lifecycle commit touches SAVE_KEY; the sim
+ *    slice of the export is unchanged, while (#228) the yard slice reflects
+ *    the committed lifecycle change.
  *
  * Fixtures place real buildings in getBuildWorld() and register matching
  * logistics buildings (the documented id/approach-cell convention). Costs and
@@ -139,7 +141,7 @@ function yard(store: Store): { gen: Cell; wh: Cell } {
 }
 
 describe("store LifecycleApi: preview -> move commit conserves both ledgers", () => {
-  it("preview is pure; move recalls affected cargo, preserves id, retargets approach; saves untouched", () => {
+  it("preview is pure; move recalls affected cargo, preserves id, retargets approach; checkpoint untouched", () => {
     const storage = memoryStorage();
     const store = createStore({ storage, now: () => 10, leaseId: "tab-a" });
     expect(store.getRole()).toBe("writer");
@@ -174,11 +176,15 @@ describe("store LifecycleApi: preview -> move commit conserves both ledgers", ()
     expect(moved.rotation).toBe(target.rotation);
     expect(moved.completedTick).toBe(completedTick);
     expect(log.buildings[1].cell).toEqual(target.cell);
-    // Both ledgers conserved; session-only (no save/export change).
+    // Both ledgers conserved. The commit itself never writes SAVE_KEY (the
+    // checkpoint cadence owns writes) and leaves the sim slice untouched;
+    // #228: the export's yard slice now reflects the move.
     expect(logisticsTotals(log)).toEqual(baseLog);
     expectWorldConserved(w, baseWorld, "after move");
     expect(storage.getItem(SAVE_KEY)).toBe(saveBefore);
-    expect(store.exportSave()).toBe(exportBefore);
+    const exportAfter = store.exportSave();
+    expect(JSON.parse(exportAfter).payload.sim).toEqual(JSON.parse(exportBefore).payload.sim);
+    expect(JSON.parse(exportAfter).payload.world.buildings.find((b: { id: number }) => b.id === 1).cell).toEqual(target.cell);
   });
 
   it("a refused move (world law) leaves both ledgers byte-identical", () => {
@@ -292,8 +298,14 @@ describe("store LifecycleApi: dismantle blockers, recovery transfer and overflow
     expect(overflowTotal).toBe(refundTotal);
     for (const e of w.overflow ?? []) expect(e.source.buildingId).toBe(2);
     expectWorldConserved(w, baseWorld, "after dismantle");
+    // Commit never writes SAVE_KEY; sim slice unchanged. #228: the export's
+    // yard slice now reflects the dismantle (building gone, refund overflowed).
     expect(storage.getItem(SAVE_KEY)).toBe(saveBefore);
-    expect(store.exportSave()).toBe(exportBefore);
+    const exportAfter = store.exportSave();
+    expect(JSON.parse(exportAfter).payload.sim).toEqual(JSON.parse(exportBefore).payload.sim);
+    const exportedWorld = JSON.parse(exportAfter).payload.world;
+    expect(exportedWorld.buildings.find((b: { id: number }) => b.id === 2)).toBeUndefined();
+    expect(exportedWorld.overflow.reduce((a: number, e: { qty: number }) => a + e.qty, 0)).toBe(refundTotal);
   });
 });
 
