@@ -1,0 +1,1375 @@
+{
+  "mode": "P02",
+  "issue": 151,
+  "sha": "a58b40a92498dd53736c9670f0dd03d3c25260ae",
+  "generatedOn": "2026-11-15T02:41:26.657Z",
+  "command": "npx tsx tests/perf/perf-151.evidence.mjs --mode p02",
+  "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
+  "protocol": "rw3d-t07 harness (REAL renderer modules), MATURE release fixture via route-swapped decodeSave+migrate; 60 s warmup then three identical 600 s wall-clock loops (reset to the same fixture decode between loops); sim at 10 Hz wall clock, render every rAF; heap measured after forced GC (--expose-gc) at loop start/end; renderer.info from the live three.js singleton.",
+  "declaredDevice": "headless desktop Chrome emulation, 1440x900 @1x (no physical phone, #190)",
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false,
+    "gcExposed": true
+  },
+  "fixture": {
+    "name": "MATURE (tests/fixtures/release.ts buildMature)",
+    "buildings": 20,
+    "units": 30,
+    "cargo": 200,
+    "note": "harness info() still labels the legacy import name; the route swap installs MATURE — verified by machine count below"
+  },
+  "warmup": {
+    "durationMs": 60010,
+    "frames": 3593,
+    "simTicks": 600,
+    "stateStart": {
+      "tick": 100,
+      "machines": 20,
+      "drones": 5,
+      "credits": 325
+    },
+    "stateEnd": {
+      "tick": 700,
+      "machines": 20,
+      "drones": 5,
+      "credits": 325
+    },
+    "renderMs": {
+      "p50": 0.2,
+      "p95": 0.4,
+      "p99": 0.5,
+      "max": 1.1,
+      "count": 3593
+    },
+    "heapStart": {
+      "usedJSHeapSize": 7599882,
+      "totalJSHeapSize": 12478318
+    },
+    "heapEnd": {
+      "usedJSHeapSize": 8635445,
+      "totalJSHeapSize": 14051169
+    },
+    "heapGrowthPct": 13.63,
+    "infoStart": {
+      "calls": 11,
+      "triangles": 326,
+      "geometries": 3,
+      "textures": 0,
+      "programs": 3
+    },
+    "infoEnd": {
+      "calls": 11,
+      "triangles": 326,
+      "geometries": 3,
+      "textures": 0,
+      "programs": 3
+    },
+    "snapshots": [
+      {
+        "tSec": 30,
+        "heap": {
+          "usedJSHeapSize": 10451473,
+          "totalJSHeapSize": 14051169
+        },
+        "info": {
+          "calls": 11,
+          "triangles": 326,
+          "geometries": 3,
+          "textures": 0,
+          "programs": 3
+        },
+        "tick": 400
+      }
+    ]
+  },
+  "loops": [
+    {
+      "durationMs": 600011,
+      "frames": 35922,
+      "simTicks": 6000,
+      "stateStart": {
+        "tick": 100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "stateEnd": {
+        "tick": 6100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "renderMs": {
+        "p50": 0.2,
+        "p95": 0.4,
+        "p99": 0.5,
+        "max": 0.8,
+        "count": 35922
+      },
+      "heapStart": {
+        "usedJSHeapSize": 8635445,
+        "totalJSHeapSize": 14051169
+      },
+      "heapEnd": {
+        "usedJSHeapSize": 9104880,
+        "totalJSHeapSize": 14460720
+      },
+      "heapGrowthPct": 5.44,
+      "infoStart": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "infoEnd": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "snapshots": [
+        {
+          "tSec": 30,
+          "heap": {
+            "usedJSHeapSize": 9276493,
+            "totalJSHeapSize": 14051169
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 400
+        },
+        {
+          "tSec": 60,
+          "heap": {
+            "usedJSHeapSize": 12339809,
+            "totalJSHeapSize": 17721185
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 701
+        },
+        {
+          "tSec": 90,
+          "heap": {
+            "usedJSHeapSize": 10061400,
+            "totalJSHeapSize": 17721212
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1001
+        },
+        {
+          "tSec": 120,
+          "heap": {
+            "usedJSHeapSize": 12007328,
+            "totalJSHeapSize": 17983356
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1302
+        },
+        {
+          "tSec": 150,
+          "heap": {
+            "usedJSHeapSize": 12647076,
+            "totalJSHeapSize": 18507644
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1603
+        },
+        {
+          "tSec": 180,
+          "heap": {
+            "usedJSHeapSize": 9819284,
+            "totalJSHeapSize": 18245500
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1903
+        },
+        {
+          "tSec": 210,
+          "heap": {
+            "usedJSHeapSize": 11094276,
+            "totalJSHeapSize": 18245500
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2204
+        },
+        {
+          "tSec": 241,
+          "heap": {
+            "usedJSHeapSize": 11160956,
+            "totalJSHeapSize": 18507644
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2505
+        },
+        {
+          "tSec": 271,
+          "heap": {
+            "usedJSHeapSize": 9661671,
+            "totalJSHeapSize": 13448979
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2805
+        },
+        {
+          "tSec": 301,
+          "heap": {
+            "usedJSHeapSize": 10408679,
+            "totalJSHeapSize": 13448979
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3106
+        },
+        {
+          "tSec": 331,
+          "heap": {
+            "usedJSHeapSize": 11153247,
+            "totalJSHeapSize": 13711123
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3407
+        },
+        {
+          "tSec": 361,
+          "heap": {
+            "usedJSHeapSize": 10003019,
+            "totalJSHeapSize": 14497555
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3707
+        },
+        {
+          "tSec": 391,
+          "heap": {
+            "usedJSHeapSize": 9935047,
+            "totalJSHeapSize": 13985555
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4008
+        },
+        {
+          "tSec": 421,
+          "heap": {
+            "usedJSHeapSize": 10526067,
+            "totalJSHeapSize": 13985555
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4309
+        },
+        {
+          "tSec": 451,
+          "heap": {
+            "usedJSHeapSize": 10992655,
+            "totalJSHeapSize": 14771987
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4609
+        },
+        {
+          "tSec": 481,
+          "heap": {
+            "usedJSHeapSize": 10688091,
+            "totalJSHeapSize": 14325523
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4910
+        },
+        {
+          "tSec": 511,
+          "heap": {
+            "usedJSHeapSize": 9536979,
+            "totalJSHeapSize": 14325523
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5211
+        },
+        {
+          "tSec": 541,
+          "heap": {
+            "usedJSHeapSize": 10333540,
+            "totalJSHeapSize": 15374244
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5511
+        },
+        {
+          "tSec": 571,
+          "heap": {
+            "usedJSHeapSize": 11116791,
+            "totalJSHeapSize": 14735279
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5812
+        }
+      ]
+    },
+    {
+      "durationMs": 600022,
+      "frames": 35923,
+      "simTicks": 6000,
+      "stateStart": {
+        "tick": 100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "stateEnd": {
+        "tick": 6100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "renderMs": {
+        "p50": 0.2,
+        "p95": 0.4,
+        "p99": 0.5,
+        "max": 1,
+        "count": 35923
+      },
+      "heapStart": {
+        "usedJSHeapSize": 9104880,
+        "totalJSHeapSize": 14460720
+      },
+      "heapEnd": {
+        "usedJSHeapSize": 9111072,
+        "totalJSHeapSize": 24684336
+      },
+      "heapGrowthPct": 0.07,
+      "infoStart": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "infoEnd": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "snapshots": [
+        {
+          "tSec": 30,
+          "heap": {
+            "usedJSHeapSize": 11232861,
+            "totalJSHeapSize": 16934989
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 400
+        },
+        {
+          "tSec": 60,
+          "heap": {
+            "usedJSHeapSize": 10384911,
+            "totalJSHeapSize": 16935259
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 701
+        },
+        {
+          "tSec": 90,
+          "heap": {
+            "usedJSHeapSize": 11947460,
+            "totalJSHeapSize": 16934764
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1001
+        },
+        {
+          "tSec": 120,
+          "heap": {
+            "usedJSHeapSize": 10929118,
+            "totalJSHeapSize": 17197178
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1302
+        },
+        {
+          "tSec": 150,
+          "heap": {
+            "usedJSHeapSize": 9709896,
+            "totalJSHeapSize": 17197448
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1603
+        },
+        {
+          "tSec": 180,
+          "heap": {
+            "usedJSHeapSize": 11160310,
+            "totalJSHeapSize": 17721214
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1903
+        },
+        {
+          "tSec": 210,
+          "heap": {
+            "usedJSHeapSize": 9589079,
+            "totalJSHeapSize": 17721475
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2204
+        },
+        {
+          "tSec": 241,
+          "heap": {
+            "usedJSHeapSize": 11455205,
+            "totalJSHeapSize": 17721745
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2505
+        },
+        {
+          "tSec": 271,
+          "heap": {
+            "usedJSHeapSize": 10197847,
+            "totalJSHeapSize": 18168479
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2805
+        },
+        {
+          "tSec": 301,
+          "heap": {
+            "usedJSHeapSize": 11220744,
+            "totalJSHeapSize": 18167840
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3106
+        },
+        {
+          "tSec": 331,
+          "heap": {
+            "usedJSHeapSize": 9682810,
+            "totalJSHeapSize": 18168110
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3407
+        },
+        {
+          "tSec": 361,
+          "heap": {
+            "usedJSHeapSize": 11329283,
+            "totalJSHeapSize": 18168371
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3707
+        },
+        {
+          "tSec": 391,
+          "heap": {
+            "usedJSHeapSize": 11905343,
+            "totalJSHeapSize": 18519979
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4008
+        },
+        {
+          "tSec": 421,
+          "heap": {
+            "usedJSHeapSize": 10339593,
+            "totalJSHeapSize": 18520249
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4309
+        },
+        {
+          "tSec": 451,
+          "heap": {
+            "usedJSHeapSize": 15628365,
+            "totalJSHeapSize": 24024985
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4609
+        },
+        {
+          "tSec": 481,
+          "heap": {
+            "usedJSHeapSize": 9800615,
+            "totalJSHeapSize": 24287399
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4910
+        },
+        {
+          "tSec": 511,
+          "heap": {
+            "usedJSHeapSize": 14613812,
+            "totalJSHeapSize": 24549804
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5211
+        },
+        {
+          "tSec": 541,
+          "heap": {
+            "usedJSHeapSize": 12757722,
+            "totalJSHeapSize": 25336506
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5511
+        },
+        {
+          "tSec": 571,
+          "heap": {
+            "usedJSHeapSize": 13222008,
+            "totalJSHeapSize": 24959044
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5812
+        }
+      ]
+    },
+    {
+      "durationMs": 600022,
+      "frames": 35923,
+      "simTicks": 6000,
+      "stateStart": {
+        "tick": 100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "stateEnd": {
+        "tick": 6100,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "renderMs": {
+        "p50": 0.2,
+        "p95": 0.4,
+        "p99": 0.5,
+        "max": 1,
+        "count": 35923
+      },
+      "heapStart": {
+        "usedJSHeapSize": 9111072,
+        "totalJSHeapSize": 24684336
+      },
+      "heapEnd": {
+        "usedJSHeapSize": 9143688,
+        "totalJSHeapSize": 24684336
+      },
+      "heapGrowthPct": 0.36,
+      "infoStart": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "infoEnd": {
+        "calls": 11,
+        "triangles": 326,
+        "geometries": 3,
+        "textures": 0,
+        "programs": 3
+      },
+      "snapshots": [
+        {
+          "tSec": 30,
+          "heap": {
+            "usedJSHeapSize": 14179189,
+            "totalJSHeapSize": 23488589
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 400
+        },
+        {
+          "tSec": 60,
+          "heap": {
+            "usedJSHeapSize": 13087983,
+            "totalJSHeapSize": 23751003
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 701
+        },
+        {
+          "tSec": 90,
+          "heap": {
+            "usedJSHeapSize": 12138390,
+            "totalJSHeapSize": 24012634
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1001
+        },
+        {
+          "tSec": 120,
+          "heap": {
+            "usedJSHeapSize": 10951443,
+            "totalJSHeapSize": 24275039
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1302
+        },
+        {
+          "tSec": 150,
+          "heap": {
+            "usedJSHeapSize": 16078705,
+            "totalJSHeapSize": 24275309
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1603
+        },
+        {
+          "tSec": 180,
+          "heap": {
+            "usedJSHeapSize": 12273751,
+            "totalJSHeapSize": 24799111
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 1903
+        },
+        {
+          "tSec": 210,
+          "heap": {
+            "usedJSHeapSize": 10476053,
+            "totalJSHeapSize": 24799381
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2204
+        },
+        {
+          "tSec": 241,
+          "heap": {
+            "usedJSHeapSize": 15282695,
+            "totalJSHeapSize": 24799651
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2505
+        },
+        {
+          "tSec": 271,
+          "heap": {
+            "usedJSHeapSize": 13578356,
+            "totalJSHeapSize": 24984232
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 2805
+        },
+        {
+          "tSec": 301,
+          "heap": {
+            "usedJSHeapSize": 15482598,
+            "totalJSHeapSize": 24983594
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3106
+        },
+        {
+          "tSec": 331,
+          "heap": {
+            "usedJSHeapSize": 13719334,
+            "totalJSHeapSize": 24983894
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3407
+        },
+        {
+          "tSec": 361,
+          "heap": {
+            "usedJSHeapSize": 11897798,
+            "totalJSHeapSize": 24984194
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 3707
+        },
+        {
+          "tSec": 391,
+          "heap": {
+            "usedJSHeapSize": 14146493,
+            "totalJSHeapSize": 24733653
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4008
+        },
+        {
+          "tSec": 421,
+          "heap": {
+            "usedJSHeapSize": 12284135,
+            "totalJSHeapSize": 24733943
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4309
+        },
+        {
+          "tSec": 451,
+          "heap": {
+            "usedJSHeapSize": 10447999,
+            "totalJSHeapSize": 25258531
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4609
+        },
+        {
+          "tSec": 481,
+          "heap": {
+            "usedJSHeapSize": 14195427,
+            "totalJSHeapSize": 24549223
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 4910
+        },
+        {
+          "tSec": 511,
+          "heap": {
+            "usedJSHeapSize": 12344215,
+            "totalJSHeapSize": 24549523
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5211
+        },
+        {
+          "tSec": 541,
+          "heap": {
+            "usedJSHeapSize": 10591081,
+            "totalJSHeapSize": 24549813
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5511
+        },
+        {
+          "tSec": 571,
+          "heap": {
+            "usedJSHeapSize": 15794941,
+            "totalJSHeapSize": 25746145
+          },
+          "info": {
+            "calls": 11,
+            "triangles": 326,
+            "geometries": 3,
+            "textures": 0,
+            "programs": 3
+          },
+          "tick": 5812
+        }
+      ]
+    }
+  ],
+  "hiddenTab": {
+    "whileHidden": 0,
+    "afterRestore": 0.0047,
+    "house": {
+      "whileHidden": 0,
+      "afterRestore": 0
+    }
+  },
+  "simCatchUp": {
+    "continuous": {
+      "state": {
+        "tick": 700,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "hash": "1aa81257"
+    },
+    "splitWithHiddenGap": {
+      "state": {
+        "tick": 700,
+        "machines": 20,
+        "drones": 5,
+        "credits": 325
+      },
+      "hash": "1aa81257"
+    }
+  },
+  "contextLoss": {
+    "lostStatus": "lost",
+    "restoredStatus": "ready",
+    "saveBytesBefore": 11353,
+    "saveBytesAfter": 11353,
+    "saveSha256Before": "020701a2f43d2641ab971420c747bcf274ed2b4bac58e8e50d9c218fc9d9301f",
+    "saveSha256After": "020701a2f43d2641ab971420c747bcf274ed2b4bac58e8e50d9c218fc9d9301f",
+    "saveUnchanged": true
+  },
+  "device": {
+    "fixture": "deep-yard.modern",
+    "threeRevision": "187",
+    "dpr": 1,
+    "tick": 100,
+    "machines": 20,
+    "drones": 5,
+    "credits": 325,
+    "gl": {
+      "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    "status": "ready",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 32
+  },
+  "pageErrors": [],
+  "checks": [
+    {
+      "name": "MATURE fixture installed (20 machines)",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "3D world ready (not 2D fallback)",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "loop 1: completed ~600 s",
+      "expected": ">=595000",
+      "actual": 600011,
+      "pass": true
+    },
+    {
+      "name": "loop 1: rendered frames (>20000)",
+      "expected": ">20000",
+      "actual": 35922,
+      "pass": true
+    },
+    {
+      "name": "loop 1: sim ticks ~6000 (10 Hz, ±5%)",
+      "expected": "5700..6100",
+      "actual": 6000,
+      "pass": true
+    },
+    {
+      "name": "loop 1: identical fixture start (20 machines)",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "loop 1: heap growth <= 10%",
+      "expected": "<=10",
+      "actual": 5.44,
+      "pass": true
+    },
+    {
+      "name": "loop 1: world textures stay 0 (no text in world textures)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 1: geometries bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 1: programs bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 1: draw calls bounded (<= 500)",
+      "expected": "<=500",
+      "actual": 11,
+      "pass": true
+    },
+    {
+      "name": "loop 2: completed ~600 s",
+      "expected": ">=595000",
+      "actual": 600022,
+      "pass": true
+    },
+    {
+      "name": "loop 2: rendered frames (>20000)",
+      "expected": ">20000",
+      "actual": 35923,
+      "pass": true
+    },
+    {
+      "name": "loop 2: sim ticks ~6000 (10 Hz, ±5%)",
+      "expected": "5700..6100",
+      "actual": 6000,
+      "pass": true
+    },
+    {
+      "name": "loop 2: identical fixture start (20 machines)",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "loop 2: heap growth <= 10%",
+      "expected": "<=10",
+      "actual": 0.07,
+      "pass": true
+    },
+    {
+      "name": "loop 2: world textures stay 0 (no text in world textures)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 2: geometries bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 2: programs bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 2: draw calls bounded (<= 500)",
+      "expected": "<=500",
+      "actual": 11,
+      "pass": true
+    },
+    {
+      "name": "loop 3: completed ~600 s",
+      "expected": ">=595000",
+      "actual": 600022,
+      "pass": true
+    },
+    {
+      "name": "loop 3: rendered frames (>20000)",
+      "expected": ">20000",
+      "actual": 35923,
+      "pass": true
+    },
+    {
+      "name": "loop 3: sim ticks ~6000 (10 Hz, ±5%)",
+      "expected": "5700..6100",
+      "actual": 6000,
+      "pass": true
+    },
+    {
+      "name": "loop 3: identical fixture start (20 machines)",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "loop 3: heap growth <= 10%",
+      "expected": "<=10",
+      "actual": 0.36,
+      "pass": true
+    },
+    {
+      "name": "loop 3: world textures stay 0 (no text in world textures)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 3: geometries bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 3: programs bounded (delta <= 2)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "loop 3: draw calls bounded (<= 500)",
+      "expected": "<=500",
+      "actual": 11,
+      "pass": true
+    },
+    {
+      "name": "hidden-tab paint diff = 0 (sim+phase advanced while hidden)",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "paint resumes after restore (diff > 0)",
+      "expected": ">0",
+      "actual": 0.0047,
+      "pass": true
+    },
+    {
+      "name": "house hiddenPause() whileHidden = 0",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "sim catch-up: state identical across hidden gap",
+      "expected": "{\"tick\":700,\"machines\":20,\"drones\":5,\"credits\":325}",
+      "actual": "{\"tick\":700,\"machines\":20,\"drones\":5,\"credits\":325}",
+      "pass": true
+    },
+    {
+      "name": "sim catch-up: pixel hash identical across hidden gap",
+      "expected": "1aa81257",
+      "actual": "1aa81257",
+      "pass": true
+    },
+    {
+      "name": "context loss reported",
+      "expected": "lost",
+      "actual": "lost",
+      "pass": true
+    },
+    {
+      "name": "save bytes unchanged through context loss",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "context restored to ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "pass": true
+}
