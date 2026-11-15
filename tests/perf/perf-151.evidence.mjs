@@ -781,7 +781,7 @@ async function runP03() {
     mode: "P03", issue: 151, sha: SHA, generatedOn: GENERATED, url: URL,
     command: "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
     limitation: LIMITATION,
-    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle).",
+    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off).",
     browser: { executablePath, probeRenderer, swiftshaderForced },
     cpuThrottleRate: CPU_THROTTLE_RATE,
     budgets, devices: [], hardFailures: [],
@@ -802,7 +802,12 @@ async function runP03() {
       const tag = `${dev.name}-MATURE`;
       const context = await browser.newContext({ viewport: dev.viewport, deviceScaleFactor: dev.deviceScaleFactor, isMobile: dev.isMobile, hasTouch: dev.hasTouch });
       await context.addInitScript(PERF_INIT);
-      await context.addInitScript(([key, value]) => localStorage.setItem(key, value), [SAVE_KEY, appSeed(mature.sim)]);
+      // Seed precondition (verified live): the as-is MATURE fixture never taps
+      // the wreck, so its tutorial cannot reach the Yard gate (tutorial >= 9,
+      // App.tsx) and the Yard panel would never open. tutorial=9 is the exact
+      // value syncTutorial reaches after the first machine upgrade; it unlocks
+      // the shipped Yard face without altering any measurement below.
+      await context.addInitScript(([key, value]) => localStorage.setItem(key, value), [SAVE_KEY, appSeed({ ...mature.sim, tutorial: 9 })]);
       const page = await context.newPage();
       const consoleErrors = [];
       page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(m.text()); });

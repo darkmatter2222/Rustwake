@@ -549,7 +549,13 @@ async function captureV04(browser, report) {
 /* ---- export/import round-trip from the running build ----------------------- */
 async function captureRoundTrip(browser, report) {
   const mature = buildMature();
-  const context = await newSeededContext(browser, DEVICES.desktop, mature.sim);
+  // Seed precondition (verified live): the command-built MATURE fixture never
+  // taps the wreck, so wreck.pulses stays 0 and syncTutorial cannot advance;
+  // the Yard face is gated at tutorial >= 9 (App.tsx) and never renders as-is.
+  // Seed tutorial=9 — the exact value syncTutorial reaches after the first
+  // machine upgrade — solely to unlock the shipped save-transfer UI. Every
+  // round-trip check below is unchanged.
+  const context = await newSeededContext(browser, DEVICES.desktop, { ...mature.sim, tutorial: 9 });
   const { page, pageErrors } = await openApp(context);
   await page.waitForTimeout(1500);
   const openYardBackup = async () => {
@@ -632,7 +638,7 @@ async function captureRoundTrip(browser, report) {
   check("roundtrip: invalid import tick drift <=2 (natural only)", "<=2", invalidDelta.tickDelta, invalidDelta.tickDelta >= 0 && invalidDelta.tickDelta <= 2);
   check("roundtrip: no page errors", 0, pageErrors.length, pageErrors.length === 0);
   report.roundTrip = {
-    protocol: "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts.",
+    protocol: "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
     exportA: { sha256: sha256(Buffer.from(A, "utf8")), chars: A.length, tick: dA.payload.sim.tick, shot: shotA },
     exportB: { sha256: sha256(Buffer.from(B, "utf8")), chars: B.length, tick: dB.payload.sim.tick },
     exportC: { sha256: sha256(Buffer.from(C, "utf8")), chars: C.length, tick: dC.payload.sim.tick },
