@@ -22,6 +22,14 @@ import {
   type ViewState,
 } from "../../src/game/renderer/projection";
 import { WORLD_H, WORLD_W, fitCamera } from "../../src/game/renderer/scene";
+import {
+  SHELL_COMPACT_LANDSCAPE_MAX_HEIGHT_PX,
+  SHELL_DESKTOP_MIN_WIDTH_PX,
+  SHELL_PHONE_MAX_WIDTH_PX,
+  SHELL_RIGHT_GUTTER_PX,
+  SHELL_SHEET_COLLAPSED_VH,
+  SHELL_SHEET_EXPANDED_VH,
+} from "../../src/ui/shell/layout";
 
 /**
  * RW3D T07 (#134): the orbit-aware camera contract.
@@ -36,8 +44,12 @@ import { WORLD_H, WORLD_W, fitCamera } from "../../src/game/renderer/scene";
  *     multiples of 90, and the pan clamp uses the projected view AABB so the
  *     visible ground never leaves the world under any orbit.
  *
- * Resize coverage here is the usable-band rectangle (V03 partial): full V03
- * breakpoint/orbit resize coverage is owed at G1 (#151).
+ * Resize coverage is full V03 (#151): the usable-band rectangle at every shell
+ * breakpoint (layout.ts phone/tablet/desktop/landscape bands), orbit-aware
+ * refit across those bands, exact selection/placement projection round-trips
+ * at the world edge cells, camera reset, the desktop inspector gutter and the
+ * phone sheet. Geometric/numeric assertions only — visual fidelity remains a
+ * vision-capable review verdict, never self-certified here.
  */
 
 const view: ViewState = { width: 960, height: 640 };
@@ -236,7 +248,60 @@ describe("orbit geometry", () => {
   });
 });
 
-describe("resize: the usable world rectangle (V03 partial; full coverage owed at #151)", () => {
+/* The real shell breakpoint bands: layout.ts is the one source of truth the
+ * CSS blocks and the App camera-fit share. Both sides of the phone (767/768)
+ * and desktop (1023/1024) breakpoints are present so the resize sweep actually
+ * crosses them; the landscape band is the short-viewport composition. */
+const RESIZE_BANDS: Array<{ name: string; view: ViewState; insets: { top: number; bottom: number } }> = [
+  { name: "phone-small", view: { width: 360, height: 640 }, insets: { top: 64, bottom: 96 } },
+  { name: "phone", view: { width: 390, height: 844 }, insets: { top: 64, bottom: 96 } },
+  {
+    name: "phone-sheet",
+    view: { width: 390, height: 844 },
+    insets: { top: 64, bottom: Math.round((844 * SHELL_SHEET_COLLAPSED_VH) / 100) },
+  },
+  { name: "phone-max", view: { width: SHELL_PHONE_MAX_WIDTH_PX, height: 800 }, insets: { top: 64, bottom: 96 } },
+  { name: "tablet-min", view: { width: SHELL_PHONE_MAX_WIDTH_PX + 1, height: 800 }, insets: { top: 64, bottom: 96 } },
+  { name: "desktop-min-minus", view: { width: SHELL_DESKTOP_MIN_WIDTH_PX - 1, height: 800 }, insets: { top: 64, bottom: 96 } },
+  { name: "desktop-min", view: { width: SHELL_DESKTOP_MIN_WIDTH_PX, height: 768 }, insets: { top: 64, bottom: 96 } },
+  { name: "desktop", view: { width: 1440, height: 900 }, insets: { top: 64, bottom: 96 } },
+  { name: "landscape-phone", view: { width: 844, height: 390 }, insets: { top: 64, bottom: 96 } },
+];
+
+/** World corners, edge midpoints and centre — the V03 "no unreachable edge
+ *  cells" probe set for the projection and usable-band assertions. */
+const EDGE_POINTS: Array<[number, number]> = [
+  [0, 0],
+  [WORLD_W, 0],
+  [0, WORLD_H],
+  [WORLD_W, WORLD_H],
+  [WORLD_W / 2, 0],
+  [WORLD_W / 2, WORLD_H],
+  [0, WORLD_H / 2],
+  [WORLD_W, WORLD_H / 2],
+  [WORLD_W / 2, WORLD_H / 2],
+];
+
+/** The V03 clamp invariant at any viewport/orbit: the visible ground never
+ *  leaves the world, and an axis the whole world fits on pins to the composed
+ *  fit centre (which carries the usable-band offset). */
+function expectGroundInsideWorld(cam: Camera, v: ViewState, fit: Camera): void {
+  const { hx, hy } = groundHalfExtents(cam, v);
+  if (hx < WORLD_W / 2) {
+    expect(cam.x - hx).toBeGreaterThanOrEqual(-1e-9);
+    expect(cam.x + hx).toBeLessThanOrEqual(WORLD_W + 1e-9);
+  } else {
+    expect(cam.x).toBe(fit.x);
+  }
+  if (hy < WORLD_H / 2) {
+    expect(cam.y - hy).toBeGreaterThanOrEqual(-1e-9);
+    expect(cam.y + hy).toBeLessThanOrEqual(WORLD_H + 1e-9);
+  } else {
+    expect(cam.y).toBe(fit.y);
+  }
+}
+
+describe("resize: the usable world rectangle (full V03, #151)", () => {
   it("fitCamera centres the world in the usable band, not the canvas", () => {
     const insets = { top: 64, bottom: 96 };
     const fit = fitCamera(view, insets);
@@ -305,5 +370,193 @@ describe("resize: the usable world rectangle (V03 partial; full coverage owed at
     if (hy >= WORLD_H / 2) expect(kept.y).toBe(afterFit.y);
     expect(kept.scale).toBe(CAMERA_MIN_SCALE);
     expect(wide.width).toBeGreaterThan(phone.width);
+  });
+
+  it("the band table straddles the real shell breakpoints (layout.ts)", () => {
+    expect(SHELL_PHONE_MAX_WIDTH_PX).toBe(767);
+    expect(SHELL_DESKTOP_MIN_WIDTH_PX).toBe(1024);
+    expect(SHELL_COMPACT_LANDSCAPE_MAX_HEIGHT_PX).toBe(460);
+    const widths = RESIZE_BANDS.map((b) => b.view.width);
+    expect(widths).toContain(SHELL_PHONE_MAX_WIDTH_PX);
+    expect(widths).toContain(SHELL_PHONE_MAX_WIDTH_PX + 1);
+    expect(widths).toContain(SHELL_DESKTOP_MIN_WIDTH_PX - 1);
+    expect(widths).toContain(SHELL_DESKTOP_MIN_WIDTH_PX);
+    const landscape = RESIZE_BANDS.find((b) => b.name === "landscape-phone");
+    expect(landscape!.view.height).toBeLessThanOrEqual(SHELL_COMPACT_LANDSCAPE_MAX_HEIGHT_PX);
+  });
+
+  it("every breakpoint band fits and centres the world in its usable band", () => {
+    for (const band of RESIZE_BANDS) {
+      const { view: v, insets } = band;
+      const fit = fitCamera(v, insets);
+      const usableH = v.height - insets.top - insets.bottom;
+      const bandCentre = insets.top + usableH / 2;
+      const bandScale = usableH / (WORLD_H + 12);
+      const raw = Math.min(4, v.width / (WORLD_W + 8));
+      // scene.ts floors the band scale at the private BAND_MIN_SCALE = 1.1 so
+      // the yard never zooms below a readable size. On a band shorter than the
+      // floor's yard (WORLD_H * 1.1 = 246.4 px) the frozen fit deliberately
+      // overflows the band; App.tsx's #117 fitToShell override then re-fits
+      // below the floor at the shell layer. The frozen helper's contract is
+      // the floor itself, pinned here exactly rather than a false universal fit.
+      const floorBinds = bandScale < raw && bandScale < 1.1;
+      expect(WORLD_W * fit.scale).toBeLessThanOrEqual(v.width + 1e-9);
+      if (floorBinds) {
+        expect(fit.scale).toBe(1.1);
+        expect(WORLD_H * fit.scale).toBeGreaterThan(usableH);
+      } else {
+        expect(WORLD_H * fit.scale).toBeLessThanOrEqual(usableH + 1e-9);
+      }
+      const centre = worldToScreen(fit, v, WORLD_W / 2, WORLD_H / 2);
+      expect(centre.x).toBeCloseTo(v.width / 2, 9);
+      expect(centre.y).toBeCloseTo(bandCentre, 6);
+      // No unreachable edge cells: every world corner and edge midpoint
+      // projects inside the viewport horizontally on every band, and inside
+      // the usable band vertically whenever the readable-size floor is slack.
+      for (const [gx, gy] of EDGE_POINTS) {
+        const p = worldToScreen(fit, v, gx, gy);
+        expect(p.x).toBeGreaterThanOrEqual(-1e-6);
+        expect(p.x).toBeLessThanOrEqual(v.width + 1e-6);
+        if (!floorBinds) {
+          expect(p.y).toBeGreaterThanOrEqual(insets.top - 1e-6);
+          expect(p.y).toBeLessThanOrEqual(v.height - insets.bottom + 1e-6);
+        }
+      }
+    }
+  });
+
+  it("orbit-aware resize keeps intent and the visible ground inside the world at every band", () => {
+    for (const band of RESIZE_BANDS) {
+      const fit = fitCamera(band.view, band.insets);
+      for (const yaw of [0, 45, 90, 180, 270, 315]) {
+        for (const elev of [ELEV_MIN, 35, ELEV_MAX]) {
+          const intent: Camera = { x: 30, y: 25, scale: 4, yaw, elev };
+          const kept = refitCamera(intent, fit, band.view, true);
+          // Zoom and orbit are the player's; they survive the resize exactly.
+          expect(kept.scale).toBe(4);
+          expect(kept.yaw).toBe(yaw);
+          expect(kept.elev).toBe(elev);
+          expectGroundInsideWorld(kept, band.view, fit);
+        }
+      }
+    }
+  });
+
+  it("selection and placement projection stay exact through resize + orbit", () => {
+    const orientations: Array<Partial<Pick<Camera, "yaw" | "elev">>> = [
+      {},
+      { yaw: 45, elev: 35 },
+      { yaw: 90, elev: ELEV_MIN },
+      { yaw: 315, elev: 60 },
+    ];
+    for (const band of RESIZE_BANDS) {
+      const fit = fitCamera(band.view, band.insets);
+      for (const orient of orientations) {
+        const cam = refitCamera(
+          { x: WORLD_W / 2, y: WORLD_H / 2, scale: 3, ...orient },
+          fit,
+          band.view,
+          true,
+        );
+        // A tap on any edge cell maps back to the same ground point (the
+        // selection/placement ray cast), at every breakpoint and orbit.
+        for (const [gx, gy] of EDGE_POINTS) {
+          const s = worldToScreen(cam, band.view, gx, gy);
+          const back = screenToWorld(cam, band.view, s.x, s.y);
+          expect(back.x).toBeCloseTo(gx, 6);
+          expect(back.y).toBeCloseTo(gy, 6);
+        }
+      }
+      // Top-down keeps the legacy bit-exact mapping at every band width.
+      const plain: Camera = { x: 100, y: 80, scale: 2 };
+      const s = worldToScreen(plain, band.view, 37, 91);
+      expect(s.x).toBe((37 - 100) * 2 + band.view.width / 2);
+      expect(s.y).toBe((91 - 80) * 2 + band.view.height / 2);
+      const back = screenToWorld(plain, band.view, s.x, s.y);
+      expect(back.x).toBeCloseTo(37, 9);
+      expect(back.y).toBeCloseTo(91, 9);
+    }
+  });
+
+  it("camera reset restores the composed fit exactly at every breakpoint", () => {
+    for (const band of RESIZE_BANDS) {
+      const fit = fitCamera(band.view, band.insets);
+      const orbited = orbitCamera({ x: 30, y: 25, scale: 5, yaw: 40, elev: 30 }, band.view, 120, -50, fit);
+      const reset = refitCamera(orbited, fit, band.view, false);
+      expect(reset).toEqual({ ...fit });
+      expect(reset.yaw).toBeUndefined();
+      expect(reset.elev).toBeUndefined();
+      const centre = worldToScreen(reset, band.view, WORLD_W / 2, WORLD_H / 2);
+      const usableH = band.view.height - band.insets.top - band.insets.bottom;
+      expect(centre.y).toBeCloseTo(band.insets.top + usableH / 2, 6);
+    }
+  });
+
+  it("a desktop -> phone -> desktop journey with orbit between resizes never strands the yard", () => {
+    const desktop: ViewState = { width: 1440, height: 900 };
+    const phone: ViewState = { width: 390, height: 844 };
+    const insets = { top: 64, bottom: 96 };
+    let cam: Camera = { x: WORLD_W - 20, y: 20, scale: 5, yaw: 30, elev: 40 };
+    const steps: Array<{ view: ViewState; act: (c: Camera, v: ViewState, f: Camera) => Camera }> = [
+      { view: desktop, act: (c, v, f) => orbitCamera(c, v, 60, -15, f) },
+      { view: phone, act: (c, v, f) => refitCamera(c, f, v, true) },
+      { view: phone, act: (c, v, f) => quarterTurn(c, v, 1, f) },
+      { view: phone, act: (c, v, f) => panCamera(c, v, 200, -300, f) },
+      { view: desktop, act: (c, v, f) => refitCamera(c, f, v, true) },
+    ];
+    for (const step of steps) {
+      const fit = fitCamera(step.view, insets);
+      cam = step.act(cam, step.view, fit);
+      expect(cam.scale).toBeGreaterThanOrEqual(CAMERA_MIN_SCALE);
+      expect(cam.scale).toBeLessThanOrEqual(CAMERA_MAX_SCALE);
+      expectGroundInsideWorld(cam, step.view, fit);
+    }
+    // The orbit intent accumulated exactly across the breakpoint switches.
+    expect(cam.yaw).toBe(180);
+    expect(cam.elev).toBe(25);
+    expect(cam.scale).toBe(5);
+  });
+
+  it("the desktop inspector gutter refits without leaving the desktop band", () => {
+    const wide: ViewState = { width: 1440, height: 900 };
+    const docked: ViewState = { width: wide.width - SHELL_RIGHT_GUTTER_PX, height: 900 };
+    expect(docked.width).toBeGreaterThanOrEqual(SHELL_DESKTOP_MIN_WIDTH_PX);
+    const insets = { top: 64, bottom: 96 };
+    const fit = fitCamera(docked, insets);
+    const usableH = docked.height - insets.top - insets.bottom;
+    expect(WORLD_W * fit.scale).toBeLessThanOrEqual(docked.width + 1e-9);
+    expect(WORLD_H * fit.scale).toBeLessThanOrEqual(usableH + 1e-9);
+    const intent: Camera = { x: WORLD_W - 15, y: WORLD_H - 15, scale: 5, yaw: 270, elev: 30 };
+    const kept = refitCamera(intent, fit, docked, true);
+    expect(kept.scale).toBe(5);
+    expect(kept.yaw).toBe(270);
+    expect(kept.elev).toBe(30);
+    expectGroundInsideWorld(kept, docked, fit);
+    expect(refitCamera(kept, fit, docked, false)).toEqual({ ...fit });
+  });
+
+  it("the phone sheet expansion refits into the shorter band and keeps the centre anchor", () => {
+    const phone: ViewState = { width: 390, height: 844 };
+    const collapsed = { top: 64, bottom: Math.round((phone.height * SHELL_SHEET_COLLAPSED_VH) / 100) };
+    const expanded = { top: 64, bottom: Math.round((phone.height * SHELL_SHEET_EXPANDED_VH) / 100) };
+    const before = fitCamera(phone, collapsed);
+    const after = fitCamera(phone, expanded);
+    expect(after.scale).toBeLessThan(before.scale);
+    // The band centre stays the composition anchor even where the shipped
+    // BAND_MIN_SCALE floor (scene.ts) binds and the yard exceeds the short
+    // expanded band: the centre never drifts under the chrome.
+    for (const [fit, insets] of [[before, collapsed], [after, expanded]] as const) {
+      const centre = worldToScreen(fit, phone, WORLD_W / 2, WORLD_H / 2);
+      expect(centre.x).toBeCloseTo(phone.width / 2, 9);
+      expect(centre.y).toBeCloseTo(insets.top + (phone.height - insets.top - insets.bottom) / 2, 6);
+    }
+    // Intent survives the sheet opening, clamped into the shorter band.
+    const intent: Camera = { x: 40, y: 30, scale: 4, yaw: 45, elev: 35 };
+    const kept = refitCamera(intent, after, phone, true);
+    expect(kept.scale).toBe(4);
+    expect(kept.yaw).toBe(45);
+    expect(kept.elev).toBe(35);
+    expectGroundInsideWorld(kept, phone, after);
+    expect(refitCamera(kept, after, phone, false)).toEqual({ ...after });
   });
 });

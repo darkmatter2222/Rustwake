@@ -242,7 +242,7 @@ export function buildChoiceLocal(): ChoiceLocalFixture {
 
 /**
  * CHOICE-REMOTE: long route, hauling bottleneck. The SAME seed yard as LOCAL,
- * plus a session corridor of REMOTE_CORRIDOR_CELLS cells. Travel cost (24) far
+ * plus a session corridor of REMOTE_CORRIDOR_CELLS cells. Travel cost (23) far
  * exceeds the 2-tick unload, and a single destination bay serialises the two
  * carriers — hauling-limited. The choice test measures exact completion ticks
  * (E05) and shifts the bottleneck by widening the bay (capacity 1 -> 2).
