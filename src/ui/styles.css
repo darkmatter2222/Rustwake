@@ -186,7 +186,16 @@ body {
 }
 
 /* Spec 6.4: at a large text scale the guidance card keeps its one essential line
-   and the secondary hint steps back, so the objective stays above the world. */
+   and the secondary hint steps back, so the objective stays above the world.
+   G1 #151 pass 14 (CHRM-002): the chip row already stepped back here; the phase
+   hint now steps back too. At 360x640 scale 2.0 a refused tap wraps the numbers
+   line to a third box, and keeping the hint pushed the card past the 42% chrome
+   cap. Hiding the hint (not the numbers line, which carries the PLAY-002
+   shortfall) plus the shorter upgrade primaries keeps every reachable state
+   under the cap with headroom. Font sizes / leading are unchanged. The hint
+   rule itself is declared after `.status-line` / `.text-large .status-line`
+   below, so the browser's specificity cascade and jsdom's source-order
+   cascade both resolve it to display:none at text-large. */
 .text-large .objective__row {
   display: none;
 }
@@ -727,6 +736,16 @@ body {
   font-size: 0.72rem;
   line-height: 1.2;
   margin-top: 0;
+}
+
+/* G1 #151 pass 14 (CHRM-002 / spec 6.4): the secondary phase hint steps back at a
+   large text scale so the card keeps its essential primary + numbers/shortfall lines
+   within the 42% chrome cap. Declared after `.status-line { display: block }` and
+   `.text-large .status-line` so source order (jsdom) and specificity (browser) both
+   resolve it to none. The numbers line keeps `.status-line` without `.objective__hint`,
+   so the PLAY-002 shortfall readout stays visible at every scale. */
+.text-large .objective__hint {
+  display: none;
 }
 
 /* A phone turned sideways has ~390 px of height and three HUD rows cost 140 px of it,

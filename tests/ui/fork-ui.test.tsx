@@ -98,7 +98,10 @@ describe("STRAT-002/A1 the fork on the dock", () => {
     expect(nextYardStep(store.getState()).kind).toBe("upgrade");
 
     const card = document.querySelector(".objective")?.textContent ?? "";
-    expect(card).toContain("Choose what improves on the Scrap sorter");
+    // CHRM-002 (pass 14): the fork primary shortened to "Upgrade {machine} · {cost}" so the
+    // card stays under the 42% chrome cap at large text; the two named outcomes still ride
+    // the dock faces asserted below, and the price still reads on the primary.
+    expect(card).toContain("Upgrade Scrap sorter");
     expect(card).toContain("30 credits");
 
     // The drop executed (STRAT-002 g3 / A1-2v3): `buffer` leads no column under either

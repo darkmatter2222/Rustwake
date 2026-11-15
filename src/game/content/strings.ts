@@ -82,7 +82,7 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "card.connect-route": "Connect the dock to the sorter.",
   "card.refine": "Refine metal into trade goods · build a furnace",
   "card.export": "Sell your first {label} · {qty} {label} for {credits} credits",
-  "card.upgrade": "Improve recovery or production: upgrade a machine.",
+  "card.upgrade": "Upgrade a machine: speed or power.",
   "card.chain": "Choose your next goal.",
 
   // ---- Objective card: yard ladder (spec 3.3) ------------------------------------
@@ -93,7 +93,7 @@ export const STRINGS: Readonly<Record<string, string>> = {
   "step.researchAny": "Research a node when its data cost is covered.",
   "step.drone": "Add a recovery drone · {cost}",
   "step.upgrade": "Upgrade the {machine}.",
-  "step.fork": "Choose what improves on the {machine} · {cost}",
+  "step.fork": "Upgrade {machine} · {cost}",
   "hud.power": "Power {capacity} · {requested} requested · {percent} %",
   // PLAY-001 P-2/P-4: the two resting numbers the yard answers without a tap - how many
   // drones are actually flying, and what the rows of five pips count.
