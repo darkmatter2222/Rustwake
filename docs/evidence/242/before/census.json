@@ -1,0 +1,70 @@
+{
+  "issue": 242,
+  "url": "http://localhost:4183/",
+  "generatedOn": "2026-11-15T22:41:43.756Z",
+  "gate": {
+    "btn": "Begin recovery",
+    "save": "A fresh yard is waiting"
+  },
+  "fresh": {
+    "world3d": "ready",
+    "cam": "106.52,193.51,2.852",
+    "cw": 824,
+    "ch": 1830,
+    "machines": 0,
+    "tick": 80,
+    "tutorial": 0,
+    "credits": 60,
+    "objective": "Tap the highlighted wreck to salvage scrap.",
+    "panelOpen": false,
+    "saveBytes": 13122,
+    "settingsJson": "{\"muted\":false,\"reducedMotion\":false,\"textScale\":1}",
+    "simJson": "{\"machines\":[],\"tutorial\":0,\"droneRepaired\":false,\"wreckGeneration\":1,\"credits\":60}",
+    "census": {
+      "samples": 800,
+      "uniqueColors": 5,
+      "dominant": "8,13,24",
+      "nonDominantPct": 23,
+      "structurePinned": 4,
+      "structureFamily": 8,
+      "top": [
+        [
+          "8,13,24",
+          618
+        ],
+        [
+          "27,44,54",
+          162
+        ],
+        [
+          "41,62,74",
+          12
+        ],
+        [
+          "117,138,147",
+          4
+        ],
+        [
+          "92,118,128",
+          4
+        ]
+      ]
+    }
+  },
+  "roundTrip": {
+    "gateAfterReload": {
+      "btn": "Continue",
+      "save": "Saved run found — Tick 90 · 0 machines · drone wrecked · 60 credits"
+    },
+    "settingsEqual": true,
+    "simEqual": true,
+    "machinesBefore": 0,
+    "machinesAfter": 0,
+    "tutorialBefore": 0,
+    "tutorialAfter": 0,
+    "world3dAfterReload": "ready",
+    "simBefore": "{\"machines\":[],\"tutorial\":0,\"droneRepaired\":false,\"wreckGeneration\":1,\"credits\":60}",
+    "simAfter": "{\"machines\":[],\"tutorial\":0,\"droneRepaired\":false,\"wreckGeneration\":1,\"credits\":60}"
+  },
+  "errors": []
+}
