@@ -3,6 +3,23 @@
     "issue": "https://github.com/darkmatter2222/Rustwake/issues/67",
     "purpose": "Experience-level performance budgets for the redesigned Rustwake game. These are ceilings a player should never feel exceed, NOT a byte-shaving contest. The historical 233000-byte entry ceiling is explicitly NOT a hard constraint here; entryDecodedBytes is a realistic headroom budget, and total transferred bytes are measured as decoded payload (this build ships procedural audio + procedural canvas sprites, so binary media is zero).",
     "groundedIn": "Baseline measured at main f80726970287a9c6da96e0c475b77dc0daccd96b via tests/perf/perf-67.evidence.mjs (vite preview of the production build, headless Chromium, 6x CPU throttle for the low-end pass). See docs/PERF_BUDGETS.md for the full protocol and the device-vs-emulation limitation.",
+    "redeclaration": {
+      "issue": "https://github.com/darkmatter2222/Rustwake/issues/237",
+      "authority": "§5.7 = docs/vision/architecture/README.md:98 (§5 item 7 'Budget discipline': do not lift failing budgets without documenting scene and tradeoff) + docs/vision/TECHNICAL_CONTRACT.md:9/:15 (byte ceiling re-declared against the <=8 MB compressed first-playable budget, never silently lifted). #230 product ruling comment 6900038312 commissioned (R)#237; #236 product verdict comment 6901199383 (PR #239) is the operative directive: ground against MEASURED post-#236 values, re-declare 3D MATURE ~1.1x (tighter than 1.2x), and openly retire the measurably dead 'HOLD FALLBACK + close via (A) alone' branch.",
+      "groundedIn": "Post-#236 baseline re-measured at rw/237 head (base origin/main 083242a3b1fc0fa634306d931801bd941378a5c7, the #236 squash merge) via tests/perf/perf-151.evidence.mjs --mode p03: real per-context PerformanceResourceTiming decodedBodySize sums, vite preview of the production build, headless Chromium SwiftShader emulation, 6x CPU throttle for the low-end pass. See docs/evidence/237-budget-redeclaration.md and docs/PERF_BUDGETS.md.",
+      "measuredBaseline": {
+        "entryDecodedBytesMature3d": 324689,
+        "totalColdDecodedBytesMature3d": 1106322,
+        "totalColdDecodedBytesFallback2d": 561642,
+        "coldCompressedTransferBytesMature3d": 301735,
+        "coldCompressedTransferBytesFallback2d": 164570,
+        "binaryMediaCount": 0
+      },
+      "scene": "rw3d Living Voxel World: pinned three.js 0.187.0 WebGLRenderer voxel world needed at first playable paint (the gate paints a live yard preview). 3D MATURE = release MATURE fixture (20 machines / 30 units / 200 cargo) on phone 390x844@2 and desktop 1920x1080@1; entry is the app+sim module script (324689 B, three excluded by the #236 probe-gated lazy import), total cold adds the async three chunk (~544680 B) + vendor/tables/CSS/HTML. FALLBACK-2D = the same app+sim entry on no-WebGL devices; the three chunk is NEVER fetched there (measured), so its cold total is 561642 B.",
+      "tradeoff": "The 2D-era #67 global decoded ceilings (entry 240000 / total cold 520000, grounded in the 190898/422552 pre-rw3d 2D baseline) are structurally incompatible with the pinned-three 3D app and are RETIRED for it. Re-declared CONTEXT-AWARE decoded ceilings at ~1.1x the measured post-#236 baseline (tighter than 1.2x, to force genuine future reductions): mature3d entry 360000 (1.109x), mature3d total cold 1220000 (1.103x), fallback2d total cold 620000 (1.104x). These are secondary proxies; the player-facing guardrails are the UNCHANGED experience budgets (coldLoad FCP/load, interaction, frame, memory) and the <=8 MB compressed first-playable budget (measured ~0.30 MB gzip MATURE / ~0.16 MB FALLBACK, all MET). No check removed or weakened; same metrics, re-declared context-aware ceiling values; UNKNOWN is never auto-MET.",
+      "retired": "The pre-measurement 'HOLD FALLBACK ceilings (entry <=240000, total cold <=520000) and close via (A) alone' branch of the #230 ruling is measurably DEAD (#236 measured FALLBACK cold 561642 > 520000 and entry 324689 > 240000: the non-three app+sim entry itself exceeds the 2D-era ceilings) and is retired OPENLY here per product verdict 6901199383 — never silently. A genuine app+sim entry diet remains a valid FUTURE optimization (tracked separately, P3, not a G1 blocker).",
+      "reductionHistory": "(C)#235 named-import tree-shake: measured 0 B (exhausted). (A)#236 probe-gated lazy three: FALLBACK-2D cold 1105441 -> 561642 (-49.2%, genuine; the 544680 B three chunk is never fetched without WebGL); MATURE entry 868488 -> 324689 (-62.6%); MATURE total cold +881 B relocation only."
+    },
     "evaluationNote": "The probe compares interaction budgets against the MEDIAN open/tap latency (the budget keys retain the *P95Ms names the probe reads). Frame budgets use P95 of requestAnimationFrame deltas. 'met=null' means not measured (e.g. landscape machine-tap automation does not land) or no budget set; those are reported as unknown, never silently passed.",
     "deviceLimitation": "All numbers are AGENT headless emulation on a fast host with a local preview (no real network, no real low-end GPU/compositor). Emulation is a necessary-but-not-sufficient floor: meeting a budget here does not prove a real mid/low-end phone meets it. Frame time stays at the 60Hz vsync floor (16.8ms) even at 6x CPU throttle on this host, so throttled interaction latency is the sensitive rerender-cost signal."
   },
@@ -14,9 +31,14 @@
       "desktopLoadMs": 1800
     },
     "transferred": {
-      "entryDecodedBytes": 240000,
-      "totalColdDecodedBytes": 520000,
-      "imageAudioBinaryCount": 0
+      "imageAudioBinaryCount": 0,
+      "mature3d": {
+        "entryDecodedBytes": 360000,
+        "totalColdDecodedBytes": 1220000
+      },
+      "fallback2d": {
+        "totalColdDecodedBytes": 620000
+      }
     },
     "interaction": {
       "menuOpenP95Ms": 100,

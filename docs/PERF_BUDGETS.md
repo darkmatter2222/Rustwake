@@ -7,6 +7,38 @@ Probe: [`tests/perf/perf-67.evidence.mjs`](../tests/perf/perf-67.evidence.mjs) �
 
 This document satisfies acceptance criterion 1 (publish measurable budgets + a test protocol for mobile cold load, total transferred assets, interaction latency, frame time and memory) and defines the identical-conditions method used for the baseline-vs-redesign comparison (criterion 4).
 
+## rw3d §5.7 re-declaration — context-aware decoded-byte ceilings (#237, CURRENT)
+
+**Authority.** §5.7 = [`vision/architecture/README.md:98`](vision/architecture/README.md) (§5 item 7 "Budget discipline": do not lift failing budgets without documenting scene and tradeoff) + [`vision/TECHNICAL_CONTRACT.md:9/:15`](vision/TECHNICAL_CONTRACT.md) (byte ceiling re-declared against the ≤8 MB compressed first-playable budget, **never silently lifted**). The #230 product ruling (comment 6900038312) commissioned this (R) re-declaration; the #236 product verdict (comment 6901199383 on PR #239) is the operative directive. This is the sanctioned, documented revision — NOT a silent lift in a perf PR. Full evidence: [`evidence/237-budget-redeclaration.md`](evidence/237-budget-redeclaration.md).
+
+**Scene.** rw3d is the Living Voxel World: a real pinned **three.js 0.187.0** WebGLRenderer voxel world needed at first playable paint (the gate paints a live yard preview). **3D MATURE** = the release MATURE fixture (20 machines / 30 units / 200 cargo) on phone 390×844@2 and desktop 1920×1080@1. Since #236 the entry is the app+sim module script (**324689 B** decoded, three excluded by the probe-gated lazy import); total cold adds the async three chunk (~544680 B) + vendor/tables/CSS/HTML = **1106322 B**. **FALLBACK-2D** = the same app+sim entry on no-WebGL devices; the three chunk is **never fetched** there (measured, #236), so its cold total is **561642 B**. Zero binary media in every context.
+
+**Measured grounding (re-measured at the #237 measurement head `5f50d961160f59ddffe7c6b157fa20d168b25083`, base `origin/main` `083242a3b1fc0fa634306d931801bd941378a5c7` = the #236 squash merge; no `src/` change — bundle byte-identical).** P03 harness (`npx tsx tests/perf/perf-151.evidence.mjs --mode p03`), real per-context `PerformanceResourceTiming.decodedBodySize` sums, vite preview of the production build, headless Chromium SwiftShader emulation, 6× CPU throttle low-end pass:
+
+| Context | entry decoded | total cold decoded | cold compressed (gzip) |
+| --- | --- | --- | --- |
+| phone-MATURE / desktop-MATURE (3D) | 324689 B | 1106322 B | 301735 B (~0.30 MB) |
+| phone-FALLBACK-2D / desktop-FALLBACK-2D | 324689 B (not a separately checked metric) | 561642 B | 164570 B (~0.16 MB) |
+
+**Re-declared ceilings (~1.1× measured — TIGHTER than 1.2×, to force genuine future reductions).** In [`tests/perf/budgets.json`](../tests/perf/budgets.json) `budgets.transferred` is now **context-aware**:
+
+| Context | Metric | Re-declared ceiling | Measured | Ratio | Headroom |
+| --- | --- | --- | --- | --- | --- |
+| 3D MATURE (`mature3d`) | entryDecodedBytes | **360000 B** | 324689 B | 1.109× | 35311 B |
+| 3D MATURE (`mature3d`) | totalColdDecodedBytes | **1220000 B** | 1106322 B | 1.103× | 113678 B |
+| FALLBACK-2D (`fallback2d`) | totalColdDecodedBytes | **620000 B** | 561642 B | 1.104× | 58358 B |
+| all contexts | imageAudioBinaryCount | **0** (unchanged) | 0 | — | — |
+
+**Mapping (transparent, no check removed or weakened).** `evaluateBudgets` in `perf-151.evidence.mjs` (and the legacy `perf-67.evidence.mjs`) now maps MATURE/STRESS 3D contexts to `transferred.mature3d.{entryDecodedBytes,totalColdDecodedBytes}` and FALLBACK-2D contexts to `transferred.fallback2d.totalColdDecodedBytes`. Same metrics, same `check()` calls, same UNKNOWN-never-MET semantics; only the ceiling values + mapping changed. The report `protocol` string records the change.
+
+**Tradeoff.** The decoded-byte ceilings are **secondary proxies**. The player-facing guardrails are the **experience budgets — ALL UNCHANGED and still enforced**: coldLoad FCP/load, interaction latency, frame P95/dropped, memory heap/growth, and the **≤8 MB compressed first-playable budget** (measured ~0.30 MB gzip MATURE / ~0.16 MB FALLBACK ≪ 8 MB). All experience budgets are MET at this head (FCP 76–88 ms, load 34.6–39 ms, idle P95 16.8 ms / 0% dropped, menu 9.2–10.9 ms, tap 10–13 ms, throttled menu 15.4–17.3 ms, throttled tap 60–125 ms, heap ≤11.65 MB, growth ≤0 MB, binary media 0). The 2D-era #67 global ceilings (entry ≤240000 / total cold ≤520000, grounded in the 190898/422552 pre-rw3d 2D baseline) are **structurally incompatible** with the pinned-three 3D app — the non-three app+sim entry alone is 324689 B — and are **retired for the 3D app** by this documented re-declaration.
+
+**OPEN retirement of the dead "HOLD FALLBACK" branch.** The #230 ruling's pre-measurement branch — *"FALLBACK-2D: HOLD the 2D-appropriate ceilings (entry ≤240000, total cold ≤520000) and CLOSE them via genuine reduction (A), NOT by lifting"* — is **measurably DEAD and is retired OPENLY here**, per the #236 product verdict (comment 6901199383): #236's genuine lazy-load cut landed FALLBACK cold at **561642 B > 520000** and entry at **324689 B > 240000**; the residual is structural (the app+sim entry itself exceeds the 2D-era ceilings), so (A) alone cannot close it. No silent abandonment: this paragraph is the record. A genuine **app+sim entry diet** remains a valid FUTURE optimization (tracked as a separate P3 follow-up, **not a G1 blocker**).
+
+**Reduction history (genuine, measured).** (C) #235 named-import tree-shake: **0 B** (exhausted). (A) #236 probe-gated lazy three: FALLBACK-2D cold 1105441 → 561642 (**−49.2% genuine** — the 544680 B three chunk is never fetched without WebGL); MATURE entry 868488 → 324689 (−62.6%); MATURE total cold +881 B relocation only. (R) #237 (this section): context-aware re-declaration grounded in those measured values.
+
+**Verdicts at this head.** Before re-declaration (old global ceilings, same measured bytes): **40 met / 6 unmet / 0 unknown** — the 6 UNMET were exactly 2× MATURE entry + 2× MATURE cold + 2× FALLBACK cold. After re-declaration, re-measured: **46 met / 0 unmet / 0 unknown**, 0 hard failures. The 6 previously-UNMET became MET **only because they were actually re-measured passing** at the re-declared ceilings; no UNKNOWN was auto-promoted. Limitations unchanged: headless-emulation floor, not real-phone proof (#190 owed); non-vision — G1 visual ACCEPT is sponsor-reserved.
+
 ## What this is — and is NOT
 
 - These are **experience-level ceilings** a player should never feel exceed. They are grounded in the measured baseline, not aspirational marketing numbers.
@@ -87,8 +119,9 @@ Defined in [`tests/perf/budgets.json`](../tests/perf/budgets.json). Interaction 
 | coldLoad | desktop FCP | ≤ 1000 ms | 76 ms | Sub-second first paint on desktop. |
 | coldLoad | mobile loadEventEnd | ≤ 2500 ms | 35–38 ms | Fully loaded yard. |
 | coldLoad | desktop loadEventEnd | ≤ 1800 ms | 35–37 ms | Fully loaded yard. |
-| transferred | entry decoded bytes | ≤ 240000 B | 190898 B | Realistic entry headroom (~234 KB); **not** the 233000 ceiling. |
-| transferred | total cold decoded bytes | ≤ 520000 B | 422552 B | Entry+vendor+tables+CSS+HTML (~413 KB); lazy worker excluded from cold. |
+| transferred | entry decoded bytes (3D MATURE) | ≤ 360000 B | 324689 B (post-#236) | **Re-declared #237** (~1.109× measured); see the §5.7 re-declaration section above. Retired 2D-era #67 value: ≤ 240000 B (baseline 190898 B). |
+| transferred | total cold decoded bytes (3D MATURE) | ≤ 1220000 B | 1106322 B (post-#236) | **Re-declared #237** (~1.103× measured). Retired 2D-era #67 value: ≤ 520000 B (baseline 422552 B). |
+| transferred | total cold decoded bytes (FALLBACK-2D) | ≤ 620000 B | 561642 B (post-#236) | **Re-declared #237** (~1.104× measured); the three chunk is never fetched without WebGL (#236). FALLBACK entry is not a separately checked metric. |
 | transferred | binary image/audio count | = 0 | 0 | Procedural audio + canvas sprites invariant. |
 | interaction | menu open (median) | ≤ 100 ms | 6.8–13 ms | "Instant" perception threshold. |
 | interaction | machine tap (median) | ≤ 120 ms | 11–12 ms | Tap→inspector feels immediate. |

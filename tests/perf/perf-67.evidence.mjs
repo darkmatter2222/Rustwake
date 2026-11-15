@@ -771,8 +771,13 @@ function evaluateBudgets(res, budgets) {
       check("loadEventEnd", scope, d.coldLoad?.navigation?.loadEventEndMs, mobile ? b.coldLoad.mobileLoadMs : b.coldLoad.desktopLoadMs, "ms");
     }
     if (b.transferred) {
-      check("entryDecodedBytes", scope, d.coldLoad?.resources?.buckets?.entryJs?.decodedBodySize, b.transferred.entryDecodedBytes, "B");
-      check("totalColdDecodedBytes", scope, d.coldLoad?.resources?.totalDecodedBodySize, b.transferred.totalColdDecodedBytes, "B");
+      // #237 (§5.7 re-declaration): decoded ceilings are context-aware in
+      // budgets.json (transferred.mature3d / transferred.fallback2d). This legacy
+      // harness's mature contexts map to the 3D-MATURE ceilings; same metrics and
+      // checks, re-declared values. A missing ceiling stays UNKNOWN, never MET.
+      const t3 = b.transferred.mature3d || {};
+      check("entryDecodedBytes", scope, d.coldLoad?.resources?.buckets?.entryJs?.decodedBodySize, t3.entryDecodedBytes, "B");
+      check("totalColdDecodedBytes", scope, d.coldLoad?.resources?.totalDecodedBodySize, t3.totalColdDecodedBytes, "B");
       check("binaryMediaCount", scope, d.coldLoad?.resources?.binaryMediaCount, b.transferred.imageAudioBinaryCount, "count");
     }
     if (b.interaction) {
