@@ -39,4 +39,4 @@ export function resetWebGLProbe(): void {
 /** Cache a negative result after a world-construction failure (three/index.ts). */
 export function markWebGLUnavailable(): void {
   glAvailable = false;
-}
+}
