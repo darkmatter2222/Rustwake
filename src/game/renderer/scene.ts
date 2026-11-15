@@ -104,9 +104,11 @@ let threeLoad: Promise<ThreeModule | null> | null = null;
 
 /** Kick off the probe-gated dynamic import exactly once. NEVER called through when the
  * probe fails, so FALLBACK-2D (jsdom null / write-only Proxy / forced-null harness)
- * never fetches the three.js chunk. While the chunk is in flight the caller paints the
- * legacy 2D frame; the gate's live preview resolves to the blitted 3D world as soon as
- * the import lands (one 2D-only frame at most on the local preview). */
+ * never fetches the three.js chunk. While the chunk is in flight the caller keeps
+ * painting the legacy 2D frame (no blank); the gate's live preview resolves to the
+ * blitted 3D world as soon as the import lands. Measured on the headless local preview
+ * (SwiftShader, tests/perf/perf-236-firstpaint.mjs): 3 2D-only frames (~272 ms) before
+ * the first "ready" stamp; faster on real GPUs. FALLBACK-2D never requests the chunk. */
 function loadThreeOnce(): void {
   if (threeModule || threeLoad || !probeWebGL()) return;
   threeLoad = import("./three")
