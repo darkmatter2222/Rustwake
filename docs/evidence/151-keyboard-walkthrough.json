@@ -1,0 +1,5097 @@
+{
+ "issue": 151,
+ "acceptance": "U04 — keyboard-only / screen-reader entity list: build, inspect, upgrade, trade, save, close; focus returns; status not color-only",
+ "buildSha": "2d01905a2f9d70cbda719793cbc062ac505dc107",
+ "port": 4195,
+ "url": "http://127.0.0.1:4195/",
+ "generatedAt": "2026-11-15T02:03:35.945Z",
+ "method": "headless Chrome, real key events only (Tab/Enter/Escape/digits); no mouse, no element.click(), no programmatic focus",
+ "steps": [
+  {
+   "name": "gate-continue",
+   "keys": [
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "gate-continue-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "gate__btn",
+      "label": "Begin recovery — continue the saved yard",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "toolbar-visible",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "six-destinations",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-01-yard.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Build1",
+    "slot": "build",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "build-catalog-place",
+   "keys": [
+    "1",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Build1",
+    "slot": "build",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "catalog-opened-by-digit-1",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "sorter-card-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "catalog__card catalog__card--selected",
+      "label": "Scrap sorterSplits scrap into ferrous and nonferrous metal.Inputs: 2 scrapOutput",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "sorter-card-selected",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "place-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "catalog__place",
+      "label": "Place Scrap sorter",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "place-enabled",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "catalog-closed-ghost-armed",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-02-catalog.png"
+   ],
+   "focusAfter": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "build-commit",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "build-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "dock__btn dock__btn--primary",
+      "label": "Build Scrap sorter30 scrap + 4 steel",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "build-face-committed",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-03-placement.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "map-entity-list",
+   "keys": [
+    "6"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "two-buildings-enumerated",
+     "pass": true,
+     "detail": [
+      "building",
+      "building",
+      "drone"
+     ]
+    },
+    {
+     "name": "buildings-before-units",
+     "pass": true,
+     "detail": [
+      "building",
+      "building",
+      "drone"
+     ]
+    },
+    {
+     "name": "drone-enumerated",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "every-row-a-named-button",
+     "pass": true,
+     "detail": [
+      "Scrap sorter 1, level 1, Cargo full, cell 9",
+      "Scrap sorter 2, level 1, Needs input, cell 0",
+      "Drone 1, Idle, Deliveries 25"
+     ]
+    },
+    {
+     "name": "status-worded-not-color",
+     "pass": true,
+     "detail": [
+      "Scrap sorter 1, level 1, Cargo full, cell 9",
+      "Scrap sorter 2, level 1, Needs input, cell 0",
+      "Drone 1, Idle, Deliveries 25"
+     ]
+    },
+    {
+     "name": "rows-44px-floor",
+     "pass": true,
+     "detail": [
+      49,
+      49,
+      49
+     ]
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-04-entity-list.png"
+   ],
+   "rows": [
+    {
+     "kind": "building",
+     "id": "1",
+     "name": "Scrap sorter 1, level 1, Cargo full, cell 9",
+     "text": "Scrap sorter 1level 1 · Cargo full · cell 9",
+     "tag": "button",
+     "h": 49
+    },
+    {
+     "kind": "building",
+     "id": "2",
+     "name": "Scrap sorter 2, level 1, Needs input, cell 0",
+     "text": "Scrap sorter 2level 1 · Needs input · cell 0",
+     "tag": "button",
+     "h": 49
+    },
+    {
+     "kind": "drone",
+     "id": "1",
+     "name": "Drone 1, Idle, Deliveries 25",
+     "text": "Drone 1Idle · Deliveries 25",
+     "tag": "button",
+     "h": 49
+    }
+   ],
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "inspect-building",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "building-row-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "entity-list__row",
+      "label": "Scrap sorter 2, level 1, Needs input, cell 0",
+      "slot": null,
+      "entity": "building",
+      "entityId": "2",
+      "id": ""
+     }
+    },
+    {
+     "name": "inspector-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "stack-depth-2",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "back-face-present",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-entered-host",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-05-inspector.png"
+   ],
+   "inspectedRow": {
+    "tag": "button",
+    "cls": "entity-list__row",
+    "label": "Scrap sorter 2, level 1, Needs input, cell 0",
+    "slot": null,
+    "entity": "building",
+    "entityId": "2",
+    "id": ""
+   },
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "BackScrap sorterCloseIdentityStatusNeeds inputLevel1Cell0Recipe2 Scrap → 1 Ferro",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "upgrade",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "BackScrap sorterCloseIdentityStatusNeeds inputLevel1Cell0Recipe2 Scrap → 1 Ferro",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "upgrade-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Upgrade · 30 credits",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "upgrade-charged-exact-cost",
+     "pass": true,
+     "detail": {
+      "creditsBefore": 240,
+      "creditsAfter": 210,
+      "cost": 30
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-06-upgraded.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Upgrade · 35 credits",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "escape-to-list-level-worded",
+   "keys": [
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Upgrade · 35 credits",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "stack-depth-1",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "level-2-worded-in-row",
+     "pass": true,
+     "detail": "Scrap sorter 2, level 2, Needs input, cell 0"
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-07-list-after-upgrade.png"
+   ],
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "trade-sell",
+   "keys": [
+    "Escape",
+    "5",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "trade-opened-by-digit-5",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "sell-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn store-trade__sell",
+      "label": "Sell 60 · +60",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "sell-paid-exact-tranche",
+     "pass": true,
+     "detail": {
+      "creditsBefore": 210,
+      "creditsAfter": 270,
+      "gain": 60
+     }
+    },
+    {
+     "name": "trade-closed-by-escape",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-08-trade.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "settings-yard-backup-download",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "settings-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Settings",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "settings-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "yard-record-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Open",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "yard-record-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "backup-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Backup",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "save-export-text-present",
+     "pass": true,
+     "detail": 2053
+    },
+    {
+     "name": "download-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Download",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "save-downloaded-and-parses",
+     "pass": true,
+     "detail": {
+      "file": "docs/evidence/151-keyboard-walkthrough/laptop-save-export.json",
+      "suggestedFilename": "rustwake-yard-tick-1366.json",
+      "bytes": 2053,
+      "sha256": "e66d2ef53838f5b52f6d6c6a5d7662844d66a54d9588f017057b3d6a5ff24097",
+      "parsesAsSave": true
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-09-backup.png"
+   ],
+   "saveArtifact": {
+    "file": "docs/evidence/151-keyboard-walkthrough/laptop-save-export.json",
+    "suggestedFilename": "rustwake-yard-tick-1366.json",
+    "bytes": 2053,
+    "sha256": "e66d2ef53838f5b52f6d6c6a5d7662844d66a54d9588f017057b3d6a5ff24097",
+    "parsesAsSave": true
+   },
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Download",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "escape-unwind-focus-restore",
+   "keys": [
+    "Escape",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Download",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "yard-closed-settings-survives",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "stack-emptied",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-settings-opener",
+     "pass": true,
+     "detail": {
+      "after": {
+       "tag": "button",
+       "cls": "icon-btn",
+       "label": "Settings",
+       "slot": null,
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      },
+      "settingsOpener": {
+       "tag": "button",
+       "cls": "icon-btn",
+       "label": "Settings",
+       "slot": null,
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      }
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-10-focus-restored.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Settings",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "map-toolbar-focus-return",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Settings",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "map-toolbar-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "map-opened-from-toolbar",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "map-closed",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-map-toolbar",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    }
+   ],
+   "screenshots": [],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "digit6-escape-focus",
+   "keys": [
+    "6",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "map-opened-by-digit-6",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "map-closed-by-escape",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-opener",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    }
+   ],
+   "screenshots": [],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "tab-cycle-no-trap",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "tab-cycle-wraps-no-trap",
+     "pass": true,
+     "detail": {
+      "tabbable": 21,
+      "first": {
+       "tag": "button",
+       "cls": "toolbar__btn",
+       "label": "Map6",
+       "slot": "map",
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      }
+     }
+    }
+   ],
+   "screenshots": [],
+   "tabbableCount": 21,
+   "tabSequence": [
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Map6",
+     "slot": "map",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "body",
+     "cls": "",
+     "label": "",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Settings",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard coach",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "summary",
+     "cls": "onboard__summary",
+     "label": "Why this matters",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn road-entry",
+     "label": "Open road tool",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn build-entry",
+     "label": "Open build catalog",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Store",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Yard",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Build",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Build1",
+     "slot": "build",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Routes2",
+     "slot": "routes",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Fleet3",
+     "slot": "fleet",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Trade5",
+     "slot": "trade",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Map6",
+     "slot": "map",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    }
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "status-event-driven-focus-ring",
+   "keys": [
+    "6",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "status-not-per-tick",
+     "pass": true,
+     "detail": {
+      "before": "",
+      "after": ""
+     }
+    },
+    {
+     "name": "drone-row-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "entity-list__row",
+      "label": "Drone 1, Idle, Deliveries 28",
+      "slot": null,
+      "entity": "drone",
+      "entityId": "1",
+      "id": ""
+     }
+    },
+    {
+     "name": "visible-focus-ring",
+     "pass": true,
+     "detail": {
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(95, 216, 232)"
+     }
+    },
+    {
+     "name": "activation-announced",
+     "pass": true,
+     "detail": "Focused Drone 1"
+    },
+    {
+     "name": "unit-activation-camera-only",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/laptop-11-drone-focused.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "laptop"
+  },
+  {
+   "name": "gate-continue",
+   "keys": [
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "gate-continue-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "gate__btn",
+      "label": "Begin recovery — continue the saved yard",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "toolbar-visible",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "six-destinations",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-01-yard.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Build1",
+    "slot": "build",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "build-catalog-place",
+   "keys": [
+    "1",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Build1",
+    "slot": "build",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "catalog-opened-by-digit-1",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "sorter-card-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "catalog__card catalog__card--selected",
+      "label": "Scrap sorterSplits scrap into ferrous and nonferrous metal.Inputs: 2 scrapOutput",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "sorter-card-selected",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "place-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "catalog__place",
+      "label": "Place Scrap sorter",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "place-enabled",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "catalog-closed-ghost-armed",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-02-catalog.png"
+   ],
+   "focusAfter": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "build-commit",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "body",
+    "cls": "",
+    "label": "",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "build-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "dock__btn dock__btn--primary",
+      "label": "Build Scrap sorter30 scrap + 4 steel",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "build-face-committed",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-03-placement.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "map-entity-list",
+   "keys": [
+    "6"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "two-buildings-enumerated",
+     "pass": true,
+     "detail": [
+      "building",
+      "building",
+      "drone"
+     ]
+    },
+    {
+     "name": "buildings-before-units",
+     "pass": true,
+     "detail": [
+      "building",
+      "building",
+      "drone"
+     ]
+    },
+    {
+     "name": "drone-enumerated",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "every-row-a-named-button",
+     "pass": true,
+     "detail": [
+      "Scrap sorter 1, level 1, Cargo full, cell 9",
+      "Scrap sorter 2, level 1, Needs input, cell 0",
+      "Drone 1, Idle, Deliveries 25"
+     ]
+    },
+    {
+     "name": "status-worded-not-color",
+     "pass": true,
+     "detail": [
+      "Scrap sorter 1, level 1, Cargo full, cell 9",
+      "Scrap sorter 2, level 1, Needs input, cell 0",
+      "Drone 1, Idle, Deliveries 25"
+     ]
+    },
+    {
+     "name": "rows-44px-floor",
+     "pass": true,
+     "detail": [
+      49,
+      49,
+      49
+     ]
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-04-entity-list.png"
+   ],
+   "rows": [
+    {
+     "kind": "building",
+     "id": "1",
+     "name": "Scrap sorter 1, level 1, Cargo full, cell 9",
+     "text": "Scrap sorter 1level 1 · Cargo full · cell 9",
+     "tag": "button",
+     "h": 49
+    },
+    {
+     "kind": "building",
+     "id": "2",
+     "name": "Scrap sorter 2, level 1, Needs input, cell 0",
+     "text": "Scrap sorter 2level 1 · Needs input · cell 0",
+     "tag": "button",
+     "h": 49
+    },
+    {
+     "kind": "drone",
+     "id": "1",
+     "name": "Drone 1, Idle, Deliveries 25",
+     "text": "Drone 1Idle · Deliveries 25",
+     "tag": "button",
+     "h": 49
+    }
+   ],
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "inspect-building",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "building-row-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "entity-list__row",
+      "label": "Scrap sorter 2, level 1, Needs input, cell 0",
+      "slot": null,
+      "entity": "building",
+      "entityId": "2",
+      "id": ""
+     }
+    },
+    {
+     "name": "inspector-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "stack-depth-2",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "back-face-present",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-entered-host",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-05-inspector.png"
+   ],
+   "inspectedRow": {
+    "tag": "button",
+    "cls": "entity-list__row",
+    "label": "Scrap sorter 2, level 1, Needs input, cell 0",
+    "slot": null,
+    "entity": "building",
+    "entityId": "2",
+    "id": ""
+   },
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "BackScrap sorterCloseIdentityStatusNeeds inputLevel1Cell0Recipe2 Scrap → 1 Ferro",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "upgrade",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "BackScrap sorterCloseIdentityStatusNeeds inputLevel1Cell0Recipe2 Scrap → 1 Ferro",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "upgrade-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Upgrade · 30 credits",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "upgrade-charged-exact-cost",
+     "pass": true,
+     "detail": {
+      "creditsBefore": 240,
+      "creditsAfter": 210,
+      "cost": 30
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-06-upgraded.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Upgrade · 35 credits",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "escape-to-list-level-worded",
+   "keys": [
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Upgrade · 35 credits",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "stack-depth-1",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "level-2-worded-in-row",
+     "pass": true,
+     "detail": "Scrap sorter 2, level 2, Needs input, cell 0"
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-07-list-after-upgrade.png"
+   ],
+   "focusAfter": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "trade-sell",
+   "keys": [
+    "Escape",
+    "5",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "div",
+    "cls": "shell-host shell-inspector",
+    "label": "MapCloseThe yard region you are recovering. New regions open as the story and re",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "trade-opened-by-digit-5",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "sell-face-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn store-trade__sell",
+      "label": "Sell 60 · +60",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "sell-paid-exact-tranche",
+     "pass": true,
+     "detail": {
+      "creditsBefore": 210,
+      "creditsAfter": 270,
+      "gain": 60
+     }
+    },
+    {
+     "name": "trade-closed-by-escape",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-08-trade.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "settings-yard-backup-download",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "dock__btn",
+    "label": "Yard",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "settings-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Settings",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "settings-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "yard-record-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Open",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "yard-record-opened",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "backup-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Backup",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "save-export-text-present",
+     "pass": true,
+     "detail": 2072
+    },
+    {
+     "name": "download-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "icon-btn",
+      "label": "Download",
+      "slot": null,
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "save-downloaded-and-parses",
+     "pass": true,
+     "detail": {
+      "file": "docs/evidence/151-keyboard-walkthrough/desktop-save-export.json",
+      "suggestedFilename": "rustwake-yard-tick-1364.json",
+      "bytes": 2053,
+      "sha256": "cfee653212f1bc42db51fd89ad3c8ad8fe96ec22fd19efe98c779e778f02a655",
+      "parsesAsSave": true
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-09-backup.png"
+   ],
+   "saveArtifact": {
+    "file": "docs/evidence/151-keyboard-walkthrough/desktop-save-export.json",
+    "suggestedFilename": "rustwake-yard-tick-1364.json",
+    "bytes": 2053,
+    "sha256": "cfee653212f1bc42db51fd89ad3c8ad8fe96ec22fd19efe98c779e778f02a655",
+    "parsesAsSave": true
+   },
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Download",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "escape-unwind-focus-restore",
+   "keys": [
+    "Escape",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Download",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "yard-closed-settings-survives",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "stack-emptied",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-settings-opener",
+     "pass": true,
+     "detail": {
+      "after": {
+       "tag": "button",
+       "cls": "icon-btn",
+       "label": "Settings",
+       "slot": null,
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      },
+      "settingsOpener": {
+       "tag": "button",
+       "cls": "icon-btn",
+       "label": "Settings",
+       "slot": null,
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      }
+     }
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-10-focus-restored.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Settings",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "map-toolbar-focus-return",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "icon-btn",
+    "label": "Settings",
+    "slot": null,
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "map-toolbar-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    },
+    {
+     "name": "map-opened-from-toolbar",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "map-closed",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-map-toolbar",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    }
+   ],
+   "screenshots": [],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "digit6-escape-focus",
+   "keys": [
+    "6",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "map-opened-by-digit-6",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "map-closed-by-escape",
+     "pass": true,
+     "detail": null
+    },
+    {
+     "name": "focus-restored-to-opener",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "toolbar__btn",
+      "label": "Map6",
+      "slot": "map",
+      "entity": null,
+      "entityId": null,
+      "id": ""
+     }
+    }
+   ],
+   "screenshots": [],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "tab-cycle-no-trap",
+   "keys": [
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "tab-cycle-wraps-no-trap",
+     "pass": true,
+     "detail": {
+      "tabbable": 21,
+      "first": {
+       "tag": "button",
+       "cls": "toolbar__btn",
+       "label": "Map6",
+       "slot": "map",
+       "entity": null,
+       "entityId": null,
+       "id": ""
+      }
+     }
+    }
+   ],
+   "screenshots": [],
+   "tabbableCount": 21,
+   "tabSequence": [
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Map6",
+     "slot": "map",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom in",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face",
+     "label": "Zoom out",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "shell-zoom__face shell-zoom__face--reset",
+     "label": "Reset view",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "body",
+     "cls": "",
+     "label": "",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Sound off",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Text size 1",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "All resources",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn",
+     "label": "Settings",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Collapse objective",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "objective__btn",
+     "label": "Dismiss objective",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn onboard__btn onboard__skip",
+     "label": "Skip lessons and hide the yard coach",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "summary",
+     "cls": "onboard__summary",
+     "label": "Why this matters",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn road-entry",
+     "label": "Open road tool",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "icon-btn build-entry",
+     "label": "Open build catalog",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Store",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Yard",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn dock__btn--primary",
+     "label": "Connect",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "dock__btn",
+     "label": "Build",
+     "slot": null,
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Build1",
+     "slot": "build",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Routes2",
+     "slot": "routes",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Fleet3",
+     "slot": "fleet",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Trade5",
+     "slot": "trade",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    },
+    {
+     "tag": "button",
+     "cls": "toolbar__btn",
+     "label": "Map6",
+     "slot": "map",
+     "entity": null,
+     "entityId": null,
+     "id": ""
+    }
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  },
+  {
+   "name": "status-event-driven-focus-ring",
+   "keys": [
+    "6",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Tab",
+    "Enter",
+    "Escape"
+   ],
+   "focusBefore": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "checks": [
+    {
+     "name": "status-not-per-tick",
+     "pass": true,
+     "detail": {
+      "before": "",
+      "after": ""
+     }
+    },
+    {
+     "name": "drone-row-reachable-by-tab",
+     "pass": true,
+     "detail": {
+      "tag": "button",
+      "cls": "entity-list__row",
+      "label": "Drone 1, Idle, Deliveries 28",
+      "slot": null,
+      "entity": "drone",
+      "entityId": "1",
+      "id": ""
+     }
+    },
+    {
+     "name": "visible-focus-ring",
+     "pass": true,
+     "detail": {
+      "outlineWidth": "2px",
+      "outlineStyle": "solid",
+      "outlineColor": "rgb(95, 216, 232)"
+     }
+    },
+    {
+     "name": "activation-announced",
+     "pass": true,
+     "detail": "Focused Drone 1"
+    },
+    {
+     "name": "unit-activation-camera-only",
+     "pass": true,
+     "detail": null
+    }
+   ],
+   "screenshots": [
+    "docs/evidence/151-keyboard-walkthrough/desktop-11-drone-focused.png"
+   ],
+   "focusAfter": {
+    "tag": "button",
+    "cls": "toolbar__btn",
+    "label": "Map6",
+    "slot": "map",
+    "entity": null,
+    "entityId": null,
+    "id": ""
+   },
+   "pass": true,
+   "loop": "desktop"
+  }
+ ],
+ "census": {
+  "phone-small-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 98,
+     "innerScroll": 334
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-small-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-small-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 789,
+     "clientHeight": 366,
+     "innerScroll": 423
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-small-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 169,
+     "innerScroll": 263
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 344,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 344,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 765,
+     "clientHeight": 508,
+     "innerScroll": 257
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 344,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 344,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-large-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 194,
+     "innerScroll": 238
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 366,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 366,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-large-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-large-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 765,
+     "clientHeight": 558,
+     "innerScroll": 207
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 366,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 366,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-large-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-landscape-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 0,
+     "innerScroll": 432
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 274,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 274,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-landscape-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "phone-landscape-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 813,
+     "clientHeight": 0,
+     "innerScroll": 813
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 274,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 274,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/phone-landscape-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "tablet-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 403,
+     "clientHeight": 232,
+     "innerScroll": 171
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 534,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 534,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/tablet-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "tablet-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 694,
+     "clientHeight": 634,
+     "innerScroll": 60
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 534,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 534,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/tablet-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "laptop-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 62,
+     "innerScroll": 370
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/laptop-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "laptop-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 789,
+     "clientHeight": 21,
+     "innerScroll": 768
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/laptop-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "desktop-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 218,
+     "innerScroll": 214
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/desktop-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "desktop-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 789,
+     "clientHeight": 99,
+     "innerScroll": 690
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/desktop-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "desktop-large-ts1": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": false,
+    "scaleVar": "1",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 432,
+     "clientHeight": 398,
+     "innerScroll": 34
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 49,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 49,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/desktop-large-ts1-map.png",
+   "pass": true,
+   "consoleErrors": []
+  },
+  "desktop-large-ts2": {
+   "map": {
+    "docScroll": 0,
+    "textLarge": true,
+    "scaleVar": "2",
+    "panelFound": true,
+    "body": {
+     "overflowY": "auto",
+     "scrollHeight": 789,
+     "clientHeight": 289,
+     "innerScroll": 500
+    },
+    "rows": [
+     {
+      "kind": "building",
+      "h": 79,
+      "w": 314,
+      "name": "Scrap sorter 1, level 1, Cargo full, cell 9"
+     },
+     {
+      "kind": "drone",
+      "h": 79,
+      "w": 314,
+      "name": "Drone 1, In flight, Deliveries 23"
+     }
+    ],
+    "unnamedRows": 0,
+    "statusWorded": true
+   },
+   "inspector": {
+    "docScroll": 0,
+    "depth": "2"
+   },
+   "mapShot": "docs/evidence/151-keyboard-walkthrough/desktop-large-ts2-map.png",
+   "pass": true,
+   "consoleErrors": []
+  }
+ },
+ "defects": [],
+ "limitations": [
+  "Proves keyboard operability and focus, NOT visual fidelity (sponsor judges visuals at the live URL).",
+  "Digit-key entry records the body as the opener (existing PanelHost behavior); the toolbar-button path proves real focus return. Documented in tests/ui/entity-list-151.test.tsx.",
+  "Drones have no fixed engine cell (they fly store <-> machine); their rows focus the dock cell they operate from."
+ ],
+ "mirror": {
+  "count": 54,
+  "allNonEmpty": true,
+  "frames": [
+   {
+    "file": "desktop-01-yard.png",
+    "sha256": "9ec928fee6c4d09dbe53315e20fc8451cc3e6f1df575ccc0db12f6054d4e1341",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 55432,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-02-catalog.png",
+    "sha256": "fb118956beb671cbf7391b62a61b2c75d016db0b6cdb6e984b76bf051b28545f",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 78162,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-03-placement.png",
+    "sha256": "49f8dc4142fe19254d0c3c0a9306eb70f53635b473dd112baf5f3102e2b7360e",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 67429,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-04-entity-list.png",
+    "sha256": "4ddabb9b5eb9ddfe200da4cca0c896689e22888b65b179ba46a7421fffc6a2fb",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 71855,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-05-inspector.png",
+    "sha256": "8683c18bb2b595b73659c08446cb98a4e30043a4439038bbbc64dcdeb4f85287",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 67204,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-06-upgraded.png",
+    "sha256": "c37a18f41db0e4d7ce1ddaa5df1fac847ab19ac49272a90d8c80907c4cd3f8db",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 71206,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-07-list-after-upgrade.png",
+    "sha256": "49ad5a5f4f45a45e9092627dbfea138bc7f05cbc8213b45b75f3e28312b549de",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 71869,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-08-trade.png",
+    "sha256": "84f4ab6ece1143b616b2f345e9b3f14ea67c57f5b2cac2d8fdf7e155e54487f8",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 69771,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-09-backup.png",
+    "sha256": "9fa0fbc296a392f03af43e702a9eabe74a391156cf6def47fbbb72a2c0d24198",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 69454,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-10-focus-restored.png",
+    "sha256": "75f1761af280d4316015396979bd700f5ae7251dfce7576e2163b5536a62544c",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 56114,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-11-drone-focused.png",
+    "sha256": "2826c5205709de7412746b6b02ff58956ce62b20d519a3e18a9289f513975e3a",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 69228,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts1-inspector.png",
+    "sha256": "7df4fdf851d302a201a3930780cff9f5442167a3d59e8691d7e98ece91d75154",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 85348,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts1-map.png",
+    "sha256": "06c1318e19d1ea674f51fcde1c4d1692c817492be63d6c7b0d2a277580de6385",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 85629,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts2-inspector.png",
+    "sha256": "36f3a2c5c4e122003bac584675c2364da701ed422d03bf19bf2aea1f7f33a9d0",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 149629,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-large-ts2-map.png",
+    "sha256": "1b6c80e3e51d1bad463b399e8e409442c0b0fbfe97e88b39b0fde1260f596a37",
+    "width": 2560,
+    "height": 1440,
+    "bytes": 165849,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts1-inspector.png",
+    "sha256": "08ee8827b6d012082d173763e479bf98e326845799f29283bf7616bc27c7917a",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 67284,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts1-map.png",
+    "sha256": "5c6ea9c33fc74518ea139a169ba41402f8e76a4b36ac046f74f5ca7ea06e6263",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 71384,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts2-inspector.png",
+    "sha256": "f75a32e511b51c4092dd523ab137e92c9c352e7393820960aff43db3387ed1d7",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 132986,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "desktop-ts2-map.png",
+    "sha256": "a916ae74d9d22c5ce0eae14879ff2770e976f87c594e9840bed2015357932aa8",
+    "width": 1920,
+    "height": 1080,
+    "bytes": 139365,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-01-yard.png",
+    "sha256": "b17aad9f0ca4e3c3a4b59b54725dacb3ff44158ade419cfa646f728e7c99a429",
+    "width": 1366,
+    "height": 768,
+    "bytes": 50334,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-02-catalog.png",
+    "sha256": "9582823d621018152af71d59587d10e1801085419347fc7b793fc18fbf94a6f7",
+    "width": 1366,
+    "height": 768,
+    "bytes": 64033,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-03-placement.png",
+    "sha256": "69ab2f479645a38f03d216cda77ad7ace77e1f7d6971a65ed1968e1609c434e4",
+    "width": 1366,
+    "height": 768,
+    "bytes": 58794,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-04-entity-list.png",
+    "sha256": "0549cb585485a1a6457ac8604b952c0146cdd2cb056e1400efd274c71c86fc09",
+    "width": 1366,
+    "height": 768,
+    "bytes": 56840,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-05-inspector.png",
+    "sha256": "568084c869f36c306cc7e6882ec2c5bfeb83e4b409a496f83c79a756d60e776d",
+    "width": 1366,
+    "height": 768,
+    "bytes": 54138,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-06-upgraded.png",
+    "sha256": "28d85666f145671281ef8271f34acab3cb17361a981027d763963f521b62bb6a",
+    "width": 1366,
+    "height": 768,
+    "bytes": 56063,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-07-list-after-upgrade.png",
+    "sha256": "14e92e98fc1ce2c102d802ef9b62b85fb8c4a04f61382a45db08db0875f3805b",
+    "width": 1366,
+    "height": 768,
+    "bytes": 56807,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-08-trade.png",
+    "sha256": "0036eedcb199a622a1dce58a49a6eb344a823039428e6d7f70ed0b842d2ee7f6",
+    "width": 1366,
+    "height": 768,
+    "bytes": 55546,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-09-backup.png",
+    "sha256": "f3ef433475ab5185d2e2a43a34af2fee862dbb5d24c400b5c1d3c1fc5b98f99c",
+    "width": 1366,
+    "height": 768,
+    "bytes": 54417,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-10-focus-restored.png",
+    "sha256": "7246c8f9b7a1d875573165332fd559721fa5d8824500e4a0f5e0133ba3357832",
+    "width": 1366,
+    "height": 768,
+    "bytes": 50637,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-11-drone-focused.png",
+    "sha256": "339855130e46ff2574d0ed68ba43d54e44be8a6c43afd54ec1be4d5da16ba9e7",
+    "width": 1366,
+    "height": 768,
+    "bytes": 56380,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts1-inspector.png",
+    "sha256": "ed3d1dbe5d0f5fe5b03a75f0640f3f20342dd0b4b580ca0d7da8e48014a8a1f8",
+    "width": 1366,
+    "height": 768,
+    "bytes": 53822,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts1-map.png",
+    "sha256": "4b75d9b4fdfe58cd80b06997f971d55f049b16ca020a767b2fc101754e247f3d",
+    "width": 1366,
+    "height": 768,
+    "bytes": 56379,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts2-inspector.png",
+    "sha256": "5c5b30b584e7dbcc640275edb04de2d9e7302989a3354594ec67c87556ef7bad",
+    "width": 1366,
+    "height": 768,
+    "bytes": 103483,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "laptop-ts2-map.png",
+    "sha256": "9293504683b0dfb4a380fa10efa30014c76902c7e046d39280e6fe63c309a746",
+    "width": 1366,
+    "height": 768,
+    "bytes": 103611,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts1-inspector.png",
+    "sha256": "bbe779ea2d1b3cb5f53db2bf7a76a62af4a5e5a85b1d5da7c3fc5d5cd11ad9d5",
+    "width": 1688,
+    "height": 780,
+    "bytes": 75901,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts1-map.png",
+    "sha256": "9f1f1bd3c3f9671250cee4b3ccd49413e2699bfedc74cde7391dd59907c4508b",
+    "width": 1688,
+    "height": 780,
+    "bytes": 73171,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts2-inspector.png",
+    "sha256": "8aa3490d1980c78ad556945c9131b9885992f0121825ad3b53aa59a69f5e60d8",
+    "width": 1688,
+    "height": 780,
+    "bytes": 91494,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-landscape-ts2-map.png",
+    "sha256": "331d6b5db0acb16a24a060c9d806d2175f023e9594ceca1c32bedf03fca92413",
+    "width": 1688,
+    "height": 780,
+    "bytes": 84590,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts1-inspector.png",
+    "sha256": "9c7c9c659284d9b5576e10f4d48176237ec03a7ee5ff2700a0af0d7da66cd40e",
+    "width": 824,
+    "height": 1830,
+    "bytes": 176120,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts1-map.png",
+    "sha256": "8fa62e21c30692825fa3de45760bd0ce3056c1f895405ca45adf5755131f9046",
+    "width": 824,
+    "height": 1830,
+    "bytes": 183796,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts2-inspector.png",
+    "sha256": "e3e721581e730bbb8e7d55c06c3e3c84b9ebc04b22fd5b748c50444c0297a1b8",
+    "width": 824,
+    "height": 1830,
+    "bytes": 171757,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-large-ts2-map.png",
+    "sha256": "fb76cddc64bcfd1e6b63fb1083b1f02049cd2713f8453376c7c80adce3574f37",
+    "width": 824,
+    "height": 1830,
+    "bytes": 195418,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-small-ts1-inspector.png",
+    "sha256": "5abe16c00acee61b6efdc100d259c353a8bc736190cadcd8e29f4a0b871cc2cf",
+    "width": 720,
+    "height": 1280,
+    "bytes": 104849,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-small-ts1-map.png",
+    "sha256": "227cd2dfe728b3104665441c1482aefc42403caa6388bcd732af5a039547aa75",
+    "width": 720,
+    "height": 1280,
+    "bytes": 113253,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-small-ts2-inspector.png",
+    "sha256": "c771d9d3bd56591cafc19a0f1c71052718f83317812441ecd650def55c8a179a",
+    "width": 720,
+    "height": 1280,
+    "bytes": 112928,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-small-ts2-map.png",
+    "sha256": "68d0dd21fb0ea6b1a1bbdf94a8bf3c4281b9bb885aa009fd8c9d9e5104921023",
+    "width": 720,
+    "height": 1280,
+    "bytes": 150630,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts1-inspector.png",
+    "sha256": "5fbe98726dda9d39cb9e0e09f3c98a34683e6db2b3f1b33829f2371ef7c7b32a",
+    "width": 780,
+    "height": 1688,
+    "bytes": 161159,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts1-map.png",
+    "sha256": "2b1544d67037d63ccbc6285f22f483c16c8fbd2415d48a8530c48024ed1e89e2",
+    "width": 780,
+    "height": 1688,
+    "bytes": 176096,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts2-inspector.png",
+    "sha256": "8bf9479b3632e9b660f433864426b5015eb6d35180e79306526f07a9244909f0",
+    "width": 780,
+    "height": 1688,
+    "bytes": 147788,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "phone-ts2-map.png",
+    "sha256": "1f154e4d4143c275cf54bc5e64746d28bbb7fe34714015a05e9f393294b84441",
+    "width": 780,
+    "height": 1688,
+    "bytes": 184153,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts1-inspector.png",
+    "sha256": "800001ff165930efc4d8984a6c75274764fa0540bf6880eaa31e89674f3dd7fc",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 180579,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts1-map.png",
+    "sha256": "6b822d1624ecd85b5e8e2652606ab7f14a9a8a0e5c2f4874b0ffd4ad4db350a9",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 193533,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts2-inspector.png",
+    "sha256": "160455d62ceb355ff2d2a256822f2606595ae0ed120bf9b88249cdba14044876",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 248988,
+    "nonEmpty": true,
+    "distinct": true
+   },
+   {
+    "file": "tablet-ts2-map.png",
+    "sha256": "6c5e41f4ee8147692bdc19ffe06ee931aef6ce99680b6f1e3e0a458b36def621",
+    "width": 1536,
+    "height": 2048,
+    "bytes": 259277,
+    "nonEmpty": true,
+    "distinct": true
+   }
+  ]
+ },
+ "keySequence": [
+  {
+   "step": "gate-continue",
+   "key": "Tab"
+  },
+  {
+   "step": "gate-continue",
+   "key": "Enter"
+  },
+  {
+   "step": "gate-continue",
+   "key": "Escape"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "1"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Enter"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Enter"
+  },
+  {
+   "step": "build-commit",
+   "key": "Tab"
+  },
+  {
+   "step": "build-commit",
+   "key": "Tab"
+  },
+  {
+   "step": "build-commit",
+   "key": "Enter"
+  },
+  {
+   "step": "map-entity-list",
+   "key": "6"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Enter"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Enter"
+  },
+  {
+   "step": "escape-to-list-level-worded",
+   "key": "Escape"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Escape"
+  },
+  {
+   "step": "trade-sell",
+   "key": "5"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Enter"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Escape"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "escape-unwind-focus-restore",
+   "key": "Escape"
+  },
+  {
+   "step": "escape-unwind-focus-restore",
+   "key": "Escape"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Enter"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Escape"
+  },
+  {
+   "step": "digit6-escape-focus",
+   "key": "6"
+  },
+  {
+   "step": "digit6-escape-focus",
+   "key": "Escape"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "6"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Enter"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Escape"
+  },
+  {
+   "step": "gate-continue",
+   "key": "Tab"
+  },
+  {
+   "step": "gate-continue",
+   "key": "Enter"
+  },
+  {
+   "step": "gate-continue",
+   "key": "Escape"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "1"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Enter"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Tab"
+  },
+  {
+   "step": "build-catalog-place",
+   "key": "Enter"
+  },
+  {
+   "step": "build-commit",
+   "key": "Tab"
+  },
+  {
+   "step": "build-commit",
+   "key": "Tab"
+  },
+  {
+   "step": "build-commit",
+   "key": "Enter"
+  },
+  {
+   "step": "map-entity-list",
+   "key": "6"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Tab"
+  },
+  {
+   "step": "inspect-building",
+   "key": "Enter"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Tab"
+  },
+  {
+   "step": "upgrade",
+   "key": "Enter"
+  },
+  {
+   "step": "escape-to-list-level-worded",
+   "key": "Escape"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Escape"
+  },
+  {
+   "step": "trade-sell",
+   "key": "5"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Tab"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Enter"
+  },
+  {
+   "step": "trade-sell",
+   "key": "Escape"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Tab"
+  },
+  {
+   "step": "settings-yard-backup-download",
+   "key": "Enter"
+  },
+  {
+   "step": "escape-unwind-focus-restore",
+   "key": "Escape"
+  },
+  {
+   "step": "escape-unwind-focus-restore",
+   "key": "Escape"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Tab"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Enter"
+  },
+  {
+   "step": "map-toolbar-focus-return",
+   "key": "Escape"
+  },
+  {
+   "step": "digit6-escape-focus",
+   "key": "6"
+  },
+  {
+   "step": "digit6-escape-focus",
+   "key": "Escape"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "tab-cycle-no-trap",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "6"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Tab"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Enter"
+  },
+  {
+   "step": "status-event-driven-focus-ring",
+   "key": "Escape"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  },
+  {
+   "step": "(outside)",
+   "key": "Tab"
+  }
+ ],
+ "summary": {
+  "steps": 28,
+  "stepsPassed": 28,
+  "stepsFailed": 0,
+  "censusCells": 16,
+  "censusPassed": 16,
+  "defectCount": 0,
+  "defectKinds": [],
+  "frames": 54,
+  "keysPressed": 349
+ },
+ "verdict": "PASS"
+}
