@@ -1,0 +1,41 @@
+{
+  "dist": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/rw-249/dist",
+  "binaryMediaCount": 0,
+  "files": [
+    {
+      "file": "assets/index-QjNkSjBx.js",
+      "bytes": 548966,
+      "sha256": "9ae3830d136fddd888931899949cf4994db151b5175da128570b412be1fa332e"
+    },
+    {
+      "file": "assets/index-CTPRJTx-.js",
+      "bytes": 324689,
+      "sha256": "977969e6732889500533bd0cd16785dc298d61a45c3af9dc9da3e69dcea10c48"
+    },
+    {
+      "file": "assets/vendor-Bt4lNSbZ.js",
+      "bytes": 141658,
+      "sha256": "a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0"
+    },
+    {
+      "file": "assets/index-7H--D8XZ.css",
+      "bytes": 67447,
+      "sha256": "99dcf68e01b55a9b5d2e399c9ff5d9d3715042895a95623b69a9e60acfcd9555"
+    },
+    {
+      "file": "assets/tables-BO6NIz7N.js",
+      "bytes": 27054,
+      "sha256": "aa4dde34aa71d31be79e39ac47133adbc14667e6a6c938c1632a7a966912cd02"
+    },
+    {
+      "file": "assets/catchup.worker-B2acSi-4.js",
+      "bytes": 13430,
+      "sha256": "aa7ed1e5851b2d87965a2af80d59468c0ff449de08c1b1cf7ed35f1d61a8382f"
+    },
+    {
+      "file": "index.html",
+      "bytes": 1368,
+      "sha256": "7b32b9c838cf053925c847799439921c25e544c92c0498927adfa83984be3ec4"
+    }
+  ]
+}

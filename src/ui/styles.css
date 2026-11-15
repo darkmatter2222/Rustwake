@@ -917,6 +917,58 @@ body {
   }
 }
 
+/* ---- #249: Desktop (>= 1024 px) compact top bar ----
+   UI_CONTRACT.md:7 — "compact top resource bar 56-64px tall, small top-right pinned
+   objective ... camera fit uses remaining rectangle. ... No ... empty portrait yard
+   centered in widescreen." The legacy lead stacks the resource strip, objective card,
+   onboarding coach and the Roads / Build-catalog entry faces as one full-width phone
+   column; on a fresh desktop yard that painted a 328 px lead which (with the dock that
+   shell.css now pins above the toolbar) squeezed the world band to ~210 px and collapsed
+   the fit to zoom 0.890 — a tiny yard island in ~90% void. Here the lead becomes the
+   contract's compact bar: the resource strip on the left, the objective pinned small at
+   the top-right, and the coach + entry faces reachable through the SAME themed declared
+   scroller the #66 laptop / phone leads already use (no text is shrunk; every control
+   stays reachable with one flick). The camera's chromeInsets reads the bounded lead box
+   (paint truth), so the frozen fitToShell / fitCamera chain fits the yard into the
+   remaining rectangle with no math change. The pinned objective stays inside the reserved
+   top band, so it never covers a tappable yard cell (#117). Portrait (< 1024 px) keeps its
+   proven composition untouched. */
+@media (min-width: 1024px) {
+  :root .hud__lead {
+    position: relative;
+    max-height: 120px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(111, 147, 173, 0.55) rgba(9, 15, 26, 0.4);
+  }
+  :root .hud__lead::-webkit-scrollbar {
+    width: 8px;
+  }
+  :root .hud__lead::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgba(111, 147, 173, 0.55);
+  }
+  :root .hud__lead::-webkit-scrollbar-track {
+    background: rgba(9, 15, 26, 0.4);
+  }
+  /* Small top-right pinned objective. Absolute inside the bounded lead so it reserves no
+     extra flow height; it paints within the lead's reserved top band (<= 120 px), clear of
+     the yard, and scrolls with the lead content like the rest of the bar. */
+  :root .hud__lead .objective {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    max-width: min(40%, 360px);
+  }
+  /* Keep the resource strip + its cluster clear of the pinned objective. */
+  :root .hud__lead .hud__top {
+    margin-right: min(40%, 360px);
+  }
+}
+
 /* ---- Phone column (<= 767 px) ----
    The lead is a flow child of the .hud column; the #64/#65 guidance/recovery
    content grows it with the text scale. Bound it with the same themed declared
