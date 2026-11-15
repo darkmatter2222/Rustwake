@@ -25,3 +25,7 @@ At each meaningful completion: inspect current GitHub state once, route results,
 ## Main publication exception
 
 Only this sponsor-authorized planning/assets/instruction package may be committed directly to main as requested on 2026-11-13. It changes no live game behavior. Future work, including revisions to these documents, resumes Issue -> isolated branch -> linked PR -> independent QA/product -> release engineer -> main CI/deployment. Do not bypass enforced branch protection. Keep a concise receipt with exact changes and verification limitations.
+
+
+## Sponsor-directed live release evidence
+Issue #248 adds a dedicated rustwake-live-verifier persona as a rotating reviewer within the SAME five-session cap. It never directly launches a browser or starts another goal loop: only the serialized GitHub-hosted verify-live job (after successful delivery) owns a browser. Coordinator dispatches verifier only after a real delivery event or actionable failure; no speculative periodic polling. Release engineer watches merged-SHA main CI, deploy and exact-source live smoke, records PASS/FAIL/UNKNOWN, and refills developer slots. Sponsor #244-#247 remain G1 blockers until the new isometric sandbox and UI receive explicit visual ACCEPT.
