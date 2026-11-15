@@ -9,7 +9,7 @@ export function hostError(e){
 }
 
 export function prioritizeTasks(tasks){
- const rank=t=>t.role==='release-engineer'?0:t.role==='reviewer'?1:2;
+ const rank=t=>t.role==='release-engineer'?0:(t.role==='reviewer'||t.role==='live-verifier')?1:2;
  return [...tasks].sort((a,b)=>rank(a)-rank(b));
 }
 export async function taskDirectory(root,task){
@@ -35,7 +35,7 @@ export function assertDispatchableIssue(issue,role){
  const blocked=new Set(['status:blocked','status:deferred','status:superseded']);
  const names=issue.labels.map(label=>typeof label==='string'?label:label.name);
  if(names.some(label=>blocked.has(label)))throw Error('GitHub issue is blocked, deferred or superseded; coordinator must resolve it before dispatch');
- const allowed=role==='product-owner'?['status:triage','status:ready','status:doing','status:rework','status:review','status:accepted']:role==='release-engineer'?['status:accepted','status:ready','status:doing']:role==='reviewer'||role==='player'?['status:review','status:ready','status:doing','status:rework']:['status:ready','status:doing','status:rework'];
+ const allowed=role==='product-owner'?['status:triage','status:ready','status:doing','status:rework','status:review','status:accepted']:role==='release-engineer'?['status:accepted','status:ready','status:doing']:role==='reviewer'||role==='player'||role==='live-verifier'?['status:review','status:ready','status:doing','status:rework','status:accepted']:['status:ready','status:doing','status:rework'];
  if(!names.some(name=>allowed.includes(name)))throw Error('GitHub issue has no eligible status for role '+role);
 }
 export async function verifyIssueWithGh(root, task){
@@ -52,7 +52,7 @@ export async function verifyIssueWithGh(root, task){
   return issue;
 }
 
-const roles = new Set(['developer','reviewer','player','product-owner','release-engineer','ui-ux']);
+const roles = new Set(['developer','reviewer','player','product-owner','release-engineer','ui-ux','live-verifier']);
 const conflict=(a,b)=>a.some(x=>b.some(y=>x===y||x.startsWith(y+'/')||y.startsWith(x+'/')));
 export function validateTask(t){
  if(!t||!/^[-a-zA-Z0-9_]{1,80}$/.test(t.id)||!roles.has(t.role)||typeof t.prompt!=='string'||!t.prompt.trim())throw Error('Invalid dispatch task');
@@ -136,7 +136,7 @@ export function createDispatcher(ctx,root,{verifyIssue=verifyIssueWithGh,request
     w.session_id=child.id;if(w.status==='creating')w.status='created';await save();
     if(!state.enabled){await host('interrupt',{sessionID:child.id});break;}
     await host('prompt',{sessionID:child.id,resume:true,text:
-      `Bounded Rustwake assignment ${t.id} for open GitHub Issue ${t.issue_url}. FIRST read AGENTS.md, docs/GITHUB_WORKFLOW.md, docs/GITHUB_PROJECT.md and your persona file. The only active work tracker is GitHub Issues; do not update historical work/backlog.json. Use the same GitHub account, distinguish each persona in GitHub comments with Role: ${t.role}. Five total agents including coordinator, maximum four children. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit peer files. Developer: only in registered rw/ worktree, push with node scripts/publish-feature.mjs --issue ${t.issue_url} "commit message" <owned paths>; it MUST open/reuse a linked draft PR. After verification mark PR ready, include head SHA and evidence; do not push main. Reviewer: inspect linked PR and comment ACCEPT/REWORK at exact head SHA. Release engineer: inspect independent review, product decision and CI; request rework or gh pr merge approved PR; NEVER push main directly. No role may merge unreviewed code. Return issue/PR URLs and evidence for the bounded assignment, not a new local board.\n${t.prompt}`});
+      `Bounded Rustwake assignment ${t.id} for open GitHub Issue ${t.issue_url}. FIRST read AGENTS.md, docs/GITHUB_WORKFLOW.md, docs/GITHUB_PROJECT.md and your persona file. The only active work tracker is GitHub Issues; do not update historical work/backlog.json. Use the same GitHub account, distinguish each persona in GitHub comments with Role: ${t.role}. Five total agents including coordinator, maximum four children. Do not spawn children. Only edit these owned paths: ${t.write_paths.join(', ')}. Never commit peer files. Developer: only in registered rw/ worktree, push with node scripts/publish-feature.mjs --issue ${t.issue_url} "commit message" <owned paths>; it MUST open/reuse a linked draft PR. After verification mark PR ready, include head SHA and evidence; do not push main. Reviewer: inspect linked PR and comment ACCEPT/REWORK at exact head SHA. Release engineer: inspect independent review, product decision and CI; request rework or gh pr merge approved PR; NEVER push main directly. Live verifier: inspect the one per-release GitHub Actions browser artifact and exact served SHA; do not launch another browser. No role may merge unreviewed code. Return issue/PR URLs and evidence for the bounded assignment, not a new local board.\n${t.prompt}`});
     if(w.status==='created')w.status='queued';await save();
    }
    state.error=null;
