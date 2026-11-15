@@ -296,6 +296,83 @@
   color: var(--cyan);
 }
 
+/* ---- #151 (U04): the accessible entity list in the Map destination ----
+   Every row is a real button with a worded accessible name; the status line
+   is text, never color alone. Rows keep the 44 px target floor at every text
+   scale (they grow when the words wrap). Long lists scroll inside the panel's
+   one declared `.panel__body` scroller — the document itself stays flat. */
+.entity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.entity-list__heading {
+  margin: 4px 0 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--steel-light);
+}
+
+.entity-list__group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.entity-list__row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(111, 147, 173, 0.32);
+  background: rgba(9, 15, 26, 0.45);
+  color: var(--paper);
+  font: inherit;
+  font-size: 0.85rem;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+.entity-list__row:hover {
+  border-color: rgba(111, 147, 173, 0.6);
+  background: rgba(95, 216, 232, 0.08);
+}
+
+/* The visible keyboard ring belongs to the row itself (the host container
+   suppresses its own ring). */
+.entity-list__row:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.entity-list__name {
+  font-weight: 600;
+}
+
+.entity-list__status {
+  font-size: 0.72rem;
+  color: var(--steel-light);
+}
+
+.entity-list__announce {
+  margin: 0;
+  min-height: 1em;
+}
+
 /* ---- Phone band (< 768 px): the zoom stack clears the painted chrome ---- */
 @media (max-width: 767px) {
   .shell-zoom {

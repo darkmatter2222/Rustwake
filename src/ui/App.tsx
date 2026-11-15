@@ -1472,7 +1472,20 @@ export function App({
               onFocusCell={focusWorldCell}
             />
           ) : null}
-          {selected === PANEL_MAP ? <MapPanel state={state} onClose={closeSelection} /> : null}
+          {/* RW3D #151 (U04): the Map destination carries the accessible entity
+              list — buildings open the inspector through the same openPanel
+              stack push a canvas tap uses, units pan the camera through the
+              same focusWorldCell FleetPanel/RoadFleet use, and the road slice
+              is the same capability instance FleetPanel gets. */}
+          {selected === PANEL_MAP ? (
+            <MapPanel
+              state={state}
+              onClose={closeSelection}
+              onSelectMachine={openPanel}
+              onFocusCell={focusWorldCell}
+              road={store as GameStore & LogisticsApi & TrafficApi & RoadApi}
+            />
+          ) : null}
           {/* T12 (#139): the road destination. The store's road slice is an additive
               capability (RoadApi) kept off the GameStore surface, so the cast lives
               only at this registration site; existing store doubles stay untouched. */}
