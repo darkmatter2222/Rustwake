@@ -1,12 +1,12 @@
 {
   "issue": 151,
   "gate": "G1/P1",
-  "headSha": "9dd62080c28c8cdfd57091e98fb9bf4864474e5b",
-  "generated": "2026-11-15T03:21:49.986Z",
+  "headSha": "7ec32526f264382b5be224e376d126fb68dd2f56",
+  "generated": "2026-11-15T04:02:40.146Z",
   "mode": "running-build-captures",
   "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
-  "build": "vite preview of THIS branch's dist (npm run build at head 9dd62080c28c8cdfd57091e98fb9bf4864474e5b)",
-  "fixtures": "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; lastSeenMs=Date.now() so no offline catch-up contaminates captures",
+  "build": "vite preview of THIS branch's dist (npm run build at head 7ec32526f264382b5be224e376d126fb68dd2f56)",
+  "fixtures": "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; seeded ONLY when the slot is empty and lastSeenMs re-stamped at DOCUMENT START so store.creditAbsence cannot add offline catch-up ticks (V01 'Begin recovery' + V05 reload persistence stay honest)",
   "devices": {
     "phone": {
       "viewport": {
@@ -34,53 +34,53 @@
   },
   "scenes": {
     "v01-phone": {
-      "gate": "Continue",
+      "gate": "Begin recovery",
       "save": {
-        "tick": 21,
+        "tick": 20,
         "machines": 0
       },
       "stamp": {
-        "cam": "115.68,112.00,1.629",
+        "cam": "157.17,23.39,0.524",
         "world3d": "ready"
       },
       "shot": {
         "name": "151-v01-opening-yard-phone.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-phone.png",
-        "sha256": "6502753db1bf2d14185fdb5ac5e1e134eba1b99cbfa821f0291d89a490debe67",
-        "bytes": 172546
+        "sha256": "29714fb45683034ab0edb743714e501c0857fd935b6a2b9b47d90442eed0cf59",
+        "bytes": 126720
       },
       "pageErrors": []
     },
     "v02-phone": {
       "gate": "Continue",
       "save": {
-        "tick": 151,
+        "tick": 150,
         "machines": 20,
         "drones": 5,
         "routes": 3,
         "storeUnits": 202
       },
       "stamp": {
-        "cam": "115.68,112.00,1.629",
+        "cam": "157.17,23.39,0.524",
         "world3d": "ready"
       },
       "shot": {
         "name": "151-v02-mature-phone.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-phone.png",
-        "sha256": "ef15b78b53b488e7f0977a0ff01de0809a5fab5cfb11cbf963be156ac14f06e5",
-        "bytes": 181175
+        "sha256": "9cec617b6a055d59eab5815db3a633d3e990aac695c91496635b0f80ea4ec031",
+        "bytes": 128688
       },
       "pageErrors": []
     },
     "blocked-phone": {
       "gate": "Continue",
       "save": {
-        "tick": 1601,
+        "tick": 1600,
         "storeUnits": 300,
         "storeCapacity": 300
       },
       "stamp": {
-        "cam": "115.68,112.00,1.629",
+        "cam": "125.17,8.02,1.099",
         "world3d": "ready"
       },
       "alert": {
@@ -91,59 +91,59 @@
       "shot": {
         "name": "151-blocked-yard-phone.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-phone.png",
-        "sha256": "b97b303ae377a46f9c09555584a480303817bade635147996dd62552cda21849",
-        "bytes": 180083
+        "sha256": "838d87f97423158e02cc5694a3b831454397a752b43fb2f42b582fe068b218c4",
+        "bytes": 145422
       },
       "pageErrors": []
     },
     "v01-desktop": {
-      "gate": "Continue",
+      "gate": "Begin recovery",
       "save": {
-        "tick": 21,
+        "tick": 20,
         "machines": 0
       },
       "stamp": {
-        "cam": "327.96,116.49,0.893",
+        "cam": "131.92,116.49,0.893",
         "world3d": "ready"
       },
       "shot": {
         "name": "151-v01-opening-yard-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-desktop.png",
-        "sha256": "5951498956e97c062c7dea5477bfb986063bf13ce7be25b8c6a1458965baf8ac",
-        "bytes": 63973
+        "sha256": "1827701a9c7dceca2c77afc3345be3c030f1562985a596c5da748af3a90978e4",
+        "bytes": 48479
       },
       "pageErrors": []
     },
     "v02-desktop": {
       "gate": "Continue",
       "save": {
-        "tick": 151,
+        "tick": 150,
         "machines": 20,
         "drones": 5,
         "routes": 3,
         "storeUnits": 202
       },
       "stamp": {
-        "cam": "327.96,116.49,0.893",
+        "cam": "131.92,116.49,0.893",
         "world3d": "ready"
       },
       "shot": {
         "name": "151-v02-mature-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-desktop.png",
-        "sha256": "80e46b8e926b6ad909f2b9fc1cddc7c42e82a87a06401833f3fc42b109d667bb",
-        "bytes": 67688
+        "sha256": "5296edf3ea893ef8e17da7262a76455b8511daffaf2e00a8ed333f436c265d51",
+        "bytes": 52256
       },
       "pageErrors": []
     },
     "blocked-desktop": {
       "gate": "Continue",
       "save": {
-        "tick": 1601,
+        "tick": 1600,
         "storeUnits": 300,
         "storeCapacity": 300
       },
       "stamp": {
-        "cam": "327.96,116.49,0.893",
+        "cam": "131.92,116.49,0.893",
         "world3d": "ready"
       },
       "alert": {
@@ -154,8 +154,8 @@
       "shot": {
         "name": "151-blocked-yard-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-desktop.png",
-        "sha256": "d7d9f06a58f009f8b57ddc437e436275c6ca9e9a3cc8b9c5e0bbb7ba060e779a",
-        "bytes": 69521
+        "sha256": "6977f4d1babe13e06148707cdbc3391258ba018de1d2097aacd6b56d06862eae",
+        "bytes": 54344
       },
       "pageErrors": []
     }
@@ -167,12 +167,41 @@
         "scrap": 198,
         "steel": 5
       },
-      "placed": null,
-      "cost": [],
-      "scrapDelta": -2,
-      "steelDelta": 0,
+      "beforeCommit": {
+        "machines": 20,
+        "scrap": 196,
+        "steel": 5,
+        "tick": 130
+      },
+      "placed": {
+        "id": 21,
+        "blueprint": "sorter",
+        "tile": 21,
+        "status": "idle",
+        "ageTicks": 0,
+        "routed": false
+      },
+      "cost": [
+        {
+          "resource": "scrap",
+          "qty": 30
+        },
+        {
+          "resource": "steel",
+          "qty": 4
+        }
+      ],
+      "scrapDelta": -30,
+      "steelDelta": -4,
+      "droneArrived": 0,
+      "scrapCorrected": -30,
+      "tickBracket": 4,
       "armed": {
         "label": "Place Scrap sorter",
+        "disabled": false
+      },
+      "commitFace": {
+        "label": "Build Scrap sorter30 scrap + 4 steel",
         "disabled": false
       },
       "dockFaces": [
@@ -183,59 +212,81 @@
       "sequence": [
         {
           "t": 0,
-          "sha256": "56126bc73c33b6e7d622000fd42f848b5418fff8f669013d373009d08673231c",
+          "sha256": "7181524b7c78c9767d50201f4281679c299ad6bf3fb22110bb61e7cd42d53c03",
           "name": "151-v05-t0-phone.png"
         },
         {
           "t": 1,
-          "sha256": "7834089857c746f00141bcf41396b169c94f273d73c692687695d2783bab936c",
+          "sha256": "f0914d975449456a0317cc2f3e9a070e5096ffeb9d33433e9ec5de2a84488a03",
           "name": "151-v05-t1-phone.png"
         },
         {
           "t": 2,
-          "sha256": "cbac622008506532784630caaa12c713ea9d8bb1d21bcc5c1491456af63431a6",
+          "sha256": "852b0c11c021b32647417270a2479049c570ed5239c51909a3d4a39649d7ce7b",
           "name": "151-v05-t2-phone.png"
         },
         {
           "t": 3,
-          "sha256": "15b8dcb902b2aae6183722cba6153314568eea785113c0dc55c7d0cb4bc3ea44",
+          "sha256": "1f5838500179325f9a48a65a4cae9aff2b8a473719f9ce08ad3d64e32bfa05d9",
           "name": "151-v05-t3-phone.png"
         },
         {
           "t": 4,
-          "sha256": "5c960613e3e9f7d0dfae16ccea6d511b8229d2deeb0828be5dbbe3872ae98c18",
+          "sha256": "2bd8adbea31147a9e0fb0bb9faa387c7340ebacf64c5df451d4e5085e4c026ed",
           "name": "151-v05-t4-phone.png"
         },
         {
           "t": 5,
-          "sha256": "fe11cade3bd065fbf0b8e4cbf0a5c679ef0132d26ec4ca3870e322af3bcdfd5e",
+          "sha256": "2b7b7d53f4cbc1a84f4744c931b796a64ebb603bdf8db4961db9e8ca63afb04a",
           "name": "151-v05-t5-phone.png"
         }
       ],
       "seqUnique": 6,
-      "placedMachineCrop": null,
+      "placedMachineCrop": {
+        "tile": 21,
+        "measurement": "in-page 2D backing-store FNV (getImageData)",
+        "hashes": [
+          "71bdccb3",
+          "71bdccb3",
+          "71bdccb3",
+          "71bdccb3",
+          "fcbb8215",
+          "1f22a66b"
+        ],
+        "identicalToMode": 4,
+        "samples": 6,
+        "clip": {
+          "x": 153.33092,
+          "y": 450.43164,
+          "width": 36,
+          "height": 36
+        }
+      },
       "reload": {
-        "machines": 20,
-        "scrapDelta": -2,
-        "tickDelta": 18,
+        "machines": 21,
+        "scrapDelta": 0,
+        "droneArrived": 0,
+        "scrapCorrected": 0,
+        "steelDelta": 0,
+        "tickDelta": 0,
         "shot": {
           "name": "151-v05-reload-phone.png",
           "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-phone.png",
-          "sha256": "6ac6a210fdcc3db3d8b22221f56477b855ae1ce2bfeed4e873df9578f08ad98e",
-          "bytes": 173601
+          "sha256": "9a811800b432320fca23d132e3917558a9b24943a66f1191ad83314cbe0ed311",
+          "bytes": 128469
         }
       },
       "beforeShot": {
         "name": "151-v05-before-phone.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-phone.png",
-        "sha256": "03d967ca8cd1595355fee013a47c7ac827b57a1138dbfa2dd6a93d0f355c705e",
-        "bytes": 182052
+        "sha256": "de61a7f5d391305280e18356ddb36967c1182fd60ba50e449da9b132feaa1215",
+        "bytes": 129571
       },
       "catalogShot": {
         "name": "151-v05-catalog-phone.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-phone.png",
-        "sha256": "818b5be0510d79fb4b9ba61e1b9d52f3e3f6c4b144c596626b5d4f909e80df3f",
-        "bytes": 187263
+        "sha256": "e75db97560499dc84ac22c4a03c66bc5ea0a518b2977ff13e341c167851a47fb",
+        "bytes": 185783
       },
       "pageErrors": []
     },
@@ -245,12 +296,41 @@
         "scrap": 198,
         "steel": 5
       },
-      "placed": null,
-      "cost": [],
-      "scrapDelta": -2,
-      "steelDelta": 0,
+      "beforeCommit": {
+        "machines": 20,
+        "scrap": 196,
+        "steel": 5,
+        "tick": 130
+      },
+      "placed": {
+        "id": 21,
+        "blueprint": "sorter",
+        "tile": 21,
+        "status": "idle",
+        "ageTicks": 0,
+        "routed": false
+      },
+      "cost": [
+        {
+          "resource": "scrap",
+          "qty": 30
+        },
+        {
+          "resource": "steel",
+          "qty": 4
+        }
+      ],
+      "scrapDelta": -30,
+      "steelDelta": -4,
+      "droneArrived": 0,
+      "scrapCorrected": -30,
+      "tickBracket": 4,
       "armed": {
         "label": "Place Scrap sorter",
+        "disabled": false
+      },
+      "commitFace": {
+        "label": "Build Scrap sorter30 scrap + 4 steel",
         "disabled": false
       },
       "dockFaces": [
@@ -261,59 +341,81 @@
       "sequence": [
         {
           "t": 0,
-          "sha256": "6bd770cb53cc1c31841108ea7a1ec377d5cbcef229cd73f940bdcb6c42f5c572",
+          "sha256": "4d49c3dac58e491d313af6ad3fb45eb24894e918f42ad7851d946dd4f3240537",
           "name": "151-v05-t0-desktop.png"
         },
         {
           "t": 1,
-          "sha256": "f4176a6d363c80e7e13c99659c4b31cc77686d09008dabfe3633eac163119b85",
+          "sha256": "19f9a533f78b33c056967c8b1a28c8ce9ead429bd13c03e904e8c2e35a05d07e",
           "name": "151-v05-t1-desktop.png"
         },
         {
           "t": 2,
-          "sha256": "9b39dd88911fbb0d347c83e6d7be4595eeb02e9f7f7c182bdc6923601d637bb4",
+          "sha256": "92ef8d89cfdceb57a541a8381002b2eb7b5662de0985d9e3aa3a3f1276bc254c",
           "name": "151-v05-t2-desktop.png"
         },
         {
           "t": 3,
-          "sha256": "99bb6736501800c5400cee9aa3a8035ff26b4d8032cd012c022d12067e164912",
+          "sha256": "407f87e06a9c41aad396e1a4ce9af9756f4399567cf4f29155415fc16920b48f",
           "name": "151-v05-t3-desktop.png"
         },
         {
           "t": 4,
-          "sha256": "cf89a535a2235fa9b502fdd35cb840c795fcadfcb8c697e244c843b062636e7c",
+          "sha256": "7e790669e32c87317fe47c638380ac72074b51b43807ca5a8bcec9aa71e1efb9",
           "name": "151-v05-t4-desktop.png"
         },
         {
           "t": 5,
-          "sha256": "55ed920d1bf84dfb1a94952fd67c03783aa034a5e20a326b09ebda862cf05da8",
+          "sha256": "d0e072089475fa4e8cef3bfb8457e1ba629fb825249c838ff5ff805015f620f8",
           "name": "151-v05-t5-desktop.png"
         }
       ],
       "seqUnique": 6,
-      "placedMachineCrop": null,
+      "placedMachineCrop": {
+        "tile": 21,
+        "measurement": "in-page 2D backing-store FNV (getImageData)",
+        "hashes": [
+          "dd4527eb",
+          "dd4527eb",
+          "dd4527eb",
+          "dd4527eb",
+          "dd4527eb",
+          "bd8434c9"
+        ],
+        "identicalToMode": 5,
+        "samples": 6,
+        "clip": {
+          "x": 678.9934400000001,
+          "y": 422.77243,
+          "width": 46.436,
+          "height": 46.436
+        }
+      },
       "reload": {
-        "machines": 20,
-        "scrapDelta": -2,
-        "tickDelta": 18,
+        "machines": 21,
+        "scrapDelta": 0,
+        "droneArrived": 0,
+        "scrapCorrected": 0,
+        "steelDelta": 0,
+        "tickDelta": 0,
         "shot": {
           "name": "151-v05-reload-desktop.png",
           "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-desktop.png",
-          "sha256": "f078b1501db235db2f5be686e44ea4768aff1e2c1fcad4ec0320d0f1cb91e610",
-          "bytes": 66373
+          "sha256": "b84a7e69b5fd278a3d1c7be8a4651ae117b82cd285d390b15aeabd67fa553834",
+          "bytes": 52307
         }
       },
       "beforeShot": {
         "name": "151-v05-before-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-desktop.png",
-        "sha256": "8a52c5aaa7686099604c53dc3474b55b5abd0ffffa61ebbc35ac3ae4cbd17d83",
-        "bytes": 68045
+        "sha256": "a2bb7f8e640fa2d6364a326be4a653b7852275a11d73c7a1e5cb4f242bfac2ae",
+        "bytes": 52424
       },
       "catalogShot": {
         "name": "151-v05-catalog-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-desktop.png",
-        "sha256": "26e5a4e52cbeee77a8e24986884b7ff2f7b479dd870ee34ce27014d6454130bd",
-        "bytes": 68456
+        "sha256": "d864d74ddf40bd4bedfe3880734592a934882a62801db16f8ee23ee7b5181b66",
+        "bytes": 67807
       },
       "pageErrors": []
     }
@@ -322,11 +424,11 @@
     "phone": {
       "frames": 120,
       "fps": 2,
-      "durationMs": 59673,
+      "durationMs": 59664,
       "measurement": "in-page 2D canvas backing-store FNV (getImageData) — the verified T07 paint-surface method; Playwright screenshot sha256 retained per-frame as supplementary evidence (DEFECT #2 fix: screenshots vary under compositor readback even when the backing store is frozen).",
       "uniqueHashes": 113,
       "maxConsecutiveIdenticalOutsideHidden": 1,
-      "screenshotUniqueHashes": 116,
+      "screenshotUniqueHashes": 117,
       "hiddenWindow": {
         "from": 60,
         "to": 67,
@@ -334,150 +436,150 @@
         "tickDelta": 40,
         "resumedDiffers": true
       },
-      "tickStart": 141,
-      "tickEnd": 741,
+      "tickStart": 140,
+      "tickEnd": 740,
       "tickDelta": 600,
       "readyCount": 120,
       "keyframes": [
         {
           "i": 0,
-          "tMs": 182,
+          "tMs": 174,
           "png": "151-v04-phone-f000.png",
-          "sha256": "683401c1ae2f15522f3dd24215d6bc69e62aaccc6940ee40f2ad4e6264c5d0fc",
-          "inPageHash": "1791bfe2"
+          "sha256": "aaf1c5d97a4fa8916bee33ca96f63c786f5d3b276dbdfe1e7b1d3027d8453fa2",
+          "inPageHash": "3eb6e834"
         },
         {
           "i": 6,
-          "tMs": 3163,
+          "tMs": 3160,
           "png": "151-v04-phone-f006.png",
-          "sha256": "0b4aa4684aa9908754e01b40dddc079240daf59ad740cd5f13b19ab2dfdaf7fa",
-          "inPageHash": "d2c56da8"
+          "sha256": "a540760f152da0ddc0c1e808a8b593b5b4efccfa8c567080bfbeff2b2bff4c9b",
+          "inPageHash": "f4522d78"
         },
         {
           "i": 12,
-          "tMs": 6161,
+          "tMs": 6154,
           "png": "151-v04-phone-f012.png",
-          "sha256": "564879dfa2104a0199d7e32dbc199787b0da58fd2ec3d3a8e740ab91522f5a43",
-          "inPageHash": "2cbd7e6b"
+          "sha256": "b33fc181a4516cdb42740dcb0bcdc0c7e17f02b05509a7bca4ee1514d6f67291",
+          "inPageHash": "126d8ecc"
         },
         {
           "i": 18,
-          "tMs": 9157,
+          "tMs": 9155,
           "png": "151-v04-phone-f018.png",
-          "sha256": "a4610a77fcadb11ac61911c68b51ff5d07c3b621d5271fde6fb5270fad5c243c",
-          "inPageHash": "60bf7664"
+          "sha256": "ba4e970a7f37edf0d6fa63f3d0435d66566907583227aa7127647fd7d8a9ca9f",
+          "inPageHash": "9cf38a11"
         },
         {
           "i": 24,
-          "tMs": 12164,
+          "tMs": 12161,
           "png": "151-v04-phone-f024.png",
-          "sha256": "fb346233856129061e7691e2710d077a5818940ff2b328fd7d1bcb0a62e6dd5e",
-          "inPageHash": "125c397a"
+          "sha256": "871956cf7c834ffb5b7a79fe56d69ab442e1ee0784a51ee4ec2d8f6d36ab96b7",
+          "inPageHash": "d080d4a0"
         },
         {
           "i": 30,
-          "tMs": 15173,
+          "tMs": 15166,
           "png": "151-v04-phone-f030.png",
-          "sha256": "fb947edd1cecea6548be82c4a69122547d7fed26a2f61daa18e3d968b199f07f",
-          "inPageHash": "80c90764"
+          "sha256": "8a826b88c920f7555839939ab3050f81bfc7f0af6bb8d0cc1a9169b112cdd64e",
+          "inPageHash": "aa719831"
         },
         {
           "i": 36,
-          "tMs": 18154,
+          "tMs": 18159,
           "png": "151-v04-phone-f036.png",
-          "sha256": "f277f281496f2742fce0af4f8c6d82bfbace30c1cc782cd5d9ade26b399ac746",
-          "inPageHash": "5ea4f191"
+          "sha256": "7acc2baf213a2b55e3650ecf79c1feed5277a80cab95a72499e641d4ef086d8c",
+          "inPageHash": "0bf98191"
         },
         {
           "i": 42,
-          "tMs": 21170,
+          "tMs": 21163,
           "png": "151-v04-phone-f042.png",
-          "sha256": "64020e531ff9a4b9776a384a188ae257c97cc4b7785ef8211124eb8f7fb3cd61",
-          "inPageHash": "f13a8442"
+          "sha256": "a611d08a46122286cfdf0317e84acd83c3527374073eeb8edd78e447ee76f9ce",
+          "inPageHash": "8dd4bc8d"
         },
         {
           "i": 48,
-          "tMs": 24157,
+          "tMs": 24154,
           "png": "151-v04-phone-f048.png",
-          "sha256": "8fe737e7f23b867b75747312b470a5fc4970aa1d4aba60e6ffea021f95f21564",
-          "inPageHash": "602eefc2"
+          "sha256": "5229a3509c4459934a28d4e374997f673898ca5379c3506b757caada7e562159",
+          "inPageHash": "05d9f82a"
         },
         {
           "i": 54,
-          "tMs": 27152,
+          "tMs": 27132,
           "png": "151-v04-phone-f054.png",
-          "sha256": "a79560ceaadfb4f1614cf32ca38a353a4b71f335f9c964375db4142607af2be3",
-          "inPageHash": "eec9c740"
+          "sha256": "5cf9a0d2fe020209f8bd099965dce53488357d5eeda139943e90f596d3ad9fd9",
+          "inPageHash": "257d4e1b"
         },
         {
           "i": 60,
-          "tMs": 30133,
+          "tMs": 30134,
           "png": "151-v04-phone-f060.png",
-          "sha256": "7ed98d53bebc5a50d50eb9b4ec216d8a4e66cd0d46722b587b3cfc66b3748474",
-          "inPageHash": "bcaa9268"
+          "sha256": "dc57eca82dd735fa92bf01ed2c668769ffdf99033449355cdd3928c382e7f88f",
+          "inPageHash": "cb7fe4b7"
         },
         {
           "i": 66,
-          "tMs": 33132,
+          "tMs": 33135,
           "png": "151-v04-phone-f066.png",
-          "sha256": "9ab1bbcbec07a7884a5bdf2ed36bbe5025ada5682d7b718cf88c8b0a41561a25",
-          "inPageHash": "bcaa9268"
+          "sha256": "7dcec8c6246943524a6782677ece1123653f90ab9ace53b85d165f369ac50841",
+          "inPageHash": "cb7fe4b7"
         },
         {
           "i": 72,
-          "tMs": 36168,
+          "tMs": 36163,
           "png": "151-v04-phone-f072.png",
-          "sha256": "8dc15200fe344b7910d90f6214e2fbeb1b49ada35a2ced9d80274582db150d34",
-          "inPageHash": "f2b29221"
+          "sha256": "edc6d8212254475767c6ad3a61e84a6008729d857cabf05678e363362ae83ed8",
+          "inPageHash": "dfb092d8"
         },
         {
           "i": 78,
-          "tMs": 39156,
+          "tMs": 39154,
           "png": "151-v04-phone-f078.png",
-          "sha256": "ce4f172cfbf13d1ebf5f61ffbb7fb2fc11655ba1489c1f570145b5de94b8c148",
-          "inPageHash": "89eb9435"
+          "sha256": "c2e91b58c082b6af697ba91399532560d8b986034f16eb8a875845d7117b4aca",
+          "inPageHash": "51bedab0"
         },
         {
           "i": 84,
-          "tMs": 42165,
+          "tMs": 42159,
           "png": "151-v04-phone-f084.png",
-          "sha256": "e022967b8a91afc2fc5b67262d90a7cdbf2162dae772661bb4daa4c19ae9b17d",
-          "inPageHash": "052381bc"
+          "sha256": "1e1c4baf973361ba5eaa7d601a5f95bbd2d1495ff81d1364089d1be398da59b0",
+          "inPageHash": "add1dc4c"
         },
         {
           "i": 90,
-          "tMs": 45164,
+          "tMs": 45163,
           "png": "151-v04-phone-f090.png",
-          "sha256": "9215c7a4d254cdb9c4b335deabb49c463959de36911d4b4310bbcd4057859f9f",
-          "inPageHash": "946edef4"
+          "sha256": "ce08fcffc14dffb3f5915a236f11ce60a5a09c4b2a438341e8bb2cda01e0332e",
+          "inPageHash": "2c90c778"
         },
         {
           "i": 96,
-          "tMs": 48155,
+          "tMs": 48158,
           "png": "151-v04-phone-f096.png",
-          "sha256": "05300f1b77eff6cf5496a3dbe9a5f46124ff744024d07de6af97198bcf56019b",
-          "inPageHash": "29c8dddc"
+          "sha256": "0cab8670121d857a4e52b9b9df156c6d98b33613fa96d45c8d7a56469cf8ff91",
+          "inPageHash": "be85742b"
         },
         {
           "i": 102,
-          "tMs": 51161,
+          "tMs": 51163,
           "png": "151-v04-phone-f102.png",
-          "sha256": "3167ce09f961ebd854b3f478061a5af4623d9d8d246cef144059c625f76a8304",
-          "inPageHash": "abd09c04"
+          "sha256": "7013739f5d83cbd8739230f277815645f74306c593aa424c219322a102079d26",
+          "inPageHash": "aa6fed91"
         },
         {
           "i": 108,
-          "tMs": 54158,
+          "tMs": 54151,
           "png": "151-v04-phone-f108.png",
-          "sha256": "7a8597048aa9d7f933e97c746b2c54d06d2b27704d79237adacbc0e961c9e26c",
-          "inPageHash": "afca54f7"
+          "sha256": "eb4f9f862d596bcd165e18b889b526fff2ba33208b18a80caa17f811ee743c6a",
+          "inPageHash": "c36ddeb8"
         },
         {
           "i": 114,
-          "tMs": 57176,
+          "tMs": 57158,
           "png": "151-v04-phone-f114.png",
-          "sha256": "2a19baf50d1be58f3856ed551caa7d77509fec5c77133af221e1af9ee9bfd465",
-          "inPageHash": "1123b367"
+          "sha256": "c57bfa96c24b0ed237be905900435b8f3cbd1a08d078630ed021c08fd2e465eb",
+          "inPageHash": "92ddfe91"
         }
       ],
       "pageErrors": []
@@ -485,7 +587,7 @@
     "desktop": {
       "frames": 120,
       "fps": 2,
-      "durationMs": 59660,
+      "durationMs": 59650,
       "measurement": "in-page 2D canvas backing-store FNV (getImageData) — the verified T07 paint-surface method; Playwright screenshot sha256 retained per-frame as supplementary evidence (DEFECT #2 fix: screenshots vary under compositor readback even when the backing store is frozen).",
       "uniqueHashes": 113,
       "maxConsecutiveIdenticalOutsideHidden": 1,
@@ -497,150 +599,150 @@
         "tickDelta": 40,
         "resumedDiffers": true
       },
-      "tickStart": 141,
-      "tickEnd": 741,
+      "tickStart": 140,
+      "tickEnd": 740,
       "tickDelta": 600,
       "readyCount": 120,
       "keyframes": [
         {
           "i": 0,
-          "tMs": 163,
+          "tMs": 166,
           "png": "151-v04-desktop-f000.png",
-          "sha256": "9d8bea96f85435ec6359c3a20222a649dde576ca39c8d1ed1dd0a289bb577667",
-          "inPageHash": "909326e6"
+          "sha256": "cc80da5aff55997390ceea837a351edadc3404a62da86e9a0b4b3874877ba7d0",
+          "inPageHash": "a1e07ca6"
         },
         {
           "i": 6,
-          "tMs": 3167,
+          "tMs": 3171,
           "png": "151-v04-desktop-f006.png",
-          "sha256": "ae7efa419132453d8aa11ebdbdf70e662131c9b0da6742b2761eac352a090abf",
-          "inPageHash": "79c9a2ba"
+          "sha256": "071fbf35d53d0d461023ba38586afcd3449d9a2bf116f2554838be5ec1ab5506",
+          "inPageHash": "01550949"
         },
         {
           "i": 12,
-          "tMs": 6174,
+          "tMs": 6182,
           "png": "151-v04-desktop-f012.png",
-          "sha256": "207da75b6ecf95efd16a429404e742ca9d5563b5711fa3090af30a130f92d25d",
-          "inPageHash": "199d9d86"
+          "sha256": "04ee07bfab6677d88ec677dae6dc069d5371f248740835508b004c6d9e11ded8",
+          "inPageHash": "02c7a53d"
         },
         {
           "i": 18,
-          "tMs": 9164,
+          "tMs": 9190,
           "png": "151-v04-desktop-f018.png",
-          "sha256": "9435f1945744c25323f4283a6e73ffad9ac3fbf374c7b26cb4e107cb3e1ae904",
-          "inPageHash": "5eb44831"
+          "sha256": "dac77abb37d09f0f794d56643e82e6c25ef2cf40a76392dea18ee9d6681b294f",
+          "inPageHash": "0a72148a"
         },
         {
           "i": 24,
-          "tMs": 12172,
+          "tMs": 12171,
           "png": "151-v04-desktop-f024.png",
-          "sha256": "15dc3676b60da793597d3e197d3c8847dc388cbbe13b3606b3e1c178a4f6e8f3",
-          "inPageHash": "c0f0edee"
+          "sha256": "f7edcaaa5d5a4b8bbdb1ffdbd23a06a027ef71aba74b111af5551a9327c8e168",
+          "inPageHash": "14c494de"
         },
         {
           "i": 30,
-          "tMs": 15159,
+          "tMs": 15187,
           "png": "151-v04-desktop-f030.png",
-          "sha256": "0ac144a379a0f5b4dd117d06efce1192c32307d2c6ca519d5b0f1f6c557efd73",
-          "inPageHash": "918c1c54"
+          "sha256": "13359cde4be61fc7e5f9ecc2c343eaba0247bc21c2645b9e990f39c59a697bad",
+          "inPageHash": "67f7bb89"
         },
         {
           "i": 36,
-          "tMs": 18167,
+          "tMs": 18174,
           "png": "151-v04-desktop-f036.png",
-          "sha256": "5c1e5839f608f57fcaba97debd4db0dbac54a849199b530615da2cf4f137fc46",
-          "inPageHash": "792a089c"
+          "sha256": "95d9c8bb14435764ee590d0c991105283fb7cbb75482a34ab51a1920845c7dda",
+          "inPageHash": "c83ae92a"
         },
         {
           "i": 42,
-          "tMs": 21174,
+          "tMs": 21181,
           "png": "151-v04-desktop-f042.png",
-          "sha256": "99641e5de53211904938c1335b96cc240dcee09743ed3a7ed51524ac029804f9",
-          "inPageHash": "0b2308b4"
+          "sha256": "b44f8d0f0fe20d5663c4c2ddc2110ba198b3aae46398aab9c9e222f3c88ac2ab",
+          "inPageHash": "b8ebb494"
         },
         {
           "i": 48,
-          "tMs": 24177,
+          "tMs": 24189,
           "png": "151-v04-desktop-f048.png",
-          "sha256": "3e04f88fd5ebcdf6ca68df72c1de1cc1178e25d575a36e9c8d1dcf30ceeb106c",
-          "inPageHash": "6ebfbd28"
+          "sha256": "0174e93dbc5eb5f552fbd210bd88249bc0553a54a869b38da0be1aa53c0dd4c3",
+          "inPageHash": "72785467"
         },
         {
           "i": 54,
-          "tMs": 27153,
+          "tMs": 27180,
           "png": "151-v04-desktop-f054.png",
-          "sha256": "6f015f401fcd337b9f45677d9310a10459b1b53afcf424870d377265f17506f1",
-          "inPageHash": "8d8bd4f1"
+          "sha256": "704752931de316f485ac5a778e1a46bb6dc621034be741fe700d1d622ad4ee2d",
+          "inPageHash": "6861504d"
         },
         {
           "i": 60,
-          "tMs": 30140,
+          "tMs": 30124,
           "png": "151-v04-desktop-f060.png",
-          "sha256": "049de7a853e1f3a449f97dd4d76c4eb1368544d20ac91c5e62e420b47df4333b",
-          "inPageHash": "0faaba3c"
+          "sha256": "86a82f933983ce104f8b33b2cab6ac25e43f87d4eb48ee1b7065eb095b09d98f",
+          "inPageHash": "5434fce9"
         },
         {
           "i": 66,
-          "tMs": 33125,
+          "tMs": 33117,
           "png": "151-v04-desktop-f066.png",
-          "sha256": "408c2e42eca26ca84f209953ea1a1af9ded329993d332de9955d79d26d315048",
-          "inPageHash": "0faaba3c"
+          "sha256": "71a14b0650f551a02dbc5f81ecb8bac288344e4ed909554bb080137ccf68b508",
+          "inPageHash": "5434fce9"
         },
         {
           "i": 72,
-          "tMs": 36157,
+          "tMs": 36147,
           "png": "151-v04-desktop-f072.png",
-          "sha256": "bc7df3abc8e4bfc45964d482d68ea1e6f25e019f8b6f388085280551d5f8edd0",
-          "inPageHash": "05e82ab9"
+          "sha256": "a61b7ad3c9a55d93b0d7b6ade4f4e34c55a6610f9dc691221a2f7eb4bd3b7536",
+          "inPageHash": "8a8870f7"
         },
         {
           "i": 78,
-          "tMs": 39160,
+          "tMs": 39156,
           "png": "151-v04-desktop-f078.png",
-          "sha256": "d6499ea6a3f327d8bf0e0835a99a07876929b66146eba75e54e1a96737806c26",
-          "inPageHash": "47d534ca"
+          "sha256": "6f80361c62e5ab37a2fbab685fa9eb43bb4a3a5eb23d6996ea126edbef5fbfbf",
+          "inPageHash": "3ac12da5"
         },
         {
           "i": 84,
-          "tMs": 42151,
+          "tMs": 42144,
           "png": "151-v04-desktop-f084.png",
-          "sha256": "d00fde73b3bc4f4e912b7b89b1027dc00c176df2c087c84e15aca80d957dd425",
-          "inPageHash": "d7cec608"
+          "sha256": "74aea7b8a37ffc0c9bdea24312ab45f3561d8d8e666e3dff125d9f50b2ab8f68",
+          "inPageHash": "450301c8"
         },
         {
           "i": 90,
-          "tMs": 45161,
+          "tMs": 45150,
           "png": "151-v04-desktop-f090.png",
-          "sha256": "897e7215cdb8aa0d8f8fde0328ee7641a1569aec180c95bcd178bc96cb9ecba1",
-          "inPageHash": "87ecc3bb"
+          "sha256": "3d49b84812bef2e71bd74424866762e969b239ac64d6a259e874dc02705f642b",
+          "inPageHash": "7871994e"
         },
         {
           "i": 96,
-          "tMs": 48167,
+          "tMs": 48142,
           "png": "151-v04-desktop-f096.png",
-          "sha256": "6f01b8362561831125fd67a0eb8290c2c93b11b5279a29196cb3ec2ebb16b5ec",
-          "inPageHash": "69058f75"
+          "sha256": "4df8229b3cc360f23fdf31534e3bf96e5eb8fae7fd672619d2fd3a14000ac898",
+          "inPageHash": "d3f017dd"
         },
         {
           "i": 102,
-          "tMs": 51156,
+          "tMs": 51148,
           "png": "151-v04-desktop-f102.png",
-          "sha256": "7eecd3faa70c26d51e33e00bb0b39e81239b81e21ee283f8d7f7c877e99bbd6b",
-          "inPageHash": "6fef4f64"
+          "sha256": "078f6ffa5b78b5974d15cfeba313864d20251b690134c7c8ed9dca61b70fd569",
+          "inPageHash": "756527a1"
         },
         {
           "i": 108,
-          "tMs": 54168,
+          "tMs": 54139,
           "png": "151-v04-desktop-f108.png",
-          "sha256": "5319f66908396cb6aa31e4dac8b61ddac941801fa927ec5c6ccf3f8a50b0b91c",
-          "inPageHash": "7d0fe364"
+          "sha256": "ce3f6cf1568112eeb6c93ddf3248b6a0cff5bf65b44329cccbdfbc0f7a6d94e0",
+          "inPageHash": "4c1a1409"
         },
         {
           "i": 114,
-          "tMs": 57155,
+          "tMs": 57143,
           "png": "151-v04-desktop-f114.png",
-          "sha256": "7aeec2568d327b35cfc296f4c3e325007af12441e89d349e521a93b894ee6d3b",
-          "inPageHash": "9aaf3ee8"
+          "sha256": "494c49af6e75ac11b310c7e9bf7e438e0c44cc44acba904de955c8856cf0daa0",
+          "inPageHash": "ed12de83"
         }
       ],
       "pageErrors": []
@@ -648,42 +750,44 @@
     "desktopCrops": {
       "starved": {
         "machine": {
-          "id": 2,
-          "blueprint": "furnace",
-          "tile": 1,
+          "id": 3,
+          "blueprint": "sorter",
+          "tile": 3,
           "status": "starved",
-          "ageTicks": 141
+          "ageTicks": 140,
+          "routed": false
         },
         "clip": {
-          "x": 446.77772,
+          "x": 678.9934400000001,
           "y": 337.04443,
           "width": 46.436,
           "height": 46.436
         },
+        "measurement": "in-page 2D backing-store FNV (getImageData)",
         "hashes": [
-          "469fafece77b96df818e2142fd0f12a97a4406d40bac1d16d8138ad39ea72bde",
-          "3c1be5287546a3744e9351702ea27ac2363ea1da116f80420d3e44e6bde4a6b8",
-          "5fd6761e6918eba77e6dec310e403c7541a5b373fd0f967b42d9c4f1f89a26f3",
-          "44aaae6ef938ad4885e0dd01f7b671960bf1b35d189dbb1f9a118c08fb0bdaec",
-          "629b6496b9e25a6d2b8c429a3a9d395bb4949e60ea1edb1858669e7b283401f6",
-          "4c0724036f3b9ab3987fabe702fb875f5015e9900c6a39bd9d71c10caa3d4e28",
-          "ccfe978b40590e3750d2713dddeb553058905a35ca3f97f66f032b6a7db51d69",
-          "4007c15c928ee83028a40032d74971ce4d7356ddd5d2a9dd623652a3c0fc6034",
-          "db41400c4e746d46f33aac495a730752740fbce432630cb08a864a64440a9310",
-          "23596e60f20ebc3f6b9c1c7a77e17238665193db844e9ea3762993550062cfe2",
-          "80eb3b449e2b04cf2a846d535bd44fe2830cf004136a983f4b2cb9c4d27c7e67",
-          "e403cb8bebbb72184d384902c009d3f6598460f9cb72c5bfd0aa4ecc9f3c12d9",
-          "14f762507900a0599b0724475a37af5bccaf2df4149b0b5e9f27e2b0444e1848",
-          "e2eb2b805d1000ed4ed826651c0ea04e663be2cb0e651b0bb9bc6caacadb4220",
-          "d54bd9118eec6de587660e80b48aa5fb2731a70049062af5728c4404c5970667",
-          "a232b294b81cb08b05508b8d9c69846406239eb27c6268bd058c25f76ae01e3c",
-          "ffff7c26924c9546d50118a0d1aa82dc2ae232fd8f199fc5e3dd5e33e5b65244",
-          "25e80885b22a99c0ede41869ef5cfcbf9fbc07b7381e47ab46cda1844ec00018",
-          "7fa6fd2738bfc3053ad3bfde86e13318a6898325293f0dabb8adc4bb721345a2",
-          "cbdbd282c8fbd4e0d108309cf1ded42edcede3eeb0dbd9293f0416f8a40edb34"
+          "84341774",
+          "84341774",
+          "84341774",
+          "ecc532c1",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "76503b57",
+          "048104d1",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774",
+          "84341774"
         ],
-        "unique": 20,
-        "modeCount": 1,
+        "unique": 4,
+        "modeCount": 17,
         "samples": 20
       },
       "working": {
@@ -692,35 +796,37 @@
           "blueprint": "sorter",
           "tile": 0,
           "status": "running",
-          "ageTicks": 141
+          "ageTicks": 140,
+          "routed": true
         },
         "clip": {
-          "x": 418.20172,
+          "x": 593.26544,
           "y": 337.04443,
           "width": 46.436,
           "height": 46.436
         },
+        "measurement": "in-page 2D backing-store FNV (getImageData)",
         "hashes": [
-          "d2d9833355294e0b4530728729feb1b51ee7390ad7d2eb6c288f88c151eedd59",
-          "8a2f261e72919dcee6a7569d770cf324d5e80aebd9220fbd7d15148a996bf5ed",
-          "0ffb267b9c4174df365a1be1fc6eacc10be5f6a2d35fdf01450b1d2afa521336",
-          "560e4a74ed1d2e36dd82692ea581507c94bd8e75349241ac4111692b7a11a8e9",
-          "db1e678c9cadf7939ee5e216184b9dcf692c469d55de67254c15f11a860a414c",
-          "7193aae87312529b48453b35a86ddb8695f3bce80d6df826c7d769c39b16963c",
-          "bb81526c191bd196f14d7170825c1b7ba29ae6d687d31a978578049994c0c8c4",
-          "93121e78725b071037f230ca46eee37cdf964ead87b3b4c6f7a3e4d1ef851f22",
-          "481fed9c033d62f016790417e010b500108806b49fd3e53ffbee90eda7b78ca9",
-          "34ce7a7f5297956eb708f2baefb48634ab878170adeda8227d322e596cfc2900",
-          "db66e98d1071d387e87e445a06fa2ad77ebf751d0cc79afd92cd59afe0a7f741",
-          "9d3986c11d3b99555a1aff1c69568ce6fabaa6bc69f2c9a8bdcde1828e20d459",
-          "846a914d90cf74d4e50beee46326b2c3f5a1019873fb2b81286b1d19e4397c6c",
-          "f32480babdbedd6ab6093aae8ecc43e9efcbf06e10d57e67b1a30f921f58291d",
-          "dfe3aa407f3c537fb33c35e79abad644a18f1658df6b62ef000101da9f222292",
-          "d281edbe934601bc279d93e0ff039aa5fddffaa2202701c9743957e172a1ec75",
-          "03802ff6f2ffd610f2cddaac26dc0f8966c908aa5cc0eb9b2445f531e156e62f",
-          "3c0d5932ee016233eff6f38bc9dc469a1c392ffffeac8f9c5b09e2693d7271cb",
-          "cb520cd609acb38c15158c8437827ddc9eb5464a4d065176d987419af744b829",
-          "d5fca19795f3eb92b716ab8d94c9c6e3c63096bfd08cb6ce59fddf58744ca60f"
+          "cdfdc8e8",
+          "9e86f279",
+          "58f33080",
+          "63ae5f30",
+          "76295b80",
+          "e165282e",
+          "d2631803",
+          "2526687d",
+          "1cb357e4",
+          "587ca225",
+          "f22b7e87",
+          "3c473908",
+          "0429ae71",
+          "ec33876b",
+          "43c92f66",
+          "4eed3d0f",
+          "76317072",
+          "82d7e2c3",
+          "1726e778",
+          "162fa8a4"
         ],
         "unique": 20,
         "modeCount": 1,
@@ -729,27 +835,27 @@
     }
   },
   "roundTrip": {
-    "protocol": "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
+    "protocol": "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. The restored snapshot is read from the shipped persistence slot in the same evaluate as the Replace click (importSave persists synchronously), so it is the frozen import, not the later live sim. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
     "exportA": {
-      "sha256": "f48d57b81915cc9606f75ba2155bd18136e3279d00c92bf2e05eb59e0b8910b5",
+      "sha256": "01955196345c4542c6c7d547a90f32c1b14832e85dd02d5adbfe3f0fcdae4e44",
       "chars": 10765,
-      "tick": 141,
+      "tick": 140,
       "shot": {
         "name": "151-roundtrip-export-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-export-desktop.png",
-        "sha256": "ec83e225ad219aad46357f5f5915c8d81f6b8baff687a9b3aede681bb55238cd",
-        "bytes": 66085
+        "sha256": "697e7802d7001edae2fdf0cbfae4f91d8ac792eda973099038966f86a967a230",
+        "bytes": 66079
       }
     },
     "exportB": {
-      "sha256": "c089da152ed0d268f934e53f7c1e4f9a20c8bff00e9ef1f8410a8c6a246ca04f",
-      "chars": 10895,
-      "tick": 167
+      "sha256": "625cc850d8f17ed6fbfa5fae6cca77297229b8c204e2edc25c1677b2cdae7660",
+      "chars": 10854,
+      "tick": 166
     },
     "exportC": {
-      "sha256": "4d2c7d7f30c86e14f38a3e1054289c7c20ab8024a549b4aa194d34a6613785eb",
+      "sha256": "3ed1045870eb4eb4493e9eab1773c223ff083224a2849d424147a507e68fab81",
       "chars": 10765,
-      "tick": 148
+      "tick": 147
     },
     "abDelta": {
       "byteIdentical": false,
@@ -757,62 +863,80 @@
       "lastSeenDeltaMs": 2005,
       "simIdentical": false
     },
+    "importedDelta": {
+      "ok": true,
+      "simIdentical": true,
+      "tick": 140,
+      "settingsIdentical": true,
+      "lastSeenDeltaMs": 3025
+    },
     "acDelta": {
       "byteIdentical": false,
       "tickDelta": 7,
-      "lastSeenDeltaMs": 3077,
+      "lastSeenDeltaMs": 3025,
       "simIdenticalExceptTick": false,
       "settingsIdentical": true
     },
-    "importNote": "Applied · tick 141, 20 machines",
+    "importNote": "Applied · tick 140, 20 machines",
     "invalid": {
       "confirmPresent": false,
       "note": "Not a Rustwake file",
-      "economyIdentical": true,
-      "tickDelta": 0,
+      "economyIdentical": false,
+      "tickDelta": 10,
       "shot": {
         "name": "151-roundtrip-invalid-desktop.png",
         "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-invalid-desktop.png",
-        "sha256": "8b352bf9c1a5c81eef939a49c7f4519775eda043708d7b0fa7ffb5bb1b201bba",
-        "bytes": 63423
+        "sha256": "be08edffde9197f900768eb3f199cbb61f9869de4cd869579c3776d18820101d",
+        "bytes": 63443
       }
     },
     "confirmShot": {
       "name": "151-roundtrip-confirm-desktop.png",
       "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-confirm-desktop.png",
-      "sha256": "9f15f93413621a155ffbaae5d991b11bc2a5aadf6cb22578cf969614197c2fb3",
-      "bytes": 81749
+      "sha256": "dee8d248ea9904ff1100ddce8f6cc4d1ee6635ce346d2c77655c6b0e7fecc350",
+      "bytes": 81939
     },
     "pageErrors": [],
-    "envelopeA": "{\"schemaVersion\":1,\"checksum\":\"2cbe2aa3\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":141,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":16001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":141,\"busyTicks\":136,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":101,\"batchesDone\":1,\"ageTicks\":141,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":141,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":141,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":141,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794713118679,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}",
-    "envelopeC": "{\"schemaVersion\":1,\"checksum\":\"2acc0ecc\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":148,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":23001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":148,\"busyTicks\":143,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":108,\"batchesDone\":1,\"ageTicks\":148,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":148,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":148,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":148,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794713121756,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}"
+    "envelopeA": "{\"schemaVersion\":1,\"checksum\":\"40448cb8\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":140,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":15001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":140,\"busyTicks\":135,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":100,\"batchesDone\":1,\"ageTicks\":140,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":140,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":140,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":140,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794715577436,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}",
+    "envelopeImported": "{\"schemaVersion\":1,\"checksum\":\"f3cbd7c2\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":140,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":15001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":140,\"busyTicks\":135,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":100,\"batchesDone\":1,\"ageTicks\":140,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":140,\"batchesDone\":0,\"ageTicks\":140,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":140,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":140,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":140,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794715580461,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}",
+    "envelopeC": "{\"schemaVersion\":1,\"checksum\":\"243d4faf\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":147,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":22001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":147,\"busyTicks\":142,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":107,\"batchesDone\":1,\"ageTicks\":147,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":147,\"batchesDone\":0,\"ageTicks\":147,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":147,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":147,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":147,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794715580461,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}"
   },
   "contextLoss": {
     "glContexts": 2,
+    "activeGLIndex": 1,
     "lostStamp": {
-      "cam": "327.96,116.49,0.893",
-      "world3d": "ready"
+      "cam": "131.92,116.49,0.893",
+      "world3d": "lost"
     },
     "readyStamp": {
-      "cam": "327.96,116.49,0.893",
+      "cam": "131.92,116.49,0.893",
       "world3d": "ready"
     },
     "tickDelta": 20,
-    "economyIdentical": false,
+    "structureIdentical": true,
+    "scrapDelta": 0,
+    "droneArrived": 0,
+    "scrapCorrected": 0,
+    "steelDelta": 0,
+    "during": {
+      "tick": 140,
+      "scrap": 196,
+      "steel": 6
+    },
     "lostShot": {
       "name": "151-context-loss-banner-desktop.png",
       "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-loss-banner-desktop.png",
-      "sha256": "c198a2b99dbbcd1aed364387b195cec95f9d0582f5817e91d6536033699d3ba3",
-      "bytes": 67766
+      "sha256": "77c3443ca6452fdb2dbc603bc0a9574e8d71fbf7af4a0cb1f36afb14ff37dabe",
+      "bytes": 62776
     },
     "restoredShot": {
       "name": "151-context-restored-desktop.png",
       "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-restored-desktop.png",
-      "sha256": "18dcf5e751869e77d781a6c97e1fd237a6315c06b4d7a574684384bacc7a552a",
-      "bytes": 67715
+      "sha256": "6afe34a9abec4821601988bf863688e9bf3aed8857c624c4a1c0a0ca716a5a4d",
+      "bytes": 52313
     },
     "pageErrors": [],
-    "note": "Banner/fallback VISUALS are pending sponsor inspection; numeric proof is the dataset.world3d transition + unchanged save economy. The byte-strict save check lives in the P02 harness run (151-p02-loops.json)."
+    "note": "Target is the ACTIVE world GL context (the blit source canvas), not the __rwGL[0] probe. Banner/fallback VISUALS are pending sponsor inspection; numeric proof is the dataset.world3d transition + untouched economy structure + no resource spend (drone deliveries corrected by conservation). The byte-strict frozen-save check lives in the P02 harness run (151-p02-loops.json)."
   },
   "artifacts": [
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-phone.png",
@@ -829,6 +953,7 @@
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t3-phone.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t4-phone.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t5-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-crop-phone.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-phone.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-desktop.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-desktop.png",
@@ -838,6 +963,7 @@
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t3-desktop.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t4-desktop.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t5-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-crop-desktop.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-desktop.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f000.png",
     "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f006.png",
@@ -894,8 +1020,8 @@
     {
       "name": "v01-phone: gate offered",
       "expected": "Begin recovery",
-      "actual": "Continue",
-      "pass": false
+      "actual": "Begin recovery",
+      "pass": true
     },
     {
       "name": "v01-phone: fresh yard machines",
@@ -942,7 +1068,7 @@
     {
       "name": "v02-phone: sim ticking",
       "expected": ">0",
-      "actual": 151,
+      "actual": 150,
       "pass": true
     },
     {
@@ -978,8 +1104,8 @@
     {
       "name": "v01-desktop: gate offered",
       "expected": "Begin recovery",
-      "actual": "Continue",
-      "pass": false
+      "actual": "Begin recovery",
+      "pass": true
     },
     {
       "name": "v01-desktop: fresh yard machines",
@@ -1026,7 +1152,7 @@
     {
       "name": "v02-desktop: sim ticking",
       "expected": ">0",
-      "actual": 151,
+      "actual": 150,
       "pass": true
     },
     {
@@ -1066,33 +1192,48 @@
       "pass": true
     },
     {
-      "name": "v05-phone: machine added",
-      "expected": 21,
-      "actual": 20,
-      "pass": false
-    },
-    {
-      "name": "v05-phone: scrap charged exactly once",
-      "expected": 0,
-      "actual": -2,
-      "pass": false
-    },
-    {
-      "name": "v05-phone: steel charged exactly once",
-      "expected": 0,
-      "actual": 0,
-      "pass": false
-    },
-    {
-      "name": "v05-phone: reload keeps machine",
-      "expected": 20,
-      "actual": 20,
+      "name": "v05-phone: armed dock commit face",
+      "expected": "Build {machine}, enabled",
+      "actual": {
+        "label": "Build Scrap sorter30 scrap + 4 steel",
+        "disabled": false
+      },
       "pass": true
     },
     {
-      "name": "v05-phone: reload no second build charge",
-      "expected": "[-3,0] (natural consumption only)",
-      "actual": -2,
+      "name": "v05-phone: machine added",
+      "expected": 21,
+      "actual": 21,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: scrap charged exactly once (drone-corrected)",
+      "expected": "-30 +/-6",
+      "actual": -30,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: steel charged exactly once",
+      "expected": -4,
+      "actual": -4,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: reload keeps machine",
+      "expected": 21,
+      "actual": 21,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: reload no second build charge (drone-corrected scrap)",
+      "expected": "[-6,+6]",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: reload steel unchanged",
+      "expected": 0,
+      "actual": 0,
       "pass": true
     },
     {
@@ -1108,33 +1249,48 @@
       "pass": true
     },
     {
-      "name": "v05-desktop: machine added",
-      "expected": 21,
-      "actual": 20,
-      "pass": false
-    },
-    {
-      "name": "v05-desktop: scrap charged exactly once",
-      "expected": 0,
-      "actual": -2,
-      "pass": false
-    },
-    {
-      "name": "v05-desktop: steel charged exactly once",
-      "expected": 0,
-      "actual": 0,
-      "pass": false
-    },
-    {
-      "name": "v05-desktop: reload keeps machine",
-      "expected": 20,
-      "actual": 20,
+      "name": "v05-desktop: armed dock commit face",
+      "expected": "Build {machine}, enabled",
+      "actual": {
+        "label": "Build Scrap sorter30 scrap + 4 steel",
+        "disabled": false
+      },
       "pass": true
     },
     {
-      "name": "v05-desktop: reload no second build charge",
-      "expected": "[-3,0] (natural consumption only)",
-      "actual": -2,
+      "name": "v05-desktop: machine added",
+      "expected": 21,
+      "actual": 21,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: scrap charged exactly once (drone-corrected)",
+      "expected": "-30 +/-6",
+      "actual": -30,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: steel charged exactly once",
+      "expected": -4,
+      "actual": -4,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: reload keeps machine",
+      "expected": 21,
+      "actual": 21,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: reload no second build charge (drone-corrected scrap)",
+      "expected": "[-6,+6]",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: reload steel unchanged",
+      "expected": 0,
+      "actual": 0,
       "pass": true
     },
     {
@@ -1242,14 +1398,14 @@
     {
       "name": "v04-starved-crop: no fake motion (>=14/20 identical, drone occlusion tolerance)",
       "expected": ">=14",
-      "actual": 1,
-      "pass": false
+      "actual": 17,
+      "pass": true
     },
     {
-      "name": "roundtrip: import restores sim (tick may advance <=5 naturally)",
+      "name": "roundtrip: import restores sim exactly (frozen snapshot, tick included)",
       "expected": true,
-      "actual": false,
-      "pass": false
+      "actual": true,
+      "pass": true
     },
     {
       "name": "roundtrip: settings preserved",
@@ -1258,9 +1414,21 @@
       "pass": true
     },
     {
+      "name": "roundtrip: import note names restored tick/machines",
+      "expected": "Applied · tick 140, 20 machines",
+      "actual": "Applied · tick 140, 20 machines",
+      "pass": true
+    },
+    {
       "name": "roundtrip: live export advances between reads (A!=B)",
       "expected": false,
       "actual": false,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: live sim resumes after import (C tick > imported tick)",
+      "expected": ">0",
+      "actual": 7,
       "pass": true
     },
     {
@@ -1272,14 +1440,14 @@
     {
       "name": "roundtrip: invalid import leaves economy byte-identical",
       "expected": true,
-      "actual": true,
-      "pass": true
+      "actual": false,
+      "pass": false
     },
     {
       "name": "roundtrip: invalid import tick drift <=2 (natural only)",
       "expected": "<=2",
-      "actual": 0,
-      "pass": true
+      "actual": 10,
+      "pass": false
     },
     {
       "name": "roundtrip: no page errors",
@@ -1294,10 +1462,16 @@
       "pass": true
     },
     {
+      "name": "context-loss: active world GL identified + lost",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
       "name": "context-loss: dataset.world3d=lost",
       "expected": "lost",
-      "actual": "ready",
-      "pass": false
+      "actual": "lost",
+      "pass": true
     },
     {
       "name": "context-loss: dataset.world3d=ready after restore",
@@ -1306,10 +1480,22 @@
       "pass": true
     },
     {
-      "name": "context-loss: save economy untouched",
+      "name": "context-loss: machines/routes/credits untouched",
       "expected": true,
-      "actual": false,
-      "pass": false
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "context-loss: no scrap spend (drone-corrected)",
+      "expected": "[-8,+2] natural feed only",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "context-loss: no steel spend",
+      "expected": "[0,+4] production only",
+      "actual": 0,
+      "pass": true
     },
     {
       "name": "context-loss: no page errors",
