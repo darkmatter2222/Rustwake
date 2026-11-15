@@ -20,8 +20,10 @@ import stylesRaw from "../../src/ui/styles.css?raw";
 const ROOT_PX = 15;
 /** `App.tsx`: `root.classList.toggle("text-large", settings.textScale >= 1.5)`. */
 const TEXT_LARGE_FROM = 1.5;
-/** The three `A` steps the button cycles (`App.tsx` textScale steps), i.e. the census columns. */
-const STEPS = [1, 1.25, 1.5] as const;
+/** The four `A` steps the button cycles (`App.tsx` textScale steps), i.e. the census columns.
+ * RW3D #229 (U03): the 2.0 column is the "200% text" acceptance — `text-large` stays active
+ * there (>= 1.5), so it resolves the same declarations as 1.5 at twice the root size. */
+const STEPS = [1, 1.25, 1.5, 2] as const;
 
 type Rule = { selectors: string[]; declarations: Record<string, string> };
 
@@ -108,14 +110,16 @@ const asHex = (rgb: readonly [number, number, number]) =>
   "#" + rgb.map((c) => c.toString(16).padStart(2, "0")).join("");
 
 describe("UI-004 dock legibility floors (PROD-TRIAGE-004 row 3)", () => {
-  /** Row 1: the price clears 12.0 px at every `A` step. */
-  it("keeps .dock__cost at or above 12.0 px on all three text-scale steps", () => {
+  /** Row 1: the price clears 12.0 px at every `A` step, including 200% text. */
+  it("keeps .dock__cost at or above 12.0 px on all four text-scale steps", () => {
     const ladder = STEPS.map((step) => declaredPx(".dock__cost", "font-size", step));
-    expect(ladder).toEqual([12, 15, 16.2]);
+    // 2.0 resolves the same 0.72rem `text-large` declaration as 1.5: 0.72 * 15 * 2 = 21.6.
+    expect(ladder).toEqual([12, 15, 16.2, 21.6]);
     for (const px of ladder) expect(px).toBeGreaterThanOrEqual(12);
     // The two declarations that make it happen, pinned as numbers and not as a lucky sum.
     expect(declared(".dock__cost", "font-size", 1)).toBe("0.8rem");
     expect(declared(".dock__cost", "font-size", 1.5)).toBe("0.72rem");
+    expect(declared(".dock__cost", "font-size", 2)).toBe("0.72rem");
   });
 
   /** Row 1: the price holds AA on the accent fill it is painted on. */
@@ -161,12 +165,15 @@ describe("UI-004 dock legibility floors (PROD-TRIAGE-004 row 3)", () => {
       for (let i = 1; i < ladder.length; i += 1)
         expect(ladder[i], `${label} @ step ${STEPS[i]}`).toBeGreaterThanOrEqual(ladder[i - 1]);
       expect(ladder[2], `${label} must still grow past step 1`).toBeGreaterThan(ladder[0]);
+      expect(ladder[3], `${label} must keep growing at 200% text`).toBeGreaterThan(ladder[0]);
     }
     // The two regressions by name, with their baseline triples kept as comments in numbers:
-    // label 13.2 / 16.5 / 13.95 -> 13.2 / 16.5 / 16.65; price 10.8 / 13.5 / 11.25 -> the ladder above.
+    // label 13.2 / 16.5 / 13.95 -> 13.2 / 16.5 / 16.65 / 22.2; price 10.8 / 13.5 / 11.25 ->
+    // the ladder above. At 2.0 the same 0.74rem `text-large` label resolves 0.74 * 15 * 2.
     expect(declaredPx(".dock__btn", "font-size", 1)).toBe(13.2);
     expect(declaredPx(".dock__btn", "font-size", 1.25)).toBe(16.5);
     expect(declaredPx(".dock__btn", "font-size", 1.5)).toBe(16.65);
+    expect(declaredPx(".dock__btn", "font-size", 2)).toBe(22.2);
   });
 
   /** Row 4: the tap-target floors the witnesses already pass are not paid away. */
