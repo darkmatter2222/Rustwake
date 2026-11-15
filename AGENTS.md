@@ -10,3 +10,10 @@ Current mandate: [#121](https://github.com/darkmatter2222/Rustwake/issues/121), 
 - Check live dependencies and phase gate before dispatch. Keep at most five ready tasks. Blocked work stays blocked. If GitHub/runtime access fails, record the exact blocker; never substitute an internal board.
 - Preserve saves, cancellation, approval settings and security. Follow runtime health/quiet-wait guidance in `docs/TEAM_DISPATCH.md` only where supported by the commissioned runtime. Two identical no-progress checks -> checkpoint/block/event wait, not another thinking loop.
 - Visual evidence must come from the running build. Generated references are style targets, not implementation proof. Non-vision agents use geometric recipes and numerical checks but cannot self-certify visual fidelity.
+
+
+## Post-merge release verification (#248)
+- Accepted implementation is not DONE at branch push or PR approval. Release engineer merges the reviewed PR into main, identifies exact main CI run, awaits successful trusted delivery, and inspects the subsequent verify-live job for the same source SHA. A failed, missing or blocked verification is UNKNOWN/FAIL, never deployed-verified.
+- The GitHub-hosted verify-live job uses ONE headless browser with sequential desktop/mobile contexts, checks live manifest/source/asset hashes and produces screenshots and a JSON artifact. No additional browser fleet, workstation/phone automation, or repo scripts on the self-hosted deployment runner.
+- Dedicated live-verifier is a rotating child role within the existing total limit of five sessions; coordinator must reconcile active leases and not run a second team. It inspects the one existing artifact, flags errors and sponsor visual gaps, and reports to release engineer/coordinator.
+- Smoke PASS proves release integrity and minimal interactive rendering ONLY; sponsor G1 visual ACCEPT still requires the approved isometric sandbox, roads/vehicle gameplay and full UI redesign in #244-#247. No old top-down grid may silently become accepted via generic test counts.
