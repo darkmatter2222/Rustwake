@@ -33,3 +33,7 @@ Qwen agent definitions use initial maxTurns: coordinator helper 12, developer 80
 ## Verify efficiency
 
 Run comparable small assignments under inherited baseline vs role policy. Record model/provider/version, actual effective effort, input/output/reasoning tokens when exposed, cache use, tool calls, elapsed time, task result and defects. One routine coordinator pass, one release verification and one complex developer change. Accept improvement only if less unnecessary work without missing outcomes. No fabricated savings percentage. Do not log credentials or private reasoning. Runtime adapter posts receipt to the cutover issue before claiming deployment.
+
+
+## Deployment verifier effort profile
+live-verifier is a low-effort, evidence-first rotating child role, at most 24 native Qwen turns per bounded run. Inspect exact SHA, main CI/delivery/verify-live IDs, browser report and screenshots once after deployment. Escalate only on concrete bugs, wrong SHA or ambiguous releases. Do not launch another browser; the GitHub-hosted verifier is the sole browser per release. Never mistake numeric browser smoke for sponsor visual acceptance. The agent shares the existing five-session cap.
