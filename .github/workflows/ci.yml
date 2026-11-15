@@ -14,6 +14,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - run: node --test scripts/verify-live-helpers.test.mjs
       - run: node scripts/team-board.mjs --check
       - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs
       - run: python scripts/deploy-artifact.test.py
