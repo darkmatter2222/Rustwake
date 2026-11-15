@@ -1,7 +1,8 @@
 /*
  * RW3D T07 (#134): the boundary entry for the three.js world layer.
  *
- * `blitWorld3D` is the ONLY symbol scene.ts imports from this module. It renders the
+ * #236: scene.ts reaches this module through a probe-gated dynamic import("./three");
+ * `blitWorld3D` is the render entry it calls once the chunk resolves. It renders the
  * volumetric yard into a dedicated offscreen WebGL canvas and blits it into the caller's
  * 2D context, returning true so the overlay can skip the flat bodies. It returns false —
  * without touching the context — whenever WebGL is unavailable, so the legacy 2D paint
@@ -21,32 +22,16 @@
 import type { SimState } from "../../simulation/types";
 import type { AssemblySnapshot } from "../assembly";
 import type { Camera, ViewState } from "../projection";
+// #236 (option A): the probe itself now lives in the THREE-free ../webglProbe module so
+// scene.ts can gate import("./three") without loading this chunk. Same cached probe,
+// same rejection of jsdom null / the write-only Proxy — only its address moved.
+import { markWebGLUnavailable, probeWebGL, resetWebGLProbe } from "../webglProbe";
 import { YardWorld, type PickResult, type WorldSyncOptions } from "./worldRenderer";
 
 export { YardWorld };
 export type { PickResult, WorldSyncOptions };
 
 let world: YardWorld | null = null;
-let glAvailable: boolean | null = null;
-
-/** Probe WebGL once on a throwaway canvas. Rejects jsdom null and the write-only Proxy
- * (getParameter(VERSION) must be a real string), never the visible 2D canvas. */
-function probeWebGL(): boolean {
-  if (glAvailable !== null) return glAvailable;
-  try {
-    const probe = document.createElement("canvas");
-    const gl =
-      (probe.getContext("webgl2") as WebGLRenderingContext | null) ??
-      (probe.getContext("webgl") as WebGLRenderingContext | null);
-    glAvailable =
-      !!gl &&
-      typeof gl.getParameter === "function" &&
-      typeof gl.getParameter(gl.VERSION) === "string";
-  } catch {
-    glAvailable = false;
-  }
-  return glAvailable;
-}
 
 /** The lazy singleton world on its own offscreen canvas (never the visible 2D canvas). */
 export function getWorld3D(): YardWorld | null {
@@ -58,7 +43,7 @@ export function getWorld3D(): YardWorld | null {
       world = new YardWorld(canvas);
     } catch {
       world = null;
-      glAvailable = false;
+      markWebGLUnavailable();
     }
   }
   return world;
@@ -72,7 +57,7 @@ export function disposeWorld3D(): void {
 
 /** Reset the cached probe so a test can re-evaluate availability. */
 export function resetWorld3DProbe(): void {
-  glAvailable = null;
+  resetWebGLProbe();
 }
 
 /**

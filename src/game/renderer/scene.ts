@@ -59,7 +59,14 @@ import {
   type CameraInsets,
   type ViewState,
 } from "./projection";
-import { blitWorld3D, getWorld3D, world3DStatus } from "./three";
+// #236 (option A): the three.js world layer is now a DYNAMIC import("./three") gated
+// behind the WebGL probe, so its bytes download ONLY when WebGL is available. In the
+// no-WebGL FALLBACK-2D context the probe fails and the import never fires — a genuine
+// total-cold reduction there. In a real browser the gate's live yard preview resolves
+// the chunk at first paint (relocation for 3D MATURE, NOT a total-cold win). The probe
+// lives in webglProbe.ts (no THREE) so gating never loads the chunk it gates.
+import { probeWebGL } from "./webglProbe";
+import type { PickResult } from "./three";
 // RW3D T07 (#134): the drone flight parameter is pure and shared with the three.js world
 // layer; it lives in flight.ts so THREE never imports scene.ts (no import cycle, no UI
 // bridge across the boundary). Re-exported here to keep the legacy import surface.
@@ -80,11 +87,53 @@ export type { Camera, CameraInsets, ViewState };
 // RW3D T08 (#135) wiring deltas 1/3 — additive bridge only. The frozen boundary tests
 // allow the relative "./three" specifier here; src/ui keeps importing scene.ts alone.
 //
-// Delta 1: raycast selection against the last-synced singleton world. Returns null when
-// WebGL is unavailable (jsdom / context loss), so the shell falls back to
-// screenToWorld + pickTarget and the legacy path stays byte-identical.
-export { pickWorld3D, world3DStatus } from "./three";
+// #236 (option A): the former `export { pickWorld3D, world3DStatus } from "./three"`
+// re-export was a SECOND static edge into the three.js module (it alone would keep the
+// chunk in the cold graph). It is now a pair of delegating wrappers over the async
+// module state below, with the exact legacy no-WebGL answers until the chunk resolves:
+// pick null, status "unavailable". The type re-export is erased at compile time and
+// fetches nothing.
 export type { PickResult } from "./three";
+
+// #236: async module state. `threeModule` stays null until the probe-gated dynamic
+// import resolves; a failed import also leaves it null (legacy 2D paint, never a throw
+// across the boundary). No clock, no storage — resolution is the browser's own promise.
+type ThreeModule = typeof import("./three");
+let threeModule: ThreeModule | null = null;
+let threeLoad: Promise<ThreeModule | null> | null = null;
+
+/** Kick off the probe-gated dynamic import exactly once. NEVER called through when the
+ * probe fails, so FALLBACK-2D (jsdom null / write-only Proxy / forced-null harness)
+ * never fetches the three.js chunk. While the chunk is in flight the caller keeps
+ * painting the legacy 2D frame (no blank); the gate's live preview resolves to the
+ * blitted 3D world as soon as the import lands. Measured on the headless local preview
+ * (SwiftShader, tests/perf/perf-236-firstpaint.mjs): 3 2D-only frames (~272 ms) before
+ * the first "ready" stamp; faster on real GPUs. FALLBACK-2D never requests the chunk. */
+function loadThreeOnce(): void {
+  if (threeModule || threeLoad || !probeWebGL()) return;
+  threeLoad = import("./three")
+    .then((m) => {
+      threeModule = m;
+      return m;
+    })
+    .catch(() => null);
+}
+
+/**
+ * Delta 1: raycast selection against the last-synced singleton world. Returns null when
+ * WebGL is unavailable (jsdom / context loss) or the async chunk has not resolved yet,
+ * so the shell falls back to screenToWorld + pickTarget and the legacy path stays
+ * byte-identical.
+ */
+export function pickWorld3D(sx: number, sy: number): PickResult | null {
+  return threeModule?.pickWorld3D(sx, sy) ?? null;
+}
+
+/** The world layer's health; "unavailable" until the probe-gated chunk resolves (the
+ * exact legacy answer when WebGL is absent). Never throws. */
+export function world3DStatus(): "unavailable" | "lost" | "ready" {
+  return threeModule?.world3DStatus() ?? "unavailable";
+}
 
 /**
  * Delta 3: project a world point (x = yard x, y = up, z = yard y) to canvas-local CSS px
@@ -93,11 +142,11 @@ export type { PickResult } from "./three";
  * THREE.OrthographicCamera — which the UI must never import or construct — so this bridge
  * delegates to YardWorld.projectWorld, the public wrapper that runs projectToScreen on
  * the last-synced camera + view. Anchors therefore agree with the blitted frame by
- * construction. Returns null when the 3D world is unavailable or lost; the caller falls
- * back to projection.worldToScreen.
+ * construction. Returns null when the 3D world is unavailable, lost, or still loading;
+ * the caller falls back to projection.worldToScreen.
  */
 export function projectWorld3D(x: number, y: number, z: number): { x: number; y: number } | null {
-  const w = getWorld3D();
+  const w = threeModule?.getWorld3D() ?? null;
   if (!w || w.isContextLost()) return null;
   return w.projectWorld(x, y, z);
 }
@@ -293,17 +342,22 @@ export function drawScene(
   // the renderer (no signature change, no new persisted setting). jsdom has no matchMedia,
   // so the unit tests keep the caller's option as the whole answer.
   const reducedMotion = effectiveReducedMotion(options.reducedMotion);
-  // RW3D T07 (#134): try the three.js world first. In a real browser it renders the
-  // volumetric yard (ground + instanced bodies + drones) and blits it here, so the flat
-  // bodies below are skipped and only the 2D information overlay is painted on top. In
-  // jsdom / recording contexts the probe fails and blitWorld3D returns false WITHOUT
-  // touching ctx, so `bodies` stays true and the legacy paint runs byte for byte.
-  const used3D = blitWorld3D(ctx, state, camera, view, {
-    reducedMotion,
-    framePhase: phase,
-    selected: options.selected,
-    assembly: options.assembly,
-  });
+  // RW3D T07 (#134) / #236: try the three.js world first. In a real browser the
+  // probe-gated dynamic import resolves at the gate's live preview and the chunk renders
+  // the volumetric yard (ground + instanced bodies + drones) and blits it here, so the
+  // flat bodies below are skipped and only the 2D information overlay is painted on top.
+  // In jsdom / recording contexts the probe fails, the import NEVER fires and the legacy
+  // paint runs byte for byte; while the chunk is in flight the same legacy 2D frame
+  // paints (no context writes from the 3D path until it resolves).
+  loadThreeOnce();
+  const used3D = threeModule
+    ? threeModule.blitWorld3D(ctx, state, camera, view, {
+        reducedMotion,
+        framePhase: phase,
+        selected: options.selected,
+        assembly: options.assembly,
+      })
+    : false;
   const bodies = !used3D;
   if (bodies) {
     // Layer 1: sky; layer 2: backdrop outside the panel; layer 3: solid floor (C-rule).

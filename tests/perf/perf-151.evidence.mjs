@@ -544,6 +544,14 @@ async function readColdLoad(page) {
     const perf = window.__perf || { resources: [], paint: [], lcp: [], longTasks: [] };
     const fcp = perf.paint.find((p) => p.name === "first-contentful-paint") || null;
     const lcp = perf.lcp.length ? perf.lcp[perf.lcp.length - 1] : null;
+    // #236: attribute entryJs to the module script index.html actually references.
+    // The probe-gated dynamic import("./three") emits a SECOND index-*.js async chunk;
+    // counting it as entry would misreport entryDecodedBytes in 3D MATURE. It lands in
+    // otherJs and is fetched cold ONLY in WebGL contexts (FALLBACK-2D never fires the
+    // import). Ground-truth attribution of the same real PerformanceResourceTiming
+    // decoded bytes — no ceiling, floor or assertion changed. The BEFORE build has a
+    // single index-*.js (the HTML entry), so this rule classifies it identically.
+    const entryBase = (document.querySelector('script[type="module"][src]')?.getAttribute("src") || "").split("/").pop();
     const cat = (name, type) => {
       if (/\.(png|jpe?g|gif|webp|avif|svg|ico)(\?|$)/i.test(name)) return "image";
       if (/\.(mp3|wav|ogg|m4a|aac|flac)(\?|$)/i.test(name)) return "audio";
@@ -552,7 +560,7 @@ async function readColdLoad(page) {
       if (/worker/i.test(name) || type === "worker") return "worker";
       if (/vendor-.*\.js/.test(name)) return "vendorJs";
       if (/tables-.*\.js/.test(name)) return "tablesJs";
-      if (/index-.*\.js/.test(name)) return "entryJs";
+      if (/index-.*\.js/.test(name)) return name.split("/").pop() === entryBase ? "entryJs" : "otherJs";
       if (/\.js(\?|$)/i.test(name)) return "otherJs";
       if (type === "navigation" || type === "document") return "html";
       return "other";
@@ -800,7 +808,7 @@ async function runP03() {
     mode: "P03", issue: 151, sha: SHA, generatedOn: GENERATED, url: URL,
     command: "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
     limitation: LIMITATION,
-    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. No budget, floor or assertion changed.",
+    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. #236: cold bytes are the REAL per-context PerformanceResourceTiming decodedBodySize sums (as before); entryJs is now attributed to the index.html module script so the probe-gated async three chunk (a second index-*.js, bucket otherJs) is not miscounted as entry — it is fetched cold only in WebGL contexts, and FALLBACK-2D never fires the import. No budget, floor or assertion changed.",
     browser: { executablePath, probeRenderer, swiftshaderForced },
     cpuThrottleRate: CPU_THROTTLE_RATE,
     budgets, devices: [], hardFailures: [],
