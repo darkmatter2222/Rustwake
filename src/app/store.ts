@@ -38,7 +38,12 @@ import {
   type RoadLanes,
   type RoadNetworkState,
 } from "../game/world/roadGraph";
-import { roadSocketLinks, type RoadSocketLink } from "../game/world/roadSockets";
+import {
+  buildingLogisticsCell,
+  buildingTakesRoadLane,
+  roadSocketLinks,
+  type RoadSocketLink,
+} from "../game/world/roadSockets";
 import {
   previewRoadPlace,
   previewRoadRemove,
@@ -365,9 +370,11 @@ export interface TrafficApi {
  * to free stock via `world.recall`. Nothing here touches SAVE_KEY/migration/
  * recovery (#148 owns the cutover).
  *
- * Convention: a logistics building id matches the buildWorld building id, and
- * its approach cell is the building's footprint-origin cell. Session fixtures
- * establish this; the #148 cutover will wire exact socket approaches.
+ * Convention: a logistics building id matches the buildWorld building id. As of
+ * #217 (session-only) a road-taking building's approach cell is its first
+ * road-taking socket's approach cell, so bay-editor capacity gates the cell jobs
+ * lease; socket-less assets fall back to the footprint-origin cell. The #148
+ * cutover owns persistence and real per-building capacity.
  */
 export interface LifecycleAffectedJob {
   readonly jobId: number;
@@ -454,6 +461,13 @@ const MAX_TICKS_PER_FRAME = 20;
 const ROAD_SESSION_SEED = 139;
 /** T11 (#138): fixed seed for the session-only build yard (deterministic). */
 const BUILD_SESSION_SEED = 138;
+/**
+ * #217 (session-only): default logistics storage capacity for a building that
+ * auto-registers on completion. The kit declares no per-building storage field
+ * yet, so this matches the session fixtures' placeholder (50 units); the #148
+ * cutover will wire real per-building capacity. Never persisted.
+ */
+const DEFAULT_BUILDING_LOGISTICS_CAPACITY = 50;
 /** Follower tabs adopt the owner's snapshot at this cadence. */
 const RECONCILE_MS = 100;
 /** Authoritative checkpoint cadence for the owning tab. */
@@ -584,6 +598,31 @@ export function createStore(
   // unchanged until a writer enables it; never persisted (#148 owns cutover).
   const traffic = createTraffic();
   let trafficEnabled = false;
+
+  // #217 (session-only): advance the build yard and surface completed buildings
+  // to the logistics ledger. Construction settles inside `advanceWorld`; when a
+  // site becomes a completed building we auto-register it IF it declares a
+  // road-taking socket, at that socket's approach cell (buildingLogisticsCell).
+  // This is the deferred wiring the #146 convention comment promised: the bay
+  // editor writes capacity at approach cells, and logistics jobs lease bays at
+  // the registered cell, so the two must coincide for capacity to gate anything.
+  // Bounded (the scan runs only on a tick that settled a site), idempotent
+  // (already-registered buildings are skipped, preserving manual capacity), and
+  // never persisted — the logistics ledger stays disjoint from the save (#148).
+  const settleBuildWorld = (ticks: number): void => {
+    const before = buildWorld.buildings.length;
+    advanceWorld(buildWorld, ticks);
+    if (buildWorld.buildings.length === before) return;
+    for (const building of buildWorld.buildings) {
+      if (logistics.buildings[building.id] !== undefined) continue;
+      if (!buildingTakesRoadLane(building)) continue;
+      registerLogisticsBuildingFn(logistics, {
+        id: building.id,
+        cell: buildingLogisticsCell(building),
+        capacity: DEFAULT_BUILDING_LOGISTICS_CAPACITY,
+      });
+    }
+  };
 
   let role: StoreRole = lease ? lease.claim(state.revision) : "writer";
 
@@ -753,6 +792,9 @@ export function createStore(
       // T13 (#140): logistics jobs ride the same budget, after road cargo.
       // T14 (#141): traffic is opt-in; undefined keeps the legacy tick path.
       tickLogistics(logistics, roadNet, ticks, trafficEnabled ? traffic : undefined);
+      // #217: the build yard rides the same authoritative budget so construction
+      // completes in the live loop and completed sockets reach the bay editor.
+      settleBuildWorld(ticks);
       sinceSave += ticks * TICK_MS;
       if (sinceSave >= PERSIST_MS) {
         sinceSave = 0;
@@ -996,8 +1038,9 @@ export function createStore(
       // T14 (#141): traffic is opt-in; undefined keeps the legacy tick path.
       tickLogistics(logistics, roadNet, ticks, trafficEnabled ? traffic : undefined);
       // T11 (#138): construction sites advance with the same authoritative
-      // ticks (5 s assembly, #133 engine). Session-only: never persisted.
-      advanceWorld(buildWorld, ticks);
+      // ticks (5 s assembly, #133 engine). #217: completion also auto-registers
+      // road-taking buildings to their socket approach cells. Session-only.
+      settleBuildWorld(ticks);
       lastSeenMs = now();
       persist();
       notify();
@@ -1008,7 +1051,11 @@ export function createStore(
     getWorld: () => roadWorld,
     getRoadNetwork: () => roadNet,
     getRoadCargo: () => roadCargo,
-    getRoadSockets: () => roadSocketLinks(roadNet, roadWorld),
+    // #217: sockets belong to COMPLETED player buildings, which live in
+    // buildWorld (seed 138), not the road-only roadWorld (seed 139) that never
+    // receives buildings. roadSocketLinks reads only world.buildings, so this
+    // projection is safe; roadTool keeps using roadWorld for placement law.
+    getRoadSockets: () => roadSocketLinks(roadNet, buildWorld),
     previewRoadPlace: (cells, lanes = 1) => previewRoadPlace(roadWorld, roadNet, cells, lanes),
     previewRoadRemove: (cells) => previewRoadRemove(roadWorld, roadNet, cells),
     commitRoad(command: RoadCommand): RoadTransactionResult {
@@ -1283,7 +1330,13 @@ export function createStore(
       if (!result.ok) return { ok: false, rejection: result.rejection };
       const lb = logistics.buildings[buildingId];
       if (lb !== undefined) {
-        registerLogisticsBuildingFn(logistics, { id: buildingId, cell: { x: cell.x, y: cell.y }, capacity: lb.capacity });
+        // #217: retarget the registration to the moved building's socket approach
+        // cell (same rule as completion), preserving its capacity. Assets without
+        // a road lane fall back to the footprint-origin cell, so a manually
+        // registered socket-less building keeps its prior convention.
+        const moved = buildWorld.buildings.find((b) => b.id === buildingId);
+        const approach = moved !== undefined ? buildingLogisticsCell(moved) : { x: cell.x, y: cell.y };
+        registerLogisticsBuildingFn(logistics, { id: buildingId, cell: approach, capacity: lb.capacity });
       }
       notify();
       return { ok: true, revision: result.revision, recalledJobIds };
