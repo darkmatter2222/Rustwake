@@ -78,3 +78,8 @@ node --test scripts/package-dashboard.test.mjs
 ```
 
 [GitHub runner service documentation](https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/configure-the-application) · [nginx root documentation](https://nginx.org/en/docs/http/ngx_http_core_module.html#root)
+
+
+## Current post-deployment assurance (issue #248)
+The trusted self-hosted deployment job remains unchanged and executes only the root-owned host adapter. Once deploy succeeds, the same serialized delivery workflow runs a separate GitHub-hosted verify-live job at the packaged immutable main SHA. It validates HTTPS release-manifest.json source_sha and every listed file SHA256, then uses ONE Chromium browser with two sequential fresh desktop/phone-emulated contexts to record opening/game UI, canvas readiness, navigation presence, JavaScript errors, scrolling and screenshots. GitHub Actions retains rustwake-live-<SHA> artifact/report.json and screenshots (including failures). If public HTTPS cannot be reached from the GitHub-hosted runner, classify verification FAIL/UNKNOWN; do not mark live verification successful based only on self-hosted deploy receipt. Only the release engineer links exact main CI/deploy/live-verifier workflow IDs to the issue/PR.
+This tests deployment and minimal render reachability, NOT approved isometric styling, real phone performance or full sandbox interactions. Sponsor visual acceptance for #244-#247/#151 is separate. Re-test after approved changes; do not spawn local browser loops to compensate.
