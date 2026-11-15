@@ -1,0 +1,300 @@
+{
+ "label": "optB",
+ "url": "http://localhost:4186/",
+ "viewports": {
+  "824x1830": {
+   "gate": {
+    "btn": "Begin recovery",
+    "save": "A fresh yard is waiting"
+   },
+   "info": {
+    "world3d": "ready",
+    "cam": "106.52,193.51,2.852",
+    "cw": 824,
+    "ch": 1830,
+    "cssW": 824,
+    "cssH": 1830,
+    "machines": 0,
+    "tick": 80,
+    "tutorial": 0,
+    "credits": 60,
+    "objective": "Tap the highlighted wreck to salvage scrap.",
+    "boxes": {
+     "lead": {
+      "top": 8,
+      "bottom": 340,
+      "left": 10,
+      "right": 814,
+      "w": 804,
+      "h": 332
+     },
+     "dock": {
+      "top": 1025,
+      "bottom": 1071,
+      "left": 132,
+      "right": 692,
+      "w": 560,
+      "h": 46
+     },
+     "toolbar": {
+      "top": 1762,
+      "bottom": 1822,
+      "left": 132,
+      "right": 692,
+      "w": 560,
+      "h": 60
+     },
+     "zoom": {
+      "top": 0,
+      "bottom": 0,
+      "left": 0,
+      "right": 0,
+      "w": 0,
+      "h": 0
+     },
+     "inspector": null,
+     "sheet": null
+    },
+    "census": {
+     "samples": 800,
+     "uniqueColors": 28,
+     "dominant": "8,13,24",
+     "nonDominantPct": 60,
+     "structureTones": 45,
+     "groundPct": 33,
+     "top": [
+      [
+       "8,13,24",
+       320
+      ],
+      [
+       "18,31,39",
+       264
+      ],
+      [
+       "28,45,54",
+       29
+      ],
+      [
+       "28,45,55",
+       26
+      ],
+      [
+       "27,44,53",
+       24
+      ],
+      [
+       "92,118,128",
+       17
+      ]
+     ]
+    }
+   },
+   "roundTrip": {
+    "gateBtn": "Continue",
+    "gateSave": "Saved run found — Tick 80 · 0 machines · drone wrecked · 60 credits",
+    "machines": 0,
+    "tutorial": 0,
+    "credits": 60,
+    "tick": 80
+   },
+   "errors": []
+  },
+  "1440x900": {
+   "gate": {
+    "btn": "Begin recovery",
+    "save": "A fresh yard is waiting"
+   },
+   "info": {
+    "world3d": "ready",
+    "cam": "107.82,110.53,2.712",
+    "cw": 1440,
+    "ch": 900,
+    "cssW": 1440,
+    "cssH": 900,
+    "machines": 0,
+    "tick": 80,
+    "tutorial": 0,
+    "credits": 60,
+    "objective": "Tap the highlighted wreck to salvage scrap.",
+    "boxes": {
+     "lead": {
+      "top": 8,
+      "bottom": 128,
+      "left": 10,
+      "right": 1430,
+      "w": 1420,
+      "h": 120
+     },
+     "dock": {
+      "top": 780,
+      "bottom": 826,
+      "left": 440,
+      "right": 1000,
+      "w": 560,
+      "h": 46
+     },
+     "toolbar": {
+      "top": 832,
+      "bottom": 892,
+      "left": 440,
+      "right": 1000,
+      "w": 560,
+      "h": 60
+     },
+     "zoom": {
+      "top": 628,
+      "bottom": 772,
+      "left": 1382,
+      "right": 1430,
+      "w": 48,
+      "h": 144
+     },
+     "inspector": null,
+     "sheet": null
+    },
+    "census": {
+     "samples": 800,
+     "uniqueColors": 29,
+     "dominant": "18,31,39",
+     "nonDominantPct": 64,
+     "structureTones": 45,
+     "groundPct": 37,
+     "top": [
+      [
+       "18,31,39",
+       292
+      ],
+      [
+       "8,13,24",
+       280
+      ],
+      [
+       "27,44,53",
+       38
+      ],
+      [
+       "28,45,54",
+       24
+      ],
+      [
+       "28,45,55",
+       23
+      ],
+      [
+       "92,118,128",
+       18
+      ]
+     ]
+    }
+   },
+   "roundTrip": {
+    "gateBtn": "Continue",
+    "gateSave": "Saved run found — Tick 80 · 0 machines · drone wrecked · 60 credits",
+    "machines": 0,
+    "tutorial": 0,
+    "credits": 60,
+    "tick": 80
+   },
+   "errors": []
+  },
+  "1920x1080": {
+   "gate": {
+    "btn": "Begin recovery",
+    "save": "A fresh yard is waiting"
+   },
+   "info": {
+    "world3d": "ready",
+    "cam": "105.23,110.85,3.475",
+    "cw": 1920,
+    "ch": 1080,
+    "cssW": 1920,
+    "cssH": 1080,
+    "machines": 0,
+    "tick": 80,
+    "tutorial": 0,
+    "credits": 60,
+    "objective": "Tap the highlighted wreck to salvage scrap.",
+    "boxes": {
+     "lead": {
+      "top": 8,
+      "bottom": 128,
+      "left": 10,
+      "right": 1910,
+      "w": 1900,
+      "h": 120
+     },
+     "dock": {
+      "top": 960,
+      "bottom": 1006,
+      "left": 680,
+      "right": 1240,
+      "w": 560,
+      "h": 46
+     },
+     "toolbar": {
+      "top": 1012,
+      "bottom": 1072,
+      "left": 680,
+      "right": 1240,
+      "w": 560,
+      "h": 60
+     },
+     "zoom": {
+      "top": 808,
+      "bottom": 952,
+      "left": 1862,
+      "right": 1910,
+      "w": 48,
+      "h": 144
+     },
+     "inspector": null,
+     "sheet": null
+    },
+    "census": {
+     "samples": 800,
+     "uniqueColors": 33,
+     "dominant": "18,31,39",
+     "nonDominantPct": 64,
+     "structureTones": 40,
+     "groundPct": 36,
+     "top": [
+      [
+       "18,31,39",
+       286
+      ],
+      [
+       "8,13,24",
+       280
+      ],
+      [
+       "27,44,53",
+       34
+      ],
+      [
+       "28,45,54",
+       28
+      ],
+      [
+       "92,118,128",
+       19
+      ],
+      [
+       "28,45,55",
+       19
+      ]
+     ]
+    }
+   },
+   "roundTrip": {
+    "gateBtn": "Continue",
+    "gateSave": "Saved run found — Tick 80 · 0 machines · drone wrecked · 60 credits",
+    "machines": 0,
+    "tutorial": 0,
+    "credits": 60,
+    "tick": 80
+   },
+   "errors": []
+  }
+ }
+}

@@ -429,6 +429,20 @@
 
 /* ---- Desktop (>= 1024 px): the right inspector ---- */
 @media (min-width: 1024px) {
+  /* #249: the contextual action tray sits directly above the centred toolbar
+     (UI_CONTRACT: "centered bottom toolbar"), not floating in the vertical middle
+     of the free space. `.hud` is a space-between column; with only the lead, dock
+     and toolbar painted on a fresh desktop yard the dock otherwise lands mid-screen
+     and `chromeInsets` reserves everything below its top as bottom chrome — on a
+     900 px-tall desktop that collapsed the world band to ~210 px (zoom 0.890, a tiny
+     yard island in ~90% void). The auto top margin absorbs the free space above the
+     dock so the bottom chrome is just dock + toolbar and the camera fit (frozen
+     fitToShell/fitCamera, paint-truth) gets the contract's remaining rectangle.
+     The toolbar's own 6 px margin-top keeps the tray/toolbar gutter. Phone portrait
+     (< 1024 px) keeps its proven composition untouched. */
+  .dock {
+    margin-top: auto;
+  }
   .shell-inspector {
     position: absolute;
     z-index: 6;

@@ -1,0 +1,64 @@
+{
+  "issue": 249,
+  "base": "c551f276b0d6bcf70eee3d68de3ab2071724af6a",
+  "entryDecodedBytes": {
+    "value": 324689,
+    "ceiling": 360000,
+    "met": true
+  },
+  "matureColdTotalDiskBytes": {
+    "value": 1124612,
+    "ceiling": 1220000,
+    "met": true
+  },
+  "fallback2dColdTotalDiskBytes": {
+    "value": 575646,
+    "ceiling": 620000,
+    "met": true,
+    "headroom": 44354
+  },
+  "binaryMediaCount": 0,
+  "budgetsJsonUntouched": true,
+  "css": {
+    "before": {
+      "name": "index-BVohK8qu.css",
+      "bytes": 66873,
+      "sha256": "55ecfe0d08ecd86df1c6f66ba398e9abc6f8c880884f713cc97dcca75dfd9635"
+    },
+    "after": {
+      "name": "index-7H--D8XZ.css",
+      "bytes": 67447,
+      "sha256": "99dcf68e01b55a9b5d2e399c9ff5d9d3715042895a95623b69a9e60acfcd9555"
+    }
+  },
+  "byteIdentity": {
+    "vendor": "identical a58625f8076320045a88e2acaa800218823508f519a191c9bcce8466767ca0d0",
+    "tables": "identical aa4dde34aa71d31be79e39ac47133adbc14667e6a6c938c1632a7a966912cd02",
+    "worker": "identical aa7ed1e5851b2d87965a2af80d59468c0ff449de08c1b1cf7ed35f1d61a8382f",
+    "entryJs": {
+      "bytes": 324689,
+      "diffSpans": [
+        [
+          66,
+          8
+        ],
+        [
+          127655,
+          8
+        ]
+      ],
+      "content": "vite 3D-chunk asset-hash cross-reference only (D3leWt-I -> QjNkSjBx)"
+    },
+    "threeChunkJs": {
+      "bytes": 548966,
+      "diffSpans": [
+        [
+          196,
+          8
+        ]
+      ],
+      "content": "vite entry asset-hash cross-reference only (_FVz8to1 -> CTPRJTx-)"
+    },
+    "note": "No logic byte changed; literal whole-file identity impossible for any CSS edit under content-hashed assets."
+  }
+}
