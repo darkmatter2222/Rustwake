@@ -7,6 +7,7 @@
 import { describe, expect, it } from "vitest";
 import * as THREE from "three";
 import { AssemblyView } from "../../src/game/renderer/three/assemblyView";
+import { buildingStageReport } from "../../src/game/renderer/assembly";
 import type { AssemblyBuildingSnapshot, AssemblySnapshot } from "../../src/game/renderer/assembly";
 import { KIT_GEOMETRY } from "../../src/game/renderer/kitGeometry";
 
@@ -72,6 +73,35 @@ describe("AssemblyView scene graph", () => {
       expect(r.done).toBe(p === 50);
       expect(r.totalParts).toBe(18);
     });
+    view.dispose();
+  });
+
+  it("stamps an atomic QA time base: group userData tick == the tick mesh.visible was synced to (G1 #151)", () => {
+    const view = new AssemblyView();
+    for (const p of [0, 7, 10, 20, 30, 40, 50]) {
+      view.sync(snap([bld({ progressTicks: p })], p), { reducedMotion: false, framePhase: 0 });
+      const group = view.root.getObjectByName("building-1-warehouse") as THREE.Group;
+      expect(group.userData.progressTicks, `progress ${p}`).toBe(p);
+      expect(group.userData.durationTicks, `progress ${p}`).toBe(D);
+      // The pure report derived from the stamped tick must agree with the live
+      // graph at the SAME sync instant — the invariant the V05 capture relies
+      // on (one atomic time base, no persisted-envelope lag).
+      const pure = buildingStageReport({
+        ...bld(),
+        progressTicks: group.userData.progressTicks as number,
+        durationTicks: group.userData.durationTicks as number,
+      });
+      let liveVisible = 0;
+      group.traverse((o) => { if ((o as THREE.Mesh).isMesh && o.visible) liveVisible += 1; });
+      expect(pure.visibleParts, `progress ${p}`).toBe(liveVisible);
+      expect(pure.stage, `progress ${p}`).toBe(view.stageReport()[0].stage);
+    }
+    // A progress-only update keeps the group instance and refreshes the stamp.
+    const before = view.root.getObjectByName("building-1-warehouse");
+    view.sync(snap([bld({ progressTicks: 12 })], 12), { reducedMotion: false, framePhase: 0 });
+    const after = view.root.getObjectByName("building-1-warehouse") as THREE.Group;
+    expect(after).toBe(before);
+    expect(after.userData.progressTicks).toBe(12);
     view.dispose();
   });
 

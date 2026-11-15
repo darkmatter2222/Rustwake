@@ -22,7 +22,10 @@
  * save envelope (encodeSave 4th arg, world), boots the REAL built app, and
  * samples the staged construction (base/frame/walls/roof/activation) two ways:
  *   (1) the pure buildingStageReport()/assemblyStageAt() stage index computed
- *       from the persisted progressTicks (the exact data assemblyReport reads), and
+ *       from the LIVE sync tick stamped on the scene group's userData by
+ *       assemblyView.updateRecord (pass 10: one atomic time base with (2);
+ *       the persisted envelope lags by up to PERSIST_MS and is recorded
+ *       separately as progressTicks, never used to time the live scene), and
  *   (2) the LIVE three.js scene graph reached through the sanctioned
  *       __THREE_DEVTOOLS__ 'observe' hook (WebGLRenderer constructor) + a
  *       render() wrap that stashes scene/camera: actual mesh.visible per kit
@@ -355,7 +358,15 @@ const readLiveAssembly = (page, buildingId, asset) => page.evaluate(([id, ast]) 
       if (!m) continue;
       const parts = [];
       child.traverse((o) => { if (o.isMesh) parts.push({ name: o.name, visible: o.visible === true }); });
-      out.buildings.push({ id: Number(m[1]), asset: m[2], parts });
+      // DEFECT 1 fix (pass 10): the group's userData time base is stamped by
+      // assemblyView.updateRecord in the SAME sync that sets mesh.visible, so
+      // this single evaluate returns visibility AND the exact tick it belongs
+      // to — one atomic snapshot, no persisted-envelope (PERSIST_MS) lag.
+      out.buildings.push({
+        id: Number(m[1]), asset: m[2], parts,
+        progressTicks: typeof child.userData.progressTicks === "number" ? child.userData.progressTicks : null,
+        durationTicks: typeof child.userData.durationTicks === "number" ? child.userData.durationTicks : null,
+      });
     }
     const group = root.getObjectByName(`building-${id}-${ast}`);
     if (group) {
@@ -569,8 +580,9 @@ async function captureV05(browser, report) {
     return { context, page, pageErrors, gate, buildingId, cell, bootSave, world };
   };
 
-  /** One observation: persisted progress -> pure stage report, LIVE scene-graph
-   *  stage (mesh.visible), and the building's in-page backing-store crop hash. */
+  /** One observation: LIVE sync tick -> pure stage report (atomic with the
+   *  mesh.visible read), LIVE scene-graph stage, and the building's in-page
+   *  backing-store crop hash. Persisted progress is recorded separately. */
   const observe = async (page, buildingId, start, label, cropState) => {
     const save = await readSave(page);
     const w = save.world;
@@ -578,10 +590,28 @@ async function captureV05(browser, report) {
     const building = w?.buildings?.find((b) => b.id === buildingId) ?? null;
     const snap = w ? worldAssemblySnapshot(w, () => 1) : { tick: 0, buildings: [] };
     const bSnap = snap.buildings.find((b) => b.id === buildingId) ?? null;
-    const pure = bSnap ? buildingStageReport(bSnap) : null;
     const live = await readLiveAssembly(page, buildingId, ASSET);
     const liveB = live.buildings.find((b) => b.id === buildingId) ?? null;
     const liveObs = liveB ? liveStageOf(ASSET, liveB.parts) : null;
+    // DEFECT 1 fix (pass 10): ONE atomic time base for pure AND live. The
+    // persisted envelope lags the live scene by up to PERSIST_MS (1000 ms =
+    // 10 sim ticks), so deriving `pure` from the save made it disagree with
+    // mesh.visible read moments later ("live ahead of persisted" — a capture
+    // time-base defect, not a renderer defect). assemblyView.updateRecord now
+    // stamps progressTicks/durationTicks on the group in the same sync that
+    // sets mesh.visible; readLiveAssembly returns them in the SAME evaluate.
+    // The pure report is derived from that live tick. If the stamp is absent
+    // (older bundle), fall back to the persisted snapshot — the agreement
+    // checks then fail honestly rather than being relaxed.
+    const liveProgress = liveB && typeof liveB.progressTicks === "number" ? liveB.progressTicks : null;
+    const pureSnap = liveProgress !== null
+      ? {
+          ...(bSnap ?? { id: buildingId, asset: ASSET, cell: { x: 0, y: 0 }, rotation: 0, completed: false, level: 1 }),
+          progressTicks: liveProgress,
+          durationTicks: liveB.durationTicks ?? DURATION,
+        }
+      : bSnap;
+    const pure = pureSnap ? buildingStageReport(pureSnap) : null;
     let cropHash = null;
     let cropRect = null;
     if (live.center && Number.isFinite(live.center.x) && Number.isFinite(live.center.y)) {
@@ -596,7 +626,10 @@ async function captureV05(browser, report) {
         }
       }
     }
-    const stageIdx = pure ? pure.stage : null;
+    // DEFECT 2 fix (pass 10): bucket crops by the LIVE stage — the same atomic
+    // time base as `pure` above. Bucketing by the stale persisted stage let one
+    // live-stage crop hash dominate several buckets (desktop crop collapse).
+    const stageIdx = liveObs ? liveObs.stage : (pure ? pure.stage : null);
     if (stageIdx !== null && cropHash) (cropState.byStage[stageIdx] ??= []).push(cropHash);
     const ledger = w ? {
       scrap: totals(w, "scrap"), steel: totals(w, "steel"), ferrous: totals(w, "ferrous"),
@@ -607,6 +640,7 @@ async function captureV05(browser, report) {
     return {
       label, tMs: Date.now() - start, simTick: save.tick,
       progressTicks: site ? site.progressTicks : (building ? DURATION : null),
+      liveProgressTicks: liveProgress,
       sitePresent: !!site, buildingPresent: !!building,
       pure, live: liveObs, liveFound: live.found, liveHasGroup: live.hasGroup,
       cropHash, cropRect, ledger,
@@ -687,8 +721,8 @@ async function captureV05(browser, report) {
 
     check(`v05-${devName}: yard site restored at boot`, "in-progress site", bootSite ? `progress ${bootSite.progressTicks}` : null, bootSite !== null && bootSite.progressTicks < DURATION);
     check(`v05-${devName}: live assembly scene observed`, true, liveObserved, liveObserved === true);
-    check(`v05-${devName}: live stage matches persisted stage`, "agree at every sample", `${withObs.length} samples`, liveAgrees === true);
-    check(`v05-${devName}: live visibleParts matches persisted`, "agree at every sample", `${withObs.length} samples`, visiblePartsAgree === true);
+    check(`v05-${devName}: live stage matches pure stage (atomic live tick)`, "agree at every sample", `${withObs.length} samples`, liveAgrees === true);
+    check(`v05-${devName}: live visibleParts matches pure stage report (atomic live tick)`, "agree at every sample", `${withObs.length} samples`, visiblePartsAgree === true);
     check(`v05-${devName}: stage sequence covers base/frame/walls/roof/activation`, "[0,1,2,3,4]", JSON.stringify(stageSequence), stageSequence.length === 5 && stageSequence.every((s, i) => s === i));
     check(`v05-${devName}: visibleParts monotone non-decreasing`, true, monotone, monotone === true);
     check(`v05-${devName}: crop hash distinct across all five stages`, "5 distinct stage hashes", `${stageModes.length} stages, ${new Set(stageModes).size} distinct, ${uniqueCropHashes} total unique`, cropDistinctAcrossStages === true);
@@ -706,7 +740,7 @@ async function captureV05(browser, report) {
       modeByStage, uniqueCropHashes, cropDistinctAcrossStages, allConserved, steelCommittedOnce, completedOnce, completedAt,
       simSteelDelta, simScrapDelta,
       canonical: canonical.map(({ t, sha256, name, progressTicks, stage, stageName, cropHash }) => ({ t, sha256, name, progressTicks, stage, stageName, cropHash })),
-      samples: samples.map((s) => ({ label: s.label, tMs: s.tMs, simTick: s.simTick, progressTicks: s.progressTicks, stage: s.pure?.stage ?? null, stageName: s.pure?.stageName ?? null, done: s.pure?.done ?? null, visibleParts: s.pure?.visibleParts ?? null, liveStage: s.live?.stage ?? null, liveVisibleParts: s.live?.visibleParts ?? null, cropHash: s.cropHash, sites: s.sites, buildings: s.buildings, reservations: s.reservations, ledger: s.ledger })),
+      samples: samples.map((s) => ({ label: s.label, tMs: s.tMs, simTick: s.simTick, progressTicks: s.progressTicks, liveProgressTicks: s.liveProgressTicks, stage: s.pure?.stage ?? null, stageName: s.pure?.stageName ?? null, done: s.pure?.done ?? null, visibleParts: s.pure?.visibleParts ?? null, liveStage: s.live?.stage ?? null, liveVisibleParts: s.live?.visibleParts ?? null, cropHash: s.cropHash, sites: s.sites, buildings: s.buildings, reservations: s.reservations, ledger: s.ledger })),
       finalLedger, beforeShot, completeShot, cropClip: cropState.clip, pageErrors: a.pageErrors,
     };
     await a.context.close();
@@ -783,14 +817,16 @@ async function captureV05(browser, report) {
   const v05Checks = checks.filter((c) => c.name.startsWith("v05-"));
   const v05Pass = v05Checks.length > 0 && v05Checks.every((c) => c.pass);
   const summary = Object.entries(v05).map(([dev, d]) =>
-    `${dev}: stages [${d.sequence.stageSequence.join("->")}], live==persisted ${d.sequence.liveAgrees}, ` +
+    `${dev}: stages [${d.sequence.stageSequence.join("->")}], live==pure(atomic live tick) ${d.sequence.liveAgrees}, ` +
     `distinctStageCrops ${d.sequence.cropDistinctAcrossStages}, completedOnce ${d.sequence.completedOnce}, ` +
     `ledgerConserved ${d.sequence.allConserved}, reloadResume ${d.reload.progressSurvived}, reloadSingleCharge ${d.reload.bSteelOnce}`).join("; ");
   finding(v05Pass ? "V05 staged construction MET (numeric, running build)" : "V05 staged construction GAP",
     "ACCEPTANCE V05: a 0/1/2/3/4/5 s base/frame/walls/roof/activation clip + mid-build reload resume that charges once. " +
     "Method: seeded an in-progress warehouse WorldState site through the save envelope (encodeSave 4th arg), booted the real built app, " +
-    "and sampled the staged build two ways — the pure buildingStageReport()/assemblyStageAt() index from persisted progressTicks AND the " +
-    "LIVE three.js scene graph (mesh.visible via the __THREE_DEVTOOLS__ render-wrap seam), cross-checked at every sample, plus the " +
+    "and sampled the staged build two ways on ONE atomic time base — the pure buildingStageReport()/assemblyStageAt() index from the " +
+    "live sync tick (group.userData.progressTicks, stamped by assemblyView.updateRecord in the same sync that sets mesh.visible) AND the " +
+    "LIVE three.js scene graph (mesh.visible via the __THREE_DEVTOOLS__ render-wrap seam, read in the SAME evaluate), cross-checked at every " +
+    "sample, plus the " +
     "building's in-page 2D backing-store crop hash. ASSEMBLY_STAGES=" + JSON.stringify(ASSEMBLY_STAGES) + ". " +
     `Result: ${summary}. ` +
     (v05Pass

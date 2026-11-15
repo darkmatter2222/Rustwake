@@ -191,6 +191,15 @@ export class AssemblyView {
       mesh.scale.set(p.size[0], p.size[1] * pose.sy, p.size[2]);
     }
 
+    // Read-only QA time-base metadata (G1 #151 pass 10): stamped in the SAME
+    // sync that sets mesh.visible above, so a headless capture can derive the
+    // pure stage report from the exact tick the live scene was synced to — one
+    // atomic time base instead of the persisted envelope, which lags by up to
+    // PERSIST_MS. Render-layer metadata only: no economy logic, no state
+    // writes, no clock reads (boundary-3d contract unchanged).
+    rec.group.userData.progressTicks = b.progressTicks;
+    rec.group.userData.durationTicks = b.durationTicks;
+
     // Idle mechanisms run only on completed buildings, never under reduced
     // motion. Phase is (tick + framePhase): deterministic, no clock reads.
     const completed = assemblyStageAt(b.progressTicks, b.durationTicks).done;
