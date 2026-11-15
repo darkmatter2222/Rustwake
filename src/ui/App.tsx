@@ -962,6 +962,10 @@ export function App({
         selected: moveFlow !== null ? moveFlow.machineId : selected,
         // Q-004 C-1: the sub-tick phase the tick loop left in its accumulator (A1).
         framePhase: store.getFramePhase(),
+        // G1 (#228): the staged build-yard assembly the running 3D renderer draws on top
+        // of the instanced sim bodies. Derived from the same store snapshot tick, so the
+        // construction stages advance with the sim. Absent WebGL the 2D fallback is unchanged.
+        assembly: (store as GameStore & BuildPlacementApi).getAssemblySnapshot(),
       });
       // RW3D #135 delta 3: world-anchored paint truth for the selection. The anchor is
       // projected through the SAME cameraRig.projectToScreen the blit uses (scene.ts

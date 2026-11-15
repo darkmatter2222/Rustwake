@@ -52,6 +52,13 @@ import {
   syncOrthoCamera,
   type PickResult,
 } from "./cameraRig";
+// G1 (#228): the staged-construction layer. AssemblyView renders the pure poses from
+// ../assembly over named kit pivots; the world drives it from the immutable build-yard
+// snapshot the caller threads in. It is additive to the instanced sim batches below —
+// the build yard (WorldState) and the sim machines (SimState.machines) are disjoint sets,
+// so the two layers never double-draw the same body.
+import { AssemblyView, type ObservedBuildingReport } from "./assemblyView";
+import type { AssemblySnapshot } from "../assembly";
 
 /** DPR cap (§1.5): never render above 2 device pixels per CSS pixel. */
 export const MAX_DPR = 2;
@@ -81,6 +88,12 @@ export interface WorldSyncOptions {
   reducedMotion: boolean;
   framePhase: number;
   selected: number | null;
+  /**
+   * G1 (#228): the build-yard assembly snapshot, derived by the caller from
+   * `worldAssemblySnapshot(buildWorld, levelOf)`. Absent it the assembly layer is
+   * empty and the frame is exactly the legacy instanced yard (byte-for-byte fallback).
+   */
+  assembly?: AssemblySnapshot;
 }
 
 export type { PickResult };
@@ -148,6 +161,8 @@ export class YardWorld {
   private droneGroup: THREE.Group;
   private trucks: TruckRig[] = [];
   private truckGroup: THREE.Group;
+  /** G1 (#228): staged build-yard construction, additive to the instanced sim bodies. */
+  private assemblyView: AssemblyView;
   private lastFleet: FleetFrame = { tick: 0, units: [] };
   private unitBox = new THREE.BoxGeometry(1, 1, 1);
   private machineSignature = "";
@@ -225,6 +240,15 @@ export class YardWorld {
 
     this.truckGroup = new THREE.Group();
     this.scene.add(this.truckGroup);
+
+    // G1 (#228): AssemblyView lays buildings out in GRID-CELL units (1 unit = 1 cell);
+    // the yard scene is in world units (CELL = 32). Scaling the root by CELL places each
+    // building's anchor cell on exactly the tile the instanced batches and the 2D overlay
+    // use (tileToWorld), so the two layers share one projection. The view is empty until a
+    // snapshot is synced, so a yard with no build-yard work renders the legacy frame.
+    this.assemblyView = new AssemblyView();
+    this.assemblyView.root.scale.set(CELL, CELL, CELL);
+    this.scene.add(this.assemblyView.root);
 
     canvas.addEventListener("webglcontextlost", this.handleContextLost, false);
     canvas.addEventListener("webglcontextrestored", this.handleContextRestored, false);
@@ -513,6 +537,17 @@ export class YardWorld {
     };
   }
 
+  /** G1 (#228): numeric build-yard stage report observed from the live scene graph
+   * (mesh.visible + pivot transforms), for headless construction evidence and QA. */
+  assemblyReport(): ObservedBuildingReport[] {
+    return this.assemblyView.stageReport();
+  }
+
+  /** G1 (#228): shared-resource accounting for the assembly layer (instancing evidence). */
+  assemblyResourceCounts(): { geometries: number; materials: number; meshes: number } {
+    return this.assemblyView.resourceCounts();
+  }
+
   /** Push one immutable snapshot + camera + view into the world. No state is mutated. */
   sync(state: SimState, camera: Camera, view: ViewState, opts: WorldSyncOptions): void {
     if (this.disposed || this.contextLost) return;
@@ -523,6 +558,14 @@ export class YardWorld {
     this.updateInstances(state.machines, opts.selected);
     this.updateDrones(state, opts);
     this.updateFleet();
+    // G1 (#228): drive the staged build-yard layer from the caller's snapshot. An absent
+    // snapshot reconciles to an empty yard (every record removed), leaving the instanced
+    // sim bodies above untouched. Reduced motion collapses idle mechanisms to discrete
+    // static stages inside AssemblyView (U07), exactly as the drone arc does here.
+    this.assemblyView.sync(opts.assembly ?? { tick: state.tick, buildings: [] }, {
+      reducedMotion: opts.reducedMotion,
+      framePhase: opts.framePhase,
+    });
     this.grid.visible = true;
   }
 
@@ -598,6 +641,7 @@ export class YardWorld {
     (this.grid.material as THREE.Material).dispose();
     (this.wreck.material as THREE.Material).dispose();
     (this.dock.material as THREE.Material).dispose();
+    this.assemblyView.dispose();
     this.renderer.dispose();
   }
 }

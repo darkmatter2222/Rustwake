@@ -19,6 +19,7 @@
  * for the shell (#135 wiring delta).
  */
 import type { SimState } from "../../simulation/types";
+import type { AssemblySnapshot } from "../assembly";
 import type { Camera, ViewState } from "../projection";
 import { YardWorld, type PickResult, type WorldSyncOptions } from "./worldRenderer";
 
@@ -89,6 +90,8 @@ export interface BlitOptions {
   reducedMotion: boolean;
   framePhase: number;
   selected: number | null;
+  /** G1 (#228): build-yard assembly snapshot; absent keeps the legacy instanced frame. */
+  assembly?: AssemblySnapshot;
 }
 
 /**
@@ -113,6 +116,7 @@ export function blitWorld3D(
       reducedMotion: options.reducedMotion,
       framePhase: options.framePhase,
       selected: options.selected,
+      assembly: options.assembly,
     });
     w.render();
     ctx.drawImage(w.canvas, 0, 0, view.width, view.height);

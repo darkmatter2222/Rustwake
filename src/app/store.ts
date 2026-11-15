@@ -124,6 +124,11 @@ import {
   type TrafficState,
   type TruckConfig,
 } from "../game/simulation/traffic";
+// G1 (#228): the world<->sim assembly join. worldAssemblySnapshot is a pure renderer
+// adapter (no THREE); the store derives the build-yard snapshot the running renderer
+// consumes, joining each completed build-yard building to its sim level (#148/#199 seam).
+import { worldAssemblySnapshot, type AssemblySnapshot } from "../game/renderer/assembly";
+import { YARD_COLS } from "../game/renderer/grid";
 
 export type StoreRole = LeaseRole;
 
@@ -298,6 +303,14 @@ export type BuildConfirmResult =
  */
 export interface BuildPlacementApi {
   getBuildWorld(): WorldState;
+  /**
+   * G1 (#228): the build-yard assembly snapshot the running 3D renderer consumes,
+   * derived from `worldAssemblySnapshot(buildWorld, levelOf)`. `levelOf` joins each
+   * completed build-yard building to the level of a sim machine on its anchor cell
+   * (the #148/#199 cutover seam); while the build yard and the sim machines are
+   * disjoint it returns 1. Pure read — safe for any role, never mutates either state.
+   */
+  getAssemblySnapshot(): AssemblySnapshot;
   getBuildPlacement(): BuildPlacementState;
   /**
    * Arm a catalog entry. Locked entries refuse with the unlock reason and the
@@ -1121,6 +1134,24 @@ export function createStore(
     // like `dispatch` and never calls `persist` — the build yard is session-only
     // (#148 owns persistence). Previews stay pure reads of `getBuildWorld()`.
     getBuildWorld: () => buildWorld,
+    getAssemblySnapshot(): AssemblySnapshot {
+      // G1 (#228): the world<->sim join. Index sim levels by tile and build-yard anchor
+      // cells by building id once per call (O(machines + buildings)), then hand the adapter
+      // a levelOf lookup. The build yard and the sim machines are disjoint today —
+      // confirmBuildPlacement writes only buildWorld, never buildMachine — so a completed
+      // yard building has no sim machine on its cell and the join returns 1. The seam is
+      // wired now so the #148/#199 cutover only populates the mapping; the running renderer
+      // already consumes the level (upgrade modules) without any further change.
+      const levelByTile = new Map<number, number>();
+      for (const m of state.machines) levelByTile.set(m.tile, m.level);
+      const tileByBuilding = new Map<number, number>();
+      for (const b of buildWorld.buildings) {
+        tileByBuilding.set(b.id, b.cell.y * YARD_COLS + b.cell.x);
+      }
+      const levelOf = (buildingId: number): number =>
+        levelByTile.get(tileByBuilding.get(buildingId) ?? -1) ?? 1;
+      return worldAssemblySnapshot(buildWorld, levelOf);
+    },
     getBuildPlacement: () => buildPlacement,
     selectBuildAsset(asset: WorldAssetId): BuildSelectResult {
       if (!isWorldAssetId(asset)) {

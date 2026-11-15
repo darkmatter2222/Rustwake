@@ -67,6 +67,10 @@ import { droneLeg } from "./flight";
 // RW3D T16 (#143): the fleet bridge carries presentation states derived only from real
 // cargo jobs. Empty by default, so the legacy paint is byte-identical until a publish.
 import { getFleetFrame } from "./fleet";
+// G1 (#228): the build-yard assembly snapshot type. assembly.ts is a pure renderer module
+// (no THREE), so importing its type here keeps the boundary clean; the caller derives the
+// snapshot from the live build yard and threads it through to the three.js world layer.
+import type { AssemblySnapshot } from "./assembly";
 
 export { CELL, WORLD_H, WORLD_W, WRECK_POSITION, tileToWorld, worldToTile };
 export { screenToWorld, worldToScreen };
@@ -150,6 +154,12 @@ export interface DrawOptions {
    * stepping once per tick. Absent it the draw is the tick-start frame, phase 0.
    */
   framePhase?: number;
+  /**
+   * G1 (#228): the build-yard assembly snapshot (`worldAssemblySnapshot(buildWorld, levelOf)`),
+   * threaded into the three.js world layer so staged construction is visible. Absent it the
+   * 3D frame is the legacy instanced yard and the 2D fallback is unchanged byte for byte.
+   */
+  assembly?: AssemblySnapshot;
 }
 
 /** The caller's phase, clamped to the one-tick window; no clock is read here (A10). */
@@ -292,6 +302,7 @@ export function drawScene(
     reducedMotion,
     framePhase: phase,
     selected: options.selected,
+    assembly: options.assembly,
   });
   const bodies = !used3D;
   if (bodies) {
