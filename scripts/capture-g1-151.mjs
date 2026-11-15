@@ -123,6 +123,11 @@ const stopServer = (child) => { if (child && child.exitCode === null) spawnSync(
 
 /* ---- seeded contexts ------------------------------------------------------- */
 const appSeed = (sim) => fixtureSaveText(sim, Date.now(), { ...DEFAULT_SETTINGS, muted: true });
+// Fixture reference-clock lead (ms): keeps store.creditAbsence at exactly zero
+// offline ticks regardless of bundle-load latency (see newSeededContext). Small
+// enough to be an obvious fixture artifact, large enough to cover any localhost
+// load. The first real persist() rewrites lastSeenMs to wall-clock now().
+const SEED_AHEAD_MS = 5000;
 
 /** Seed before first paint + instrument GL contexts and tab visibility.
  *  The hidden/visibilityState getters are the SAME emulation the coordinator-
@@ -132,7 +137,33 @@ async function newSeededContext(browser, device, sim) {
   const context = await browser.newContext({ ...device, reducedMotion: "no-preference" });
   const seed = appSeed(sim);
   if (!decodeSave(seed).ok) throw new Error("fixture seed rejected by decodeSave");
-  await context.addInitScript(([k, v]) => { localStorage.setItem(k, v); }, [SAVE_KEY, seed]);
+  // CALIBRATION (pass 3, area 1 + V05 reload): seed ONLY when the slot is empty,
+  // and stamp lastSeenMs slightly AHEAD of wall-clock at DOCUMENT START.
+  //  - The store credits the absence since lastSeenMs once at construction
+  //    (src/app/store.ts creditAbsence -> offline.ts catchUp advances the sim by
+  //    floor((now-lastSeenMs)/TICK_MS) ticks, with NO inline minimum). A seed
+  //    stamped at context creation arrives seconds later with tick>0, so
+  //    hasSaveProgress is true and the gate correctly reads "Continue" even for
+  //    the pristine OPENING yard. Stamping at init alone is not enough: bundle-
+  //    load-to-construction latency can still exceed TICK_MS (100 ms). Stamping
+  //    SEED_AHEAD_MS ahead makes (now-lastSeenMs) negative, so Math.max(0,...)=0
+  //    and catch-up provably credits ZERO ticks regardless of load latency. The
+  //    fixture then presents its exact intended state — a genuinely fresh opening
+  //    yard ("Begin recovery") for V01. This is fixture calibration, NOT a relaxed
+  //    check: offline catch-up itself is verified separately by the P02 harness.
+  //  - Seeding only when absent keeps a mid-test reload a PERSISTENCE test: the
+  //    old unconditional setItem re-wrote the fixture over the persisted save on
+  //    every navigation, which would have erased a committed V05 build.
+  await context.addInitScript(([k, v, ahead]) => {
+    if (localStorage.getItem(k)) return; // never clobber a persisted save on reload
+    const env = JSON.parse(v);
+    env.payload.lastSeenMs = Date.now() + ahead;
+    const body = JSON.stringify(env.payload);
+    let hash = 0x811c9dc5;
+    for (let i = 0; i < body.length; i += 1) { hash ^= body.charCodeAt(i); hash = Math.imul(hash, 0x01000193) >>> 0; }
+    env.checksum = hash.toString(16).padStart(8, "0");
+    localStorage.setItem(k, JSON.stringify(env));
+  }, [SAVE_KEY, seed, SEED_AHEAD_MS]);
   await context.addInitScript(() => {
     window.__rwGL = [];
     const orig = HTMLCanvasElement.prototype.getContext;
@@ -140,6 +171,17 @@ async function newSeededContext(browser, device, sim) {
       const ctx = orig.call(this, type, ...a);
       if (ctx && /webgl/.test(String(type))) window.__rwGL.push(ctx);
       return ctx;
+    };
+    // CALIBRATION (pass 3, area 5): __rwGL[0] is the throwaway WebGL PROBE canvas
+    // (src/game/renderer/three/index.ts probeWebGL), NOT the world. The active
+    // world context is the one whose canvas blitWorld3D draws into the visible 2D
+    // canvas every frame (index.ts: ctx.drawImage(w.canvas, ...)). Record that
+    // source canvas so context-loss targets the REAL world context.
+    window.__rwActiveGLCanvas = null;
+    const origDraw = CanvasRenderingContext2D.prototype.drawImage;
+    CanvasRenderingContext2D.prototype.drawImage = function (src, ...a) {
+      if (src && window.__rwGL.some((g) => g.canvas === src)) window.__rwActiveGLCanvas = src;
+      return origDraw.call(this, src, ...a);
     };
     window.__rwHidden = false;
     Object.defineProperty(document, "hidden", { configurable: true, get: () => window.__rwHidden === true });
@@ -184,25 +226,50 @@ async function readSave(page) {
     machines: s.machines.length, drones: fleetUnits(s).length, routes: s.routes.length,
     scrap: s.store.scrap, steel: s.store.steel,
     storeUnits: s.storeUnits, storeCapacity: s.storeCapacity,
-    machineList: s.machines.map((m) => ({ id: m.id, blueprint: m.blueprint, tile: m.tile, status: m.status, ageTicks: m.ageTicks })),
+    machineList: s.machines.map((m) => ({
+      id: m.id, blueprint: m.blueprint, tile: m.tile, status: m.status, ageTicks: m.ageTicks,
+      routed: s.routes.some((r) => (r.from.kind === "machine" && r.from.id === m.id) || (r.to.kind === "machine" && r.to.id === m.id)),
+    })),
+    // Fleet cargo state for the EXACT drone-scrap conservation correction below.
+    fleet: fleetUnits(s).map((u) => ({ accumulated: u.accumulated, inFlightQty: u.inFlight ? u.inFlight.qty : 0, deliveries: u.deliveries })),
+    wreckRemaining: s.wreck.remaining,
     lastSeenMs: d.payload.lastSeenMs, settings: d.payload.settings,
   };
 }
 
-/** Refresh lastSeenMs so a reload exercises persistence WITHOUT a long offline
- *  catch-up window (same envelope rewrite pattern as scripts/capture.mjs). */
+/** Exact scrap the drone fleet delivered INTO the store between two persisted
+ *  snapshots, by conservation: each unit's `accumulated` rises only when it takes
+ *  cargo from the wreck (engine.ts updateUnit), and `inFlight.qty` is cargo still
+ *  in the air. arrived = taken - delta(inFlight). This removes the periodic
+ *  +5/unit drone deliveries (TUNING.droneDeliveryTicks) from a charge/drift
+ *  measurement WITHOUT weakening it — the correction is computed, not assumed. */
+function droneScrapArrived(before, after) {
+  if (!before.fleet || !after.fleet || before.fleet.length !== after.fleet.length) return null;
+  let taken = 0, flightDelta = 0;
+  for (let i = 0; i < before.fleet.length; i += 1) {
+    taken += after.fleet[i].accumulated - before.fleet[i].accumulated;
+    flightDelta += after.fleet[i].inFlightQty - before.fleet[i].inFlightQty;
+  }
+  return taken - flightDelta;
+}
+
+/** Refresh lastSeenMs so a reload exercises PURE persistence with zero offline
+ *  catch-up (same envelope rewrite pattern as scripts/capture.mjs). Stamped
+ *  SEED_AHEAD_MS ahead so the reload loads the persisted yard exactly — the
+ *  "no second build charge" check then sees only natural post-reload drift, not
+ *  a catch-up burst. Offline catch-up is verified separately by the P02 harness. */
 async function refreshLastSeen(page) {
-  await page.evaluate((k) => {
+  await page.evaluate(([k, ahead]) => {
     const raw = localStorage.getItem(k);
     if (!raw) return;
     const env = JSON.parse(raw);
-    env.payload.lastSeenMs = Date.now();
+    env.payload.lastSeenMs = Date.now() + ahead;
     const body = JSON.stringify(env.payload);
     let hash = 0x811c9dc5;
     for (let i = 0; i < body.length; i += 1) { hash ^= body.charCodeAt(i); hash = Math.imul(hash, 0x01000193) >>> 0; }
     env.checksum = hash.toString(16).padStart(8, "0");
     localStorage.setItem(k, JSON.stringify(env));
-  }, SAVE_KEY);
+  }, [SAVE_KEY, SEED_AHEAD_MS]);
 }
 
 async function shot(page, name) {
@@ -239,6 +306,47 @@ const canvasPixelHash = (page) => page.evaluate(() => {
   return h.toString(16).padStart(8, "0");
 });
 
+// CALIBRATION (pass 3, area 3): crop hashes use the SAME authoritative in-page
+// 2D backing-store read as canvasPixelHash (DEFECT #2 fix), not page.screenshot
+// ({clip}) — compositor/GPU readback varies frame-to-frame even when the backing
+// store is frozen, which made a static starved tile read 20/20 unique. The rect
+// is canvas-relative CSS pixels; it is scaled to backing-store pixels in-page.
+const cropPixelHash = (page, rect) => page.evaluate((r) => {
+  const c = document.querySelector(".game canvas");
+  if (!c) return null;
+  const ctx = c.getContext("2d");
+  if (!ctx) return null;
+  const sx = c.width / c.clientWidth, sy = c.height / c.clientHeight;
+  const x = Math.max(0, Math.min(c.width - 1, Math.round(r.x * sx)));
+  const y = Math.max(0, Math.min(c.height - 1, Math.round(r.y * sy)));
+  const w = Math.max(1, Math.min(c.width - x, Math.round(r.w * sx)));
+  const h = Math.max(1, Math.min(c.height - y, Math.round(r.h * sy)));
+  const d = ctx.getImageData(x, y, w, h).data;
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < d.length; i += 1) { hash ^= d[i]; hash = Math.imul(hash, 0x01000193) >>> 0; }
+  return hash.toString(16).padStart(8, "0");
+}, rect);
+
+/** Fresh camera + canvas geometry, read per sample so a crop tracks the camera. */
+const canvasGeom = (page) => page.evaluate(() => {
+  const c = document.querySelector(".game canvas");
+  const r = c.getBoundingClientRect();
+  const parts = (c.dataset.cam || "").split(",").map((v) => parseFloat(v));
+  return { left: r.left, top: r.top, width: c.clientWidth, height: c.clientHeight, cam: parts };
+});
+
+/** Canvas-relative CSS crop rect centred on a machine tile (and its page clip). */
+function tileCrop(geom, tile) {
+  const w = tileToWorld(tile);
+  const p = worldToScreen({ x: geom.cam[0], y: geom.cam[1], scale: geom.cam[2] }, { width: geom.width, height: geom.height }, w.x, w.y);
+  const half = Math.max(18, 26 * geom.cam[2]);
+  const x = Math.max(0, p.x - half);
+  const y = Math.max(0, p.y - half);
+  const rect = { x, y, w: Math.min(2 * half, geom.width - x), h: Math.min(2 * half, geom.height - y) };
+  const clip = { x: geom.left + x, y: geom.top + y, width: rect.w, height: rect.h };
+  return { rect, clip };
+}
+
 const clickDock = (page, label) => page.evaluate((want) => {
   const faces = [...document.querySelectorAll(".dock .dock__btn")];
   const texts = faces.map((b) => (b.textContent || "").replace(/\s+/g, " ").trim());
@@ -268,7 +376,10 @@ async function captureScenes(browser, report) {
   const blocked = buildBlocked();
   const scenes = {};
   for (const [devName, device] of Object.entries(DEVICES)) {
-    // V01 — opening: fresh yard, gate reads Begin recovery.
+    // V01 — opening: a genuinely fresh yard (lastSeenMs stamped at first paint,
+    // so creditAbsence sees no gap and tick stays 0) must read "Begin recovery".
+    // hasSaveProgress (save.ts) is false for the pristine seed; the earlier
+    // "Continue" was seed-to-load catch-up contamination, not an app defect.
     {
       const context = await newSeededContext(browser, device, opening.sim);
       const { page, pageErrors, gate } = await openApp(context);
@@ -340,19 +451,47 @@ async function captureV05(browser, report) {
       const b = document.querySelector(".catalog__place");
       return b ? { label: (b.textContent || "").trim(), disabled: b.disabled } : null;
     });
-    // Commit the build through the shipped Place button.
+    // CALIBRATION (pass 3, area 2): the catalog Place button ONLY closes the
+    // catalog into the armed placement preview (App.tsx onPlace -> setCatalogOpen
+    // (false)). The actual spend is the dock's armed primary face "Build {machine}"
+    // (Hud.tsx DockButtons -> App.tsx onPlace -> dispatch machine.build). The old
+    // script stopped at Place, so nothing was ever built (placed:null) and the
+    // -2 scrap it saw was natural route feed. Commit through the shipped dock
+    // face, then POLL the persisted envelope until the build flushes (PERSIST_MS
+    // 1000) instead of reading a stale 350 ms snapshot.
     await page.evaluate(() => document.querySelector(".catalog__place")?.click());
-    await page.waitForTimeout(350);
+    await page.waitForTimeout(250);
+    const commitFace = await page.evaluate(() => {
+      const b = document.querySelector(".dock .dock__btn--primary");
+      return b ? { label: (b.textContent || "").replace(/\s+/g, " ").trim(), disabled: b.disabled } : null;
+    });
+    const beforeCommit = await readSave(page);
+    await page.evaluate(() => {
+      const b = document.querySelector(".dock .dock__btn--primary");
+      if (b && !b.disabled) b.click();
+    });
     const t0 = await shot(page, `v05-t0-${devName}`);
-    const after = await readSave(page);
-    const placed = after.machineList.find((m) => !before.machineList.some((b) => b.id === m.id)) ?? null;
+    let after = await readSave(page);
+    for (let i = 0; i < 16 && after.machines !== beforeCommit.machines + 1; i += 1) {
+      await page.waitForTimeout(200);
+      after = await readSave(page);
+    }
+    const placed = after.machineList.find((m) => !beforeCommit.machineList.some((b) => b.id === m.id)) ?? null;
     const cost = placed ? BLUEPRINTS[placed.blueprint]?.buildCost ?? [] : [];
     const costOf = (r) => cost.find((c) => c.resource === r)?.qty ?? 0;
-    const scrapDelta = after.scrap - before.scrap;
-    const steelDelta = after.steel - before.steel;
+    const scrapDelta = after.scrap - beforeCommit.scrap;
+    const steelDelta = after.steel - beforeCommit.steel;
+    // Exact drone-scrap correction (conservation, see droneScrapArrived). The
+    // remaining natural scrap drift is route feed into the sorter (<= a few units
+    // over the <=2 s bracket); steel has NO natural source/sink in this window
+    // (the only furnace is starved and a batch takes 40 ticks), so steel is exact.
+    const droneArrived = droneScrapArrived(beforeCommit, after);
+    const scrapCorrected = droneArrived === null ? null : scrapDelta - droneArrived;
+    const tickBracket = after.tick - beforeCommit.tick;
     check(`v05-${devName}: catalog opened`, true, armed !== null && !armed.disabled, armed !== null && armed.disabled === false);
-    check(`v05-${devName}: machine added`, before.machines + 1, after.machines, after.machines === before.machines + 1);
-    check(`v05-${devName}: scrap charged exactly once`, -costOf("scrap"), scrapDelta, placed !== null && scrapDelta === -costOf("scrap"));
+    check(`v05-${devName}: armed dock commit face`, "Build {machine}, enabled", commitFace, commitFace !== null && commitFace.disabled === false && commitFace.label.startsWith("Build"));
+    check(`v05-${devName}: machine added`, beforeCommit.machines + 1, after.machines, after.machines === beforeCommit.machines + 1);
+    check(`v05-${devName}: scrap charged exactly once (drone-corrected)`, `${-costOf("scrap")} +/-6`, scrapCorrected, placed !== null && scrapCorrected !== null && scrapCorrected <= -costOf("scrap") + 6 && scrapCorrected >= -costOf("scrap") - 6);
     check(`v05-${devName}: steel charged exactly once`, -costOf("steel"), steelDelta, placed !== null && steelDelta === -costOf("steel"));
     // 0-5 s frame sequence after placement (the V05 acceptance timeline).
     const seq = [{ t: 0, ...t0 }];
@@ -366,33 +505,26 @@ async function captureV05(browser, report) {
     // kit at t0. Occlusion tolerance: drones/overlay may cross the crop.
     let crop = null;
     if (placed) {
-      const geom = await page.evaluate(() => {
-        const c = document.querySelector(".game canvas");
-        const r = c.getBoundingClientRect();
-        const parts = (c.dataset.cam || "").split(",").map((v) => parseFloat(v));
-        return { left: r.left, top: r.top, width: c.clientWidth, height: c.clientHeight, cam: parts };
-      });
-      if (geom.cam.length >= 3 && geom.cam.every((v) => Number.isFinite(v))) {
-        const w = tileToWorld(placed.tile);
-        const p = worldToScreen({ x: geom.cam[0], y: geom.cam[1], scale: geom.cam[2] }, { width: geom.width, height: geom.height }, w.x, w.y);
-        const half = Math.max(18, 26 * geom.cam[2]);
-        const clip = {
-          x: Math.max(geom.left, geom.left + p.x - half),
-          y: Math.max(geom.top, geom.top + p.y - half),
-          width: Math.min(2 * half, geom.left + geom.width - Math.max(geom.left, geom.left + p.x - half)),
-          height: Math.min(2 * half, geom.top + geom.height - Math.max(geom.top, geom.top + p.y - half)),
-        };
-        if (clip.width > 8 && clip.height > 8) {
-          const hashes = [];
-          for (let i = 0; i < 6; i += 1) {
-            const buf = await page.screenshot({ clip });
-            hashes.push(sha256(buf));
-            if (i === 0) { const cp = resolve(shotDir, `151-v05-crop-${devName}.png`); writeFileSync(cp, buf); artifacts.push(cp); }
-            await page.waitForTimeout(900);
+      const hashes = [];
+      let firstClip = null;
+      for (let i = 0; i < 6; i += 1) {
+        const geom = await canvasGeom(page);
+        if (geom.cam.length >= 3 && geom.cam.every((v) => Number.isFinite(v))) {
+          const { rect, clip } = tileCrop(geom, placed.tile);
+          if (rect.w > 8 && rect.h > 8) {
+            hashes.push(await cropPixelHash(page, rect));
+            if (i === 0) {
+              firstClip = clip;
+              const buf = await page.screenshot({ clip });
+              const cp = resolve(shotDir, `151-v05-crop-${devName}.png`); writeFileSync(cp, buf); artifacts.push(cp);
+            }
           }
-          const mode = hashes.sort((a, b) => hashes.filter((h) => h === b).length - hashes.filter((h) => h === a).length)[0];
-          crop = { tile: placed.tile, hashes, identicalToMode: hashes.filter((h) => h === mode).length, samples: hashes.length };
         }
+        await page.waitForTimeout(900);
+      }
+      if (hashes.length) {
+        const mode = hashes.sort((a, b) => hashes.filter((h) => h === b).length - hashes.filter((h) => h === a).length)[0];
+        crop = { tile: placed.tile, measurement: "in-page 2D backing-store FNV (getImageData)", hashes, identicalToMode: hashes.filter((h) => h === mode).length, samples: hashes.length, clip: firstClip };
       }
     }
     // Reload mid-"build": persistence + no second charge. Refresh lastSeenMs
@@ -410,17 +542,24 @@ async function captureV05(browser, report) {
     const reloaded = await readSave(page);
     const reloadShot = await shot(page, `v05-reload-${devName}`);
     const reloadScrapDelta = reloaded.scrap - preReload.scrap;
+    const reloadSteelDelta = reloaded.steel - preReload.steel;
     const reloadTickDelta = reloaded.tick - preReload.tick;
+    const reloadDroneArrived = droneScrapArrived(preReload, reloaded);
+    const reloadScrapCorrected = reloadDroneArrived === null ? null : reloadScrapDelta - reloadDroneArrived;
     check(`v05-${devName}: reload keeps machine`, after.machines, reloaded.machines, reloaded.machines === after.machines);
-    check(`v05-${devName}: reload no second build charge`, "[-3,0] (natural consumption only)", reloadScrapDelta, reloadScrapDelta <= 0 && reloadScrapDelta >= -3);
+    // No second charge: drone-corrected scrap drift is natural route feed only
+    // (a second build would be -30); steel has no natural sink, so it is unchanged.
+    check(`v05-${devName}: reload no second build charge (drone-corrected scrap)`, "[-6,+6]", reloadScrapCorrected, reloadScrapCorrected !== null && reloadScrapCorrected >= -6 && reloadScrapCorrected <= 6);
+    check(`v05-${devName}: reload steel unchanged`, 0, reloadSteelDelta, reloadSteelDelta === 0);
     check(`v05-${devName}: no page errors`, 0, pageErrors.length, pageErrors.length === 0);
     v05[devName] = {
       before: { machines: before.machines, scrap: before.scrap, steel: before.steel },
-      placed, cost, scrapDelta, steelDelta,
-      armed, dockFaces: dock.faces,
+      beforeCommit: { machines: beforeCommit.machines, scrap: beforeCommit.scrap, steel: beforeCommit.steel, tick: beforeCommit.tick },
+      placed, cost, scrapDelta, steelDelta, droneArrived, scrapCorrected, tickBracket,
+      armed, commitFace, dockFaces: dock.faces,
       sequence: seq.map(({ t, sha256, name }) => ({ t, sha256, name })), seqUnique,
       placedMachineCrop: crop,
-      reload: { machines: reloaded.machines, scrapDelta: reloadScrapDelta, tickDelta: reloadTickDelta, shot: reloadShot },
+      reload: { machines: reloaded.machines, scrapDelta: reloadScrapDelta, droneArrived: reloadDroneArrived, scrapCorrected: reloadScrapCorrected, steelDelta: reloadSteelDelta, tickDelta: reloadTickDelta, shot: reloadShot },
       beforeShot, catalogShot, pageErrors,
     };
     await context.close();
@@ -546,34 +685,34 @@ async function captureV04(browser, report) {
     await page.waitForTimeout(2000);
     const save = await readSave(page);
     const working = save.machineList.find((m) => m.status === "running" || m.status === "working") ?? save.machineList[0];
-    const starved = save.machineList.find((m) => m.status === "starved" || m.status === "idle");
-    const geom = await page.evaluate(() => {
-      const c = document.querySelector(".game canvas");
-      const r = c.getBoundingClientRect();
-      const parts = (c.dataset.cam || "").split(",").map((v) => parseFloat(v));
-      return { left: r.left, top: r.top, width: c.clientWidth, height: c.clientHeight, cam: parts };
-    });
-    const cropFor = (m) => {
-      const w = tileToWorld(m.tile);
-      const p = worldToScreen({ x: geom.cam[0], y: geom.cam[1], scale: geom.cam[2] }, { width: geom.width, height: geom.height }, w.x, w.y);
-      const half = Math.max(18, 26 * geom.cam[2]);
-      const x = Math.max(geom.left, geom.left + p.x - half);
-      const y = Math.max(geom.top, geom.top + p.y - half);
-      return { x, y, width: Math.min(2 * half, geom.left + geom.width - x), height: Math.min(2 * half, geom.top + geom.height - y) };
-    };
+    // CALIBRATION (pass 3, area 3): prefer an UNROUTED starved machine. The old
+    // pick (id 2, the furnace) carries routes 2/3, so drone/belt traffic crosses
+    // its tile; ids 3-20 are starved with no routes (inRoutes [], outRoute null)
+    // and paint a static quiet core (scene.ts: only `running` machines animate).
+    const starved = save.machineList.find((m) => (m.status === "starved" || m.status === "idle") && !m.routed)
+      ?? save.machineList.find((m) => m.status === "starved" || m.status === "idle");
     const sample = async (m, label) => {
-      const clip = cropFor(m);
       const hashes = [];
+      let firstClip = null;
       for (let i = 0; i < 20; i += 1) {
-        const buf = await page.screenshot({ clip });
-        hashes.push(sha256(buf));
-        if (i === 0) { const p = resolve(shotDir, `151-v04-crop-${label}-desktop.png`); writeFileSync(p, buf); artifacts.push(p); }
+        const geom = await canvasGeom(page); // per-sample camera tracking
+        if (geom.cam.length >= 3 && geom.cam.every((v) => Number.isFinite(v))) {
+          const { rect, clip } = tileCrop(geom, m.tile);
+          if (rect.w > 8 && rect.h > 8) {
+            hashes.push(await cropPixelHash(page, rect));
+            if (i === 0) {
+              firstClip = clip;
+              const buf = await page.screenshot({ clip });
+              const p = resolve(shotDir, `151-v04-crop-${label}-desktop.png`); writeFileSync(p, buf); artifacts.push(p);
+            }
+          }
+        }
         await page.waitForTimeout(480);
       }
       const counts = {};
       for (const h of hashes) counts[h] = (counts[h] ?? 0) + 1;
       const mode = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-      return { machine: m, clip, hashes, unique: Object.keys(counts).length, modeCount: mode[1], samples: 20 };
+      return { machine: m, clip: firstClip, measurement: "in-page 2D backing-store FNV (getImageData)", hashes, unique: Object.keys(counts).length, modeCount: mode ? mode[1] : 0, samples: hashes.length };
     };
     const starvedCrop = starved ? await sample(starved, "starved") : null;
     const workingCrop = working ? await sample(working, "working") : null;
@@ -635,7 +774,18 @@ async function captureRoundTrip(browser, report) {
   await page.waitForSelector(".import-confirm", { timeout: 10000 });
   const shotConfirm = await shot(page, "roundtrip-confirm-desktop");
   await page.evaluate(() => { const c = document.querySelector(".import-confirm__ack input"); if (c && !c.checked) c.click(); });
-  await page.evaluate(() => document.querySelector(".import-confirm__replace")?.click());
+  // CALIBRATION (pass 3, area 4): importSave swaps the whole yard and persists
+  // SYNCHRONOUSLY inside the Replace handler (src/app/store.ts importSave ->
+  // persist()). Read the persisted envelope in the SAME evaluate as the click so
+  // no rAF tick/flush can interleave: this is the FROZEN imported snapshot, which
+  // must equal export A exactly (tick included). The old check compared a C
+  // exported ~0.7 s later against A and failed on 7 ticks of natural advance —
+  // a methodology error, not an import defect (the note already proved tick 141).
+  const importedRaw = await page.evaluate((k) => {
+    document.querySelector(".import-confirm__replace")?.click();
+    return localStorage.getItem(k);
+  }, SAVE_KEY);
+  const dI = decodeSave(importedRaw);
   await page.waitForTimeout(400);
   const note = await page.evaluate(() => document.querySelector(".panel .status-line")?.textContent?.trim() ?? null);
   await closePanel();
@@ -643,6 +793,13 @@ async function captureRoundTrip(browser, report) {
   await closePanel();
   const dC = decodeSave(C);
   const simNoTick = (s) => JSON.stringify({ ...s, tick: 0 });
+  const importedDelta = {
+    ok: dI.ok,
+    simIdentical: dI.ok && JSON.stringify(dI.payload.sim) === JSON.stringify(dA.payload.sim),
+    tick: dI.ok ? dI.payload.sim.tick : null,
+    settingsIdentical: dI.ok && JSON.stringify(dI.payload.settings) === JSON.stringify(dA.payload.settings),
+    lastSeenDeltaMs: dI.ok ? dI.payload.lastSeenMs - dA.payload.lastSeenMs : null,
+  };
   const acDelta = {
     byteIdentical: A === C,
     tickDelta: dC.payload.sim.tick - dA.payload.sim.tick,
@@ -650,9 +807,11 @@ async function captureRoundTrip(browser, report) {
     simIdenticalExceptTick: simNoTick(dA.payload.sim) === simNoTick(dC.payload.sim),
     settingsIdentical: JSON.stringify(dA.payload.settings) === JSON.stringify(dC.payload.settings),
   };
-  check("roundtrip: import restores sim (tick may advance <=5 naturally)", true, acDelta.simIdenticalExceptTick && acDelta.tickDelta >= 0 && acDelta.tickDelta <= 5, acDelta.simIdenticalExceptTick === true && acDelta.tickDelta >= 0 && acDelta.tickDelta <= 5);
-  check("roundtrip: settings preserved", true, acDelta.settingsIdentical, acDelta.settingsIdentical === true);
+  check("roundtrip: import restores sim exactly (frozen snapshot, tick included)", true, importedDelta.simIdentical, importedDelta.simIdentical === true);
+  check("roundtrip: settings preserved", true, importedDelta.settingsIdentical, importedDelta.settingsIdentical === true);
+  check("roundtrip: import note names restored tick/machines", `Applied · tick ${dA.payload.sim.tick}, ${dA.payload.sim.machines.length} machines`, note, note === `Applied · tick ${dA.payload.sim.tick}, ${dA.payload.sim.machines.length} machines`);
   check("roundtrip: live export advances between reads (A!=B)", false, abDelta.byteIdentical, abDelta.byteIdentical === false);
+  check("roundtrip: live sim resumes after import (C tick > imported tick)", ">0", acDelta.tickDelta, acDelta.tickDelta > 0);
   // Invalid import must change NOTHING (natural tick progression excepted).
   await clickDock(page, "Yard");
   await page.waitForSelector(".panel", { timeout: 10000 });
@@ -681,13 +840,13 @@ async function captureRoundTrip(browser, report) {
   check("roundtrip: invalid import tick drift <=2 (natural only)", "<=2", invalidDelta.tickDelta, invalidDelta.tickDelta >= 0 && invalidDelta.tickDelta <= 2);
   check("roundtrip: no page errors", 0, pageErrors.length, pageErrors.length === 0);
   report.roundTrip = {
-    protocol: "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
+    protocol: "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. The restored snapshot is read from the shipped persistence slot in the same evaluate as the Replace click (importSave persists synchronously), so it is the frozen import, not the later live sim. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
     exportA: { sha256: sha256(Buffer.from(A, "utf8")), chars: A.length, tick: dA.payload.sim.tick, shot: shotA },
     exportB: { sha256: sha256(Buffer.from(B, "utf8")), chars: B.length, tick: dB.payload.sim.tick },
     exportC: { sha256: sha256(Buffer.from(C, "utf8")), chars: C.length, tick: dC.payload.sim.tick },
-    abDelta, acDelta, importNote: note, invalid: { ...invalidDelta, shot: shotInvalid },
+    abDelta, importedDelta, acDelta, importNote: note, invalid: { ...invalidDelta, shot: shotInvalid },
     confirmShot: shotConfirm, pageErrors,
-    envelopeA: A, envelopeC: C,
+    envelopeA: A, envelopeImported: importedRaw, envelopeC: C,
   };
   const rtSection = sectionVerdict("roundtrip:");
   writeReport("151-roundtrip.json", {
@@ -705,35 +864,59 @@ async function captureContextLoss(browser, report) {
   const { page, pageErrors } = await openApp(context);
   await page.waitForTimeout(1500);
   const before = await readSave(page);
-  const glCount = await page.evaluate(() => window.__rwGL.length);
-  check("context-loss: WebGL context instrumented", ">=1", glCount, glCount >= 1);
-  await page.evaluate(() => {
-    const ext = window.__rwGL[0]?.getExtension("WEBGL_lose_context");
+  // CALIBRATION (pass 3, area 5): target the ACTIVE world context, not __rwGL[0].
+  // __rwGL[0] is the throwaway probe (three/index.ts probeWebGL); the world runs
+  // on its own offscreen canvas (getWorld3D). The drawImage instrumentation
+  // recorded the blit source canvas; lose/restore THAT context. The extension
+  // handle is captured before loss (getExtension returns null on a lost context).
+  const glInfo = await page.evaluate(() => {
+    const active = window.__rwActiveGLCanvas || null;
+    const index = window.__rwGL.findIndex((g) => g.canvas === active);
+    const gl = index >= 0 ? window.__rwGL[index] : null;
+    const ext = gl ? gl.getExtension("WEBGL_lose_context") : null;
+    window.__rwLoseExt = ext || null;
     if (ext) ext.loseContext();
+    return { count: window.__rwGL.length, activeIndex: index, hadExt: !!ext };
   });
+  check("context-loss: WebGL context instrumented", ">=1", glInfo.count, glInfo.count >= 1);
+  check("context-loss: active world GL identified + lost", true, glInfo.activeIndex >= 0 && glInfo.hadExt, glInfo.activeIndex >= 0 && glInfo.hadExt === true);
   await page.waitForTimeout(800);
   const lostStamp = await canvasStamp(page);
   const lostShot = await shot(page, "context-loss-banner-desktop");
   const during = await readSave(page);
-  await page.evaluate(() => {
-    const ext = window.__rwGL[0]?.getExtension("WEBGL_lose_context");
-    if (ext) ext.restoreContext();
-  });
+  await page.evaluate(() => { if (window.__rwLoseExt) window.__rwLoseExt.restoreContext(); });
   await page.waitForTimeout(1500);
   const readyStamp = await canvasStamp(page);
   const restoredShot = await shot(page, "context-restored-desktop");
   const after = await readSave(page);
-  const economy = (s) => JSON.stringify({ machines: s.machineList, routes: s.routes, credits: s.credits, scrap: s.scrap, steel: s.steel });
+  // The renderer holds no save bytes (three/index.ts header), so a context loss
+  // must not touch the economy. The live economy DOES advance naturally (drone
+  // scrap deliveries + route feed), so the old live-bytes equality was invalid.
+  // Measure the real invariant: structure (machines/routes/credits) identical,
+  // and no resource SPEND beyond natural drone-corrected route feed. The mature
+  // fixture has no export route, so credits never drift naturally.
+  const structure = (s) => JSON.stringify({
+    machines: s.machineList.map((m) => ({ id: m.id, blueprint: m.blueprint, tile: m.tile })),
+    routes: s.routes, credits: s.credits,
+  });
+  const structureIdentical = structure(before) === structure(after);
+  const scrapDelta = after.scrap - before.scrap;
+  const steelDelta = after.steel - before.steel;
+  const droneArrived = droneScrapArrived(before, after);
+  const scrapCorrected = droneArrived === null ? null : scrapDelta - droneArrived;
   check("context-loss: dataset.world3d=lost", "lost", lostStamp?.world3d, lostStamp?.world3d === "lost");
   check("context-loss: dataset.world3d=ready after restore", "ready", readyStamp?.world3d, readyStamp?.world3d === "ready");
-  check("context-loss: save economy untouched", true, economy(before) === economy(after), economy(before) === economy(after));
+  check("context-loss: machines/routes/credits untouched", true, structureIdentical, structureIdentical === true);
+  check("context-loss: no scrap spend (drone-corrected)", "[-8,+2] natural feed only", scrapCorrected, scrapCorrected !== null && scrapCorrected >= -8 && scrapCorrected <= 2);
+  check("context-loss: no steel spend", "[0,+4] production only", steelDelta, steelDelta >= 0 && steelDelta <= 4);
   check("context-loss: no page errors", 0, pageErrors.length, pageErrors.length === 0);
   report.contextLoss = {
-    glContexts: glCount, lostStamp, readyStamp,
+    glContexts: glInfo.count, activeGLIndex: glInfo.activeIndex, lostStamp, readyStamp,
     tickDelta: after.tick - before.tick,
-    economyIdentical: economy(before) === economy(after),
+    structureIdentical, scrapDelta, droneArrived, scrapCorrected, steelDelta,
+    during: { tick: during.tick, scrap: during.scrap, steel: during.steel },
     lostShot, restoredShot, pageErrors,
-    note: "Banner/fallback VISUALS are pending sponsor inspection; numeric proof is the dataset.world3d transition + unchanged save economy. The byte-strict save check lives in the P02 harness run (151-p02-loops.json).",
+    note: "Target is the ACTIVE world GL context (the blit source canvas), not the __rwGL[0] probe. Banner/fallback VISUALS are pending sponsor inspection; numeric proof is the dataset.world3d transition + untouched economy structure + no resource spend (drone deliveries corrected by conservation). The byte-strict frozen-save check lives in the P02 harness run (151-p02-loops.json).",
   };
   await context.close();
 }
@@ -748,7 +931,7 @@ async function main() {
     issue: 151, gate: "G1/P1", headSha: SHA, generated: GENERATED,
     mode: "running-build-captures", limitation: LIMITATION,
     build: "vite preview of THIS branch's dist (npm run build at head " + SHA + ")",
-    fixtures: "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; lastSeenMs=Date.now() so no offline catch-up contaminates captures",
+    fixtures: "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; seeded ONLY when the slot is empty and lastSeenMs re-stamped at DOCUMENT START so store.creditAbsence cannot add offline catch-up ticks (V01 'Begin recovery' + V05 reload persistence stay honest)",
     devices: DEVICES,
   };
   const preview = await startPreview(PORT);
