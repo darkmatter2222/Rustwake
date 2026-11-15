@@ -39,6 +39,11 @@ test('five agents total means one coordinator and at most FOUR children',async t
  await f.d.tick();assert.equal(f.calls(),5);
  assert.equal((await f.d.status()).workers.filter(w=>!['succeeded','failed','interrupted'].includes(w.status)).length,4);
 });
+test('deployment verifier fits the existing agent cap and respects role readiness',()=>{
+ assert.doesNotThrow(()=>validateTask(task('verify','live-verifier')));
+ assert.doesNotThrow(()=>assertDispatchableIssue({labels:[{name:'status:ready'}]},'live-verifier'));
+ assert.throws(()=>assertDispatchableIssue({labels:[{name:'status:blocked'}]},'live-verifier'));
+});
 test('dispatch rejects missing or cross-repository Issue and unsafe path',()=>{
  assert.throws(()=>validateTask({id:'x',role:'reviewer',prompt:'x',write_paths:['work/x']}),/GitHub Issue URL/);
  assert.throws(()=>validateTask({...task('x','reviewer'),issue_url:'https://github.com/elsewhere/repo/issues/2'}),/GitHub Issue URL/);
