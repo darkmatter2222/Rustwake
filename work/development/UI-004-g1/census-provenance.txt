@@ -1,0 +1,9 @@
+# U03 census provenance (pass 9, re-run)
+RUSTWAKE_URL=http://localhost:4174/
+worktree=C:/Users/ryans/AppData/Local/Temp/rw-qwen/rw-151 branch=rw/151
+git_head=f6871b55d06c79545e1881259c857d3e8bd945a9
+served_entry=assets/index-BHuJAK_X.js assets/index-GWtdmgwN.css 
+dist_entry=assets/index-BHuJAK_X.js assets/index-GWtdmgwN.css 
+preview_pid=24172 (rw-151 vite preview, bound 4174 because rw-217 held 4173)
+utc_start=2026-11-15T14:27:59Z
+utc_end=2026-11-15T14:29:52Z

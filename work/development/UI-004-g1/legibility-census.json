@@ -1,9 +1,9 @@
 {
  "ticket": "UI-004 g1 / U03",
- "baseSha": "1d98bfbd009ab2230b47d44b43e5bc603c084b97",
- "generated": "2026-11-15T14:16:52.556Z",
+ "baseSha": "f6871b55d06c79545e1881259c857d3e8bd945a9",
+ "generated": "2026-11-15T14:29:52.653Z",
  "window": "W-3 cadence (1 tap/s, fresh storage) per viewport; A ladder 1 -> 1.25 -> 1.5 -> 2",
- "url": "http://localhost:4173/",
+ "url": "http://localhost:4174/",
  "viewports": [
   {
    "name": "phone360",
