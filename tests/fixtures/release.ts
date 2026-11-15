@@ -393,6 +393,37 @@ export function buildMature(): MatureFixture {
   return { sim, world, net, log, traffic };
 }
 
+/**
+ * MATURE-RESEARCH (#231): canonical MATURE plus a reachable Research face, for
+ * the P03 panel-open instrument ONLY. `showResearch` (App.tsx) requires
+ * store.data > 0 OR an owned research node; canonical MATURE seeds scrap/steel
+ * only, so the Research dock face never renders and P03 records a hard failure
+ * that is a fixture gap, not an app defect.
+ *
+ * Data is unreachable through commands inside MATURE's pinned population: the
+ * only data recipe is R11 (circuits -> data, signalLab), and circuits need the
+ * R07 wire+polymer chain — adding those machines would change the 20-machine
+ * sorter/furnace population that P01/P02/V02/V05 pin. So data enters through a
+ * bounded direct fill at `addToStore`, the SAME sanctioned cargo entry
+ * boundary as the MATURE cargo pin above (it moves storeUnits and the store
+ * stack together, so every cargo counter shifts by the same delta and
+ * canonical MATURE's accounting is carried over unchanged).
+ * The purchase itself is a REAL research.buy command (cutters, cost 4 data,
+ * no prerequisite). Cutters' only bonus is the manual.salvage pulse scrap
+ * multiplier (research.ts researchBonus); P03 never issues manual.salvage, so
+ * the running yard economy is unchanged. No ticks after seeding — frozen like
+ * canonical MATURE. buildMature()/buildStress() themselves are untouched.
+ */
+export const MATURE_RESEARCH_DATA = 12;
+
+export function buildMatureResearch(): MatureFixture {
+  const fixture = buildMature();
+  const sim = fixture.sim;
+  addToStore(sim, "data", MATURE_RESEARCH_DATA);
+  send(sim, { id: "mature-research-1", type: "research.buy", node: "cutters" });
+  return fixture;
+}
+
 /* ------------------------------------------------------------------- STRESS */
 
 /**

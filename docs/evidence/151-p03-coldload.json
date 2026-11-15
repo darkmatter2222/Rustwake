@@ -1,12 +1,12 @@
 {
   "mode": "P03",
   "issue": 151,
-  "sha": "4b5c4f449067b3b57b9151856d7799cdbdbb55fe",
-  "generatedOn": "2026-11-15T03:27:17.345Z",
+  "sha": "3a28931e703bdfbe3a87965ebc2d9b86e0432c5c",
+  "generatedOn": "2026-11-15T18:21:34.488Z",
   "url": "http://localhost:4167/",
   "command": "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
   "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
-  "protocol": "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off).",
+  "protocol": "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. No budget, floor or assertion changed.",
   "browser": {
     "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
@@ -58,6 +58,7 @@
     {
       "device": "phone",
       "fixture": "MATURE",
+      "seedFixture": "MATURE-RESEARCH (#231: +12 data fill, research.buy cutters, tutorial=9)",
       "fallback": false,
       "tag": "phone-MATURE",
       "viewport": {
@@ -69,43 +70,43 @@
       "coldLoad": {
         "navigation": {
           "domInteractiveMs": 9.7,
-          "domContentLoadedMs": 47.5,
-          "loadEventEndMs": 47.6,
+          "domContentLoadedMs": 47,
+          "loadEventEndMs": 47.1,
           "responseEndMs": 6,
-          "durationMs": 47.6,
-          "transferSize": 1022,
+          "durationMs": 47.1,
+          "transferSize": 1018,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 116,
-        "lcpMs": 116,
+        "fcpMs": 108,
+        "lcpMs": 108,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
-          "totalTransferSize": 294226,
-          "totalEncodedBodySize": 292004,
-          "totalDecodedBodySize": 1080407,
+          "totalTransferSize": 300928,
+          "totalEncodedBodySize": 298710,
+          "totalDecodedBodySize": 1105441,
           "document": {
-            "transferSize": 1022,
+            "transferSize": 1018,
             "decodedBodySize": 1368
           },
           "buckets": {
             "css": {
               "count": 1,
-              "transferSize": 11570,
-              "encodedBodySize": 11270,
-              "decodedBodySize": 66799,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
               "names": [
-                "index-GWtdmgwN.css"
+                "index-BVohK8qu.css"
               ]
             },
             "tablesJs": {
               "count": 1,
-              "transferSize": 10241,
-              "encodedBodySize": 9941,
-              "decodedBodySize": 27090,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
               "names": [
-                "tables-CyHrShv8.js"
+                "tables-DbUfDFRZ.js"
               ]
             },
             "vendorJs": {
@@ -119,11 +120,11 @@
             },
             "entryJs": {
               "count": 1,
-              "transferSize": 225719,
-              "encodedBodySize": 225419,
-              "decodedBodySize": 843492,
+              "transferSize": 232438,
+              "encodedBodySize": 232138,
+              "decodedBodySize": 868488,
               "names": [
-                "index-mgHy0JIy.js"
+                "index-Cvs8KQfj.js"
               ]
             }
           },
@@ -132,40 +133,40 @@
         }
       },
       "idleFrame": {
-        "count": 180,
-        "meanMs": 16.7,
+        "count": 181,
+        "meanMs": 16.62,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
-        "maxMs": 16.9,
+        "maxMs": 16.8,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 59.9
+        "fpsMean": 60.2
       },
       "memoryIdle": {
-        "usedJSHeapMB": 9.73,
-        "totalJSHeapMB": 16.81,
+        "usedJSHeapMB": 11.15,
+        "totalJSHeapMB": 16.91,
         "jsHeapLimitMB": 4192
       },
       "interaction": {
         "menuOpen": {
           "samples": [
-            "no-target",
-            "no-target",
-            "no-target"
+            11.7,
+            15.5,
+            9.3
           ],
-          "medianMs": null,
-          "p95Ms": null,
-          "okCount": 0
+          "medianMs": 11.7,
+          "p95Ms": 15.5,
+          "okCount": 3
         },
         "machineTap": {
           "samples": [
-            35,
-            14,
-            10
+            36,
+            15,
+            12
           ],
-          "medianMs": 14,
-          "p95Ms": 35,
+          "medianMs": 15,
+          "p95Ms": 36,
           "okCount": 3
         }
       },
@@ -173,38 +174,38 @@
         "rate": 6,
         "idleFrame": {
           "count": 181,
-          "meanMs": 16.65,
+          "meanMs": 16.62,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
-          "maxMs": 16.9,
+          "maxMs": 16.8,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 60.1
+          "fpsMean": 60.2
         },
         "menuOpen": {
           "samples": [
-            "no-target",
-            "no-target",
-            "no-target"
+            19.3,
+            15,
+            15.7
           ],
-          "medianMs": null,
-          "p95Ms": null,
-          "okCount": 0
+          "medianMs": 15.7,
+          "p95Ms": 19.3,
+          "okCount": 3
         },
         "machineTap": {
           "samples": [
-            149,
-            74,
-            96
+            111,
+            101,
+            117
           ],
-          "medianMs": 96,
-          "p95Ms": 149,
+          "medianMs": 111,
+          "p95Ms": 117,
           "okCount": 3
         },
         "storeFrame": {
           "count": 91,
-          "meanMs": 16.65,
+          "meanMs": 16.63,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
@@ -221,6 +222,38 @@
           "title": "Yard store",
           "frameWhileOpen": {
             "count": 91,
+            "meanMs": 16.66,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60
+          }
+        },
+        {
+          "name": "Research",
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 91,
+            "meanMs": 16.59,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.3
+          }
+        },
+        {
+          "name": "Yard",
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 91,
             "meanMs": 16.53,
             "p50Ms": 16.7,
             "p95Ms": 16.8,
@@ -230,34 +263,23 @@
             "droppedPct": 0,
             "fpsMean": 60.5
           }
-        },
-        {
-          "name": "Research",
-          "present": 0,
-          "title": "",
-          "frameWhileOpen": null
-        },
-        {
-          "name": "Yard",
-          "present": 1,
-          "title": "Yard record",
-          "frameWhileOpen": {
-            "count": 91,
-            "meanMs": 16.57,
-            "p50Ms": 16.7,
-            "p95Ms": 16.8,
-            "p99Ms": 16.8,
-            "maxMs": 16.8,
-            "droppedOver50ms": 0,
-            "droppedPct": 0,
-            "fpsMean": 60.4
-          }
         }
       ],
       "stress": {
         "longSessionFrame": {
           "count": 240,
-          "meanMs": 16.7,
+          "meanMs": 16.67,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
@@ -266,39 +288,29 @@
           "droppedPct": 0,
           "fpsMean": 59.9
         },
-        "churnFrame": {
-          "count": 150,
-          "meanMs": 16.68,
-          "p50Ms": 16.7,
-          "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 16.8,
-          "droppedOver50ms": 0,
-          "droppedPct": 0,
-          "fpsMean": 59.9
-        },
-        "heapGrowthMB": -1.57,
+        "heapGrowthMB": 2.79,
         "memBeforeStress": {
-          "usedJSHeapMB": 9.98,
-          "totalJSHeapMB": 17.88,
+          "usedJSHeapMB": 9.47,
+          "totalJSHeapMB": 17.92,
           "jsHeapLimitMB": 4192
         },
         "memAfterStress": {
-          "usedJSHeapMB": 8.41,
-          "totalJSHeapMB": 16.55,
+          "usedJSHeapMB": 12.26,
+          "totalJSHeapMB": 18.33,
           "jsHeapLimitMB": 4192
         }
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-phone-MATURE.png",
-        "bytes": 132873,
-        "sha256": "9554315033193e82d73047097778c102f50158b4aff1f88572dd330709f45a1d"
+        "bytes": 129973,
+        "sha256": "b3804cecd205666f170257581667a226fa290f00b60929df5921c26ae3e30206"
       }
     },
     {
       "device": "desktop",
       "fixture": "MATURE",
+      "seedFixture": "MATURE-RESEARCH (#231: +12 data fill, research.buy cutters, tutorial=9)",
       "fallback": false,
       "tag": "desktop-MATURE",
       "viewport": {
@@ -309,44 +321,44 @@
       "world3d": "ready",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 9.8,
-          "domContentLoadedMs": 47.2,
-          "loadEventEndMs": 47.3,
-          "responseEndMs": 6.2,
-          "durationMs": 47.3,
-          "transferSize": 1022,
+          "domInteractiveMs": 10.6,
+          "domContentLoadedMs": 49.5,
+          "loadEventEndMs": 49.6,
+          "responseEndMs": 7,
+          "durationMs": 49.6,
+          "transferSize": 1018,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 112,
-        "lcpMs": 112,
+        "fcpMs": 108,
+        "lcpMs": 108,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
-          "totalTransferSize": 294226,
-          "totalEncodedBodySize": 292004,
-          "totalDecodedBodySize": 1080407,
+          "totalTransferSize": 300928,
+          "totalEncodedBodySize": 298710,
+          "totalDecodedBodySize": 1105441,
           "document": {
-            "transferSize": 1022,
+            "transferSize": 1018,
             "decodedBodySize": 1368
           },
           "buckets": {
             "css": {
               "count": 1,
-              "transferSize": 11570,
-              "encodedBodySize": 11270,
-              "decodedBodySize": 66799,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
               "names": [
-                "index-GWtdmgwN.css"
+                "index-BVohK8qu.css"
               ]
             },
             "tablesJs": {
               "count": 1,
-              "transferSize": 10241,
-              "encodedBodySize": 9941,
-              "decodedBodySize": 27090,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
               "names": [
-                "tables-CyHrShv8.js"
+                "tables-DbUfDFRZ.js"
               ]
             },
             "vendorJs": {
@@ -360,11 +372,11 @@
             },
             "entryJs": {
               "count": 1,
-              "transferSize": 225719,
-              "encodedBodySize": 225419,
-              "decodedBodySize": 843492,
+              "transferSize": 232438,
+              "encodedBodySize": 232138,
+              "decodedBodySize": 868488,
               "names": [
-                "index-mgHy0JIy.js"
+                "index-Cvs8KQfj.js"
               ]
             }
           },
@@ -373,40 +385,40 @@
         }
       },
       "idleFrame": {
-        "count": 180,
-        "meanMs": 16.69,
+        "count": 181,
+        "meanMs": 16.66,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
-        "p99Ms": 16.8,
+        "p99Ms": 16.9,
         "maxMs": 16.9,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 59.9
+        "fpsMean": 60
       },
       "memoryIdle": {
-        "usedJSHeapMB": 8.24,
-        "totalJSHeapMB": 12.29,
+        "usedJSHeapMB": 9.1,
+        "totalJSHeapMB": 13.87,
         "jsHeapLimitMB": 4192
       },
       "interaction": {
         "menuOpen": {
           "samples": [
-            "no-target",
-            "no-target",
-            "no-target"
+            13.4,
+            14,
+            6.7
           ],
-          "medianMs": null,
-          "p95Ms": null,
-          "okCount": 0
+          "medianMs": 13.4,
+          "p95Ms": 14,
+          "okCount": 3
         },
         "machineTap": {
           "samples": [
-            26,
-            11,
-            10
+            27,
+            10,
+            9
           ],
-          "medianMs": 11,
-          "p95Ms": 26,
+          "medianMs": 10,
+          "p95Ms": 27,
           "okCount": 3
         }
       },
@@ -414,45 +426,45 @@
         "rate": 6,
         "idleFrame": {
           "count": 181,
-          "meanMs": 16.61,
+          "meanMs": 16.63,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
-          "p99Ms": 16.9,
-          "maxMs": 16.9,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 60.2
+          "fpsMean": 60.1
         },
         "menuOpen": {
           "samples": [
-            "no-target",
-            "no-target",
-            "no-target"
+            14.3,
+            17.9,
+            14.2
           ],
-          "medianMs": null,
-          "p95Ms": null,
-          "okCount": 0
+          "medianMs": 14.3,
+          "p95Ms": 17.9,
+          "okCount": 3
         },
         "machineTap": {
           "samples": [
-            153,
-            100,
-            115
+            75,
+            79,
+            80
           ],
-          "medianMs": 115,
-          "p95Ms": 153,
+          "medianMs": 79,
+          "p95Ms": 80,
           "okCount": 3
         },
         "storeFrame": {
           "count": 91,
-          "meanMs": 16.65,
+          "meanMs": 16.61,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
-          "p99Ms": 17,
-          "maxMs": 17,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 60.1
+          "fpsMean": 60.2
         }
       },
       "panels": [
@@ -462,21 +474,31 @@
           "title": "Yard store",
           "frameWhileOpen": {
             "count": 91,
-            "meanMs": 16.53,
+            "meanMs": 16.63,
             "p50Ms": 16.7,
             "p95Ms": 16.8,
             "p99Ms": 16.8,
             "maxMs": 16.8,
             "droppedOver50ms": 0,
             "droppedPct": 0,
-            "fpsMean": 60.5
+            "fpsMean": 60.1
           }
         },
         {
           "name": "Research",
-          "present": 0,
-          "title": "",
-          "frameWhileOpen": null
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 91,
+            "meanMs": 16.65,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
         },
         {
           "name": "Yard",
@@ -484,28 +506,28 @@
           "title": "Yard record",
           "frameWhileOpen": {
             "count": 90,
-            "meanMs": 16.7,
+            "meanMs": 16.67,
             "p50Ms": 16.7,
             "p95Ms": 16.8,
             "p99Ms": 16.8,
             "maxMs": 16.8,
             "droppedOver50ms": 0,
             "droppedPct": 0,
-            "fpsMean": 59.9
+            "fpsMean": 60
           }
         }
       ],
       "stress": {
         "longSessionFrame": {
-          "count": 240,
-          "meanMs": 16.7,
+          "count": 241,
+          "meanMs": 16.64,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 16.8,
+          "p99Ms": 16.9,
+          "maxMs": 16.9,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 59.9
+          "fpsMean": 60.1
         },
         "churnFrame": {
           "count": 150,
@@ -518,23 +540,23 @@
           "droppedPct": 0,
           "fpsMean": 59.9
         },
-        "heapGrowthMB": 1.39,
+        "heapGrowthMB": -2.46,
         "memBeforeStress": {
-          "usedJSHeapMB": 9.6,
-          "totalJSHeapMB": 17.43,
+          "usedJSHeapMB": 12.43,
+          "totalJSHeapMB": 17.76,
           "jsHeapLimitMB": 4192
         },
         "memAfterStress": {
-          "usedJSHeapMB": 10.99,
-          "totalJSHeapMB": 18.01,
+          "usedJSHeapMB": 9.97,
+          "totalJSHeapMB": 17.58,
           "jsHeapLimitMB": 4192
         }
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-MATURE.png",
-        "bytes": 58800,
-        "sha256": "6aa2bb5ec35e5fef0c1184b92d9e951e14c92bb44b2186c6ee08cc99beb19efe"
+        "bytes": 55787,
+        "sha256": "eaf57daeb4c9c3041e1f49148460a92d73667286d61a9908e08e53fd2b17cdcd"
       }
     },
     {
@@ -544,44 +566,44 @@
       "tag": "desktop-STRESS",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 10.8,
-          "domContentLoadedMs": 47.3,
-          "loadEventEndMs": 47.4,
-          "responseEndMs": 6.7,
-          "durationMs": 47.4,
-          "transferSize": 1022,
+          "domInteractiveMs": 10.6,
+          "domContentLoadedMs": 50.2,
+          "loadEventEndMs": 50.2,
+          "responseEndMs": 6.4,
+          "durationMs": 50.2,
+          "transferSize": 1018,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 100,
-        "lcpMs": 100,
+        "fcpMs": 108,
+        "lcpMs": 108,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
-          "totalTransferSize": 294226,
-          "totalEncodedBodySize": 292004,
-          "totalDecodedBodySize": 1080407,
+          "totalTransferSize": 300928,
+          "totalEncodedBodySize": 298710,
+          "totalDecodedBodySize": 1105441,
           "document": {
-            "transferSize": 1022,
+            "transferSize": 1018,
             "decodedBodySize": 1368
           },
           "buckets": {
             "css": {
               "count": 1,
-              "transferSize": 11570,
-              "encodedBodySize": 11270,
-              "decodedBodySize": 66799,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
               "names": [
-                "index-GWtdmgwN.css"
+                "index-BVohK8qu.css"
               ]
             },
             "tablesJs": {
               "count": 1,
-              "transferSize": 10241,
-              "encodedBodySize": 9941,
-              "decodedBodySize": 27090,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
               "names": [
-                "tables-CyHrShv8.js"
+                "tables-DbUfDFRZ.js"
               ]
             },
             "vendorJs": {
@@ -595,11 +617,11 @@
             },
             "entryJs": {
               "count": 1,
-              "transferSize": 225719,
-              "encodedBodySize": 225419,
-              "decodedBodySize": 843492,
+              "transferSize": 232438,
+              "encodedBodySize": 232138,
+              "decodedBodySize": 868488,
               "names": [
-                "index-mgHy0JIy.js"
+                "index-Cvs8KQfj.js"
               ]
             }
           },
@@ -616,18 +638,18 @@
         "maxMs": 16.8,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 60.1
+        "fpsMean": 60
       },
       "memoryIdle": {
-        "usedJSHeapMB": 8.12,
-        "totalJSHeapMB": 16.05,
+        "usedJSHeapMB": 10.92,
+        "totalJSHeapMB": 17.34,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-STRESS.png",
-        "bytes": 68971,
-        "sha256": "6baa139a8dae1933607e6bbff2c3f586d3a15821e896ac9834dba43a7f90c0a4"
+        "bytes": 67999,
+        "sha256": "a540cf30b78efc8c6a3939923ad476a85009a2f6dca07e81b57d681b15a24e6c"
       }
     },
     {
@@ -638,44 +660,44 @@
       "world3d": "unavailable",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 12.1,
-          "domContentLoadedMs": 52.5,
-          "loadEventEndMs": 52.6,
-          "responseEndMs": 6.3,
-          "durationMs": 52.6,
-          "transferSize": 1022,
+          "domInteractiveMs": 11,
+          "domContentLoadedMs": 53.2,
+          "loadEventEndMs": 53.3,
+          "responseEndMs": 6.6,
+          "durationMs": 53.3,
+          "transferSize": 1018,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 88,
-        "lcpMs": 88,
+        "fcpMs": 104,
+        "lcpMs": 104,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
-          "totalTransferSize": 294226,
-          "totalEncodedBodySize": 292004,
-          "totalDecodedBodySize": 1080407,
+          "totalTransferSize": 300928,
+          "totalEncodedBodySize": 298710,
+          "totalDecodedBodySize": 1105441,
           "document": {
-            "transferSize": 1022,
+            "transferSize": 1018,
             "decodedBodySize": 1368
           },
           "buckets": {
             "css": {
               "count": 1,
-              "transferSize": 11570,
-              "encodedBodySize": 11270,
-              "decodedBodySize": 66799,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
               "names": [
-                "index-GWtdmgwN.css"
+                "index-BVohK8qu.css"
               ]
             },
             "tablesJs": {
               "count": 1,
-              "transferSize": 10241,
-              "encodedBodySize": 9941,
-              "decodedBodySize": 27090,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
               "names": [
-                "tables-CyHrShv8.js"
+                "tables-DbUfDFRZ.js"
               ]
             },
             "vendorJs": {
@@ -689,11 +711,11 @@
             },
             "entryJs": {
               "count": 1,
-              "transferSize": 225719,
-              "encodedBodySize": 225419,
-              "decodedBodySize": 843492,
+              "transferSize": 232438,
+              "encodedBodySize": 232138,
+              "decodedBodySize": 868488,
               "names": [
-                "index-mgHy0JIy.js"
+                "index-Cvs8KQfj.js"
               ]
             }
           },
@@ -703,25 +725,25 @@
       },
       "idleFrame": {
         "count": 120,
-        "meanMs": 16.7,
+        "meanMs": 16.68,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
-        "maxMs": 16.8,
+        "maxMs": 16.9,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 59.9
+        "fpsMean": 60
       },
       "memoryIdle": {
-        "usedJSHeapMB": 7.26,
-        "totalJSHeapMB": 11.03,
+        "usedJSHeapMB": 7.94,
+        "totalJSHeapMB": 11.58,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-phone-FALLBACK-2D.png",
-        "bytes": 132228,
-        "sha256": "e39380fca754863add8207fda2a42aeb44d84852592e9ff64d381f2c3ea363a8"
+        "bytes": 132240,
+        "sha256": "a73567dd309ea40ca7d312e34637ba4a9f3d2a0b254809492db473aa1aa8de8b"
       }
     },
     {
@@ -732,44 +754,44 @@
       "world3d": "unavailable",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 10.3,
-          "domContentLoadedMs": 49.6,
-          "loadEventEndMs": 49.7,
-          "responseEndMs": 6.4,
-          "durationMs": 49.7,
-          "transferSize": 1022,
+          "domInteractiveMs": 10.7,
+          "domContentLoadedMs": 52.1,
+          "loadEventEndMs": 52.2,
+          "responseEndMs": 6.3,
+          "durationMs": 52.2,
+          "transferSize": 1018,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 96,
-        "lcpMs": 96,
+        "fcpMs": 92,
+        "lcpMs": 92,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
-          "totalTransferSize": 294226,
-          "totalEncodedBodySize": 292004,
-          "totalDecodedBodySize": 1080407,
+          "totalTransferSize": 300928,
+          "totalEncodedBodySize": 298710,
+          "totalDecodedBodySize": 1105441,
           "document": {
-            "transferSize": 1022,
+            "transferSize": 1018,
             "decodedBodySize": 1368
           },
           "buckets": {
             "css": {
               "count": 1,
-              "transferSize": 11570,
-              "encodedBodySize": 11270,
-              "decodedBodySize": 66799,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
               "names": [
-                "index-GWtdmgwN.css"
+                "index-BVohK8qu.css"
               ]
             },
             "tablesJs": {
               "count": 1,
-              "transferSize": 10241,
-              "encodedBodySize": 9941,
-              "decodedBodySize": 27090,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
               "names": [
-                "tables-CyHrShv8.js"
+                "tables-DbUfDFRZ.js"
               ]
             },
             "vendorJs": {
@@ -783,11 +805,11 @@
             },
             "entryJs": {
               "count": 1,
-              "transferSize": 225719,
-              "encodedBodySize": 225419,
-              "decodedBodySize": 843492,
+              "transferSize": 232438,
+              "encodedBodySize": 232138,
+              "decodedBodySize": 868488,
               "names": [
-                "index-mgHy0JIy.js"
+                "index-Cvs8KQfj.js"
               ]
             }
           },
@@ -797,7 +819,7 @@
       },
       "idleFrame": {
         "count": 120,
-        "meanMs": 16.7,
+        "meanMs": 16.69,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
@@ -807,22 +829,19 @@
         "fpsMean": 59.9
       },
       "memoryIdle": {
-        "usedJSHeapMB": 7.12,
-        "totalJSHeapMB": 11.53,
+        "usedJSHeapMB": 7.74,
+        "totalJSHeapMB": 11.83,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-FALLBACK-2D.png",
-        "bytes": 65349,
-        "sha256": "bfc3dc4fec2f772698084c2a7892c70836013b418d4a765af7ee0335051d9c73"
+        "bytes": 65593,
+        "sha256": "8091b2db8ebf5330da7208b33bcfd00bd1441148da3af795bfa4cb05bf98063c"
       }
     }
   ],
-  "hardFailures": [
-    "phone-MATURE: panel Research did not open",
-    "desktop-MATURE: panel Research did not open"
-  ],
+  "hardFailures": [],
   "buildInventory": [
     {
       "name": "catchup.worker-B2acSi-4.js",
@@ -831,22 +850,22 @@
       "sha256": "aa7ed1e5851b2d87965a2af80d59468c0ff449de08c1b1cf7ed35f1d61a8382f"
     },
     {
-      "name": "index-GWtdmgwN.css",
+      "name": "index-BVohK8qu.css",
       "role": "css",
-      "bytes": 66799,
-      "sha256": "01df7972e3e8220f605989ef1d5d4fae7ddaebc2348159a9f9767ad6561f485e"
+      "bytes": 66873,
+      "sha256": "55ecfe0d08ecd86df1c6f66ba398e9abc6f8c880884f713cc97dcca75dfd9635"
     },
     {
-      "name": "index-mgHy0JIy.js",
+      "name": "index-Cvs8KQfj.js",
       "role": "entryJs",
-      "bytes": 843492,
-      "sha256": "3270ae0204846a7fc94a37d691b61f69ca199d9d840807df8248c9855a4d849a"
+      "bytes": 868488,
+      "sha256": "357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e"
     },
     {
-      "name": "tables-CyHrShv8.js",
+      "name": "tables-DbUfDFRZ.js",
       "role": "tablesJs",
-      "bytes": 27090,
-      "sha256": "47203b5b08fc92a4adc6043baa453a64d3c1064ea1ad26b05c7ce2d8f0c5aaa1"
+      "bytes": 27054,
+      "sha256": "024fef7eaf4aa5ba4171072889cf8cda3ec755d9cdf82eddd4db6cec4ba832ab"
     },
     {
       "name": "vendor-Bt4lNSbZ.js",
@@ -860,7 +879,7 @@
       {
         "metric": "fcp",
         "scope": "phone-MATURE",
-        "value": 116,
+        "value": 108,
         "limit": 1500,
         "unit": "ms",
         "dir": "max",
@@ -869,7 +888,7 @@
       {
         "metric": "loadEventEnd",
         "scope": "phone-MATURE",
-        "value": 47.6,
+        "value": 47.1,
         "limit": 2500,
         "unit": "ms",
         "dir": "max",
@@ -878,7 +897,7 @@
       {
         "metric": "entryDecodedBytes",
         "scope": "phone-MATURE",
-        "value": 843492,
+        "value": 868488,
         "limit": 240000,
         "unit": "B",
         "dir": "max",
@@ -887,7 +906,7 @@
       {
         "metric": "totalColdDecodedBytes",
         "scope": "phone-MATURE",
-        "value": 1080407,
+        "value": 1105441,
         "limit": 520000,
         "unit": "B",
         "dir": "max",
@@ -905,16 +924,16 @@
       {
         "metric": "menuOpenMedian",
         "scope": "phone-MATURE",
-        "value": null,
+        "value": 11.7,
         "limit": 100,
         "unit": "ms",
-        "met": null,
-        "note": "not measured / no budget"
+        "dir": "max",
+        "met": true
       },
       {
         "metric": "machineTapMedian",
         "scope": "phone-MATURE",
-        "value": 14,
+        "value": 15,
         "limit": 120,
         "unit": "ms",
         "dir": "max",
@@ -923,16 +942,16 @@
       {
         "metric": "throttledMenuOpenMedian",
         "scope": "phone-MATURE",
-        "value": null,
+        "value": 15.7,
         "limit": 200,
         "unit": "ms",
-        "met": null,
-        "note": "not measured / no budget"
+        "dir": "max",
+        "met": true
       },
       {
         "metric": "throttledMachineTapMedian",
         "scope": "phone-MATURE",
-        "value": 96,
+        "value": 111,
         "limit": 250,
         "unit": "ms",
         "dir": "max",
@@ -1004,7 +1023,7 @@
       {
         "metric": "idleUsedHeap",
         "scope": "phone-MATURE",
-        "value": 9.73,
+        "value": 11.15,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1013,7 +1032,7 @@
       {
         "metric": "sessionHeapGrowth",
         "scope": "phone-MATURE",
-        "value": -1.57,
+        "value": 2.79,
         "limit": 16,
         "unit": "MB",
         "dir": "max",
@@ -1022,7 +1041,7 @@
       {
         "metric": "fcp",
         "scope": "desktop-MATURE",
-        "value": 112,
+        "value": 108,
         "limit": 1000,
         "unit": "ms",
         "dir": "max",
@@ -1031,7 +1050,7 @@
       {
         "metric": "loadEventEnd",
         "scope": "desktop-MATURE",
-        "value": 47.3,
+        "value": 49.6,
         "limit": 1800,
         "unit": "ms",
         "dir": "max",
@@ -1040,7 +1059,7 @@
       {
         "metric": "entryDecodedBytes",
         "scope": "desktop-MATURE",
-        "value": 843492,
+        "value": 868488,
         "limit": 240000,
         "unit": "B",
         "dir": "max",
@@ -1049,7 +1068,7 @@
       {
         "metric": "totalColdDecodedBytes",
         "scope": "desktop-MATURE",
-        "value": 1080407,
+        "value": 1105441,
         "limit": 520000,
         "unit": "B",
         "dir": "max",
@@ -1067,16 +1086,16 @@
       {
         "metric": "menuOpenMedian",
         "scope": "desktop-MATURE",
-        "value": null,
+        "value": 13.4,
         "limit": 100,
         "unit": "ms",
-        "met": null,
-        "note": "not measured / no budget"
+        "dir": "max",
+        "met": true
       },
       {
         "metric": "machineTapMedian",
         "scope": "desktop-MATURE",
-        "value": 11,
+        "value": 10,
         "limit": 120,
         "unit": "ms",
         "dir": "max",
@@ -1085,16 +1104,16 @@
       {
         "metric": "throttledMenuOpenMedian",
         "scope": "desktop-MATURE",
-        "value": null,
+        "value": 14.3,
         "limit": 200,
         "unit": "ms",
-        "met": null,
-        "note": "not measured / no budget"
+        "dir": "max",
+        "met": true
       },
       {
         "metric": "throttledMachineTapMedian",
         "scope": "desktop-MATURE",
-        "value": 115,
+        "value": 79,
         "limit": 250,
         "unit": "ms",
         "dir": "max",
@@ -1166,7 +1185,7 @@
       {
         "metric": "idleUsedHeap",
         "scope": "desktop-MATURE",
-        "value": 8.24,
+        "value": 9.1,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1175,7 +1194,7 @@
       {
         "metric": "sessionHeapGrowth",
         "scope": "desktop-MATURE",
-        "value": 1.39,
+        "value": -2.46,
         "limit": 16,
         "unit": "MB",
         "dir": "max",
@@ -1193,7 +1212,7 @@
       {
         "metric": "stressFixtureIdleHeap",
         "scope": "desktop-STRESS",
-        "value": 8.12,
+        "value": 10.92,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1202,7 +1221,7 @@
       {
         "metric": "fallbackFcp",
         "scope": "phone-FALLBACK-2D",
-        "value": 88,
+        "value": 104,
         "limit": 1500,
         "unit": "ms",
         "dir": "max",
@@ -1211,7 +1230,7 @@
       {
         "metric": "fallbackLoadEventEnd",
         "scope": "phone-FALLBACK-2D",
-        "value": 52.6,
+        "value": 53.3,
         "limit": 2500,
         "unit": "ms",
         "dir": "max",
@@ -1220,7 +1239,7 @@
       {
         "metric": "fallbackTotalColdDecodedBytes",
         "scope": "phone-FALLBACK-2D",
-        "value": 1080407,
+        "value": 1105441,
         "limit": 520000,
         "unit": "B",
         "dir": "max",
@@ -1238,7 +1257,7 @@
       {
         "metric": "fallbackFcp",
         "scope": "desktop-FALLBACK-2D",
-        "value": 96,
+        "value": 92,
         "limit": 1000,
         "unit": "ms",
         "dir": "max",
@@ -1247,7 +1266,7 @@
       {
         "metric": "fallbackLoadEventEnd",
         "scope": "desktop-FALLBACK-2D",
-        "value": 49.7,
+        "value": 52.2,
         "limit": 1800,
         "unit": "ms",
         "dir": "max",
@@ -1256,7 +1275,7 @@
       {
         "metric": "fallbackTotalColdDecodedBytes",
         "scope": "desktop-FALLBACK-2D",
-        "value": 1080407,
+        "value": 1105441,
         "limit": 520000,
         "unit": "B",
         "dir": "max",
@@ -1273,9 +1292,9 @@
       }
     ],
     "summary": {
-      "met": 36,
+      "met": 40,
       "unmet": 6,
-      "unknown": 4,
+      "unknown": 0,
       "total": 46,
       "allMet": false
     }
@@ -1284,9 +1303,9 @@
     {
       "name": "no hard failures",
       "expected": 0,
-      "actual": 2,
-      "pass": false
+      "actual": 0,
+      "pass": true
     }
   ],
-  "pass": false
+  "pass": true
 }
