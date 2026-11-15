@@ -1,12 +1,12 @@
 {
   "mode": "P03",
   "issue": 151,
-  "sha": "861e2f2f13fde133e58992b9276b29306b6c4a1b",
-  "generatedOn": "2026-11-15T20:40:07.229Z",
+  "sha": "5f50d961160f59ddffe7c6b157fa20d168b25083",
+  "generatedOn": "2026-11-15T21:14:15.339Z",
   "url": "http://localhost:4167/",
   "command": "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
   "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
-  "protocol": "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. #236: cold bytes are the REAL per-context PerformanceResourceTiming decodedBodySize sums (as before); entryJs is now attributed to the index.html module script so the probe-gated async three chunk (a second index-*.js, bucket otherJs) is not miscounted as entry — it is fetched cold only in WebGL contexts, and FALLBACK-2D never fires the import. No budget, floor or assertion changed.",
+  "protocol": "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. #236: cold bytes are the REAL per-context PerformanceResourceTiming decodedBodySize sums (as before); entryJs is now attributed to the index.html module script so the probe-gated async three chunk (a second index-*.js, bucket otherJs) is not miscounted as entry — it is fetched cold only in WebGL contexts, and FALLBACK-2D never fires the import. #236 changed no budget, floor or assertion. #237 (§5.7 re-declaration, product verdict 6901199383 on PR #239): decoded-byte ceilings are now CONTEXT-AWARE — MATURE/STRESS 3D contexts evaluate transferred.mature3d.entryDecodedBytes (360000 B) / transferred.mature3d.totalColdDecodedBytes (1220000 B); FALLBACK-2D evaluates transferred.fallback2d.totalColdDecodedBytes (620000 B); binaryMediaCount stays 0. Same metrics, same checks, re-declared ceiling values grounded in the MEASURED post-#236 baseline at this head (~1.1x, tighter than 1.2x); the 2D-era global 240000/520000 ceilings and the measurably dead 'HOLD FALLBACK + close via (A) alone' branch are openly retired (docs/PERF_BUDGETS.md, docs/evidence/237-budget-redeclaration.md). All experience budgets (coldLoad/interaction/frame/memory) UNCHANGED; no floor or assertion weakened; UNKNOWN never auto-MET.",
   "browser": {
     "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
@@ -18,6 +18,23 @@
       "issue": "https://github.com/darkmatter2222/Rustwake/issues/67",
       "purpose": "Experience-level performance budgets for the redesigned Rustwake game. These are ceilings a player should never feel exceed, NOT a byte-shaving contest. The historical 233000-byte entry ceiling is explicitly NOT a hard constraint here; entryDecodedBytes is a realistic headroom budget, and total transferred bytes are measured as decoded payload (this build ships procedural audio + procedural canvas sprites, so binary media is zero).",
       "groundedIn": "Baseline measured at main f80726970287a9c6da96e0c475b77dc0daccd96b via tests/perf/perf-67.evidence.mjs (vite preview of the production build, headless Chromium, 6x CPU throttle for the low-end pass). See docs/PERF_BUDGETS.md for the full protocol and the device-vs-emulation limitation.",
+      "redeclaration": {
+        "issue": "https://github.com/darkmatter2222/Rustwake/issues/237",
+        "authority": "§5.7 = docs/vision/architecture/README.md:98 (§5 item 7 'Budget discipline': do not lift failing budgets without documenting scene and tradeoff) + docs/vision/TECHNICAL_CONTRACT.md:9/:15 (byte ceiling re-declared against the <=8 MB compressed first-playable budget, never silently lifted). #230 product ruling comment 6900038312 commissioned (R)#237; #236 product verdict comment 6901199383 (PR #239) is the operative directive: ground against MEASURED post-#236 values, re-declare 3D MATURE ~1.1x (tighter than 1.2x), and openly retire the measurably dead 'HOLD FALLBACK + close via (A) alone' branch.",
+        "groundedIn": "Post-#236 baseline re-measured at rw/237 head (base origin/main 083242a3b1fc0fa634306d931801bd941378a5c7, the #236 squash merge) via tests/perf/perf-151.evidence.mjs --mode p03: real per-context PerformanceResourceTiming decodedBodySize sums, vite preview of the production build, headless Chromium SwiftShader emulation, 6x CPU throttle for the low-end pass. See docs/evidence/237-budget-redeclaration.md and docs/PERF_BUDGETS.md.",
+        "measuredBaseline": {
+          "entryDecodedBytesMature3d": 324689,
+          "totalColdDecodedBytesMature3d": 1106322,
+          "totalColdDecodedBytesFallback2d": 561642,
+          "coldCompressedTransferBytesMature3d": 301735,
+          "coldCompressedTransferBytesFallback2d": 164570,
+          "binaryMediaCount": 0
+        },
+        "scene": "rw3d Living Voxel World: pinned three.js 0.187.0 WebGLRenderer voxel world needed at first playable paint (the gate paints a live yard preview). 3D MATURE = release MATURE fixture (20 machines / 30 units / 200 cargo) on phone 390x844@2 and desktop 1920x1080@1; entry is the app+sim module script (324689 B, three excluded by the #236 probe-gated lazy import), total cold adds the async three chunk (~544680 B) + vendor/tables/CSS/HTML. FALLBACK-2D = the same app+sim entry on no-WebGL devices; the three chunk is NEVER fetched there (measured), so its cold total is 561642 B.",
+        "tradeoff": "The 2D-era #67 global decoded ceilings (entry 240000 / total cold 520000, grounded in the 190898/422552 pre-rw3d 2D baseline) are structurally incompatible with the pinned-three 3D app and are RETIRED for it. Re-declared CONTEXT-AWARE decoded ceilings at ~1.1x the measured post-#236 baseline (tighter than 1.2x, to force genuine future reductions): mature3d entry 360000 (1.109x), mature3d total cold 1220000 (1.103x), fallback2d total cold 620000 (1.104x). These are secondary proxies; the player-facing guardrails are the UNCHANGED experience budgets (coldLoad FCP/load, interaction, frame, memory) and the <=8 MB compressed first-playable budget (measured ~0.30 MB gzip MATURE / ~0.16 MB FALLBACK, all MET). No check removed or weakened; same metrics, re-declared context-aware ceiling values; UNKNOWN is never auto-MET.",
+        "retired": "The pre-measurement 'HOLD FALLBACK ceilings (entry <=240000, total cold <=520000) and close via (A) alone' branch of the #230 ruling is measurably DEAD (#236 measured FALLBACK cold 561642 > 520000 and entry 324689 > 240000: the non-three app+sim entry itself exceeds the 2D-era ceilings) and is retired OPENLY here per product verdict 6901199383 — never silently. A genuine app+sim entry diet remains a valid FUTURE optimization (tracked separately, P3, not a G1 blocker).",
+        "reductionHistory": "(C)#235 named-import tree-shake: measured 0 B (exhausted). (A)#236 probe-gated lazy three: FALLBACK-2D cold 1105441 -> 561642 (-49.2%, genuine; the 544680 B three chunk is never fetched without WebGL); MATURE entry 868488 -> 324689 (-62.6%); MATURE total cold +881 B relocation only."
+      },
       "evaluationNote": "The probe compares interaction budgets against the MEDIAN open/tap latency (the budget keys retain the *P95Ms names the probe reads). Frame budgets use P95 of requestAnimationFrame deltas. 'met=null' means not measured (e.g. landscape machine-tap automation does not land) or no budget set; those are reported as unknown, never silently passed.",
       "deviceLimitation": "All numbers are AGENT headless emulation on a fast host with a local preview (no real network, no real low-end GPU/compositor). Emulation is a necessary-but-not-sufficient floor: meeting a budget here does not prove a real mid/low-end phone meets it. Frame time stays at the 60Hz vsync floor (16.8ms) even at 6x CPU throttle on this host, so throttled interaction latency is the sensitive rerender-cost signal."
     },
@@ -29,9 +46,14 @@
         "desktopLoadMs": 1800
       },
       "transferred": {
-        "entryDecodedBytes": 240000,
-        "totalColdDecodedBytes": 520000,
-        "imageAudioBinaryCount": 0
+        "imageAudioBinaryCount": 0,
+        "mature3d": {
+          "entryDecodedBytes": 360000,
+          "totalColdDecodedBytes": 1220000
+        },
+        "fallback2d": {
+          "totalColdDecodedBytes": 620000
+        }
       },
       "interaction": {
         "menuOpenP95Ms": 100,
@@ -69,272 +91,11 @@
       "world3d": "ready",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 13.4,
-          "domContentLoadedMs": 45.4,
-          "loadEventEndMs": 45.5,
-          "responseEndMs": 8.4,
-          "durationMs": 45.5,
-          "transferSize": 1020,
-          "decodedBodySize": 1368,
-          "type": "navigate"
-        },
-        "fcpMs": 84,
-        "lcpMs": 84,
-        "longTasksDuringLoad": 0,
-        "resources": {
-          "count": 5,
-          "totalTransferSize": 301735,
-          "totalEncodedBodySize": 299215,
-          "totalDecodedBodySize": 1106322,
-          "document": {
-            "transferSize": 1020,
-            "decodedBodySize": 1368
-          },
-          "buckets": {
-            "css": {
-              "count": 1,
-              "transferSize": 11578,
-              "encodedBodySize": 11278,
-              "decodedBodySize": 66873,
-              "names": [
-                "index-BVohK8qu.css"
-              ]
-            },
-            "tablesJs": {
-              "count": 1,
-              "transferSize": 10220,
-              "encodedBodySize": 9920,
-              "decodedBodySize": 27054,
-              "names": [
-                "tables-BO6NIz7N.js"
-              ]
-            },
-            "vendorJs": {
-              "count": 1,
-              "transferSize": 45674,
-              "encodedBodySize": 45374,
-              "decodedBodySize": 141658,
-              "names": [
-                "vendor-Bt4lNSbZ.js"
-              ]
-            },
-            "entryJs": {
-              "count": 1,
-              "transferSize": 96078,
-              "encodedBodySize": 95778,
-              "decodedBodySize": 324689,
-              "names": [
-                "index-BgVhHfeK.js"
-              ]
-            },
-            "otherJs": {
-              "count": 1,
-              "transferSize": 137165,
-              "encodedBodySize": 136865,
-              "decodedBodySize": 544680,
-              "names": [
-                "index-C09_CvPm.js"
-              ]
-            }
-          },
-          "binaryMediaCount": 0,
-          "binaryMedia": []
-        }
-      },
-      "idleFrame": {
-        "count": 181,
-        "meanMs": 16.66,
-        "p50Ms": 16.7,
-        "p95Ms": 16.8,
-        "p99Ms": 16.8,
-        "maxMs": 16.8,
-        "droppedOver50ms": 0,
-        "droppedPct": 0,
-        "fpsMean": 60
-      },
-      "memoryIdle": {
-        "usedJSHeapMB": 10.31,
-        "totalJSHeapMB": 13.37,
-        "jsHeapLimitMB": 4192
-      },
-      "interaction": {
-        "menuOpen": {
-          "samples": [
-            12.8,
-            9.8,
-            5.5
-          ],
-          "medianMs": 9.8,
-          "p95Ms": 12.8,
-          "okCount": 3
-        },
-        "machineTap": {
-          "samples": [
-            34,
-            14,
-            9
-          ],
-          "medianMs": 14,
-          "p95Ms": 34,
-          "okCount": 3
-        }
-      },
-      "throttled": {
-        "rate": 6,
-        "idleFrame": {
-          "count": 181,
-          "meanMs": 16.66,
-          "p50Ms": 16.7,
-          "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 16.8,
-          "droppedOver50ms": 0,
-          "droppedPct": 0,
-          "fpsMean": 60
-        },
-        "menuOpen": {
-          "samples": [
-            16.3,
-            16.7,
-            16.8
-          ],
-          "medianMs": 16.7,
-          "p95Ms": 16.8,
-          "okCount": 3
-        },
-        "machineTap": {
-          "samples": [
-            168,
-            119,
-            119
-          ],
-          "medianMs": 119,
-          "p95Ms": 168,
-          "okCount": 3
-        },
-        "storeFrame": {
-          "count": 91,
-          "meanMs": 16.64,
-          "p50Ms": 16.7,
-          "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 16.8,
-          "droppedOver50ms": 0,
-          "droppedPct": 0,
-          "fpsMean": 60.1
-        }
-      },
-      "panels": [
-        {
-          "name": "Store",
-          "present": 1,
-          "title": "Yard store",
-          "frameWhileOpen": {
-            "count": 91,
-            "meanMs": 16.65,
-            "p50Ms": 16.7,
-            "p95Ms": 16.8,
-            "p99Ms": 16.8,
-            "maxMs": 16.8,
-            "droppedOver50ms": 0,
-            "droppedPct": 0,
-            "fpsMean": 60.1
-          }
-        },
-        {
-          "name": "Research",
-          "present": 1,
-          "title": "Research",
-          "frameWhileOpen": {
-            "count": 90,
-            "meanMs": 16.68,
-            "p50Ms": 16.7,
-            "p95Ms": 16.8,
-            "p99Ms": 16.8,
-            "maxMs": 16.8,
-            "droppedOver50ms": 0,
-            "droppedPct": 0,
-            "fpsMean": 59.9
-          }
-        },
-        {
-          "name": "Yard",
-          "present": 1,
-          "title": "Yard record",
-          "frameWhileOpen": {
-            "count": 91,
-            "meanMs": 16.59,
-            "p50Ms": 16.7,
-            "p95Ms": 16.8,
-            "p99Ms": 16.8,
-            "maxMs": 16.8,
-            "droppedOver50ms": 0,
-            "droppedPct": 0,
-            "fpsMean": 60.3
-          }
-        }
-      ],
-      "stress": {
-        "longSessionFrame": {
-          "count": 240,
-          "meanMs": 16.67,
-          "p50Ms": 16.7,
-          "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 17.1,
-          "droppedOver50ms": 0,
-          "droppedPct": 0,
-          "fpsMean": 60
-        },
-        "churnFrame": {
-          "count": 150,
-          "meanMs": 16.68,
-          "p50Ms": 16.7,
-          "p95Ms": 16.8,
-          "p99Ms": 16.8,
-          "maxMs": 16.8,
-          "droppedOver50ms": 0,
-          "droppedPct": 0,
-          "fpsMean": 60
-        },
-        "heapGrowthMB": -0.14,
-        "memBeforeStress": {
-          "usedJSHeapMB": 11.11,
-          "totalJSHeapMB": 16.35,
-          "jsHeapLimitMB": 4192
-        },
-        "memAfterStress": {
-          "usedJSHeapMB": 10.97,
-          "totalJSHeapMB": 17.08,
-          "jsHeapLimitMB": 4192
-        }
-      },
-      "consoleErrors": [],
-      "screenshot": {
-        "file": "151-p03-phone-MATURE.png",
-        "bytes": 130073,
-        "sha256": "edb923c8007b0b2689c4b9b4778674665010638ac14040e261a5c23b963b65f2"
-      }
-    },
-    {
-      "device": "desktop",
-      "fixture": "MATURE",
-      "seedFixture": "MATURE-RESEARCH (#231: +12 data fill, research.buy cutters, tutorial=9)",
-      "fallback": false,
-      "tag": "desktop-MATURE",
-      "viewport": {
-        "width": 1920,
-        "height": 1080
-      },
-      "deviceScaleFactor": 1,
-      "world3d": "ready",
-      "coldLoad": {
-        "navigation": {
-          "domInteractiveMs": 12.7,
-          "domContentLoadedMs": 37.2,
-          "loadEventEndMs": 37.4,
-          "responseEndMs": 7.6,
-          "durationMs": 37.4,
+          "domInteractiveMs": 9.9,
+          "domContentLoadedMs": 34.5,
+          "loadEventEndMs": 34.6,
+          "responseEndMs": 5.7,
+          "durationMs": 34.6,
           "transferSize": 1020,
           "decodedBodySize": 1368,
           "type": "navigate"
@@ -404,39 +165,300 @@
       },
       "idleFrame": {
         "count": 180,
-        "meanMs": 16.68,
+        "meanMs": 16.69,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
-        "p99Ms": 16.8,
+        "p99Ms": 16.9,
         "maxMs": 16.9,
         "droppedOver50ms": 0,
         "droppedPct": 0,
         "fpsMean": 59.9
       },
       "memoryIdle": {
-        "usedJSHeapMB": 9.29,
-        "totalJSHeapMB": 12.87,
+        "usedJSHeapMB": 11.63,
+        "totalJSHeapMB": 17.67,
         "jsHeapLimitMB": 4192
       },
       "interaction": {
         "menuOpen": {
           "samples": [
-            13.1,
-            9.9,
-            3.9
+            10.9,
+            3.5,
+            15.7
           ],
-          "medianMs": 9.9,
-          "p95Ms": 13.1,
+          "medianMs": 10.9,
+          "p95Ms": 15.7,
           "okCount": 3
         },
         "machineTap": {
           "samples": [
-            24,
-            13,
-            11
+            31,
+            10,
+            13
           ],
           "medianMs": 13,
-          "p95Ms": 24,
+          "p95Ms": 31,
+          "okCount": 3
+        }
+      },
+      "throttled": {
+        "rate": 6,
+        "idleFrame": {
+          "count": 181,
+          "meanMs": 16.65,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60.1
+        },
+        "menuOpen": {
+          "samples": [
+            19.7,
+            14.4,
+            17.3
+          ],
+          "medianMs": 17.3,
+          "p95Ms": 19.7,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            131,
+            125,
+            103
+          ],
+          "medianMs": 125,
+          "p95Ms": 131,
+          "okCount": 3
+        },
+        "storeFrame": {
+          "count": 91,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        }
+      },
+      "panels": [
+        {
+          "name": "Store",
+          "present": 1,
+          "title": "Yard store",
+          "frameWhileOpen": {
+            "count": 91,
+            "meanMs": 16.53,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.5
+          }
+        },
+        {
+          "name": "Research",
+          "present": 1,
+          "title": "Research",
+          "frameWhileOpen": {
+            "count": 90,
+            "meanMs": 16.69,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 59.9
+          }
+        },
+        {
+          "name": "Yard",
+          "present": 1,
+          "title": "Yard record",
+          "frameWhileOpen": {
+            "count": 91,
+            "meanMs": 16.64,
+            "p50Ms": 16.7,
+            "p95Ms": 16.8,
+            "p99Ms": 16.9,
+            "maxMs": 16.9,
+            "droppedOver50ms": 0,
+            "droppedPct": 0,
+            "fpsMean": 60.1
+          }
+        }
+      ],
+      "stress": {
+        "longSessionFrame": {
+          "count": 241,
+          "meanMs": 16.66,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 60
+        },
+        "churnFrame": {
+          "count": 150,
+          "meanMs": 16.68,
+          "p50Ms": 16.7,
+          "p95Ms": 16.8,
+          "p99Ms": 16.8,
+          "maxMs": 16.8,
+          "droppedOver50ms": 0,
+          "droppedPct": 0,
+          "fpsMean": 59.9
+        },
+        "heapGrowthMB": -0.33,
+        "memBeforeStress": {
+          "usedJSHeapMB": 9.15,
+          "totalJSHeapMB": 16.67,
+          "jsHeapLimitMB": 4192
+        },
+        "memAfterStress": {
+          "usedJSHeapMB": 8.82,
+          "totalJSHeapMB": 20.08,
+          "jsHeapLimitMB": 4192
+        }
+      },
+      "consoleErrors": [],
+      "screenshot": {
+        "file": "151-p03-phone-MATURE.png",
+        "bytes": 129927,
+        "sha256": "6c800bcaa17a63884417a004ce1abe79bc505a4e5f0585a3d866fa9f8dc1e669"
+      }
+    },
+    {
+      "device": "desktop",
+      "fixture": "MATURE",
+      "seedFixture": "MATURE-RESEARCH (#231: +12 data fill, research.buy cutters, tutorial=9)",
+      "fallback": false,
+      "tag": "desktop-MATURE",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "deviceScaleFactor": 1,
+      "world3d": "ready",
+      "coldLoad": {
+        "navigation": {
+          "domInteractiveMs": 12,
+          "domContentLoadedMs": 38.4,
+          "loadEventEndMs": 39,
+          "responseEndMs": 6.6,
+          "durationMs": 39,
+          "transferSize": 1020,
+          "decodedBodySize": 1368,
+          "type": "navigate"
+        },
+        "fcpMs": 88,
+        "lcpMs": 88,
+        "longTasksDuringLoad": 0,
+        "resources": {
+          "count": 5,
+          "totalTransferSize": 301735,
+          "totalEncodedBodySize": 299215,
+          "totalDecodedBodySize": 1106322,
+          "document": {
+            "transferSize": 1020,
+            "decodedBodySize": 1368
+          },
+          "buckets": {
+            "tablesJs": {
+              "count": 1,
+              "transferSize": 10220,
+              "encodedBodySize": 9920,
+              "decodedBodySize": 27054,
+              "names": [
+                "tables-BO6NIz7N.js"
+              ]
+            },
+            "css": {
+              "count": 1,
+              "transferSize": 11578,
+              "encodedBodySize": 11278,
+              "decodedBodySize": 66873,
+              "names": [
+                "index-BVohK8qu.css"
+              ]
+            },
+            "vendorJs": {
+              "count": 1,
+              "transferSize": 45674,
+              "encodedBodySize": 45374,
+              "decodedBodySize": 141658,
+              "names": [
+                "vendor-Bt4lNSbZ.js"
+              ]
+            },
+            "entryJs": {
+              "count": 1,
+              "transferSize": 96078,
+              "encodedBodySize": 95778,
+              "decodedBodySize": 324689,
+              "names": [
+                "index-BgVhHfeK.js"
+              ]
+            },
+            "otherJs": {
+              "count": 1,
+              "transferSize": 137165,
+              "encodedBodySize": 136865,
+              "decodedBodySize": 544680,
+              "names": [
+                "index-C09_CvPm.js"
+              ]
+            }
+          },
+          "binaryMediaCount": 0,
+          "binaryMedia": []
+        }
+      },
+      "idleFrame": {
+        "count": 181,
+        "meanMs": 16.65,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 16.8,
+        "maxMs": 16.9,
+        "droppedOver50ms": 0,
+        "droppedPct": 0,
+        "fpsMean": 60
+      },
+      "memoryIdle": {
+        "usedJSHeapMB": 11.65,
+        "totalJSHeapMB": 17.17,
+        "jsHeapLimitMB": 4192
+      },
+      "interaction": {
+        "menuOpen": {
+          "samples": [
+            13.4,
+            9.2,
+            2.4
+          ],
+          "medianMs": 9.2,
+          "p95Ms": 13.4,
+          "okCount": 3
+        },
+        "machineTap": {
+          "samples": [
+            30,
+            10,
+            10
+          ],
+          "medianMs": 10,
+          "p95Ms": 30,
           "okCount": 3
         }
       },
@@ -455,34 +477,34 @@
         },
         "menuOpen": {
           "samples": [
-            15.8,
-            13.8,
-            14.7
+            19.6,
+            13.6,
+            15.4
           ],
-          "medianMs": 14.7,
-          "p95Ms": 15.8,
+          "medianMs": 15.4,
+          "p95Ms": 19.6,
           "okCount": 3
         },
         "machineTap": {
           "samples": [
             80,
-            78,
-            59
+            60,
+            56
           ],
-          "medianMs": 78,
+          "medianMs": 60,
           "p95Ms": 80,
           "okCount": 3
         },
         "storeFrame": {
           "count": 91,
-          "meanMs": 16.54,
+          "meanMs": 16.6,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
           "maxMs": 16.8,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 60.5
+          "fpsMean": 60.2
         }
       },
       "panels": [
@@ -507,8 +529,8 @@
           "present": 1,
           "title": "Research",
           "frameWhileOpen": {
-            "count": 90,
-            "meanMs": 16.67,
+            "count": 91,
+            "meanMs": 16.66,
             "p50Ms": 16.7,
             "p95Ms": 16.8,
             "p99Ms": 16.8,
@@ -523,29 +545,29 @@
           "present": 1,
           "title": "Yard record",
           "frameWhileOpen": {
-            "count": 90,
-            "meanMs": 16.69,
+            "count": 91,
+            "meanMs": 16.63,
             "p50Ms": 16.7,
             "p95Ms": 16.8,
-            "p99Ms": 16.9,
-            "maxMs": 16.9,
+            "p99Ms": 16.8,
+            "maxMs": 16.8,
             "droppedOver50ms": 0,
             "droppedPct": 0,
-            "fpsMean": 59.9
+            "fpsMean": 60.1
           }
         }
       ],
       "stress": {
         "longSessionFrame": {
-          "count": 240,
-          "meanMs": 16.67,
+          "count": 241,
+          "meanMs": 16.65,
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
-          "maxMs": 16.8,
+          "maxMs": 16.9,
           "droppedOver50ms": 0,
           "droppedPct": 0,
-          "fpsMean": 60
+          "fpsMean": 60.1
         },
         "churnFrame": {
           "count": 150,
@@ -553,28 +575,28 @@
           "p50Ms": 16.7,
           "p95Ms": 16.8,
           "p99Ms": 16.8,
-          "maxMs": 16.9,
+          "maxMs": 16.8,
           "droppedOver50ms": 0,
           "droppedPct": 0,
           "fpsMean": 59.9
         },
-        "heapGrowthMB": -0.41,
+        "heapGrowthMB": -0.43,
         "memBeforeStress": {
-          "usedJSHeapMB": 10.96,
-          "totalJSHeapMB": 17.77,
+          "usedJSHeapMB": 12.28,
+          "totalJSHeapMB": 19.67,
           "jsHeapLimitMB": 4192
         },
         "memAfterStress": {
-          "usedJSHeapMB": 10.55,
-          "totalJSHeapMB": 17.58,
+          "usedJSHeapMB": 11.85,
+          "totalJSHeapMB": 20.58,
           "jsHeapLimitMB": 4192
         }
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-MATURE.png",
-        "bytes": 55754,
-        "sha256": "b93329d93525bd6e62fdf991b8ecb3c4fac6e77ebf0c67cbe17f75fd60aec751"
+        "bytes": 55650,
+        "sha256": "5a8c865fc651f0fd7e1392976ff790fad7d1507a1096f06d3345dfd008a2cfc0"
       }
     },
     {
@@ -584,11 +606,11 @@
       "tag": "desktop-STRESS",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 11.3,
-          "domContentLoadedMs": 35.1,
-          "loadEventEndMs": 35.2,
-          "responseEndMs": 6.6,
-          "durationMs": 35.2,
+          "domInteractiveMs": 10.7,
+          "domContentLoadedMs": 36.8,
+          "loadEventEndMs": 36.8,
+          "responseEndMs": 6.7,
+          "durationMs": 36.8,
           "transferSize": 1020,
           "decodedBodySize": 1368,
           "type": "navigate"
@@ -658,25 +680,25 @@
       },
       "idleFrame": {
         "count": 240,
-        "meanMs": 16.68,
+        "meanMs": 16.69,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
-        "maxMs": 16.9,
+        "maxMs": 16.8,
         "droppedOver50ms": 0,
         "droppedPct": 0,
         "fpsMean": 59.9
       },
       "memoryIdle": {
-        "usedJSHeapMB": 10.55,
-        "totalJSHeapMB": 18.76,
+        "usedJSHeapMB": 9.68,
+        "totalJSHeapMB": 16.9,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-STRESS.png",
-        "bytes": 68121,
-        "sha256": "69bbb1e20b4c1ec77ede697377262c6502f1e7eb8563dafaf31c0540dc736d2e"
+        "bytes": 67966,
+        "sha256": "8fbbb8622eff66303bccb300630b41e19c5fe81f4f6be7d6303f4b59934d8bf0"
       }
     },
     {
@@ -687,17 +709,17 @@
       "world3d": "unavailable",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 12.6,
-          "domContentLoadedMs": 46.4,
-          "loadEventEndMs": 47.6,
-          "responseEndMs": 8.1,
-          "durationMs": 47.6,
+          "domInteractiveMs": 11.9,
+          "domContentLoadedMs": 38.3,
+          "loadEventEndMs": 38.9,
+          "responseEndMs": 6.8,
+          "durationMs": 38.9,
           "transferSize": 1020,
           "decodedBodySize": 1368,
           "type": "navigate"
         },
-        "fcpMs": 92,
-        "lcpMs": 92,
+        "fcpMs": 88,
+        "lcpMs": 88,
         "longTasksDuringLoad": 0,
         "resources": {
           "count": 4,
@@ -751,26 +773,26 @@
         }
       },
       "idleFrame": {
-        "count": 121,
-        "meanMs": 16.65,
+        "count": 120,
+        "meanMs": 16.69,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
-        "maxMs": 16.9,
+        "maxMs": 16.8,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 60
+        "fpsMean": 59.9
       },
       "memoryIdle": {
-        "usedJSHeapMB": 6.53,
-        "totalJSHeapMB": 10.58,
+        "usedJSHeapMB": 8.91,
+        "totalJSHeapMB": 15.63,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-phone-FALLBACK-2D.png",
-        "bytes": 132247,
-        "sha256": "77f7cd230230b654a2dc7056a36487a30b2833f5f33883af177607a859fdb40e"
+        "bytes": 132252,
+        "sha256": "d2375954f4c872899616a695f38c642cd39bc883ac22dd9e07788bdcdcd40f98"
       }
     },
     {
@@ -781,11 +803,11 @@
       "world3d": "unavailable",
       "coldLoad": {
         "navigation": {
-          "domInteractiveMs": 11.8,
-          "domContentLoadedMs": 34.3,
-          "loadEventEndMs": 34.9,
-          "responseEndMs": 7.4,
-          "durationMs": 34.9,
+          "domInteractiveMs": 11.4,
+          "domContentLoadedMs": 37.2,
+          "loadEventEndMs": 37.7,
+          "responseEndMs": 7,
+          "durationMs": 37.7,
           "transferSize": 1020,
           "decodedBodySize": 1368,
           "type": "navigate"
@@ -845,26 +867,26 @@
         }
       },
       "idleFrame": {
-        "count": 120,
-        "meanMs": 16.67,
+        "count": 121,
+        "meanMs": 16.59,
         "p50Ms": 16.7,
         "p95Ms": 16.8,
         "p99Ms": 16.8,
-        "maxMs": 16.9,
+        "maxMs": 16.8,
         "droppedOver50ms": 0,
         "droppedPct": 0,
-        "fpsMean": 60
+        "fpsMean": 60.3
       },
       "memoryIdle": {
-        "usedJSHeapMB": 9.41,
-        "totalJSHeapMB": 15.13,
+        "usedJSHeapMB": 6.02,
+        "totalJSHeapMB": 10.33,
         "jsHeapLimitMB": 4192
       },
       "consoleErrors": [],
       "screenshot": {
         "file": "151-p03-desktop-FALLBACK-2D.png",
-        "bytes": 65688,
-        "sha256": "c23d794d828ab04f1f1723a02a68f852194406685bdf5cdf19f988a0fce8d218"
+        "bytes": 65590,
+        "sha256": "78177d75bd39e763477f032ec72d558119f273b846beaace2be65fcc1a36ca2f"
       }
     }
   ],
@@ -912,7 +934,7 @@
       {
         "metric": "fcp",
         "scope": "phone-MATURE",
-        "value": 84,
+        "value": 76,
         "limit": 1500,
         "unit": "ms",
         "dir": "max",
@@ -921,7 +943,7 @@
       {
         "metric": "loadEventEnd",
         "scope": "phone-MATURE",
-        "value": 45.5,
+        "value": 34.6,
         "limit": 2500,
         "unit": "ms",
         "dir": "max",
@@ -931,19 +953,19 @@
         "metric": "entryDecodedBytes",
         "scope": "phone-MATURE",
         "value": 324689,
-        "limit": 240000,
+        "limit": 360000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "totalColdDecodedBytes",
         "scope": "phone-MATURE",
         "value": 1106322,
-        "limit": 520000,
+        "limit": 1220000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "binaryMediaCount",
@@ -957,7 +979,7 @@
       {
         "metric": "menuOpenMedian",
         "scope": "phone-MATURE",
-        "value": 9.8,
+        "value": 10.9,
         "limit": 100,
         "unit": "ms",
         "dir": "max",
@@ -966,7 +988,7 @@
       {
         "metric": "machineTapMedian",
         "scope": "phone-MATURE",
-        "value": 14,
+        "value": 13,
         "limit": 120,
         "unit": "ms",
         "dir": "max",
@@ -975,7 +997,7 @@
       {
         "metric": "throttledMenuOpenMedian",
         "scope": "phone-MATURE",
-        "value": 16.7,
+        "value": 17.3,
         "limit": 200,
         "unit": "ms",
         "dir": "max",
@@ -984,7 +1006,7 @@
       {
         "metric": "throttledMachineTapMedian",
         "scope": "phone-MATURE",
-        "value": 119,
+        "value": 125,
         "limit": 250,
         "unit": "ms",
         "dir": "max",
@@ -1056,7 +1078,7 @@
       {
         "metric": "idleUsedHeap",
         "scope": "phone-MATURE",
-        "value": 10.31,
+        "value": 11.63,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1065,7 +1087,7 @@
       {
         "metric": "sessionHeapGrowth",
         "scope": "phone-MATURE",
-        "value": -0.14,
+        "value": -0.33,
         "limit": 16,
         "unit": "MB",
         "dir": "max",
@@ -1074,7 +1096,7 @@
       {
         "metric": "fcp",
         "scope": "desktop-MATURE",
-        "value": 76,
+        "value": 88,
         "limit": 1000,
         "unit": "ms",
         "dir": "max",
@@ -1083,7 +1105,7 @@
       {
         "metric": "loadEventEnd",
         "scope": "desktop-MATURE",
-        "value": 37.4,
+        "value": 39,
         "limit": 1800,
         "unit": "ms",
         "dir": "max",
@@ -1093,19 +1115,19 @@
         "metric": "entryDecodedBytes",
         "scope": "desktop-MATURE",
         "value": 324689,
-        "limit": 240000,
+        "limit": 360000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "totalColdDecodedBytes",
         "scope": "desktop-MATURE",
         "value": 1106322,
-        "limit": 520000,
+        "limit": 1220000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "binaryMediaCount",
@@ -1119,7 +1141,7 @@
       {
         "metric": "menuOpenMedian",
         "scope": "desktop-MATURE",
-        "value": 9.9,
+        "value": 9.2,
         "limit": 100,
         "unit": "ms",
         "dir": "max",
@@ -1128,7 +1150,7 @@
       {
         "metric": "machineTapMedian",
         "scope": "desktop-MATURE",
-        "value": 13,
+        "value": 10,
         "limit": 120,
         "unit": "ms",
         "dir": "max",
@@ -1137,7 +1159,7 @@
       {
         "metric": "throttledMenuOpenMedian",
         "scope": "desktop-MATURE",
-        "value": 14.7,
+        "value": 15.4,
         "limit": 200,
         "unit": "ms",
         "dir": "max",
@@ -1146,7 +1168,7 @@
       {
         "metric": "throttledMachineTapMedian",
         "scope": "desktop-MATURE",
-        "value": 78,
+        "value": 60,
         "limit": 250,
         "unit": "ms",
         "dir": "max",
@@ -1218,7 +1240,7 @@
       {
         "metric": "idleUsedHeap",
         "scope": "desktop-MATURE",
-        "value": 9.29,
+        "value": 11.65,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1227,7 +1249,7 @@
       {
         "metric": "sessionHeapGrowth",
         "scope": "desktop-MATURE",
-        "value": -0.41,
+        "value": -0.43,
         "limit": 16,
         "unit": "MB",
         "dir": "max",
@@ -1245,7 +1267,7 @@
       {
         "metric": "stressFixtureIdleHeap",
         "scope": "desktop-STRESS",
-        "value": 10.55,
+        "value": 9.68,
         "limit": 64,
         "unit": "MB",
         "dir": "max",
@@ -1254,7 +1276,7 @@
       {
         "metric": "fallbackFcp",
         "scope": "phone-FALLBACK-2D",
-        "value": 92,
+        "value": 88,
         "limit": 1500,
         "unit": "ms",
         "dir": "max",
@@ -1263,7 +1285,7 @@
       {
         "metric": "fallbackLoadEventEnd",
         "scope": "phone-FALLBACK-2D",
-        "value": 47.6,
+        "value": 38.9,
         "limit": 2500,
         "unit": "ms",
         "dir": "max",
@@ -1273,10 +1295,10 @@
         "metric": "fallbackTotalColdDecodedBytes",
         "scope": "phone-FALLBACK-2D",
         "value": 561642,
-        "limit": 520000,
+        "limit": 620000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "fallbackIdleP95",
@@ -1299,7 +1321,7 @@
       {
         "metric": "fallbackLoadEventEnd",
         "scope": "desktop-FALLBACK-2D",
-        "value": 34.9,
+        "value": 37.7,
         "limit": 1800,
         "unit": "ms",
         "dir": "max",
@@ -1309,10 +1331,10 @@
         "metric": "fallbackTotalColdDecodedBytes",
         "scope": "desktop-FALLBACK-2D",
         "value": 561642,
-        "limit": 520000,
+        "limit": 620000,
         "unit": "B",
         "dir": "max",
-        "met": false
+        "met": true
       },
       {
         "metric": "fallbackIdleP95",
@@ -1325,11 +1347,11 @@
       }
     ],
     "summary": {
-      "met": 40,
-      "unmet": 6,
+      "met": 46,
+      "unmet": 0,
       "unknown": 0,
       "total": 46,
-      "allMet": false
+      "allMet": true
     }
   },
   "checks": [
