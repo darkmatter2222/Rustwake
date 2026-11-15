@@ -1071,29 +1071,49 @@ async function captureRoundTrip(browser, report) {
   check("roundtrip: import note names restored tick/machines", `Applied · tick ${dA.payload.sim.tick}, ${dA.payload.sim.machines.length} machines`, note, note === `Applied · tick ${dA.payload.sim.tick}, ${dA.payload.sim.machines.length} machines`);
   check("roundtrip: live export advances between reads (A!=B)", false, abDelta.byteIdentical, abDelta.byteIdentical === false);
   check("roundtrip: live sim resumes after import (C tick > imported tick)", ">0", acDelta.tickDelta, acDelta.tickDelta > 0);
-  // Invalid import must change NOTHING (natural tick progression excepted).
+  // Invalid import must change NOTHING. G1 #151 pass 10: the old witness read
+  // D1, clicked Apply, waited 400 ms, then read D2 — the live sim advances ~10
+  // ticks/s and drone deliveries mutate the store, so NATURAL drift between the
+  // two reads failed the byte-identical check even though the refusal path
+  // mutates nothing (YardPanel.applyImport refuses via previewImport before any
+  // onImport call; store.importSave also rejects before any state swap). Use
+  // the SAME sanctioned atomic pattern as the frozen valid import above: read
+  // the slot, click Apply and read the slot again in ONE synchronous evaluate,
+  // so no sim tick can interleave. The 400 ms wait still runs afterwards for the
+  // confirm-gate/note witness, and a third read records (informational, not a
+  // gate) that the sim keeps advancing after the refusal. No check is relaxed:
+  // the drift window is now zero, and the <=2 threshold is kept as-is.
   await clickDock(page, "Yard");
   await page.waitForSelector(".panel", { timeout: 10000 });
   await clickByText(page, "Import");
   await page.waitForSelector("#rustwake-save-import", { timeout: 10000 });
-  const D1 = await page.evaluate((k) => localStorage.getItem(k), SAVE_KEY);
   await page.fill("#rustwake-save-import", "rw-invalid{{{not-a-save");
-  await clickByText(page, "Apply");
+  const invalidAtomic = await page.evaluate((k) => {
+    const before = localStorage.getItem(k);
+    const b = [...document.querySelectorAll("button")].find((n) => (n.textContent ?? "").trim().startsWith("Apply"));
+    if (b) b.click();
+    return { before, after: localStorage.getItem(k), applyClicked: !!b };
+  }, SAVE_KEY);
+  const D1 = invalidAtomic.before;
+  const D2 = invalidAtomic.after;
   await page.waitForTimeout(400);
   const invalid = await page.evaluate(() => ({
     confirmPresent: !!document.querySelector(".import-confirm"),
     note: document.querySelector(".panel .status-line")?.textContent?.trim() ?? null,
   }));
-  const D2 = await page.evaluate((k) => localStorage.getItem(k), SAVE_KEY);
+  const D3 = await page.evaluate((k) => localStorage.getItem(k), SAVE_KEY);
   const shotInvalid = await shot(page, "roundtrip-invalid-desktop");
   await closePanel();
-  const d1 = decodeSave(D1), d2 = decodeSave(D2);
+  const d1 = decodeSave(D1), d2 = decodeSave(D2), d3 = decodeSave(D3);
   const economy = (s) => JSON.stringify({ machines: s.machines, routes: s.routes, store: s.store, credits: s.credits, drones: fleetUnits(s), storeUnits: s.storeUnits });
   const invalidDelta = {
     confirmPresent: invalid.confirmPresent, note: invalid.note,
+    applyClicked: invalidAtomic.applyClicked,
     economyIdentical: economy(d1.payload.sim) === economy(d2.payload.sim),
     tickDelta: d2.payload.sim.tick - d1.payload.sim.tick,
+    postWaitTickDelta: d3.payload.sim.tick - d2.payload.sim.tick,
   };
+  check("roundtrip: invalid import witness actually clicked Apply", true, invalidDelta.applyClicked, invalidDelta.applyClicked === true);
   check("roundtrip: invalid import refused (no confirm gate)", false, invalid.confirmPresent, invalid.confirmPresent === false);
   check("roundtrip: invalid import leaves economy byte-identical", true, invalidDelta.economyIdentical, invalidDelta.economyIdentical === true);
   check("roundtrip: invalid import tick drift <=2 (natural only)", "<=2", invalidDelta.tickDelta, invalidDelta.tickDelta >= 0 && invalidDelta.tickDelta <= 2);
