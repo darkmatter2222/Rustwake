@@ -441,7 +441,7 @@ async function captureV04(browser, report) {
       const stamp = await canvasStamp(page);
       if (stamp?.world3d === "ready") readyCount += 1;
       const rec = { i, tMs: Date.now() - start, sha256: sha256(buf), world3d: stamp?.world3d ?? null, cam: stamp?.cam ?? null };
-      if (i % 10 === 0) {
+      if (i % 10 === 0 || i === FRAMES - 1) {
         const save = await readSave(page);
         rec.tick = save.tick;
         if (tickStart === null) tickStart = save.tick;
@@ -608,7 +608,7 @@ async function captureRoundTrip(browser, report) {
   await page.waitForSelector(".panel", { timeout: 10000 });
   await clickByText(page, "Import");
   await page.waitForSelector("#rustwake-save-import", { timeout: 10000 });
-  const D1 = await page.evaluate(() => localStorage.getItem(SAVE_KEY));
+  const D1 = await page.evaluate((k) => localStorage.getItem(k), SAVE_KEY);
   await page.fill("#rustwake-save-import", "rw-invalid{{{not-a-save");
   await clickByText(page, "Apply");
   await page.waitForTimeout(400);
@@ -616,7 +616,7 @@ async function captureRoundTrip(browser, report) {
     confirmPresent: !!document.querySelector(".import-confirm"),
     note: document.querySelector(".panel .status-line")?.textContent?.trim() ?? null,
   }));
-  const D2 = await page.evaluate(() => localStorage.getItem(SAVE_KEY));
+  const D2 = await page.evaluate((k) => localStorage.getItem(k), SAVE_KEY);
   const shotInvalid = await shot(page, "roundtrip-invalid-desktop");
   await closePanel();
   const d1 = decodeSave(D1), d2 = decodeSave(D2);
