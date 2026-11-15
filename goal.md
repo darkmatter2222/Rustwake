@@ -13,3 +13,8 @@ Each issue completes only with evidence, independent acceptance and merged imple
 ## First player milestone
 
 A player places a sorter/furnace, builds roads, assigns a truck, sees cargo physically delivered, manufactures/sells steel, upgrades a bottleneck, watches buildings unfold and returns to a correct saved/offline state. P1 must pass visual, interaction, resource conservation and performance gates before expanding scope.
+
+
+## Current sponsor correction: G1 is NOT visually accepted
+Issue #244 is the blocking outcome: integrate real isometric 45/35 camera and orbit/zoom controls (#245), replace the legacy shell with a world-first responsive game UI (#246), and deliver a visible road/vehicle/building construction sandbox (#247). Dressing-only #242/PR #243 does not satisfy the mandate. #151 stays open until the actual deployed first-playable experience is visually accepted by the sponsor; do not skip to P2.
+Every eligible reviewed implementation PR must be merged by the release engineer, followed through main CI, trusted delivery, and the single-browser verify-live release evidence (#248). Release failures are diagnosed, not asserted away. Preserve the five-session cap and existing active worker leases.
