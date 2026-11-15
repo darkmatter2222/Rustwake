@@ -6,6 +6,23 @@ namespace three.js imports to named imports of exactly the 24 used members, then
 entry + total-cold decoded-byte saving. three stays pinned **0.187.0**; `three.module.js` kept
 (WebGLRenderer required; `three.core.js` is NOT a substitute).
 
+## Disposition — EVIDENCE-ONLY (product ruling 6900438083, measured head 421d1cff)
+
+Per the §5.7 product disposition ruling (comment **6900438083**, bound to the measured refactor head
+`421d1cffa98ede7c4de7f5662bb604b464152eaf`), option (C) achieved **0 B** of its commissioned reduction
+objective. The durable deliverable is this honest measurement: it supersedes the #230 §3 ESTIMATE
+(~30–130 KB) and hands #237 a hash-anchored baseline — the documented scene+tradeoff input §5.7
+(architecture/README.md:98) and TECHNICAL_CONTRACT:9/:15 require. The byte-neutral 3-file named-import
+refactor (`worldRenderer.ts`, `cameraRig.ts`, `assemblyView.ts`) was **REVERTED** to base `c9ab523`;
+merging it would be cosmetic drift ("not a byte-shaving contest", PERF_BUDGETS:12–13). This PR therefore
+lands **evidence-only**: the net diff vs `main` is this document; the 3 src files match base exactly
+(0 diff). (C) is **EXHAUSTED** as a reduction lever (0 headroom); no further named-import/tree-shake
+work is commissioned against this bundle.
+
+- BEFORE measurement head: base `c9ab52365aae12670285e21e3e78de7b1e10f03f`.
+- AFTER (refactor) measurement head: `421d1cffa98ede7c4de7f5662bb604b464152eaf` (reverted; the bundle
+  was byte-for-byte identical, so the measurement is unchanged at this evidence-only head).
+
 ## Headline (honest, measured)
 
 **The real measured saving is 0 bytes — for BOTH metrics, in ALL contexts.** The production bundle is
@@ -17,7 +34,7 @@ converting to named imports removes no additional bytes. The #230 §3 ESTIMATE (
 This is real byte removal attempted, not relocation — there was simply nothing left to shake. No budget
 or ceiling was lifted; both operative ceilings remain **UNMET**.
 
-## Change (exactly 3 files)
+## Experiment (measured at 421d1cff, then reverted per disposition)
 
 `import * as THREE from "three"` → named imports; every `THREE.X` → `X`:
 
@@ -29,8 +46,10 @@ Imported member union verified = **24** (exactly the brief/§3 set): BoxGeometry
 DirectionalLight, DynamicDrawUsage, Float32BufferAttribute, Group, HemisphereLight, InstancedMesh,
 LineBasicMaterial, LineSegments, Material, Matrix4, Mesh, MeshLambertMaterial, Object3D,
 OrthographicCamera, PlaneGeometry, Quaternion, Raycaster, Scene, Vector2, Vector3, WebGLRenderer.
-`grep -rn 'import \* as THREE' src` → 0 remaining. No budget/ceiling/test/config/version/build-plugin
-edits; no sourcemaps. Legacy 2D fallback boundary (`blitWorld3D`/`getWorld3D`) untouched.
+`grep -rn 'import \* as THREE' src` → 0 remaining at the refactor head. No budget/ceiling/test/config/
+version/build-plugin edits; no sourcemaps. Legacy 2D fallback boundary (`blitWorld3D`/`getWorld3D`)
+untouched. Residual `THREE.` mentions are **3 comments** (`scene.ts:93`, `three/index.ts:132`,
+`worldRenderer.ts:9`), **0 code references** (tsc exit 0 corroborates); benign, no action required.
 
 ## Measurement method (FILTER-SAFE, numeric only)
 
@@ -53,7 +72,7 @@ minified vendor / source-map content was read. totalCold = entry + vendor + tabl
 - **entryDecodedBytes = 868488**
 - **totalColdDecodedBytes = 1105441** (868488+141658+27054+66873+1368)
 
-## AFTER (MEASURED at rw/235 head — see PR for immutable SHA)
+## AFTER (MEASURED at refactor head 421d1cff — byte-for-byte identical)
 
 | asset | bytes | sha256 |
 |---|---|---|
@@ -91,7 +110,8 @@ every context exactly as before; `fallbackTotalColdDecodedBytes` still equals `t
 Option (C) genuinely reduces both metrics in principle, but at this head the measured reduction is 0,
 so it cannot meet either ceiling. Meeting total cold ≤ 520000 still requires removing 585441 B —
 implausible while keeping a working WebGLRenderer 3D world (per #230 §5c/§6). This honestly informs
-#237 (budget revision): named-import tree-shaking yields no headroom here.
+#237 (budget revision): named-import tree-shaking yields no headroom here; the 3D MATURE ceiling must
+ground in measured totalCold 1105441 / entry 868488 + (A)/#236's genuine FALLBACK-2D fix.
 
 ## Gates (PLAIN, all green first run — no rerun needed)
 
@@ -116,5 +136,5 @@ implausible while keeping a working WebGLRenderer 3D world (per #230 §5c/§6). 
 ## Citations
 
 #235 (issue body), #230 §3/§4/§5c/§6 (`docs/evidence/230-bundle-plan.md`), §5.7 ruling (product
-comment 6900038312), TECHNICAL_CONTRACT:7 (three pinned 0.187.0), `tests/perf/budgets.json`,
-`docs/PERF_BUDGETS.md`.
+comment 6900038312), disposition ruling (product comment 6900438083), TECHNICAL_CONTRACT:7 (three
+pinned 0.187.0), `tests/perf/budgets.json`, `docs/PERF_BUDGETS.md`.
