@@ -40,7 +40,7 @@ import {
   percentile, evidenceDir, HARNESS_URL, repoRoot,
 } from "../renderer/rw3d-t07/lib.mjs";
 import {
-  buildMature, buildStress, fixtureSaveText, FIXTURE_WITNESS_MS,
+  buildMature, buildMatureResearch, buildStress, fixtureSaveText, FIXTURE_WITNESS_MS,
   MATURE_BUILDINGS, MATURE_UNITS, MATURE_CARGO, STRESS_BUILDINGS,
 } from "../fixtures/release.ts";
 import { SAVE_KEY, DEFAULT_SETTINGS, decodeSave } from "../../src/game/persistence/save.ts";
@@ -61,14 +61,30 @@ const LIMITATION =
 
 /* ---- release fixtures (pass 1) ------------------------------------------- */
 const mature = buildMature();
+// #231: P03 MATURE panel contexts seed the Research variant (canonical MATURE
+// + bounded data fill + real research.buy cutters) so the Research dock face
+// renders. P01/P02 and the STRESS/FALLBACK contexts keep canonical MATURE.
+const matureResearch = buildMatureResearch();
 const stress = buildStress();
 const matureEnvelope = JSON.parse(fixtureSaveText(mature.sim, FIXTURE_WITNESS_MS));
+const matureResearchEnvelope = JSON.parse(fixtureSaveText(matureResearch.sim, FIXTURE_WITNESS_MS));
 const stressEnvelope = JSON.parse(fixtureSaveText(stress.sim, FIXTURE_WITNESS_MS));
-for (const [name, env] of [["MATURE", matureEnvelope], ["STRESS", stressEnvelope]]) {
+for (const [name, env] of [["MATURE", matureEnvelope], ["MATURE-RESEARCH", matureResearchEnvelope], ["STRESS", stressEnvelope]]) {
   const d = decodeSave(JSON.stringify(env));
   if (!d.ok) { console.error(`fixture ${name} rejected by decodeSave: ${d.reason}`); process.exit(1); }
 }
 const appSeed = (sim) => fixtureSaveText(sim, Date.now(), { ...DEFAULT_SETTINGS, muted: true });
+
+/* #231 live-shell navigation selectors. The 2D-era Menu face/sheet
+ * (button[aria-label="Menu"] / .shell-menu) was retired by the #135 compact
+ * shell: navigation is now the persistent six-slot toolbar, and a destination
+ * tap roots the ONE panel host (.shell-host, inspector on desktop / sheet on
+ * phone). Trade is ungated on every fixture (App.tsx onSlot), so it is the
+ * stable menu-open instrument target; Escape pops the single rooted layer, so
+ * each sample starts closed. Same measurement semantics as before: click ->
+ * rAF-poll the navigation surface painted. */
+const MENU_OPEN_SEL = '.toolbar__btn[data-slot="trade"]';
+const MENU_APPEAR_SEL = ".shell-host";
 
 /* ---- shared helpers ------------------------------------------------------- */
 const checks = [];
@@ -598,6 +614,9 @@ async function measureClickOpen(page, { sel, appear }, times = 3) {
     const res = await page.evaluate(({ sel, appear }) => new Promise((resolve) => {
       const target = document.querySelector(sel);
       if (!target) { resolve({ ok: false, reason: "no-target" }); return; }
+      // #231 strengthening: a surface already painted before the click would
+      // resolve at ~0ms and fake a fast open. Refuse the sample instead.
+      if (document.querySelector(appear)) { resolve({ ok: false, reason: "already-open" }); return; }
       const t0 = performance.now();
       target.click();
       const start = performance.now();
@@ -781,13 +800,15 @@ async function runP03() {
     mode: "P03", issue: 151, sha: SHA, generatedOn: GENERATED, url: URL,
     command: "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
     limitation: LIMITATION,
-    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off).",
+    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. No budget, floor or assertion changed.",
     browser: { executablePath, probeRenderer, swiftshaderForced },
     cpuThrottleRate: CPU_THROTTLE_RATE,
     budgets, devices: [], hardFailures: [],
   };
   const hardFailures = report.hardFailures;
-  const matureTiles = mature.sim.machines.map((m) => m.tile);
+  // Same 20 tiles as canonical MATURE (the variant only adds store data + one
+  // research node); read from the variant so the P03 context is self-contained.
+  const matureTiles = matureResearch.sim.machines.map((m) => m.tile);
   let exitCode = 1;
   try {
     // Warmup navigation so the first measured context does not pay browser cold-start.
@@ -807,7 +828,12 @@ async function runP03() {
       // App.tsx) and the Yard panel would never open. tutorial=9 is the exact
       // value syncTutorial reaches after the first machine upgrade; it unlocks
       // the shipped Yard face without altering any measurement below.
-      await context.addInitScript(([key, value]) => localStorage.setItem(key, value), [SAVE_KEY, appSeed({ ...mature.sim, tutorial: 9 })]);
+      // #231: seed the MATURE-RESEARCH variant (canonical MATURE + 12 data via
+      // the conserved addToStore boundary + real research.buy cutters) so
+      // showResearch (App.tsx: data > 0 OR owned node) renders the Research
+      // dock face. Canonical MATURE has no data/research, which is why the
+      // Research panel-open check hard-failed on the retired instrument.
+      await context.addInitScript(([key, value]) => localStorage.setItem(key, value), [SAVE_KEY, appSeed({ ...matureResearch.sim, tutorial: 9 })]);
       const page = await context.newPage();
       const consoleErrors = [];
       page.on("console", (m) => { if (m.type() === "error") consoleErrors.push(m.text()); });
@@ -821,7 +847,7 @@ async function runP03() {
       const world3d = await page.evaluate(() => document.querySelector(".game canvas")?.dataset.world3d ?? null);
       const idleFrame = await sampleFrames(page, 3000);
       const memoryIdle = await readHeap(page);
-      const menuOpen = await measureClickOpen(page, { sel: 'button[aria-label="Menu"]', appear: ".shell-menu" }, 3);
+      const menuOpen = await measureClickOpen(page, { sel: MENU_OPEN_SEL, appear: MENU_APPEAR_SEL }, 3);
       await page.keyboard.press("Escape");
       await page.waitForTimeout(120);
       const machineTap = await measureMachineTap(page, matureTiles, 3);
@@ -839,7 +865,7 @@ async function runP03() {
       const longSessionFrame = await sampleFrames(page, 4000);
       const churnFramePromise = sampleFrames(page, 2500);
       for (let i = 0; i < 12; i += 1) {
-        await page.evaluate(() => document.querySelector('button[aria-label="Menu"]')?.click());
+        await page.evaluate((sel) => document.querySelector(sel)?.click(), MENU_OPEN_SEL);
         await page.waitForTimeout(70);
         await page.keyboard.press("Escape");
         await page.waitForTimeout(70);
@@ -853,7 +879,7 @@ async function runP03() {
       await cdpT.send("Emulation.setCPUThrottlingRate", { rate: CPU_THROTTLE_RATE });
       await page.waitForTimeout(250);
       const throttledIdleFrame = await sampleFrames(page, 3000);
-      const throttledMenuOpen = await measureClickOpen(page, { sel: 'button[aria-label="Menu"]', appear: ".shell-menu" }, 3);
+      const throttledMenuOpen = await measureClickOpen(page, { sel: MENU_OPEN_SEL, appear: MENU_APPEAR_SEL }, 3);
       await page.keyboard.press("Escape");
       await page.waitForTimeout(120);
       const throttledMachineTap = await measureMachineTap(page, matureTiles, 3);
@@ -867,7 +893,7 @@ async function runP03() {
       const screenshot = await shot(page, `151-p03-${tag}.png`);
       if (consoleErrors.length) hardFailures.push(`${tag}: console errors ${consoleErrors.slice(0, 3).join(" | ")}`);
       report.devices.push({
-        device: dev.name, fixture: "MATURE", fallback: false, tag, viewport: dev.viewport, deviceScaleFactor: dev.deviceScaleFactor,
+        device: dev.name, fixture: "MATURE", seedFixture: "MATURE-RESEARCH (#231: +12 data fill, research.buy cutters, tutorial=9)", fallback: false, tag, viewport: dev.viewport, deviceScaleFactor: dev.deviceScaleFactor,
         world3d, coldLoad, idleFrame, memoryIdle, interaction: { menuOpen, machineTap },
         throttled: { rate: CPU_THROTTLE_RATE, idleFrame: throttledIdleFrame, menuOpen: throttledMenuOpen, machineTap: throttledMachineTap, storeFrame: throttledStoreFrame },
         panels, stress: { longSessionFrame, churnFrame, heapGrowthMB, memBeforeStress, memAfterStress },
