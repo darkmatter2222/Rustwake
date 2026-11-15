@@ -14,7 +14,7 @@
  *
  * Pure and integer-only: no DOM, no wall-clock, no stored state.
  */
-import { MU_PER_UNIT, type Cell, type Rotation, type WorldState } from "./types";
+import { MU_PER_UNIT, type Cell, type PlacedBuilding, type Rotation, type WorldState } from "./types";
 import { socketWorldMu } from "./geometry";
 import { WORLD_KIT, type KitAsset, type KitSocket, type SocketKind, type WorldAssetId } from "./kit";
 import { roadEdgesAt, type RoadNetworkState } from "./roadGraph";
@@ -79,6 +79,36 @@ export function roadSocketLinks(net: RoadNetworkState, world: WorldState): RoadS
     }
   }
   return out;
+}
+
+/**
+ * Issue #217 (session-only): the cell a completed building registers with the
+ * logistics ledger. It is the approach cell of the building's FIRST road-taking
+ * socket in kit-socket order (deterministic for multi-socket buildings such as
+ * the warehouse's bay0/bay1), falling back to the footprint-origin cell when the
+ * asset declares no road lane. Registering at the approach cell keeps the bay
+ * editor's approach-cell capacity coherent with the cell logistics jobs lease
+ * (#141 leases bays at sourceCell/destCell). Pure: derived from kit geometry on
+ * every read, never stored, so a moved or rotated building never leaves a stale
+ * cell behind. The #148 cutover owns persistence; nothing here is serialized.
+ */
+export function buildingLogisticsCell(building: PlacedBuilding): Cell {
+  const asset = WORLD_KIT[building.asset as WorldAssetId];
+  if (asset !== undefined) {
+    for (const socket of asset.sockets) {
+      if (takesRoadLane(socket)) {
+        return socketApproachCell(asset, building.cell, building.rotation, socket);
+      }
+    }
+  }
+  return { x: building.cell.x, y: building.cell.y };
+}
+
+/** True when a completed building declares at least one road-taking socket. */
+export function buildingTakesRoadLane(building: PlacedBuilding): boolean {
+  const asset = WORLD_KIT[building.asset as WorldAssetId];
+  if (asset === undefined) return false;
+  return asset.sockets.some(takesRoadLane);
 }
 
 /** Approach cells of all road-taking bays, sorted by cell key (deduped). */
