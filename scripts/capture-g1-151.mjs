@@ -95,6 +95,13 @@ function finish(report) {
   console.log(`capture-g1-151: ${report.pass ? "PASS" : "FAIL"} (${checks.length - failed.length}/${checks.length} hard checks, ${findings.length} findings)`);
   return report.pass ? 0 : 1;
 }
+/** Real per-section verdict for a sub-report: filter the global checks by name
+ *  prefix and compute pass from the SAME numeric checks (never a placeholder). */
+function sectionVerdict(prefix) {
+  const section = checks.filter((c) => c.name.startsWith(prefix));
+  const failed = section.filter((c) => !c.pass);
+  return { checks: section, pass: failed.length === 0, total: section.length, passed: section.length - failed.length };
+}
 
 /* ---- preview server -------------------------------------------------------- */
 async function startPreview(port) {
@@ -487,8 +494,10 @@ async function captureV04(browser, report) {
       keyframes: frames.filter((f) => f.png).map((f) => ({ i: f.i, tMs: f.tMs, png: f.png, sha256: f.sha256 })),
       pageErrors,
     };
+    const v04Section = sectionVerdict(`v04-${devName}:`);
     writeReport(`151-v04-frames-${devName}.json`, {
-      issue: 151, pass: "3/4", headSha: SHA, generated: GENERATED, device: devName, limitation: LIMITATION,
+      issue: 151, pass: v04Section.pass, headSha: SHA, generated: GENERATED, device: devName, limitation: LIMITATION,
+      checks: v04Section.checks, checkSummary: { passed: v04Section.passed, total: v04Section.total },
       note: "Per-frame sha256 of CANVAS-ONLY screenshots at 2 fps for 60 s. Frames 60-67 are the emulated hidden-tab window (paint must freeze, sim must keep ticking). Every 6th frame is persisted as PNG; all 120 hashes are listed.",
       frames,
     });
@@ -646,8 +655,10 @@ async function captureRoundTrip(browser, report) {
     confirmShot: shotConfirm, pageErrors,
     envelopeA: A, envelopeC: C,
   };
+  const rtSection = sectionVerdict("roundtrip:");
   writeReport("151-roundtrip.json", {
-    issue: 151, pass: "3/4", headSha: SHA, generated: GENERATED, limitation: LIMITATION,
+    issue: 151, pass: rtSection.pass, headSha: SHA, generated: GENERATED, limitation: LIMITATION,
+    checks: rtSection.checks, checkSummary: { passed: rtSection.passed, total: rtSection.total },
     ...report.roundTrip,
   });
   await context.close();
@@ -700,7 +711,7 @@ async function main() {
     process.exit(1);
   }
   const report = {
-    issue: 151, pass: "3/4", gate: "G1/P1", headSha: SHA, generated: GENERATED,
+    issue: 151, gate: "G1/P1", headSha: SHA, generated: GENERATED,
     mode: "running-build-captures", limitation: LIMITATION,
     build: "vite preview of THIS branch's dist (npm run build at head " + SHA + ")",
     fixtures: "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; lastSeenMs=Date.now() so no offline catch-up contaminates captures",
@@ -721,8 +732,12 @@ async function main() {
     stopServer(preview);
   }
   report.artifacts = artifacts;
+  // DEFECT #1 fix: finish() computes the REAL checks/findings/boolean pass and
+  // mutates report; persist AFTER it so the on-disk JSON carries the true verdict
+  // (never the old hardcoded "3/4" placeholder written before the verdict existed).
+  const code = finish(report);
   writeReport("151-g1-captures.json", report);
-  process.exit(finish(report));
+  process.exit(code);
 }
 
 main().catch((e) => {
