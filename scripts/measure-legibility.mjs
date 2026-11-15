@@ -34,6 +34,7 @@
 //   npx tsx scripts/measure-legibility.mjs
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { chromium } from "playwright-core";
 
 const OUT = "work/development/UI-004-g1/";
@@ -53,6 +54,38 @@ const headSha = () => {
   const r = spawnSync("git", ["rev-parse", "HEAD"], { cwd: process.cwd(), encoding: "utf8" });
   return r.status === 0 ? r.stdout.trim() : "unknown";
 };
+
+// ---- served-bundle identity assertion (pass-14 provenance gap; mirrors chrm002-probe.mjs) ----
+// The census `baseSha` comes from git, NOT from the served bundle, so a stale or foreign preview
+// (e.g. another worktree holding the port) could be measured silently — the pass-9 :4173 invalid
+// run. Assert the preview actually serves THIS worktree's dist entry: fetch served index.html ->
+// resolve its entry chunk ref -> fetch that chunk -> sha256 + bytes == the on-disk dist asset.
+// Abort on mismatch. This STRENGTHENS the gate (it can only invalidate a run, never relax a floor).
+const sha256 = (b) => createHash("sha256").update(b).digest("hex");
+const servedIndexHtml = await (await fetch(url)).text();
+const servedEntryRef = (servedIndexHtml.match(/assets\/index-[^"']+\.js/) ?? [null])[0];
+if (!servedEntryRef) throw new Error(`no entry chunk ref in served index.html at ${url}`);
+const servedEntry = Buffer.from(await (await fetch(url + servedEntryRef)).arrayBuffer());
+const diskEntry = readFileSync("dist/" + servedEntryRef);
+const servedBundleProvenance = {
+  url,
+  servedEntryRef,
+  servedEntrySha256: sha256(servedEntry),
+  diskEntrySha256: sha256(diskEntry),
+  servedEntryBytes: servedEntry.length,
+  diskEntryBytes: diskEntry.length,
+  identical: servedEntry.equals(diskEntry),
+};
+if (!servedBundleProvenance.identical) {
+  throw new Error(`served entry != dist entry — wrong worktree? ${JSON.stringify(servedBundleProvenance)}`);
+}
+console.log(
+  "census provenance OK",
+  servedEntryRef,
+  servedBundleProvenance.servedEntryBytes,
+  "B sha",
+  servedBundleProvenance.servedEntrySha256.slice(0, 12),
+);
 
 /**
  * The canonical U03 viewports (ACCEPTANCE.md U03), dpr convention mirrored from the
@@ -408,6 +441,7 @@ const report = {
   generated: new Date().toISOString(),
   window: "W-3 cadence (1 tap/s, fresh storage) per viewport; A ladder 1 -> 1.25 -> 1.5 -> 2",
   url,
+  servedBundleProvenance,
   viewports: VIEWPORTS.map((v) => ({ name: v.name, width: v.w, height: v.h, dpr: v.dpr, mobile: v.mobile })),
   columns: stepLabels,
   textScales: TEXT_SCALES,
