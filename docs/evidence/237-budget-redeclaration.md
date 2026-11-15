@@ -5,8 +5,10 @@ Role: developer (non-vision). Branch `rw/237`, base `origin/main`
 MERGED+DEPLOYED+live-verified). Measurement head SHA:
 `5f50d961160f59ddffe7c6b157fa20d168b25083` (budget re-declaration + mapping +
 PERF_BUDGETS.md; no `src/` change — the production bundle is byte-identical to the
-base main build, verified by SHA256 inventory below). The final commit on this
-branch is evidence-only over that measurement head. three stays pinned `0.187.0`.
+base main build, verified by SHA256 inventory below). The commits after the
+measurement head are evidence-only (docs/frames; no `src/`, `budgets.json` or
+harness change); the immutable PR head is recorded in the draft PR and the #237
+developer handoff. three stays pinned `0.187.0`.
 No build-plugin/vite/sourcemap/package.json change; saves/cancellation/approval/
 security paths untouched. FILTER-SAFE numeric-only measurement throughout.
 
