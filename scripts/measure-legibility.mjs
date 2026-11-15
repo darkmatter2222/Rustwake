@@ -180,14 +180,31 @@ const readCensus = (ELEMENTS) => {
   const card = document.querySelector(".objective");
   const hud = document.querySelector(".hud");
   const root = document.documentElement;
-  const targets = Array.from(document.querySelectorAll(".dock .dock__btn, .hud .icon-btn")).map((node) => {
+  // G1 #151 pass 10 (U03-3): the 44 px touch floor applies to RENDERED controls.
+  // `.cluster .icon-btn:last-child` (Home) is display:none at every width by
+  // design (styles.css) — it is not a target the player can see or tap, and
+  // counting its 0x0 box dragged minTargetPx to 0 and failed the floor on every
+  // cell. That was an instrument defect, not a UI defect. Exclude non-rendered
+  // controls (display:none, visibility:hidden, or a zero-area box) from the
+  // target list; every RENDERED target still faces the unchanged 44 px floor.
+  // The excluded entries are recorded as hiddenTargets so the witness stays
+  // auditable (an exclusion can never silently hide a rendered small target).
+  const targets = [];
+  const hiddenTargets = [];
+  for (const node of Array.from(document.querySelectorAll(".dock .dock__btn, .hud .icon-btn"))) {
+    const style = getComputedStyle(node);
     const rect = node.getBoundingClientRect();
-    return {
+    const entry = {
       text: (node.textContent ?? "").replace(/\s+/g, " ").trim().slice(0, 30),
       h: round(rect.height),
       w: round(rect.width),
     };
-  });
+    if (style.display === "none" || style.visibility === "hidden" || rect.width <= 0 || rect.height <= 0) {
+      hiddenTargets.push(entry);
+    } else {
+      targets.push(entry);
+    }
+  }
   return {
     inner: { width: window.innerWidth, height: window.innerHeight },
     dpr: window.devicePixelRatio,
@@ -196,6 +213,7 @@ const readCensus = (ELEMENTS) => {
     textLarge: root.classList.contains("text-large"),
     rows,
     targets,
+    hiddenTargets,
     cardFillPct: card && hud ? round((card.getBoundingClientRect().height / hud.clientHeight) * 1000) / 10 : null,
     pageScroll: {
       scrollWidth: root.scrollWidth,
