@@ -445,10 +445,17 @@ async function captureV04(browser, report) {
       }
       // Canvas-only capture: the painted yard is the motion surface. A full-
       // page shot would include the ticking HUD DOM and make hashes vacuous.
+      // DEFECT #2 diagnostic: sample what the production hidden-pause guard
+      // (scene.ts drawScene / index.ts blitWorld3D read document.hidden) actually
+      // sees at capture time, so a non-frozen hidden window is attributed honestly
+      // — emulation lag (hidden reads false) vs. app defect (hidden true, still paints).
+      const vis = await page.evaluate(() => ({
+        hidden: document.hidden, visibilityState: document.visibilityState, rwHidden: window.__rwHidden === true,
+      }));
       const buf = await canvas.screenshot();
       const stamp = await canvasStamp(page);
       if (stamp?.world3d === "ready") readyCount += 1;
-      const rec = { i, tMs: Date.now() - start, sha256: sha256(buf), world3d: stamp?.world3d ?? null, cam: stamp?.cam ?? null };
+      const rec = { i, tMs: Date.now() - start, sha256: sha256(buf), world3d: stamp?.world3d ?? null, cam: stamp?.cam ?? null, docHidden: vis.hidden, visState: vis.visibilityState, rwHidden: vis.rwHidden };
       if (i % 10 === 0 || i === FRAMES - 1) {
         const save = await readSave(page);
         rec.tick = save.tick;
