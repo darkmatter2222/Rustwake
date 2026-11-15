@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import {
   DEFAULT_SETTINGS,
   MAX_WORLD_RECORDS,
+  SAVE_KEY,
   checksum,
   decodeSave,
   encodeSave,
@@ -17,7 +18,25 @@ import {
 } from "../../src/game/persistence/save";
 import { SCHEMA_VERSION, createInitialState } from "../../src/game/simulation/types";
 import { advanceWorld, createWorld, type WorldState } from "../../src/game/world";
-import { expectOk, findLegalCell, place } from "../game/world/helpers";
+import { createStore } from "../../src/app/store";
+import {
+  expectConserved,
+  expectCreditsConserved,
+  expectOk,
+  findLegalCell,
+  place,
+} from "../game/world/helpers";
+
+function memoryStorage() {
+  const map = new Map<string, string>();
+  return {
+    getItem: (key: string) => (map.has(key) ? (map.get(key) as string) : null),
+    setItem: (key: string, value: string) => {
+      map.set(key, value);
+    },
+    raw: map,
+  };
+}
 
 /** A yard with one completed building, one partway site and its reservation. */
 function yardInProgress(): WorldState {
@@ -164,5 +183,117 @@ describe("world save field (#228)", () => {
     expect(
       validateWorld({ ...createWorld(133), schemaVersion: SCHEMA_VERSION + 99 }),
     ).toBe("schemaVersion");
+  });
+});
+
+describe("store persistence join (#228 M2)", () => {
+  /** Place one generator through the real store API and advance partway. */
+  function placePartway(store: ReturnType<typeof createStore>, ticks: number): void {
+    expect(store.selectBuildAsset("generator").ok).toBe(true);
+    const cell = findLegalCell(store.getBuildWorld(), "generator");
+    store.setBuildGhostCell(cell);
+    expect(store.confirmBuildPlacement().ok).toBe(true);
+    store.step(ticks);
+  }
+
+  it("reload resumes with the SAME progressTicks and settles exactly once", () => {
+    const storage = memoryStorage();
+    // Same lease id models a reload of the owning tab; the fixed clock means
+    // zero elapsed absence, so no catch-up interferes with the yard assertions.
+    const store = createStore({ storage, now: () => 1_000, leaseId: "tab-a" });
+    placePartway(store, 20);
+    const mid = store.getBuildWorld();
+    expect(mid.sites[0].progressTicks).toBe(20);
+    const reservedItems = mid.reservations[0].items.map((i) => ({ ...i }));
+    const reservedCredits = mid.reservations[0].credits;
+    const stockBefore = { ...mid.stock };
+    const creditsBefore = mid.credits;
+
+    const reopened = createStore({ storage, now: () => 1_000, leaseId: "tab-a" });
+    const yard = reopened.getBuildWorld();
+    expect(yard.tick).toBe(20);
+    expect(yard.sites.length).toBe(1);
+    expect(yard.sites[0].progressTicks).toBe(20);
+    expect(yard.reservations.length).toBe(1);
+    expectConserved(yard, { scrap: 120, ferrous: 12, steel: 12 });
+    expectCreditsConserved(yard, 60);
+
+    reopened.step(30); // tick 50: the site settles
+    const settled = reopened.getBuildWorld();
+    expect(settled.sites.length).toBe(0);
+    expect(settled.buildings.length).toBe(1);
+    expect(settled.reservations.length).toBe(0);
+    // Single charge: the reservation moves to committed exactly once.
+    for (const item of reservedItems) {
+      expect(settled.committed[item.resource]).toBe(item.qty);
+    }
+    expect(settled.committedCredits).toBe(reservedCredits);
+    // Material was reserved at PLACEMENT, so completion charges nothing more.
+    expect(settled.stock).toEqual(stockBefore);
+    expect(settled.credits).toBe(creditsBefore);
+    expectConserved(settled, { scrap: 120, ferrous: 12, steel: 12 });
+    expectCreditsConserved(settled, 60);
+
+    reopened.step(100); // further ticks must never charge again
+    const after = reopened.getBuildWorld();
+    expect(after.buildings.length).toBe(1);
+    expect(after.committed).toEqual(settled.committed);
+    expect(after.committedCredits).toBe(settled.committedCredits);
+    expect(after.stock).toEqual(stockBefore);
+    // The durable checkpoint carries the settled yard.
+    const saved = decodeSave(storage.raw.get(SAVE_KEY) ?? null);
+    expect(saved.ok).toBe(true);
+    if (saved.ok) {
+      expect(saved.payload.world?.buildings.length).toBe(1);
+      expect(saved.payload.world?.reservations.length).toBe(0);
+    }
+  });
+
+  it("a follower tab adopts the writer's yard through reconcile", () => {
+    const storage = memoryStorage();
+    const writer = createStore({ storage, now: () => 1_000, leaseId: "writer" });
+    const follower = createStore({ storage, now: () => 1_000, leaseId: "follower" });
+    expect(follower.getBuildWorld().sites.length).toBe(0);
+    placePartway(writer, 20);
+    follower.step(0); // reconcile adopts the newer snapshot, yard included
+    const mirrored = follower.getBuildWorld();
+    expect(mirrored.tick).toBe(20);
+    expect(mirrored.sites.length).toBe(1);
+    expect(mirrored.sites[0].progressTicks).toBe(20);
+    expect(mirrored.reservations.length).toBe(1);
+    // A reader never advances the yard itself.
+    follower.step(10);
+    expect(follower.getBuildWorld().tick).toBe(20);
+  });
+
+  it("an OLD world-less save boots a fresh seeded yard", () => {
+    const storage = memoryStorage();
+    storage.setItem(SAVE_KEY, encodeSave(createInitialState(), 1_000, DEFAULT_SETTINGS));
+    const store = createStore({ storage, now: () => 1_000, leaseId: "tab-a" });
+    const yard = store.getBuildWorld();
+    expect(yard.tick).toBe(0);
+    expect(yard.sites.length).toBe(0);
+    expect(yard.buildings.length).toBe(0);
+    expect(yard.seed).toBe(138); // BUILD_SESSION_SEED
+  });
+
+  it("export/import round-trips the yard; a refused import leaves it untouched", () => {
+    const storage = memoryStorage();
+    const store = createStore({ storage, now: () => 1_000, leaseId: "tab-a" });
+    placePartway(store, 20);
+    const text = store.exportSave();
+
+    const other = memoryStorage();
+    const target = createStore({ storage: other, now: () => 1_000, leaseId: "tab-b" });
+    expect(target.importSave(text).ok).toBe(true);
+    expect(target.getBuildWorld().sites[0].progressTicks).toBe(20);
+    expect(target.getBuildWorld().reservations.length).toBe(1);
+    // The imported yard is durable in the target's storage.
+    const saved = decodeSave(other.raw.get(SAVE_KEY) ?? null);
+    expect(saved.ok).toBe(true);
+    if (saved.ok) expect(saved.payload.world?.sites[0].progressTicks).toBe(20);
+    // A corrupt import changes nothing.
+    expect(target.importSave("{ broken").ok).toBe(false);
+    expect(target.getBuildWorld().sites[0].progressTicks).toBe(20);
   });
 });

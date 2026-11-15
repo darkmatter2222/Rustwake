@@ -26,7 +26,7 @@ import { WORLD_ASSET_IDS, WORLD_KIT, type WorldAssetId } from "../../src/game/wo
 import type { Rotation } from "../../src/game/world/types";
 import type { WorldRejection } from "../../src/game/world/transactions";
 import { createStore, type BuildConfirmResult } from "../../src/app/store";
-import { SAVE_KEY } from "../../src/game/persistence/save";
+import { decodeSave, SAVE_KEY } from "../../src/game/persistence/save";
 import { cloneWorld, expectOk, expectReason, findLegalCell, newWorld, place } from "./world/helpers";
 
 const freshCtx: BuildUnlockContext = { research: {}, milestoneTokens: 0 };
@@ -468,20 +468,23 @@ describe("T11 store slice: session-only placement state machine", () => {
     expect(store.getBuildWorld().buildings).toHaveLength(1);
   });
 
-  it("never persists the build yard: the save slot stays untouched by placement", () => {
+  it("persists the build yard on the checkpoint cadence (#228); confirm alone never writes", () => {
     const storage = memoryStorage();
     const store = createStore({ storage, now: () => 1_000, leaseId: "tab-a" });
     store.selectBuildAsset("warehouse");
     expectBuildOk(store.confirmBuildPlacement());
     // The confirm path never calls persist: no SAVE_KEY write from the slice.
     expect(storage.raw.has(SAVE_KEY)).toBe(false);
-    // The legacy sim still persists on its own cadence, without world fields.
+    // #228: the checkpoint cadence serializes the yard alongside the sim.
     store.step(1);
     const raw = storage.raw.get(SAVE_KEY);
     expect(raw).toBeDefined();
-    expect(raw).not.toContain('"terrain"');
-    expect(raw).not.toContain('"parcels"');
-    expect(raw).not.toContain('"milestoneTokens"');
+    expect(raw).toContain('"terrain"');
+    expect(raw).toContain('"parcels"');
+    expect(raw).toContain('"milestoneTokens"');
+    const decoded = decodeSave(raw ?? null);
+    expect(decoded.ok).toBe(true);
+    if (decoded.ok) expect(decoded.payload.world?.sites).toHaveLength(1);
   });
 
   it("gates confirm to the writer tab; readers preview but never commit", () => {

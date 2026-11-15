@@ -17,9 +17,10 @@
  *    tick budget (numerical, hand-derived, no wall-clock).
  *  - Lifecycle: MOVE retargets the registration + sockets to the new approach;
  *    DISMANTLE removes the building from both ledgers.
- *  - Session-only (G1): socket/capacity mutations never touch SAVE_KEY or the
- *    export envelope, and a fresh store over the same storage recomputes empty
- *    sockets from its (empty) session build yard. NO save-shape change.
+ *  - Session-only sockets: socket/capacity mutations never touch SAVE_KEY or
+ *    the export envelope. #228 persists the build yard, so a fresh store over
+ *    the same storage restores the completed building + its registration, then
+ *    recomputes its bay sockets disconnected against the (empty) session roadNet.
  *
  * Geometry is hand-derived from the kit (warehouse 6x4, bay0 local (-1.55, 2.15),
  * bay1 (1.55, 2.15); footprint-center origin, approach = floor(worldMu/1000)).
@@ -307,8 +308,8 @@ describe("store lifecycle keeps sockets + registration coherent (#217)", () => {
   });
 });
 
-describe("store socket exposure is session-only (#217, NO save-shape change)", () => {
-  it("socket/capacity mutations never touch SAVE_KEY or the export; a fresh store recomputes empty", () => {
+describe("store socket exposure is session-only (#217; #228 persists the yard, not the sockets)", () => {
+  it("socket/capacity mutations never touch SAVE_KEY or the export; a fresh store restores the yard, recomputes sockets", () => {
     const storage = memoryStorage();
     const store = createStore({ storage, now: () => 10, leaseId: "tab-a" });
     completeWarehouse(store);
@@ -325,20 +326,25 @@ describe("store socket exposure is session-only (#217, NO save-shape change)", (
     expect(store.exportSave()).toBe(exportBefore);
     expect(storage.getItem(SAVE_KEY)).toBe(saveBefore);
 
-    // The envelope carries no world/logistics/traffic fields (shape unchanged).
+    // The envelope carries no top-level world/logistics/traffic fields; #228
+    // nests the yard under payload.world only. Sockets/traffic stay session-only.
     const envelope = JSON.parse(exportBefore) as Record<string, unknown>;
     for (const key of ["buildWorld", "roadWorld", "roadNet", "logistics", "traffic", "roadCargo", "bayCapacity", "terrain"]) {
       expect(envelope).not.toHaveProperty(key);
     }
-    expect(exportBefore).not.toContain("completedTick");
     expect(exportBefore).not.toContain("bayCapacity");
 
-    // A fresh store over the same storage starts from the fixed session seed:
-    // no buildings, no sockets, no registration, traffic off — nothing persisted.
+    // A fresh store over the same storage restores the persisted yard (#228):
+    // the completed building, its two bay sockets and its #217 logistics
+    // registration come back. Roads are still session-only, so every socket
+    // recomputes disconnected against the fresh (empty) roadNet; traffic stays
+    // off with no persisted bay capacities.
     const fresh = createStore({ storage, now: () => 10, leaseId: "tab-b" });
-    expect(fresh.getBuildWorld().buildings).toHaveLength(0);
-    expect(fresh.getRoadSockets()).toHaveLength(0);
-    expect(fresh.getLogistics().buildings).toEqual({});
+    expect(fresh.getBuildWorld().buildings).toHaveLength(1);
+    const freshSockets = fresh.getRoadSockets();
+    expect(freshSockets).toHaveLength(2);
+    for (const link of freshSockets) expect(link.connected).toBe(false);
+    expect(fresh.getLogistics().buildings[1]).toEqual(store.getLogistics().buildings[1]);
     expect(fresh.isTrafficEnabled()).toBe(false);
     expect(fresh.getTraffic().bayCapacity).toEqual({});
   });
