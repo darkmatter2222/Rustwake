@@ -59,6 +59,15 @@ import {
 // so the two layers never double-draw the same body.
 import { AssemblyView, type ObservedBuildingReport } from "./assemblyView";
 import type { AssemblySnapshot } from "../assembly";
+// #242: static first-run environment dressing (apron wreck cluster, site office,
+// scrap rows, perimeter fence, corner piles, sparse stones). Presentation only —
+// no sim state, no pick targets, no per-frame work; see yardDressing.ts.
+import {
+  createSurroundTerrain,
+  createYardDressing,
+  mottleGroundGeometry,
+  type YardDressing,
+} from "./yardDressing";
 
 /** DPR cap (§1.5): never render above 2 device pixels per CSS pixel. */
 export const MAX_DPR = 2;
@@ -153,6 +162,10 @@ export class YardWorld {
   private camera3: THREE.OrthographicCamera;
   private raycaster = new THREE.Raycaster();
   private ground: THREE.Mesh;
+  /** #242: darker surround terrain slab under the static perimeter dressing. */
+  private surround: THREE.Mesh;
+  /** #242: static first-run environment dressing (presentation only). */
+  private dressing: YardDressing;
   private grid: THREE.LineSegments;
   private wreck: THREE.Mesh;
   private dock: THREE.Mesh;
@@ -201,14 +214,30 @@ export class YardWorld {
 
     this.camera3 = new THREE.OrthographicCamera(-1, 1, 1, -1, CAMERA_NEAR, CAMERA_FAR);
 
+    // #242: darker surround terrain first (under everything), so the perimeter
+    // dressing sits on ground instead of floating in the night background.
+    this.surround = createSurroundTerrain();
+    this.scene.add(this.surround);
+
     // Ground slab on y = 0 spanning the yard rectangle (world X = yard x, Z = yard y).
-    const groundGeo = new THREE.PlaneGeometry(WORLD_W, WORLD_H);
-    const groundMat = new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.floor) });
+    // #242: subdivided with deterministic per-vertex mottling — sparse terrain
+    // variation in the floor tone. The rectangle is unchanged, so castGround and
+    // screenToWorld agreement (raycast-3d) are untouched.
+    const groundGeo = new THREE.PlaneGeometry(WORLD_W, WORLD_H, 12, 14);
+    mottleGroundGeometry(groundGeo);
+    const groundMat = new THREE.MeshLambertMaterial({
+      color: new THREE.Color(PALETTE.floor),
+      vertexColors: true,
+    });
     this.ground = new THREE.Mesh(groundGeo, groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.position.set(WORLD_W / 2, 0, WORLD_H / 2);
     this.ground.userData.pickId = null; // ground is not a selection target
     this.scene.add(this.ground);
+
+    // #242: static voxel dressing — built once, never synced, never pickable.
+    this.dressing = createYardDressing(this.unitBox);
+    this.scene.add(this.dressing.group);
 
     this.grid = this.buildGrid();
     this.scene.add(this.grid);
@@ -548,6 +577,11 @@ export class YardWorld {
     return this.assemblyView.resourceCounts();
   }
 
+  /** #242: numeric dressing accounting for the first-run evidence harness. */
+  dressingStats(): { boxes: number; batches: number } {
+    return this.dressing.stats();
+  }
+
   /** Push one immutable snapshot + camera + view into the world. No state is mutated. */
   sync(state: SimState, camera: Camera, view: ViewState, opts: WorldSyncOptions): void {
     if (this.disposed || this.contextLost) return;
@@ -634,6 +668,9 @@ export class YardWorld {
       });
     }
     this.trucks = [];
+    this.dressing.dispose();
+    this.surround.geometry.dispose();
+    (this.surround.material as THREE.Material).dispose();
     this.unitBox.dispose();
     this.ground.geometry.dispose();
     (this.ground.material as THREE.Material).dispose();
