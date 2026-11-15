@@ -1,0 +1,1328 @@
+{
+  "issue": 151,
+  "gate": "G1/P1",
+  "headSha": "9dd62080c28c8cdfd57091e98fb9bf4864474e5b",
+  "generated": "2026-11-15T03:21:49.986Z",
+  "mode": "running-build-captures",
+  "limitation": "HEADLESS CHROME EMULATION on a desktop host, NOT a physical phone (#190). Numeric checks only; visual fidelity PENDING sponsor inspection at the live URL (G1 #151). Frame-time/memory are host-relative; a concurrent P02 background loop may add host contention.",
+  "build": "vite preview of THIS branch's dist (npm run build at head 9dd62080c28c8cdfd57091e98fb9bf4864474e5b)",
+  "fixtures": "pass-1 release fixtures (tests/fixtures/release.ts) seeded via the game's own encodeSave before first paint; lastSeenMs=Date.now() so no offline catch-up contaminates captures",
+  "devices": {
+    "phone": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true
+    },
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false
+    }
+  },
+  "browser": {
+    "executablePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "probeRenderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5090 (0x00002B85) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "swiftshaderForced": false
+  },
+  "scenes": {
+    "v01-phone": {
+      "gate": "Continue",
+      "save": {
+        "tick": 21,
+        "machines": 0
+      },
+      "stamp": {
+        "cam": "115.68,112.00,1.629",
+        "world3d": "ready"
+      },
+      "shot": {
+        "name": "151-v01-opening-yard-phone.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-phone.png",
+        "sha256": "6502753db1bf2d14185fdb5ac5e1e134eba1b99cbfa821f0291d89a490debe67",
+        "bytes": 172546
+      },
+      "pageErrors": []
+    },
+    "v02-phone": {
+      "gate": "Continue",
+      "save": {
+        "tick": 151,
+        "machines": 20,
+        "drones": 5,
+        "routes": 3,
+        "storeUnits": 202
+      },
+      "stamp": {
+        "cam": "115.68,112.00,1.629",
+        "world3d": "ready"
+      },
+      "shot": {
+        "name": "151-v02-mature-phone.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-phone.png",
+        "sha256": "ef15b78b53b488e7f0977a0ff01de0809a5fab5cfb11cbf963be156ac14f06e5",
+        "bytes": 181175
+      },
+      "pageErrors": []
+    },
+    "blocked-phone": {
+      "gate": "Continue",
+      "save": {
+        "tick": 1601,
+        "storeUnits": 300,
+        "storeCapacity": 300
+      },
+      "stamp": {
+        "cam": "115.68,112.00,1.629",
+        "world3d": "ready"
+      },
+      "alert": {
+        "present": true,
+        "role": "status",
+        "text": "Store full · 300/300 · finish the steel contract to sellOpen store"
+      },
+      "shot": {
+        "name": "151-blocked-yard-phone.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-phone.png",
+        "sha256": "b97b303ae377a46f9c09555584a480303817bade635147996dd62552cda21849",
+        "bytes": 180083
+      },
+      "pageErrors": []
+    },
+    "v01-desktop": {
+      "gate": "Continue",
+      "save": {
+        "tick": 21,
+        "machines": 0
+      },
+      "stamp": {
+        "cam": "327.96,116.49,0.893",
+        "world3d": "ready"
+      },
+      "shot": {
+        "name": "151-v01-opening-yard-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-desktop.png",
+        "sha256": "5951498956e97c062c7dea5477bfb986063bf13ce7be25b8c6a1458965baf8ac",
+        "bytes": 63973
+      },
+      "pageErrors": []
+    },
+    "v02-desktop": {
+      "gate": "Continue",
+      "save": {
+        "tick": 151,
+        "machines": 20,
+        "drones": 5,
+        "routes": 3,
+        "storeUnits": 202
+      },
+      "stamp": {
+        "cam": "327.96,116.49,0.893",
+        "world3d": "ready"
+      },
+      "shot": {
+        "name": "151-v02-mature-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-desktop.png",
+        "sha256": "80e46b8e926b6ad909f2b9fc1cddc7c42e82a87a06401833f3fc42b109d667bb",
+        "bytes": 67688
+      },
+      "pageErrors": []
+    },
+    "blocked-desktop": {
+      "gate": "Continue",
+      "save": {
+        "tick": 1601,
+        "storeUnits": 300,
+        "storeCapacity": 300
+      },
+      "stamp": {
+        "cam": "327.96,116.49,0.893",
+        "world3d": "ready"
+      },
+      "alert": {
+        "present": true,
+        "role": "status",
+        "text": "Store full · 300/300 · finish the steel contract to sellOpen store"
+      },
+      "shot": {
+        "name": "151-blocked-yard-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-desktop.png",
+        "sha256": "d7d9f06a58f009f8b57ddc437e436275c6ca9e9a3cc8b9c5e0bbb7ba060e779a",
+        "bytes": 69521
+      },
+      "pageErrors": []
+    }
+  },
+  "v05": {
+    "phone": {
+      "before": {
+        "machines": 20,
+        "scrap": 198,
+        "steel": 5
+      },
+      "placed": null,
+      "cost": [],
+      "scrapDelta": -2,
+      "steelDelta": 0,
+      "armed": {
+        "label": "Place Scrap sorter",
+        "disabled": false
+      },
+      "dockFaces": [
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "sequence": [
+        {
+          "t": 0,
+          "sha256": "56126bc73c33b6e7d622000fd42f848b5418fff8f669013d373009d08673231c",
+          "name": "151-v05-t0-phone.png"
+        },
+        {
+          "t": 1,
+          "sha256": "7834089857c746f00141bcf41396b169c94f273d73c692687695d2783bab936c",
+          "name": "151-v05-t1-phone.png"
+        },
+        {
+          "t": 2,
+          "sha256": "cbac622008506532784630caaa12c713ea9d8bb1d21bcc5c1491456af63431a6",
+          "name": "151-v05-t2-phone.png"
+        },
+        {
+          "t": 3,
+          "sha256": "15b8dcb902b2aae6183722cba6153314568eea785113c0dc55c7d0cb4bc3ea44",
+          "name": "151-v05-t3-phone.png"
+        },
+        {
+          "t": 4,
+          "sha256": "5c960613e3e9f7d0dfae16ccea6d511b8229d2deeb0828be5dbbe3872ae98c18",
+          "name": "151-v05-t4-phone.png"
+        },
+        {
+          "t": 5,
+          "sha256": "fe11cade3bd065fbf0b8e4cbf0a5c679ef0132d26ec4ca3870e322af3bcdfd5e",
+          "name": "151-v05-t5-phone.png"
+        }
+      ],
+      "seqUnique": 6,
+      "placedMachineCrop": null,
+      "reload": {
+        "machines": 20,
+        "scrapDelta": -2,
+        "tickDelta": 18,
+        "shot": {
+          "name": "151-v05-reload-phone.png",
+          "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-phone.png",
+          "sha256": "6ac6a210fdcc3db3d8b22221f56477b855ae1ce2bfeed4e873df9578f08ad98e",
+          "bytes": 173601
+        }
+      },
+      "beforeShot": {
+        "name": "151-v05-before-phone.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-phone.png",
+        "sha256": "03d967ca8cd1595355fee013a47c7ac827b57a1138dbfa2dd6a93d0f355c705e",
+        "bytes": 182052
+      },
+      "catalogShot": {
+        "name": "151-v05-catalog-phone.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-phone.png",
+        "sha256": "818b5be0510d79fb4b9ba61e1b9d52f3e3f6c4b144c596626b5d4f909e80df3f",
+        "bytes": 187263
+      },
+      "pageErrors": []
+    },
+    "desktop": {
+      "before": {
+        "machines": 20,
+        "scrap": 198,
+        "steel": 5
+      },
+      "placed": null,
+      "cost": [],
+      "scrapDelta": -2,
+      "steelDelta": 0,
+      "armed": {
+        "label": "Place Scrap sorter",
+        "disabled": false
+      },
+      "dockFaces": [
+        "Store",
+        "Salvage",
+        "Build"
+      ],
+      "sequence": [
+        {
+          "t": 0,
+          "sha256": "6bd770cb53cc1c31841108ea7a1ec377d5cbcef229cd73f940bdcb6c42f5c572",
+          "name": "151-v05-t0-desktop.png"
+        },
+        {
+          "t": 1,
+          "sha256": "f4176a6d363c80e7e13c99659c4b31cc77686d09008dabfe3633eac163119b85",
+          "name": "151-v05-t1-desktop.png"
+        },
+        {
+          "t": 2,
+          "sha256": "9b39dd88911fbb0d347c83e6d7be4595eeb02e9f7f7c182bdc6923601d637bb4",
+          "name": "151-v05-t2-desktop.png"
+        },
+        {
+          "t": 3,
+          "sha256": "99bb6736501800c5400cee9aa3a8035ff26b4d8032cd012c022d12067e164912",
+          "name": "151-v05-t3-desktop.png"
+        },
+        {
+          "t": 4,
+          "sha256": "cf89a535a2235fa9b502fdd35cb840c795fcadfcb8c697e244c843b062636e7c",
+          "name": "151-v05-t4-desktop.png"
+        },
+        {
+          "t": 5,
+          "sha256": "55ed920d1bf84dfb1a94952fd67c03783aa034a5e20a326b09ebda862cf05da8",
+          "name": "151-v05-t5-desktop.png"
+        }
+      ],
+      "seqUnique": 6,
+      "placedMachineCrop": null,
+      "reload": {
+        "machines": 20,
+        "scrapDelta": -2,
+        "tickDelta": 18,
+        "shot": {
+          "name": "151-v05-reload-desktop.png",
+          "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-desktop.png",
+          "sha256": "f078b1501db235db2f5be686e44ea4768aff1e2c1fcad4ec0320d0f1cb91e610",
+          "bytes": 66373
+        }
+      },
+      "beforeShot": {
+        "name": "151-v05-before-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-desktop.png",
+        "sha256": "8a52c5aaa7686099604c53dc3474b55b5abd0ffffa61ebbc35ac3ae4cbd17d83",
+        "bytes": 68045
+      },
+      "catalogShot": {
+        "name": "151-v05-catalog-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-desktop.png",
+        "sha256": "26e5a4e52cbeee77a8e24986884b7ff2f7b479dd870ee34ce27014d6454130bd",
+        "bytes": 68456
+      },
+      "pageErrors": []
+    }
+  },
+  "v04": {
+    "phone": {
+      "frames": 120,
+      "fps": 2,
+      "durationMs": 59673,
+      "measurement": "in-page 2D canvas backing-store FNV (getImageData) — the verified T07 paint-surface method; Playwright screenshot sha256 retained per-frame as supplementary evidence (DEFECT #2 fix: screenshots vary under compositor readback even when the backing store is frozen).",
+      "uniqueHashes": 113,
+      "maxConsecutiveIdenticalOutsideHidden": 1,
+      "screenshotUniqueHashes": 116,
+      "hiddenWindow": {
+        "from": 60,
+        "to": 67,
+        "frozen": true,
+        "tickDelta": 40,
+        "resumedDiffers": true
+      },
+      "tickStart": 141,
+      "tickEnd": 741,
+      "tickDelta": 600,
+      "readyCount": 120,
+      "keyframes": [
+        {
+          "i": 0,
+          "tMs": 182,
+          "png": "151-v04-phone-f000.png",
+          "sha256": "683401c1ae2f15522f3dd24215d6bc69e62aaccc6940ee40f2ad4e6264c5d0fc",
+          "inPageHash": "1791bfe2"
+        },
+        {
+          "i": 6,
+          "tMs": 3163,
+          "png": "151-v04-phone-f006.png",
+          "sha256": "0b4aa4684aa9908754e01b40dddc079240daf59ad740cd5f13b19ab2dfdaf7fa",
+          "inPageHash": "d2c56da8"
+        },
+        {
+          "i": 12,
+          "tMs": 6161,
+          "png": "151-v04-phone-f012.png",
+          "sha256": "564879dfa2104a0199d7e32dbc199787b0da58fd2ec3d3a8e740ab91522f5a43",
+          "inPageHash": "2cbd7e6b"
+        },
+        {
+          "i": 18,
+          "tMs": 9157,
+          "png": "151-v04-phone-f018.png",
+          "sha256": "a4610a77fcadb11ac61911c68b51ff5d07c3b621d5271fde6fb5270fad5c243c",
+          "inPageHash": "60bf7664"
+        },
+        {
+          "i": 24,
+          "tMs": 12164,
+          "png": "151-v04-phone-f024.png",
+          "sha256": "fb346233856129061e7691e2710d077a5818940ff2b328fd7d1bcb0a62e6dd5e",
+          "inPageHash": "125c397a"
+        },
+        {
+          "i": 30,
+          "tMs": 15173,
+          "png": "151-v04-phone-f030.png",
+          "sha256": "fb947edd1cecea6548be82c4a69122547d7fed26a2f61daa18e3d968b199f07f",
+          "inPageHash": "80c90764"
+        },
+        {
+          "i": 36,
+          "tMs": 18154,
+          "png": "151-v04-phone-f036.png",
+          "sha256": "f277f281496f2742fce0af4f8c6d82bfbace30c1cc782cd5d9ade26b399ac746",
+          "inPageHash": "5ea4f191"
+        },
+        {
+          "i": 42,
+          "tMs": 21170,
+          "png": "151-v04-phone-f042.png",
+          "sha256": "64020e531ff9a4b9776a384a188ae257c97cc4b7785ef8211124eb8f7fb3cd61",
+          "inPageHash": "f13a8442"
+        },
+        {
+          "i": 48,
+          "tMs": 24157,
+          "png": "151-v04-phone-f048.png",
+          "sha256": "8fe737e7f23b867b75747312b470a5fc4970aa1d4aba60e6ffea021f95f21564",
+          "inPageHash": "602eefc2"
+        },
+        {
+          "i": 54,
+          "tMs": 27152,
+          "png": "151-v04-phone-f054.png",
+          "sha256": "a79560ceaadfb4f1614cf32ca38a353a4b71f335f9c964375db4142607af2be3",
+          "inPageHash": "eec9c740"
+        },
+        {
+          "i": 60,
+          "tMs": 30133,
+          "png": "151-v04-phone-f060.png",
+          "sha256": "7ed98d53bebc5a50d50eb9b4ec216d8a4e66cd0d46722b587b3cfc66b3748474",
+          "inPageHash": "bcaa9268"
+        },
+        {
+          "i": 66,
+          "tMs": 33132,
+          "png": "151-v04-phone-f066.png",
+          "sha256": "9ab1bbcbec07a7884a5bdf2ed36bbe5025ada5682d7b718cf88c8b0a41561a25",
+          "inPageHash": "bcaa9268"
+        },
+        {
+          "i": 72,
+          "tMs": 36168,
+          "png": "151-v04-phone-f072.png",
+          "sha256": "8dc15200fe344b7910d90f6214e2fbeb1b49ada35a2ced9d80274582db150d34",
+          "inPageHash": "f2b29221"
+        },
+        {
+          "i": 78,
+          "tMs": 39156,
+          "png": "151-v04-phone-f078.png",
+          "sha256": "ce4f172cfbf13d1ebf5f61ffbb7fb2fc11655ba1489c1f570145b5de94b8c148",
+          "inPageHash": "89eb9435"
+        },
+        {
+          "i": 84,
+          "tMs": 42165,
+          "png": "151-v04-phone-f084.png",
+          "sha256": "e022967b8a91afc2fc5b67262d90a7cdbf2162dae772661bb4daa4c19ae9b17d",
+          "inPageHash": "052381bc"
+        },
+        {
+          "i": 90,
+          "tMs": 45164,
+          "png": "151-v04-phone-f090.png",
+          "sha256": "9215c7a4d254cdb9c4b335deabb49c463959de36911d4b4310bbcd4057859f9f",
+          "inPageHash": "946edef4"
+        },
+        {
+          "i": 96,
+          "tMs": 48155,
+          "png": "151-v04-phone-f096.png",
+          "sha256": "05300f1b77eff6cf5496a3dbe9a5f46124ff744024d07de6af97198bcf56019b",
+          "inPageHash": "29c8dddc"
+        },
+        {
+          "i": 102,
+          "tMs": 51161,
+          "png": "151-v04-phone-f102.png",
+          "sha256": "3167ce09f961ebd854b3f478061a5af4623d9d8d246cef144059c625f76a8304",
+          "inPageHash": "abd09c04"
+        },
+        {
+          "i": 108,
+          "tMs": 54158,
+          "png": "151-v04-phone-f108.png",
+          "sha256": "7a8597048aa9d7f933e97c746b2c54d06d2b27704d79237adacbc0e961c9e26c",
+          "inPageHash": "afca54f7"
+        },
+        {
+          "i": 114,
+          "tMs": 57176,
+          "png": "151-v04-phone-f114.png",
+          "sha256": "2a19baf50d1be58f3856ed551caa7d77509fec5c77133af221e1af9ee9bfd465",
+          "inPageHash": "1123b367"
+        }
+      ],
+      "pageErrors": []
+    },
+    "desktop": {
+      "frames": 120,
+      "fps": 2,
+      "durationMs": 59660,
+      "measurement": "in-page 2D canvas backing-store FNV (getImageData) — the verified T07 paint-surface method; Playwright screenshot sha256 retained per-frame as supplementary evidence (DEFECT #2 fix: screenshots vary under compositor readback even when the backing store is frozen).",
+      "uniqueHashes": 113,
+      "maxConsecutiveIdenticalOutsideHidden": 1,
+      "screenshotUniqueHashes": 116,
+      "hiddenWindow": {
+        "from": 60,
+        "to": 67,
+        "frozen": true,
+        "tickDelta": 40,
+        "resumedDiffers": true
+      },
+      "tickStart": 141,
+      "tickEnd": 741,
+      "tickDelta": 600,
+      "readyCount": 120,
+      "keyframes": [
+        {
+          "i": 0,
+          "tMs": 163,
+          "png": "151-v04-desktop-f000.png",
+          "sha256": "9d8bea96f85435ec6359c3a20222a649dde576ca39c8d1ed1dd0a289bb577667",
+          "inPageHash": "909326e6"
+        },
+        {
+          "i": 6,
+          "tMs": 3167,
+          "png": "151-v04-desktop-f006.png",
+          "sha256": "ae7efa419132453d8aa11ebdbdf70e662131c9b0da6742b2761eac352a090abf",
+          "inPageHash": "79c9a2ba"
+        },
+        {
+          "i": 12,
+          "tMs": 6174,
+          "png": "151-v04-desktop-f012.png",
+          "sha256": "207da75b6ecf95efd16a429404e742ca9d5563b5711fa3090af30a130f92d25d",
+          "inPageHash": "199d9d86"
+        },
+        {
+          "i": 18,
+          "tMs": 9164,
+          "png": "151-v04-desktop-f018.png",
+          "sha256": "9435f1945744c25323f4283a6e73ffad9ac3fbf374c7b26cb4e107cb3e1ae904",
+          "inPageHash": "5eb44831"
+        },
+        {
+          "i": 24,
+          "tMs": 12172,
+          "png": "151-v04-desktop-f024.png",
+          "sha256": "15dc3676b60da793597d3e197d3c8847dc388cbbe13b3606b3e1c178a4f6e8f3",
+          "inPageHash": "c0f0edee"
+        },
+        {
+          "i": 30,
+          "tMs": 15159,
+          "png": "151-v04-desktop-f030.png",
+          "sha256": "0ac144a379a0f5b4dd117d06efce1192c32307d2c6ca519d5b0f1f6c557efd73",
+          "inPageHash": "918c1c54"
+        },
+        {
+          "i": 36,
+          "tMs": 18167,
+          "png": "151-v04-desktop-f036.png",
+          "sha256": "5c1e5839f608f57fcaba97debd4db0dbac54a849199b530615da2cf4f137fc46",
+          "inPageHash": "792a089c"
+        },
+        {
+          "i": 42,
+          "tMs": 21174,
+          "png": "151-v04-desktop-f042.png",
+          "sha256": "99641e5de53211904938c1335b96cc240dcee09743ed3a7ed51524ac029804f9",
+          "inPageHash": "0b2308b4"
+        },
+        {
+          "i": 48,
+          "tMs": 24177,
+          "png": "151-v04-desktop-f048.png",
+          "sha256": "3e04f88fd5ebcdf6ca68df72c1de1cc1178e25d575a36e9c8d1dcf30ceeb106c",
+          "inPageHash": "6ebfbd28"
+        },
+        {
+          "i": 54,
+          "tMs": 27153,
+          "png": "151-v04-desktop-f054.png",
+          "sha256": "6f015f401fcd337b9f45677d9310a10459b1b53afcf424870d377265f17506f1",
+          "inPageHash": "8d8bd4f1"
+        },
+        {
+          "i": 60,
+          "tMs": 30140,
+          "png": "151-v04-desktop-f060.png",
+          "sha256": "049de7a853e1f3a449f97dd4d76c4eb1368544d20ac91c5e62e420b47df4333b",
+          "inPageHash": "0faaba3c"
+        },
+        {
+          "i": 66,
+          "tMs": 33125,
+          "png": "151-v04-desktop-f066.png",
+          "sha256": "408c2e42eca26ca84f209953ea1a1af9ded329993d332de9955d79d26d315048",
+          "inPageHash": "0faaba3c"
+        },
+        {
+          "i": 72,
+          "tMs": 36157,
+          "png": "151-v04-desktop-f072.png",
+          "sha256": "bc7df3abc8e4bfc45964d482d68ea1e6f25e019f8b6f388085280551d5f8edd0",
+          "inPageHash": "05e82ab9"
+        },
+        {
+          "i": 78,
+          "tMs": 39160,
+          "png": "151-v04-desktop-f078.png",
+          "sha256": "d6499ea6a3f327d8bf0e0835a99a07876929b66146eba75e54e1a96737806c26",
+          "inPageHash": "47d534ca"
+        },
+        {
+          "i": 84,
+          "tMs": 42151,
+          "png": "151-v04-desktop-f084.png",
+          "sha256": "d00fde73b3bc4f4e912b7b89b1027dc00c176df2c087c84e15aca80d957dd425",
+          "inPageHash": "d7cec608"
+        },
+        {
+          "i": 90,
+          "tMs": 45161,
+          "png": "151-v04-desktop-f090.png",
+          "sha256": "897e7215cdb8aa0d8f8fde0328ee7641a1569aec180c95bcd178bc96cb9ecba1",
+          "inPageHash": "87ecc3bb"
+        },
+        {
+          "i": 96,
+          "tMs": 48167,
+          "png": "151-v04-desktop-f096.png",
+          "sha256": "6f01b8362561831125fd67a0eb8290c2c93b11b5279a29196cb3ec2ebb16b5ec",
+          "inPageHash": "69058f75"
+        },
+        {
+          "i": 102,
+          "tMs": 51156,
+          "png": "151-v04-desktop-f102.png",
+          "sha256": "7eecd3faa70c26d51e33e00bb0b39e81239b81e21ee283f8d7f7c877e99bbd6b",
+          "inPageHash": "6fef4f64"
+        },
+        {
+          "i": 108,
+          "tMs": 54168,
+          "png": "151-v04-desktop-f108.png",
+          "sha256": "5319f66908396cb6aa31e4dac8b61ddac941801fa927ec5c6ccf3f8a50b0b91c",
+          "inPageHash": "7d0fe364"
+        },
+        {
+          "i": 114,
+          "tMs": 57155,
+          "png": "151-v04-desktop-f114.png",
+          "sha256": "7aeec2568d327b35cfc296f4c3e325007af12441e89d349e521a93b894ee6d3b",
+          "inPageHash": "9aaf3ee8"
+        }
+      ],
+      "pageErrors": []
+    },
+    "desktopCrops": {
+      "starved": {
+        "machine": {
+          "id": 2,
+          "blueprint": "furnace",
+          "tile": 1,
+          "status": "starved",
+          "ageTicks": 141
+        },
+        "clip": {
+          "x": 446.77772,
+          "y": 337.04443,
+          "width": 46.436,
+          "height": 46.436
+        },
+        "hashes": [
+          "469fafece77b96df818e2142fd0f12a97a4406d40bac1d16d8138ad39ea72bde",
+          "3c1be5287546a3744e9351702ea27ac2363ea1da116f80420d3e44e6bde4a6b8",
+          "5fd6761e6918eba77e6dec310e403c7541a5b373fd0f967b42d9c4f1f89a26f3",
+          "44aaae6ef938ad4885e0dd01f7b671960bf1b35d189dbb1f9a118c08fb0bdaec",
+          "629b6496b9e25a6d2b8c429a3a9d395bb4949e60ea1edb1858669e7b283401f6",
+          "4c0724036f3b9ab3987fabe702fb875f5015e9900c6a39bd9d71c10caa3d4e28",
+          "ccfe978b40590e3750d2713dddeb553058905a35ca3f97f66f032b6a7db51d69",
+          "4007c15c928ee83028a40032d74971ce4d7356ddd5d2a9dd623652a3c0fc6034",
+          "db41400c4e746d46f33aac495a730752740fbce432630cb08a864a64440a9310",
+          "23596e60f20ebc3f6b9c1c7a77e17238665193db844e9ea3762993550062cfe2",
+          "80eb3b449e2b04cf2a846d535bd44fe2830cf004136a983f4b2cb9c4d27c7e67",
+          "e403cb8bebbb72184d384902c009d3f6598460f9cb72c5bfd0aa4ecc9f3c12d9",
+          "14f762507900a0599b0724475a37af5bccaf2df4149b0b5e9f27e2b0444e1848",
+          "e2eb2b805d1000ed4ed826651c0ea04e663be2cb0e651b0bb9bc6caacadb4220",
+          "d54bd9118eec6de587660e80b48aa5fb2731a70049062af5728c4404c5970667",
+          "a232b294b81cb08b05508b8d9c69846406239eb27c6268bd058c25f76ae01e3c",
+          "ffff7c26924c9546d50118a0d1aa82dc2ae232fd8f199fc5e3dd5e33e5b65244",
+          "25e80885b22a99c0ede41869ef5cfcbf9fbc07b7381e47ab46cda1844ec00018",
+          "7fa6fd2738bfc3053ad3bfde86e13318a6898325293f0dabb8adc4bb721345a2",
+          "cbdbd282c8fbd4e0d108309cf1ded42edcede3eeb0dbd9293f0416f8a40edb34"
+        ],
+        "unique": 20,
+        "modeCount": 1,
+        "samples": 20
+      },
+      "working": {
+        "machine": {
+          "id": 1,
+          "blueprint": "sorter",
+          "tile": 0,
+          "status": "running",
+          "ageTicks": 141
+        },
+        "clip": {
+          "x": 418.20172,
+          "y": 337.04443,
+          "width": 46.436,
+          "height": 46.436
+        },
+        "hashes": [
+          "d2d9833355294e0b4530728729feb1b51ee7390ad7d2eb6c288f88c151eedd59",
+          "8a2f261e72919dcee6a7569d770cf324d5e80aebd9220fbd7d15148a996bf5ed",
+          "0ffb267b9c4174df365a1be1fc6eacc10be5f6a2d35fdf01450b1d2afa521336",
+          "560e4a74ed1d2e36dd82692ea581507c94bd8e75349241ac4111692b7a11a8e9",
+          "db1e678c9cadf7939ee5e216184b9dcf692c469d55de67254c15f11a860a414c",
+          "7193aae87312529b48453b35a86ddb8695f3bce80d6df826c7d769c39b16963c",
+          "bb81526c191bd196f14d7170825c1b7ba29ae6d687d31a978578049994c0c8c4",
+          "93121e78725b071037f230ca46eee37cdf964ead87b3b4c6f7a3e4d1ef851f22",
+          "481fed9c033d62f016790417e010b500108806b49fd3e53ffbee90eda7b78ca9",
+          "34ce7a7f5297956eb708f2baefb48634ab878170adeda8227d322e596cfc2900",
+          "db66e98d1071d387e87e445a06fa2ad77ebf751d0cc79afd92cd59afe0a7f741",
+          "9d3986c11d3b99555a1aff1c69568ce6fabaa6bc69f2c9a8bdcde1828e20d459",
+          "846a914d90cf74d4e50beee46326b2c3f5a1019873fb2b81286b1d19e4397c6c",
+          "f32480babdbedd6ab6093aae8ecc43e9efcbf06e10d57e67b1a30f921f58291d",
+          "dfe3aa407f3c537fb33c35e79abad644a18f1658df6b62ef000101da9f222292",
+          "d281edbe934601bc279d93e0ff039aa5fddffaa2202701c9743957e172a1ec75",
+          "03802ff6f2ffd610f2cddaac26dc0f8966c908aa5cc0eb9b2445f531e156e62f",
+          "3c0d5932ee016233eff6f38bc9dc469a1c392ffffeac8f9c5b09e2693d7271cb",
+          "cb520cd609acb38c15158c8437827ddc9eb5464a4d065176d987419af744b829",
+          "d5fca19795f3eb92b716ab8d94c9c6e3c63096bfd08cb6ce59fddf58744ca60f"
+        ],
+        "unique": 20,
+        "modeCount": 1,
+        "samples": 20
+      }
+    }
+  },
+  "roundTrip": {
+    "protocol": "Yard panel -> Backup export textarea (#rustwake-save-export) / Replace import (#rustwake-save-import) -> Apply -> ImportConfirm ack -> Replace yard; the shipped UI path, no store shortcuts. Seed precondition: tutorial=9 (the engine's own unlock value; the as-is MATURE fixture never taps the wreck so its tutorial cannot reach the Yard gate).",
+    "exportA": {
+      "sha256": "f48d57b81915cc9606f75ba2155bd18136e3279d00c92bf2e05eb59e0b8910b5",
+      "chars": 10765,
+      "tick": 141,
+      "shot": {
+        "name": "151-roundtrip-export-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-export-desktop.png",
+        "sha256": "ec83e225ad219aad46357f5f5915c8d81f6b8baff687a9b3aede681bb55238cd",
+        "bytes": 66085
+      }
+    },
+    "exportB": {
+      "sha256": "c089da152ed0d268f934e53f7c1e4f9a20c8bff00e9ef1f8410a8c6a246ca04f",
+      "chars": 10895,
+      "tick": 167
+    },
+    "exportC": {
+      "sha256": "4d2c7d7f30c86e14f38a3e1054289c7c20ab8024a549b4aa194d34a6613785eb",
+      "chars": 10765,
+      "tick": 148
+    },
+    "abDelta": {
+      "byteIdentical": false,
+      "tickDelta": 26,
+      "lastSeenDeltaMs": 2005,
+      "simIdentical": false
+    },
+    "acDelta": {
+      "byteIdentical": false,
+      "tickDelta": 7,
+      "lastSeenDeltaMs": 3077,
+      "simIdenticalExceptTick": false,
+      "settingsIdentical": true
+    },
+    "importNote": "Applied · tick 141, 20 machines",
+    "invalid": {
+      "confirmPresent": false,
+      "note": "Not a Rustwake file",
+      "economyIdentical": true,
+      "tickDelta": 0,
+      "shot": {
+        "name": "151-roundtrip-invalid-desktop.png",
+        "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-invalid-desktop.png",
+        "sha256": "8b352bf9c1a5c81eef939a49c7f4519775eda043708d7b0fa7ffb5bb1b201bba",
+        "bytes": 63423
+      }
+    },
+    "confirmShot": {
+      "name": "151-roundtrip-confirm-desktop.png",
+      "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-confirm-desktop.png",
+      "sha256": "9f15f93413621a155ffbaae5d991b11bc2a5aadf6cb22578cf969614197c2fb3",
+      "bytes": 81749
+    },
+    "pageErrors": [],
+    "envelopeA": "{\"schemaVersion\":1,\"checksum\":\"2cbe2aa3\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":141,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":16001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":141,\"busyTicks\":136,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":101,\"batchesDone\":1,\"ageTicks\":141,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":141,\"batchesDone\":0,\"ageTicks\":141,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":141,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":141,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":141,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794713118679,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}",
+    "envelopeC": "{\"schemaVersion\":1,\"checksum\":\"2acc0ecc\",\"payload\":{\"sim\":{\"schemaVersion\":1,\"contentVersion\":1,\"revision\":28,\"tick\":148,\"store\":{\"scrap\":196,\"ferrous\":12,\"steel\":6},\"storeUnits\":202,\"storeCapacity\":1000,\"overflow\":[],\"machines\":[{\"id\":1,\"blueprint\":\"sorter\",\"tile\":0,\"orientation\":0,\"level\":1,\"inBuf\":{\"scrap\":4},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[{\"resource\":\"scrap\",\"qty\":2}],\"progress\":23001,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"running\",\"inRoutes\":[1],\"outRoute\":2,\"starvedTicks\":5,\"batchesDone\":3,\"ageTicks\":148,\"busyTicks\":143,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":2,\"blueprint\":\"furnace\",\"tile\":1,\"orientation\":0,\"level\":1,\"inBuf\":{\"ferrous\":1,\"nonferrous\":3},\"inBufUnits\":4,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":6,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[2],\"outRoute\":3,\"starvedTicks\":108,\"batchesDone\":1,\"ageTicks\":148,\"busyTicks\":40,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":3,\"blueprint\":\"sorter\",\"tile\":3,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":4,\"blueprint\":\"furnace\",\"tile\":4,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":5,\"blueprint\":\"sorter\",\"tile\":5,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":6,\"blueprint\":\"furnace\",\"tile\":6,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":7,\"blueprint\":\"sorter\",\"tile\":7,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":8,\"blueprint\":\"furnace\",\"tile\":8,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":9,\"blueprint\":\"sorter\",\"tile\":9,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":10,\"blueprint\":\"furnace\",\"tile\":10,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":11,\"blueprint\":\"sorter\",\"tile\":11,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":12,\"blueprint\":\"furnace\",\"tile\":12,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":13,\"blueprint\":\"sorter\",\"tile\":13,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":14,\"blueprint\":\"furnace\",\"tile\":14,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":15,\"blueprint\":\"sorter\",\"tile\":15,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":16,\"blueprint\":\"furnace\",\"tile\":16,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":17,\"blueprint\":\"sorter\",\"tile\":17,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":18,\"blueprint\":\"furnace\",\"tile\":18,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":19,\"blueprint\":\"sorter\",\"tile\":19,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":1,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0},{\"id\":20,\"blueprint\":\"furnace\",\"tile\":20,\"orientation\":0,\"level\":1,\"inBuf\":{},\"inBufUnits\":0,\"tray\":[],\"trayUnits\":0,\"batch\":[],\"progress\":0,\"progressRem\":0,\"progressDen\":0,\"batchMilli\":40000,\"batchPower\":2,\"status\":\"starved\",\"inRoutes\":[],\"outRoute\":null,\"starvedTicks\":148,\"batchesDone\":0,\"ageTicks\":148,\"busyTicks\":0,\"fullTicks\":0,\"rateAge\":0,\"rateFrom\":0,\"rateAgePrev\":0,\"rateFromPrev\":0}],\"routes\":[{\"id\":1,\"from\":{\"kind\":\"store\",\"id\":0},\"to\":{\"kind\":\"machine\",\"id\":1},\"filter\":\"scrap\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":25,\"ageTicks\":148,\"run\":[2,1,0]},{\"id\":2,\"from\":{\"kind\":\"machine\",\"id\":1},\"to\":{\"kind\":\"machine\",\"id\":2},\"filter\":\"ferrous\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":21,\"ageTicks\":148,\"run\":[0,1]},{\"id\":3,\"from\":{\"kind\":\"machine\",\"id\":2},\"to\":{\"kind\":\"store\",\"id\":0},\"filter\":\"steel\",\"capacity\":24,\"latency\":5,\"items\":[],\"inFlight\":0,\"busyTicks\":5,\"ageTicks\":148,\"run\":[1,2]}],\"wreck\":{\"remaining\":190,\"generation\":1,\"pulses\":0,\"nextPulseTick\":0},\"drone\":{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},\"spares\":[{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null},{\"repaired\":true,\"accumulated\":10,\"nextDeliveryTick\":150,\"deliveries\":2,\"inFlight\":null}],\"credits\":325,\"exportSteelDelivered\":0,\"exportClaimed\":false,\"tutorial\":9,\"nextMachineId\":21,\"nextRouteId\":4,\"machineCursor\":1,\"routeCursor\":0,\"powerRatio\":1,\"log\":[{\"tick\":0,\"key\":\"build\",\"value\":5},{\"tick\":0,\"key\":\"build\",\"value\":6},{\"tick\":0,\"key\":\"build\",\"value\":7},{\"tick\":0,\"key\":\"build\",\"value\":8},{\"tick\":0,\"key\":\"build\",\"value\":9},{\"tick\":0,\"key\":\"build\",\"value\":10},{\"tick\":0,\"key\":\"build\",\"value\":11},{\"tick\":0,\"key\":\"build\",\"value\":12},{\"tick\":0,\"key\":\"build\",\"value\":13},{\"tick\":0,\"key\":\"build\",\"value\":14},{\"tick\":0,\"key\":\"build\",\"value\":15},{\"tick\":0,\"key\":\"build\",\"value\":16},{\"tick\":0,\"key\":\"build\",\"value\":17},{\"tick\":0,\"key\":\"build\",\"value\":18},{\"tick\":0,\"key\":\"build\",\"value\":19},{\"tick\":0,\"key\":\"build\",\"value\":20},{\"tick\":0,\"key\":\"repair\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":1},{\"tick\":0,\"key\":\"drone\",\"value\":2},{\"tick\":0,\"key\":\"drone\",\"value\":3},{\"tick\":0,\"key\":\"drone\",\"value\":4},{\"tick\":0,\"key\":\"connect\",\"value\":1},{\"tick\":0,\"key\":\"connect\",\"value\":2},{\"tick\":0,\"key\":\"connect\",\"value\":3}],\"seenCommands\":{\"mature-1\":1,\"mature-2\":2,\"mature-3\":3,\"mature-4\":4,\"mature-5\":5,\"mature-6\":6,\"mature-7\":7,\"mature-8\":8,\"mature-9\":9,\"mature-10\":10,\"mature-11\":11,\"mature-12\":12,\"mature-13\":13,\"mature-14\":14,\"mature-15\":15,\"mature-16\":16,\"mature-17\":17,\"mature-18\":18,\"mature-19\":19,\"mature-20\":20,\"mature-21\":21,\"mature-22\":22,\"mature-23\":23,\"mature-24\":24,\"mature-25\":25,\"mature-26\":26,\"mature-27\":27,\"mature-28\":28},\"research\":{}},\"lastSeenMs\":1794713121756,\"settings\":{\"muted\":true,\"reducedMotion\":false,\"textScale\":1}}}"
+  },
+  "contextLoss": {
+    "glContexts": 2,
+    "lostStamp": {
+      "cam": "327.96,116.49,0.893",
+      "world3d": "ready"
+    },
+    "readyStamp": {
+      "cam": "327.96,116.49,0.893",
+      "world3d": "ready"
+    },
+    "tickDelta": 20,
+    "economyIdentical": false,
+    "lostShot": {
+      "name": "151-context-loss-banner-desktop.png",
+      "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-loss-banner-desktop.png",
+      "sha256": "c198a2b99dbbcd1aed364387b195cec95f9d0582f5817e91d6536033699d3ba3",
+      "bytes": 67766
+    },
+    "restoredShot": {
+      "name": "151-context-restored-desktop.png",
+      "path": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-restored-desktop.png",
+      "sha256": "18dcf5e751869e77d781a6c97e1fd237a6315c06b4d7a574684384bacc7a552a",
+      "bytes": 67715
+    },
+    "pageErrors": [],
+    "note": "Banner/fallback VISUALS are pending sponsor inspection; numeric proof is the dataset.world3d transition + unchanged save economy. The byte-strict save check lives in the P02 harness run (151-p02-loops.json)."
+  },
+  "artifacts": [
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v01-opening-yard-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v02-mature-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-blocked-yard-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t0-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t1-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t2-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t3-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t4-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t5-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-phone.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-before-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-catalog-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t0-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t1-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t2-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t3-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t4-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-t5-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v05-reload-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f000.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f006.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f012.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f018.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f024.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f030.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f036.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f042.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f048.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f054.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f060.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f066.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f072.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f078.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f084.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f090.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f096.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f102.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f108.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-phone-f114.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\evidence\\151-v04-frames-phone.json",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f000.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f006.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f012.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f018.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f024.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f030.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f036.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f042.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f048.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f054.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f060.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f066.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f072.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f078.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f084.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f090.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f096.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f102.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f108.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-desktop-f114.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\evidence\\151-v04-frames-desktop.json",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-crop-starved-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-v04-crop-working-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-export-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-confirm-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-roundtrip-invalid-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\evidence\\151-roundtrip.json",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-loss-banner-desktop.png",
+    "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\rw-151\\docs\\screenshots\\151-context-restored-desktop.png"
+  ],
+  "checks": [
+    {
+      "name": "v01-phone: gate offered",
+      "expected": "Begin recovery",
+      "actual": "Continue",
+      "pass": false
+    },
+    {
+      "name": "v01-phone: fresh yard machines",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v01-phone: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "v01-phone: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v02-phone: gate offered",
+      "expected": "Continue",
+      "actual": "Continue",
+      "pass": true
+    },
+    {
+      "name": "v02-phone: mature machines",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "v02-phone: mature drones",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "v02-phone: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "v02-phone: sim ticking",
+      "expected": ">0",
+      "actual": 151,
+      "pass": true
+    },
+    {
+      "name": "v02-phone: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "blocked-phone: storage at capacity",
+      "expected": 300,
+      "actual": 300,
+      "pass": true
+    },
+    {
+      "name": "blocked-phone: storage alert visible",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "blocked-phone: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "blocked-phone: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v01-desktop: gate offered",
+      "expected": "Begin recovery",
+      "actual": "Continue",
+      "pass": false
+    },
+    {
+      "name": "v01-desktop: fresh yard machines",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v01-desktop: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "v01-desktop: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: gate offered",
+      "expected": "Continue",
+      "actual": "Continue",
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: mature machines",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: mature drones",
+      "expected": 5,
+      "actual": 5,
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: sim ticking",
+      "expected": ">0",
+      "actual": 151,
+      "pass": true
+    },
+    {
+      "name": "v02-desktop: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "blocked-desktop: storage at capacity",
+      "expected": 300,
+      "actual": 300,
+      "pass": true
+    },
+    {
+      "name": "blocked-desktop: storage alert visible",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "blocked-desktop: world3d ready",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "blocked-desktop: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: catalog opened",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: machine added",
+      "expected": 21,
+      "actual": 20,
+      "pass": false
+    },
+    {
+      "name": "v05-phone: scrap charged exactly once",
+      "expected": 0,
+      "actual": -2,
+      "pass": false
+    },
+    {
+      "name": "v05-phone: steel charged exactly once",
+      "expected": 0,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "name": "v05-phone: reload keeps machine",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: reload no second build charge",
+      "expected": "[-3,0] (natural consumption only)",
+      "actual": -2,
+      "pass": true
+    },
+    {
+      "name": "v05-phone: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: catalog opened",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: machine added",
+      "expected": 21,
+      "actual": 20,
+      "pass": false
+    },
+    {
+      "name": "v05-desktop: scrap charged exactly once",
+      "expected": 0,
+      "actual": -2,
+      "pass": false
+    },
+    {
+      "name": "v05-desktop: steel charged exactly once",
+      "expected": 0,
+      "actual": 0,
+      "pass": false
+    },
+    {
+      "name": "v05-desktop: reload keeps machine",
+      "expected": 20,
+      "actual": 20,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: reload no second build charge",
+      "expected": "[-3,0] (natural consumption only)",
+      "actual": -2,
+      "pass": true
+    },
+    {
+      "name": "v05-desktop: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: independent motion (unique canvas hashes)",
+      "expected": ">=100 of 120",
+      "actual": 113,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: no frozen run outside hidden window",
+      "expected": "<=2",
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: hidden-tab paint frozen",
+      "expected": "8/8 identical",
+      "actual": "1 unique of 8",
+      "pass": true
+    },
+    {
+      "name": "v04-phone: sim alive while hidden (tick delta)",
+      "expected": ">=30",
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: paint resumes after restore",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: 60 s sim catch-up (tick delta)",
+      "expected": "560..660",
+      "actual": 600,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: world3d ready every frame",
+      "expected": 120,
+      "actual": 120,
+      "pass": true
+    },
+    {
+      "name": "v04-phone: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: independent motion (unique canvas hashes)",
+      "expected": ">=100 of 120",
+      "actual": 113,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: no frozen run outside hidden window",
+      "expected": "<=2",
+      "actual": 1,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: hidden-tab paint frozen",
+      "expected": "8/8 identical",
+      "actual": "1 unique of 8",
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: sim alive while hidden (tick delta)",
+      "expected": ">=30",
+      "actual": 40,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: paint resumes after restore",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: 60 s sim catch-up (tick delta)",
+      "expected": "560..660",
+      "actual": 600,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: world3d ready every frame",
+      "expected": 120,
+      "actual": 120,
+      "pass": true
+    },
+    {
+      "name": "v04-desktop: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "v04-starved-crop: no fake motion (>=14/20 identical, drone occlusion tolerance)",
+      "expected": ">=14",
+      "actual": 1,
+      "pass": false
+    },
+    {
+      "name": "roundtrip: import restores sim (tick may advance <=5 naturally)",
+      "expected": true,
+      "actual": false,
+      "pass": false
+    },
+    {
+      "name": "roundtrip: settings preserved",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: live export advances between reads (A!=B)",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: invalid import refused (no confirm gate)",
+      "expected": false,
+      "actual": false,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: invalid import leaves economy byte-identical",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: invalid import tick drift <=2 (natural only)",
+      "expected": "<=2",
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "roundtrip: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    },
+    {
+      "name": "context-loss: WebGL context instrumented",
+      "expected": ">=1",
+      "actual": 2,
+      "pass": true
+    },
+    {
+      "name": "context-loss: dataset.world3d=lost",
+      "expected": "lost",
+      "actual": "ready",
+      "pass": false
+    },
+    {
+      "name": "context-loss: dataset.world3d=ready after restore",
+      "expected": "ready",
+      "actual": "ready",
+      "pass": true
+    },
+    {
+      "name": "context-loss: save economy untouched",
+      "expected": true,
+      "actual": false,
+      "pass": false
+    },
+    {
+      "name": "context-loss: no page errors",
+      "expected": 0,
+      "actual": 0,
+      "pass": true
+    }
+  ],
+  "findings": [
+    {
+      "name": "V05 staged construction GAP",
+      "detail": "ACCEPTANCE V05 requires a 0/1/2/3/4/5 s base/frame/walls/roof/activation clip and mid-build reload resume. At this SHA machine.build is INSTANT (src/game/simulation/commands.ts buildMachine: no construction stages in SimState) and the running renderer paints the full kit at t0. The staged assembly controller EXISTS (src/game/renderer/assembly.ts ASSEMBLY_STAGES=[\"base\",\"frame\",\"walls\",\"roof\",\"activation\"], three/assemblyView.ts, unit-tested by tests/renderer/assembly-stage.test.ts / assembly-timing.test.ts / assembly-view.test.ts and the rw3d-t10 harness) but is NOT imported by three/worldRenderer.ts or three/index.ts; the app join is owned by shell wiring #199. Captured instead: instant placement, exact single charge, 0-5 s frame sequence, reload persistence. The staged clip CANNOT be produced from the running build at this SHA — pass 4 must record this as unmet/pending, not pass."
+    }
+  ],
+  "pass": false
+}
