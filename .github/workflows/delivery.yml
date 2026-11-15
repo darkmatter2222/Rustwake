@@ -95,3 +95,47 @@ jobs:
         env:
           CANDIDATE: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
         run: rm -rf -- "$CANDIDATE"
+
+  # #248: After deployment, observe the public release with ONE GitHub-hosted
+  # Chromium process. The self-hosted deployment runner still runs only trusted
+  # host-owned adapter code (no repo checkout or browsers there).
+  # Existing workflow concurrency serializes verify jobs with deployments.
+  verify-live:
+    needs: [package, deploy]
+    if: needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.package.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Unit-test verifier's release identity rules
+        run: node --test scripts/verify-live-helpers.test.mjs
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: rustwake-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install one headless browser on the GitHub-hosted runner
+        run: npx playwright-core install --with-deps chromium
+      - name: Verify live SHA, served asset bytes and actual game in two viewports
+        env:
+          RUSTWAKE_EXPECTED_SHA: ${{ needs.package.outputs.source_sha }}
+          RUSTWAKE_LIVE_URL: https://home.darkmatter2222.com/rustwake/
+          RUSTWAKE_VERIFY_OUT: ${{ runner.temp }}/rustwake-live-${{ needs.package.outputs.source_sha }}
+        run: node scripts/verify-live-deployment.mjs
+      - name: Retain browser evidence (even if verification fails)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustwake-live-${{ needs.package.outputs.source_sha }}
+          path: ${{ runner.temp }}/rustwake-live-${{ needs.package.outputs.source_sha }}/
+          retention-days: 30
+          if-no-files-found: warn
