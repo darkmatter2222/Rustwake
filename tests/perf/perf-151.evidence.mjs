@@ -752,8 +752,14 @@ function evaluateBudgets(res, budgets) {
       check("loadEventEnd", scope, d.coldLoad?.navigation?.loadEventEndMs, mobile ? b.coldLoad.mobileLoadMs : b.coldLoad.desktopLoadMs, "ms");
     }
     if (b.transferred) {
-      check("entryDecodedBytes", scope, d.coldLoad?.resources?.buckets?.entryJs?.decodedBodySize, b.transferred.entryDecodedBytes, "B");
-      check("totalColdDecodedBytes", scope, d.coldLoad?.resources?.totalDecodedBodySize, b.transferred.totalColdDecodedBytes, "B");
+      // #237 (§5.7 re-declaration, product verdict 6901199383): decoded ceilings
+      // are CONTEXT-AWARE. 3D MATURE contexts evaluate transferred.mature3d;
+      // FALLBACK-2D evaluates transferred.fallback2d (below). Same metrics and
+      // checks — only the ceiling VALUES + mapping are re-declared, grounded in
+      // the measured post-#236 baseline. A missing ceiling stays UNKNOWN, never MET.
+      const t3 = b.transferred.mature3d || {};
+      check("entryDecodedBytes", scope, d.coldLoad?.resources?.buckets?.entryJs?.decodedBodySize, t3.entryDecodedBytes, "B");
+      check("totalColdDecodedBytes", scope, d.coldLoad?.resources?.totalDecodedBodySize, t3.totalColdDecodedBytes, "B");
       check("binaryMediaCount", scope, d.coldLoad?.resources?.binaryMediaCount, b.transferred.imageAudioBinaryCount, "count");
     }
     if (b.interaction) {
@@ -788,7 +794,9 @@ function evaluateBudgets(res, budgets) {
       check("fallbackLoadEventEnd", d.tag, d.coldLoad?.navigation?.loadEventEndMs, mobile ? b.coldLoad.mobileLoadMs : b.coldLoad.desktopLoadMs, "ms");
     }
     if (b.transferred) {
-      check("fallbackTotalColdDecodedBytes", d.tag, d.coldLoad?.resources?.totalDecodedBodySize, b.transferred.totalColdDecodedBytes, "B");
+      // #237: FALLBACK-2D cold ceiling is context-aware (transferred.fallback2d);
+      // the three chunk is never fetched without WebGL (#236, measured).
+      check("fallbackTotalColdDecodedBytes", d.tag, d.coldLoad?.resources?.totalDecodedBodySize, b.transferred.fallback2d?.totalColdDecodedBytes, "B");
     }
     if (b.frame) check("fallbackIdleP95", d.tag, d.idleFrame?.p95Ms, b.frame.idleP95Ms, "ms");
   }
@@ -808,7 +816,7 @@ async function runP03() {
     mode: "P03", issue: 151, sha: SHA, generatedOn: GENERATED, url: URL,
     command: "npx tsx tests/perf/perf-151.evidence.mjs --mode p03",
     limitation: LIMITATION,
-    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. #236: cold bytes are the REAL per-context PerformanceResourceTiming decodedBodySize sums (as before); entryJs is now attributed to the index.html module script so the probe-gated async three chunk (a second index-*.js, bucket otherJs) is not miscounted as entry — it is fetched cold only in WebGL contexts, and FALLBACK-2D never fires the import. No budget, floor or assertion changed.",
+    protocol: "perf-67.evidence.mjs patterns against vite preview of THIS branch's build; pass-1 release fixtures seeded through the game's own encodeSave before first paint (lastSeenMs=Date.now(), no offline catch-up); cold-load read on the gate pre-start; identical emulation conditions to the #67 budget grounding (phone 390x844@2, desktop 1920x1080@1, 6x CPU throttle). MATURE panel contexts seed tutorial=9 (the engine's own Yard-unlock value; the as-is fixture never taps the wreck so its tutorial stays 0 and the Yard face is gated off). #231: menu-open instrument re-targeted from the retired #135 Menu face/sheet (button[aria-label=\"Menu\"] / .shell-menu) to the live compact-shell navigation: toolbar trade tap -> .shell-host panel host painted (trade is ungated on every fixture; Escape pops the single rooted layer between samples; a surface already open before the click is refused as already-open, never counted as ~0ms). MATURE panel contexts seed the MATURE-RESEARCH variant (canonical MATURE + 12 data at the conserved addToStore boundary + real research.buy cutters) so showResearch renders the Research dock face; STRESS and FALLBACK contexts keep canonical fixtures. #236: cold bytes are the REAL per-context PerformanceResourceTiming decodedBodySize sums (as before); entryJs is now attributed to the index.html module script so the probe-gated async three chunk (a second index-*.js, bucket otherJs) is not miscounted as entry — it is fetched cold only in WebGL contexts, and FALLBACK-2D never fires the import. #236 changed no budget, floor or assertion. #237 (§5.7 re-declaration, product verdict 6901199383 on PR #239): decoded-byte ceilings are now CONTEXT-AWARE — MATURE/STRESS 3D contexts evaluate transferred.mature3d.entryDecodedBytes (360000 B) / transferred.mature3d.totalColdDecodedBytes (1220000 B); FALLBACK-2D evaluates transferred.fallback2d.totalColdDecodedBytes (620000 B); binaryMediaCount stays 0. Same metrics, same checks, re-declared ceiling values grounded in the MEASURED post-#236 baseline at this head (~1.1x, tighter than 1.2x); the 2D-era global 240000/520000 ceilings and the measurably dead 'HOLD FALLBACK + close via (A) alone' branch are openly retired (docs/PERF_BUDGETS.md, docs/evidence/237-budget-redeclaration.md). All experience budgets (coldLoad/interaction/frame/memory) UNCHANGED; no floor or assertion weakened; UNKNOWN never auto-MET.",
     browser: { executablePath, probeRenderer, swiftshaderForced },
     cpuThrottleRate: CPU_THROTTLE_RATE,
     budgets, devices: [], hardFailures: [],
