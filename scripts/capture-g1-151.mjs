@@ -48,7 +48,7 @@
  * Never touches src/.
  */
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { existsSync, writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import {
@@ -352,7 +352,7 @@ const readLiveAssembly = (page, buildingId, asset) => page.evaluate(([id, ast]) 
     if (!scene || typeof scene.getObjectByName !== "function") continue;
     const root = scene.getObjectByName("assemblyRoot");
     if (!root) continue;
-    const out = { found: true, hasGroup: false, buildings: [], center: null };
+    const out = { found: true, hasGroup: false, buildings: [], center: null, bbox: null };
     for (const child of root.children) {
       const m = /^building-(\d+)-(.+)$/.exec(child.name || "");
       if (!m) continue;
@@ -383,12 +383,36 @@ const readLiveAssembly = (page, buildingId, asset) => page.evaluate(([id, ast]) 
             y: ((1 - target.y) / 2) * c.clientHeight,
             ndcZ: target.z,
           };
+          // Pass 12 (crop-framing fix): the target group's PROJECTED SCREEN
+          // bounding box in CSS px — every kit mesh's 8 unit-box world corners
+          // (geometry is the shared 1x1x1 box; matrixWorld carries scale/pose)
+          // projected through the LIVE camera. Read-only: a temporary vector is
+          // cloned/set/applyMatrix4/project; no scene/economy/state/clock writes.
+          // ALL meshes are included (visible or not): partAssemblyPose leaves
+          // future-stage parts at their REST transform (HIDDEN has sy=1, no
+          // offset), so this union is the building's full rest extent regardless
+          // of the current stage — a stable reference for a CONSTANT crop window.
+          let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+          const v = group.position.clone();
+          group.traverse((o) => {
+            if (!o.isMesh) return;
+            for (const sx of [-0.5, 0.5]) for (const sy of [-0.5, 0.5]) for (const sz of [-0.5, 0.5]) {
+              v.set(sx, sy, sz).applyMatrix4(o.matrixWorld).project(cam);
+              const px = ((v.x + 1) / 2) * c.clientWidth;
+              const py = ((1 - v.y) / 2) * c.clientHeight;
+              if (px < minX) minX = px; if (px > maxX) maxX = px;
+              if (py < minY) minY = py; if (py > maxY) maxY = py;
+            }
+          });
+          if (Number.isFinite(minX) && Number.isFinite(maxX) && Number.isFinite(minY) && Number.isFinite(maxY)) {
+            out.bbox = { minX, minY, maxX, maxY, w: maxX - minX, h: maxY - minY };
+          }
         }
       }
     }
     return out;
   }
-  return { found: false, hasGroup: false, buildings: [], center: null };
+  return { found: false, hasGroup: false, buildings: [], center: null, bbox: null };
 }, [buildingId, asset]);
 
 async function shot(page, name) {
@@ -561,7 +585,17 @@ async function captureV05(browser, report) {
   const COST = buildCostOf(ASSET); // [{scrap,30},{steel,8}]
   const costOf = (r) => COST.find((c) => c.resource === r)?.qty ?? 0;
   const DURATION = 50; // P1_CONSTRUCTION_TICKS; 50 ticks x TICK_MS 100 = 5 s
-  const HALF = 46; // CSS px half-window around the projected building centre
+  // Pass 12 (crop-framing fix): the old FIXED 92 CSS-px window (HALF=46) centred
+  // on the projected mid-height resolved the early-stage part changes on phone
+  // (390x844 dpr2) but NOT on desktop (1440x900 dpr1): the desktop building's
+  // projected rest extent is ~174x117 CSS px, so a 92px centre window hashed
+  // BYTE-IDENTICAL across base/frame/walls (be6c0645 x3 -> 3 distinct of 5). A
+  // desktop probe confirmed the scene graph advances (atomic stage/visibleParts
+  // PASS) — a CROP-FRAMING instrument defect, not a renderer defect. The window
+  // is now a TIGHT per-device rect derived from the building's projected screen
+  // bbox + this margin, computed ONCE per device and held CONSTANT across all 5
+  // stages, so distinct hashes come from GENUINE pixel change, never resizing.
+  const CROP_MARGIN = 6; // CSS px padding around the projected bbox
 
   /** Seed a fresh opening sim + a yard with ONE in-progress warehouse site
    *  (progressTicks 0, material reserved exactly once), boot the real app. */
@@ -614,16 +648,30 @@ async function captureV05(browser, report) {
     const pure = pureSnap ? buildingStageReport(pureSnap) : null;
     let cropHash = null;
     let cropRect = null;
-    if (live.center && Number.isFinite(live.center.x) && Number.isFinite(live.center.y)) {
-      const geom = await canvasGeom(page);
-      const x = Math.max(0, Math.min(geom.width - 2 * HALF, live.center.x - HALF));
-      const y = Math.max(0, Math.min(geom.height - 2 * HALF, live.center.y - HALF));
-      cropRect = { x, y, w: Math.min(2 * HALF, geom.width - x), h: Math.min(2 * HALF, geom.height - y) };
-      if (cropRect.w > 8 && cropRect.h > 8) {
-        cropHash = await cropPixelHash(page, cropRect);
-        if (cropState.clip === null) {
-          cropState.clip = { x: geom.left + x, y: geom.top + y, width: cropRect.w, height: cropRect.h };
-        }
+    const geom = await canvasGeom(page);
+    // Pass 12: derive the crop window ONCE per device from the building's
+    // projected screen bbox (full rest extent of ALL kit parts) + CROP_MARGIN,
+    // clamped to the canvas, then FREEZE it in cropState.rect and reuse it for
+    // every stage. The window is CONSTANT across stages — distinct stage hashes
+    // therefore reflect genuine pixel change, not per-stage resizing/reposition.
+    // cropPixelHash's backing-store FNV method and the "5 distinct" check below
+    // are UNCHANGED. If the bbox is not yet available (group not rendered), the
+    // rect stays null and is computed on a later sample — still frozen once set.
+    if (cropState.rect === null && live.bbox
+      && Number.isFinite(live.bbox.minX) && Number.isFinite(live.bbox.maxX)
+      && Number.isFinite(live.bbox.minY) && Number.isFinite(live.bbox.maxY)) {
+      const x0 = Math.max(0, Math.floor(live.bbox.minX - CROP_MARGIN));
+      const y0 = Math.max(0, Math.floor(live.bbox.minY - CROP_MARGIN));
+      const x1 = Math.min(geom.width, Math.ceil(live.bbox.maxX + CROP_MARGIN));
+      const y1 = Math.min(geom.height, Math.ceil(live.bbox.maxY + CROP_MARGIN));
+      const w = x1 - x0, h = y1 - y0;
+      if (w > 8 && h > 8) cropState.rect = { x: x0, y: y0, w, h };
+    }
+    if (cropState.rect) {
+      cropRect = cropState.rect;
+      cropHash = await cropPixelHash(page, cropRect);
+      if (cropState.clip === null) {
+        cropState.clip = { x: geom.left + cropRect.x, y: geom.top + cropRect.y, width: cropRect.w, height: cropRect.h };
       }
     }
     // DEFECT 2 fix (pass 10): bucket crops by the LIVE stage — the same atomic
@@ -661,7 +709,7 @@ async function captureV05(browser, report) {
     const a = await seedYard(device);
     const beforeShot = await shot(a.page, `v05-before-${devName}`);
     const bootSite = a.bootSave.world?.sites?.find((s) => s.buildingId === a.buildingId) ?? null;
-    const cropState = { byStage: {}, clip: null };
+    const cropState = { byStage: {}, clip: null, rect: null };
     const samples = [];
     const canonical = [];
     const start = Date.now();
@@ -741,14 +789,14 @@ async function captureV05(browser, report) {
       simSteelDelta, simScrapDelta,
       canonical: canonical.map(({ t, sha256, name, progressTicks, stage, stageName, cropHash }) => ({ t, sha256, name, progressTicks, stage, stageName, cropHash })),
       samples: samples.map((s) => ({ label: s.label, tMs: s.tMs, simTick: s.simTick, progressTicks: s.progressTicks, liveProgressTicks: s.liveProgressTicks, stage: s.pure?.stage ?? null, stageName: s.pure?.stageName ?? null, done: s.pure?.done ?? null, visibleParts: s.pure?.visibleParts ?? null, liveStage: s.live?.stage ?? null, liveVisibleParts: s.live?.visibleParts ?? null, cropHash: s.cropHash, sites: s.sites, buildings: s.buildings, reservations: s.reservations, ledger: s.ledger })),
-      finalLedger, beforeShot, completeShot, cropClip: cropState.clip, pageErrors: a.pageErrors,
+      finalLedger, beforeShot, completeShot, cropClip: cropState.clip, cropWindow: cropState.rect, pageErrors: a.pageErrors,
     };
     await a.context.close();
 
     /* ---- Phase B: mid-build reload -> resume, completes once, single charge -- */
     const b = await seedYard(device);
     const bStart = Date.now();
-    const bCrop = { byStage: {}, clip: null };
+    const bCrop = { byStage: {}, clip: null, rect: null };
     // Poll the PERSISTED site progress until mid-build (frame stage, >= 12 ticks),
     // then reload. readSave is persisted truth (PERSIST_MS 1000), so the restored
     // yard resumes from exactly this progress.
@@ -1200,6 +1248,36 @@ async function captureContextLoss(browser, report) {
   await context.close();
 }
 
+/* ---- served-bundle identity (pass 12 provenance) --------------------------- */
+/** Assert the preview is serving THIS worktree's dist: the served index.html must
+ *  be byte-identical to dist/index.html on disk, and the served entry chunk it
+ *  references must hash identically to the on-disk dist asset. Recorded as a hard
+ *  check + provenance so the capture can never silently run against a stale or
+ *  foreign bundle (e.g. another session's preview on a fallback port). */
+async function assertServedBundle(report) {
+  const diskIndexPath = resolve(repoRoot, "dist/index.html");
+  const diskIndex = readFileSync(diskIndexPath, "utf8");
+  const servedIndex = await (await fetch(URL, { signal: AbortSignal.timeout(5000) })).text();
+  const indexIdentical = servedIndex === diskIndex;
+  const m = /src="\.\/(assets\/index-[^"]+\.js)"/.exec(diskIndex);
+  const entryRel = m ? m[1] : null;
+  let entryIdentical = false, servedEntrySha = null, diskEntrySha = null, servedEntryBytes = null, diskEntryBytes = null;
+  if (entryRel) {
+    const diskBuf = readFileSync(resolve(repoRoot, "dist", entryRel));
+    const servedBuf = Buffer.from(await (await fetch(`${URL}${entryRel}`, { signal: AbortSignal.timeout(10000) })).arrayBuffer());
+    diskEntrySha = sha256(diskBuf); servedEntrySha = sha256(servedBuf);
+    diskEntryBytes = diskBuf.length; servedEntryBytes = servedBuf.length;
+    entryIdentical = diskEntrySha === servedEntrySha;
+  }
+  report.servedBundle = {
+    port: PORT, url: URL, diskIndexPath, indexIdentical,
+    entryChunk: entryRel, entryIdentical, servedEntrySha, diskEntrySha, servedEntryBytes, diskEntryBytes,
+    note: "vite preview --strictPort of THIS worktree's dist; served index.html byte-identical to disk and served entry chunk sha256 identical to the on-disk dist asset (no port fallback, no foreign bundle).",
+  };
+  check("serve: served bundle identity matches this worktree dist", "index + entry chunk byte-identical",
+    `index=${indexIdentical}, entry=${entryIdentical} (${entryRel})`, indexIdentical === true && entryIdentical === true);
+}
+
 /* ---- main ------------------------------------------------------------------ */
 async function main() {
   if (!existsSync(resolve(repoRoot, "dist/index.html"))) {
@@ -1214,6 +1292,7 @@ async function main() {
     devices: DEVICES,
   };
   const preview = await startPreview(PORT);
+  await assertServedBundle(report);
   const { browser, executablePath, probeRenderer, swiftshaderForced } = await launchBrowser();
   report.browser = { executablePath, probeRenderer, swiftshaderForced };
   console.log(`capture-g1-151: head=${SHA} browser=${executablePath} preview=:${PORT}`);
