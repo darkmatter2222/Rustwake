@@ -1,9 +1,18 @@
 {
  "ticket": "UI-004 g1 / U03",
- "baseSha": "cdd87e26b5917a71ed21117bda733251575e4787",
- "generated": "2026-11-15T15:48:49.286Z",
+ "baseSha": "7b652c40afefa07dc5132e29ef9647d44b3e2b7c",
+ "generated": "2026-11-15T17:03:49.029Z",
  "window": "W-3 cadence (1 tap/s, fresh storage) per viewport; A ladder 1 -> 1.25 -> 1.5 -> 2",
  "url": "http://localhost:4174/",
+ "servedBundleProvenance": {
+  "url": "http://localhost:4174/",
+  "servedEntryRef": "assets/index-Cvs8KQfj.js",
+  "servedEntrySha256": "357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e",
+  "diskEntrySha256": "357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e",
+  "servedEntryBytes": 868488,
+  "diskEntryBytes": 868488,
+  "identical": true
+ },
  "viewports": [
   {
    "name": "phone360",
@@ -730,7 +739,7 @@
       "innerWidth": 360,
       "innerHeight": 640
      },
-     "cardFillPct": 19.668,
+     "cardFillPct": 13.594,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -818,7 +827,7 @@
       "innerWidth": 360,
       "innerHeight": 640
      },
-     "cardFillPct": 29.644,
+     "cardFillPct": 21.548,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -1581,8 +1590,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 38.88,
-       "widthPx": 289.8,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -1867,7 +1876,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 19.668,
+     "cardFillPct": 13.594,
      "pageScroll": {
       "scrollWidth": 360,
       "scrollHeight": 640,
@@ -1927,8 +1936,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 289.8,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -2213,7 +2222,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 29.644,
+     "cardFillPct": 21.548,
      "pageScroll": {
       "scrollWidth": 360,
       "scrollHeight": 640,
@@ -2803,7 +2812,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -2869,7 +2877,7 @@
       "innerWidth": 390,
       "innerHeight": 844
      },
-     "cardFillPct": 12.611,
+     "cardFillPct": 10.308,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -2957,7 +2965,7 @@
       "innerWidth": 390,
       "innerHeight": 844
      },
-     "cardFillPct": 22.479,
+     "cardFillPct": 16.34,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -3720,10 +3728,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 317.39,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -4006,7 +4014,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 12.611,
+     "cardFillPct": 10.308,
      "pageScroll": {
       "scrollWidth": 390,
       "scrollHeight": 844,
@@ -4066,8 +4074,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 317.39,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -4352,7 +4360,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 22.479,
+     "cardFillPct": 16.34,
      "pageScroll": {
       "scrollWidth": 390,
       "scrollHeight": 844,
@@ -4942,7 +4950,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -5008,7 +5015,7 @@
       "innerWidth": 412,
       "innerHeight": 915
      },
-     "cardFillPct": 11.633,
+     "cardFillPct": 9.508,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -5096,7 +5103,7 @@
       "innerWidth": 412,
       "innerHeight": 915
      },
-     "cardFillPct": 20.734,
+     "cardFillPct": 15.072,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -5859,10 +5866,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 337.63,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -6145,7 +6152,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 11.633,
+     "cardFillPct": 9.508,
      "pageScroll": {
       "scrollWidth": 412,
       "scrollHeight": 915,
@@ -6205,8 +6212,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 337.63,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -6491,7 +6498,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 20.734,
+     "cardFillPct": 15.072,
      "pageScroll": {
       "scrollWidth": 412,
       "scrollHeight": 915,
@@ -7081,7 +7088,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -7147,7 +7153,7 @@
       "innerWidth": 844,
       "innerHeight": 390
      },
-     "cardFillPct": 20.168,
+     "cardFillPct": 15.184000000000001,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -7235,7 +7241,7 @@
       "innerWidth": 844,
       "innerHeight": 390
      },
-     "cardFillPct": 25.861,
+     "cardFillPct": 19.219,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -7998,10 +8004,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 487,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -8284,7 +8290,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 20.168,
+     "cardFillPct": 15.184000000000001,
      "pageScroll": {
       "scrollWidth": 844,
       "scrollHeight": 390,
@@ -8344,8 +8350,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 25.91,
-       "widthPx": 487,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -8630,7 +8636,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 25.861,
+     "cardFillPct": 19.219,
      "pageScroll": {
       "scrollWidth": 844,
       "scrollHeight": 390,
@@ -9220,7 +9226,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -9286,16 +9291,16 @@
       "innerWidth": 768,
       "innerHeight": 1024
      },
-     "cardFillPct": 7.681,
+     "cardFillPct": 5.7829999999999995,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 192.41,
-      "y": 640.55,
+      "y": 630.83,
       "w": 384.53,
       "h": 46,
       "right": 576.94,
-      "bottom": 686.55,
+      "bottom": 676.83,
       "withinViewport": true,
       "clipped": false
      },
@@ -9374,16 +9379,16 @@
       "innerWidth": 768,
       "innerHeight": 1024
      },
-     "cardFillPct": 15.997,
+     "cardFillPct": 10.937999999999999,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 196.81,
-      "y": 727.5,
+      "y": 701.59,
       "w": 376.2,
       "h": 54.55,
       "right": 573.02,
-      "bottom": 782.05,
+      "bottom": 756.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -10091,11 +10096,11 @@
      "coreAction": {
       "present": true,
       "x": 192.41,
-      "y": 640.55,
+      "y": 630.83,
       "w": 384.53,
       "h": 46,
       "right": 576.94,
-      "bottom": 686.55,
+      "bottom": 676.83,
       "withinViewport": true,
       "clipped": false
      },
@@ -10137,10 +10142,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -10423,7 +10428,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 7.681,
+     "cardFillPct": 5.7829999999999995,
      "pageScroll": {
       "scrollWidth": 768,
       "scrollHeight": 1024,
@@ -10437,11 +10442,11 @@
      "coreAction": {
       "present": true,
       "x": 196.81,
-      "y": 727.5,
+      "y": 701.59,
       "w": 376.2,
       "h": 54.55,
       "right": 573.02,
-      "bottom": 782.05,
+      "bottom": 756.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -10483,8 +10488,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -10769,7 +10774,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 15.997,
+     "cardFillPct": 10.937999999999999,
      "pageScroll": {
       "scrollWidth": 768,
       "scrollHeight": 1024,
@@ -11359,7 +11364,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -11425,16 +11429,16 @@
       "innerWidth": 1366,
       "innerHeight": 768
      },
-     "cardFillPct": 10.242,
+     "cardFillPct": 7.711,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 491.41,
-      "y": 508.86,
+      "y": 499.14,
       "w": 384.53,
       "h": 46,
       "right": 875.94,
-      "bottom": 554.86,
+      "bottom": 545.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -11513,7 +11517,7 @@
       "innerWidth": 1366,
       "innerHeight": 768
      },
-     "cardFillPct": 21.330000000000002,
+     "cardFillPct": 14.583000000000002,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
@@ -12230,11 +12234,11 @@
      "coreAction": {
       "present": true,
       "x": 491.41,
-      "y": 508.86,
+      "y": 499.14,
       "w": 384.53,
       "h": 46,
       "right": 875.94,
-      "bottom": 554.86,
+      "bottom": 545.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -12276,10 +12280,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -12562,7 +12566,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 10.242,
+     "cardFillPct": 7.711,
      "pageScroll": {
       "scrollWidth": 1366,
       "scrollHeight": 768,
@@ -12622,8 +12626,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -12908,7 +12912,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 21.330000000000002,
+     "cardFillPct": 14.583000000000002,
      "pageScroll": {
       "scrollWidth": 1366,
       "scrollHeight": 768,
@@ -13498,7 +13502,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -13564,16 +13567,16 @@
       "innerWidth": 1920,
       "innerHeight": 1080
      },
-     "cardFillPct": 7.2829999999999995,
+     "cardFillPct": 5.483,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 768.41,
-      "y": 664.86,
+      "y": 655.14,
       "w": 384.53,
       "h": 46,
       "right": 1152.94,
-      "bottom": 710.86,
+      "bottom": 701.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -13652,16 +13655,16 @@
       "innerWidth": 1920,
       "innerHeight": 1080
      },
-     "cardFillPct": 15.168000000000001,
+     "cardFillPct": 10.370000000000001,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 772.81,
-      "y": 727.14,
+      "y": 701.23,
       "w": 376.2,
       "h": 54.55,
       "right": 1149.02,
-      "bottom": 781.69,
+      "bottom": 755.78,
       "withinViewport": true,
       "clipped": false
      },
@@ -14369,11 +14372,11 @@
      "coreAction": {
       "present": true,
       "x": 768.41,
-      "y": 664.86,
+      "y": 655.14,
       "w": 384.53,
       "h": 46,
       "right": 1152.94,
-      "bottom": 710.86,
+      "bottom": 701.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -14415,10 +14418,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -14701,7 +14704,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 7.2829999999999995,
+     "cardFillPct": 5.483,
      "pageScroll": {
       "scrollWidth": 1920,
       "scrollHeight": 1080,
@@ -14715,11 +14718,11 @@
      "coreAction": {
       "present": true,
       "x": 772.81,
-      "y": 727.14,
+      "y": 701.23,
       "w": 376.2,
       "h": 54.55,
       "right": 1149.02,
-      "bottom": 781.69,
+      "bottom": 755.78,
       "withinViewport": true,
       "clipped": false
      },
@@ -14761,8 +14764,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -15047,7 +15050,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 15.168000000000001,
+     "cardFillPct": 10.370000000000001,
      "pageScroll": {
       "scrollWidth": 1920,
       "scrollHeight": 1080,
@@ -15637,7 +15640,6 @@
      "rootFontPx": 22.5,
      "clipped": [],
      "verticalOverflow1pxRows": [
-      "objective status line #0 +1px",
       "objective status line #1 +1px",
       "dock price (plain fill) #0 +1px",
       "dock price (amber fill) #0 +1px"
@@ -15703,16 +15705,16 @@
       "innerWidth": 2560,
       "innerHeight": 1440
      },
-     "cardFillPct": 5.462,
+     "cardFillPct": 4.112,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 1088.41,
-      "y": 844.86,
+      "y": 835.14,
       "w": 384.53,
       "h": 46,
       "right": 1472.94,
-      "bottom": 890.86,
+      "bottom": 881.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -15791,16 +15793,16 @@
       "innerWidth": 2560,
       "innerHeight": 1440
      },
-     "cardFillPct": 11.376000000000001,
+     "cardFillPct": 7.7780000000000005,
      "cardFillPass": true,
      "coreAction": {
       "present": true,
       "x": 1092.81,
-      "y": 907.14,
+      "y": 881.23,
       "w": 376.2,
       "h": 54.55,
       "right": 1469.02,
-      "bottom": 961.69,
+      "bottom": 935.78,
       "withinViewport": true,
       "clipped": false
      },
@@ -16508,11 +16510,11 @@
      "coreAction": {
       "present": true,
       "x": 1088.41,
-      "y": 844.86,
+      "y": 835.14,
       "w": 384.53,
       "h": 46,
       "right": 1472.94,
-      "bottom": 890.86,
+      "bottom": 881.14,
       "withinViewport": true,
       "clipped": false
      },
@@ -16554,10 +16556,10 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 19.44,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
-       "overflowYpx": 1
+       "overflowYpx": 0
       },
       {
        "label": "objective status line",
@@ -16840,7 +16842,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 5.462,
+     "cardFillPct": 4.112,
      "pageScroll": {
       "scrollWidth": 2560,
       "scrollHeight": 1440,
@@ -16854,11 +16856,11 @@
      "coreAction": {
       "present": true,
       "x": 1092.81,
-      "y": 907.14,
+      "y": 881.23,
       "w": 376.2,
       "h": 54.55,
       "right": 1469.02,
-      "bottom": 961.69,
+      "bottom": 935.78,
       "withinViewport": true,
       "clipped": false
      },
@@ -16900,8 +16902,8 @@
        "color": "rgb(111, 147, 173)",
        "bg": "rgba(11, 18, 32, 0.92)",
        "gradientStops": 0,
-       "heightPx": 51.81,
-       "widthPx": 397,
+       "heightPx": 0,
+       "widthPx": 0,
        "clipped": false,
        "overflowYpx": 0
       },
@@ -17186,7 +17188,7 @@
        "w": 0
       }
      ],
-     "cardFillPct": 11.376000000000001,
+     "cardFillPct": 7.7780000000000005,
      "pageScroll": {
       "scrollWidth": 2560,
       "scrollHeight": 1440,

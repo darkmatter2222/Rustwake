@@ -1,17 +1,117 @@
 {
- "ticket": "CHRM-002 worst-case re-measure (G1 #151 pass 13)",
- "baseSha": "cdd87e26b5917a71ed21117bda733251575e4787",
- "generated": "2026-11-15T15:51:52.403Z",
+ "ticket": "CHRM-002 worst-case re-measure (G1 #151 pass 14)",
+ "baseSha": "7b652c40afefa07dc5132e29ef9647d44b3e2b7c",
+ "generated": "2026-11-15T17:04:10.323Z",
  "url": "http://localhost:4174/",
+ "provenance": {
+  "url": "http://localhost:4174/",
+  "servedEntryRef": "assets/index-Cvs8KQfj.js",
+  "servedEntrySha256": "357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e",
+  "diskEntrySha256": "357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e",
+  "servedEntryBytes": 868488,
+  "diskEntryBytes": 868488,
+  "identical": true
+ },
  "viewport": "360x640 dpr2 mobile text-scale 2.0",
  "cap": 42,
- "method": "real .objective card geometry; longest reachable text injected via textContent (classes/CSS unchanged); cardFill = card.height / hud.clientHeight * 100 (same as census)",
- "reachability": "restingLine appends ' · Last {detail}' on any refused tap (lastReject set via labelForReject); numbers line reachable while machines run; word max 'nonferrous'; primary/phase maxima are longest objective.*/hint.* strings",
+ "method": "real .objective card geometry; reachable text injected via textContent (classes/CSS unchanged); cardFill = card.height / hud.clientHeight * 100 (same as census); served entry asserted byte-identical to dist",
+ "reachability": "objectiveFor returns only card.*/step.* (PRIMARY_WORST=objective.research is a HINT, swept separately); phase = hintFor(suggestedAction)/phase.ghost/buildRefusal/reader.hint; restingLine appends ' · Last {detail}' on any refused tap (commit App.tsx:377); real refused tap measured via salvage cooldown. PASS-14 FIX: card.upgrade + step.fork shortened to 3 boxes; phase hint steps back at text-large (.text-large .objective__hint, spec 6.4) so it adds 0 boxes at the binding cell; numbers/shortfall line stays visible. PRIMARY_CANDIDATES re-derived verbatim from the CURRENT strings.ts.",
  "strings": {
   "NUMBERS_WORST": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
   "NUMBERS_HIST": "Drones 2 · Power 6 · 6 requested · 50 % · Last need 30 nonferrous · have 5",
+  "NUMBERS_COOLDOWN": "Drones 0 · Power 6 · 0 requested · 100 % · Last cutting pulse recharging",
   "PRIMARY_WORST": "Data pays for one research node; open Research to see its effect.",
   "PHASE_WORST": "Machines share one power budget; slowest ones share it."
+ },
+ "realRefusedTap": {
+  "textScale": "1",
+  "textLarge": false,
+  "inner": {
+   "width": 360,
+   "height": 640
+  },
+  "primaryText": "Keep salvaging: 1/15 pulses for the drone repair.",
+  "primaryChars": 49,
+  "primaryFontSizePx": 14.25,
+  "primaryLineHeightPx": 18.52,
+  "primaryHeightPx": 37.03,
+  "primaryBoxes": 2,
+  "primaryOverflowYpx": 0,
+  "cardHeightPx": 100.72,
+  "hudClientHeightPx": 640,
+  "cardFillPct": 15.737,
+  "lines": [
+   {
+    "i": 0,
+    "text": "Tap Salvage until the drone repair is affordable.",
+    "chars": 49,
+    "display": "block",
+    "fontSizePx": 10.8,
+    "lineHeightPx": 14.58,
+    "heightPx": 14.56,
+    "boxes": 1,
+    "overflowYpx": 0,
+    "clippedX": false
+   },
+   {
+    "i": 1,
+    "text": "Drones 0 · Power 6 · 0 requested · 100 % · Last cutting pulse recharging",
+    "chars": 72,
+    "display": "block",
+    "fontSizePx": 10.8,
+    "lineHeightPx": 14.58,
+    "heightPx": 29.13,
+    "boxes": 2,
+    "overflowYpx": 0,
+    "clippedX": false
+   }
+  ],
+  "refusedAtStart": true,
+  "numbersText": "Drones 0 · Power 6 · 0 requested · 100 % · Last cutting pulse recharging"
+ },
+ "realRefusedTapAtScale": {
+  "textScale": "2",
+  "textLarge": true,
+  "inner": {
+   "width": 360,
+   "height": 640
+  },
+  "primaryText": "Keep salvaging: 1/15 pulses for the drone repair.",
+  "primaryChars": 49,
+  "primaryFontSizePx": 28.5,
+  "primaryLineHeightPx": 37.05,
+  "primaryHeightPx": 148.19,
+  "primaryBoxes": 4,
+  "primaryOverflowYpx": 0,
+  "cardHeightPx": 237.91,
+  "hudClientHeightPx": 640,
+  "cardFillPct": 37.173,
+  "lines": [
+   {
+    "i": 0,
+    "text": "Tap Salvage until the drone repair is affordable.",
+    "chars": 49,
+    "display": "none",
+    "fontSizePx": 21.6,
+    "lineHeightPx": 25.92,
+    "heightPx": 0,
+    "boxes": 0,
+    "overflowYpx": 0,
+    "clippedX": false
+   },
+   {
+    "i": 1,
+    "text": "Drones 0 · Power 6 · 0 requested · 100 % · Last cutting pulse recharging",
+    "chars": 72,
+    "display": "block",
+    "fontSizePx": 21.6,
+    "lineHeightPx": 25.92,
+    "heightPx": 77.72,
+    "boxes": 3,
+    "overflowYpx": 0,
+    "clippedX": false
+   }
+  ]
  },
  "results": {
   "baseline": {
@@ -23,19 +123,24 @@
    },
    "primaryText": "Tap the highlighted wreck to salvage scrap.",
    "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 263.81,
+   "cardHeightPx": 212,
    "hudClientHeightPx": 640,
-   "cardFillPct": 41.221,
+   "cardFillPct": 33.125,
    "lines": [
     {
      "i": 0,
      "text": "Tap Salvage until the drone repair is affordable.",
      "chars": 49,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -43,6 +148,7 @@
      "i": 1,
      "text": "Drones 0 · Power 6 · 0 requested · 100 %",
      "chars": 40,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 51.81,
@@ -61,19 +167,24 @@
    },
    "primaryText": "Tap the highlighted wreck to salvage scrap.",
    "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 289.72,
+   "cardHeightPx": 237.91,
    "hudClientHeightPx": 640,
-   "cardFillPct": 45.269,
+   "cardFillPct": 37.173,
    "lines": [
     {
      "i": 0,
      "text": "Tap Salvage until the drone repair is affordable.",
      "chars": 49,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -81,6 +192,7 @@
      "i": 1,
      "text": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
      "chars": 79,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 77.72,
@@ -99,19 +211,24 @@
    },
    "primaryText": "Tap the highlighted wreck to salvage scrap.",
    "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 289.72,
+   "cardHeightPx": 237.91,
    "hudClientHeightPx": 640,
-   "cardFillPct": 45.269,
+   "cardFillPct": 37.173,
    "lines": [
     {
      "i": 0,
      "text": "Tap Salvage until the drone repair is affordable.",
      "chars": 49,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -119,6 +236,7 @@
      "i": 1,
      "text": "Drones 2 · Power 6 · 6 requested · 50 % · Last need 30 nonferrous · have 5",
      "chars": 74,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 77.72,
@@ -137,19 +255,24 @@
    },
    "primaryText": "Tap the highlighted wreck to salvage scrap.",
    "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 289.72,
+   "cardHeightPx": 237.91,
    "hudClientHeightPx": 640,
-   "cardFillPct": 45.269,
+   "cardFillPct": 37.173,
    "lines": [
     {
      "i": 0,
      "text": "Tap Salvage until the drone repair is affordable.",
      "chars": 49,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -157,6 +280,7 @@
      "i": 1,
      "text": "Drones 1 · Power 6 · 3 requested · 100 % · Last need 30 scrap · have 5",
      "chars": 70,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 77.72,
@@ -175,19 +299,24 @@
    },
    "primaryText": "Tap the highlighted wreck to salvage scrap.",
    "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 289.72,
+   "cardHeightPx": 237.91,
    "hudClientHeightPx": 640,
-   "cardFillPct": 45.269,
+   "cardFillPct": 37.173,
    "lines": [
     {
      "i": 0,
      "text": "Tap Salvage until the drone repair is affordable.",
      "chars": 49,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -195,6 +324,51 @@
      "i": 1,
      "text": "Drones 1 · Power 6 · 3 requested · 100 % · Last need 30 nonferrous · have 5",
      "chars": 75,
+     "display": "block",
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "numbersCooldown": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 237.91,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 37.173,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "display": "none",
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 0,
+     "boxes": 0,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 0 · Power 6 · 0 requested · 100 % · Last cutting pulse recharging",
+     "chars": 72,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 77.72,
@@ -213,19 +387,24 @@
    },
    "primaryText": "Data pays for one research node; open Research to see its effect.",
    "primaryChars": 65,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 185.23,
+   "primaryBoxes": 5,
    "primaryOverflowYpx": 0,
-   "cardHeightPx": 326.77,
+   "cardHeightPx": 274.95,
    "hudClientHeightPx": 640,
-   "cardFillPct": 51.057,
+   "cardFillPct": 42.961,
    "lines": [
     {
      "i": 0,
      "text": "Machines share one power budget; slowest ones share it.",
      "chars": 55,
+     "display": "none",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
-     "heightPx": 51.81,
-     "boxes": 2,
+     "heightPx": 0,
+     "boxes": 0,
      "overflowYpx": 0,
      "clippedX": false
     },
@@ -233,6 +412,51 @@
      "i": 1,
      "text": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
      "chars": 79,
+     "display": "block",
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "absoluteReachable": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Keep salvaging: 15/15 pulses for the drone repair.",
+   "primaryChars": 50,
+   "primaryFontSizePx": 28.5,
+   "primaryLineHeightPx": 37.05,
+   "primaryHeightPx": 148.19,
+   "primaryBoxes": 4,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 237.91,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 37.173,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Machines share one power budget; slowest ones share it.",
+     "chars": 55,
+     "display": "none",
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 0,
+     "boxes": 0,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
+     "chars": 79,
+     "display": "block",
      "fontSizePx": 21.6,
      "lineHeightPx": 25.92,
      "heightPx": 77.72,
@@ -243,39 +467,363 @@
    ]
   }
  },
+ "primarySweep": [
+  {
+   "key": "card.tap-wreck",
+   "text": "Tap the highlighted wreck to salvage scrap.",
+   "chars": 43,
+   "boxes": 4,
+   "heightPx": 148.19,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.pulses",
+   "text": "Keep salvaging: 15/15 pulses for the drone repair.",
+   "chars": 50,
+   "boxes": 4,
+   "heightPx": 148.19,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.repair",
+   "text": "Repair your recovery drone · 30 scrap",
+   "chars": 37,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.observe",
+   "text": "Your drone now works for you.",
+   "chars": 29,
+   "boxes": 2,
+   "heightPx": 74.09,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.build-sorter",
+   "text": "Build a sorter · 30 scrap + 4 steel",
+   "chars": 35,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.connect-route",
+   "text": "Connect the dock to the sorter.",
+   "chars": 31,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.refine",
+   "text": "Refine metal into trade goods · build a furnace",
+   "chars": 47,
+   "boxes": 4,
+   "heightPx": 148.19,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.export",
+   "text": "Sell your first steel · 10 steel for 50 credits",
+   "chars": 47,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.upgrade",
+   "text": "Upgrade a machine: speed or power.",
+   "chars": 34,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "card.chain",
+   "text": "Choose your next goal.",
+   "chars": 22,
+   "boxes": 2,
+   "heightPx": 74.09,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.connect",
+   "text": "Connect Circuit assembler so its cargo moves.",
+   "chars": 45,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.build",
+   "text": "Build Circuit assembler · 40 scrap + 10 ferrous",
+   "chars": 47,
+   "boxes": 4,
+   "heightPx": 148.19,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.build.signalLab",
+   "text": "Build Signal lab · 50 scrap + 12 ferrous",
+   "chars": 40,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.sell",
+   "text": "Sell 10 Steel for 50 credits.",
+   "chars": 29,
+   "boxes": 2,
+   "heightPx": 74.09,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.research",
+   "text": "Research Route Dispatch · 12 Data",
+   "chars": 33,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.researchAny",
+   "text": "Research a node when its data cost is covered.",
+   "chars": 46,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.drone",
+   "text": "Add a recovery drone · 60 credits",
+   "chars": 33,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.upgrade",
+   "text": "Upgrade the Circuit assembler.",
+   "chars": 30,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.fork",
+   "text": "Upgrade Circuit assembler · 70 credits",
+   "chars": 38,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "step.fork.hi",
+   "text": "Upgrade Circuit assembler · 140 credits",
+   "chars": 39,
+   "boxes": 3,
+   "heightPx": 111.14,
+   "overflowYpx": 0
+  },
+  {
+   "key": "reader.objective",
+   "text": "Following the other tab",
+   "chars": 23,
+   "boxes": 2,
+   "heightPx": 74.09,
+   "overflowYpx": 0
+  }
+ ],
+ "phaseSweep": [
+  {
+   "key": "objective.repair",
+   "text": "Tap Salvage until the drone repair is affordable.",
+   "chars": 49,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.build-sorter",
+   "text": "Open Build and place the sorter on a lit cell.",
+   "chars": 46,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.connect-route",
+   "text": "Draw the route so cargo has somewhere to go.",
+   "chars": 44,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.export",
+   "text": "Sell the steel to earn your first credits.",
+   "chars": 42,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.upgrade",
+   "text": "Pick a machine and upgrade its speed.",
+   "chars": 37,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.chain",
+   "text": "Sell a surplus, then fund the next processor or an upgrade.",
+   "chars": 59,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "objective.research",
+   "text": "Data pays for one research node; open Research to see its effect.",
+   "chars": 65,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "hint.starved",
+   "text": "A machine waits for input; check its empty side.",
+   "chars": 48,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "hint.cargo-full",
+   "text": "A machine's output is waiting; connect storage.",
+   "chars": 47,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "hint.power",
+   "text": "Machines share one power budget; slowest ones share it.",
+   "chars": 55,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "phase.ghost",
+   "text": "Ghost on cell 8 · tap again to place",
+   "chars": 36,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "reject.locked",
+   "text": "Sell opens after your first steel contract",
+   "chars": 42,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  },
+  {
+   "key": "reader.hint",
+   "text": "This tab mirrors the yard exactly as the first tab writes it.",
+   "chars": 61,
+   "boxes": 0,
+   "heightPx": 0,
+   "display": "none",
+   "overflowYpx": 0
+  }
+ ],
+ "maxPrimaryBoxes": 4,
+ "maxPhaseBoxes": 0,
+ "worstReachable": {
+  "maxPrimaryBoxes": 4,
+  "maxNumbersBoxes": 3,
+  "hintHiddenAtTextLarge": true,
+  "primaryLineHeightPx": 37.05,
+  "numbersLineHeightPx": 25.92,
+  "chromePx": 12,
+  "heightPx": 237.96,
+  "hudClientHeightPx": 640,
+  "cardFillPct": 37.181,
+  "capHeightPx": 268.8,
+  "headroomPx": 30.84
+ },
  "fills": [
   {
    "state": "baseline",
-   "cardFillPct": 41.221,
+   "reachable": true,
+   "cardFillPct": 33.125,
    "over": false
   },
   {
    "state": "numbersWorst",
-   "cardFillPct": 45.269,
-   "over": true
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
   },
   {
    "state": "numbersHist",
-   "cardFillPct": 45.269,
-   "over": true
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
   },
   {
    "state": "minScrap",
-   "cardFillPct": 45.269,
-   "over": true
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
   },
   {
    "state": "minNonferrous",
-   "cardFillPct": 45.269,
-   "over": true
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
+  },
+  {
+   "state": "numbersCooldown",
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
   },
   {
    "state": "absoluteWorst",
-   "cardFillPct": 51.057,
+   "reachable": false,
+   "cardFillPct": 42.961,
    "over": true
+  },
+  {
+   "state": "absoluteReachable",
+   "reachable": true,
+   "cardFillPct": 37.173,
+   "over": false
   }
  ],
- "maxCardFillPct": 51.057,
- "anyOverCap": true,
+ "maxCardFillPct": 37.173,
+ "syntheticMaxCardFillPct": 42.961,
+ "anyOverCap": false,
+ "syntheticOverCap": true,
  "pageErrors": []
 }

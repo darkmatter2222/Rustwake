@@ -23,3 +23,26 @@ entry_identical=true
 preview_pid=34336 (rw-151 vite preview --strictPort 4174; rw-217 PID 10320 on 4173 NOT touched)
 assertion=served entry chunk == this worktree dist/index.html ref AND served entry sha256 == on-disk dist asset
 utc=2026-11-15T15:46:20.994Z
+
+# U03 census provenance (pass 14, re-run at CHRM-002 FIX head + census served-bundle assertion)
+RUSTWAKE_URL=http://localhost:4174/
+worktree=C:/Users/ryans/AppData/Local/Temp/rw-qwen/rw-151 branch=rw/151
+git_head=7b652c40afefa07dc5132e29ef9647d44b3e2b7c
+fix_head=99af746fca5ea6b1195e87b06d3385aeb64fae18 (CHRM-002 src fix; 7b652c4 = 99af746 + scripts-only census served-bundle assertion, src byte-identical to the fix)
+served_entry=assets/index-Cvs8KQfj.js
+dist_entry=assets/index-Cvs8KQfj.js
+served_index_identical=true
+served_entry_sha256=357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e
+disk_entry_sha256=357857e41e5b57308b5845c945dadc46a60be72547f4f1f711b44a33493ae87e
+served_entry_bytes=868488
+disk_entry_bytes=868488
+entry_identical=true
+css_entry=assets/index-BVohK8qu.css 66873 B sha256 55ecfe0d08ecd86df1c6f66ba398e9abc6f8c880884f713cc97dcca75dfd9635
+preview_pid=3904 (rw-151 vite preview --strictPort 4174; rw-217 PID 10320 on 4173 NOT touched; stale prior-session PID 11532 on 4175 NOT touched)
+assertion=scripts/measure-legibility.mjs now SELF-ASSERTS served index.html entry chunk sha256+bytes == on-disk dist asset (mirrors chrm002-probe.mjs), aborts on mismatch; provenance also persisted in legibility-census.json.servedBundleProvenance (identical:true). This closes the pass-14 census served-bundle provenance gap (baseSha alone came from git, not the served bundle).
+census=u03AllPass:true floorFailures:0 pageErrors:0 floors{dockCostPx12,aaRatio4.5,tapTargetPx44,cardFillPct42} unchanged; 480 readings/120 rows/32 cells; monotonic120/120 noPageScroll32/32 coreActionPass32/32 u03Pass32/32; maxCardFill21.548% minTargetPx44 0 clipped 16 informational +1px overflow cells
+probe=anyOverCap:false maxCardFillPct(reachable)37.173% worstReachable37.181% (237.96px, headroom30.84px under 268.8px cap) absoluteWorst42.961% reachable:false (synthetic, excluded from gate) pageErrors:0
+typecheck_exit=0 vitest=112 files / 1517 tests passed (0 failed, no flake, no rerun)
+utc_census=2026-11-15T17:03:49.029Z
+utc_probe=2026-11-15T17:04:10.323Z
+utc=2026-11-15T17:04:47Z
