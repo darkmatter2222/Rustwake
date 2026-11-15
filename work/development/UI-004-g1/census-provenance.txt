@@ -7,3 +7,19 @@ dist_entry=assets/index-BHuJAK_X.js assets/index-GWtdmgwN.css
 preview_pid=24172 (rw-151 vite preview, bound 4174 because rw-217 held 4173)
 utc_start=2026-11-15T14:27:59Z
 utc_end=2026-11-15T14:29:52Z
+
+# U03 census provenance (pass 13, re-run at FINAL_FIX_HEAD)
+RUSTWAKE_URL=http://localhost:4174/
+worktree=C:/Users/ryans/AppData/Local/Temp/rw-qwen/rw-151 branch=rw/151
+git_head=cdd87e26b5917a71ed21117bda733251575e4787
+served_entry=assets/index-Cvl4BdAr.js
+dist_entry=assets/index-Cvl4BdAr.js
+served_index_identical=true
+served_entry_sha256=8c25322cd871fe0426df1f8b0eaa9efb094fc3cbb1c62aac88ad8d6793b95118
+disk_entry_sha256=8c25322cd871fe0426df1f8b0eaa9efb094fc3cbb1c62aac88ad8d6793b95118
+served_entry_bytes=868472
+disk_entry_bytes=868472
+entry_identical=true
+preview_pid=34336 (rw-151 vite preview --strictPort 4174; rw-217 PID 10320 on 4173 NOT touched)
+assertion=served entry chunk == this worktree dist/index.html ref AND served entry sha256 == on-disk dist asset
+utc=2026-11-15T15:46:20.994Z

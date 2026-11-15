@@ -1,0 +1,281 @@
+{
+ "ticket": "CHRM-002 worst-case re-measure (G1 #151 pass 13)",
+ "baseSha": "cdd87e26b5917a71ed21117bda733251575e4787",
+ "generated": "2026-11-15T15:51:52.403Z",
+ "url": "http://localhost:4174/",
+ "viewport": "360x640 dpr2 mobile text-scale 2.0",
+ "cap": 42,
+ "method": "real .objective card geometry; longest reachable text injected via textContent (classes/CSS unchanged); cardFill = card.height / hud.clientHeight * 100 (same as census)",
+ "reachability": "restingLine appends ' · Last {detail}' on any refused tap (lastReject set via labelForReject); numbers line reachable while machines run; word max 'nonferrous'; primary/phase maxima are longest objective.*/hint.* strings",
+ "strings": {
+  "NUMBERS_WORST": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
+  "NUMBERS_HIST": "Drones 2 · Power 6 · 6 requested · 50 % · Last need 30 nonferrous · have 5",
+  "PRIMARY_WORST": "Data pays for one research node; open Research to see its effect.",
+  "PHASE_WORST": "Machines share one power budget; slowest ones share it."
+ },
+ "results": {
+  "baseline": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 263.81,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 41.221,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 0 · Power 6 · 0 requested · 100 %",
+     "chars": 40,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "numbersWorst": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 289.72,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 45.269,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
+     "chars": 79,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "numbersHist": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 289.72,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 45.269,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 2 · Power 6 · 6 requested · 50 % · Last need 30 nonferrous · have 5",
+     "chars": 74,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "minScrap": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 289.72,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 45.269,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 1 · Power 6 · 3 requested · 100 % · Last need 30 scrap · have 5",
+     "chars": 70,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "minNonferrous": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Tap the highlighted wreck to salvage scrap.",
+   "primaryChars": 43,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 289.72,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 45.269,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Tap Salvage until the drone repair is affordable.",
+     "chars": 49,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 1 · Power 6 · 3 requested · 100 % · Last need 30 nonferrous · have 5",
+     "chars": 75,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  },
+  "absoluteWorst": {
+   "textScale": "2",
+   "textLarge": true,
+   "inner": {
+    "width": 360,
+    "height": 640
+   },
+   "primaryText": "Data pays for one research node; open Research to see its effect.",
+   "primaryChars": 65,
+   "primaryOverflowYpx": 0,
+   "cardHeightPx": 326.77,
+   "hudClientHeightPx": 640,
+   "cardFillPct": 51.057,
+   "lines": [
+    {
+     "i": 0,
+     "text": "Machines share one power budget; slowest ones share it.",
+     "chars": 55,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 51.81,
+     "boxes": 2,
+     "overflowYpx": 0,
+     "clippedX": false
+    },
+    {
+     "i": 1,
+     "text": "Drones 10 · Power 6 · 12 requested · 100 % · Last need 100 nonferrous · have 99",
+     "chars": 79,
+     "fontSizePx": 21.6,
+     "lineHeightPx": 25.92,
+     "heightPx": 77.72,
+     "boxes": 3,
+     "overflowYpx": 0,
+     "clippedX": false
+    }
+   ]
+  }
+ },
+ "fills": [
+  {
+   "state": "baseline",
+   "cardFillPct": 41.221,
+   "over": false
+  },
+  {
+   "state": "numbersWorst",
+   "cardFillPct": 45.269,
+   "over": true
+  },
+  {
+   "state": "numbersHist",
+   "cardFillPct": 45.269,
+   "over": true
+  },
+  {
+   "state": "minScrap",
+   "cardFillPct": 45.269,
+   "over": true
+  },
+  {
+   "state": "minNonferrous",
+   "cardFillPct": 45.269,
+   "over": true
+  },
+  {
+   "state": "absoluteWorst",
+   "cardFillPct": 51.057,
+   "over": true
+  }
+ ],
+ "maxCardFillPct": 51.057,
+ "anyOverCap": true,
+ "pageErrors": []
+}
