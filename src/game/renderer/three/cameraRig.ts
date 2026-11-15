@@ -14,7 +14,7 @@
  * Reads immutable snapshots only through its callers; no state writes, no clock reads,
  * no UI imports, no save bytes.
  */
-import * as THREE from "three";
+import { type Object3D, type OrthographicCamera, type Raycaster, Vector2, Vector3 } from "three";
 import { clampElev, elevOf, normalizeYaw, yawOf, type Camera, type ViewState } from "../projection";
 
 /** A large camera stand-off keeps the whole yard inside [near, far] under any orbit. */
@@ -31,7 +31,7 @@ export interface PickResult {
 
 /** Sync an OrthographicCamera to the shared projection (reproduces worldToScreen). */
 export function syncOrthoCamera(
-  camera3: THREE.OrthographicCamera,
+  camera3: OrthographicCamera,
   camera: Camera,
   view: ViewState
 ): void {
@@ -42,9 +42,9 @@ export function syncOrthoCamera(
   const sinP = Math.sin(phi);
   const cosP = Math.cos(phi);
   // right R = (cosT, 0, -sinT) is implicit in lookAt(up, out); only up and out are set.
-  const up = new THREE.Vector3(-sinT * sinP, cosP, -cosT * sinP);
-  const out = new THREE.Vector3(sinT * cosP, sinP, cosT * cosP);
-  const target = new THREE.Vector3(camera.x, 0, camera.y);
+  const up = new Vector3(-sinT * sinP, cosP, -cosT * sinP);
+  const out = new Vector3(sinT * cosP, sinP, cosT * cosP);
+  const target = new Vector3(camera.x, 0, camera.y);
   camera3.position.copy(target).addScaledVector(out, CAMERA_RADIUS);
   camera3.up.copy(up);
   camera3.lookAt(target);
@@ -61,8 +61,8 @@ export function syncOrthoCamera(
 }
 
 /** Canvas-local CSS pixel -> THREE NDC. */
-export function ndcOf(view: ViewState, sx: number, sy: number): THREE.Vector2 {
-  return new THREE.Vector2((sx / view.width) * 2 - 1, -((sy / view.height) * 2 - 1));
+export function ndcOf(view: ViewState, sx: number, sy: number): Vector2 {
+  return new Vector2((sx / view.width) * 2 - 1, -((sy / view.height) * 2 - 1));
 }
 
 /**
@@ -71,12 +71,12 @@ export function ndcOf(view: ViewState, sx: number, sy: number): THREE.Vector2 {
  * bodies carry `userData.pickId` (-1 wreck, -2 dock). Ground/drones are not pickable.
  */
 export function castPick(
-  raycaster: THREE.Raycaster,
-  camera3: THREE.OrthographicCamera,
+  raycaster: Raycaster,
+  camera3: OrthographicCamera,
   view: ViewState,
   sx: number,
   sy: number,
-  objects: THREE.Object3D[]
+  objects: Object3D[]
 ): PickResult | null {
   raycaster.setFromCamera(ndcOf(view, sx, sy), camera3);
   const hits = raycaster.intersectObjects(objects, false);
@@ -98,12 +98,12 @@ export function castPick(
 
 /** The ground-plane point under a pixel — agrees with projection.screenToWorld. */
 export function castGround(
-  raycaster: THREE.Raycaster,
-  camera3: THREE.OrthographicCamera,
+  raycaster: Raycaster,
+  camera3: OrthographicCamera,
   view: ViewState,
   sx: number,
   sy: number,
-  ground: THREE.Object3D
+  ground: Object3D
 ): { x: number; y: number } | null {
   raycaster.setFromCamera(ndcOf(view, sx, sy), camera3);
   const hits = raycaster.intersectObject(ground, false);
@@ -113,13 +113,13 @@ export function castGround(
 
 /** Project a world point (x = yard x, y = up, z = yard y) to canvas-local CSS pixels. */
 export function projectToScreen(
-  camera3: THREE.OrthographicCamera,
+  camera3: OrthographicCamera,
   view: ViewState,
   x: number,
   y: number,
   z: number
 ): { x: number; y: number } {
-  const v = new THREE.Vector3(x, y, z).project(camera3);
+  const v = new Vector3(x, y, z).project(camera3);
   return {
     x: ((v.x + 1) / 2) * view.width,
     y: ((1 - v.y) / 2) * view.height,

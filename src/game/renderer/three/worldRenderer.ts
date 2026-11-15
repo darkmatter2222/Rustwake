@@ -13,7 +13,7 @@
  * (the default) hides every rig, so the pre-T16 frame is unchanged.
  *
  * Quality is blockout-flat (§1.5 / T03 ADR): no shadow maps, DPR capped at 2, an
- * ambient-dominant hemisphere fill. Selection is a real THREE.Raycaster pick whose ground
+ * ambient-dominant hemisphere fill. Selection is a real Raycaster pick whose ground
  * intersection agrees with projection.screenToWorld, so a tap maps to the same cell under
  * any orbit. Context loss is surfaced (save untouched by construction — the renderer holds
  * no save bytes); the caller pauses rendering on a hidden tab; reduced motion collapses the
@@ -26,7 +26,31 @@
  *   position = target + radius*Z, frustum half-width = width/(2*scale),
  *   half-height = height/(2*scale). At yaw 0 / elev 90 this is the legacy top-down view.
  */
-import * as THREE from "three";
+import {
+  BoxGeometry,
+  BufferGeometry,
+  Color,
+  DirectionalLight,
+  DynamicDrawUsage,
+  Float32BufferAttribute,
+  Group,
+  HemisphereLight,
+  InstancedMesh,
+  LineBasicMaterial,
+  LineSegments,
+  type Material,
+  Matrix4,
+  Mesh,
+  MeshLambertMaterial,
+  type Object3D,
+  OrthographicCamera,
+  PlaneGeometry,
+  Quaternion,
+  Raycaster,
+  Scene,
+  Vector3,
+  WebGLRenderer,
+} from "three";
 import { TUNING } from "../../content/defs";
 import type { MachineState, SimState } from "../../simulation/types";
 import { getFleetFrame, type FleetFrame, type FleetUnit } from "../fleet";
@@ -126,7 +150,7 @@ function bodyBoxOf(row: readonly PartTuple[]): { w: number; d: number; color: st
 }
 
 interface ArchetypeBatch {
-  mesh: THREE.InstancedMesh;
+  mesh: InstancedMesh;
   ids: number[];
   box: { w: number; d: number; color: string };
 }
@@ -135,11 +159,11 @@ interface ArchetypeBatch {
  * box exists only while real units ride the carrier, the lift only moves while a
  * real load/unload timer runs, and the wheels only turn over cells actually walked. */
 interface TruckRig {
-  group: THREE.Group;
-  cargo: THREE.Mesh;
-  lift: THREE.Mesh;
-  wheels: THREE.Mesh[];
-  brakes: THREE.Mesh[];
+  group: Group;
+  cargo: Mesh;
+  lift: Mesh;
+  wheels: Mesh[];
+  brakes: Mesh[];
 }
 
 /**
@@ -148,23 +172,23 @@ interface TruckRig {
  */
 export class YardWorld {
   readonly canvas: HTMLCanvasElement;
-  private renderer: THREE.WebGLRenderer;
-  private scene: THREE.Scene;
-  private camera3: THREE.OrthographicCamera;
-  private raycaster = new THREE.Raycaster();
-  private ground: THREE.Mesh;
-  private grid: THREE.LineSegments;
-  private wreck: THREE.Mesh;
-  private dock: THREE.Mesh;
+  private renderer: WebGLRenderer;
+  private scene: Scene;
+  private camera3: OrthographicCamera;
+  private raycaster = new Raycaster();
+  private ground: Mesh;
+  private grid: LineSegments;
+  private wreck: Mesh;
+  private dock: Mesh;
   private batches = new Map<string, ArchetypeBatch>();
-  private drones: THREE.Mesh[] = [];
-  private droneGroup: THREE.Group;
+  private drones: Mesh[] = [];
+  private droneGroup: Group;
   private trucks: TruckRig[] = [];
-  private truckGroup: THREE.Group;
+  private truckGroup: Group;
   /** G1 (#228): staged build-yard construction, additive to the instanced sim bodies. */
   private assemblyView: AssemblyView;
   private lastFleet: FleetFrame = { tick: 0, units: [] };
-  private unitBox = new THREE.BoxGeometry(1, 1, 1);
+  private unitBox = new BoxGeometry(1, 1, 1);
   private machineSignature = "";
   private view: ViewState = { width: 1, height: 1 };
   private cam: Camera = { x: WORLD_W / 2, y: WORLD_H / 2, scale: 2 };
@@ -176,7 +200,7 @@ export class YardWorld {
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       canvas,
       antialias: true,
       alpha: false,
@@ -185,26 +209,26 @@ export class YardWorld {
     });
     this.renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio || 1, MAX_DPR));
     this.renderer.shadowMap.enabled = false; // blockout-flat: no shadows
-    this.renderer.setClearColor(new THREE.Color(PALETTE.night), 1);
+    this.renderer.setClearColor(new Color(PALETTE.night), 1);
 
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(PALETTE.nightDeep);
+    this.scene = new Scene();
+    this.scene.background = new Color(PALETTE.nightDeep);
 
     // Ambient-dominant fill (T03 ADR 1.0 -> 1.6): a warm hemisphere carries most of the
     // light, one gentle directional gives the blockouts form without casting shadows.
-    const hemi = new THREE.HemisphereLight(0xf4ebd8, 0xba8054, 1.6);
+    const hemi = new HemisphereLight(0xf4ebd8, 0xba8054, 1.6);
     this.scene.add(hemi);
-    const sun = new THREE.DirectionalLight(0xfff4e0, 1.0);
+    const sun = new DirectionalLight(0xfff4e0, 1.0);
     sun.position.set(-8, 12, 6);
     sun.castShadow = false;
     this.scene.add(sun);
 
-    this.camera3 = new THREE.OrthographicCamera(-1, 1, 1, -1, CAMERA_NEAR, CAMERA_FAR);
+    this.camera3 = new OrthographicCamera(-1, 1, 1, -1, CAMERA_NEAR, CAMERA_FAR);
 
     // Ground slab on y = 0 spanning the yard rectangle (world X = yard x, Z = yard y).
-    const groundGeo = new THREE.PlaneGeometry(WORLD_W, WORLD_H);
-    const groundMat = new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.floor) });
-    this.ground = new THREE.Mesh(groundGeo, groundMat);
+    const groundGeo = new PlaneGeometry(WORLD_W, WORLD_H);
+    const groundMat = new MeshLambertMaterial({ color: new Color(PALETTE.floor) });
+    this.ground = new Mesh(groundGeo, groundMat);
     this.ground.rotation.x = -Math.PI / 2;
     this.ground.position.set(WORLD_W / 2, 0, WORLD_H / 2);
     this.ground.userData.pickId = null; // ground is not a selection target
@@ -215,9 +239,9 @@ export class YardWorld {
 
     // Wreck hulk blockout (pickId -1) and dock blockout (pickId -2).
     const wreckBox = bodyBoxOf(PARTS.generic);
-    this.wreck = new THREE.Mesh(
+    this.wreck = new Mesh(
       this.unitBox,
-      new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.wreck) })
+      new MeshLambertMaterial({ color: new Color(PALETTE.wreck) })
     );
     this.wreck.scale.set(wreckBox.w + 8, BODY_BASE_HEIGHT, wreckBox.d + 6);
     this.wreck.position.set(WRECK_POSITION.x, BODY_BASE_HEIGHT / 2, WRECK_POSITION.y);
@@ -226,19 +250,19 @@ export class YardWorld {
 
     const dockBox = bodyBoxOf(PARTS.dock);
     const dockCentre = tileToWorld(DOCK_TILE);
-    this.dock = new THREE.Mesh(
+    this.dock = new Mesh(
       this.unitBox,
-      new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.bodyLight) })
+      new MeshLambertMaterial({ color: new Color(PALETTE.bodyLight) })
     );
     this.dock.scale.set(dockBox.w, BODY_BASE_HEIGHT * 0.6, dockBox.d);
     this.dock.position.set(dockCentre.x, (BODY_BASE_HEIGHT * 0.6) / 2, dockCentre.y);
     this.dock.userData.pickId = -2;
     this.scene.add(this.dock);
 
-    this.droneGroup = new THREE.Group();
+    this.droneGroup = new Group();
     this.scene.add(this.droneGroup);
 
-    this.truckGroup = new THREE.Group();
+    this.truckGroup = new Group();
     this.scene.add(this.truckGroup);
 
     // G1 (#228): AssemblyView lays buildings out in GRID-CELL units (1 unit = 1 cell);
@@ -267,7 +291,7 @@ export class YardWorld {
     this.onContextRestored?.();
   };
 
-  private buildGrid(): THREE.LineSegments {
+  private buildGrid(): LineSegments {
     const verts: number[] = [];
     const y = 0.05; // lift just above the ground to avoid z-fighting
     for (let col = 0; col <= YARD_COLS; col += 1) {
@@ -278,14 +302,14 @@ export class YardWorld {
       const z = row * CELL;
       verts.push(0, y, z, YARD_COLS * CELL, y, z);
     }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
-    const mat = new THREE.LineBasicMaterial({
-      color: new THREE.Color(PALETTE.steelLight),
+    const geo = new BufferGeometry();
+    geo.setAttribute("position", new Float32BufferAttribute(verts, 3));
+    const mat = new LineBasicMaterial({
+      color: new Color(PALETTE.steelLight),
       transparent: true,
       opacity: 0.22,
     });
-    return new THREE.LineSegments(geo, mat);
+    return new LineSegments(geo, mat);
   }
 
   isContextLost(): boolean {
@@ -314,7 +338,7 @@ export class YardWorld {
     for (const batch of this.batches.values()) {
       this.scene.remove(batch.mesh);
       batch.mesh.dispose();
-      (batch.mesh.material as THREE.Material).dispose();
+      (batch.mesh.material as Material).dispose();
     }
     this.batches.clear();
     const byArchetype = new Map<string, MachineState[]>();
@@ -326,9 +350,9 @@ export class YardWorld {
     for (const [archetype, list] of byArchetype) {
       const row = PARTS[archetype] ?? PARTS.generic;
       const box = bodyBoxOf(row);
-      const material = new THREE.MeshLambertMaterial({ color: new THREE.Color(box.color) });
-      const mesh = new THREE.InstancedMesh(this.unitBox, material, list.length);
-      mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      const material = new MeshLambertMaterial({ color: new Color(box.color) });
+      const mesh = new InstancedMesh(this.unitBox, material, list.length);
+      mesh.instanceMatrix.setUsage(DynamicDrawUsage);
       mesh.userData.kind = "machine";
       mesh.userData.archetype = archetype;
       const ids = list.map((m) => m.id);
@@ -346,11 +370,11 @@ export class YardWorld {
       list.push(m);
       byArchetype.set(m.blueprint, list);
     }
-    const pos = new THREE.Vector3();
-    const quat = new THREE.Quaternion();
-    const scale = new THREE.Vector3();
-    const matrix = new THREE.Matrix4();
-    const yAxis = new THREE.Vector3(0, 1, 0);
+    const pos = new Vector3();
+    const quat = new Quaternion();
+    const scale = new Vector3();
+    const matrix = new Matrix4();
+    const yAxis = new Vector3(0, 1, 0);
     for (const [archetype, list] of byArchetype) {
       const batch = this.batches.get(archetype);
       if (!batch) continue;
@@ -367,7 +391,7 @@ export class YardWorld {
       batch.mesh.instanceMatrix.needsUpdate = true;
       batch.mesh.count = list.length;
       // A selected machine reads brighter; blockout-flat keeps this a flat colour shift.
-      const mat = batch.mesh.material as THREE.MeshLambertMaterial;
+      const mat = batch.mesh.material as MeshLambertMaterial;
       const anySelected = list.some((m) => m.id === selected);
       mat.color.set(anySelected ? PALETTE.select : batch.box.color);
     }
@@ -387,9 +411,9 @@ export class YardWorld {
         continue;
       }
       if (!mesh) {
-        mesh = new THREE.Mesh(
+        mesh = new Mesh(
           this.unitBox,
-          new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.bodyLight) })
+          new MeshLambertMaterial({ color: new Color(PALETTE.bodyLight) })
         );
         mesh.scale.set(8, 4, 8);
         mesh.userData.pickId = null; // drones are not selection targets
@@ -406,7 +430,7 @@ export class YardWorld {
       const z = WRECK_POSITION.y + (dock.y - WRECK_POSITION.y) * t;
       const y = 6 + Math.sin(Math.PI * t) * 10 + heavy;
       mesh.position.set(x, y, z);
-      (mesh.material as THREE.MeshLambertMaterial).color.set(
+      (mesh.material as MeshLambertMaterial).color.set(
         carrying ? PALETTE.amber : PALETTE.bodyMid
       );
     }
@@ -414,9 +438,9 @@ export class YardWorld {
     if (!state.drone.repaired) {
       let parked = this.drones[MAX_DRONES - 1];
       if (!parked) {
-        parked = new THREE.Mesh(
+        parked = new Mesh(
           this.unitBox,
-          new THREE.MeshLambertMaterial({ color: new THREE.Color(PALETTE.bodyMid) })
+          new MeshLambertMaterial({ color: new Color(PALETTE.bodyMid) })
         );
         parked.scale.set(8, 4, 8);
         parked.userData.pickId = null;
@@ -431,9 +455,9 @@ export class YardWorld {
   /** Build one pooled truck rig from the shared unit box (T16). Faces local +X:
    * cab forward, cargo bed aft, brake lights on the rear face. */
   private buildTruckRig(): TruckRig {
-    const group = new THREE.Group();
-    const part = (color: string): THREE.Mesh =>
-      new THREE.Mesh(this.unitBox, new THREE.MeshLambertMaterial({ color: new THREE.Color(color) }));
+    const group = new Group();
+    const part = (color: string): Mesh =>
+      new Mesh(this.unitBox, new MeshLambertMaterial({ color: new Color(color) }));
     const chassis = part(PALETTE.bodyMid);
     chassis.scale.set(TRUCK.chassisL, TRUCK.chassisH, TRUCK.chassisW);
     chassis.position.set(0, TRUCK.groundY + TRUCK.wheelR + TRUCK.chassisH / 2, 0);
@@ -456,7 +480,7 @@ export class YardWorld {
     cargo.position.set(lift.position.x, bedY + 0.8 + TRUCK.cargoH / 2, 0);
     cargo.visible = false; // no real cargo, no box (E05)
     group.add(cargo);
-    const wheels: THREE.Mesh[] = [];
+    const wheels: Mesh[] = [];
     for (const [wx, wz] of [
       [TRUCK.chassisL / 2 - 2.5, TRUCK.chassisW / 2],
       [TRUCK.chassisL / 2 - 2.5, -TRUCK.chassisW / 2],
@@ -469,7 +493,7 @@ export class YardWorld {
       group.add(wheel);
       wheels.push(wheel);
     }
-    const brakes: THREE.Mesh[] = [];
+    const brakes: Mesh[] = [];
     for (const bz of [TRUCK.chassisW / 2 - 1.5, -TRUCK.chassisW / 2 + 1.5]) {
       const lamp = part(PALETTE.rust);
       lamp.scale.set(0.8, 1.2, 1.6);
@@ -575,8 +599,8 @@ export class YardWorld {
     this.renderer.render(this.scene, this.camera3);
   }
 
-  private pickables(): THREE.Object3D[] {
-    const list: THREE.Object3D[] = [this.wreck, this.dock];
+  private pickables(): Object3D[] {
+    const list: Object3D[] = [this.wreck, this.dock];
     for (const batch of this.batches.values()) list.push(batch.mesh);
     return list;
   }
@@ -623,24 +647,24 @@ export class YardWorld {
     this.canvas.removeEventListener("webglcontextrestored", this.handleContextRestored);
     for (const batch of this.batches.values()) {
       batch.mesh.dispose();
-      (batch.mesh.material as THREE.Material).dispose();
+      (batch.mesh.material as Material).dispose();
     }
     this.batches.clear();
-    for (const d of this.drones) (d.material as THREE.Material).dispose();
+    for (const d of this.drones) (d.material as Material).dispose();
     this.drones = [];
     for (const rig of this.trucks) {
       rig.group.traverse((obj) => {
-        if (obj instanceof THREE.Mesh) (obj.material as THREE.Material).dispose();
+        if (obj instanceof Mesh) (obj.material as Material).dispose();
       });
     }
     this.trucks = [];
     this.unitBox.dispose();
     this.ground.geometry.dispose();
-    (this.ground.material as THREE.Material).dispose();
+    (this.ground.material as Material).dispose();
     this.grid.geometry.dispose();
-    (this.grid.material as THREE.Material).dispose();
-    (this.wreck.material as THREE.Material).dispose();
-    (this.dock.material as THREE.Material).dispose();
+    (this.grid.material as Material).dispose();
+    (this.wreck.material as Material).dispose();
+    (this.dock.material as Material).dispose();
     this.assemblyView.dispose();
     this.renderer.dispose();
   }

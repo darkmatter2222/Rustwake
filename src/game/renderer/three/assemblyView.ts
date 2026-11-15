@@ -13,7 +13,7 @@
  * individual pivots. At P1 scale (tens of buildings) this is cheap; full
  * instanced batching of static kit parts is a P02 (#151) concern.
  */
-import * as THREE from "three";
+import { BoxGeometry, Group, Mesh, MeshLambertMaterial } from "three";
 import {
   ASSEMBLY_STAGES,
   assemblyStageAt,
@@ -66,10 +66,10 @@ export interface ObservedBuildingReport extends BuildingStageReport {
 interface BuildingRecord {
   signature: string;
   snapshot: AssemblyBuildingSnapshot;
-  group: THREE.Group;
-  kitGroups: Map<string, THREE.Group>;
-  parts: Map<string, THREE.Mesh>;
-  modules: THREE.Mesh[];
+  group: Group;
+  kitGroups: Map<string, Group>;
+  parts: Map<string, Mesh>;
+  modules: Mesh[];
 }
 
 function signatureOf(b: AssemblyBuildingSnapshot): string {
@@ -82,18 +82,18 @@ function rotatedSize(footprint: readonly [number, number], rotation: number): [n
 }
 
 export class AssemblyView {
-  readonly root: THREE.Group;
-  private readonly unitBox: THREE.BoxGeometry;
-  private readonly materials: Map<KitMaterialToken, THREE.MeshLambertMaterial>;
+  readonly root: Group;
+  private readonly unitBox: BoxGeometry;
+  private readonly materials: Map<KitMaterialToken, MeshLambertMaterial>;
   private readonly records: Map<number, BuildingRecord>;
 
   constructor() {
-    this.root = new THREE.Group();
+    this.root = new Group();
     this.root.name = "assemblyRoot";
-    this.unitBox = new THREE.BoxGeometry(1, 1, 1);
+    this.unitBox = new BoxGeometry(1, 1, 1);
     this.materials = new Map();
     for (const token of Object.keys(KIT_PALETTE) as KitMaterialToken[]) {
-      this.materials.set(token, new THREE.MeshLambertMaterial({ color: KIT_PALETTE[token] }));
+      this.materials.set(token, new MeshLambertMaterial({ color: KIT_PALETTE[token] }));
     }
     this.records = new Map();
   }
@@ -127,16 +127,16 @@ export class AssemblyView {
 
   private buildRecord(b: AssemblyBuildingSnapshot): BuildingRecord {
     const geo = KIT_GEOMETRY[b.asset];
-    const group = new THREE.Group();
+    const group = new Group();
     group.name = `building-${b.id}-${b.asset}`;
     const [rw, rd] = rotatedSize(geo.footprint, b.rotation);
     group.position.set(b.cell.x + rw / 2, 0, b.cell.y + rd / 2);
     // World convention: positive yaw takes +Z toward +X (geometry.ts).
     group.rotation.y = (b.rotation * Math.PI) / 180;
 
-    const kitGroups = new Map<string, THREE.Group>();
+    const kitGroups = new Map<string, Group>();
     for (const g of geo.groups) {
-      const node = new THREE.Group();
+      const node = new Group();
       node.name = g.name;
       node.position.set(g.position[0], g.position[1], g.position[2]);
       const parent = g.parent === "root" ? group : kitGroups.get(g.parent);
@@ -147,11 +147,11 @@ export class AssemblyView {
       kitGroups.set(g.name, node);
     }
 
-    const parts = new Map<string, THREE.Mesh>();
+    const parts = new Map<string, Mesh>();
     for (const p of geo.parts) {
       const material = this.materials.get(p.material);
       if (material === undefined) throw new Error(`unknown kit material ${p.material}`);
-      const mesh = new THREE.Mesh(this.unitBox, material);
+      const mesh = new Mesh(this.unitBox, material);
       mesh.name = p.name;
       mesh.scale.set(p.size[0], p.size[1], p.size[2]);
       mesh.position.set(p.center[0], p.center[1], p.center[2]);
@@ -163,11 +163,11 @@ export class AssemblyView {
       parts.set(p.name, mesh);
     }
 
-    const modules: THREE.Mesh[] = [];
+    const modules: Mesh[] = [];
     for (const m of upgradeModulesFor(b.asset, b.level)) {
       const material = this.materials.get(m.material);
       if (material === undefined) throw new Error(`unknown module material ${m.material}`);
-      const mesh = new THREE.Mesh(this.unitBox, material);
+      const mesh = new Mesh(this.unitBox, material);
       mesh.name = m.name;
       mesh.scale.set(m.size[0], m.size[1], m.size[2]);
       mesh.position.set(m.center[0], m.center[1], m.center[2]);
