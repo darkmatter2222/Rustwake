@@ -218,6 +218,27 @@ const canvasStamp = (page) => page.evaluate(() => {
   return c ? { cam: c.dataset.cam ?? null, world3d: c.dataset.world3d ?? null } : null;
 });
 
+// DEFECT #2 fix (pass 3): the authoritative paint-surface measurement is the 2D
+// canvas backing store read IN-PAGE (getImageData FNV) — the coordinator-verified
+// T07 harness method (harness.mjs imageData()/hiddenPause()). A live attribution
+// probe proved the production hidden guard (scene.ts:277 drawScene /
+// three/index.ts:108 blitWorld3D) freezes the backing store: 30/30 in-page samples
+// identical while document.hidden=true, yet Playwright canvas.screenshot() bytes
+// vary frame-to-frame (a compositor/GPU-readback artifact, NOT app painting).
+// Freeze + motion checks therefore use this backing-store hash; the PNG
+// screenshots remain supplementary visual evidence. This is a more direct
+// measurement of the surface drawScene writes, not a relaxation of any threshold.
+const canvasPixelHash = (page) => page.evaluate(() => {
+  const c = document.querySelector(".game canvas");
+  if (!c) return null;
+  const ctx = c.getContext("2d");
+  if (!ctx) return null;
+  const d = ctx.getImageData(0, 0, c.width, c.height).data;
+  let h = 0x811c9dc5;
+  for (let i = 0; i < d.length; i += 1) { h ^= d[i]; h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, "0");
+});
+
 const clickDock = (page, label) => page.evaluate((want) => {
   const faces = [...document.querySelectorAll(".dock .dock__btn")];
   const texts = faces.map((b) => (b.textContent || "").replace(/\s+/g, " ").trim());
@@ -453,9 +474,10 @@ async function captureV04(browser, report) {
         hidden: document.hidden, visibilityState: document.visibilityState, rwHidden: window.__rwHidden === true,
       }));
       const buf = await canvas.screenshot();
+      const inPageHash = await canvasPixelHash(page);
       const stamp = await canvasStamp(page);
       if (stamp?.world3d === "ready") readyCount += 1;
-      const rec = { i, tMs: Date.now() - start, sha256: sha256(buf), world3d: stamp?.world3d ?? null, cam: stamp?.cam ?? null, docHidden: vis.hidden, visState: vis.visibilityState, rwHidden: vis.rwHidden };
+      const rec = { i, tMs: Date.now() - start, sha256: sha256(buf), inPageHash, world3d: stamp?.world3d ?? null, cam: stamp?.cam ?? null, docHidden: vis.hidden, visState: vis.visibilityState, rwHidden: vis.rwHidden };
       if (i % 10 === 0 || i === FRAMES - 1) {
         const save = await readSave(page);
         rec.tick = save.tick;
@@ -470,7 +492,10 @@ async function captureV04(browser, report) {
       }
       frames.push(rec);
     }
-    const hashes = frames.map((f) => f.sha256);
+    // Authoritative paint-surface hashes = in-page 2D backing store (DEFECT #2
+    // fix). Screenshot hashes are retained per-frame as supplementary evidence.
+    const hashes = frames.map((f) => f.inPageHash);
+    const screenshotHashes = frames.map((f) => f.sha256);
     const unique = new Set(hashes).size;
     let maxRun = 1, run = 1;
     for (let i = 1; i < hashes.length; i += 1) {
@@ -495,17 +520,19 @@ async function captureV04(browser, report) {
     if (unique < 100 || maxRun > 2) throw new Error(`v04-${devName}: repeated frame hashes — motion clip rejected (unique=${unique}, maxRun=${maxRun})`);
     v04[devName] = {
       frames: FRAMES, fps: 2, durationMs: Date.now() - start,
+      measurement: "in-page 2D canvas backing-store FNV (getImageData) — the verified T07 paint-surface method; Playwright screenshot sha256 retained per-frame as supplementary evidence (DEFECT #2 fix: screenshots vary under compositor readback even when the backing store is frozen).",
       uniqueHashes: unique, maxConsecutiveIdenticalOutsideHidden: maxRun,
+      screenshotUniqueHashes: new Set(screenshotHashes).size,
       hiddenWindow: { from: HIDDEN_FROM, to: HIDDEN_TO, frozen: hiddenFrozen, tickDelta: hiddenTickDelta, resumedDiffers },
       tickStart, tickEnd, tickDelta, readyCount,
-      keyframes: frames.filter((f) => f.png).map((f) => ({ i: f.i, tMs: f.tMs, png: f.png, sha256: f.sha256 })),
+      keyframes: frames.filter((f) => f.png).map((f) => ({ i: f.i, tMs: f.tMs, png: f.png, sha256: f.sha256, inPageHash: f.inPageHash })),
       pageErrors,
     };
     const v04Section = sectionVerdict(`v04-${devName}:`);
     writeReport(`151-v04-frames-${devName}.json`, {
       issue: 151, pass: v04Section.pass, headSha: SHA, generated: GENERATED, device: devName, limitation: LIMITATION,
       checks: v04Section.checks, checkSummary: { passed: v04Section.passed, total: v04Section.total },
-      note: "Per-frame sha256 of CANVAS-ONLY screenshots at 2 fps for 60 s. Frames 60-67 are the emulated hidden-tab window (paint must freeze, sim must keep ticking). Every 6th frame is persisted as PNG; all 120 hashes are listed.",
+      note: "Per-frame in-page 2D backing-store FNV hash (getImageData, the verified T07 method) at 2 fps for 60 s; Playwright canvas screenshot sha256 also recorded per-frame. Frames 60-67 are the emulated hidden-tab window (paint must freeze, sim must keep ticking). DEFECT #2 fix: freeze/motion checks use the backing-store hash because a live probe proved the production hidden guard freezes it (30/30 identical while document.hidden=true) even though screenshot bytes vary (compositor readback artifact). Every 6th frame is persisted as PNG; all 120 hashes are listed.",
       frames,
     });
     await context.close();
