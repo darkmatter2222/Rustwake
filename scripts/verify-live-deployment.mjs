@@ -60,7 +60,7 @@ async function verifyServedRelease() {
   try { manifest = JSON.parse(bytes.toString("utf8")); }
   catch { throw new Error("Live release manifest is not valid JSON"); }
   const files = auditManifest(manifest, EXPECTED_SHA);
-  report.source_identity = {expected_sha:EXPECTED_SHA,served_sha:manifest.source_sha,files:files.length,verified:true};
+  report.source_identity = {expected_sha:EXPECTED_SHA,served_sha:manifest.source_sha,files:files.length,verified:false};
   for (const file of files) {
     const data = await fetchBytes(file.path);
     const digest = createHash("sha256").update(data).digest("hex");
@@ -69,6 +69,7 @@ async function verifyServedRelease() {
     }
     report.assets.push({path:file.path,bytes:data.length,sha256:digest,match:true});
   }
+  report.source_identity.verified=true;
 }
 const devices = [
   {name:"desktop",viewport:{width:1440,height:900},deviceScaleFactor:1,isMobile:false,hasTouch:false},
@@ -98,10 +99,13 @@ async function visit(device) {
       } catch { /* do not persist arbitrary malformed request URL */ }
     });
     await page.goto(BASE.href,{waitUntil:"domcontentloaded",timeout:30000});
-    await page.locator(".gate__btn").waitFor({state:"visible",timeout:15000});
+    // The G1 UI rewrite may remove the legacy Begin gate; do not pin smoke to it.
+    await page.waitForFunction(()=>document.querySelector(".gate__btn") ||
+      document.querySelector("canvas[data-world3d]"),null,{timeout:15000});
     await page.screenshot({path:path.join(OUTPUT,device.name+"-gate.png"),animations:"disabled"});
     entry.screenshots.push(device.name+"-gate.png");
-    await page.locator(".gate__btn").click();
+    const begin = page.locator(".gate__btn");
+    if(await begin.count() && await begin.isVisible())await begin.click();
     await page.waitForFunction(()=>{
       const c = document.querySelector("canvas[data-world3d]");
       return c && c.dataset.world3d === "ready";
