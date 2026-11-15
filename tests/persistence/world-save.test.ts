@@ -5,7 +5,7 @@
  * failure path as a hostile sim, and the decoded yard never aliases the
  * parsed envelope.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   DEFAULT_SETTINGS,
   MAX_WORLD_RECORDS,
@@ -16,10 +16,14 @@ import {
   migrate,
   validateWorld,
 } from "../../src/game/persistence/save";
+import { TICK_MS, TUNING } from "../../src/game/content/defs";
 import { SCHEMA_VERSION, createInitialState } from "../../src/game/simulation/types";
 import { advanceWorld, createWorld, type WorldState } from "../../src/game/world";
 import { createStore } from "../../src/app/store";
+import { CATCHUP_PROTOCOL, handleCatchUp, type CatchUpRequest } from "../../src/game/workers/catchup";
+import { handleWorkerMessage } from "../../src/game/workers/catchup.worker";
 import {
+  cloneWorld,
   expectConserved,
   expectCreditsConserved,
   expectOk,
@@ -186,16 +190,30 @@ describe("world save field (#228)", () => {
   });
 });
 
-describe("store persistence join (#228 M2)", () => {
-  /** Place one generator through the real store API and advance partway. */
-  function placePartway(store: ReturnType<typeof createStore>, ticks: number): void {
-    expect(store.selectBuildAsset("generator").ok).toBe(true);
-    const cell = findLegalCell(store.getBuildWorld(), "generator");
-    store.setBuildGhostCell(cell);
-    expect(store.confirmBuildPlacement().ok).toBe(true);
-    store.step(ticks);
-  }
+/** Place one generator through the real store API and advance partway. */
+function placePartway(store: ReturnType<typeof createStore>, ticks: number): void {
+  expect(store.selectBuildAsset("generator").ok).toBe(true);
+  const cell = findLegalCell(store.getBuildWorld(), "generator");
+  store.setBuildGhostCell(cell);
+  expect(store.confirmBuildPlacement().ok).toBe(true);
+  store.step(ticks);
+}
 
+/** The economy-relevant yard slice compared by the offline-equivalence tests. */
+function yardSlice(w: WorldState) {
+  return {
+    tick: w.tick,
+    buildings: w.buildings,
+    sites: w.sites,
+    reservations: w.reservations,
+    committed: w.committed,
+    committedCredits: w.committedCredits,
+    stock: w.stock,
+    credits: w.credits,
+  };
+}
+
+describe("store persistence join (#228 M2)", () => {
   it("reload resumes with the SAME progressTicks and settles exactly once", () => {
     const storage = memoryStorage();
     // Same lease id models a reload of the owning tab; the fixed clock means
@@ -296,4 +314,121 @@ describe("store persistence join (#228 M2)", () => {
     expect(target.importSave("{ broken").ok).toBe(false);
     expect(target.getBuildWorld().sites[0].progressTicks).toBe(20);
   });
+});
+
+describe("store offline advance join (#228 M3)", () => {
+  const T0 = 1_700_000_000_000;
+
+  it("an absence advances the yard by exactly the credited ticks, identically to live play", () => {
+    const partway = yardInProgress(); // tick 70: one finished generator, one site 20/50
+    const absenceTicks = 100; // sub-cap window that finishes the partway site
+    const storage = memoryStorage();
+    storage.setItem(SAVE_KEY, encodeSave(createInitialState(), T0, DEFAULT_SETTINGS, partway));
+    const store = createStore({
+      storage,
+      now: () => T0 + absenceTicks * TICK_MS,
+      leaseId: "tab-a",
+    });
+
+    const report = store.getReturnReport();
+    expect(report).not.toBeNull();
+    expect(report?.creditedTicks).toBe(absenceTicks);
+    expect(report?.capped).toBe(false);
+
+    const yard = store.getBuildWorld();
+    expect(yard.tick).toBe(partway.tick + absenceTicks);
+    // The partway site finished during the absence; the finished one is untouched.
+    expect(yard.sites.length).toBe(0);
+    expect(yard.buildings.length).toBe(2);
+    expect(yard.reservations.length).toBe(0);
+
+    // Offline equivalence: the yard is byte-identical to a live advance of the
+    // same window from the same checkpoint (yardSlice is the economy slice).
+    const live = cloneWorld(partway);
+    advanceWorld(live, absenceTicks);
+    expect(yardSlice(yard)).toEqual(yardSlice(live));
+
+    // Single charge: the reservation moved to committed exactly once, on top of
+    // the generator that had already finished before the absence.
+    const settledSite = partway.reservations[0];
+    for (const item of settledSite.items) {
+      expect(yard.committed[item.resource]).toBe(
+        (partway.committed[item.resource] ?? 0) + item.qty,
+      );
+    }
+    expect(yard.committedCredits).toBe(partway.committedCredits + settledSite.credits);
+    // Material was reserved at placement, so completion charges nothing more.
+    expect(yard.stock).toEqual(partway.stock);
+    expect(yard.credits).toBe(partway.credits);
+
+    // The boot checkpoint durably carries the advanced yard.
+    const saved = decodeSave(storage.raw.get(SAVE_KEY) ?? null);
+    expect(saved.ok).toBe(true);
+    if (saved.ok) {
+      expect(saved.payload.world?.tick).toBe(partway.tick + absenceTicks);
+      expect(saved.payload.world?.buildings.length).toBe(2);
+      expect(saved.payload.world?.reservations.length).toBe(0);
+    }
+  });
+
+  it("a reload at the same instant credits nothing and never double-charges", () => {
+    const partway = yardInProgress();
+    const absenceTicks = 100;
+    const storage = memoryStorage();
+    storage.setItem(SAVE_KEY, encodeSave(createInitialState(), T0, DEFAULT_SETTINGS, partway));
+    const clock = T0 + absenceTicks * TICK_MS;
+    const first = createStore({ storage, now: () => clock, leaseId: "tab-a" });
+    const advanced = first.getBuildWorld();
+    expect(advanced.tick).toBe(partway.tick + absenceTicks);
+
+    // The reference moved to `clock`, so a second boot measures no gap.
+    const reopened = createStore({ storage, now: () => clock, leaseId: "tab-a" });
+    expect(reopened.getReturnReport()).toBeNull();
+    const again = reopened.getBuildWorld();
+    expect(again.tick).toBe(advanced.tick);
+    expect(yardSlice(again)).toEqual(yardSlice(advanced));
+    expect(again.committed).toEqual(advanced.committed);
+    expect(again.committedCredits).toBe(advanced.committedCredits);
+  });
+
+  it("the worker message contract agrees with the inline path and ignores stale requests", () => {
+    const request: CatchUpRequest = {
+      protocol: CATCHUP_PROTOCOL,
+      id: 7,
+      sim: createInitialState(),
+      lastSeenMs: T0,
+      nowMs: T0 + 100 * TICK_MS,
+    };
+    const post = vi.fn();
+    handleWorkerMessage(request, post);
+    expect(post).toHaveBeenCalledTimes(1);
+    const response = post.mock.calls[0][0];
+    expect(response).toEqual(handleCatchUp(request));
+    expect(response.report.creditedTicks).toBe(100);
+
+    // No request, or a foreign protocol version, posts nothing (spec 18.5).
+    const stale = vi.fn();
+    handleWorkerMessage(undefined, stale);
+    handleWorkerMessage({ ...request, protocol: CATCHUP_PROTOCOL + 99 }, stale);
+    expect(stale).not.toHaveBeenCalled();
+  });
+
+  it("a long absence caps the yard advance at the offline cap, not the full gap", () => {
+    const partway = yardInProgress();
+    const storage = memoryStorage();
+    storage.setItem(SAVE_KEY, encodeSave(createInitialState(), T0, DEFAULT_SETTINGS, partway));
+    const store = createStore({
+      storage,
+      now: () => T0 + 18 * 3600 * 1000, // 18h gap, 12h cap
+      leaseId: "tab-a",
+    });
+    const report = store.getReturnReport();
+    expect(report?.creditedTicks).toBe(TUNING.offlineCapTicks);
+    expect(report?.capped).toBe(true);
+    const yard = store.getBuildWorld();
+    // The yard rode exactly the credited window; the discarded 6h tail is never claimed.
+    expect(yard.tick).toBe(partway.tick + TUNING.offlineCapTicks);
+    expect(yard.sites.length).toBe(0);
+    expect(yard.buildings.length).toBe(2);
+  }, 30_000);
 });

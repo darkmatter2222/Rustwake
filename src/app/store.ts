@@ -687,6 +687,11 @@ export function createStore(
   /** Adopts a settled catch-up, then applies what the player typed while it ran. */
   const adoptCatchUp = (settled: CatchUpResponse) => {
     state = settled.sim;
+    // #228: the yard advances by exactly the credited absence ticks — the same
+    // window the sim just settled (offline equivalence). Progress is derived
+    // from integer ticks and settlement is idempotent, so a repeat adoption
+    // (creditedTicks 0 after the reference moved) never double-charges.
+    settleBuildWorld(settled.report.creditedTicks);
     adoptedAtFrame = frameClock();
     lastSeenMs = Math.max(lastSeenMs, settled.nextLastSeenMs);
     if (settled.report.creditedTicks > 0) returnReport = settled.report;
@@ -699,6 +704,9 @@ export function createStore(
     }
     if (deferredTicks > 0) {
       advance(state, deferredTicks);
+      // Live ticks deferred during the worker run reach the yard exactly once,
+      // after the absence window: disjoint windows, chronological order.
+      settleBuildWorld(deferredTicks);
       deferredTicks = 0;
     }
     lastFrameMs = frameClock();
