@@ -6,12 +6,12 @@ const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
 const mat=(hex,metalness=.07,roughness=.78)=>new THREE.MeshStandardMaterial({color:hex,metalness,roughness,flatShading:true});
 const mats={
- asphalt:mat("#222c31"),line:mat("#e5ac60"),earth:mat("#55534a"),rock:mat("#77715c"),
- steel:mat("#8fa0a1",.42),dark:mat("#33474e",.38),rust:mat("#b87549",.3),
+ asphalt:mat("#283840"),line:mat("#e5ac60"),earth:mat("#756b55"),rock:mat("#91806b"),
+ steel:mat("#b2bfbd",.42),dark:mat("#33474e",.38),rust:mat("#c78355",.3),
  orange:mat("#e7a25d",.36),lights:new THREE.MeshStandardMaterial({color:"#86d5c5",emissive:"#4baba7",emissiveIntensity:1.1}),
  furnace:new THREE.MeshStandardMaterial({color:"#f98b50",emissive:"#cf431c",emissiveIntensity:1.8}),
- roof:mat("#57696c",.35),body:mat("#697e82",.4),glass:mat("#9ab9bc",.1,.22),
- sand:mat("#6e6250"),wood:mat("#80644d"),black:mat("#151d23",.1)
+ roof:mat("#70888b",.35),body:mat("#839c9e",.4),glass:mat("#9ab9bc",.1,.22),
+ sand:mat("#8d7b5d"),wood:mat("#80644d"),black:mat("#151d23",.1)
 };
 const geo=new THREE.BoxGeometry(1,1,1);
 function box(parent,x,y,z,w,h,d,material){
@@ -142,17 +142,17 @@ function seeded(seed){let s=seed>>>0;return ()=>{s=(Math.imul(s,1664525)+1013904
 export class LivingWorld{
  constructor(host){
   this.host=host;this.scene=new THREE.Scene();
-  this.scene.background=new THREE.Color("#1a2930");this.scene.fog=new THREE.FogExp2("#27323a",.007);
+  this.scene.background=new THREE.Color("#1a2930");this.scene.fog=new THREE.FogExp2("#3e4240",.0038);
   this.camera=new THREE.OrthographicCamera(-25,25,15,-15,.1,600);
   this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
   this.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
   this.renderer.outputColorSpace=THREE.SRGBColorSpace;
-  this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.55;
+  this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.9;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   this.renderer.domElement.className="world-canvas";this.renderer.domElement.dataset.world3d="initializing";this.renderer.domElement.setAttribute("aria-label","Rustwake interactive 3D salvage sandbox");
   host.appendChild(this.renderer.domElement);
-  this.scene.add(new THREE.HemisphereLight("#cadde2","#665a46",2.05));
-  const sun=new THREE.DirectionalLight("#ffe5b3",3.0);sun.position.set(-45,90,38);
+  this.scene.add(new THREE.HemisphereLight("#d8e7e3","#897754",2.5));
+  const sun=new THREE.DirectionalLight("#ffe5b3",3.65);sun.position.set(-45,90,38);
   sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
   sun.shadow.camera.left=-130;sun.shadow.camera.right=130;sun.shadow.camera.top=130;sun.shadow.camera.bottom=-130;
   sun.shadow.bias=-.0001;this.scene.add(sun);
@@ -190,6 +190,31 @@ export class LivingWorld{
   for(const [x,z] of containers){
    box(this.scenery,x,1,z,5,2,2.6,"rust");
    for(let p=-2;p<2;p+=.85)box(this.scenery,x+p,1.9,z, .06,.1,2.4,"steel");
+  }
+
+  // Frontier infrastructure landmarks: heavy industry creates visual depth
+  // from the first frame, without pretending decorative structures produce.
+  const service=new THREE.Group();this.scenery.add(service);
+  for(const [x,z] of [[-30,-23],[29,23]]){
+   box(service,x,2.0,z,9,3.9,5.7,"body");
+   box(service,x,4.2,z,9.6,.58,6.15,"roof");
+   for(let j=-1;j<=1;j++)box(service,x+j*2.5,2.5,z+2.92,1.6,1.35,.09,"dark");
+   for(let j=-1;j<=1;j++)box(service,x+j*2.5,4.52,z,.4,.12,3.8,"steel");
+   cylinder(service,x-3.4,6.4,z-1.8,.22,4.5,"rust");
+  }
+  for(const [x,z] of [[-28,17],[27,-20]]){
+   for(let i=0;i<3;i++){
+    const sx=x+(i-1)*2.8;
+    cylinder(service,sx,2.6,z,1.15,5.2,i===1?"rust":"steel");
+    cylinder(service,sx,5.55,z,.88,.6,"roof");
+    box(service,sx,1.1,z+1.2,.22,1.8,.35,"orange");
+   }
+  }
+  for(const [x,z] of [[-19,-32],[19,32]]){
+   box(service,x,1.05,z,6,1.6,2.3,"rust");
+   box(service,x,2.05,z,6.1,.25,2.45,"roof");
+   for(let j=-2;j<=2;j++)box(service,x+j*1.0,1.25,z+1.2,.12,.55,.1,"steel");
+   box(service,x+3.2,2.45,z,.28,4.8,.28,"orange");
   }
   for(let i=0;i<52;i++){
    const a=rand()*Math.PI*2,r=EDGE*.50+rand()*17;
