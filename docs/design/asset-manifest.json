@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "source": "original V2 repository preservation; prior glTF procedural blockouts",
+  "approved_style": "public/reference/approved-yard.png",
+  "supplemental_style": "public/reference/asset-style-sheet.png",
+  "recipes": "docs/asset-kit/kit.json",
+  "import_policy": "Reference-only until integrated, tested and vision-reviewed; do not assume old blockouts are production art",
+  "assets": [
+    {
+      "id": "crane",
+      "path": "public/assets/blockouts/crane.gltf",
+      "purpose": "Utility hoist with physical cargo animation requirement",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "depot",
+      "path": "public/assets/blockouts/depot.gltf",
+      "purpose": "Freight warehouse and entry/exit loading sockets",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "drone",
+      "path": "public/assets/blockouts/drone.gltf",
+      "purpose": "Flight unit with state-driven cargo",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "forklift",
+      "path": "public/assets/blockouts/forklift.gltf",
+      "purpose": "Loading unit and correct truck scale",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "furnace",
+      "path": "public/assets/blockouts/furnace.gltf",
+      "purpose": "Induction furnace, heat/power animations",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "generator",
+      "path": "public/assets/blockouts/generator.gltf",
+      "purpose": "Fans/shaft spin only when supplying load",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "sorter",
+      "path": "public/assets/blockouts/sorter.gltf",
+      "purpose": "Mechanical separation with physical inputs/outputs",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "truck",
+      "path": "public/assets/blockouts/truck.gltf",
+      "purpose": "Cargo reservation and dynamic load visuals",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "turret",
+      "path": "public/assets/blockouts/turret.gltf",
+      "purpose": "Later factory supplied defense",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "wall_gate",
+      "path": "public/assets/blockouts/wall_gate.gltf",
+      "purpose": "Road navigation/defense gates",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "warehouse",
+      "path": "public/assets/blockouts/warehouse.gltf",
+      "purpose": "Inventory/stock capacity",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "worker",
+      "path": "public/assets/blockouts/worker.gltf",
+      "purpose": "Scale reference and future human movement",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    },
+    {
+      "id": "wreckSections",
+      "path": "public/assets/blockouts/wreckSections.gltf",
+      "purpose": "Salvage source and exploration props",
+      "stage": "original blockout; not automatically production-approved",
+      "review_required": [
+        "scale",
+        "pivot",
+        "footprint",
+        "material_palette",
+        "animation",
+        "performance",
+        "selection",
+        "mobile_readability"
+      ]
+    }
+  ]
+}
