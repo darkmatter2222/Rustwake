@@ -123,11 +123,13 @@ export default function App(){
  const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
  const zoomControl=useCallback((factor)=>{
   const world=worldRef.current,cv=world?.renderer.domElement;
-  if(!world||!cv)return;
+  document.body.dataset.lastZoomRequested=String(factor);
+  if(!world||!cv){document.body.dataset.lastZoomError="world-missing";return;}
   const rect=cv.getBoundingClientRect(),size={width:rect.width,height:rect.height};
   camera.current=zoomAtPixel(camera.current,camera.current.zoom*factor,
     {x:size.width/2,y:size.height/2},size);
   world.setView(camera.current);world.applyCamera();
+  document.body.dataset.lastZoomApplied=String(camera.current.zoom);
  },[]);
  useEffect(()=>{
   if(!sceneHost.current)return;
