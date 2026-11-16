@@ -12,6 +12,12 @@ jobs:
         with:
           sparse-checkout: |
             .github
+            .qwen
+            .opencode
+            docs
+            AGENTS.md
+            QWEN.md
+            goal.md
             src
             scripts
             tests
@@ -28,6 +34,7 @@ jobs:
       - run: npm ci
       - run: npm run validate
       - run: npm test
+      - run: node scripts/check-studio-docs.mjs
       - run: npm run build
       - name: Install one Chromium binary for PR visual smoke
         if: github.event_name == 'pull_request'
