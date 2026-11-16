@@ -144,6 +144,34 @@
       "mission": "One preexisting browser artifact, live source verification and runtime defects.",
       "spawned_by": "coordinator",
       "concurrent_slot_cost": 1
+    },
+    {
+      "id": "cicd-engineer",
+      "effort_intent": "medium",
+      "mission": "Maintain GitHub-hosted builds, tests, artifact provenance and trusted runner boundaries without deploying unreviewed code.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "production-release-manager",
+      "effort_intent": "low",
+      "mission": "Coordinate approved releases, go/no-go and incidents; release engineer remains sole merge integrator.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "staging-verifier",
+      "effort_intent": "medium",
+      "mission": "Independently validate PR preview built source, desktop/phone screenshots, functional regressions and environment parity.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "site-reliability-engineer",
+      "effort_intent": "medium",
+      "mission": "Observe live health, deployment provenance, rollback readiness and incidents without privileged improvisation.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
     }
   ]
 }
