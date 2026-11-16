@@ -29,4 +29,17 @@ jobs:
       - run: npm run validate
       - run: npm test
       - run: npm run build
+      - name: Install one Chromium binary for PR visual smoke
+        if: github.event_name == 'pull_request'
+        run: npx playwright-core install --with-deps chromium
+      - name: Capture the actual V2 production build on desktop and phone
+        if: github.event_name == 'pull_request'
+        run: node scripts/capture-v2.mjs
+      - uses: actions/upload-artifact@v4
+        if: always() && github.event_name == 'pull_request'
+        with:
+          name: rustwake-v2-visual-preview
+          path: artifacts/v2-preview/
+          if-no-files-found: warn
+          retention-days: 14
       - run: node --test scripts/package-dashboard.test.mjs
