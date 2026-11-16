@@ -75,7 +75,7 @@ try{
     const zoomButton=page.getByRole("button",{name:"Zoom in"});
     await zoomButton.click();await page.waitForTimeout(130);
     const buttonZoom=await pose();
-    if(buttonZoom.zoom<=zoomed.zoom)throw Error("Visible Zoom in control did not work: initial="+first.zoom+", wheel="+zoomed.zoom+", button="+buttonZoom.zoom);
+    if(buttonZoom.zoom<=zoomed.zoom)throw Error("Visible Zoom in control did not work: initial="+first.zoom+", wheel="+zoomed.zoom+", button="+buttonZoom.zoom+", clickTrace="+JSON.stringify(await page.evaluate(()=>({...document.body.dataset})))+", jsErrors="+errs.join(";"));
     gripProof={dragWorldError:dragError,wheelWorldError:zoomError,
       initialZoom:first.zoom,afterWheel:zoomed.zoom,afterZoomButton:buttonZoom.zoom,
       expected:"ground coordinate remains directly beneath moving cursor"};
