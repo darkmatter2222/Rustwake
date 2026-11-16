@@ -1,0 +1,5042 @@
+{
+  "schemaVersion": 1,
+  "units": "world units; 1 unit = 1 cell, conceptual 2m",
+  "axes": "right handed Y-up; forward +Z",
+  "detailQuantum": 0.125,
+  "palette": {
+    "sand": "#BA8054",
+    "oxide": "#A34F32",
+    "oxideLight": "#C47746",
+    "cream": "#D6C7A3",
+    "charcoal": "#292C29",
+    "steel": "#7C8078",
+    "olive": "#777746",
+    "yellow": "#C99A35",
+    "amber": "#FFB348",
+    "rubber": "#33332F"
+  },
+  "assets": [
+    {
+      "id": "warehouse",
+      "footprint": [
+        6,
+        4
+      ],
+      "description": "Cream warehouse, two unobstructed front bays, stepped oxide roof. Doors lift independently; roof vent fan and rear pallet lift.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "foundation",
+          "parent": "root",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            6,
+            0.2,
+            4
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "structure",
+          "center": [
+            0,
+            1.1,
+            -1.85
+          ],
+          "size": [
+            5.8,
+            2.2,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "side-1",
+          "parent": "structure",
+          "center": [
+            -2.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "side1",
+          "parent": "structure",
+          "center": [
+            2.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "roofBase",
+          "parent": "roof",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            6.1,
+            0.2,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep-1",
+          "parent": "roof",
+          "center": [
+            -1.32,
+            0.3,
+            0
+          ],
+          "size": [
+            2.88,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep1",
+          "parent": "roof",
+          "center": [
+            1.32,
+            0.3,
+            0
+          ],
+          "size": [
+            2.88,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "ridge",
+          "parent": "roof",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            2.0999999999999996,
+            0.2,
+            4.1
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "frontLintel",
+          "parent": "structure",
+          "center": [
+            0,
+            2.0,
+            1.85
+          ],
+          "size": [
+            5.8,
+            0.4,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "centerPier",
+          "parent": "structure",
+          "center": [
+            0,
+            1.0,
+            1.85
+          ],
+          "size": [
+            0.35,
+            2,
+            0.25
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "doorPanel0",
+          "parent": "door0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2.2,
+            1.7,
+            0.12
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "doorPanel1",
+          "parent": "door1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            2.2,
+            1.7,
+            0.12
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "ventHousing",
+          "parent": "roof",
+          "center": [
+            1.75,
+            0.5,
+            -1
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.5
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "ventAxle",
+          "parent": "ventFan",
+          "center": [
+            0,
+            -0.125,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "ventBladeX",
+          "parent": "ventFan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.125,
+            0.125
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "ventBladeZ",
+          "parent": "ventFan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.5
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "liftPlatform",
+          "parent": "palletLift",
+          "center": [
+            0,
+            0.125,
+            -0.25
+          ],
+          "size": [
+            1.25,
+            0.25,
+            0.5
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "liftPallet",
+          "parent": "palletLift",
+          "center": [
+            0,
+            0.375,
+            -0.25
+          ],
+          "size": [
+            0.75,
+            0.25,
+            0.375
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        },
+        {
+          "name": "door0",
+          "parent": "root",
+          "position": [
+            -1.55,
+            1.0,
+            1.85
+          ]
+        },
+        {
+          "name": "door1",
+          "parent": "root",
+          "position": [
+            1.55,
+            1.0,
+            1.85
+          ]
+        },
+        {
+          "name": "ventFan",
+          "parent": "roof",
+          "position": [
+            1.75,
+            0.75,
+            -1
+          ]
+        },
+        {
+          "name": "palletLift",
+          "parent": "root",
+          "position": [
+            1.5,
+            0,
+            -1.5
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "bay0",
+          "position": [
+            -1.55,
+            0,
+            2.15
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 2.2
+        },
+        {
+          "name": "bay1",
+          "position": [
+            1.55,
+            0,
+            2.15
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 2.2
+        }
+      ],
+      "animations": [
+        {
+          "name": "assemble_structure",
+          "target": "structure",
+          "path": "scale",
+          "times": [
+            0,
+            0.6,
+            2.8,
+            5
+          ],
+          "values": [
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "assemble_roof",
+          "target": "roof",
+          "path": "translation",
+          "times": [
+            0,
+            2.8,
+            3.8,
+            5
+          ],
+          "values": [
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door0_open",
+          "target": "door0",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              -1.55,
+              1,
+              1.85
+            ],
+            [
+              -1.55,
+              2.7,
+              1.85
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door1_open",
+          "target": "door1",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              1.55,
+              1,
+              1.85
+            ],
+            [
+              1.55,
+              2.7,
+              1.85
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "vent_fan",
+          "target": "ventFan",
+          "path": "rotation",
+          "times": [
+            0,
+            6.5,
+            13
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "pallet_lift",
+          "target": "palletLift",
+          "path": "translation",
+          "times": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "values": [
+            [
+              1.5,
+              0,
+              -1.5
+            ],
+            [
+              1.5,
+              0.625,
+              -1.5
+            ],
+            [
+              1.5,
+              0.625,
+              -1.5
+            ],
+            [
+              1.5,
+              0,
+              -1.5
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "depot",
+      "footprint": [
+        4,
+        4
+      ],
+      "description": "Yellow garage with wide front bay, lifting steel service door and slow roof vent fan.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "foundation",
+          "parent": "root",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            4,
+            0.2,
+            4
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "structure",
+          "center": [
+            0,
+            1.1,
+            -1.85
+          ],
+          "size": [
+            3.8,
+            2.2,
+            0.25
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "side-1",
+          "parent": "structure",
+          "center": [
+            -1.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "side1",
+          "parent": "structure",
+          "center": [
+            1.85,
+            1.1,
+            0
+          ],
+          "size": [
+            0.25,
+            2.2,
+            3.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "roofBase",
+          "parent": "roof",
+          "center": [
+            0,
+            0.1,
+            0
+          ],
+          "size": [
+            4.1,
+            0.2,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep-1",
+          "parent": "roof",
+          "center": [
+            -0.88,
+            0.3,
+            0
+          ],
+          "size": [
+            1.92,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "roofStep1",
+          "parent": "roof",
+          "center": [
+            0.88,
+            0.3,
+            0
+          ],
+          "size": [
+            1.92,
+            0.25,
+            4.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "ridge",
+          "parent": "roof",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            1.4,
+            0.2,
+            4.1
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "lintel",
+          "parent": "structure",
+          "center": [
+            0,
+            2,
+            1.85
+          ],
+          "size": [
+            3.8,
+            0.4,
+            0.2
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "doorPanel",
+          "parent": "door",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            3.2,
+            1.625,
+            0.25
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "ventHousing",
+          "parent": "roof",
+          "center": [
+            1,
+            0.5,
+            -1
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.5
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "ventAxle",
+          "parent": "ventFan",
+          "center": [
+            0,
+            -0.125,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "ventBladeX",
+          "parent": "ventFan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.125,
+            0.125
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "ventBladeZ",
+          "parent": "ventFan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.5
+          ],
+          "material": "cream"
+        }
+      ],
+      "groups": [
+        {
+          "name": "structure",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "position": [
+            0,
+            2.2,
+            0
+          ]
+        },
+        {
+          "name": "door",
+          "parent": "root",
+          "position": [
+            0,
+            1,
+            1.875
+          ]
+        },
+        {
+          "name": "ventFan",
+          "parent": "roof",
+          "position": [
+            1,
+            0.75,
+            -1
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "serviceBay",
+          "position": [
+            0,
+            0,
+            2.2
+          ],
+          "kind": "truck",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 3.2
+        }
+      ],
+      "animations": [
+        {
+          "name": "assemble_structure",
+          "target": "structure",
+          "path": "scale",
+          "times": [
+            0,
+            0.6,
+            2.8,
+            5
+          ],
+          "values": [
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              0.001,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              1,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "assemble_roof",
+          "target": "roof",
+          "path": "translation",
+          "times": [
+            0,
+            2.8,
+            3.8,
+            5
+          ],
+          "values": [
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              0.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ],
+            [
+              0,
+              2.2,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door_open",
+          "target": "door",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              0,
+              1,
+              1.875
+            ],
+            [
+              0,
+              2.625,
+              1.875
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "vent_fan",
+          "target": "ventFan",
+          "path": "rotation",
+          "times": [
+            0,
+            8.5,
+            17
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "sorter",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Olive hopper with short dark belt emerging at front; twin rollers and batch magnet sweep gantry.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.8,
+            -0.3
+          ],
+          "size": [
+            2.4,
+            1.6,
+            1.8
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "hopper",
+          "parent": "root",
+          "center": [
+            0,
+            1.8,
+            -0.3
+          ],
+          "size": [
+            2.6,
+            0.4,
+            2
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "belt",
+          "parent": "root",
+          "center": [
+            0,
+            0.6,
+            1.1
+          ],
+          "size": [
+            1,
+            0.2,
+            1.6
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "rollerMesh",
+          "parent": "roller",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            0.18,
+            0.18
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "rollerMesh2",
+          "parent": "roller2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1,
+            0.125,
+            0.125
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "gantryPostL",
+          "parent": "root",
+          "center": [
+            -0.625,
+            0.625,
+            1.125
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "gantryPostR",
+          "parent": "root",
+          "center": [
+            0.625,
+            0.625,
+            1.125
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "gantryBar",
+          "parent": "root",
+          "center": [
+            0,
+            1.25,
+            1.125
+          ],
+          "size": [
+            1.375,
+            0.125,
+            0.125
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "magnetBody",
+          "parent": "magnet",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.375,
+            0.25,
+            0.375
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "magnetTip",
+          "parent": "magnet",
+          "center": [
+            0,
+            -0.125,
+            0
+          ],
+          "size": [
+            0.25,
+            0.125,
+            0.25
+          ],
+          "material": "amber"
+        }
+      ],
+      "groups": [
+        {
+          "name": "roller",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            1.3
+          ]
+        },
+        {
+          "name": "roller2",
+          "parent": "root",
+          "position": [
+            0,
+            0.5,
+            1.375
+          ]
+        },
+        {
+          "name": "magnet",
+          "parent": "root",
+          "position": [
+            0,
+            1.125,
+            1.125
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "output",
+          "position": [
+            0,
+            0,
+            1.6
+          ],
+          "kind": "belt",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1
+        }
+      ],
+      "animations": [
+        {
+          "name": "roller_work",
+          "target": "roller",
+          "path": "rotation",
+          "times": [
+            0,
+            1,
+            2
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "roller2_work",
+          "target": "roller2",
+          "path": "rotation",
+          "times": [
+            0,
+            1,
+            2
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "magnet_sweep",
+          "target": "magnet",
+          "path": "rotation",
+          "times": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0.3826834324,
+              0,
+              0.9238795325
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              -0.3826834324,
+              0,
+              0.9238795325
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "furnace",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Oxide furnace with open amber mouth, tall chimney, side cooling fan, pour spout and sparse vent puff.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.15,
+            0
+          ],
+          "size": [
+            3,
+            0.3,
+            3
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "back",
+          "parent": "root",
+          "center": [
+            0,
+            1.05,
+            -0.7
+          ],
+          "size": [
+            2.5,
+            1.8,
+            1.1
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "left",
+          "parent": "root",
+          "center": [
+            -0.9,
+            0.85,
+            0.4
+          ],
+          "size": [
+            0.5,
+            1.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "right",
+          "parent": "root",
+          "center": [
+            0.9,
+            0.85,
+            0.4
+          ],
+          "size": [
+            0.5,
+            1.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "lintel",
+          "parent": "root",
+          "center": [
+            0,
+            1.6,
+            0.4
+          ],
+          "size": [
+            2.3,
+            0.4,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "glow",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0.55
+          ],
+          "size": [
+            1.2,
+            0.25,
+            1.1
+          ],
+          "material": "amber"
+        },
+        {
+          "name": "chimney",
+          "parent": "root",
+          "center": [
+            0.65,
+            2.4,
+            -0.65
+          ],
+          "size": [
+            0.55,
+            2,
+            0.55
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "door",
+          "parent": "intakeDoor",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1.3,
+            0.9,
+            0.12
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "fanHousing",
+          "parent": "root",
+          "center": [
+            -1.25,
+            0.875,
+            0.375
+          ],
+          "size": [
+            0.25,
+            0.5,
+            0.5
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "fanBladeY",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.5,
+            0.125
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "fanBladeZ",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.5
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "spout",
+          "parent": "pourSpout",
+          "center": [
+            0,
+            0,
+            0.25
+          ],
+          "size": [
+            0.375,
+            0.125,
+            0.5
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "puff",
+          "parent": "ventPuff",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.375,
+            0.25,
+            0.375
+          ],
+          "material": "cream"
+        }
+      ],
+      "groups": [
+        {
+          "name": "intakeDoor",
+          "parent": "root",
+          "position": [
+            0,
+            1.0,
+            1.2
+          ]
+        },
+        {
+          "name": "fan",
+          "parent": "root",
+          "position": [
+            -1.375,
+            0.875,
+            0.375
+          ]
+        },
+        {
+          "name": "pourSpout",
+          "parent": "root",
+          "position": [
+            0,
+            1.75,
+            0.875
+          ]
+        },
+        {
+          "name": "ventPuff",
+          "parent": "root",
+          "position": [
+            0.625,
+            3.5,
+            -0.625
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "input",
+          "position": [
+            0,
+            0,
+            1.7
+          ],
+          "kind": "pallet",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1.3
+        }
+      ],
+      "animations": [
+        {
+          "name": "intake",
+          "target": "intakeDoor",
+          "path": "translation",
+          "times": [
+            0,
+            0.6,
+            1.4,
+            2
+          ],
+          "values": [
+            [
+              0,
+              1,
+              1.2
+            ],
+            [
+              0,
+              1.9,
+              1.2
+            ],
+            [
+              0,
+              1.9,
+              1.2
+            ],
+            [
+              0,
+              1,
+              1.2
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "fan_work",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.85,
+            1.7
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "pour",
+          "target": "pourSpout",
+          "path": "rotation",
+          "times": [
+            0,
+            0.8,
+            1.6,
+            2.4
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0.2588190451,
+              0,
+              0,
+              0.9659258263
+            ],
+            [
+              0.2588190451,
+              0,
+              0,
+              0.9659258263
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "vent_puff",
+          "target": "ventPuff",
+          "path": "scale",
+          "times": [
+            0,
+            1,
+            2,
+            11
+          ],
+          "values": [
+            [
+              0.5,
+              0.5,
+              0.5
+            ],
+            [
+              1,
+              1,
+              1
+            ],
+            [
+              0.5,
+              0.5,
+              0.5
+            ],
+            [
+              0.5,
+              0.5,
+              0.5
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "generator",
+      "footprint": [
+        2,
+        2
+      ],
+      "description": "Olive generator with visible cream fan in charcoal frame, drive shaft and start/load/spin-down channels.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "housing",
+          "parent": "root",
+          "center": [
+            0,
+            0.65,
+            0
+          ],
+          "size": [
+            1.7,
+            1.3,
+            1.6
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "fanFrame",
+          "parent": "root",
+          "center": [
+            0,
+            0.75,
+            0.84
+          ],
+          "size": [
+            1,
+            1,
+            0.12
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "fanX",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.8,
+            0.12,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "fanY",
+          "parent": "fan",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.12,
+            0.8,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "shaftBar",
+          "parent": "shaft",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.25
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "fan",
+          "parent": "root",
+          "position": [
+            0,
+            0.75,
+            0.93
+          ]
+        },
+        {
+          "name": "shaft",
+          "parent": "root",
+          "position": [
+            0,
+            0.75,
+            0.875
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "fan_powered",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.85,
+            1.7
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "shaft_drive",
+          "target": "shaft",
+          "path": "rotation",
+          "times": [
+            0,
+            0.85,
+            1.7
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "fan_idle",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            1.7,
+            3.4
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "fan_load_high",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.425,
+            0.85
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "fan_start",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1.2,
+            2.2,
+            3.6
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              0.0871557427,
+              0.9961946981
+            ],
+            [
+              0,
+              0,
+              0.5,
+              0.8660254038
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "fan_spin_down",
+          "target": "fan",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1.2,
+            2.2,
+            3.6
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0.5,
+              -0.8660254038
+            ],
+            [
+              0,
+              0,
+              0.0871557427,
+              -0.9961946981
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "crane",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Production mobile crane rig: 3x3 base, slewing tower/boom with counterweight and operator cab, hoist cable with opening grip claws. Slew/hoist/grip/place channels; suspended load never grounds. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.3,
+            0
+          ],
+          "size": [
+            2.2,
+            0.6,
+            2.2
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "tower",
+          "parent": "slew",
+          "center": [
+            0,
+            1,
+            0
+          ],
+          "size": [
+            0.8,
+            2,
+            0.8
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "boom",
+          "parent": "slew",
+          "center": [
+            1,
+            2,
+            0
+          ],
+          "size": [
+            3,
+            0.3,
+            0.4
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "cable",
+          "parent": "hoist",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            0.06,
+            1,
+            0.06
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "grip",
+          "parent": "hoist",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.2,
+            0.5
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "counterweight",
+          "parent": "slew",
+          "center": [
+            -1.125,
+            1.875,
+            0
+          ],
+          "size": [
+            0.625,
+            0.5,
+            0.875
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "supportArm",
+          "parent": "slew",
+          "center": [
+            -0.625,
+            1.75,
+            0
+          ],
+          "size": [
+            0.75,
+            0.375,
+            0.375
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "cab",
+          "parent": "slew",
+          "center": [
+            0.625,
+            1.375,
+            0.5
+          ],
+          "size": [
+            0.5,
+            0.625,
+            0.5
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "cabWindow",
+          "parent": "slew",
+          "center": [
+            0.625,
+            1.5,
+            0.75
+          ],
+          "size": [
+            0.375,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "clawLBlade",
+          "parent": "clawL",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.375,
+            0.375
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "clawRBlade",
+          "parent": "clawR",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.125,
+            0.375,
+            0.375
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "slew",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "hoist",
+          "parent": "slew",
+          "position": [
+            2.2,
+            1.2,
+            0
+          ]
+        },
+        {
+          "name": "clawL",
+          "parent": "hoist",
+          "position": [
+            -0.125,
+            -0.125,
+            0
+          ]
+        },
+        {
+          "name": "clawR",
+          "parent": "hoist",
+          "position": [
+            0.125,
+            -0.125,
+            0
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "hoist_lift",
+          "target": "hoist",
+          "path": "translation",
+          "times": [
+            0,
+            1.8
+          ],
+          "values": [
+            [
+              2.2,
+              1.075,
+              0
+            ],
+            [
+              2.2,
+              1.2,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "slew_rotate",
+          "target": "slew",
+          "path": "rotation",
+          "times": [
+            0,
+            2,
+            3,
+            5
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0.7071067811865475,
+              0,
+              0.7071067811865476
+            ],
+            [
+              0,
+              0.7071067811865475,
+              0,
+              0.7071067811865476
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "hoist_place",
+          "target": "hoist",
+          "path": "translation",
+          "times": [
+            0,
+            1.8
+          ],
+          "values": [
+            [
+              2.2,
+              1.2,
+              0
+            ],
+            [
+              2.2,
+              1.075,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "grip_openL",
+          "target": "clawL",
+          "path": "translation",
+          "times": [
+            0,
+            0.5
+          ],
+          "values": [
+            [
+              -0.125,
+              -0.125,
+              0
+            ],
+            [
+              -0.25,
+              -0.125,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "grip_openR",
+          "target": "clawR",
+          "path": "translation",
+          "times": [
+            0,
+            0.5
+          ],
+          "values": [
+            [
+              0.125,
+              -0.125,
+              0
+            ],
+            [
+              0.25,
+              -0.125,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "truck",
+      "footprint": [
+        1,
+        3
+      ],
+      "description": "Production truck rig: cream cab with opening side doors, oxide bed with folding tailgate and brake lights, six rolling wheels (front pair steers), body suspension and cargo-load channels. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "chassis",
+          "parent": "body",
+          "center": [
+            0,
+            0.35,
+            0
+          ],
+          "size": [
+            0.9,
+            0.2,
+            2.5
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "cab",
+          "parent": "body",
+          "center": [
+            0,
+            0.85,
+            0.75
+          ],
+          "size": [
+            0.75,
+            0.9,
+            0.85
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "windshield",
+          "parent": "body",
+          "center": [
+            0,
+            1,
+            1.125
+          ],
+          "size": [
+            0.625,
+            0.375,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "bed",
+          "parent": "body",
+          "center": [
+            0,
+            0.65,
+            -0.375
+          ],
+          "size": [
+            1,
+            0.2,
+            1.25
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "pallet",
+          "parent": "cargo",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            0.8,
+            0.5,
+            1.1
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "wheel_-1_0Mesh",
+          "parent": "wheel_-1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_-1_1Mesh",
+          "parent": "wheel_-1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_-1_2Mesh",
+          "parent": "wheel_-1_2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_0Mesh",
+          "parent": "wheel_1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_1Mesh",
+          "parent": "wheel_1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_2Mesh",
+          "parent": "wheel_1_2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.18,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "bedMount",
+          "parent": "body",
+          "center": [
+            0,
+            0.5,
+            -0.375
+          ],
+          "size": [
+            0.875,
+            0.125,
+            1
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "doorPanel-1",
+          "parent": "door-1",
+          "center": [
+            0,
+            0,
+            -0.25
+          ],
+          "size": [
+            0.125,
+            0.75,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "doorPanel1",
+          "parent": "door1",
+          "center": [
+            0,
+            0,
+            -0.25
+          ],
+          "size": [
+            0.125,
+            0.75,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "tailgatePanel",
+          "parent": "tailgate",
+          "center": [
+            0,
+            0.25,
+            -0.125
+          ],
+          "size": [
+            1,
+            0.5,
+            0.25
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "brakeLight-1",
+          "parent": "tailgate",
+          "center": [
+            -0.375,
+            0.5,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.25
+          ],
+          "material": "amber"
+        },
+        {
+          "name": "brakeLight1",
+          "parent": "tailgate",
+          "center": [
+            0.375,
+            0.5,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.25
+          ],
+          "material": "amber"
+        }
+      ],
+      "groups": [
+        {
+          "name": "cargo",
+          "parent": "root",
+          "position": [
+            0,
+            0.8,
+            -0.45
+          ]
+        },
+        {
+          "name": "wheel_-1_0",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            0.8
+          ]
+        },
+        {
+          "name": "wheel_-1_1",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            -0.4
+          ]
+        },
+        {
+          "name": "wheel_-1_2",
+          "parent": "root",
+          "position": [
+            -0.5,
+            0.3,
+            -0.95
+          ]
+        },
+        {
+          "name": "wheel_1_0",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            0.8
+          ]
+        },
+        {
+          "name": "wheel_1_1",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            -0.4
+          ]
+        },
+        {
+          "name": "wheel_1_2",
+          "parent": "root",
+          "position": [
+            0.5,
+            0.3,
+            -0.95
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "door-1",
+          "parent": "body",
+          "position": [
+            -0.375,
+            0.875,
+            1
+          ]
+        },
+        {
+          "name": "door1",
+          "parent": "body",
+          "position": [
+            0.375,
+            0.875,
+            1
+          ]
+        },
+        {
+          "name": "tailgate",
+          "parent": "body",
+          "position": [
+            0,
+            0.25,
+            -1
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "cargo",
+          "position": [
+            0,
+            0.8,
+            -0.45
+          ],
+          "kind": "cargo",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 0.8
+        }
+      ],
+      "animations": [
+        {
+          "name": "wheel_-1_0_roll",
+          "target": "wheel_-1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "target": "wheel_-1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_-1_2_roll",
+          "target": "wheel_-1_2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "target": "wheel_1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "target": "wheel_1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_2_roll",
+          "target": "wheel_1_2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "door_open-1",
+          "target": "door-1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.8
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              0.49999999999999994,
+              0,
+              0.8660254037844387
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "door_open1",
+          "target": "door1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.8
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              -0.49999999999999994,
+              0,
+              0.8660254037844387
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "tailgate_open",
+          "target": "tailgate",
+          "path": "rotation",
+          "times": [
+            0,
+            0.9
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              -0.7071067811865475,
+              0,
+              0,
+              0.7071067811865476
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "suspension_bounce",
+          "target": "body",
+          "path": "translation",
+          "times": [
+            0,
+            0.4,
+            0.8
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              -0.125,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "wheel_-1_0_steer",
+          "target": "wheel_-1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.6
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              -0.25881904510252074,
+              0,
+              0.9659258262890683
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "wheel_1_0_steer",
+          "target": "wheel_1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.6
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              -0.25881904510252074,
+              0,
+              0.9659258262890683
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "load_pallet",
+          "target": "cargo",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              0,
+              1.55,
+              -0.45
+            ],
+            [
+              0,
+              0.8,
+              -0.45
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "forklift",
+      "footprint": [
+        1,
+        2
+      ],
+      "description": "Production forklift rig: yellow body, charcoal mast with tilting carriage and spreading forks, operator seat/roof, four rolling wheels. Parked forks lowered. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            -0.3
+          ],
+          "size": [
+            0.9,
+            0.7,
+            1.1
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "mast",
+          "parent": "root",
+          "center": [
+            0,
+            1,
+            0.5
+          ],
+          "size": [
+            0.8,
+            2,
+            0.15
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "crossbar",
+          "parent": "tilt",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.8,
+            0.15,
+            0.15
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "fork-0.25",
+          "parent": "forkL",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.12,
+            0.1,
+            0.9
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "fork0.25",
+          "parent": "forkR",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.12,
+            0.1,
+            0.9
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "wheel_-1_0Mesh",
+          "parent": "wheel_-1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.25,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_0Mesh",
+          "parent": "wheel_1_0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.25,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_-1_1Mesh",
+          "parent": "wheel_-1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.25,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "wheel_1_1Mesh",
+          "parent": "wheel_1_1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.25,
+            0.5,
+            0.5
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "postRear-1",
+          "parent": "root",
+          "center": [
+            -0.375,
+            1.375,
+            -0.75
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "postRear1",
+          "parent": "root",
+          "center": [
+            0.375,
+            1.375,
+            -0.75
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "postFront-1",
+          "parent": "root",
+          "center": [
+            -0.375,
+            1.375,
+            0.125
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "postFront1",
+          "parent": "root",
+          "center": [
+            0.375,
+            1.375,
+            0.125
+          ],
+          "size": [
+            0.125,
+            1.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "roof",
+          "parent": "root",
+          "center": [
+            0,
+            1.875,
+            -0.375
+          ],
+          "size": [
+            1,
+            0.25,
+            1.25
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "counterweight",
+          "parent": "root",
+          "center": [
+            0,
+            0.375,
+            -0.875
+          ],
+          "size": [
+            0.875,
+            0.5,
+            0.25
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "seat",
+          "parent": "root",
+          "center": [
+            0,
+            0.875,
+            -0.375
+          ],
+          "size": [
+            0.375,
+            0.25,
+            0.375
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "backrest",
+          "parent": "root",
+          "center": [
+            0,
+            1.25,
+            -0.625
+          ],
+          "size": [
+            0.375,
+            0.5,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "column",
+          "parent": "root",
+          "center": [
+            0,
+            1,
+            0
+          ],
+          "size": [
+            0.125,
+            0.5,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "steeringWheel",
+          "parent": "root",
+          "center": [
+            0,
+            1.25,
+            0
+          ],
+          "size": [
+            0.25,
+            0.125,
+            0.25
+          ],
+          "material": "charcoal"
+        }
+      ],
+      "groups": [
+        {
+          "name": "lift",
+          "parent": "root",
+          "position": [
+            0,
+            0.25,
+            0.6
+          ]
+        },
+        {
+          "name": "tilt",
+          "parent": "lift",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "forkL",
+          "parent": "tilt",
+          "position": [
+            -0.25,
+            -0.05,
+            0.4
+          ]
+        },
+        {
+          "name": "forkR",
+          "parent": "tilt",
+          "position": [
+            0.25,
+            -0.05,
+            0.4
+          ]
+        },
+        {
+          "name": "wheel_-1_0",
+          "parent": "root",
+          "position": [
+            -0.375,
+            0.25,
+            0.125
+          ]
+        },
+        {
+          "name": "wheel_1_0",
+          "parent": "root",
+          "position": [
+            0.375,
+            0.25,
+            0.125
+          ]
+        },
+        {
+          "name": "wheel_-1_1",
+          "parent": "root",
+          "position": [
+            -0.375,
+            0.25,
+            -0.625
+          ]
+        },
+        {
+          "name": "wheel_1_1",
+          "parent": "root",
+          "position": [
+            0.375,
+            0.25,
+            -0.625
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "lift_pallet",
+          "target": "lift",
+          "path": "translation",
+          "times": [
+            0,
+            1.4
+          ],
+          "values": [
+            [
+              0,
+              0.25,
+              0.6
+            ],
+            [
+              0,
+              1.2,
+              0.6
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "wheel_-1_0_roll",
+          "target": "wheel_-1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_0_roll",
+          "target": "wheel_1_0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_-1_1_roll",
+          "target": "wheel_-1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "wheel_1_1_roll",
+          "target": "wheel_1_1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "mast_tilt",
+          "target": "tilt",
+          "path": "rotation",
+          "times": [
+            0,
+            0.8
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0.08715574274765817,
+              0,
+              0,
+              0.9961946980917455
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "fork_spread_L",
+          "target": "forkL",
+          "path": "translation",
+          "times": [
+            0,
+            0.6
+          ],
+          "values": [
+            [
+              -0.25,
+              -0.05,
+              0.4
+            ],
+            [
+              -0.375,
+              -0.05,
+              0.4
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "fork_spread_R",
+          "target": "forkR",
+          "path": "translation",
+          "times": [
+            0,
+            0.6
+          ],
+          "values": [
+            [
+              0.25,
+              -0.05,
+              0.4
+            ],
+            [
+              0.375,
+              -0.05,
+              0.4
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "drone",
+      "footprint": [
+        1,
+        1
+      ],
+      "description": "Production cargo drone rig: four spinning rotors on cross arms, landing skids, beacon mast, and a load group carrying the crate (attach/lower channel). Takeoff/landing flight height is an entity transform. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "body",
+          "parent": "root",
+          "center": [
+            0,
+            0.4,
+            0
+          ],
+          "size": [
+            0.6,
+            0.25,
+            0.6
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "armX",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            1.4,
+            0.1,
+            0.12
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armZ",
+          "parent": "root",
+          "center": [
+            0,
+            0.45,
+            0
+          ],
+          "size": [
+            0.12,
+            0.1,
+            1.4
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "blade0",
+          "parent": "rotor0",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade1",
+          "parent": "rotor1",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade2",
+          "parent": "rotor2",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "blade3",
+          "parent": "rotor3",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            0.5,
+            0.04,
+            0.08
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "cargo",
+          "parent": "load",
+          "center": [
+            0,
+            0.05,
+            0
+          ],
+          "size": [
+            0.45,
+            0.35,
+            0.45
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "skidRail-1",
+          "parent": "root",
+          "center": [
+            -0.375,
+            0.125,
+            0
+          ],
+          "size": [
+            0.25,
+            0.25,
+            0.5
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "skidRail1",
+          "parent": "root",
+          "center": [
+            0.375,
+            0.125,
+            0
+          ],
+          "size": [
+            0.25,
+            0.25,
+            0.5
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "skidStrut-1",
+          "parent": "root",
+          "center": [
+            -0.375,
+            0.25,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "skidStrut1",
+          "parent": "root",
+          "center": [
+            0.375,
+            0.25,
+            0
+          ],
+          "size": [
+            0.125,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "beaconMast",
+          "parent": "root",
+          "center": [
+            0,
+            0.5,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "beacon",
+          "parent": "root",
+          "center": [
+            0,
+            0.625,
+            0
+          ],
+          "size": [
+            0.125,
+            0.125,
+            0.125
+          ],
+          "material": "amber"
+        }
+      ],
+      "groups": [
+        {
+          "name": "rotor0",
+          "parent": "root",
+          "position": [
+            -0.6,
+            0.55,
+            0
+          ]
+        },
+        {
+          "name": "rotor1",
+          "parent": "root",
+          "position": [
+            0.6,
+            0.55,
+            0
+          ]
+        },
+        {
+          "name": "rotor2",
+          "parent": "root",
+          "position": [
+            0,
+            0.55,
+            -0.6
+          ]
+        },
+        {
+          "name": "rotor3",
+          "parent": "root",
+          "position": [
+            0,
+            0.55,
+            0.6
+          ]
+        },
+        {
+          "name": "load",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "hook",
+          "position": [
+            0,
+            -0.15,
+            0
+          ],
+          "kind": "cargo",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 0.45
+        }
+      ],
+      "animations": [
+        {
+          "name": "rotor0_spin",
+          "target": "rotor0",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor1_spin",
+          "target": "rotor1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor2_spin",
+          "target": "rotor2",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "rotor3_spin",
+          "target": "rotor3",
+          "path": "rotation",
+          "times": [
+            0,
+            0.15,
+            0.3
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              -1
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "cargo_attach",
+          "target": "load",
+          "path": "translation",
+          "times": [
+            0,
+            1
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              -0.5,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "worker",
+      "footprint": [
+        1,
+        1
+      ],
+      "description": "Production worker rig: grounded boots, hi-vis vest, hard hat, and a weld torch on the right arm. Walk (anti-phase limbs), carry, operate and weld channels; rest pose waits. Forward +Z.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "torso",
+          "parent": "root",
+          "center": [
+            0,
+            0.48,
+            0
+          ],
+          "size": [
+            0.25,
+            0.3,
+            0.18
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "head",
+          "parent": "root",
+          "center": [
+            0,
+            0.73,
+            0
+          ],
+          "size": [
+            0.18,
+            0.18,
+            0.18
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "helmet",
+          "parent": "root",
+          "center": [
+            0,
+            0.84,
+            0
+          ],
+          "size": [
+            0.25,
+            0.08,
+            0.23
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "legMesh-1",
+          "parent": "leg-1",
+          "center": [
+            0,
+            -0.16,
+            0
+          ],
+          "size": [
+            0.09,
+            0.32,
+            0.1
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armMesh-1",
+          "parent": "arm-1",
+          "center": [
+            0,
+            -0.12,
+            0
+          ],
+          "size": [
+            0.08,
+            0.24,
+            0.09
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "legMesh1",
+          "parent": "leg1",
+          "center": [
+            0,
+            -0.16,
+            0
+          ],
+          "size": [
+            0.09,
+            0.32,
+            0.1
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "armMesh1",
+          "parent": "arm1",
+          "center": [
+            0,
+            -0.12,
+            0
+          ],
+          "size": [
+            0.08,
+            0.24,
+            0.09
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "boot-1",
+          "parent": "leg-1",
+          "center": [
+            0,
+            -0.29,
+            0.01
+          ],
+          "size": [
+            0.1,
+            0.06,
+            0.12
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "boot1",
+          "parent": "leg1",
+          "center": [
+            0,
+            -0.29,
+            0.01
+          ],
+          "size": [
+            0.1,
+            0.06,
+            0.12
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "vestFront",
+          "parent": "root",
+          "center": [
+            0,
+            0.5,
+            0.1
+          ],
+          "size": [
+            0.26,
+            0.22,
+            0.02
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "vestBack",
+          "parent": "root",
+          "center": [
+            0,
+            0.5,
+            -0.1
+          ],
+          "size": [
+            0.26,
+            0.22,
+            0.02
+          ],
+          "material": "yellow"
+        },
+        {
+          "name": "torch",
+          "parent": "arm1",
+          "center": [
+            0,
+            -0.26,
+            0.03
+          ],
+          "size": [
+            0.05,
+            0.08,
+            0.12
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "torchTip",
+          "parent": "arm1",
+          "center": [
+            0,
+            -0.26,
+            0.1
+          ],
+          "size": [
+            0.03,
+            0.03,
+            0.04
+          ],
+          "material": "amber"
+        }
+      ],
+      "groups": [
+        {
+          "name": "leg-1",
+          "parent": "root",
+          "position": [
+            -0.07,
+            0.32,
+            0
+          ]
+        },
+        {
+          "name": "arm-1",
+          "parent": "root",
+          "position": [
+            -0.17,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "leg1",
+          "parent": "root",
+          "position": [
+            0.07,
+            0.32,
+            0
+          ]
+        },
+        {
+          "name": "arm1",
+          "parent": "root",
+          "position": [
+            0.17,
+            0.6,
+            0
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "walk_leg",
+          "target": "leg1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.35,
+            0.7
+          ],
+          "values": [
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "walk_leg-1",
+          "target": "leg-1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.35,
+            0.7
+          ],
+          "values": [
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "walk_arm1",
+          "target": "arm1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.35,
+            0.7
+          ],
+          "values": [
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "walk_arm-1",
+          "target": "arm-1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.35,
+            0.7
+          ],
+          "values": [
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              -0.25,
+              0,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0.25,
+              0,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "carry_arm-1",
+          "target": "arm-1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              -0.5646424733950354,
+              0,
+              0,
+              0.8253356149096783
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "carry_arm1",
+          "target": "arm1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.5
+          ],
+          "values": [
+            [
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              -0.5646424733950354,
+              0,
+              0,
+              0.8253356149096783
+            ]
+          ],
+          "loop": false
+        },
+        {
+          "name": "operate_arm1",
+          "target": "arm1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.4,
+            0.8
+          ],
+          "values": [
+            [
+              -0.43496553411123023,
+              0,
+              0,
+              0.9004471023526769
+            ],
+            [
+              -0.5226872289306592,
+              0,
+              0,
+              0.8525245220595057
+            ],
+            [
+              -0.43496553411123023,
+              0,
+              0,
+              0.9004471023526769
+            ]
+          ],
+          "loop": true
+        },
+        {
+          "name": "weld_arm1",
+          "target": "arm1",
+          "path": "rotation",
+          "times": [
+            0,
+            0.3,
+            0.6
+          ],
+          "values": [
+            [
+              -0.479425538604203,
+              0,
+              0,
+              0.8775825618903728
+            ],
+            [
+              -0.5438347906836426,
+              0,
+              0,
+              0.8391923024206541
+            ],
+            [
+              -0.479425538604203,
+              0,
+              0,
+              0.8775825618903728
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "turret",
+      "footprint": [
+        2,
+        2
+      ],
+      "description": "Olive kinetic defense turret with separate yaw mount and pitch barrel.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "base",
+          "parent": "root",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            1.8,
+            0.4,
+            1.8
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "housing",
+          "parent": "yaw",
+          "center": [
+            0,
+            0.2,
+            0
+          ],
+          "size": [
+            1,
+            0.6,
+            1
+          ],
+          "material": "olive"
+        },
+        {
+          "name": "barrel",
+          "parent": "pitch",
+          "center": [
+            0,
+            0,
+            0.6
+          ],
+          "size": [
+            0.25,
+            0.25,
+            1.3
+          ],
+          "material": "charcoal"
+        }
+      ],
+      "groups": [
+        {
+          "name": "yaw",
+          "parent": "root",
+          "position": [
+            0,
+            0.6,
+            0
+          ]
+        },
+        {
+          "name": "pitch",
+          "parent": "yaw",
+          "position": [
+            0,
+            0.3,
+            0.35
+          ]
+        }
+      ],
+      "sockets": [],
+      "animations": [
+        {
+          "name": "scan",
+          "target": "yaw",
+          "path": "rotation",
+          "times": [
+            0,
+            2,
+            4
+          ],
+          "values": [
+            [
+              0,
+              -0.25,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0,
+              0.25,
+              0,
+              0.9682458365518543
+            ],
+            [
+              0,
+              -0.25,
+              0,
+              0.9682458365518543
+            ]
+          ],
+          "loop": true
+        }
+      ]
+    },
+    {
+      "id": "wall_gate",
+      "footprint": [
+        3,
+        1
+      ],
+      "description": "Original modular wall gate; friendly road passage opens center.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "left",
+          "parent": "root",
+          "center": [
+            -1.2,
+            0.7,
+            0
+          ],
+          "size": [
+            0.6,
+            1.4,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "right",
+          "parent": "root",
+          "center": [
+            1.2,
+            0.7,
+            0
+          ],
+          "size": [
+            0.6,
+            1.4,
+            0.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "panel",
+          "parent": "gate",
+          "center": [
+            0,
+            0,
+            0
+          ],
+          "size": [
+            1.8,
+            1.3,
+            0.18
+          ],
+          "material": "steel"
+        }
+      ],
+      "groups": [
+        {
+          "name": "gate",
+          "parent": "root",
+          "position": [
+            0,
+            0.65,
+            0
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "passage",
+          "position": [
+            0,
+            0,
+            0.7
+          ],
+          "kind": "road",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1.8
+        }
+      ],
+      "animations": [
+        {
+          "name": "gate_open",
+          "target": "gate",
+          "path": "translation",
+          "times": [
+            0,
+            1.2
+          ],
+          "values": [
+            [
+              0,
+              0.65,
+              0
+            ],
+            [
+              0,
+              2,
+              0
+            ]
+          ],
+          "loop": false
+        }
+      ]
+    },
+    {
+      "id": "wreckSections",
+      "footprint": [
+        3,
+        3
+      ],
+      "description": "Sectioned wreck husk for salvage landmarks: dead hull, cab and bed sections with scattered debris. Static; reveal stages owned by #169.",
+      "front": "+Z",
+      "parts": [
+        {
+          "name": "hullPlate",
+          "parent": "root",
+          "center": [
+            0,
+            0.125,
+            0
+          ],
+          "size": [
+            2.75,
+            0.25,
+            2.75
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "hullBlock",
+          "parent": "sectionHull",
+          "center": [
+            0,
+            0.375,
+            -0.25
+          ],
+          "size": [
+            2.25,
+            0.75,
+            1.5
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "hullScorch",
+          "parent": "sectionHull",
+          "center": [
+            0.375,
+            0.375,
+            0.5
+          ],
+          "size": [
+            0.75,
+            0.5,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "cabBlock",
+          "parent": "sectionCab",
+          "center": [
+            0,
+            0.375,
+            0
+          ],
+          "size": [
+            1,
+            0.75,
+            0.75
+          ],
+          "material": "cream"
+        },
+        {
+          "name": "cabRoofStep",
+          "parent": "sectionCab",
+          "center": [
+            0.125,
+            0.75,
+            -0.125
+          ],
+          "size": [
+            0.75,
+            0.125,
+            0.5
+          ],
+          "material": "oxideLight"
+        },
+        {
+          "name": "cabVisor",
+          "parent": "sectionCab",
+          "center": [
+            0,
+            0.5,
+            0.375
+          ],
+          "size": [
+            0.625,
+            0.25,
+            0.125
+          ],
+          "material": "charcoal"
+        },
+        {
+          "name": "bedPlate",
+          "parent": "sectionBed",
+          "center": [
+            0,
+            0.125,
+            0
+          ],
+          "size": [
+            1.25,
+            0.25,
+            1.25
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "bedRail",
+          "parent": "sectionBed",
+          "center": [
+            0,
+            0.375,
+            -0.5
+          ],
+          "size": [
+            1.25,
+            0.375,
+            0.25
+          ],
+          "material": "oxide"
+        },
+        {
+          "name": "debrisA",
+          "parent": "sectionDebris",
+          "center": [
+            1.25,
+            0.125,
+            0.875
+          ],
+          "size": [
+            0.375,
+            0.25,
+            0.375
+          ],
+          "material": "steel"
+        },
+        {
+          "name": "debrisB",
+          "parent": "sectionDebris",
+          "center": [
+            -1.25,
+            0.125,
+            -1.125
+          ],
+          "size": [
+            0.5,
+            0.25,
+            0.25
+          ],
+          "material": "rubber"
+        },
+        {
+          "name": "debrisC",
+          "parent": "sectionDebris",
+          "center": [
+            0.25,
+            0.0625,
+            1.25
+          ],
+          "size": [
+            0.25,
+            0.125,
+            0.5
+          ],
+          "material": "oxideLight"
+        }
+      ],
+      "groups": [
+        {
+          "name": "sectionHull",
+          "parent": "root",
+          "position": [
+            0,
+            0.25,
+            0
+          ]
+        },
+        {
+          "name": "sectionCab",
+          "parent": "root",
+          "position": [
+            -0.75,
+            0.25,
+            0.75
+          ]
+        },
+        {
+          "name": "sectionBed",
+          "parent": "root",
+          "position": [
+            0.75,
+            0.25,
+            -0.75
+          ]
+        },
+        {
+          "name": "sectionDebris",
+          "parent": "root",
+          "position": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "sockets": [
+        {
+          "name": "salvage",
+          "position": [
+            0,
+            0,
+            1.6
+          ],
+          "kind": "pallet",
+          "approach": [
+            0,
+            0,
+            1
+          ],
+          "clearanceWidth": 1.3
+        }
+      ],
+      "animations": []
+    }
+  ]
+}

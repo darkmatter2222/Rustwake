@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+    branches: [main, 'rw/**']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: node scripts/team-board.mjs --check
+      - run: node --test scripts/team-*.test.mjs scripts/sponsor-inbox.test.mjs scripts/package-dashboard.test.mjs scripts/publish-feature.test.mjs tools/team-supervisor/*.test.mjs
+      - run: python scripts/deploy-artifact.test.py
+      - run: python scripts/host-adapter.test.py
+      - run: python scripts/commission-databrick.test.py
+      - run: bash -n scripts/install-delivery-host.sh
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run validate
+      - run: npm test
+      - run: npm run build
+
+
+
+
