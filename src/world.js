@@ -149,7 +149,7 @@ export class LivingWorld{
   this.renderer.outputColorSpace=THREE.SRGBColorSpace;
   this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.55;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  this.renderer.domElement.className="world-canvas";this.renderer.domElement.setAttribute("aria-label","Rustwake interactive 3D salvage sandbox");
+  this.renderer.domElement.className="world-canvas";this.renderer.domElement.dataset.world3d="initializing";this.renderer.domElement.setAttribute("aria-label","Rustwake interactive 3D salvage sandbox");
   host.appendChild(this.renderer.domElement);
   this.scene.add(new THREE.HemisphereLight("#cadde2","#665a46",2.05));
   const sun=new THREE.DirectionalLight("#ffe5b3",3.0);sun.position.set(-45,90,38);
@@ -295,6 +295,9 @@ export class LivingWorld{
   }
   for(const [id,tr] of this.trucks)if(!alive.has(id)){this.vehicleGroup.remove(tr);this.trucks.delete(id);}
   this.renderer.render(this.scene,this.camera);
+  this.renderer.domElement.dataset.world3d="ready";
+  this.renderer.domElement.dataset.cameraYaw=String(this.view.yaw);
+  this.renderer.domElement.dataset.cameraElevation=String(this.view.elevation);
  }
  dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }
