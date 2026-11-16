@@ -1,0 +1,43 @@
+name: Rustwake V2 implementation
+description: Scoped, testable autonomous studio work item
+title: "[V2][P1] "
+labels: ["v2"]
+body:
+  - type: markdown
+    attributes:
+      value: "Read AGENTS.md and docs/agents/TASK_PROTOCOL.md. Archived V1 is not implementation authority."
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Player-visible outcome
+      description: What the player can do or observe in the actual running 3D game
+      placeholder: A player can ...
+    validations:
+      required: true
+  - type: textarea
+    id: blockers
+    attributes:
+      label: Accepted blocker issues and exact merged SHAs
+      placeholder: "#123; merged source SHA; or none with rationale"
+    validations:
+      required: true
+  - type: textarea
+    id: paths
+    attributes:
+      label: Owned files/worktree and agent role
+      placeholder: "Role: developer; paths: src/..."
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Evidence-based acceptance
+      description: Include negative tests, user-visible screenshots, source identity and saves/currency invariants
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Migration, performance, art, security and recovery risks
+    validations:
+      required: true
