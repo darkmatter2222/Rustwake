@@ -206,3 +206,46 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
+
+/* V2 first-player visual correction: game is visible on arrival. Overlay chrome
+   never forms a second website on top of the world; phone resources have their
+   own row, avoiding brand/currency collisions at narrow widths. */
+.screen-vignette {
+  background: linear-gradient(180deg, rgba(7,16,18,.36), transparent 18%, transparent 76%, rgba(6,13,17,.30));
+}
+@media(max-width:770px) {
+  .hud-top {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:38px 32px;
+    align-content:start;
+    justify-content:stretch;
+    gap:6px;
+    padding:7px 10px 0;
+    background:linear-gradient(180deg,rgba(9,23,29,.78),rgba(9,23,29,.08));
+  }
+  .brand {grid-row:1;max-width:calc(100vw - 20px);margin:0}
+  .brand-type strong {font-size:19px}
+  .brand-type small {font-size:6.8px}
+  .brand-badge {font-size:8px}
+  .resources-strip {
+    grid-row:2;grid-column:1;width:100%;max-width:100%;
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) 42px;gap:5px;
+    justify-content:stretch;overflow:visible;
+  }
+  .resource {justify-content:center;min-width:0;min-height:31px;gap:5px;padding:5px 3px}
+  .resource__name {font-size:9px}
+  .resource strong {font-size:11px}
+  .resource-more {justify-content:center;min-width:0;padding:4px 3px}
+  .left-rail {top:101px;gap:9px}
+  .coordinate-chip {border-left-width:2px;padding:3px 0 3px 9px;max-width:142px}
+  .coordinate-chip .eyebrow {font-size:7px}
+  .coordinate-chip strong {font-size:15px}
+  .coordinate-chip small {font-size:7px;white-space:normal}
+  .right-rail {display:none}
+  .rail-controls button {font-size:14px;min-width:37px;min-height:37px;padding:6px 8px}
+  .controls-card {max-width:min(250px,calc(100vw - 26px))}
+  .panel-host {max-height:46dvh}
+  .center-hint {bottom:95px;white-space:normal;text-align:center;max-width:calc(100vw - 40px)}
+  .footline {background:#0c1c24b9}
+}
