@@ -103,12 +103,12 @@ export default function App(){
  const [buildId,setBuildId]=useState("salvager");
  const [selectedId,setSelectedId]=useState(null);
  const [toast,setToast]=useState("");
- const [intro,setIntro]=useState(()=>{try{return !localStorage.getItem("rustwake:v2:intro");}catch{return true;}});
+ const [intro,setIntro]=useState(false);
  const [preview,setPreview]=useState(null);
  const [roadStart,setRoadStart]=useState(null);
  const [showLegend,setShowLegend]=useState(false);
  const [gridVisible,setGridVisible]=useState(false);
- const camera=useRef({yaw:45,elevation:35.264,zoom:1,x:0,z:0});
+ const camera=useRef({yaw:45,elevation:35.264,zoom:typeof window!=="undefined"&&window.innerWidth>=960?1.15:1,x:0,z:0});
  const input=useRef({pointers:new Map(),dragged:false,right:false,gesture:null});
  const modeRef=useRef({mode,buildId,roadStart});
  useEffect(()=>{modeRef.current={mode,buildId,roadStart};},[mode,buildId,roadStart]);
@@ -118,7 +118,7 @@ export default function App(){
  const onSell=useCallback((id)=>{const r=sell(gameRef.current,id,10);notify(r.ok?"Sold materials for "+r.earnings+" CR":r.reason);refresh();},[notify,refresh]);
  const onResearch=useCallback((id)=>{const r=researchAt(gameRef.current,id);notify(r.ok?"Research completed":r.reason);refresh();},[notify,refresh]);
  const onRemove=useCallback((id)=>{const r=removeBuilding(gameRef.current,id);notify(r.ok?"Machine dismantled":r.reason);if(r.ok)setSelectedId(null);refresh();},[notify,refresh]);
- const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
+ const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
  useEffect(()=>{
   if(!sceneHost.current)return;
   const world=new LivingWorld(sceneHost.current);worldRef.current=world;world.setView(camera.current);
