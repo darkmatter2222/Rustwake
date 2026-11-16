@@ -33,3 +33,12 @@ Only the coordinator dispatches; worktrees and active session IDs must be reconc
 
 ## Required output for every role
 GitHub issue and PR URL; source SHA; exact changed paths; expected and observed behavior; test command/result and real screenshot/clip if visual; issue dependencies, limitations and next accountable owner. An automated numeric screenshot-color test cannot certify the visual style of the README art. Real-device evidence remains distinct from phone viewport emulation.
+
+
+## Additional production and non-production responsibilities
+- **cicd-engineer** (medium): Maintain GitHub-hosted builds, tests, artifact provenance and trusted runner boundaries without deploying unreviewed code.
+- **production-release-manager** (low): Coordinate approved releases, go/no-go and incidents; release engineer remains sole merge integrator.
+- **staging-verifier** (medium): Independently validate PR preview built source, desktop/phone screenshots, functional regressions and environment parity.
+- **site-reliability-engineer** (medium): Observe live health, deployment provenance, rollback readiness and incidents without privileged improvisation.
+
+Staging verification works against immutable PR preview SHA and is not permission to visit live production. Production live verification works against deployed main SHA and an existing serialized browser artifact. The release engineer alone executes reviewed main merges; the production release manager coordinates go/no-go, risk and rollback communication rather than introducing a competing merge lease. Site reliability preserves host protections and audits deployment receipts. Every additional role consumes one of the same four child slots when active.
