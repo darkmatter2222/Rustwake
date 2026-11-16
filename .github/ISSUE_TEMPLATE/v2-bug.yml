@@ -1,0 +1,42 @@
+name: Rustwake V2 defect
+description: Reproducible gameplay, camera, render, build, save, security or release defect
+title: "[V2][DEFECT] "
+labels: ["v2"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Observable player failure
+      placeholder: "Actual vs expected at exact game source SHA"
+    validations:
+      required: true
+  - type: input
+    id: sha
+    attributes:
+      label: Exact source SHA / production release manifest SHA
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps, device, viewport, seed and logs
+    validations:
+      required: true
+  - type: textarea
+    id: captures
+    attributes:
+      label: Screenshot/recording/browser artifact and CI run
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Severity, user impact, save/security risk and rollback
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Deterministic regression test and fixed-behavior acceptance
+    validations:
+      required: true
