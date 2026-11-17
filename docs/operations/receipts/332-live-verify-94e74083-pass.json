@@ -1,0 +1,49 @@
+{
+  "check": "rustwake-live-release-proof",
+  "issue": 332,
+  "status": "PASS",
+  "checked_at": "2026-11-17T01:50:53.014Z",
+  "base_url": "https://home.darkmatter2222.com/rustwake/",
+  "manifest_url": "https://home.darkmatter2222.com/rustwake/release-manifest.json",
+  "expected_source_sha": "94e74083cf6a1b19273fc3c492242033bb30978e",
+  "manifest_source_sha": "94e74083cf6a1b19273fc3c492242033bb30978e",
+  "rollback": {
+    "previous_main_sha": "006b5e8d3061940c514b2d0dc7206b677e0e2746"
+  },
+  "evidence": {
+    "main_ci_run": "https://github.com/darkmatter2222/Rustwake/actions/runs/43996906181",
+    "delivery_run": "https://github.com/darkmatter2222/Rustwake/actions/runs/43996966371"
+  },
+  "mode": "entry-js-css-and-index",
+  "files_checked": [
+    {
+      "path": "assets/index-Dwe8S8zt.css",
+      "url": "https://home.darkmatter2222.com/rustwake/assets/index-Dwe8S8zt.css",
+      "expected_sha256": "80558109655e4d69ed61b464dc35688886aa2dd6c1de0bd2bbccb60874730e81",
+      "served_sha256": "80558109655e4d69ed61b464dc35688886aa2dd6c1de0bd2bbccb60874730e81",
+      "expected_bytes": 18906,
+      "served_bytes": 18906,
+      "status": "PASS"
+    },
+    {
+      "path": "assets/index-UmXxyUGv.js",
+      "url": "https://home.darkmatter2222.com/rustwake/assets/index-UmXxyUGv.js",
+      "expected_sha256": "5851cb67737a5aeb13b66bd82f80dca70dadd34719b78782d4e128c63df5d84c",
+      "served_sha256": "5851cb67737a5aeb13b66bd82f80dca70dadd34719b78782d4e128c63df5d84c",
+      "expected_bytes": 719705,
+      "served_bytes": 719705,
+      "status": "PASS"
+    },
+    {
+      "path": "index.html",
+      "url": "https://home.darkmatter2222.com/rustwake/index.html",
+      "expected_sha256": "141f5387b49ab4355b0e965912575995893c3f328145e2df2bddbde78befb1d2",
+      "served_sha256": "141f5387b49ab4355b0e965912575995893c3f328145e2df2bddbde78befb1d2",
+      "expected_bytes": 582,
+      "served_bytes": 582,
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "errors": []
+}

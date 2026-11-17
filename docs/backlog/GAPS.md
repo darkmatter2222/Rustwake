@@ -22,6 +22,7 @@ This is an **evidence inventory**, not a parallel status board. GitHub master #2
 | Native V2 GitHub Projects board | Unverified | #265, requires project-scoped GitHub auth |
 | Qwen/OpenCode host adoption of V2 agents | Definition files, runtime adoption unverified | #263, actual session/lease evidence required |
 | Production V2 source promotion | CI and adapter receipt succeeded | #264, independent public manifest and end-user browser evidence |
+| Automated post-promote live manifest/checksum proof | Implemented on rw/v2-ops-08-live-release-proof: delivery `verify-live` job + `scripts/verify-live-release.mjs`; 13 offline tests incl. negative cases green; real public-HTTPS PASS receipt at main 94e74083 (rollback 006b5e8d, CI run 43996906181, delivery run 43996966371) in docs/operations/receipts/ | #332: first automated Actions receipt owed on the NEXT deployment after merge; hosted-browser smoke separate #333 |
 | Sponsor G1 visual acceptance | Not granted | #276 |
 
 ## Maintenance rules
