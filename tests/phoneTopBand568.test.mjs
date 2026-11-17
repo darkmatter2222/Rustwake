@@ -59,6 +59,12 @@ test("CSS contract: nothing in the top band is suppressed to buy canvas room", (
   assert.doesNotMatch(css, /\.resource\s*\{[^}]*display:\s*none/);
   // #564 coordinate-chip transparency contract survives.
   assert.match(css, /\.coordinate-chip[^{}]*\{[^}]*pointer-events:\s*none/);
+  // #568 cascade fix: the phone strip-alert hide must OUTSPECIFY the later
+  // base .strip-alert{display:flex} rule, or the alert wraps the strip to two
+  // rows (y16..108) and re-occludes the framed aim band. The signal itself is
+  // carried by the chip flags + the live alarm rail, never suppressed.
+  assert.match(css, /\.resources-strip \.strip-alert\s*\{display:none\}/);
+  assert.match(css, /\.resource__flag--critical|\.resource__flag--warning/);
 });
 
 // Declared phone geometry from the CSS contract above (390x844, sat=0):

@@ -279,7 +279,15 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
   .resource__reserved {position:static;font-size:7.5px;padding:0;background:none;border:0}
   .resource__flag {position:absolute;top:2px;right:3px;font-size:8px}
   .resource-more {justify-content:center;min-width:0;padding:4px 3px}
-  .strip-alert {display:none}
+  /* #568: the base .strip-alert{display:flex} rule lands AFTER this media block
+     at equal specificity and was silently winning, so the brownout/shortage
+     alert became an 8th grid item, wrapped the strip to TWO rows (y16..108)
+     and re-occluded the framed-machine aim band. Scope the hide to the strip
+     so it wins the cascade. The shortage signal is NOT suppressed: every chip
+     keeps its ⚠/◔ flag and the alarm rail below still raises the same WARNING
+     (#566 owns alarm existence; this is the pre-existing compact-width design,
+     line 182: "chip flags carry the shortage signal at compact widths"). */
+  .resources-strip .strip-alert {display:none}
   /* #568: the interactive camera/alarm rail sits BELOW the compact top readout
      and BELOW the CAM-05 framed-machine band (pivot y~151 at 390x844, aim
      heights y91..151), in the clear gap above the starter machine band
