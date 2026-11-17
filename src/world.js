@@ -414,6 +414,31 @@ export function makeBuilding(b,time){
  const art03=ART03_TYPES.includes(kind)?{statusNodes:{light:status,...a03.statusNodes},emits:a03.emits}:null;
  return {group,parts,art03};
 }
+// ART-03 (#349): the EXACT per-rig application World.update() runs, exported so
+// tests drive the real rendered code path (same shared mats pool, same pure
+// art03 functions) against a real makeBuilding graph with real simulation state.
+// Returns the observability stamp {status,clock,load}. Never mutates the pool:
+// status changes are discrete mesh.material reassignments of registered entries.
+export function applyArt03(obj,g,b,reducedMotion,id){
+ if(!obj.a03)obj.a03={clock:0,lastTimer:b.timer||0,lastElapsed:g.elapsed||0};
+ const next=art03Advance(obj.a03,g,b,reducedMotion);
+ obj.a03=next;
+ const pose=art03Pose(next.clock,reducedMotion,id);
+ for(const p of obj.parts)if(p.kind==="a03")p.node.rotation[p.axis]=pose[p.role];
+ const sm=STATUS_MATERIALS[next.status]||STATUS_MATERIALS.idle;
+ obj.art03.statusNodes.light.material=mats[sm.light];
+ for(const k of ["window","glow","ingot"]){const n=obj.art03.statusNodes[k];if(n)n.material=mats[sm.hot];}
+ const working=next.status==="working"&&!reducedMotion;
+ const phase=next.clock*ART03_SMOKE.speed;
+ for(const e of obj.art03.emits){
+  e.visible=working;
+  if(!working)continue;
+  if(e.userData.flare){e.scale.set(1,1+.25*Math.sin(next.clock*7+id),1);continue;}
+  for(const puff of e.children){const s=smokePuff(phase,puff.userData.puff,ART03_SMOKE.count);puff.position.y=s.y;puff.scale.setScalar(s.s);}
+ }
+ if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+(working?pose.pulse:0);
+ return {status:next.status,clock:next.clock,load:next.load};
+}
 // ---------------------------------------------------------------------------
 // ART-05 (#351): identity-specific vehicle/crew rigs at coherent relative scale.
 // All geometry is ORIGINAL, authored in-code from the shared unit box/cylinder
@@ -1236,26 +1261,7 @@ export class LivingWorld{
    // wrap-aware sim timer deltas (generator: elapsed × real load fraction), so
    // unpowered machines freeze and starved machines never smoke. Material swaps
    // reassign shared pool entries — the pool itself is never mutated.
-   if(obj.art03){
-    if(!obj.a03)obj.a03={clock:0,lastTimer:b.timer||0,lastElapsed:g.elapsed||0};
-    const next=art03Advance(obj.a03,g,b,this.reducedMotion);
-    obj.a03=next;
-    const pose=art03Pose(next.clock,this.reducedMotion,id);
-    for(const p of obj.parts)if(p.kind==="a03")p.node.rotation[p.axis]=pose[p.role];
-    const sm=STATUS_MATERIALS[next.status]||STATUS_MATERIALS.idle;
-    obj.art03.statusNodes.light.material=mats[sm.light];
-    for(const k of ["window","glow","ingot"]){const n=obj.art03.statusNodes[k];if(n)n.material=mats[sm.hot];}
-    const working=next.status==="working"&&!this.reducedMotion;
-    const phase=next.clock*ART03_SMOKE.speed;
-    for(const e of obj.art03.emits){
-     e.visible=working;
-     if(!working)continue;
-     if(e.userData.flare){e.scale.set(1,1+.25*Math.sin(next.clock*7+id),1);continue;}
-     for(const puff of e.children){const s=smokePuff(phase,puff.userData.puff,ART03_SMOKE.count);puff.position.y=s.y;puff.scale.setScalar(s.s);}
-    }
-    if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+(working?pose.pulse:0);
-    art03Stamp[b.type]={status:next.status,clock:next.clock,load:next.load};
-   }
+   if(obj.art03)art03Stamp[b.type]=applyArt03(obj,g,b,this.reducedMotion,id);
   }
   // ART-05 (#351): one LOD tier per frame from the real projected cell size.
   const lodTier=rigLodTier(this.view.zoom,this.height);
