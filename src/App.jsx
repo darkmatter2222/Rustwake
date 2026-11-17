@@ -3,7 +3,7 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
 import {fleetState,truckAt,followTarget,readFleetSettings,writeFleetSettings} from "./fleet.js";
@@ -452,7 +452,19 @@ export default function App(){
     simulation.cancelFreight returns reserved OR onboard units to their source
     exactly once (returnFreight). No UI-side ledger or refund math here. */
  const onCancelFreight=useCallback(id=>{
-  const r=cancelFreight(gameRef.current,id);
+  // Atomic observability (#363): the sim may re-dispatch this truck on the very
+  // next frame, so captures prove exact-once conservation from a stamp taken
+  // INSIDE the transaction — never from the periodic UI stamp. Read-only.
+  const g=gameRef.current,v0=g.vehicles.find(x=>x.id===id),j0=v0?.job||null;
+  const srcId=j0?.sourceId??null;
+  const bagOf=bid=>{const b=g.buildings.find(x=>x.id===bid);return !b||b.type==="depot"?g.bank:(b.inventory||{});};
+  const pre=freightTotals(g),bagBefore=j0?(bagOf(srcId)[j0.resource]||0):0;
+  const r=cancelFreight(g,id);
+  const post=freightTotals(g),bagAfter=j0?(bagOf(srcId)[j0.resource]||0):0;
+  document.body.dataset.cancelProbe=JSON.stringify({id,ok:r.ok,code:r.code,amount:r.amount??0,resource:r.resource??null,
+   sourceId:srcId,phase:j0?.phase??null,bagBefore,bagAfter,
+   before:{reserved:pre.reserved,onboard:pre.onboard,totals:pre.totals},
+   after:{reserved:post.reserved,onboard:post.onboard,totals:post.totals}});
   notify(r.ok?"Freight canceled — "+r.amount+" "+(RESOURCE_BY_ID[r.resource]?.unit||r.resource)+" returned to its source":r.reason);
   refresh();
  },[notify,refresh]);
@@ -499,10 +511,30 @@ export default function App(){
    const fr=fleetRef.current;
    if(fr.followId!=null&&fr.followCam&&viewSize.width>0&&viewSize.height>0){
     const v=gameRef.current.vehicles.find(x=>x.id===fr.followId);
-    if(v)camera.current=followTarget(camera.current,v,viewSize);
+    if(v){
+     camera.current=followTarget(camera.current,v,viewSize);
+     // Same-frame observability: the LIVE truck position the camera pinned,
+     // so captures can verify the pin against the applied camera stamps.
+     document.body.dataset.followProbe=JSON.stringify({id:v.id,x:v.x,z:v.z});
+    }
    }
    world.setView(camera.current);world.update(gameRef.current,dt,now/1000);
-   if(now-uiLast>270){setData(snapshot(gameRef.current));updatePlacement(false);uiLast=now;}
+   if(now-uiLast>270){
+    const s=snapshot(gameRef.current);setData(s);
+    // UX-05 (#363) observability stamp: the SAME snapshot the panel renders,
+    // so captures can prove panel values equal the sim's own freight fields
+    // (same pattern as lastSiteOk / lastZoomApplied). Read-only, never mutates.
+    const ft=freightTotals(s);
+    document.body.dataset.fleetProbe=JSON.stringify({reserved:ft.reserved,onboard:ft.onboard,totals:ft.totals,
+     bank:s.bank,buildings:s.buildings.map(b=>({id:b.id,type:b.type,inventory:b.inventory||{}})),
+     fleetResearch:s.research.includes("fleet"),
+     vehicles:s.vehicles.map(v=>({id:v.id,x:v.x,z:v.z,speed:v.speed,
+      job:v.job?{phase:v.job.phase,amount:v.job.amount,resource:v.job.resource,segment:v.job.segment,
+       progress:v.job.progress,routeLen:v.job.route.length,toSourceLen:v.job.toSource.length,
+       toDestLen:v.job.toDest.length,sourceId:v.job.sourceId,destId:v.job.destId}:null,
+      cargo:v.cargo?{amount:v.cargo.amount,resource:v.cargo.resource}:null}))});
+    updatePlacement(false);uiLast=now;
+   }
    if(now-saveLast>4200){persist(gameRef.current);saveLast=now;}
    raf=requestAnimationFrame(loop);
   };
