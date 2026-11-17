@@ -4,7 +4,7 @@
   "issue": 347,
   "schema": "rustwake.voxel.geometry.v1",
   "source_sha": "local",
-  "started": "2026-11-17T01:58:21.441Z",
+  "started": "2026-11-17T02:22:24.929Z",
   "views": [
     {
       "name": "desktop",
@@ -25,9 +25,9 @@
       "final": {
         "yaw": 45,
         "elevation": 35.264,
-        "zoom": 9.391095399452796,
+        "zoom": 9.391095399452798,
         "x": 4.560804492508554,
-        "z": -7.717638379333679,
+        "z": -7.71763837933368,
         "voxelSchema": "rustwake.voxel.geometry.v1",
         "machineCount": 6,
         "world3d": "ready"
@@ -35,9 +35,9 @@
       "detailPose": {
         "yaw": 45,
         "elevation": 35.264,
-        "zoom": 9.391095399452796,
+        "zoom": 9.391095399452798,
         "x": 4.560804492508554,
-        "z": -7.717638379333679,
+        "z": -7.71763837933368,
         "voxelSchema": "rustwake.voxel.geometry.v1",
         "machineCount": 6,
         "world3d": "ready"
@@ -189,5 +189,5 @@
     "One headless Chromium/SwiftShader run; phone view is emulated",
     "Not art parity or sponsor approval"
   ],
-  "completed": "2026-11-17T01:58:34.920Z"
+  "completed": "2026-11-17T02:22:37.426Z"
 }

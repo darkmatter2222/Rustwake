@@ -18,7 +18,8 @@ Status: describes and validates the LIVE procedural geometry in `src/world.js`. 
 - Right-handed axes: **X east, Y up, Z south** (matches `src/camera.js`).
 - Logical parcel: **24 × 24 hidden cells**, `CELL = 3.5` world units → 84 × 84 world units.
 - Cell origin: `origin(i) = (i − 24/2 + 0.5) × 3.5`; `cellCenter(i)` is exported by the schema.
-- Every initial machine occupies exactly **1 × 1 cells**; group origin sits at cell center on Y = 0.
+- Logical footprints come from the content registry `footprintOf()` (**#370**, merged in main `e8240a87`): 11 initial machines are **1 × 1 cells**; the crane is **2 × 3**. Per #370 the group sits at the footprint center on Y = 0, rotated `rot × 90°` and scaled by base w/d.
+- **All schema geometry fields (bounds, pick, pivots, bay) are authored LOCAL (unscaled) space.** World envelope = local envelope × `footprint.scale`; the invisible pick volume scales with the group and covers the whole footprint. `tests/voxelSchema.test.mjs` measures local geometry AND asserts the exact `worldFootprint()` transform for all 12 machines × 4 rotations.
 - **Frontage faces +Z (south)**: ground loading bay `port:loading-bay` at offset `[0, 1.295]`, size 1.22 × 0.42, y 0.11; status beacon `status:light` at `[1.28, 0.95, 1.25]`.
 - Orthographic frustum vertical span = `80 / zoom` (camera contract; camera math and PR #307 observability stamps are untouched by this schema).
 
@@ -55,9 +56,9 @@ Pick volume = full logical cell (3.5 × pickHeight × 3.5), enclosing the static
 
 Picking itself is a ground-plane cell raycast, so the whole cell is targetable at any zoom; the 44 px floor is the declared comfort target, published via `minZoomForPick()` rather than silently claimed.
 
-## Machine validation table (all 12 initial machines, 1×1 cells)
+## Machine validation table (all 12 initial machines; bounds in authored local space)
 
-Bounds are pad-inclusive static envelopes (W × H × D, world units); pick H encloses animated poses. Validated by `validateAllMachines()` AND by measuring real `THREE.Box3` envelopes in `tests/voxelSchema.test.mjs` (tolerance 0.02).
+Bounds are pad-inclusive static envelopes (W × H × D, local world units before the #370 footprint scale); pick H encloses animated poses. Validated by `validateAllMachines()` AND by measuring real `THREE.Box3` envelopes in `tests/voxelSchema.test.mjs` (tolerance 0.02).
 
 | Machine | Footprint | Static bounds | Pick H | Pivot (motion, swingRadius) | Budget meshes/tris |
 |---|---|---|---|---|---|
@@ -69,12 +70,12 @@ Bounds are pad-inclusive static envelopes (W × H × D, world units); pick H enc
 | foundry | 1×1 | 3.045 × 4.55 × 3.045 | 4.55 | group pulse (amp 0.009, speed 5) | 24 / 500 |
 | crusher | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
 | refinery | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
-| crane | 1×1 | 3.045 × 5.09 × 3.045 | 5.60 | crane (oscillate, 4.8) | 32 / 600 |
+| crane | 2×3 | 3.045 × 5.09 × 3.045 | 5.60 | crane (oscillate, 4.8) | 32 / 600 |
 | turret | 1×1 | 3.045 × 3.42 × 3.045 | 3.42 | rotate (spin, 2.3) | 20 / 400 |
 | fabricator | 1×1 | 3.045 × 3.05 × 3.045 | 3.05 | static | 24 / 400 |
 | research | 1×1 | 3.045 × 4.925 × 3.045 | 4.92 | static | 24 / 450 |
 
-Validation rules enforced per descriptor: integer footprint within 24×24; `footprint.world = cells × 3.5`; static bounds ≤ cell; worker height ratio; pick ≥ cell and enclosing static silhouette with ≥44 px declared floor; +Z bay inside footprint and ≥ truck width; pivot naming/axis/motion/offset within envelope (`y ≤ height + 0.5`); swingRadius ≤ 5.25; registered materials; budgets ≤ global limits. 18 negative descriptors (oversize footprint, overhang, sub-cell pick, narrow bay, misnamed pivot, out-of-envelope offset, excessive reach, unregistered material, over-budget, missing descriptor…) are asserted rejected in tests.
+Validation rules enforced per descriptor: integer footprint within 24×24 mirroring `footprintOf()`; `footprint.world = cells × 3.5`; static bounds ≤ base cell; worker height ratio; pick ≥ base cell and enclosing static silhouette with ≥44 px declared floor; +Z bay inside the base cell and ≥ truck width; pivot naming/axis/motion/offset within envelope (`y ≤ height + 0.5`); swingRadius ≤ 5.25; registered materials; budgets ≤ global limits. 18 negative descriptors (oversize footprint, overhang, sub-cell pick, narrow bay, misnamed pivot, out-of-envelope offset, excessive reach, unregistered material, over-budget, missing descriptor…) are asserted rejected in tests.
 
 ## Performance limits
 
@@ -98,11 +99,11 @@ Shared unit BoxGeometry + shared material pool; no per-mesh geometry allocation.
 
 ## Reproducible evidence
 
-- Tests: `node --test tests/*.test.mjs` — 25 pass (13 new in `tests/voxelSchema.test.mjs`: schema/token identity, real Box3 envelopes, pick enclosure, frontage/truck fit, pivot offsets/axes/motion, material registry, scale references, budgets, 44 px projection, negative descriptors, staging).
+- Tests: `node --test tests/*.test.mjs` — 48 pass (14 in `tests/voxelSchema.test.mjs`: schema/token identity, real Box3 envelopes, #370 worldFootprint transform integration (12 machines × 4 rotations), pick enclosure, frontage/truck fit, pivot offsets/axes/motion, material registry, scale references, budgets, 44 px projection, negative descriptors, staging; plus camera, gridOccupancy, simulation and verify-live suites from main).
 - Capture: `npm run build && node scripts/capture-art.mjs` → `artifacts/art-01/` (`desktop-world.png`, `desktop-detail.png` near-zoom pivots/bay/worker/truck, `desktop-negative-ghost.png`, `desktop-negative-toast.png`, `phone-world.png`, `phone-negative-toast.png`, `report.json` with the full validation table and camera poses). The run for this PR is committed at `docs/evidence/347-art-01/`. One headless Chromium/SwiftShader, production vite preview; phone view is emulated, not a physical handset (#275).
 - Gates: `npm run validate`, `node scripts/check-design-contract.mjs` (PASS: 13 assets / 20 world tokens), `node scripts/check-studio-docs.mjs` (PASS).
 - **No code-author art self-acceptance**: numeric capture status is `PASS_NUMERIC_ONLY`. Independent reviewer + product verdict on the immutable PR head, then sponsor G1 (#276) on the deployed build, are required before any art-parity claim.
 
 ## Concurrency boundaries respected
 
-Camera math and PR #307 `applyCamera` stamps unchanged (#337 owns `src/cameraInput.js` / `src/camera.js`); `src/simulation.js` untouched (#370 lease); `scripts/capture-v2.mjs`, `docs/city/*`, city scripts and `ci.yml` untouched (#526). `scripts/capture-art.mjs` is a new, separate capture entry point.
+Rebased onto main `e8240a87` after #528 BLD-01 merged: camera math and PR #307 `applyCamera`/`stampCamera` are byte-identical to main (#337 owns `src/cameraInput.js` / `src/camera.js`); #370 occupancy (`src/gridOccupancy.js`, `src/simulation.js`, footprint pivots/AABB in `src/world.js`, rotate/cancel UI, `scripts/capture-v2.mjs` construction proof) is preserved intact — this schema integrates with it via registry footprints and local-space geometry fields. `scripts/capture-art.mjs` is a new, separate capture entry point.

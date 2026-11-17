@@ -4,7 +4,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import * as THREE from "three";
-import {CELL, WORLD_SIZE, BUILDINGS} from "../src/content.js";
+import {CELL, WORLD_SIZE, BUILDINGS, footprintOf} from "../src/content.js";
+import {worldFootprint} from "../src/gridOccupancy.js";
 import {
   SCHEMA_ID, PARCEL, SCALE_REFERENCES, MATERIALS, PERFORMANCE_LIMITS, MACHINES,
   machineDescriptor, validateMachine, validateAllMachines, cellProjectedCssPx, minZoomForPick
@@ -40,8 +41,17 @@ function fullBox(group) {
   group.traverse((node) => {if (node.isMesh && node.name !== "pick:volume") box.expandByObject(node);});
   return box;
 }
-const build = (type, remaining = 0) =>
-  makeBuilding({id: 99, type, x: WORLD_SIZE / 2 - 0.5, z: WORLD_SIZE / 2 - 0.5, remaining}, 0).group;
+// Schema geometry fields describe the AUTHORED LOCAL (unscaled) kit. #370 (merged in
+// main e8240a87) places the group at the footprint center and scales it by base w/d;
+// that placement is validated separately below against worldFootprint(). For geometry
+// measurement we reset the group transform so Box3 world == authored local space.
+const build = (type, remaining = 0) => {
+  const group = makeBuilding({id: 99, type, x: WORLD_SIZE / 2 - 0.5, z: WORLD_SIZE / 2 - 0.5, remaining}, 0).group;
+  group.position.set(0, 0, 0);
+  group.rotation.set(0, 0, 0);
+  group.scale.set(1, 1, 1);
+  return group;
+};
 
 test("schema identity, parcel and cell scale match content registry and design tokens", () => {
   assert.equal(SCHEMA_ID, "rustwake.voxel.geometry.v1");
@@ -82,8 +92,30 @@ test("all 12 machines: real static geometry fits the 3.5-unit cell and matches d
     near(size.y, desc.bounds.height, b.id + " height");
     near(size.z, desc.bounds.depth, b.id + " depth");
     assert.ok(box.min.y >= -TOL, b.id + " geometry below ground");
-    assert.ok(size.x <= CELL + TOL && size.z <= CELL + TOL, b.id + " static overhang beyond cell");
-    assert.ok(desc.footprint.world[0] === CELL && desc.footprint.world[1] === CELL);
+    assert.ok(size.x <= CELL + TOL && size.z <= CELL + TOL, b.id + " static overhang beyond base cell");
+    const fp = footprintOf(b.id);
+    assert.deepEqual(desc.footprint.cells, [fp.w, fp.d], b.id + " footprint must mirror content registry");
+    assert.deepEqual(desc.footprint.world, [fp.w * CELL, fp.d * CELL], b.id + " footprint world units");
+    assert.deepEqual(desc.footprint.scale, [fp.w, fp.d], b.id + " #370 group scale declaration");
+  }
+});
+
+test("#370 occupancy integration: makeBuilding applies the exact worldFootprint transform", () => {
+  for (const b of BUILDINGS) {
+    for (const rot of [0, 1, 2, 3]) {
+      const {group} = makeBuilding({id: 99, type: b.id, x: 5, z: 7, rot, remaining: 0}, 0);
+      const wf = worldFootprint(b.id, 5, 7, rot);
+      assert.deepEqual([...group.scale], [wf.base.w, 1, wf.base.d], b.id + " rot" + rot + " group scale");
+      near(group.position.x, wf.pivot.x, b.id + " rot" + rot + " pivot x");
+      near(group.position.y, 0, b.id + " rot" + rot + " pivot y");
+      near(group.position.z, wf.pivot.z, b.id + " rot" + rot + " pivot z");
+      near(group.rotation.y, wf.rotationY, b.id + " rot" + rot + " rotation");
+      // The invisible pick volume scales with the group, covering the whole footprint.
+      const pick = group.getObjectByName("pick:volume");
+      const desc = machineDescriptor(b.id);
+      near(pick.scale.x * group.scale.x, desc.footprint.world[0], b.id + " world pick width");
+      near(pick.scale.z * group.scale.z, desc.footprint.world[1], b.id + " world pick depth");
+    }
   }
 });
 

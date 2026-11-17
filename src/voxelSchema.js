@@ -9,10 +9,13 @@
 //    replaces the playable world with an image and never imports archive/legacy code.
 //
 // Coordinate contract (matches src/camera.js): right-handed, X east, Y up, Z south.
-// A building occupies `footprint.cells` logical cells of CELL world units each; its
-// group origin sits at the cell center on Y=0. Frontage faces +Z (south) toward the
-// loading bay. Pivots are named THREE.Group nodes ("pivot:<id>") owned by the machine.
-import {CELL, WORLD_SIZE, BUILDINGS} from "./content.js";
+// A building occupies `footprint.cells` logical cells of CELL world units each, taken
+// from the content registry footprintOf() (#370, merged in main e8240a87). Per #370 the
+// group sits at the footprint center on Y=0 and is scaled by base w/d; ALL geometry
+// fields below (bounds, pick, pivots, bay) describe the AUTHORED LOCAL (unscaled)
+// geometry, so world envelope = local envelope × footprint.scale. Frontage faces +Z
+// (south) toward the loading bay. Pivots are named THREE.Group nodes ("pivot:<id>").
+import {CELL, WORLD_SIZE, BUILDINGS, footprintOf} from "./content.js";
 
 export const SCHEMA_ID = "rustwake.voxel.geometry.v1";
 export const PARCEL = Object.freeze({cells: [WORLD_SIZE, WORLD_SIZE], world: [WORLD_SIZE * CELL, WORLD_SIZE * CELL]});
@@ -79,7 +82,7 @@ const foot = (height, extra = {}) => {
   };
 };
 
-export const MACHINES = Object.freeze({
+const RAW_MACHINES = {
   salvager: foot(2.285, {
     pickHeight: 2.95,
     bounds: {width: PAD, height: 2.285, depth: PAD},
@@ -215,7 +218,17 @@ export const MACHINES = Object.freeze({
     ],
     budget: {maxMeshes: 24, maxTriangles: 450}
   })
-});
+};
+
+// #370 integration: logical footprints come from the content registry (crane is 2×3;
+// every other initial machine is 1×1). footprint.scale is the base w/d group scale
+// applied by world.js makeBuilding(); geometry fields stay in authored local space.
+export const MACHINES = Object.freeze(Object.fromEntries(Object.entries(RAW_MACHINES).map(([type, d]) => {
+  const fp = footprintOf(type);
+  return [type, Object.freeze({...d, footprint: Object.freeze({
+    ...d.footprint, cells: [fp.w, fp.d], world: [fp.w * CELL, fp.d * CELL], scale: [fp.w, fp.d]
+  })})];
+})));
 
 export const machineDescriptor = (type) => MACHINES[type] || null;
 export const cellCenter = (i) => (i - WORLD_SIZE / 2 + 0.5) * CELL;
@@ -239,16 +252,17 @@ export function validateMachine(type, desc = MACHINES[type]) {
   if (!b || !isNum(b.width) || !isNum(b.height) || !isNum(b.depth) || b.width <= 0 || b.height <= 0 || b.depth <= 0)
     fail(errors, type, "bounds must be positive width/height/depth");
   else {
-    if (b.width > f.world[0] + 1e-9 || b.depth > f.world[1] + 1e-9)
-      fail(errors, type, "static geometry overhangs the logical cell (animated reach is declared separately)");
+    if (b.width > CELL + 1e-9 || b.depth > CELL + 1e-9)
+      fail(errors, type, "static geometry overhangs the authored base cell (animated reach is declared separately)");
     const ratio = b.height / SCALE_REFERENCES.worker.height;
     if (ratio < SCALE_REFERENCES.machineHeightRatio.min || ratio > SCALE_REFERENCES.machineHeightRatio.max)
       fail(errors, type, "height " + b.height + " outside worker scale ratio " + JSON.stringify(SCALE_REFERENCES.machineHeightRatio));
   }
   if (!p || !Array.isArray(p.size) || !Array.isArray(p.center)) fail(errors, type, "pick bounds missing");
   else {
-    if (p.size[0] < f.world[0] - 1e-9 || p.size[2] < f.world[1] - 1e-9)
-      fail(errors, type, "pick bounds smaller than the cell footprint (inaccessible on touch)");
+    // Pick is authored local; the #370 group scale stretches it over the full footprint.
+    if (p.size[0] < CELL - 1e-9 || p.size[2] < CELL - 1e-9)
+      fail(errors, type, "pick bounds smaller than the base cell (inaccessible on touch)");
     if (b && (p.size[0] < b.width - 1e-9 || p.size[1] < b.height - 1e-9 || p.size[2] < b.depth - 1e-9))
       fail(errors, type, "pick bounds must enclose the full static silhouette incl. roof");
     if (p.minProjectedCssPx < 44) fail(errors, type, "pick target below 44 css px accessibility floor");
@@ -257,8 +271,8 @@ export function validateMachine(type, desc = MACHINES[type]) {
   if (!fr || fr.face !== "+z" || !fr.bay) fail(errors, type, "frontage must declare +Z loading bay");
   else {
     const [ox, oz] = fr.bay.offset, [bw, bd] = fr.bay.size;
-    if (Math.abs(ox) + bw / 2 > f.world[0] / 2 + 1e-9 || Math.abs(oz) + bd / 2 > f.world[1] / 2 + 1e-9)
-      fail(errors, type, "loading bay outside footprint");
+    if (Math.abs(ox) + bw / 2 > CELL / 2 + 1e-9 || Math.abs(oz) + bd / 2 > CELL / 2 + 1e-9)
+      fail(errors, type, "loading bay outside the authored base cell");
     if (bw < SCALE_REFERENCES.truck.width - 1e-9) fail(errors, type, "bay narrower than a truck");
   }
   for (const pv of desc.pivots || []) {
