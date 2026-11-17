@@ -264,3 +264,60 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
   .rail-controls {flex-wrap:wrap;max-width:220px;gap:5px}
   .rail-controls button {min-width:44px;min-height:44px;padding:8px}
 }
+
+/* UX-04 (#362) building inspector: readable read-model sheet, two-step
+   dismantle confirmation, exact upgrade preview, non-obscuring dock.
+   All tones pair color with text/icon; tokens mirror docs/design/tokens.json. */
+.panel-host--right{left:auto;right:clamp(14px,2.3vw,36px)}
+/* When the inspector docks left it must never bury the camera controls:
+   the left rail slides beside the sheet (desktop only; phone rails stay top). */
+@media(min-width:771px){
+ .left-rail--beside-panel{left:calc(clamp(14px,2.3vw,36px) + min(356px,100vw - 28px) + 14px)}
+}
+.inspector-panel{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#6c7777 transparent}
+.status-chip{display:inline-flex;align-items:center;gap:7px;font:700 11px "DM Sans";letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:4px;border:1px solid}
+.status-chip i{width:7px;height:7px;flex:none;transform:rotate(45deg);background:currentColor}
+.status-chip--mint{color:var(--mint);border-color:#8ac8b966;background:#8ac8b914}
+.status-chip--amber{color:var(--amber-bright);border-color:#eeac7166;background:#eeac7114}
+.status-chip--danger{color:var(--danger);border-color:#f1917d66;background:#f1917d14}
+.status-chip--muted{color:var(--muted);border-color:#94a5a366;background:#94a5a314}
+.bay-line{display:flex;gap:9px;align-items:flex-start;font-size:11px;line-height:1.5;color:var(--mint);background:#8ac8b90f;border-left:2px solid var(--mint);padding:9px 11px;margin:0 0 6px}
+.bay-line--warn{color:var(--danger);border-left-color:var(--danger);background:#f1917d0f}
+.upgrade-preview{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.upgrade-preview>div{background:#283a3e99;border:1px solid #40565b;padding:9px}
+.upgrade-preview small{display:block;font-size:9px;letter-spacing:.07em;color:#a1b2ae}
+.upgrade-preview span{display:block;margin-top:5px;font:700 13px "Barlow Condensed";color:var(--amber-bright);letter-spacing:.03em}
+.upgrade-button{width:100%;min-height:44px;border:1px solid #596464;border-radius:4px;background:#27383c;color:#d5dcd7;font-size:11px;font-weight:800;letter-spacing:.06em}
+.confirm-block{border:1px solid #83594e;border-left:3px solid var(--danger);background:#2b2320e6;border-radius:6px;padding:13px;margin-top:8px}
+.confirm-block>strong{display:block;font:700 17px "Barlow Condensed";letter-spacing:.04em;color:#ffd9cd;margin-bottom:7px}
+.refund-list{display:flex;flex-direction:column;margin:9px 0}
+.refund-list>div{display:flex;align-items:center;gap:8px;min-height:30px;border-bottom:1px solid #40515399;font-size:11px;padding:4px 2px}
+.refund-list span{flex:1;color:var(--text)}
+.refund-list em{font-style:normal;font-size:9px;letter-spacing:.05em;color:var(--muted);text-transform:uppercase}
+.refund-list strong{font-variant-numeric:tabular-nums;color:var(--mint)}
+.confirm-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}
+.confirm-actions button{flex:1;min-width:130px;min-height:44px;margin-top:0}
+.danger-button--solid{background:#7a3f33;border-color:#c96f57;color:#ffe3d9}
+.danger-button--solid:hover{background:#8d4a3c}
+.keep-button{border:1px solid #596464;border-radius:4px;background:#27383c;color:#e3e9e3;font-size:11px;font-weight:800;padding:9px 12px}
+.keep-button:hover{border-color:#ad8864;color:var(--amber)}
+.inspector-panel .danger-button{min-height:44px}
+.focus-button{width:100%;min-height:44px;margin-top:10px;border:1px solid #c3935e;border-radius:4px;background:#6a4e35;color:#fff0d6;font-size:11px;font-weight:800;letter-spacing:.06em}
+.focus-button:hover{background:#7d5c3e}
+.inspector-settings{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #415558;margin-top:13px;padding-top:11px}
+.inspector-settings label{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);cursor:pointer;min-height:32px}
+.inspector-settings input{width:16px;height:16px;accent-color:var(--amber)}
+.side-button{border:1px solid #4a5a5b;border-radius:4px;background:#203036bb;color:#cad4d0;font-size:10px;font-weight:700;padding:8px 10px;min-height:36px;text-transform:capitalize}
+.side-button:hover{border-color:#ba905f;color:var(--amber)}
+.inspector-loading{display:flex;align-items:center;gap:12px;padding:10px 0}
+.spinner{width:18px;height:18px;flex:none;border:2px solid #40565b;border-top-color:var(--amber);border-radius:50%;animation:rw-spin .9s linear infinite}
+@keyframes rw-spin{to{transform:rotate(360deg)}}
+@media(max-width:770px){
+ .panel-host--right{left:6px;right:6px;width:auto}
+ .side-button{display:none}
+ .confirm-actions button{min-width:0}
+ .upgrade-preview span{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){
+ .spinner{animation:none;border-top-color:var(--amber)}
+}
