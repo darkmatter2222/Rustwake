@@ -36,3 +36,6 @@ Instancing/static batching for repeated props. Load optional detailed glTF rig a
 
 ## Visual decision gate
 Review actual production screenshots desktop 1440x900, phone 390x844, landscape 844x390, and detailed near zoom. Include one 60s real interaction/animation capture. A capable reviewer compares the reference against the actual V2 build: occupancy, ground cover, machine density, amber/teal balance, road legibility, truck scale, animation and visual hierarchy. Numeric pixel tests are supporting only; sponsor approval remains a separately recorded decision. If visually wrong, REWORK regardless of green tests.
+
+## Canonical geometry schema (ART-01, #347)
+The enforceable scale/pivot/material contract for the procedural kit lives in docs/design/VOXEL_GEOMETRY.md and src/voxelSchema.js (rustwake.voxel.geometry.v1): 24×24 parcel, 3.5-unit cells, +Z frontage with named loading-bay/status ports, named pivot:<id> assemblies with declared swing reach, full-cell pick bounds with the 44px touch floor, worker/truck scale references and per-machine mesh/triangle budgets. It validates the live geometry; it does not grant art parity — that remains this document's visual decision gate and sponsor G1 (#276).

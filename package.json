@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/*.test.mjs",
-    "validate": "node --check src/content.js && node --check src/gridOccupancy.js && node --check src/simulation.js && node --check src/world.js",
+    "validate": "node --check src/content.js && node --check src/gridOccupancy.js && node --check src/simulation.js && node --check src/world.js && node --check src/voxelSchema.js",
     "typecheck": "npm run validate"
   },
   "dependencies": {"react":"18.3.1","react-dom":"18.3.1","three":"0.187.0"},
