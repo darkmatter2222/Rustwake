@@ -312,6 +312,30 @@ try {
     // NEGATIVE STATE: build mode (key "2"), hover the wreck rock cell -> red
     // ghost; tap -> the real validator stamps TERRAIN (no construction).
     await page.keyboard.press("2");
+    // On compact layouts the build catalog opens as a bottom sheet that can
+    // cover the target cell. Collapse it through the REAL UX-07 toggle (a
+    // genuine player action; camera + selection untouched) so hover/tap reach
+    // the canvas. No gate is relaxed: the cell must still be canvas-topmost.
+    let sheetCollapsedForTap = false;
+    {
+      const covered = await page.evaluate(([x, y]) => {
+        const e = document.elementFromPoint(x, y);
+        return !(e && e.classList && e.classList.contains("world-canvas"));
+      }, [wreckPt.p.x, wreckPt.p.y]);
+      if (covered) {
+        const host = page.locator('[data-testid="panel-host"]');
+        if (await host.count() && await host.getAttribute("data-collapsed") === "false") {
+          await page.locator('[data-testid="sheet-toggle"]').click();
+          await page.waitForFunction(() => document.getElementById("context-sheet-body")?.hidden === true, null, {timeout: 5000});
+          sheetCollapsedForTap = true;
+        }
+        const still = await page.evaluate(([x, y]) => {
+          const e = document.elementFromPoint(x, y);
+          return !(e && e.classList && e.classList.contains("world-canvas"));
+        }, [wreckPt.p.x, wreckPt.p.y]);
+        if (still) throw Error("CELL_COVERED_AFTER_SHEET_COLLAPSE at " + v.name);
+      }
+    }
     await page.mouse.move(wreckPt.p.x + 1, wreckPt.p.y);
     await page.mouse.move(wreckPt.p.x, wreckPt.p.y);
     await page.waitForTimeout(600);
@@ -376,7 +400,7 @@ try {
       landing, wide, detail, orbit, landmark, afterReject, afterBuild,
       stampMatchesApplied, beforeButtonZoom: beforeButton.zoom, buttonZoom: buttonZoom.zoom, appliedZoom,
       ghostChroma: {baselineRG, terrainRG, validRG, radiusDevicePx: radius},
-      terrainVerdict, padVerdict, sceneryStatic, simRunning,
+      terrainVerdict, padVerdict, sheetCollapsedForTap, sceneryStatic, simRunning,
       screenshots: shots, pageErrors: errs, failedRequests: failed, ...env
     });
     if (landing.world3d !== "ready" || landing.voxelSchema !== SCHEMA_ID || landing.machineCount !== 6 ||
