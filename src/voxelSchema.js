@@ -170,11 +170,11 @@ const RAW_MACHINES = {
     ],
     pivots: [
       {id: "scale", node: "pivot:scale", offset: [0, 2.95, 0.72], axis: "z",
-        motion: {kind: "oscillate", amplitude: 0.12, speed: 0.5, drive: "ambient-elapsed"}, swingRadius: 0.8,
+        motion: {kind: "oscillate", amplitude: 0.3, speed: 0.5, drive: "ambient-elapsed"}, swingRadius: 0.8,
         parts: [{id: "post", material: "steel"}, {id: "beam", material: "steel"},
           {id: "hangers", material: "steel"}, {id: "pans", material: "orange"}]},
       {id: "awning", node: "pivot:awning", offset: [0, 1.95, 0.72], axis: "x",
-        motion: {kind: "oscillate", amplitude: 0.05, speed: 0.8, drive: "ambient-elapsed"}, swingRadius: 0.85,
+        motion: {kind: "oscillate", amplitude: 0.12, speed: 0.8, drive: "ambient-elapsed"}, swingRadius: 0.85,
         parts: [{id: "canopy", material: "orange"}, {id: "scallops", material: "orange"}]}
     ],
     signage: "EXCHANGE",

@@ -34,8 +34,8 @@ export const ART04_MOTION=Object.freeze({
  gearSpeed:1.6,         // fabricator drive gear (axis z, working only)
  pinionSpeed:3.2,       // fabricator pinion, counter-rotating at the 2:1 radius ratio
  hammerAmp:.45,hammerSpeed:1.1, // fabricator trip hammer (axis x, oscillate)
- scaleAmp:.12,scaleSpeed:.5,    // market balance beam (axis z, AMBIENT)
- awningAmp:.05,awningSpeed:.8   // market awning flutter (axis x, AMBIENT)
+ scaleAmp:.3,scaleSpeed:.5,     // market balance beam (axis z, AMBIENT)
+ awningAmp:.12,awningSpeed:.8   // market awning flutter (axis x, AMBIENT)
 });
 
 // Dock shutter travel contract (depot). Distance is world units from the truck
