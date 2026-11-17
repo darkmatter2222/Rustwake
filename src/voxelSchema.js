@@ -87,18 +87,27 @@ const foot = (height, extra = {}) => {
 };
 
 const RAW_MACHINES = {
-  salvager: foot(2.285, {
+  // ART-02 (#348): rebuilt Scrap Extractor — stepped hull/roof, glazed cab, flared
+  // intake + discharge chute, radiator fins, exhaust stack (static top 2.74), rear
+  // counterweight. Rocker pivot contract unchanged; grapple head gains 3 teeth.
+  salvager: foot(2.74, {
     pickHeight: 2.95,
-    bounds: {width: PAD, height: 2.285, depth: PAD},
+    bounds: {width: PAD, height: 2.74, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "rust"}, {id: "roof", material: "roof"},
-      {id: "intake", material: "orange"}, {id: "chute", material: "steel"}, {id: "vents", material: "dark"}
+      {id: "hull", material: "rust"}, {id: "roof", material: "roof"}, {id: "roofStep", material: "roof"},
+      {id: "roofVents", material: "dark"}, {id: "cabFrame", material: "dark"}, {id: "cabGlass", material: "glass"},
+      {id: "intake", material: "orange"}, {id: "intakeMouth", material: "black"},
+      {id: "chute", material: "steel"}, {id: "chuteRim", material: "dark"},
+      {id: "radiatorFins", material: "dark"}, {id: "stack", material: "steel"}, {id: "stackCap", material: "rust"},
+      {id: "counterweight", material: "dark"}, {id: "sidePanel", material: "rust"},
+      {id: "bay", material: "orange"}, {id: "status", material: "lights"}
     ],
     pivots: [{id: "rocker", node: "pivot:rocker", offset: [0, 2.4, -0.2], axis: "y",
       motion: {kind: "oscillate", amplitude: 0.55, speed: 0.65}, swingRadius: 2.95,
-      parts: [{id: "turret", material: "dark"}, {id: "arm", material: "orange"}, {id: "head", material: "steel"}]}],
-    budget: {maxMeshes: 24, maxTriangles: 400}
+      parts: [{id: "turret", material: "dark"}, {id: "boom", material: "orange"},
+        {id: "head", material: "steel"}, {id: "teeth", material: "orange"}]}],
+    budget: {maxMeshes: 32, maxTriangles: 560}
   }),
   depot: foot(2.87, {
     bounds: {width: 3.13, height: 2.87, depth: PAD},
@@ -161,14 +170,38 @@ const RAW_MACHINES = {
     animations: [{kind: "pulse", target: "group.scale.y", amplitude: 0.009, speed: 5}],
     budget: {maxMeshes: 24, maxTriangles: 500}
   }),
-  crusher: foot(2.34, {
-    bounds: {width: PAD, height: 2.34, depth: PAD},
+  // ART-02 (#348): Crusher + screening plant, split from the shared refinery branch
+  // (refinery below is UNCHANGED — ART-03 seam). Open-front chamber, stepped hopper
+  // roof (static top 2.51), twin discharge chutes. The "sorter" outcome of the ART-02
+  // trio is the oscillating screen deck: V2's content registry has no standalone
+  // buildable sorter (adding one needs src/content.js + src/simulation.js, outside
+  // this lease), and the crusher's real sim outputs {iron:6, stone:2} ARE mechanical
+  // separation. Motion numbers mirror world.js ART02_MOTION exactly (no drift).
+  crusher: foot(2.51, {
+    bounds: {width: PAD, height: 2.51, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "rollers", material: "steel"},
-      {id: "hopper", material: "orange"}, {id: "grille", material: "dark"}
+      {id: "chamberWalls", material: "body"}, {id: "chamberRear", material: "body"},
+      {id: "chamberFloor", material: "dark"}, {id: "sideRibs", material: "dark"},
+      {id: "wearPlate", material: "rust"}, {id: "hopperThroat", material: "dark"},
+      {id: "hopperMid", material: "orange"}, {id: "hopperFlare", material: "orange"},
+      {id: "hopperRails", material: "steel"}, {id: "roofCap", material: "roof"},
+      {id: "chuteFerrous", material: "steel"}, {id: "chuteAggregate", material: "steel"},
+      {id: "chuteRimFerrous", material: "rust"}, {id: "chuteRimAggregate", material: "orange"},
+      {id: "ladder", material: "steel"}, {id: "bay", material: "orange"}, {id: "status", material: "lights"}
     ],
-    budget: {maxMeshes: 24, maxTriangles: 500}
+    pivots: [
+      {id: "rollerA", node: "pivot:rollerA", offset: [0, 1.35, 0.42], axis: "x",
+        motion: {kind: "spin", speed: 1.75}, swingRadius: 1.8,
+        parts: [{id: "shaft", material: "steel"}, {id: "teeth", material: "steel"}, {id: "flywheel", material: "dark"}]},
+      {id: "rollerB", node: "pivot:rollerB", offset: [0, 1.35, -0.18], axis: "x",
+        motion: {kind: "spin", speed: -1.75}, swingRadius: 0.4,
+        parts: [{id: "shaft", material: "steel"}, {id: "teeth", material: "steel"}]},
+      {id: "screen", node: "pivot:screen", offset: [0, 0.95, 0.95], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.04, speed: 3.4}, swingRadius: 1.1,
+        parts: [{id: "deck", material: "steel"}, {id: "meshBars", material: "dark"}]}
+    ],
+    budget: {maxMeshes: 46, maxTriangles: 660}
   }),
   refinery: foot(2.34, {
     bounds: {width: PAD, height: 2.34, depth: PAD},

@@ -154,15 +154,23 @@ test("frontage loading bay and status light exist on +Z and fit a truck", () => 
 });
 
 test("named pivots match schema offsets, axes and motion; animated reach is bounded", () => {
-  const expected = {salvager: "rocker", generator: "spin", crane: "crane", turret: "rotate"};
+  // Exact-expectation update (ART-02 #348, written justification): the crusher was
+  // static at ART-01; ART-02 authors its declared working parts — counter-rotating
+  // toothed rollers (rollerA carries the drive flywheel) and the oscillating screen
+  // deck that delivers the trio's "sorter" separation outcome. The salvager keeps
+  // its single rocker pivot; every other machine's pivot set is unchanged.
+  const expected = {salvager: ["rocker"], generator: ["spin"], crane: ["crane"], turret: ["rotate"],
+    crusher: ["rollerA", "rollerB", "screen"]};
   for (const b of BUILDINGS) {
     const group = build(b.id), desc = machineDescriptor(b.id);
-    assert.equal(desc.pivots.length, expected[b.id] ? 1 : 0, b.id + " pivot count");
+    const want = expected[b.id] || [];
+    assert.equal(desc.pivots.length, want.length, b.id + " pivot count");
+    assert.deepEqual(desc.pivots.map(p => p.id), want, b.id + " pivot ids");
     for (const pv of desc.pivots) {
       const node = group.getObjectByName(pv.node);
       assert.ok(node, b.id + " missing " + pv.node);
       assert.deepEqual([...node.position], pv.offset, b.id + " pivot offset");
-      assert.equal(expected[b.id], pv.id);
+      assert.ok(want.includes(pv.id));
       assert.ok(pv.swingRadius <= SCALE_REFERENCES.maxAnimatedReach);
     }
     if (b.id === "furnace" || b.id === "foundry")
