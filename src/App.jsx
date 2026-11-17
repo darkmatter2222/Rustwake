@@ -3,9 +3,10 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
+import {fleetState,truckAt,followTarget,readFleetSettings,writeFleetSettings} from "./fleet.js";
 import {classifyViewport,dockBottomOffset,sheetMaxHeight,readDockSettings,writeDockSettings} from "./dock.js";
 import "./styles.css";
 
@@ -87,11 +88,6 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
   <div className="panel-sub">Tap the starting cell, then tap the destination. Asphalt connects the freight fleet to machines.</div>
   <div className="stat-grid"><div><small>Network</small><strong>{g.roads.length} cells</strong></div><div><small>Per segment</small><strong>3 AG / 4 CR</strong></div></div>
   <div className="hint-box"><span>01</span> Select route origin<br/><span>02</span> Select route destination<br/><span>03</span> Trucks automatically use connected roads</div>
- </Card>;
- if(mode==="fleet")return <Card title="Active fleet" eyebrow="DISPATCH / PHYSICAL CARGO" onClose={close}>
-  <div className="panel-sub">Each truck physically follows connected road segments. Inventory is reserved while in transit.</div>
-  <div className="fleet-list">{g.vehicles.map(v=><div className="fleet-row" key={v.id}><span className="fleet-glyph">▰</span><div><strong>{v.name}</strong><small>{v.job?(v.job.phase==="toSource"?"Driving to pickup":"Delivering cargo"):"Available for dispatch"}</small></div><span className="fleet-label">{v.job?(v.job.amount+" "+v.job.resource):"IDLE"}</span></div>)}</div>
-  <div className="panel-footnote">Priority: maintain processor inputs, then haul finished products to your depot.</div>
  </Card>;
  if(mode==="research")return <Card title="Research & industry" eyebrow="PROGRESSION / LONG GAME" onClose={close}>
   <div className="panel-sub">Data and credits fund lasting research. Further eras unlock new materials, sectors and systems.</div>
@@ -245,6 +241,85 @@ function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmI
    <label><input type="checkbox" checked={ux.autoFrame} onChange={e=>onUx({autoFrame:e.target.checked})} data-testid="setting-autoframe"/> Keep machine in view</label>
    <button className="side-button" data-testid="setting-side" onClick={()=>onUx({panelSide:ux.panelSide==="auto"?"left":ux.panelSide==="left"?"right":"auto"})} title="Inspector dock side (desktop)">Dock: {ux.panelSide}</button>
   </div>
+ </Card>;
+}
+/* UX-05 (#363): fleet logistics is a pure read model over the authoritative
+   simulation (src/fleet.js). Routes, reserved/onboard loads, bay queues and
+   stuck reasons are the sim's own job fields — never a second fleet ledger.
+   A disabled truck (cancelled / route-blocked / reconciled) is NEVER shown as
+   hauling. The only mutation is the player's explicit cancelFreight command,
+   which returns the units to their source exactly once. Follow camera moves
+   ONLY through the public world.setView/applyCamera path (#307 invariants). */
+function FleetPanel({g,focusId,setFocusId,followId,onFollow,onStopFollow,prefs,onPrefs,onCancelFreight,close}){
+ const f=fleetState(g);
+ if(f.kind==="loading")return <Card title="Fleet logistics" eyebrow="DISPATCH / LOADING" onClose={close} className="fleet-panel">
+  <div className="inspector-loading" aria-busy="true" data-testid="fleet-loading"><span className="spinner" aria-hidden="true"/><p className="panel-sub">Reading dispatch state…</p></div>
+ </Card>;
+ const focus=f.rows.find(r=>r.id===focusId)||null;
+ const rows=prefs.showIdle?f.rows:f.rows.filter(r=>r.state!=="idle");
+ const focusBay=focus?.job?f.bays.find(b=>b.id===focus.job.destId):null;
+ return <Card title="Fleet logistics" eyebrow="DISPATCH / PHYSICAL CARGO" onClose={close} className="fleet-panel">
+  <div className="stat-grid fleet-summary">
+   <div><small>Active</small><strong data-testid="fleet-active">{f.totals.active}/{f.totals.trucks}</strong></div>
+   <div><small>Reserved</small><strong data-testid="fleet-reserved">{f.totals.reserved}</strong></div>
+   <div><small>Onboard</small><strong data-testid="fleet-onboard">{f.totals.onboard}</strong></div>
+  </div>
+  {f.totals.waiting>0&&<p className="panel-sub" data-testid="fleet-waiting">{f.totals.waiting} load{f.totals.waiting===1?"":"s"} waiting for a connected route — dispatch assigns them automatically.</p>}
+  {f.empty
+   ?<p className="panel-sub" data-testid="fleet-empty">No trucks in the yard. The starter fleet is restored with a fresh save; vehicle manufacturing arrives with a later progression phase.</p>
+   :<div className="fleet-list" data-testid="fleet-rows">{rows.map(r=><button type="button" key={r.id}
+     className={"fleet-row"+(focusId===r.id?" is-active":"")} data-testid={"truck-"+r.id} data-state={r.state}
+     aria-pressed={focusId===r.id} onClick={()=>setFocusId(r.id)}
+     aria-label={r.name+": "+r.stateLabel+(r.job?", "+r.job.amount+" "+r.job.resource:"")+(r.stuck?", "+r.stuck.reason:"")}>
+     <span className="fleet-glyph" aria-hidden="true">▰</span>
+     <div><strong>{r.name}</strong><small>{r.stateLabel}</small></div>
+     <span className={"fleet-label"+(r.tone==="danger"?" fleet-label--danger":"")}>{r.state==="error"?"REPAIR":r.job?(r.job.amount+" "+r.job.resource):"IDLE"}</span>
+    </button>)}</div>}
+  {focus&&<div className="fleet-detail" data-testid="fleet-detail" data-truck={focus.id}>
+   <div className="selected-hero"><span className="selected-hero__mark" style={{background:"var(--amber)"}}>▰</span><div><strong>{focus.name}</strong>
+    <span className={"status-chip status-chip--"+focus.tone} data-testid="fleet-state"><i aria-hidden="true"/>{focus.stateLabel.toUpperCase()}</span></div></div>
+   <p className="panel-sub" data-testid="fleet-detail-note">{focus.detail}</p>
+   {focus.job&&<>
+    <div className={"bay-line"+(focus.state==="blocked"?" bay-line--warn":"")} data-testid="fleet-route">
+     <span aria-hidden="true">⇄</span>
+     <span>{(focus.source.name||"Missing source")+(focus.source.missing?"":" "+focus.source.x+","+focus.source.z)} → {(focus.dest.name||"Missing destination")+(focus.dest.missing?"":" "+focus.dest.x+","+focus.dest.z)}</span>
+    </div>
+    <div className="stat-grid">
+     <div><small>Reserved load</small><strong data-testid="fleet-reserved-load">{focus.reserved} {focus.resource?.unit}</strong></div>
+     <div><small>Onboard</small><strong data-testid="fleet-onboard-load">{focus.onboard} {focus.resource?.unit}</strong></div>
+     <div><small>Route progress</small><strong data-testid="fleet-progress">{Math.round(focus.progress*100)}%</strong></div>
+     <div><small>ETA</small><strong data-testid="fleet-eta">{focus.etaSeconds!=null?focus.etaSeconds.toFixed(1)+"s":"—"}</strong></div>
+    </div>
+    <Meter value={focus.progress} max={1} color={focus.tone==="danger"?"var(--danger)":"var(--amber)"}/>
+   </>}
+   {focus.stuck&&<div className="bay-line bay-line--warn" role={focus.state==="error"?"alert":"status"}
+    data-testid={focus.state==="error"?"fleet-error":"fleet-stuck"}>
+    <span aria-hidden="true">⚠</span><span><strong>{focus.stuck.code}</strong> — {focus.stuck.reason}. {focus.stuck.detail}</span>
+   </div>}
+   {focus.state==="noroute"&&focus.unaffordable&&<p className="panel-sub text-warn" data-testid="fleet-unaffordable">A road segment costs 3 AG + 4 CR — the depot cannot afford one right now. Sell surplus or wait for production.</p>}
+   {focusBay&&focusBay.queue.length>0&&<div className="fleet-queue" data-testid="fleet-bay-queue">
+    <h3 className="panel-section">Bay queue — {focusBay.name||"bay"}</h3>
+    {focusBay.queue.map(q=><div key={q.vehicleId} className="fleet-queue__row" data-vehicle={q.vehicleId}>
+     <strong>{q.name}</strong><span>{q.role==="pickup"?"PICKUP":"DELIVERY"} · {q.amount} {q.unit}</span>
+     <em>{q.loading?"AT BAY":Math.ceil(q.remainingCells)+" cells out"}</em>
+    </div>)}
+   </div>}
+   <div className="fleet-actions">
+    <button type="button" className="focus-button" data-testid="fleet-follow" aria-pressed={followId===focus.id}
+     onClick={()=>followId===focus.id?onStopFollow():onFollow(focus.id)}>
+     {followId===focus.id?"Stop following":"Follow truck"}</button>
+    {focus.cancel.allowed
+     ?<button type="button" className="danger-button" data-testid="fleet-cancel" onClick={()=>onCancelFreight(focus.id)}>Cancel job — return load</button>
+     :<button type="button" className="danger-button" data-testid="fleet-cancel" disabled title={focus.cancel.reason}>Cancel job — no freight</button>}
+   </div>
+  </div>}
+  <div className="inspector-settings">
+   <label><input type="checkbox" checked={prefs.showIdle} onChange={e=>onPrefs({showIdle:e.target.checked})} data-testid="fleet-setting-idle"/> Show idle trucks</label>
+   <label><input type="checkbox" checked={prefs.followCam} onChange={e=>onPrefs({followCam:e.target.checked})} data-testid="fleet-setting-follow"/> Keep following truck in view</label>
+  </div>
+  <button type="button" className="rotate-button" data-testid="fleet-build-locked" disabled aria-describedby="fleet-build-lock-reason">Build new truck — locked</button>
+  <p className="panel-footnote" id="fleet-build-lock-reason">{f.buildLock.reason}</p>
+  <div className="panel-footnote">Every value mirrors the simulation's freight ledger live. Canceling returns the reserved or onboard units to their source exactly once — never both. Priority: maintain processor inputs, then haul finished products to your depot.</div>
  </Card>;
 }
 export default function App(){
