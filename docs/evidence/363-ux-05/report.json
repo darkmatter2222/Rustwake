@@ -1,0 +1,453 @@
+{
+  "version": 1,
+  "issue": 363,
+  "task": "UX-05 fleet logistics panel with real truck and cargo states",
+  "build": "production-preview",
+  "source_sha": "8e688415fe6c446113cdcf1ddc321924d8024d0d",
+  "started": "2026-11-17T08:04:33.259Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "mobile": false,
+      "touch": false,
+      "screenshots": [
+        "desktop-fleet-panel.png",
+        "desktop-fleet-hauling-detail.png",
+        "desktop-fleet-follow.png",
+        "desktop-fleet-after-cancel.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15
+        },
+        "geometry": {
+          "panel": {
+            "x": 33.109375,
+            "y": 200,
+            "width": 356,
+            "height": 567
+          },
+          "dock": {
+            "x": 462.5,
+            "y": 771,
+            "width": 515,
+            "height": 88
+          },
+          "sheetMaxHeight": 567,
+          "sheetBody": {
+            "scrollHeight": 691,
+            "clientHeight": 510,
+            "overflowY": "auto"
+          },
+          "tapTargets": {
+            "label": "fleet-open",
+            "count": 24,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "nonBlank": {
+          "width": 1440,
+          "height": 900,
+          "distinctColors": 2664,
+          "meanLuma": 89.09295711398848
+        },
+        "equality": {
+          "totals": {
+            "expected": {
+              "active": "3/3",
+              "reserved": "17",
+              "onboard": "15"
+            },
+            "actual": {
+              "active": "3/3",
+              "reserved": "17",
+              "onboard": "15"
+            }
+          },
+          "detail": {
+            "expected": {
+              "reserved": "0 FE",
+              "onboard": "15 FE",
+              "progress": "5%",
+              "eta": "4.0s"
+            },
+            "actual": {
+              "reserved": "0 FE",
+              "onboard": "15 FE",
+              "progress": "5%",
+              "eta": "4.0s"
+            },
+            "job": {
+              "phase": "toDest",
+              "amount": 15,
+              "resource": "iron",
+              "segment": 0,
+              "progress": 0.5806399999999999,
+              "routeLen": 12
+            },
+            "speedFormula": "(speed||2.1)*(fleetResearch?1.18:1)"
+          }
+        },
+        "haulingChip": "DELIVERING CARGO",
+        "bayQueue": {
+          "rows": [
+            {
+              "vehicle": 3,
+              "text": "1 cells out"
+            },
+            {
+              "vehicle": 1,
+              "text": "3 cells out"
+            },
+            {
+              "vehicle": 2,
+              "text": "11 cells out"
+            }
+          ],
+          "ordered": true
+        },
+        "haulingAttempts": [
+          {
+            "attempt": 0,
+            "id": 2,
+            "ok": true
+          }
+        ],
+        "follow": {
+          "posePreserved": true,
+          "cameraTargetMoved": true,
+          "truckId": 2,
+          "focusPixel": {
+            "x": 950.4000000000001,
+            "y": 405
+          },
+          "truckPixel": {
+            "x": 950.4000000000001,
+            "y": 405
+          },
+          "pinErrorPx": 0,
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "cancel": {
+          "truckId": 1,
+          "phase": "toDest",
+          "resource": "iron",
+          "amount": 10,
+          "sourceId": 4,
+          "expected": {
+            "sourceBagDelta": 10,
+            "totalsUnchanged": true,
+            "reservedDelta": 0,
+            "onboardDelta": -10
+          },
+          "actual": {
+            "sourceBagDelta": 10,
+            "totalsUnchanged": true,
+            "reservedDelta": 0,
+            "onboardDelta": -10,
+            "rowStateAfter": "idle"
+          },
+          "note": "Atomic in-transaction stamp; dispatch may legitimately re-assign the idle truck afterwards"
+        },
+        "prefs": {
+          "key": "rustwake:v2:fleet-settings",
+          "storedAfterToggle": "{\"showIdle\":false,\"followCam\":true}",
+          "afterReload": {
+            "showIdleChecked": false,
+            "idleRowsVisible": 0
+          }
+        },
+        "roadArmingRegression": {
+          "cell": {
+            "x": 12,
+            "z": 14
+          },
+          "pixel": {
+            "x": 655.9626421287933,
+            "y": 505.45744528851355
+          },
+          "zoom": 1.15,
+          "armed": true,
+          "escapeCleared": true,
+          "escapeReturnsToSelect": true,
+          "startHintOnReentry": "TAP A START CELL"
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1.15,
+          "afterZoom": 1.7825,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        },
+        "documentScroll": false
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "mobile": true,
+      "touch": true,
+      "screenshots": [
+        "phone-fleet-sheet.png",
+        "phone-fleet-follow.png"
+      ],
+      "proof": {
+        "geometry": {
+          "panel": {
+            "x": 6,
+            "y": 359.765625,
+            "width": 378,
+            "height": 388.234375
+          },
+          "dock": {
+            "x": 6,
+            "y": 754,
+            "width": 378,
+            "height": 66
+          },
+          "sheetMaxHeight": 388.24,
+          "sheetBody": {
+            "scrollHeight": 1192,
+            "clientHeight": 331,
+            "overflowY": "auto"
+          },
+          "tapTargets": {
+            "label": "fleet-open",
+            "count": 26,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "focusAboveSheet": {
+          "focusPixel": {
+            "x": 257.40000000000003,
+            "y": 202.56
+          },
+          "sheetTop": 359.765625
+        },
+        "nonBlank": {
+          "width": 780,
+          "height": 1688,
+          "distinctColors": 2013,
+          "meanLuma": 69.61156131820637
+        },
+        "follow": {
+          "posePreserved": true,
+          "pinErrorPx": 5.684341886080802e-14,
+          "truckPixel": {
+            "x": 257.4000000000001,
+            "y": 202.56
+          },
+          "focusPixel": {
+            "x": 257.40000000000003,
+            "y": 202.56
+          },
+          "aboveSheet": true
+        },
+        "collapse": {
+          "cameraUnmoved": true,
+          "panelMounted": true
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "webglContextCount": 1,
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264
+        },
+        "documentScroll": false
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "adverse-desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "mobile": false,
+      "touch": false,
+      "screenshots": [
+        "adverse-desktop-fleet-noroute.png",
+        "adverse-desktop-fleet-tap-inspect.png"
+      ],
+      "proof": {
+        "adverse": {
+          "stuckCode": "NO_ROUTE",
+          "stuckText": "⚠\nNO_ROUTE — 3 loads waiting, but no connected asphalt path reaches them. Connect the source and destination bays with roads (3 AG + 4 CR per segment).",
+          "unaffordableText": "A road segment costs 3 AG + 4 CR — the depot cannot afford one right now. Sell surplus or wait for production.",
+          "buildDisabled": true,
+          "lockReason": "Vehicle manufacturing is not wired to the simulation yet (#280) — the yard dispatches its existing haulers. Build roads and machines to keep them working."
+        },
+        "geometry": {
+          "panel": {
+            "x": 33.109375,
+            "y": 200,
+            "width": 356,
+            "height": 567
+          },
+          "dock": {
+            "x": 462.5,
+            "y": 771,
+            "width": 515,
+            "height": 88
+          },
+          "sheetMaxHeight": 567,
+          "sheetBody": {
+            "scrollHeight": 1022,
+            "clientHeight": 510,
+            "overflowY": "auto"
+          },
+          "tapTargets": {
+            "label": "fleet-open",
+            "count": 26,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "nonBlank": {
+          "width": 1440,
+          "height": 900,
+          "distinctColors": 2316,
+          "meanLuma": 103.49557168874584
+        },
+        "truckTapRoadMode": {
+          "truckId": 1,
+          "tapPixel": {
+            "x": 752.0186789356034,
+            "y": 413.0283698076576
+          },
+          "roundTripCellDistance": 0,
+          "mode": "road",
+          "focused": true,
+          "roadArmed": false
+        },
+        "truckTapSelectMode": {
+          "truckId": 2,
+          "tapPixel": {
+            "x": 720,
+            "y": 431.51418490382883
+          },
+          "roundTripCellDistance": 0,
+          "mode": "select",
+          "focused": true,
+          "roadArmed": false
+        },
+        "negativeTap": {
+          "cell": {
+            "x": 12,
+            "z": 9
+          },
+          "pixel": {
+            "x": 816.0560368068101,
+            "y": 413.0283698076576
+          },
+          "zoom": 1.15,
+          "nearestTruckDistanceCells": 1.4142135623730951,
+          "radius": 0.65,
+          "roadArmed": true,
+          "fleetOpened": false
+        },
+        "documentScroll": false,
+        "cameraInvariants": {
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "empty-phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "mobile": true,
+      "touch": true,
+      "screenshots": [
+        "empty-phone-fleet-empty.png"
+      ],
+      "proof": {
+        "empty": {
+          "totals": "0/0",
+          "text": "No trucks in the yard. The starter fleet is restored with a fresh save; vehicle manufacturing arrives with a later progression phase.",
+          "buildDisabled": true
+        },
+        "geometry": {
+          "panel": {
+            "x": 6,
+            "y": 359.765625,
+            "width": 378,
+            "height": 388.234375
+          },
+          "dock": {
+            "x": 6,
+            "y": 754,
+            "width": 378,
+            "height": 66
+          },
+          "sheetMaxHeight": 388.24,
+          "sheetBody": {
+            "scrollHeight": 554,
+            "clientHeight": 331,
+            "overflowY": "auto"
+          },
+          "tapTargets": {
+            "label": "fleet-open",
+            "count": 21,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "nonBlank": {
+          "width": 780,
+          "height": 1688,
+          "distinctColors": 1938,
+          "meanLuma": 70.20443494916752
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2 touch), not a physical device",
+    "Numeric layout/value proofs do not certify visual beauty — sponsor G1 review required (#276)",
+    "Local preview only — the live hosted receipt is produced at release by the release engineer",
+    "Blocked/error freight rows are transient in the live sim (the next tick returns the load); those states are proven by tests/fleet.test.mjs + tests/fleetWiring.test.mjs against the real transactions, and the persistent NO_ROUTE/unaffordable/empty/locked states are captured here"
+  ],
+  "completed": "2026-11-17T08:06:09.550Z"
+}
