@@ -1,0 +1,770 @@
+// ART-03 (#349) production-build industrial-rig capture. NEW script — does not
+// modify any existing capture script. Run AFTER `npm run build`: spawns vite
+// preview, ONE Chromium, sequential contexts.
+//
+// Evidence produced (docs/evidence/349-art-03 by default):
+//  - desktop 1440x900 dpr1 + emulated phone 390x844 dpr2 (hasTouch/isMobile):
+//    fresh first-run home yard (refinery/foundry stamps "absent"), then a
+//    tier-1 seeded save where the Fuel Refinery and Alloy Foundry are placed
+//    through the REAL build UI (blueprint card -> tap -> lastSiteOk -> 5s
+//    assembly observed via the inspector),
+//  - per-rig strategic-zoom clips + picking proof for all four ART-03 rigs
+//    (Turbine Generator, Induction Furnace, Fuel Refinery, Alloy Foundry),
+//  - 96px silhouette legibility: all six rig pairs decoded independently
+//    (zlib PNG decode in this script), box-downsampled, pairwise diff floors,
+//  - negative states from REAL simulation seeds (never hardcoded timers):
+//    starved yard (no upstream producer, empty inventories -> starved stamps),
+//    unpowered yard (generator frozen mid-assembly -> supply 0 -> unpowered
+//    stamps), reduced-motion parked art03Clock constant over real browser
+//    time, and a WebGL-context failure proving the app fails loudly,
+//  - motion timeline from the REAL art03Clock/art03Load/art03<type> stamps
+//    (generator work clock = elapsed x demand/supply, sim-only),
+//  - #307 camera invariants: landing yaw/elevation, synchronous stamp==applied
+//    zoom, single WebGL canvas, no document scroll, method-body sha256-16 hashes.
+//
+// No fixed setTimeout sleeps: every wait is page.waitForFunction on a real
+// dataset stamp, inspector text, or the browser's own performance.now clock.
+// Numeric smoke only — PASS_NUMERIC_ONLY, never visual approval. Reviewer/product
+// acceptance and sponsor G1 visual review of the deployed build remain required.
+import {chromium} from "playwright-core";
+import {spawn} from "node:child_process";
+import {mkdir, writeFile, readFile} from "node:fs/promises";
+import {resolve} from "node:path";
+import crypto from "node:crypto";
+import zlib from "node:zlib";
+import {SCHEMA_ID, machineDescriptor} from "../src/voxelSchema.js";
+import {worldFootprint} from "../src/gridOccupancy.js";
+import {CELL, SAVE_KEY} from "../src/content.js";
+
+// world.js textPanel needs a 2D canvas at import time; stub it (no pixels read).
+globalThis.document = {
+  createElement: () => ({width: 0, height: 0, getContext: () => new Proxy({}, {get: () => () => {}})})
+};
+const {makeBuilding, ART03_MOTION, ART03_TYPES} = await import("../src/world.js");
+const {createGame, checkSite} = await import("../src/simulation.js");
+
+const OUT = resolve(process.env.RUSTWAKE_CAPTURE_OUT || "docs/evidence/349-art-03");
+const PORT = Number(process.env.RUSTWAKE_PREVIEW_PORT || 4193);
+const HOST = `http://127.0.0.1:${PORT}/rustwake/`;
+const ORIGIN = `http://127.0.0.1:${PORT}`;
+const SOURCE_SHA = process.env.RUSTWAKE_SOURCE_SHA || process.env.GITHUB_SHA || "local";
+
+const RIGS = [
+  {type: "generator", name: "Turbine Generator"},
+  {type: "furnace", name: "Induction Furnace"},
+  {type: "refinery", name: "Fuel Refinery"},
+  {type: "foundry", name: "Alloy Foundry"}
+];
+const rigName = type => RIGS.find(r => r.type === type).name;
+
+// ---- Deterministic scenario seeds (real save schema, readGame coerces) ----
+// Sites are validated with the REAL checkSite against a tier-1 rich-bank yard,
+// so the UI placement taps land on genuinely valid cells.
+function richBank(g) {
+  Object.assign(g.bank, {credits: 6000, scrap: 600, iron: 300, stone: 300, steel: 200, copper: 200, fuel: 200, water: 200});
+  return g;
+}
+function baseSeed() {
+  const g = createGame();
+  g.tier = 1; g.stats.produced = 60; g.lastSavedAt = Date.now();
+  return richBank(g);
+}
+function findSite(g, type, preferred) {
+  for (const [x, z] of preferred) if (checkSite(g, type, x, z, 0).ok) return {x, z};
+  for (let z = 4; z <= 20; z++) for (let x = 4; x <= 20; x++)
+    if (checkSite(g, type, x, z, 0).ok) return {x, z};
+  throw Error("NO_VALID_SITE for " + type);
+}
+function addRig(g, type, site, inventory = {}) {
+  const b = {id: g.nextId++, type, x: site.x, z: site.z, rot: 0, level: 1, remaining: 0, timer: 0, inventory};
+  g.buildings.push(b);
+  return b;
+}
+const scanG = baseSeed();
+const SITE_REFINERY = findSite(scanG, "refinery", [[9, 9], [9, 10], [10, 9], [8, 9]]);
+addRig(scanG, "refinery", SITE_REFINERY);
+const SITE_FOUNDRY = findSite(scanG, "foundry", [[9, 14], [9, 15], [10, 14], [8, 14], [13, 14]]);
+const FP = Object.fromEntries(RIGS.map(r => {
+  const site = r.type === "refinery" ? SITE_REFINERY : r.type === "foundry" ? SITE_FOUNDRY
+    : {x: scanG.buildings.find(b => b.type === r.type).x, z: scanG.buildings.find(b => b.type === r.type).z};
+  return [r.type, worldFootprint(r.type, site.x, site.z, 0)];
+}));
+const YARD_MID = {
+  x: RIGS.reduce((a, r) => a + FP[r.type].pivot.x, 0) / 4,
+  z: RIGS.reduce((a, r) => a + FP[r.type].pivot.z, 0) / 4
+};
+// Seeded unlock yard: starter layout untouched, tier 1 + bank afford both rigs.
+const unlockSeed = () => baseSeed();
+// Working yard: all four rigs complete and stocked; generator load = 12/12.
+function workingSeed() {
+  const g = baseSeed();
+  g.buildings.find(b => b.type === "furnace").inventory = {iron: 40, fuel: 20};
+  addRig(g, "refinery", SITE_REFINERY, {scrap: 80, water: 20});
+  addRig(g, "foundry", SITE_FOUNDRY, {steel: 40, copper: 30, fuel: 20});
+  return g;
+}
+// Starved yard: no upstream producer (salvager removed), empty inventories and
+// an empty material bank -> every cycling rig genuinely lacks recipe inputs.
+function starvedSeed() {
+  const g = baseSeed();
+  g.buildings = g.buildings.filter(b => b.type !== "salvager");
+  g.buildings.find(b => b.type === "furnace").inventory = {};
+  addRig(g, "refinery", SITE_REFINERY, {});
+  addRig(g, "foundry", SITE_FOUNDRY, {});
+  for (const k of ["iron", "fuel", "scrap", "water", "steel", "copper"]) g.bank[k] = 0;
+  return g;
+}
+// Unpowered yard: the only generator is frozen mid-assembly (remaining 1e9, the
+// freight-test pattern) -> supply 0 < demand -> every consumer is unpowered.
+function unpoweredSeed() {
+  const g = workingSeed();
+  g.buildings.find(b => b.type === "generator").remaining = 1e9;
+  return g;
+}
+
+// #307 hash guard — same extraction as tests/salvageModels.test.mjs.
+const worldSrc = (await readFile(resolve("src/world.js"), "utf8")).replace(/\r\n/g, "\n");
+const methodBody = name => {
+  const start = worldSrc.indexOf(name + "(){");
+  if (start < 0) throw Error(name + " missing from src/world.js");
+  let depth = 0, j = worldSrc.indexOf("{", start);
+  for (; j < worldSrc.length; j++) {
+    if (worldSrc[j] === "{") depth++;
+    else if (worldSrc[j] === "}") {depth--; if (depth === 0) {j++; break;}}
+  }
+  return worldSrc.slice(start, j);
+};
+const cameraHashes = {};
+for (const [name, expected] of [["applyCamera", "f3afa5479a66b97e"], ["stampCamera", "691b3c0a3480e97b"]]) {
+  const actual = crypto.createHash("sha256").update(" " + methodBody(name)).digest("hex").slice(0, 16);
+  cameraHashes[name] = {expected, actual, ok: actual === expected};
+}
+
+// Measured per-rig budgets from the REAL geometry (Node side, same as tests).
+const budgets = {};
+for (const {type} of RIGS) {
+  const {group} = makeBuilding({id: 99, type, x: 11.5, z: 11.5, remaining: 0}, 0);
+  let meshes = 0, triangles = 0;
+  group.traverse(n => {
+    if (!n.isMesh || n.name === "pick:volume" || !n.material.visible) return;
+    meshes++;
+    triangles += (n.geometry.index ? n.geometry.index.count : n.geometry.attributes.position.count) / 3;
+  });
+  const desc = machineDescriptor(type);
+  budgets[type] = {meshes, triangles, declared: desc.budget, pivots: desc.pivots.map(p => p.id),
+    bounds: desc.bounds, pickHeight: desc.pick.size[1]};
+}
+
+const report = {
+  version: 1, build: "production-preview", issue: 349, schema: SCHEMA_ID,
+  source_sha: SOURCE_SHA,
+  started: new Date().toISOString(),
+  cameraHashes, budgets, art03Motion: ART03_MOTION,
+  sites: {refinery: SITE_REFINERY, foundry: SITE_FOUNDRY},
+  freshLanding: [], views: [], placement: [], picking: [], motion: null,
+  negatives: {starved: [], unpowered: [], reducedMotion: [], webglFailure: null},
+  legibility: null,
+  status: "UNKNOWN", errors: [],
+  limitations: [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile)",
+    "Scenario yards (tier-1 unlock, working, starved, unpowered) are seeded through the real save schema; status itself is derived only by the live simulation from that state",
+    "V2 has no 2D fallback renderer; the WebGL-failure negative proves a loud failure, not a playable fallback",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity, reviewer/product acceptance or sponsor G1 approval"
+  ]
+};
+let child, browser;
+await mkdir(OUT, {recursive: true});
+
+// ---- projection helpers (inverse of src/camera.js, extended with world Y) ----
+function screenOfWorld(cam, rect, wx, wy, wz) {
+  const wpp = 80 / (rect.height * cam.zoom);
+  const dx = wx - cam.x, dz = wz - cam.z;
+  const th = cam.yaw * Math.PI / 180, el = cam.elevation * Math.PI / 180;
+  const cs = Math.cos(th), sn = Math.sin(th);
+  const u = cs * dx - sn * dz;
+  const v = wy * Math.cos(el) + (-sn * dx - cs * dz) * Math.sin(el);
+  return {x: rect.left + rect.width / 2 + u / wpp, y: rect.top + rect.height / 2 - v / wpp};
+}
+const screenOfGround = (cam, rect, wx, wz) => screenOfWorld(cam, rect, wx, 0, wz);
+const pose = page => page.locator(".world-canvas").evaluate(c => ({
+  yaw: Number(c.dataset.cameraYaw), elevation: Number(c.dataset.cameraElevation),
+  zoom: Number(c.dataset.cameraZoom), x: Number(c.dataset.cameraX), z: Number(c.dataset.cameraZ),
+  voxelSchema: c.dataset.voxelSchema, machineCount: Number(c.dataset.machineCount),
+  world3d: c.dataset.world3d,
+  art03Generator: c.dataset.art03Generator, art03Furnace: c.dataset.art03Furnace,
+  art03Refinery: c.dataset.art03Refinery, art03Foundry: c.dataset.art03Foundry,
+  art03Load: c.dataset.art03Load, art03Clock: c.dataset.art03Clock, art03Reduced: c.dataset.art03Reduced
+}));
+const canvasRect = page => page.locator(".world-canvas").evaluate(c => {
+  const r = c.getBoundingClientRect();
+  return {left: r.left, top: r.top, width: r.width, height: r.height};
+});
+const shot = (page, name, clip) => page.screenshot({path: resolve(OUT, name), fullPage: false, animations: "disabled", ...(clip ? {clip} : {})});
+// Real-clock wait inside the browser (NOT a Node setTimeout sleep).
+const waitForClock = (page, ms) => page.evaluate(() => performance.now())
+  .then(t0 => page.waitForFunction(a => performance.now() - a.t0 > a.ms, {t0, ms}, {timeout: ms + 15000, polling: 50}));
+const angDiff = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
+
+async function orbitTo(page, targetYaw) {
+  const cam = await pose(page), rect = await canvasRect(page);
+  const curYaw = ((cam.yaw + 180) % 360) - 180;
+  const dx = (curYaw - targetYaw) / .42;
+  const sx = rect.left + rect.width * .6, sy = rect.top + rect.height * .5;
+  await page.keyboard.down("Shift");
+  await page.mouse.move(sx, sy);
+  await page.mouse.down();
+  await page.mouse.move(sx + dx, sy, {steps: 16});
+  await page.mouse.up();
+  await page.keyboard.up("Shift");
+  await page.waitForFunction(t => Math.abs(((Number(document.querySelector(".world-canvas").dataset.cameraYaw) - t + 540) % 360) - 180) < .5,
+    targetYaw, {timeout: 8000, polling: 50});
+  return pose(page);
+}
+// Which element actually owns a screen point (wheel/tap delivery diagnostics).
+const topmostAt = (page, p) => page.evaluate(([x, y]) => {
+  const e = document.elementFromPoint(x, y);
+  if (!e) return {canvas: false, top: "null"};
+  const cls = typeof e.className === "string" && e.className ? "." + e.className.trim().split(/\s+/).join(".") : "";
+  const tid = e.dataset && e.dataset.testid ? "[data-testid=" + e.dataset.testid + "]" : "";
+  return {canvas: e.classList.contains("world-canvas"), top: e.tagName.toLowerCase() + cls + tid};
+}, [p.x, p.y]);
+// CAM-05: the contextual sheet toggle must never move the applied camera.
+async function sheetToggleTo(page, collapsed) {
+  const toggle = page.locator('[data-testid="sheet-toggle"]');
+  if (!(await toggle.count())) return false;
+  const want = collapsed ? "false" : "true"; // aria-expanded is the inverse
+  if ((await toggle.getAttribute("aria-expanded")) === want) return false;
+  const before = await pose(page);
+  await toggle.click();
+  await page.waitForFunction(c => document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed === c,
+    String(collapsed), {timeout: 8000, polling: 50});
+  const after = await pose(page);
+  for (const k of ["yaw", "elevation", "zoom", "x", "z"])
+    if (before[k] !== after[k])
+      throw Error("SHEET_TOGGLE_MOVED_CAMERA: " + k + " " + before[k] + " -> " + after[k]);
+  return true;
+}
+// UX-07 phone sheet / alarm rail can overlay the canvas: resolve a genuinely
+// exposed canvas anchor before wheeling (elementFromPoint FIRST, never guess).
+async function exposedCanvasPoint(page, preferred) {
+  let hit = await topmostAt(page, preferred);
+  if (hit.canvas) return preferred;
+  await sheetToggleTo(page, true);
+  hit = await topmostAt(page, preferred);
+  if (hit.canvas) return preferred;
+  const rect = await canvasRect(page);
+  for (const fy of [.3, .45, .6, .2, .75])
+    for (const fx of [.5, .3, .7, .15, .85]) {
+      const p = {x: rect.left + rect.width * fx, y: rect.top + rect.height * fy};
+      hit = await topmostAt(page, p);
+      if (hit.canvas) return p;
+    }
+  throw Error("NO_EXPOSED_CANVAS_ANCHOR: preferred=" + JSON.stringify(preferred) + " topmost=" + hit.top);
+}
+// CAM-03 anchored wheel zoom, closed-loop on the synchronous stamp (no sleeps).
+async function wheelZoomAt(page, point, targetZoom) {
+  point = await exposedCanvasPoint(page, point);
+  await page.mouse.move(point.x, point.y);
+  let zoom = (await pose(page)).zoom;
+  for (let i = 0; i < 24 && Math.abs(zoom - targetZoom) > 1e-4; i++) {
+    const prev = zoom;
+    await page.mouse.wheel(0, -Math.log(targetZoom / prev) / .0015);
+    try {
+      await page.waitForFunction(p => Math.abs(Number(document.querySelector(".world-canvas").dataset.cameraZoom) - p) > 1e-6,
+        prev, {timeout: 2000, polling: 30});
+    } catch {
+      const diag = await topmostAt(page, point);
+      const stampNow = (await pose(page)).zoom;
+      throw Error("WHEEL_ZOOM_STAMP_STALLED iter " + i + ": anchor=" + JSON.stringify(point) +
+        " topmost=" + diag.top + " prev=" + prev + " stampNow=" + stampNow + " target=" + targetZoom);
+    }
+    zoom = (await pose(page)).zoom;
+  }
+  if (Math.abs(zoom - targetZoom) > 1e-3)
+    throw Error("ZOOM_TARGET_NOT_REACHED: wanted " + targetZoom + " got " + zoom);
+  return pose(page);
+}
+async function zoomToWorld(page, wp, targetZoom, minVisibleZoom) {
+  let cam = await pose(page), rect = await canvasRect(page);
+  let p = screenOfGround(cam, rect, wp.x, wp.z);
+  if (p.x < rect.left || p.x > rect.left + rect.width || p.y < rect.top || p.y > rect.top + rect.height) {
+    await wheelZoomAt(page, {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2}, minVisibleZoom);
+    cam = await pose(page); rect = await canvasRect(page);
+    p = screenOfGround(cam, rect, wp.x, wp.z);
+  }
+  return wheelZoomAt(page, p, targetZoom);
+}
+const dismissIntro = async page => {
+  const btn = page.getByRole("button", {name: /Enter the yard/});
+  if (await btn.count()) await btn.click();
+};
+const tap = (page, p, touch) => touch ? page.touchscreen.tap(p.x, p.y) : page.mouse.click(p.x, p.y);
+// First footprint-cell center whose screen point hits the canvas itself (HUD-safe).
+async function clickableCell(page, fp) {
+  const rect = await canvasRect(page), cam = await pose(page);
+  for (let i = 0; i < fp.base.w; i++)
+    for (let j = 0; j < fp.base.d; j++) {
+      const p = screenOfGround(cam, rect, fp.min.x + CELL / 2 + i * CELL, fp.min.z + CELL / 2 + j * CELL);
+      const hit = await page.evaluate(([x, y]) => {
+        const e = document.elementFromPoint(x, y);
+        return !!(e && e.classList && e.classList.contains("world-canvas"));
+      }, [p.x, p.y]);
+      if (hit) return p;
+    }
+  return null;
+}
+async function openPage(ctx, seed) {
+  const page = await ctx.newPage(), errs = [], failed = [];
+  page.on("pageerror", e => errs.push(String(e)));
+  page.on("requestfailed", r => {try {if (new URL(r.url()).origin === ORIGIN) failed.push(r.url());} catch {}});
+  if (seed) await page.addInitScript(([k, json]) => {localStorage.setItem(k, json);}, [SAVE_KEY, JSON.stringify(seed)]);
+  await page.goto(HOST, {waitUntil: "domcontentloaded", timeout: 30000});
+  await page.locator(".world-canvas").waitFor({state: "visible", timeout: 30000});
+  await page.waitForFunction(() => document.querySelector(".world-canvas")?.dataset.world3d === "ready", null, {timeout: 20000});
+  await dismissIntro(page);
+  return {page, errs, failed};
+}
+// Real UI placement: build tool -> blueprint card -> tap -> lastSiteOk -> the
+// inspector's own construction text disappears (REAL 5s assembly, no sleep).
+async function placeRig(page, touch, label, type, site) {
+  const name = rigName(type);
+  await page.locator('[data-tool="build"]').click();
+  await page.waitForFunction(() => document.querySelector('[data-tool="build"]')?.getAttribute("aria-pressed") === "true", null, {timeout: 8000});
+  await page.locator(".blueprint", {hasText: name}).first().click();
+  const fp = worldFootprint(type, site.x, site.z, 0);
+  let p = await clickableCell(page, fp);
+  if (!p) { // site off-screen/covered at landing zoom: zoom out at center first
+    const rect = await canvasRect(page);
+    await wheelZoomAt(page, {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2}, .7);
+    p = await clickableCell(page, fp);
+  }
+  if (!p) {
+    const rect = await canvasRect(page);
+    const diag = await topmostAt(page, screenOfGround(await pose(page), rect, fp.pivot.x, fp.pivot.z));
+    throw Error("RIG_SITE_NOT_CLICKABLE " + type + " at " + label + " topmost=" + diag.top);
+  }
+  await tap(page, p, touch);
+  await page.waitForFunction(() => document.body.dataset.lastSiteOk === "true", null, {timeout: 8000, polling: 50});
+  await sheetToggleTo(page, false);
+  const siteStamp = await page.evaluate(() => ({ok: document.body.dataset.lastSiteOk, code: document.body.dataset.lastSiteCode, reason: document.body.dataset.lastSiteReason}));
+  const panel = page.locator(".inspector-panel");
+  await panel.waitFor({timeout: 8000});
+  await page.waitForFunction(n => {
+    const el = document.querySelector(".inspector-panel");
+    return el && el.innerText.includes(n) && !/remaining/.test(el.innerText);
+  }, name, {timeout: 30000, polling: 100});
+  const rec = {label, type, site, siteStamp, inspectorText: (await panel.innerText()).replace(/\s+/g, " ").slice(0, 240)};
+  report.placement.push(rec);
+  return rec;
+}
+async function pickMachine(page, fp, name, touch, label, file) {
+  let p = await clickableCell(page, fp);
+  if (!p) {
+    await sheetToggleTo(page, true);
+    p = await clickableCell(page, fp);
+  }
+  if (!p) {
+    const rect = await canvasRect(page);
+    const diag = await topmostAt(page, screenOfGround(await pose(page), rect, fp.pivot.x, fp.pivot.z));
+    throw Error("MACHINE_NOT_CLICKABLE " + name + " at " + label + " topmost=" + diag.top);
+  }
+  await tap(page, p, touch);
+  await sheetToggleTo(page, false); // inspector must be visibly open for the proof
+  const panel = page.locator(".inspector-panel");
+  await panel.waitFor({timeout: 8000});
+  await panel.getByText(name).first().waitFor({timeout: 8000});
+  const text = (await panel.innerText()).replace(/\s+/g, " ").slice(0, 260);
+  if (!text.includes(name) || !text.includes("1×1"))
+    throw Error("PICKING_WRONG " + name + " at " + label + ": " + text);
+  await shot(page, file);
+  const rec = {label, machine: name, footprint: "1×1", inspectorText: text, screenshot: file};
+  report.picking.push(rec);
+  return rec;
+}
+// Projected-bbox clip of one rig (8 corners of footprint x bounds-height box).
+async function clipMachine(page, fp, height, file) {
+  const rect = await canvasRect(page), cam = await pose(page);
+  const hw = fp.base.w * CELL / 2, hd = fp.base.d * CELL / 2;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const dx of [-hw, hw]) for (const dz of [-hd, hd]) for (const y of [0, height]) {
+    const p = screenOfWorld(cam, rect, fp.pivot.x + dx, y, fp.pivot.z + dz);
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+  }
+  const pad = 4;
+  const clip = {x: Math.max(0, minX - pad), y: Math.max(0, minY - pad),
+    width: Math.min(maxX - minX + 2 * pad, 4000), height: Math.min(maxY - minY + 2 * pad, 4000)};
+  await shot(page, file, clip);
+  return {file, clipCss: clip};
+}
+const envOf = page => page.evaluate(() => ({
+  canvasCount: document.querySelectorAll("canvas").length,
+  documentScroll: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) > innerHeight + 2 ||
+    Math.max(document.documentElement.scrollWidth, document.body.scrollWidth) > innerWidth + 2
+}));
+
+// ---- Independent PNG decode (8-bit non-interlaced RGB/RGBA) + 96px metrics ----
+function decodePNG(buf) {
+  if (buf.readUInt32BE(0) !== 0x89504e47) throw Error("not a PNG");
+  let pos = 8, w = 0, h = 0, bitDepth = 0, colorType = 0, interlace = 0;
+  const idat = [];
+  while (pos < buf.length) {
+    const len = buf.readUInt32BE(pos), type = buf.toString("ascii", pos + 4, pos + 8);
+    const data = buf.subarray(pos + 8, pos + 8 + len);
+    if (type === "IHDR") {w = data.readUInt32BE(0); h = data.readUInt32BE(4); bitDepth = data[8]; colorType = data[9]; interlace = data[12];}
+    else if (type === "IDAT") idat.push(data);
+    else if (type === "IEND") break;
+    pos += 12 + len;
+  }
+  if (bitDepth !== 8 || interlace !== 0 || (colorType !== 2 && colorType !== 6))
+    throw Error("unsupported PNG format: depth " + bitDepth + " color " + colorType + " interlace " + interlace);
+  const ch = colorType === 6 ? 4 : 3, stride = w * ch;
+  const raw = zlib.inflateSync(Buffer.concat(idat));
+  const out = Buffer.alloc(h * stride);
+  let rp = 0;
+  for (let y = 0; y < h; y++) {
+    const filter = raw[rp++];
+    const row = out.subarray(y * stride, (y + 1) * stride);
+    const prev = y > 0 ? out.subarray((y - 1) * stride, y * stride) : null;
+    for (let x = 0; x < stride; x++) {
+      const a = x >= ch ? row[x - ch] : 0, b = prev ? prev[x] : 0, c = (prev && x >= ch) ? prev[x - ch] : 0;
+      let v = raw[rp++];
+      if (filter === 1) v += a;
+      else if (filter === 2) v += b;
+      else if (filter === 3) v += (a + b) >> 1;
+      else if (filter === 4) {
+        const p = a + b - c, pa = Math.abs(p - a), pb = Math.abs(p - b), pc = Math.abs(p - c);
+        v += (pa <= pb && pa <= pc) ? a : (pb <= pc ? b : c);
+      } else if (filter !== 0) throw Error("bad PNG filter " + filter);
+      row[x] = v & 255;
+    }
+  }
+  return {w, h, ch, data: out};
+}
+function downsample96(img) {
+  const out = new Float64Array(96 * 96 * 3);
+  for (let oy = 0; oy < 96; oy++) for (let ox = 0; ox < 96; ox++) {
+    const x0 = Math.floor(ox * img.w / 96), x1 = Math.max(x0 + 1, Math.floor((ox + 1) * img.w / 96));
+    const y0 = Math.floor(oy * img.h / 96), y1 = Math.max(y0 + 1, Math.floor((oy + 1) * img.h / 96));
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let y = y0; y < y1 && y < img.h; y++) for (let x = x0; x < x1 && x < img.w; x++) {
+      const i = (y * img.w + x) * img.ch;
+      r += img.data[i]; g += img.data[i + 1]; b += img.data[i + 2]; n++;
+    }
+    const o = (oy * 96 + ox) * 3;
+    out[o] = r / n; out[o + 1] = g / n; out[o + 2] = b / n;
+  }
+  return out;
+}
+function pairMetrics(a, b) {
+  let sum = 0, diff24 = 0, maxD = 0;
+  for (let i = 0; i < a.length; i += 3) {
+    const d = (Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2])) / 3;
+    sum += d; if (d > 24) diff24++; maxD = Math.max(maxD, d);
+  }
+  const n = a.length / 3;
+  return {meanAbsDiff: +(sum / n).toFixed(3), diffFractionOver24: +(diff24 / n).toFixed(4), maxPixelDiff: +maxD.toFixed(1)};
+}
+function edgeEnergy(img) {
+  let sum = 0, n = 0;
+  for (let y = 1; y < img.h - 1; y++) for (let x = 1; x < img.w - 1; x++) {
+    const i = (y * img.w + x) * img.ch, l = (y * img.w + x - 1) * img.ch, r = (y * img.w + x + 1) * img.ch;
+    const u = ((y - 1) * img.w + x) * img.ch, d = ((y + 1) * img.w + x) * img.ch;
+    for (let c = 0; c < 3; c++) {
+      const gx = img.data[r + c] - img.data[l + c], gy = img.data[d + c] - img.data[u + c];
+      sum += Math.sqrt(gx * gx + gy * gy); n++;
+    }
+  }
+  return +(sum / n).toFixed(3);
+}
+
+try {
+  if (!/^[0-9a-f]{40}$/.test(SOURCE_SHA))
+    throw Error("CAPTURE_SOURCE_SHA_REQUIRED: report must cite the reachable 40-char capture commit, got " + SOURCE_SHA);
+  if (!cameraHashes.applyCamera.ok || !cameraHashes.stampCamera.ok)
+    throw Error("CAMERA_HASH_DRIFT: " + JSON.stringify(cameraHashes));
+  child = spawn(process.execPath, ["node_modules/vite/bin/vite.js", "preview", "--port", String(PORT), "--strictPort", "--host", "127.0.0.1"], {stdio: ["ignore", "pipe", "pipe"]});
+  child.stdout.on("data", () => {});
+  child.stderr.on("data", d => report.errors.push("preview: " + d.toString().slice(0, 400)));
+  let open = false;
+  for (let i = 0; i < 70; i++) {
+    try {const r = await fetch(HOST, {signal: AbortSignal.timeout(2000)}); if (r.ok) {open = true; break;}} catch {}
+    await new Promise(r => setTimeout(r, 200)); // preview-server readiness poll only
+  }
+  if (!open) throw Error("Production preview did not become available");
+  browser = await chromium.launch({headless: true, args: ["--enable-webgl", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]});
+
+  // ---- Stills + placement + picking + negatives (desktop and phone) ----
+  for (const v of [
+    {name: "desktop", viewport: {width: 1440, height: 900}, dpr: 1, isMobile: false, touch: false, zoom: 2.8, minVisible: .8},
+    {name: "phone", viewport: {width: 390, height: 844}, dpr: 2, isMobile: true, touch: true, zoom: 2.2, minVisible: .6}
+  ]) {
+    // (A) Fresh first-run home yard: refinery/foundry legitimately absent.
+    {
+      const ctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "reduce"});
+      const {page, errs, failed} = await openPage(ctx, null);
+      const landing = await pose(page);
+      await shot(page, v.name + "-home-fresh.png");
+      const parkedA = landing;
+      await waitForClock(page, 2000);
+      const parkedB = await pose(page);
+      const parkedConstant = ["art03Clock", "art03Load", "art03Reduced", "art03Generator", "art03Furnace"].every(k => parkedA[k] === parkedB[k]);
+      if (landing.machineCount !== 6 || landing.art03Refinery !== "absent" || landing.art03Foundry !== "absent" ||
+        landing.art03Generator === "absent" || landing.art03Furnace === "absent" ||
+        landing.art03Reduced !== "1" || landing.art03Clock !== "0.000" || !parkedConstant ||
+        Math.abs(landing.yaw - 45) > 1e-6 || Math.abs(landing.elevation - 35.264) > 1e-6 || errs.length || failed.length)
+        throw Error("FRESH_LANDING_FAILURE at " + v.name + ": " + JSON.stringify({landing, parkedB, errs, failed}));
+      report.freshLanding.push({label: v.name, landing, parkedB, parkedConstant, screenshot: v.name + "-home-fresh.png"});
+      report.negatives.reducedMotion.push({label: v.name, stage: "fresh-landing", parkedA, parkedB, parkedConstant});
+      await ctx.close();
+    }
+
+    // (B) Tier-1 seeded yard: place refinery + foundry through the REAL build UI.
+    const ctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "reduce"});
+    const {page, errs, failed} = await openPage(ctx, unlockSeed());
+    const landing = await pose(page);
+    await shot(page, v.name + "-landing.png");
+    // Synchronous stamp==applied zoom via the visible Zoom in control (#307).
+    const beforeButton = await pose(page);
+    await page.getByRole("button", {name: "Zoom in"}).click();
+    await page.waitForFunction(z => Number(document.querySelector(".world-canvas").dataset.cameraZoom) > z,
+      beforeButton.zoom, {timeout: 8000, polling: 50});
+    const buttonZoom = await pose(page);
+    const appliedZoom = await page.evaluate(() => Number(document.body.dataset.lastZoomApplied));
+    const stampMatchesApplied = Number.isFinite(appliedZoom) && Math.abs(buttonZoom.zoom - appliedZoom) <= 1e-6;
+    if (!stampMatchesApplied) throw Error("CAMERA_STAMP_DESYNC at " + v.name);
+
+    const placedRefinery = await placeRig(page, v.touch, v.name, "refinery", SITE_REFINERY);
+    const placedFoundry = await placeRig(page, v.touch, v.name, "foundry", SITE_FOUNDRY);
+    await shot(page, v.name + "-yard-built.png");
+    // With all four rigs live under reduced motion, the lead work clock must
+    // stamp exact parked 0.000 and stay constant over 2s of real browser clock.
+    const parkedC = await pose(page);
+    await waitForClock(page, 2000);
+    const parkedD = await pose(page);
+    const allParkedConstant = ["art03Clock", "art03Load"].every(k => parkedC[k] === parkedD[k]) &&
+      RIGS.every(r => parkedC["art03" + r.type[0].toUpperCase() + r.type.slice(1)] === parkedD["art03" + r.type[0].toUpperCase() + r.type.slice(1)]);
+    if (parkedC.art03Reduced !== "1" || parkedC.art03Clock !== "0.000" || !allParkedConstant ||
+      RIGS.some(r => parkedC["art03" + r.type[0].toUpperCase() + r.type.slice(1)] === "absent"))
+      throw Error("REDUCED_MOTION_NOT_PARKED_WITH_RIGS at " + v.name + ": " + JSON.stringify({parkedC, parkedD}));
+    report.negatives.reducedMotion.push({label: v.name, stage: "all-rigs-live", parkedC, parkedD, allParkedConstant});
+
+    // Per-rig strategic zoom: picking proof, then a HUD-free silhouette clip.
+    await page.keyboard.press("Escape");
+    await page.locator('[data-tool="select"]').click();
+    const clips = [], rigPoses = {};
+    for (const {type, name} of RIGS) {
+      rigPoses[type] = await zoomToWorld(page, FP[type].pivot, v.zoom, v.minVisible);
+      await pickMachine(page, FP[type], name, v.touch, v.name, v.name + "-" + type + "-selected.png");
+      await sheetToggleTo(page, true);
+      clips.push(await clipMachine(page, FP[type], machineDescriptor(type).bounds.height, v.name + "-" + type + "-clip.png"));
+    }
+    const iso = await pose(page);
+    const front = await orbitTo(page, 0);
+    await shot(page, v.name + "-yard-front.png");
+    await orbitTo(page, 45);
+    const final = await pose(page);
+    const env = await envOf(page);
+    report.views.push({
+      name: v.name, viewport: v.viewport, dpr: v.dpr, isMobile: v.isMobile, hasTouch: v.touch,
+      landing, iso, front, final, placedRefinery, placedFoundry, clips, rigPoses,
+      stampMatchesApplied, beforeButtonZoom: beforeButton.zoom, buttonZoom: buttonZoom.zoom, appliedZoom,
+      screenshots: {
+        landing: v.name + "-landing.png", built: v.name + "-yard-built.png", front: v.name + "-yard-front.png",
+        ...Object.fromEntries(RIGS.map(r => [r.type + "Selected", v.name + "-" + r.type + "-selected.png"]))
+      },
+      pageErrors: errs, failedRequests: failed, ...env
+    });
+    if (landing.machineCount !== 6 || final.machineCount !== 8 ||
+      Math.abs(landing.yaw - 45) > 1e-6 || Math.abs(landing.elevation - 35.264) > 1e-6 ||
+      angDiff(front.yaw, 0) > .5 || Math.abs(iso.elevation - 35.264) > 1e-6 ||
+      final.zoom < .20 || final.zoom > 12 || env.canvasCount !== 1 || env.documentScroll || errs.length || failed.length)
+      throw Error("ART-03 still capture failure at " + v.name + ": " + JSON.stringify({landing, final, front, env, errs, failed}));
+    await ctx.close();
+
+    // (C) Starved yard negative: real sim inputs absent -> starved stamps.
+    {
+      const sctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "reduce"});
+      const {page, errs, failed} = await openPage(sctx, starvedSeed());
+      await page.waitForFunction(() => {
+        const d = document.querySelector(".world-canvas")?.dataset;
+        return d && d.art03Furnace === "starved" && d.art03Refinery === "starved" && d.art03Foundry === "starved" && d.art03Generator === "working";
+      }, null, {timeout: 20000, polling: 50});
+      const stamps = await pose(page);
+      await shot(page, v.name + "-starved-yard.png");
+      await zoomToWorld(page, FP.furnace.pivot, v.zoom, v.minVisible);
+      await sheetToggleTo(page, true);
+      const clip = await clipMachine(page, FP.furnace, machineDescriptor("furnace").bounds.height, v.name + "-starved-furnace-clip.png");
+      // Starved is a STABLE sim state: stamps stay starved over real time.
+      await waitForClock(page, 2000);
+      const after = await pose(page);
+      const stable = ["art03Furnace", "art03Refinery", "art03Foundry"].every(k => after[k] === "starved");
+      if (!stable || errs.length || failed.length)
+        throw Error("STARVED_NEGATIVE_FAILURE at " + v.name + ": " + JSON.stringify({stamps, after, errs, failed}));
+      report.negatives.starved.push({label: v.name, stamps, after, stable, clip, screenshots: [v.name + "-starved-yard.png", v.name + "-starved-furnace-clip.png"], pageErrors: errs});
+      await sctx.close();
+    }
+
+    // (D) Unpowered yard negative: generator frozen mid-assembly -> supply 0.
+    {
+      const uctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "reduce"});
+      const {page, errs, failed} = await openPage(uctx, unpoweredSeed());
+      await page.waitForFunction(() => {
+        const d = document.querySelector(".world-canvas")?.dataset;
+        return d && d.art03Furnace === "unpowered" && d.art03Refinery === "unpowered" && d.art03Foundry === "unpowered" && d.art03Generator === "assembling";
+      }, null, {timeout: 20000, polling: 50});
+      const stamps = await pose(page);
+      await shot(page, v.name + "-unpowered-yard.png");
+      await zoomToWorld(page, FP.furnace.pivot, v.zoom, v.minVisible);
+      await sheetToggleTo(page, true);
+      const clip = await clipMachine(page, FP.furnace, machineDescriptor("furnace").bounds.height, v.name + "-unpowered-furnace-clip.png");
+      await waitForClock(page, 2000);
+      const after = await pose(page);
+      const stable = ["art03Furnace", "art03Refinery", "art03Foundry"].every(k => after[k] === "unpowered");
+      if (!stable || errs.length || failed.length)
+        throw Error("UNPOWERED_NEGATIVE_FAILURE at " + v.name + ": " + JSON.stringify({stamps, after, errs, failed}));
+      report.negatives.unpowered.push({label: v.name, stamps, after, stable, clip, screenshots: [v.name + "-unpowered-yard.png", v.name + "-unpowered-furnace-clip.png"], pageErrors: errs});
+      await uctx.close();
+    }
+  }
+
+  // ---- 96px silhouette legibility (independent decode of the real clips) ----
+  {
+    const machines = {};
+    for (const v of ["desktop", "phone"])
+      for (const {type} of RIGS) {
+        const file = v + "-" + type + "-clip.png";
+        const img = decodePNG(await readFile(resolve(OUT, file)));
+        machines[v + ":" + type] = {file, width: img.w, height: img.h, small: downsample96(img), edgeEnergy: edgeEnergy(img)};
+      }
+    const pairs = {};
+    for (const v of ["desktop", "phone"])
+      for (let i = 0; i < RIGS.length; i++)
+        for (let j = i + 1; j < RIGS.length; j++) {
+          const a = RIGS[i].type, b = RIGS[j].type;
+          pairs[v + ":" + a + "-" + b] = pairMetrics(machines[v + ":" + a].small, machines[v + ":" + b].small);
+        }
+    const summary = {};
+    for (const [k, m] of Object.entries(machines)) summary[k] = {file: m.file, width: m.width, height: m.height, edgeEnergy: m.edgeEnergy};
+    report.legibility = {targetPx: 96, machines: summary, pairwise: pairs};
+    // Legibility floor: every rig pair must remain a measurably distinct
+    // silhouette at 96px (mean per-pixel channel diff >= 6/255, >= 10% of
+    // pixels differing by > 24). A failure means two rigs read too alike.
+    for (const [k, p] of Object.entries(pairs))
+      if (p.meanAbsDiff < 6 || p.diffFractionOver24 < .10)
+        throw Error("SILHOUETTE_LEGIBILITY_TOO_LOW at " + k + ": " + JSON.stringify(p));
+  }
+
+  // ---- Motion run (desktop, prefers-reduced-motion: no-preference) ----
+  {
+    const ctx = await browser.newContext({viewport: {width: 1440, height: 900}, deviceScaleFactor: 1, reducedMotion: "no-preference"});
+    const {page, errs, failed} = await openPage(ctx, workingSeed());
+    // All four rigs complete + stocked: every status stamp must be "working"
+    // and the lead work clock numeric before any motion sampling.
+    await page.waitForFunction(() => {
+      const d = document.querySelector(".world-canvas")?.dataset;
+      return d && d.art03Reduced === "0" &&
+        ["art03Generator", "art03Furnace", "art03Refinery", "art03Foundry"].every(k => d[k] === "working") &&
+        d.art03Clock && Number.isFinite(Number(d.art03Clock));
+    }, null, {timeout: 20000, polling: 50});
+    await zoomToWorld(page, YARD_MID, 2.0, .8);
+
+    const motionStart = Date.now();
+    const timeline = [];
+    const sample = async () => {
+      const s = await pose(page);
+      timeline.push({
+        t: (Date.now() - motionStart) / 1000, clock: Number(s.art03Clock), load: Number(s.art03Load),
+        generator: s.art03Generator, furnace: s.art03Furnace, refinery: s.art03Refinery, foundry: s.art03Foundry,
+        reduced: s.art03Reduced
+      });
+      return s;
+    };
+    await sample();
+    // Distinct working states captured mid-motion by watching the real clock.
+    const stages = [];
+    for (const [name, min] of [["clock-warmup", .8], ["clock-quarter-cycle", 2], ["clock-half-cycle", 3.5], ["clock-full-cycle", 5]]) {
+      await page.waitForFunction(m => Number(document.querySelector(".world-canvas").dataset.art03Clock) >= m,
+        min, {timeout: 30000, polling: 40});
+      const s = await sample();
+      const file = "desktop-motion-" + name + ".png";
+      await shot(page, file);
+      stages.push({name, stamp: {clock: s.art03Clock, load: s.art03Load, furnace: s.art03Furnace, refinery: s.art03Refinery, foundry: s.art03Foundry}, screenshot: file});
+    }
+    // Dense 12s timeline on the browser clock (no fixed sleeps).
+    while ((Date.now() - motionStart < 12000 || timeline.length < 100) && Date.now() - motionStart < 40000) {
+      await waitForClock(page, 90);
+      await sample();
+    }
+    await sample();
+    const env = await envOf(page);
+    await ctx.close();
+
+    const clocks = timeline.map(s => s.clock);
+    let monotone = true, maxStep = 0;
+    for (let i = 1; i < timeline.length; i++) {
+      const dt = Math.max(.001, timeline[i].t - timeline[i - 1].t);
+      const d = clocks[i] - clocks[i - 1];
+      if (d < -1e-6) monotone = false;
+      maxStep = Math.max(maxStep, d);
+      if (d > dt * 2 + .01) monotone = false; // generator load <= 1 bounds the clock
+    }
+    const elapsed = timeline[timeline.length - 1].t;
+    const advance = clocks[clocks.length - 1] - clocks[0];
+    // Lead rig is the starter generator at demand/supply = 12/12 = load 1:
+    // its work clock must track real elapsed sim time, never a wall-clock fake.
+    const speedOk = Math.abs(advance - elapsed) <= .6;
+    const allWorking = timeline.every(s => s.generator === "working" && s.furnace === "working" && s.refinery === "working" && s.foundry === "working");
+    const allReducedOff = timeline.every(s => s.reduced === "0");
+    const loadOne = timeline.every(s => Math.abs(s.load - 1) < 1e-3);
+    const distinct = {clock: new Set(clocks).size};
+    report.motion = {
+      elapsedSeconds: elapsed, samples: timeline.length, stages, monotone, maxStep, speedOk, allWorking, allReducedOff, loadOne,
+      distinctValues: distinct, clockAdvance: advance, pageErrors: errs, failedRequests: failed, ...env, timeline
+    };
+    if (!monotone || !speedOk || !allWorking || !allReducedOff || !loadOne || elapsed < 12 || timeline.length < 100 ||
+      distinct.clock < 30 || stages.length !== 4 || env.canvasCount !== 1 || env.documentScroll || errs.length || failed.length)
+      throw Error("ART-03 motion capture failure: " + JSON.stringify({monotone, speedOk, allWorking, allReducedOff, loadOne, elapsed, samples: timeline.length, distinct, env, errs, failed}));
+  }
+
+  // ---- WebGL-failure negative: loud failure, never a fake 2D world ----
+  {
+    const ctx = await browser.newContext({viewport: {width: 1440, height: 900}, deviceScaleFactor: 1});
+    const page = await ctx.newPage(), errs = [];
+    page.on("pageerror", e => errs.push(String(e)));
+    await page.addInitScript(() => {
+      const orig = HTMLCanvasElement.prototype.getContext;
+      window.__webglNullHits = 0;
+      HTMLCanvasElement.prototype.getContext = function (type, ...a) {
+        if (type === "webgl2" || type === "webgl" || type === "experimental-webgl") {window.__webglNullHits++; return null;}
+        return orig.call(this, type, ...a);
+      };
+    });
+    await page.goto(HOST, {waitUntil: "domcontentloaded", timeout: 30000});
+    await page.waitForFunction(() => window.__webglNullHits > 0, null, {timeout: 20000, polling: 50});
+    await waitForClock(page, 800); // let React surface the failure
+    const state = await page.evaluate(() => ({
+      webglNullHits: window.__webglNullHits,
+      canvasCount: document.querySelectorAll("canvas").length,
+      worldCanvasCount: document.querySelectorAll(".world-canvas").length,
+      world3dReady: [...document.querySelectorAll(".world-canvas")].some(c => c.dataset.world3d === "ready"),
+      bodyText: document.body.innerText.replace(/\s+/g, " ").slice(0, 300)
+    }));
+    await shot(page, "desktop-webgl-failure.png");
+    await ctx.close();
+    report.negatives.webglFailure = {...state, pageErrors: errs, screenshot: "desktop-webgl-failure.png"};
+    if (state.world3dReady || state.worldCanvasCount !== 0 || errs.length === 0)
+      throw Error("WEBGL_FAILURE_NOT_LOUD: " + JSON.stringify({state, errs}));
+  }
+
+  report.status = "PASS_NUMERIC_ONLY";
+} catch (e) {
+  report.errors.push(String(e.stack || e)); report.status = "FAIL"; process.exitCode = 1;
+} finally {
+  if (browser) await browser.close();
+  if (child) child.kill("SIGTERM");
+  report.completed = new Date().toISOString();
+  await writeFile(resolve(OUT, "report.json"), JSON.stringify(report, null, 2) + "\n");
+  console.log("ART-03 industrial-rig production capture:", report.status, OUT);
+  if (report.errors.length) console.error(report.errors.join("\n"));
+}
