@@ -1,0 +1,2496 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 349,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "baa065af229e7036e9057784ba1e495b17a05199",
+  "started": "2026-11-17T13:32:56.901Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "budgets": {
+    "generator": {
+      "meshes": 30,
+      "triangles": 460,
+      "declared": {
+        "maxMeshes": 36,
+        "maxTriangles": 800
+      },
+      "pivots": [
+        "spin",
+        "turbine"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 3.05,
+        "depth": 3.045
+      },
+      "pickHeight": 3.1
+    },
+    "furnace": {
+      "meshes": 31,
+      "triangles": 472,
+      "declared": {
+        "maxMeshes": 40,
+        "maxTriangles": 900
+      },
+      "pivots": [
+        "charge",
+        "blower"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 4.7,
+        "depth": 3.045
+      },
+      "pickHeight": 4.7
+    },
+    "refinery": {
+      "meshes": 41,
+      "triangles": 792,
+      "declared": {
+        "maxMeshes": 48,
+        "maxTriangles": 1100
+      },
+      "pivots": [
+        "pump",
+        "valve"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 3.5,
+        "depth": 3.045
+      },
+      "pickHeight": 3.5
+    },
+    "foundry": {
+      "meshes": 31,
+      "triangles": 512,
+      "declared": {
+        "maxMeshes": 40,
+        "maxTriangles": 900
+      },
+      "pivots": [
+        "crucible",
+        "fan"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 4.2,
+        "depth": 3.045
+      },
+      "pickHeight": 4.2
+    }
+  },
+  "art03Motion": {
+    "fanSpeed": 2.2,
+    "turbineSpeed": 3.4,
+    "blowerSpeed": 2.6,
+    "chargeAmp": 0.5,
+    "chargeSpeed": 1.2,
+    "crucibleAmp": 0.42,
+    "crucibleSpeed": 0.85,
+    "foundryFanSpeed": 2,
+    "pumpSpeed": 2.4,
+    "valveAmp": 0.6,
+    "valveSpeed": 0.9,
+    "pulseAmp": 0.009,
+    "pulseSpeed": 5
+  },
+  "sites": {
+    "refinery": {
+      "x": 9,
+      "z": 9
+    },
+    "foundry": {
+      "x": 9,
+      "z": 14
+    }
+  },
+  "freshLanding": [
+    {
+      "label": "desktop",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "parkedConstant": true,
+      "screenshot": "desktop-home-fresh.png"
+    },
+    {
+      "label": "phone",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "parkedConstant": true,
+      "screenshot": "phone-home-fresh.png"
+    }
+  ],
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -5.727786838975243,
+        "z": 5.727786838975241,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "working",
+        "art03Refinery": "working",
+        "art03Foundry": "starved",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "front": {
+        "yaw": 359.999989013672,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -5.727786838975243,
+        "z": 5.727786838975241,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "working",
+        "art03Refinery": "working",
+        "art03Foundry": "starved",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -5.727786838975243,
+        "z": 5.727786838975241,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "working",
+        "art03Refinery": "working",
+        "art03Foundry": "starved",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "placedRefinery": {
+        "label": "desktop",
+        "type": "refinery",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFoundry": {
+        "label": "desktop",
+        "type": "foundry",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 021 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells "
+      },
+      "clips": [
+        {
+          "file": "desktop-generator-clip.png",
+          "clipCss": {
+            "x": 191.57466191246522,
+            "y": 322.5457732216861,
+            "width": 163.9170445013072,
+            "height": 176.46316766543657
+          }
+        },
+        {
+          "file": "desktop-furnace-clip.png",
+          "clipCss": {
+            "x": 1127.0769289203085,
+            "y": 550.1618048655807,
+            "width": 163.91704450130737,
+            "height": 218.90078134427768
+          }
+        },
+        {
+          "file": "desktop-refinery-clip.png",
+          "clipCss": {
+            "x": 893.2013621683477,
+            "y": 85.9271741463889,
+            "width": 163.91704450130715,
+            "height": 188.03706230512057
+          }
+        },
+        {
+          "file": "desktop-foundry-clip.png",
+          "clipCss": {
+            "x": 503.4087509150796,
+            "y": 292.9680424758271,
+            "width": 163.91704450130726,
+            "height": 206.0408984112956
+          }
+        }
+      ],
+      "rigPoses": {
+        "generator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -5.727786838975243,
+          "z": 5.727786838975241,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "furnace": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -5.727786838975243,
+          "z": 5.727786838975241,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "refinery": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -5.727786838975243,
+          "z": 5.727786838975241,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "foundry": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -5.727786838975243,
+          "z": 5.727786838975241,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "built": "desktop-yard-built.png",
+        "front": "desktop-yard-front.png",
+        "generatorSelected": "desktop-generator-selected.png",
+        "furnaceSelected": "desktop-furnace-selected.png",
+        "refinerySelected": "desktop-refinery-selected.png",
+        "foundrySelected": "desktop-foundry-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "absent",
+        "art03Foundry": "absent",
+        "art03Load": "0.417",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -3.5310896229224493,
+        "z": 9.612580099243269,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "working",
+        "art03Refinery": "working",
+        "art03Foundry": "working",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "front": {
+        "yaw": 0.0000018310547034161573,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -3.5310896229224493,
+        "z": 9.612580099243269,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "working",
+        "art03Foundry": "working",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "final": {
+        "yaw": 45.000000000000284,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -3.5310896229224493,
+        "z": 9.612580099243269,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 8,
+        "world3d": "ready",
+        "art03Generator": "working",
+        "art03Furnace": "starved",
+        "art03Refinery": "working",
+        "art03Foundry": "working",
+        "art03Load": "1.000",
+        "art03Clock": "0.000",
+        "art03Reduced": "1"
+      },
+      "placedRefinery": {
+        "label": "phone",
+        "type": "refinery",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFoundry": {
+        "label": "phone",
+        "type": "foundry",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 027 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells "
+      },
+      "clips": [
+        {
+          "file": "phone-generator-clip.png",
+          "clipCss": {
+            "x": 133.56018782518913,
+            "y": 56.14053099746394,
+            "width": 122.87962434962171,
+            "height": 132.1236035486194
+          }
+        },
+        {
+          "file": "phone-furnace-clip.png",
+          "clipCss": {
+            "x": 321.6382732831672,
+            "y": 277.16765396006724,
+            "width": 122.87908413790274,
+            "height": 163.39089188286658
+          }
+        },
+        {
+          "file": "phone-refinery-clip.png",
+          "clipCss": {
+            "x": 149.3196470763129,
+            "y": 0,
+            "width": 122.87908413790285,
+            "height": 140.65062132650536
+          }
+        },
+        {
+          "file": "phone-foundry-clip.png",
+          "clipCss": {
+            "x": 62.06742471393176,
+            "y": 247.62466046642948,
+            "width": 122.8790841379028,
+            "height": 153.91577915104938
+          }
+        }
+      ],
+      "rigPoses": {
+        "generator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999231251937914,
+          "x": -10.77006020178804,
+          "z": 10.770060201788036,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "furnace": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199912780241328,
+          "x": 11.001604734860832,
+          "z": 11.961869389168378,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "working",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "refinery": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199912780241328,
+          "x": 11.001604734860832,
+          "z": 11.961869389168378,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "starved",
+          "art03Foundry": "working",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "foundry": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -3.5310896229224493,
+          "z": 9.612580099243269,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "working",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "built": "phone-yard-built.png",
+        "front": "phone-yard-front.png",
+        "generatorSelected": "phone-generator-selected.png",
+        "furnaceSelected": "phone-furnace-selected.png",
+        "refinerySelected": "phone-refinery-selected.png",
+        "foundrySelected": "phone-foundry-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "placement": [
+    {
+      "label": "desktop",
+      "type": "refinery",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "desktop",
+      "type": "foundry",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 021 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells "
+    },
+    {
+      "label": "phone",
+      "type": "refinery",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "phone",
+      "type": "foundry",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 027 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells "
+    }
+  ],
+  "picking": [
+    {
+      "label": "desktop",
+      "machine": "Turbine Generator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.16 / POWER Turbine Generator × ▣ UNIT 003 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 0 cells Local storage No cargo in this building. Upgrade effe",
+      "screenshot": "desktop-generator-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Induction Furnace",
+      "footprint": "1×1",
+      "aim": "ground-offset",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 16.13 / PROCESS Induction Furnace × ▣ UNIT 004 · LEVEL 1 OPERATING Cycle 5.5s · level 1 · outputs scale with level. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 5.5s 5 ",
+      "screenshot": "desktop-furnace-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Fuel Refinery",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 OPERATING Cycle 7s · level 1 · outputs scale with level. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 7s 8 SC + 2 H₂O",
+      "screenshot": "desktop-refinery-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Alloy Foundry",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 021 · LEVEL 1 WAITING FOR INPUTS Short 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8",
+      "screenshot": "desktop-foundry-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Turbine Generator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.16 / POWER Turbine Generator × ▣ UNIT 003 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 0 cells Local storage No cargo in this building. Upgrade effe",
+      "screenshot": "phone-generator-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Induction Furnace",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 16.13 / PROCESS Induction Furnace × ▣ UNIT 004 · LEVEL 1 WAITING FOR INPUTS Short 5 FE, 2 FU — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT",
+      "screenshot": "phone-furnace-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Fuel Refinery",
+      "footprint": "1×1",
+      "aim": "ground-offset",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Fuel Refinery × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 7s",
+      "screenshot": "phone-refinery-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Alloy Foundry",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / INDUSTRY Alloy Foundry × ▣ UNIT 027 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 4 ST + 3 C",
+      "screenshot": "phone-foundry-selected.png"
+    }
+  ],
+  "motion": {
+    "elapsedSeconds": 20.725,
+    "samples": 101,
+    "stages": [
+      {
+        "name": "clock-warmup",
+        "stamp": {
+          "clock": "0.800",
+          "load": "1.000",
+          "furnace": "working",
+          "refinery": "working",
+          "foundry": "working"
+        },
+        "screenshot": "desktop-motion-clock-warmup.png"
+      },
+      {
+        "name": "clock-quarter-cycle",
+        "stamp": {
+          "clock": "2.023",
+          "load": "1.000",
+          "furnace": "working",
+          "refinery": "working",
+          "foundry": "working"
+        },
+        "screenshot": "desktop-motion-clock-quarter-cycle.png"
+      },
+      {
+        "name": "clock-half-cycle",
+        "stamp": {
+          "clock": "3.510",
+          "load": "1.000",
+          "furnace": "working",
+          "refinery": "working",
+          "foundry": "working"
+        },
+        "screenshot": "desktop-motion-clock-half-cycle.png"
+      },
+      {
+        "name": "clock-full-cycle",
+        "stamp": {
+          "clock": "5.014",
+          "load": "1.000",
+          "furnace": "working",
+          "refinery": "working",
+          "foundry": "working"
+        },
+        "screenshot": "desktop-motion-clock-full-cycle.png"
+      }
+    ],
+    "monotone": true,
+    "maxStep": 1.5040000000000004,
+    "speedOk": true,
+    "tracksSim": true,
+    "boundedByWall": true,
+    "moving": true,
+    "simAdvance": 13,
+    "wallVsSim": {
+      "wall": 20.725,
+      "simFloorAdvance": 13,
+      "clockAdvance": 13.274000000000001
+    },
+    "allWorking": true,
+    "allReducedOff": true,
+    "loadOne": true,
+    "distinctValues": {
+      "clock": 100
+    },
+    "clockAdvance": 13.274000000000001,
+    "pageErrors": [],
+    "failedRequests": [],
+    "canvasCount": 1,
+    "documentScroll": false,
+    "timeline": [
+      {
+        "t": 0.013,
+        "clock": 0.593,
+        "load": 1,
+        "simFloor": 0,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 0.306,
+        "clock": 0.8,
+        "load": 1,
+        "simFloor": 0,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 2.444,
+        "clock": 2.023,
+        "load": 1,
+        "simFloor": 1,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 4.988,
+        "clock": 3.51,
+        "load": 1,
+        "simFloor": 3,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 7.544,
+        "clock": 5.014,
+        "load": 1,
+        "simFloor": 4,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.252,
+        "clock": 5.327,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.391,
+        "clock": 5.467,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.542,
+        "clock": 5.537,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.676,
+        "clock": 5.607,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.813,
+        "clock": 5.747,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 8.963,
+        "clock": 5.817,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.101,
+        "clock": 5.887,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.233,
+        "clock": 5.957,
+        "load": 1,
+        "simFloor": 5,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.384,
+        "clock": 6.097,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.514,
+        "clock": 6.167,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.633,
+        "clock": 6.237,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.76,
+        "clock": 6.377,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 9.929,
+        "clock": 6.447,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.072,
+        "clock": 6.517,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.211,
+        "clock": 6.657,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.35,
+        "clock": 6.727,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.485,
+        "clock": 6.797,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.613,
+        "clock": 6.867,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.745,
+        "clock": 6.937,
+        "load": 1,
+        "simFloor": 6,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 10.91,
+        "clock": 7.077,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.036,
+        "clock": 7.147,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.163,
+        "clock": 7.217,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.297,
+        "clock": 7.287,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.432,
+        "clock": 7.357,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.578,
+        "clock": 7.497,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.723,
+        "clock": 7.567,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.849,
+        "clock": 7.637,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 11.983,
+        "clock": 7.707,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.115,
+        "clock": 7.777,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.229,
+        "clock": 7.847,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.363,
+        "clock": 7.987,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.512,
+        "clock": 8.057,
+        "load": 1,
+        "simFloor": 7,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.649,
+        "clock": 8.127,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.764,
+        "clock": 8.197,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 12.898,
+        "clock": 8.267,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.056,
+        "clock": 8.337,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.194,
+        "clock": 8.477,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.334,
+        "clock": 8.547,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.471,
+        "clock": 8.617,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.591,
+        "clock": 8.687,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.722,
+        "clock": 8.827,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.858,
+        "clock": 8.897,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 13.988,
+        "clock": 8.967,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.11,
+        "clock": 9.037,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.243,
+        "clock": 9.107,
+        "load": 1,
+        "simFloor": 8,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.379,
+        "clock": 9.177,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.519,
+        "clock": 9.317,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.628,
+        "clock": 9.387,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.767,
+        "clock": 9.457,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 14.91,
+        "clock": 9.527,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.057,
+        "clock": 9.667,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.177,
+        "clock": 9.737,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.33,
+        "clock": 9.807,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.456,
+        "clock": 9.877,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.572,
+        "clock": 9.947,
+        "load": 1,
+        "simFloor": 9,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.719,
+        "clock": 10.017,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.871,
+        "clock": 10.157,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 15.992,
+        "clock": 10.227,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.107,
+        "clock": 10.297,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.242,
+        "clock": 10.367,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.373,
+        "clock": 10.437,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.527,
+        "clock": 10.577,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.663,
+        "clock": 10.647,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.808,
+        "clock": 10.787,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 16.931,
+        "clock": 10.857,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.066,
+        "clock": 10.927,
+        "load": 1,
+        "simFloor": 10,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.206,
+        "clock": 11.067,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.369,
+        "clock": 11.137,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.509,
+        "clock": 11.207,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.635,
+        "clock": 11.277,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.758,
+        "clock": 11.417,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.882,
+        "clock": 11.487,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 17.998,
+        "clock": 11.627,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.131,
+        "clock": 11.697,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.241,
+        "clock": 11.767,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.357,
+        "clock": 11.907,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.475,
+        "clock": 11.977,
+        "load": 1,
+        "simFloor": 11,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.593,
+        "clock": 12.117,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.728,
+        "clock": 12.187,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.847,
+        "clock": 12.327,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 18.98,
+        "clock": 12.397,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.092,
+        "clock": 12.467,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.232,
+        "clock": 12.607,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.342,
+        "clock": 12.677,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.467,
+        "clock": 12.817,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.591,
+        "clock": 12.887,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.716,
+        "clock": 13.027,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.839,
+        "clock": 13.097,
+        "load": 1,
+        "simFloor": 12,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 19.957,
+        "clock": 13.237,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.092,
+        "clock": 13.307,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.21,
+        "clock": 13.447,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.344,
+        "clock": 13.517,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.467,
+        "clock": 13.657,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.596,
+        "clock": 13.727,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.72,
+        "clock": 13.867,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      },
+      {
+        "t": 20.725,
+        "clock": 13.867,
+        "load": 1,
+        "simFloor": 13,
+        "generator": "working",
+        "furnace": "working",
+        "refinery": "working",
+        "foundry": "working",
+        "reduced": "0"
+      }
+    ]
+  },
+  "negatives": {
+    "starved": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "starved",
+          "art03Foundry": "starved",
+          "art03Load": "0.917",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": 9.228407326738626,
+          "z": 3.044516800586031,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "starved",
+          "art03Foundry": "starved",
+          "art03Load": "0.917",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-starved-furnace-clip.png",
+          "clipCss": {
+            "x": 734.1779118112272,
+            "y": 392.3357120893228,
+            "width": 163.9170512734206,
+            "height": 218.90079050455915
+          }
+        },
+        "screenshots": [
+          "desktop-starved-yard.png",
+          "desktop-starved-furnace-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "starved",
+          "art03Foundry": "starved",
+          "art03Load": "0.917",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": 8.550406447569323,
+          "z": 2.847358831001893,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "starved",
+          "art03Foundry": "starved",
+          "art03Load": "0.917",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-starved-furnace-clip.png",
+          "clipCss": {
+            "x": 212.28500342111005,
+            "y": 386.7519810550296,
+            "width": 122.8808744646688,
+            "height": 163.39331356367148
+          }
+        },
+        "screenshots": [
+          "phone-starved-yard.png",
+          "phone-starved-furnace-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "unpowered": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "assembling",
+          "art03Furnace": "unpowered",
+          "art03Refinery": "unpowered",
+          "art03Foundry": "unpowered",
+          "art03Load": "0.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": 9.228407326738626,
+          "z": 3.044516800586031,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "assembling",
+          "art03Furnace": "unpowered",
+          "art03Refinery": "unpowered",
+          "art03Foundry": "unpowered",
+          "art03Load": "0.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-unpowered-furnace-clip.png",
+          "clipCss": {
+            "x": 734.1779118112272,
+            "y": 392.3357120893228,
+            "width": 163.9170512734206,
+            "height": 218.90079050455915
+          }
+        },
+        "screenshots": [
+          "desktop-unpowered-yard.png",
+          "desktop-unpowered-furnace-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "assembling",
+          "art03Furnace": "unpowered",
+          "art03Refinery": "unpowered",
+          "art03Foundry": "unpowered",
+          "art03Load": "0.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": 8.550406447569323,
+          "z": 2.847358831001893,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "assembling",
+          "art03Furnace": "unpowered",
+          "art03Refinery": "unpowered",
+          "art03Foundry": "unpowered",
+          "art03Load": "0.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-unpowered-furnace-clip.png",
+          "clipCss": {
+            "x": 212.28500342111005,
+            "y": 386.7519810550296,
+            "width": 122.8808744646688,
+            "height": 163.39331356367148
+          }
+        },
+        "screenshots": [
+          "phone-unpowered-yard.png",
+          "phone-unpowered-furnace-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "reducedMotion": [
+      {
+        "label": "desktop",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "absent",
+          "art03Foundry": "absent",
+          "art03Load": "0.417",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "absent",
+          "art03Foundry": "absent",
+          "art03Load": "0.417",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "desktop",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "allParkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "absent",
+          "art03Foundry": "absent",
+          "art03Load": "0.417",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "starved",
+          "art03Refinery": "absent",
+          "art03Foundry": "absent",
+          "art03Load": "0.417",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 8,
+          "world3d": "ready",
+          "art03Generator": "working",
+          "art03Furnace": "working",
+          "art03Refinery": "working",
+          "art03Foundry": "starved",
+          "art03Load": "1.000",
+          "art03Clock": "0.000",
+          "art03Reduced": "1"
+        },
+        "allParkedConstant": true
+      }
+    ],
+    "webglFailure": {
+      "webglNullHits": 2,
+      "canvasCount": 0,
+      "worldCanvasCount": 0,
+      "world3dReady": false,
+      "bodyText": "",
+      "pageErrors": [
+        "Error: THREE.WebGLRenderer: Error creating WebGL context."
+      ],
+      "screenshot": "desktop-webgl-failure.png"
+    }
+  },
+  "legibility": {
+    "targetPx": 96,
+    "machines": {
+      "desktop:generator": {
+        "file": "desktop-generator-clip.png",
+        "width": 163,
+        "height": 176,
+        "edgeEnergy": 10.215
+      },
+      "desktop:furnace": {
+        "file": "desktop-furnace-clip.png",
+        "width": 163,
+        "height": 218,
+        "edgeEnergy": 10.261
+      },
+      "desktop:refinery": {
+        "file": "desktop-refinery-clip.png",
+        "width": 163,
+        "height": 188,
+        "edgeEnergy": 9.891
+      },
+      "desktop:foundry": {
+        "file": "desktop-foundry-clip.png",
+        "width": 163,
+        "height": 206,
+        "edgeEnergy": 9.968
+      },
+      "phone:generator": {
+        "file": "phone-generator-clip.png",
+        "width": 244,
+        "height": 264,
+        "edgeEnergy": 11.949
+      },
+      "phone:furnace": {
+        "file": "phone-furnace-clip.png",
+        "width": 136,
+        "height": 326,
+        "edgeEnergy": 8.04
+      },
+      "phone:refinery": {
+        "file": "phone-refinery-clip.png",
+        "width": 244,
+        "height": 280,
+        "edgeEnergy": 8.139
+      },
+      "phone:foundry": {
+        "file": "phone-foundry-clip.png",
+        "width": 244,
+        "height": 306,
+        "edgeEnergy": 6.649
+      }
+    },
+    "pairwise": {
+      "desktop:generator-furnace": {
+        "meanAbsDiff": 33.982,
+        "diffFractionOver24": 0.5751,
+        "maxPixelDiff": 133.3
+      },
+      "desktop:generator-refinery": {
+        "meanAbsDiff": 41.845,
+        "diffFractionOver24": 0.6434,
+        "maxPixelDiff": 138.3
+      },
+      "desktop:generator-foundry": {
+        "meanAbsDiff": 36.091,
+        "diffFractionOver24": 0.5922,
+        "maxPixelDiff": 135.2
+      },
+      "desktop:furnace-refinery": {
+        "meanAbsDiff": 30.78,
+        "diffFractionOver24": 0.5113,
+        "maxPixelDiff": 139.7
+      },
+      "desktop:furnace-foundry": {
+        "meanAbsDiff": 40.907,
+        "diffFractionOver24": 0.6768,
+        "maxPixelDiff": 135.1
+      },
+      "desktop:refinery-foundry": {
+        "meanAbsDiff": 38.172,
+        "diffFractionOver24": 0.5888,
+        "maxPixelDiff": 135.7
+      },
+      "phone:generator-furnace": {
+        "meanAbsDiff": 46.01,
+        "diffFractionOver24": 0.7472,
+        "maxPixelDiff": 150.2
+      },
+      "phone:generator-refinery": {
+        "meanAbsDiff": 45.126,
+        "diffFractionOver24": 0.6745,
+        "maxPixelDiff": 195.6
+      },
+      "phone:generator-foundry": {
+        "meanAbsDiff": 45.44,
+        "diffFractionOver24": 0.6864,
+        "maxPixelDiff": 172.7
+      },
+      "phone:furnace-refinery": {
+        "meanAbsDiff": 49.185,
+        "diffFractionOver24": 0.7196,
+        "maxPixelDiff": 160
+      },
+      "phone:furnace-foundry": {
+        "meanAbsDiff": 42.502,
+        "diffFractionOver24": 0.6967,
+        "maxPixelDiff": 139.3
+      },
+      "phone:refinery-foundry": {
+        "meanAbsDiff": 64.078,
+        "diffFractionOver24": 0.8498,
+        "maxPixelDiff": 184.9
+      }
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile)",
+    "Scenario yards (tier-1 unlock, working, starved, unpowered) are seeded through the real save schema; status itself is derived only by the live simulation from that state",
+    "V2 has no 2D fallback renderer; the WebGL-failure negative proves a loud failure, not a playable fallback",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity, reviewer/product acceptance or sponsor G1 approval"
+  ],
+  "completed": "2026-11-17T13:35:19.296Z"
+}

@@ -144,9 +144,12 @@ loading bays). Full contract, provenance and the sorter mapping decision:
   the ART-02 lease); the crusher's real outputs `{iron:6, stone:2}` ARE mechanical
   separation, delivered as the screen deck + twin chutes. Standalone buildable
   sorter is a follow-up seam under #262.
-- **refinery seam**: the old shared branch was split; refinery geometry is
-  byte-for-byte the pre-ART-02 structure (10 meshes / 180 tris, zero pivots),
-  guarded by `tests/salvageModels.test.mjs`. ART-03 (#349) owns its rebuild.
+- **refinery seam (closed by ART-03 #349)**: the old shared branch was split;
+  ART-02 kept refinery byte-for-byte pre-ART-02 (10 meshes / 180 tris, zero
+  pivots). ART-03 has now rebuilt it into a distinct distillation plant
+  (41 meshes / 792 tris, pump + valve pivots); the seam test in
+  `tests/salvageModels.test.mjs` asserts the rebuild and that the crusher is
+  collateral-free. See `docs/design/INDUSTRIAL_RIGS.md`.
 - Motion: pure `art02Pose(time, reducedMotion, id)` + frozen `ART02_MOTION` exported
   from `src/world.js`, shared by runtime `update()` and tests (ART-06 pattern);
   schema declarations mirror the constants exactly (drift-guarded). Reduced motion
@@ -167,12 +170,42 @@ loading bays). Full contract, provenance and the sorter mapping decision:
   silhouette metrics, motion timeline, invalid-site/reduced-motion/WebGL-failure
   negatives). Numeric proofs are not visual acceptance (G1 #276).
 
+## ART-03 industrial rigs (#349)
+
+Generator, induction furnace, fuel refinery and cast foundry were rebuilt as
+distinctive sim-driven rigs. Full contract: `docs/design/INDUSTRIAL_RIGS.md`.
+Summary:
+
+- **generator** (H 3.05, pick 3.1): roof fan `pivot:spin` y +2.2 + side turbine
+  `pivot:turbine` z −3.4, exhaust smoke; clock = sim elapsed × real grid load.
+  Measured 30 meshes / 460 tris (budget 36/800).
+- **furnace** (H 4.7): charge-flap oscillate + blower spin, heat pulse, twin
+  stack smoke, hot window status surface. 31 / 472 (budget 40/900).
+- **refinery** (H 3.5): distillation columns/tanks/pipe rack, pump flywheel +
+  valve handwheel, flare flame + vapor. 41 / 792 (budget 48/1100).
+- **foundry** (H 4.2): sawtooth hall, tipping crucible + roof fan, heat pulse,
+  twin stack smoke, glow/ingot status surfaces. 31 / 512 (budget 40/900).
+- Status is derived ONLY from sim state (`machineStatus`: assembling → grid →
+  inputs → working; generator working iff demand > 0) and applied as discrete
+  shared-material swaps (`STATUS_MATERIALS`); work clocks integrate wrap-aware
+  sim timer deltas via the pure `src/art03.js` (`art03Advance`/`art03Pose`/
+  `smokePuff`), shared by runtime `applyArt03` and tests. Reduced motion parks
+  clocks/channels but keeps tracking sim timers; status colours still apply.
+- Additive stamps `art03Generator/Furnace/Refinery/Foundry` (status or
+  `"absent"`), `art03Load`, `art03Clock`, `art03Reduced`; camera hashes
+  `f3afa5479a66b97e` / `691b3c0a3480e97b` guarded in tests and capture.
+- Evidence: `tests/art03Models.test.mjs` (18 tests) + `scripts/capture-art03.mjs`
+  → `docs/evidence/349-art-03/` (PASS_NUMERIC_ONLY; desktop + emulated phone,
+  real placement + picking, starved/unpowered negatives, 96px silhouette
+  metrics, sim-time-referenced motion timeline, WebGL-failure negative).
+  Numeric proofs are not visual acceptance (G1 #276).
+
 ## Performance limits
 
 | Limit | Value |
 |---|---|
-| Max meshes per machine | 60 (declared per-machine budgets 20–32) |
-| Max triangles per machine | 1600 (declared 400–600) |
+| Max meshes per machine | 60 (declared per-machine budgets 20–48) |
+| Max triangles per machine | 1600 (declared 400–1100) |
 | Initial scene machines / trucks | 6 / 3 |
 | Cylinder radial segments | 8 |
 | Shadow map | 2048 |

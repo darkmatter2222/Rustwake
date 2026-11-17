@@ -51,7 +51,16 @@ export const MATERIALS = Object.freeze({
   glass: {color: "#9ab9bc", metalness: 0.1, roughness: 0.22, owner: "world.js mats", use: "cab glazing"},
   sand: {color: "#8d7b5d", metalness: 0.07, roughness: 0.78, owner: "world.js mats", use: "dusty ground"},
   wood: {color: "#80644d", metalness: 0.07, roughness: 0.78, owner: "world.js mats", use: "market timber"},
-  black: {color: "#151d23", metalness: 0.1, roughness: 0.78, owner: "world.js mats", use: "doorways, tires"}
+  black: {color: "#151d23", metalness: 0.1, roughness: 0.78, owner: "world.js mats", use: "doorways, tires"},
+  // ART-03 (#349): discrete status variants for the four industrial rigs. Status
+  // swaps REASSIGN mesh.material to these shared pool entries; the pool is never
+  // mutated per building. "ember" is the starved (powered-but-no-inputs) process
+  // surface; "dark" doubles as the cold/unpowered surface (already registered).
+  statusStarved: {color: "#e7a25d", emissive: "#b06a20", emissiveIntensity: 1.2, owner: "world.js mats", use: "ART-03 starved amber status light"},
+  statusDead: {color: "#5a3038", emissive: "#7a2430", emissiveIntensity: 0.5, owner: "world.js mats", use: "ART-03 unpowered dead-red status light"},
+  statusIdle: {color: "#6f8a86", emissive: "#3a5a56", emissiveIntensity: 0.4, owner: "world.js mats", use: "ART-03 idle utility status light"},
+  ember: {color: "#a85a38", emissive: "#6e2a12", emissiveIntensity: 0.6, owner: "world.js mats", use: "ART-03 starved dim-ember process window"},
+  smoke: {color: "#9fb0ad", metalness: 0.05, roughness: 0.95, owner: "world.js mats", use: "ART-03 working-only emission puffs"}
 });
 
 // Performance limits (issue #347 acceptance: provenance + performance limits).
@@ -133,45 +142,98 @@ const RAW_MACHINES = {
     signage: "EXCHANGE",
     budget: {maxMeshes: 24, maxTriangles: 400}
   }),
-  generator: foot(1.975, {
-    pickHeight: 2.2,
-    bounds: {width: PAD, height: 1.975, depth: PAD},
+  // ART-03 (#349): the four industrial rigs are rebuilt as DISTINCT physically
+  // believable structures. Motion numbers mirror src/art03.js ART03_MOTION
+  // exactly (drift-tested). All pivot angles are radians per unit of SIM work
+  // clock — never wall time. Status surfaces (status:light / status:window /
+  // status:glow / status:ingot) swap between shared materials per derived sim
+  // status (working/starved/unpowered/assembling/idle); emit:* groups are
+  // working-only emission points phased off the same work clock.
+  generator: foot(3.05, {
+    pickHeight: 3.1,
+    bounds: {width: PAD, height: 3.05, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
       {id: "body", material: "body"}, {id: "cap", material: "dark"},
-      {id: "exhaust", material: "orange"}, {id: "status", material: "lights"}
+      {id: "intakeGrille", material: "dark"}, {id: "stack", material: "steel"},
+      {id: "stackCap", material: "rust"}, {id: "fuelTank", material: "rust"},
+      {id: "tankSaddles", material: "dark"}, {id: "cornerPost", material: "orange"},
+      {id: "cornerLamp", material: "lights"}, {id: "bay", material: "orange"},
+      {id: "status", material: "lights"}, {id: "exhaustPuffs", material: "smoke"}
     ],
-    pivots: [{id: "spin", node: "pivot:spin", offset: [0, 1.9, 0], axis: "y",
-      motion: {kind: "spin", speed: 1.75}, swingRadius: 1.32,
-      parts: [{id: "hub", material: "steel"}, {id: "blades", material: "orange"}]}],
-    budget: {maxMeshes: 24, maxTriangles: 500}
+    pivots: [
+      {id: "spin", node: "pivot:spin", offset: [0, 1.9, 0], axis: "y",
+        motion: {kind: "spin", speed: 2.2}, swingRadius: 1.32,
+        parts: [{id: "hub", material: "steel"}, {id: "blades", material: "orange"}]},
+      {id: "turbine", node: "pivot:turbine", offset: [0, 1.02, 1.44], axis: "z",
+        motion: {kind: "spin", speed: -3.4}, swingRadius: 0.6,
+        parts: [{id: "hub", material: "steel"}, {id: "blades", material: "orange"}]}
+    ],
+    emissions: [{node: "emit:exhaust", offset: [-0.95, 3.05, -0.95], puffs: 2, material: "smoke"}],
+    statusSurfaces: {light: "status:light"},
+    budget: {maxMeshes: 36, maxTriangles: 800}
   }),
-  furnace: foot(4.55, {
-    bounds: {width: PAD, height: 4.55, depth: PAD},
+  furnace: foot(4.7, {
+    bounds: {width: PAD, height: 4.7, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "roof", material: "roof"},
-      {id: "stackMain", material: "steel"}, {id: "stackAux", material: "rust"},
-      {id: "hotWindow", material: "furnace"}, {id: "sideRust", material: "rust"},
-      {id: "trim", material: "orange"}
+      {id: "vessel", material: "body"}, {id: "inductionCoils", material: "rust"},
+      {id: "roof", material: "dark"}, {id: "stackMain", material: "steel"},
+      {id: "stackMainCap", material: "rust"}, {id: "stackAux", material: "rust"},
+      {id: "stackAuxCap", material: "dark"}, {id: "chargeHopper", material: "orange"},
+      {id: "hopperMouth", material: "black"}, {id: "hotWindow", material: "furnace"},
+      {id: "sideGrates", material: "dark"}, {id: "tapSpout", material: "rust"},
+      {id: "launder", material: "steel"}, {id: "bay", material: "orange"},
+      {id: "status", material: "lights"}, {id: "stackPuffs", material: "smoke"}
+    ],
+    pivots: [
+      {id: "charge", node: "pivot:charge", offset: [0, 2.92, 0.62], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.5, speed: 1.2}, swingRadius: 0.8,
+        parts: [{id: "flap", material: "steel"}]},
+      {id: "blower", node: "pivot:blower", offset: [1.22, 1.55, 0.45], axis: "x",
+        motion: {kind: "spin", speed: 2.6}, swingRadius: 0.5,
+        parts: [{id: "hub", material: "steel"}, {id: "blades", material: "orange"}]}
     ],
     animations: [{kind: "pulse", target: "group.scale.y", amplitude: 0.009, speed: 5}],
-    budget: {maxMeshes: 24, maxTriangles: 500}
+    emissions: [
+      {node: "emit:stackA", offset: [-0.62, 4.72, -0.62], puffs: 2, material: "smoke"},
+      {node: "emit:stackB", offset: [0.62, 4.22, -0.62], puffs: 2, material: "smoke"}
+    ],
+    statusSurfaces: {light: "status:light", hot: "status:window"},
+    budget: {maxMeshes: 40, maxTriangles: 900}
   }),
-  foundry: foot(4.55, {
-    bounds: {width: PAD, height: 4.55, depth: PAD},
+  foundry: foot(4.2, {
+    bounds: {width: PAD, height: 4.2, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "roof", material: "roof"},
-      {id: "stackMain", material: "steel"}, {id: "stackAux", material: "rust"},
-      {id: "hotWindow", material: "furnace"}, {id: "sideRust", material: "rust"},
-      {id: "trim", material: "orange"}
+      {id: "hall", material: "rust"}, {id: "sawtoothRoof", material: "roof"},
+      {id: "clerestory", material: "glass"}, {id: "stackMain", material: "steel"},
+      {id: "stackMainCap", material: "rust"}, {id: "stackAux", material: "rust"},
+      {id: "stackAuxCap", material: "dark"}, {id: "trunnions", material: "dark"},
+      {id: "moldLine", material: "dark"}, {id: "ingots", material: "steel"},
+      {id: "hotIngot", material: "furnace"}, {id: "coolingTank", material: "steel"},
+      {id: "coolant", material: "glass"}, {id: "bay", material: "orange"},
+      {id: "status", material: "lights"}, {id: "stackPuffs", material: "smoke"}
+    ],
+    pivots: [
+      {id: "crucible", node: "pivot:crucible", offset: [0, 1.95, 0.95], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.42, speed: 0.85}, swingRadius: 0.62,
+        parts: [{id: "vessel", material: "dark"}, {id: "glow", material: "furnace"}, {id: "lip", material: "steel"}]},
+      {id: "fan", node: "pivot:fan", offset: [0.7, 2.44, 0.3], axis: "y",
+        motion: {kind: "spin", speed: 2}, swingRadius: 0.66,
+        parts: [{id: "hub", material: "steel"}, {id: "blades", material: "orange"}]}
     ],
     animations: [{kind: "pulse", target: "group.scale.y", amplitude: 0.009, speed: 5}],
-    budget: {maxMeshes: 24, maxTriangles: 500}
+    emissions: [
+      {node: "emit:stackA", offset: [-0.8, 4.22, -0.85], puffs: 2, material: "smoke"},
+      {node: "emit:stackB", offset: [0.8, 3.82, -0.85], puffs: 2, material: "smoke"}
+    ],
+    statusSurfaces: {light: "status:light", hot: "status:glow", ingot: "status:ingot"},
+    budget: {maxMeshes: 40, maxTriangles: 900}
   }),
   // ART-02 (#348): Crusher + screening plant, split from the shared refinery branch
-  // (refinery below is UNCHANGED — ART-03 seam). Open-front chamber, stepped hopper
+  // (refinery below was rebuilt by ART-03 #349 into a distinct distillation plant;
+  // the crusher geometry is UNCHANGED by ART-03). Open-front chamber, stepped hopper
   // roof (static top 2.51), twin discharge chutes. The "sorter" outcome of the ART-02
   // trio is the oscillating screen deck: V2's content registry has no standalone
   // buildable sorter (adding one needs src/content.js + src/simulation.js, outside
@@ -203,14 +265,34 @@ const RAW_MACHINES = {
     ],
     budget: {maxMeshes: 46, maxTriangles: 660}
   }),
-  refinery: foot(2.34, {
-    bounds: {width: PAD, height: 2.34, depth: PAD},
+  refinery: foot(3.5, {
+    bounds: {width: PAD, height: 3.5, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "rollers", material: "steel"},
-      {id: "hopper", material: "orange"}, {id: "grille", material: "dark"}
+      {id: "column", material: "steel"}, {id: "columnCollars", material: "rust"},
+      {id: "columnCap", material: "dark"}, {id: "columnAux", material: "rust"},
+      {id: "columnAuxCap", material: "dark"}, {id: "storageTanks", material: "steel"},
+      {id: "tankSaddles", material: "dark"}, {id: "pipeRack", material: "steel"},
+      {id: "flareStack", material: "dark"}, {id: "cabinet", material: "body"},
+      {id: "cabinetGrates", material: "dark"}, {id: "sightWindow", material: "furnace"},
+      {id: "pumpPedestal", material: "body"}, {id: "bay", material: "orange"},
+      {id: "status", material: "lights"}, {id: "vaporPuffs", material: "smoke"},
+      {id: "flareFlame", material: "furnace"}
     ],
-    budget: {maxMeshes: 24, maxTriangles: 500}
+    pivots: [
+      {id: "pump", node: "pivot:pump", offset: [-1.2, 0.95, 0.35], axis: "x",
+        motion: {kind: "spin", speed: 2.4}, swingRadius: 0.45,
+        parts: [{id: "flywheel", material: "dark"}, {id: "spokes", material: "steel"}]},
+      {id: "valve", node: "pivot:valve", offset: [0.15, 1.42, 0.2], axis: "y",
+        motion: {kind: "oscillate", amplitude: 0.6, speed: 0.9}, swingRadius: 0.3,
+        parts: [{id: "wheel", material: "orange"}, {id: "spokes", material: "steel"}, {id: "stem", material: "steel"}]}
+    ],
+    emissions: [
+      {node: "emit:flare", offset: [1.25, 3.55, -1.15], puffs: 1, material: "furnace", flare: true},
+      {node: "emit:vapor", offset: [-0.55, 3.34, -0.45], puffs: 2, material: "smoke"}
+    ],
+    statusSurfaces: {light: "status:light", hot: "status:window"},
+    budget: {maxMeshes: 48, maxTriangles: 1100}
   }),
   crane: foot(5.09, {
     pickHeight: 5.6,
