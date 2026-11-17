@@ -63,7 +63,7 @@ const report = {
   definitions: {
     frameBudgetMs: 1000 / 60, jankThresholdMs: 50,
     droppedFrames: "sum(max(0, round(delta/16.667)-1))",
-    inputToPhoton: "PROXY: synthetic event.timeStamp -> first rAF timestamp observing the camera stamp changed by that input (seq-paired). Headless SwiftShader has no physical display; this is event-to-next-rendered-frame, not a physical photon measurement.",
+    inputToPhoton: "PROXY: synthetic event.timeStamp -> max(first rAF timestamp observing the seq-paired camera stamp change, probe appliedAt). The max() corrects mid-frame CDP injection (rAF timestamps are frame START; observed raw delta -0.4ms): the presenting frame cannot precede camera application. Headless SwiftShader has no physical display; this is event-to-next-rendered-frame, not a physical photon measurement.",
     percentile: "nearest-rank ascending"
   },
   views: [], status: "UNKNOWN", errors: [],
@@ -220,7 +220,13 @@ try {
     const sample = await page.evaluate(([seq, k]) => {
       const c = window.__cam10Mon.changes.find(c => c.seq === seq && c.kind === k);
       const st = window.__RW_PROBES__.cam10.stats;
-      return {latencyMs: c.t - c.eventTime, handlerMs: st.last.handlerMs, seq: c.seq, kind: c.kind};
+      // The rAF timestamp is the frame START; CDP-injected input can arrive
+      // mid-frame before that frame's callbacks run (observed: -0.4ms). The
+      // frame that renders the new pose cannot present before the camera was
+      // applied, so the photon proxy is max(frameStart, appliedAt) - eventTime.
+      // This never shrinks the injected-stall margin (appliedAt >= event+delay).
+      const photonT = Math.max(c.t, c.appliedAt);
+      return {latencyMs: photonT - c.eventTime, frameStartDeltaMs: c.t - c.eventTime, handlerMs: st.last.handlerMs, seq: c.seq, kind: c.kind};
     }, [expected, probeKind]);
     if (!(sample.latencyMs >= 0)) throw new Error(`${kind}: negative latency ${sample.latencyMs}`);
     if (sample.seq !== expected || sample.kind !== probeKind) throw new Error(`${kind}: seq/kind mismatch ${JSON.stringify(sample)}`);
@@ -242,6 +248,7 @@ try {
     await page.waitForFunction(() => window.__cam10Mon.frames >= 10, null, {timeout: 15000});
     const samples = {drag: [], zoom: []};
     const handlers = {drag: [], zoom: []};
+    let midFrameCorrections = 0;
     // Pacing clock MUST share the in-page time origin (performance.now()),
     // never Date.now() epoch — mixing origins makes the wait unsatisfiable.
     const t0 = await page.evaluate(() => performance.now());
@@ -252,6 +259,7 @@ try {
       const s = await gestureSample(view, kind, contact, dir);
       samples[kind].push(s.latencyMs);
       handlers[kind].push(s.handlerMs);
+      if (s.frameStartDeltaMs < 0) midFrameCorrections++;
       i++;
       if (i < commands) {
         const nextAt = t0 + i * paceMs;
@@ -261,7 +269,7 @@ try {
     const mon = await collectMonitor(page);
     const kinds = await page.evaluate(() => window.__RW_PROBES__.cam10.stats.kinds);
     return {
-      label, commands: i, durationMs: mon.durationMs,
+      label, commands: i, durationMs: mon.durationMs, midFrameCorrections,
       frames: frameStats(mon.deltas, mon.durationMs),
       latency: {drag: latencyStats(samples.drag), zoom: latencyStats(samples.zoom)},
       handlerMs: {
