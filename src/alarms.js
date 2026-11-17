@@ -12,8 +12,12 @@
  * without opening unrelated menus:
  *  - power      grid brownout (demand > supply) -> build a Turbine Generator
  *  - road       completed machine without road frontage -> lay asphalt
- *  - starvation operating machine short of inputs (mirrors UX-01 shortages)
- *               -> build the unlocked producer / watch the freight delivery
+ *  - starvation operating machine short of inputs. #566: only an UNCOVERED
+ *               deficit (depot + inbound cannot cover it) raises a rail alarm,
+ *               at the strip's CRITICAL severity, with a state-changing remedy
+ *               (build the unlocked producer / sell less at the Exchange). A
+ *               delivery-pending deficit the depot already covers is telemetry
+ *               on the UX-01 strip ◔ flag and the ledger, NOT a rail alarm.
  *  - storage    output bay backing up with no truck assigned -> fix the route
  *               or check Fleet. The depot bank itself is UNCAPPED in the
  *               simulation (no capacity ledger exists); the model reports
@@ -90,21 +94,31 @@ function roadAlarms(g){
  return out;
 }
 
-/** Machine shortages: mirrors the UX-01 strip shortages EXACTLY (ids/severity). */
+/**
+ * Machine shortages: mirrors the UX-01 strip shortage IDS exactly. #566 severity
+ * rule: a delivery-pending deficit that depot + inbound ALREADY covers is NOT a
+ * rail alarm — its own text would say "already covered / automatic", crying wolf
+ * on a healthy yard (the opening-screen defect). That signal lives on the UX-01
+ * strip chip flag (◔ delivery pending) and the freight ledger, which are derived
+ * from the unchanged resourceStripState and survive at compact widths (#572).
+ * The rail raises an alarm ONLY for an UNCOVERED deficit (strip state "critical")
+ * that needs a player action; it keeps the strip's CRITICAL severity so the rail
+ * never disagrees with the strip/inspector authority. CRITICAL is the rail's
+ * highest severity (>= WARNING): the uncovered deficit stays visible, never
+ * silenced — the discrimination clause of #566.
+ */
 function starvationAlarms(g,strip){
  const out=[];
  for(const row of strip.shortages){
+  // Covered (delivery-pending) deficits are telemetry, not alarms (#566).
+  if(row.state!=="critical")continue;
   const id=row.id;
   const producers=BUILDINGS.filter(d=>d.cycle>0&&(d.outputs||{})[id]);
   const open=producers.filter(d=>unlocked(g,d.id)).sort((a,b)=>(a.cost.credits||0)-(b.cost.credits||0));
   const lockedProducer=producers.find(d=>!unlocked(g,d.id));
   const lockedTier=lockedProducer?TIERS.find(t=>t.unlocks.includes(lockedProducer.id)):null;
   let state,remedy,action,altAction=null;
-  if(row.state==="warning"){
-   state="ready";
-   remedy="Depot stock plus inbound trucks already covers the deficit — delivery is automatic. Keep the route connected and watch the freight ledger.";
-   action={tool:"inventory",resource:id,label:"Watch the freight ledger"};
-  }else if(open.length){
+  if(open.length){
    const p=open[0],afford=canAfford(g,p.cost);
    state=afford?"ready":"unaffordable";
    remedy="Build a "+p.name+" ("+costText(p.cost)+") to add "+row.name+" supply."+
@@ -121,7 +135,7 @@ function starvationAlarms(g,strip){
    action={tool:"inventory",resource:id,label:"Inspect yard stock"};
   }
   out.push(makeAlarm({
-   id:"starve-"+id,kind:"starvation",severity:row.state==="critical"?"critical":"warning",state,
+   id:"starve-"+id,kind:"starvation",severity:"critical",state,
    title:row.unit+" SHORTAGE",
    problem:row.detail,
    remedy,action,altAction,
@@ -154,8 +168,15 @@ function storageAlarms(g){
    id:"storage-"+b.id,kind:"storage",severity:"warning",state:routeOk?"ready":"blocked",
    title:"BAY BACKUP · "+def.name.toUpperCase(),
    problem:def.name+" at "+b.x+","+b.z+" is holding "+held+" units of output with no truck assigned to collect it.",
+   // #566 (product ruling 6956802594): when routeOk is TRUE the remedy must NOT
+   // diagnose blocked routes — #567 measured routeOk true with the real cause a
+   // dispatch queue, so the old "check Fleet for blocked routes" copy sent players
+   // hunting a nonexistent route problem. Queue/saturation wording is true under
+   // BOTH the pre- and post-#573 economies (#566 lands before #573). TEXT ONLY:
+   // state, severity, threshold and firing are unchanged; Fleet's cancel/reassign
+   // controls are real, and no hauler purchase beyond the #280 ceiling is promised.
    remedy:routeOk
-    ?"Freight dispatch is automatic — trucks collect loads of up to "+TRUCK_LOAD+". If the queue stalls, check Fleet for blocked routes or busy trucks."
+    ?"The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to "+TRUCK_LOAD+" per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
     :"The bay reaches a road but no connected route leads to the Freight Depot — reconnect the asphalt; trucks then haul loads of up to "+TRUCK_LOAD+" automatically.",
    action:routeOk?{tool:"fleet",label:"Check fleet dispatch"}:{tool:"road",label:"Reconnect the route"},
    target:{buildingId:b.id,x:b.x,z:b.z,name:def.name,held}
