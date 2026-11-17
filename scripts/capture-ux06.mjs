@@ -269,6 +269,11 @@ try{
   // ================= empty / nominal state =================
   {
    const {ctx,page}=await newPage(nominalSave());
+   // A fresh yard legitimately runs transient starve-iron/fuel alarms for the
+   // first ~12s while trucks prime the furnace bay (verified in-node timeline:
+   // [] at t=0, starve t=1..12, [] at t=15, storage-4 only from t=45). Wait
+   // bounded for the sim to REACH nominal, then assert the rendered empty chip.
+   await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.alarmProbe).ids.length===0;}catch{return false;}},null,{timeout:25000,polling:100});
    await page.locator('[data-testid="alarms-empty"]').waitFor({state:"visible",timeout:5000});
    view.proof.empty={text:await page.locator('[data-testid="alarms-empty"]').textContent(),ids:await alarmIds(page)};
    view.proof.emptyCentre=await centreProof(page,"empty");
