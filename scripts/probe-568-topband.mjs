@@ -102,6 +102,20 @@ try{
   await new Promise(r=>setTimeout(r,200));
  }
  if(!open)throw Error("Production preview did not become available on "+PORT);
+ // Served-bundle hard gate (#564 stale-preview precedent): the CSS actually
+ // served on this port must contain the #568 fix markers, or every frame below
+ // would measure a foreign/stale build. Minified markers verified in dist.
+ {
+  const html=await (await fetch(HOST,{signal:AbortSignal.timeout(5000)})).text();
+  const hrefs=[...html.matchAll(/href="([^"]+\.css)"/g)].map(m=>m[1]);
+  let served=null;
+  for(const h of hrefs){
+   const t=await (await fetch(new URL(h,HOST),{signal:AbortSignal.timeout(5000)})).text();
+   if(t.includes("grid-template-rows:30px 44px")&&t.includes("top:156px")&&t.includes("top:calc(156px + var(--sat))")){served=h;break;}
+  }
+  if(!served)throw Error("served CSS on "+PORT+" lacks the #568 fix markers (grid-template-rows:30px 44px / top:156px / safe-area mirror) — stale or foreign build; refusing to measure");
+  report.servedCss=served;
+ }
  browser=await chromium.launch({headless:true,args:["--enable-webgl","--use-angle=swiftshader","--enable-unsafe-swiftshader"]});
 
  for(const v of [
@@ -215,7 +229,16 @@ try{
     return {attempts,failed:true};
    };
    rec.firstSelection=await selectViaAim(RESERVED.building);
+   // FIDELITY (capture-dismantle context 3): the harness waits for the blocked
+   // control + a fresh fleetProbe stamp BEFORE Escape, so the CAM-05 selection
+   // rAF (App.jsx updatePlacement(true)) applies and pins the pivot to the
+   // clear-zone focusPixel (y~136..164 at 390x844). Escaping immediately — the
+   // old probe — cancelled that rAF and measured the HOME pose, never
+   // reproducing the framed pose where #568 actually bites (aims py91..151).
+   await page.locator('[data-testid="dismantle-blocked"]').waitFor({state:"visible",timeout:5000});
+   await page.waitForTimeout(450);
    rec.cameraAfterFirst=await page.locator(".world-canvas").evaluate(c=>({yaw:+c.dataset.cameraYaw,elevation:+c.dataset.cameraElevation,zoom:+c.dataset.cameraZoom,x:+c.dataset.cameraX,z:+c.dataset.cameraZ}));
+   rec.framedAfterFirst=rec.cameraAfterFirst.x!==0||rec.cameraAfterFirst.z!==0||rec.cameraAfterFirst.zoom!==1;
    await page.keyboard.press("Escape");
    await page.locator('[data-tool="fleet"]').click();
    await page.locator('[data-tool="fleet"][aria-pressed="true"]').waitFor({state:"attached",timeout:5000});
@@ -233,6 +256,12 @@ try{
    rec.cameraAtSecond=rec.secondSelection.camera;
    await shot(page,"reserved-second-selection-state");
    if(!rec.secondSelection.allCanvas)fails.push("reservedFlow second-selection (10,10) five-height aim NOT all canvas: "+JSON.stringify(rec.secondSelection.aims));
+   // Decisive re-selection clause — the EXACT capture-dismantle.mjs line-350
+   // action: after the real fleet cancel, a real touch tap must select the
+   // (10,10) machine again and render SITE 10.10. allCanvas alone is not enough.
+   rec.reselectAfterCancel=await selectViaAim(RESERVED.building);
+   if(rec.reselectAfterCancel.failed)fails.push("reservedFlow RE-SELECTION after cancel failed (capture-dismantle line 350 equivalent): "+JSON.stringify(rec.reselectAfterCancel.attempts));
+   else await shot(page,"reserved-reselect-inspector");
    view.contexts.reservedFlow=rec;
    await ctx.close();
   }
