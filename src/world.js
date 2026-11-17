@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import {CAMERA_LIMITS,normalizeCamera} from "./camera.js";
-import {CELL,WORLD_SIZE,BLUEPRINTS} from "./content.js";
+import {CELL,WORLD_SIZE,BLUEPRINTS,RESOURCE_BY_ID} from "./content.js";
 import {cellOf,key} from "./simulation.js";
 import {worldFootprint} from "./gridOccupancy.js";
 import {SCHEMA_ID,machineDescriptor,cellCenter} from "./voxelSchema.js";
@@ -16,6 +16,13 @@ const mats={
  roof:mat("#70888b",.35),body:mat("#839c9e",.4),glass:mat("#9ab9bc",.1,.22),
  sand:mat("#8d7b5d"),wood:mat("#80644d"),black:mat("#151d23",.1)
 };
+// LOG-04 (#384): truck crates are tinted by the actual resource onboard, so the
+// visible load is evidence of the freight ledger, not a decorative carrier.
+const cargoMats=new Map();
+function cargoMaterial(resource){
+ if(!cargoMats.has(resource))cargoMats.set(resource,mat(RESOURCE_BY_ID[resource]?.color||"#c78355",.18,.6));
+ return cargoMats.get(resource);
+}
 const geo=new THREE.BoxGeometry(1,1,1);
 // ART-01 (#347): invisible full-cell pick volume owned by the voxel schema.
 // material.visible=false never renders; the mesh gives mesh-based ray picking an
@@ -372,6 +379,7 @@ export class LivingWorld{
    if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+.009*Math.sin(time*5+id);
   }
   const alive=new Set();
+  let freightLoaded=0,freightOnboard=0;
   for(const v of g.vehicles){
    alive.add(v.id);
    let truck=this.trucks.get(v.id);
@@ -381,18 +389,30 @@ export class LivingWorld{
     const from=v.job.route[v.job.segment],to=v.job.route[v.job.segment+1];
     truck.rotation.y=Math.atan2(to.x-from.x,to.z-from.z);
    }
-   if(v.cargo && !truck.userData.loaded){
-    const load=box(truck,0,1.05,.52,.95,.5,.9,"rust");load.name="cargo";truck.userData.loaded=true;
-   }else if(!v.cargo && truck.userData.loaded){
-    const load=truck.children.find(c=>c.name==="cargo");if(load)truck.remove(load);
-    truck.userData.loaded=false;
+   // LOG-04 (#384): rebuild the visible load only when the actual onboard cargo
+   // changes; crate count/color derive from v.cargo, never from the job phase.
+   const cargo=v.cargo&&v.cargo.amount>0?v.cargo:null;
+   const sig=cargo?cargo.resource+":"+cargo.amount:"";
+   if(sig!==truck.userData.cargoSig){
+    const old=truck.children.find(c=>c.name==="cargo");if(old)truck.remove(old);
+    truck.userData.cargoSig=sig;truck.userData.loaded=!!cargo;truck.userData.cargo=cargo?{resource:cargo.resource,amount:cargo.amount}:null;
+    if(cargo){
+     const load=new THREE.Group();load.name="cargo";
+     const count=Math.max(1,Math.min(3,Math.ceil(cargo.amount/5)));
+     for(let i=0;i<count;i++)box(load,(i-(count-1)/2)*.34,1.05,.52,.3,.42,.8,cargoMaterial(cargo.resource));
+     truck.add(load);
+    }
    }
+   if(cargo){freightLoaded++;freightOnboard+=cargo.amount;}
   }
   for(const [id,tr] of this.trucks)if(!alive.has(id)){this.vehicleGroup.remove(tr);this.trucks.delete(id);}
   this.renderer.render(this.scene,this.camera);
   // applyCamera() already stamped this frame's camera synchronously; only the
   // rendered-ready flag belongs after the first successful render.
   this.renderer.domElement.dataset.world3d="ready";
+  // LOG-04 (#384): additive freight stamps (camera stamps above are untouched).
+  this.renderer.domElement.dataset.freightLoaded=String(freightLoaded);
+  this.renderer.domElement.dataset.freightOnboard=String(freightOnboard);
  }
  dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }

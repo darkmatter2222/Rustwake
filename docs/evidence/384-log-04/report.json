@@ -1,0 +1,333 @@
+{
+  "issue": 384,
+  "version": 2,
+  "build": "production-preview",
+  "source_sha": "9355a6e8c7af8723a878b6fb26129c505d0dacdc",
+  "started": "2026-11-17T04:07:12.582Z",
+  "views": [
+    {
+      "name": "desktop-onboard",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "desktop-arrived",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone-onboard",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false
+    }
+  ],
+  "measurements": {
+    "onboard": {
+      "fixture": {
+        "kinds": [
+          "reserve=12",
+          "pickup=12"
+        ],
+        "totals": {
+          "totals": {
+            "credits": 1800,
+            "scrap": 12
+          },
+          "reserved": 0,
+          "onboard": 12
+        },
+        "manifest": {
+          "bank": {
+            "credits": 1800,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "buildings": [
+            {
+              "id": 1,
+              "type": "salvager",
+              "inventory": {
+                "scrap": 0
+              }
+            },
+            {
+              "id": 2,
+              "type": "depot",
+              "inventory": {}
+            },
+            {
+              "id": 3,
+              "type": "generator",
+              "inventory": {}
+            },
+            {
+              "id": 4,
+              "type": "furnace",
+              "inventory": {}
+            },
+            {
+              "id": 5,
+              "type": "crane",
+              "inventory": {}
+            },
+            {
+              "id": 6,
+              "type": "market",
+              "inventory": {}
+            }
+          ],
+          "vehicles": [
+            {
+              "id": 1,
+              "name": "HAULER-01",
+              "phase": "toDest",
+              "sourceId": 1,
+              "destId": 2,
+              "reserved": null,
+              "cargo": {
+                "resource": "scrap",
+                "amount": 12
+              }
+            },
+            {
+              "id": 2,
+              "name": "HAULER-02",
+              "phase": "idle",
+              "sourceId": null,
+              "destId": null,
+              "reserved": null,
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "name": "HAULER-03",
+              "phase": "idle",
+              "sourceId": null,
+              "destId": null,
+              "reserved": null,
+              "cargo": null
+            }
+          ],
+          "totals": {
+            "totals": {
+              "credits": 1800,
+              "scrap": 12
+            },
+            "reserved": 0,
+            "onboard": 12
+          }
+        }
+      },
+      "haulerCell": {
+        "x": 7.075,
+        "z": 8
+      },
+      "stamps": {
+        "world3d": "ready",
+        "freightLoaded": "1",
+        "freightOnboard": "12",
+        "yaw": "45",
+        "zoom": "1.15"
+      },
+      "fleetRow": "▰\nHAULER-01\nDelivering cargo\n12 SCRAP",
+      "reloadFleetRow": "▰\nHAULER-01\nDelivering cargo\n12 SCRAP",
+      "reloadTotals": {
+        "totals": {
+          "credits": 1800,
+          "scrap": 12
+        },
+        "reserved": 0,
+        "onboard": 12
+      },
+      "closeupPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 5.153942430888775,
+        "x": -15.487499043416124,
+        "z": -12.250002265940367
+      },
+      "screenshots": [
+        "desktop-freight-onboard.png",
+        "desktop-freight-truck-closeup.png",
+        "desktop-freight-reload.png"
+      ],
+      "expected": "1 truck loaded with exactly 12 scrap; bank scrap 0; reload restores cargo, phase and ledger without duplication"
+    },
+    "arrival": {
+      "fixture": {
+        "kinds": [
+          "reserve=12",
+          "pickup=12",
+          "arrive=12"
+        ],
+        "totals": {
+          "totals": {
+            "credits": 1800,
+            "scrap": 12
+          },
+          "reserved": 0,
+          "onboard": 0
+        },
+        "manifest": {
+          "bank": {
+            "credits": 1800,
+            "scrap": 12,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "buildings": [
+            {
+              "id": 1,
+              "type": "salvager",
+              "inventory": {
+                "scrap": 0
+              }
+            },
+            {
+              "id": 2,
+              "type": "depot",
+              "inventory": {}
+            },
+            {
+              "id": 3,
+              "type": "generator",
+              "inventory": {}
+            },
+            {
+              "id": 4,
+              "type": "furnace",
+              "inventory": {}
+            },
+            {
+              "id": 5,
+              "type": "crane",
+              "inventory": {}
+            },
+            {
+              "id": 6,
+              "type": "market",
+              "inventory": {}
+            }
+          ],
+          "vehicles": [
+            {
+              "id": 1,
+              "name": "HAULER-01",
+              "phase": "idle",
+              "sourceId": null,
+              "destId": null,
+              "reserved": null,
+              "cargo": null
+            },
+            {
+              "id": 2,
+              "name": "HAULER-02",
+              "phase": "idle",
+              "sourceId": null,
+              "destId": null,
+              "reserved": null,
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "name": "HAULER-03",
+              "phase": "idle",
+              "sourceId": null,
+              "destId": null,
+              "reserved": null,
+              "cargo": null
+            }
+          ],
+          "totals": {
+            "totals": {
+              "credits": 1800,
+              "scrap": 12
+            },
+            "reserved": 0,
+            "onboard": 0
+          }
+        }
+      },
+      "bankScrapStrip": 12,
+      "stamps": {
+        "world3d": "ready",
+        "freightLoaded": "0",
+        "freightOnboard": "0",
+        "yaw": "45",
+        "zoom": "1.15"
+      },
+      "fleetRow": "▰\nHAULER-01\nAvailable for dispatch\nIDLE",
+      "reloadTotals": {
+        "totals": {
+          "credits": 1800,
+          "scrap": 12
+        },
+        "reserved": 0,
+        "onboard": 0
+      },
+      "screenshot": "desktop-freight-arrived.png",
+      "expected": "onboard 0, reserved 0, destination (depot bank) scrap exactly 12; arrive ledger entry present; truck idle"
+    },
+    "phone": {
+      "stamps": {
+        "world3d": "ready",
+        "freightLoaded": "1",
+        "freightOnboard": "12",
+        "yaw": "45",
+        "zoom": "1"
+      },
+      "fleetRow": "▰\nHAULER-01\nDelivering cargo\n12 SCRAP",
+      "documentScroll": false,
+      "screenshot": "phone-freight-onboard.png"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
+    "PASS_NUMERIC_ONLY: ledger/stamp/DOM measurements are exact; crate color/count fidelity is screenshot-only and NOT self-certified",
+    "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
+    "Fixtures freeze power (generator never completes) and slow the fleet so the mid-haul state is observable; they are measurement scenes, not a balance claim"
+  ],
+  "completed": "2026-11-17T04:07:22.681Z"
+}

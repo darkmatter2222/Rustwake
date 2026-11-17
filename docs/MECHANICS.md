@@ -2,7 +2,7 @@
 
 ## Real V2 foundation
 - Hidden 24x24 buildable parcel in a real rendered voxel 3D environment; road graph and 3 starter haulers.
-- Starter yard includes a scrapyard extractor, depot, generator, furnace, market and crane. Physical vehicles reserve cargo at dispatch, drive to source/destination along connected road cells and deposit at the actual endpoint; no magical global output claim.
+- Starter yard includes a scrapyard extractor, depot, generator, furnace, market and crane. Physical vehicles reserve cargo at dispatch, drive to source/destination along connected road cells and deposit at the actual endpoint; no magical global output claim. Freight (#384 LOG-04) runs on four distinct ledgers — source stock, reserved load, onboard cargo, destination stock — with validated reserve→pickup→arrive transitions recorded in a persisted freight ledger; cancel, severed routes and vanished endpoints return the units to their source exactly once, reload reconciles inconsistent saves before offline catch-up, and the visible truck crates are tinted/counted from the actual onboard cargo.
 - Producers and processors have localized input/output inventory; depots hold global sellable materials. Different machines have distinct build costs, recipes, power, visual state and output limits. Player chooses structure, location and roads, not a prescribed pipe chain.
 - Functional current currencies: credits, scrap, ferrous, copper, aggregate, diesel, water, steel, and data. Additional registered categories: alloys, gears, circuits, relics, influence, echo shards, charters, renown. Future tiers have explicitly incomplete sources/sinks.
 - Research choices and tech tiers are scaffolding; improve balance and implement actual long-tail decisions.
