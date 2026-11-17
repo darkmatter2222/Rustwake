@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 347,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "local",
+  "started": "2026-11-17T01:58:21.441Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 9.391095399452796,
+        "x": 4.560804492508554,
+        "z": -7.717638379333679,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready"
+      },
+      "detailPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 9.391095399452796,
+        "x": 4.560804492508554,
+        "z": -7.717638379333679,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready"
+      },
+      "toastText": "NOTICE\nA machine occupies this site\n×",
+      "screenshots": {
+        "landing": "desktop-world.png",
+        "ghost": "desktop-negative-ghost.png",
+        "negative": "desktop-negative-toast.png",
+        "detail": "desktop-detail.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 19.73541523967681,
+        "z": 19.73541523967682,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready"
+      },
+      "detailPose": null,
+      "toastText": "NOTICE\nA machine occupies this site\n×",
+      "screenshots": {
+        "landing": "phone-world.png",
+        "ghost": null,
+        "negative": "phone-negative-toast.png",
+        "detail": null
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false
+    }
+  ],
+  "machineValidation": {
+    "ok": true,
+    "schema": "rustwake.voxel.geometry.v1",
+    "parcel": {
+      "cells": [
+        24,
+        24
+      ],
+      "world": [
+        84,
+        84
+      ]
+    },
+    "cell": 3.5,
+    "machines": [
+      {
+        "id": "salvager",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "depot",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "furnace",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "crusher",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "refinery",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "generator",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "foundry",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "fabricator",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "research",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "market",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "turret",
+        "ok": true,
+        "errors": []
+      },
+      {
+        "id": "crane",
+        "ok": true,
+        "errors": []
+      }
+    ],
+    "errors": []
+  },
+  "pickProjection": {
+    "desktopDefault": {
+      "zoom": 1.15,
+      "canvasHeight": 900,
+      "cellCssPx": 45.28124999999999
+    },
+    "phoneDefault": {
+      "zoom": 1,
+      "canvasHeight": 844,
+      "cellCssPx": 36.925
+    },
+    "phoneZoomFloorFor44px": 1.1916046039268788
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated",
+    "Not art parity or sponsor approval"
+  ],
+  "completed": "2026-11-17T01:58:34.920Z"
+}

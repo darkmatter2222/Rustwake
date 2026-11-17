@@ -99,7 +99,7 @@ Shared unit BoxGeometry + shared material pool; no per-mesh geometry allocation.
 ## Reproducible evidence
 
 - Tests: `node --test tests/*.test.mjs` — 25 pass (13 new in `tests/voxelSchema.test.mjs`: schema/token identity, real Box3 envelopes, pick enclosure, frontage/truck fit, pivot offsets/axes/motion, material registry, scale references, budgets, 44 px projection, negative descriptors, staging).
-- Capture: `npm run build && node scripts/capture-art.mjs` → `artifacts/art-01/` (`desktop-world.png`, `desktop-detail.png` near-zoom pivots/bay/worker/truck, `desktop-negative-ghost.png`, `desktop-negative-toast.png`, `phone-world.png`, `phone-negative-toast.png`, `report.json` with the full validation table and camera poses). One headless Chromium/SwiftShader, production vite preview; phone view is emulated, not a physical handset (#275).
+- Capture: `npm run build && node scripts/capture-art.mjs` → `artifacts/art-01/` (`desktop-world.png`, `desktop-detail.png` near-zoom pivots/bay/worker/truck, `desktop-negative-ghost.png`, `desktop-negative-toast.png`, `phone-world.png`, `phone-negative-toast.png`, `report.json` with the full validation table and camera poses). The run for this PR is committed at `docs/evidence/347-art-01/`. One headless Chromium/SwiftShader, production vite preview; phone view is emulated, not a physical handset (#275).
 - Gates: `npm run validate`, `node scripts/check-design-contract.mjs` (PASS: 13 assets / 20 world tokens), `node scripts/check-studio-docs.mjs` (PASS).
 - **No code-author art self-acceptance**: numeric capture status is `PASS_NUMERIC_ONLY`. Independent reviewer + product verdict on the immutable PR head, then sponsor G1 (#276) on the deployed build, are required before any art-parity claim.
 
