@@ -1,0 +1,111 @@
+{
+  "method": "zlib full-frame PNG decode, distinct RGB colours + luminance stddev (no vision)",
+  "minDistinctColors": 500,
+  "minLuminanceStddev": 5,
+  "results": [
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-cancel-negative.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28837,
+      "luminanceMean": 94.356,
+      "luminanceStddev": 44.987
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-clean-commit.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28859,
+      "luminanceMean": 92.541,
+      "luminanceStddev": 45.002
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-drag5-negative.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28150,
+      "luminanceMean": 95.098,
+      "luminanceStddev": 45.17
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-home.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 25748,
+      "luminanceMean": 106.082,
+      "luminanceStddev": 42.754
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-jitter-commit.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28595,
+      "luminanceMean": 93.409,
+      "luminanceStddev": 45.057
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-orbit-negative.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 27981,
+      "luminanceMean": 96.72,
+      "luminanceStddev": 44.649
+    },
+    {
+      "file": "docs/evidence/338-cam-02/desktop-cam02-road.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28653,
+      "luminanceMean": 95.908,
+      "luminanceStddev": 44.31
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-cancel-negative.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 20270,
+      "luminanceMean": 71.706,
+      "luminanceStddev": 44.103
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-clean-commit.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 20089,
+      "luminanceMean": 70.805,
+      "luminanceStddev": 45.03
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-drag10-negative.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 19773,
+      "luminanceMean": 71.735,
+      "luminanceStddev": 44.092
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-home.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 24669,
+      "luminanceMean": 105.718,
+      "luminanceStddev": 47.856
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-jitter-commit.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 19662,
+      "luminanceMean": 70.88,
+      "luminanceStddev": 45.05
+    },
+    {
+      "file": "docs/evidence/338-cam-02/phone-cam02-twist-negative.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 15621,
+      "luminanceMean": 77.767,
+      "luminanceStddev": 46.999
+    }
+  ]
+}
