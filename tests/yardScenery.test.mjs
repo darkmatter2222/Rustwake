@@ -35,7 +35,7 @@ globalThis.document = {
 };
 const {
   yardSceneryPlan, validateSceneryPlan, sceneryConflicts, buildScenery,
-  applySceneryVisibility, DEFAULT_YARD_SEED, DRONE_PAD
+  applySceneryVisibility, DEFAULT_YARD_SEED, DRONE_PAD, surfaceTopFor, ghostLift
 } = await import("../src/world.js");
 
 const SEEDS = [4073, 1, 777, 9999, 12345, 2026, 31337];
@@ -406,4 +406,68 @@ test("interior dressing is varied: wrecks, barrels, scrap and outcrops all prese
   const wrecks = plan.props.filter(p => p.kind === "wreck").map(p => p.cells[0].split(",").map(Number));
   for (let i = 0; i < wrecks.length; i++) for (let j = i + 1; j < wrecks.length; j++)
     assert.ok(Math.max(Math.abs(wrecks[i][0] - wrecks[j][0]), Math.abs(wrecks[i][1] - wrecks[j][1])) >= 3);
+});
+
+test("REGRESSION buried ghost: surfaceTopFor derives the rendered top; ghostLift keeps the decal above raised rock dressing", () => {
+  const plan = yardSceneryPlan(DEFAULT_YARD_SEED);
+  // Wreck rock cell (19,6) — the capture negative-control cell. The OLD ghost
+  // sat at fixed y=.2 (slab bottom .14); the wreck silhouette is 1.25 tall, so
+  // the slab was buried inside the dressing and never reached the framebuffer.
+  const topWreck = surfaceTopFor(plan, 19, 6);
+  assert.ok(topWreck >= SCENERY.kinds.wreck.scale.height, "wreck cell top includes the prop silhouette");
+  assert.ok(.2 - .06 < topWreck, "the old hardcoded .2 slab WAS buried here (the bug)");
+  const slabBottom = ghostLift(topWreck, .12) - .06;
+  assert.ok(slabBottom > topWreck, "new slab bottom rides strictly above the rendered surface");
+  assert.ok(ghostLift(topWreck, .12) - topWreck <= .12, "thin overlay, not a floating slab");
+  // Every surveyed rock cell with volumetric dressing: ghost bottom above its top.
+  const terrain = terrainFor(DEFAULT_YARD_SEED);
+  let raised = 0;
+  for (const [k, t] of terrain) {
+    if (t.kind !== "rock") continue;
+    const [x, z] = cellOf(k);
+    if (!surveyed(x, z)) continue;
+    const top = surfaceTopFor(plan, x, z);
+    if (top <= .14) continue;
+    raised++;
+    assert.ok(ghostLift(top, .12) - .06 > top, "ghost above surface at " + k);
+    assert.ok(ghostLift(top, .06) - .03 > top, "bay ghost above surface at " + k);
+  }
+  assert.ok(raised >= 10, "default save has plenty of raised rock cells");
+  // Graded pad (17,4) — the capture positive-control cell: flush decals only,
+  // the decal stays ground-hugging and still clears the tallest flush tint.
+  const topPad = surfaceTopFor(plan, 17, 4);
+  assert.ok(topPad <= SCENERY.decalMaxHeight, "pad surface is flush");
+  assert.ok(ghostLift(topPad, .12) - .06 >= topPad, "pad ghost clears flush decals");
+  assert.ok(ghostLift(topPad, .12) < .2, "pad ghost hugs the ground (lower than the old fixed .2)");
+});
+
+test("REGRESSION buried ghost: occupancy-hidden rubble/props stop lifting the ghost; drawGhost has no hardcoded heights", () => {
+  const plan = yardSceneryPlan(DEFAULT_YARD_SEED);
+  // A rock cell dressed ONLY with rubble (no prop): hiding every chunk on it
+  // must drop the surface back to flush grade — a legal machine there gets a
+  // ground decal, not a ghost floating over invisible rubble.
+  const propCells = new Set(plan.props.flatMap(p => p.cells));
+  const target = plan.rubble.find(r => r.cells.some(k => !propCells.has(k) && terrainFor(DEFAULT_YARD_SEED).get(k)?.kind === "rock"));
+  assert.ok(target, "found a rubble-only rock cell");
+  const k = target.cells.find(c => !propCells.has(c) && terrainFor(DEFAULT_YARD_SEED).get(c)?.kind === "rock");
+  const [x, z] = cellOf(k);
+  const before = surfaceTopFor(plan, x, z);
+  assert.ok(before > .14, "rubble raises the cell");
+  const hiddenIdx = plan.rubble.map((r, i) => r.cells.includes(k) ? i : -1).filter(i => i >= 0);
+  const after = surfaceTopFor(plan, x, z, {props: [], rubble: hiddenIdx});
+  assert.ok(after <= SCENERY.decalMaxHeight, "hidden rubble no longer lifts the ghost");
+  assert.ok(after < before);
+  // Hidden props likewise (wreck cell with the wreck hidden).
+  const wreckIdx = plan.props.map((p, i) => p.kind === "wreck" && p.cells.includes("19,6") ? i : -1).filter(i => i >= 0);
+  const rubbleAtWreck = plan.rubble.map((r, i) => r.cells.includes("19,6") ? i : -1).filter(i => i >= 0);
+  const cleared = surfaceTopFor(plan, 19, 6, {props: wreckIdx, rubble: rubbleAtWreck});
+  assert.ok(cleared <= SCENERY.decalMaxHeight, "fully hidden dressing leaves flush grade");
+  // Source guard: drawGhost must place every slab via ghostTop/ghostLift, never
+  // the old hardcoded .2/.16/.22 heights that buried it under raised terrain.
+  const src = fs.readFileSync(new URL("../src/world.js", import.meta.url), "utf8").replace(/\r\n/g, "\n");
+  const start = src.indexOf("drawGhost(");
+  const body = src.slice(start, src.indexOf("\n update(", start));
+  assert.ok(body.includes("this.ghostTop("), "drawGhost derives per-cell surface");
+  assert.ok(!/position\.set\([^)]*,\s*\.(2|16|22)\s*,/.test(body), "no hardcoded ghost heights remain");
+  assert.ok(body.includes("opacity:.7") && body.includes("opacity:.3"), "decal opacity decisive under ACES");
 });

@@ -706,6 +706,23 @@ export function sceneryConflicts(plan,g){
  plan.rubble.forEach((r,i)=>{if(hit(r))rubble.push(i);});
  return {props,rubble};
 }
+// ART-07 (#353): rendered surface top per cell. The build ghost is a ground
+// decal, so it must ride just above whatever ACTUALLY draws in that cell —
+// flush decals, rubble chunk tops (y+h/2) and prop silhouette heights from the
+// same SCENERY descriptors that build the meshes. A fixed height buries the
+// ghost inside raised rock-cell dressing (the GREEN_GHOST_NOT_VISIBLE bug).
+// Hidden (occupancy-conflicted) props/rubble no longer lift the surface.
+export function surfaceTopFor(plan,x,z,hidden=null){
+ const k=key(x,z);let top=0;
+ const hp=hidden?new Set(hidden.props):null,hr=hidden?new Set(hidden.rubble):null;
+ for(const d of plan.decals)if(d.cells.includes(k))top=Math.max(top,d.h/2+.002);
+ plan.rubble.forEach((r,i)=>{if((!hr||!hr.has(i))&&r.cells.includes(k))top=Math.max(top,r.y+r.h/2);});
+ plan.props.forEach((p,i)=>{if((!hp||!hp.has(i))&&p.cells.includes(k))top=Math.max(top,SCENERY.kinds[p.kind].scale.height);});
+ return top;
+}
+// Thin-overlay placement: slab centered half its thickness + a 0.02 air gap
+// above the surface, so it reads as a decal on the ground, never a floating slab.
+export const ghostLift=(top,thickness)=>top+thickness/2+.02;
 let sceneryDecalMat=null,sceneryRubbleMat=null;
 const sceneryDummy=new THREE.Object3D();
 const sceneryColor=new THREE.Color();
@@ -841,7 +858,7 @@ export class LivingWorld{
   ground.rotation.x=-Math.PI/2;ground.position.y=-.42;ground.receiveShadow=true;this.scene.add(ground);
   // ART-05 (#351): decorative yard crew state (no freight authority, #274).
   this.crewWorkers=[];this.forklift=null;this.drone=null;this.crewTimers=new Map();this.droneAnchorId="none";
-  this.terrainSeed=DEFAULT_YARD_SEED;this.sceneryPlan=null;this.sceneryBuild=null;
+  this.terrainSeed=DEFAULT_YARD_SEED;this.sceneryPlan=null;this.sceneryBuild=null;this.sceneryHidden={props:[],rubble:[]};
   this.scenery=new THREE.Group();this.scene.add(this.scenery);this.makeTerrain();
   this.roadGroup=new THREE.Group();this.buildingGroup=new THREE.Group();this.vehicleGroup=new THREE.Group();
   this.scene.add(this.roadGroup,this.buildingGroup,this.vehicleGroup);
@@ -948,33 +965,54 @@ export class LivingWorld{
   // prop/rubble whose cells became road/footprint/bay is hidden (rebuild-only).
   const conflicts=sceneryConflicts(this.sceneryPlan,g);
   applySceneryVisibility(this.sceneryBuild,conflicts);
+  this.sceneryHidden=conflicts; // ghost decals ride above VISIBLE dressing only
   // ART-01 observability: schema identity + machine count, separate from camera stamps.
   const d=this.renderer.domElement.dataset;
   d.voxelSchema=SCHEMA_ID;d.machineCount=String(g.buildings.length);
   d.sceneryHidden=String(conflicts.props.length+conflicts.rubble.length);
  }
+ // ART-07 (#353): cell surface for ghost decals — visible scenery top, plus
+ // paved road slabs and legally placed machines (their schema pick height), so
+ // the overlay is never buried inside terrain, dressing or a built machine.
+ ghostTop(x,z){
+  let top=surfaceTopFor(this.sceneryPlan,x,z,this.sceneryHidden);
+  const g=this.state;
+  if(g){
+   const k=key(x,z);
+   if(g.roads.includes(k))top=Math.max(top,SCENERY.roadTop);
+   for(const b of g.buildings){
+    if(footprintCells(b.type,b.x,b.z,b.rot||0).some(c=>c.x===x&&c.z===z)){
+     top=Math.max(top,machineDescriptor(b.type)?.pick?.size?.[1]??2.2);break;
+    }
+   }
+  }
+  return top;
+ }
  drawGhost(mode,cell,valid,start,footprint){
   this.ghost.clear();if(!cell||cell.x<0||cell.z<0||cell.x>=WORLD_SIZE||cell.z>=WORLD_SIZE)return;
-  const m=new THREE.MeshBasicMaterial({color:valid?"#7ed4b3":"#ee8263",transparent:true,opacity:.4,depthWrite:false});
+  // Terrain-aware decal: each slab rides just above its own cell's rendered
+  // surface. Opacity .7 keeps the verdict chroma decisive under ACES exposure
+  // 1.9 (the old .4 blend compressed to a ~12-unit R-G shift on lit earth).
+  const m=new THREE.MeshBasicMaterial({color:valid?"#7ed4b3":"#ee8263",transparent:true,opacity:.7,depthWrite:false});
   const mesh=new THREE.Mesh(new THREE.BoxGeometry(CELL*.94,.12,CELL*.94),m);
-  mesh.position.set(origin(cell.x),.2,origin(cell.z));this.ghost.add(mesh);
+  mesh.position.set(origin(cell.x),ghostLift(this.ghostTop(cell.x,cell.z),.12),origin(cell.z));this.ghost.add(mesh);
   // Full rotated footprint + loading-bay approach, so the player sees exactly
   // which cells the validator judged (#370). Out-of-bounds cells are skipped.
   if(mode==="build"&&footprint){
-   const bayMat=new THREE.MeshBasicMaterial({color:valid?"#e5ac60":"#ee8263",transparent:true,opacity:.22,depthWrite:false});
+   const bayMat=new THREE.MeshBasicMaterial({color:valid?"#e5ac60":"#ee8263",transparent:true,opacity:.3,depthWrite:false});
    for(const c of footprint.cells||[]){
     if(c.x<0||c.z<0||c.x>=WORLD_SIZE||c.z>=WORLD_SIZE||(c.x===cell.x&&c.z===cell.z))continue;
-    const q=mesh.clone();q.position.set(origin(c.x),.2,origin(c.z));this.ghost.add(q);
+    const q=mesh.clone();q.position.set(origin(c.x),ghostLift(this.ghostTop(c.x,c.z),.12),origin(c.z));this.ghost.add(q);
    }
    for(const c of footprint.bay||[]){
     if(c.x<0||c.z<0||c.x>=WORLD_SIZE||c.z>=WORLD_SIZE)continue;
     const q=new THREE.Mesh(new THREE.BoxGeometry(CELL*.94,.06,CELL*.94),bayMat);
-    q.position.set(origin(c.x),.16,origin(c.z));this.ghost.add(q);
+    q.position.set(origin(c.x),ghostLift(this.ghostTop(c.x,c.z),.06),origin(c.z));this.ghost.add(q);
    }
   }
   if(mode==="road"&&start){
    const x0=start.x,z0=start.z,x1=cell.x,z1=cell.z;
-   const add=(x,z)=>{const q=mesh.clone();q.position.set(origin(x),.22,origin(z));this.ghost.add(q);};
+   const add=(x,z)=>{const q=mesh.clone();q.position.set(origin(x),ghostLift(this.ghostTop(x,z),.12)+.02,origin(z));this.ghost.add(q);};
    let x=x0,z=z0;while(x!==x1){x+=Math.sign(x1-x);add(x,z);}while(z!==z1){z+=Math.sign(z1-z);add(x,z);}
   }
  }
