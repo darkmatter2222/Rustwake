@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "issue": 558,
+  "task": "cancel->dismantle window winnable via per-source dispatch cooldown (no decoy seeds)",
+  "build": "production-preview",
+  "source_sha": "6ebb7ff3870582ce94b70f3b7758ba743e78e3ab",
+  "started": "2026-11-17T16:41:32.791Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-motion-a.png",
+        "desktop-motion-b.png",
+        "desktop-fleet-before-cancel.png",
+        "desktop-after-cancel-fleet.png",
+        "desktop-failure.png"
+      ],
+      "proof": {
+        "seed": {
+          "site": {
+            "x": 10,
+            "z": 10
+          },
+          "speeds": [
+            {
+              "id": 1,
+              "speed": 2.25
+            },
+            {
+              "id": 2,
+              "speed": 2.6
+            },
+            {
+              "id": 3,
+              "speed": 2
+            }
+          ],
+          "starters": [
+            {
+              "id": 1,
+              "type": "salvager"
+            },
+            {
+              "id": 2,
+              "type": "depot"
+            },
+            {
+              "id": 3,
+              "type": "generator"
+            },
+            {
+              "id": 4,
+              "type": "furnace"
+            },
+            {
+              "id": 5,
+              "type": "crane"
+            },
+            {
+              "id": 6,
+              "type": "market"
+            }
+          ],
+          "buildingId": 10,
+          "bankId": 2
+        },
+        "job": {
+          "truckId": 1,
+          "resource": "iron",
+          "amount": 15,
+          "phase": "toDest",
+          "sourceId": 2,
+          "destId": 10,
+          "motion": [
+            {
+              "id": 1,
+              "x": 11,
+              "z": 8.52765,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 10,
+              "phase": "idle"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.31015,
+              "phase": "toSource"
+            }
+          ]
+        },
+        "cancels": [
+          {
+            "round": 0,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 15,
+              "resource": "iron",
+              "sourceId": 2,
+              "phase": "toDest",
+              "bagBefore": 37,
+              "bagAfter": 52,
+              "before": {
+                "reserved": 19,
+                "onboard": 15,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          },
+          {
+            "round": 1,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 6,
+              "resource": "fuel",
+              "sourceId": 2,
+              "phase": "toSource",
+              "bagBefore": 99,
+              "bagAfter": 105,
+              "before": {
+                "reserved": 25,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          }
+        ],
+        "cooldownSuppression": {
+          "stamps": 6,
+          "windowSeconds": 15,
+          "cancelledPairs": [
+            "2:iron",
+            "2:fuel"
+          ]
+        },
+        "preReloadSave": {
+          "has": true,
+          "elapsed": 18.393200000000018,
+          "dispatchCooldowns": {
+            "2:iron": 32.06320000000001,
+            "2:fuel": 32.76320000000001
+          }
+        }
+      },
+      "status": "FAIL",
+      "failure": "Error: persisted save lost dispatchCooldowns: {\"has\":true,\"len\":9087,\"parseError\":\"ReferenceError: pid is not defined\",\"head\":\"{\\\"version\\\":2,\\\"seed\\\":4073,\\\"createdAt\\\":1794933692794,\\\"lastSavedAt\\\":1794933708357,\\\"\"}",
+      "errors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-motion-a.png",
+        "phone-motion-b.png",
+        "phone-fleet-before-cancel.png",
+        "phone-after-cancel-fleet.png",
+        "phone-failure.png"
+      ],
+      "proof": {
+        "seed": {
+          "site": {
+            "x": 10,
+            "z": 10
+          },
+          "speeds": [
+            {
+              "id": 1,
+              "speed": 2.25
+            },
+            {
+              "id": 2,
+              "speed": 2.6
+            },
+            {
+              "id": 3,
+              "speed": 2
+            }
+          ],
+          "starters": [
+            {
+              "id": 1,
+              "type": "salvager"
+            },
+            {
+              "id": 2,
+              "type": "depot"
+            },
+            {
+              "id": 3,
+              "type": "generator"
+            },
+            {
+              "id": 4,
+              "type": "furnace"
+            },
+            {
+              "id": 5,
+              "type": "crane"
+            },
+            {
+              "id": 6,
+              "type": "market"
+            }
+          ],
+          "buildingId": 10,
+          "bankId": 2
+        },
+        "job": {
+          "truckId": 1,
+          "resource": "iron",
+          "amount": 15,
+          "phase": "toDest",
+          "sourceId": 2,
+          "destId": 10,
+          "motion": [
+            {
+              "id": 1,
+              "x": 11,
+              "z": 8.047725,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.195225,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.81015,
+              "phase": "toDest"
+            }
+          ]
+        },
+        "cancels": [
+          {
+            "round": 0,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 15,
+              "resource": "iron",
+              "sourceId": 2,
+              "phase": "toDest",
+              "bagBefore": 37,
+              "bagAfter": 52,
+              "before": {
+                "reserved": 19,
+                "onboard": 15,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          },
+          {
+            "round": 1,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 6,
+              "resource": "fuel",
+              "sourceId": 2,
+              "phase": "toSource",
+              "bagBefore": 99,
+              "bagAfter": 105,
+              "before": {
+                "reserved": 25,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          }
+        ],
+        "cooldownSuppression": {
+          "stamps": 6,
+          "windowSeconds": 15,
+          "cancelledPairs": [
+            "2:iron",
+            "2:fuel"
+          ]
+        },
+        "preReloadSave": {
+          "has": true,
+          "elapsed": 18.873000000000008,
+          "dispatchCooldowns": {
+            "2:iron": 32.16320000000002,
+            "2:fuel": 32.8464
+          }
+        }
+      },
+      "status": "FAIL",
+      "failure": "Error: persisted save lost dispatchCooldowns: {\"has\":true,\"len\":8904,\"parseError\":\"ReferenceError: pid is not defined\",\"head\":\"{\\\"version\\\":2,\\\"seed\\\":4073,\\\"createdAt\\\":1794933692794,\\\"lastSavedAt\\\":1794933724111,\\\"\"}",
+      "errors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "FAIL",
+  "errors": [],
+  "raceControl": {
+    "method": "in-node: normal createGame + public buildAt furnace @(10,10) + advanceGame(8); loop 600x0.5s, cancel the first live job with destId===playerFurnace, advance 0.5s, check whether the SAME source+resource pair re-reserves onto the player furnace",
+    "base_6ebb7ff": {
+      "cancels": 513,
+      "samePairReReserveToPlayer": 495
+    },
+    "fix": {
+      "cancels": 32,
+      "samePairReReserveToPlayer": 0
+    },
+    "note": "fix also observed 16 pre-existing in-flight depot:iron jobs to the STARTER furnace (cooldown gates NEW dispatch, never returns in-flight freight) and 15 other-resource (fuel) jobs to the player furnace, which the capture cancels pair-by-pair"
+  },
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated 390x844 dpr2, not a physical device; no physical display",
+    "Numeric proofs do not certify visual fidelity — sponsor screenshot+motion review required at G1 (#276)",
+    "Local production preview only — the live hosted receipt is produced at release by the release engineer; this is NOT a release",
+    "NO DECOY SEEDS: normal createGame yard, all starters/generator intact, all three trucks at normal speed, no hand-stocked inventory. The single player furnace is built through the public buildAt API (normal cost deducted) at a legal road-adjacent site near yard center and assembled with 8s of normal simulation; live production and freight run throughout",
+    "Captured race variant is input-supply (depot->player furnace): the same #558 next-tick same-pair re-reservation, measured 495/513 on clean base vs 0/32 with the fix. The output-haul variant is proven deterministically in tests/dispatchCooldown.test.mjs c1-c4; a real-UI OUTPUT-side capture is blocked by a SEPARATE pre-existing dispatch-starvation defect (stable building-order sort always prefers starter output candidates; 0 player output jobs in 120s on BOTH base and fix) — filed as a follow-up with evidence on #567, NOT fixed here",
+    "Because the yard stays live, exact bank-delta assertions are made only for credits and stone (no other flow produces them); scrap/iron/copper/steel/fuel deltas are bounded by the production envelope (at most one salvager cycle and one cycle per furnace inside the ~300ms probe straddle). The toast carries the sim's exact transaction refund and is cross-checked against the straddling probes",
+    "Reload durability is proven here through the app's real pagehide persist + conditional seed (no re-seed over the live save) and deterministically in tests/dispatchCooldown.test.mjs (persist/readGame round-trip, hostile-expiry clamp, expiry boundary)",
+    "The 15s sim-time window, pair granularity, output+input coverage and exactly-once conservation under suppression are proven in tests/dispatchCooldown.test.mjs (7 tests); this capture proves the window is winnable through the real UI at normal fleet speed"
+  ],
+  "finished": "2026-11-17T16:42:05.489Z"
+}
