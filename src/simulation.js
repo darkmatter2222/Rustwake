@@ -28,6 +28,23 @@ const recordFreight=(g,entry)=>{
  if(g.freightLedger.length>128)g.freightLedger.splice(0,g.freightLedger.length-128);
 };
 const bagOfBuilding=(g,b)=>{if(!b)return null;if(b.type==="depot")return g.bank;if(!b.inventory||typeof b.inventory!=="object")b.inventory={};return b.inventory;};
+// Stock sanitization (#377 BLD-08): a refund may only ever move finite,
+// non-negative units. Zero keys are preserved so legitimate save round-trips
+// stay byte-identical; negative/NaN/non-numeric entries are dropped, never
+// deposited (a tampered inventory must not mint, destroy or poison bank stock).
+const sanitizeBag=(bag)=>{
+ const out={};
+ if(bag&&typeof bag==="object"&&!Array.isArray(bag))
+  for(const [id,v] of Object.entries(bag)){const n=Number(v);if(Number.isFinite(n)&&n>=0)out[id]=n;}
+ return out;
+};
+// 100% cargo recovery (#377): every positive sanitized inventory unit returns
+// to the depot on dismantle AND on cancel — no unit is ever silently destroyed.
+const cargoRefund=(b)=>{
+ const out={};
+ for(const [id,n] of Object.entries(sanitizeBag(b?.inventory)))if(n>0)out[id]=(out[id]||0)+n;
+ return out;
+};
 const sourceBagOf=(g,j)=>bagOfBuilding(g,g.buildings.find(b=>b.id===j?.sourceId));
 // ---- Construction transaction authority (#373 BLD-04) ----
 // Durable refund provenance: every committed building carries the EXACT cost it
@@ -98,7 +115,7 @@ export function readGame(){
   g.lastSavedAt=Number(g.lastSavedAt)||Date.now();
   g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z));
   g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400)
-   .map(b=>({...b,rot:normalizeRot(b.rot),paid:paidOf(b)}));
+   .map(b=>({...b,rot:normalizeRot(b.rot),paid:paidOf(b),inventory:sanitizeBag(b.inventory)}));
  g.ledger=Array.isArray(g.ledger)?g.ledger.filter(e=>e&&typeof e==="object").slice(-64):[];
  g.freightLedger=Array.isArray(g.freightLedger)?g.freightLedger.filter(e=>e&&typeof e==="object").slice(-128):[];
  // #373: replay protection survives reload; malformed registry entries drop.
@@ -140,7 +157,9 @@ export function powerStatus(g){
 export function buildAt(g,type,x,z,rot=0,commandId=null){
  const cmd=typeof commandId==="string"&&commandId.trim()?commandId.trim():null;
  if(cmd){
-  const prior=(Array.isArray(g.commands)?g.commands:[]).find(c=>c.id===cmd);
+  // #377: kind-tagged dismantle/cancel outcomes belong to their own commands;
+  // build replay only matches untagged (build/legacy) entries.
+  const prior=(Array.isArray(g.commands)?g.commands:[]).find(c=>c.id===cmd&&!c.kind);
   if(prior){
    // Idempotent replay: no revalidation, no spend, no ledger row, no stats.
    return prior.ok
@@ -187,38 +206,107 @@ export function buildAt(g,type,x,z,rot=0,commandId=null){
   throw err;
  }
 }
+// ---- Dismantle / cancel transaction authority (#377 BLD-08) ----
+// Both removals follow the #373 BLD-04 discipline: ONE validated transaction
+// (refund + splice + ledger + log) with full snapshot rollback on any throw,
+// and an optional command id (3rd argument; existing 1/2-argument calls are
+// unchanged) that makes the outcome idempotent across duplicate delivery AND
+// save/reload. Replay returns the EXACT original refund with zero further
+// deposit, no ledger row and no log line. Active-job semantics (documented in
+// docs/engineering/ECONOMY.md): HARD BLOCK — while any live truck job references
+// the building (source OR destination) removal is refused with RESERVED and
+// state is untouched; real cancellation is per-truck cancelFreight (#384),
+// which returns reserved/onboard units to their source exactly once. The player
+// cancels freight first, then dismantles; no cargo is ever stranded or doubled.
+// A rejected command records its rejection (replayable); a thrown commit
+// records nothing and is retryable.
+const removalRejection=(g,cmd,kind,code,reason,id,b)=>{
+ if(cmd){
+  const site=b?{type:b.type,x:b.x,z:b.z,rot:b.rot||0}:{};
+  recordLedger(g,{kind:"reject",buildingId:id,...site,code,reason,cost:{},refund:{},commandId:cmd});
+  recordCommand(g,{id:cmd,kind,ok:false,code,reason,buildingId:id});
+ }
+ return {ok:false,code,reason,...(cmd?{commandId:cmd}:{})};
+};
+const priorRemoval=(g,cmd,kind)=>{
+ const prior=(Array.isArray(g.commands)?g.commands:[]).find(c=>c.id===cmd&&c.kind===kind);
+ if(!prior)return null;
+ return prior.ok
+  ?{ok:true,code:"OK",duplicate:true,commandId:cmd,refund:{...(prior.refund&&typeof prior.refund==="object"?prior.refund:{})}}
+  :{ok:false,code:prior.code,reason:prior.reason,duplicate:true,commandId:cmd};
+};
+const commandIdOf=(commandId)=>typeof commandId==="string"&&commandId.trim()?commandId.trim():null;
+// Snapshot/rollback shared by both removals. ledger/log/commands are capped
+// rings: restore full CONTENTS (a push can evict their head), not lengths.
+const removalSnapshot=(g)=>({bank:{...g.bank},buildings:[...g.buildings],
+ ledger:[...(Array.isArray(g.ledger)?g.ledger:[])],log:[...g.log],
+ commands:[...(Array.isArray(g.commands)?g.commands:[])],nextId:g.nextId});
+const removalRollback=(g,snap)=>{
+ for(const k of Object.keys(g.bank))if(!(k in snap.bank))delete g.bank[k];
+ Object.assign(g.bank,snap.bank);
+ g.buildings.splice(0,g.buildings.length,...snap.buildings);
+ g.ledger=snap.ledger;g.log=snap.log;g.commands=snap.commands;g.nextId=snap.nextId;
+};
 // Cancel an in-flight assembly: refunds EXACTLY what this building paid
-// (b.paid provenance, durable across ledger eviction and save/reload), never
-// the current blueprint price. Conserved ledger, no ghost stock.
-export function cancelConstruction(g,id){
+// (b.paid provenance, durable across ledger eviction and save/reload) PLUS 100%
+// of any stored cargo (#377 conservation: assembling machines normally hold
+// empty inventory — deliveryCandidates skips remaining>0 — but legacy/tampered
+// saves can carry cargo, and no unit may be silently destroyed). Conserved
+// ledger, no ghost stock.
+export function cancelConstruction(g,id,commandId=null){
+ const cmd=commandIdOf(commandId);
+ if(cmd){const replay=priorRemoval(g,cmd,"cancel");if(replay)return replay;}
  const i=g.buildings.findIndex(b=>b.id===id);
- if(i<0)return {ok:false,code:"MISSING",reason:"No building selected"};
+ if(i<0)return removalRejection(g,cmd,"cancel","MISSING","No building selected",id,null);
  const b=g.buildings[i];
- if(b.id<=6)return {ok:false,code:"PROTECTED",reason:"Starter buildings are protected; construct your own district."};
- if(b.remaining<=0)return {ok:false,code:"COMPLETE",reason:"Assembly is complete — dismantle the machine instead"};
+ if(b.id<=6)return removalRejection(g,cmd,"cancel","PROTECTED","Starter buildings are protected; construct your own district.",id,b);
+ if(b.remaining<=0)return removalRejection(g,cmd,"cancel","COMPLETE","Assembly is complete — dismantle the machine instead",id,b);
+ for(const v of g.vehicles)if(v.job&&(v.job.sourceId===id||v.job.destId===id))
+  return removalRejection(g,cmd,"cancel","RESERVED","A truck has reserved material at this building",id,b);
  const def=BLUEPRINTS[b.type];
- const paid=paidOf(b);
- for(const [r,n] of Object.entries(paid))deposit(g.bank,r,n);
- g.buildings.splice(i,1);
- recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...paid}});
- pushLog(g,def.name+" construction canceled — full material refund.");
- return {ok:true,code:"OK",refund:{...paid}};
+ const refund={...paidOf(b)};
+ for(const [r,n] of Object.entries(cargoRefund(b)))refund[r]=(refund[r]||0)+n;
+ const snap=removalSnapshot(g);
+ try{
+  for(const [r,n] of Object.entries(refund))deposit(g.bank,r,n);
+  fault("cancel.afterRefund",{id});
+  g.buildings.splice(i,1);
+  fault("cancel.afterSplice",{id});
+  recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...refund},...(cmd?{commandId:cmd}:{})});
+  fault("cancel.afterLedger",{id});
+  pushLog(g,def.name+" construction canceled — full material refund.");
+  if(cmd)recordCommand(g,{id:cmd,kind:"cancel",ok:true,code:"OK",buildingId:b.id,refund:{...refund}});
+  return {ok:true,code:"OK",refund,...(cmd?{commandId:cmd}:{})};
+ }catch(err){removalRollback(g,snap);throw err;}
 }
-export function removeBuilding(g,id){
+// Dismantle a completed machine: floor(40%) of durable paid build materials
+// plus 100% of sanitized stored cargo (processed outputs included — the
+// inventory holds whatever the machine actually stores, not the cost recipe).
+export function removeBuilding(g,id,commandId=null){
+ const cmd=commandIdOf(commandId);
+ if(cmd){const replay=priorRemoval(g,cmd,"dismantle");if(replay)return replay;}
  const i=g.buildings.findIndex(b=>b.id===id);
- if(i<0)return {ok:false,reason:"No building selected"};
+ if(i<0)return removalRejection(g,cmd,"dismantle","MISSING","No building selected",id,null);
  const b=g.buildings[i];
- if(b.id<=6)return {ok:false,reason:"Starter buildings are protected; construct your own district."};
- for(const v of g.vehicles)if(v.job&&(v.job.sourceId===id||v.job.destId===id))return {ok:false,reason:"A truck has reserved material at this building"};
+ if(b.id<=6)return removalRejection(g,cmd,"dismantle","PROTECTED","Starter buildings are protected; construct your own district.",id,b);
+ for(const v of g.vehicles)if(v.job&&(v.job.sourceId===id||v.job.destId===id))
+  return removalRejection(g,cmd,"dismantle","RESERVED","A truck has reserved material at this building",id,b);
  const d=BLUEPRINTS[b.type];
- const paid=paidOf(b);
  const refund={};
- for(const [r,amount] of Object.entries(paid)){const n=Math.floor(amount*.4);refund[r]=(refund[r]||0)+n;deposit(g.bank,r,n);}
- for(const [r,amount] of Object.entries(b.inventory)){refund[r]=(refund[r]||0)+amount;deposit(g.bank,r,amount);}
- g.buildings.splice(i,1);
- recordLedger(g,{kind:"salvage",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund});
- pushLog(g,d.name+" salvaged. Recoverable inventory returned.");
- return {ok:true,refund};
+ for(const [r,amount] of Object.entries(paidOf(b))){const n=Math.floor(amount*.4);refund[r]=(refund[r]||0)+n;}
+ for(const [r,n] of Object.entries(cargoRefund(b)))refund[r]=(refund[r]||0)+n;
+ const snap=removalSnapshot(g);
+ try{
+  for(const [r,n] of Object.entries(refund))deposit(g.bank,r,n);
+  fault("dismantle.afterRefund",{id});
+  g.buildings.splice(i,1);
+  fault("dismantle.afterSplice",{id});
+  recordLedger(g,{kind:"salvage",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...refund},...(cmd?{commandId:cmd}:{})});
+  fault("dismantle.afterLedger",{id});
+  pushLog(g,d.name+" salvaged. Recoverable inventory returned.");
+  if(cmd)recordCommand(g,{id:cmd,kind:"dismantle",ok:true,code:"OK",buildingId:b.id,refund:{...refund}});
+  return {ok:true,code:"OK",refund,...(cmd?{commandId:cmd}:{})};
+ }catch(err){removalRollback(g,snap);throw err;}
 }
 export function roadLine(g,a,b){
  if(!inside(a.x,a.z)||!inside(b.x,b.z))return {ok:false,reason:"Road end is outside the surveyed land"};

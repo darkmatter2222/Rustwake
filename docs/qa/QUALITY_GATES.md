@@ -46,3 +46,21 @@ Capture tool `scripts/capture-art02.mjs` against the production preview (`pnpm b
 | Camera method hash guard | yes | yes | applyCamera≠f3afa5479a66b97e or stampCamera≠691b3c0a3480e97b |
 
 Capture-pipeline integrity: wheels are delivered only to anchors where `document.elementFromPoint` resolves to `.world-canvas` (phone UX-07 sheet collapsed through its real toggle when it covers the anchor); every scripted sheet toggle asserts CAM-05 camera stamps byte-unchanged; a stalled zoom stamp throws `WHEEL_ZOOM_STAMP_STALLED` with delivery diagnostics (no swallowed timeouts); the `1e-3` zoom tolerance and `ZOOM_TARGET_NOT_REACHED` throw are unchanged. Rollback control (`rollback-control.json`): the 11-test ART-02 suite fails 9/11 against main `ec641433`'s unmodified `world.js`+`voxelSchema.js`; the 2 survivors are continuity guards. Full suite `pnpm test` = `node --test tests/*.test.mjs` 282/282, `pnpm validate` + `pnpm build` green.
+
+## BLD-08 (#377) dismantle capture matrix
+Capture tool `scripts/capture-dismantle.mjs` against the production preview (`pnpm build`), one headless Chromium/SwiftShader run, capture head recorded in `docs/evidence/377-bld-08/report.json` (`source_sha`, never hand-edited). Status **PASS_NUMERIC_ONLY** — numeric/runtime smoke only; **G1 visual acceptance (#276) is sponsor-reserved and NOT granted by this matrix**. Phone is emulated (390×844 dpr2, hasTouch/isMobile), not a physical handset.
+
+| Stage | Desktop 1440×900 dpr1 | Phone 390×844 dpr2 | Failing case guarded |
+|---|---|---|---|
+| Two-step confirm dialog, exact refund rows | yes | yes | dialog rows ≠ authoritative refundEntries(dismantleRefund) per resource/label; single-tap removal |
+| Keep-machine abort | yes | yes | any bank delta or building loss on abort |
+| Confirm → exact bank delta + splice | yes | yes | fleetProbe bank delta ≠ previewed refund; building count not −1 |
+| Plain repeat tap at emptied site | yes | yes | re-selection or any payout (MISSING-safe) |
+| Persisted-save reload replay (in-node readGame+removeBuilding) | yes | yes | command/plain replay not MISSING or any deposit |
+| PROTECTED starter refusal | yes | yes | control enabled, reason drift, opener present, bank moved |
+| RESERVED refusal + real fleet-panel cancelFreight | yes | yes | gate reason drift, source bag ≠ 5/20 before/after, cancelProbe totals not conserved, double return |
+| Cancel → dismantle with returned cargo | yes | yes | re-reservation of the player machine (seeded decoys must win), refund ≠ recovery+100% cargo |
+| Fixture command-id replay (API-SEEDED headline) | yes | yes | duplicate≠true, refund drift, any deposit, registry not persisted, credits chip ≠ fixture bank |
+| Runtime hygiene (every context) | yes | yes | any pageerror/console error/same-origin failed request |
+
+Capture-pipeline integrity: every canvas tap is delivered only where `document.elementFromPoint` resolves to `.world-canvas` (checked FIRST, attempts recorded); selection is verified by the inspector eyebrow `SITE x.z`; all waits are condition-based on the app's own `data-fleet-probe` MutationObserver write count (15 s timeout, 25 ms polling) — no fixed sleeps as proof. Seed disclosures are carried in report.json limitations: generator/trucks removed for exact bank deltas; RESERVED context stocks earlier starter candidates and seeds truck speed 0.02 so the dispatcher's immediate post-cancel re-assignment deterministically goes elsewhere (the one-tick re-dispatch race is real gameplay debt, registered in GAPS, not hidden); command-id replay is API-seeded because App.jsx issues no removal command ids yet (registered cross-lease follow-up). Rollback control (`rollback-control.json`): the 15-test dismantle suite fails 15/15 against main's unmodified `simulation.js`; seven guard-break mutants each fail exactly their targeted tests; every restore is sha256-verified against the committed implementation.
