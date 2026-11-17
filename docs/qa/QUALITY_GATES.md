@@ -25,3 +25,24 @@ P0: missing/blank world, corrupted save/bank, unsafe security or wrong productio
 
 ## Closure and reporting
 Report test command/exit, source SHA, expected/actual, screenshot/video evidence, hardware and emulation note, limitations and specific issue. Never say passed just because a test runs. Release is accepted only after main deployment and actual live SHA receipt, while G1 needs separate sponsor visual approval.
+
+## ART-02 (#348) salvage-structure capture matrix
+Capture tool `scripts/capture-art02.mjs` against the production preview (`pnpm build`), one headless Chromium/SwiftShader, capture head `685c3fc1eab80f34c640edf18784af8e6c0ce084` (direct parent of the evidence commit; empty `src scripts tests` diff between them). Evidence: `docs/evidence/348-art-02/report.json` + PNGs. Status **PASS_NUMERIC_ONLY** — numeric smoke only; **G1 visual acceptance (#276) is sponsor-reserved and NOT granted by this matrix**. Phone is emulated (390×844 dpr2, hasTouch/isMobile), not a physical handset (#268/#275).
+
+| Stage | Desktop 1440×900 dpr1 | Phone 390×844 dpr2 | Failing case guarded |
+|---|---|---|---|
+| Landing still + camera pose | yes | yes | yaw≠45 / elevation≠35.264 / world3d≠ready / schema drift / machineCount≠6. Home zoom is responsive by product design (`App.jsx`: `innerWidth>=960 ? 1.15 : 1`) — desktop lands at 1.15, phone at 1; both are the correct home pose, not a desync |
+| Synchronous stamp==applied zoom (Zoom in button) | yes | yes | CAMERA_STAMP_DESYNC (dataset vs lastZoomApplied >1e-6) |
+| Real-UI crusher placement (9,9) + observed 5 s assembly | yes | yes | lastSiteOk≠true / inspector still shows "remaining" after 30 s |
+| Reduced-motion negative, landing (parked-or-absent) | yes | yes | art02Reduced≠"1" / arm≠"0.000" / roller,screen ∉ {"0.000","none"} / any stamp drifts over 2 s real clock |
+| Reduced-motion negative, crusher-live (strict) | yes | yes | any of arm/roller/screen ≠ exactly "0.000" or drifts over a second 2 s real-clock window ("none" NOT accepted once live) |
+| Invalid-site ghost + verdict (occupied depot 13,9) | yes | yes | lastSiteOk≠false / missing reason (COLLISION) / no red-ghost frame |
+| Trio isometric / front (yaw 0) / side (yaw 90) at strategic zoom | yes | yes | yaw off >0.5° / elevation drift / zoom target missed >1e-3 |
+| Inspector picking proof, both machines (1×1) | yes | yes | wrong machine name / footprint ≠1×1 / cell not clickable |
+| 96 px silhouette clips + independent PNG decode | yes | yes | meanAbsDiff<6 or diffFractionOver24<0.10 (structures read too alike) |
+| Motion timeline (no-preference, ≥12 s, ≥100 samples) | yes | n/a (desktop motion run) | non-monotone rollers / speed out of bounds / arm,screen exceed amplitude / reduced≠"0" / <30 distinct roller values / 4 mid-motion stage frames missing |
+| WebGL-failure negative | yes | n/a | world3d ready or any .world-canvas present or zero page errors (must fail loudly, never a fake 2D world) |
+| Runtime hygiene (every view) | yes | yes | >1 canvas / document scroll / any pageerror / any same-origin failed request |
+| Camera method hash guard | yes | yes | applyCamera≠f3afa5479a66b97e or stampCamera≠691b3c0a3480e97b |
+
+Capture-pipeline integrity: wheels are delivered only to anchors where `document.elementFromPoint` resolves to `.world-canvas` (phone UX-07 sheet collapsed through its real toggle when it covers the anchor); every scripted sheet toggle asserts CAM-05 camera stamps byte-unchanged; a stalled zoom stamp throws `WHEEL_ZOOM_STAMP_STALLED` with delivery diagnostics (no swallowed timeouts); the `1e-3` zoom tolerance and `ZOOM_TARGET_NOT_REACHED` throw are unchanged. Rollback control (`rollback-control.json`): the 11-test ART-02 suite fails 9/11 against main `ec641433`'s unmodified `world.js`+`voxelSchema.js`; the 2 survivors are continuity guards. Full suite `pnpm test` = `node --test tests/*.test.mjs` 282/282, `pnpm validate` + `pnpm build` green.

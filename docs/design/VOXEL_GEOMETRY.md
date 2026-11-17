@@ -151,7 +151,14 @@ loading bays). Full contract, provenance and the sorter mapping decision:
   from `src/world.js`, shared by runtime `update()` and tests (ART-06 pattern);
   schema declarations mirror the constants exactly (drift-guarded). Reduced motion
   parks ALL ART-02 channels at 0 (including the previously free-running rocker).
-  Additive stamps `art02Arm/art02Roller/art02Screen/art02Reduced`.
+  Additive stamps `art02Arm/art02Roller/art02Screen/art02Reduced`. Stamps are
+  presence-aware: a channel whose machine is not yet in the yard stamps `"none"`
+  (absent); a parked existing channel stamps exactly `"0.000"`. At landing the
+  crusher is absent, so `art02Roller`/`art02Screen` are `"none"` while the salvager
+  `art02Arm` is `"0.000"`; the capture's reduced-motion negative accepts
+  parked-or-absent at landing, then asserts strict `"0.000"` on all three channels
+  over a second 2 s real-clock window once the crusher is really placed (net
+  strengthening — see `SALVAGE_MODELS.md`).
 - Bay/status/pick/footprint/staging/save semantics unchanged; camera hashes
   `f3afa5479a66b97e` / `691b3c0a3480e97b` guarded in tests and capture.
 - Evidence: `tests/salvageModels.test.mjs` (11 tests, full suite 282/282) +

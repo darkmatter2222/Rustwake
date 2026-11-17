@@ -1,0 +1,1474 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 348,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "685c3fc1eab80f34c640edf18784af8e6c0ce084",
+  "started": "2026-11-17T11:08:49.920Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "budgets": {
+    "salvager": {
+      "meshes": 29,
+      "triangles": 408,
+      "declared": {
+        "maxMeshes": 32,
+        "maxTriangles": 560
+      },
+      "pivots": [
+        "rocker"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.74,
+        "depth": 3.045
+      },
+      "pickHeight": 2.95
+    },
+    "crusher": {
+      "meshes": 45,
+      "triangles": 600,
+      "declared": {
+        "maxMeshes": 46,
+        "maxTriangles": 660
+      },
+      "pivots": [
+        "rollerA",
+        "rollerB",
+        "screen"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.51,
+        "depth": 3.045
+      },
+      "pickHeight": 2.51
+    },
+    "refinery": {
+      "meshes": 10,
+      "triangles": 180,
+      "declared": {
+        "maxMeshes": 24,
+        "maxTriangles": 500
+      },
+      "pivots": [],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.34,
+        "depth": 3.045
+      },
+      "pickHeight": 2.34
+    }
+  },
+  "art02Motion": {
+    "rockerAmp": 0.55,
+    "rockerSpeed": 0.65,
+    "rollSpeed": 1.75,
+    "screenAmp": 0.04,
+    "screenSpeed": 3.4
+  },
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "none",
+        "art02Screen": "none",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "zoomed": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -4.458135167494586,
+        "z": -3.1767510871869256,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -4.458135167494586,
+        "z": -3.1767510871869256,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "front": {
+        "yaw": 359.999989013672,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -4.458135167494586,
+        "z": -3.1767510871869256,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "side": {
+        "yaw": 90.000010986328,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -4.458135167494586,
+        "z": -3.1767510871869256,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -4.458135167494586,
+        "z": -3.1767510871869256,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "placed": {
+        "label": "desktop",
+        "site": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "cell": {
+          "x": 9,
+          "z": 9
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 016 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "clips": [
+        {
+          "file": "desktop-salvager-clip.png",
+          "clipCss": {
+            "x": 510.66580734412423,
+            "y": 108.23749048895701,
+            "width": 163.91704450130726,
+            "height": 173.8911910788401
+          }
+        },
+        {
+          "file": "desktop-crusher-clip.png",
+          "clipCss": {
+            "x": 666.5828518454315,
+            "y": 209.57206924422658,
+            "width": 163.91704450130726,
+            "height": 162.5744940978158
+          }
+        }
+      ],
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "built": "desktop-crusher-built.png",
+        "iso": "desktop-trio-iso.png",
+        "front": "desktop-trio-front.png",
+        "side": "desktop-trio-side.png",
+        "salvagerSelected": "desktop-salvager-selected.png",
+        "crusherSelected": "desktop-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "none",
+        "art02Screen": "none",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "zoomed": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.1999231251937914,
+        "x": -8.475862310543182,
+        "z": -5.99548480952533,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.1999231251937914,
+        "x": -8.475862310543182,
+        "z": -5.99548480952533,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "front": {
+        "yaw": 0.0000018310547034161573,
+        "elevation": 35.264,
+        "zoom": 2.1999231251937914,
+        "x": -8.475862310543182,
+        "z": -5.99548480952533,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "side": {
+        "yaw": 89.99999977111804,
+        "elevation": 35.264,
+        "zoom": 2.1999231251937914,
+        "x": -8.475862310543182,
+        "z": -5.99548480952533,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "final": {
+        "yaw": 45.000001602172745,
+        "elevation": 35.264,
+        "zoom": 2.1999231251937914,
+        "x": -8.475862310543182,
+        "z": -5.99548480952533,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "art02Arm": "0.000",
+        "art02Roller": "0.000",
+        "art02Screen": "0.000",
+        "art02Reduced": "1",
+        "cranePhase": "parked",
+        "craneReducedMotion": "1"
+      },
+      "placed": {
+        "label": "phone",
+        "site": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "cell": {
+          "x": 9,
+          "z": 9
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 015 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "clips": [
+        {
+          "file": "phone-salvager-clip.png",
+          "clipCss": {
+            "x": 59.386973158172594,
+            "y": 233.91230628445942,
+            "width": 122.87962434962168,
+            "height": 130.22857209103068
+          }
+        },
+        {
+          "file": "phone-crusher-clip.png",
+          "clipCss": {
+            "x": 174.26659429539356,
+            "y": 308.5755906446785,
+            "width": 122.87962434962171,
+            "height": 121.89043367764077
+          }
+        }
+      ],
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "built": "phone-crusher-built.png",
+        "iso": "phone-trio-iso.png",
+        "front": "phone-trio-front.png",
+        "side": "phone-trio-side.png",
+        "salvagerSelected": "phone-salvager-selected.png",
+        "crusherSelected": "phone-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "placement": [
+    {
+      "label": "desktop",
+      "site": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "cell": {
+        "x": 9,
+        "z": 9
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 016 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "phone",
+      "site": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "cell": {
+        "x": 9,
+        "z": 9
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 015 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "motion",
+      "site": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "cell": {
+        "x": 9,
+        "z": 9
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 013 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    }
+  ],
+  "picking": [
+    {
+      "label": "desktop",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 3.6s Salvag",
+      "screenshot": "desktop-salvager-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 016 · LEVEL 1 OPERATING Cycle 4s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 4s 10 SC OUTPUT / LEV",
+      "screenshot": "desktop-crusher-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 3.6s Salvag",
+      "screenshot": "phone-salvager-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 015 · LEVEL 1 OPERATING Cycle 4s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 4s 10 SC OUTPUT / LEV",
+      "screenshot": "phone-crusher-selected.png"
+    }
+  ],
+  "motion": {
+    "elapsedSeconds": 16.06,
+    "samples": 101,
+    "stages": [
+      {
+        "name": "rollers-quarter-turn",
+        "stamp": {
+          "arm": "0.299",
+          "roller": "15.773",
+          "screen": "-0.013"
+        },
+        "screenshot": "desktop-motion-rollers-quarter-turn.png"
+      },
+      {
+        "name": "extractor-arm-mid-swing",
+        "stamp": {
+          "arm": "0.515",
+          "roller": "17.494",
+          "screen": "0.005"
+        },
+        "screenshot": "desktop-motion-extractor-arm-mid-swing.png"
+      },
+      {
+        "name": "rollers-half-turn",
+        "stamp": {
+          "arm": "0.539",
+          "roller": "18.982",
+          "screen": "-0.015"
+        },
+        "screenshot": "desktop-motion-rollers-half-turn.png"
+      },
+      {
+        "name": "screen-deck-tilted",
+        "stamp": {
+          "arm": "0.423",
+          "roller": "20.323",
+          "screen": "0.032"
+        },
+        "screenshot": "desktop-motion-screen-deck-tilted.png"
+      }
+    ],
+    "monotone": true,
+    "maxStep": 1.721,
+    "speedOk": true,
+    "inBounds": true,
+    "allReducedOff": true,
+    "distinctValues": {
+      "roller": 100,
+      "arm": 98,
+      "screen": 59
+    },
+    "rollerAdvance": 27.999000000000002,
+    "pageErrors": [],
+    "failedRequests": [],
+    "canvasCount": 1,
+    "documentScroll": false,
+    "timeline": [
+      {
+        "t": 0.004,
+        "arm": -0.017,
+        "roller": 14.14,
+        "screen": 0.014,
+        "reduced": "0"
+      },
+      {
+        "t": 0.955,
+        "arm": 0.299,
+        "roller": 15.773,
+        "screen": -0.013,
+        "reduced": "0"
+      },
+      {
+        "t": 1.968,
+        "arm": 0.515,
+        "roller": 17.494,
+        "screen": 0.005,
+        "reduced": "0"
+      },
+      {
+        "t": 2.823,
+        "arm": 0.539,
+        "roller": 18.982,
+        "screen": -0.015,
+        "reduced": "0"
+      },
+      {
+        "t": 3.582,
+        "arm": 0.423,
+        "roller": 20.323,
+        "screen": 0.032,
+        "reduced": "0"
+      },
+      {
+        "t": 4.373,
+        "arm": 0.175,
+        "roller": 21.811,
+        "screen": -0.037,
+        "reduced": "0"
+      },
+      {
+        "t": 4.494,
+        "arm": 0.141,
+        "roller": 21.986,
+        "screen": -0.03,
+        "reduced": "0"
+      },
+      {
+        "t": 4.622,
+        "arm": 0.106,
+        "roller": 22.161,
+        "screen": -0.019,
+        "reduced": "0"
+      },
+      {
+        "t": 4.753,
+        "arm": 0.041,
+        "roller": 22.481,
+        "screen": 0.005,
+        "reduced": "0"
+      },
+      {
+        "t": 4.88,
+        "arm": 0.005,
+        "roller": 22.657,
+        "screen": 0.018,
+        "reduced": "0"
+      },
+      {
+        "t": 4.998,
+        "arm": -0.03,
+        "roller": 22.831,
+        "screen": 0.029,
+        "reduced": "0"
+      },
+      {
+        "t": 5.123,
+        "arm": -0.06,
+        "roller": 22.977,
+        "screen": 0.036,
+        "reduced": "0"
+      },
+      {
+        "t": 5.243,
+        "arm": -0.131,
+        "roller": 23.327,
+        "screen": 0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 5.376,
+        "arm": -0.165,
+        "roller": 23.502,
+        "screen": 0.034,
+        "reduced": "0"
+      },
+      {
+        "t": 5.501,
+        "arm": -0.199,
+        "roller": 23.677,
+        "screen": 0.025,
+        "reduced": "0"
+      },
+      {
+        "t": 5.626,
+        "arm": -0.232,
+        "roller": 23.852,
+        "screen": 0.014,
+        "reduced": "0"
+      },
+      {
+        "t": 5.752,
+        "arm": -0.294,
+        "roller": 24.202,
+        "screen": -0.013,
+        "reduced": "0"
+      },
+      {
+        "t": 5.878,
+        "arm": -0.324,
+        "roller": 24.377,
+        "screen": -0.025,
+        "reduced": "0"
+      },
+      {
+        "t": 6.003,
+        "arm": -0.352,
+        "roller": 24.552,
+        "screen": -0.034,
+        "reduced": "0"
+      },
+      {
+        "t": 6.136,
+        "arm": -0.404,
+        "roller": 24.902,
+        "screen": -0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 6.258,
+        "arm": -0.427,
+        "roller": 25.077,
+        "screen": -0.036,
+        "reduced": "0"
+      },
+      {
+        "t": 6.379,
+        "arm": -0.449,
+        "roller": 25.252,
+        "screen": -0.028,
+        "reduced": "0"
+      },
+      {
+        "t": 6.503,
+        "arm": -0.469,
+        "roller": 25.427,
+        "screen": -0.017,
+        "reduced": "0"
+      },
+      {
+        "t": 6.634,
+        "arm": -0.502,
+        "roller": 25.777,
+        "screen": 0.01,
+        "reduced": "0"
+      },
+      {
+        "t": 6.762,
+        "arm": -0.515,
+        "roller": 25.952,
+        "screen": 0.022,
+        "reduced": "0"
+      },
+      {
+        "t": 6.893,
+        "arm": -0.525,
+        "roller": 26.098,
+        "screen": 0.031,
+        "reduced": "0"
+      },
+      {
+        "t": 7.014,
+        "arm": -0.542,
+        "roller": 26.448,
+        "screen": 0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 7.129,
+        "arm": -0.546,
+        "roller": 26.594,
+        "screen": 0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 7.245,
+        "arm": -0.55,
+        "roller": 26.798,
+        "screen": 0.032,
+        "reduced": "0"
+      },
+      {
+        "t": 7.361,
+        "arm": -0.55,
+        "roller": 27.002,
+        "screen": 0.02,
+        "reduced": "0"
+      },
+      {
+        "t": 7.484,
+        "arm": -0.548,
+        "roller": 27.119,
+        "screen": 0.011,
+        "reduced": "0"
+      },
+      {
+        "t": 7.6,
+        "arm": -0.538,
+        "roller": 27.469,
+        "screen": -0.015,
+        "reduced": "0"
+      },
+      {
+        "t": 7.735,
+        "arm": -0.53,
+        "roller": 27.644,
+        "screen": -0.027,
+        "reduced": "0"
+      },
+      {
+        "t": 7.861,
+        "arm": -0.521,
+        "roller": 27.789,
+        "screen": -0.034,
+        "reduced": "0"
+      },
+      {
+        "t": 7.991,
+        "arm": -0.494,
+        "roller": 28.139,
+        "screen": -0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 8.127,
+        "arm": -0.474,
+        "roller": 28.344,
+        "screen": -0.035,
+        "reduced": "0"
+      },
+      {
+        "t": 8.251,
+        "arm": -0.458,
+        "roller": 28.489,
+        "screen": -0.028,
+        "reduced": "0"
+      },
+      {
+        "t": 8.376,
+        "arm": -0.437,
+        "roller": 28.664,
+        "screen": -0.016,
+        "reduced": "0"
+      },
+      {
+        "t": 8.502,
+        "arm": -0.391,
+        "roller": 29.014,
+        "screen": 0.01,
+        "reduced": "0"
+      },
+      {
+        "t": 8.627,
+        "arm": -0.365,
+        "roller": 29.189,
+        "screen": 0.022,
+        "reduced": "0"
+      },
+      {
+        "t": 8.749,
+        "arm": -0.337,
+        "roller": 29.364,
+        "screen": 0.032,
+        "reduced": "0"
+      },
+      {
+        "t": 8.875,
+        "arm": -0.308,
+        "roller": 29.539,
+        "screen": 0.038,
+        "reduced": "0"
+      },
+      {
+        "t": 9,
+        "arm": -0.246,
+        "roller": 29.889,
+        "screen": 0.037,
+        "reduced": "0"
+      },
+      {
+        "t": 9.125,
+        "arm": -0.214,
+        "roller": 30.064,
+        "screen": 0.03,
+        "reduced": "0"
+      },
+      {
+        "t": 9.249,
+        "arm": -0.181,
+        "roller": 30.239,
+        "screen": 0.019,
+        "reduced": "0"
+      },
+      {
+        "t": 9.377,
+        "arm": -0.118,
+        "roller": 30.56,
+        "screen": -0.005,
+        "reduced": "0"
+      },
+      {
+        "t": 9.495,
+        "arm": -0.082,
+        "roller": 30.735,
+        "screen": -0.018,
+        "reduced": "0"
+      },
+      {
+        "t": 9.624,
+        "arm": -0.047,
+        "roller": 30.91,
+        "screen": -0.029,
+        "reduced": "0"
+      },
+      {
+        "t": 9.75,
+        "arm": -0.011,
+        "roller": 31.085,
+        "screen": -0.036,
+        "reduced": "0"
+      },
+      {
+        "t": 9.873,
+        "arm": 0.06,
+        "roller": 31.435,
+        "screen": -0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 9.996,
+        "arm": 0.096,
+        "roller": 31.61,
+        "screen": -0.033,
+        "reduced": "0"
+      },
+      {
+        "t": 10.124,
+        "arm": 0.131,
+        "roller": 31.785,
+        "screen": -0.024,
+        "reduced": "0"
+      },
+      {
+        "t": 10.249,
+        "arm": 0.165,
+        "roller": 31.96,
+        "screen": -0.012,
+        "reduced": "0"
+      },
+      {
+        "t": 10.365,
+        "arm": 0.232,
+        "roller": 32.31,
+        "screen": 0.015,
+        "reduced": "0"
+      },
+      {
+        "t": 10.497,
+        "arm": 0.258,
+        "roller": 32.456,
+        "screen": 0.024,
+        "reduced": "0"
+      },
+      {
+        "t": 10.62,
+        "arm": 0.289,
+        "roller": 32.631,
+        "screen": 0.034,
+        "reduced": "0"
+      },
+      {
+        "t": 10.731,
+        "arm": 0.319,
+        "roller": 32.806,
+        "screen": 0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 10.86,
+        "arm": 0.374,
+        "roller": 33.156,
+        "screen": 0.036,
+        "reduced": "0"
+      },
+      {
+        "t": 10.978,
+        "arm": 0.4,
+        "roller": 33.331,
+        "screen": 0.028,
+        "reduced": "0"
+      },
+      {
+        "t": 11.109,
+        "arm": 0.423,
+        "roller": 33.506,
+        "screen": 0.017,
+        "reduced": "0"
+      },
+      {
+        "t": 11.233,
+        "arm": 0.445,
+        "roller": 33.681,
+        "screen": 0.004,
+        "reduced": "0"
+      },
+      {
+        "t": 11.35,
+        "arm": 0.483,
+        "roller": 34.031,
+        "screen": -0.022,
+        "reduced": "0"
+      },
+      {
+        "t": 11.482,
+        "arm": 0.497,
+        "roller": 34.177,
+        "screen": -0.03,
+        "reduced": "0"
+      },
+      {
+        "t": 11.609,
+        "arm": 0.511,
+        "roller": 34.352,
+        "screen": -0.037,
+        "reduced": "0"
+      },
+      {
+        "t": 11.738,
+        "arm": 0.533,
+        "roller": 34.702,
+        "screen": -0.038,
+        "reduced": "0"
+      },
+      {
+        "t": 11.86,
+        "arm": 0.541,
+        "roller": 34.877,
+        "screen": -0.032,
+        "reduced": "0"
+      },
+      {
+        "t": 11.986,
+        "arm": 0.547,
+        "roller": 35.081,
+        "screen": -0.02,
+        "reduced": "0"
+      },
+      {
+        "t": 12.11,
+        "arm": 0.549,
+        "roller": 35.227,
+        "screen": -0.01,
+        "reduced": "0"
+      },
+      {
+        "t": 12.239,
+        "arm": 0.548,
+        "roller": 35.577,
+        "screen": 0.017,
+        "reduced": "0"
+      },
+      {
+        "t": 12.359,
+        "arm": 0.544,
+        "roller": 35.752,
+        "screen": 0.028,
+        "reduced": "0"
+      },
+      {
+        "t": 12.484,
+        "arm": 0.538,
+        "roller": 35.927,
+        "screen": 0.036,
+        "reduced": "0"
+      },
+      {
+        "t": 12.592,
+        "arm": 0.53,
+        "roller": 36.102,
+        "screen": 0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 12.717,
+        "arm": 0.519,
+        "roller": 36.277,
+        "screen": 0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 12.842,
+        "arm": 0.494,
+        "roller": 36.597,
+        "screen": 0.026,
+        "reduced": "0"
+      },
+      {
+        "t": 12.969,
+        "arm": 0.477,
+        "roller": 36.772,
+        "screen": 0.015,
+        "reduced": "0"
+      },
+      {
+        "t": 13.094,
+        "arm": 0.458,
+        "roller": 36.947,
+        "screen": 0.002,
+        "reduced": "0"
+      },
+      {
+        "t": 13.22,
+        "arm": 0.415,
+        "roller": 37.297,
+        "screen": -0.024,
+        "reduced": "0"
+      },
+      {
+        "t": 13.341,
+        "arm": 0.391,
+        "roller": 37.473,
+        "screen": -0.033,
+        "reduced": "0"
+      },
+      {
+        "t": 13.468,
+        "arm": 0.365,
+        "roller": 37.648,
+        "screen": -0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 13.592,
+        "arm": 0.337,
+        "roller": 37.822,
+        "screen": -0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 13.712,
+        "arm": 0.283,
+        "roller": 38.143,
+        "screen": -0.03,
+        "reduced": "0"
+      },
+      {
+        "t": 13.84,
+        "arm": 0.246,
+        "roller": 38.347,
+        "screen": -0.018,
+        "reduced": "0"
+      },
+      {
+        "t": 13.966,
+        "arm": 0.214,
+        "roller": 38.523,
+        "screen": -0.005,
+        "reduced": "0"
+      },
+      {
+        "t": 14.074,
+        "arm": 0.181,
+        "roller": 38.698,
+        "screen": 0.009,
+        "reduced": "0"
+      },
+      {
+        "t": 14.203,
+        "arm": 0.147,
+        "roller": 38.872,
+        "screen": 0.021,
+        "reduced": "0"
+      },
+      {
+        "t": 14.314,
+        "arm": 0.082,
+        "roller": 39.193,
+        "screen": 0.037,
+        "reduced": "0"
+      },
+      {
+        "t": 14.428,
+        "arm": 0.047,
+        "roller": 39.368,
+        "screen": 0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 14.558,
+        "arm": 0.011,
+        "roller": 39.543,
+        "screen": 0.038,
+        "reduced": "0"
+      },
+      {
+        "t": 14.684,
+        "arm": -0.025,
+        "roller": 39.718,
+        "screen": 0.032,
+        "reduced": "0"
+      },
+      {
+        "t": 14.808,
+        "arm": -0.09,
+        "roller": 40.039,
+        "screen": 0.012,
+        "reduced": "0"
+      },
+      {
+        "t": 14.934,
+        "arm": -0.125,
+        "roller": 40.214,
+        "screen": -0.001,
+        "reduced": "0"
+      },
+      {
+        "t": 15.058,
+        "arm": -0.159,
+        "roller": 40.389,
+        "screen": -0.014,
+        "reduced": "0"
+      },
+      {
+        "t": 15.186,
+        "arm": -0.226,
+        "roller": 40.739,
+        "screen": -0.035,
+        "reduced": "0"
+      },
+      {
+        "t": 15.306,
+        "arm": -0.258,
+        "roller": 40.914,
+        "screen": -0.039,
+        "reduced": "0"
+      },
+      {
+        "t": 15.43,
+        "arm": -0.289,
+        "roller": 41.089,
+        "screen": -0.04,
+        "reduced": "0"
+      },
+      {
+        "t": 15.556,
+        "arm": -0.319,
+        "roller": 41.264,
+        "screen": -0.035,
+        "reduced": "0"
+      },
+      {
+        "t": 15.684,
+        "arm": -0.374,
+        "roller": 41.614,
+        "screen": -0.015,
+        "reduced": "0"
+      },
+      {
+        "t": 15.807,
+        "arm": -0.4,
+        "roller": 41.789,
+        "screen": -0.002,
+        "reduced": "0"
+      },
+      {
+        "t": 15.929,
+        "arm": -0.423,
+        "roller": 41.964,
+        "screen": 0.011,
+        "reduced": "0"
+      },
+      {
+        "t": 16.056,
+        "arm": -0.445,
+        "roller": 42.139,
+        "screen": 0.023,
+        "reduced": "0"
+      },
+      {
+        "t": 16.06,
+        "arm": -0.445,
+        "roller": 42.139,
+        "screen": 0.023,
+        "reduced": "0"
+      }
+    ]
+  },
+  "negatives": {
+    "invalidSite": [
+      {
+        "label": "desktop",
+        "cell": {
+          "x": 13,
+          "z": 9
+        },
+        "ok": "false",
+        "code": "COLLISION",
+        "reason": "A machine occupies this site",
+        "screenshots": [
+          "desktop-invalid-site-ghost.png",
+          "desktop-invalid-site-verdict.png"
+        ]
+      },
+      {
+        "label": "phone",
+        "cell": {
+          "x": 13,
+          "z": 9
+        },
+        "ok": "false",
+        "code": "COLLISION",
+        "reason": "A machine occupies this site",
+        "screenshots": [
+          "phone-invalid-site-ghost.png",
+          "phone-invalid-site-verdict.png"
+        ]
+      }
+    ],
+    "reducedMotion": [
+      {
+        "label": "desktop",
+        "stage": "landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "none",
+          "art02Screen": "none",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "none",
+          "art02Screen": "none",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "desktop",
+        "stage": "crusher-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "0.000",
+          "art02Screen": "0.000",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "0.000",
+          "art02Screen": "0.000",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "allParkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "none",
+          "art02Screen": "none",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "none",
+          "art02Screen": "none",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "crusher-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.55,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "0.000",
+          "art02Screen": "0.000",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.55,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 7,
+          "world3d": "ready",
+          "art02Arm": "0.000",
+          "art02Roller": "0.000",
+          "art02Screen": "0.000",
+          "art02Reduced": "1",
+          "cranePhase": "parked",
+          "craneReducedMotion": "1"
+        },
+        "allParkedConstant": true
+      }
+    ],
+    "webglFailure": {
+      "webglNullHits": 2,
+      "canvasCount": 0,
+      "worldCanvasCount": 0,
+      "world3dReady": false,
+      "bodyText": "",
+      "pageErrors": [
+        "Error: THREE.WebGLRenderer: Error creating WebGL context."
+      ],
+      "screenshot": "desktop-webgl-failure.png"
+    }
+  },
+  "legibility": {
+    "targetPx": 96,
+    "machines": {
+      "desktop:salvager": {
+        "file": "desktop-salvager-clip.png",
+        "width": 163,
+        "height": 173,
+        "edgeEnergy": 13.705
+      },
+      "desktop:crusher": {
+        "file": "desktop-crusher-clip.png",
+        "width": 163,
+        "height": 162,
+        "edgeEnergy": 11.694
+      },
+      "phone:salvager": {
+        "file": "phone-salvager-clip.png",
+        "width": 244,
+        "height": 260,
+        "edgeEnergy": 8.192
+      },
+      "phone:crusher": {
+        "file": "phone-crusher-clip.png",
+        "width": 244,
+        "height": 242,
+        "edgeEnergy": 9.81
+      }
+    },
+    "pairwise": {
+      "desktop": {
+        "meanAbsDiff": 26.672,
+        "diffFractionOver24": 0.4352,
+        "maxPixelDiff": 176.6
+      },
+      "phone": {
+        "meanAbsDiff": 25.466,
+        "diffFractionOver24": 0.4296,
+        "maxPixelDiff": 134.2
+      }
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile)",
+    "The ART-02 trio's sorter outcome is the crusher's oscillating screen deck + twin discharge chutes; V2 has no standalone buildable sorter (content/sim registry is outside the ART-02 lease)",
+    "V2 has no 2D fallback renderer; the WebGL-failure negative proves a loud failure, not a playable fallback",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity, reviewer/product acceptance or sponsor G1 approval"
+  ],
+  "completed": "2026-11-17T11:10:10.832Z"
+}
