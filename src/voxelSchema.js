@@ -430,3 +430,157 @@ export function cellProjectedCssPx(zoom, viewportHeight) {
 export function minZoomForPick(viewportHeight) {
   return 44 * 80 / (CELL * viewportHeight);
 }
+
+// ---------------------------------------------------------------------------
+// ART-07 (#353): yard scenery — graded terrain dressing so a fresh save reads
+// as an inhabited salvage yard on phone and desktop. Same pure-data contract
+// as machines/rigs above: this DESCRIBES and VALIDATES the original procedural
+// geometry built by src/world.js (yardSceneryPlan/buildScenery); it never
+// replaces the playable world with an image and never imports archive/ code.
+//
+// Authority: scenery is decorative ONLY — no pick volumes (App.jsx picks by
+// ground-plane cell, never mesh raycast), no build-site occupancy, no route
+// blocking. Placement is proven against src/gridOccupancy.js in
+// tests/yardScenery.test.mjs. Authority string mirrors the ART-05 yard-crew
+// pattern (#274).
+// ---------------------------------------------------------------------------
+export const SCENERY_AUTHORITY = "none — decorative yard scenery (#274)";
+
+// Placement zones, enforced by validateSceneryPlan(plan, seed) in world.js:
+//  rock        — volumetric interior props stand ONLY on TERRAIN-rejected rock
+//                cells (permanently unbuildable for machines), never on starter
+//                footprint/bay cells. roadLine can still pave rock cells, so
+//                sceneryConflicts(plan, g) hides any covered prop dynamically.
+//  exterior    — beyond the parcel edge: machines reject BOUNDS and roadLine
+//                refuses outside cells, so nothing can ever collide there.
+//  any-nonroad — flush decals (top <= decalMaxHeight, below road top) may tint
+//                any non-road cell; they are ground staining, not occupancy.
+export const SCENERY = Object.freeze({
+  schema: SCHEMA_ID,
+  authority: SCENERY_AUTHORITY,
+  decorative: true,
+  zones: Object.freeze(["rock", "exterior", "any-nonroad"]),
+  decalMaxHeight: 0.06,   // decal slab height; top = h/2 + 0.002 <= 0.06
+  roadTop: 0.185,         // road slab top in world.js rebuild(); decals stay below
+  truckHalfWidth: 0.6,    // route-clearance margin around INITIAL_ROADS rects
+  kinds: Object.freeze({
+    // render: "prop" = grouped meshes; "rubble" = shared InstancedMesh chunks;
+    // "decal" = shared InstancedMesh flush ground tint (setColorAt).
+    wreck: Object.freeze({render: "prop", zone: "rock", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 1.9, height: 1.25, length: 3.0}),
+      materials: Object.freeze(["rust", "dark", "steel", "orange", "black"]),
+      budget: Object.freeze({maxMeshes: 12, maxTriangles: 160}),
+      pivot: "group origin at ground center; quarter-turn rotY keeps AABB inside one cell",
+      note: "original crushed-hauler husk: tilted bed, crushed cab, axle stands, two remaining wheels"}),
+    barrel: Object.freeze({render: "prop", zone: "rock", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 1.7, height: 1.0, length: 1.7}),
+      materials: Object.freeze(["rust", "orange", "dark", "steel"]),
+      budget: Object.freeze({maxMeshes: 8, maxTriangles: 160}),
+      pivot: "group origin at ground center", note: "drum cluster with lid rings"}),
+    outcrop: Object.freeze({render: "rubble", zone: "rock", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 3.1, height: 1.3, length: 3.1}),
+      materials: Object.freeze(["rock", "sand"]),
+      budget: Object.freeze({maxInstancesPerCell: 3}),
+      pivot: "instance matrices centered per chunk, offsets <= 0.8 so chunks stay inside the cell",
+      note: "weathered rock outcrop marking a permanently TERRAIN-rejected cell"}),
+    scrapPile: Object.freeze({render: "rubble", zone: "rock", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 3.2, height: 1.4, length: 3.2}),
+      materials: Object.freeze(["rust", "dark", "steel"]),
+      budget: Object.freeze({maxInstancesPerCell: 6}),
+      pivot: "instance matrices centered per chunk", note: "sorted scrap heap on a rock cell"}),
+    container: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 5.0, height: 2.0, length: 2.6}),
+      materials: Object.freeze(["rust", "body", "dark", "steel"]),
+      budget: Object.freeze({maxMeshes: 8, maxTriangles: 100}),
+      pivot: "group origin at ground center", note: "stacked freight container with ribs and door"}),
+    shed: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 9.6, height: 8.7, length: 6.15}),
+      materials: Object.freeze(["body", "roof", "dark", "steel", "rust", "black"]),
+      budget: Object.freeze({maxMeshes: 14, maxTriangles: 220}),
+      pivot: "group origin at ground center", note: "maintenance shed; height includes rust stack"}),
+    silo: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 8.0, height: 5.9, length: 2.4}),
+      materials: Object.freeze(["rust", "steel", "roof", "orange"]),
+      budget: Object.freeze({maxMeshes: 10, maxTriangles: 320}),
+      pivot: "group origin at ground center", note: "silo triad with caps and hazard ladders"}),
+    pipeRack: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 6.7, height: 4.9, length: 2.45}),
+      materials: Object.freeze(["rust", "roof", "steel", "orange"]),
+      budget: Object.freeze({maxMeshes: 10, maxTriangles: 160}),
+      pivot: "group origin at ground center", note: "pipe rack with grille and orange vent mast"}),
+    floodlight: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 0.85, height: 8.3, length: 0.75}),
+      materials: Object.freeze(["dark", "orange"]),
+      budget: Object.freeze({maxMeshes: 3, maxTriangles: 80, maxPointLights: 1}),
+      pivot: "group origin at ground center", note: "yard floodlight mast; one of four PointLights"}),
+    gatePost: Object.freeze({render: "prop", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 0.34, height: 2.6, length: 0.34}),
+      materials: Object.freeze(["orange", "dark", "black"]),
+      budget: Object.freeze({maxMeshes: 4, maxTriangles: 48}),
+      pivot: "group origin at ground center", note: "hazard-striped gate post at the yard entrance"}),
+    fence: Object.freeze({render: "rubble", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 0.24, height: 2.3, length: 6.8}),
+      materials: Object.freeze(["rust", "dark"]),
+      budget: Object.freeze({maxInstances: 120}),
+      pivot: "instance matrices: posts + rails", note: "perimeter fence with gate gap |x| <= 7"}),
+    boulder: Object.freeze({render: "rubble", zone: "exterior", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 2.5, height: 1.6, length: 2.5}),
+      materials: Object.freeze(["rock", "sand"]),
+      budget: Object.freeze({maxInstances: 60}),
+      pivot: "instance matrices on a square belt beyond the parcel edge", note: "scattered yard-edge boulders"}),
+    decal: Object.freeze({render: "decal", zone: "any-nonroad", authority: SCENERY_AUTHORITY,
+      scale: Object.freeze({width: 3.3, height: 0.05, length: 3.3}),
+      maxHeight: 0.05,
+      materials: Object.freeze(["sand", "rock", "dark", "orange", "rust"]),
+      budget: Object.freeze({maxInstances: 700}),
+      pivot: "instance matrices flush on ground (y = h/2 + 0.002)",
+      note: "bench tints, pad dust, maintenance-alley gravel + tire tracks, bay chevrons, oil stains"})
+  }),
+  budget: Object.freeze({
+    maxPropMeshesTotal: 260,
+    maxPropTrianglesTotal: 4200,
+    maxRubbleInstances: 420,
+    maxDecalInstances: 700,
+    maxPointLights: PERFORMANCE_LIMITS.pointLightsMax
+  })
+});
+
+export function sceneryDescriptor(kind) {
+  return SCENERY.kinds[kind];
+}
+
+export function validateSceneryKind(kind, desc = SCENERY.kinds[kind]) {
+  const errors = [];
+  if (!desc) {fail(errors, kind, "no scenery descriptor registered"); return {kind, ok: false, errors};}
+  if (desc.authority !== SCENERY_AUTHORITY) fail(errors, kind, "scenery must declare zero simulation authority");
+  if (!["prop", "rubble", "decal"].includes(desc.render)) fail(errors, kind, "render must be prop|rubble|decal");
+  if (!SCENERY.zones.includes(desc.zone)) fail(errors, kind, "zone must be rock|exterior|any-nonroad");
+  if (desc.render === "prop" && desc.zone === "any-nonroad") fail(errors, kind, "volumetric props may not use the decal zone");
+  const s = desc.scale;
+  if (!s || !isNum(s.width) || !isNum(s.height) || !isNum(s.length) || s.width <= 0 || s.height <= 0 || s.length <= 0)
+    fail(errors, kind, "scale must be positive width/height/length");
+  if (desc.render === "decal" && s && s.height > SCENERY.decalMaxHeight)
+    fail(errors, kind, "decal height above flush limit " + SCENERY.decalMaxHeight);
+  if (!Array.isArray(desc.materials) || !desc.materials.length) fail(errors, kind, "materials list missing");
+  else for (const m of desc.materials) if (!MATERIALS[m]) fail(errors, kind, "unknown material id " + m);
+  const b = desc.budget;
+  if (!b) fail(errors, kind, "budget missing");
+  else if (desc.render === "prop") {
+    if (!Number.isInteger(b.maxMeshes) || !Number.isInteger(b.maxTriangles) ||
+      b.maxMeshes > PERFORMANCE_LIMITS.maxMeshesPerMachine || b.maxTriangles > PERFORMANCE_LIMITS.maxTrianglesPerMachine)
+      fail(errors, kind, "prop budget missing or above global performance limits");
+    if ((b.maxPointLights || 0) > 1) fail(errors, kind, "at most one point light per scenery prop");
+  } else if (!Number.isInteger(b.maxInstances || b.maxInstancesPerCell))
+    fail(errors, kind, "instance budget missing");
+  if (!desc.pivot) fail(errors, kind, "pivot ownership must be declared");
+  return {kind, ok: errors.length === 0, errors};
+}
+
+export function validateAllScenery() {
+  const results = Object.keys(SCENERY.kinds).map(kind => validateSceneryKind(kind));
+  const errors = results.flatMap(r => r.errors);
+  const budget = SCENERY.budget;
+  if (budget.maxPointLights > PERFORMANCE_LIMITS.pointLightsMax) errors.push("scenery point-light budget above global limit");
+  if (budget.maxDecalInstances > SCENERY.kinds.decal.budget.maxInstances) errors.push("decal budget disagrees with kind budget");
+  return {ok: errors.length === 0, schema: SCHEMA_ID, scenery: results, errors};
+}

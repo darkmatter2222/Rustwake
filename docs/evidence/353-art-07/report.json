@@ -1,0 +1,517 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 353,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "cccd502b9af87e120f1ad80f8f5d2d692a06f151",
+  "artifactSuffix": "cccd502b",
+  "started": "2026-11-17T09:44:23.911Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "scenery": {
+    "seed": 4073,
+    "props": 27,
+    "rubble": 177,
+    "decals": 233,
+    "propKinds": {
+      "wreck": 4,
+      "barrel": 3,
+      "container": 6,
+      "shed": 2,
+      "silo": 2,
+      "pipeRack": 2,
+      "floodlight": 4,
+      "gatePost": 4
+    },
+    "planValidation": {
+      "ok": true,
+      "errors": []
+    },
+    "wreckCell": {
+      "x": 19,
+      "z": 6
+    },
+    "padCell": {
+      "x": 17,
+      "z": 4
+    }
+  },
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "9.455"
+      },
+      "wide": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 0.5000000109419187,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "16.935"
+      },
+      "detail": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.8000002428731023,
+        "x": 21.44846028963813,
+        "z": -15.725153060501984,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "22.527"
+      },
+      "orbit": {
+        "yaw": 134.99999633789037,
+        "elevation": 35.264,
+        "zoom": 2.8000002428731023,
+        "x": 21.44846028963813,
+        "z": -15.725153060501984,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "65.514"
+      },
+      "landmark": {
+        "yaw": 45.00002563476562,
+        "elevation": 35.264,
+        "zoom": 1.599999950262551,
+        "x": -26.157760102800797,
+        "z": -20.81066405701509,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "86.960"
+      },
+      "afterReject": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.8000002428731023,
+        "x": 21.44846028963813,
+        "z": -15.725153060501984,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "35.581"
+      },
+      "afterBuild": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.8000002428731023,
+        "x": 21.44846028963813,
+        "z": -15.725153060501984,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "50.933"
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "ghostChroma": {
+        "baselineRG": 15.04,
+        "terrainRG": 23.59,
+        "validRG": -7.86,
+        "radiusDevicePx": 46.30500401651393
+      },
+      "terrainVerdict": {
+        "ok": "false",
+        "code": "TERRAIN",
+        "reason": "Solid rock outcrop — machines need graded ground"
+      },
+      "padVerdict": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "sheetCollapsedForTap": false,
+      "sceneryStatic": true,
+      "simRunning": true,
+      "screenshots": {
+        "landing": {
+          "name": "desktop-landing-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 13275,
+            "lumMean": 106.8,
+            "lumSD": 42
+          }
+        },
+        "wide": {
+          "name": "desktop-yard-wide-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 7711,
+            "lumMean": 86.3,
+            "lumSD": 30.3
+          }
+        },
+        "wreckDetail": {
+          "name": "desktop-wreck-detail-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 11367,
+            "lumMean": 115.6,
+            "lumSD": 41.1
+          }
+        },
+        "ghostTerrain": {
+          "name": "desktop-build-ghost-terrain-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 12158,
+            "lumMean": 104.6,
+            "lumSD": 45.3
+          }
+        },
+        "ghostValid": {
+          "name": "desktop-build-ghost-valid-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 11956,
+            "lumMean": 103.4,
+            "lumSD": 45.7
+          }
+        },
+        "placed": {
+          "name": "desktop-build-placed-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 12330,
+            "lumMean": 101.4,
+            "lumSD": 46
+          }
+        },
+        "orbit": {
+          "name": "desktop-wreck-orbit135-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 11471,
+            "lumMean": 116.9,
+            "lumSD": 43.1
+          }
+        },
+        "landmark": {
+          "name": "desktop-exterior-landmarks-cccd502b.png",
+          "stats": {
+            "w": 1440,
+            "h": 900,
+            "distinctColors": 12012,
+            "lumMean": 106.5,
+            "lumSD": 43.4
+          }
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "8.217"
+      },
+      "wide": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 0.3500635832837249,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "40.341"
+      },
+      "detail": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.199938297141968,
+        "x": 21.786204650267788,
+        "z": -16.209055939934355,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "81.649"
+      },
+      "orbit": {
+        "yaw": 135.00000034332265,
+        "elevation": 35.264,
+        "zoom": 2.199938297141968,
+        "x": 21.786204650267788,
+        "z": -16.209055939934355,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "123.072"
+      },
+      "landmark": {
+        "yaw": 45.00000400543223,
+        "elevation": 35.264,
+        "zoom": 1.1999097749274894,
+        "x": -27.461086100578786,
+        "z": -20.980418635896875,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "200.714"
+      },
+      "afterReject": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.199938297141968,
+        "x": 21.786204650267788,
+        "z": -16.209055939934355,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "95.694"
+      },
+      "afterBuild": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.199938297141968,
+        "x": 21.786204650267788,
+        "z": -16.209055939934355,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 7,
+        "world3d": "ready",
+        "scenerySeed": "4073",
+        "sceneryProps": "27",
+        "sceneryRubble": "177",
+        "sceneryDecals": "233",
+        "sceneryHidden": "0",
+        "truck1Dist": "108.766"
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "ghostChroma": {
+        "baselineRG": 14.97,
+        "terrainRG": 23.58,
+        "validRG": -7.92,
+        "radiusDevicePx": 68.23548616245242
+      },
+      "terrainVerdict": {
+        "ok": "false",
+        "code": "TERRAIN",
+        "reason": "Solid rock outcrop — machines need graded ground"
+      },
+      "padVerdict": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "sheetCollapsedForTap": true,
+      "sceneryStatic": true,
+      "simRunning": true,
+      "screenshots": {
+        "landing": {
+          "name": "phone-landing-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 13118,
+            "lumMean": 111.6,
+            "lumSD": 48
+          }
+        },
+        "wide": {
+          "name": "phone-yard-wide-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 8461,
+            "lumMean": 87.6,
+            "lumSD": 38.9
+          }
+        },
+        "wreckDetail": {
+          "name": "phone-wreck-detail-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 8414,
+            "lumMean": 115.6,
+            "lumSD": 45.8
+          }
+        },
+        "ghostTerrain": {
+          "name": "phone-build-ghost-terrain-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 8966,
+            "lumMean": 107.9,
+            "lumSD": 49.2
+          }
+        },
+        "ghostValid": {
+          "name": "phone-build-ghost-valid-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 9502,
+            "lumMean": 103.9,
+            "lumSD": 49.7
+          }
+        },
+        "placed": {
+          "name": "phone-build-placed-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 9676,
+            "lumMean": 103.8,
+            "lumSD": 49
+          }
+        },
+        "orbit": {
+          "name": "phone-wreck-orbit135-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 9179,
+            "lumMean": 110.9,
+            "lumSD": 48.8
+          }
+        },
+        "landmark": {
+          "name": "phone-exterior-landmarks-cccd502b.png",
+          "stats": {
+            "w": 780,
+            "h": 1688,
+            "distinctColors": 9287,
+            "lumMean": 102.4,
+            "lumSD": 48.2
+          }
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated",
+    "Ghost verdicts are proven via the real lastSiteOk/lastSiteCode stamps plus region-chroma shifts in decoded PNGs; exact art parity is NOT certified",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not reviewer/product acceptance or sponsor G1 (#276) approval"
+  ],
+  "completed": "2026-11-17T09:45:11.870Z"
+}
