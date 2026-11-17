@@ -506,3 +506,219 @@ test("H1/H2/H3 each exit 1 through the CLI, not just in-process", () => {
   assert.equal(r3.status, 1);
   assert.ok(r3.stdout.includes("E_CENSUS_CLOCK"));
 });
+
+const RECEIPTS = "docs/operations/receipts";
+const negativeLedger = (name) => read(`${RECEIPTS}/328-runtime-ledger-negative-${name}.json`);
+const negativeOutput = (name) =>
+  fs.readFileSync(fileURLToPath(new URL(`../${RECEIPTS}/328-runtime-ledger-negative-${name}.output.txt`, import.meta.url)), "utf8");
+
+function cli(ledger, census) {
+  const r = runCli(ledger, census);
+  return { ...r, json: JSON.parse(r.stdout) };
+}
+
+function simultaneous(ledger) {
+  const l = clone(ledger);
+  for (const s of l.sessions.filter((x) => x.kind === "child")) s.started_at = l.window.from;
+  return l;
+}
+
+// Merging bursts leaves the artifact population untouched, so only the burst-derived fields move.
+function honestSummary(c) {
+  const hist = {};
+  for (const b of c.bursts) hist[String(b.ids.length)] = (hist[String(b.ids.length)] ?? 0) + 1;
+  return {
+    artifact_count: c.artifact_count,
+    zero_byte_count: c.zero_byte_count,
+    first_at: c.first_at,
+    last_at: c.last_at,
+    max_burst: c.bursts.reduce((m, b) => Math.max(m, b.ids.length), 0),
+    bursts: c.bursts.length,
+    burst_size_histogram: hist,
+    primary_id: c.primary_id,
+  };
+}
+
+function mergeWindowBursts(ledger, census) {
+  const c = clone(census);
+  const childIds = new Set(ledger.sessions.filter((s) => s.kind === "child").map((s) => s.id));
+  const inWave = c.bursts.filter((b) => b.ids.some((id) => childIds.has(id)));
+  const rest = c.bursts.filter((b) => !b.ids.some((id) => childIds.has(id)));
+  const merged = {
+    first_at: inWave.map((b) => b.first_at ?? b.at).sort()[0],
+    at: inWave.map((b) => b.at).sort().at(-1),
+    ids: inWave.flatMap((b) => b.ids),
+  };
+  c.bursts = [...rest, merged].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+  c.max_burst = c.bursts.reduce((m, b) => Math.max(m, b.ids.length), 0);
+  return { census: c, merged, inWaveCount: inWave.length };
+}
+
+test("H4 honest control: six simultaneous children with parseable clocks break both caps through the CLI", () => {
+  const { census, ledger } = realPair();
+  const r = cli(simultaneous(ledger), census);
+  assert.equal(r.status, 1);
+  assert.equal(r.json.peak_children, 6);
+  assert.equal(r.json.peak_sessions, 7);
+  assert.deepEqual(codes(r.json), ["E_CHILD_CAP", "E_SESSION_CAP"]);
+});
+
+test("H4: unparseable started_at values cannot shrink the peak the honest control measures", () => {
+  const { census, ledger } = realPair();
+  const control = cli(simultaneous(ledger), census);
+  const attacked = simultaneous(ledger);
+  const kids = attacked.sessions.filter((s) => s.kind === "child");
+  kids[0].started_at = "tbd";
+  kids[1].started_at = "tbd";
+  const r = cli(attacked, census);
+  assert.equal(r.status, 1);
+  assert.ok(codes(r.json).includes("E_SESSION_CLOCK"));
+  assert.equal(r.json.peak_children, control.json.peak_children, "a garbage clock must not erase a child from the peak");
+  assert.equal(r.json.peak_sessions, control.json.peak_sessions);
+  assert.ok(codes(r.json).includes("E_CHILD_CAP"));
+  assert.ok(codes(r.json).includes("E_SESSION_CAP"));
+});
+
+test("H4: garbage-clocking any single child of the genuine receipt never lowers the peak", () => {
+  const { census, ledger } = realPair();
+  const honest = validateLedger(clone(ledger), roles, clone(census));
+  for (const id of ledger.sessions.filter((s) => s.kind === "child").map((s) => s.id)) {
+    const attacked = clone(ledger);
+    attacked.sessions.find((s) => s.id === id).started_at = "not-a-clock";
+    const r = validateLedger(attacked, roles, clone(census));
+    assert.ok(codes(r).includes("E_SESSION_CLOCK"), id);
+    assert.ok(r.peak_children >= honest.peak_children, `${id} peak ${r.peak_children} < honest ${honest.peak_children}`);
+    assert.ok(r.peak_sessions >= honest.peak_sessions, id);
+  }
+});
+
+test("the committed H4 negative and its captured output reproduce through the CLI", () => {
+  const ledger = negativeLedger("session-clock");
+  const { census } = realPair();
+  const captured = negativeOutput("session-clock");
+  assert.ok(captured.includes("EXIT=1"));
+  assert.ok(captured.includes("E_SESSION_CLOCK"));
+  assert.ok(captured.includes('"census_cross_check": "on"'));
+  assert.ok(captured.includes("the genuine host census"));
+  const r = cli(ledger, census);
+  assert.equal(r.status, 1);
+  assert.equal(r.json.peak_children, 6);
+  assert.equal(r.json.peak_sessions, 7);
+  assert.deepEqual(codes(r.json), ["E_CHILD_CAP", "E_SESSION_CAP", "E_SESSION_CLOCK"]);
+  assert.ok(captured.includes('"peak_children": 6'));
+});
+
+test("E_SESSION_CLOCK fires in isolation on a staggered receipt and can only raise its peaks", () => {
+  const { census, ledger } = realPair();
+  const honest = validateLedger(clone(ledger), roles, clone(census));
+  assert.deepEqual(honest.violations, []);
+  ledger.sessions.find((s) => s.id === "a69124e830650b810").started_at = "tbd";
+  const r = validateLedger(ledger, roles, census);
+  assert.deepEqual(codes(r), ["E_SESSION_CLOCK"]);
+  assert.ok(r.peak_children >= honest.peak_children);
+  assert.ok(r.peak_sessions >= honest.peak_sessions);
+});
+
+test("an unparseable finished_at is clamped live to window.to and reported", () => {
+  const { census, ledger } = realPair();
+  const finished = ledger.sessions.filter((s) => s.kind === "child" && s.finished_at);
+  assert.ok(finished.length >= 2, "the receipt really has finished children to attack");
+  for (const s of finished.slice(0, 2)) s.finished_at = "unknown";
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_SESSION_CLOCK"));
+  assert.equal(r.ok, false);
+  assert.ok(r.peak_children >= 4, `clamping finished children live must raise the peak, got ${r.peak_children}`);
+});
+
+test("an unparseable window clock is a violation and does not silently skip the census cross-check", () => {
+  const { census, ledger } = realPair();
+  ledger.window.from = "sometime";
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_SESSION_CLOCK"));
+  assert.ok(codes(r).includes("E_UNDOCUMENTED_CHILD"), "NaN window comparisons must not disable the cross-check");
+  const to = realPair();
+  to.ledger.window.to = "eventually";
+  assert.ok(codes(validateLedger(to.ledger, roles, to.census)).includes("E_SESSION_CLOCK"));
+});
+
+test("H5: a merged over-cap census burst is rejected even with an honestly recomputed summary", () => {
+  const { census, ledger } = realPair();
+  const { census: merged, inWaveCount } = mergeWindowBursts(ledger, census);
+  assert.equal(inWaveCount, 3);
+  assert.equal(merged.bursts.find((b) => b.ids.length > roles.max_children).ids.length, 6);
+  ledger.dispatch_census = { ...ledger.dispatch_census, ...honestSummary(merged) };
+  const r = cli(ledger, merged);
+  assert.equal(r.status, 1);
+  assert.deepEqual(codes(r.json), ["E_DISPATCH_BURST"], "an honest summary must leave the cap as the only violation");
+  assert.equal(r.json.peak_children, 3, "the session clocks are genuine and staggered");
+});
+
+test("the committed H5 negative and its derived census reproduce through the CLI", () => {
+  const ledger = negativeLedger("census-burst");
+  const derived = read(ledger.dispatch_census.source);
+  const captured = negativeOutput("census-burst");
+  assert.ok(captured.includes("EXIT=1"));
+  assert.ok(captured.includes("E_DISPATCH_BURST"));
+  assert.ok(captured.includes("a DERIVED census committed beside this negative"));
+  assert.ok(!captured.includes("the genuine host census"));
+  const r = cli(ledger, derived);
+  assert.equal(r.status, 1);
+  assert.deepEqual(codes(r.json), ["E_DISPATCH_BURST"]);
+  assert.ok(captured.includes('"peak_children": 3'));
+});
+
+test("the burst cap is inclusive at max_children and fires one id above it", () => {
+  const { census, ledger } = realPair();
+  assert.equal(census.max_burst, roles.max_children);
+  assert.deepEqual(validateLedger(clone(ledger), roles, clone(census)).violations, []);
+  const over = clone(census);
+  over.bursts.find((b) => b.ids.length === roles.max_children).ids.push("fffffffffffffffff");
+  over.max_burst = roles.max_children + 1;
+  const honest = { ...ledger, dispatch_census: { ...ledger.dispatch_census, ...honestSummary(over) } };
+  const r = validateLedger(honest, roles, over);
+  assert.ok(codes(r).includes("E_DISPATCH_BURST"));
+  assert.ok(!codes(r).includes("E_CENSUS_MISMATCH"));
+});
+
+test("the census burst cap fires before the clock guard can excuse an inverted burst", () => {
+  const { census, ledger } = realPair();
+  const { census: merged } = mergeWindowBursts(ledger, census);
+  const burst = merged.bursts.find((b) => b.ids.length > roles.max_children);
+  burst.first_at = "2026-11-18T00:00:00.000Z";
+  ledger.dispatch_census = { ...ledger.dispatch_census, ...honestSummary(merged) };
+  const r = validateLedger(ledger, roles, merged);
+  assert.ok(codes(r).includes("E_CENSUS_CLOCK"));
+  assert.ok(codes(r).includes("E_DISPATCH_BURST"), "the trusted artifact proves the burst size on its own");
+});
+
+test("the census burst cap is unscoped by the ledger window, matching --scan", () => {
+  const { census, ledger } = realPair();
+  const { census: merged } = mergeWindowBursts(ledger, census);
+  const burst = merged.bursts.find((b) => b.ids.length > roles.max_children);
+  burst.first_at = "2026-11-16T00:00:00.000Z";
+  burst.at = "2026-11-16T00:00:01.000Z";
+  ledger.dispatch_census = { ...ledger.dispatch_census, ...honestSummary(merged) };
+  const r = validateLedger(ledger, roles, merged);
+  assert.ok(codes(r).includes("E_DISPATCH_BURST"), "an out-of-window burst is still a real over-cap dispatch");
+  assert.ok(!codes(r).includes("E_CENSUS_CLOCK"));
+});
+
+test("every committed negative output still exits 1 at the current validator", () => {
+  for (const name of ["overcap", "undocumented", "window-shift", "session-clock", "census-burst"]) {
+    const captured = negativeOutput(name);
+    assert.ok(captured.includes("EXIT=1"), name);
+    assert.ok(captured.includes('"ok": false'), name);
+  }
+});
+
+test("the four census-anchored negatives capture with the cross-check on", () => {
+  for (const name of ["undocumented", "window-shift", "session-clock", "census-burst"]) {
+    const captured = negativeOutput(name);
+    assert.ok(captured.includes("# exit code: 1"), name);
+    assert.ok(captured.includes('"census_cross_check": "on"'), name);
+    assert.ok(negativeLedger(name).dispatch_census, name);
+  }
+  const original = negativeOutput("overcap");
+  assert.ok(original.includes('"census_cross_check": "off"'), "the original over-cap negative is a synthetic ledger with no census");
+});

@@ -12,8 +12,19 @@ export function validateLedger(ledger, roles, census = null) {
   const maxChildren = roles.max_children;
   const maxSessions = roles.max_model_sessions;
   const knownRoles = new Set(roles.roles.map((r) => r.id));
-  const windowFrom = Date.parse(ledger.window.from);
-  const windowTo = Date.parse(ledger.window.to);
+  const clock = (value) => {
+    const t = Date.parse(value);
+    return Number.isFinite(t) ? t : null;
+  };
+  if (clock(ledger.window.from) === null) add("E_SESSION_CLOCK", `window.from ${JSON.stringify(ledger.window.from)} does not parse as a clock`);
+  if (clock(ledger.window.to) === null) add("E_SESSION_CLOCK", `window.to ${JSON.stringify(ledger.window.to)} does not parse as a clock`);
+  const windowFrom = clock(ledger.window.from) ?? NaN;
+  const windowTo = clock(ledger.window.to) ?? NaN;
+  const at = (t) => (Number.isFinite(t) ? new Date(t).toISOString() : String(t));
+  // An unparseable clock is already a violation; clamping it to the window keeps it LIVE for the
+  // whole observation so a garbage string can never make a peak look healthier than reality.
+  const start = (s) => clock(s.started_at) ?? windowFrom;
+  const end = (s) => (s.finished_at ? (clock(s.finished_at) ?? windowTo) : windowTo);
 
   const primaries = sessions.filter((s) => s.kind === "primary");
   if (primaries.length !== 1) add("E_PRIMARY_COUNT", `expected exactly 1 primary, found ${primaries.length}`);
@@ -23,11 +34,13 @@ export function validateLedger(ledger, roles, census = null) {
   for (const s of sessions) {
     if (!knownRoles.has(s.role)) add("E_UNKNOWN_ROLE", `${s.id} role ${s.role} absent from ${ROLES_PATH}`);
     if (!s.started_at) add("E_NO_START", `${s.id} has no started_at`);
+    if (s.started_at && clock(s.started_at) === null) add("E_SESSION_CLOCK", `${s.id} started_at ${JSON.stringify(s.started_at)} does not parse as a clock`);
+    if (s.finished_at && clock(s.finished_at) === null) add("E_SESSION_CLOCK", `${s.id} finished_at ${JSON.stringify(s.finished_at)} does not parse as a clock`);
     if (s.kind === "child") {
       if (!primary || s.spawned_by !== primary.id) add("E_RECURSIVE_SPAWN", `${s.id} spawned_by ${s.spawned_by} is not the primary`);
       if (s.status === "finished" && (!s.finished_at || !s.outcome)) add("E_NO_FINISH", `${s.id} finished without finished_at/outcome`);
-      if (Date.parse(s.started_at) < windowFrom) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} started_at ${s.started_at} precedes window.from ${ledger.window.from}`);
-      if (Date.parse(s.finished_at) > windowTo) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} finished_at ${s.finished_at} exceeds window.to ${ledger.window.to}`);
+      if (start(s) < windowFrom) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} started_at ${s.started_at} precedes window.from ${ledger.window.from}`);
+      if (s.finished_at && end(s) > windowTo) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} finished_at ${s.finished_at} exceeds window.to ${ledger.window.to}`);
     }
     if (s.status === "running" && s.finished_at) add("E_STATUS_CONTRADICTION", `${s.id} running but has finished_at`);
     if (s.finished_at && s.started_at && Date.parse(s.finished_at) < Date.parse(s.started_at)) {
@@ -35,8 +48,6 @@ export function validateLedger(ledger, roles, census = null) {
     }
   }
 
-  const end = (s) => (s.finished_at ? Date.parse(s.finished_at) : Date.parse(ledger.window.to));
-  const start = (s) => Date.parse(s.started_at);
   const marks = [...new Set(sessions.flatMap((s) => [start(s), end(s)]))].sort((a, b) => a - b);
   let peakChildren = 0;
   let peakTotal = 0;
@@ -45,16 +56,16 @@ export function validateLedger(ledger, roles, census = null) {
     const children = live.filter((s) => s.kind === "child");
     peakChildren = Math.max(peakChildren, children.length);
     peakTotal = Math.max(peakTotal, live.length);
-    if (children.length > maxChildren) add("E_CHILD_CAP", `${children.length} children live at ${new Date(t).toISOString()} > ${maxChildren}`);
-    if (live.length > maxSessions) add("E_SESSION_CAP", `${live.length} sessions live at ${new Date(t).toISOString()} > ${maxSessions}`);
+    if (children.length > maxChildren) add("E_CHILD_CAP", `${children.length} children live at ${at(t)} > ${maxChildren}`);
+    if (live.length > maxSessions) add("E_SESSION_CAP", `${live.length} sessions live at ${at(t)} > ${maxSessions}`);
     const browsers = live.filter((s) => s.browser);
-    if (browsers.length > 1) add("E_BROWSER_MULTIPLE", `${browsers.length} browser holders at ${new Date(t).toISOString()}: ${browsers.map((s) => s.id).join(",")}`);
+    if (browsers.length > 1) add("E_BROWSER_MULTIPLE", `${browsers.length} browser holders at ${at(t)}: ${browsers.map((s) => s.id).join(",")}`);
     const releasers = live.filter((s) => s.role === "release-engineer");
-    if (releasers.length > 1) add("E_RELEASE_MULTIPLE", `${releasers.length} release engineers at ${new Date(t).toISOString()}`);
+    if (releasers.length > 1) add("E_RELEASE_MULTIPLE", `${releasers.length} release engineers at ${at(t)}`);
     const held = new Map();
     for (const s of live) {
       for (const lease of s.leases ?? []) {
-        if (held.has(lease)) add("E_LEASE_CONFLICT", `${lease} held by both ${held.get(lease)} and ${s.id} at ${new Date(t).toISOString()}`);
+        if (held.has(lease)) add("E_LEASE_CONFLICT", `${lease} held by both ${held.get(lease)} and ${s.id} at ${at(t)}`);
         else held.set(lease, s.id);
       }
     }
@@ -95,6 +106,9 @@ export function validateLedger(ledger, roles, census = null) {
     const documented = new Set(sessions.map((s) => s.id));
     const dispatched = new Set();
     for (const b of census.bursts ?? []) {
+      // Checked before the clock guard and outside the window filter: the trusted artifact proves the
+      // burst size on its own, so neither an inverted clock nor an out-of-window claim can excuse it.
+      if (b.ids.length > maxChildren) add("E_DISPATCH_BURST", `census burst at ${b.at} dispatched ${b.ids.length} children > ${maxChildren}`);
       const first = Date.parse(b.first_at ?? b.at);
       const last = Date.parse(b.at);
       if (!Number.isFinite(first) || !Number.isFinite(last) || first > last) {
