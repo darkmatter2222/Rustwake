@@ -1,0 +1,365 @@
+{
+ "version": 1,
+ "issue": 559,
+ "branch": "rw/559-ux06-capture-debt",
+ "build": "production-preview",
+ "source_sha": "46a9268614e5e54bbf4b1d96c8e6c742c63f35c5",
+ "rebase_base": "38c36cc0a68f7900ea1daf6751fa4b153133bd3b",
+ "started": "2026-11-17T15:28:20.411Z",
+ "verdict": "PASS_NUMERIC_ONLY",
+ "phone_emulated": true,
+ "preview_only": true,
+ "views": [
+  {
+   "name": "landscape-844x390",
+   "part": "A",
+   "viewport": {
+    "width": 844,
+    "height": 390
+   },
+   "deviceScaleFactor": 2,
+   "isMobile": true,
+   "hasTouch": true,
+   "screenshots": [
+    "landscape-844x390-detail-open.png",
+    "landscape-844x390-after-close.png"
+   ],
+   "proof": {
+    "seeded_ids": [
+     "power-brownout",
+     "road-1",
+     "road-2",
+     "road-4",
+     "road-5",
+     "road-6"
+    ],
+    "railOnly_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "railBox": {
+     "x": 19.40625,
+     "y": 116,
+     "width": 272,
+     "height": 210
+    },
+    "detailOpen_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "detailBox": {
+     "x": 516,
+     "y": 84,
+     "width": 320,
+     "height": 210
+    },
+    "rightDock": {
+     "sheet_left": 516,
+     "centre_x": 422,
+     "clearance_px": 94,
+     "width_cap": 320
+    },
+    "detailOpen_pan": {
+     "before_x": 0,
+     "after_x": -17.405705383053476,
+     "delta_x": -17.405705,
+     "yaw_unchanged": true
+    },
+    "afterClose_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    }
+   }
+  },
+  {
+   "name": "landscape-667x375",
+   "part": "A",
+   "viewport": {
+    "width": 667,
+    "height": 375
+   },
+   "deviceScaleFactor": 2,
+   "isMobile": true,
+   "hasTouch": true,
+   "screenshots": [
+    "landscape-667x375-detail-open.png",
+    "landscape-667x375-after-close.png"
+   ],
+   "proof": {
+    "seeded_ids": [
+     "power-brownout",
+     "road-1",
+     "road-2",
+     "road-4",
+     "road-5",
+     "road-6"
+    ],
+    "railOnly_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "railBox": {
+     "x": 8,
+     "y": 84,
+     "width": 647,
+     "height": 44
+    },
+    "detailOpen_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "detailBox": {
+     "x": 358.859375,
+     "y": 84,
+     "width": 300.140625,
+     "height": 195
+    },
+    "rightDock": {
+     "sheet_left": 358.859375,
+     "centre_x": 333.5,
+     "clearance_px": 25.36,
+     "width_cap": 300.15000000000003
+    },
+    "detailOpen_pan": {
+     "before_x": 0,
+     "after_x": -18.10193359837562,
+     "delta_x": -18.101934,
+     "yaw_unchanged": true
+    },
+    "afterClose_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    }
+   }
+  },
+  {
+   "name": "phone-390x844",
+   "part": "B",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "deviceScaleFactor": 2,
+   "isMobile": true,
+   "hasTouch": true,
+   "screenshots": [
+    "phone-390x844-strip-before-swipe.png",
+    "phone-390x844-strip-after-swipe.png",
+    "phone-390x844-collapsed.png",
+    "phone-390x844-warnings-toggled.png"
+   ],
+   "proof": {
+    "seeded_ids": [
+     "power-brownout",
+     "road-1",
+     "road-2",
+     "road-4",
+     "road-5",
+     "road-6"
+    ],
+    "railOnly_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "railBox": {
+     "x": 10,
+     "y": 112,
+     "width": 370,
+     "height": 44
+    },
+    "controls_before": {
+     "warningsLabelBox": {
+      "x": 1091.84375,
+      "y": 112,
+      "width": 93.8125,
+      "height": 44
+     },
+     "warningsInputBox": {
+      "x": 1106.84375,
+      "y": 126,
+      "width": 16,
+      "height": 16
+     },
+     "collapseBox": {
+      "x": 1191.65625,
+      "y": 112,
+      "width": 62.640625,
+      "height": 44
+     },
+     "scrollLeft": 0
+    },
+    "swipes": [
+     {
+      "before": 0,
+      "after": 295,
+      "delta": 295,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     },
+     {
+      "before": 295,
+      "after": 590,
+      "delta": 295,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     },
+     {
+      "before": 590,
+      "after": 874,
+      "delta": 284,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     }
+    ],
+    "controls_after": {
+     "warningsLabelBox": {
+      "x": 217.84375,
+      "y": 112,
+      "width": 93.8125,
+      "height": 44
+     },
+     "collapseBox": {
+      "x": 317.65625,
+      "y": 112,
+      "width": 62.640625,
+      "height": 44
+     },
+     "scrollLeft": 874
+    },
+    "collapse_tap": {
+     "tapPoint": {
+      "x": 348.9765625,
+      "y": 134,
+      "id": 1
+     },
+     "box": {
+      "x": 317.65625,
+      "y": 112,
+      "width": 62.640625,
+      "height": 44
+     }
+    },
+    "collapsed_summary_visible": true,
+    "collapsed_hit": {
+     "tag": "CANVAS",
+     "cls": "world-canvas",
+     "testid": null,
+     "isCanvas": true
+    },
+    "summary_tap": {
+     "tapPoint": {
+      "x": 68.5859375,
+      "y": 134,
+      "id": 1
+     },
+     "box": {
+      "x": 10,
+      "y": 112,
+      "width": 117.171875,
+      "height": 44
+     }
+    },
+    "warnings_swipes": [
+     {
+      "before": 0,
+      "after": 295,
+      "delta": 295,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     },
+     {
+      "before": 295,
+      "after": 590,
+      "delta": 295,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     },
+     {
+      "before": 590,
+      "after": 874,
+      "delta": 284,
+      "finger": {
+       "from": 360,
+       "to": 50,
+       "y": 134
+      }
+     }
+    ],
+    "warnings_tap_1": {
+     "tapPoint": {
+      "x": 264.75,
+      "y": 134,
+      "id": 1
+     },
+     "box": {
+      "x": 217.84375,
+      "y": 112,
+      "width": 93.8125,
+      "height": 44
+     }
+    },
+    "warnings_tap_2": {
+     "tapPoint": {
+      "x": 264.75,
+      "y": 134,
+      "id": 1
+     },
+     "box": {
+      "x": 217.84375,
+      "y": 112,
+      "width": 93.8125,
+      "height": 44
+     }
+    },
+    "warnings_toggle_persisted": true,
+    "tap_method": "CDP Input.dispatchTouchEvent touchStart+touchEnd (no locator.click / scrollIntoViewIfNeeded on any strip control)"
+   }
+  }
+ ],
+ "errors": [],
+ "debt": {
+  "prior_capture": "scripts/capture-ux06.mjs (PR #550)",
+  "autoscroll_lines": [
+   171,
+   256,
+   "261-263"
+  ],
+  "live_main": "38c36cc0a68f7900ea1daf6751fa4b153133bd3b"
+ },
+ "limitations": [
+  "One headless Chromium/SwiftShader run; all phone views are EMULATED (isMobile+hasTouch+dpr2), not physical devices (#268/#275 owed)",
+  "PASS_NUMERIC_ONLY: numeric hit-test/pan/scroll proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+  "Local production preview only — no hosted-deployment receipt (#333) is claimed by this capture",
+  "CDP touch swipes/taps are synthesized single-finger contacts; fling momentum is whatever Chromium derives from the dispatched moves — no Playwright auto-scroll is used on any strip control"
+ ],
+ "finished": "2026-11-17T15:28:49.628Z"
+}
