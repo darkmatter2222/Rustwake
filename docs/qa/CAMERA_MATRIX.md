@@ -90,3 +90,43 @@ Harness root-cause note: the earlier SURVIVOR_REBASE_DRIFT 50.000000000000014 px
 Evidence (at capture source SHA 314a14476f59628677598196b49509b889997ebc, direct parent of the evidence commit): `docs/evidence/344-cam-08/report.json` (PASS_NUMERIC_ONLY) + `desktop-cam08-{home,pan,ghost-negative,lostcapture-negative,outofwindow}.png` + `phone-cam08-{home,pinch-lift,cancel-negative,tap-once}.png` + `nonblank.json` (full-frame zlib decode: 14471–24399 distinct colours, luminance stddev 41.1–47.5).
 
 CAM-08 re-run: `pnpm test` (239) then `pnpm build && GITHUB_SHA=<head> node scripts/capture-cam08.mjs`. Phone is EMULATED (#268/#275); G1 visual acceptance (#276) sponsor-reserved — numeric capture is a floor, not visual approval.
+## CAM-05 panel-transition retention matrix (#341)
+
+Contract: opening/closing any of the six toolbar panels, the inspector, the sheet collapse toggle or the ledger chip — and any responsive viewport resize — must keep the intentional camera pose **byte-identical** (dataset yaw/elevation/zoom/x/z) and the selected machine selected. Only explicit Home/Recenter (`reset`) refits; explicit Focus (`focus`) re-pins; a genuinely new obscured selection with auto-frame enabled (`selection`/`settings`) may reframe (UX-04). Decision point: pure `transitionCamera` in src/inspector.js; `panel`/`resize` return the camera **by reference**.
+
+### Unit matrix — tests/cam05Retention.test.mjs (8 tests) + tests/cam05Wiring.test.mjs (5 jsdom rendered-App tests)
+| Case family | Coverage | Cases | Tolerance | Result |
+|---|---|---|---|---|
+| Panel/resize reference identity | 2 triggers {panel,resize} × 2 viewports {desktop 1440×900, phone 390×844} × 3 poses {intentional yaw115/elev20/zoom1.37/target(9,−5); desktop home; envelope corner yaw359/elev80/zoom12/target(90,−90)} × 2 obscured × 2 autoFrame, depot selected | 48 (2×2×3×2×2) | returned camera === input camera (reference) | PASS |
+| nextToolMode selection retention | select→inspect iff selectedId!=null; every tool keeps its mode; toolbar never drops selection | matrix | exact mode | PASS |
+| Phone new-selection pin | obscured new selection pins machine to focusPixel (195,151.0992) | 1 | ≤1e-9 px | PASS |
+| focus / selection / settings policy | focus moves with autoFrame=false; selection/settings honour opt-out and unobscured case | matrix | exact pose | PASS |
+| reset homes + clamp | exact {45,35.264,1.15,0,0} desktop / {45,35.264,1,0,0} phone; out-of-range home clamps to {45,20,12,90,−90} | 3 | exact fields | PASS |
+| #307 hash guard + App source contract | applyCamera f3afa5479a66b97e / stampCamera 691b3c0a3480e97b; choose uses nextToolMode, no setSelectedId; resize retain-trigger; framedRef; Escape deselect; no pointer listeners | 2 | sha256-16 / regex | PASS |
+| Rendered-App wiring (jsdom, real cameraInput/simulation) | zoom+orbit pose → tap selects Freight Depot (pose unchanged) → six tools open/close (pose + probe selectedId 2) → collapse/expand → close + inspect re-entry → Recenter exact home → Escape probe, pose unchanged | 5 | byte-identical dataset pose | PASS |
+
+Full suite at CAM-05 head (rebased onto main 8bdb722356604c11560417398795796f5a8cc5eb after CAM-08 #540): **252 pass / 0 fail** (239 main + 8 retention + 5 wiring; zero existing tests deleted/skipped/weakened).
+
+### Deterministic negative controls (guard-is-real; exact constants embedded in tests)
+| Control | Input | Expected legacy slip | Actual legacy slip | Approved panel slip |
+|---|---|---|---|---|
+| Legacy reframe on phone panel open | yaw115/elev20/zoom1.37/target(9,−5), 390×844, depot obscured by sheet | 271.65732663398177 px (Δtarget 53.2206322822418 wu) | 271.65732663398177 px | 0 px |
+| Legacy reframe on desktop (forced obscured worst case) | same pose, 1440×900, focusPixel (898,405), legacy target (17.867683821160533,−1.8907367334617504) | 107.21827875948571 px (Δtarget 9.396985389619184 wu) | 107.21827875948571 px | 0 px |
+
+### Browser matrix — scripts/capture-cam05.mjs (production preview, Chromium/SwiftShader)
+Desktop 1440×900 dpr1 + emulated phone 390×844 dpr2 touch; every pose read from synchronous canvas dataset stamps; selection/trigger observability via panelProbe dataset.
+
+- Intentional poses via real gestures: desktop Orbit button + Zoom in → yaw 90 / zoom 1.7825; phone wheel-zoom at a verified canvas pixel near the machine + ArrowDown keyboardPan → zoom 1.1972173631218102, recorded intentional pose target (21.334745659837534,7.334745659837537); after the obscured-retention sequence + explicit Focus + one ArrowDown nudge the six-panel loop and negative controls run at target (28.124383853659552,14.124383853659559). (A centre-anchored phone orbit button would swing the pinned machine off-canvas at 390px — orbit retention is proven on desktop, pan+zoom retention on phone.)
+- Six-panel loop (build/road/fleet/research/market/**select** — select re-enters the inspector; the freight ledger is the separate seventh `inventory` panel exercised via the strip chip below): open and close each with **byte-identical pose** and probe selectedId 2; sheet titles verified; close unmounts the panel-host; inspector re-entry pose-identical; sheet collapse/expand pose-identical; ledger chip via resource strip pose-identical.
+- Responsive resize 1440↔390 both directions: pose-identical, selection retained, probe trigger resize.
+- Phone naturally-obscured retention: 3 real ArrowDown pans move the machine under the bottom sheet; Focus button appears; build open/close + inspector re-entry retain the obscured pose exactly; explicit Focus re-pins above the sheet with pin error **5.684341886080802e-14 px**.
+- In-build negative controls at the recorded poses: legacy reframe would slip desktop **105.81259439933739 px** (Δtarget 9.137701995411415 wu) and phone **35 px** (Δtarget 4.799625837653429 wu) vs approved **0 px**.
+- Home negative: exact refit {45,35.264,1.15,0,0} desktop / {45,35.264,1,0,0} phone, selection retained (probe reset selectedId 2). Escape: probe {trigger:"escape",mode:"select",selectedId:null}, pose unchanged. Empty-plot guard: build open with no selection never moves the home camera.
+- Invariants: stampMatchesApplied true, buttonZoom==appliedZoom, world3d ready, exactly one WebGL context, motion frames differ, 18 audited taps ≥44px, no document scroll, zero page errors in both views.
+
+Evidence (at capture source SHA d8ea1e6d2b063314c73d76294731a515d9a06b38, direct parent of the evidence commit): `docs/evidence/341-cam-05/report.json` (status **PASS_NUMERIC_ONLY**) + 6 desktop PNGs (inspector-posed, build-catalog-open, inspector-reentry, sheet-collapsed, resized-390x844, home-refit) + 7 phone PNGs (same set + obscured-retained, resized-1440x900). Non-blank full-frame decode now reports real meanLuma (desktop 89.00331811491156, phone 68.61826531113404; distinctColors 2651 / 2032).
+
+Coupled CAM-08 re-run (reviewer merge-order requirement — #540 pointer ownership × #541 camera retention are semantically coupled): `scripts/capture-cam08.mjs` re-run at the SAME capture head d8ea1e6d2b063314c73d76294731a515d9a06b38 → **PASS_NUMERIC_ONLY**, receipt + 9 PNGs in `docs/evidence/341-cam-05/cam08-coupled-rerun/`. Desktop pan/out-of-window/wheel anchor error 0 px; ghost negative actual step 0 vs legacy 300 px; lost-capture actual 0 vs legacy 356.0898762952971 px; phone pinch centroid max error 6.120628068700403e-15 px (zoom 2.3333333333333326), finger-lift step 0, survivor rebase 1.785170308651107e-14 px with survivorMoveDelivered true and no fresh pointerdown; touchCancel structures 6→6, lastSiteOk null; tap-once selects "Online"; zero page errors, one WebGL context, no document scroll in both views.
+
+### CAM-05 re-run recipe
+`pnpm test` (252 tests) then `pnpm build && node scripts/capture-cam05.mjs`. Phone is emulated, not a physical handset (#268/#275); numeric capture is a floor, not G1 visual acceptance (#276, sponsor-reserved); the hosted-browser receipt at the deployed SHA is produced at release (#333).

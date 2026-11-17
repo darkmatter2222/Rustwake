@@ -1,0 +1,558 @@
+{
+  "version": 1,
+  "issue": 341,
+  "task": "CAM-05 panel transitions retain camera pose and selection",
+  "build": "production-preview",
+  "source_sha": "d8ea1e6d2b063314c73d76294731a515d9a06b38",
+  "started": "2026-11-17T09:38:09.282Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "mobile": false,
+      "touch": false,
+      "screenshots": [
+        "desktop-inspector-posed.png",
+        "desktop-build-catalog-open.png",
+        "desktop-inspector-reentry.png",
+        "desktop-sheet-collapsed.png",
+        "desktop-resized-390x844.png",
+        "desktop-home-refit.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15
+        },
+        "newSelectionAutoFrame": {
+          "moved": false,
+          "obscured": false
+        },
+        "selection": {
+          "depotId": 2,
+          "tapPixel": {
+            "x": 848.0747157424134,
+            "y": 431.5141849038288
+          },
+          "sheetTitle": "Freight Depot"
+        },
+        "intentionalPose": {
+          "pose": {
+            "yaw": 90,
+            "elevation": 35.264,
+            "zoom": 1.7825,
+            "x": 0,
+            "z": 0
+          },
+          "gesture": "Orbit button + Zoom in button",
+          "machinePivotPixel": {
+            "x": 895.46484375,
+            "y": 510.78222022772434
+          },
+          "obscured": false
+        },
+        "nonBlank": {
+          "width": 1440,
+          "height": 900,
+          "distinctColors": 2651,
+          "meanLuma": 89.00331811491156
+        },
+        "guardIsReal": {
+          "pose": {
+            "yaw": 90,
+            "elevation": 35.264,
+            "zoom": 1.7825,
+            "x": 0,
+            "z": 0
+          },
+          "naturallyObscured": false,
+          "note": "adversarial obscured=true input (worst case); the natural phone obscured case is proven in obscuredRetention",
+          "focusPixel": {
+            "x": 898,
+            "y": 405
+          },
+          "legacyTarget": {
+            "x": 9.13682741622262,
+            "z": 0.12642200405173654
+          },
+          "expected": {
+            "legacyTargetDeltaWorldUnits": 9.137701995411415,
+            "legacyPivotScreenSlipPx": 105.81259439933739,
+            "approvedPanelSlipPx": 0
+          },
+          "actual": {
+            "approvedPanelSlipPx": 0,
+            "legacyWouldMove": true
+          }
+        },
+        "panels": [
+          {
+            "tool": "build",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "BUILD CATALOG"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "road",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "ROAD ENGINEER"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "fleet",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "FLEET LOGISTICS"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "research",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "RESEARCH & INDUSTRY"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "market",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "TRADE EXCHANGE"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "select",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "FREIGHT DEPOT"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          }
+        ],
+        "sheetToggle": {
+          "collapse": {
+            "poseIdentical": true,
+            "selectedId": 2
+          },
+          "expand": {
+            "poseIdentical": true
+          }
+        },
+        "ledger": {
+          "open": {
+            "poseIdentical": true,
+            "selectedId": 2
+          },
+          "close": {
+            "poseIdentical": true
+          }
+        },
+        "responsiveResize": {
+          "to": {
+            "width": 390,
+            "height": 844
+          },
+          "back": {
+            "width": 1440,
+            "height": 900
+          },
+          "poseIdentical": true,
+          "selectedId": 2
+        },
+        "homeNegative": {
+          "preconditionPose": {
+            "yaw": 90,
+            "elevation": 35.264,
+            "zoom": 1.7825,
+            "x": 0,
+            "z": 0
+          },
+          "expected": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.15,
+            "x": 0,
+            "z": 0
+          },
+          "actual": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.15,
+            "x": 0,
+            "z": 0
+          },
+          "refit": true,
+          "selectionRetained": true
+        },
+        "emptyPlotGuard": {
+          "poseIdentical": true,
+          "selectedId": null
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "stampMatchesApplied": true,
+          "buttonZoom": 1.7825,
+          "appliedZoom": 1.7825,
+          "webglContextCount": 1,
+          "world3d": "ready",
+          "yawPreservedDuringPanels": true
+        },
+        "tapTargets": {
+          "label": "cam05",
+          "count": 18,
+          "minWidth": 44,
+          "minHeight": 44
+        },
+        "documentScroll": false
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "mobile": true,
+      "touch": true,
+      "screenshots": [
+        "phone-inspector-posed.png",
+        "phone-obscured-retained.png",
+        "phone-build-catalog-open.png",
+        "phone-inspector-reentry.png",
+        "phone-sheet-collapsed.png",
+        "phone-resized-1440x900.png",
+        "phone-home-refit.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "newSelectionAutoFrame": {
+          "moved": true,
+          "obscured": true,
+          "focusPixel": {
+            "x": 195,
+            "y": 151.1015625
+          },
+          "pivotPixel": {
+            "x": 195,
+            "y": 151.1015625
+          },
+          "pinErrorPx": 0
+        },
+        "selection": {
+          "depotId": 2,
+          "tapPixel": {
+            "x": 299.4396715812531,
+            "y": 406.9255768684362
+          },
+          "sheetTitle": "Freight Depot"
+        },
+        "phoneZoomAnchor": {
+          "x": 195,
+          "y": 256.1015625
+        },
+        "phoneZoomAfterWheel": 1.1972173631218102,
+        "intentionalPose": {
+          "pose": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.1972173631218102,
+            "x": 21.334745659837534,
+            "z": 7.334745659837537
+          },
+          "gesture": "wheel-zoom-at-machine + ArrowDown pan",
+          "machinePivotPixel": {
+            "x": 195,
+            "y": 256.12159238844197
+          },
+          "obscured": false
+        },
+        "nonBlank": {
+          "width": 780,
+          "height": 1688,
+          "distinctColors": 2032,
+          "meanLuma": 68.61826531113404
+        },
+        "obscuredRetention": {
+          "panPresses": 3,
+          "obscuredPose": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.1972173631218102,
+            "x": 11.153201728948826,
+            "z": -2.84679827105117
+          },
+          "buildOpenPoseIdentical": true,
+          "sheetClosePoseIdentical": true,
+          "inspectorReentryPoseIdentical": true,
+          "explicitFocus": {
+            "pose": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.1972173631218102,
+              "x": 31.518231830622454,
+              "z": 17.51823183062246
+            },
+            "focusPixel": {
+              "x": 195,
+              "y": 151.1015625
+            },
+            "pivotPixel": {
+              "x": 195,
+              "y": 151.10156250000006
+            },
+            "pinErrorPx": 5.684341886080802e-14,
+            "aboveSheet": true
+          }
+        },
+        "guardIsReal": {
+          "pose": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.1972173631218102,
+            "x": 28.124383853659552,
+            "z": 14.124383853659559
+          },
+          "naturallyObscured": false,
+          "note": "adversarial obscured=true input (worst case); the natural phone obscured case is proven in obscuredRetention",
+          "focusPixel": {
+            "x": 195,
+            "y": 151.1015625
+          },
+          "legacyTarget": {
+            "x": 31.518231830622454,
+            "z": 17.51823183062246
+          },
+          "expected": {
+            "legacyTargetDeltaWorldUnits": 4.799625837653429,
+            "legacyPivotScreenSlipPx": 35,
+            "approvedPanelSlipPx": 0
+          },
+          "actual": {
+            "approvedPanelSlipPx": 0,
+            "legacyWouldMove": true
+          }
+        },
+        "panels": [
+          {
+            "tool": "build",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "BUILD CATALOG"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "road",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "ROAD ENGINEER"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "fleet",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "FLEET LOGISTICS"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "research",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "RESEARCH & INDUSTRY"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "market",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "TRADE EXCHANGE"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          },
+          {
+            "tool": "select",
+            "open": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "title": "FREIGHT DEPOT"
+            },
+            "close": {
+              "poseIdentical": true,
+              "selectedId": 2,
+              "sheetUnmounted": true
+            }
+          }
+        ],
+        "sheetToggle": {
+          "collapse": {
+            "poseIdentical": true,
+            "selectedId": 2
+          },
+          "expand": {
+            "poseIdentical": true
+          }
+        },
+        "ledger": {
+          "open": {
+            "poseIdentical": true,
+            "selectedId": 2
+          },
+          "close": {
+            "poseIdentical": true
+          }
+        },
+        "responsiveResize": {
+          "to": {
+            "width": 1440,
+            "height": 900
+          },
+          "back": {
+            "width": 390,
+            "height": 844
+          },
+          "poseIdentical": true,
+          "selectedId": 2
+        },
+        "homeNegative": {
+          "preconditionPose": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.1972173631218102,
+            "x": 28.124383853659552,
+            "z": 14.124383853659559
+          },
+          "expected": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "actual": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "refit": true,
+          "selectionRetained": true
+        },
+        "emptyPlotGuard": {
+          "poseIdentical": true,
+          "selectedId": null
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "stampMatchesApplied": true,
+          "buttonZoom": 1.55,
+          "appliedZoom": 1.55,
+          "webglContextCount": 1,
+          "world3d": "ready",
+          "yawPreservedDuringPanels": true
+        },
+        "tapTargets": {
+          "label": "cam05",
+          "count": 18,
+          "minWidth": 44,
+          "minHeight": 44
+        },
+        "documentScroll": false
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2 touch), not a physical device (#268/#275)",
+    "Numeric layout/pose proofs do not certify visual beauty — sponsor G1 visual acceptance is reserved and NOT granted by this capture (#276)",
+    "Local production preview only — the live hosted-browser receipt at the deployed SHA is produced at release by the release engineer",
+    "Verdict ceiling PASS_NUMERIC_ONLY; only hosted-browser CI at the deployed SHA retires that caveat (smoke invariants only)"
+  ],
+  "completed": "2026-11-17T09:39:05.924Z"
+}

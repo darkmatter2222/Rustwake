@@ -1,0 +1,295 @@
+{
+  "issue": 344,
+  "version": 2,
+  "build": "production-preview",
+  "source_sha": "d8ea1e6d2b063314c73d76294731a515d9a06b38",
+  "started": "2026-11-17T09:39:15.661Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false,
+      "webglContextCount": 1,
+      "structures": 6
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false,
+      "webglContextCount": 1
+    }
+  ],
+  "measurements": {
+    "desktopPan": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "p0": {
+        "x": 600,
+        "y": 400
+      },
+      "p1": {
+        "x": 760,
+        "y": 520
+      },
+      "anchorWorld": {
+        "x": -11.292030633764178,
+        "z": 1.8253125534645287
+      },
+      "pose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -20.10495715451205,
+        "z": -2.6151662382071095
+      },
+      "errorCssPx": 0,
+      "structuresBefore": 6,
+      "structuresAfter": 6,
+      "expected": "down-anchor under pointer <=1px; no tap"
+    },
+    "negativeGhostDrag": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "g0": {
+        "x": 600,
+        "y": 400
+      },
+      "g1": {
+        "x": 760,
+        "y": 520
+      },
+      "g2": {
+        "x": 1000,
+        "y": 700
+      },
+      "anchorWorld": {
+        "x": -11.292030633764178,
+        "z": 1.8253125534645287
+      },
+      "draggedPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -20.10495715451205,
+        "z": -2.6151662382071095
+      },
+      "actualPoseAfterHover": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -20.10495715451205,
+        "z": -2.6151662382071095
+      },
+      "actualTargetStep": 0,
+      "legacyGhostPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -50.262392886280125,
+        "z": -6.537915595517769
+      },
+      "legacyGhostTargetStep": 30.411492768951728,
+      "legacyGhostDriftCssPx": 300,
+      "approvedDriftCssPx": 0,
+      "expected": "fixed: zero target step on hover (slip 0); pre-fix legacy ghost pan would slip >1px"
+    },
+    "negativeLostCapture": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pointerId": 1,
+      "capturedBefore": true,
+      "capturedAfter": false,
+      "c0": {
+        "x": 600,
+        "y": 400
+      },
+      "c1": {
+        "x": 720,
+        "y": 480
+      },
+      "c2": {
+        "x": 1000,
+        "y": 700
+      },
+      "anchorWorld": {
+        "x": -11.292030633764178,
+        "z": 1.8253125534645287
+      },
+      "draggedPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -14.132046057854073,
+        "z": -1.0147028706253662
+      },
+      "actualPoseAfterHover": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -14.132046057854073,
+        "z": -1.0147028706253662
+      },
+      "actualTargetStep": 0,
+      "legacyStuckPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -50.262392886280125,
+        "z": -6.537915595517772
+      },
+      "legacyStuckTargetStep": 36.55007306075831,
+      "legacyStuckDriftCssPx": 356.0898762952971,
+      "approvedDriftCssPx": 0,
+      "expected": "native lostpointercapture purges track; zero target step on hover; pre-fix legacy stuck pan would slip >1px"
+    },
+    "outOfWindowRelease": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "d0": {
+        "x": 1300,
+        "y": 450
+      },
+      "dOut": {
+        "x": 1500,
+        "y": 490
+      },
+      "anchorWorld": {
+        "x": 31.700246035802714,
+        "z": -31.700246035802707
+      },
+      "pose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -14.717806554810444,
+        "z": 7.1444320905707315
+      },
+      "errorCssPx": 0,
+      "captureReleased": true,
+      "hoverTargetStep": 0,
+      "structuresAfter": 6,
+      "expected": "captured out-of-canvas drag anchors <=1px; up releases capture; hover inert; no purchase"
+    },
+    "wheelZoomAnchor": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "cursor": {
+        "x": 1140,
+        "y": 450
+      },
+      "anchorWorld": {
+        "x": 22.955350577650236,
+        "z": -22.955350577650233
+      },
+      "zoomBefore": 1.15,
+      "zoomAfter": 1.3767999675900815,
+      "errorCssPx": 0,
+      "expected": "ground under cursor fixed <=1px through wheel zoom"
+    },
+    "phonePinchLift": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "centroid": {
+        "x": 234,
+        "y": 422
+      },
+      "anchorWorld": {
+        "x": 2.613949238509512,
+        "z": -2.6139492385095116
+      },
+      "maxPinchErrorCssPx": 6.120628068700403e-15,
+      "pinchZoom": 2.3333333333333326,
+      "fingerLiftTargetStep": 0,
+      "survivorRebaseErrorCssPx": 1.785170308651107e-14,
+      "survivorMoveDelivered": true,
+      "freshPressAfterLift": false,
+      "survivorEvents": [
+        {
+          "t": "pointermove",
+          "id": 3,
+          "b": 1,
+          "x": 334,
+          "y": 452
+        }
+      ],
+      "expected": "centroid anchored <=1px; finger lift zero target jump; survivor rebased <=1px on its continuing track (no fresh press)"
+    },
+    "negativeTouchCancel": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "pressPoint": {
+        "x": 195,
+        "y": 295
+      },
+      "cancelledPointerId": 4,
+      "lateUpAfterCancel": "synthetic PointerEvent with the cancelled pointerId (CDP cannot touchEnd after touchCancel)",
+      "structuresBefore": 6,
+      "structuresAfter": 6,
+      "lastSiteOkAfterCancel": null,
+      "expected": "cancelled touch drag submits NO build (structures unchanged, lastSiteOk !== true), even with a late pointerup for the cancelled id"
+    },
+    "tapOnce": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "buildingCell": {
+        "x": 13,
+        "z": 9
+      },
+      "tapPixel": {
+        "x": 386.69256702292375,
+        "y": 466.82634602635125
+      },
+      "tapCss": {
+        "x": 387,
+        "y": 467
+      },
+      "inspectorEmptyAfterTap": 0,
+      "selectedStatus": "Online",
+      "inspectorEmptyAfterSecondTap": 0,
+      "structuresAfter": 6,
+      "expected": "a clean tap selects the starter building (inspector populated); a second identical tap keeps one selection; select mode never purchases"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is EMULATED, not a physical device",
+    "PASS_NUMERIC_ONLY: camera/stamp/DOM measurements are exact; visual fidelity is screenshot-only and NOT self-certified",
+    "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
+    "Ghost-drag / lost-capture negatives compare the fixed build's actual pose against the computed pre-fix legacy pose; the pre-fix Node failure (11/22) is recorded separately",
+    "Out-of-canvas pan is measured inside the +/-90 envelope; beyond it the documented CAM-01 pan clamp legitimately stops the anchor",
+    "CDP touchMove events are queued until the next compositor frame or dispatchTouchEvent; Page.startScreencast forces frames and the harness asserts each move reached the canvas (pointer-event log) before measuring. touchEnd lists the points being RELEASED and delivers pointerup immediately; touchCancel must carry no points and ends the sequence, so the late-up-after-cancel case uses a synthetic PointerEvent with the cancelled pointerId against the real canvas listener."
+  ],
+  "completed": "2026-11-17T09:39:27.299Z"
+}

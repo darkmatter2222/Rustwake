@@ -74,6 +74,16 @@ export function tapTargetOk(rect) {
   return !!rect && Number(rect.width) + 0.5 >= MIN_TAP_CSS_PX && Number(rect.height) + 0.5 >= MIN_TAP_CSS_PX;
 }
 
+/** CAM-05 (#341): toolbar transitions NEVER drop the selected machine.
+ *  The Inspect tool re-shows the inspector for a retained selection; with no
+ *  selection it is the plain select mode. Every other tool opens its own
+ *  panel while the selection (and the camera pose) is preserved. Explicit
+ *  deselect stays a distinct gesture: empty-ground tap, Escape, dismantle. */
+export function nextToolMode(toolId, selectedId) {
+  if (toolId === "select") return selectedId != null ? "inspect" : "select";
+  return toolId;
+}
+
 /* ---- Persisted dock preferences (player preference, never economy) ---- */
 function sanitizeDock(p) {
   return { sheetCollapsed: typeof p?.sheetCollapsed === "boolean" ? p.sheetCollapsed : DOCK_DEFAULTS.sheetCollapsed };
