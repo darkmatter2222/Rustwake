@@ -3,8 +3,8 @@
   "issue": 362,
   "task": "UX-04 building inspector",
   "build": "production-preview",
-  "source_sha": "20ff7db691e6ef1a9198e626de102132f0307da1",
-  "started": "2026-11-17T02:55:51.367Z",
+  "source_sha": "052a742be582fdb3fae3c9e597bf48a96c74f902",
+  "started": "2026-11-17T03:24:59.230Z",
   "views": [
     {
       "name": "desktop",
@@ -251,13 +251,13 @@
           "initialFocus": "dismantle-confirm",
           "refundRows": [
             "Credits\n40% RECOVERY\n+144 CR",
-            "Ferrous ore\n40% RECOVERY\n+19 FE",
+            "Ferrous ore\n40% RECOVERY\n+24 FE",
             "Scrap\n40% RECOVERY\n+20 SC",
             "Aggregate\n40% RECOVERY\n+8 AG",
-            "Diesel\nCARGO RETURN\n+7 FU",
-            "Steel\nCARGO RETURN\n+18 ST"
+            "Diesel\nCARGO RETURN\n+3 FU",
+            "Steel\nCARGO RETURN\n+14 ST"
           ],
-          "previewTxt": "Recovery preview: +144 CR, +19 FE, +20 SC, +8 AG, +7 FU, +18 ST.",
+          "previewTxt": "Recovery preview: +144 CR, +24 FE, +20 SC, +8 AG, +3 FU, +14 ST.",
           "touchTargets": [
             {
               "testid": "dismantle-confirm",
@@ -330,5 +330,5 @@
     "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
     "Numeric occlusion/refund proofs do not certify visual beauty — sponsor review required at G1"
   ],
-  "completed": "2026-11-17T02:57:01.916Z"
+  "completed": "2026-11-17T03:26:10.973Z"
 }
