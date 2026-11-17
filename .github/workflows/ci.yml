@@ -36,6 +36,9 @@ jobs:
       - run: npm test
       - run: node scripts/check-studio-docs.mjs
       - run: node scripts/check-design-contract.mjs
+      - run: node scripts/check-city-manifest.mjs
+      - run: node --check scripts/bootstrap-v2-city-project.mjs
+      - run: node scripts/bootstrap-v2-city-project.mjs
       - run: npm run build
       - name: Install one Chromium binary for PR visual smoke
         if: github.event_name == 'pull_request'
