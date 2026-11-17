@@ -40,10 +40,32 @@ export const BUILDINGS = [
  {id:"research",name:"Signal Observatory",tag:"RESEARCH",family:"science",description:"Converts circuit boards and power into research data.",cost:{credits:1250,steel:46,circuits:8},cycle:13,inputs:{circuits:2},outputs:{data:5},power:4,color:"#7d9eb0",accent:"#8bd7d8"},
  {id:"market",name:"Trade Exchange",tag:"ECONOMY",family:"logistics",description:"Sell surplus materials into the growing inter-faction economy.",cost:{credits:650,steel:16,stone:22},cycle:0,inputs:{},outputs:{},power:0,color:"#9f967e",accent:"#e4b97e"},
  {id:"turret",name:"Watchtower",tag:"DEFENSE",family:"defense",description:"The first modular defense platform, ready for future raid systems.",cost:{credits:780,steel:25,gears:6},cycle:0,inputs:{},outputs:{},power:2,color:"#8d9898",accent:"#d99f7e"},
- {id:"crane",name:"Heavy Yard Crane",tag:"UTILITY",family:"utility",description:"Animated cargo hoist; can anchor a future vehicle construction bay.",cost:{credits:880,steel:36,gears:12},cycle:0,inputs:{},outputs:{},power:1,color:"#d19c5f",accent:"#f4c67f"}
+ {id:"crane",name:"Heavy Yard Crane",tag:"UTILITY",family:"utility",description:"Animated cargo hoist on a 2×3 pad; can anchor a future vehicle construction bay.",cost:{credits:880,steel:36,gears:12},cycle:0,inputs:{},outputs:{},power:1,footprint:{w:2,d:3},color:"#d19c5f",accent:"#f4c67f"}
 ];
 
 export const BLUEPRINTS = Object.fromEntries(BUILDINGS.map(b=>[b.id,b]));
+// Deterministic footprint contract (#370): every blueprint occupies w×d cells.
+// Absent footprint means the legacy 1×1 pad. Rotation never changes the anchor.
+export const footprintOf=(type)=>BLUEPRINTS[type]?.footprint||{w:1,d:1};
+
+// Starter yard layout is canonical content data so terrain grading, occupancy
+// and the simulation all agree on the same deterministic first frame.
+export const STARTER_BUILDINGS = [
+ {id:1,type:"salvager",x:7,z:9,level:1,remaining:0,inventory:{},timer:0},
+ {id:2,type:"depot",x:13,z:9,level:1,remaining:0,inventory:{},timer:0},
+ {id:3,type:"generator",x:7,z:16,level:1,remaining:0,inventory:{},timer:0},
+ {id:4,type:"furnace",x:16,z:13,level:1,remaining:0,inventory:{iron:10,fuel:7},timer:0},
+ {id:5,type:"crane",x:15,z:5,rot:0,level:1,remaining:0,inventory:{},timer:0},
+ {id:6,type:"market",x:15,z:18,level:1,remaining:0,inventory:{},timer:0},
+];
+const starterRoads=()=>{
+ const set=new Set();
+ const h=(z,x0,x1)=>{for(let x=x0;x<=x1;x++)set.add(x+","+z);};
+ const v=(x,z0,z1)=>{for(let z=z0;z<=z1;z++)set.add(x+","+z);};
+ h(8,5,19);h(12,5,19);h(17,5,19);v(11,4,20);v(5,8,17);v(19,8,17);
+ return [...set];
+};
+export const INITIAL_ROADS = starterRoads();
 export const ROAD_KINDS = [
   {id:"road",name:"Asphalt road",description:"Two-way traffic lane; logistics trucks follow connected segments.",cost:{stone:3,credits:4}},
   {id:"heavy",name:"Heavy haul",description:"Future high-capacity lane; currently uses road rules.",cost:{stone:5,credits:8}}

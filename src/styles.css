@@ -139,6 +139,8 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .cost--short{background:#4b3837;color:#f6aa99}
 .danger-button{background:transparent;border:1px solid #83594e;color:#eea99d;padding:9px 12px;border-radius:4px;font-size:10px;font-weight:800;margin-top:12px}
 .danger-button:hover{background:#5c332c}
+.rotate-button{width:100%;min-height:44px;border:1px solid #c3935e;border-radius:4px;background:#6a4e35;color:#fff0d6;font-size:11px;font-weight:800;letter-spacing:.06em;margin:0 0 12px}
+.rotate-button:hover{background:#7d5c3e}
 .intro-prompt{position:absolute;left:clamp(14px,2.3vw,36px);bottom:139px;z-index:10;width:min(330px,calc(100vw - 28px));padding:22px;background:linear-gradient(150deg,#2b3231ec,#16282aed);border:1px solid #c08d63;border-top:3px solid var(--amber);box-shadow:0 18px 70px #04080ca8;pointer-events:auto}
 .intro-prompt strong{display:block;font:800 32px/1.06 "Barlow Condensed";letter-spacing:.03em;margin:12px 0}
 .intro-prompt p{font-size:12px;line-height:1.6;color:#c8d3c9}

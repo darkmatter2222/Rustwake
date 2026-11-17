@@ -3,7 +3,7 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName} from "./simulation.js";
 import "./styles.css";
 
 const cap=(n)=>Math.max(0,Math.floor(n||0));
@@ -51,13 +51,21 @@ function BuildingCard({def,g,onChoose,selected}){
   <span className={"blueprint__cost"+(afford?"":" blueprint__cost--short")}>{locked?"LOCKED":def.cost.credits+" CR"}</span>
  </button>;
 }
-function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,notify,close,onSell,onResearch,onRemove}){
+function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,setBuildRot,notify,close,onSell,onResearch,onRemove,onCancel}){
  const selected=g.buildings.find(b=>b.id===selectedId);
- if(mode==="build")return <Card title="Build catalog" eyebrow="CONSTRUCTION / BLUEPRINTS" onClose={close} className="catalog-panel">
-  <div className="panel-sub">Select a structure, then tap the terrain. Roads and loading bays matter.</div>
-  <div className="blueprint-list">{BUILDINGS.map(d=><BuildingCard key={d.id} def={d} g={g} selected={buildId===d.id} onChoose={setBuildId}/>)}</div>
-  <div className="panel-footnote">Constructing a machine reserves the listed materials. Mechanical assembly takes five seconds.</div>
- </Card>;
+ if(mode==="build"){
+  const fp=footprintDims(buildId,buildRot);
+  return <Card title="Build catalog" eyebrow="CONSTRUCTION / BLUEPRINTS" onClose={close} className="catalog-panel">
+   <div className="panel-sub">Select a structure, then tap the terrain. Slope, parcels, bays and road frontage are validated before any material is spent.</div>
+   <div className="stat-grid" data-testid="site-orientation">
+    <div><small>Footprint</small><strong data-testid="footprint-dims">{fp.w}×{fp.d}</strong></div>
+    <div><small>Bay facing</small><strong data-testid="bay-facing">{facingName(buildRot)}</strong></div>
+   </div>
+   <button className="rotate-button" data-testid="rotate-footprint" onClick={()=>setBuildRot(r=>(r+1)%4)}>Rotate footprint (R)</button>
+   <div className="blueprint-list">{BUILDINGS.map(d=><BuildingCard key={d.id} def={d} g={g} selected={buildId===d.id} onChoose={setBuildId}/>)}</div>
+   <div className="panel-footnote">Constructing a machine reserves the listed materials. Mechanical assembly takes five seconds; canceling mid-assembly refunds everything.</div>
+  </Card>;
+ }
  if(mode==="road")return <Card title="Road engineer" eyebrow="ROUTING / INFRASTRUCTURE" onClose={close}>
   <div className="panel-sub">Tap the starting cell, then tap the destination. Asphalt connects the freight fleet to machines.</div>
   <div className="stat-grid"><div><small>Network</small><strong>{g.roads.length} cells</strong></div><div><small>Per segment</small><strong>3 AG / 4 CR</strong></div></div>
@@ -83,15 +91,18 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,notify,cl
   <div className="panel-footnote">Material totals are depot inventory. Truck cargo and machine inventories are separate until delivery.</div>
  </Card>;
  if(mode==="inspect"&&selected){
-  const def=BLUEPRINTS[selected.type],connected=connectedToRoad(g,selected);
+  const def=BLUEPRINTS[selected.type],connected=connectedToRoad(g,selected),fp=footprintDims(selected.type,selected.rot||0);
   return <Card title={def.name} eyebrow={"SITE "+selected.x+"."+selected.z+" / "+def.tag} onClose={()=>setSelectedId(null)}>
    <div className="selected-hero"><span className="selected-hero__mark" style={{background:def.accent}}>▣</span><div><strong>UNIT {String(selected.id).padStart(3,"0")}</strong><small>{selected.remaining>0?"ASSEMBLING — "+selected.remaining.toFixed(1)+"s":"OPERATING / LEVEL "+selected.level}</small></div></div>
    <p className="panel-sub">{def.description}</p>
    <div className="stat-grid"><div><small>Power demand</small><strong>{Math.max(0,def.power)} MW</strong></div><div><small>Road network</small><strong className={connected?"":"text-warn"}>{connected?"Connected":"No frontage"}</strong></div></div>
+   <div className="stat-grid"><div><small>Footprint</small><strong data-testid="inspect-footprint">{fp.w}×{fp.d}</strong></div><div><small>Bay facing</small><strong>{facingName(selected.rot||0)}</strong></div></div>
    {def.cycle>0&&<><h3 className="panel-section">Production cycle</h3><Meter value={selected.timer} max={def.cycle} color="var(--mint)"/><div className="recipe-table"><div><small>INPUT</small><span>{toMoney(def.inputs)||"Salvage site"}</span></div><div><small>OUTPUT</small><span>{toMoney(def.outputs)||"No product"}</span></div></div></>}
    <h3 className="panel-section">Local storage</h3>
    <div className="inventory-list inventory-list--short">{Object.entries(selected.inventory).length?Object.entries(selected.inventory).map(([id,n])=><div key={id}><strong>{RESOURCE_BY_ID[id]?.name||id}</strong><span>{amount(n)}</span></div>):<p className="panel-sub">No cargo in this building.</p>}</div>
-   <button className="danger-button" onClick={()=>onRemove(selected.id)}>Dismantle machine</button>
+   {selected.remaining>0
+    ?<button className="danger-button" data-testid="cancel-construction" onClick={()=>onCancel(selected.id)}>Cancel construction — full refund</button>
+    :<button className="danger-button" onClick={()=>onRemove(selected.id)}>Dismantle machine</button>}
   </Card>;
  }
  return null;
@@ -103,6 +114,7 @@ export default function App(){
  const [data,setData]=useState(()=>snapshot(gameRef.current));
  const [mode,setMode]=useState("select");
  const [buildId,setBuildId]=useState("salvager");
+ const [buildRot,setBuildRot]=useState(0);
  const [selectedId,setSelectedId]=useState(null);
  const [toast,setToast]=useState("");
  const [intro,setIntro]=useState(false);
@@ -112,14 +124,15 @@ export default function App(){
  const [gridVisible,setGridVisible]=useState(false);
  const camera=useRef({yaw:45,elevation:35.264,zoom:typeof window!=="undefined"&&window.innerWidth>=960?1.15:1,x:0,z:0});
 
- const modeRef=useRef({mode,buildId,roadStart});
- useEffect(()=>{modeRef.current={mode,buildId,roadStart};},[mode,buildId,roadStart]);
+ const modeRef=useRef({mode,buildId,buildRot,roadStart});
+ useEffect(()=>{modeRef.current={mode,buildId,buildRot,roadStart};},[mode,buildId,buildRot,roadStart]);
  const notify=useCallback((text)=>{setToast(text);},[]);
  const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);if(id!=="build")setSelectedId(null);},[]);
  const refresh=useCallback(()=>setData(snapshot(gameRef.current)),[]);
  const onSell=useCallback((id)=>{const r=sell(gameRef.current,id,10);notify(r.ok?"Sold materials for "+r.earnings+" CR":r.reason);refresh();},[notify,refresh]);
  const onResearch=useCallback((id)=>{const r=researchAt(gameRef.current,id);notify(r.ok?"Research completed":r.reason);refresh();},[notify,refresh]);
  const onRemove=useCallback((id)=>{const r=removeBuilding(gameRef.current,id);notify(r.ok?"Machine dismantled":r.reason);if(r.ok)setSelectedId(null);refresh();},[notify,refresh]);
+ const onCancel=useCallback((id)=>{const r=cancelConstruction(gameRef.current,id);notify(r.ok?"Construction canceled — materials refunded":r.reason);if(r.ok){setSelectedId(null);setMode("select");}refresh();},[notify,refresh]);
  const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
  const zoomControl=useCallback((factor)=>{
   const world=worldRef.current,cv=world?.renderer.domElement;
@@ -160,7 +173,11 @@ export default function App(){
     if(!c||c.x<0||c.x>=WORLD_SIZE||c.z<0||c.z>=WORLD_SIZE)return;
     const g=gameRef.current,tool=modeRef.current.mode;
     if(tool==="build"){
-     const r=buildAt(g,modeRef.current.buildId,c.x,c.z);
+     const r=buildAt(g,modeRef.current.buildId,c.x,c.z,modeRef.current.buildRot);
+     // Observability stamp: the exact validator verdict for the tapped site.
+     document.body.dataset.lastSiteOk=String(r.ok);
+     document.body.dataset.lastSiteCode=r.code||"";
+     document.body.dataset.lastSiteReason=r.reason||"";
      notify(r.ok?"Construction underway — "+BLUEPRINTS[modeRef.current.buildId].name:r.reason);
      if(r.ok){setSelectedId(r.building.id);setMode("inspect");}
     }else if(tool==="road"){
@@ -168,7 +185,7 @@ export default function App(){
      if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
      else {const r=roadLine(g,first,{x:c.x,z:c.z});notify(r.ok?r.cells+" road segments connected":r.reason);setRoadStart(null);}
     }else{
-     const hit=g.buildings.find(b=>b.x===c.x&&b.z===c.z);
+     const hit=buildingAt(g,c.x,c.z);
      if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
      else {setSelectedId(null);if(tool==="inspect")setMode("select");}
     }
@@ -184,6 +201,7 @@ export default function App(){
    if(e.key==="Escape"){choose("select");setSelectedId(null);}
    if(["1","2","3","4","5","6"].includes(e.key))choose(TOOLBAR[Number(e.key)-1].id);
    if(e.key==="g"||e.key==="G")setGridVisible(v=>!v);
+   if((e.key==="r"||e.key==="R")&&modeRef.current.mode==="build")setBuildRot(v=>(v+1)%4);
    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)){
     e.preventDefault();
     keyboardPan(e.key==="ArrowLeft"?-35:e.key==="ArrowRight"?35:0,e.key==="ArrowUp"?-35:e.key==="ArrowDown"?35:0);
@@ -200,11 +218,16 @@ export default function App(){
  useEffect(()=>{
   const world=worldRef.current;
   if(!world)return;
-  const hover=preview,valid=hover?hover.x>=0&&hover.z>=0&&hover.x<WORLD_SIZE&&hover.z<WORLD_SIZE&&
-    !data.buildings.some(b=>b.x===hover.x&&b.z===hover.z):false;
+  const hover=preview;
+  const inBounds=hover&&hover.x>=0&&hover.z>=0&&hover.x<WORLD_SIZE&&hover.z<WORLD_SIZE;
+  // The ghost uses the SAME pure validator as the transaction: free selection
+  // never deducts bank stock (#370).
+  const site=mode==="build"&&inBounds?checkSite(data,buildId,hover.x,hover.z,buildRot):null;
+  const valid=mode==="build"?!!site?.ok:!!inBounds&&!buildingAt(data,hover.x,hover.z);
   world.drawGhost(mode==="road"?"road":mode==="build"?"build":null,
-   mode==="road"||mode==="build"?hover:null,valid,roadStart);
- },[preview,mode,roadStart,data.buildings.length]);
+   mode==="road"||mode==="build"?hover:null,valid,roadStart,
+   site?{cells:site.cells,bay:site.bay}:null);
+ },[preview,mode,roadStart,buildId,buildRot,data]);
  return <div className="app-shell" data-world="v2" data-camera="isometric" data-save-version="2">
   <div className="world-container" ref={sceneHost} id="rustwake-3d-world"/>
   <div className="screen-vignette" aria-hidden="true"/>
@@ -241,7 +264,7 @@ export default function App(){
    <div className="activity-card"><div className="eyebrow">YARD ACTIVITY</div><Log events={data.log}/></div>
   </aside>
   {intro&&<IntroPrompt onDismiss={()=>{setIntro(false);try{localStorage.setItem("rustwake:v2:intro","1");}catch{}}}/>}
-  <div className="center-hint" aria-hidden="true">{mode==="road"?(roadStart?"TAP A DESTINATION CELL":"TAP A START CELL"):mode==="build"?"TAP THE GROUND TO CONSTRUCT":null}</div>
+  <div className="center-hint" aria-hidden="true">{mode==="road"?(roadStart?"TAP A DESTINATION CELL":"TAP A START CELL"):mode==="build"?"TAP THE GROUND TO CONSTRUCT · R ROTATES THE FOOTPRINT":null}</div>
   <nav className="tool-dock" aria-label="Construction and world controls">
     {TOOLBAR.map(item=><button key={item.id} data-tool={item.id}
       className={mode===item.id||item.id==="select"&&mode==="inspect"?"tool-dock__item is-active":"tool-dock__item"}
@@ -251,7 +274,8 @@ export default function App(){
   </nav>
   {["build","road","fleet","research","market","inventory","inspect"].includes(mode)&&<div className="panel-host">
     <DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
-      buildId={buildId} setBuildId={setBuildId} notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} close={()=>choose("select")}/>
+      buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
+      notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}/>
    </div>}
   <div className="footline"><span>RUSTWAKE / V2 FOUNDATION</span><span>SIM {Math.floor(data.elapsed)}s</span><span>{data.buildings.length} STRUCTURES · {data.roads.length} ROAD CELLS</span></div>
   {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status" onClick={()=>setToast("")}><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}

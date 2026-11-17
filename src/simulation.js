@@ -1,8 +1,8 @@
-import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY} from "./content.js";
+import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
+import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot} from "./gridOccupancy.js";
 
-export const key=(x,z)=>x+","+z;
-export const cellOf=(k)=>k.split(",").map(Number);
-export const inside=(x,z)=>Number.isInteger(x)&&Number.isInteger(z)&&x>=0&&z>=0&&x<WORLD_SIZE&&z<WORLD_SIZE;
+export {key,cellOf,inside} from "./gridOccupancy.js";
+export {checkSite,buildingAt,footprintCells,footprintDims,bayCells,worldFootprint,terrainFor,terrainAt,ownedParcels,parcelId,surveyed,facingName,normalizeRot,SURVEY_MIN,SURVEY_MAX,ROAD_REACH,PARCEL_SIZE,PARCEL_NAMES} from "./gridOccupancy.js";
 const clone=(x)=>JSON.parse(JSON.stringify(x));
 const stock=(bag,id)=>Math.max(0,Number(bag?.[id]||0));
 const fits=(bag,need)=>Object.entries(need).every(([id,n])=>stock(bag,id)+1e-7>=n);
@@ -10,30 +10,23 @@ const spend=(bag,need)=>{for(const [id,n] of Object.entries(need))bag[id]=Math.m
 const take=(bag,id,amount)=>{const n=Math.min(stock(bag,id),amount);bag[id]=Math.max(0,stock(bag,id)-n);return n;};
 const deposit=(bag,id,n)=>{bag[id]=stock(bag,id)+n;};
 const pushLog=(g,message)=>{g.log.unshift({id:g.nextId++,time:g.elapsed,message});g.log.length=Math.min(g.log.length,32);};
-const startRoads=()=>{
- const set=new Set();
- const h=(z,x0,x1)=>{for(let x=x0;x<=x1;x++)set.add(key(x,z));};
- const v=(x,z0,z1)=>{for(let z=z0;z<=z1;z++)set.add(key(x,z));};
- h(8,5,19);h(12,5,19);h(17,5,19);v(11,4,20);v(5,8,17);v(19,8,17);
- return [...set];
+// Construction transaction ledger (#370): every build/cancel/salvage/reject is
+// recorded with its exact spend or refund delta so conservation is auditable.
+const recordLedger=(g,entry)=>{
+ if(!Array.isArray(g.ledger))g.ledger=[];
+ g.ledger.push({id:g.nextId++,time:g.elapsed,...entry});
+ if(g.ledger.length>64)g.ledger.splice(0,g.ledger.length-64);
 };
 export function createGame(){
- const buildings=[
-  {id:1,type:"salvager",x:7,z:9,level:1,remaining:0,inventory:{},timer:0},
-  {id:2,type:"depot",x:13,z:9,level:1,remaining:0,inventory:{},timer:0},
-  {id:3,type:"generator",x:7,z:16,level:1,remaining:0,inventory:{},timer:0},
-  {id:4,type:"furnace",x:16,z:13,level:1,remaining:0,inventory:{iron:10,fuel:7},timer:0},
-  {id:5,type:"crane",x:15,z:5,level:1,remaining:0,inventory:{},timer:0},
-  {id:6,type:"market",x:15,z:18,level:1,remaining:0,inventory:{},timer:0},
- ];
+ const buildings=clone(STARTER_BUILDINGS);
  const vehicles=[
   {id:1,name:"HAULER-01",x:11,z:10,speed:2.25,job:null,cargo:null,anim:0},
   {id:2,name:"HAULER-02",x:11,z:11,speed:2.6,job:null,cargo:null,anim:0},
   {id:3,name:"HAULER-03",x:11,z:12,speed:2.0,job:null,cargo:null,anim:0}
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
-  nextId:10,bank:{...INITIAL_BANK},buildings,roads:startRoads(),vehicles,
-  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,
+  nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
+  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],
   view:{yaw:45,elevation:35.264,zoom:1},stats:{produced:0,delivered:0,shipments:0,sold:0,builds:0},
   log:[{id:0,time:0,message:"Cinder Yard established. Roads and freight trucks are operational."}],
   notices:[]
@@ -50,7 +43,9 @@ export function readGame(){
   g.elapsed=Math.max(0,Math.min(1e9,Number(g.elapsed)||0));
   g.lastSavedAt=Number(g.lastSavedAt)||Date.now();
   g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z)&&!v.job?.path?.some(p=>!inside(p.x,p.z))).slice(0,12);
-  g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400);
+  g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400)
+   .map(b=>({...b,rot:normalizeRot(b.rot)}));
+ g.ledger=Array.isArray(g.ledger)?g.ledger.filter(e=>e&&typeof e==="object").slice(-64):[];
   g.roads=[...new Set(g.roads.filter(k=>typeof k==="string"&&inside(...cellOf(k))))];
   const away=Math.max(0,(Date.now()-g.lastSavedAt)/1000);
   if(away>6){const simulated=Math.min(300,away);advanceGame(g,simulated);g.notices=[{type:"offline",message:"Your yard kept running for "+Math.floor(simulated)+"s while you were away."}];}
@@ -71,19 +66,35 @@ export function powerStatus(g){
  const demand=g.buildings.filter(b=>b.remaining<=0).reduce((a,b)=>a+Math.max(0,BLUEPRINTS[b.type]?.power||0),0);
  return {supply,demand,available:supply>=demand,percent:supply===0?0:Math.round(demand/supply*100)};
 }
-export function buildAt(g,type,x,z){
+// Free selection/hover uses checkSite (pure, never deducts). A confirmed build
+// spends exactly once, after full footprint/terrain/parcel/bay/frontage validation.
+export function buildAt(g,type,x,z,rot=0){
+ const site=checkSite(g,type,x,z,rot);
+ if(!site.ok){
+  recordLedger(g,{kind:"reject",type,x,z,rot:normalizeRot(rot),code:site.code,reason:site.reason,cost:{},refund:{}});
+  return {ok:false,reason:site.reason,code:site.code};
+ }
  const def=BLUEPRINTS[type];
- if(!def)return {ok:false,reason:"Unknown blueprint"};
- if(!unlocked(g,type))return {ok:false,reason:"Unlock this blueprint by growing your industrial rank"};
- if(!inside(x,z))return {ok:false,reason:"Beyond the surveyed frontier"};
- if(g.buildings.some(b=>b.x===x&&b.z===z))return {ok:false,reason:"A machine occupies this site"};
- if(g.roads.includes(key(x,z)))return {ok:false,reason:"Move the site off the road"};
- if(!fits(g.bank,def.cost))return {ok:false,reason:"Not enough materials — review the blueprint costs"};
  spend(g.bank,def.cost);
- const b={id:g.nextId++,type,x,z,level:1,remaining:5,inventory:{},timer:0};
+ const b={id:g.nextId++,type,x,z,rot:site.rot,level:1,remaining:5,inventory:{},timer:0};
  g.buildings.push(b);g.stats.builds++;
+ recordLedger(g,{kind:"build",type,buildingId:b.id,x,z,rot:b.rot,cost:{...def.cost},refund:{}});
  pushLog(g,def.name+" deployed at "+x+","+z+" — assembling.");
- return {ok:true,building:b};
+ return {ok:true,building:b,code:"OK"};
+}
+// Cancel an in-flight assembly: full refund, conserved ledger, no ghost stock.
+export function cancelConstruction(g,id){
+ const i=g.buildings.findIndex(b=>b.id===id);
+ if(i<0)return {ok:false,code:"MISSING",reason:"No building selected"};
+ const b=g.buildings[i];
+ if(b.id<=6)return {ok:false,code:"PROTECTED",reason:"Starter buildings are protected; construct your own district."};
+ if(b.remaining<=0)return {ok:false,code:"COMPLETE",reason:"Assembly is complete — dismantle the machine instead"};
+ const def=BLUEPRINTS[b.type];
+ for(const [r,n] of Object.entries(def.cost))deposit(g.bank,r,n);
+ g.buildings.splice(i,1);
+ recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...def.cost}});
+ pushLog(g,def.name+" construction canceled — full material refund.");
+ return {ok:true,code:"OK",refund:{...def.cost}};
 }
 export function removeBuilding(g,id){
  const i=g.buildings.findIndex(b=>b.id===id);
@@ -92,10 +103,13 @@ export function removeBuilding(g,id){
  if(b.id<=6)return {ok:false,reason:"Starter buildings are protected; construct your own district."};
  for(const v of g.vehicles)if(v.job&&(v.job.sourceId===id||v.job.destId===id))return {ok:false,reason:"A truck has reserved material at this building"};
  const d=BLUEPRINTS[b.type];
- for(const [r,amount] of Object.entries(d.cost))deposit(g.bank,r,Math.floor(amount*.4));
- for(const [r,amount] of Object.entries(b.inventory))deposit(g.bank,r,amount);
- g.buildings.splice(i,1);pushLog(g,d.name+" salvaged. Recoverable inventory returned.");
- return {ok:true};
+ const refund={};
+ for(const [r,amount] of Object.entries(d.cost)){const n=Math.floor(amount*.4);refund[r]=(refund[r]||0)+n;deposit(g.bank,r,n);}
+ for(const [r,amount] of Object.entries(b.inventory)){refund[r]=(refund[r]||0)+amount;deposit(g.bank,r,amount);}
+ g.buildings.splice(i,1);
+ recordLedger(g,{kind:"salvage",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund});
+ pushLog(g,d.name+" salvaged. Recoverable inventory returned.");
+ return {ok:true,refund};
 }
 export function roadLine(g,a,b){
  if(!inside(a.x,a.z)||!inside(b.x,b.z))return {ok:false,reason:"Road end is outside the surveyed land"};
@@ -106,7 +120,7 @@ export function roadLine(g,a,b){
  if(points.length>30)return {ok:false,reason:"Route too long; build it in segments"};
  const existing=new Set(g.roads);
  const added=points.filter(p=>!existing.has(key(p.x,p.z)));
- if(added.some(p=>g.buildings.some(q=>q.x===p.x&&q.z===p.z)))return {ok:false,reason:"Road intersects a machine; route around it"};
+ if(added.some(p=>buildingAt(g,p.x,p.z)))return {ok:false,reason:"Road intersects a machine; route around it"};
  const cost={credits:4*added.length,stone:3*added.length};
  if(!fits(g.bank,cost))return {ok:false,reason:"Need "+cost.stone+" aggregate and "+cost.credits+" credits"};
  spend(g.bank,cost);for(const p of added)g.roads.push(key(p.x,p.z));
