@@ -228,7 +228,7 @@ try {
     for (let z = 0; z < WORLD_SIZE; z++) for (let x = 0; x < WORLD_SIZE; x++) {
       if (!checkSite(fixture, "salvager", x, z, 0).ok) continue;
       const pix = pixelOf(cam, cellGround({x, z}), box);
-      const offsets = jitter ? Array.from({length: 41}, (_, i) => i - 20) : [0];
+      const offsets = jitter ? Array.from({length: 81}, (_, i) => i - 40) : [0];
       for (const ox of offsets) {
         const css = {x: Math.round(box.left + pix.x + ox), y: Math.round(box.top + pix.y)};
         if (css.x < 2 || css.y < 2 || css.x >= vp.width - 2 || css.y >= vp.height - 2) continue;
@@ -588,7 +588,7 @@ try {
       for (let z = 0; z < WORLD_SIZE; z++) for (let x = 0; x < WORLD_SIZE; x++) {
         if (!checkSite(fixture, "salvager", x, z, 0).ok) continue;
         const pix = pixelOf(cam, cellGround({x, z}), box);
-        const offsets = jitter ? Array.from({length: 41}, (_, i) => i - 20) : [0];
+        const offsets = jitter ? Array.from({length: 81}, (_, i) => i - 40) : [0];
         for (const ox of offsets) {
           const css = {x: Math.round(box.left + pix.x + ox), y: Math.round(box.top + pix.y)};
           if (css.y > box.top + box.height * 0.42 || css.x < 4 || css.x >= vp.width - 14 || css.y < 4) continue;
