@@ -32,7 +32,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .resource__spark{width:7px;height:7px;display:inline-block;flex:none;transform:rotate(45deg);box-shadow:0 0 10px currentColor}
 .resource__name{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em}
 .resource strong{font-size:13px;font-variant-numeric:tabular-nums}
-.resource-more{color:var(--amber);font-size:11px;font-weight:800}
+.resource-more{min-width:44px;justify-content:center;color:var(--amber);font-size:11px;font-weight:800}
 .session-info{min-width:120px;display:flex;align-items:center;justify-content:flex-end;gap:7px;color:#c4d1cb;font-weight:700;letter-spacing:.07em;font-size:10px;padding-top:12px}
 .session-info small{display:block;font-size:9px;color:#879a9e}
 .status-dot{width:6px;height:6px;display:inline-block;flex:none;background:#78c7a9;border-radius:50%;box-shadow:0 0 0 3px #78c7a933}
@@ -234,7 +234,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
   .brand-badge {font-size:8px}
   .resources-strip {
     grid-row:2;grid-column:1;width:100%;max-width:100%;
-    display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 40px;gap:4px;
+    display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) 44px;gap:4px;
     justify-content:stretch;overflow:visible;
   }
   /* UX-01 (#359): all six headline resources stay visible on phone — stacked

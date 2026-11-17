@@ -127,9 +127,9 @@ try{
     const r=el.getBoundingClientRect();return {id:el.dataset.resource,state:el.dataset.state,width:Math.round(r.width),height:Math.round(r.height),visible:r.width>0&&r.height>0};
    }));
    if(chips.length!==6||chips.some(c=>!c.visible))throw Error("Strip must show all 6 headline resources: "+JSON.stringify(chips));
-   if(chips.some(c=>c.height<44))throw Error("Strip touch targets below 44px: "+JSON.stringify(chips));
+   if(chips.some(c=>c.height<44||c.width<44))throw Error("Strip touch targets below 44px: "+JSON.stringify(chips));
    const moreBox=await page.locator(".resource-more").boundingBox();
-   if(!moreBox||moreBox.height<44)throw Error("Ledger opener below 44px: "+JSON.stringify(moreBox));
+   if(!moreBox||moreBox.height<44||moreBox.width<44)throw Error("Ledger opener below 44px: "+JSON.stringify(moreBox));
    view.proof.strip={chips,moreTarget:{width:Math.round(moreBox.width),height:Math.round(moreBox.height)}};
 
    // 2) Critical shortage states + alert (desktop) mirror the starving furnace.
