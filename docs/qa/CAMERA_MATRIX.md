@@ -32,4 +32,4 @@ Real right-drag orbits + wheel zooms reach 6 poses verified from rendered-camera
 Evidence artifacts (at capture source SHA): `artifacts/v2-preview/camera-gesture-trace.json`, `camera-matrix-q1-minpitch-minzoom.png`, `camera-matrix-q2-maxpitch-maxzoom.png`, `camera-matrix-q4-maxpitch-minzoom.png`, plus `report.json` (cameraMatrix section) and the three viewport world screenshots. CI uploads these on every PR capture run.
 
 ## Re-run recipe
-`npm test` (21 tests: 16 camera incl. 9 matrix + 5 world/sim) then `npm run build && node scripts/capture-v2.mjs`. Numeric capture is a floor, not G1 visual acceptance; sponsor still reviews real screenshots/motion per docs/qa/QUALITY_GATES.md.
+`npm test` (43 tests on main e8240a87: 7 camera + 9 camera matrix + 9 grid occupancy + 5 simulation + 13 verify-live) then `npm run build && node scripts/capture-v2.mjs`. Numeric capture is a floor, not G1 visual acceptance; sponsor still reviews real screenshots/motion per docs/qa/QUALITY_GATES.md.
