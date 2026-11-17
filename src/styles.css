@@ -166,10 +166,14 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
 .intro-prompt strong{display:block;font:800 32px/1.06 "Barlow Condensed";letter-spacing:.03em;margin:12px 0}
 .intro-prompt p{font-size:12px;line-height:1.6;color:#c8d3c9}
 .intro-prompt button{width:100%;display:flex;align-items:center;justify-content:space-between;margin-top:16px;border:1px solid #e4af7d;background:#986940;color:#fff4df;padding:12px 16px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-.toast{position:absolute;right:24px;bottom:145px;z-index:11;background:#183037ed;border:1px solid #ad936c;border-left:3px solid var(--amber);padding:12px 12px;max-width:min(320px,85vw);display:flex;gap:10px;align-items:center;box-shadow:0 8px 30px #030a0f8a}
+/* #548: the NOTICE toast body must never intercept world-canvas contacts —
+   pointer-events:none lets drags/pinches pass straight through to the camera,
+   while the dismiss button re-enables pointer-events:auto (44px target kept
+   below). role="status" semantics are unchanged. */
+.toast{position:absolute;right:24px;bottom:145px;z-index:11;background:#183037ed;border:1px solid #ad936c;border-left:3px solid var(--amber);padding:12px 12px;max-width:min(320px,85vw);display:flex;gap:10px;align-items:center;box-shadow:0 8px 30px #030a0f8a;pointer-events:none}
 .toast b{font-size:9px;color:var(--amber);letter-spacing:.09em}
 .toast span{font-size:11px;line-height:1.3}
-.toast button{color:#d7e6dc;background:none;border:0;font-size:18px}
+.toast button{color:#d7e6dc;background:none;border:0;font-size:18px;pointer-events:auto}
 @media(max-width:1150px){
  .resources-strip{max-width:54vw;justify-content:flex-end;gap:6px}
  /* UX-01 (#359): shortages must never be hidden — compact chips shrink
@@ -560,4 +564,100 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
  .app-shell:has(.panel-host:not(.panel-host--collapsed)) .toast{bottom:calc(98px + var(--sab) + max(120px,min(38dvh,100dvh - 288px)))}
  /* Keep the small-landscape toast-yield rule from widening the narrow budget. */
  .app-shell:has(.toast):has(.panel-host:not(.panel-host--collapsed)) .panel-host{max-height:max(120px,min(38dvh,calc(100dvh - 288px - var(--sat) - var(--sab))))}
+}
+
+/* ---- UX-06 (#364): actionable in-world alarm rail ----
+   Severity is NEVER colour alone: each chip pairs a distinct icon with a
+   shaped icon frame (critical = squared double-ring, warning = pill, ok =
+   circle), an explicit CRITICAL / WARNING word and a title. The expanded
+   detail spells out problem + remedy with >=44px action targets. The rail
+   lives inside the left HUD rail (camera-neutral, CAM-05); when a detail is
+   open the rail lifts above the sheet so the remedy is never buried. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Desktop: the rail scrolls inside the left HUD column; the 490px reserve
+   keeps its bottom above the footline (rail top ~458 at 1440x900). */
+.alarm-rail{display:flex;flex-direction:column;gap:6px;max-width:272px;max-height:calc(100dvh - 490px);overflow-y:auto;scrollbar-width:thin;pointer-events:auto}
+.alarm-chip{display:flex;align-items:center;gap:9px;min-height:44px;width:100%;text-align:left;border:1px solid #44585b;border-left:3px solid var(--muted);background:#102129d9;border-radius:5px;padding:7px 10px;color:var(--text);backdrop-filter:blur(8px)}
+.alarm-chip__icon{font-size:15px;line-height:1;flex:none;width:24px;height:24px;display:grid;place-items:center;border:1px solid currentColor;border-radius:4px}
+.alarm-chip--critical{border-left-color:var(--danger);background:#3a2622d9}
+.alarm-chip--critical .alarm-chip__icon{color:var(--danger);border-radius:2px;box-shadow:0 0 0 2px #f1917d33}
+.alarm-chip--warning{border-left-color:var(--amber);background:#33291fd9}
+.alarm-chip--warning .alarm-chip__icon{color:var(--amber-bright);border-radius:12px}
+.alarm-chip--ok{border-left-color:var(--mint);background:#12262bd9}
+.alarm-chip--ok .alarm-chip__icon{color:var(--mint);border-radius:50%}
+.alarm-chip__text{display:flex;flex-direction:column;gap:2px;min-width:0}
+.alarm-chip__text strong{font:700 11px "Barlow Condensed";letter-spacing:.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alarm-chip__text em{font-style:normal;font-size:8px;font-weight:800;letter-spacing:.14em;color:var(--muted)}
+.alarm-chip--critical .alarm-chip__text em{color:var(--danger)}
+.alarm-chip--warning .alarm-chip__text em{color:var(--amber-bright)}
+.alarm-chip--ok .alarm-chip__text em{color:var(--mint)}
+.alarm-chip:hover{border-color:#b28b65}
+.alarm-chip.is-active{border-color:var(--amber);box-shadow:0 0 0 1px #eeac7155}
+.alarm-summary{display:flex;align-items:center;gap:8px;min-height:44px;width:100%;text-align:left;border:1px solid #eeac7188;border-left:3px solid var(--amber);background:#33291fd9;border-radius:5px;padding:7px 10px;color:var(--amber-bright);font:800 11px "Barlow Condensed";letter-spacing:.08em;backdrop-filter:blur(8px)}
+.alarm-summary em{font-style:normal;margin-left:auto;font-size:8px;letter-spacing:.14em;color:var(--muted)}
+.alarm-summary:hover{border-color:var(--amber)}
+.alarm-detail{border:1px solid #596464;border-left:3px solid var(--amber);background:#16282af2;border-radius:6px;padding:11px;box-shadow:0 14px 44px #04080ca8;animation:rw-alarm-in .16s ease-out}
+.alarm-detail[data-severity="critical"]{border-left-color:var(--danger)}
+.left-rail:has(.alarm-detail){z-index:9}
+.alarm-detail__head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.alarm-detail__title{display:flex;gap:7px;align-items:center;font:700 13px "Barlow Condensed";letter-spacing:.05em;margin-bottom:6px}
+.alarm-detail .panel-sub{margin:0 0 8px}
+.alarm-detail__remedy{font-size:11px;line-height:1.6;color:#d7e2da;margin:0 0 10px;border-top:1px dashed #44585b;padding-top:8px}
+.alarm-detail__remedy .eyebrow{display:block;margin-bottom:3px}
+/* Sticky remedy actions: inside the nearest scroll ancestor (the desktop
+   rail, or the detail itself on phone) the actions stay reachable even when
+   the problem/remedy copy overflows — the reviewer's unreachable-remedy
+   blocker (#364) is a layout contract, not a scroll suggestion. */
+.alarm-detail__actions{display:flex;flex-direction:column;gap:7px;position:sticky;bottom:0;background:#16282af2;padding:8px 0 2px}
+.alarm-detail__actions .focus-button{margin-top:0}
+.alarm-detail__actions .keep-button{min-height:44px;width:100%}
+.alarm-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:var(--muted)}
+.alarm-controls label{display:flex;align-items:center;gap:6px;min-height:44px;cursor:pointer}
+.alarm-controls input{width:16px;height:16px;accent-color:var(--amber)}
+.alarm-collapse{border:1px solid #44585b;background:transparent;color:var(--muted);border-radius:4px;font-size:9px;font-weight:800;letter-spacing:.08em;padding:6px 9px;min-height:44px}
+.alarm-collapse:hover{color:var(--amber);border-color:#b28b65}
+.inspector-alarms{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.alarm-line{flex-wrap:wrap;color:var(--amber-bright);border-left-color:var(--amber);background:#eeac710f}
+.alarm-line--critical{color:var(--danger);border-left-color:var(--danger);background:#f1917d0f}
+.alarm-line em{display:block;font-style:normal;color:#c9d6ce;margin-top:3px}
+.alarm-fix-button{margin-left:auto;flex:none;border:1px solid #c3935e;background:#6a4e35;color:#fff0d6;border-radius:4px;font-size:10px;font-weight:800;letter-spacing:.05em;padding:8px 10px;min-height:44px}
+.alarm-fix-button:hover{background:#7d5c3e}
+@keyframes rw-alarm-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* #364 phone blocker: the vertical rail used to own the canvas centre
+   (elementFromPoint(195,422) hit a chip; drag-pan delta 0). On phones the
+   rail becomes a 44px-tall horizontally scrollable strip pinned FIRST in
+   the left rail (order:-1, y ~112..158 at any portrait height), so the
+   centre contact always reaches the world canvas. Every alarm AND the
+   settings controls stay actionable in the strip — nothing is hidden. */
+@media(max-width:770px){
+ .alarm-rail{order:-1;flex-direction:row;flex-wrap:nowrap;align-items:stretch;gap:6px;max-width:calc(100vw - 20px - var(--sal) - var(--sar));max-height:none;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;overscroll-behavior-x:contain;scrollbar-width:none}
+ .alarm-rail::-webkit-scrollbar{display:none}
+ .alarm-chip{flex:0 0 auto;width:auto;max-width:200px}
+ .alarm-summary{flex:0 0 auto;width:auto}
+ .alarm-controls{flex:0 0 auto;flex-direction:row;gap:6px}
+ .alarm-controls label{border:1px solid #44585b;background:#102129d9;border-radius:5px;padding:0 10px;white-space:nowrap}
+ /* The expanded detail leaves the strip flow and docks as a bottom sheet
+   ABOVE the tool dock (bottom 96px) with its top strictly below the canvas
+   centre: max-height max(170,min(320,100dvh-524-sat-sab)) puts the top at
+   >=428 on a 390x844 phone (centre 422) at every portrait height >600.
+   position:fixed escapes the strip's overflow clipping — no ancestor of
+   .alarm-rail establishes a containing block (no transform/filter). */
+ .alarm-detail{position:fixed;left:calc(8px + var(--sal));right:calc(8px + var(--sar));bottom:calc(96px + var(--sab));max-height:max(170px,min(320px,calc(100dvh - 524px - var(--sat) - var(--sab))));overflow-y:auto;overscroll-behavior:contain;animation:none}
+ .left-rail:has(.alarm-detail){z-index:12}
+}
+/* Short viewports (phone landscape / short desktop): the bottom sheet would
+   cover the centre, so the detail docks as a RIGHT-side sheet instead.
+   width <=45vw keeps the centre column (x=50vw) on the canvas. This block
+   intentionally follows the phone block so it wins in small landscape. */
+@media(max-height:600px){
+ .alarm-rail{max-height:calc(100dvh - 180px)}
+ .alarm-detail{position:fixed;left:auto;right:calc(8px + var(--sar));top:calc(84px + var(--sat));bottom:calc(96px + var(--sab));width:min(320px,45vw);max-height:none;overflow-y:auto;overscroll-behavior:contain;animation:none}
+ .left-rail:has(.alarm-detail){z-index:12}
+}
+@media(max-width:359px){
+ .alarm-rail{max-width:100%}
+ .alarm-chip__text strong{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .alarm-detail{animation:none}
 }

@@ -1,0 +1,463 @@
+{
+ "version": 1,
+ "issue": 364,
+ "bundled_issue": 548,
+ "pr": 550,
+ "branch": "rw/v2-ux-06-actionable-alarms",
+ "build": "production-preview",
+ "source_sha": "ff53da030f34a585e723300bf6ef63e5060aa290",
+ "rebase_base": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+ "started": "2026-11-17T14:23:11.178Z",
+ "verdict": "PASS_NUMERIC_ONLY",
+ "phone_emulated": true,
+ "preview_only": true,
+ "views": [
+  {
+   "name": "desktop",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "deviceScaleFactor": 1,
+   "isMobile": false,
+   "hasTouch": false,
+   "screenshots": [
+    "desktop-rail-only.png",
+    "desktop-detail-open.png",
+    "desktop-remedy-applied.png",
+    "desktop-after-close.png",
+    "desktop-toast-straddle.png",
+    "desktop-empty-nominal.png"
+   ],
+   "proof": {
+    "seeded_ids": [
+     "power-brownout",
+     "road-1",
+     "road-2",
+     "road-4",
+     "road-5",
+     "road-6"
+    ],
+    "railBox": {
+     "x": 33.109375,
+     "y": 458,
+     "width": 192.84375,
+     "height": 344
+    },
+    "railOnly": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": 0,
+      "after_x": -6.5586715936143545,
+      "delta_x": -6.558672,
+      "yaw_unchanged": true
+     }
+    },
+    "detailBox": {
+     "x": 33.109375,
+     "y": 758,
+     "width": 272,
+     "height": 285.359375
+    },
+    "reducedMotion_animation": "none",
+    "detailOpen": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": -6.5586715936143545,
+      "after_x": -13.117343187228709,
+      "delta_x": -6.558672,
+      "yaw_unchanged": true
+     }
+    },
+    "actionBox": {
+     "x": 47.109375,
+     "y": 822,
+     "width": 246,
+     "height": 44
+    },
+    "escape_focus_return": "alarm-chip-road-2",
+    "remedy_applied": {
+     "panelProbe": {
+      "trigger": "tool:road",
+      "mode": "road",
+      "selectedId": null
+     },
+     "toast": "Lay asphalt within 3 cells of the Freight Depot bay at 13,9"
+    },
+    "afterClose": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": -13.117343187228709,
+      "after_x": -19.67601478084306,
+      "delta_x": -6.558672,
+      "yaw_unchanged": true
+     }
+    },
+    "toast": {
+     "toastBox": {
+      "x": 1096,
+      "y": 685,
+      "width": 320,
+      "height": 70
+     },
+     "btnBox": {
+      "x": 1359,
+      "y": 698,
+      "width": 44,
+      "height": 44
+     },
+     "bodyPoint": {
+      "x": 1126,
+      "y": 720
+     },
+     "hitBody": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "hitBtn": {
+      "tag": "BUTTON",
+      "cls": "",
+      "testid": null,
+      "isCanvas": false
+     },
+     "btnHeight": 44,
+     "straddle": {
+      "poseBefore_x": -19.67601478084306,
+      "poseAfter_x": -29.13904315459766,
+      "delta_x": -9.463028,
+      "yaw_unchanged": true,
+      "bankBefore": {
+       "credits": 1800,
+       "scrap": 220,
+       "iron": 90,
+       "copper": 45,
+       "stone": 220,
+       "fuel": 110,
+       "water": 90,
+       "steel": 20,
+       "alloy": 0,
+       "gears": 0,
+       "circuits": 0,
+       "data": 15,
+       "relics": 0,
+       "influence": 0,
+       "shards": 0,
+       "charters": 0,
+       "renown": 0
+      },
+      "bankAfter": {
+       "credits": 1800,
+       "scrap": 220,
+       "iron": 90,
+       "copper": 45,
+       "stone": 220,
+       "fuel": 110,
+       "water": 90,
+       "steel": 20,
+       "alloy": 0,
+       "gears": 0,
+       "circuits": 0,
+       "data": 15,
+       "relics": 0,
+       "influence": 0,
+       "shards": 0,
+       "charters": 0,
+       "renown": 0
+      },
+      "bank_unchanged": true,
+      "lastSiteOk": null,
+      "toast_still_visible": true
+     },
+     "dismiss_button_works": true
+    },
+    "empty": {
+     "text": "✓YARD NOMINALNO ALARMS",
+     "ids": []
+    },
+    "emptyCentre": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": 0,
+      "after_x": -6.5586715936143545,
+      "delta_x": -6.558672,
+      "yaw_unchanged": true
+     }
+    }
+   }
+  },
+  {
+   "name": "phone",
+   "viewport": {
+    "width": 390,
+    "height": 844
+   },
+   "deviceScaleFactor": 2,
+   "isMobile": true,
+   "hasTouch": true,
+   "screenshots": [
+    "phone-rail-only.png",
+    "phone-detail-open.png",
+    "phone-remedy-applied.png",
+    "phone-after-close.png",
+    "phone-toast-straddle.png",
+    "phone-empty-nominal.png",
+    "phone-alarm-processing.png",
+    "phone-alarm-cleared.png"
+   ],
+   "proof": {
+    "seeded_ids": [
+     "power-brownout",
+     "road-1",
+     "road-2",
+     "road-4",
+     "road-5",
+     "road-6"
+    ],
+    "railBox": {
+     "x": 10,
+     "y": 112,
+     "width": 370,
+     "height": 44
+    },
+    "railOnly": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": 0,
+      "after_x": -8.042920733875421,
+      "delta_x": -8.042921,
+      "yaw_unchanged": true
+     }
+    },
+    "detailBox": {
+     "x": 8,
+     "y": 480.234375,
+     "width": 374,
+     "height": 267.765625
+    },
+    "reducedMotion_animation": "none",
+    "detailOpen": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": -8.042920733875421,
+      "after_x": -16.085841467750843,
+      "delta_x": -8.042921,
+      "yaw_unchanged": true
+     }
+    },
+    "actionBox": {
+     "x": 22,
+     "y": 690,
+     "width": 348,
+     "height": 44
+    },
+    "escape_focus_return": "alarm-chip-road-2",
+    "remedy_applied": {
+     "panelProbe": {
+      "trigger": "tool:road",
+      "mode": "road",
+      "selectedId": null
+     },
+     "toast": "Lay asphalt within 3 cells of the Freight Depot bay at 13,9"
+    },
+    "afterClose": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": -16.085841467750843,
+      "after_x": -24.128762201626266,
+      "delta_x": -8.042921,
+      "yaw_unchanged": true
+     }
+    },
+    "toast": {
+     "toastBox": {
+      "x": 12.671875,
+      "y": 628,
+      "width": 367.328125,
+      "height": 58
+     },
+     "btnBox": {
+      "x": 327,
+      "y": 635,
+      "width": 44,
+      "height": 44
+     },
+     "bodyPoint": {
+      "x": 42.671875,
+      "y": 657
+     },
+     "hitBody": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "hitBtn": {
+      "tag": "BUTTON",
+      "cls": "",
+      "testid": null,
+      "isCanvas": false
+     },
+     "btnHeight": 44,
+     "straddle": {
+      "poseBefore_x": -24.128762201626266,
+      "poseAfter_x": -35.733305290294524,
+      "delta_x": -11.604543,
+      "yaw_unchanged": true,
+      "bankBefore": {
+       "credits": 1800,
+       "scrap": 220,
+       "iron": 90,
+       "copper": 45,
+       "stone": 220,
+       "fuel": 110,
+       "water": 90,
+       "steel": 20,
+       "alloy": 0,
+       "gears": 0,
+       "circuits": 0,
+       "data": 15,
+       "relics": 0,
+       "influence": 0,
+       "shards": 0,
+       "charters": 0,
+       "renown": 0
+      },
+      "bankAfter": {
+       "credits": 1800,
+       "scrap": 220,
+       "iron": 90,
+       "copper": 45,
+       "stone": 220,
+       "fuel": 110,
+       "water": 90,
+       "steel": 20,
+       "alloy": 0,
+       "gears": 0,
+       "circuits": 0,
+       "data": 15,
+       "relics": 0,
+       "influence": 0,
+       "shards": 0,
+       "charters": 0,
+       "renown": 0
+      },
+      "bank_unchanged": true,
+      "lastSiteOk": null,
+      "toast_still_visible": true
+     },
+     "dismiss_button_works": true
+    },
+    "controls": {
+     "warningsBox": {
+      "x": 1106.84375,
+      "y": 126,
+      "width": 16,
+      "height": 16
+     },
+     "collapseBox": {
+      "x": 1191.65625,
+      "y": 112,
+      "width": 62.640625,
+      "height": 44
+     }
+    },
+    "collapsedCentre": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": -35.733305290294524,
+      "after_x": -43.776226024169944,
+      "delta_x": -8.042921,
+      "yaw_unchanged": true
+     }
+    },
+    "warnings_toggle_persisted": true,
+    "empty": {
+     "text": "✓YARD NOMINALNO ALARMS",
+     "ids": []
+    },
+    "emptyCentre": {
+     "hit": {
+      "tag": "CANVAS",
+      "cls": "world-canvas",
+      "testid": null,
+      "isCanvas": true
+     },
+     "pan": {
+      "before_x": 0,
+      "after_x": -8.042920733875421,
+      "delta_x": -8.042921,
+      "yaw_unchanged": true
+     }
+    },
+    "clearing": {
+     "processing_state": "processing",
+     "cleared_to": "✓YARD NOMINALNO ALARMS",
+     "ids_after": []
+    }
+   }
+  }
+ ],
+ "errors": [],
+ "before_reference": {
+  "reviewer_comment": 6947563902,
+  "verdict_head": "a1eaa906a475f6454d9bd96ca49cb03d2f59aba3",
+  "phone_hitCenter": "BUTTON.alarm-chip-road-2 (rail stole the centre)",
+  "phone_panRailOnly": [
+   0,
+   0
+  ],
+  "phone_panWithRailHidden": -7.504,
+  "phone_detailBottom": 886,
+  "viewport_height": 844
+ },
+ "limitations": [
+  "One headless Chromium/SwiftShader run; phone 390x844 is EMULATED (isMobile+hasTouch+dpr2), not a physical device (#268/#275 owed)",
+  "PASS_NUMERIC_ONLY: numeric hit-test/pan/conservation proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+  "Local production preview only — no hosted-deployment receipt (#333) is claimed by this capture",
+  "Toast persistence is unchanged (#548 option A: pointer-transparent body); no auto-dismiss timer was added",
+  "alarmProbe is test-gated (window.__RW_PROBES__) and registered as probe debt; production builds never write it"
+ ],
+ "finished": "2026-11-17T14:24:15.230Z"
+}

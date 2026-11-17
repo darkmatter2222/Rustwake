@@ -3,9 +3,10 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals,ROAD_REACH} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,transitionCamera,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
+import {alarmsState,alarmsForBuilding,readAlarmSettings,writeAlarmSettings} from "./alarms.js";
 import {fleetState,truckAt,followTarget,readFleetSettings,writeFleetSettings} from "./fleet.js";
 import {classifyViewport,dockBottomOffset,sheetMaxHeight,nextToolMode,readDockSettings,writeDockSettings} from "./dock.js";
 import "./styles.css";
@@ -69,7 +70,7 @@ function BuildingCard({def,g,onChoose,selected}){
   <span className={"blueprint__cost"+(afford?"":" blueprint__cost--short")}>{locked?"LOCKED":def.cost.credits+" CR"}</span>
  </button>;
 }
-function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,setBuildRot,notify,close,onSell,onResearch,onRemove,onCancel,strip,stripPrefs,onStripPrefs,ledgerFocus,setLedgerFocus}){
+function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,setBuildRot,notify,close,onSell,onResearch,onRemove,onCancel,strip,stripPrefs,onStripPrefs,ledgerFocus,setLedgerFocus,alarms}){
  const selected=g.buildings.find(b=>b.id===selectedId);
  if(mode==="build"){
   const fp=footprintDims(buildId,buildRot);
@@ -119,6 +120,16 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
       <span aria-hidden="true">{s.state==="critical"?"⚠":"◔"}</span>
       <span className="ledger-shortage__body"><strong>{s.name} · {s.state==="critical"?"CRITICAL":"DELIVERY PENDING"}</strong><small>{s.detail}</small></span>
      </button>)}</div></>}
+   {/* UX-06 (#364): storage backups mirror the alarm rail read model — the
+       depot bank is uncapped in the simulation, so the honest storage alarm
+       is a machine output bay holding a full truck load with no pickup job. */}
+   {alarms?.kind==="ready"&&alarms.alarms.some(a=>a.kind==="storage")&&<>
+    <h3 className="panel-section">Storage backups</h3>
+    <div className="ledger-shortages" data-testid="ledger-storage">{alarms.alarms.filter(a=>a.kind==="storage").map(a=>
+     <div key={a.id} className="ledger-shortage ledger-shortage--warning" data-testid={"storage-"+a.target.buildingId} data-state={a.state}>
+      <span aria-hidden="true">{a.icon}</span>
+      <span className="ledger-shortage__body"><strong>{a.title} · WARNING</strong><small>{a.problem} {a.remedy}</small></span>
+     </div>)}</div></>}
    {focus&&<div className="ledger-detail" data-testid="ledger-detail" data-resource={focus.id}>
     <div className="selected-hero"><span className="selected-hero__mark" style={{background:focus.color}}>▤</span><div><strong>{focus.name.toUpperCase()}</strong>
      <span className={"status-chip status-chip--"+tone} data-testid="ledger-state"><i aria-hidden="true"/>{stateLabel}</span></div></div>
@@ -158,7 +169,7 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
 /* UX-04 (#362): the inspector is a pure read model over the authoritative
    simulation (src/inspector.js). It never spends, forks or fabricates economy
    state; refund previews are unit-tested against the real transactions. */
-function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmId,setConfirmId,openBtnRef,confirmBtnRef,obscured,onFocus,openBuild}){
+function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmId,setConfirmId,openBtnRef,confirmBtnRef,obscured,onFocus,openBuild,alarms,onAlarmAction}){
  if(selectedId==null)return <Card title="Inspector" eyebrow="SELECTION / EMPTY" onClose={onClose} className="inspector-panel">
   <p className="panel-sub" data-testid="inspector-empty">No machine selected. Tap any structure in the yard to read its status, recipe, cargo, bay connectivity and recovery options.</p>
   <button className="rotate-button" onClick={openBuild}>Open construct catalog</button>
@@ -193,6 +204,24 @@ function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmI
    <span aria-hidden="true">{bay.connected?"▣":"⚠"}</span>
    <span>{bay.connected?"Loading bay reaches a road in "+bay.reach+" cell"+(bay.reach===1?"":"s"):"No road frontage — lay asphalt within 3 cells of the loading bay"}</span>
   </div>
+  {/* UX-06 (#364): contextual alarm states for THIS machine — the same pure
+      read model the rail renders, with problem + remedy + a real action.
+      Powerless consumers also surface the grid brownout contextually. */}
+  {(()=>{
+   const list=alarmsForBuilding(alarms,selectedId);
+   const powerAlarm=alarms?.kind==="ready"&&def.power>0&&s.building.remaining<=0?alarms.alarms.find(a=>a.kind==="power"):null;
+   const all=powerAlarm&&!list.some(a=>a.id===powerAlarm.id)?[powerAlarm,...list]:list;
+   return all.length>0&&<>
+    <h3 className="panel-section">Active alarms</h3>
+    <div className="inspector-alarms" data-testid="inspector-alarms">{all.map(a=>
+     <div key={a.id} className={"bay-line alarm-line alarm-line--"+a.severity} data-testid={"inspector-alarm-"+a.id} data-severity={a.severity} data-state={a.state}>
+      <span aria-hidden="true">{a.icon}</span>
+      <span><strong>{a.severityLabel} · {a.title}</strong> — {a.problem} <em>{a.remedy}</em></span>
+      <button type="button" className="alarm-fix-button" data-testid={"inspector-alarm-action-"+a.id} onClick={()=>onAlarmAction(a)}>{a.action.label}</button>
+     </div>)}
+    </div></>;
+  })()}
+  {def.id==="depot"&&<p className="panel-sub" data-testid="inspector-depot-capacity">Depot storage is uncapped in this build — the simulation enforces no depot limit. Machine bays raise a storage alarm when output waits for a truck.</p>}
   {construction.active&&<>
    <h3 className="panel-section">Construction stage</h3>
    <Meter value={construction.total-construction.remaining} max={construction.total} color="var(--amber)"/>
@@ -322,6 +351,78 @@ function FleetPanel({g,focusId,setFocusId,followId,onFollow,onStopFollow,prefs,o
   <div className="panel-footnote">Every value mirrors the simulation's freight ledger live. Canceling returns the reserved or onboard units to their source exactly once — never both. Priority: maintain processor inputs, then haul finished products to your depot.</div>
  </Card>;
 }
+/* UX-06 (#364): actionable in-world alarms. Compact severity chips + one
+   expanded detail at a time, derived from the pure src/alarms.js read model
+   over the authoritative simulation. Colour is NEVER the only cue: every
+   chip pairs an icon with an explicit CRITICAL / WARNING word and a title;
+   the detail spells out the problem AND the remedy with a real action.
+   CAM-05 (#341): chips appear, expand and act WITHOUT moving the camera or
+   dropping the selection — actions reuse the camera-neutral choose() /
+   openLedger() paths; no transitionCamera call lives in this component. */
+function AlarmChip({alarm,expanded,onToggle}){
+ return <button type="button"
+  className={"alarm-chip alarm-chip--"+alarm.severity+(expanded?" is-active":"")}
+  data-testid={"alarm-chip-"+alarm.id} data-kind={alarm.kind} data-severity={alarm.severity} data-state={alarm.state}
+  aria-pressed={expanded} aria-expanded={expanded} aria-controls={expanded?"alarm-detail":undefined}
+  onClick={()=>onToggle(alarm.id)}
+  aria-label={alarm.severityLabel+": "+alarm.title+". "+alarm.problem+" Remedy: "+alarm.remedy}>
+  <span className="alarm-chip__icon" aria-hidden="true">{alarm.icon}</span>
+  <span className="alarm-chip__text"><strong>{alarm.title}</strong><em>{alarm.severityLabel}</em></span>
+ </button>;
+}
+function AlarmDetail({alarm,onAction,onClose}){
+ return <div className="alarm-detail" id="alarm-detail" data-testid="alarm-detail"
+  data-kind={alarm.kind} data-severity={alarm.severity} data-state={alarm.state}
+  role="group" aria-label={alarm.title+" alarm detail"}>
+  <div className="alarm-detail__head">
+   <span className={"status-chip status-chip--"+(alarm.severity==="critical"?"danger":"amber")}><i aria-hidden="true"/>{alarm.severityLabel}</span>
+   <button type="button" className="plain-icon" data-testid="alarm-detail-close" aria-label="Close alarm detail" onClick={onClose}>×</button>
+  </div>
+  <strong className="alarm-detail__title"><span aria-hidden="true">{alarm.icon}</span> {alarm.title}</strong>
+  <p className="panel-sub" data-testid="alarm-problem">{alarm.problem}</p>
+  <p className="alarm-detail__remedy" data-testid="alarm-remedy"><span className="eyebrow">REMEDY</span>{alarm.remedy}</p>
+  {alarm.detail&&<p className="panel-sub" data-testid="alarm-processing">{alarm.detail}</p>}
+  <div className="alarm-detail__actions">
+   <button type="button" className="focus-button" data-testid="alarm-action" onClick={()=>onAction(alarm)}>{alarm.action.label}</button>
+   {alarm.altAction&&<button type="button" className="keep-button" data-testid="alarm-alt-action" onClick={()=>onAction(alarm,alarm.altAction)}>{alarm.altAction.label}</button>}
+  </div>
+ </div>;
+}
+function AlarmRail({state,prefs,onPrefs,expandedId,onToggle,onAction,onCloseDetail}){
+ if(state.kind==="loading")return <div className="alarm-rail" aria-busy="true" data-testid="alarms-loading">
+  <span className="alarm-chip alarm-chip--ok"><span className="spinner" aria-hidden="true"/><span className="alarm-chip__text"><strong>READING YARD…</strong><em>LOADING</em></span></span>
+ </div>;
+ if(state.kind==="error")return <div className="alarm-rail" role="alert" data-testid="alarms-error">
+  <span className="alarm-chip alarm-chip--critical"><span className="alarm-chip__icon" aria-hidden="true">⚠</span><span className="alarm-chip__text"><strong>ALARMS PAUSED</strong><em>{state.reason}</em></span></span>
+ </div>;
+ const visible=state.alarms.filter(a=>a.severity==="critical"||prefs.showWarnings);
+ const expanded=visible.find(a=>a.id===expandedId)||null;
+ const live=visible.length
+  ?visible.length+" yard alarm"+(visible.length===1?"":"s")+": "+visible.map(a=>a.severityLabel+" "+a.title).join("; ")
+  :"All yard systems nominal";
+ return <div className="alarm-rail" data-testid="alarm-rail">
+  <span className="sr-only" role="status" aria-live="polite" data-testid="alarm-live">{live}</span>
+  {!prefs.railOpen
+   ?(visible.length>0&&<button type="button" className="alarm-summary" data-testid="alarm-summary" aria-expanded={false}
+     onClick={()=>onPrefs({railOpen:true})}
+     aria-label={visible.length+" yard alarm"+(visible.length===1?"":"s")+" hidden — show alarm rail"}>
+     <span aria-hidden="true">{visible.some(a=>a.severity==="critical")?"⚠":"◔"}</span>
+     {visible.length} ALARM{visible.length===1?"":"S"}<em>show</em></button>)
+   :<>
+    {visible.length===0&&<span className="alarm-chip alarm-chip--ok" data-testid="alarms-empty">
+     <span className="alarm-chip__icon" aria-hidden="true">✓</span>
+     <span className="alarm-chip__text"><strong>YARD NOMINAL</strong><em>NO ALARMS</em></span></span>}
+    {visible.map(a=><AlarmChip key={a.id} alarm={a} expanded={expanded?.id===a.id} onToggle={onToggle}/>)}
+    {expanded&&<AlarmDetail alarm={expanded} onAction={onAction} onClose={onCloseDetail}/>}
+    {state.alarms.length>0&&<div className="alarm-controls">
+     <label><input type="checkbox" checked={prefs.showWarnings} data-testid="alarm-setting-warnings"
+      onChange={e=>onPrefs({showWarnings:e.target.checked})}/> Warnings</label>
+     <button type="button" className="alarm-collapse" data-testid="alarm-collapse" aria-expanded={true}
+      onClick={()=>onPrefs({railOpen:false})}>Hide rail</button>
+    </div>}
+   </>}
+ </div>;
+}
 export default function App(){
  const sceneHost=useRef(null),worldRef=useRef(null);
  const gameRef=useRef(null);
@@ -353,6 +454,13 @@ export default function App(){
  const [fleetPrefs,setFleetPrefs]=useState(()=>readFleetSettings(typeof window!=="undefined"?window.localStorage:null));
  const fleetRef=useRef({followId:null,followCam:fleetPrefs.followCam});
  useEffect(()=>{fleetRef.current={followId,followCam:fleetPrefs.followCam};},[followId,fleetPrefs.followCam]);
+ // UX-06 (#364): persisted alarm rail prefs under their OWN storage key
+ // (alarms.js sanitizer) + the single expanded alarm detail. UI-only state:
+ // expanding/acting on an alarm never touches the camera ref or selection.
+ const [alarmPrefs,setAlarmPrefs]=useState(()=>readAlarmSettings(typeof window!=="undefined"?window.localStorage:null));
+ const [expandedAlarmId,setExpandedAlarmId]=useState(null);
+ const expandedAlarmRef=useRef(null);
+ useEffect(()=>{expandedAlarmRef.current=expandedAlarmId;},[expandedAlarmId]);
  const [compact,setCompact]=useState(()=>typeof window!=="undefined"&&window.matchMedia("(max-width:770px),(max-height:600px)").matches);
  const sheetCollapsed=dockPrefs.sheetCollapsed;
  const [confirmId,setConfirmId]=useState(null);
@@ -385,6 +493,28 @@ export default function App(){
  const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
  const onDockPrefs=useCallback(patch=>{setDockPrefs(writeDockSettings(window.localStorage,patch));},[]);
  const onFleetPrefs=useCallback(patch=>{setFleetPrefs(writeFleetSettings(window.localStorage,patch));},[]);
+ const onAlarmPrefs=useCallback(patch=>{setAlarmPrefs(writeAlarmSettings(window.localStorage,patch));},[]);
+ const onToggleAlarm=useCallback(id=>setExpandedAlarmId(cur=>cur===id?null:id),[]);
+ const onCloseAlarmDetail=useCallback(()=>setExpandedAlarmId(null),[]);
+ /* UX-06 (#364): alarm remedies route through the SAME camera-neutral tool
+    paths as the dock (choose / openLedger). No transitionCamera, no selection
+    change — CAM-05 invariants hold for every alarm interaction. */
+ const onAlarmAction=useCallback((alarm,alt)=>{
+  const action=alt||alarm.action;
+  if(action.tool==="build"){
+   choose("build");
+   if(action.blueprint&&BLUEPRINTS[action.blueprint])setBuildId(action.blueprint);
+   notify("Construct a "+(BLUEPRINTS[action.blueprint]?.name||"machine")+" — tap a free pad to place it");
+  }else if(action.tool==="road"){
+   choose("road");
+   notify(alarm.target?.name
+    ?"Lay asphalt within "+ROAD_REACH+" cells of the "+alarm.target.name+" bay at "+alarm.target.x+","+alarm.target.z
+    :"Lay asphalt to reconnect the route — tap a start cell, then the destination");
+  }else if(action.tool==="fleet")choose("fleet");
+  else if(action.tool==="market")choose("market");
+  else openLedger(action.resource||null);
+  setExpandedAlarmId(null);
+ },[choose,openLedger,notify]);
  /* Follow camera reframes ONLY through the public world.setView/applyCamera
     path (#307): followTarget is a pure pinGroundToPixel target move — yaw,
     elevation and zoom are preserved; world.js/camera.js are never edited. */
@@ -571,6 +701,15 @@ export default function App(){
        progress:v.job.progress,routeLen:v.job.route.length,toSourceLen:v.job.toSource.length,
        toDestLen:v.job.toDest.length,sourceId:v.job.sourceId,destId:v.job.destId}:null,
       cargo:v.cargo?{amount:v.cargo.amount,resource:v.cargo.resource}:null}))});
+    // UX-06 (#364) observability stamp: the SAME snapshot the alarm rail
+    // renders, so captures prove chip ids/counts equal the pure read model
+    // over the sim. Test-gated behind window.__RW_PROBES__ (wiring harness
+    // + capture script opt in) so production never grows the debug-probe
+    // family; registered in the probe debt ledger. Read-only, never mutates.
+    if(window.__RW_PROBES__){
+     const al=alarmsState(s);
+     document.body.dataset.alarmProbe=JSON.stringify({kind:al.kind,ids:(al.alarms||[]).map(a=>a.id),counts:al.counts||null,power:al.power||null});
+    }
     updatePlacement(false);uiLast=now;
    }
    if(now-saveLast>4200){persist(gameRef.current);saveLast=now;}
@@ -624,6 +763,15 @@ export default function App(){
    if(e.key==="q"||e.key==="Q")rotate(-24,0);
    if(e.key==="e"||e.key==="E")rotate(24,0);
    if(e.key==="Home"||e.key==="f"||e.key==="F")resetCam();
+   // UX-06 (#364): an expanded alarm detail is the topmost transient layer —
+   // close it and return focus to its chip; camera and selection untouched.
+   // A separate guard BEFORE the CAM-05 Escape block keeps that block's source
+   // contract (cam05Retention) byte-identical.
+   if(e.key==="Escape"&&expandedAlarmRef.current!=null){
+    const id=expandedAlarmRef.current;setExpandedAlarmId(null);
+    requestAnimationFrame(()=>document.querySelector('[data-testid="alarm-chip-'+id+'"]')?.focus?.());
+    return;
+   }
    if(e.key==="Escape"){
     // Topmost layer first: an open dismantle confirmation closes before selection.
     if(confirmRef.current!=null){setConfirmId(null);requestAnimationFrame(()=>openBtnRef.current?.focus?.());return;}
@@ -653,6 +801,7 @@ export default function App(){
  },[]);
  const power=powerStatus(data);
  const stripState=resourceStripState(data);
+ const alarmState=alarmsState(data);
  const sheetTitle=mode==="inspect"
   ?(selectedId!=null?(BLUEPRINTS[data.buildings.find(b=>b.id===selectedId)?.type]?.name||"Inspector"):"Inspector")
   :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Fleet logistics"
@@ -700,6 +849,10 @@ export default function App(){
     <button aria-label="Zoom out" onClick={()=>zoomControl(1/1.55)} title="Zoom out (down to 0.20×)">− <span>Zoom out</span></button>
     <button onClick={()=>setShowLegend(v=>!v)} title="Controls and help">? <span>Controls</span></button>
    </div>
+   {/* UX-06 (#364): the alarm rail lives in the left HUD rail — compact chips
+      with an expanded detail, camera-neutral by construction. */}
+   <AlarmRail state={alarmState} prefs={alarmPrefs} onPrefs={onAlarmPrefs}
+    expandedId={expandedAlarmId} onToggle={onToggleAlarm} onAction={onAlarmAction} onCloseDetail={onCloseAlarmDetail}/>
    {showLegend&&<div className="controls-card"><b>Explore your world</b><p>Drag to pan with cursor-locked grip · right-drag to orbit · wheel to zoom (0.20×–12×) · Q/E rotate · Home reset. Mobile: one finger pans, pinch zooms, two fingers twist.</p><p>Select a building to inspect it. Construct machinery or lay roads from the tool dock.</p><button onClick={()=>setShowLegend(false)}>Close</button></div>}
   </aside>
   <aside className="right-rail">
@@ -742,7 +895,8 @@ export default function App(){
       ?<InspectorPanel g={data} selectedId={selectedId} ux={ux} onUx={onUx}
         confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
         obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
-        onRemove={onRemove} onCancel={onCancel} onClose={closeSheet}/>
+        onRemove={onRemove} onCancel={onCancel} onClose={closeSheet}
+        alarms={alarmState} onAlarmAction={onAlarmAction}/>
       :mode==="fleet"
       ?<FleetPanel g={data} focusId={fleetFocus} setFocusId={setFleetFocus}
         followId={followId} onFollow={onFollow} onStopFollow={onStopFollow}
@@ -751,11 +905,14 @@ export default function App(){
       :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
         buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
         notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={closeSheet}
-        strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus}/>}
+        strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus} alarms={alarmState}/>}
     </div>
    </div>}
   <div className="footline"><span>RUSTWAKE / V2 FOUNDATION</span><span>SIM {Math.floor(data.elapsed)}s</span><span>{data.buildings.length} STRUCTURES · {data.roads.length} ROAD CELLS</span></div>
-  {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status" onClick={()=>setToast("")}><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}
+  {/* #548: toast body is pointer-events:none (styles.css) so world gestures
+      pass through; only the 44px dismiss button is interactive. role=status
+      and the remount key are unchanged. */}
+  {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status"><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}
  </div>;
 }
 const EDGE_LIMIT=70;
