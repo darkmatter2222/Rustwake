@@ -196,6 +196,14 @@ test("#548 controls: dismiss button clears the notice; clicking the pointer-tran
   // Body click bubbles but has no handler any more (pointer-events:none means
   // real browsers never deliver this contact to the toast at all).
   toast.dispatchEvent(new dom.window.MouseEvent("click", { bubbles: true }));
+  // #559 N2: React 18 flushes a (regressed) body onClick dismissal in a
+  // microtask/scheduler tick AFTER dispatchEvent returns — a synchronous
+  // assert here scored 4/4 PASS even with the pre-#548 body onClick re-added
+  // (coordinator comment 6951565246). Await one flush tick (the reviewer's
+  // measured 120ms probe), THEN assert persistence, so a re-added dismissal
+  // handler actually fails this guard. The dismiss-button half below is
+  // unchanged — it was already load-bearing (3/1 FAIL under its mutation).
+  await new Promise(r => setTimeout(r, 120));
   assert.ok(q(".toast"), "body click no longer dismisses — dismissal is button-only");
   btn.click();
   await waitFor(() => !q(".toast"), "dismiss button clears the toast");
