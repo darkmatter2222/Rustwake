@@ -21,9 +21,13 @@ export const SCHEMA_ID = "rustwake.voxel.geometry.v1";
 export const PARCEL = Object.freeze({cells: [WORLD_SIZE, WORLD_SIZE], world: [WORLD_SIZE * CELL, WORLD_SIZE * CELL]});
 
 // Canonical scale references. Worker is the human unit; truck matches createTruck().
+// ART-05 (#351): forklift/drone join the same canonical scale ladder; both are
+// decorative yard crew with NO simulation authority until crew systems land (#274).
 export const SCALE_REFERENCES = Object.freeze({
   worker: {height: 1.7, width: 0.62, depth: 0.34, role: "human scale reference; decorative until crew simulation lands (#274)"},
   truck: {length: 2.05, width: 1.2, height: 1.35, role: "physical freight carrier; must fit one road cell and one loading bay"},
+  forklift: {length: 1.3, width: 0.8, height: 1.1, role: "decorative yard crew at the depot bay approach; no freight authority (#274, #351)"},
+  drone: {length: 1.0, width: 1.0, height: 0.3, role: "decorative survey crew hovering over a real active cycle; no freight authority (#274, #351)"},
   machineHeightRatio: {min: 0.9, max: 4.0}, // machine height / worker height
   maxAnimatedReach: CELL * 1.5 // animated booms may overhang the cell, never the parcel logic
 });
@@ -306,6 +310,115 @@ export function validateAllMachines() {
   if (missing.length) errors.push("missing descriptors: " + missing.join(","));
   if (extra.length) errors.push("orphan descriptors: " + extra.join(","));
   return {ok: errors.length === 0, schema: SCHEMA_ID, parcel: PARCEL, cell: CELL, machines: results, errors};
+}
+
+// ---------------------------------------------------------------------------
+// ART-05 (#351): vehicle/crew rig schema. Describes the ORIGINAL procedural rigs
+// authored in src/world.js (createTruck/createForklift/createDrone/createWorker).
+// Provenance: all geometry is authored in-code from the shared unit box/cylinder
+// kit against public/reference/approved-yard.png + docs/design/tokens.json; no
+// external/downloaded models, no archive/legacy geometry.
+//
+// Authority contract (honesty, #274/#384):
+//  - truck is the ONLY rig with economic authority: its visible cargo mirrors the
+//    simulation.js freight ledger (reserved -> onboard -> delivered) exactly.
+//  - forklift/drone/worker are DECORATIVE yard crew. They never carry cargo,
+//    never report freight capacity/production, and their placement/animation is
+//    anchored to real observable sim state (truck proximity at the depot bay,
+//    a building whose production timer actually advanced) or parked.
+// ---------------------------------------------------------------------------
+export const RIG_LOD = Object.freeze({detailMinCellPx: 26, blockMinCellPx: 12});
+// LOD tier from the projected cell size (same orthographic contract as camera.js):
+// 0 = full detail, 1 = silhouette block (greebles hidden), 2 = single proxy box.
+export function rigLodTier(zoom, viewportHeight) {
+  const px = cellProjectedCssPx(zoom, viewportHeight);
+  return px >= RIG_LOD.detailMinCellPx ? 0 : px >= RIG_LOD.blockMinCellPx ? 1 : 2;
+}
+
+export const RIGS = Object.freeze({
+  truck: Object.freeze({
+    kind: "freight", authority: "simulation.js freight ledger (reserve/pickup/arrive)",
+    decorative: false,
+    identities: Object.freeze([
+      {variant: "flatbed", livery: "rust", label: "RUST FLATBED"},
+      {variant: "stake", livery: "orange", label: "AMBER STAKE-BED"},
+      {variant: "tipper", livery: "body", label: "TEAL TIPPER"}
+    ]),
+    scale: {width: 1.2, height: 1.35, length: 2.05},
+    wheelRadius: 0.3,
+    pivots: ["pivot:wheels", "steer:fl", "steer:fr", "wheel:*", "pivot:beacon"],
+    articulation: "wheel spin = travelled distance / radius; front-wheel steer from real route heading deltas; suspension bob proportional to real speed; beacon spin distance-driven. No free-running decorative work cycle.",
+    cargo: "crates rebuilt only when v.cargo signature changes (real pickup/drop); tinted by RESOURCE_BY_ID color; empty truck carries no crate",
+    lod: {proxy: {size: [1.2, 1.35, 2.05], center: [0, 0.625, 0.075]}, greebleGroup: "lod:greeble"},
+    budget: {maxMeshes: 40, maxTriangles: 700}
+  }),
+  forklift: Object.freeze({
+    kind: "decorative", authority: "none — decorative yard crew (#274)",
+    decorative: true,
+    scale: {width: 0.8, height: 1.1, length: 1.3},
+    pivots: ["pivot:forks"],
+    articulation: "fork lift is a pure function of the nearest REAL freight truck's distance to the depot bay approach (<=2 units raised 0.75, >=6 units lowered 0); never carries a load mesh",
+    placement: "depot bay approach cell (machines cannot build there per gridOccupancy bayCells); visual only, never occupies a build site or road logic",
+    lod: {proxy: {size: [0.8, 1.1, 1.3], center: [0, 0.55, 0]}, greebleGroup: "lod:greeble"},
+    budget: {maxMeshes: 28, maxTriangles: 450}
+  }),
+  drone: Object.freeze({
+    kind: "decorative", authority: "none — decorative yard crew (#274)",
+    decorative: true,
+    scale: {width: 1.0, height: 0.3, length: 1.0},
+    pivots: ["pivot:rotor:0", "pivot:rotor:1", "pivot:rotor:2", "pivot:rotor:3"],
+    articulation: "anchors above a building whose production timer ACTUALLY advanced this frame (real active cycle); hover bob/rotor spin are decorative flight on the sim clock, parked when no cycle is active or under reduced motion",
+    lod: {proxy: {size: [1.0, 0.3, 1.0], center: [0, 0.15, 0]}, greebleGroup: "lod:greeble"},
+    budget: {maxMeshes: 22, maxTriangles: 400}
+  }),
+  worker: Object.freeze({
+    kind: "decorative", authority: "none — decorative yard crew (#274)",
+    decorative: true,
+    scale: {width: 0.62, height: 1.7, length: 0.34},
+    pivots: ["pivot:arm-l", "pivot:arm-r"],
+    articulation: "static posed scale reference; arm pivots named for future crew simulation, never driven as economic work",
+    lod: {proxy: {size: [0.62, 1.7, 0.34], center: [0, 0.85, 0]}, greebleGroup: "lod:greeble"},
+    budget: {maxMeshes: 16, maxTriangles: 250}
+  })
+});
+
+export const rigDescriptor = (id) => RIGS[id] || null;
+
+export function validateRig(id, desc = RIGS[id]) {
+  const errors = [];
+  if (!desc) {fail(errors, id, "no rig descriptor registered"); return {id, ok: false, errors};}
+  if (!["freight", "decorative"].includes(desc.kind)) fail(errors, id, "kind must be freight|decorative");
+  if (desc.decorative && desc.authority !== "none — decorative yard crew (#274)")
+    fail(errors, id, "decorative rigs must declare zero simulation authority");
+  if (!desc.decorative && desc.kind !== "freight") fail(errors, id, "non-decorative rigs must be freight authority");
+  const s = desc.scale;
+  if (!s || !isNum(s.width) || !isNum(s.height) || !isNum(s.length) || s.width <= 0 || s.height <= 0 || s.length <= 0)
+    fail(errors, id, "scale must be positive width/height/length");
+  else {
+    if (s.width > CELL || s.length > CELL) fail(errors, id, "rig envelope exceeds one 3.5-unit cell");
+    const ref = SCALE_REFERENCES[id];
+    if (ref && (Math.abs(ref.width - s.width) > 1e-9 || Math.abs(ref.height - s.height) > 1e-9 || Math.abs(ref.length - s.length) > 1e-9))
+      fail(errors, id, "scale disagrees with SCALE_REFERENCES." + id);
+    if (id !== "worker" && s.height > SCALE_REFERENCES.worker.height)
+      fail(errors, id, "yard crew/vehicle taller than the canonical 1.7-unit worker");
+  }
+  if (!Array.isArray(desc.pivots) || !desc.pivots.length) fail(errors, id, "rig must name its pivots");
+  const lod = desc.lod;
+  if (!lod || !lod.proxy || !Array.isArray(lod.proxy.size) || lod.proxy.size.length !== 3 || !lod.proxy.size.every(isNum))
+    fail(errors, id, "lod proxy size missing");
+  else if (s && (lod.proxy.size[0] < s.width - 1e-9 || lod.proxy.size[1] < s.height - 1e-9 || lod.proxy.size[2] < s.length - 1e-9))
+    fail(errors, id, "lod proxy must enclose the rig silhouette");
+  const budget = desc.budget;
+  if (!budget || !Number.isInteger(budget.maxMeshes) || !Number.isInteger(budget.maxTriangles) ||
+    budget.maxMeshes > PERFORMANCE_LIMITS.maxMeshesPerMachine || budget.maxTriangles > PERFORMANCE_LIMITS.maxTrianglesPerMachine)
+    fail(errors, id, "budget missing or above global performance limits");
+  return {id, ok: errors.length === 0, errors};
+}
+
+export function validateAllRigs() {
+  const results = Object.keys(RIGS).map(id => validateRig(id));
+  const errors = results.flatMap(r => r.errors);
+  return {ok: errors.length === 0, schema: SCHEMA_ID, rigs: results, errors};
 }
 
 // CSS pixels spanned by one cell at a given camera zoom/viewport (orthographic,
