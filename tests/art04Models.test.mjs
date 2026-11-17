@@ -634,7 +634,7 @@ test("ART-05 forklift post stays outside the truck corridor at the starter depot
 test("update() consumes applyArt04 + observability stamps; camera bodies byte-identical to main", () => {
   const src = fs.readFileSync("src/world.js", "utf8").replace(/\r\n/g, "\n");
   assert.ok(src.includes("applyArt04(obj,g,b,this.reducedMotion,id)"), "update() must call the shared civic application path");
-  for (const stamp of ['cd["art04"', "cd.art04Clock", "cd.art04Reduced", "cd.art04Door", "cd.art04BayDist", "cd.art04MarketLoad"])
+  for (const stamp of ['cd["art04"', "cd.art04Clock", "cd.art04Reduced", "cd.art04Door", "cd.art04BayDist", "cd.art04MarketLoad", '+"Clock"]=art04Stamp[t]'])
     assert.ok(src.includes(stamp), "missing observability stamp " + stamp);
   assert.ok(!src.includes('kind==="depot"||kind==="market"'), "the shared depot/market blockout branch must be GONE");
   const methodBody = name => {

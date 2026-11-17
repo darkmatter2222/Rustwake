@@ -1505,6 +1505,10 @@ export class LivingWorld{
   cd.art04Door=art04Stamp.depot?art04Stamp.depot.door.toFixed(3):"0.000";
   cd.art04BayDist=art04Stamp.depot&&Number.isFinite(art04Stamp.depot.truckDistance)?art04Stamp.depot.truckDistance.toFixed(3):"none";
   cd.art04MarketLoad=art04Stamp.market?art04Stamp.market.load.toFixed(3):"0.000";
+  // Per-type civic clocks: depot has no cycle (always 0.000 — honest), market
+  // is the labelled ambient elapsed clock, research/fabricator are sim work
+  // clocks. Captures/tests prove motion against these, never wall time.
+  for(const t of ART04_TYPES)cd["art04"+t[0].toUpperCase()+t.slice(1)+"Clock"]=art04Stamp[t]?art04Stamp[t].clock.toFixed(3):"0.000";
   // ART-05 (#351): additive rig observability (camera stamps untouched). Wheel
   // angle must equal travelled distance / radius; crew stamps expose the honest
   // decorative anchoring so captures/tests can prove no fabricated freight.
