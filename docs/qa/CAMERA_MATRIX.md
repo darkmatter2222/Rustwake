@@ -188,3 +188,48 @@ Evidence (at capture source SHA **501bc9dab220ae016268f7f7e55f92f50d740793**, di
 
 ### CAM-02 re-run recipe
 `pnpm test` (298 tests = 273 main + 25 gesture) then `pnpm build && node scripts/capture-cam02.mjs`. Phone is EMULATED, not a physical handset (#268/#275); numeric capture is a floor, not G1 visual acceptance (#276, sponsor-reserved); the hosted-browser receipt at the deployed SHA is produced at release (#333). Branch CI success is NOT a production release.
+
+## CAM-10 latency and smoothness matrix (#346, measurement slice)
+
+Capture: scripts/capture-cam10.mjs, production preview, ONE headless Chromium/SwiftShader browser (HeadlessChrome/159.0.8154.6, ANGLE Vulkan 1.3.0 SwiftShader Subzero), code head **ee34fef55c363582b1d614f590e66b8a63823bda** (train-turn rebase onto main 0f54b2cf3f72e4c89158dc601e5dd1e6e0ef1a7f; evidence RE-CAPTURED on the rebased build 2026-11-17 because main's src moved underneath the prior capture). Evidence: docs/evidence/346-cam-10/report.json (**PASS_NUMERIC_ONLY**, errors []) + 4 PNGs + rollback-control.json (control re-run at the new head). Input-to-photon is an event-to-next-rendered-frame PROXY (no physical display; GPU presentation/compositor latency excluded). Synthetic gestures only; aggregates only.
+
+### Unit matrix — tests/cameraInputProbe.test.mjs (11) + tests/cam10Stats.test.mjs (10)
+
+Full suite **466 = 445 coordinator-verified main baseline at 0f54b2cf + 21** (cam10Stats 10/10, cameraInputProbe 11/11 new; per-file 21/21). Windows-local 465/466 — the single fail is main's OWN pre-existing tests/deliveryAlert.test.mjs LF-only permissions regex (CRLF checkout; known Windows failure, coordinator-verified on main, Linux CI authoritative); the file is byte-identical to main on this branch. Historical figures: 380 = 359 main b56fded + 21 at the prior base; main has since grown to 445 (#576/#566 and the alarm/dismantle/dispatch train).
+
+### Browser matrix — 60 s baseline per view, drag and zoom SEPARATE
+
+| View | Frames / duration | FPS | Frame mean / P50 / P95 / max (ms) | Jank (>50ms) | Dropped | Drag latency mean/P95 (ms, n=15) | Zoom latency mean/P95 (ms, n=15) | Handler drag mean/max (ms) | Handler zoom mean/max (ms) |
+|---|---|---|---|---|---|---|---|---|---|
+| Desktop 1440×900 dpr1 (mouse drag + wheel) | 851 / 58.91 s | 14.45 | 69.19 / 66.70 / **83.40** / 133.4 | 819 | 2682 | 63.16 / **67.90** (min 55.40) | 207.67 / **226.40** (min 192.70) | 0.140 / 0.40 | 0.127 / 0.70 |
+| Phone 390×844 dpr2 EMULATED (CDP touch drag + two-finger pinch) | 761 / 59.20 s | 12.86 | 77.77 / 83.30 / **116.70** / 183.3 | 677 | 2790 | 231.11 / **270.20** (min 179.80) | 236.77 / **310.20** (min 176.60) | 0.213 / 0.90 | 0.020 / 0.10 |
+
+Provenance both views: SwiftShader true, drawingBuffer 1440×900 / 780×1688, webglContexts 1, zero page errors, zero contact refinds (elementFromPoint verified before AND at each gesture), delivery counters confirm every gesture reached the canvas.
+
+### Deterministic negative (delayMs=120 injected stall, 16 commands) — exact expected/actual
+
+| Gate | Desktop expected | Desktop actual | Phone expected | Phone actual | Verdict |
+|---|---|---|---|---|---|
+| drag min sample ≥ 120 ms | ≥120 | 121.6 | ≥120 | 261.0 | PASS |
+| drag degraded P95 ≥ baseline+60 | ≥127.90 | 191.70 | ≥330.20 | 345.80 | PASS |
+| zoom min sample ≥ 120 ms | ≥120 | 320.7 | ≥120 | 368.6 | PASS |
+| zoom degraded P95 ≥ baseline+60 | ≥286.40 | 347.90 | ≥370.20 | 456.40 | PASS |
+| jank frames ≥ 16 injected | ≥16 | 74 | ≥16 | 68 | PASS |
+
+### Recovery (flag cleared, 6 commands)
+
+| Gate | Desktop expected | Desktop actual | Phone expected | Phone actual | Verdict |
+|---|---|---|---|---|---|
+| drag recovered P95 ≤ baseline+60 | ≤127.90 | 66.20 | ≤330.20 | 152.10 | PASS |
+| zoom recovered P95 ≤ baseline+60 | ≤286.40 | 220.00 | ≤370.20 | 147.50 | PASS |
+
+### Guard-is-real proof (rollback-control.json)
+
+RE-RUN at rebased code head ee34fef: src/cameraInput.js rolled back to main 0f54b2cf blob (main never touched the file since b56fded, so the blob is unchanged) → **9/11 probe tests FAIL** (2 survivors are inertness continuity guards that must hold on main too); restored byte-exact. scripts/cam10-stats.mjs JANK_MS mutated 50→5000 → **2/10 stats tests FAIL** (declared constants; exact jank trace); restored. git diff HEAD 0 bytes + sha256 equality + post-restore 21/21 green.
+
+### Runner-load disclosure and interpretation
+
+Shared host: other agents run concurrently and idle dev servers remain from earlier sessions — the 14.45/12.86 fps baselines INCLUDE that contention and are NOT quiet-host guarantees. No CPU-heavy work (tests, rollback proof) ran during the capture. Handler cost ≤0.9 ms max shows the input/raycast path is not the bottleneck; proxy latency is dominated by time-to-next-rendered-frame (software WebGL render cost + host load). The optimization half of #346 (world.js frame-cadence paths) is deferred to a scoped follow-up issue — no quality setting was changed to obtain any number here.
+
+### CAM-10 re-run recipe
+`pnpm test` (466 = 445 main + 21) then `pnpm build && RUSTWAKE_PREVIEW_PORT=<free-port> node scripts/capture-cam10.mjs`. Phone is EMULATED (#268/#275); numeric capture is a floor, not G1 visual acceptance (#276, sponsor-reserved); hosted-browser receipt at the deployed SHA is produced at release (#333). Branch CI success is NOT a production release.
