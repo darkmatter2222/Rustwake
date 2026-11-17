@@ -210,6 +210,7 @@ try{
    const readStripIron=()=>page.evaluate(()=>{const el=document.querySelector('.resources-strip .resource[data-resource="iron"]');return el?{state:el.getAttribute("data-state"),flag:el.querySelector(".resource__flag")?.textContent??null}:null;});
    let clickErr=null,healedBeforeClick=null,attempts=0,actionMeasurement2=null;
    let panelProbe=null,selectedBlueprint=null,toast=null,actionShot=null;
+   let collapsedAfterAction=null,centerHint=null,sheetExpandedByHarness=false;
    while(attempts<3){
     attempts++;
     try{await page.locator('[data-testid="alarm-action"]').click({timeout:5000});clickErr=null;break;}
@@ -256,14 +257,29 @@ try{
    if(clickErr){
     anyFail=true;report.errors.push("clause3: remedy click failed: "+clickErr+(healedBeforeClick?" healedBeforeClick="+JSON.stringify(healedBeforeClick):"")+(actionMeasurement2?" measure2="+JSON.stringify(actionMeasurement2):""));
    }else{
-    await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.panelProbe).trigger==="tool:build";}catch{return false;}},null,{timeout:5000});
-    panelProbe=await page.evaluate(()=>JSON.parse(document.body.dataset.panelProbe));
-    await page.locator(".catalog-panel").waitFor({state:"visible",timeout:5000});
-    selectedBlueprint=await page.locator(".blueprint--selected").getAttribute("aria-label").catch(()=>null);
-    toast=await page.locator(".toast span").textContent().catch(()=>null);
-    actionShot=await shot(page,"disc-after-action-build");
+    try{
+     await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.panelProbe).trigger==="tool:build";}catch{return false;}},null,{timeout:5000});
+     panelProbe=await page.evaluate(()=>JSON.parse(document.body.dataset.panelProbe));
+     // MEASURED: choose("build") — the SAME camera-neutral path the dock uses —
+     // does not expand a collapsed sheet (persisted dock pref; src/App.jsx is
+     // byte-identical to main e82caa52, so this is pre-existing dock behaviour,
+     // not a #566 regression). While collapsed the player still gets the toast
+     // and the build center-hint; record both, then tap the REAL sheet-toggle
+     // (the genuine expand control) to reveal the catalog before asserting it.
+     collapsedAfterAction=await page.locator('[data-testid="panel-host"]').getAttribute("data-collapsed").catch(()=>null);
+     toast=await page.locator(".toast span").textContent().catch(()=>null);
+     centerHint=await page.locator(".center-hint").textContent().catch(()=>null);
+     if(collapsedAfterAction==="true"){
+      await page.locator('[data-testid="sheet-toggle"]').click();
+      sheetExpandedByHarness=true;
+      await page.waitForFunction(()=>document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed==="false",null,{timeout:5000});
+     }
+     await page.locator(".catalog-panel").waitFor({state:"visible",timeout:5000});
+     selectedBlueprint=await page.locator(".blueprint--selected").getAttribute("aria-label").catch(()=>null);
+     actionShot=await shot(page,"disc-after-action-build");
+    }catch(e2){anyFail=true;report.errors.push("clause3: post-action build-catalog proof failed: "+String(e2).split("\n")[0]);}
    }
-   disc.after={chipSeverity,chipAria,problem,remedy,actionLabel,actionMeasurement,actionMeasurement2,healedBeforeClick,detailShotMs,clickAttempts:attempts,panelProbe,selectedBlueprint,toast,screenshot:afterShot,actionScreenshot:actionShot};
+   disc.after={chipSeverity,chipAria,problem,remedy,actionLabel,actionMeasurement,actionMeasurement2,healedBeforeClick,detailShotMs,clickAttempts:attempts,panelProbe,collapsedAfterAction,centerHint,sheetExpandedByHarness,selectedBlueprint,toast,screenshot:afterShot,actionScreenshot:actionShot};
    if(chipSeverity!=="critical"){anyFail=true;report.errors.push("clause3: uncovered starve-iron chip severity is not critical: "+chipSeverity);}
    if(!/cannot cover it/i.test(problem||"")){anyFail=true;report.errors.push("clause3: problem text does not state uncovered deficit: "+problem);}
    if(!/Construct/i.test(actionLabel||"")){anyFail=true;report.errors.push("clause3: remedy action is not a state-changing construct action: "+actionLabel);}
