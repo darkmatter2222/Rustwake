@@ -6,7 +6,7 @@ G0: V1 archive/backups, V2 independent app and save key, reproducible build, cor
 ## Acceptance matrix
 | Surface | Evidence and failing cases |
 |---|---|
-| Camera | 45° yaw/35.264° elevation on open, 360° yaw, tilt bounds, wide zoom range, pointer-locked pan across elevations/zoom, wheel and pinch anchoring, button zoom actually works, accurate ray/ground projection and cancel safety |
+| Camera | 45° yaw/35.264° elevation on open, 360° yaw, tilt bounds, wide zoom range, pointer-locked pan across elevations/zoom, wheel and pinch anchoring, button zoom actually works, accurate ray/ground projection and cancel safety. CAM-01 regression matrix (docs/qa/CAMERA_MATRIX.md): all yaw quadrants × pitch 20–80 × min/max zoom × near-edge targets, ≤1 CSS px cursor grip in math AND production-built browser gestures, fixed-seed golden snapshots, exact-value negative controls and live raycast cross-check |
 | UI | 390×844 phone, 844×390 landscape, 1440×900 desktop and wide monitor; no page scroll, 200% text, focus, 44px targets, no world blocked by overlays |
 | Art | Actual in-game views vs approved screenshot: roofs/sides, varied silhouettes, roads and real moving vehicles, coherent rustic palette, restrained teal statuses; numeric pixels alone cannot pass |
 | Construction | Validity and cost, rotate/move/dismantle, once-only charge and refund, five-stage mechanical rise, mid-stage reload, reduced-motion alternative |
