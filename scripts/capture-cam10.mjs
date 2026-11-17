@@ -242,7 +242,9 @@ try {
     await page.waitForFunction(() => window.__cam10Mon.frames >= 10, null, {timeout: 15000});
     const samples = {drag: [], zoom: []};
     const handlers = {drag: [], zoom: []};
-    const t0 = Date.now();
+    // Pacing clock MUST share the in-page time origin (performance.now()),
+    // never Date.now() epoch — mixing origins makes the wait unsatisfiable.
+    const t0 = await page.evaluate(() => performance.now());
     let i = 0;
     while (i < commands) {
       const kind = i % 2 === 0 ? "drag" : "zoom";
