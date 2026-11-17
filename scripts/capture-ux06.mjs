@@ -116,6 +116,17 @@ try{
    return {hit:h,pan};
   };
   const alarmIds=page=>page.evaluate(()=>{try{return JSON.parse(document.body.dataset.alarmProbe).ids;}catch{return null;}});
+  // A remedy routes into a tool sheet (UX-07). The OPEN sheet intentionally
+  // occupies the lower-left band (desktop) / lower band (phone) above the rail
+  // (z8) — established panel behaviour, not alarm UI. Collapse it (mode and
+  // toast survive) so the after-close and toast proofs measure the alarm-free
+  // canvas, and the build-mode tap-leak detector stays live.
+  const collapseSheet=async(page)=>{
+   if(await page.locator('[data-testid="panel-host"]').getAttribute("data-collapsed")!=="true"){
+    await page.locator('[data-testid="sheet-toggle"]').click();
+    await page.waitForFunction(()=>document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed==="true",null,{timeout:5000});
+   }
+  };
 
   // ================= six-alarm fixture =================
   {
@@ -175,6 +186,7 @@ try{
    await page.locator(".toast").waitFor({state:"visible",timeout:5000});
    view.proof.remedy_applied={panelProbe:await page.evaluate(()=>JSON.parse(document.body.dataset.panelProbe)),toast:await page.locator(".toast span").textContent()};
    await shot(page,"remedy-applied");
+   await collapseSheet(page);
    view.proof.afterClose=await centreProof(page,"after-close");
    await shot(page,"after-close");
 
@@ -184,6 +196,7 @@ try{
    await page.locator('[data-testid="alarm-action"]').click();
    await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.panelProbe).trigger==="tool:build";}catch{return false;}},null,{timeout:5000});
    await page.locator(".toast").waitFor({state:"visible",timeout:5000});
+   await collapseSheet(page);
    const toastBox=await box(page,".toast"),btnBox=await box(page,".toast button");
    const bodyPoint={x:toastBox.x+30,y:toastBox.y+toastBox.height/2};
    const hitBody=await hit(page,bodyPoint.x,bodyPoint.y);
