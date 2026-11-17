@@ -2,7 +2,7 @@
   "issue": 338,
   "version": 2,
   "build": "production-preview",
-  "source_sha": "eafae2346100efee5be2358335ddffa6e3ffca8c",
+  "source_sha": "501bc9dab220ae016268f7f7e55f92f50d740793",
   "started": "2026-11-17T10:38:05.938Z",
   "views": [
     {
@@ -604,7 +604,8 @@
     "Fixture = createGame() with vehicles:[] so freight income cannot pollute bank deltas; the pointer->onTap->buildAt/roadLine path under test is unchanged",
     "CDP touchMove events queue until the next compositor frame; Page.startScreencast forces BeginFrames and the harness ASSERTS each move reached the canvas before measuring (playwright-core 1.65.1 here vs lockfile 1.49.1 — delivery is asserted, not assumed)",
     "touchCancel carries no points and ends the CDP sequence; the late-up-after-cancel regression uses a synthetic PointerEvent with the cancelled pointerId against the real canvas listener (desktop uses a REAL CDP mouseReleased as the late up)",
-    "The pre-fix Node failure proof (14 behavioral + 6 state-contract of 25 new tests) is recorded separately in prefix-proof.json"
+    "The pre-fix Node failure proof (14 behavioral + 6 state-contract of 25 new tests) is recorded separately in prefix-proof.json — a real measured node --test run of tests/cameraInputGesture.test.mjs against the pre-fix controller from main 5dd3fe295de0345d52ab82353fec730c7cd7b105 (20 fail / 5 pass pre-fix, 25 pass post-fix, raw TAP embedded)",
+    "Capture originally ran at pre-rebase code head eafae2346100efee5be2358335ddffa6e3ffca8c on old main ec64143340891d4c9fe1829560243d17e753b506; branch rebased onto main 5dd3fe295de0345d52ab82353fec730c7cd7b105 (docs-only conflicts, union-resolved). source_sha updated to the reachable capture head 501bc9dab220ae016268f7f7e55f92f50d740793: git diff eafae234 c3f26ae7 -- src/cameraInput.js scripts/capture-cam02.mjs tests/cameraInputGesture.test.mjs is EMPTY, so the captured code is byte-identical; full suite re-run post-rebase 298/298 (273 main + 25 new)"
   ],
   "completed": "2026-11-17T10:38:36.655Z",
   "nonblank": {
