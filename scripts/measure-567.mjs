@@ -10,10 +10,30 @@
 // consistency assertion proves the mirror agrees with the real dispatcher:
 // whenever the mirror says ASSIGNABLE for an idle truck, the real sim must
 // assign that truck a job on the next substep.
-import * as sim from "../src/simulation.js";
-import {BLUEPRINTS} from "../src/content.js";
-import {alarmsState} from "../src/alarms.js";
-import {fleetState} from "../src/fleet.js";
+//
+// PRODUCT GATE BAR (ruling 6956801701 / 6956802181): the run ends with C-1..C-4
+// assertions that FAIL LOUDLY (non-zero exit) on any violation:
+//  C-1 every output pair first-assignable > 0 AND delivered > 0 (no relocated starvation)
+//  C-2 bank steel > 20 by t=120s; furnace bay bounded/draining; storage-4 never latches
+//  C-3 scrap flow > 0 in every 60s window (backlog growth only tolerated while flowing)
+//  C-4 total delivered units REPORTED, never gated (vanity metric per product)
+// N-1: every figure this harness prints is annotated with the exact 40-char base
+// SHA of the tree it was measured at (git rev-parse HEAD in the measured root).
+//
+// Usage: node scripts/measure-567.mjs [root]   (root defaults to this checkout;
+// pass another worktree root to measure a different base, e.g. the pre-fix base).
+import {execFileSync} from "node:child_process";
+import {fileURLToPath} from "node:url";
+import path from "node:path";
+const ROOT=process.argv[2]?path.resolve(process.argv[2]):fileURLToPath(new URL("..",import.meta.url));
+const BASE_SHA=execFileSync("git",["rev-parse","HEAD"],{cwd:ROOT}).toString().trim();
+const sim=await import(pathToFileURL(path.join(ROOT,"src/simulation.js")).href);
+const {BLUEPRINTS}=await import(pathToFileURL(path.join(ROOT,"src/content.js")).href);
+const {alarmsState}=await import(pathToFileURL(path.join(ROOT,"src/alarms.js")).href);
+const {fleetState}=await import(pathToFileURL(path.join(ROOT,"src/fleet.js")).href);
+function pathToFileURL(p){return new URL("file:///"+p.replace(/\\/g,"/"));}
+console.log("== base SHA (N-1 annotation; every figure below was measured at this tree) ==");
+console.log(BASE_SHA,"root:",ROOT);
 
 const stock=(bag,id)=>Math.max(0,Number(bag?.[id]||0));
 const cooldownUntil=(g,sourceId,resource)=>{
@@ -68,8 +88,8 @@ console.log("furnace id",furnace.id,"at",furnace.x+","+furnace.z,"remaining",fur
 console.log("connectedToRoad:",sim.connectedToRoad(g,furnace));
 const fRoad=sim.nearestRoad(g,furnace.x,furnace.z),dRoad=sim.nearestRoad(g,depot.x,depot.z);
 console.log("nearestRoad(furnace):",JSON.stringify(fRoad),"nearestRoad(depot):",JSON.stringify(dRoad));
-const path=sim.roadPath(g,fRoad,dRoad);
-console.log("roadPath furnace->depot:",path?path.map(p=>p.x+","+p.z).join(" "):"NULL (no connected path)");
+const p=sim.roadPath(g,fRoad,dRoad);
+console.log("roadPath furnace->depot:",p?p.map(q=>q.x+","+q.z).join(" "):"NULL (no connected path)");
 for(const v of g.vehicles){
  const s=sim.nearestRoad(g,Math.round(v.x),Math.round(v.z));
  console.log(v.name,"start",v.x+","+v.z,"nearestRoad",JSON.stringify(s),"pathToDepot",s&&dRoad?!!sim.roadPath(g,s,dRoad):"n/a");
@@ -85,6 +105,15 @@ const rejectionTally={};
 const idleEpisodes=[]; // {t, truck, waiting, reasons}
 let prevJobs={1:null,2:null,3:null};
 let alarmSamples=[];
+// Gate-bar trackers (C-1..C-3): per-pair first-assignable + delivered, bank steel
+// at t=120, storage-4 latch (checked EVERY substep), scrap flow per 60s window,
+// furnace drain. Delivered/assigned tallies come from the real freight ledger's
+// reserve/arrive transitions, scanned incrementally (ledger is capped at 128).
+const OUTPUT_PAIRS=["1:scrap","1:iron","1:copper","4:steel"];
+const firstAssignableByPair={},deliveredByPair={},assignedByPair={};
+const scrapBuckets=new Array(Math.ceil(TOTAL/60)).fill(0);
+let lastLedgerId=0,bankSteelAt120=null,storage4Ever=false;
+let prevFurnaceSteel=0,sawDrain=false,lateSteelAssigns=0;
 for(let t=0;t<TOTAL;t+=DT){
  sim.advanceGame(g,DT);
  // track furnace freight lifecycle
@@ -99,8 +128,25 @@ for(let t=0;t<TOTAL;t+=DT){
    prevJobs[v.id]=j?j.sourceId+"-"+j.phase:null;
   }
  }
+ for(const e of g.freightLedger){
+  if(e.id<=lastLedgerId)continue;
+  lastLedgerId=e.id;
+  const k=e.sourceId+":"+e.resource;
+  if(e.kind==="arrive"&&e.destId===depot.id){
+   deliveredByPair[k]=(deliveredByPair[k]||0)+e.amount;
+   if(e.resource==="scrap")scrapBuckets[Math.min(scrapBuckets.length-1,Math.floor(e.time/60))]+=e.amount;
+  }
+  if(e.kind==="reserve"&&e.sourceId!==depot.id){
+   assignedByPair[k]=(assignedByPair[k]||0)+1;
+   if(k==="4:steel"&&e.time>TOTAL-120)lateSteelAssigns++;
+  }
+ }
+ if(bankSteelAt120===null&&g.elapsed>=120)bankSteelAt120=stock(g.bank,"steel");
  const steel=stock(furnace.inventory,"steel");
  if(steel>maxSteel)maxSteel=steel;
+ if(steel<prevFurnaceSteel)sawDrain=true;
+ prevFurnaceSteel=steel;
+ if(!storage4Ever&&(alarmsState(g).alarms||[]).some(a=>a.id==="storage-"+furnace.id))storage4Ever=true;
  // idle-truck rejection enumeration AFTER the substep (post-arrive idle is the
  // exact state the UI renders between frames)
  const cands=mirrorCandidates(g);
@@ -109,7 +155,11 @@ for(let t=0;t<TOTAL;t+=DT){
  const firstIdle=g.vehicles.find(v=>!v.job);
  if(firstIdle){
   const firstAssignable=cands.find(c=>rejectionFor(g,firstIdle,c)==="ASSIGNABLE");
-  if(firstAssignable&&firstAssignable.source.id===furnace.id&&firstAssignable.resource==="steel")steelFirstAssignableSteps++;
+  if(firstAssignable){
+   const k=firstAssignable.source.id+":"+firstAssignable.resource;
+   firstAssignableByPair[k]=(firstAssignableByPair[k]||0)+1;
+   if(firstAssignable.source.id===furnace.id&&firstAssignable.resource==="steel")steelFirstAssignableSteps++;
+  }
  }
  for(const v of g.vehicles){
   if(v.job)continue;
@@ -138,15 +188,15 @@ for(let t=0;t<TOTAL;t+=DT){
   if(st4&&alarmSamples.length<3)alarmSamples.push({t:+(t+DT).toFixed(1),remedy:st4.remedy,action:st4.action});
  }
 }
-console.log("\n== Q3: time series (every 15s, 660s sim, zero input) ==");
+console.log("\n== Q3: time series (every 15s, 660s sim, zero input) @ "+BASE_SHA+" ==");
 for(const s of series)console.log(JSON.stringify(s));
-console.log("\n== Q2: idle-truck / queued-load measurements ==");
+console.log("\n== Q2: idle-truck / queued-load measurements @ "+BASE_SHA+" ==");
 console.log("idle substeps per truck (of",TOTAL/DT,"):",JSON.stringify(idleSteps));
 console.log("idle substeps WITH >=1 waiting candidate:",idleWithCandidates);
 console.log("rejection reason tally over all (idle truck, candidate) pairs:",JSON.stringify(rejectionTally));
 console.log("mirror said ASSIGNABLE yet truck idle at sample:",mirrorAssignableButIdle);
 console.log("first 12 idle episodes:",JSON.stringify(idleEpisodes.slice(0,12),null,1));
-console.log("\n== furnace freight lifecycle ==");
+console.log("\n== furnace freight lifecycle @ "+BASE_SHA+" ==");
 console.log("substeps with a live furnace-source job:",furnaceJobSteps,"pickups:",furnacePickups,"arrives:",furnaceArrives,"maxSteelHeld:",maxSteel,"finalSteel:",stock(furnace.inventory,"steel"));
 console.log("furnace pickups by resource:",JSON.stringify(furnacePickupByResource));
 console.log("substeps steel>=3 was a waiting candidate:",steelCandidateSteps,"of",TOTAL/DT);
@@ -154,12 +204,12 @@ console.log("substeps steel was the FIRST assignable candidate for the first idl
 console.log("bank steel min/max over run:",bankSteelMin,"/",bankSteelMax,"(initial bank steel = 20; unchanged => zero steel ever delivered)");
 console.log("final bank steel:",stock(g.bank,"steel"),"stats:",JSON.stringify(g.stats));
 console.log("dispatchCooldowns at end (zero player input => must be empty):",JSON.stringify(g.dispatchCooldowns));
-console.log("\n== Q4: alarm samples ==");
+console.log("\n== Q4: alarm samples @ "+BASE_SHA+" ==");
 console.log(JSON.stringify(alarmSamples,null,1));
 const aEnd=alarmsState(g);
 console.log("final alarms:",(aEnd.alarms||[]).map(x=>x.id+"/"+x.kind+"/"+x.state).join(", "));
 // mirror-consistency proof: replay one assignable episode
-console.log("\n== mirror consistency spot-check ==");
+console.log("\n== mirror consistency spot-check (240 substeps) @ "+BASE_SHA+" ==");
 const g2=sim.createGame();
 let checked=0,violations=0;
 for(let t=0;t<120;t+=DT){
@@ -172,4 +222,31 @@ for(let t=0;t<120;t+=DT){
  sim.advanceGame(g2,DT);
  if(assignable){checked++;if(!first.job)violations++;}
 }
-console.log("assignable-predictions checked:",checked,"violations (mirror said assignable, sim left idle):",violations);
+console.log("assignable-predictions checked:",checked,"violations (mirror said assignable, sim left idle):",violations,"base:",BASE_SHA);
+
+// ===================== PRODUCT GATE BAR C-1..C-4 =====================
+// Ruling 6956801701 (PR #573) / 6956802181 (#567). Failures are printed in full
+// and exit non-zero. C-4 is report-only: totals are NEVER a gate metric.
+console.log("\n== PRODUCT GATE BAR C-1..C-4 @ "+BASE_SHA+" (fresh untouched yard, 660s, zero input) ==");
+const failures=[];
+const gate=(id,ok,detail)=>{console.log((ok?"PASS":"FAIL")+" "+id+": "+detail);if(!ok)failures.push(id+": "+detail);};
+for(const pair of OUTPUT_PAIRS){
+ const fa=firstAssignableByPair[pair]||0,d=deliveredByPair[pair]||0;
+ gate("C-1["+pair+"]",fa>0&&d>0,`first-assignable=${fa} substeps, delivered=${d} units (both must be > 0; starvation must not be relocated)`);
+}
+gate("C-2[bank steel by t=120s]",bankSteelAt120>20,`bank steel at t=120s = ${bankSteelAt120} (must exceed starter 20)`);
+gate("C-2[furnace bay bounded]",maxSteel<60,`max furnace steel held = ${maxSteel} (pre-fix monotonic pile to 228)`);
+gate("C-2[no monotonic freeze]",sawDrain&&lateSteelAssigns>0,`bay drained=${sawDrain}, steel assigns in final 120s=${lateSteelAssigns}, final bay=${stock(furnace.inventory,"steel")}`);
+gate("C-2[storage-4 never latches]",!storage4Ever,`storage-4 present in any of ${TOTAL/DT} substeps = ${storage4Ever} (checked every substep)`);
+const dryWindows=scrapBuckets.map((u,i)=>u>0?null:`t=${i*60}-${(i+1)*60}s`).filter(Boolean);
+gate("C-3[scrap flow throughout]",dryWindows.length===0,`scrap units per 60s window = ${JSON.stringify(scrapBuckets)}${dryWindows.length?"; DRY windows: "+dryWindows.join(", "):""}`);
+console.log("REPORT C-4 (vanity metric, NOT gated): total delivered="+g.stats.delivered+" shipments="+g.stats.shipments+
+ " per-pair delivered="+JSON.stringify(deliveredByPair)+
+ " salvager scrap backlog="+stock(g.buildings.find(b=>b.type==="salvager").inventory,"scrap")+
+ " base="+BASE_SHA);
+if(failures.length){
+ console.error("\nGATE BAR FAILED @ "+BASE_SHA+" — "+failures.length+" violation(s):");
+ for(const f of failures)console.error("  REWORK "+f);
+ process.exit(1);
+}
+console.log("GATE BAR C-1..C-3 PASS @ "+BASE_SHA+" (C-4 reported, not gated)");
