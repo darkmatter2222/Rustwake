@@ -3,8 +3,8 @@
   "issue": 341,
   "task": "CAM-05 panel transitions retain camera pose and selection",
   "build": "production-preview",
-  "source_sha": "bf9e45a4488cddaa1d482e5d032f65d4e2d1a0b6",
-  "started": "2026-11-17T09:09:35.537Z",
+  "source_sha": "d8ea1e6d2b063314c73d76294731a515d9a06b38",
+  "started": "2026-11-17T09:38:09.282Z",
   "views": [
     {
       "name": "desktop",
@@ -60,8 +60,8 @@
         "nonBlank": {
           "width": 1440,
           "height": 900,
-          "distinctColors": 2668,
-          "meanLuma": null
+          "distinctColors": 2651,
+          "meanLuma": 89.00331811491156
         },
         "guardIsReal": {
           "pose": {
@@ -321,8 +321,8 @@
         "nonBlank": {
           "width": 780,
           "height": 1688,
-          "distinctColors": 2040,
-          "meanLuma": null
+          "distinctColors": 2032,
+          "meanLuma": 68.61826531113404
         },
         "obscuredRetention": {
           "panPresses": 3,
@@ -554,5 +554,5 @@
     "Local production preview only — the live hosted-browser receipt at the deployed SHA is produced at release by the release engineer",
     "Verdict ceiling PASS_NUMERIC_ONLY; only hosted-browser CI at the deployed SHA retires that caveat (smoke invariants only)"
   ],
-  "completed": "2026-11-17T09:10:32.317Z"
+  "completed": "2026-11-17T09:39:05.924Z"
 }
