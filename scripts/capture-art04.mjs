@@ -421,6 +421,51 @@ async function zoomToWorld(page, wp, targetZoom, minVisibleZoom) {
   }
   return wheelZoomAt(page, p, targetZoom);
 }
+// Motion-proof framing guard: zoomToWorld anchors the GROUND pivot, so a rig
+// whose pivot sits high on screen can have its upper storey project ABOVE the
+// canvas top; clipMachine's y=0 clamp then silently amputates exactly the
+// region where the mechanism moves (the depot shutter travels at the TOP of
+// the rig). Before any motion clip, pan with the REAL primary-drag gesture
+// (panWithAnchor — a uniform screen-space translation) until the FULL
+// projected bbox (ground..bounds.height, all four footprint corners) fits
+// inside the canvas with padding. Never touches zoom, gates or timeouts.
+async function frameRig(page, fp, height) {
+  const hw = fp.base.w * CELL / 2, hd = fp.base.d * CELL / 2;
+  const project = (cam, rect) => {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const dx of [-hw, hw]) for (const dz of [-hd, hd]) for (const y of [0, height]) {
+      const p = screenOfWorld(cam, rect, fp.pivot.x + dx, y, fp.pivot.z + dz);
+      minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+      minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+    }
+    return {minX, minY, maxX, maxY};
+  };
+  const pad = 6;
+  for (let i = 0; i < 6; i++) {
+    const rect = await canvasRect(page), cam = await pose(page);
+    const b = project(cam, rect);
+    const fits = b.minX >= rect.left + pad && b.maxX <= rect.left + rect.width - pad &&
+      b.minY >= rect.top + pad && b.maxY <= rect.top + rect.height - pad;
+    if (fits) return {panIterations: i, bbox: b};
+    if (b.maxX - b.minX > rect.width - 2 * pad || b.maxY - b.minY > rect.height - 2 * pad)
+      throw Error("RIG_TOO_LARGE_FOR_VIEWPORT: " + JSON.stringify({bbox: b, rect, zoom: cam.zoom}));
+    const dx = (rect.left + rect.width / 2) - (b.minX + b.maxX) / 2;
+    const dy = (rect.top + rect.height / 2) - (b.minY + b.maxY) / 2;
+    const grab = await exposedCanvasPoint(page, {
+      x: Math.min(Math.max((b.minX + b.maxX) / 2, rect.left + 2), rect.left + rect.width - 2),
+      y: Math.min(Math.max((b.minY + b.maxY) / 2, rect.top + 2), rect.top + rect.height - 2)
+    });
+    await page.mouse.move(grab.x, grab.y);
+    await page.mouse.down();
+    await page.mouse.move(grab.x + dx, grab.y + dy, {steps: 12});
+    await page.mouse.up();
+    await page.waitForFunction(c => {
+      const d = document.querySelector(".world-canvas").dataset;
+      return Number(d.cameraX) !== c.x || Number(d.cameraZ) !== c.z;
+    }, cam, {timeout: 4000, polling: 30});
+  }
+  throw Error("RIG_FRAMING_DID_NOT_CONVERGE: " + JSON.stringify(project(await pose(page), await canvasRect(page))));
+}
 const dismissIntro = async page => {
   const btn = page.getByRole("button", {name: /Enter the yard/});
   if (await btn.count()) await btn.click();
@@ -546,8 +591,12 @@ async function clipMachine(page, fp, height, file) {
   const pad = 4;
   const clip = {x: Math.max(0, minX - pad), y: Math.max(0, minY - pad),
     width: Math.min(maxX - minX + 2 * pad, 4000), height: Math.min(maxY - minY + 2 * pad, 4000)};
+  // Loud amputation flag: a clamped clip is missing part of the rig. Motion
+  // clauses MUST frame first (frameRig) and then refuse any clamped clip.
+  const clamped = minX - pad < 0 || minY - pad < 0 ||
+    maxX + pad > rect.left + rect.width || maxY + pad > rect.top + rect.height;
   await shot(page, file, clip);
-  return {file, clipCss: clip};
+  return {file, clipCss: clip, clamped};
 }
 const envOf = page => page.evaluate(() => ({
   canvasCount: document.querySelectorAll("canvas").length,
@@ -934,10 +983,12 @@ try {
       await zoomToWorld(page, FP[type].pivot, 2.8, .8);
       await sheetToggleTo(page, true);
       const h = machineDescriptor(type).bounds.height;
+      const framing = await frameRig(page, FP[type], h);
       const k = clockKey(type);
       const s1 = await pose(page);
       const f1 = await simFloor();
       const c1 = await clipMachine(page, FP[type], h, "desktop-motion-" + type + "-t1.png");
+      if (c1.clamped) throw Error("MOTION_CLIP_AMPUTATED " + type + " t1: " + JSON.stringify({framing, clip: c1}));
       const start = Number(s1[k]);
       await page.waitForFunction(a => Number(document.querySelector(".world-canvas").dataset[a.k]) >= a.v,
         {k, v: start + 1.2}, {timeout: 30000, polling: 50});
