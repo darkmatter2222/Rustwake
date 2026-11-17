@@ -88,12 +88,17 @@ Roller axes are 0.6 apart with teeth reaching 0.36 → the toothed rollers
 **intermesh and counter-rotate** like a real double-roll crusher. Measured
 **45 meshes / 600 triangles** (budget 46/660).
 
-### ART-03 seam: refinery untouched
+### ART-03 seam: closed by #349
 
-The old shared crusher/refinery branch was split. **Refinery keeps exactly the
-pre-ART-02 geometry** (10 meshes / 180 tris, static 3.045×2.34×3.045, zero pivots),
-guarded by a seam test. Furnace/foundry pulse, generator spin and turret rotate are
-likewise untouched.
+The old shared crusher/refinery branch was split. ART-02 kept **refinery exactly
+at the pre-ART-02 geometry** (10 meshes / 180 tris, static 3.045×2.34×3.045, zero
+pivots), guarded by a seam test. **ART-03 (#349) has now rebuilt the refinery**
+into a distinct distillation plant (41 meshes / 792 tris, H 3.5, pump + valve
+pivots, flare + vapor emissions); the seam test in `tests/salvageModels.test.mjs`
+now asserts the rebuild and that the crusher is collateral-free. The generator,
+furnace and foundry were likewise rebuilt by ART-03 — see
+`docs/design/INDUSTRIAL_RIGS.md`. ART-02's salvager/crusher geometry and motion
+remain untouched by ART-03.
 
 ## Motion ownership (tested pose == rendered pose)
 

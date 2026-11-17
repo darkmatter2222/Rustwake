@@ -221,19 +221,36 @@ async function orbitTo(page, targetYaw) {
   return pose(page);
 }
 // Which element actually owns a screen point (wheel/tap delivery diagnostics).
+// Includes the ancestor chain so a covered aim point names its overlay exactly.
 const topmostAt = (page, p) => page.evaluate(([x, y]) => {
   const e = document.elementFromPoint(x, y);
   if (!e) return {canvas: false, top: "null"};
-  const cls = typeof e.className === "string" && e.className ? "." + e.className.trim().split(/\s+/).join(".") : "";
-  const tid = e.dataset && e.dataset.testid ? "[data-testid=" + e.dataset.testid + "]" : "";
-  return {canvas: e.classList.contains("world-canvas"), top: e.tagName.toLowerCase() + cls + tid};
+  const desc = n => n.tagName.toLowerCase() +
+    (typeof n.className === "string" && n.className ? "." + n.className.trim().split(/\s+/).join(".") : "") +
+    (n.dataset && n.dataset.testid ? "[data-testid=" + n.dataset.testid + "]" : "");
+  const chain = [];
+  for (let n = e, i = 0; n && i < 3; n = n.parentElement, i++) chain.push(desc(n));
+  return {canvas: e.classList.contains("world-canvas"), top: chain.join(" < ")};
 }, [p.x, p.y]);
+// The NOTICE toast (App.jsx notify) never auto-dismisses and can cover canvas
+// aim points (#548 tracks the player-facing side). Dismissing it through its
+// real dismiss button is a legitimate player action — never a DOM removal.
+async function dismissToast(page) {
+  const btn = page.locator('.toast button[aria-label="Dismiss notice"]');
+  if (await btn.count()) {
+    await btn.click();
+    await page.waitForFunction(() => !document.querySelector(".toast"), null, {timeout: 4000, polling: 50});
+  }
+}
 // CAM-05: the contextual sheet toggle must never move the applied camera.
 async function sheetToggleTo(page, collapsed) {
   const toggle = page.locator('[data-testid="sheet-toggle"]');
   if (!(await toggle.count())) return false;
   const want = collapsed ? "false" : "true"; // aria-expanded is the inverse
   if ((await toggle.getAttribute("aria-expanded")) === want) return false;
+  // A selection/placement NOTICE toast can sit over the toggle itself (#548);
+  // dismiss it through its real button before clicking — a real player action.
+  await dismissToast(page);
   const before = await pose(page);
   await toggle.click();
   await page.waitForFunction(c => document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed === c,
@@ -299,18 +316,37 @@ const dismissIntro = async page => {
   if (await btn.count()) await btn.click();
 };
 const tap = (page, p, touch) => touch ? page.touchscreen.tap(p.x, p.y) : page.mouse.click(p.x, p.y);
+// elementFromPoint FIRST: a point is only aimable if the canvas itself owns it.
+const canvasHit = (page, p) => page.evaluate(([x, y]) => {
+  const e = document.elementFromPoint(x, y);
+  return !!(e && e.classList && e.classList.contains("world-canvas"));
+}, [p.x, p.y]);
 // First footprint-cell center whose screen point hits the canvas itself (HUD-safe).
 async function clickableCell(page, fp) {
   const rect = await canvasRect(page), cam = await pose(page);
   for (let i = 0; i < fp.base.w; i++)
     for (let j = 0; j < fp.base.d; j++) {
       const p = screenOfGround(cam, rect, fp.min.x + CELL / 2 + i * CELL, fp.min.z + CELL / 2 + j * CELL);
-      const hit = await page.evaluate(([x, y]) => {
-        const e = document.elementFromPoint(x, y);
-        return !!(e && e.classList && e.classList.contains("world-canvas"));
-      }, [p.x, p.y]);
-      if (hit) return p;
+      if (await canvasHit(page, p)) return p;
     }
+  return null;
+}
+// Selection is ground-plane picking (world.js screenToCell: ray -> groundPlane ->
+// cell), NOT mesh raycast — a tap on a rig's visible body selects the cell BEHIND
+// it (registered "height-aware mesh picking" debt, CAM-01 row). So a valid pick
+// aim must project INSIDE the footprint's ground cells. If a HUD chip/toast
+// covers the cell center (the #349 desktop furnace case: NOTICE toast #548),
+// try sub-cell offsets that still raycast to the SAME cell.
+async function clickableCellOffset(page, fp) {
+  const rect = await canvasRect(page), cam = await pose(page);
+  const offs = [[0, 0], [-.32, 0], [.32, 0], [0, -.32], [0, .32], [-.32, -.32], [.32, .32], [-.32, .32], [.32, -.32]];
+  for (let i = 0; i < fp.base.w; i++)
+    for (let j = 0; j < fp.base.d; j++)
+      for (const [ox, oz] of offs) {
+        const p = screenOfGround(cam, rect, fp.min.x + CELL / 2 + i * CELL + ox * CELL, fp.min.z + CELL / 2 + j * CELL + oz * CELL);
+        if (p.x < rect.left || p.x > rect.left + rect.width || p.y < rect.top || p.y > rect.top + rect.height) continue;
+        if (await canvasHit(page, p)) return p;
+      }
   return null;
 }
 async function openPage(ctx, seed) {
@@ -328,15 +364,16 @@ async function openPage(ctx, seed) {
 // inspector's own construction text disappears (REAL 5s assembly, no sleep).
 async function placeRig(page, touch, label, type, site) {
   const name = rigName(type);
+  await dismissToast(page); // a prior NOTICE toast must not cover the build site
   await page.locator('[data-tool="build"]').click();
   await page.waitForFunction(() => document.querySelector('[data-tool="build"]')?.getAttribute("aria-pressed") === "true", null, {timeout: 8000});
   await page.locator(".blueprint", {hasText: name}).first().click();
   const fp = worldFootprint(type, site.x, site.z, 0);
-  let p = await clickableCell(page, fp);
+  let p = await clickableCell(page, fp) || await clickableCellOffset(page, fp);
   if (!p) { // site off-screen/covered at landing zoom: zoom out at center first
     const rect = await canvasRect(page);
     await wheelZoomAt(page, {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2}, .7);
-    p = await clickableCell(page, fp);
+    p = await clickableCell(page, fp) || await clickableCellOffset(page, fp);
   }
   if (!p) {
     const rect = await canvasRect(page);
@@ -357,17 +394,32 @@ async function placeRig(page, touch, label, type, site) {
   report.placement.push(rec);
   return rec;
 }
-async function pickMachine(page, fp, name, touch, label, file) {
+async function pickMachine(page, fp, name, touch, label, file, minVisible) {
+  await dismissToast(page); // a prior pick's NOTICE toast must not steal this contact
+  const groundDiag = async () => {
+    const rect = await canvasRect(page);
+    return topmostAt(page, screenOfGround(await pose(page), rect, fp.pivot.x, fp.pivot.z));
+  };
   let p = await clickableCell(page, fp);
+  let aim = "ground-center";
   if (!p) {
     await sheetToggleTo(page, true);
     p = await clickableCell(page, fp);
   }
+  if (!p) { p = await clickableCellOffset(page, fp); aim = "ground-offset"; }
+  let reframed = false;
+  const cover = p ? null : (await groundDiag()).top;
   if (!p) {
+    // Whole ground cell HUD-covered at strategic zoom: zoom out at an exposed
+    // anchor (real wheel gesture), pick there, then re-anchor back for the clip.
     const rect = await canvasRect(page);
-    const diag = await topmostAt(page, screenOfGround(await pose(page), rect, fp.pivot.x, fp.pivot.z));
-    throw Error("MACHINE_NOT_CLICKABLE " + name + " at " + label + " topmost=" + diag.top);
+    await wheelZoomAt(page, {x: rect.left + rect.width / 2, y: rect.top + rect.height / 2}, minVisible);
+    reframed = true;
+    p = await clickableCell(page, fp) || await clickableCellOffset(page, fp);
+    aim = "ground-reframed";
   }
+  if (!p)
+    throw Error("MACHINE_NOT_CLICKABLE " + name + " at " + label + " topmost=" + (await groundDiag()).top + " firstCover=" + cover);
   await tap(page, p, touch);
   await sheetToggleTo(page, false); // inspector must be visibly open for the proof
   const panel = page.locator(".inspector-panel");
@@ -376,8 +428,9 @@ async function pickMachine(page, fp, name, touch, label, file) {
   const text = (await panel.innerText()).replace(/\s+/g, " ").slice(0, 260);
   if (!text.includes(name) || !text.includes("1×1"))
     throw Error("PICKING_WRONG " + name + " at " + label + ": " + text);
+  await dismissToast(page); // keep the selection still + silhouette clip HUD-free
   await shot(page, file);
-  const rec = {label, machine: name, footprint: "1×1", inspectorText: text, screenshot: file};
+  const rec = {label, machine: name, footprint: "1×1", aim, groundCover: cover, reframed, inspectorText: text, screenshot: file};
   report.picking.push(rec);
   return rec;
 }
@@ -551,11 +604,15 @@ try {
 
     // Per-rig strategic zoom: picking proof, then a HUD-free silhouette clip.
     await page.keyboard.press("Escape");
+    await dismissToast(page); // placement NOTICE must not shadow the toolbar
     await page.locator('[data-tool="select"]').click();
     const clips = [], rigPoses = {};
     for (const {type, name} of RIGS) {
       rigPoses[type] = await zoomToWorld(page, FP[type].pivot, v.zoom, v.minVisible);
-      await pickMachine(page, FP[type], name, v.touch, v.name, v.name + "-" + type + "-selected.png");
+      const pickRec = await pickMachine(page, FP[type], name, v.touch, v.name, v.name + "-" + type + "-selected.png", v.minVisible);
+      // A HUD-covered ground cell forced a zoom-out to pick; re-anchor back to
+      // strategic zoom (the pick cleared the toast, so the cell is exposed now).
+      if (pickRec.reframed) rigPoses[type] = await zoomToWorld(page, FP[type].pivot, v.zoom, v.minVisible);
       await sheetToggleTo(page, true);
       clips.push(await clipMachine(page, FP[type], machineDescriptor(type).bounds.height, v.name + "-" + type + "-clip.png"));
     }
@@ -671,10 +728,20 @@ try {
 
     const motionStart = Date.now();
     const timeline = [];
+    // Independent sim-time reference: the footline renders SIM floor(g.elapsed)
+    // from the same snapshot the panels use (App.jsx, ~270ms cadence). The app
+    // clamps frame dt to .07s (App.jsx rAF loop), so under SwiftShader sim time
+    // legitimately advances slower than wall time — the work clock must track
+    // SIM time, never wall time (that is the feature contract).
+    const simFloor = () => page.evaluate(() => {
+      const m = /SIM (\d+)s/.exec(document.querySelector(".footline")?.textContent || "");
+      return m ? Number(m[1]) : NaN;
+    });
     const sample = async () => {
       const s = await pose(page);
       timeline.push({
         t: (Date.now() - motionStart) / 1000, clock: Number(s.art03Clock), load: Number(s.art03Load),
+        simFloor: await simFloor(),
         generator: s.art03Generator, furnace: s.art03Furnace, refinery: s.art03Refinery, foundry: s.art03Foundry,
         reduced: s.art03Reduced
       });
@@ -712,19 +779,35 @@ try {
     const elapsed = timeline[timeline.length - 1].t;
     const advance = clocks[clocks.length - 1] - clocks[0];
     // Lead rig is the starter generator at demand/supply = 12/12 = load 1:
-    // its work clock must track real elapsed sim time, never a wall-clock fake.
-    const speedOk = Math.abs(advance - elapsed) <= .6;
+    // its work clock must track real elapsed SIM time, never a wall-clock fake.
+    // The app clamps frame dt to .07s, so under SwiftShader sim time advances
+    // slower than wall time (long render/screenshot frames). Comparing the
+    // clock against WALL time was a harness reference bug; the contract is sim
+    // time. Cross-check against the footline's independent SIM floor(elapsed)
+    // readout (±1s floor precision at each end + 270ms UI cadence), keep the
+    // wall upper bound (load <= 1 ⇒ sim can never outrun wall), and require
+    // substantial real progress so a parked/faked clock still fails loudly.
+    const simFloors = timeline.map(s => s.simFloor);
+    if (simFloors.some(n => !Number.isFinite(n)))
+      throw Error("SIM_FOOTLINE_MISSING: motion timeline has no SIM readout");
+    const simAdvance = simFloors[simFloors.length - 1] - simFloors[0];
+    const tracksSim = Math.abs(advance - simAdvance) <= 1.5;
+    const boundedByWall = advance <= elapsed + .6;
+    const moving = advance >= 8;
+    const speedOk = tracksSim && boundedByWall && moving;
     const allWorking = timeline.every(s => s.generator === "working" && s.furnace === "working" && s.refinery === "working" && s.foundry === "working");
     const allReducedOff = timeline.every(s => s.reduced === "0");
     const loadOne = timeline.every(s => Math.abs(s.load - 1) < 1e-3);
     const distinct = {clock: new Set(clocks).size};
     report.motion = {
-      elapsedSeconds: elapsed, samples: timeline.length, stages, monotone, maxStep, speedOk, allWorking, allReducedOff, loadOne,
+      elapsedSeconds: elapsed, samples: timeline.length, stages, monotone, maxStep, speedOk,
+      tracksSim, boundedByWall, moving, simAdvance, wallVsSim: {wall: elapsed, simFloorAdvance: simAdvance, clockAdvance: advance},
+      allWorking, allReducedOff, loadOne,
       distinctValues: distinct, clockAdvance: advance, pageErrors: errs, failedRequests: failed, ...env, timeline
     };
     if (!monotone || !speedOk || !allWorking || !allReducedOff || !loadOne || elapsed < 12 || timeline.length < 100 ||
       distinct.clock < 30 || stages.length !== 4 || env.canvasCount !== 1 || env.documentScroll || errs.length || failed.length)
-      throw Error("ART-03 motion capture failure: " + JSON.stringify({monotone, speedOk, allWorking, allReducedOff, loadOne, elapsed, samples: timeline.length, distinct, env, errs, failed}));
+      throw Error("ART-03 motion capture failure: " + JSON.stringify({monotone, speedOk, tracksSim, boundedByWall, moving, simAdvance, allWorking, allReducedOff, loadOne, elapsed, samples: timeline.length, distinct, env, errs, failed}));
   }
 
   // ---- WebGL-failure negative: loud failure, never a fake 2D world ----

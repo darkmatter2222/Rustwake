@@ -10,7 +10,7 @@
     "source": "src/voxelSchema.js",
     "docs": "docs/design/VOXEL_GEOMETRY.md",
     "issue": 347,
-    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs; ART-05 vehicle rigs (#351) validated by tests/vehicleRigs.test.mjs, scripts/measure-rigs.mjs and scripts/capture-rigs.mjs; ART-07 yard terrain/scenery (#353) validated by tests/yardScenery.test.mjs and scripts/capture-terrain.mjs; ART-02 salvage structures (#348) validated by tests/salvageModels.test.mjs and scripts/capture-art02.mjs",
+    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs; ART-05 vehicle rigs (#351) validated by tests/vehicleRigs.test.mjs, scripts/measure-rigs.mjs and scripts/capture-rigs.mjs; ART-07 yard terrain/scenery (#353) validated by tests/yardScenery.test.mjs and scripts/capture-terrain.mjs; ART-02 salvage structures (#348) validated by tests/salvageModels.test.mjs and scripts/capture-art02.mjs; ART-03 industrial rigs (#349) validated by tests/art03Models.test.mjs and scripts/capture-art03.mjs",
     "parcel": {
       "cells": [
         24,
@@ -384,7 +384,7 @@
             "maxTriangles": 660
           }
         },
-        "refinery_seam": "UNCHANGED pre-ART-02 geometry (10 meshes / 180 tris, static 3.045x2.34x3.045, zero pivots); ART-03 #349 owns its rebuild; seam guarded by tests/salvageModels.test.mjs"
+        "refinery_seam": "CLOSED by ART-03 #349: refinery rebuilt into a distinct distillation plant (41 meshes / 792 tris, H 3.5, pump+valve pivots, flare+vapor); seam test in tests/salvageModels.test.mjs now asserts the rebuild and crusher collateral-free; see geometry_schema.industrial_rigs"
       },
       "motion": "art02Pose(time,reducedMotion,id) pure export; rollerA=+t*1.75, rollerB=-t*1.75 (counter-rotating intermeshing teeth), rocker=sin(t*0.65+id)*0.55, screen=sin(t*3.4+id)*0.04; schema declarations mirror ART02_MOTION exactly (drift-guarded)",
       "reducedMotion": "prefers-reduced-motion parks ALL ART-02 channels at 0 including the previously free-running salvager rocker (intentional accessibility improvement, ART-06 pattern); sim/economic timing untouched",
@@ -399,6 +399,88 @@
       "performance": "shared geometry/materials, 8-segment cylinders, no new lights/textures/tokens; per-machine budgets within global 60 meshes / 1600 tris caps; ART-07 scenery stats untouched (177/2824/4, 2 InstancedMeshes, seed 4073)",
       "evidence": "tests/salvageModels.test.mjs (11 tests, full suite 282/282 = 271 main + 11 new) + scripts/capture-art02.mjs -> docs/evidence/348-art-02/ (PASS_NUMERIC_ONLY; report.json.source_sha = capture head, direct parent of the evidence commit, empty src/scripts/tests diff between them; desktop 1440x900 dpr1 + emulated phone 390x844 dpr2 front/side/iso, real UI crusher placement + inspector picking proof, 96px silhouette pairwise metrics via independent PNG decode, stamp-driven motion timeline, invalid-site/reduced-motion/WebGL-failure negatives, rollback injection recorded)",
       "stage": "live structure contract; numeric validation only, not automatically production-approved art parity (G1 #276); independent reviewer/product ACCEPT of immutable head pending"
+    },
+    "industrial_rigs": {
+      "issue": 349,
+      "source": "src/world.js makeBuilding generator/furnace/refinery/foundry branches + exported applyArt03 (the exact runtime application, driven by tests) + src/art03.js pure module (ART03_MOTION/ART03_SMOKE/STATUS_MATERIALS/machineStatus/generatorLoad/timerDelta/art03Advance/art03Pose/smokePuff, no THREE/DOM) + src/voxelSchema.js descriptors",
+      "docs": "docs/design/INDUSTRIAL_RIGS.md",
+      "provenance": "All geometry original, authored in code (shared unit BoxGeometry + 8-segment cylinders, shared MATERIALS pool mirroring docs/design/tokens.json, flat shading); no external/downloaded models, textures or images as the playable world; approved-yard.png and color/scale tokens unchanged; replaces the pre-ART-02 shared generator/furnace/refinery/foundry blockouts",
+      "structures": {
+        "generator": {
+          "staticBounds": [3.045, 3.05, 3.045],
+          "pickHeight": 3.1,
+          "features": ["intake grille", "exhaust stack + rust cap", "side fuel tank on saddles", "orange corner post + lamp", "roof fan + exposed side turbine (counter-rotating read)"],
+          "pivots": [
+            {"id": "spin", "offset": [0, 1.9, 0], "axis": "y", "motion": {"kind": "spin", "speed": 2.2}, "swingRadius": 1.32, "parts": ["hub", "orange blades"]},
+            {"id": "turbine", "offset": [0, 1.02, 1.44], "axis": "z", "motion": {"kind": "spin", "speed": -3.4}, "swingRadius": 0.6, "parts": ["hub", "orange blades"]}
+          ],
+          "emissions": [{"node": "emit:exhaust", "offset": [-0.95, 3.05, -0.95], "puffs": 2, "material": "smoke"}],
+          "statusSurfaces": ["light"],
+          "measured": {"meshes": 30, "triangles": 460},
+          "budget": {"maxMeshes": 36, "maxTriangles": 800}
+        },
+        "furnace": {
+          "staticBounds": [3.045, 4.7, 3.045],
+          "pickHeight": 4.7,
+          "features": ["vessel + rust induction coils", "twin capped stacks", "orange charge hopper + black mouth", "hot window (furnace material)", "side grates", "tap spout + launder"],
+          "pivots": [
+            {"id": "charge", "offset": [0, 2.92, 0.62], "axis": "x", "motion": {"kind": "oscillate", "amplitude": 0.5, "speed": 1.2}, "swingRadius": 0.8, "parts": ["flap"]},
+            {"id": "blower", "offset": [1.22, 1.55, 0.45], "axis": "x", "motion": {"kind": "spin", "speed": 2.6}, "swingRadius": 0.5, "parts": ["hub", "orange blades"]}
+          ],
+          "pulse": {"target": "group.scale.y", "amplitude": 0.009, "speed": 5, "workingOnly": true},
+          "emissions": [
+            {"node": "emit:stackA", "offset": [-0.62, 4.72, -0.62], "puffs": 2, "material": "smoke"},
+            {"node": "emit:stackB", "offset": [0.62, 4.22, -0.62], "puffs": 2, "material": "smoke"}
+          ],
+          "statusSurfaces": ["light", "window"],
+          "measured": {"meshes": 31, "triangles": 472},
+          "budget": {"maxMeshes": 40, "maxTriangles": 900}
+        },
+        "refinery": {
+          "staticBounds": [3.045, 3.5, 3.045],
+          "pickHeight": 3.5,
+          "features": ["main column + rust collars + cap", "aux column", "twin storage tanks on saddles", "pipe rack", "flare stack", "control cabinet + grates + sight window", "pump pedestal"],
+          "pivots": [
+            {"id": "pump", "offset": [-1.2, 0.95, 0.35], "axis": "x", "motion": {"kind": "spin", "speed": 2.4}, "swingRadius": 0.45, "parts": ["flywheel", "spokes"]},
+            {"id": "valve", "offset": [0.15, 1.42, 0.2], "axis": "y", "motion": {"kind": "oscillate", "amplitude": 0.6, "speed": 0.9}, "swingRadius": 0.3, "parts": ["orange wheel", "spokes", "stem"]}
+          ],
+          "emissions": [
+            {"node": "emit:flare", "offset": [1.25, 3.55, -1.15], "puffs": 1, "material": "furnace", "flare": true},
+            {"node": "emit:vapor", "offset": [-0.55, 3.34, -0.45], "puffs": 2, "material": "smoke"}
+          ],
+          "statusSurfaces": ["light", "window"],
+          "measured": {"meshes": 41, "triangles": 792},
+          "budget": {"maxMeshes": 48, "maxTriangles": 1100},
+          "seam": "rebuilds the pre-ART-02 shared 10-mesh/180-tri blockout; crusher collateral-free (seam test in tests/salvageModels.test.mjs)"
+        },
+        "foundry": {
+          "staticBounds": [3.045, 4.2, 3.045],
+          "pickHeight": 4.2,
+          "features": ["rust hall + sawtooth roof + glass clerestory", "twin capped stacks", "trunnions", "mold line + steel ingots + one hot ingot", "cooling tank + glass coolant"],
+          "pivots": [
+            {"id": "crucible", "offset": [0, 1.95, 0.95], "axis": "x", "motion": {"kind": "oscillate", "amplitude": 0.42, "speed": 0.85}, "swingRadius": 0.62, "parts": ["vessel", "glow", "lip"]},
+            {"id": "fan", "offset": [0.7, 2.44, 0.3], "axis": "y", "motion": {"kind": "spin", "speed": 2}, "swingRadius": 0.66, "parts": ["hub", "orange blades"]}
+          ],
+          "pulse": {"target": "group.scale.y", "amplitude": 0.009, "speed": 5, "workingOnly": true},
+          "emissions": [
+            {"node": "emit:stackA", "offset": [-0.8, 4.22, -0.85], "puffs": 2, "material": "smoke"},
+            {"node": "emit:stackB", "offset": [0.8, 3.82, -0.85], "puffs": 2, "material": "smoke"}
+          ],
+          "statusSurfaces": ["light", "glow", "ingot"],
+          "measured": {"meshes": 31, "triangles": 512},
+          "budget": {"maxMeshes": 40, "maxTriangles": 900}
+        }
+      },
+      "status": "machineStatus(g,b) sim-only precedence: assembling -> generator demand (working iff demand>0) / utility idle -> unpowered (grid unavailable) -> starved (inputsFit eps 1e-7) -> working; discrete shared-material swaps via STATUS_MATERIALS (working lights/furnace, starved statusStarved/ember, unpowered statusDead/dark, assembling lights/dark, idle statusIdle/dark); pool never mutated",
+      "motion": "art03Advance integrates wrap-aware sim timer deltas (timerDelta rejects resets/rebuilds as 0; cycle machines advance only while working; generator advance = elapsed delta x real grid load); art03Pose(clock,reducedMotion,id) pure pivot angles mirroring ART03_MOTION exactly (drift-guarded); smokePuff phased off clock x ART03_SMOKE.speed 0.55 (rise 1.1, base 0.22, deterministic); emissions visible only while working && !reducedMotion",
+      "reducedMotion": "prefers-reduced-motion parks the work clock and ALL channels at 0 but keeps tracking lastTimer/lastElapsed (re-enabling never jumps); status colours still apply (not motion); sim/economic timing untouched",
+      "stamps": ["art03Generator", "art03Furnace", "art03Refinery", "art03Foundry", "art03Load", "art03Clock", "art03Reduced"],
+      "unchanged": "1x1 footprints, +Z port:loading-bay [0,0.11,1.295] 1.22x0.08x0.42, status light [1.28,0.95,1.25], full-cell pick volumes, mid-build staging semantics, save semantics/registry/costs/outputs; ART-02 salvager/crusher, ART-05 rigs, ART-06 crane cycle, ART-07 scenery untouched; src/App.jsx/UI modules/cameraInput.js/simulation.js/content.js untouched (lease)",
+      "camera_invariants": "applyCamera/stampCamera byte-identical to main (sha256-16 f3afa5479a66b97e / 691b3c0a3480e97b, hash-guarded in tests/art03Models.test.mjs and scripts/capture-art03.mjs); CAM-05 sheet-toggle camera-unchanged asserted in capture",
+      "performance": "shared geometry/materials, 8-segment cylinders, no new lights/textures/tokens; per-rig budgets within global 60 meshes / 1600 tris caps; measured from the real makeBuilding graph",
+      "picking_note": "world.js screenToCell is ground-plane raycast (not mesh raycast): valid pick aims project inside the footprint ground cells; body taps select the cell behind (height-aware mesh picking = registered GAPS CAM-01 debt). Capture dismisses the never-auto-dismissing NOTICE toast (#548, App.jsx lease) through its real button and uses same-cell sub-offsets + closed-loop zoom reframe; inherited MACHINE_NOT_CLICKABLE was harness aiming bug (a), not a new product defect",
+      "evidence": "tests/art03Models.test.mjs (18 tests) + scripts/capture-art03.mjs -> docs/evidence/349-art-03/ (PASS_NUMERIC_ONLY; report.json.source_sha = capture head, direct parent of the evidence commit, empty src/scripts/tests diff between them; desktop 1440x900 dpr1 + emulated phone 390x844 dpr2, real UI refinery/foundry placement + inspector picking proof for all four rigs, sim-seeded starved/unpowered negatives, 96px silhouette pairwise metrics via independent PNG decode, motion timeline >=100 samples/>=12s referenced to the footline SIM elapsed readout (app clamps frame dt to .07s so sim time, not wall time, is the contract), reduced-motion parked negatives, WebGL-failure loud-failure negative)",
+      "stage": "live structure contract; numeric validation only, not automatically production-approved art parity (G1 #276 sponsor visual review still owed); independent reviewer/product ACCEPT of immutable head pending; nothing live/deployed until release engineer merges and verifies"
     },
     "stage": "live geometry contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
   },
