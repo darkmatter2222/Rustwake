@@ -1,0 +1,208 @@
+{
+ "issue": 351,
+ "source_sha": "1f571918ab8fdeb76cdafe97079acbdf7b58f212",
+ "method": "pngjs full-frame decode; thresholds uniqueColors>1000, luminance stddev>5, dominant color share<0.9",
+ "verdict": "NONBLANK_OK",
+ "images": [
+  {
+   "file": "desktop-depot-selected.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 25082,
+   "lumMean": 97.054,
+   "lumStddev": 44.03,
+   "dominantColorShare": 0.0394,
+   "ok": true
+  },
+  {
+   "file": "desktop-landing.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 25062,
+   "lumMean": 105.858,
+   "lumStddev": 41.574,
+   "dominantColorShare": 0.0187,
+   "ok": true
+  },
+  {
+   "file": "desktop-lod-tier1.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 14120,
+   "lumMean": 85.957,
+   "lumStddev": 29.567,
+   "dominantColorShare": 0.0415,
+   "ok": true
+  },
+  {
+   "file": "desktop-lod-tier2.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 9954,
+   "lumMean": 70.488,
+   "lumStddev": 29.585,
+   "dominantColorShare": 0.0419,
+   "ok": true
+  },
+  {
+   "file": "desktop-motion-dropped.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 21501,
+   "lumMean": 109.641,
+   "lumStddev": 39.917,
+   "dominantColorShare": 0.0513,
+   "ok": true
+  },
+  {
+   "file": "desktop-motion-empty.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 24456,
+   "lumMean": 105.804,
+   "lumStddev": 41.599,
+   "dominantColorShare": 0.0187,
+   "ok": true
+  },
+  {
+   "file": "desktop-motion-loaded.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 22072,
+   "lumMean": 109.686,
+   "lumStddev": 39.972,
+   "dominantColorShare": 0.0493,
+   "ok": true
+  },
+  {
+   "file": "desktop-rigs-front.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 19055,
+   "lumMean": 111.91,
+   "lumStddev": 40.667,
+   "dominantColorShare": 0.0722,
+   "ok": true
+  },
+  {
+   "file": "desktop-rigs-iso.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 21870,
+   "lumMean": 109.709,
+   "lumStddev": 40.002,
+   "dominantColorShare": 0.0535,
+   "ok": true
+  },
+  {
+   "file": "desktop-rigs-side.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 18532,
+   "lumMean": 112.804,
+   "lumStddev": 41.354,
+   "dominantColorShare": 0.0578,
+   "ok": true
+  },
+  {
+   "file": "desktop-yard-wide.png",
+   "width": 1440,
+   "height": 900,
+   "uniqueColors": 21879,
+   "lumMean": 101.25,
+   "lumStddev": 40.381,
+   "dominantColorShare": 0.0241,
+   "ok": true
+  },
+  {
+   "file": "phone-depot-selected.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 17113,
+   "lumMean": 71.941,
+   "lumStddev": 45.238,
+   "dominantColorShare": 0.0336,
+   "ok": true
+  },
+  {
+   "file": "phone-landing.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 24038,
+   "lumMean": 110.647,
+   "lumStddev": 47.543,
+   "dominantColorShare": 0.0209,
+   "ok": true
+  },
+  {
+   "file": "phone-lod-tier1.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 14634,
+   "lumMean": 86.532,
+   "lumStddev": 37.605,
+   "dominantColorShare": 0.0349,
+   "ok": true
+  },
+  {
+   "file": "phone-lod-tier2.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 12085,
+   "lumMean": 72.747,
+   "lumStddev": 35.518,
+   "dominantColorShare": 0.0432,
+   "ok": true
+  },
+  {
+   "file": "phone-motion-loaded.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 18256,
+   "lumMean": 109.83,
+   "lumStddev": 45.501,
+   "dominantColorShare": 0.0548,
+   "ok": true
+  },
+  {
+   "file": "phone-rigs-front.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 12695,
+   "lumMean": 104.947,
+   "lumStddev": 44.51,
+   "dominantColorShare": 0.0779,
+   "ok": true
+  },
+  {
+   "file": "phone-rigs-iso.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 18533,
+   "lumMean": 109.274,
+   "lumStddev": 45.504,
+   "dominantColorShare": 0.0633,
+   "ok": true
+  },
+  {
+   "file": "phone-rigs-side.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 12756,
+   "lumMean": 109.447,
+   "lumStddev": 45.36,
+   "dominantColorShare": 0.0605,
+   "ok": true
+  },
+  {
+   "file": "phone-yard-wide.png",
+   "width": 780,
+   "height": 1688,
+   "uniqueColors": 15984,
+   "lumMean": 97.364,
+   "lumStddev": 44.361,
+   "dominantColorShare": 0.0308,
+   "ok": true
+  }
+ ]
+}
