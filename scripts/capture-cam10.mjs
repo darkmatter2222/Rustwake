@@ -32,7 +32,14 @@
 // Predicate discipline: every waitForFunction waits on the EXACT condition
 // asserted afterwards (world3d ready AND camera stamped; change frame with
 // the expected seq AND kind AND eventTime). Contact points are verified with
-// document.elementFromPoint BEFORE any gesture (overlay-thief trap). No fixed
+// document.elementFromPoint BEFORE any gesture AND re-verified at the instant
+// of each gesture (overlay-thief trap: the zoom rail / a toast can mount over
+// a contact AFTER the one-time setup check — observed on the reference phone,
+// where the "Zoom out" button occupies the centre column x=195). If a contact
+// is stolen it is re-found from the candidate list and the refind is counted
+// in the report; if NO candidate reaches the canvas the run fails loudly.
+// Aggregate pointer-delivery counters (counts only, no traces) distinguish
+// "touch never reached the canvas" from "camera did not respond". No fixed
 // sleeps; pacing uses condition-based waits on performance.now(). ONE browser.
 //
 // Verdict ceiling PASS_NUMERIC_ONLY (local preview). source_sha must be a real
@@ -117,6 +124,24 @@ const armMonitor = () => {
   requestAnimationFrame(tick);
 };
 
+// Aggregate pointer-delivery counters on the world canvas — COUNTS ONLY
+// (privacy: no coordinates, no per-event traces). Passive listeners; they do
+// not alter cameraInput behaviour or the measured handler cost. They let a
+// gesture timeout distinguish "the touch never reached the canvas" (down/move
+// stay 0 -> an overlay thief or a delivery stall) from "the canvas received
+// the pointer but the camera did not stamp a change" (a real camera defect).
+const armDelivery = () => {
+  const cv = document.querySelector(".world-canvas");
+  const d = {down: 0, move: 0, up: 0, cancel: 0, out: 0, lost: 0};
+  window.__cam10Delivery = d;
+  cv.addEventListener("pointerdown", () => d.down++, {passive: true});
+  cv.addEventListener("pointermove", () => d.move++, {passive: true});
+  cv.addEventListener("pointerup", () => d.up++, {passive: true});
+  cv.addEventListener("pointercancel", () => d.cancel++, {passive: true});
+  cv.addEventListener("pointerout", () => d.out++, {passive: true});
+  cv.addEventListener("lostpointercapture", () => d.lost++, {passive: true});
+};
+
 try {
   child = spawn(process.execPath, ["node_modules/vite/bin/vite.js", "preview", "--port", String(PORT), "--strictPort", "--host", "127.0.0.1"], {stdio: ["ignore", "pipe", "pipe"]});
   child.stdout.on("data", () => {});
@@ -174,6 +199,26 @@ try {
     return {point: {x: hit.x, y: hit.y}, candidates: info};
   };
 
+  // Re-verify the contact at the INSTANT of the gesture (not just at setup).
+  // The reference phone's zoom rail ("Zoom out" button) and transient toasts
+  // can mount over a contact after the one-time findContact check; a drag that
+  // lands on a button never reaches the canvas and the seq-paired wait times
+  // out. If stolen, re-find a live canvas contact (mutating contact.point so
+  // the session's reference stays valid) and count the refind for the report.
+  // findContact throws OVERLAY THIEF if no candidate reaches the canvas.
+  const verifyContact = async (view, contact) => {
+    const check = await view.page.evaluate(([x, y]) => {
+      const el = document.elementFromPoint(x, y);
+      const cv = document.querySelector(".world-canvas");
+      return {ok: el === cv, tag: el ? el.tagName + "." + String(el.className || "").slice(0, 40) : "null"};
+    }, [contact.point.x, contact.point.y]);
+    if (check.ok) return;
+    view.contactRefinds = (view.contactRefinds || 0) + 1;
+    const fresh = await findContact(view.page, view.candidates);
+    contact.refindFrom = check.tag;
+    contact.point = fresh.point;
+  };
+
   const newView = async v => {
     const ctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.mobile, hasTouch: v.touch, reducedMotion: "no-preference"});
     await ctx.addInitScript(instrument);
@@ -187,6 +232,7 @@ try {
       const d = document.querySelector(".world-canvas")?.dataset;
       return d && d.world3d === "ready" && d.cameraZoom !== undefined && d.cameraYaw !== undefined;
     }, null, {timeout: 30000});
+    await page.evaluate(armDelivery);
     const cdp = v.touch ? await ctx.newCDPSession(page) : null;
     if (cdp) {
       // CAM-08 harness lesson (docs/design/CAMERA.md CAM-08): CDP touchMove
@@ -207,6 +253,9 @@ try {
   // a change frame with the expected seq AND kind AND a finite eventTime.
   const gestureSample = async (view, kind, contact, dir) => {
     const {page, cdp} = view;
+    // Re-verify the contact reaches the canvas at the instant of the gesture;
+    // re-find (and count) if an overlay mounted over it since setup.
+    await verifyContact(view, contact);
     const {x: cx, y: cy} = contact.point;
     const seqBefore = await page.evaluate(() => (window.__RW_PROBES__.cam10.stats && window.__RW_PROBES__.cam10.stats.seq) || 0);
     const expected = seqBefore + 1;
@@ -226,10 +275,32 @@ try {
       await cdp.send("Input.dispatchTouchEvent", {type: "touchStart", touchPoints: [{x: cx - from, y: cy, id: 1}, {x: cx + from, y: cy, id: 2}]});
       await cdp.send("Input.dispatchTouchEvent", {type: "touchMove", touchPoints: [{x: cx - to, y: cy, id: 1}, {x: cx + to, y: cy, id: 2}]});
     }
-    await page.waitForFunction(([seq, k]) => {
-      const m = window.__cam10Mon;
-      return m.changes.some(c => c.seq === seq && c.kind === k && c.eventTime != null && Number.isFinite(c.eventTime));
-    }, [expected, probeKind], {timeout: 15000});
+    try {
+      await page.waitForFunction(([seq, k]) => {
+        const m = window.__cam10Mon;
+        return m.changes.some(c => c.seq === seq && c.kind === k && c.eventTime != null && Number.isFinite(c.eventTime));
+      }, [expected, probeKind], {timeout: 15000});
+    } catch (waitErr) {
+      // Timeout diagnostics: elementFromPoint FIRST (overlay thief), then the
+      // aggregate delivery counters, monitor progress, probe state and pose.
+      const diag = await page.evaluate(([x, y]) => {
+        const el = document.elementFromPoint(x, y);
+        const cv = document.querySelector(".world-canvas");
+        const d = cv ? cv.dataset : {};
+        const st = window.__RW_PROBES__.cam10.stats;
+        const m = window.__cam10Mon;
+        return {
+          contact: {x, y, isCanvas: el === cv, tag: el ? el.tagName + "." + String(el.className || "").slice(0, 40) : "null"},
+          delivery: window.__cam10Delivery,
+          monitor: {frames: m.frames, changes: m.changes.length, lastChanges: m.changes.slice(-3)},
+          probe: {seq: st && st.seq, kinds: st && st.kinds, last: st && st.last},
+          pose: {yaw: d.cameraYaw, elev: d.cameraElevation, zoom: d.cameraZoom, x: d.cameraX, z: d.cameraZ},
+          scrollY: window.scrollY,
+          visualViewport: window.visualViewport ? {scale: window.visualViewport.scale, offsetTop: window.visualViewport.offsetTop} : null
+        };
+      }, [cx, cy]).catch(e => ({diagError: String(e)}));
+      throw new Error(`${kind}: seq-paired change wait timed out (expected seq ${expected} kind ${probeKind}): ${String(waitErr).slice(0, 120)} | DIAGNOSTICS ${JSON.stringify(diag)}`);
+    }
     const sample = await page.evaluate(([seq, k]) => {
       const c = window.__cam10Mon.changes.find(c => c.seq === seq && c.kind === k);
       const st = window.__RW_PROBES__.cam10.stats;
@@ -281,8 +352,10 @@ try {
     }
     const mon = await collectMonitor(page);
     const kinds = await page.evaluate(() => window.__RW_PROBES__.cam10.stats.kinds);
+    const delivery = await page.evaluate(() => window.__cam10Delivery);
     return {
       label, commands: i, durationMs: mon.durationMs, midFrameCorrections,
+      contactRefinds: view.contactRefinds || 0, delivery,
       frames: frameStats(mon.deltas, mon.durationMs),
       latency: {drag: latencyStats(samples.drag), zoom: latencyStats(samples.zoom)},
       handlerMs: {
@@ -309,6 +382,7 @@ try {
       const candidates = v.touch
         ? [[195, 200], [195, 300], [195, 422], [100, 150], [290, 250]]
         : [[720, 450], [720, 300], [500, 400]];
+      view.candidates = candidates; // gesture-time re-verification re-finds from these
       out.contact = await findContact(view.page, candidates);
       // 60-second baseline at default production quality.
       out.baseline = await runSession(view, out.contact, {commands: Math.floor(RUN_MS / PACE_MS), paceMs: PACE_MS, label: "baseline-60s"});
