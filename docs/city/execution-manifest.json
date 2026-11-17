@@ -1222,7 +1222,7 @@
         383,
         385
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-01] In-world route drawing with editable waypoints"
     },
@@ -1237,7 +1237,7 @@
       "hard_blockers": [
         402
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-02] Name, save, duplicate and version player-defined routes"
     },
@@ -1253,7 +1253,7 @@
         402,
         384
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-03] Per-truck route assignments and manual dispatch commands"
     },
@@ -1269,7 +1269,7 @@
         404,
         386
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-04] Round-trip routes with dwell times and pickup/dropoff manifests"
     },
@@ -1285,7 +1285,7 @@
         383,
         402
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-05] Routing policy: fastest, shortest, economical, safest and hazard avoidance"
     },
@@ -1300,7 +1300,7 @@
       "hard_blockers": [
         383
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-06] Road segment directionality, lane restrictions and turn rules"
     },
@@ -1315,7 +1315,7 @@
       "hard_blockers": [
         407
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-07] Traffic signals, timing and priority configuration"
     },
@@ -1331,7 +1331,7 @@
         402,
         406
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-08] Manual road closures, planned maintenance and detour creation"
     },
@@ -1346,7 +1346,7 @@
       "hard_blockers": [
         408
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-09] Emergency routing and right-of-way priority overrides"
     },
@@ -1362,7 +1362,7 @@
         402,
         404
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-10] Map overlays for routes, cargo, congestion and accessibility"
     },
@@ -1377,7 +1377,7 @@
       "hard_blockers": [
         407
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-11] Road classes, roundabouts, bridges and intersection upgrades"
     },
@@ -1392,7 +1392,7 @@
       "hard_blockers": [
         407
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-12] Design pedestrian footpaths, crossings and protected walkways"
     },
@@ -1408,7 +1408,7 @@
         402,
         389
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-13] Multimodal route editor for trucks, drones, forklifts and transit"
     },
@@ -1424,7 +1424,7 @@
         404,
         411
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][RTE-14] Route design tutorial and seed scenario with two viable solutions"
     },
@@ -1439,7 +1439,7 @@
       "hard_blockers": [
         512
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-01] Implement deterministic civilian and worker entity identities"
     },
@@ -1455,7 +1455,7 @@
         413,
         416
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-02] Create pedestrian path network and safe crossings"
     },
@@ -1471,7 +1471,7 @@
         416,
         417
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-03] Introduce shift-based worker commute, attendance and industrial productivity"
     },
@@ -1486,7 +1486,7 @@
       "hard_blockers": [
         416
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-04] Model dwellings, households, jobs and population growth"
     },
@@ -1502,7 +1502,7 @@
         417,
         419
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-05] Give citizens daily routines, destinations and visible walking"
     },
@@ -1518,7 +1518,7 @@
         420,
         347
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-06] Create recognizable small voxel human rigs, clothing and crowd LOD"
     },
@@ -1534,7 +1534,7 @@
         417,
         404
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-07] Simulate public transit, bus routes and passenger transfer"
     },
@@ -1549,7 +1549,7 @@
       "hard_blockers": [
         419
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-08] Model resident needs, morale and amenity access causally"
     },
@@ -1565,7 +1565,7 @@
         420,
         423
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-09] Add citizen gatherings, social events and recreation destinations"
     },
@@ -1581,7 +1581,7 @@
         418,
         384
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-10] Simulate worker fatigue, injuries and workplace safety"
     },
@@ -1596,7 +1596,7 @@
       "hard_blockers": [
         423
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-11] Support neighborhood demographic abstraction without unfair stereotypes"
     },
@@ -1612,7 +1612,7 @@
         420,
         423
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-12] Add resident inspection, commute overlays and causal service explanations"
     },
@@ -1627,7 +1627,7 @@
       "hard_blockers": [
         417
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-13] Create emergency evacuation and safe shelter behavior"
     },
@@ -1642,7 +1642,7 @@
       "hard_blockers": [
         420
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][POP-14] Validate hundreds of autonomous citizens without mobile GPU/CPU collapse"
     },
@@ -1657,7 +1657,7 @@
       "hard_blockers": [
         513
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-01] Build deterministic incident and hazard event engine"
     },
@@ -1672,7 +1672,7 @@
       "hard_blockers": [
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-02] Model weather forecast, alerts and changing wind/temperature"
     },
@@ -1687,7 +1687,7 @@
       "hard_blockers": [
         431
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-03] Implement rainwater runoff, drainage and neighborhood flooding"
     },
@@ -1702,7 +1702,7 @@
       "hard_blockers": [
         431
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-04] Introduce tornado/high-wind storms with visible world-space impacts"
     },
@@ -1717,7 +1717,7 @@
       "hard_blockers": [
         431
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-05] Simulate wildfire ignition, spread, smoke and fire breaks"
     },
@@ -1733,7 +1733,7 @@
         430,
         412
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-06] Model earthquake ground motion, structural vulnerability and utilities"
     },
@@ -1748,7 +1748,7 @@
       "hard_blockers": [
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-07] Represent industrial equipment malfunctions and factory fires"
     },
@@ -1763,7 +1763,7 @@
       "hard_blockers": [
         436
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-08] Add abstract hazardous-material spill and contamination consequences"
     },
@@ -1778,7 +1778,7 @@
       "hard_blockers": [
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-09] Model grid failure, water outage and cascading infrastructure disruption"
     },
@@ -1793,7 +1793,7 @@
       "hard_blockers": [
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-10] Add abstract sabotage/vandalism incidents and security mitigation"
     },
@@ -1810,7 +1810,7 @@
         410,
         428
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-11] Implement fire, medical and utility emergency response teams"
     },
@@ -1826,7 +1826,7 @@
         436,
         374
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-12] Implement visible staged destruction, debris, repair and rebuilding"
     },
@@ -1841,7 +1841,7 @@
       "hard_blockers": [
         440
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-13] Implement disaster preparedness, insurance and safe recovery budgets"
     },
@@ -1856,7 +1856,7 @@
       "hard_blockers": [
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][HAZ-14] Build scenario replay, intensity options and non-punitive hazard testing"
     },
@@ -1872,7 +1872,7 @@
         423,
         419
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-01] Model civic satisfaction by neighborhood from real needs and services"
     },
@@ -1887,7 +1887,7 @@
       "hard_blockers": [
         444
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-02] Implement municipal budget with operating and capital costs"
     },
@@ -1902,7 +1902,7 @@
       "hard_blockers": [
         445
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-03] Expose adjustable property/business tax and service funding policy"
     },
@@ -1918,7 +1918,7 @@
         444,
         418
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-04] Model labor negotiations, wages and stoppages"
     },
@@ -1934,7 +1934,7 @@
         444,
         420
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-05] Create peaceful demonstrations and civic gatherings"
     },
@@ -1950,7 +1950,7 @@
         448,
         430
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-06] Implement unrest escalation and fictional riot incidents with recovery"
     },
@@ -1966,7 +1966,7 @@
         449,
         440
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-07] Build emergency-response choices for unrest and damaged districts"
     },
@@ -1982,7 +1982,7 @@
         444,
         417
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-08] Implement education, clinic, parks and community services"
     },
@@ -1998,7 +1998,7 @@
         445,
         440
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-09] Add police, fire, medical and public works stations as routed services"
     },
@@ -2014,7 +2014,7 @@
         446,
         451
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-10] Implement public policy milestones with measurable risks and benefits"
     },
@@ -2030,7 +2030,7 @@
         447,
         449
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-11] Create civic narrative events, negotiation UI and transparent outcomes"
     },
@@ -2045,7 +2045,7 @@
       "hard_blockers": [
         451
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-12] Model fair service distribution and non-discriminatory risk evaluation"
     },
@@ -2061,7 +2061,7 @@
         449,
         451
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-13] Create public trust, accountability and rebuilding after incidents"
     },
@@ -2077,7 +2077,7 @@
         454,
         456
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][CIV-14] Validate interlocking riots, strikes, transport and economy scenarios"
     },
@@ -2093,7 +2093,7 @@
         383,
         386
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-01] Build shared dynamic lane occupancy and traffic world-state"
     },
@@ -2108,7 +2108,7 @@
       "hard_blockers": [
         458
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-02] Introduce bounded 3D vehicle collision checks and contact responses"
     },
@@ -2124,7 +2124,7 @@
         458,
         408
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-03] Implement realistic yielding, right-of-way, queueing and roundabouts"
     },
@@ -2140,7 +2140,7 @@
         459,
         384
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-04] Simulate car/truck collisions with damage, cargo preservation and repair"
     },
@@ -2156,7 +2156,7 @@
         458,
         390
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-05] Add breakdowns, stalled trucks, fuel loss and roadside incidents"
     },
@@ -2172,7 +2172,7 @@
         458,
         417
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-06] Protect pedestrian crossings and implement near-miss avoidance"
     },
@@ -2188,7 +2188,7 @@
         458,
         385
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-07] Model vehicle acceleration, braking, turn radius and load effects"
     },
@@ -2204,7 +2204,7 @@
         461,
         440
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-08] Design accident and emergency clear-lane protocols"
     },
@@ -2220,7 +2220,7 @@
         460,
         418
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-09] Create traffic signal/timing optimization and peak-hour demand"
     },
@@ -2235,7 +2235,7 @@
       "hard_blockers": [
         461
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-10] Implement road safety upgrades, speed policies and enforcement"
     },
@@ -2251,7 +2251,7 @@
         461,
         351
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-11] Create incident reports and cinematic but truthful collision animations"
     },
@@ -2267,7 +2267,7 @@
         466,
         411
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-12] Expose flow heatmap, intersections, traffic patterns and reroute UI"
     },
@@ -2284,7 +2284,7 @@
         432,
         449
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-13] Validate vehicles and pedestrians under emergency weather or unrest"
     },
@@ -2299,7 +2299,7 @@
       "hard_blockers": [
         459
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][TRF-14] Scale traffic and collision simulation under mobile performance budgets"
     },
@@ -2314,7 +2314,7 @@
       "hard_blockers": [
         370
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-01] Implement zoning overlays and editable district boundaries"
     },
@@ -2330,7 +2330,7 @@
         472,
         419
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-02] Create housing categories with density, vacancy and capacity"
     },
@@ -2346,7 +2346,7 @@
         472,
         418
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-03] Add shops, markets, offices and commercial demand loops"
     },
@@ -2362,7 +2362,7 @@
         472,
         444
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-04] Create industrial zoning tiers and land-use impact choices"
     },
@@ -2377,7 +2377,7 @@
       "hard_blockers": [
         472
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-05] Build water distribution network with tanks, pumps and service capacity"
     },
@@ -2392,7 +2392,7 @@
       "hard_blockers": [
         476
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-06] Model sewage, sanitation and treatment utility capacity"
     },
@@ -2407,7 +2407,7 @@
       "hard_blockers": [
         472
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-07] Implement power substation and local electrical network coverage"
     },
@@ -2423,7 +2423,7 @@
         473,
         474
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-08] Simulate land value, development desirability and market demand"
     },
@@ -2439,7 +2439,7 @@
         479,
         374
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-09] Implement building construction and growth from city demand"
     },
@@ -2455,7 +2455,7 @@
         472,
         424
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-10] Create parks, plazas, public squares and recreation coverage"
     },
@@ -2471,7 +2471,7 @@
         473,
         451
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-11] Model fire/health/education/public works service radius and access"
     },
@@ -2487,7 +2487,7 @@
         472,
         402
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-12] Add city road-grid planning tool with templates and exact construction costs"
     },
@@ -2502,7 +2502,7 @@
       "hard_blockers": [
         479
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-13] Create mixed-use district specialization and zoning upgrade tradeoffs"
     },
@@ -2518,7 +2518,7 @@
         476,
         478
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-14] Show city health overlays: power, water, sewage, jobs, land and taxes"
     },
@@ -2534,7 +2534,7 @@
         480,
         432
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ZON-15] Integrate zoning with disasters, population and realistic fiscal recovery"
     },
@@ -2549,7 +2549,7 @@
       "hard_blockers": [
         416
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-01] Introduce world day-night clock and state-driven industrial lighting"
     },
@@ -2565,7 +2565,7 @@
         487,
         431
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-02] Implement seasonal temperature and precipitation cycles"
     },
@@ -2581,7 +2581,7 @@
         488,
         475
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-03] Model air pollution, emissions sources and dispersion"
     },
@@ -2597,7 +2597,7 @@
         489,
         444
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-04] Model noise pollution from freight, heavy industry and nightlife"
     },
@@ -2613,7 +2613,7 @@
         477,
         432
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-05] Simulate groundwater, river and wastewater quality"
     },
@@ -2629,7 +2629,7 @@
         488,
         478
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-06] Model urban heat and cooling demand"
     },
@@ -2645,7 +2645,7 @@
         489,
         481
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-07] Create vegetation, tree growth and landscape restoration"
     },
@@ -2660,7 +2660,7 @@
       "hard_blockers": [
         432
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-08] Add terrain sculpting, grading and earthworks with engineering costs"
     },
@@ -2676,7 +2676,7 @@
         488,
         464
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-09] Make road surface condition and weather affect vehicle traction"
     },
@@ -2692,7 +2692,7 @@
         491,
         493
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-10] Implement ecosystem/service health and sustainable industrial options"
     },
@@ -2707,7 +2707,7 @@
       "hard_blockers": [
         493
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-11] Add ambient wildlife and environmental animations with LOD"
     },
@@ -2724,7 +2724,7 @@
         495,
         443
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][ENV-12] Validate coupled season, pollution, flooding and disaster simulations"
     },
@@ -2740,7 +2740,7 @@
         430,
         444
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-01] Build canonical city event timeline and causal source references"
     },
@@ -2755,7 +2755,7 @@
       "hard_blockers": [
         499
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-02] Implement editable scenario seed, map and starting-condition presets"
     },
@@ -2770,7 +2770,7 @@
       "hard_blockers": [
         499
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-03] Introduce pause, slow motion and time-speed controls"
     },
@@ -2786,7 +2786,7 @@
         443,
         500
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-04] Build freeplay hazard frequency, severity and safety controls"
     },
@@ -2803,7 +2803,7 @@
         485,
         456
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-05] Create layered 3D heatmaps for traffic, pollution, fire, services and unrest"
     },
@@ -2819,7 +2819,7 @@
         440,
         452
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-06] Implement emergency operations panel with live incident dispatch"
     },
@@ -2834,7 +2834,7 @@
       "hard_blockers": [
         499
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-07] Create dynamic city objectives, contracts and emergent event chains"
     },
@@ -2849,7 +2849,7 @@
       "hard_blockers": [
         499
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-08] Build incident replay/scrub timeline for routes, damage and decisions"
     },
@@ -2864,7 +2864,7 @@
       "hard_blockers": [
         500
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-09] Provide named sandbox saves and scenario blueprints with safe import/export"
     },
@@ -2879,7 +2879,7 @@
       "hard_blockers": [
         420
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-10] Add follow-camera, selected-agent tracking and cinematic event bookmarks"
     },
@@ -2894,7 +2894,7 @@
       "hard_blockers": [
         499
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-11] Generate a city newswire and relevant opt-in notifications"
     },
@@ -2910,7 +2910,7 @@
         502,
         505
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-12] Build curated scripted scenarios showcasing emergent city mechanics"
     },
@@ -2926,7 +2926,7 @@
         506,
         510
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SCN-13] Validate fair and replayable multi-system disaster challenges"
     },
@@ -2939,7 +2939,7 @@
       "priority": "P1",
       "role": "developer",
       "hard_blockers": [],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-01] Define stable entity-component city simulation schema"
     },
@@ -2954,7 +2954,7 @@
       "hard_blockers": [
         512
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-02] Decouple deterministic fixed simulation tick from frame rendering"
     },
@@ -2970,7 +2970,7 @@
         512,
         459
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-03] Introduce spatial partition and nearby-agent collision query"
     },
@@ -2986,7 +2986,7 @@
         513,
         420
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-04] Create offscreen crowd abstraction preserving jobs and movement outcomes"
     },
@@ -3001,7 +3001,7 @@
       "hard_blockers": [
         514
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-05] Scale city terrain and industry across streamed chunks and region tiers"
     },
@@ -3017,7 +3017,7 @@
         383,
         514
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-06] Make pathfinding incremental and cache-aware after road edits"
     },
@@ -3034,7 +3034,7 @@
         430,
         444
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-07] Create bounded event queue for weather, strikes, accidents and disasters"
     },
@@ -3049,7 +3049,7 @@
       "hard_blockers": [
         512
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-08] Build idempotent command journal for player decisions and simulation events"
     },
@@ -3064,7 +3064,7 @@
       "hard_blockers": [
         518
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-09] Implement multi-day offline settlement for jobs, agents, utilities and disasters"
     },
@@ -3079,7 +3079,7 @@
       "hard_blockers": [
         519
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-10] Add snapshot compaction, migration and corrupt-storage recovery"
     },
@@ -3095,7 +3095,7 @@
         515,
         516
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-11] Provide graphics/simulation quality tiers with parity guarantees"
     },
@@ -3110,7 +3110,7 @@
       "hard_blockers": [
         522
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-12] Create representative performance benchmark maps and mobile targets"
     },
@@ -3126,7 +3126,7 @@
         518,
         519
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-13] Implement determinism and invariant stress testing with randomized cities"
     },
@@ -3141,9 +3141,10 @@
       "hard_blockers": [
         519
       ],
-      "external_hold": null,
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
       "dispatchable": true,
       "title": "[V2 CITY][SIM-14] Build test-only replay/debug bridge without leaking private state"
     }
-  ]
+  ],
+  "phase_unlock_policy": "G1 first-playable (including real camera, build/road/freight, visual phone evidence) remains the gating sponsor milestone before P2/P3 city systems, unless sponsor explicitly changes sequence."
 }
