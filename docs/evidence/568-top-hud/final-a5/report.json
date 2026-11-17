@@ -1,0 +1,968 @@
+{
+  "version": 1,
+  "issue": 377,
+  "task": "BLD-08 safe dismantle, refunds and local stock recovery",
+  "build": "production-preview",
+  "source_sha": "50c3e21920e3fd55ed99ecfd9a3b701057a76589",
+  "started": "2026-11-17T17:50:14.542Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-dismantle-confirm-dialog.png",
+        "desktop-dismantle-refunded.png",
+        "desktop-dismantle-repeat-missing.png",
+        "desktop-dismantle-protected.png",
+        "desktop-dismantle-reserved.png",
+        "desktop-fleet-reserved-detail.png",
+        "desktop-freight-canceled.png",
+        "desktop-reserved-then-confirm-dialog.png",
+        "desktop-reserved-then-dismantled.png",
+        "desktop-replay-no-double-refund.png"
+      ],
+      "proof": {
+        "uiDismantle": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 720,
+              "py": 382,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "previewText": "Recovery preview: +72 CR, +11 SC, +4 AG, +7 FE.",
+          "dialogRows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 72
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 11
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 4
+            },
+            {
+              "name": "Ferrous ore",
+              "source": "cargo return",
+              "amount": 7
+            }
+          ],
+          "keepMachine": {
+            "bankDeltaZero": true,
+            "buildingRetained": true
+          },
+          "success": {
+            "before": {
+              "credits": 820,
+              "scrap": 72,
+              "iron": 0,
+              "copper": 0,
+              "stone": 88,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "after": {
+              "credits": 892,
+              "scrap": 83,
+              "iron": 7,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "delta": {
+              "credits": 72,
+              "scrap": 11,
+              "iron": 7,
+              "copper": 0,
+              "stone": 4,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "buildingsBefore": 6,
+            "buildingsAfter": 5
+          },
+          "repeatTap": {
+            "selected": false,
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            }
+          },
+          "reload": {
+            "commandReplay": {
+              "ok": false,
+              "code": "MISSING"
+            },
+            "plainRepeat": {
+              "ok": false,
+              "code": "MISSING"
+            },
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "persistedBank": {
+              "credits": 892,
+              "scrap": 83,
+              "iron": 7,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            }
+          },
+          "seed": {
+            "powerFrozen": "generator removed",
+            "freightFrozen": "all trucks removed",
+            "cargo": {
+              "iron": 7
+            }
+          }
+        },
+        "protected": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 656,
+              "py": 308,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "buildingId": 1,
+          "disabled": true,
+          "reason": "Starter buildings are protected; construct your own district.",
+          "bankDelta": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          }
+        },
+        "reservedFlow": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 720,
+              "py": 382,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "blockedReason": "A truck has reserved material at this building",
+          "sourceBagBefore": 5,
+          "jobBefore": {
+            "phase": "toDest",
+            "amount": 15,
+            "resource": "scrap",
+            "segment": 1,
+            "progress": 0.1442000000000001,
+            "routeLen": 5,
+            "toSourceLen": 1,
+            "toDestLen": 5,
+            "sourceId": 10,
+            "destId": 2
+          },
+          "cancelFreight": {
+            "id": 1,
+            "ok": true,
+            "code": "OK",
+            "amount": 15,
+            "resource": "scrap",
+            "sourceId": 10,
+            "phase": "toDest",
+            "bagBefore": 5,
+            "bagAfter": 20,
+            "before": {
+              "reserved": 30,
+              "onboard": 15,
+              "totals": {
+                "credits": 820,
+                "scrap": 292,
+                "stone": 88,
+                "iron": 200,
+                "fuel": 200
+              }
+            },
+            "after": {
+              "reserved": 30,
+              "onboard": 0,
+              "totals": {
+                "credits": 820,
+                "scrap": 292,
+                "stone": 88,
+                "iron": 200,
+                "fuel": 200
+              }
+            }
+          },
+          "reassignedJob": {
+            "phase": "toSource",
+            "amount": 15,
+            "resource": "fuel",
+            "segment": 0,
+            "progress": 0.010003999999999987,
+            "routeLen": 9,
+            "toSourceLen": 9,
+            "toDestLen": 12,
+            "sourceId": 4,
+            "destId": 2
+          },
+          "sourceBagAfterCancel": 20,
+          "selectionAfterCancel": [
+            {
+              "h": 1.2,
+              "px": 720,
+              "py": 382,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "dialogRows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 72
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 31
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 4
+            }
+          ],
+          "success": {
+            "before": {
+              "credits": 820,
+              "scrap": 72,
+              "iron": 0,
+              "copper": 0,
+              "stone": 88,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "after": {
+              "credits": 892,
+              "scrap": 103,
+              "iron": 0,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "delta": {
+              "credits": 72,
+              "scrap": 31,
+              "iron": 0,
+              "copper": 0,
+              "stone": 4,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "buildingsBefore": 6,
+            "buildingsAfter": 5
+          },
+          "seed": {
+            "starterStocks": {
+              "salvager1": {
+                "scrap": 200
+              },
+              "furnace4": {
+                "iron": 200,
+                "fuel": 200
+              }
+            },
+            "truckSpeed": 0.02,
+            "note": "post-cancel re-assignment deterministically takes an earlier starter candidate; the one-tick re-dispatch race is disclosed gameplay debt"
+          }
+        },
+        "replay": {
+          "inNode": {
+            "commandId": "fixture-dismantle-1",
+            "buildingId": 10,
+            "duplicate": true,
+            "refund": {
+              "credits": 104,
+              "scrap": 18,
+              "stone": 17,
+              "iron": 18
+            },
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "plainRepeat": {
+              "ok": false,
+              "code": "MISSING"
+            }
+          },
+          "browser": {
+            "buildingsLive": 6,
+            "buildingsFixture": 6,
+            "creditsChip": 844,
+            "fixtureBankCredits": 844,
+            "registryPersisted": true
+          },
+          "note": "API-SEEDED headline: command-id replay is proven through the authoritative public API + persisted registry; the UI issues no command ids yet (registered follow-up)"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "probeWait": {
+        "condition": "MutationObserver count of data-fleet-probe attribute writes > baseline captured at probe start (fresh post-action stamp)",
+        "timeoutMs": 15000,
+        "pollingMs": 25,
+        "count": 13,
+        "maxMs": 463,
+        "meanMs": 199,
+        "samplesMs": [
+          184,
+          139,
+          252,
+          440,
+          160,
+          28,
+          290,
+          233,
+          209,
+          27,
+          133,
+          463,
+          28
+        ]
+      }
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-dismantle-confirm-dialog.png",
+        "phone-dismantle-refunded.png",
+        "phone-dismantle-repeat-missing.png",
+        "phone-dismantle-protected.png",
+        "phone-dismantle-reserved.png",
+        "phone-fleet-reserved-detail.png",
+        "phone-freight-canceled.png",
+        "phone-reserved-then-confirm-dialog.png",
+        "phone-reserved-then-dismantled.png",
+        "phone-replay-no-double-refund.png"
+      ],
+      "proof": {
+        "uiDismantle": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 195,
+              "py": 366,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "previewText": "Recovery preview: +72 CR, +11 SC, +4 AG, +7 FE.",
+          "dialogRows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 72
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 11
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 4
+            },
+            {
+              "name": "Ferrous ore",
+              "source": "cargo return",
+              "amount": 7
+            }
+          ],
+          "keepMachine": {
+            "bankDeltaZero": true,
+            "buildingRetained": true
+          },
+          "success": {
+            "before": {
+              "credits": 820,
+              "scrap": 72,
+              "iron": 0,
+              "copper": 0,
+              "stone": 88,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "after": {
+              "credits": 892,
+              "scrap": 83,
+              "iron": 7,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "delta": {
+              "credits": 72,
+              "scrap": 11,
+              "iron": 7,
+              "copper": 0,
+              "stone": 4,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "buildingsBefore": 6,
+            "buildingsAfter": 5
+          },
+          "repeatTap": {
+            "selected": false,
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            }
+          },
+          "reload": {
+            "commandReplay": {
+              "ok": false,
+              "code": "MISSING"
+            },
+            "plainRepeat": {
+              "ok": false,
+              "code": "MISSING"
+            },
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "persistedBank": {
+              "credits": 892,
+              "scrap": 83,
+              "iron": 7,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            }
+          },
+          "seed": {
+            "powerFrozen": "generator removed",
+            "freightFrozen": "all trucks removed",
+            "cargo": {
+              "iron": 7
+            }
+          }
+        },
+        "protected": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 143,
+              "py": 306,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "buildingId": 1,
+          "disabled": true,
+          "reason": "Starter buildings are protected; construct your own district.",
+          "bankDelta": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          }
+        },
+        "reservedFlow": {
+          "selection": [
+            {
+              "h": 1.2,
+              "px": 195,
+              "py": 366,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "blockedReason": "A truck has reserved material at this building",
+          "sourceBagBefore": 5,
+          "jobBefore": {
+            "phase": "toDest",
+            "amount": 15,
+            "resource": "scrap",
+            "segment": 1,
+            "progress": 0.14926200000000012,
+            "routeLen": 5,
+            "toSourceLen": 1,
+            "toDestLen": 5,
+            "sourceId": 10,
+            "destId": 2
+          },
+          "cancelFreight": {
+            "id": 1,
+            "ok": true,
+            "code": "OK",
+            "amount": 15,
+            "resource": "scrap",
+            "sourceId": 10,
+            "phase": "toDest",
+            "bagBefore": 5,
+            "bagAfter": 20,
+            "before": {
+              "reserved": 30,
+              "onboard": 15,
+              "totals": {
+                "credits": 820,
+                "scrap": 292,
+                "stone": 88,
+                "iron": 200,
+                "fuel": 200
+              }
+            },
+            "after": {
+              "reserved": 30,
+              "onboard": 0,
+              "totals": {
+                "credits": 820,
+                "scrap": 292,
+                "stone": 88,
+                "iron": 200,
+                "fuel": 200
+              }
+            }
+          },
+          "reassignedJob": {
+            "phase": "toSource",
+            "amount": 15,
+            "resource": "fuel",
+            "segment": 0,
+            "progress": 0.011933999999999988,
+            "routeLen": 9,
+            "toSourceLen": 9,
+            "toDestLen": 12,
+            "sourceId": 4,
+            "destId": 2
+          },
+          "sourceBagAfterCancel": 20,
+          "selectionAfterCancel": [
+            {
+              "h": 1.2,
+              "px": 195,
+              "py": 141,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "dialogRows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 72
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 31
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 4
+            }
+          ],
+          "success": {
+            "before": {
+              "credits": 820,
+              "scrap": 72,
+              "iron": 0,
+              "copper": 0,
+              "stone": 88,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "after": {
+              "credits": 892,
+              "scrap": 103,
+              "iron": 0,
+              "copper": 0,
+              "stone": 92,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "delta": {
+              "credits": 72,
+              "scrap": 31,
+              "iron": 0,
+              "copper": 0,
+              "stone": 4,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "buildingsBefore": 6,
+            "buildingsAfter": 5
+          },
+          "seed": {
+            "starterStocks": {
+              "salvager1": {
+                "scrap": 200
+              },
+              "furnace4": {
+                "iron": 200,
+                "fuel": 200
+              }
+            },
+            "truckSpeed": 0.02,
+            "note": "post-cancel re-assignment deterministically takes an earlier starter candidate; the one-tick re-dispatch race is disclosed gameplay debt"
+          }
+        },
+        "replay": {
+          "inNode": {
+            "commandId": "fixture-dismantle-1",
+            "buildingId": 10,
+            "duplicate": true,
+            "refund": {
+              "credits": 104,
+              "scrap": 18,
+              "stone": 17,
+              "iron": 18
+            },
+            "bankDelta": {
+              "credits": 0,
+              "scrap": 0,
+              "iron": 0,
+              "copper": 0,
+              "stone": 0,
+              "fuel": 0,
+              "water": 0,
+              "steel": 0,
+              "alloy": 0,
+              "gears": 0,
+              "circuits": 0,
+              "data": 0,
+              "relics": 0,
+              "influence": 0,
+              "shards": 0,
+              "charters": 0,
+              "renown": 0
+            },
+            "plainRepeat": {
+              "ok": false,
+              "code": "MISSING"
+            }
+          },
+          "browser": {
+            "buildingsLive": 6,
+            "buildingsFixture": 6,
+            "creditsChip": 844,
+            "fixtureBankCredits": 844,
+            "registryPersisted": true
+          },
+          "note": "API-SEEDED headline: command-id replay is proven through the authoritative public API + persisted registry; the UI issues no command ids yet (registered follow-up)"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "probeWait": {
+        "condition": "MutationObserver count of data-fleet-probe attribute writes > baseline captured at probe start (fresh post-action stamp)",
+        "timeoutMs": 15000,
+        "pollingMs": 25,
+        "count": 13,
+        "maxMs": 312,
+        "meanMs": 187,
+        "samplesMs": [
+          82,
+          209,
+          202,
+          312,
+          28,
+          261,
+          235,
+          149,
+          197,
+          234,
+          211,
+          260,
+          55
+        ]
+      }
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated 390x844 dpr2, not a physical device; no physical display",
+    "Numeric proofs do not certify visual fidelity — sponsor screenshot+motion review required at G1 (#276)",
+    "Local production preview only — the live hosted receipt is produced at release by the release engineer; this is NOT a release",
+    "UI is not idempotent end-to-end: App.jsx onRemove issues no command id (registered cross-lease follow-up, same debt as BLD-04). Command-id replay is proven via the authoritative public API + the persisted fixture registry (API-SEEDED headline); real UI duplicate safety is proven by the plain repeat tap (MISSING, zero payout) and by replaying the PERSISTED browser save through readGame+removeBuilding in-node",
+    "RESERVED context seed: starter salvager/furnace inventories stocked (200 each) and ALL truck speeds seeded to 0.02 cells/s so (a) the reservation stays live for the whole capture and (b) after the real UI cancelFreight the dispatcher's IMMEDIATE next-tick re-assignment takes an earlier starter candidate instead of re-reserving the player machine. The one-tick re-dispatch race itself is real gameplay debt (a player cannot normally win the cancel->dismantle window) — disclosed in the GAPS row and filed as a follow-up; no gate was weakened to hide it",
+    "UI dismantle context seed: generator removed (no power -> no production) and all trucks removed (no freight) so every bank resource is exact; the seeded cargo (iron 7) stands in for processed outputs — the crusher 3-cycle processed-output refund is proven with real production in tests/dismantleAtomic.test.mjs and the fixture",
+    "Save/reload durability of the command registry, sanitized inventory and rollback atomicity is proven by tests/dismantleAtomic.test.mjs (15 tests, rollback control main 0/15 vs branch 15/15); the browser seed script re-seeds on reload, so reload is re-proven here only via the persisted-save in-node replay"
+  ],
+  "completed": "2026-11-17T17:50:49.014Z"
+}

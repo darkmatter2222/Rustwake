@@ -1,0 +1,13 @@
+BLD-08 dismantle capture: PASS_NUMERIC_ONLY C:\Users\ryans\AppData\Local\Temp\rw-qwen\dev-568\docs\evidence\568-top-hud\final-a5
+[
+ {
+  "view": "desktop",
+  "shots": 10,
+  "errors": 0
+ },
+ {
+  "view": "phone",
+  "shots": 10,
+  "errors": 0
+ }
+]
