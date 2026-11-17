@@ -1,0 +1,3174 @@
+{
+  "schema": "rustwake.v2.city-execution.v1",
+  "published_on": "2026-11-16",
+  "baseline_main_sha": "258fce59755c4c07aabed0c6925a0757f0e4cc24",
+  "vision_issue": 253,
+  "execution_master": 310,
+  "definition": "An issue is dispatchable only when concrete hard_blockers accepted/merged and external_hold cleared. Scope/capability trackers are not hard blockers.",
+  "first_playable_gate": 276,
+  "tracks": [
+    {
+      "id": "S01",
+      "issue": 311,
+      "phase": "P0",
+      "task_range": [
+        325,
+        336
+      ]
+    },
+    {
+      "id": "S02",
+      "issue": 312,
+      "phase": "P1",
+      "task_range": [
+        337,
+        346
+      ]
+    },
+    {
+      "id": "S03",
+      "issue": 313,
+      "phase": "P1",
+      "task_range": [
+        347,
+        358
+      ]
+    },
+    {
+      "id": "S04",
+      "issue": 314,
+      "phase": "P1",
+      "task_range": [
+        359,
+        369
+      ]
+    },
+    {
+      "id": "S05",
+      "issue": 315,
+      "phase": "P1",
+      "task_range": [
+        370,
+        380
+      ]
+    },
+    {
+      "id": "S06",
+      "issue": 316,
+      "phase": "P1",
+      "task_range": [
+        381,
+        392
+      ]
+    },
+    {
+      "id": "S15",
+      "issue": 393,
+      "phase": "P2",
+      "task_range": [
+        402,
+        415
+      ]
+    },
+    {
+      "id": "S16",
+      "issue": 394,
+      "phase": "P2",
+      "task_range": [
+        416,
+        429
+      ]
+    },
+    {
+      "id": "S17",
+      "issue": 395,
+      "phase": "P3",
+      "task_range": [
+        430,
+        443
+      ]
+    },
+    {
+      "id": "S18",
+      "issue": 396,
+      "phase": "P3",
+      "task_range": [
+        444,
+        457
+      ]
+    },
+    {
+      "id": "S19",
+      "issue": 397,
+      "phase": "P2",
+      "task_range": [
+        458,
+        471
+      ]
+    },
+    {
+      "id": "S20",
+      "issue": 398,
+      "phase": "P2",
+      "task_range": [
+        472,
+        486
+      ]
+    },
+    {
+      "id": "S21",
+      "issue": 399,
+      "phase": "P2",
+      "task_range": [
+        487,
+        498
+      ]
+    },
+    {
+      "id": "S22",
+      "issue": 400,
+      "phase": "P3",
+      "task_range": [
+        499,
+        511
+      ]
+    },
+    {
+      "id": "S23",
+      "issue": 401,
+      "phase": "P2",
+      "task_range": [
+        512,
+        525
+      ]
+    }
+  ],
+  "explicitly_non_dispatchable": [
+    253,
+    254,
+    255,
+    256,
+    257,
+    258,
+    259,
+    310,
+    311,
+    312,
+    313,
+    314,
+    315,
+    316,
+    317,
+    318,
+    319,
+    320,
+    321,
+    322,
+    323,
+    324,
+    393,
+    394,
+    395,
+    396,
+    397,
+    398,
+    399,
+    400,
+    401
+  ],
+  "roles_sessions": {
+    "coordinator": 1,
+    "children_max": 4,
+    "total_max": 5
+  },
+  "tasks": [
+    {
+      "issue": 325,
+      "key": "OPS-01",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "coordinator",
+      "hard_blockers": [],
+      "external_hold": "GitHub Projects scoped account authorization",
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-01] Create and verify the new native V2 GitHub Projects board"
+    },
+    {
+      "issue": 326,
+      "key": "OPS-02",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "coordinator",
+      "hard_blockers": [
+        325,
+        327
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-02] Close historical Projects only after verified migration"
+    },
+    {
+      "issue": 327,
+      "key": "OPS-03",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "coordinator",
+      "hard_blockers": [
+        325
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-03] Materialize native GitHub issue sub-issues and blocker edges"
+    },
+    {
+      "issue": 328,
+      "key": "OPS-04",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "coordinator",
+      "hard_blockers": [],
+      "external_hold": "Actual AI host session/lease reconciliation",
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-04] Prove one Qwen/OpenCode coordinator and four-slot dispatch cap"
+    },
+    {
+      "issue": 329,
+      "key": "OPS-05",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "coordinator",
+      "hard_blockers": [
+        328
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-05] Synchronize machine-readable role manifests and host agent definitions"
+    },
+    {
+      "issue": 330,
+      "key": "OPS-06",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [
+        328
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-06] Implement worktree/path ownership lease checks and PR linkage"
+    },
+    {
+      "issue": 331,
+      "key": "OPS-07",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "release-engineer",
+      "hard_blockers": [
+        328,
+        330
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-07] Enforce immutable SHA QA/product verdict and merge eligibility"
+    },
+    {
+      "issue": 332,
+      "key": "OPS-08",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "release-engineer",
+      "hard_blockers": [],
+      "external_hold": "Public-site/host access required for exact served SHA checks",
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-08] Verify live release manifest, exact served JS/CSS hashes and rollback target"
+    },
+    {
+      "issue": 333,
+      "key": "OPS-09",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P0",
+      "role": "release-engineer",
+      "hard_blockers": [
+        332
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-09] Run exactly one hosted browser smoke per deployed SHA"
+    },
+    {
+      "issue": 334,
+      "key": "OPS-10",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P1",
+      "role": "release-engineer",
+      "hard_blockers": [
+        332
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-10] Rehearse trusted Databrick deployment rollback and interrupted promotion"
+    },
+    {
+      "issue": 335,
+      "key": "OPS-11",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P1",
+      "role": "coordinator",
+      "hard_blockers": [
+        325,
+        328,
+        332
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-11] Publish a truthful autonomous studio health and release summary"
+    },
+    {
+      "issue": 336,
+      "key": "OPS-12",
+      "track_issue": 311,
+      "stream": "S01",
+      "phase": "P0",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        332
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][OPS-12] Protect GitHub credential scope, branch rules and workflow supply chain"
+    },
+    {
+      "issue": 337,
+      "key": "CAM-01",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [],
+      "external_hold": "Open PR #307; failed browser interaction smoke and camera source lease",
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-01] Create a 360-degree camera and pointer-grip regression matrix"
+    },
+    {
+      "issue": 338,
+      "key": "CAM-02",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-02] Prevent accidental placement from drag, orbit, pinch and pointer cancellation"
+    },
+    {
+      "issue": 339,
+      "key": "CAM-03",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-03] Keep zoom anchored to cursor or touch centroid at all angles"
+    },
+    {
+      "issue": 340,
+      "key": "CAM-04",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-04] Make world selection and raycast stable under angled building geometry"
+    },
+    {
+      "issue": 341,
+      "key": "CAM-05",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-05] Retain camera target and selection when panels open, close or resize"
+    },
+    {
+      "issue": 342,
+      "key": "CAM-06",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-06] Implement map focus, bounds and intelligent scene fit for expanding terrain"
+    },
+    {
+      "issue": 343,
+      "key": "CAM-07",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-07] Give camera controls usable keyboard, focus and visible touch alternatives"
+    },
+    {
+      "issue": 344,
+      "key": "CAM-08",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-08] Test pointer ownership across mouse, stylus, touch and lost capture"
+    },
+    {
+      "issue": 345,
+      "key": "CAM-09",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337,
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-09] Provide a recoverable WebGL context-loss and low-quality camera fallback"
+    },
+    {
+      "issue": 346,
+      "key": "CAM-10",
+      "track_issue": 312,
+      "stream": "S02",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        337,
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][CAM-10] Measure input-to-photon latency and camera smoothness on declared devices"
+    },
+    {
+      "issue": 347,
+      "key": "ART-01",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [],
+      "external_hold": "Coordinate src/world.js overlap with open PR #307",
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-01] Define canonical voxel geometry scale, pivot and material schema"
+    },
+    {
+      "issue": 348,
+      "key": "ART-02",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-02] Build recognizable salvage extractor, crusher and sorter models"
+    },
+    {
+      "issue": 349,
+      "key": "ART-03",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-03] Build distinctive furnace, refinery, generator and foundry assets"
+    },
+    {
+      "issue": 350,
+      "key": "ART-04",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-04] Build depot, market, research and fabrication production-ready kits"
+    },
+    {
+      "issue": 351,
+      "key": "ART-05",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-05] Build truck, forklift, drone and worker rigs at coherent relative scale"
+    },
+    {
+      "issue": 352,
+      "key": "ART-06",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-06] Rebuild crane with true hoist, boom, trolley and mechanical cable motion"
+    },
+    {
+      "issue": 353,
+      "key": "ART-07",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-07] Create varied salvage-yard terrain, roadsides and environmental landmarks"
+    },
+    {
+      "issue": 354,
+      "key": "ART-08",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-08] Calibrate industrial palette, ambient/sun/fog and limited emissive lighting"
+    },
+    {
+      "issue": 355,
+      "key": "ART-09",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-09] Introduce asset instancing, material reuse, pooling and multi-LOD"
+    },
+    {
+      "issue": 356,
+      "key": "ART-10",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337,
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-10] Implement roof occlusion, transparent cutaways and selection outlines"
+    },
+    {
+      "issue": 357,
+      "key": "ART-11",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-11] Attach meaningful sound layers to machinery and vehicles"
+    },
+    {
+      "issue": 358,
+      "key": "ART-12",
+      "track_issue": 313,
+      "stream": "S03",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        347
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][ART-12] Maintain original glTF asset provenance, licensing and visual review kit"
+    },
+    {
+      "issue": 359,
+      "key": "UX-01",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-01] Redesign top resource strip to show actionable stock and shortages"
+    },
+    {
+      "issue": 360,
+      "key": "UX-02",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        337,
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-02] Build contextual construction palette with cost, rotation and preview"
+    },
+    {
+      "issue": 361,
+      "key": "UX-03",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        381
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-03] Build contextual road designer with cost and network feedback"
+    },
+    {
+      "issue": 362,
+      "key": "UX-04",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-04] Build readable building inspector, upgrade and dismantle interaction"
+    },
+    {
+      "issue": 363,
+      "key": "UX-05",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-05] Build fleet logistics panel with actual truck and cargo states"
+    },
+    {
+      "issue": 364,
+      "key": "UX-06",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        359
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-06] Make power, starvation and storage alarms actionable in-world"
+    },
+    {
+      "issue": 365,
+      "key": "UX-07",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        337
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-07] Implement phone-safe bottom dock and collapsible contextual sheet"
+    },
+    {
+      "issue": 366,
+      "key": "UX-08",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        365
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-08] Improve keyboard, screen-reader and reduced-motion game alternatives"
+    },
+    {
+      "issue": 367,
+      "key": "UX-09",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "product-owner",
+      "hard_blockers": [
+        365
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-09] Create novice first-run teaching without a blocking landing gate"
+    },
+    {
+      "issue": 368,
+      "key": "UX-10",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        365
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-10] Build production/quality settings with mute, graphics and camera reset"
+    },
+    {
+      "issue": 369,
+      "key": "UX-11",
+      "track_issue": 314,
+      "stream": "S04",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        365
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][UX-11] Produce approved world-first design component library and semantic tokens"
+    },
+    {
+      "issue": 370,
+      "key": "BLD-01",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-01] Create explicit world grid occupancy and buildable-terrain validation"
+    },
+    {
+      "issue": 371,
+      "key": "BLD-02",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        337,
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-02] Implement 3D placement ghosts with orientation, sockets and cost overlays"
+    },
+    {
+      "issue": 372,
+      "key": "BLD-03",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-03] Rotate full building footprint and loading bay without changing world coordinates"
+    },
+    {
+      "issue": 373,
+      "key": "BLD-04",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-04] Make material reservation and construction commit atomic and idempotent"
+    },
+    {
+      "issue": 374,
+      "key": "BLD-05",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        347,
+        373
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-05] Implement five-stage mechanically unfolding voxel building animation"
+    },
+    {
+      "issue": 375,
+      "key": "BLD-06",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        374
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-06] Persist construction assembly stage and resume exactly after reload"
+    },
+    {
+      "issue": 376,
+      "key": "BLD-07",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        372,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-07] Implement safe machine move and rotate with live network dependencies"
+    },
+    {
+      "issue": 377,
+      "key": "BLD-08",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        373,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-08] Implement dismantle, refunds and local stock recovery rules"
+    },
+    {
+      "issue": 378,
+      "key": "BLD-09",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        372
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-09] Create modular machine upgrade sockets and visible attachments"
+    },
+    {
+      "issue": 379,
+      "key": "BLD-10",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        374,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-10] Add construction drones/workers and staged cargo unloading animation"
+    },
+    {
+      "issue": 380,
+      "key": "BLD-11",
+      "track_issue": 315,
+      "stream": "S05",
+      "phase": "P1",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        373
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][BLD-11] Support multi-building blueprint repeat placement with explicit commit per tile"
+    },
+    {
+      "issue": 381,
+      "key": "LOG-01",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-01] Build road planner with continuous 3D path preview and costs"
+    },
+    {
+      "issue": 382,
+      "key": "LOG-02",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-02] Define standardized loading bay socket orientation and clearance"
+    },
+    {
+      "issue": 383,
+      "key": "LOG-03",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        381,
+        382
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-03] Implement vehicle pathfinding with traffic cost and deterministic tie-breaking"
+    },
+    {
+      "issue": 384,
+      "key": "LOG-04",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P0",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": "Exclusive src/simulation.js writer lease; start after #370 occupancy result is reviewed and merged",
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-04] Separate freight reservation, pickup, onboard cargo and arrival state"
+    },
+    {
+      "issue": 385,
+      "key": "LOG-05",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-05] Animate trucks along real roads with wheel heading and loading states"
+    },
+    {
+      "issue": 386,
+      "key": "LOG-06",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-06] Implement bay queues, reservations, contention and traffic recovery"
+    },
+    {
+      "issue": 387,
+      "key": "LOG-07",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-07] Handle road deletion, bridge outage and moving source during delivery"
+    },
+    {
+      "issue": 388,
+      "key": "LOG-08",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-08] Build explicit dispatch policies and route-priority player decisions"
+    },
+    {
+      "issue": 389,
+      "key": "LOG-09",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        384,
+        385
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-09] Introduce forklift/drone loading tasks and cross-vehicle cargo handoff"
+    },
+    {
+      "issue": 390,
+      "key": "LOG-10",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        385
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-10] Implement upgradeable fleet speed, load capacity, fuel and repair behavior"
+    },
+    {
+      "issue": 391,
+      "key": "LOG-11",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        384
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-11] Persist mid-route vehicles, reservations, road topology and bay queues"
+    },
+    {
+      "issue": 392,
+      "key": "LOG-12",
+      "track_issue": 316,
+      "stream": "S06",
+      "phase": "P1",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        337,
+        385,
+        391
+      ],
+      "external_hold": null,
+      "dispatchable": true,
+      "title": "[V2 NEXT][LOG-12] Test 3D route visibility and physical carrier operations on actual phone"
+    },
+    {
+      "issue": 402,
+      "key": "RTE-01",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        385
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-01] In-world route drawing with editable waypoints"
+    },
+    {
+      "issue": 403,
+      "key": "RTE-02",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        402
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-02] Name, save, duplicate and version player-defined routes"
+    },
+    {
+      "issue": 404,
+      "key": "RTE-03",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        402,
+        384
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-03] Per-truck route assignments and manual dispatch commands"
+    },
+    {
+      "issue": 405,
+      "key": "RTE-04",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        404,
+        386
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-04] Round-trip routes with dwell times and pickup/dropoff manifests"
+    },
+    {
+      "issue": 406,
+      "key": "RTE-05",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        402
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-05] Routing policy: fastest, shortest, economical, safest and hazard avoidance"
+    },
+    {
+      "issue": 407,
+      "key": "RTE-06",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-06] Road segment directionality, lane restrictions and turn rules"
+    },
+    {
+      "issue": 408,
+      "key": "RTE-07",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        407
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-07] Traffic signals, timing and priority configuration"
+    },
+    {
+      "issue": 409,
+      "key": "RTE-08",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        402,
+        406
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-08] Manual road closures, planned maintenance and detour creation"
+    },
+    {
+      "issue": 410,
+      "key": "RTE-09",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        408
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-09] Emergency routing and right-of-way priority overrides"
+    },
+    {
+      "issue": 411,
+      "key": "RTE-10",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        402,
+        404
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-10] Map overlays for routes, cargo, congestion and accessibility"
+    },
+    {
+      "issue": 412,
+      "key": "RTE-11",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        407
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-11] Road classes, roundabouts, bridges and intersection upgrades"
+    },
+    {
+      "issue": 413,
+      "key": "RTE-12",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        407
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-12] Design pedestrian footpaths, crossings and protected walkways"
+    },
+    {
+      "issue": 414,
+      "key": "RTE-13",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        402,
+        389
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-13] Multimodal route editor for trucks, drones, forklifts and transit"
+    },
+    {
+      "issue": 415,
+      "key": "RTE-14",
+      "track_issue": 393,
+      "stream": "S15",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "product-owner",
+      "hard_blockers": [
+        404,
+        411
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][RTE-14] Route design tutorial and seed scenario with two viable solutions"
+    },
+    {
+      "issue": 416,
+      "key": "POP-01",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        512
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-01] Implement deterministic civilian and worker entity identities"
+    },
+    {
+      "issue": 417,
+      "key": "POP-02",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        413,
+        416
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-02] Create pedestrian path network and safe crossings"
+    },
+    {
+      "issue": 418,
+      "key": "POP-03",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        416,
+        417
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-03] Introduce shift-based worker commute, attendance and industrial productivity"
+    },
+    {
+      "issue": 419,
+      "key": "POP-04",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        416
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-04] Model dwellings, households, jobs and population growth"
+    },
+    {
+      "issue": 420,
+      "key": "POP-05",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        417,
+        419
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-05] Give citizens daily routines, destinations and visible walking"
+    },
+    {
+      "issue": 421,
+      "key": "POP-06",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        420,
+        347
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-06] Create recognizable small voxel human rigs, clothing and crowd LOD"
+    },
+    {
+      "issue": 422,
+      "key": "POP-07",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        417,
+        404
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-07] Simulate public transit, bus routes and passenger transfer"
+    },
+    {
+      "issue": 423,
+      "key": "POP-08",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        419
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-08] Model resident needs, morale and amenity access causally"
+    },
+    {
+      "issue": 424,
+      "key": "POP-09",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        420,
+        423
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-09] Add citizen gatherings, social events and recreation destinations"
+    },
+    {
+      "issue": 425,
+      "key": "POP-10",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        418,
+        384
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-10] Simulate worker fatigue, injuries and workplace safety"
+    },
+    {
+      "issue": 426,
+      "key": "POP-11",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        423
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-11] Support neighborhood demographic abstraction without unfair stereotypes"
+    },
+    {
+      "issue": 427,
+      "key": "POP-12",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        420,
+        423
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-12] Add resident inspection, commute overlays and causal service explanations"
+    },
+    {
+      "issue": 428,
+      "key": "POP-13",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        417
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-13] Create emergency evacuation and safe shelter behavior"
+    },
+    {
+      "issue": 429,
+      "key": "POP-14",
+      "track_issue": 394,
+      "stream": "S16",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        420
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][POP-14] Validate hundreds of autonomous citizens without mobile GPU/CPU collapse"
+    },
+    {
+      "issue": 430,
+      "key": "HAZ-01",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        513
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-01] Build deterministic incident and hazard event engine"
+    },
+    {
+      "issue": 431,
+      "key": "HAZ-02",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-02] Model weather forecast, alerts and changing wind/temperature"
+    },
+    {
+      "issue": 432,
+      "key": "HAZ-03",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        431
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-03] Implement rainwater runoff, drainage and neighborhood flooding"
+    },
+    {
+      "issue": 433,
+      "key": "HAZ-04",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        431
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-04] Introduce tornado/high-wind storms with visible world-space impacts"
+    },
+    {
+      "issue": 434,
+      "key": "HAZ-05",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        431
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-05] Simulate wildfire ignition, spread, smoke and fire breaks"
+    },
+    {
+      "issue": 435,
+      "key": "HAZ-06",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        430,
+        412
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-06] Model earthquake ground motion, structural vulnerability and utilities"
+    },
+    {
+      "issue": 436,
+      "key": "HAZ-07",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-07] Represent industrial equipment malfunctions and factory fires"
+    },
+    {
+      "issue": 437,
+      "key": "HAZ-08",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        436
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-08] Add abstract hazardous-material spill and contamination consequences"
+    },
+    {
+      "issue": 438,
+      "key": "HAZ-09",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-09] Model grid failure, water outage and cascading infrastructure disruption"
+    },
+    {
+      "issue": 439,
+      "key": "HAZ-10",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-10] Add abstract sabotage/vandalism incidents and security mitigation"
+    },
+    {
+      "issue": 440,
+      "key": "HAZ-11",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        430,
+        410,
+        428
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-11] Implement fire, medical and utility emergency response teams"
+    },
+    {
+      "issue": 441,
+      "key": "HAZ-12",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        436,
+        374
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-12] Implement visible staged destruction, debris, repair and rebuilding"
+    },
+    {
+      "issue": 442,
+      "key": "HAZ-13",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        440
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-13] Implement disaster preparedness, insurance and safe recovery budgets"
+    },
+    {
+      "issue": 443,
+      "key": "HAZ-14",
+      "track_issue": 395,
+      "stream": "S17",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][HAZ-14] Build scenario replay, intensity options and non-punitive hazard testing"
+    },
+    {
+      "issue": 444,
+      "key": "CIV-01",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        423,
+        419
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-01] Model civic satisfaction by neighborhood from real needs and services"
+    },
+    {
+      "issue": 445,
+      "key": "CIV-02",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        444
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-02] Implement municipal budget with operating and capital costs"
+    },
+    {
+      "issue": 446,
+      "key": "CIV-03",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        445
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-03] Expose adjustable property/business tax and service funding policy"
+    },
+    {
+      "issue": 447,
+      "key": "CIV-04",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        444,
+        418
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-04] Model labor negotiations, wages and stoppages"
+    },
+    {
+      "issue": 448,
+      "key": "CIV-05",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        444,
+        420
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-05] Create peaceful demonstrations and civic gatherings"
+    },
+    {
+      "issue": 449,
+      "key": "CIV-06",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        448,
+        430
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-06] Implement unrest escalation and fictional riot incidents with recovery"
+    },
+    {
+      "issue": 450,
+      "key": "CIV-07",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        449,
+        440
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-07] Build emergency-response choices for unrest and damaged districts"
+    },
+    {
+      "issue": 451,
+      "key": "CIV-08",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        444,
+        417
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-08] Implement education, clinic, parks and community services"
+    },
+    {
+      "issue": 452,
+      "key": "CIV-09",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        445,
+        440
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-09] Add police, fire, medical and public works stations as routed services"
+    },
+    {
+      "issue": 453,
+      "key": "CIV-10",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        446,
+        451
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-10] Implement public policy milestones with measurable risks and benefits"
+    },
+    {
+      "issue": 454,
+      "key": "CIV-11",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "ui-ux",
+      "hard_blockers": [
+        447,
+        449
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-11] Create civic narrative events, negotiation UI and transparent outcomes"
+    },
+    {
+      "issue": 455,
+      "key": "CIV-12",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        451
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-12] Model fair service distribution and non-discriminatory risk evaluation"
+    },
+    {
+      "issue": 456,
+      "key": "CIV-13",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        449,
+        451
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-13] Create public trust, accountability and rebuilding after incidents"
+    },
+    {
+      "issue": 457,
+      "key": "CIV-14",
+      "track_issue": 396,
+      "stream": "S18",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        454,
+        456
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][CIV-14] Validate interlocking riots, strikes, transport and economy scenarios"
+    },
+    {
+      "issue": 458,
+      "key": "TRF-01",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        386
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-01] Build shared dynamic lane occupancy and traffic world-state"
+    },
+    {
+      "issue": 459,
+      "key": "TRF-02",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        458
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-02] Introduce bounded 3D vehicle collision checks and contact responses"
+    },
+    {
+      "issue": 460,
+      "key": "TRF-03",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        458,
+        408
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-03] Implement realistic yielding, right-of-way, queueing and roundabouts"
+    },
+    {
+      "issue": 461,
+      "key": "TRF-04",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        459,
+        384
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-04] Simulate car/truck collisions with damage, cargo preservation and repair"
+    },
+    {
+      "issue": 462,
+      "key": "TRF-05",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        458,
+        390
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-05] Add breakdowns, stalled trucks, fuel loss and roadside incidents"
+    },
+    {
+      "issue": 463,
+      "key": "TRF-06",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        458,
+        417
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-06] Protect pedestrian crossings and implement near-miss avoidance"
+    },
+    {
+      "issue": 464,
+      "key": "TRF-07",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        458,
+        385
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-07] Model vehicle acceleration, braking, turn radius and load effects"
+    },
+    {
+      "issue": 465,
+      "key": "TRF-08",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        461,
+        440
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-08] Design accident and emergency clear-lane protocols"
+    },
+    {
+      "issue": 466,
+      "key": "TRF-09",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        460,
+        418
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-09] Create traffic signal/timing optimization and peak-hour demand"
+    },
+    {
+      "issue": 467,
+      "key": "TRF-10",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        461
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-10] Implement road safety upgrades, speed policies and enforcement"
+    },
+    {
+      "issue": 468,
+      "key": "TRF-11",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "ui-ux",
+      "hard_blockers": [
+        461,
+        351
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-11] Create incident reports and cinematic but truthful collision animations"
+    },
+    {
+      "issue": 469,
+      "key": "TRF-12",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "ui-ux",
+      "hard_blockers": [
+        466,
+        411
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-12] Expose flow heatmap, intersections, traffic patterns and reroute UI"
+    },
+    {
+      "issue": 470,
+      "key": "TRF-13",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        465,
+        432,
+        449
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-13] Validate vehicles and pedestrians under emergency weather or unrest"
+    },
+    {
+      "issue": 471,
+      "key": "TRF-14",
+      "track_issue": 397,
+      "stream": "S19",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        459
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][TRF-14] Scale traffic and collision simulation under mobile performance budgets"
+    },
+    {
+      "issue": 472,
+      "key": "ZON-01",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-01] Implement zoning overlays and editable district boundaries"
+    },
+    {
+      "issue": 473,
+      "key": "ZON-02",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472,
+        419
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-02] Create housing categories with density, vacancy and capacity"
+    },
+    {
+      "issue": 474,
+      "key": "ZON-03",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472,
+        418
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-03] Add shops, markets, offices and commercial demand loops"
+    },
+    {
+      "issue": 475,
+      "key": "ZON-04",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472,
+        444
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-04] Create industrial zoning tiers and land-use impact choices"
+    },
+    {
+      "issue": 476,
+      "key": "ZON-05",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-05] Build water distribution network with tanks, pumps and service capacity"
+    },
+    {
+      "issue": 477,
+      "key": "ZON-06",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        476
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-06] Model sewage, sanitation and treatment utility capacity"
+    },
+    {
+      "issue": 478,
+      "key": "ZON-07",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-07] Implement power substation and local electrical network coverage"
+    },
+    {
+      "issue": 479,
+      "key": "ZON-08",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        473,
+        474
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-08] Simulate land value, development desirability and market demand"
+    },
+    {
+      "issue": 480,
+      "key": "ZON-09",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        479,
+        374
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-09] Implement building construction and growth from city demand"
+    },
+    {
+      "issue": 481,
+      "key": "ZON-10",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        472,
+        424
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-10] Create parks, plazas, public squares and recreation coverage"
+    },
+    {
+      "issue": 482,
+      "key": "ZON-11",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        473,
+        451
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-11] Model fire/health/education/public works service radius and access"
+    },
+    {
+      "issue": 483,
+      "key": "ZON-12",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        472,
+        402
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-12] Add city road-grid planning tool with templates and exact construction costs"
+    },
+    {
+      "issue": 484,
+      "key": "ZON-13",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        479
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-13] Create mixed-use district specialization and zoning upgrade tradeoffs"
+    },
+    {
+      "issue": 485,
+      "key": "ZON-14",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        476,
+        478
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-14] Show city health overlays: power, water, sewage, jobs, land and taxes"
+    },
+    {
+      "issue": 486,
+      "key": "ZON-15",
+      "track_issue": 398,
+      "stream": "S20",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        480,
+        432
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ZON-15] Integrate zoning with disasters, population and realistic fiscal recovery"
+    },
+    {
+      "issue": 487,
+      "key": "ENV-01",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        416
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-01] Introduce world day-night clock and state-driven industrial lighting"
+    },
+    {
+      "issue": 488,
+      "key": "ENV-02",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        487,
+        431
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-02] Implement seasonal temperature and precipitation cycles"
+    },
+    {
+      "issue": 489,
+      "key": "ENV-03",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        488,
+        475
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-03] Model air pollution, emissions sources and dispersion"
+    },
+    {
+      "issue": 490,
+      "key": "ENV-04",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        489,
+        444
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-04] Model noise pollution from freight, heavy industry and nightlife"
+    },
+    {
+      "issue": 491,
+      "key": "ENV-05",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        477,
+        432
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-05] Simulate groundwater, river and wastewater quality"
+    },
+    {
+      "issue": 492,
+      "key": "ENV-06",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        488,
+        478
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-06] Model urban heat and cooling demand"
+    },
+    {
+      "issue": 493,
+      "key": "ENV-07",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        489,
+        481
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-07] Create vegetation, tree growth and landscape restoration"
+    },
+    {
+      "issue": 494,
+      "key": "ENV-08",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        432
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-08] Add terrain sculpting, grading and earthworks with engineering costs"
+    },
+    {
+      "issue": 495,
+      "key": "ENV-09",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        488,
+        464
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-09] Make road surface condition and weather affect vehicle traction"
+    },
+    {
+      "issue": 496,
+      "key": "ENV-10",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        491,
+        493
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-10] Implement ecosystem/service health and sustainable industrial options"
+    },
+    {
+      "issue": 497,
+      "key": "ENV-11",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "ui-ux",
+      "hard_blockers": [
+        493
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-11] Add ambient wildlife and environmental animations with LOD"
+    },
+    {
+      "issue": 498,
+      "key": "ENV-12",
+      "track_issue": 399,
+      "stream": "S21",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        491,
+        495,
+        443
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][ENV-12] Validate coupled season, pollution, flooding and disaster simulations"
+    },
+    {
+      "issue": 499,
+      "key": "SCN-01",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        430,
+        444
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-01] Build canonical city event timeline and causal source references"
+    },
+    {
+      "issue": 500,
+      "key": "SCN-02",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        499
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-02] Implement editable scenario seed, map and starting-condition presets"
+    },
+    {
+      "issue": 501,
+      "key": "SCN-03",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        499
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-03] Introduce pause, slow motion and time-speed controls"
+    },
+    {
+      "issue": 502,
+      "key": "SCN-04",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        443,
+        500
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-04] Build freeplay hazard frequency, severity and safety controls"
+    },
+    {
+      "issue": 503,
+      "key": "SCN-05",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        469,
+        485,
+        456
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-05] Create layered 3D heatmaps for traffic, pollution, fire, services and unrest"
+    },
+    {
+      "issue": 504,
+      "key": "SCN-06",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        440,
+        452
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-06] Implement emergency operations panel with live incident dispatch"
+    },
+    {
+      "issue": 505,
+      "key": "SCN-07",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        499
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-07] Create dynamic city objectives, contracts and emergent event chains"
+    },
+    {
+      "issue": 506,
+      "key": "SCN-08",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        499
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-08] Build incident replay/scrub timeline for routes, damage and decisions"
+    },
+    {
+      "issue": 507,
+      "key": "SCN-09",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        500
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-09] Provide named sandbox saves and scenario blueprints with safe import/export"
+    },
+    {
+      "issue": 508,
+      "key": "SCN-10",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P1",
+      "role": "ui-ux",
+      "hard_blockers": [
+        420
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-10] Add follow-camera, selected-agent tracking and cinematic event bookmarks"
+    },
+    {
+      "issue": 509,
+      "key": "SCN-11",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "ui-ux",
+      "hard_blockers": [
+        499
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-11] Generate a city newswire and relevant opt-in notifications"
+    },
+    {
+      "issue": 510,
+      "key": "SCN-12",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "product-owner",
+      "hard_blockers": [
+        502,
+        505
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-12] Build curated scripted scenarios showcasing emergent city mechanics"
+    },
+    {
+      "issue": 511,
+      "key": "SCN-13",
+      "track_issue": 400,
+      "stream": "S22",
+      "phase": "P3",
+      "priority": "P2",
+      "role": "reviewer",
+      "hard_blockers": [
+        506,
+        510
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SCN-13] Validate fair and replayable multi-system disaster challenges"
+    },
+    {
+      "issue": 512,
+      "key": "SIM-01",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-01] Define stable entity-component city simulation schema"
+    },
+    {
+      "issue": 513,
+      "key": "SIM-02",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        512
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-02] Decouple deterministic fixed simulation tick from frame rendering"
+    },
+    {
+      "issue": 514,
+      "key": "SIM-03",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        512,
+        459
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-03] Introduce spatial partition and nearby-agent collision query"
+    },
+    {
+      "issue": 515,
+      "key": "SIM-04",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        513,
+        420
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-04] Create offscreen crowd abstraction preserving jobs and movement outcomes"
+    },
+    {
+      "issue": 516,
+      "key": "SIM-05",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        514
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-05] Scale city terrain and industry across streamed chunks and region tiers"
+    },
+    {
+      "issue": 517,
+      "key": "SIM-06",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        383,
+        514
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-06] Make pathfinding incremental and cache-aware after road edits"
+    },
+    {
+      "issue": 518,
+      "key": "SIM-07",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        513,
+        430,
+        444
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-07] Create bounded event queue for weather, strikes, accidents and disasters"
+    },
+    {
+      "issue": 519,
+      "key": "SIM-08",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        512
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-08] Build idempotent command journal for player decisions and simulation events"
+    },
+    {
+      "issue": 520,
+      "key": "SIM-09",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        518
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-09] Implement multi-day offline settlement for jobs, agents, utilities and disasters"
+    },
+    {
+      "issue": 521,
+      "key": "SIM-10",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        519
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-10] Add snapshot compaction, migration and corrupt-storage recovery"
+    },
+    {
+      "issue": 522,
+      "key": "SIM-11",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "developer",
+      "hard_blockers": [
+        515,
+        516
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-11] Provide graphics/simulation quality tiers with parity guarantees"
+    },
+    {
+      "issue": 523,
+      "key": "SIM-12",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        522
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-12] Create representative performance benchmark maps and mobile targets"
+    },
+    {
+      "issue": 524,
+      "key": "SIM-13",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P1",
+      "role": "reviewer",
+      "hard_blockers": [
+        518,
+        519
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-13] Implement determinism and invariant stress testing with randomized cities"
+    },
+    {
+      "issue": 525,
+      "key": "SIM-14",
+      "track_issue": 401,
+      "stream": "S23",
+      "phase": "P2",
+      "priority": "P2",
+      "role": "developer",
+      "hard_blockers": [
+        519
+      ],
+      "external_hold": "G1 first-playable sponsor acceptance #276 (or explicit sponsor phase-unlock exception)",
+      "dispatchable": true,
+      "title": "[V2 CITY][SIM-14] Build test-only replay/debug bridge without leaking private state"
+    }
+  ],
+  "phase_unlock_policy": "G1 first-playable (including real camera, build/road/freight, visual phone evidence) remains the gating sponsor milestone before P2/P3 city systems, unless sponsor explicitly changes sequence.",
+  "dispatch_first_wave": [
+    {
+      "issue": 370,
+      "role": "developer",
+      "reason": "Foundation occupancy/collision correctness, distinct from active camera/design worktrees"
+    },
+    {
+      "issue": 325,
+      "role": "coordinator",
+      "reason": "Native Project migration after project-scoped gh authentication"
+    },
+    {
+      "issue": 328,
+      "role": "coordinator",
+      "reason": "Host/agent session reconciliation"
+    },
+    {
+      "issue": 332,
+      "role": "release-engineer",
+      "reason": "External served-SHA validation, requires authorized access"
+    }
+  ]
+}
