@@ -166,9 +166,17 @@ test("named pivots match schema offsets, axes and motion; animated reach is boun
   // gains a tilting crucible + roof extractor; refinery (rebuilt from the old
   // shared screening box) gains a pump flywheel + valve handwheel. ART-02's
   // salvager rocker and crusher roller/screen sets are UNCHANGED.
+  // ART-04 (#350): the four civic rigs gain their FIRST named pivots (they had
+  // none — depot/market shared one static blockout, research/fabricator were a
+  // box + mast/boxes). depot: distance-driven roll-up shutter (motion "lift");
+  // market: ambient balance beam + awning (labelled, no production authority);
+  // research: azimuth dish + nested feed horn; fabricator: 2:1 gear train +
+  // trip hammer. Same justification pattern as the ART-03 map extension above.
   const expected = {salvager: ["rocker"], generator: ["spin", "turbine"],
     furnace: ["charge", "blower"], foundry: ["crucible", "fan"], refinery: ["pump", "valve"],
-    crane: ["crane"], turret: ["rotate"], crusher: ["rollerA", "rollerB", "screen"]};
+    crane: ["crane"], turret: ["rotate"], crusher: ["rollerA", "rollerB", "screen"],
+    depot: ["door"], market: ["scale", "awning"], research: ["dish", "feed"],
+    fabricator: ["gear", "pinion", "hammer"]};
   for (const b of BUILDINGS) {
     const group = build(b.id), desc = machineDescriptor(b.id);
     const want = expected[b.id] || [];

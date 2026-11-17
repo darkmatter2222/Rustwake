@@ -118,29 +118,67 @@ const RAW_MACHINES = {
         {id: "head", material: "steel"}, {id: "teeth", material: "orange"}]}],
     budget: {maxMeshes: 32, maxTriangles: 560}
   }),
-  depot: foot(2.87, {
-    bounds: {width: 3.13, height: 2.87, depth: PAD},
+  // ART-04 (#350): the four civic rigs are rebuilt as DISTINCT functional
+  // structures (the old depot/market shared one blockout body differing only by
+  // a text panel; research/fabricator were the same box + mast/boxes). Motion
+  // numbers mirror src/art04.js ART04_MOTION / ART04_DOCK exactly (drift-tested).
+  // research/fabricator pivots turn ONLY on the real sim work clock while
+  // working; the depot shutter is a distance-driven "lift" (nearest real truck
+  // to the bay approach cell — the ART-05 forklift convention); the market
+  // beam/awning are DECLARED AMBIENT civic decoration (no production authority,
+  // #274) and its lamp reads "trading" only on a real g.stats.sold increase.
+  // Bounds/budgets below are MEASURED from the real makeBuilding graph
+  // (scripts/measure-art04.mjs), not eyeballed.
+  depot: foot(2.98, {
+    bounds: {width: 3.14, height: 2.98, depth: 3.2725},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "roof", material: "roof"},
-      {id: "door", material: "black"}, {id: "doorTrim", material: "orange"},
-      {id: "roofVents", material: "steel"}, {id: "signage", material: "canvas-text"},
+      {id: "hall", material: "body"}, {id: "roof", material: "roof"},
+      {id: "monitor", material: "dark"}, {id: "monitorSlats", material: "steel"},
+      {id: "platform", material: "dark"}, {id: "platformLip", material: "steel"},
+      {id: "doorway", material: "black"}, {id: "doorFrame", material: "dark"},
+      {id: "canopy", material: "roof"}, {id: "canopyPosts", material: "orange"},
+      {id: "signHangers", material: "steel"}, {id: "signage", material: "canvas-text"},
+      {id: "container", material: "rust"}, {id: "containerRibs", material: "dark"},
+      {id: "logoPlaque", material: "dark"}, {id: "logoCrates", material: "orange"},
+      {id: "logoCrateCore", material: "steel"},
       {id: "bay", material: "orange"}, {id: "status", material: "lights"}
     ],
+    // pivot:door is a roll-up shutter: motion kind "lift" (vertical travel in
+    // world units) driven by nearest-truck-bay-distance, NOT a clock spin.
+    // Vocabulary extension documented in docs/design/ASSETS.md + GAPS.md.
+    pivots: [{id: "door", node: "pivot:door", offset: [0, 0.76, 1.08], axis: "y",
+      motion: {kind: "lift", travel: 0.8, drive: "nearest-truck-bay-distance"}, swingRadius: 0.8,
+      parts: [{id: "panel", material: "dark"}, {id: "slats", material: "steel"}, {id: "edge", material: "orange"}]}],
     signage: "FREIGHT",
-    budget: {maxMeshes: 24, maxTriangles: 400}
+    budget: {maxMeshes: 38, maxTriangles: 460}
   }),
-  market: foot(2.87, {
-    bounds: {width: 3.13, height: 2.87, depth: PAD},
+  market: foot(2.79, {
+    pickHeight: 3.1,
+    bounds: {width: PAD, height: 2.79, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "wood"}, {id: "roof", material: "roof"},
+      {id: "hall", material: "wood"}, {id: "roofSlabs", material: "roof"},
+      {id: "ridge", material: "dark"}, {id: "gable", material: "wood"},
+      {id: "coin", material: "orange"}, {id: "coinHole", material: "dark"},
       {id: "door", material: "black"}, {id: "doorTrim", material: "orange"},
-      {id: "roofVents", material: "steel"}, {id: "signage", material: "canvas-text"},
+      {id: "signage", material: "canvas-text"},
+      {id: "counter", material: "wood"}, {id: "counterTop", material: "steel"},
+      {id: "produceCrate", material: "rust"}, {id: "produceCrateWood", material: "wood"},
+      {id: "crateBands", material: "dark"},
       {id: "bay", material: "orange"}, {id: "status", material: "lights"}
+    ],
+    pivots: [
+      {id: "scale", node: "pivot:scale", offset: [0, 2.95, 0.72], axis: "z",
+        motion: {kind: "oscillate", amplitude: 0.12, speed: 0.5, drive: "ambient-elapsed"}, swingRadius: 0.8,
+        parts: [{id: "post", material: "steel"}, {id: "beam", material: "steel"},
+          {id: "hangers", material: "steel"}, {id: "pans", material: "orange"}]},
+      {id: "awning", node: "pivot:awning", offset: [0, 1.95, 0.72], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.05, speed: 0.8, drive: "ambient-elapsed"}, swingRadius: 0.85,
+        parts: [{id: "canopy", material: "orange"}, {id: "scallops", material: "orange"}]}
     ],
     signage: "EXCHANGE",
-    budget: {maxMeshes: 24, maxTriangles: 400}
+    budget: {maxMeshes: 36, maxTriangles: 480}
   }),
   // ART-03 (#349): the four industrial rigs are rebuilt as DISTINCT physically
   // believable structures. Motion numbers mirror src/art03.js ART03_MOTION
@@ -319,23 +357,63 @@ const RAW_MACHINES = {
       parts: [{id: "barrel", material: "orange"}]}],
     budget: {maxMeshes: 20, maxTriangles: 400}
   }),
-  fabricator: foot(3.05, {
-    bounds: {width: PAD, height: 3.05, depth: PAD},
+  fabricator: foot(2.56, {
+    bounds: {width: PAD, height: 2.56, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "roof", material: "roof"},
-      {id: "windows", material: "lights"}, {id: "roofUnits", material: "orange"}
+      {id: "workshop", material: "body"}, {id: "roof", material: "roof"},
+      {id: "vent", material: "dark"}, {id: "ventCap", material: "steel"},
+      {id: "backplate", material: "dark"},
+      {id: "anvil", material: "dark"}, {id: "anvilTop", material: "steel"},
+      {id: "chute", material: "steel"}, {id: "chuteRails", material: "dark"},
+      {id: "chuteCrate", material: "orange"},
+      {id: "entrance", material: "black"}, {id: "lintel", material: "orange"},
+      {id: "statusWindow", material: "furnace"}, {id: "signage", material: "canvas-text"},
+      {id: "bay", material: "orange"}, {id: "status", material: "lights"}
     ],
-    budget: {maxMeshes: 24, maxTriangles: 400}
+    // 2:1 gear train: 8-tooth drive gear vs 4-tooth pinion, counter-rotating at
+    // the radius ratio (1.6 / -3.2 rad per sim work-clock unit). Trip hammer
+    // oscillates over the anvil; head clearance is proven in the model tests.
+    pivots: [
+      {id: "gear", node: "pivot:gear", offset: [-0.35, 1.35, 0.78], axis: "z",
+        motion: {kind: "spin", speed: 1.6}, swingRadius: 0.6,
+        parts: [{id: "disc", material: "steel"}, {id: "teeth", material: "steel"}, {id: "hub", material: "orange"}]},
+      {id: "pinion", node: "pivot:pinion", offset: [0.4, 1.35, 0.78], axis: "z",
+        motion: {kind: "spin", speed: -3.2}, swingRadius: 0.35,
+        parts: [{id: "disc", material: "rust"}, {id: "teeth", material: "rust"}]},
+      {id: "hammer", node: "pivot:hammer", offset: [1.05, 1.9, 0.9], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.45, speed: 1.1}, swingRadius: 1.05,
+        parts: [{id: "arm", material: "steel"}, {id: "head", material: "rust"}, {id: "bearing", material: "dark"}]}
+    ],
+    signage: "FAB WORKS",
+    budget: {maxMeshes: 40, maxTriangles: 540}
   }),
-  research: foot(4.925, {
-    bounds: {width: PAD, height: 4.925, depth: PAD},
+  research: foot(3.45, {
+    pickHeight: 4.5,
+    bounds: {width: 3.09, height: 3.45, depth: PAD},
     parts: [
       {id: "foundation", material: "dark"}, {id: "base", material: "steel"},
-      {id: "body", material: "body"}, {id: "roof", material: "roof"},
-      {id: "windows", material: "lights"}, {id: "mast", material: "steel"}, {id: "beacon", material: "lights"}
+      {id: "tower", material: "body"}, {id: "bands", material: "rust"},
+      {id: "cap", material: "dark"},
+      {id: "cabinet", material: "body"}, {id: "grille", material: "dark"},
+      {id: "statusWindow", material: "furnace"},
+      {id: "signBacking", material: "dark"}, {id: "signage", material: "canvas-text"},
+      {id: "ladder", material: "steel"}, {id: "rungs", material: "steel"},
+      {id: "bay", material: "orange"}, {id: "status", material: "lights"}
     ],
-    budget: {maxMeshes: 24, maxTriangles: 450}
+    // Azimuth dish (spin y) with a NESTED feed horn (oscillate x, parent
+    // pivot:dish). Full animated height 4.4589 is SHORTER than the old 4.925
+    // mast — the height-aware pick volume shrinks with it (CAM-01 debt relief).
+    pivots: [
+      {id: "dish", node: "pivot:dish", offset: [0, 3.55, -0.2], axis: "y",
+        motion: {kind: "spin", speed: 0.5}, swingRadius: 1.15,
+        parts: [{id: "drum", material: "dark"}, {id: "panel", material: "steel"}, {id: "rim", material: "rust"}]},
+      {id: "feed", node: "pivot:feed", parent: "pivot:dish", offset: [0, 0.55, 0.62], axis: "x",
+        motion: {kind: "oscillate", amplitude: 0.16, speed: 0.7}, swingRadius: 0.65,
+        parts: [{id: "arm", material: "steel"}, {id: "horn", material: "orange"}]}
+    ],
+    signage: "SIGNAL",
+    budget: {maxMeshes: 28, maxTriangles: 460}
   })
 };
 
@@ -397,7 +475,12 @@ export function validateMachine(type, desc = MACHINES[type]) {
   for (const pv of desc.pivots || []) {
     if (!pv.node || pv.node !== "pivot:" + pv.id) fail(errors, type, "pivot node must be named pivot:" + pv.id);
     if (!["x", "y", "z"].includes(pv.axis)) fail(errors, type, "pivot " + pv.id + " axis invalid");
-    if (!pv.motion || !["spin", "oscillate"].includes(pv.motion.kind)) fail(errors, type, "pivot " + pv.id + " motion invalid");
+    // ART-04 (#350): "lift" joins the motion vocabulary — a vertical travel in
+    // world units driven by a declared real-sim signal (depot shutter:
+    // nearest-truck-bay-distance), never a wall clock. Same envelope rules.
+    if (!pv.motion || !["spin", "oscillate", "lift"].includes(pv.motion.kind)) fail(errors, type, "pivot " + pv.id + " motion invalid");
+    if (pv.motion && pv.motion.kind === "lift" && (!isNum(pv.motion.travel) || pv.motion.travel <= 0 || typeof pv.motion.drive !== "string" || !pv.motion.drive))
+      fail(errors, type, "pivot " + pv.id + " lift motion needs positive travel and a named drive signal");
     if (!Array.isArray(pv.offset) || pv.offset.length !== 3 || !pv.offset.every(isNum))
       fail(errors, type, "pivot " + pv.id + " offset invalid");
     else if (b && (Math.abs(pv.offset[0]) > b.width / 2 + 1e-9 || Math.abs(pv.offset[2]) > b.depth / 2 + 1e-9 ||
