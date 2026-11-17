@@ -66,9 +66,9 @@ const sourceBagOf=(g,j)=>bagOfBuilding(g,g.buildings.find(b=>b.id===j?.sourceId)
 // and exactly-once cancellation/conservation are NOT weakened: the cooldown
 // only suppresses NEW reservations, it never touches live jobs or ledgers.
 export const DISPATCH_COOLDOWN_SECONDS=15;
-const cooldownKey=(sourceId,resource)=>sourceId+":"+resource;
+const pairKey=(sourceId,resource)=>sourceId+":"+resource;
 const cooldownUntil=(g,sourceId,resource)=>{
- const until=g?.dispatchCooldowns?.[cooldownKey(sourceId,resource)];
+ const until=g?.dispatchCooldowns?.[pairKey(sourceId,resource)];
  return Number.isFinite(until)?until:0;
 };
 // Read-only remaining window (sim seconds) for UI/tests; 0 when not cooled.
@@ -85,6 +85,49 @@ const sanitizeCooldowns=(raw,elapsed)=>{
   out[k]=Math.min(n,elapsed+DISPATCH_COOLDOWN_SECONDS);
  }
  return out;
+};
+// ---- Output-collection fairness (#567) ----
+// Measured on a fresh untouched yard (zero player input, 660 sim seconds, both
+// 38c36cc0 and 4a9571e3): the furnace steel bay backed up to 228 units and was
+// NEVER collected, while the fleet hauled 307 other shipments. The route was
+// fully connected; the defect was candidate ORDERING — every output is
+// priority 1 in building/inventory insertion order, so the salvager's scrap
+// (and priority-3 input replenishments) permanently outranked furnace steel
+// under the saturated 3-truck fleet. Remedy: oldest-served-first ordering for
+// output candidates. g.freightServedAt maps "<sourceId>:<resource>" to the sim
+// time that pair's output LAST arrived at the depot; never-served pairs sort
+// first (-1), then oldest served. This is deterministic, replay-safe, part of
+// the save, and cannot starve any eligible output bay indefinitely. It does
+// NOT change input priority (3), the RESERVED hard block, the #558 cooldown,
+// or any ledger transition — only the tie-break order among priority-1 output
+// candidates. readGame sanitizes hostile entries (bad keys, non-finite or
+// future timestamps, vanished sources) and caps the registry.
+const SERVED_AT_CAP=2048;
+const servedAtOf=(g,sourceId,resource)=>{
+ const n=g?.freightServedAt?.[pairKey(sourceId,resource)];
+ return Number.isFinite(n)?n:-1;
+};
+const sanitizeServedAt=(raw,elapsed,buildings)=>{
+ let out={};
+ if(!raw||typeof raw!=="object"||Array.isArray(raw))return out;
+ const ids=new Set((buildings||[]).map(b=>b.id));
+ for(const [k,v] of Object.entries(raw)){
+  if(!/^\d+:[a-z]+$/.test(k))continue;
+  const n=Number(v);
+  if(!Number.isFinite(n)||n<0||n>elapsed)continue;
+  if(!ids.has(Number(k.split(":")[0])))continue;
+  out[k]=n;
+ }
+ const keys=Object.keys(out);
+ if(keys.length>SERVED_AT_CAP){
+  const keep=keys.sort((a,b)=>out[b]-out[a]).slice(0,SERVED_AT_CAP);
+  const trimmed={};for(const k of keep)trimmed[k]=out[k];out=trimmed;
+ }
+ return out;
+};
+const pruneServedAt=(g,id)=>{
+ if(g.freightServedAt&&typeof g.freightServedAt==="object")
+  for(const k of Object.keys(g.freightServedAt))if(k.startsWith(id+":"))delete g.freightServedAt[k];
 };
 // ---- Construction transaction authority (#373 BLD-04) ----
 // Durable refund provenance: every committed building carries the EXACT cost it
@@ -137,7 +180,7 @@ export function createGame(){
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
-  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],commands:[],dispatchCooldowns:{},
+  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],commands:[],dispatchCooldowns:{},freightServedAt:{},
   view:{yaw:45,elevation:35.264,zoom:1},stats:{produced:0,delivered:0,shipments:0,sold:0,builds:0},
   log:[{id:0,time:0,message:"Cinder Yard established. Roads and freight trucks are operational."}],
   notices:[]
@@ -163,6 +206,8 @@ export function readGame(){
  // #558: dispatch cooldowns survive reload (absolute sim-time expiry). Malformed
  // and expired entries drop; tampered far-future expiries clamp to ONE window.
  g.dispatchCooldowns=sanitizeCooldowns(data.dispatchCooldowns,g.elapsed);
+ // #567: output-collection fairness registry survives reload; hostile entries drop.
+ g.freightServedAt=sanitizeServedAt(data.freightServedAt,g.elapsed,g.buildings);
   g.roads=[...new Set(g.roads.filter(k=>typeof k==="string"&&inside(...cellOf(k))))];
   // #384: reconcile reserved/onboard ledgers BEFORE offline catch-up so a reload
   // can never count the same units twice; cap the fleet without losing freight.
@@ -283,12 +328,14 @@ const commandIdOf=(commandId)=>typeof commandId==="string"&&commandId.trim()?com
 // rings: restore full CONTENTS (a push can evict their head), not lengths.
 const removalSnapshot=(g)=>({bank:{...g.bank},buildings:[...g.buildings],
  ledger:[...(Array.isArray(g.ledger)?g.ledger:[])],log:[...g.log],
- commands:[...(Array.isArray(g.commands)?g.commands:[])],nextId:g.nextId});
+ commands:[...(Array.isArray(g.commands)?g.commands:[])],nextId:g.nextId,
+ freightServedAt:{...(g.freightServedAt||{})}});
 const removalRollback=(g,snap)=>{
  for(const k of Object.keys(g.bank))if(!(k in snap.bank))delete g.bank[k];
  Object.assign(g.bank,snap.bank);
  g.buildings.splice(0,g.buildings.length,...snap.buildings);
  g.ledger=snap.ledger;g.log=snap.log;g.commands=snap.commands;g.nextId=snap.nextId;
+ g.freightServedAt=snap.freightServedAt;
 };
 // Cancel an in-flight assembly: refunds EXACTLY what this building paid
 // (b.paid provenance, durable across ledger eviction and save/reload) PLUS 100%
@@ -314,6 +361,7 @@ export function cancelConstruction(g,id,commandId=null){
   for(const [r,n] of Object.entries(refund))deposit(g.bank,r,n);
   fault("cancel.afterRefund",{id});
   g.buildings.splice(i,1);
+  pruneServedAt(g,id);
   fault("cancel.afterSplice",{id});
   recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...refund},...(cmd?{commandId:cmd}:{})});
   fault("cancel.afterLedger",{id});
@@ -343,6 +391,7 @@ export function removeBuilding(g,id,commandId=null){
   for(const [r,n] of Object.entries(refund))deposit(g.bank,r,n);
   fault("dismantle.afterRefund",{id});
   g.buildings.splice(i,1);
+  pruneServedAt(g,id);
   fault("dismantle.afterSplice",{id});
   recordLedger(g,{kind:"salvage",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...refund},...(cmd?{commandId:cmd}:{})});
   fault("dismantle.afterLedger",{id});
@@ -405,7 +454,9 @@ function deliveryCandidates(g){
   const def=BLUEPRINTS[b.type];if(!def)continue;
   for(const [id,amount] of Object.entries(b.inventory||{})){
    if(amount>=3 && !cooled(b.id,id) && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
-    candidates.push({source:b,dest:bank,resource:id,amount:Math.min(15,Math.floor(amount)),priority:1});
+    // #567: oldest-served-first tie-break among priority-1 outputs; a pair
+    // never collected (-1) outranks every previously served pair.
+    candidates.push({source:b,dest:bank,resource:id,amount:Math.min(15,Math.floor(amount)),priority:1,servedAt:servedAtOf(g,b.id,id)});
    }
   }
   for(const [id,n] of Object.entries(def.inputs)){
@@ -416,7 +467,9 @@ function deliveryCandidates(g){
    }
   }
  }
- return candidates.sort((a,b)=>b.priority-a.priority);
+ // Stable sort: priority first (inputs 3 > outputs 1), then oldest-served
+ // output first. Insertion order still breaks exact ties (deterministic).
+ return candidates.sort((a,b)=>b.priority-a.priority||(a.servedAt??-1)-(b.servedAt??-1));
 }
 // RESERVE transition (#384): source stock -> reserved load. The units leave the
 // source bag exactly once and are held against the job, NOT yet onboard.
@@ -459,6 +512,12 @@ function arriveCargo(g,v){
  const dest=g.buildings.find(b=>b.id===j.destId);
  if(!dest){returnFreight(g,v,"DEST_MISSING");return;}
  deposit(bagOfBuilding(g,dest),c.resource,c.amount);
+ // #567: stamp the pair's last output collection so the next dispatch decision
+ // serves the oldest waiting bay instead of the same insertion-order favorite.
+ if(dest.type==="depot"){
+  if(!g.freightServedAt||typeof g.freightServedAt!=="object"||Array.isArray(g.freightServedAt))g.freightServedAt={};
+  g.freightServedAt[pairKey(j.sourceId,c.resource)]=g.elapsed;
+ }
  recordFreight(g,{kind:"arrive",vehicleId:v.id,sourceId:j.sourceId,destId:j.destId,resource:c.resource,amount:c.amount});
  g.stats.delivered+=c.amount;g.stats.shipments++;
  v.job=null;v.cargo=null;
@@ -491,7 +550,7 @@ export function cancelFreight(g,vehicleId){
  const r=returnFreight(g,v,"CANCELLED");
  if(r.ok&&sourceId!==null){
   if(!g.dispatchCooldowns||typeof g.dispatchCooldowns!=="object"||Array.isArray(g.dispatchCooldowns))g.dispatchCooldowns={};
-  g.dispatchCooldowns[cooldownKey(sourceId,r.resource)]=g.elapsed+DISPATCH_COOLDOWN_SECONDS;
+  g.dispatchCooldowns[pairKey(sourceId,r.resource)]=g.elapsed+DISPATCH_COOLDOWN_SECONDS;
  }
  return r.ok?{ok:true,code:"OK",resource:r.resource,amount:r.amount}:r;
 }
