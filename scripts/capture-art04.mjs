@@ -76,9 +76,14 @@ const RIGS = [
 ];
 const SIX = [...RIGS, {type: "salvager", name: "Scrap Extractor"}, {type: "crusher", name: "Crusher"}];
 // ART-03 (#349) rigs placed through the same real UI so the captured yard
-// carries the full ART-03 + ART-04 set (generator + furnace are starters).
-const ART03_EXTRA = [{type: "refinery", name: "Fuel Refinery"}, {type: "foundry", name: "Alloy Foundry"}];
-const rigName = type => [...SIX, ...ART03_EXTRA].find(r => r.type === type).name;
+// carries the full ART-03 + ART-04 set (a starter generator + furnace already
+// exist; the second generator is placed for power headroom, supply 12 each).
+const ART03_EXTRA = [{type: "generator", name: "Turbine Generator"}, {type: "refinery", name: "Fuel Refinery"}, {type: "foundry", name: "Alloy Foundry"}];
+const rigName = type => {
+  const r = [...SIX, ...ART03_EXTRA].find(r => r.type === type);
+  if (!r) throw Error("UNKNOWN_RIG_TYPE " + type);
+  return r.name;
+};
 const clockKey = type => "art04" + type[0].toUpperCase() + type.slice(1) + "Clock";
 const statusKey = type => "art04" + type[0].toUpperCase() + type.slice(1);
 
