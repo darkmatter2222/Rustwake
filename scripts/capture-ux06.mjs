@@ -162,9 +162,9 @@ try{
    // --- Escape closes detail, focus returns to its chip (desktop keyboard proof) ---
    await page.keyboard.press("Escape");
    await page.waitForFunction(()=>!document.querySelector('[data-testid="alarm-detail"]'),null,{timeout:5000});
-   const focusTestid=await page.evaluate(()=>document.activeElement?.getAttribute("data-testid"));
-   view.proof.escape_focus_return=focusTestid;
-   if(focusTestid!=="alarm-chip-road-2")throw Error("Escape focus did not return to the chip: "+focusTestid);
+   // Focus return is scheduled on the next rAF by App.jsx — observe it bounded.
+   await page.waitForFunction(()=>document.activeElement?.getAttribute("data-testid")==="alarm-chip-road-2",null,{timeout:5000,polling:50});
+   view.proof.escape_focus_return=await page.evaluate(()=>document.activeElement?.getAttribute("data-testid"));
 
    // --- reopen and APPLY the remedy ---
    await page.locator('[data-testid="alarm-chip-road-2"]').click();
