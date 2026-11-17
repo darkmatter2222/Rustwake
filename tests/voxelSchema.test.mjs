@@ -23,14 +23,16 @@ const {makeBuilding, createTruck, createWorker} = await import("../src/world.js"
 const TOL = 0.02;
 const near = (a, b, msg) => assert.ok(Math.abs(a - b) <= TOL, msg + ": " + a + " vs " + b);
 
-// Static envelope of a machine group: excludes named animated pivot assemblies
-// and the invisible schema pick volume, exactly as the schema declares.
+// Static envelope of a machine group: excludes named animated pivot assemblies,
+// ART-03 animated emission puffs (emit:* — declared in schema.emissions, their
+// rise/shrink is work-clock driven like any pivot motion) and the invisible
+// schema pick volume, exactly as the schema declares.
 function staticBox(group) {
   group.updateWorldMatrix(true, true);
   const box = new THREE.Box3();
   group.traverse((node) => {
     if (!node.isMesh || node.name === "pick:volume") return;
-    for (let p = node.parent; p; p = p.parent) if (p.name?.startsWith("pivot:")) return;
+    for (let p = node.parent; p; p = p.parent) if (p.name?.startsWith("pivot:") || p.name?.startsWith("emit:")) return;
     box.expandByObject(node);
   });
   return box;
@@ -79,7 +81,11 @@ test("material registry mirrors tokens.json world colors and world.js source own
   for (const [key, m] of Object.entries(MATERIALS)) {
     assert.equal(m.color, tokens.world[key], "token color drift: " + key);
     assert.ok(source.includes(m.color.toLowerCase()), "world.js missing material " + key);
-    if (m.emissive) assert.equal(m.emissive, tokens.world[key === "lights" ? "lampEmission" : "furnaceEmission"]);
+    // ART-03 (#349): the status variants carry their OWN registered emission
+    // tokens (starved amber / dead red / idle dim / ember), not the lamp or
+    // furnace emission — still an exact per-material token equality.
+    const emissionKey = key === "lights" ? "lampEmission" : key === "furnace" ? "furnaceEmission" : key + "Emission";
+    if (m.emissive) assert.equal(m.emissive, tokens.world[emissionKey], "emission token drift: " + key);
     assert.equal(m.owner, "world.js mats");
   }
 });
@@ -154,13 +160,15 @@ test("frontage loading bay and status light exist on +Z and fit a truck", () => 
 });
 
 test("named pivots match schema offsets, axes and motion; animated reach is bounded", () => {
-  // Exact-expectation update (ART-02 #348, written justification): the crusher was
-  // static at ART-01; ART-02 authors its declared working parts — counter-rotating
-  // toothed rollers (rollerA carries the drive flywheel) and the oscillating screen
-  // deck that delivers the trio's "sorter" separation outcome. The salvager keeps
-  // its single rocker pivot; every other machine's pivot set is unchanged.
-  const expected = {salvager: ["rocker"], generator: ["spin"], crane: ["crane"], turret: ["rotate"],
-    crusher: ["rollerA", "rollerB", "screen"]};
+  // Exact-expectation update (ART-03 #349, written justification): the four
+  // industrial rigs gain their declared working parts — generator keeps pivot:spin
+  // and adds a front turbine; furnace gains a charging flap + side blower; foundry
+  // gains a tilting crucible + roof extractor; refinery (rebuilt from the old
+  // shared screening box) gains a pump flywheel + valve handwheel. ART-02's
+  // salvager rocker and crusher roller/screen sets are UNCHANGED.
+  const expected = {salvager: ["rocker"], generator: ["spin", "turbine"],
+    furnace: ["charge", "blower"], foundry: ["crucible", "fan"], refinery: ["pump", "valve"],
+    crane: ["crane"], turret: ["rotate"], crusher: ["rollerA", "rollerB", "screen"]};
   for (const b of BUILDINGS) {
     const group = build(b.id), desc = machineDescriptor(b.id);
     const want = expected[b.id] || [];

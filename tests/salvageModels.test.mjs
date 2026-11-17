@@ -40,7 +40,9 @@ function staticBox(group) {
   const box = new THREE.Box3();
   group.traverse((node) => {
     if (!node.isMesh || node.name === "pick:volume") return;
-    for (let p = node.parent; p; p = p.parent) if (p.name?.startsWith("pivot:")) return;
+    // ART-03 (#349): emit:* puffs are animated emission points (schema.emissions),
+    // excluded from the STATIC envelope exactly like pivot assemblies.
+    for (let p = node.parent; p; p = p.parent) if (p.name?.startsWith("pivot:") || p.name?.startsWith("emit:")) return;
     box.expandByObject(node);
   });
   return box;
@@ -205,22 +207,36 @@ test("crusher/salvager frontage: loading bay and status light are byte-exact to 
   }
 });
 
-// ---- ART-03 seam: refinery is untouched ----
+// ---- ART-03 (#349): refinery rebuilt; crusher collateral-free ----
+// Supersedes the ART-02 seam test that pinned the OLD shared screening-plant box
+// (height 2.34 / 10 meshes / 0 pivots). ART-03's whole point is that the refinery
+// becomes a distinct distillation plant; the crusher assertions below are kept
+// intact so any collateral change to the ART-02 machine still fails.
 
-test("ART-03 seam: refinery geometry is EXACTLY the pre-ART-02 shared branch (no collateral change)", () => {
+test("ART-03: refinery is a distinct distillation plant (columns/tanks/flare), not the old shared box", () => {
   const g = build("refinery");
   const size = staticBox(g).getSize(new THREE.Vector3());
   near(size.x, 3.045, "refinery width");
-  near(size.y, 2.34, "refinery height unchanged");
+  near(size.y, 3.5, "refinery rebuilt height");
   near(size.z, 3.045, "refinery depth");
-  assert.equal(machineDescriptor("refinery").pivots.length, 0, "refinery stays static until ART-03");
-  // main baseline: foundation(2) + body + 3 rollers + hopper + grille + bay + status = 10 meshes.
-  assert.equal(meshesOf(g).length, 10, "refinery mesh count unchanged");
+  const desc = machineDescriptor("refinery");
+  assert.deepEqual(desc.pivots.map(p => p.id), ["pump", "valve"], "refinery working pivots");
+  assert.ok(g.getObjectByName("pivot:pump"), "pump flywheel exists");
+  assert.ok(g.getObjectByName("pivot:valve"), "valve handwheel exists");
+  assert.ok(g.getObjectByName("emit:flare"), "flare emission point exists");
+  assert.ok(g.getObjectByName("emit:vapor"), "column vapor emission point exists");
+  assert.ok(g.getObjectByName("status:window"), "refinery sight window is a status surface");
+  // The old baseline was 10 meshes; the rebuilt plant must be genuinely richer.
+  assert.ok(meshesOf(g).length > 20, "refinery must be richer than the old 10-mesh shared box");
   assert.ok(!g.getObjectByName("pivot:rollerA"), "crusher pivots must not leak into refinery");
-  // The two machines are now genuinely distinct structures.
+  // All four ART-03 rigs are mutually distinct silhouettes (no shared box reuse).
+  const heights = ["generator", "furnace", "refinery", "foundry"].map(t => machineDescriptor(t).bounds.height);
+  assert.equal(new Set(heights).size, 4, "four rigs must have four distinct heights");
+  // Crusher collateral guard (kept from the ART-02 seam test, unchanged intent).
   const crusher = build("crusher");
-  assert.notEqual(machineDescriptor("crusher").bounds.height, machineDescriptor("refinery").bounds.height);
-  assert.ok(meshesOf(crusher).length > meshesOf(g).length * 2, "crusher must be a richer structure than the old shared box");
+  assert.notEqual(machineDescriptor("crusher").bounds.height, desc.bounds.height);
+  assert.ok(meshesOf(crusher).length > 20, "crusher must remain a rich structure (old baseline 10 × 2)");
+  assert.deepEqual(machineDescriptor("crusher").pivots.map(p => p.id), ["rollerA", "rollerB", "screen"]);
 });
 
 // ---- Staging, budgets, camera invariants ----

@@ -4,6 +4,8 @@ import {CELL,WORLD_SIZE,BLUEPRINTS,RESOURCE_BY_ID,STARTER_BUILDINGS,INITIAL_ROAD
 import {cellOf,key} from "./simulation.js";
 import {worldFootprint,terrainFor,surveyed,inside,footprintCells,bayCells} from "./gridOccupancy.js";
 import {SCHEMA_ID,machineDescriptor,cellCenter,rigLodTier,RIGS,SCENERY,SCENERY_AUTHORITY,MATERIALS} from "./voxelSchema.js";
+import {ART03_TYPES,ART03_SMOKE,STATUS_MATERIALS,art03Advance,art03Pose,smokePuff} from "./art03.js";
+export {ART03_MOTION,ART03_TYPES,art03Pose,art03Advance,machineStatus,smokePuff} from "./art03.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -14,7 +16,15 @@ const mats={
  orange:mat("#e7a25d",.36),lights:new THREE.MeshStandardMaterial({color:"#86d5c5",emissive:"#4baba7",emissiveIntensity:1.1}),
  furnace:new THREE.MeshStandardMaterial({color:"#f98b50",emissive:"#cf431c",emissiveIntensity:1.8}),
  roof:mat("#70888b",.35),body:mat("#839c9e",.4),glass:mat("#9ab9bc",.1,.22),
- sand:mat("#8d7b5d"),wood:mat("#80644d"),black:mat("#151d23",.1)
+ sand:mat("#8d7b5d"),wood:mat("#80644d"),black:mat("#151d23",.1),
+ // ART-03 (#349): discrete status variants for the four industrial rigs. These
+ // are SHARED pool entries (registered in voxelSchema MATERIALS) — status swaps
+ // reassign mesh.material, never mutate a shared material per building.
+ statusStarved:new THREE.MeshStandardMaterial({color:"#e7a25d",emissive:"#b06a20",emissiveIntensity:1.2}),
+ statusDead:new THREE.MeshStandardMaterial({color:"#5a3038",emissive:"#7a2430",emissiveIntensity:.5}),
+ statusIdle:new THREE.MeshStandardMaterial({color:"#6f8a86",emissive:"#3a5a56",emissiveIntensity:.4}),
+ ember:new THREE.MeshStandardMaterial({color:"#a85a38",emissive:"#6e2a12",emissiveIntensity:.6}),
+ smoke:mat("#9fb0ad",.05,.95)
 };
 // LOG-04 (#384): truck crates are tinted by the actual resource onboard, so the
 // visible load is evidence of the freight ledger, not a decorative carrier.
@@ -127,6 +137,15 @@ export function makeBuilding(b,time){
  const d=BLUEPRINTS[b.type],kind=b.type;
  const has=(b.remaining||0)>0;
  const parts=[];
+ // ART-03 (#349): status/emission metadata for the four industrial rigs. Named
+ // status surfaces get discrete shared-material swaps in update(); emit groups
+ // carry a few smoke puffs phased off the sim work clock (visible only working).
+ const a03={statusNodes:{},emits:[]};
+ const mkEmit=(name,x,y,z,count=ART03_SMOKE.count,material="smoke",flare=false)=>{
+  const e=new THREE.Group();e.name=name;e.position.set(x,y,z);e.visible=false;e.userData.flare=flare;
+  for(let i=0;i<count;i++){const p=box(e,0,0,0,ART03_SMOKE.base,ART03_SMOKE.base,ART03_SMOKE.base,material);p.userData.puff=i;}
+  group.add(e);a03.emits.push(e);return e;
+ };
  const add=(...args)=>box(group,...args);
  const foot=add(0,.2,0,CELL*.87,.4,CELL*.87,"dark");
  add(0,.48,0,CELL*.72,.17,CELL*.72,"steel");
@@ -166,22 +185,94 @@ export function makeBuilding(b,time){
   for(let i=-1;i<=1;i++)add(i*.82,2.72,-.12,.45,.06,.9,"steel");
   textPanel(group,kind==="depot"?"FREIGHT":"EXCHANGE",0,2.2,1.44,.95);
  } else if(kind==="generator"){
+  // ART-03 (#349): Turbine Generator — hall body with a front intake grille
+  // framing the visible counter-rotating turbine (pivot:turbine, axis z), the
+  // legacy roof fan kept as pivot:spin (axis y), an exhaust stack with a real
+  // emission point, and a saddle-mounted fuel tank. Blade speed is driven by the
+  // sim work clock scaled by the REAL grid load fraction (demand/supply), so the
+  // blades visibly reflect plant load exactly as the blueprint promises.
   add(0,1.02,0,2.75,.95,2.8,"body");
   add(0,1.75,0,2.8,.45,2.8,"dark");
+  for(const s of [-1,1])add(s*.72,1.02,1.42,.16,.8,.1,"dark");
+  add(0,1.5,1.42,1.6,.12,.1,"dark");
+  add(0,.58,1.42,1.6,.12,.1,"dark");
+  const turbine=new THREE.Group();turbine.position.set(0,1.02,1.44);turbine.name="pivot:turbine";
+  const th=cylinder(turbine,0,0,0,.16,.22,"steel");th.rotation.x=Math.PI/2;
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const bl=box(turbine,Math.cos(a)*.3,Math.sin(a)*.3,0,.5,.14,.1,"orange");bl.rotation.z=a;}
+  group.add(turbine);parts.push({kind:"a03",node:turbine,role:"turbine",axis:"z"});
   const fan=new THREE.Group();fan.position.set(0,1.9,0);
   cylinder(fan,0,.1,0,.65,.35,"steel");
   for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const s=box(fan,Math.cos(a)*.84,.1,Math.sin(a)*.84,.95,.14,.28,"orange");s.rotation.y=a;}
-  fan.name="pivot:spin";group.add(fan);parts.push({kind:"spin",node:fan});
-  add(-.95,1.4,-.95,.25,1.15,.25,"orange");
-  add(.95,1.4,.95,.25,1.15,.25,"lights");
- } else if(kind==="furnace"||kind==="foundry"){
-  add(0,1.38,0,2.6,1.95,2.6,"body");
-  add(0,2.55,0,2.65,.28,2.65,"roof");
-  cylinder(group,-.75,3.35,-.75,.29,2.4,"steel");
-  cylinder(group,.75,3,-.75,.25,1.9,"rust");
-  add(0,1.32,1.32,1.32,.87,.12,"furnace");
-  add(-1.2,1.05,0,.2,1.4,2.4,"rust");
-  for(let i=0;i<3;i++)add(-.9+i*.9,2.45,1.35,.23,.12,.13,"orange");
+  fan.name="pivot:spin";group.add(fan);parts.push({kind:"a03",node:fan,role:"fan",axis:"y"});
+  cylinder(group,-.95,2.35,-.95,.16,1.2,"steel");
+  cylinder(group,-.95,2.99,-.95,.2,.12,"rust");
+  mkEmit("emit:exhaust",-.95,3.05,-.95);
+  cylinder(group,.95,.72,-.6,.34,1,"rust",true);
+  add(.95,.42,-.95,.28,.26,.14,"dark");
+  add(.95,.42,-.25,.28,.26,.14,"dark");
+  add(-1.2,1.35,.95,.22,1.05,.22,"orange");
+  add(1.2,1.35,.95,.22,1.05,.22,"lights");
+ } else if(kind==="furnace"){
+  // ART-03 (#349): Induction Furnace — coil-banded melting vessel (the three
+  // rust bands are the induction coils), twin chimneys with emission points,
+  // a charging hopper whose flap (pivot:charge) oscillates on the work clock,
+  // a side blower (pivot:blower, axis x), side grates, a tap spout and the hot
+  // status:window. Distinct from the foundry's casting-hall silhouette.
+  add(0,1.35,0,2.2,1.7,2.2,"body");
+  for(const y of [.85,1.35,1.85])add(0,y,0,2.32,.16,2.32,"rust");
+  add(0,2.3,0,2.3,.22,2.3,"dark");
+  cylinder(group,-.62,3.5,-.62,.26,2.2,"steel");
+  cylinder(group,-.62,4.64,-.62,.3,.12,"rust");
+  cylinder(group,.62,3.25,-.62,.22,1.7,"rust");
+  cylinder(group,.62,4.14,-.62,.26,.12,"dark");
+  add(0,2.62,.62,1.1,.42,.9,"orange");
+  add(0,2.86,.62,.9,.1,.7,"black");
+  const charge=new THREE.Group();charge.position.set(0,2.92,.62);charge.name="pivot:charge";
+  box(charge,0,0,-.38,1,.07,.76,"steel");
+  group.add(charge);parts.push({kind:"a03",node:charge,role:"charge",axis:"x"});
+  const win=add(0,1.3,1.12,1.2,.8,.1,"furnace");win.name="status:window";a03.statusNodes.window=win;
+  for(let i=0;i<3;i++)add(-1.18,1.1+i*.42,0,.12,.24,1.9,"dark");
+  add(0,.72,1.28,.5,.22,.42,"rust");
+  add(0,.6,1.42,.4,.1,.2,"steel");
+  const blower=new THREE.Group();blower.position.set(1.22,1.55,.45);blower.name="pivot:blower";
+  cylinder(blower,0,0,0,.14,.24,"steel",true);
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const bl=box(blower,0,Math.cos(a)*.26,Math.sin(a)*.26,.1,.4,.12,"orange");bl.rotation.x=a;}
+  group.add(blower);parts.push({kind:"a03",node:blower,role:"blower",axis:"x"});
+  mkEmit("emit:stackA",-.62,4.72,-.62);
+  mkEmit("emit:stackB",.62,4.22,-.62);
+ } else if(kind==="foundry"){
+  // ART-03 (#349): Alloy Foundry — rust casting hall with a sawtooth roof and
+  // glazed clerestory, twin chimneys, a trunnion-mounted tilting crucible
+  // (pivot:crucible, axis x) whose glow disc is a status surface, a mold line
+  // with one hot status:ingot, a cooling tank and a roof extractor fan
+  // (pivot:fan). Deliberately NOT the furnace's coil-banded vessel silhouette.
+  add(0,1.15,-.3,2.7,1.5,1.9,"rust");
+  add(0,2.02,-.55,2.8,.24,1.4,"roof");
+  add(0,2.26,.2,2.8,.24,.5,"roof");
+  add(0,2.1,-.02,2.7,.3,.12,"glass");
+  cylinder(group,-.8,3.1,-.85,.24,2,"steel");
+  cylinder(group,-.8,4.14,-.85,.28,.12,"rust");
+  cylinder(group,.8,2.9,-.85,.2,1.6,"rust");
+  cylinder(group,.8,3.74,-.85,.24,.12,"dark");
+  for(const s of [-1,1])add(s*.62,1.95,.95,.16,.5,.16,"dark");
+  const crucible=new THREE.Group();crucible.position.set(0,1.95,.95);crucible.name="pivot:crucible";
+  cylinder(crucible,0,0,0,.5,.62,"dark");
+  const glow=cylinder(crucible,0,.33,0,.42,.08,"furnace");glow.name="status:glow";a03.statusNodes.glow=glow;
+  box(crucible,.52,.1,0,.14,.2,.2,"steel");
+  group.add(crucible);parts.push({kind:"a03",node:crucible,role:"crucible",axis:"x"});
+  add(0,.62,1.3,1.9,.16,.42,"dark");
+  for(const x of [-.6,0,.6]){
+   const ing=add(x,.76,1.3,.4,.12,.34,x===0?"furnace":"steel");
+   if(x===0){ing.name="status:ingot";a03.statusNodes.ingot=ing;}
+  }
+  add(-1.18,.82,.95,.5,.64,1.1,"steel");
+  add(-1.18,1.16,.95,.42,.06,1,"glass");
+  const ffan=new THREE.Group();ffan.position.set(.7,2.44,.3);ffan.name="pivot:fan";
+  cylinder(ffan,0,.06,0,.3,.16,"steel");
+  for(let i=0;i<3;i++){const a=i*Math.PI*2/3;const bl=box(ffan,Math.cos(a)*.4,.06,Math.sin(a)*.4,.5,.08,.16,"orange");bl.rotation.y=a;}
+  group.add(ffan);parts.push({kind:"a03",node:ffan,role:"foundryFan",axis:"y"});
+  mkEmit("emit:stackA",-.8,4.22,-.85);
+  mkEmit("emit:stackB",.8,3.82,-.85);
  } else if(kind==="crusher"){
   // ART-02 (#348): Crusher + screening plant. Open-front crushing chamber with
   // counter-rotating toothed rollers (pivot:rollerA carries the drive flywheel),
@@ -189,8 +280,8 @@ export function makeBuilding(b,time){
   // an oscillating screen deck (pivot:screen) feeding TWIN discharge chutes — the
   // visual separation stage for the sim's real scrap -> iron + stone outputs.
   // V2 has no standalone buildable "sorter" (content/simulation registry is outside
-  // the ART-02 lease); the separation stage lives here. Refinery keeps its own
-  // untouched branch below (ART-03 seam).
+  // the ART-02 lease); the separation stage lives here. ART-03 (#349) rebuilt the
+  // refinery into its own distillation plant below; this crusher is UNCHANGED.
   for(const s of [-1,1])add(s*1.1,1.09,-.2,.3,1.06,1.9,"body");
   add(0,1.09,-1,2.5,1.06,.3,"body");
   add(0,.62,-.15,2.2,.16,1.6,"dark");
@@ -223,11 +314,42 @@ export function makeBuilding(b,time){
   for(let i=0;i<5;i++)box(screen,-.76+i*.38,.06,0,.06,.07,.64,"dark");
   group.add(screen);parts.push({kind:"screen",node:screen});
  } else if(kind==="refinery"){
-  // ART-03 (#349) seam: refinery geometry is UNCHANGED by ART-02.
-  add(0,1,0,2.55,1.04,2.5,"body");
-  for(let i=-1;i<=1;i++)cylinder(group,i*.7,1.65,0,.35,.75,"steel",true);
-  add(0,2.15,0,2.1,.38,1.6,"orange");
-  add(0,1.4,1.31,1.7,.45,.16,"dark");
+  // ART-03 (#349): Fuel Refinery — replaces the old shared screening-plant box
+  // (the crusher keeps its OWN ART-02 branch, so no collateral change there).
+  // Collared distillation column + secondary column, twin saddle-mounted
+  // horizontal storage tanks, a pipe rack, a pump flywheel (pivot:pump, axis x),
+  // a valve handwheel (pivot:valve, axis y), a control cabinet with grates and a
+  // hot status:window sight glass, and a flare stack whose flame (emit:flare)
+  // only burns while the sim says the plant is actually working.
+  cylinder(group,-.55,1.85,-.45,.5,2.6,"steel");
+  for(const y of [1.15,1.85,2.55])cylinder(group,-.55,y,-.45,.56,.12,"rust");
+  cylinder(group,-.55,3.22,-.45,.42,.18,"dark");
+  cylinder(group,.62,1.6,-.75,.34,1.9,"rust");
+  cylinder(group,.62,2.6,-.75,.38,.12,"dark");
+  for(const s of [-1,1]){
+   cylinder(group,s*.62,.78,.85,.36,1.05,"steel",true);
+   for(const zz of [.55,1.15])add(s*.62,.42,zz,.3,.26,.14,"dark");
+  }
+  beam(group,0,1.25,.2,1.6,"x","steel");
+  cylinder(group,-.55,1.05,.2,.07,.5,"steel");
+  cylinder(group,.62,1.15,-.2,.07,.9,"steel");
+  beam(group,.3,.95,.55,1.1,"z","steel");
+  cylinder(group,1.25,2.2,-1.15,.1,2.6,"dark");
+  mkEmit("emit:flare",1.25,3.55,-1.15,1,"furnace",true);
+  add(1.12,.95,.35,.62,.9,.75,"body");
+  for(let i=0;i<3;i++)add(1.12,.72+i*.24,.74,.5,.1,.06,"dark");
+  const win=add(-.55,1.7,.08,.16,.5,.08,"furnace");win.name="status:window";a03.statusNodes.window=win;
+  add(-1.2,.5,.35,.3,.5,.3,"body");
+  const pump=new THREE.Group();pump.position.set(-1.2,.95,.35);pump.name="pivot:pump";
+  cylinder(pump,0,0,0,.4,.12,"dark",true);
+  for(let i=0;i<3;i++){const a=i*Math.PI*2/3;const sp=box(pump,0,Math.cos(a)*.2,Math.sin(a)*.2,.1,.36,.1,"steel");sp.rotation.x=a;}
+  group.add(pump);parts.push({kind:"a03",node:pump,role:"pump",axis:"x"});
+  const valve=new THREE.Group();valve.position.set(.15,1.42,.2);valve.name="pivot:valve";
+  cylinder(valve,0,0,0,.22,.07,"orange");
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const sp=box(valve,Math.cos(a)*.13,.05,Math.sin(a)*.13,.26,.05,.07,"steel");sp.rotation.y=a;}
+  cylinder(valve,0,-.12,0,.05,.2,"steel");
+  group.add(valve);parts.push({kind:"a03",node:valve,role:"valve",axis:"y"});
+  mkEmit("emit:vapor",-.55,3.34,-.45);
  } else if(kind==="crane"){
   add(0,.7,0,2.2,.8,2.4,"rust");
   for(let s of [-1,1])for(let z of [-1,1])box(group,s*.9,2.8,z*.8,.22,4.3,.22,"orange");
@@ -286,7 +408,11 @@ export function makeBuilding(b,time){
   for(const child of [...group.children])if(child!==foot&&child.name!=="pick:volume")child.visible=ratio>=.25;
   if(ratio<.65){for(const child of group.children)if(child!==foot&&child.name!=="pick:volume")child.visible=child.position.y<1.4||ratio>.35;}
  }
- return {group,parts};
+ // ART-03 (#349): the four industrial rigs carry status/emission metadata; the
+ // runtime work-clock state (obj.a03) is created lazily in update() from the
+ // REAL sim timers, never from wall time.
+ const art03=ART03_TYPES.includes(kind)?{statusNodes:{light:status,...a03.statusNodes},emits:a03.emits}:null;
+ return {group,parts,art03};
 }
 // ---------------------------------------------------------------------------
 // ART-05 (#351): identity-specific vehicle/crew rigs at coherent relative scale.
@@ -1093,19 +1219,43 @@ export class LivingWorld{
   this.applyCamera();
   let craneStamp=null;
   const art02Stamp={arm:"none",roller:"none",screen:"none"};
+  const art03Stamp={};
   for(const [id,obj] of this.built){
    const b=g.buildings.find(b=>b.id===id);if(!b)continue;
    obj.group.userData.buildingId=id;
    const a02=art02Pose(time,this.reducedMotion,id);
    for(const p of obj.parts){
-    if(p.kind==="spin")p.node.rotation.y=time*1.75;
     if(p.kind==="rocker"){p.node.rotation.y=a02.rocker;art02Stamp.arm=a02.rocker.toFixed(3);}
     if(p.kind==="roll"){p.node.rotation.x=p.speed>0?a02.rollerA:a02.rollerB;if(p.speed>0)art02Stamp.roller=a02.rollerA.toFixed(3);}
     if(p.kind==="screen"){p.node.rotation.x=a02.screen;art02Stamp.screen=a02.screen.toFixed(3);}
     if(p.kind==="crane"){const pose=cranePose(time,this.reducedMotion);applyCranePose(p,pose);craneStamp=pose;}
     if(p.kind==="rotate")p.node.rotation.y=time*.22;
    }
-   if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+.009*Math.sin(time*5+id);
+   // ART-03 (#349): status-driven industrial rigs. Status comes ONLY from the
+   // simulation (powerStatus + inventory fit); the work clock integrates real
+   // wrap-aware sim timer deltas (generator: elapsed × real load fraction), so
+   // unpowered machines freeze and starved machines never smoke. Material swaps
+   // reassign shared pool entries — the pool itself is never mutated.
+   if(obj.art03){
+    if(!obj.a03)obj.a03={clock:0,lastTimer:b.timer||0,lastElapsed:g.elapsed||0};
+    const next=art03Advance(obj.a03,g,b,this.reducedMotion);
+    obj.a03=next;
+    const pose=art03Pose(next.clock,this.reducedMotion,id);
+    for(const p of obj.parts)if(p.kind==="a03")p.node.rotation[p.axis]=pose[p.role];
+    const sm=STATUS_MATERIALS[next.status]||STATUS_MATERIALS.idle;
+    obj.art03.statusNodes.light.material=mats[sm.light];
+    for(const k of ["window","glow","ingot"]){const n=obj.art03.statusNodes[k];if(n)n.material=mats[sm.hot];}
+    const working=next.status==="working"&&!this.reducedMotion;
+    const phase=next.clock*ART03_SMOKE.speed;
+    for(const e of obj.art03.emits){
+     e.visible=working;
+     if(!working)continue;
+     if(e.userData.flare){e.scale.set(1,1+.25*Math.sin(next.clock*7+id),1);continue;}
+     for(const puff of e.children){const s=smokePuff(phase,puff.userData.puff,ART03_SMOKE.count);puff.position.y=s.y;puff.scale.setScalar(s.s);}
+    }
+    if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+(working?pose.pulse:0);
+    art03Stamp[b.type]={status:next.status,clock:next.clock,load:next.load};
+   }
   }
   // ART-05 (#351): one LOD tier per frame from the real projected cell size.
   const lodTier=rigLodTier(this.view.zoom,this.height);
@@ -1187,6 +1337,14 @@ export class LivingWorld{
   cd.art02Roller=art02Stamp.roller;
   cd.art02Screen=art02Stamp.screen;
   cd.art02Reduced=this.reducedMotion?"1":"0";
+  // ART-03 (#349): additive per-rig status observability (camera stamps
+  // untouched). Status strings are the derived sim states; "absent" when that
+  // rig is not in the yard. art03Load is the generator's real demand/supply.
+  for(const t of ART03_TYPES)cd["art03"+t[0].toUpperCase()+t.slice(1)]=art03Stamp[t]?art03Stamp[t].status:"absent";
+  cd.art03Load=art03Stamp.generator?art03Stamp.generator.load.toFixed(3):"0.000";
+  const lead03=[...this.built.values()].find(o=>o.art03&&o.a03);
+  cd.art03Clock=lead03?lead03.a03.clock.toFixed(3):"0.000";
+  cd.art03Reduced=this.reducedMotion?"1":"0";
   // ART-05 (#351): additive rig observability (camera stamps untouched). Wheel
   // angle must equal travelled distance / radius; crew stamps expose the honest
   // decorative anchoring so captures/tests can prove no fabricated freight.
