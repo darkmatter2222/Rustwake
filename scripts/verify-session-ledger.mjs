@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 
 const ROLES_PATH = "docs/agents/roles.json";
 
-export function validateLedger(ledger, roles) {
+export function validateLedger(ledger, roles, census = null) {
   const v = [];
   const add = (code, detail) => v.push({ code, detail });
   const sessions = ledger.sessions ?? [];
@@ -60,6 +60,25 @@ export function validateLedger(ledger, roles) {
     if (b.ids.length > maxChildren) add("E_DISPATCH_BURST", `${b.ids.length} children dispatched at ${b.at} > ${maxChildren}`);
   }
 
+  if (census) {
+    const documented = new Set(sessions.map((s) => s.id));
+    const from = Date.parse(ledger.window.from);
+    const to = Date.parse(ledger.window.to);
+    const dispatched = new Set();
+    for (const b of census.bursts ?? []) {
+      const first = Date.parse(b.first_at ?? b.at);
+      const last = Date.parse(b.at);
+      for (const id of b.ids) dispatched.add(id);
+      if (first > to || last < from) continue;
+      for (const id of b.ids) {
+        if (!documented.has(id)) add("E_UNDOCUMENTED_CHILD", `${id} dispatched at ${b.at} inside the ledger window but absent from sessions[]`);
+      }
+    }
+    for (const s of sessions.filter((x) => x.kind === "child")) {
+      if (!dispatched.has(s.id)) add("E_NO_DISPATCH_ARTIFACT", `${s.id} documented as a child but has no dispatch artifact in the census`);
+    }
+  }
+
   return { ok: v.length === 0, violations: v, peak_children: peakChildren, peak_sessions: peakTotal };
 }
 
@@ -72,7 +91,7 @@ export function groupBursts(rows, windowMs = 2000) {
       last.ids.push(r.id);
       last.at = r.started_at;
     } else {
-      bursts.push({ at: r.started_at, ids: [r.id] });
+      bursts.push({ at: r.started_at, first_at: r.started_at, ids: [r.id] });
     }
   }
   return bursts;
@@ -124,8 +143,13 @@ function main() {
     process.exit(2);
   }
   const ledger = JSON.parse(fs.readFileSync(ledgerPath, "utf8"));
-  const result = validateLedger(ledger, roles);
-  process.stdout.write(JSON.stringify(result, null, 2) + "\n");
+  const censusPath = get("--census") ?? ledger.dispatch_census?.source ?? null;
+  let census = null;
+  if (censusPath) {
+    census = JSON.parse(fs.readFileSync(censusPath, "utf8"));
+  }
+  const result = validateLedger(ledger, roles, census);
+  process.stdout.write(JSON.stringify({ ...result, census_cross_check: census ? "on" : "off" }, null, 2) + "\n");
   if (!result.ok) process.exit(1);
 }
 

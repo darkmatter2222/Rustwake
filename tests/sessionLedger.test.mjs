@@ -257,3 +257,77 @@ test("every child in the pass receipt is accounted for by a census artifact", ()
     assert.equal(s.spawned_by, ledger.coordinator_session);
   }
 });
+
+const clone = (o) => JSON.parse(JSON.stringify(o));
+const realPair = () => ({
+  census: read("docs/operations/receipts/328-dispatch-census-e82caa52.json"),
+  ledger: read("docs/operations/receipts/328-runtime-ledger-e82caa52-pass.json"),
+});
+
+test("groupBursts records first_at as the earliest dispatch and at as the latest", () => {
+  const at = (ms) => new Date(Date.parse(T(0)) + ms).toISOString();
+  const [b] = groupBursts([{ id: "b", started_at: at(1500) }, { id: "a", started_at: at(0) }]);
+  assert.equal(b.first_at, at(0));
+  assert.equal(b.at, at(1500));
+});
+
+test("the committed pass receipt survives the census cross-check", () => {
+  const { census, ledger } = realPair();
+  const r = validateLedger(ledger, roles, census);
+  assert.deepEqual(r.violations, []);
+  assert.equal(r.ok, true);
+});
+
+test("omitting a child the census shows was dispatched inside the window is rejected", () => {
+  const { census, ledger } = realPair();
+  const dropped = "a69124e830650b810";
+  assert.ok(ledger.sessions.some((s) => s.id === dropped));
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== dropped);
+  assert.deepEqual(validateLedger(ledger, roles).violations, [], "without a census the omission is invisible");
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_UNDOCUMENTED_CHILD"));
+  assert.ok(r.violations.some((v) => v.code === "E_UNDOCUMENTED_CHILD" && v.detail.includes(dropped)));
+});
+
+test("a documented child with no dispatch artifact anywhere in the census is rejected", () => {
+  const { census, ledger } = realPair();
+  const phantom = clone(ledger.sessions.find((s) => s.id === "a69124e830650b810"));
+  phantom.id = "fffffffffffffffff";
+  phantom.leases = [];
+  phantom.browser = false;
+  ledger.sessions.push(phantom);
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_NO_DISPATCH_ARTIFACT"));
+  assert.ok(r.violations.some((v) => v.code === "E_NO_DISPATCH_ARTIFACT" && v.detail.includes(phantom.id)));
+});
+
+test("artifacts dispatched outside the ledger window are not claimed as children of this ledger", () => {
+  const { census, ledger } = realPair();
+  const keep = new Set([ledger.coordinator_session, "a9ec0494c2d539dc3", "abe14b6fae88cd389"]);
+  ledger.sessions = ledger.sessions.filter((s) => keep.has(s.id));
+  ledger.window = { from: "2026-11-17T19:22:00.000Z", to: "2026-11-17T19:28:30.000Z" };
+  const r = validateLedger(ledger, roles, census);
+  assert.deepEqual(r.violations, []);
+  assert.ok(census.artifact_count > ledger.sessions.length, "the census really is broader than this window");
+});
+
+test("a burst straddling the window start is still cross-checked", () => {
+  const l = base();
+  l.window = { from: T(10), to: T(20) };
+  const census = { bursts: [{ first_at: T(8), at: T(12), ids: ["eeeeeeeeeeeeeeeee"] }] };
+  assert.ok(codes(validateLedger(l, roles, census)).includes("E_UNDOCUMENTED_CHILD"));
+  const outside = { bursts: [{ first_at: T(1), at: T(2), ids: ["eeeeeeeeeeeeeeeee"] }] };
+  assert.deepEqual(validateLedger(l, roles, outside).violations, []);
+});
+
+test("the committed undocumented-child negative receipt fires both cross-check codes and exits 1", () => {
+  const neg = read("docs/operations/receipts/328-runtime-ledger-negative-undocumented.json");
+  const { census } = realPair();
+  const r = validateLedger(neg, roles, census);
+  assert.equal(r.ok, false);
+  for (const code of neg.expected_violations) assert.ok(codes(r).includes(code), `${code} did not fire`);
+  const captured = fs.readFileSync(fileURLToPath(new URL("../docs/operations/receipts/328-runtime-ledger-negative-undocumented.output.txt", import.meta.url)), "utf8");
+  assert.ok(captured.includes("E_UNDOCUMENTED_CHILD"));
+  assert.ok(captured.includes("E_NO_DISPATCH_ARTIFACT"));
+  assert.ok(captured.includes('"ok": false'));
+});

@@ -1,0 +1,19 @@
+# captured: node scripts/verify-session-ledger.mjs --ledger docs/operations/receipts/328-runtime-ledger-negative-undocumented.json
+# exit code: 1
+# census auto-loaded from dispatch_census.source (the genuine host census)
+{
+  "ok": false,
+  "violations": [
+    {
+      "code": "E_UNDOCUMENTED_CHILD",
+      "detail": "a69124e830650b810 dispatched at 2026-11-17T19:11:24.095Z inside the ledger window but absent from sessions[]"
+    },
+    {
+      "code": "E_NO_DISPATCH_ARTIFACT",
+      "detail": "fffffffffffffffff documented as a child but has no dispatch artifact in the census"
+    }
+  ],
+  "peak_children": 3,
+  "peak_sessions": 4,
+  "census_cross_check": "on"
+}
