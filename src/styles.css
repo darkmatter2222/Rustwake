@@ -26,7 +26,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .brand-type strong{display:block;font:800 clamp(20px,2vw,27px)/1.02 "Barlow Condensed",sans-serif;letter-spacing:.095em}
 .brand-type small{display:block;font-size:8px;font-weight:700;letter-spacing:.15em;margin-top:6px;color:#b4c6c5}
 .brand-badge{display:inline-block;position:relative;top:-3px;font:700 9px "DM Sans";border:1px solid #ad784e;color:#ffbb7d;padding:3px 4px;margin-left:8px;letter-spacing:.04em}
-.resources-strip{display:flex;max-width:min(60vw,710px);align-items:center;flex-wrap:wrap;justify-content:center;gap:8px;pointer-events:auto}
+.resources-strip{display:flex;max-width:min(62vw,760px);align-items:center;flex-wrap:wrap;justify-content:center;gap:8px;pointer-events:auto}
 .resource,.resource-more{position:relative;display:flex;align-items:center;gap:7px;min-height:44px;padding:6px 10px;background:#14262bcc;border:1px solid #3c5151b0;border-radius:5px;color:var(--text);backdrop-filter:blur(8px);transition:border .15s}
 .resource:hover,.resource-more:hover{border-color:#ad8864}
 .resource__spark{width:7px;height:7px;display:inline-block;flex:none;transform:rotate(45deg);box-shadow:0 0 10px currentColor}
@@ -154,6 +154,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
  /* UX-01 (#359): shortages must never be hidden — compact chips shrink
     instead of dropping steel/fuel/data from the strip. */
  .resource--compact{padding:6px 7px;gap:5px}
+ .strip-alert{display:none} /* chip flags carry the shortage signal at compact widths */
  .activity-card{display:none}
  .right-rail{width:190px}
 }
