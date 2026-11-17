@@ -10,10 +10,10 @@
     "source": "src/voxelSchema.js",
     "docs": "docs/design/VOXEL_GEOMETRY.md",
     "issue": 347,
-    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs",
+    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs; ART-05 vehicle rigs (#351) validated by tests/vehicleRigs.test.mjs, scripts/measure-rigs.mjs and scripts/capture-rigs.mjs",
     "parcel": {"cells": [24, 24], "worldUnitsPerCell": 3.5},
     "footprint_contract": "Logical footprints mirror src/content.js footprintOf() (#370, main e8240a87); crane 2x3, others 1x1. Geometry fields are authored local space; world group scaled by base w/d at the footprint center.",
-    "scale_references": {"workerHeight": 1.7, "truck": {"length": 2.05, "width": 1.2, "height": 1.35}},
+    "scale_references": {"workerHeight": 1.7, "truck": {"length": 2.05, "width": 1.2, "height": 1.35}, "forklift": {"length": 1.3, "width": 0.8, "height": 1.1}, "drone": {"length": 1.0, "width": 1.0, "height": 0.3}, "worker": {"length": 0.34, "width": 0.62, "height": 1.7}},
     "performance_limits": {"maxMeshesPerMachine": 60, "maxTrianglesPerMachine": 1600, "maxMachinesInitialScene": 6, "maxTrucksInitialScene": 3, "cylinderRadialSegments": 8, "shadowMapSize": 2048, "deviceDPRMax": 2, "pointLightsMax": 4},
     "crane_motion": {
       "issue": 352,
@@ -30,6 +30,37 @@
       "schema_declaration_gap": "src/voxelSchema.js crane pivot motion still declares oscillate amplitude 0.34 speed 0.24 (validator vocabulary spin|oscillate; file outside the #352 lease); pivot name/offset/axis/swingRadius 4.8 unchanged; vocabulary extension is a follow-up under #262",
       "evidence": "tests/craneMotion.test.mjs (13 tests) + scripts/capture-crane.mjs -> docs/evidence/352-art-06/ (PASS_NUMERIC_ONLY)",
       "stage": "live motion contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
+    },
+    "vehicle_rigs": {
+      "issue": 351,
+      "source": "src/world.js createTruck/truckIdentity/stepTruck/syncTruckCargo/createForklift/forkliftLift/createDrone/droneHover/activeCycleAnchor/createWorker/rigShell/applyRigLod (pure pose functions shared by runtime update() and tests) + src/voxelSchema.js RIGS/RIG_LOD/rigLodTier/validateRig",
+      "docs": "docs/design/VEHICLE_RIGS.md",
+      "provenance": "All geometry original, authored in code (shared unit BoxGeometry + 8-segment cylinders, shared MATERIALS pool, flat shading); no external/downloaded models; blockout glTF entries remain reference-only per import_policy",
+      "authority": {
+        "truck": "simulation.js freight ledger (reserve/pickup/arrive); crates only while v.cargo onboard, count max(1,min(3,ceil(amount/5))), tinted RESOURCE_BY_ID; empty tray shows nothing",
+        "forklift": "none — decorative yard crew (#274); fork lift is a pure function of nearest real truck distance to the depot bay post; never carries a load mesh",
+        "drone": "none — decorative yard crew (#274); hovers over a building only while its real cycle timer advanced frame-over-frame, else parked at DRONE_PAD",
+        "worker": "none — decorative yard crew (#274); static posed 1.7-unit scale reference, arms posed not animated"
+      },
+      "identities": "truckIdentity(v) = ((v.id % 3) + 3) % 3 preserves original per-id liveries: id%3=1 AMBER STAKE-BED (orange, 4 wheels, beacon), id%3=2 TEAL TIPPER (body, 6 wheels, ram), id%3=0 RUST FLATBED (rust, 4 wheels, headboard slats)",
+      "pivots": ["wheel:steer:*", "wheel:spin:*", "pivot:beacon", "cargo", "pivot:forks", "pivot:rotor:0..3", "pivot:arm-l", "pivot:arm-r", "lod:detail", "lod:greeble", "lod:proxy"],
+      "motion": "wheelSpin = travelled world distance / 0.3 (real sim deltas * CELL); steer wrap-aware route heading clamp +/-0.45 with decay; suspension bob speed-gated (0 when parked); forkliftLift 0.75 at <=2 units, 0 at >=6; droneHover bob sin(t*1.3)*0.18 rotor t*22",
+      "lod": {"detailMinCellPx": 26, "blockMinCellPx": 12, "cellProjectedCssPx": "CELL * viewportHeight * zoom / 80", "tier2": "single-box proxy in rig livery, cargo culled, visibility toggles only"},
+      "reducedMotion": "prefers-reduced-motion parks wheel/steer/bob/beacon/forks/rotors; distance still accrues, truck positions still follow sim, economic timing untouched",
+      "stamps": ["rigLod", "rigReducedMotion", "truck1Dist", "truck1Wheel", "truck1Cargo", "forkliftLift", "droneAnchor"],
+      "measured": {
+        "truckStakeLoaded": {"meshes": 27, "triangles": 424},
+        "truckTipperLoaded": {"meshes": 30, "triangles": 500},
+        "truckFlatbedLoaded": {"meshes": 24, "triangles": 408},
+        "truckEmpty": {"meshes": 24, "triangles": 388},
+        "forklift": {"meshes": 20, "triangles": 320},
+        "drone": {"meshes": 19, "triangles": 308},
+        "worker": {"meshes": 11, "triangles": 132},
+        "budgets": {"truck": {"maxMeshes": 40, "maxTriangles": 700}, "forklift": {"maxMeshes": 28, "maxTriangles": 450}, "drone": {"maxMeshes": 22, "maxTriangles": 400}, "worker": {"maxMeshes": 16, "maxTriangles": 250}}
+      },
+      "camera_invariants": "applyCamera/stampCamera byte-identical to main (sha256-16 f3afa5479a66b97e / 691b3c0a3480e97b, hash-guarded in tests/vehicleRigs.test.mjs and scripts/capture-rigs.mjs)",
+      "evidence": "tests/vehicleRigs.test.mjs (16 tests, full suite 184/184) + scripts/measure-rigs.mjs + scripts/capture-rigs.mjs -> docs/evidence/351-art-05/ (PASS_NUMERIC_ONLY, source_sha 1f571918ab8fdeb76cdafe97079acbdf7b58f212, 20 PNGs + nonblank.json)",
+      "stage": "live rig contract; numeric validation only, not automatically production-approved art parity (G1 #276); decorative animation is not a completed crew gameplay mechanic (#274)"
     },
     "stage": "live geometry contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
   },
@@ -70,7 +101,7 @@
     {
       "id": "drone",
       "path": "public/assets/blockouts/drone.gltf",
-      "purpose": "Flight unit with state-driven cargo",
+      "purpose": "Flight unit blockout reference; the live procedural drone is DECORATIVE survey yard crew (geometry_schema.vehicle_rigs) with no freight authority — it hovers over a real active cycle and never carries cargo (#274, #351)",
       "stage": "original blockout; not automatically production-approved",
       "review_required": [
         "scale",
@@ -86,7 +117,7 @@
     {
       "id": "forklift",
       "path": "public/assets/blockouts/forklift.gltf",
-      "purpose": "Loading unit and correct truck scale",
+      "purpose": "Loading unit blockout reference; the live procedural forklift is DECORATIVE yard crew at the depot bay approach (geometry_schema.vehicle_rigs) with no freight authority — fork lift mirrors real truck proximity, forks never carry a load mesh (#274, #351)",
       "stage": "original blockout; not automatically production-approved",
       "review_required": [
         "scale",
@@ -150,7 +181,7 @@
     {
       "id": "truck",
       "path": "public/assets/blockouts/truck.gltf",
-      "purpose": "Cargo reservation and dynamic load visuals",
+      "purpose": "Cargo hauler blockout reference; the live procedural trucks are identity-specific rigs (geometry_schema.vehicle_rigs) whose crates mirror ONLY the simulation freight ledger onboard cargo, wheels turn with real travelled distance (#351, #384)",
       "stage": "original blockout; not automatically production-approved",
       "review_required": [
         "scale",
@@ -214,7 +245,7 @@
     {
       "id": "worker",
       "path": "public/assets/blockouts/worker.gltf",
-      "purpose": "Scale reference and future human movement",
+      "purpose": "Scale reference blockout; the live procedural workers are DECORATIVE posed yard crew at the canonical 1.7-unit height (geometry_schema.vehicle_rigs), no crew simulation; real human movement remains #274 (#351)",
       "stage": "original blockout; not automatically production-approved",
       "review_required": [
         "scale",
