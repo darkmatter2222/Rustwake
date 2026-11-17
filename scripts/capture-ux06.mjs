@@ -52,7 +52,12 @@ function clearingSave(){
  const gen=g.buildings.find(b=>b.type==="generator");
  if(!gen)throw Error("seed has no generator to clone");
  g.buildings=g.buildings.filter(b=>b.type!=="generator");
- g.buildings.push({...gen,remaining:0.6}); // assembling turbine: brownout PROCESSING, then real clear
+ // 4s assembly window survives SwiftShader startup; a generous furnace buffer
+ // prevents the transient post-clear starvation window (verified in-node:
+ // without it, starve-iron/fuel appear for ~15s while trucks re-prime the bay).
+ g.buildings.push({...gen,remaining:4});
+ const f=g.buildings.find(b=>b.type==="furnace");
+ f.inventory={iron:60,fuel:60,steel:0};
  return g;
 }
 // Double stringify: the inner one embeds the save as a QUOTED JSON string
@@ -279,7 +284,7 @@ try{
    view.proof.clearing={processing_state:processing};
    if(processing!=="processing")throw Error("assembling turbine should render PROCESSING, got "+processing);
    await shot(page,"alarm-processing");
-   await page.waitForFunction(()=>{try{return !JSON.parse(document.body.dataset.alarmProbe).ids.includes("power-brownout");}catch{return false;}},null,{timeout:20000,polling:100});
+   await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.alarmProbe).ids.length===0;}catch{return false;}},null,{timeout:20000,polling:100});
    await page.locator('[data-testid="alarms-empty"]').waitFor({state:"visible",timeout:5000});
    view.proof.clearing.cleared_to=await page.locator('[data-testid="alarms-empty"]').textContent();
    view.proof.clearing.ids_after=await alarmIds(page);
