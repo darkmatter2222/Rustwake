@@ -58,9 +58,42 @@ const shortestAngle = radians => ((radians+Math.PI*3)%(Math.PI*2)-Math.PI);
 // wider tolerance for finger jitter; mouse/pen are precise.
 const CLICK_SLOP={mouse:5,pen:5,touch:10};
 const slopFor=type=>CLICK_SLOP[type]??CLICK_SLOP.mouse;
+// CAM-10 (#346) measurement probes — INERT unless a measurement harness sets
+// window.__RW_PROBES__.cam10={enabled:true[,delayMs]} BEFORE load. Aggregate
+// statistics only (per-kind count/sum/max handler ms + one last-input stamp);
+// no raw pointer coordinates, no event logs, no timers, no storage, so no
+// personal input trace can be persisted. delayMs>0 injects a deterministic
+// synchronous main-thread stall BEFORE the camera command — the negative
+// control that proves the harness detects degradation. It is a probe flag,
+// never a rendering-quality change. Normal gameplay never sets __RW_PROBES__.
+const cam10Probe=()=>{
+  if(typeof window==="undefined")return null;
+  const p=window.__RW_PROBES__&&window.__RW_PROBES__.cam10;
+  return p&&p.enabled?p:null;
+};
 export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
   const pointers=new Map();
   let gesture=null;
+  // Wrap one camera command with probe accounting. `evt` is the originating
+  // DOM event when available (its timeStamp shares the rAF time origin, which
+  // is what makes event->next-rendered-frame latency measurable); commands
+  // without an event (UI buttons/keys) fall back to handler start time.
+  const measured=(kind,evt,fn)=>{
+    const p=cam10Probe();
+    if(!p){fn();return;}
+    const t0=performance.now();
+    const delay=Number(p.delayMs)||0;
+    if(delay>0){const end=t0+delay;while(performance.now()<end){/* injected stall: negative control only */}}
+    fn();
+    const t1=performance.now();
+    const s=p.stats||(p.stats={seq:0,kinds:{},last:null});
+    const k=s.kinds[kind]||(s.kinds[kind]={count:0,sumMs:0,maxMs:0});
+    k.count++;k.sumMs+=t1-t0;if(t1-t0>k.maxMs)k.maxMs=t1-t0;
+    s.seq++;
+    s.last={seq:s.seq,kind,
+      eventTime:evt&&Number.isFinite(evt.timeStamp)?evt.timeStamp:t0,
+      appliedAt:t1,handlerMs:t1-t0};
+  };
 
   const viewport=()=>{
     const r=canvas.getBoundingClientRect();
@@ -81,24 +114,33 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
     for(const t of pointers.values()){t.gestured=true;if(t.phase==="press")t.phase="gesture";}
   };
 
-  const rotate=(dx,dy)=>{
-    markContactGesture();
-    applyView({
-      ...cameraRef.current,
-      yaw:cameraRef.current.yaw-dx*.42,
-      elevation:cameraRef.current.elevation+dy*.23
+  // CAM-10: optional trailing `evt` is the originating DOM event for probe
+  // latency pairing only; existing callers (App.jsx rail buttons, keys) pass
+  // nothing and behave exactly as before.
+  const rotate=(dx,dy,evt)=>{
+    measured("orbit",evt,()=>{
+      markContactGesture();
+      applyView({
+        ...cameraRef.current,
+        yaw:cameraRef.current.yaw-dx*.42,
+        elevation:cameraRef.current.elevation+dy*.23
+      });
     });
   };
-  const keyboardPan=(dx,dy)=>{
-    markContactGesture();
-    const box=size(),center={x:box.width/2,y:box.height/2};
-    applyView(panWithAnchor(cameraRef.current,pointBelow(center),
-      {x:center.x+dx,y:center.y+dy},box));
+  const keyboardPan=(dx,dy,evt)=>{
+    measured("key",evt,()=>{
+      markContactGesture();
+      const box=size(),center={x:box.width/2,y:box.height/2};
+      applyView(panWithAnchor(cameraRef.current,pointBelow(center),
+        {x:center.x+dx,y:center.y+dy},box));
+    });
   };
-  const zoomBy=(ratio,point)=>{
-    markContactGesture();
-    const box=size(),p=point||{x:box.width/2,y:box.height/2};
-    applyView(zoomAtPixel(cameraRef.current,cameraRef.current.zoom*ratio,p,box));
+  const zoomBy=(ratio,point,evt)=>{
+    measured("zoom",evt,()=>{
+      markContactGesture();
+      const box=size(),p=point||{x:box.width/2,y:box.height/2};
+      applyView(zoomAtPixel(cameraRef.current,cameraRef.current.zoom*ratio,p,box));
+    });
   };
   const emitHover=e=>{
     if(!onHover)return;
@@ -193,10 +235,10 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
     track.x=e.clientX;track.y=e.clientY;
     if(pointers.size===1){
       if(e.buttons===2||track.button===2||e.shiftKey||track.orbitIntent){
-        if(track.moved){track.phase="orbit";rotate(dx,dy);}
+        if(track.moved){track.phase="orbit";rotate(dx,dy,e);}
       }else if(track.moved){
         track.phase="pan";
-        applyView(panWithAnchor(cameraRef.current,track.anchor,screen(e),size()));
+        measured("drag",e,()=>applyView(panWithAnchor(cameraRef.current,track.anchor,screen(e),size())));
       }
     }else if(pointers.size===2){
       const [a,b]=[...pointers.values()];
@@ -204,12 +246,14 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
       const angle=Math.atan2(b.y-a.y,b.x-a.x);
       if(!gesture)startGesture();
       else{
-        const center=local({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
-        applyView(transformGesture(cameraRef.current,gesture.anchor,center,
-          size(),distance/gesture.distance,shortestAngle(angle-gesture.angle)*180/Math.PI));
-        gesture.distance=distance;gesture.angle=angle;
-        // Both fingers participated in a real transform: neither may tap.
-        a.gestured=true;b.gestured=true;a.phase="multi";b.phase="multi";
+        measured("pinch",e,()=>{
+          const center=local({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+          applyView(transformGesture(cameraRef.current,gesture.anchor,center,
+            size(),distance/gesture.distance,shortestAngle(angle-gesture.angle)*180/Math.PI));
+          gesture.distance=distance;gesture.angle=angle;
+          // Both fingers participated in a real transform: neither may tap.
+          a.gestured=true;b.gestured=true;a.phase="multi";b.phase="multi";
+        });
       }
     }
     emitHover(e);
@@ -256,7 +300,7 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
     markContactGesture();
     const box=size();
     const delta=e.deltaMode===1?e.deltaY*16:e.deltaMode===2?e.deltaY*box.height:e.deltaY;
-    zoomBy(Math.exp(-delta*.0015),screen(e));
+    zoomBy(Math.exp(-delta*.0015),screen(e),e);
   };
   const onContext=e=>e.preventDefault();
   canvas.addEventListener("pointerdown",onDown);
