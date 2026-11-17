@@ -1,0 +1,19 @@
+{
+  "issue": 549,
+  "event": "workflow_run",
+  "dryRun": true,
+  "shouldAlert": true,
+  "run": 44063235910,
+  "title": "delivery skipped: main CI run 44063235910 concluded cancelled",
+  "body": "## Deployment was skipped and merged code is NOT live\n\nMain CI run **44063235910** concluded `cancelled` (event `push`, branch `main`).\ndelivery.yml's `package` job gates on `github.event.workflow_run.conclusion == 'success'`, so **all four delivery jobs (`package`, `deploy`, `verify-live`, `hosted-browser`) were skipped**. **Deployment was skipped and merged code is NOT live.** The live site keeps serving the previously deployed SHA until a green main CI delivers this one.\n\n- CI run: 44063235910 — https://github.com/darkmatter2222/Rustwake/actions/runs/44063235910\n- Head SHA: `ec64143340891d4c9fe1829560243d17e753b506`\n- Conclusion: `cancelled`\n- Event: `push`\n- Branch: `main`\n- Delivery run: 44065451074 (`skipped`) — https://github.com/darkmatter2222/Rustwake/actions/runs/44065451074\n\n### Root-cause class (#545)\nThe measured instance of this class: a test harness kept the Node event loop alive, `node --test` never exited, ci.yml's `timeout-minutes: 14` killed the job, and GitHub reported the conclusion as `cancelled` — not `failure`. The known harness hang was fixed by #545 / #546, but ANY non-success conclusion (`cancelled`, `timed_out`, `failure`, `action_required`, `stale`, `skipped`, or a future value) silently skips delivery the same way. This alert exists so that can never again go unnoticed.\n\n### Next action (release engineer)\n1. Open the CI run above and read the failing/timed-out step.\n2. Land the fix on main (or re-run the failed CI jobs if transient) until main CI concludes `success`.\n3. Confirm the delivery run for the new main SHA completes all four jobs, then verify the live SHA equals main.\n\n_Filed automatically by `.github/workflows/delivery-alert.yml` (issue #549). Dedupe key: CI run id in the title._",
+  "deliveryRun": {
+    "id": 44065451074,
+    "conclusion": "skipped",
+    "status": "completed",
+    "html_url": "https://github.com/darkmatter2222/Rustwake/actions/runs/44065451074"
+  },
+  "dedupe": {
+    "action": "create"
+  },
+  "action": "dry-run (would create)"
+}
