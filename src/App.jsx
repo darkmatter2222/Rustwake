@@ -3,9 +3,10 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
+import {fleetState,truckAt,followTarget,readFleetSettings,writeFleetSettings} from "./fleet.js";
 import {classifyViewport,dockBottomOffset,sheetMaxHeight,readDockSettings,writeDockSettings} from "./dock.js";
 import "./styles.css";
 
@@ -87,11 +88,6 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
   <div className="panel-sub">Tap the starting cell, then tap the destination. Asphalt connects the freight fleet to machines.</div>
   <div className="stat-grid"><div><small>Network</small><strong>{g.roads.length} cells</strong></div><div><small>Per segment</small><strong>3 AG / 4 CR</strong></div></div>
   <div className="hint-box"><span>01</span> Select route origin<br/><span>02</span> Select route destination<br/><span>03</span> Trucks automatically use connected roads</div>
- </Card>;
- if(mode==="fleet")return <Card title="Active fleet" eyebrow="DISPATCH / PHYSICAL CARGO" onClose={close}>
-  <div className="panel-sub">Each truck physically follows connected road segments. Inventory is reserved while in transit.</div>
-  <div className="fleet-list">{g.vehicles.map(v=><div className="fleet-row" key={v.id}><span className="fleet-glyph">▰</span><div><strong>{v.name}</strong><small>{v.job?(v.job.phase==="toSource"?"Driving to pickup":"Delivering cargo"):"Available for dispatch"}</small></div><span className="fleet-label">{v.job?(v.job.amount+" "+v.job.resource):"IDLE"}</span></div>)}</div>
-  <div className="panel-footnote">Priority: maintain processor inputs, then haul finished products to your depot.</div>
  </Card>;
  if(mode==="research")return <Card title="Research & industry" eyebrow="PROGRESSION / LONG GAME" onClose={close}>
   <div className="panel-sub">Data and credits fund lasting research. Further eras unlock new materials, sectors and systems.</div>
@@ -247,6 +243,85 @@ function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmI
   </div>
  </Card>;
 }
+/* UX-05 (#363): fleet logistics is a pure read model over the authoritative
+   simulation (src/fleet.js). Routes, reserved/onboard loads, bay queues and
+   stuck reasons are the sim's own job fields — never a second fleet ledger.
+   A disabled truck (cancelled / route-blocked / reconciled) is NEVER shown as
+   hauling. The only mutation is the player's explicit cancelFreight command,
+   which returns the units to their source exactly once. Follow camera moves
+   ONLY through the public world.setView/applyCamera path (#307 invariants). */
+function FleetPanel({g,focusId,setFocusId,followId,onFollow,onStopFollow,prefs,onPrefs,onCancelFreight,close}){
+ const f=fleetState(g);
+ if(f.kind==="loading")return <Card title="Fleet logistics" eyebrow="DISPATCH / LOADING" onClose={close} className="fleet-panel">
+  <div className="inspector-loading" aria-busy="true" data-testid="fleet-loading"><span className="spinner" aria-hidden="true"/><p className="panel-sub">Reading dispatch state…</p></div>
+ </Card>;
+ const focus=f.rows.find(r=>r.id===focusId)||null;
+ const rows=prefs.showIdle?f.rows:f.rows.filter(r=>r.state!=="idle");
+ const focusBay=focus?.job?f.bays.find(b=>b.id===focus.job.destId):null;
+ return <Card title="Fleet logistics" eyebrow="DISPATCH / PHYSICAL CARGO" onClose={close} className="fleet-panel">
+  <div className="stat-grid fleet-summary">
+   <div><small>Active</small><strong data-testid="fleet-active">{f.totals.active}/{f.totals.trucks}</strong></div>
+   <div><small>Reserved</small><strong data-testid="fleet-reserved">{f.totals.reserved}</strong></div>
+   <div><small>Onboard</small><strong data-testid="fleet-onboard">{f.totals.onboard}</strong></div>
+  </div>
+  {f.totals.waiting>0&&<p className="panel-sub" data-testid="fleet-waiting">{f.totals.waiting} load{f.totals.waiting===1?"":"s"} waiting for a connected route — dispatch assigns them automatically.</p>}
+  {f.empty
+   ?<p className="panel-sub" data-testid="fleet-empty">No trucks in the yard. The starter fleet is restored with a fresh save; vehicle manufacturing arrives with a later progression phase.</p>
+   :<div className="fleet-list" data-testid="fleet-rows">{rows.map(r=><button type="button" key={r.id}
+     className={"fleet-row"+(focusId===r.id?" is-active":"")} data-testid={"truck-"+r.id} data-state={r.state}
+     aria-pressed={focusId===r.id} onClick={()=>setFocusId(r.id)}
+     aria-label={r.name+": "+r.stateLabel+(r.job?", "+r.job.amount+" "+r.job.resource:"")+(r.stuck?", "+r.stuck.reason:"")}>
+     <span className="fleet-glyph" aria-hidden="true">▰</span>
+     <div><strong>{r.name}</strong><small>{r.stateLabel}</small></div>
+     <span className={"fleet-label"+(r.tone==="danger"?" fleet-label--danger":"")}>{r.state==="error"?"REPAIR":r.job?(r.job.amount+" "+r.job.resource):"IDLE"}</span>
+    </button>)}</div>}
+  {focus&&<div className="fleet-detail" data-testid="fleet-detail" data-truck={focus.id}>
+   <div className="selected-hero"><span className="selected-hero__mark" style={{background:"var(--amber)"}}>▰</span><div><strong>{focus.name}</strong>
+    <span className={"status-chip status-chip--"+focus.tone} data-testid="fleet-state"><i aria-hidden="true"/>{focus.stateLabel.toUpperCase()}</span></div></div>
+   <p className="panel-sub" data-testid="fleet-detail-note">{focus.detail}</p>
+   {focus.job&&<>
+    <div className={"bay-line"+(focus.state==="blocked"?" bay-line--warn":"")} data-testid="fleet-route">
+     <span aria-hidden="true">⇄</span>
+     <span>{(focus.source.name||"Missing source")+(focus.source.missing?"":" "+focus.source.x+","+focus.source.z)} → {(focus.dest.name||"Missing destination")+(focus.dest.missing?"":" "+focus.dest.x+","+focus.dest.z)}</span>
+    </div>
+    <div className="stat-grid">
+     <div><small>Reserved load</small><strong data-testid="fleet-reserved-load">{focus.reserved} {focus.resource?.unit}</strong></div>
+     <div><small>Onboard</small><strong data-testid="fleet-onboard-load">{focus.onboard} {focus.resource?.unit}</strong></div>
+     <div><small>Route progress</small><strong data-testid="fleet-progress">{Math.round(focus.progress*100)}%</strong></div>
+     <div><small>ETA</small><strong data-testid="fleet-eta">{focus.etaSeconds!=null?focus.etaSeconds.toFixed(1)+"s":"—"}</strong></div>
+    </div>
+    <Meter value={focus.progress} max={1} color={focus.tone==="danger"?"var(--danger)":"var(--amber)"}/>
+   </>}
+   {focus.stuck&&<div className="bay-line bay-line--warn" role={focus.state==="error"?"alert":"status"}
+    data-testid={focus.state==="error"?"fleet-error":"fleet-stuck"}>
+    <span aria-hidden="true">⚠</span><span><strong>{focus.stuck.code}</strong> — {focus.stuck.reason}. {focus.stuck.detail}</span>
+   </div>}
+   {focus.state==="noroute"&&focus.unaffordable&&<p className="panel-sub text-warn" data-testid="fleet-unaffordable">A road segment costs 3 AG + 4 CR — the depot cannot afford one right now. Sell surplus or wait for production.</p>}
+   {focusBay&&focusBay.queue.length>0&&<div className="fleet-queue" data-testid="fleet-bay-queue">
+    <h3 className="panel-section">Bay queue — {focusBay.name||"bay"}</h3>
+    {focusBay.queue.map(q=><div key={q.vehicleId} className="fleet-queue__row" data-vehicle={q.vehicleId}>
+     <strong>{q.name}</strong><span>{q.role==="pickup"?"PICKUP":"DELIVERY"} · {q.amount} {q.unit}</span>
+     <em>{q.loading?"AT BAY":Math.ceil(q.remainingCells)+" cells out"}</em>
+    </div>)}
+   </div>}
+   <div className="fleet-actions">
+    <button type="button" className="focus-button" data-testid="fleet-follow" aria-pressed={followId===focus.id}
+     onClick={()=>followId===focus.id?onStopFollow():onFollow(focus.id)}>
+     {followId===focus.id?"Stop following":"Follow truck"}</button>
+    {focus.cancel.allowed
+     ?<button type="button" className="danger-button" data-testid="fleet-cancel" onClick={()=>onCancelFreight(focus.id)}>Cancel job — return load</button>
+     :<button type="button" className="danger-button" data-testid="fleet-cancel" disabled title={focus.cancel.reason}>Cancel job — no freight</button>}
+   </div>
+  </div>}
+  <div className="inspector-settings">
+   <label><input type="checkbox" checked={prefs.showIdle} onChange={e=>onPrefs({showIdle:e.target.checked})} data-testid="fleet-setting-idle"/> Show idle trucks</label>
+   <label><input type="checkbox" checked={prefs.followCam} onChange={e=>onPrefs({followCam:e.target.checked})} data-testid="fleet-setting-follow"/> Keep following truck in view</label>
+  </div>
+  <button type="button" className="rotate-button" data-testid="fleet-build-locked" disabled aria-describedby="fleet-build-lock-reason">Build new truck — locked</button>
+  <p className="panel-footnote" id="fleet-build-lock-reason">{f.buildLock.reason}</p>
+  <div className="panel-footnote">Every value mirrors the simulation's freight ledger live. Canceling returns the reserved or onboard units to their source exactly once — never both. Priority: maintain processor inputs, then haul finished products to your depot.</div>
+ </Card>;
+}
 export default function App(){
  const sceneHost=useRef(null),worldRef=useRef(null);
  const gameRef=useRef(null);
@@ -271,6 +346,13 @@ export default function App(){
  // + compact-mode detection for the center hint. Collapsing NEVER touches the
  // camera ref or selection — it only hides the sheet body in place.
  const [dockPrefs,setDockPrefs]=useState(()=>readDockSettings(typeof window!=="undefined"?window.localStorage:null));
+ // UX-05 (#363): fleet focus (selected truck) + follow-camera selection, and
+ // persisted fleet prefs under their OWN storage key (fleet.js sanitizer).
+ const [fleetFocus,setFleetFocus]=useState(null);
+ const [followId,setFollowId]=useState(null);
+ const [fleetPrefs,setFleetPrefs]=useState(()=>readFleetSettings(typeof window!=="undefined"?window.localStorage:null));
+ const fleetRef=useRef({followId:null,followCam:fleetPrefs.followCam});
+ useEffect(()=>{fleetRef.current={followId,followCam:fleetPrefs.followCam};},[followId,fleetPrefs.followCam]);
  const [compact,setCompact]=useState(()=>typeof window!=="undefined"&&window.matchMedia("(max-width:770px),(max-height:600px)").matches);
  const sheetCollapsed=dockPrefs.sheetCollapsed;
  const [confirmId,setConfirmId]=useState(null);
@@ -288,10 +370,27 @@ export default function App(){
  useEffect(()=>{setConfirmId(null);},[selectedId]);
  useEffect(()=>{if(confirmId!=null)confirmBtnRef.current?.focus();},[confirmId]);
  const notify=useCallback((text)=>{setToast(text);},[]);
- const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);},[]);
+ // Leaving fleet mode stops the follow camera (bounded UX-05 judgment call:
+ // follow is a fleet-panel affordance; the truck focus itself is preserved).
+ const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);if(id!=="fleet")setFollowId(null);},[]);
  const openLedger=useCallback((id=null)=>{choose("inventory");setLedgerFocus(id);},[choose]);
  const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
  const onDockPrefs=useCallback(patch=>{setDockPrefs(writeDockSettings(window.localStorage,patch));},[]);
+ const onFleetPrefs=useCallback(patch=>{setFleetPrefs(writeFleetSettings(window.localStorage,patch));},[]);
+ /* Follow camera reframes ONLY through the public world.setView/applyCamera
+    path (#307): followTarget is a pure pinGroundToPixel target move — yaw,
+    elevation and zoom are preserved; world.js/camera.js are never edited. */
+ const reframeFollow=useCallback(id=>{
+  const world=worldRef.current,cv=world?.renderer.domElement;
+  const v=gameRef.current?.vehicles.find(x=>x.id===id);
+  if(!world||!cv||!v)return;
+  const rect=cv.getBoundingClientRect(),viewport={width:rect.width,height:rect.height};
+  if(viewport.width<=0||viewport.height<=0)return;
+  camera.current=followTarget(camera.current,v,viewport);
+  world.setView(camera.current);world.applyCamera();
+ },[]);
+ const onFollow=useCallback(id=>{setFollowId(id);reframeFollow(id);},[reframeFollow]);
+ const onStopFollow=useCallback(()=>setFollowId(null),[]);
  useEffect(()=>{
   const mq=window.matchMedia("(max-width:770px),(max-height:600px)");
   const onChange=e=>setCompact(e.matches);
@@ -349,6 +448,26 @@ export default function App(){
   requestAnimationFrame(()=>updatePlacement(true));
  },[updatePlacement]);
  const refresh=useCallback(()=>setData(snapshot(gameRef.current)),[]);
+ /* UX-05 (#363): the ONLY fleet mutation is the player's explicit cancel —
+    simulation.cancelFreight returns reserved OR onboard units to their source
+    exactly once (returnFreight). No UI-side ledger or refund math here. */
+ const onCancelFreight=useCallback(id=>{
+  // Atomic observability (#363): the sim may re-dispatch this truck on the very
+  // next frame, so captures prove exact-once conservation from a stamp taken
+  // INSIDE the transaction — never from the periodic UI stamp. Read-only.
+  const g=gameRef.current,v0=g.vehicles.find(x=>x.id===id),j0=v0?.job||null;
+  const srcId=j0?.sourceId??null;
+  const bagOf=bid=>{const b=g.buildings.find(x=>x.id===bid);return !b||b.type==="depot"?g.bank:(b.inventory||{});};
+  const pre=freightTotals(g),bagBefore=j0?(bagOf(srcId)[j0.resource]||0):0;
+  const r=cancelFreight(g,id);
+  const post=freightTotals(g),bagAfter=j0?(bagOf(srcId)[j0.resource]||0):0;
+  document.body.dataset.cancelProbe=JSON.stringify({id,ok:r.ok,code:r.code,amount:r.amount??0,resource:r.resource??null,
+   sourceId:srcId,phase:j0?.phase??null,bagBefore,bagAfter,
+   before:{reserved:pre.reserved,onboard:pre.onboard,totals:pre.totals},
+   after:{reserved:post.reserved,onboard:post.onboard,totals:post.totals}});
+  notify(r.ok?"Freight canceled — "+r.amount+" "+(RESOURCE_BY_ID[r.resource]?.unit||r.resource)+" returned to its source":r.reason);
+  refresh();
+ },[notify,refresh]);
  const onSell=useCallback((id)=>{const r=sell(gameRef.current,id,10);notify(r.ok?"Sold materials for "+r.earnings+" CR":r.reason);refresh();},[notify,refresh]);
  const onResearch=useCallback((id)=>{const r=researchAt(gameRef.current,id);notify(r.ok?"Research completed":r.reason);refresh();},[notify,refresh]);
  const onRemove=useCallback((id)=>{
@@ -379,12 +498,43 @@ export default function App(){
   if(!sceneHost.current)return;
   const world=new LivingWorld(sceneHost.current);worldRef.current=world;world.setView(camera.current);
   let raf=0,last=performance.now(),uiLast=0,saveLast=0,alive=true;
+  // Cached canvas size (refreshed by the ResizeObserver) so the follow camera
+  // never forces a per-frame layout read.
+  let viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};
   const loop=(now)=>{
    if(!alive)return;
    const dt=Math.min(.07,Math.max(0,(now-last)/1000));last=now;
    advanceGame(gameRef.current,dt);
+   // UX-05 (#363): follow camera pins the truck's ACTUAL sim position to the
+   // clear-zone focus pixel via the pure fleet.followTarget; the camera only
+   // moves through the existing public setView/applyCamera path below.
+   const fr=fleetRef.current;
+   if(fr.followId!=null&&fr.followCam&&viewSize.width>0&&viewSize.height>0){
+    const v=gameRef.current.vehicles.find(x=>x.id===fr.followId);
+    if(v){
+     camera.current=followTarget(camera.current,v,viewSize);
+     // Same-frame observability: the LIVE truck position the camera pinned,
+     // so captures can verify the pin against the applied camera stamps.
+     document.body.dataset.followProbe=JSON.stringify({id:v.id,x:v.x,z:v.z});
+    }
+   }
    world.setView(camera.current);world.update(gameRef.current,dt,now/1000);
-   if(now-uiLast>270){setData(snapshot(gameRef.current));updatePlacement(false);uiLast=now;}
+   if(now-uiLast>270){
+    const s=snapshot(gameRef.current);setData(s);
+    // UX-05 (#363) observability stamp: the SAME snapshot the panel renders,
+    // so captures can prove panel values equal the sim's own freight fields
+    // (same pattern as lastSiteOk / lastZoomApplied). Read-only, never mutates.
+    const ft=freightTotals(s);
+    document.body.dataset.fleetProbe=JSON.stringify({reserved:ft.reserved,onboard:ft.onboard,totals:ft.totals,
+     bank:s.bank,buildings:s.buildings.map(b=>({id:b.id,type:b.type,inventory:b.inventory||{}})),
+     fleetResearch:s.research.includes("fleet"),
+     vehicles:s.vehicles.map(v=>({id:v.id,x:v.x,z:v.z,speed:v.speed,
+      job:v.job?{phase:v.job.phase,amount:v.job.amount,resource:v.job.resource,segment:v.job.segment,
+       progress:v.job.progress,routeLen:v.job.route.length,toSourceLen:v.job.toSource.length,
+       toDestLen:v.job.toDest.length,sourceId:v.job.sourceId,destId:v.job.destId}:null,
+      cargo:v.cargo?{amount:v.cargo.amount,resource:v.cargo.resource}:null}))});
+    updatePlacement(false);uiLast=now;
+   }
    if(now-saveLast>4200){persist(gameRef.current);saveLast=now;}
    raf=requestAnimationFrame(loop);
   };
@@ -413,11 +563,18 @@ export default function App(){
      if(r.ok){setSelectedId(r.building.id);setMode("inspect");}
     }else if(tool==="road"){
      const first=modeRef.current.roadStart;
-     if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
+     // UX-05 (#363): a fresh road-mode tap ON a truck inspects it instead of
+     // arming a road origin — choose("fleet") clears roadStart, so inspecting
+     // never mis-triggers road construction. A destination tap still builds.
+     const truck=!first?truckAt(g,c.x,c.z):null;
+     if(truck!=null){choose("fleet");setFleetFocus(truck);notify((g.vehicles.find(v=>v.id===truck)?.name||"Truck")+" — fleet logistics");}
+     else if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
      else {const r=roadLine(g,first,{x:c.x,z:c.z});notify(r.ok?r.cells+" road segments connected":r.reason);setRoadStart(null);}
     }else{
-     const hit=buildingAt(g,c.x,c.z);
-     if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
+     const truck=tool!=="build"?truckAt(g,c.x,c.z):null;
+     const hit=truck==null?buildingAt(g,c.x,c.z):null;
+     if(truck!=null){choose("fleet");setFleetFocus(truck);notify((g.vehicles.find(v=>v.id===truck)?.name||"Truck")+" — fleet logistics");}
+     else if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
      else {setSelectedId(null);if(tool==="inspect")setMode("select");}
     }
     refresh();
@@ -443,7 +600,7 @@ export default function App(){
    }
   };
   window.addEventListener("keydown",onKey);
-  const observer=new ResizeObserver(()=>{world.resize();updatePlacement(true);});observer.observe(sceneHost.current);
+  const observer=new ResizeObserver(()=>{viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};world.resize();updatePlacement(true);});observer.observe(sceneHost.current);
   return ()=>{alive=false;cancelAnimationFrame(raf);observer.disconnect();persist(gameRef.current);
    controller.dispose();
    window.removeEventListener("keydown",onKey);window.removeEventListener("pagehide",save);world.dispose();worldRef.current=null;
@@ -453,7 +610,7 @@ export default function App(){
  const stripState=resourceStripState(data);
  const sheetTitle=mode==="inspect"
   ?(selectedId!=null?(BLUEPRINTS[data.buildings.find(b=>b.id===selectedId)?.type]?.name||"Inspector"):"Inspector")
-  :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Active fleet"
+  :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Fleet logistics"
   :mode==="research"?"Research & industry":mode==="market"?"Trade exchange":"Freight ledger";
  const criticalCount=stripState.kind==="ready"?stripState.shortages.filter(s=>s.state==="critical").length:0;
  useEffect(()=>{
@@ -541,6 +698,11 @@ export default function App(){
         confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
         obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
         onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
+      :mode==="fleet"
+      ?<FleetPanel g={data} focusId={fleetFocus} setFocusId={setFleetFocus}
+        followId={followId} onFollow={onFollow} onStopFollow={onStopFollow}
+        prefs={fleetPrefs} onPrefs={onFleetPrefs} onCancelFreight={onCancelFreight}
+        close={()=>choose("select")}/>
       :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
         buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
         notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}

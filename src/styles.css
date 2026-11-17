@@ -105,6 +105,27 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .fleet-row strong{font-size:11px}
 .fleet-row small{font-size:10px;color:#98acaa}
 .fleet-label{font:700 10px "Barlow Condensed";color:var(--mint);text-transform:uppercase}
+/* UX-05 (#363) fleet logistics panel — world-first industrial tokens, same
+   surfaces as the inspector; rows are now real buttons (focusable targets). */
+.fleet-panel .fleet-summary{grid-template-columns:1fr 1fr 1fr;margin:9px 0 10px}
+button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
+.fleet-row:hover{border-color:#5f7d80;background:#2d4348}
+.fleet-row:focus-visible{outline:2px solid var(--amber);outline-offset:1px}
+.fleet-row.is-active{border-color:var(--amber);background:#eeac7114}
+.fleet-label--danger{color:var(--danger)}
+.fleet-detail{border-top:1px solid #415558;margin-top:12px;padding-top:12px}
+.fleet-detail .selected-hero{margin-bottom:10px}
+.fleet-detail .stat-grid{margin:9px 0 10px}
+.fleet-queue{margin:10px 0 4px}
+.fleet-queue__row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;color:#a7b9b4;background:#27383ca8;border:1px solid #44585b;border-radius:4px;padding:8px 10px;margin-bottom:5px}
+.fleet-queue__row strong{font:700 12px "Barlow Condensed";letter-spacing:.04em;color:#e3e9e3}
+.fleet-queue__row span{flex:1;min-width:0}
+.fleet-queue__row em{font-style:normal;font-weight:700;color:var(--amber);white-space:nowrap}
+.fleet-actions{display:flex;gap:8px;align-items:stretch;margin-top:2px}
+.fleet-actions .focus-button,.fleet-actions .danger-button{flex:1;width:auto;margin-top:10px;min-height:44px}
+.fleet-actions .focus-button[aria-pressed="true"]{border-color:var(--mint);background:#2e4a41;color:#d9f2e6}
+.fleet-panel .inspector-settings{flex-wrap:wrap;justify-content:flex-start;gap:6px 18px}
+.fleet-panel .rotate-button{margin-top:12px}
 .research-list{display:flex;flex-direction:column;gap:7px;overflow-y:auto}
 .research-row,.trade-row{display:flex;justify-content:space-between;gap:12px;align-items:center;background:#27383ca8;border:1px solid #44585b;padding:11px;border-radius:5px}
 .research-row>div{display:flex;flex-direction:column;gap:4px}
@@ -421,6 +442,8 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .intro-prompt button{min-height:44px}
 .danger-button{min-height:44px}
 .keep-button{min-height:44px}
+.fleet-row{min-height:44px}
+.fleet-queue__row{min-height:32px}
 /* Desktop safe-area reservations (geometry otherwise unchanged from UX-04). */
 .hud-top{padding-top:calc(14px + var(--sat))}
 .left-rail{left:calc(clamp(14px,2.3vw,36px) + var(--sal));top:calc(104px + var(--sat))}
