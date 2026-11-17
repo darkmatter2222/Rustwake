@@ -70,12 +70,57 @@ Bounds are pad-inclusive static envelopes (W × H × D, local world units before
 | foundry | 1×1 | 3.045 × 4.55 × 3.045 | 4.55 | group pulse (amp 0.009, speed 5) | 24 / 500 |
 | crusher | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
 | refinery | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
-| crane | 2×3 | 3.045 × 5.09 × 3.045 | 5.60 | crane (oscillate, 4.8) | 32 / 600 |
+| crane | 2×3 | 3.045 × 5.09 × 3.045 | 5.60 | crane slew→trolley→hoist→hook (ART-06 lift cycle, 4.8) | 32 / 600 (measured 27 / 324) |
 | turret | 1×1 | 3.045 × 3.42 × 3.045 | 3.42 | rotate (spin, 2.3) | 20 / 400 |
 | fabricator | 1×1 | 3.045 × 3.05 × 3.045 | 3.05 | static | 24 / 400 |
 | research | 1×1 | 3.045 × 4.925 × 3.045 | 4.92 | static | 24 / 450 |
 
 Validation rules enforced per descriptor: integer footprint within 24×24 mirroring `footprintOf()`; `footprint.world = cells × 3.5`; static bounds ≤ base cell; worker height ratio; pick ≥ base cell and enclosing static silhouette with ≥44 px declared floor; +Z bay inside the base cell and ≥ truck width; pivot naming/axis/motion/offset within envelope (`y ≤ height + 0.5`); swingRadius ≤ 5.25; registered materials; budgets ≤ global limits. 18 negative descriptors (oversize footprint, overhang, sub-cell pick, narrow bay, misnamed pivot, out-of-envelope offset, excessive reach, unregistered material, over-budget, missing descriptor…) are asserted rejected in tests.
+
+## ART-06 crane lift-cycle motion contract (#352)
+
+The decorative endless sinusoidal slew (`rotation.y = sin(time*.24)*.34`) is replaced by a deterministic, phased mechanical lift cycle on a named pivot hierarchy. Source of truth: `src/world.js` exports `CRANE_LIMITS`, `CRANE_PHASES`, `CRANE_CYCLE_TOTAL`, pure `cranePose(time, reducedMotion)` and the single application path `applyCranePose(p, pose)` — runtime `update()` and `tests/craneMotion.test.mjs` share the same functions, so the tested pose is the rendered pose.
+
+### Pivot hierarchy (inspectable named Groups)
+
+- `pivot:crane` — slew assembly at the ART-01 schema offset `[0, 5.1, 0]` (name/offset/axis/swingRadius 4.8 unchanged): boom girder, 8 truss beams, counterweight. `rotation.y` = slew angle.
+- `pivot:crane:trolley` — child of the slew; travels the boom on local X between `trolleyMin 0.7` and `trolleyMax 4.35`.
+- `pivot:crane:hoist` — child of the trolley at `[0, −0.2, 0]`; carries the cable mesh. Cable `scale.y` = drop and `position.y` = −drop/2, so the cable always spans exactly from hoist to hook.
+- `pivot:crane:hook` — child of the hoist; `position.y` = −drop (block + shank + tip). The hook rides exactly the cable end; the load chain can never teleport apart.
+
+### Deterministic cycle (25.2 s, smoothstep ease, zero end velocity)
+
+| # | Phase | Dur (s) | Motion |
+|---|---|---|---|
+| 0 | travel-out | 3.0 | trolley 0.7 → 4.35 |
+| 1 | lower | 3.0 | drop 0.45 → 3.2 at trolley max |
+| 2 | hook-dwell | 1.6 | hold at full drop |
+| 3 | raise | 3.0 | drop 3.2 → 0.45 |
+| 4 | travel-in | 3.0 | trolley 4.35 → 0.7 |
+| 5 | slew-to-drop | 2.4 | slew 0 → −0.6 rad |
+| 6 | lower-drop | 2.6 | drop 0.45 → 2.6 (release height) |
+| 7 | release-dwell | 1.6 | hold at release height |
+| 8 | raise-drop | 2.6 | drop 2.6 → 0.45 |
+| 9 | slew-back | 2.4 | slew −0.6 → 0 rad |
+
+`cranePose` is pure: elapsed time modulo 25.2 s selects the phase, smoothstep `u²(3−2u)` eases each channel; no randomness, no frame-rate dependence, exact periodicity (t and t + 25.2 pose identically).
+
+### Simulated truth and accessibility
+
+- **Empty hook.** No cargo mesh is created, attached or teleported; the cycle implies no production and moves no inventory. A visible load may only ever mirror a real reserved shipment from the simulation authority (#274); `src/simulation.js` is untouched by #352.
+- **prefers-reduced-motion** (matchMedia + change listener): `cranePose` returns the parked pose `{phase:"parked", slew:0, trolley:0.7, drop:0.45}` — static, minimal, state preserved.
+- Canvas stamps each refresh: `dataset.cranePhase`, `dataset.craneTrolley` (3 dp), `dataset.craneDrop` (3 dp), `dataset.craneReducedMotion` ("1"/"0"), alongside the untouched #307 camera stamps.
+- Selection/footprint unchanged: 2×3 via #370 `worldFootprint`, full-cell pick volume (pickHeight 5.6 encloses every animated pose), shared material pool; measured 27 meshes / 324 triangles (budget 32 / 600).
+- Camera invariants preserved: `applyCamera`/`stampCamera` byte-identical to main (sha256-16 `f3afa5479a66b97e` / `691b3c0a3480e97b`, guarded in `tests/craneMotion.test.mjs`), isometric yaw 45 / elevation 35.264, synchronous dataset stamps, one WebGL context, no document scroll.
+
+### Schema declaration follow-up (honest gap)
+
+`src/voxelSchema.js` still declares the crane pivot motion as `{kind:"oscillate", amplitude:0.34, speed:0.24}` — the validator vocabulary is `spin | oscillate` and `voxelSchema.js` is outside the #352 file lease, so the descriptor is now stale relative to the runtime lift cycle. Pivot name/offset/axis/swingRadius/parts/budget remain accurate and all schema tests stay green. Extending the schema motion vocabulary to describe the phased cycle (and retiring the stale amplitude/speed) is a follow-up under the ART umbrella #262; recorded in `docs/backlog/GAPS.md`.
+
+### ART-06 evidence
+
+- Tests: `tests/craneMotion.test.mjs` — 13 tests (hierarchy names/parentage, phase order + durations + periodicity, channel bounds, hook==cable-end coupling, no-cargo negatives, reduced-motion parked static, camera-hash guard). Full suite 168/168 on rebased main `d1e8dec4` (155 main + 13 crane).
+- Capture: `npm run build && node scripts/capture-crane.mjs` → `docs/evidence/352-art-06/` (desktop 1440×900 + phone 390×844 front/side/isometric stills, parked reduced-motion negative, selection proof, 10 distinct motion-stage frames over ≥60 s with a ≥120-sample timeline, phone motion frames, `report.json` citing the capture head SHA). Status `PASS_NUMERIC_ONLY` — numeric smoke only, not art parity, reviewer/product acceptance or sponsor G1 (#276).
 
 ## Performance limits
 
@@ -99,11 +144,11 @@ Shared unit BoxGeometry + shared material pool; no per-mesh geometry allocation.
 
 ## Reproducible evidence
 
-- Tests: `node --test tests/*.test.mjs` — 48 pass (14 in `tests/voxelSchema.test.mjs`: schema/token identity, real Box3 envelopes, #370 worldFootprint transform integration (12 machines × 4 rotations), pick enclosure, frontage/truck fit, pivot offsets/axes/motion, material registry, scale references, budgets, 44 px projection, negative descriptors, staging; plus camera, gridOccupancy, simulation and verify-live suites from main).
+- Tests: `node --test tests/*.test.mjs` — 168 pass at ART-06 (14 in `tests/voxelSchema.test.mjs`: schema/token identity, real Box3 envelopes, #370 worldFootprint transform integration (12 machines × 4 rotations), pick enclosure, frontage/truck fit, pivot offsets/axes/motion, material registry, scale references, budgets, 44 px projection, negative descriptors, staging; 13 in `tests/craneMotion.test.mjs` (ART-06 #352); plus camera, gridOccupancy, simulation, dock and verify-live suites from main).
 - Capture: `npm run build && node scripts/capture-art.mjs` → `artifacts/art-01/` (`desktop-world.png`, `desktop-detail.png` near-zoom pivots/bay/worker/truck, `desktop-negative-ghost.png`, `desktop-negative-toast.png`, `phone-world.png`, `phone-negative-toast.png`, `report.json` with the full validation table and camera poses). The run for this PR is committed at `docs/evidence/347-art-01/`. One headless Chromium/SwiftShader, production vite preview; phone view is emulated, not a physical handset (#275).
 - Gates: `npm run validate`, `node scripts/check-design-contract.mjs` (PASS: 13 assets / 20 world tokens), `node scripts/check-studio-docs.mjs` (PASS).
 - **No code-author art self-acceptance**: numeric capture status is `PASS_NUMERIC_ONLY`. Independent reviewer + product verdict on the immutable PR head, then sponsor G1 (#276) on the deployed build, are required before any art-parity claim.
 
 ## Concurrency boundaries respected
 
-Rebased onto main `e8240a87` after #528 BLD-01 merged: camera math and PR #307 `applyCamera`/`stampCamera` are byte-identical to main (#337 owns `src/cameraInput.js` / `src/camera.js`); #370 occupancy (`src/gridOccupancy.js`, `src/simulation.js`, footprint pivots/AABB in `src/world.js`, rotate/cancel UI, `scripts/capture-v2.mjs` construction proof) is preserved intact — this schema integrates with it via registry footprints and local-space geometry fields. `scripts/capture-art.mjs` is a new, separate capture entry point.
+Rebased onto main `e8240a87` after #528 BLD-01 merged: camera math and PR #307 `applyCamera`/`stampCamera` are byte-identical to main (#337 owns `src/cameraInput.js` / `src/camera.js`); #370 occupancy (`src/gridOccupancy.js`, `src/simulation.js`, footprint pivots/AABB in `src/world.js`, rotate/cancel UI, `scripts/capture-v2.mjs` construction proof) is preserved intact — this schema integrates with it via registry footprints and local-space geometry fields. `scripts/capture-art.mjs` is a new, separate capture entry point. ART-06 (#352, rebased onto main `d1e8dec4` after UX-07 #536) owns only the crane motion in `src/world.js`: `applyCamera`/`stampCamera` remain byte-identical (sha256-16 `f3afa5479a66b97e` / `691b3c0a3480e97b`, hash-guarded in `tests/craneMotion.test.mjs`); `src/camera.js`, `src/cameraInput.js`, `src/simulation.js`, `src/App.jsx`, `src/styles.css` and `src/voxelSchema.js` are untouched; `scripts/capture-crane.mjs` is a new, separate capture entry point.

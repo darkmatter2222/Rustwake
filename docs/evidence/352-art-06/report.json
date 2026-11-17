@@ -1,0 +1,3115 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 352,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "28870f895e94e65ca7b44eb35cf2ec18ea5e4a1c",
+  "started": "2026-11-17T06:40:08.919Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "crane": {
+    "pivot": {
+      "x": 14,
+      "y": 0,
+      "z": -19.25
+    },
+    "cycleTotal": 25.200000000000003,
+    "phases": [
+      {
+        "name": "travel-out",
+        "dur": 3
+      },
+      {
+        "name": "lower",
+        "dur": 3
+      },
+      {
+        "name": "hook-dwell",
+        "dur": 1.6
+      },
+      {
+        "name": "raise",
+        "dur": 3
+      },
+      {
+        "name": "travel-in",
+        "dur": 3
+      },
+      {
+        "name": "slew-to-drop",
+        "dur": 2.4
+      },
+      {
+        "name": "lower-drop",
+        "dur": 2.6
+      },
+      {
+        "name": "release-dwell",
+        "dur": 1.6
+      },
+      {
+        "name": "raise-drop",
+        "dur": 2.6
+      },
+      {
+        "name": "slew-back",
+        "dur": 2.4
+      }
+    ],
+    "limits": {
+      "trolleyMin": 0.7,
+      "trolleyMax": 4.35,
+      "dropMin": 0.45,
+      "dropMax": 3.2,
+      "dropRelease": 2.6,
+      "slewDrop": -0.6
+    }
+  },
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedA": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedConstant": true,
+      "zoomed": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": 5.08095823641389,
+        "z": -6.989679800084268,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": 5.08095823641389,
+        "z": -6.989679800084268,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "front": {
+        "yaw": 359.999989013672,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": 5.08095823641389,
+        "z": -6.989679800084268,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "side": {
+        "yaw": 90.000010986328,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": 5.08095823641389,
+        "z": -6.989679800084268,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": 5.08095823641389,
+        "z": -6.989679800084268,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "selectedText": "SITE 15.5 / UTILITY Heavy Yard Crane × ▣ UNIT 005 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 1 MW Yard grid Powered Footprint 2×3 Bay facing SOUTH ▣ Loading bay reaches a road in 0 cells Local storage No c",
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "iso": "desktop-crane-iso.png",
+        "front": "desktop-crane-front.png",
+        "side": "desktop-crane-side.png",
+        "selected": "desktop-crane-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedA": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "parkedConstant": true,
+      "zoomed": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.19991277737092,
+        "x": 10.051985716903612,
+        "z": -13.9913467719764,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.19991277737092,
+        "x": 10.051985716903612,
+        "z": -13.9913467719764,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "front": {
+        "yaw": 0.0000018310547034161573,
+        "elevation": 35.264,
+        "zoom": 2.19991277737092,
+        "x": 10.051985716903612,
+        "z": -13.9913467719764,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "side": {
+        "yaw": 89.99999977111804,
+        "elevation": 35.264,
+        "zoom": 2.19991277737092,
+        "x": 10.051985716903612,
+        "z": -13.9913467719764,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "final": {
+        "yaw": 45.000001602172745,
+        "elevation": 35.264,
+        "zoom": 2.19991277737092,
+        "x": 28.295468642680653,
+        "z": -4.954532156813123,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "cranePhase": "parked",
+        "craneTrolley": "0.700",
+        "craneDrop": "0.450",
+        "craneReducedMotion": "1"
+      },
+      "selectedText": "SITE 15.5 / UTILITY Heavy Yard Crane × ▣ UNIT 005 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 1 MW Yard grid Powered Footprint 2×3 Bay facing SOUTH ▣ Loading bay reaches a road in 0 cells Local storage No c",
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "iso": "phone-crane-iso.png",
+        "front": "phone-crane-front.png",
+        "side": "phone-crane-side.png",
+        "selected": "phone-crane-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "motion": {
+    "elapsedSeconds": 60.083,
+    "samples": 371,
+    "stages": [
+      {
+        "index": 0,
+        "phase": "travel-out",
+        "stamp": {
+          "phase": "travel-out",
+          "trolley": "1.795",
+          "drop": "0.450"
+        },
+        "screenshot": "desktop-motion-00-travel-out.png"
+      },
+      {
+        "index": 1,
+        "phase": "lower",
+        "stamp": {
+          "phase": "lower",
+          "trolley": "4.350",
+          "drop": "1.296"
+        },
+        "screenshot": "desktop-motion-01-lower.png"
+      },
+      {
+        "index": 2,
+        "phase": "hook-dwell",
+        "stamp": {
+          "phase": "hook-dwell",
+          "trolley": "4.350",
+          "drop": "3.200"
+        },
+        "screenshot": "desktop-motion-02-hook-dwell.png"
+      },
+      {
+        "index": 3,
+        "phase": "raise",
+        "stamp": {
+          "phase": "raise",
+          "trolley": "4.350",
+          "drop": "2.290"
+        },
+        "screenshot": "desktop-motion-03-raise.png"
+      },
+      {
+        "index": 4,
+        "phase": "travel-in",
+        "stamp": {
+          "phase": "travel-in",
+          "trolley": "3.113",
+          "drop": "0.450"
+        },
+        "screenshot": "desktop-motion-04-travel-in.png"
+      },
+      {
+        "index": 5,
+        "phase": "slew-to-drop",
+        "stamp": {
+          "phase": "slew-to-drop",
+          "trolley": "0.700",
+          "drop": "0.450"
+        },
+        "screenshot": "desktop-motion-05-slew-to-drop.png"
+      },
+      {
+        "index": 6,
+        "phase": "lower-drop",
+        "stamp": {
+          "phase": "lower-drop",
+          "trolley": "0.700",
+          "drop": "1.166"
+        },
+        "screenshot": "desktop-motion-06-lower-drop.png"
+      },
+      {
+        "index": 7,
+        "phase": "release-dwell",
+        "stamp": {
+          "phase": "release-dwell",
+          "trolley": "0.700",
+          "drop": "2.600"
+        },
+        "screenshot": "desktop-motion-07-release-dwell.png"
+      },
+      {
+        "index": 8,
+        "phase": "raise-drop",
+        "stamp": {
+          "phase": "raise-drop",
+          "trolley": "0.700",
+          "drop": "1.942"
+        },
+        "screenshot": "desktop-motion-08-raise-drop.png"
+      },
+      {
+        "index": 9,
+        "phase": "slew-back",
+        "stamp": {
+          "phase": "slew-back",
+          "trolley": "0.700",
+          "drop": "0.450"
+        },
+        "screenshot": "desktop-motion-09-slew-back.png"
+      }
+    ],
+    "seenPhases": [
+      "travel-out",
+      "lower",
+      "hook-dwell",
+      "raise",
+      "travel-in",
+      "slew-to-drop",
+      "lower-drop",
+      "release-dwell",
+      "raise-drop",
+      "slew-back"
+    ],
+    "phaseOrderCyclic": true,
+    "stagesAdjacent": true,
+    "inBounds": true,
+    "continuous": true,
+    "maxStep": {
+      "trolley": 1.7829999999999995,
+      "drop": 1.2980000000000003
+    },
+    "allReducedOff": true,
+    "distinctTrolleyValues": 86,
+    "distinctDropValues": 158,
+    "pageErrors": [],
+    "failedRequests": [],
+    "canvasCount": 1,
+    "documentScroll": false,
+    "timeline": [
+      {
+        "t": 0.005,
+        "phase": "travel-out",
+        "trolley": 1.498,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 0.201,
+        "phase": "travel-out",
+        "trolley": 1.795,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 0.205,
+        "phase": "travel-out",
+        "trolley": 1.795,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 0.21,
+        "phase": "travel-out",
+        "trolley": 1.795,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 0.679,
+        "phase": "travel-out",
+        "trolley": 2.567,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 3.231,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.296,
+        "reduced": "0"
+      },
+      {
+        "t": 3.236,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.296,
+        "reduced": "0"
+      },
+      {
+        "t": 3.24,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.296,
+        "reduced": "0"
+      },
+      {
+        "t": 3.698,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.902,
+        "reduced": "0"
+      },
+      {
+        "t": 5.158,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 5.164,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 5.169,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 5.54,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 7.892,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.29,
+        "reduced": "0"
+      },
+      {
+        "t": 7.898,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.29,
+        "reduced": "0"
+      },
+      {
+        "t": 7.903,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.29,
+        "reduced": "0"
+      },
+      {
+        "t": 8.411,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.612,
+        "reduced": "0"
+      },
+      {
+        "t": 10.874,
+        "phase": "travel-in",
+        "trolley": 3.113,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 10.879,
+        "phase": "travel-in",
+        "trolley": 3.113,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 10.884,
+        "phase": "travel-in",
+        "trolley": 3.113,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 11.351,
+        "phase": "travel-in",
+        "trolley": 2.332,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 13.23,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 13.745,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 14.265,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 14.739,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 16.111,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.166,
+        "reduced": "0"
+      },
+      {
+        "t": 16.118,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.166,
+        "reduced": "0"
+      },
+      {
+        "t": 16.123,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.166,
+        "reduced": "0"
+      },
+      {
+        "t": 16.542,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.635,
+        "reduced": "0"
+      },
+      {
+        "t": 17.775,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 17.779,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 17.783,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 18.117,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 20.289,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.942,
+        "reduced": "0"
+      },
+      {
+        "t": 20.295,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.942,
+        "reduced": "0"
+      },
+      {
+        "t": 20.3,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.942,
+        "reduced": "0"
+      },
+      {
+        "t": 20.747,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.395,
+        "reduced": "0"
+      },
+      {
+        "t": 22.48,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 22.998,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 23.515,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 23.848,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 23.956,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.064,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.172,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.282,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.39,
+        "phase": "travel-out",
+        "trolley": 0.706,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.501,
+        "phase": "travel-out",
+        "trolley": 0.728,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.612,
+        "phase": "travel-out",
+        "trolley": 0.806,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.722,
+        "phase": "travel-out",
+        "trolley": 0.854,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.833,
+        "phase": "travel-out",
+        "trolley": 0.993,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 24.941,
+        "phase": "travel-out",
+        "trolley": 1.086,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.054,
+        "phase": "travel-out",
+        "trolley": 1.277,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.162,
+        "phase": "travel-out",
+        "trolley": 1.372,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.273,
+        "phase": "travel-out",
+        "trolley": 1.601,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.383,
+        "phase": "travel-out",
+        "trolley": 1.793,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.494,
+        "phase": "travel-out",
+        "trolley": 1.965,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.615,
+        "phase": "travel-out",
+        "trolley": 2.112,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.728,
+        "phase": "travel-out",
+        "trolley": 2.382,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.837,
+        "phase": "travel-out",
+        "trolley": 2.534,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 25.948,
+        "phase": "travel-out",
+        "trolley": 2.807,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.058,
+        "phase": "travel-out",
+        "trolley": 2.927,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.171,
+        "phase": "travel-out",
+        "trolley": 3.19,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.279,
+        "phase": "travel-out",
+        "trolley": 3.33,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.392,
+        "phase": "travel-out",
+        "trolley": 3.544,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.497,
+        "phase": "travel-out",
+        "trolley": 3.669,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.61,
+        "phase": "travel-out",
+        "trolley": 3.853,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.716,
+        "phase": "travel-out",
+        "trolley": 3.957,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.827,
+        "phase": "travel-out",
+        "trolley": 4.032,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 26.936,
+        "phase": "travel-out",
+        "trolley": 4.177,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 27.046,
+        "phase": "travel-out",
+        "trolley": 4.24,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 27.155,
+        "phase": "travel-out",
+        "trolley": 4.319,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 27.265,
+        "phase": "travel-out",
+        "trolley": 4.343,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 27.375,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.453,
+        "reduced": "0"
+      },
+      {
+        "t": 27.482,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.471,
+        "reduced": "0"
+      },
+      {
+        "t": 27.594,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.521,
+        "reduced": "0"
+      },
+      {
+        "t": 27.704,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.556,
+        "reduced": "0"
+      },
+      {
+        "t": 27.814,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.658,
+        "reduced": "0"
+      },
+      {
+        "t": 27.922,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.726,
+        "reduced": "0"
+      },
+      {
+        "t": 28.033,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.868,
+        "reduced": "0"
+      },
+      {
+        "t": 28.139,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.938,
+        "reduced": "0"
+      },
+      {
+        "t": 28.248,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.012,
+        "reduced": "0"
+      },
+      {
+        "t": 28.357,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.21,
+        "reduced": "0"
+      },
+      {
+        "t": 28.467,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.316,
+        "reduced": "0"
+      },
+      {
+        "t": 28.576,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.514,
+        "reduced": "0"
+      },
+      {
+        "t": 28.688,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.604,
+        "reduced": "0"
+      },
+      {
+        "t": 28.799,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.809,
+        "reduced": "0"
+      },
+      {
+        "t": 28.905,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.924,
+        "reduced": "0"
+      },
+      {
+        "t": 29.015,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.127,
+        "reduced": "0"
+      },
+      {
+        "t": 29.125,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.217,
+        "reduced": "0"
+      },
+      {
+        "t": 29.235,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.411,
+        "reduced": "0"
+      },
+      {
+        "t": 29.356,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.493,
+        "reduced": "0"
+      },
+      {
+        "t": 29.466,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.668,
+        "reduced": "0"
+      },
+      {
+        "t": 29.575,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.758,
+        "reduced": "0"
+      },
+      {
+        "t": 29.688,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.904,
+        "reduced": "0"
+      },
+      {
+        "t": 29.795,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.961,
+        "reduced": "0"
+      },
+      {
+        "t": 29.904,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.025,
+        "reduced": "0"
+      },
+      {
+        "t": 30.012,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.117,
+        "reduced": "0"
+      },
+      {
+        "t": 30.123,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.117,
+        "reduced": "0"
+      },
+      {
+        "t": 30.233,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.192,
+        "reduced": "0"
+      },
+      {
+        "t": 30.342,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.45,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.557,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.669,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.777,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.888,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 30.994,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.109,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.214,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.324,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.432,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.541,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.651,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.76,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.871,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 31.977,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.199,
+        "reduced": "0"
+      },
+      {
+        "t": 32.088,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.169,
+        "reduced": "0"
+      },
+      {
+        "t": 32.199,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.144,
+        "reduced": "0"
+      },
+      {
+        "t": 32.307,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.103,
+        "reduced": "0"
+      },
+      {
+        "t": 32.416,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.005,
+        "reduced": "0"
+      },
+      {
+        "t": 32.525,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.939,
+        "reduced": "0"
+      },
+      {
+        "t": 32.634,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.799,
+        "reduced": "0"
+      },
+      {
+        "t": 32.745,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.73,
+        "reduced": "0"
+      },
+      {
+        "t": 32.855,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.542,
+        "reduced": "0"
+      },
+      {
+        "t": 32.961,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.44,
+        "reduced": "0"
+      },
+      {
+        "t": 33.07,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.356,
+        "reduced": "0"
+      },
+      {
+        "t": 33.183,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.137,
+        "reduced": "0"
+      },
+      {
+        "t": 33.292,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.978,
+        "reduced": "0"
+      },
+      {
+        "t": 33.401,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.887,
+        "reduced": "0"
+      },
+      {
+        "t": 33.513,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.772,
+        "reduced": "0"
+      },
+      {
+        "t": 33.633,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.636,
+        "reduced": "0"
+      },
+      {
+        "t": 33.746,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.368,
+        "reduced": "0"
+      },
+      {
+        "t": 33.867,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.261,
+        "reduced": "0"
+      },
+      {
+        "t": 33.979,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.077,
+        "reduced": "0"
+      },
+      {
+        "t": 34.086,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.982,
+        "reduced": "0"
+      },
+      {
+        "t": 34.193,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.909,
+        "reduced": "0"
+      },
+      {
+        "t": 34.302,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.777,
+        "reduced": "0"
+      },
+      {
+        "t": 34.412,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.689,
+        "reduced": "0"
+      },
+      {
+        "t": 34.524,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.57,
+        "reduced": "0"
+      },
+      {
+        "t": 34.632,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.533,
+        "reduced": "0"
+      },
+      {
+        "t": 34.741,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.495,
+        "reduced": "0"
+      },
+      {
+        "t": 34.851,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.456,
+        "reduced": "0"
+      },
+      {
+        "t": 34.961,
+        "phase": "travel-in",
+        "trolley": 4.35,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.072,
+        "phase": "travel-in",
+        "trolley": 4.322,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.181,
+        "phase": "travel-in",
+        "trolley": 4.285,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.293,
+        "phase": "travel-in",
+        "trolley": 4.183,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.402,
+        "phase": "travel-in",
+        "trolley": 4.108,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.512,
+        "phase": "travel-in",
+        "trolley": 4.022,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.62,
+        "phase": "travel-in",
+        "trolley": 3.862,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.729,
+        "phase": "travel-in",
+        "trolley": 3.75,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.841,
+        "phase": "travel-in",
+        "trolley": 3.529,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 35.95,
+        "phase": "travel-in",
+        "trolley": 3.423,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.06,
+        "phase": "travel-in",
+        "trolley": 3.173,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.169,
+        "phase": "travel-in",
+        "trolley": 3.057,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.28,
+        "phase": "travel-in",
+        "trolley": 2.789,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.391,
+        "phase": "travel-in",
+        "trolley": 2.638,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.5,
+        "phase": "travel-in",
+        "trolley": 2.364,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.609,
+        "phase": "travel-in",
+        "trolley": 2.243,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.719,
+        "phase": "travel-in",
+        "trolley": 1.977,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.831,
+        "phase": "travel-in",
+        "trolley": 1.833,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 36.941,
+        "phase": "travel-in",
+        "trolley": 1.585,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.051,
+        "phase": "travel-in",
+        "trolley": 1.481,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.162,
+        "phase": "travel-in",
+        "trolley": 1.287,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.272,
+        "phase": "travel-in",
+        "trolley": 1.155,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.386,
+        "phase": "travel-in",
+        "trolley": 0.983,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.492,
+        "phase": "travel-in",
+        "trolley": 0.917,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.606,
+        "phase": "travel-in",
+        "trolley": 0.799,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.712,
+        "phase": "travel-in",
+        "trolley": 0.752,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.824,
+        "phase": "travel-in",
+        "trolley": 0.725,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 37.932,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.044,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.154,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.263,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.374,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.485,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.593,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.704,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.815,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 38.925,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.036,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.144,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.255,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.362,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.473,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.582,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.693,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.799,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 39.91,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 40.019,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 40.131,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 40.239,
+        "phase": "slew-to-drop",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 40.35,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.453,
+        "reduced": "0"
+      },
+      {
+        "t": 40.46,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.464,
+        "reduced": "0"
+      },
+      {
+        "t": 40.572,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.515,
+        "reduced": "0"
+      },
+      {
+        "t": 40.681,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.55,
+        "reduced": "0"
+      },
+      {
+        "t": 40.791,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.649,
+        "reduced": "0"
+      },
+      {
+        "t": 40.9,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.702,
+        "reduced": "0"
+      },
+      {
+        "t": 41.015,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.838,
+        "reduced": "0"
+      },
+      {
+        "t": 41.122,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 0.923,
+        "reduced": "0"
+      },
+      {
+        "t": 41.232,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.087,
+        "reduced": "0"
+      },
+      {
+        "t": 41.34,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.165,
+        "reduced": "0"
+      },
+      {
+        "t": 41.455,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.345,
+        "reduced": "0"
+      },
+      {
+        "t": 41.559,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.448,
+        "reduced": "0"
+      },
+      {
+        "t": 41.669,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.531,
+        "reduced": "0"
+      },
+      {
+        "t": 41.779,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.716,
+        "reduced": "0"
+      },
+      {
+        "t": 41.892,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.797,
+        "reduced": "0"
+      },
+      {
+        "t": 41.999,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 1.973,
+        "reduced": "0"
+      },
+      {
+        "t": 42.107,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.066,
+        "reduced": "0"
+      },
+      {
+        "t": 42.217,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.205,
+        "reduced": "0"
+      },
+      {
+        "t": 42.325,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.283,
+        "reduced": "0"
+      },
+      {
+        "t": 42.435,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.408,
+        "reduced": "0"
+      },
+      {
+        "t": 42.547,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.455,
+        "reduced": "0"
+      },
+      {
+        "t": 42.657,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.539,
+        "reduced": "0"
+      },
+      {
+        "t": 42.767,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.565,
+        "reduced": "0"
+      },
+      {
+        "t": 42.877,
+        "phase": "lower-drop",
+        "trolley": 0.7,
+        "drop": 2.599,
+        "reduced": "0"
+      },
+      {
+        "t": 42.988,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.099,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.208,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.318,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.429,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.54,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.649,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.762,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.872,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 43.984,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.089,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.2,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.311,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.42,
+        "phase": "release-dwell",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.532,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.6,
+        "reduced": "0"
+      },
+      {
+        "t": 44.641,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.593,
+        "reduced": "0"
+      },
+      {
+        "t": 44.751,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.549,
+        "reduced": "0"
+      },
+      {
+        "t": 44.862,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.518,
+        "reduced": "0"
+      },
+      {
+        "t": 44.971,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.426,
+        "reduced": "0"
+      },
+      {
+        "t": 45.083,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.362,
+        "reduced": "0"
+      },
+      {
+        "t": 45.193,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.228,
+        "reduced": "0"
+      },
+      {
+        "t": 45.304,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.162,
+        "reduced": "0"
+      },
+      {
+        "t": 45.418,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 2.001,
+        "reduced": "0"
+      },
+      {
+        "t": 45.528,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.924,
+        "reduced": "0"
+      },
+      {
+        "t": 45.64,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.746,
+        "reduced": "0"
+      },
+      {
+        "t": 45.75,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.643,
+        "reduced": "0"
+      },
+      {
+        "t": 45.862,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.458,
+        "reduced": "0"
+      },
+      {
+        "t": 45.972,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.375,
+        "reduced": "0"
+      },
+      {
+        "t": 46.085,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.194,
+        "reduced": "0"
+      },
+      {
+        "t": 46.194,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 1.096,
+        "reduced": "0"
+      },
+      {
+        "t": 46.306,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.948,
+        "reduced": "0"
+      },
+      {
+        "t": 46.414,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.862,
+        "reduced": "0"
+      },
+      {
+        "t": 46.525,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.722,
+        "reduced": "0"
+      },
+      {
+        "t": 46.635,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.668,
+        "reduced": "0"
+      },
+      {
+        "t": 46.747,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.564,
+        "reduced": "0"
+      },
+      {
+        "t": 46.859,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.504,
+        "reduced": "0"
+      },
+      {
+        "t": 46.969,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.469,
+        "reduced": "0"
+      },
+      {
+        "t": 47.079,
+        "phase": "raise-drop",
+        "trolley": 0.7,
+        "drop": 0.454,
+        "reduced": "0"
+      },
+      {
+        "t": 47.189,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.298,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.41,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.52,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.631,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.739,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.852,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 47.961,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.074,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.184,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.295,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.405,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.517,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.627,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.738,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.845,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 48.955,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.065,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.177,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.285,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.397,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.505,
+        "phase": "slew-back",
+        "trolley": 0.7,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.616,
+        "phase": "travel-out",
+        "trolley": 0.704,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.728,
+        "phase": "travel-out",
+        "trolley": 0.748,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.838,
+        "phase": "travel-out",
+        "trolley": 0.794,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 49.948,
+        "phase": "travel-out",
+        "trolley": 0.854,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.059,
+        "phase": "travel-out",
+        "trolley": 0.975,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.169,
+        "phase": "travel-out",
+        "trolley": 1.145,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.279,
+        "phase": "travel-out",
+        "trolley": 1.253,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.39,
+        "phase": "travel-out",
+        "trolley": 1.444,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.499,
+        "phase": "travel-out",
+        "trolley": 1.573,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.611,
+        "phase": "travel-out",
+        "trolley": 1.819,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.72,
+        "phase": "travel-out",
+        "trolley": 1.934,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.831,
+        "phase": "travel-out",
+        "trolley": 2.2,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 50.942,
+        "phase": "travel-out",
+        "trolley": 2.32,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.052,
+        "phase": "travel-out",
+        "trolley": 2.593,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.162,
+        "phase": "travel-out",
+        "trolley": 2.745,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.273,
+        "phase": "travel-out",
+        "trolley": 3.014,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.382,
+        "phase": "travel-out",
+        "trolley": 3.131,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.492,
+        "phase": "travel-out",
+        "trolley": 3.383,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.601,
+        "phase": "travel-out",
+        "trolley": 3.516,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.713,
+        "phase": "travel-out",
+        "trolley": 3.739,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.822,
+        "phase": "travel-out",
+        "trolley": 3.83,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 51.933,
+        "phase": "travel-out",
+        "trolley": 4.013,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.039,
+        "phase": "travel-out",
+        "trolley": 4.084,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.15,
+        "phase": "travel-out",
+        "trolley": 4.162,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.258,
+        "phase": "travel-out",
+        "trolley": 4.271,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.369,
+        "phase": "travel-out",
+        "trolley": 4.305,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.481,
+        "phase": "travel-out",
+        "trolley": 4.347,
+        "drop": 0.45,
+        "reduced": "0"
+      },
+      {
+        "t": 52.592,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.451,
+        "reduced": "0"
+      },
+      {
+        "t": 52.703,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.481,
+        "reduced": "0"
+      },
+      {
+        "t": 52.814,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.513,
+        "reduced": "0"
+      },
+      {
+        "t": 52.925,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.597,
+        "reduced": "0"
+      },
+      {
+        "t": 53.034,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.644,
+        "reduced": "0"
+      },
+      {
+        "t": 53.145,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.77,
+        "reduced": "0"
+      },
+      {
+        "t": 53.256,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.85,
+        "reduced": "0"
+      },
+      {
+        "t": 53.366,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 0.992,
+        "reduced": "0"
+      },
+      {
+        "t": 53.475,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.088,
+        "reduced": "0"
+      },
+      {
+        "t": 53.587,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.272,
+        "reduced": "0"
+      },
+      {
+        "t": 53.706,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.401,
+        "reduced": "0"
+      },
+      {
+        "t": 53.816,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.557,
+        "reduced": "0"
+      },
+      {
+        "t": 53.925,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.648,
+        "reduced": "0"
+      },
+      {
+        "t": 54.035,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.853,
+        "reduced": "0"
+      },
+      {
+        "t": 54.143,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 1.968,
+        "reduced": "0"
+      },
+      {
+        "t": 54.254,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.171,
+        "reduced": "0"
+      },
+      {
+        "t": 54.362,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.259,
+        "reduced": "0"
+      },
+      {
+        "t": 54.471,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.451,
+        "reduced": "0"
+      },
+      {
+        "t": 54.582,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.532,
+        "reduced": "0"
+      },
+      {
+        "t": 54.693,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.704,
+        "reduced": "0"
+      },
+      {
+        "t": 54.803,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.791,
+        "reduced": "0"
+      },
+      {
+        "t": 54.914,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.932,
+        "reduced": "0"
+      },
+      {
+        "t": 55.021,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 2.986,
+        "reduced": "0"
+      },
+      {
+        "t": 55.134,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.089,
+        "reduced": "0"
+      },
+      {
+        "t": 55.241,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.133,
+        "reduced": "0"
+      },
+      {
+        "t": 55.353,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.16,
+        "reduced": "0"
+      },
+      {
+        "t": 55.463,
+        "phase": "lower",
+        "trolley": 4.35,
+        "drop": 3.196,
+        "reduced": "0"
+      },
+      {
+        "t": 55.577,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 55.684,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 55.795,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 55.903,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.014,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.123,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.236,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.344,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.456,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.563,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.671,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.782,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 56.891,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 57.002,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 57.111,
+        "phase": "hook-dwell",
+        "trolley": 4.35,
+        "drop": 3.2,
+        "reduced": "0"
+      },
+      {
+        "t": 57.221,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.19,
+        "reduced": "0"
+      },
+      {
+        "t": 57.331,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.169,
+        "reduced": "0"
+      },
+      {
+        "t": 57.442,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.112,
+        "reduced": "0"
+      },
+      {
+        "t": 57.553,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 3.064,
+        "reduced": "0"
+      },
+      {
+        "t": 57.663,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.953,
+        "reduced": "0"
+      },
+      {
+        "t": 57.774,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.896,
+        "reduced": "0"
+      },
+      {
+        "t": 57.883,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.749,
+        "reduced": "0"
+      },
+      {
+        "t": 57.992,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.677,
+        "reduced": "0"
+      },
+      {
+        "t": 58.103,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.482,
+        "reduced": "0"
+      },
+      {
+        "t": 58.211,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.399,
+        "reduced": "0"
+      },
+      {
+        "t": 58.32,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.205,
+        "reduced": "0"
+      },
+      {
+        "t": 58.429,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 2.116,
+        "reduced": "0"
+      },
+      {
+        "t": 58.541,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.911,
+        "reduced": "0"
+      },
+      {
+        "t": 58.65,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.797,
+        "reduced": "0"
+      },
+      {
+        "t": 58.762,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.614,
+        "reduced": "0"
+      },
+      {
+        "t": 58.868,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.502,
+        "reduced": "0"
+      },
+      {
+        "t": 58.983,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.304,
+        "reduced": "0"
+      },
+      {
+        "t": 59.088,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.199,
+        "reduced": "0"
+      },
+      {
+        "t": 59.199,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 1.118,
+        "reduced": "0"
+      },
+      {
+        "t": 59.309,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.946,
+        "reduced": "0"
+      },
+      {
+        "t": 59.418,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.876,
+        "reduced": "0"
+      },
+      {
+        "t": 59.528,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.733,
+        "reduced": "0"
+      },
+      {
+        "t": 59.637,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.664,
+        "reduced": "0"
+      },
+      {
+        "t": 59.749,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.561,
+        "reduced": "0"
+      },
+      {
+        "t": 59.859,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.525,
+        "reduced": "0"
+      },
+      {
+        "t": 59.968,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.469,
+        "reduced": "0"
+      },
+      {
+        "t": 60.08,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.454,
+        "reduced": "0"
+      },
+      {
+        "t": 60.083,
+        "phase": "raise",
+        "trolley": 4.35,
+        "drop": 0.454,
+        "reduced": "0"
+      }
+    ]
+  },
+  "phoneMotion": {
+    "stages": [
+      {
+        "phase": "hook-dwell",
+        "stamp": {
+          "phase": "hook-dwell",
+          "trolley": "4.350",
+          "drop": "3.200"
+        },
+        "screenshot": "phone-motion-hook-dwell.png"
+      },
+      {
+        "phase": "lower-drop",
+        "stamp": {
+          "phase": "lower-drop",
+          "trolley": "0.700",
+          "drop": "1.314"
+        },
+        "screenshot": "phone-motion-lower-drop.png"
+      }
+    ],
+    "pageErrors": []
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated",
+    "V2 has no 2D fallback renderer; the reduced-motion parked pose is the negative state",
+    "Numeric smoke only — not art parity, reviewer/product acceptance or sponsor G1 approval"
+  ],
+  "completed": "2026-11-17T06:42:26.981Z"
+}

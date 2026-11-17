@@ -10,18 +10,35 @@
     "source": "src/voxelSchema.js",
     "docs": "docs/design/VOXEL_GEOMETRY.md",
     "issue": 347,
-    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs",
+    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs",
     "parcel": {"cells": [24, 24], "worldUnitsPerCell": 3.5},
     "footprint_contract": "Logical footprints mirror src/content.js footprintOf() (#370, main e8240a87); crane 2x3, others 1x1. Geometry fields are authored local space; world group scaled by base w/d at the footprint center.",
     "scale_references": {"workerHeight": 1.7, "truck": {"length": 2.05, "width": 1.2, "height": 1.35}},
     "performance_limits": {"maxMeshesPerMachine": 60, "maxTrianglesPerMachine": 1600, "maxMachinesInitialScene": 6, "maxTrucksInitialScene": 3, "cylinderRadialSegments": 8, "shadowMapSize": 2048, "deviceDPRMax": 2, "pointLightsMax": 4},
+    "crane_motion": {
+      "issue": 352,
+      "source": "src/world.js cranePose/applyCranePose/CRANE_PHASES/CRANE_LIMITS/CRANE_CYCLE_TOTAL (pure, shared by runtime update() and tests)",
+      "cycleSeconds": 25.2,
+      "phases": ["travel-out", "lower", "hook-dwell", "raise", "travel-in", "slew-to-drop", "lower-drop", "release-dwell", "raise-drop", "slew-back"],
+      "pivots": ["pivot:crane", "pivot:crane:trolley", "pivot:crane:hoist", "pivot:crane:hook"],
+      "limits": {"trolleyMin": 0.7, "trolleyMax": 4.35, "dropMin": 0.45, "dropMax": 3.2, "dropRelease": 2.6, "slewDrop": -0.6},
+      "cargo": "empty hook; no load mesh, no teleporting cargo, no implied production; a visible load must mirror a reserved shipment from the simulation authority (#274)",
+      "reducedMotion": "parked static pose (slew 0, trolley 0.7, drop 0.45) via prefers-reduced-motion matchMedia + change listener",
+      "stamps": ["cranePhase", "craneTrolley", "craneDrop", "craneReducedMotion"],
+      "measured": {"meshes": 27, "triangles": 324, "budget": {"maxMeshes": 32, "maxTriangles": 600}},
+      "camera_invariants": "applyCamera/stampCamera byte-identical to main (sha256-16 f3afa5479a66b97e / 691b3c0a3480e97b, hash-guarded in tests/craneMotion.test.mjs)",
+      "schema_declaration_gap": "src/voxelSchema.js crane pivot motion still declares oscillate amplitude 0.34 speed 0.24 (validator vocabulary spin|oscillate; file outside the #352 lease); pivot name/offset/axis/swingRadius 4.8 unchanged; vocabulary extension is a follow-up under #262",
+      "evidence": "tests/craneMotion.test.mjs (13 tests) + scripts/capture-crane.mjs -> docs/evidence/352-art-06/ (PASS_NUMERIC_ONLY)",
+      "stage": "live motion contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
+    },
     "stage": "live geometry contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
   },
   "assets": [
     {
       "id": "crane",
       "path": "public/assets/blockouts/crane.gltf",
-      "purpose": "Utility hoist with physical cargo animation requirement",
+      "purpose": "Utility hoist blockout reference; the live procedural crane runs the ART-06 empty-hook lift cycle (geometry_schema.crane_motion); a visible load still requires a reserved shipment (#274)",
+      "live_motion": "ART-06 #352 deterministic 25.2s 10-phase lift cycle on pivot:crane -> :trolley -> :hoist -> :hook; see geometry_schema.crane_motion and docs/design/VOXEL_GEOMETRY.md",
       "stage": "original blockout; not automatically production-approved",
       "review_required": [
         "scale",
