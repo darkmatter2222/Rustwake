@@ -24,6 +24,27 @@
  *   - movement is tracked PER POINTER (moved/gestured), so one finger's motion
  *     no longer suppresses another finger's tap, and a multi-touch transform
  *     marks both participants so neither lifts into a build purchase.
+ *
+ * CAM-02 (#338) interaction state machine: ONE classifier decides whether a
+ * contact sequence is a click (the only thing that may commit a build/road or
+ * change selection) or a camera gesture (pan / orbit / pinch-twist) that must
+ * NEVER spend materials. Per-pointer phase: press -> pan|orbit (movement latch),
+ * multi (two-finger transform), chord (secondary mouse button), or purged
+ * (cancel / lost capture / out / buttons===0). A tap is emitted only when ALL of:
+ *   1. the track still exists at the FINAL button release (e.buttons===0);
+ *   2. the session was single-pointer at release (no multi-touch participant);
+ *   3. displacement from down stayed STRICTLY BELOW the type click-slop
+ *      (mouse/pen 5 CSS px, touch 10 CSS px) — latched: once >= slop it is a
+ *      drag forever, even if the pointer returns to the down pixel;
+ *   4. the pointer never gestured: no two-finger transform, no button chord,
+ *      and no camera command (wheel / Q-E orbit / arrow pan / zoom buttons)
+ *      while it was in contact;
+ *   5. the press was PRIMARY (button 0, no shift orbit modifier) and the
+ *      release is primary (button 0) — right/middle/back/forward never commit;
+ *   6. the commit cell is the cell picked at POINTER DOWN (downCell), never the
+ *      release pixel, so sub-threshold jitter across a cell boundary or camera
+ *      motion during the press can never redirect a commit to another cell.
+ * The anchor math (src/camera.js) and src/world.js are untouched.
  */
 import {
   CAMERA_LIMITS, normalizeCamera, groundAtScreen, panWithAnchor,
@@ -32,6 +53,11 @@ import {
 
 const clamp=(value,a,b)=>Math.min(b,Math.max(a,value));
 const shortestAngle = radians => ((radians+Math.PI*3)%(Math.PI*2)-Math.PI);
+// CAM-02 click-vs-drag slop in CSS pixels. Displacement >= slop classifies the
+// contact as a drag (never commits); strictly below it is a click. Touch gets a
+// wider tolerance for finger jitter; mouse/pen are precise.
+const CLICK_SLOP={mouse:5,pen:5,touch:10};
+const slopFor=type=>CLICK_SLOP[type]??CLICK_SLOP.mouse;
 export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
   const pointers=new Map();
   let gesture=null;
@@ -49,18 +75,28 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
     world.applyCamera(); // ray picking must use the CURRENT pointer camera
   };
   const pointBelow=(point)=>groundAtScreen(cameraRef.current,point,size());
+  // CAM-02: any camera command issued while a pointer is in contact is a camera
+  // gesture, not a click — every tracked pointer loses its commit eligibility.
+  const markContactGesture=()=>{
+    for(const t of pointers.values()){t.gestured=true;if(t.phase==="press")t.phase="gesture";}
+  };
 
-  const rotate=(dx,dy)=>applyView({
-    ...cameraRef.current,
-    yaw:cameraRef.current.yaw-dx*.42,
-    elevation:cameraRef.current.elevation+dy*.23
-  });
+  const rotate=(dx,dy)=>{
+    markContactGesture();
+    applyView({
+      ...cameraRef.current,
+      yaw:cameraRef.current.yaw-dx*.42,
+      elevation:cameraRef.current.elevation+dy*.23
+    });
+  };
   const keyboardPan=(dx,dy)=>{
+    markContactGesture();
     const box=size(),center={x:box.width/2,y:box.height/2};
     applyView(panWithAnchor(cameraRef.current,pointBelow(center),
       {x:center.x+dx,y:center.y+dy},box));
   };
   const zoomBy=(ratio,point)=>{
+    markContactGesture();
     const box=size(),p=point||{x:box.width/2,y:box.height/2};
     applyView(zoomAtPixel(cameraRef.current,cameraRef.current.zoom*ratio,p,box));
   };
@@ -113,10 +149,28 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
       if(canvas.setPointerCapture && !canvas.hasPointerCapture(e.pointerId))
         canvas.setPointerCapture(e.pointerId);
     }catch{ /* capture unsupported / inactive pointer */ }
+    // CAM-02 button chord: a mouse reports EVERY button change as pointerdown on
+    // the SAME pointerId. A secondary press during an existing contact must NOT
+    // reset the track (that would erase the drag latch and re-arm a clean click,
+    // letting an orbit+click chord lift into a purchase). Keep the original
+    // down pixel/button/anchor and mark the contact as a gesture.
+    const existing=pointers.get(e.pointerId);
+    if(existing){
+      existing.gestured=true;existing.phase="chord";
+      return;
+    }
     const p=screen(e);
+    // Sync the rendered camera before picking so downCell uses the CURRENT view.
+    world.setView(cameraRef.current);world.applyCamera();
+    const cell=world.screenToCell(e.clientX,e.clientY);
+    const primary=e.button===0&&!e.shiftKey;
     pointers.set(e.pointerId,{
       x:e.clientX,y:e.clientY,downX:e.clientX,downY:e.clientY,
-      button:e.button,anchor:pointBelow(p),moved:false,gestured:false
+      button:e.button,anchor:pointBelow(p),moved:false,gestured:false,
+      phase:"press",slop:slopFor(e.pointerType),orbitIntent:e.shiftKey,
+      // A ray that misses the ground plane yields null: an out-of-bounds cell
+      // the gameplay dispatch rejects, never a crash on the input path.
+      primary,downCell:cell?{x:cell.x,z:cell.z}:{x:-1,z:-1}
     });
     if(pointers.size===1)gesture=null;
     else startGesture();
@@ -133,12 +187,15 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
       return;
     }
     const dx=e.clientX-track.x,dy=e.clientY-track.y;
-    if(Math.hypot(e.clientX-track.downX,e.clientY-track.downY)>6)track.moved=true;
+    // CAM-02 latch: displacement >= type slop => drag, permanently (returning to
+    // the down pixel never re-arms a click).
+    if(Math.hypot(e.clientX-track.downX,e.clientY-track.downY)>=track.slop)track.moved=true;
     track.x=e.clientX;track.y=e.clientY;
     if(pointers.size===1){
-      if(e.buttons===2||track.button===2||e.shiftKey){
-        if(track.moved)rotate(dx,dy);
+      if(e.buttons===2||track.button===2||e.shiftKey||track.orbitIntent){
+        if(track.moved){track.phase="orbit";rotate(dx,dy);}
       }else if(track.moved){
+        track.phase="pan";
         applyView(panWithAnchor(cameraRef.current,track.anchor,screen(e),size()));
       }
     }else if(pointers.size===2){
@@ -152,13 +209,22 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
           size(),distance/gesture.distance,shortestAngle(angle-gesture.angle)*180/Math.PI));
         gesture.distance=distance;gesture.angle=angle;
         // Both fingers participated in a real transform: neither may tap.
-        a.gestured=true;b.gestured=true;
+        a.gestured=true;b.gestured=true;a.phase="multi";b.phase="multi";
       }
     }
     emitHover(e);
   };
   const onUp=e=>{
-    const track=pointers.get(e.pointerId),wasMulti=pointers.size>1;
+    const track=pointers.get(e.pointerId);
+    if(!track)return; // late up for a purged/cancelled id: inert (no duplicate tap)
+    // CAM-02 chord: a non-final button release (other buttons still held) keeps
+    // the contact alive and gesture-marked; only the FINAL release may classify.
+    if(e.buttons!==0){
+      track.gestured=true;track.phase="chord";
+      track.x=e.clientX;track.y=e.clientY;
+      return;
+    }
+    const wasMulti=pointers.size>1;
     pointers.delete(e.pointerId);
     releaseCapture(e.pointerId);
     gesture=null;
@@ -166,10 +232,11 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
       for(const remaining of pointers.values())
         remaining.anchor=pointBelow(local(remaining));
     }
-    const isTap=!!track&&!wasMulti&&!track.moved&&!track.gestured&&track.button!==2&&e.button!==2;
+    const isTap=!wasMulti&&!track.moved&&!track.gestured&&track.primary&&e.button===0;
     if(isTap&&onTap){
       world.setView(cameraRef.current);world.applyCamera();
-      onTap(world.screenToCell(e.clientX,e.clientY),e);
+      // Commit the cell picked at DOWN, not the release pixel (CAM-02 rule 6).
+      onTap(track.downCell,e);
     }
   };
   const onCancel=e=>{purgePointer(e.pointerId);};
@@ -186,6 +253,7 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
   };
   const onWheel=e=>{
     e.preventDefault();
+    markContactGesture();
     const box=size();
     const delta=e.deltaMode===1?e.deltaY*16:e.deltaMode===2?e.deltaY*box.height:e.deltaY;
     zoomBy(Math.exp(-delta*.0015),screen(e));
@@ -203,6 +271,15 @@ export function createCameraInput({canvas,world,cameraRef,onTap,onHover}){
   return {
     zoomBy,rotate,keyboardPan,
     limits:CAMERA_LIMITS,
+    // Read-only state-machine snapshot for tests/evidence (no mutation).
+    state(){
+      return {
+        mode:pointers.size===0?"idle":pointers.size===1?"single":"multi",
+        pointers:[...pointers.entries()].map(([id,t])=>({
+          id,phase:t.phase,moved:t.moved,gestured:t.gestured,button:t.button,primary:t.primary
+        }))
+      };
+    },
     dispose(){
       canvas.removeEventListener("pointerdown",onDown);
       canvas.removeEventListener("pointermove",onMove);
