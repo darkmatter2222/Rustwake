@@ -34,7 +34,22 @@
 //  - rendered-domain motion proof: research dish / fabricator gear train /
 //    market beam clipped at TWO distinct sim times with a fixed camera and
 //    compared via the same independent pairMetrics; depot shutter clipped
-//    OPEN (real truck docking) vs CLOSED at the same camera,
+//    OPEN (real truck docking) vs CLOSED at the same camera. Every motion
+//    clause first frameRig()s the rig with a REAL primary-drag pan and then
+//    REFUSES any clamped clip (MOTION_CLIP_AMPUTATED / DOCKING_CLIP_AMPUTATED)
+//    — a motion pair may never be measured on an amputated rig. Full-frame
+//    diagnostic context views are kept at the depot open/closed instants and
+//    at the market ambient +/- amplitude extrema (computed from the real
+//    seeded market id, never guessed phases). The framed motion run is
+//    DESKTOP-ONLY by design; the phone loop clips static rigs only, and phone
+//    shutter motion is measured by the home-camera section below,
+//  - PRODUCT measurement (informational, no gate, ZERO camera gestures):
+//    at the DEFAULT home camera, does the starter yard's depot shutter ever
+//    open (15s real-clock watch + bay/road geometry from the real sim), and
+//    when a dockable yard genuinely animates the shutter, is that travel
+//    inside the home frustum and detectable in rendered pixels on desktop
+//    AND phone? Recorded either way; the starter bay orientation finding
+//    belongs to LOG-02 #382, not to this lease,
 //  - per-PNG colour-count + luminance-sigma sanity so a blank/flat frame
 //    cannot pass (SANITY_BLANK_OR_FLAT_FRAME),
 //  - #307 camera invariants: landing yaw/elevation, synchronous stamp==applied
@@ -52,7 +67,7 @@ import crypto from "node:crypto";
 import zlib from "node:zlib";
 import * as THREE from "three";
 import {SCHEMA_ID, machineDescriptor} from "../src/voxelSchema.js";
-import {worldFootprint} from "../src/gridOccupancy.js";
+import {worldFootprint, bayCells} from "../src/gridOccupancy.js";
 import {CELL, SAVE_KEY} from "../src/content.js";
 
 // world.js textPanel needs a 2D canvas at import time; stub it (no pixels read).
@@ -60,7 +75,7 @@ globalThis.document = {
   createElement: () => ({width: 0, height: 0, getContext: () => new Proxy({}, {get: () => () => {}})})
 };
 const {makeBuilding, ART04_MOTION, ART04_TYPES, ART04_DOCK} = await import("../src/world.js");
-const {createGame, checkSite} = await import("../src/simulation.js");
+const {createGame, checkSite, nearestRoad} = await import("../src/simulation.js");
 
 const OUT = resolve(process.env.RUSTWAKE_CAPTURE_OUT || "docs/evidence/350-art-04");
 const PORT = Number(process.env.RUSTWAKE_PREVIEW_PORT || 4194);
@@ -257,7 +272,7 @@ const report = {
   cameraHashes, budgets, art04Motion: ART04_MOTION, art04Dock: ART04_DOCK,
   distinctness3d, sites: SITES,
   freshLanding: [], views: [], placement: [], picking: [], motion: null, dockingProof: null,
-  contactChecks: [], motionDetails: null, sanity: null,
+  contactChecks: [], motionDetails: null, homeShutterVisibility: null, sanity: null,
   negatives: {starved: [], unpowered: [], reducedMotion: [], webglFailure: null},
   legibility: null,
   status: "UNKNOWN", errors: [],
@@ -931,9 +946,11 @@ try {
       throw Error("DOCKING_PROOF_BAD: " + JSON.stringify({bayDist, doorLift, dockStamp}));
     await zoomToWorld(page, FP.depot.pivot, 2.4, .8);
     await sheetToggleTo(page, true);
+    const dockFraming = await frameRig(page, FP.depot, machineDescriptor("depot").bounds.height);
     await shot(page, "desktop-depot-docking.png");
     const dockClip = await clipMachine(page, FP.depot, machineDescriptor("depot").bounds.height, "desktop-depot-docking-clip.png");
-    report.dockingProof = {bayDist, doorLift, stamp: dockStamp, screenshot: "desktop-depot-docking.png", clip: dockClip,
+    if (dockClip.clamped) throw Error("DOCKING_CLIP_AMPUTATED: " + JSON.stringify({framing: dockFraming, clip: dockClip}));
+    report.dockingProof = {bayDist, doorLift, stamp: dockStamp, screenshot: "desktop-depot-docking.png", clip: dockClip, framing: dockFraming,
       contract: "art04Depot docking iff nearest real truck <= ART04_DOCK.near (2.5) to the LOG-02 bay approach cell; shutter lift = depotDoorLift(distance)"};
     await zoomToWorld(page, YARD_MID, 2.0, .8);
 
@@ -995,6 +1012,7 @@ try {
       const s2 = await pose(page);
       const f2 = await simFloor();
       const c2 = await clipMachine(page, FP[type], h, "desktop-motion-" + type + "-t2.png");
+      if (c2.clamped) throw Error("MOTION_CLIP_AMPUTATED " + type + " t2: " + JSON.stringify({framing, clip: c2}));
       const pair = pairMetrics(
         downsample96(decodePNG(await readFile(resolve(OUT, c1.file)))),
         downsample96(decodePNG(await readFile(resolve(OUT, c2.file)))));
@@ -1007,26 +1025,73 @@ try {
       await zoomToWorld(page, FP.depot.pivot, 2.8, .8);
       await sheetToggleTo(page, true);
       const h = machineDescriptor("depot").bounds.height;
+      // The shutter travels at the TOP of the rig: frame the FULL projected
+      // bbox before clipping, and refuse any clamped clip on BOTH frames.
+      const framing = await frameRig(page, FP.depot, h);
       await page.waitForFunction(() => {
         const d = document.querySelector(".world-canvas").dataset;
         return d.art04Depot === "docking" && Number(d.art04Door) > 0;
       }, null, {timeout: 60000, polling: 100});
       const openStamp = await pose(page);
       const openClip = await clipMachine(page, FP.depot, h, "desktop-motion-depot-open.png");
+      if (openClip.clamped) throw Error("MOTION_CLIP_AMPUTATED depot open: " + JSON.stringify({framing, clip: openClip}));
+      // Diagnostic context view: the FULL canvas at the open instant, proving
+      // the framed rig sits inside the viewport (regenerates the diag view).
+      await shot(page, "desktop-motion-depot-diag-open.png");
       await page.waitForFunction(() => {
         const d = document.querySelector(".world-canvas").dataset;
         return d.art04Door === "0.000" && d.art04Depot !== "docking";
       }, null, {timeout: 60000, polling: 100});
       const closedStamp = await pose(page);
       const closedClip = await clipMachine(page, FP.depot, h, "desktop-motion-depot-closed.png");
+      if (closedClip.clamped) throw Error("MOTION_CLIP_AMPUTATED depot closed: " + JSON.stringify({framing, clip: closedClip}));
+      await shot(page, "desktop-motion-depot-diag-closed.png");
       const pair = pairMetrics(
         downsample96(decodePNG(await readFile(resolve(OUT, openClip.file)))),
         downsample96(decodePNG(await readFile(resolve(OUT, closedClip.file)))));
       motionDetails.depot = {doorLifts: [Number(openStamp.art04Door), Number(closedStamp.art04Door)],
         bayDists: [Number(openStamp.art04BayDist), Number(closedStamp.art04BayDist)],
-        clips: [openClip, closedClip], pair};
+        framing, clips: [openClip, closedClip], pair,
+        diagViews: ["desktop-motion-depot-diag-open.png", "desktop-motion-depot-diag-closed.png"]};
       if (!(Number(openStamp.art04Door) > 0) || Number(closedStamp.art04Door) !== 0 || pair.meanAbsDiff < 1)
         throw Error("SHUTTER_MOTION_NOT_VISIBLE: " + JSON.stringify(motionDetails.depot));
+    }
+    // Market ambient EXTREMA diagnostics: clip the beam at its +amp and -amp
+    // peaks (computed from the REAL seeded market id and the declared 1.3
+    // speed), proving the ambient pair renders its full swing. Regenerates
+    // desktop-motion-market-diag-peak1/peak2.png.
+    {
+      await zoomToWorld(page, FP.market.pivot, 2.8, .8);
+      await sheetToggleTo(page, true);
+      const h = machineDescriptor("market").bounds.height;
+      const framing = await frameRig(page, FP.market, h);
+      const marketId = workingSeed().buildings.find(b => b.type === "market").id;
+      const M = ART04_MOTION;
+      const now = Number((await pose(page)).art04MarketClock);
+      const peakClock = (phase, after) => {
+        const base = (phase - marketId) / M.scaleSpeed;
+        const period = 2 * Math.PI / M.scaleSpeed;
+        return base + period * Math.ceil((after - base) / period);
+      };
+      const t1 = peakClock(Math.PI / 2, now + .5), t2 = peakClock(3 * Math.PI / 2, t1 + .5);
+      const peaks = [];
+      for (const [i, target] of [t1, t2].entries()) {
+        await page.waitForFunction(v => Number(document.querySelector(".world-canvas").dataset.art04MarketClock) >= v,
+          target, {timeout: 30000, polling: 40});
+        const s = await pose(page);
+        const clock = Number(s.art04MarketClock);
+        const file = "desktop-motion-market-diag-peak" + (i + 1) + ".png";
+        const clip = await clipMachine(page, FP.market, h, file);
+        if (clip.clamped) throw Error("MOTION_CLIP_AMPUTATED market diag peak" + (i + 1) + ": " + JSON.stringify({framing, clip}));
+        peaks.push({targetClock: target, clock, scaleAngle: Math.sin(clock * M.scaleSpeed + marketId) * M.scaleAmp,
+          simFloor: await simFloor(), clip});
+      }
+      const pair = pairMetrics(
+        downsample96(decodePNG(await readFile(resolve(OUT, peaks[0].clip.file)))),
+        downsample96(decodePNG(await readFile(resolve(OUT, peaks[1].clip.file)))));
+      motionDetails.marketDiag = {marketId, targetClocks: [t1, t2], peaks, pair};
+      if (pair.meanAbsDiff < 1)
+        throw Error("MOTION_NOT_VISIBLE_IN_RENDER market diag extrema: " + JSON.stringify(motionDetails.marketDiag));
     }
     report.motionDetails = motionDetails;
 
@@ -1077,6 +1142,101 @@ try {
       elapsed < 12 || timeline.length < 100 || distinct.marketClock < 30 || stages.length !== 4 ||
       env.canvasCount !== 1 || env.documentScroll || errs.length || failed.length)
       throw Error("ART-04 motion capture failure: " + JSON.stringify({monotone, speedOk, tracksSim, boundedByWall, moving, simAdvance, workOk, depotClockZero, researchWorking, allReducedOff, loadOne, elapsed, samples: timeline.length, distinct, env, errs, failed}));
+  }
+
+  // ---- PRODUCT measurement: depot shutter at the DEFAULT home camera ----
+  // The framed motion proof above is a deliberate camera move. It does NOT
+  // answer whether a real player at the DEFAULT home pose (no pan, no zoom,
+  // no gesture of any kind) can see the shutter move. Measured honestly in
+  // both directions, never "fixed" by moving the depot or the home pose:
+  //  (1) fresh DEFAULT yard: does the shutter EVER open? The starter depot
+  //      (content.js STARTER_BUILDINGS, rot 0) bay orientation is LOG-02 #382
+  //      territory — this records the real truck distances, not an assumption.
+  //  (2) dockable yard (workingSeed, depot rot 2 onto the road): with the
+  //      shutter genuinely animating, is its travel inside the home frustum
+  //      and detectable in the rendered pixels at the home zoom?
+  // Informational: recorded either way, no gate, no camera manipulation.
+  {
+    const starter = createGame();
+    const sd = starter.buildings.find(b => b.type === "depot");
+    const bay = bayCells(sd.type, sd.x, sd.z, sd.rot || 0)[0];
+    const road = nearestRoad(starter, sd.x, sd.z);
+    if (!road) throw Error("HOME_VIS_NO_ROAD_NEAR_STARTER_DEPOT");
+    const bayWorld = {x: (bay.x - 24 / 2 + .5) * CELL, z: (bay.z - 24 / 2 + .5) * CELL};
+    const roadWorld = {x: (road.x - 24 / 2 + .5) * CELL, z: (road.z - 24 / 2 + .5) * CELL};
+    const starterGeometry = {depot: {x: sd.x, z: sd.z, rot: sd.rot || 0}, bayCell: bay, roadCell: road,
+      bayWorld, roadWorld, bayToRoadWorld: +Math.hypot(bayWorld.x - roadWorld.x, bayWorld.z - roadWorld.z).toFixed(4),
+      dock: ART04_DOCK};
+    const homeVis = {starterGeometry, viewports: {}};
+    for (const v of [
+      {name: "desktop", viewport: {width: 1440, height: 900}, dpr: 1, isMobile: false, touch: false},
+      {name: "phone", viewport: {width: 390, height: 844}, dpr: 2, isMobile: true, touch: true}
+    ]) {
+      const h = machineDescriptor("depot").bounds.height;
+      const projectHome = async page => {
+        const rect = await canvasRect(page), cam = await pose(page);
+        const hw = FP.depot.base.w * CELL / 2, hd = FP.depot.base.d * CELL / 2;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        for (const dx of [-hw, hw]) for (const dz of [-hd, hd]) for (const y of [0, h]) {
+          const p = screenOfWorld(cam, rect, FP.depot.pivot.x + dx, y, FP.depot.pivot.z + dz);
+          minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+          minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+        }
+        const wpp = 80 / (rect.height * cam.zoom);
+        return {cam, rect, bbox: {minX, minY, maxX, maxY},
+          bboxFitsCanvas: minX >= rect.left && maxX <= rect.left + rect.width && minY >= rect.top && maxY <= rect.top + rect.height,
+          shutterTravelPx: +(ART04_DOCK.travel * Math.cos(cam.elevation * Math.PI / 180) / wpp).toFixed(2),
+          rigHeightPx: +((maxY - minY)).toFixed(2)};
+      };
+      // (1) Fresh DEFAULT yard, no-preference motion, home camera untouched.
+      const fctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "no-preference"});
+      const fresh = await openPage(fctx, null);
+      await assertContact(fresh.page, v.name + ":home-shutter-watch");
+      const homeGeom = await projectHome(fresh.page);
+      const watch = [];
+      const wt0 = Date.now();
+      while (Date.now() - wt0 < 15000) {
+        await waitForClock(fresh.page, 200);
+        const s = await pose(fresh.page);
+        watch.push({t: +((Date.now() - wt0) / 1000).toFixed(2), door: Number(s.art04Door), bayDist: Number(s.art04BayDist), depot: s.art04Depot});
+      }
+      await shot(fresh.page, v.name + "-home-shutter-watch.png");
+      const freshRec = {home: homeGeom, samples: watch.length,
+        maxDoorLift: Math.max(...watch.map(s => s.door)), minBayDist: Math.min(...watch.map(s => s.bayDist)),
+        dockingSamples: watch.filter(s => s.depot === "docking").length,
+        shutterEverOpens: watch.some(s => s.door > 0),
+        screenshot: v.name + "-home-shutter-watch.png", pageErrors: fresh.errs, failedRequests: fresh.failed};
+      await fctx.close();
+      // (2) Dockable yard at the SAME default home camera — still no gestures.
+      const dctx = await browser.newContext({viewport: v.viewport, deviceScaleFactor: v.dpr, isMobile: v.isMobile, hasTouch: v.touch, reducedMotion: "no-preference"});
+      const dockable = await openPage(dctx, workingSeed());
+      await assertContact(dockable.page, v.name + ":home-shutter-dockable");
+      const homeGeom2 = await projectHome(dockable.page);
+      await dockable.page.waitForFunction(() => {
+        const d = document.querySelector(".world-canvas")?.dataset;
+        return d && d.art04Depot === "docking" && Number(d.art04Door) > 0;
+      }, null, {timeout: 60000, polling: 100});
+      const openStamp = await pose(dockable.page);
+      const openClip = await clipMachine(dockable.page, FP.depot, h, v.name + "-home-depot-open.png");
+      await dockable.page.waitForFunction(() => {
+        const d = document.querySelector(".world-canvas").dataset;
+        return d.art04Door === "0.000" && d.art04Depot !== "docking";
+      }, null, {timeout: 60000, polling: 100});
+      const closedStamp = await pose(dockable.page);
+      const closedClip = await clipMachine(dockable.page, FP.depot, h, v.name + "-home-depot-closed.png");
+      const pair = pairMetrics(
+        downsample96(decodePNG(await readFile(resolve(OUT, openClip.file)))),
+        downsample96(decodePNG(await readFile(resolve(OUT, closedClip.file)))));
+      const dockableRec = {home: homeGeom2, doorLifts: [Number(openStamp.art04Door), Number(closedStamp.art04Door)],
+        bayDists: [Number(openStamp.art04BayDist), Number(closedStamp.art04BayDist)],
+        clips: [openClip, closedClip], pair,
+        shutterTravelOnScreen: homeGeom2.bboxFitsCanvas && !openClip.clamped && !closedClip.clamped,
+        motionDetectableAtHome: pair.meanAbsDiff >= 1,
+        pageErrors: dockable.errs, failedRequests: dockable.failed};
+      await dctx.close();
+      homeVis.viewports[v.name] = {freshDefaultYard: freshRec, dockableYardAtHome: dockableRec};
+    }
+    report.homeShutterVisibility = homeVis;
   }
 
   // ---- WebGL-failure negative: loud failure, never a fake 2D world ----
