@@ -70,7 +70,23 @@ function uiSeed(){
  b.inventory={iron:7};
  return {save:snapshot(g),building:clone(b)};
 }
-const UI=uiSeed();
+// reservedSeed: byte-for-byte the same construction as capture-dismantle.mjs
+// context 3 — a live truck job reserves the player machine; after a real UI
+// cancelFreight the dispatcher re-assigns to an earlier starter candidate.
+function reservedSeed(){
+ const g=frozenGame();
+ const b=completed(g,"salvager","capture-377-reserved-build");
+ b.inventory={scrap:20};
+ let v=null;
+ for(let i=0;i<400&&!v;i++){v=g.vehicles.find(x=>x.job&&x.job.sourceId===b.id)||null;if(!v)advanceGame(g,0.5);}
+ if(!v)throw Error("no reservation seeded within 200s");
+ if(v.job.amount!==15||b.inventory.scrap!==5)throw Error("unexpected reservation: "+JSON.stringify({amount:v.job.amount,inv:b.inventory}));
+ g.buildings.find(x=>x.id===1).inventory={scrap:200};
+ g.buildings.find(x=>x.id===4).inventory={iron:200,fuel:200};
+ for(const x of g.vehicles)x.speed=0.02;
+ return {save:snapshot(g),building:clone(b),truckId:v.id};
+}
+const UI=uiSeed(),RESERVED=reservedSeed();
 if(UI.building.x!==10||UI.building.z!==10)throw Error("uiSeed player machine must sit at (10,10); got "+UI.building.x+","+UI.building.z);
 const seedScript=(json)=>`(()=>{try{const g=JSON.parse(${JSON.stringify(json)});g.lastSavedAt=Date.now();localStorage.setItem(${JSON.stringify(SAVE_KEY)},JSON.stringify(g));}catch(e){}})()`;
 
@@ -168,6 +184,56 @@ try{
     }
    }
    view.contexts.uiSeed=rec;
+   await ctx.close();
+  }
+
+  // ---- reservedFlow context (phone only): reproduce the EXACT capture-dismantle
+  //      context-3 state at the SECOND selection (line 350). The first selection
+  //      auto-frames the machine (CAM-05); the fleet cancel flow leaves that
+  //      framed pose applied. This is where #568 actually bites — measure the
+  //      camera + top-band boxes + five-height aims at that moment. ----
+  if(v.hard){
+   const {ctx,page}=await newPage(JSON.stringify(RESERVED.save));
+   const rec={};
+   const selectViaAim=async(b)=>{
+    const box=await page.locator(".world-canvas").boundingBox();
+    const cam=await page.locator(".world-canvas").evaluate(c=>({yaw:+c.dataset.cameraYaw,elevation:+c.dataset.cameraElevation,zoom:+c.dataset.cameraZoom,x:+c.dataset.cameraX,z:+c.dataset.cameraZ}));
+    const fp=worldFootprint(b.type,b.x,b.z,b.rot||0);
+    const attempts=[];
+    for(const h of HEIGHTS){
+     const p=projectGround(cam,{x:fp.pivot.x,y:h,z:fp.pivot.z},{width:box.width,height:box.height});
+     const px=Math.round(box.x+p.x),py=Math.round(box.y+p.y);
+     const top=await hit(page,px,py);
+     if(!/world-canvas/.test(top)){attempts.push({h,px,py,top,skipped:"overlay"});continue;}
+     await page.touchscreen.tap(px,py);
+     try{
+      await page.waitForFunction(([x,z])=>{const e=document.querySelector(".inspector-panel .eyebrow");return !!e&&e.textContent.includes("SITE "+x+"."+z);},[b.x,b.z],{timeout:3000,polling:100});
+      attempts.push({h,px,py,top,ok:true});
+      return {attempts,px,py};
+     }catch{attempts.push({h,px,py,top,ok:false});await page.keyboard.press("Escape");await page.waitForTimeout(200);}
+    }
+    return {attempts,failed:true};
+   };
+   rec.firstSelection=await selectViaAim(RESERVED.building);
+   rec.cameraAfterFirst=await page.locator(".world-canvas").evaluate(c=>({yaw:+c.dataset.cameraYaw,elevation:+c.dataset.cameraElevation,zoom:+c.dataset.cameraZoom,x:+c.dataset.cameraX,z:+c.dataset.cameraZ}));
+   await page.keyboard.press("Escape");
+   await page.locator('[data-tool="fleet"]').click();
+   await page.locator('[data-tool="fleet"][aria-pressed="true"]').waitFor({state:"attached",timeout:5000});
+   await page.locator(`[data-testid="truck-${RESERVED.truckId}"]`).click();
+   await page.locator(`[data-testid="fleet-detail"][data-truck="${RESERVED.truckId}"]`).waitFor({state:"visible",timeout:5000});
+   await page.locator('[data-testid="fleet-cancel"]').click();
+   await page.waitForFunction(()=>!!document.body.dataset.cancelProbe,null,{timeout:5000,polling:50});
+   await page.waitForFunction(id=>{try{const p=JSON.parse(document.body.dataset.fleetProbe||"null");return !!p&&!p.vehicles.some(x=>x.job&&(x.job.sourceId===id||x.job.destId===id));}catch{return false;}},RESERVED.building.id,{timeout:8000,polling:50});
+   await page.keyboard.press("Escape");
+   await page.waitForTimeout(300);
+   // The second-selection state: camera + boxes + five aims, NO pan.
+   rec.bandBoxesAtSecond=await bandBoxes(page);
+   rec.secondSelection=await aim(page,RESERVED.building);
+   rec.secondSelection.allCanvas=rec.secondSelection.aims.every(a=>a.canvas);
+   rec.cameraAtSecond=rec.secondSelection.camera;
+   await shot(page,"reserved-second-selection-state");
+   if(!rec.secondSelection.allCanvas)fails.push("reservedFlow second-selection (10,10) five-height aim NOT all canvas: "+JSON.stringify(rec.secondSelection.aims));
+   view.contexts.reservedFlow=rec;
    await ctx.close();
   }
   view.pageErrors=errs;
