@@ -95,3 +95,54 @@ jobs:
         env:
           CANDIDATE: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
         run: rm -rf -- "$CANDIDATE"
+  # OPS-08 (#332): post-promote live proof. Runs ONLY after the trusted deploy
+  # succeeded, on a GitHub-hosted runner — repository scripts never execute on
+  # the privileged deploy runner. Compares the exact promoted main SHA against
+  # the publicly served release-manifest.json and recomputes served entry
+  # JS/CSS SHA-256 over plain HTTPS. FAILED/UNKNOWN exits non-zero and fails
+  # this delivery run. Hosted-browser smoke remains separate task #333.
+  verify-live:
+    needs: [package, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.package.outputs.source_sha }}
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Record previous-main rollback target
+        id: rollback
+        run: |
+          PREV=$(git rev-parse HEAD^ 2>/dev/null || true)
+          echo "sha=$PREV" >> "$GITHUB_OUTPUT"
+      - name: Verify served manifest and asset checksums against promoted SHA
+        env:
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+          ROLLBACK_SHA: ${{ steps.rollback.outputs.sha }}
+          MAIN_CI_RUN: ${{ github.event.workflow_run.html_url || 'workflow_dispatch (no upstream CI run)' }}
+          DELIVERY_RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          node scripts/verify-live-release.mjs "$SOURCE_SHA" \
+            --rollback-sha "$ROLLBACK_SHA" \
+            --main-ci-run "$MAIN_CI_RUN" \
+            --delivery-run "$DELIVERY_RUN" \
+            --out live-release-proof.json
+      - name: Publish live verification receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustwake-live-verification-${{ needs.package.outputs.source_sha }}
+          path: live-release-proof.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain live verification outcome
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+        run: |
+          printf '### Rustwake live release proof (OPS-08)\nSource: `%s`\n\nPublic manifest + served JS/CSS checksum verification: **%s**. See the rustwake-live-verification artifact for the full receipt (rollback target, main CI run, delivery run).\n' "$SOURCE_SHA" "$RESULT" >> "$GITHUB_STEP_SUMMARY"
