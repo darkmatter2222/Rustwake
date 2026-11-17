@@ -1,0 +1,615 @@
+{
+  "issue": 338,
+  "version": 2,
+  "build": "production-preview",
+  "source_sha": "501bc9dab220ae016268f7f7e55f92f50d740793",
+  "started": "2026-11-17T10:38:05.938Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false,
+      "webglContextCount": 1,
+      "homePose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0
+      },
+      "counts": {
+        "structures": 6,
+        "roads": 73
+      }
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false,
+      "webglContextCount": 1,
+      "homePose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0
+      },
+      "counts": {
+        "structures": 8,
+        "roads": 79
+      }
+    }
+  ],
+  "measurements": {
+    "desktopDrag5px": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 10,
+        "z": 1
+      },
+      "pressCss": {
+        "x": 1008,
+        "y": 228
+      },
+      "dragPx": 5,
+      "anchorWorld": {
+        "x": -5.275302313590766,
+        "z": -36.75692596293967
+      },
+      "poseAfter": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": -0.2732779830672616,
+        "z": 0.2732779830672669
+      },
+      "errorCssPx": 7.50574650604848e-14,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 6,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "modeStillBuild": true,
+      "inspectorEmpty": 0,
+      "expected": "5px mouse drag pans anchor-exact <=1px and spends NOTHING (bank delta {}, counts unchanged, lastSiteOk null = no tap reached buildAt, build mode retained, no selection)"
+    },
+    "desktopJitter4pxCommit": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "downCell": {
+        "x": 10,
+        "z": 1
+      },
+      "releasePixelCell": {
+        "x": 10,
+        "z": 0
+      },
+      "pressCss": {
+        "x": 1036,
+        "y": 228
+      },
+      "releaseCss": {
+        "x": 1040,
+        "y": 228
+      },
+      "jitterPx": 4,
+      "bankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "expectedBankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "countsBefore": {
+        "structures": 6,
+        "roads": 73
+      },
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": "true",
+      "inspectorHasSiteTag": "SITE 10.1",
+      "newBuildingId": 10,
+      "secondTap": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 7,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2,
+        "selectionKept": true
+      },
+      "expected": "4px jitter commits EXACTLY ONE salvager at the DOWN cell (not the release cell): bank delta == -cost, structures +1, inspector SITE == down cell; second tap selects, spends 0"
+    },
+    "desktopRightDragOrbit": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "yawBefore": 45,
+      "yawAfter": 11.399999999999977,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "right-drag orbits yaw and spends NOTHING"
+    },
+    "negativeMiddleClick": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "middle click spends NOTHING (pre-fix tapped: only button 2 was excluded)"
+    },
+    "negativeShiftStationary": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "modifiers": "Shift",
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "shift+left stationary press is orbit intent: spends NOTHING (pre-fix tapped)"
+    },
+    "negativeOrbitClickChord": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "afterLeftRelease": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 7,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2
+      },
+      "afterFinalRelease": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 7,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2
+      },
+      "expected": "orbit+click chord: NEITHER the non-final left release NOR the final right release spends (pre-fix re-armed a fresh track and tapped on the left release)"
+    },
+    "negativeWheelDuringPress": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "zoomBefore": 1.15,
+      "zoomAfter": 1.3767999675900815,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "wheel zoom while a contact is held marks the gesture: release spends NOTHING (pre-fix tapped)"
+    },
+    "negativePointerCancelDesktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "pointerId": 1,
+      "capturedBefore": true,
+      "capturedAfter": false,
+      "cancel": "synthetic PointerEvent(pointercancel) with the real mouse pointerId",
+      "lateUp": "REAL CDP mouseReleased",
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 7,
+        "roads": 73
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "cancelled stationary press + late real pointerup spends NOTHING; capture freed"
+    },
+    "desktopCleanClickCommit": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "build",
+      "site": {
+        "x": 11,
+        "z": 1
+      },
+      "pressCss": {
+        "x": 1040,
+        "y": 247
+      },
+      "bankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "expectedBankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "countsBefore": {
+        "structures": 7,
+        "roads": 73
+      },
+      "countsAfter": {
+        "structures": 8,
+        "roads": 73
+      },
+      "lastSiteOk": "true",
+      "inspectorHasSiteTag": "SITE 11.1",
+      "newBuildingId": 13,
+      "expected": "clean click commits EXACTLY ONE salvager: bank delta == -{credits:180,scrap:28,stone:12}, structures +1, inspector selects the NEW building at the tapped cell, build mode auto-exits"
+    },
+    "roadGesture": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "road",
+      "origin": {
+        "x": 2,
+        "z": 2
+      },
+      "destination": {
+        "x": 7,
+        "z": 2
+      },
+      "originPixelCell": {
+        "x": 2,
+        "z": 2
+      },
+      "destinationPixelCell": {
+        "x": 7,
+        "z": 2
+      },
+      "dragOnly": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 8,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2
+      },
+      "originClick": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 8,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2
+      },
+      "dragBetween": {
+        "bankDelta": {},
+        "countsAfter": {
+          "structures": 8,
+          "roads": 73
+        },
+        "lastSiteOk": null,
+        "probeTicksWaited": 2
+      },
+      "destinationClick": {
+        "bankDelta": {
+          "credits": -24,
+          "stone": -18
+        },
+        "expectedBankDelta": {
+          "credits": -24,
+          "stone": -18
+        },
+        "countsBefore": {
+          "structures": 8,
+          "roads": 73
+        },
+        "countsAfter": {
+          "structures": 8,
+          "roads": 79
+        },
+        "roadCellsAdded": 6
+      },
+      "expected": "drag (armed or not) pave NOTHING and spend 0; origin click arms without spend; destination click paves exactly the route once: roads +N, bank -{4N credits, 3N stone}, structures unchanged"
+    },
+    "selectTap": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mode": "select",
+      "buildingCell": {
+        "x": 7,
+        "z": 9
+      },
+      "buildingName": "Scrap Extractor",
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 8,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "selected": true,
+      "expected": "clean select-mode tap selects the starter building and spends NOTHING"
+    },
+    "phoneDrag10px": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "site": {
+        "x": 1,
+        "z": 1
+      },
+      "dragPx": 10,
+      "errorCssPx": 0,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 8,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "10px touch drag pans anchor-exact <=1px and spends NOTHING"
+    },
+    "phoneJitter9pxCommit": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "downCell": {
+        "x": 1,
+        "z": 1
+      },
+      "releasePixelCell": {
+        "x": 1,
+        "z": 0
+      },
+      "jitterPx": 9,
+      "bankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "expectedBankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "countsBefore": {
+        "structures": 8,
+        "roads": 79
+      },
+      "countsAfter": {
+        "structures": 9,
+        "roads": 79
+      },
+      "lastSiteOk": "true",
+      "inspectorHasSiteTag": "SITE 1.1",
+      "newBuildingId": 17,
+      "expected": "9px touch jitter commits EXACTLY ONE salvager at the DOWN cell: bank delta == -cost, structures +1, inspector SITE == down cell (pre-fix >6px slop panned and spent nothing)"
+    },
+    "phoneTwoFingerTurn": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "twistDeg": 40,
+      "gestureZoneHeightFraction": 0.3,
+      "yawBefore": 45,
+      "yawAfter": 84.99999997971395,
+      "maxCentroidErrorCssPx": 0.000008435723809348083,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 9,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "two-finger turn orbits yaw with centroid anchored <=1px and spends NOTHING for either finger"
+    },
+    "phonePinchLift": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "gestureZoneHeightFraction": 0.3,
+      "maxPinchErrorCssPx": 0.0000042724609447601375,
+      "pinchZoom": 2.399999999999999,
+      "fingerLiftTargetStep": 0,
+      "survivorRebaseErrorCssPx": 0.00001525878903596692,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 9,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "pinch zooms centroid-anchored <=1px; finger lift zero target jump; survivor rebases <=1px; NOTHING spent at any stage"
+    },
+    "negativePhoneCancelStationary": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "site": {
+        "x": 3,
+        "z": 1
+      },
+      "cancelledPointerId": 8,
+      "lateUp": "synthetic PointerEvent with the cancelled pointerId (CDP cannot touchEnd after touchCancel)",
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 9,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "cancelled STATIONARY build press + late up spends NOTHING (a stationary press is exactly the pre-fix tap shape; cancel must purge it)"
+    },
+    "negativePhoneCancelMidDrag": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "site": {
+        "x": 3,
+        "z": 1
+      },
+      "cancelledPointerId": 9,
+      "bankDelta": {},
+      "countsAfter": {
+        "structures": 9,
+        "roads": 79
+      },
+      "lastSiteOk": null,
+      "probeTicksWaited": 2,
+      "expected": "cancelled touch DRAG + late up spends NOTHING"
+    },
+    "phoneCleanTapCommit": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "emulated": true,
+      "mode": "build",
+      "site": {
+        "x": 3,
+        "z": 1
+      },
+      "pressCss": {
+        "x": 247,
+        "y": 136
+      },
+      "bankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "expectedBankDelta": {
+        "credits": -180,
+        "scrap": -28,
+        "stone": -12
+      },
+      "countsBefore": {
+        "structures": 9,
+        "roads": 79
+      },
+      "countsAfter": {
+        "structures": 10,
+        "roads": 79
+      },
+      "lastSiteOk": "true",
+      "inspectorHasSiteTag": "SITE 3.1",
+      "newBuildingId": 20,
+      "expected": "clean touch tap commits EXACTLY ONE salvager: bank delta == -cost, structures +1, inspector selects the new building at the tapped cell"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is EMULATED, not a physical device (#268/#275 open)",
+    "PASS_NUMERIC_ONLY: bank/structure/pose/DOM measurements are exact; visual fidelity is screenshot-only and NOT self-certified",
+    "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
+    "Hosted-browser deployment receipt (#333) is owed at deployment time, not by this local preview capture; branch CI success is NOT a production release",
+    "Fixture = createGame() with vehicles:[] so freight income cannot pollute bank deltas; the pointer->onTap->buildAt/roadLine path under test is unchanged",
+    "CDP touchMove events queue until the next compositor frame; Page.startScreencast forces BeginFrames and the harness ASSERTS each move reached the canvas before measuring (playwright-core 1.65.1 here vs lockfile 1.49.1 — delivery is asserted, not assumed)",
+    "touchCancel carries no points and ends the CDP sequence; the late-up-after-cancel regression uses a synthetic PointerEvent with the cancelled pointerId against the real canvas listener (desktop uses a REAL CDP mouseReleased as the late up)",
+    "The pre-fix Node failure proof (14 behavioral + 6 state-contract of 25 new tests) is recorded separately in prefix-proof.json — a real measured node --test run of tests/cameraInputGesture.test.mjs against the pre-fix controller from main 5dd3fe295de0345d52ab82353fec730c7cd7b105 (20 fail / 5 pass pre-fix, 25 pass post-fix, raw TAP embedded)",
+    "Capture originally ran at pre-rebase code head eafae2346100efee5be2358335ddffa6e3ffca8c on old main ec64143340891d4c9fe1829560243d17e753b506; branch rebased onto main 5dd3fe295de0345d52ab82353fec730c7cd7b105 (docs-only conflicts, union-resolved). source_sha updated to the reachable capture head 501bc9dab220ae016268f7f7e55f92f50d740793: git diff eafae234 c3f26ae7 -- src/cameraInput.js scripts/capture-cam02.mjs tests/cameraInputGesture.test.mjs is EMPTY, so the captured code is byte-identical; full suite re-run post-rebase 298/298 (273 main + 25 new)"
+  ],
+  "completed": "2026-11-17T10:38:36.655Z",
+  "nonblank": {
+    "minDistinctColors": 15621,
+    "minLuminanceStddev": 42.754
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "issue": 338,
+  "purpose": "Pre-fix Node failure proof for the 25 CAM-02 gesture tests referenced by report.json limitations. Real measured run, not hand-written.",
+  "generatedAt": "2026-11-17T11:24:30.627Z",
+  "method": "Temporarily replaced src/cameraInput.js with the pre-fix controller from main 5dd3fe295de0345d52ab82353fec730c7cd7b105 (blob-identical to old main ec64143340891d4c9fe1829560243d17e753b506), ran node --test tests/cameraInputGesture.test.mjs, restored the fixed file (git diff empty asserted), re-ran the same file post-fix.",
+  "command": "node --test tests/cameraInputGesture.test.mjs",
+  "preFixSourceSha": "5dd3fe295de0345d52ab82353fec730c7cd7b105",
+  "postFixSourceSha": "501bc9dab220ae016268f7f7e55f92f50d740793",
+  "preFix": {
+    "exitCode": 1,
+    "pass": 5,
+    "fail": 20,
+    "total": 25,
+    "failedTests": [
+      "CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps",
+      "CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell",
+      "CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps",
+      "CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell",
+      "CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell",
+      "CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)",
+      "CAM-02: right-drag orbits and never taps (even sub-threshold right press)",
+      "CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits",
+      "CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit",
+      "CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click",
+      "CAM-02: shift+left micro-drag below slop orbits-armed and never taps",
+      "CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase",
+      "CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored",
+      "CAM-02: pointercancel mid single-finger drag never taps; late up inert",
+      "CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit",
+      "CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit",
+      "CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit",
+      "CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit",
+      "CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct",
+      "CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle"
+    ],
+    "diagnostics": {
+      "CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: right-drag orbits and never taps (even sub-threshold right press)": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: shift+left micro-drag below slop orbits-armed and never taps": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: pointercancel mid single-finger drag never taps; late up inert": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      },
+      "CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle": {
+        "code": "ERR_ASSERTION",
+        "error": "|-"
+      }
+    },
+    "rawTap": "TAP version 13\n# Subtest: CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps\nnot ok 1 - CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps\n  ---\n  duration_ms: 1.6273\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:116:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    a 5px mouse drag must never spend\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:126:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n# Subtest: CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell\nnot ok 2 - CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell\n  ---\n  duration_ms: 0.8915\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:133:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    commit cell must be the DOWN cell\n    + actual - expected\n    \n      {\n    +   x: 4,\n    +   z: 19\n    -   x: 3,\n    -   z: 20\n      }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    x: 3\n    z: 20\n  actual:\n    x: 4\n    z: 19\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:143:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps\nnot ok 3 - CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps\n  ---\n  duration_ms: 0.751\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:148:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    8px touch jitter is inside the 10px slop: one tap\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:166:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell\nnot ok 4 - CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell\n  ---\n  duration_ms: 0.2262\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:171:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:180:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell\nnot ok 5 - CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell\n  ---\n  duration_ms: 0.2889\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:185:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    commit must be the pressed cell, not the jittered release cell\n    + actual - expected\n    \n      {\n    +   x: 4,\n    +   z: 19\n    -   x: 3,\n    -   z: 20\n      }\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected:\n    x: 3\n    z: 20\n  actual:\n    x: 4\n    z: 19\n  operator: 'deepStrictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:195:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)\nnot ok 6 - CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)\n  ---\n  duration_ms: 0.2296\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:199:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    moved latch must survive return-to-start\n    + actual - expected\n    \n    + undefined\n    - true\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: true\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:208:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: right-drag orbits and never taps (even sub-threshold right press)\nnot ok 7 - CAM-02: right-drag orbits and never taps (even sub-threshold right press)\n  ---\n  duration_ms: 0.2434\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:212:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + undefined\n    - 'orbit'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'orbit'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:220:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits\nnot ok 8 - CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits\n  ---\n  duration_ms: 0.1585\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:227:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    middle click must not place a building\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:231:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit\nnot ok 9 - CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit\n  ---\n  duration_ms: 0.3699\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:234:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:240:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click\nnot ok 10 - CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click\n  ---\n  duration_ms: 0.275\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:243:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    shift press must not purchase\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:249:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: shift+left micro-drag below slop orbits-armed and never taps\nnot ok 11 - CAM-02: shift+left micro-drag below slop orbits-armed and never taps\n  ---\n  duration_ms: 0.211\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:253:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:258:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase\nnot ok 12 - CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase\n  ---\n  duration_ms: 0.1578\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:261:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    non-final chord release must not tap\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:272:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: left-drag then right-click chord then left release never taps\nok 13 - CAM-02: left-drag then right-click chord then left release never taps\n  ---\n  duration_ms: 0.1015\n  type: 'test'\n  ...\n# Subtest: CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored\nnot ok 14 - CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored\n  ---\n  duration_ms: 0.4824\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:293:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + 'no-state-api'\n    - 'multi'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'multi'\n  actual: 'no-state-api'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:313:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: one moving finger + one stationary finger, both lift -> no tap\nok 15 - CAM-02: one moving finger + one stationary finger, both lift -> no tap\n  ---\n  duration_ms: 0.1218\n  type: 'test'\n  ...\n# Subtest: CAM-02: pointercancel mid single-finger drag never taps; late up inert\nnot ok 16 - CAM-02: pointercancel mid single-finger drag never taps; late up inert\n  ---\n  duration_ms: 0.136\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:328:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + 'no-state-api'\n    - 'idle'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'idle'\n  actual: 'no-state-api'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:337:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: pointercancel of a stationary touch never taps\nok 17 - CAM-02: pointercancel of a stationary touch never taps\n  ---\n  duration_ms: 0.0535\n  type: 'test'\n  ...\n# Subtest: CAM-02: cancel of one finger in a pinch rebases survivor and blocks its purchase\nok 18 - CAM-02: cancel of one finger in a pinch rebases survivor and blocks its purchase\n  ---\n  duration_ms: 0.0912\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit\nnot ok 19 - CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.1638\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:365:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    a zoom during contact is a gesture, not a click\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:373:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit\nnot ok 20 - CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.4119\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:378:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:384:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit\nnot ok 21 - CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.1893\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:387:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:393:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit\nnot ok 22 - CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.1008\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:396:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 0\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 0\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:402:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct\nnot ok 23 - CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct\n  ---\n  duration_ms: 0.1059\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:406:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + 'no-state-api'\n    - 'idle'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'idle'\n  actual: 'no-state-api'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:417:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: CAM-02: road gesture = two clean clicks emit two taps; a drag between them emits none\nok 24 - CAM-02: road gesture = two clean clicks emit two taps; a drag between them emits none\n  ---\n  duration_ms: 0.157\n  type: 'test'\n  ...\n# Subtest: CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle\nnot ok 25 - CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle\n  ---\n  duration_ms: 0.0881\n  type: 'test'\n  location: 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-338\\\\tests\\\\cameraInputGesture.test.mjs:437:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    + actual - expected\n    \n    + 'no-state-api'\n    - 'idle'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 'idle'\n  actual: 'no-state-api'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-338/tests/cameraInputGesture.test.mjs:439:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n1..25\n# tests 25\n# suites 0\n# pass 5\n# fail 20\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 62.3495\n"
+  },
+  "postFix": {
+    "exitCode": 0,
+    "pass": 25,
+    "fail": 0,
+    "total": 25,
+    "failedTests": [],
+    "rawTap": "TAP version 13\n# Subtest: CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps\nok 1 - CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps\n  ---\n  duration_ms: 1.4398\n  type: 'test'\n  ...\n# Subtest: CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell\nok 2 - CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell\n  ---\n  duration_ms: 1.0767\n  type: 'test'\n  ...\n# Subtest: CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps\nok 3 - CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps\n  ---\n  duration_ms: 0.2496\n  type: 'test'\n  ...\n# Subtest: CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell\nok 4 - CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell\n  ---\n  duration_ms: 0.1243\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell\nok 5 - CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell\n  ---\n  duration_ms: 0.1501\n  type: 'test'\n  ...\n# Subtest: CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)\nok 6 - CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)\n  ---\n  duration_ms: 0.1042\n  type: 'test'\n  ...\n# Subtest: CAM-02: right-drag orbits and never taps (even sub-threshold right press)\nok 7 - CAM-02: right-drag orbits and never taps (even sub-threshold right press)\n  ---\n  duration_ms: 0.2563\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits\nok 8 - CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits\n  ---\n  duration_ms: 0.0828\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit\nok 9 - CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit\n  ---\n  duration_ms: 0.3047\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click\nok 10 - CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click\n  ---\n  duration_ms: 0.2591\n  type: 'test'\n  ...\n# Subtest: CAM-02: shift+left micro-drag below slop orbits-armed and never taps\nok 11 - CAM-02: shift+left micro-drag below slop orbits-armed and never taps\n  ---\n  duration_ms: 0.1183\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase\nok 12 - CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase\n  ---\n  duration_ms: 0.1138\n  type: 'test'\n  ...\n# Subtest: CAM-02: left-drag then right-click chord then left release never taps\nok 13 - CAM-02: left-drag then right-click chord then left release never taps\n  ---\n  duration_ms: 0.0624\n  type: 'test'\n  ...\n# Subtest: CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored\nok 14 - CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored\n  ---\n  duration_ms: 0.4137\n  type: 'test'\n  ...\n# Subtest: CAM-02: one moving finger + one stationary finger, both lift -> no tap\nok 15 - CAM-02: one moving finger + one stationary finger, both lift -> no tap\n  ---\n  duration_ms: 0.1138\n  type: 'test'\n  ...\n# Subtest: CAM-02: pointercancel mid single-finger drag never taps; late up inert\nok 16 - CAM-02: pointercancel mid single-finger drag never taps; late up inert\n  ---\n  duration_ms: 0.0828\n  type: 'test'\n  ...\n# Subtest: CAM-02: pointercancel of a stationary touch never taps\nok 17 - CAM-02: pointercancel of a stationary touch never taps\n  ---\n  duration_ms: 0.039\n  type: 'test'\n  ...\n# Subtest: CAM-02: cancel of one finger in a pinch rebases survivor and blocks its purchase\nok 18 - CAM-02: cancel of one finger in a pinch rebases survivor and blocks its purchase\n  ---\n  duration_ms: 0.5783\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit\nok 19 - CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.1749\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit\nok 20 - CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.0557\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit\nok 21 - CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.0595\n  type: 'test'\n  ...\n# Subtest: CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit\nok 22 - CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit\n  ---\n  duration_ms: 0.0465\n  type: 'test'\n  ...\n# Subtest: CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct\nok 23 - CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct\n  ---\n  duration_ms: 0.0621\n  type: 'test'\n  ...\n# Subtest: CAM-02: road gesture = two clean clicks emit two taps; a drag between them emits none\nok 24 - CAM-02: road gesture = two clean clicks emit two taps; a drag between them emits none\n  ---\n  duration_ms: 0.0823\n  type: 'test'\n  ...\n# Subtest: CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle\nok 25 - CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle\n  ---\n  duration_ms: 0.0631\n  type: 'test'\n  ...\n1..25\n# tests 25\n# suites 0\n# pass 25\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 59.7157\n"
+  },
+  "workingTreeRestored": true,
+  "classification": {
+    "method": "Each failed test classified by its FIRST failed assertion frame (TAP stack locations into tests/cameraInputGesture.test.mjs, first line containing assert.): tap-count/commit-cell assertions = behavioral; state() snapshot (mode/phase/moved) assertions = state-contract. The pre-fix controller has no state() API; the harness tolerant stub returns {mode:\"no-state-api\",pointers:[]}.",
+    "behavioralCount": 14,
+    "stateContractCount": 6,
+    "behavioral": [
+      {
+        "name": "CAM-02: mouse drag at exactly the 5px threshold pans and NEVER taps",
+        "firstFailedAssertionLine": 126,
+        "assertion": "assert.equal(h.calls.tap.length, 0, \"a 5px mouse drag must never spend\");"
+      },
+      {
+        "name": "CAM-02: mouse 4px jitter is still a click — commits exactly once at the DOWN cell",
+        "firstFailedAssertionLine": 143,
+        "assertion": "assert.deepEqual(tapCells(h)[0], cellA, \"commit cell must be the DOWN cell\");"
+      },
+      {
+        "name": "CAM-02: touch drag at exactly the 10px threshold pans and NEVER taps",
+        "firstFailedAssertionLine": 166,
+        "assertion": "assert.equal(h.calls.tap.length, 1, \"8px touch jitter is inside the 10px slop: one tap\");"
+      },
+      {
+        "name": "CAM-02: touch 9px jitter is still a tap — commits once at the DOWN cell",
+        "firstFailedAssertionLine": 180,
+        "assertion": "assert.equal(h.calls.tap.length, 1);"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): sub-threshold jitter across a cell boundary commits the DOWN cell, not the release cell",
+        "firstFailedAssertionLine": 195,
+        "assertion": "assert.deepEqual(tapCells(h)[0], cellA, \"commit must be the pressed cell, not the jittered release cell\");"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): middle-button click never commits",
+        "firstFailedAssertionLine": 231,
+        "assertion": "assert.equal(h.calls.tap.length, 0, \"middle click must not place a building\");"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): back/forward mouse buttons never commit",
+        "firstFailedAssertionLine": 240,
+        "assertion": "assert.equal(h.calls.tap.length, 0);"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): shift+left stationary press is orbit intent, never a click",
+        "firstFailedAssertionLine": 249,
+        "assertion": "assert.equal(h.calls.tap.length, 0, \"shift press must not purchase\");"
+      },
+      {
+        "name": "CAM-02: shift+left micro-drag below slop orbits-armed and never taps",
+        "firstFailedAssertionLine": 258,
+        "assertion": "assert.equal(h.calls.tap.length, 0);"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): orbit+click button chord never lifts into a purchase",
+        "firstFailedAssertionLine": 272,
+        "assertion": "assert.equal(h.calls.tap.length, 0, \"non-final chord release must not tap\");"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): wheel zoom during a stationary press blocks the release commit",
+        "firstFailedAssertionLine": 373,
+        "assertion": "assert.equal(h.calls.tap.length, 0, \"a zoom during contact is a gesture, not a click\");"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): Q/E orbit during a stationary press blocks the release commit",
+        "firstFailedAssertionLine": 384,
+        "assertion": "assert.equal(h.calls.tap.length, 0);"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): arrow-key pan during a stationary press blocks the release commit",
+        "firstFailedAssertionLine": 393,
+        "assertion": "assert.equal(h.calls.tap.length, 0);"
+      },
+      {
+        "name": "CAM-02 NEGATIVE (fails pre-fix): zoom-button command during a stationary press blocks the release commit",
+        "firstFailedAssertionLine": 402,
+        "assertion": "assert.equal(h.calls.tap.length, 0);"
+      }
+    ],
+    "stateContract": [
+      {
+        "name": "CAM-02: drag out-and-back to the down pixel never re-arms a click (latch)",
+        "firstFailedAssertionLine": 208,
+        "assertion": "assert.equal(mid.pointers[0]?.moved, true, \"moved latch must survive return-to-start\");"
+      },
+      {
+        "name": "CAM-02: right-drag orbits and never taps (even sub-threshold right press)",
+        "firstFailedAssertionLine": 220,
+        "assertion": "assert.equal(mid.pointers[0]?.phase, \"orbit\");"
+      },
+      {
+        "name": "CAM-02: two-finger turn (twist) never taps for either finger; centroid anchored",
+        "firstFailedAssertionLine": 313,
+        "assertion": "assert.equal(mid.mode, \"multi\");"
+      },
+      {
+        "name": "CAM-02: pointercancel mid single-finger drag never taps; late up inert",
+        "firstFailedAssertionLine": 337,
+        "assertion": "assert.equal(mid.mode, \"idle\");"
+      },
+      {
+        "name": "CAM-02: intentional clean click commits exactly once; state returns to idle; selection cell correct",
+        "firstFailedAssertionLine": 417,
+        "assertion": "assert.equal(before.mode, \"idle\");"
+      },
+      {
+        "name": "CAM-02: state machine phases press->pan, press->orbit, multi, chord, idle",
+        "firstFailedAssertionLine": 439,
+        "assertion": "assert.equal(h.state().mode, \"idle\");"
+      }
+    ]
+  }
+}
