@@ -359,7 +359,7 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .ledger-detail .selected-hero__mark{width:40px;height:40px;font-size:20px}
 .ledger-detail .stat-grid{margin:7px 0}
 .ledger-detail .stat-grid strong{font-size:15px}
-.ledger-list{max-height:32dvh;gap:0}
+.ledger-list{max-height:32dvh;gap:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#6c7777 transparent}
 .ledger-row{display:flex;align-items:center;gap:9px;width:100%;min-height:44px;text-align:left;border:0;border-bottom:1px solid #40515399;background:transparent;color:var(--text);font-size:11px;padding:5px 6px}
 .ledger-row:hover{background:#273d4066}
 .ledger-row.is-active{background:#664c3755;box-shadow:inset 2px 0 0 var(--amber)}
