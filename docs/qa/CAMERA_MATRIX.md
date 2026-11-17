@@ -97,7 +97,7 @@ Contract: opening/closing any of the six toolbar panels, the inspector, the shee
 ### Unit matrix — tests/cam05Retention.test.mjs (8 tests) + tests/cam05Wiring.test.mjs (5 jsdom rendered-App tests)
 | Case family | Coverage | Cases | Tolerance | Result |
 |---|---|---|---|---|
-| Panel/resize reference identity | 6 tools × open/close × desktop 1440×900 / phone 390×844 + resize both directions, intentional pose yaw115/elev20/zoom1.37/target(9,−5), depot selected | 48 | returned camera === input camera (reference) | PASS |
+| Panel/resize reference identity | 2 triggers {panel,resize} × 2 viewports {desktop 1440×900, phone 390×844} × 3 poses {intentional yaw115/elev20/zoom1.37/target(9,−5); desktop home; envelope corner yaw359/elev80/zoom12/target(90,−90)} × 2 obscured × 2 autoFrame, depot selected | 48 (2×2×3×2×2) | returned camera === input camera (reference) | PASS |
 | nextToolMode selection retention | select→inspect iff selectedId!=null; every tool keeps its mode; toolbar never drops selection | matrix | exact mode | PASS |
 | Phone new-selection pin | obscured new selection pins machine to focusPixel (195,151.0992) | 1 | ≤1e-9 px | PASS |
 | focus / selection / settings policy | focus moves with autoFrame=false; selection/settings honour opt-out and unobscured case | matrix | exact pose | PASS |
@@ -105,7 +105,7 @@ Contract: opening/closing any of the six toolbar panels, the inspector, the shee
 | #307 hash guard + App source contract | applyCamera f3afa5479a66b97e / stampCamera 691b3c0a3480e97b; choose uses nextToolMode, no setSelectedId; resize retain-trigger; framedRef; Escape deselect; no pointer listeners | 2 | sha256-16 / regex | PASS |
 | Rendered-App wiring (jsdom, real cameraInput/simulation) | zoom+orbit pose → tap selects Freight Depot (pose unchanged) → six tools open/close (pose + probe selectedId 2) → collapse/expand → close + inspect re-entry → Recenter exact home → Escape probe, pose unchanged | 5 | byte-identical dataset pose | PASS |
 
-Full suite at CAM-05 head: **230 pass / 0 fail** (217 main + 8 retention + 5 wiring; zero existing tests deleted/skipped/weakened).
+Full suite at CAM-05 head (rebased onto main 8bdb722356604c11560417398795796f5a8cc5eb after CAM-08 #540): **252 pass / 0 fail** (239 main + 8 retention + 5 wiring; zero existing tests deleted/skipped/weakened).
 
 ### Deterministic negative controls (guard-is-real; exact constants embedded in tests)
 | Control | Input | Expected legacy slip | Actual legacy slip | Approved panel slip |
@@ -117,7 +117,7 @@ Full suite at CAM-05 head: **230 pass / 0 fail** (217 main + 8 retention + 5 wir
 Desktop 1440×900 dpr1 + emulated phone 390×844 dpr2 touch; every pose read from synchronous canvas dataset stamps; selection/trigger observability via panelProbe dataset.
 
 - Intentional poses via real gestures: desktop Orbit button + Zoom in → yaw 90 / zoom 1.7825; phone wheel-zoom at a verified canvas pixel near the machine + ArrowDown keyboardPan → zoom 1.1972173631218102, target (28.124383853659552,14.124383853659559) at the recorded pose. (A centre-anchored phone orbit button would swing the pinned machine off-canvas at 390px — orbit retention is proven on desktop, pan+zoom retention on phone.)
-- Six-panel loop (build/road/fleet/research/market/inventory): open and close each with **byte-identical pose** and probe selectedId 2; sheet titles verified; close unmounts the panel-host; inspector re-entry pose-identical; sheet collapse/expand pose-identical; ledger chip via resource strip pose-identical.
+- Six-panel loop (build/road/fleet/research/market/**select** — select re-enters the inspector; the freight ledger is the separate seventh `inventory` panel exercised via the strip chip below): open and close each with **byte-identical pose** and probe selectedId 2; sheet titles verified; close unmounts the panel-host; inspector re-entry pose-identical; sheet collapse/expand pose-identical; ledger chip via resource strip pose-identical.
 - Responsive resize 1440↔390 both directions: pose-identical, selection retained, probe trigger resize.
 - Phone naturally-obscured retention: 3 real ArrowDown pans move the machine under the bottom sheet; Focus button appears; build open/close + inspector re-entry retain the obscured pose exactly; explicit Focus re-pins above the sheet with pin error **5.684341886080802e-14 px**.
 - In-build negative controls at the recorded poses: legacy reframe would slip desktop **105.81259439933739 px** (Δtarget 9.137701995411415 wu) and phone **35 px** (Δtarget 4.799625837653429 wu) vs approved **0 px**.
@@ -127,4 +127,4 @@ Desktop 1440×900 dpr1 + emulated phone 390×844 dpr2 touch; every pose read fro
 Evidence (at capture source SHA bf9e45a4488cddaa1d482e5d032f65d4e2d1a0b6): `docs/evidence/341-cam-05/report.json` (status **PASS_NUMERIC_ONLY**) + 6 desktop PNGs (inspector-posed, build-catalog-open, inspector-reentry, sheet-collapsed, resized-390x844, home-refit) + 7 phone PNGs (same set + obscured-retained, resized-1440x900).
 
 ### CAM-05 re-run recipe
-`pnpm test` (230 tests) then `pnpm build && node scripts/capture-cam05.mjs`. Phone is emulated, not a physical handset (#268/#275); numeric capture is a floor, not G1 visual acceptance (#276, sponsor-reserved); the hosted-browser receipt at the deployed SHA is produced at release (#333).
+`pnpm test` (252 tests) then `pnpm build && node scripts/capture-cam05.mjs`. Phone is emulated, not a physical handset (#268/#275); numeric capture is a floor, not G1 visual acceptance (#276, sponsor-reserved); the hosted-browser receipt at the deployed SHA is produced at release (#333).

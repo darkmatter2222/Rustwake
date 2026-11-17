@@ -64,7 +64,7 @@ try{
    const ctx=c.getContext("2d");ctx.drawImage(img,0,0);
    const d=ctx.getImageData(0,0,c.width,c.height).data;
    const colors=new Set();let sum=0,n=0;
-   for(let i=0;i<d.length;i+=4*97){colors.add((d[i]<<16)|(d[i+1]<<8)|d[i+2]);sum+=d[i]+d[i+1]+d[i+2];}
+   for(let i=0;i<d.length;i+=4*97){colors.add((d[i]<<16)|(d[i+1]<<8)|d[i+2]);sum+=d[i]+d[i+1]+d[i+2];n++;}
    return {width:img.width,height:img.height,distinctColors:colors.size,meanLuma:sum/n/3};
   },b64);
   if(stats.distinctColors<60)throw Error("Screenshot looks blank: "+file+" "+JSON.stringify(stats));
