@@ -147,15 +147,70 @@ async function orbitTo(page, targetYaw) {
     targetYaw, {timeout: 8000, polling: 50});
   return pose(page);
 }
+// Which element actually owns a screen point (wheel/tap delivery diagnostics).
+const topmostAt = (page, p) => page.evaluate(([x, y]) => {
+  const e = document.elementFromPoint(x, y);
+  if (!e) return {canvas: false, top: "null"};
+  const cls = typeof e.className === "string" && e.className ? "." + e.className.trim().split(/\s+/).join(".") : "";
+  const tid = e.dataset && e.dataset.testid ? "[data-testid=" + e.dataset.testid + "]" : "";
+  return {canvas: e.classList.contains("world-canvas"), top: e.tagName.toLowerCase() + cls + tid};
+}, [p.x, p.y]);
+// CAM-05: collapsing/expanding the contextual sheet through its REAL toggle must
+// never move the applied camera. Assert it on every scripted toggle.
+async function sheetToggleTo(page, collapsed) {
+  const toggle = page.locator('[data-testid="sheet-toggle"]');
+  if (!(await toggle.count())) return false;
+  const want = collapsed ? "false" : "true"; // aria-expanded is the inverse
+  if ((await toggle.getAttribute("aria-expanded")) === want) return false;
+  const before = await pose(page);
+  await toggle.click();
+  await page.waitForFunction(c => document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed === c,
+    String(collapsed), {timeout: 8000, polling: 50});
+  const after = await pose(page);
+  for (const k of ["yaw", "elevation", "zoom", "x", "z"])
+    if (before[k] !== after[k])
+      throw Error("SHEET_TOGGLE_MOVED_CAMERA: " + k + " " + before[k] + " -> " + after[k]);
+  return true;
+}
+// UX-07 phone sheet can overlay the canvas centre: a wheel sent there scrolls
+// the sheet body and NEVER reaches the canvas wheel listener. Resolve a
+// genuinely exposed canvas anchor before wheeling — prefer the requested point,
+// else collapse the sheet via its own toggle, else scan the canvas rect.
+async function exposedCanvasPoint(page, preferred) {
+  let hit = await topmostAt(page, preferred);
+  if (hit.canvas) return preferred;
+  await sheetToggleTo(page, true);
+  hit = await topmostAt(page, preferred);
+  if (hit.canvas) return preferred;
+  const rect = await canvasRect(page);
+  for (const fy of [.3, .45, .6, .2, .75])
+    for (const fx of [.5, .3, .7, .15, .85]) {
+      const p = {x: rect.left + rect.width * fx, y: rect.top + rect.height * fy};
+      hit = await topmostAt(page, p);
+      if (hit.canvas) return p;
+    }
+  throw Error("NO_EXPOSED_CANVAS_ANCHOR: preferred=" + JSON.stringify(preferred) + " topmost=" + hit.top);
+}
 // CAM-03 anchored wheel zoom, closed-loop on the synchronous stamp (no sleeps).
+// A stalled stamp is a HARD failure with the real delivery diagnostics (which
+// element owns the anchor, whether the stamp moved at all) — never a silent
+// no-op loop. The 1e-3 target tolerance and ZOOM_TARGET_NOT_REACHED stay exact.
 async function wheelZoomAt(page, point, targetZoom) {
+  point = await exposedCanvasPoint(page, point);
   await page.mouse.move(point.x, point.y);
   let zoom = (await pose(page)).zoom;
   for (let i = 0; i < 24 && Math.abs(zoom - targetZoom) > 1e-4; i++) {
     const prev = zoom;
-    await page.mouse.wheel(0, -Math.log(targetZoom / zoom) / .0015);
-    await page.waitForFunction(p => Math.abs(Number(document.querySelector(".world-canvas").dataset.cameraZoom) - p) > 1e-6,
-      prev, {timeout: 2000, polling: 30}).catch(() => {});
+    await page.mouse.wheel(0, -Math.log(targetZoom / prev) / .0015);
+    try {
+      await page.waitForFunction(p => Math.abs(Number(document.querySelector(".world-canvas").dataset.cameraZoom) - p) > 1e-6,
+        prev, {timeout: 2000, polling: 30});
+    } catch {
+      const diag = await topmostAt(page, point);
+      const stampNow = (await pose(page)).zoom;
+      throw Error("WHEEL_ZOOM_STAMP_STALLED iter " + i + ": anchor=" + JSON.stringify(point) +
+        " topmost=" + diag.top + " prev=" + prev + " stampNow=" + stampNow + " target=" + targetZoom);
+    }
     zoom = (await pose(page)).zoom;
   }
   if (Math.abs(zoom - targetZoom) > 1e-3)
@@ -204,6 +259,9 @@ async function placeCrusher(page, touch, label) {
   if (!p) throw Error("CRUSHER_SITE_NOT_CLICKABLE at " + label);
   await tap(page, p, touch);
   await page.waitForFunction(() => document.body.dataset.lastSiteOk === "true", null, {timeout: 8000, polling: 50});
+  // The zoom-out fallback may have collapsed the sheet; selection does NOT
+  // auto-expand it, so re-expand through the real toggle to observe assembly.
+  await sheetToggleTo(page, false);
   const site = await page.evaluate(() => ({ok: document.body.dataset.lastSiteOk, code: document.body.dataset.lastSiteCode, reason: document.body.dataset.lastSiteReason}));
   // Auto-switch to inspect selected the new build; wait out the REAL 5s assembly
   // by watching the inspector's own construction text disappear.
@@ -218,9 +276,16 @@ async function placeCrusher(page, touch, label) {
   return rec;
 }
 async function pickMachine(page, fp, name, touch, label, file) {
-  const p = await clickableCell(page, fp);
+  let p = await clickableCell(page, fp);
+  if (!p) {
+    // The sheet opened by the previous pick may cover the next machine cell on
+    // phone: collapse it through its real toggle (CAM-05 keeps camera/selection).
+    await sheetToggleTo(page, true);
+    p = await clickableCell(page, fp);
+  }
   if (!p) throw Error("MACHINE_NOT_CLICKABLE " + name + " at " + label);
   await tap(page, p, touch);
+  await sheetToggleTo(page, false); // inspector must be visibly open for the proof
   const panel = page.locator(".inspector-panel");
   await panel.waitFor({timeout: 8000});
   await panel.getByText(name).first().waitFor({timeout: 8000});
@@ -428,7 +493,9 @@ try {
     await pickMachine(page, SALVAGER, "Scrap Extractor", v.touch, v.name, v.name + "-salvager-selected.png");
     await pickMachine(page, CRUSHER_SITE, "Crusher", v.touch, v.name, v.name + "-crusher-selected.png");
 
-    // 96px silhouette clips at the strategic isometric zoom.
+    // 96px silhouette clips at the strategic isometric zoom. Collapse the sheet
+    // first so the clips contain ONLY world pixels, never HUD overlay.
+    await sheetToggleTo(page, true);
     const clips = [];
     clips.push(await clipMachine(page, SALVAGER, machineDescriptor("salvager").pick.size[1], v.name + "-salvager-clip.png"));
     clips.push(await clipMachine(page, CRUSHER_SITE, machineDescriptor("crusher").bounds.height, v.name + "-crusher-clip.png"));
