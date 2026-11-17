@@ -13,8 +13,9 @@
  *
  * Pan envelope: camera target is clamped to +/-90 world units (CAMERA_LIMITS).
  * Matrix cases are constructed to stay strictly inside that envelope so they
- * measure GRIP, not clamping. The documented boundary slip is pinned separately
- * in the "panExtent boundary" test with exact expected numbers.
+ * measure GRIP, not clamping. The former boundary slip is now fixed by CAM-03
+ * (#339): the "CAM-03 boundary" test pins the legacy 520.892780px slip as a
+ * negative control and asserts the approved smooth zoom clamp has zero slip.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -267,18 +268,45 @@ test("CAM-01 NEGATIVE: legacy center-pivot wheel zoom violates the 1px contract 
   console.log(`CAM-01 negative center-zoom: legacy ${legacyErr.toFixed(6)} CSS px (expected 380.160000, > ${TOL_PX}); approved ${correctErr.toExponential(3)} CSS px`);
 });
 
-test("CAM-01 documented limit: panExtent clamp at extreme corner zoom-out slips by an exact known amount", () => {
+// CAM-03 (#339): the former "documented limit" corner zoom-out slip is now FIXED.
+// The pre-fix behavior (pin at requested zoom, then normalizeCamera hard-clamps
+// the target to +/-90) is preserved here as a deterministic NEGATIVE control with
+// the exact historical constant; the approved zoomAtPixel must instead clamp the
+// ZOOM smoothly so the anchored terrain never slides (zero slip, no target jump).
+function legacyPinClampZoom(camera, nextZoom, pixel, vp) {
+  const c = normalizeCamera(camera);
+  const anchor = groundAtScreen(c, pixel, vp);
+  const below = groundAtScreen({ ...c, zoom: nextZoom }, pixel, vp);
+  return normalizeCamera({ ...c, zoom: nextZoom, x: c.x + (anchor.x - below.x), z: c.z + (anchor.z - below.z) });
+}
+test("CAM-03 boundary: corner zoom-out clamps zoom smoothly with ZERO anchor slip (legacy 520.892780px negative control)", () => {
   const vp = { width: 1440, height: 900 };
   const pose = { x: 0, z: 0, yaw: 115, elevation: 20, zoom: 1 };
   const corner = { x: vp.width * .98, y: vp.height * .98 };
   const anchor = groundAtScreen(pose, corner, vp);
-  const clamped = zoomAtPixel(pose, .2, corner, vp);
-  // The target legitimately saturates at the +/-90 boundary; this is the
-  // documented envelope limit, NOT a grip regression. Exact expected slip:
-  assert.equal(clamped.x, -90); assert.equal(clamped.z, 90);
-  assert.equal(clamped.zoom, .2);
-  const slip = errorCssPx(clamped, anchor, corner, vp);
-  assert.ok(Math.abs(slip - 520.8927797489522) < 1e-6, `boundary slip expected ~520.892780px, actual ${slip}`);
-  assert.ok(slip > TOL_PX);
-  console.log(`CAM-01 panExtent boundary: target clamped to (-90, 90), documented slip ${slip.toFixed(6)} CSS px (expected 520.892780)`);
+  // NEGATIVE: pre-fix pin-then-clamp reproduces the exact historical boundary slip.
+  const legacy = legacyPinClampZoom(pose, .2, corner, vp);
+  assert.equal(legacy.x, -90); assert.equal(legacy.z, 90); assert.equal(legacy.zoom, .2);
+  const legacySlip = errorCssPx(legacy, anchor, corner, vp);
+  assert.ok(Math.abs(legacySlip - 520.8927797489522) < 1e-6, `legacy boundary slip expected ~520.892780px, actual ${legacySlip}`);
+  assert.ok(legacySlip > TOL_PX, "negative control MUST fail the 1px contract, proving sensitivity");
+  // POSITIVE: approved zoom clamps smoothly; anchor stays fixed (zero slip).
+  const fixed = zoomAtPixel(pose, .2, corner, vp);
+  const slip = errorCssPx(fixed, anchor, corner, vp);
+  assert.ok(slip <= 1e-9, `CAM-03 boundary slip must be ~0, actual ${slip}`);
+  assert.ok(Math.abs(fixed.zoom - 0.5339989951510876) < 1e-9, `smooth clamp zoom expected ~0.533999, actual ${fixed.zoom}`);
+  assert.ok(Math.abs(fixed.x - -66.13842108175984) < 1e-6 && Math.abs(fixed.z - 90) < 1e-6, `target on envelope, actual (${fixed.x}, ${fixed.z})`);
+  assert.ok(fixed.zoom > CAMERA_LIMITS.minZoom && fixed.zoom < pose.zoom, "zoom clamped between min and current, not teleported");
+  // Smooth no-jump clamp: successive zoom-out ticks are monotone non-increasing,
+  // converge to the same feasible zoom, and never move the anchor.
+  let cam = pose, prevZoom = pose.zoom, maxTickSlip = 0;
+  for (let i = 0; i < 12; i++) {
+    cam = zoomAtPixel(cam, cam.zoom / 1.55, corner, vp);
+    assert.ok(cam.zoom <= prevZoom + 1e-12, `zoom must not jump up: ${prevZoom} -> ${cam.zoom}`);
+    maxTickSlip = Math.max(maxTickSlip, errorCssPx(cam, anchor, corner, vp));
+    prevZoom = cam.zoom;
+  }
+  assert.ok(Math.abs(cam.zoom - fixed.zoom) < 1e-9, "ticks converge to the smooth clamp zoom");
+  assert.ok(maxTickSlip <= 1e-9, `every clamped tick keeps anchor fixed, max slip ${maxTickSlip}`);
+  console.log(`CAM-03 boundary: legacy ${legacySlip.toFixed(6)}px (> ${TOL_PX}); approved slip ${slip.toExponential(3)}px, smooth clamp zoom ${fixed.zoom.toFixed(6)}, target (${fixed.x.toFixed(4)}, ${fixed.z.toFixed(4)})`);
 });

@@ -11,6 +11,13 @@
  * For a drag from screen p0 to p1, the world point under p0 at mouse-down
  * remains under p1 afterward. Delta-only pan is wrong at low elevations
  * because it omits the 1/sin(elevation) correction.
+ *
+ * CAM-03 (#339) zoom anchoring: wheel/button/pinch zoom keeps the world point
+ * under the cursor/centroid fixed across the FULL 0.20-12 range at every angle.
+ * When keeping that point would push the camera target past the +/-90 pan
+ * envelope, the zoom clamps SMOOTHLY to the nearest feasible value (boundedZoom)
+ * instead of hard-clamping the target and sliding the terrain. Center-anchored
+ * zoom (the +/- buttons) has zero target shift and always reaches both limits.
  */
 export const CAMERA_LIMITS = Object.freeze({
   minZoom: 0.20,
@@ -66,11 +73,45 @@ export function pinGroundToPixel(camera, ground, pixel, viewport) {
   });
 }
 
-/** Zoom about a cursor / gesture centroid without letting its terrain slide. */
+/** Raw (unclamped) camera target that would pin `anchor` under `pixel` at the
+ *  given zoom/yaw. Used to test pan-envelope feasibility BEFORE normalizing,
+ *  so a clamp can never silently slide the anchored terrain (CAM-03 #339). */
+function pinnedTarget(c, anchor, pixel, viewport, zoom, yaw) {
+  const below = groundAtScreen({ ...c, zoom, yaw }, pixel, viewport);
+  return { x: c.x + (anchor.x - below.x), z: c.z + (anchor.z - below.z) };
+}
+const insidePanEnvelope = t =>
+  Math.abs(t.x) <= CAMERA_LIMITS.panExtent && Math.abs(t.z) <= CAMERA_LIMITS.panExtent;
+
+/** CAM-03 (#339): nearest zoom to `requested` (between it and the current zoom)
+ *  whose anchored target still fits the +/-panExtent envelope. The pinned
+ *  target is anchor + K/zoom per axis, monotone in zoom, so the feasible zooms
+ *  form an interval containing the current zoom; binary search converges to the
+ *  boundary from the feasible side. Returns `requested` when fully feasible, so
+ *  center-anchored zoom (K=0) always reaches the full 0.20-12 range. When the
+ *  envelope binds, zoom clamps SMOOTHLY here instead of letting normalizeCamera
+ *  teleport the target — the world point under the cursor never drifts. */
+function boundedZoom(c, anchor, pixel, viewport, requested, yaw) {
+  const feasible = z => insidePanEnvelope(pinnedTarget(c, anchor, pixel, viewport, z, yaw));
+  if (feasible(requested)) return requested;
+  let lo = c.zoom, hi = requested;
+  if (!feasible(lo)) return lo; // pure pan/twist already outside; caller clamps pan
+  for (let i = 0; i < 64; i++) {
+    const mid = (lo + hi) / 2;
+    if (feasible(mid)) lo = mid; else hi = mid;
+  }
+  return lo;
+}
+
+/** Zoom about a cursor / gesture centroid without letting its terrain slide.
+ *  CAM-03 (#339): anchor-exact across the full 0.20-12 range at every angle;
+ *  at the pan envelope the zoom clamps smoothly (zero anchor drift, no jump). */
 export function zoomAtPixel(camera, nextZoom, pixel, viewport) {
   const c = normalizeCamera(camera);
   const anchor = groundAtScreen(c, pixel, viewport);
-  return pinGroundToPixel({ ...c, zoom:nextZoom }, anchor, pixel, viewport);
+  const requested = clamp(nextZoom, CAMERA_LIMITS.minZoom, CAMERA_LIMITS.maxZoom);
+  const zoom = boundedZoom(c, anchor, pixel, viewport, requested, c.yaw);
+  return pinGroundToPixel({ ...c, zoom }, anchor, pixel, viewport);
 }
 
 /** Change orbit/tilt while preserving a point under the gesture's centroid. */
@@ -89,12 +130,14 @@ export function panWithAnchor(camera, pointerDownGround, currentPixel, viewport)
   return pinGroundToPixel(camera, pointerDownGround, currentPixel, viewport);
 }
 
-/** Two-touch gesture: simultaneous rotate+pinch+pan around original ground. */
+/** Two-touch gesture: simultaneous rotate+pinch+pan around original ground.
+ *  CAM-03 (#339): the pinch zoom component clamps smoothly at the pan envelope
+ *  (anchor-exact) rather than sliding the centroid terrain; a pure pan/twist
+ *  that exceeds the envelope still clamps at the documented +/-90 boundary. */
 export function transformGesture(camera, anchorGround, nextPixel, viewport, zoomRatio, deltaYaw) {
   const c = normalizeCamera(camera);
-  return pinGroundToPixel({
-    ...c,
-    zoom: clamp(c.zoom * zoomRatio, CAMERA_LIMITS.minZoom, CAMERA_LIMITS.maxZoom),
-    yaw: c.yaw + deltaYaw
-  }, anchorGround, nextPixel, viewport);
+  const yaw = c.yaw + deltaYaw;
+  const requested = clamp(c.zoom * zoomRatio, CAMERA_LIMITS.minZoom, CAMERA_LIMITS.maxZoom);
+  const zoom = boundedZoom(c, anchorGround, nextPixel, viewport, requested, yaw);
+  return pinGroundToPixel({ ...c, zoom, yaw }, anchorGround, nextPixel, viewport);
 }

@@ -1,0 +1,778 @@
+{
+  "issue": 339,
+  "version": 2,
+  "build": "production-preview",
+  "source_sha": "ded72b164db22c0d01f9c976477950749f92faf7",
+  "started": "2026-11-17T05:07:36.396Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "documentScroll": false
+    }
+  ],
+  "measurements": {
+    "desktopButtonRange": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "home": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0
+      },
+      "centerAnchor": {
+        "x": 0,
+        "z": 0
+      },
+      "reachedMax": 12,
+      "reachedMin": 0.2,
+      "maxErrorCssPx": 0,
+      "ticks": 16,
+      "trace": [
+        {
+          "button": "Zoom in",
+          "tick": 0,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom in",
+          "tick": 1,
+          "zoom": 2.762875,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom in",
+          "tick": 2,
+          "zoom": 4.28245625,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom in",
+          "tick": 3,
+          "zoom": 6.6378071875,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom in",
+          "tick": 4,
+          "zoom": 10.288601140625,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom in",
+          "tick": 5,
+          "zoom": 12,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 0,
+          "zoom": 7.741935483870968,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 1,
+          "zoom": 4.994797086368366,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 2,
+          "zoom": 3.222449733140881,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 3,
+          "zoom": 2.0789998278328263,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 4,
+          "zoom": 1.3412902115050491,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 5,
+          "zoom": 0.8653485235516446,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 6,
+          "zoom": 0.5582893700333191,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 7,
+          "zoom": 0.36018669034407685,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 8,
+          "zoom": 0.23237850989940442,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        },
+        {
+          "button": "Zoom out",
+          "tick": 9,
+          "zoom": 0.2,
+          "x": 0,
+          "z": 0,
+          "errorCssPx": 0,
+          "stampMatchesApplied": true
+        }
+      ],
+      "expected": "center buttons reach exactly 12 and 0.20 with zero target shift and <=1px anchor error"
+    },
+    "desktopCursorWheel": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "cursor": {
+        "x": 1140,
+        "y": 450
+      },
+      "startPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0
+      },
+      "anchorWorld": {
+        "x": 22.955350577650236,
+        "z": -22.955350577650233
+      },
+      "maxErrorCssPx": 6.782799421513907e-13,
+      "maxTargetStep": 56.09303820495662,
+      "reachedMaxZoom": 12,
+      "clampZoom": 0.23370874446669293,
+      "endPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 0.23370874446669293,
+        "x": -90,
+        "z": 89.99999999999997
+      },
+      "ticks": 18,
+      "trace": [
+        {
+          "label": "in-0",
+          "ratio": 1.55,
+          "zoomBefore": 1.15,
+          "zoomAfter": 1.7824999958248715,
+          "x": 8.145446944477152,
+          "z": -8.14544694447715,
+          "errorCssPx": 0,
+          "targetStep": 11.519401540470074,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "in-1",
+          "ratio": 1.55,
+          "zoomBefore": 1.7824999958248715,
+          "zoomAfter": 2.762874987057102,
+          "x": 13.400574017739176,
+          "z": -13.40057401773917,
+          "errorCssPx": 9.016277948153295e-14,
+          "targetStep": 7.431871979001181,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "in-2",
+          "ratio": 1.55,
+          "zoomBefore": 2.762874987057102,
+          "zoomAfter": 4.282456219907762,
+          "x": 16.79097858907533,
+          "z": -16.790978589075326,
+          "errorCssPx": 2.420586797587417e-13,
+          "targetStep": 4.794756126715329,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "in-3",
+          "ratio": 1.55,
+          "zoomBefore": 4.282456219907762,
+          "zoomAfter": 6.637807125309375,
+          "x": 18.97833638215756,
+          "z": -18.97833638215756,
+          "errorCssPx": 3.7519095274724436e-13,
+          "targetStep": 3.0933910567393763,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "in-4",
+          "ratio": 1.55,
+          "zoomBefore": 6.637807125309375,
+          "zoomAfter": 10.288601020130663,
+          "x": 20.389534961645083,
+          "z": -20.38953496164508,
+          "errorCssPx": 5.815459753960806e-13,
+          "targetStep": 1.9957361703128966,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "in-5",
+          "ratio": 1.55,
+          "zoomBefore": 10.288601020130663,
+          "zoomAfter": 12,
+          "x": 20.75546281395875,
+          "z": -20.755462813958747,
+          "errorCssPx": 6.782799421513907e-13,
+          "targetStep": 0.5175001315920479,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-0",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 12,
+          "zoomAfter": 7.74193550200481,
+          "x": 19.545524551915232,
+          "z": -19.54552455191523,
+          "errorCssPx": 4.3759996370330177e-13,
+          "targetStep": 1.711111099816076,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-1",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 7.74193550200481,
+          "zoomAfter": 4.994797109766872,
+          "x": 17.67012025014051,
+          "z": -17.670120250140506,
+          "errorCssPx": 2.823225578892173e-13,
+          "targetStep": 2.652222198502657,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-2",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 4.994797109766872,
+          "zoomAfter": 3.222449755784597,
+          "x": 14.763243589198439,
+          "z": -14.763243589198435,
+          "errorCssPx": 1.0516039563216092e-13,
+          "targetStep": 4.110944398050094,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-3",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 3.222449755784597,
+          "zoomAfter": 2.078999847311292,
+          "x": 10.257584775291775,
+          "z": -10.257584775291772,
+          "errorCssPx": 6.784541669579153e-14,
+          "targetStep": 6.371963802052677,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-4",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 2.078999847311292,
+          "zoomAfter": 1.3412902272134892,
+          "x": 3.2738136300944554,
+          "z": -3.273813630094452,
+          "errorCssPx": 4.3771236680454855e-14,
+          "targetStep": 9.876543870047932,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-5",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 1.3412902272134892,
+          "zoomAfter": 0.8653485357130175,
+          "x": -7.551031619606494,
+          "z": 7.551031619606498,
+          "errorCssPx": 2.8239507601922386e-14,
+          "targetStep": 15.308642962717057,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-6",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.8653485357130175,
+          "zoomAfter": 0.5582893791870406,
+          "x": -24.329541717342867,
+          "z": 24.329541717342863,
+          "errorCssPx": 3.155637398489348e-14,
+          "targetStep": 23.728396536632697,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-7",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.5582893791870406,
+          "zoomAfter": 0.36018669709336454,
+          "x": -50.33623230791908,
+          "z": 50.33623230791907,
+          "errorCssPx": 3.109880066826575e-14,
+          "targetStep": 36.779014545633636,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-8",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.36018669709336454,
+          "zoomAfter": 0.23370874446669293,
+          "x": -90,
+          "z": 89.99999999999997,
+          "errorCssPx": 7.626776487886337e-15,
+          "targetStep": 56.09303820495662,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-9",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.23370874446669293,
+          "zoomAfter": 0.23370874446669293,
+          "x": -90,
+          "z": 89.99999999999997,
+          "errorCssPx": 7.626776487886337e-15,
+          "targetStep": 0,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-10",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.23370874446669293,
+          "zoomAfter": 0.23370874446669293,
+          "x": -90,
+          "z": 89.99999999999997,
+          "errorCssPx": 7.626776487886337e-15,
+          "targetStep": 0,
+          "stampFixedPoint": true
+        },
+        {
+          "label": "out-11",
+          "ratio": 0.6451612903225806,
+          "zoomBefore": 0.23370874446669293,
+          "zoomAfter": 0.23370874446669293,
+          "x": -90,
+          "z": 89.99999999999997,
+          "errorCssPx": 7.626776487886337e-15,
+          "targetStep": 0,
+          "stampFixedPoint": true
+        }
+      ],
+      "expected": "world point under cursor fixed <=1px at every tick; zoom monotone; smooth clamp at envelope with zero slip and no target teleport"
+    },
+    "negativeControl": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "cursor": {
+        "x": 1140,
+        "y": 450
+      },
+      "pose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 0.23370874446669293,
+        "x": -90,
+        "z": 89.99999999999997
+      },
+      "anchorWorld": {
+        "x": 22.955350577650236,
+        "z": -22.955350577650236
+      },
+      "legacyCenterPivotDriftCssPx": 230.99999999999991,
+      "approvedAnchoredDriftCssPx": 0,
+      "expected": "legacy center-pivot zoom drifts >1px (fails the contract); approved anchored zoom drifts <=1px (passes)"
+    },
+    "phonePinch": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "home": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0
+      },
+      "centroid": {
+        "x": 241.8,
+        "y": 464.20000000000005
+      },
+      "anchorWorld": {
+        "x": 8.035765692766489,
+        "z": 1.762287520343659
+      },
+      "maxErrorCssPx": 0.00005982148103931782,
+      "pinchOutPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 0.2,
+        "x": -32.143069769079396,
+        "z": -7.049154420341415
+      },
+      "pinchInPose": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.5000004959108328,
+        "x": 2.678588148704107,
+        "z": 0.5874326932856402
+      },
+      "ticks": 32,
+      "trace": [
+        {
+          "dir": "out",
+          "tick": 0,
+          "half": 50.4,
+          "zoom": 0.7200002092634157,
+          "x": -3.1250178898228675,
+          "z": -0.6853332845072422,
+          "errorCssPx": 0.0000072093858855590344,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 1,
+          "half": 36.288,
+          "zoom": 0.7200002092634157,
+          "x": -3.1250178898228675,
+          "z": -0.6853332845072422,
+          "errorCssPx": 0.0000072093858855590344,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 2,
+          "half": 26.127359999999996,
+          "zoom": 0.5184001942662042,
+          "x": -7.465321744558002,
+          "z": -1.637186204256508,
+          "errorCssPx": 0.000007999376614789204,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 3,
+          "half": 18.811699199999996,
+          "zoom": 0.3732481137137401,
+          "x": -13.493524355228589,
+          "z": -2.9592047651337627,
+          "errorCssPx": 0.000009010848140767286,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 4,
+          "half": 13.544423423999996,
+          "zoom": 0.2687385851983845,
+          "x": -21.866030875675275,
+          "z": -4.795344610116194,
+          "errorCssPx": 0.000009533539197685914,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 5,
+          "half": 9.751984865279997,
+          "zoom": 0.2,
+          "x": -32.14306721230375,
+          "z": -7.049156977117063,
+          "errorCssPx": 0.000010429692042675986,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 6,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 7,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 8,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 9,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 10,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 11,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 12,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 13,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 14,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "out",
+          "tick": 15,
+          "half": 8,
+          "zoom": 0.2,
+          "x": -32.143069769079396,
+          "z": -7.049154420341415,
+          "errorCssPx": 0.000010540720203373646,
+          "stampFixedPoint": true
+        },
+        {
+          "dir": "in",
+          "tick": 0,
+          "half": 27,
+          "zoom": 0.270000026702891,
+          "errorCssPx": 0.000011305846721371915
+        },
+        {
+          "dir": "in",
+          "tick": 1,
+          "half": 36.45,
+          "zoom": 0.270000026702891,
+          "errorCssPx": 0.000011305846721371915
+        },
+        {
+          "dir": "in",
+          "tick": 2,
+          "half": 49.20750000000001,
+          "zoom": 0.36450010852817855,
+          "errorCssPx": 0.000020175879074368385
+        },
+        {
+          "dir": "in",
+          "tick": 3,
+          "half": 66.43012500000002,
+          "zoom": 0.4920752304364129,
+          "errorCssPx": 0.000024861051318148452
+        },
+        {
+          "dir": "in",
+          "tick": 4,
+          "half": 89.68066875000002,
+          "zoom": 0.6643015534597599,
+          "errorCssPx": 0.0000316997680847927
+        },
+        {
+          "dir": "in",
+          "tick": 5,
+          "half": 121.06890281250004,
+          "zoom": 0.896807135317663,
+          "errorCssPx": 0.000041386667127842985
+        },
+        {
+          "dir": "in",
+          "tick": 6,
+          "half": 150,
+          "zoom": 1.2106894724614987,
+          "errorCssPx": 0.00004721869264640814
+        },
+        {
+          "dir": "in",
+          "tick": 7,
+          "half": 150,
+          "zoom": 1.2106894724614987,
+          "errorCssPx": 0.00004721869264640814
+        },
+        {
+          "dir": "in",
+          "tick": 8,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 9,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 10,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 11,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 12,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 13,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 14,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        },
+        {
+          "dir": "in",
+          "tick": 15,
+          "half": 150,
+          "zoom": 1.5000004959108328,
+          "errorCssPx": 0.00005982148103931782
+        }
+      ],
+      "documentScroll": false,
+      "expected": "touch centroid world point fixed <=1px through pinch out/in; smooth envelope clamp; no jump"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
+    "PASS_NUMERIC_ONLY: anchor/stamp/DOM measurements are exact; visual fidelity is screenshot-only and NOT self-certified",
+    "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
+    "Off-center zoom clamps smoothly below a limit when the pinned anchor would leave the +/-90 pan envelope; the FULL 0.20-12 range is reached by center-anchored controls (zero target shift)"
+  ],
+  "completed": "2026-11-17T05:08:03.071Z"
+}
