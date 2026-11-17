@@ -1,0 +1,721 @@
+{
+  "version": 1,
+  "issue": 346,
+  "task": "CAM-10 measurement slice — input-to-photon latency and camera smoothness",
+  "build": "production-preview",
+  "source_sha": "ee34fef55c363582b1d614f590e66b8a63823bda",
+  "started": "2026-11-17T20:20:18.548Z",
+  "scope": "MEASUREMENT HALF ONLY of #346. Raycast/render optimization in src/world.js is leased (dev-349c ART-03) and deferred to a scoped follow-up issue.",
+  "quality": {
+    "tier": "default production — NO quality setting changed for this measurement",
+    "pixelRatio": "min(2, devicePixelRatio) as shipped in src/world.js",
+    "reducedMotion": "no-preference (full ambient animation load)",
+    "note": "No rendering-quality reduction was applied to obtain any number in this report."
+  },
+  "definitions": {
+    "frameBudgetMs": 16.666666666666668,
+    "jankThresholdMs": 50,
+    "droppedFrames": "sum(max(0, round(delta/16.667)-1))",
+    "inputToPhoton": "PROXY: synthetic event.timeStamp -> max(first rAF timestamp observing the seq-paired camera stamp change, probe appliedAt). Seq pairing = first command of the gesture (smallest observed seq > seqBefore) of the expected kind; single-command gestures (drag, wheel) are exactly seqBefore+1, a two-finger pinch emits one transform command per moving finger (up to 2) and pairs to its first observed command. The max() corrects mid-frame CDP injection (rAF timestamps are frame START; observed raw delta -0.4ms): the presenting frame cannot precede camera application. Headless SwiftShader has no physical display; this is event-to-next-rendered-frame, not a physical photon measurement.",
+    "percentile": "nearest-rank ascending"
+  },
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "touch": false,
+      "gestures": {
+        "drag": "mouse left-drag",
+        "zoom": "wheel"
+      },
+      "screenshots": [
+        {
+          "file": "desktop-baseline.png",
+          "nonBlank": {
+            "width": 1440,
+            "height": 900,
+            "distinctColors": 1892,
+            "meanLuma": 103.91382880522916
+          }
+        },
+        {
+          "file": "desktop-negative.png",
+          "nonBlank": {
+            "width": 1440,
+            "height": 900,
+            "distinctColors": 1844,
+            "meanLuma": 103.0766659182197
+          }
+        }
+      ],
+      "provenance": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.8154.6 Safari/537.36",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)",
+        "swiftshader": true,
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "dpr": 1,
+        "drawingBuffer": [
+          1440,
+          900
+        ],
+        "webglContexts": 1
+      },
+      "contact": {
+        "point": {
+          "x": 720,
+          "y": 450
+        },
+        "candidates": [
+          {
+            "x": 720,
+            "y": 450,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 720,
+            "y": 300,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 500,
+            "y": 400,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          }
+        ]
+      },
+      "baseline": {
+        "label": "baseline-60s",
+        "commands": 30,
+        "durationMs": 58908.59999999404,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 15,
+          "move": 45,
+          "up": 15,
+          "cancel": 0,
+          "out": 0,
+          "lost": 15
+        },
+        "frames": {
+          "frames": 851,
+          "durationMs": 58908.59999999404,
+          "fps": 14.446108038556103,
+          "meanMs": 69.19036427732081,
+          "p50Ms": 66.69999999999709,
+          "p95Ms": 83.40000000000146,
+          "maxMs": 133.40000000000146,
+          "jankFrames": 819,
+          "droppedFrames": 2682
+        },
+        "latency": {
+          "drag": {
+            "count": 15,
+            "meanMs": 63.15999999841054,
+            "p50Ms": 63.30000001192093,
+            "p95Ms": 67.90000000596046,
+            "minMs": 55.400000005960464,
+            "maxMs": 67.90000000596046
+          },
+          "zoom": {
+            "count": 15,
+            "meanMs": 207.67333333889644,
+            "p50Ms": 207.2999999821186,
+            "p95Ms": 226.40000000596046,
+            "minMs": 192.7000000178814,
+            "maxMs": 226.40000000596046
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 15,
+            "mean": 0.1400000055631002,
+            "max": 0.4000000059604645
+          },
+          "zoom": {
+            "count": 15,
+            "mean": 0.12666666905085247,
+            "max": 0.699999988079071
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 15,
+            "sumMs": 2.1000000834465027,
+            "maxMs": 0.4000000059604645
+          },
+          "zoom": {
+            "count": 15,
+            "sumMs": 1.9000000357627869,
+            "maxMs": 0.699999988079071
+          }
+        },
+        "cameraChangeFrames": 30
+      },
+      "negative": {
+        "label": "negative-injected-120ms",
+        "commands": 16,
+        "durationMs": 6789.9000000059605,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 23,
+          "move": 69,
+          "up": 23,
+          "cancel": 0,
+          "out": 0,
+          "lost": 23
+        },
+        "frames": {
+          "frames": 187,
+          "durationMs": 6789.9000000059605,
+          "fps": 27.540906346166487,
+          "meanMs": 35.29251336898398,
+          "p50Ms": 0,
+          "p95Ms": 133.3000000000029,
+          "maxMs": 150.10000000000582,
+          "jankFrames": 74,
+          "droppedFrames": 303
+        },
+        "latency": {
+          "drag": {
+            "count": 8,
+            "meanMs": 170.70000000670552,
+            "p50Ms": 183.59999999403954,
+            "p95Ms": 191.7000000178814,
+            "minMs": 121.60000002384186,
+            "maxMs": 191.7000000178814
+          },
+          "zoom": {
+            "count": 8,
+            "meanMs": 333.23749999701977,
+            "p50Ms": 331.09999999403954,
+            "p95Ms": 347.89999997615814,
+            "minMs": 320.7000000178814,
+            "maxMs": 347.89999997615814
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 8,
+            "mean": 120.07499999925494,
+            "max": 120.19999998807907
+          },
+          "zoom": {
+            "count": 8,
+            "mean": 120.07499999925494,
+            "max": 120.10000002384186
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 23,
+            "sumMs": 962.700000077486,
+            "maxMs": 120.19999998807907
+          },
+          "zoom": {
+            "count": 23,
+            "sumMs": 962.5000000298023,
+            "maxMs": 120.10000002384186
+          }
+        },
+        "cameraChangeFrames": 16,
+        "delayMs": 120,
+        "injectedCommands": 16,
+        "verdict": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "drag: every degraded sample >= injected stall",
+              "expected": "min >= 120",
+              "actual": 121.60000002384186,
+              "pass": true
+            },
+            {
+              "name": "drag: degraded P95 >= baseline P95 + delay/2",
+              "expected": 127.90000000596046,
+              "actual": 191.7000000178814,
+              "pass": true
+            },
+            {
+              "name": "zoom: every degraded sample >= injected stall",
+              "expected": "min >= 120",
+              "actual": 320.7000000178814,
+              "pass": true
+            },
+            {
+              "name": "zoom: degraded P95 >= baseline P95 + delay/2",
+              "expected": 286.40000000596046,
+              "actual": 347.89999997615814,
+              "pass": true
+            },
+            {
+              "name": "degraded jank frames >= injected commands",
+              "expected": ">= 16",
+              "actual": 74,
+              "pass": true
+            }
+          ]
+        }
+      },
+      "recovery": {
+        "label": "recovery-flag-cleared",
+        "commands": 6,
+        "durationMs": 2624.199999988079,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 26,
+          "move": 78,
+          "up": 26,
+          "cancel": 0,
+          "out": 0,
+          "lost": 26
+        },
+        "frames": {
+          "frames": 110,
+          "durationMs": 2624.199999988079,
+          "fps": 41.917536773302224,
+          "meanMs": 23.331818181818182,
+          "p50Ms": 0,
+          "p95Ms": 83.30000000000291,
+          "maxMs": 116.80000000000291,
+          "jankFrames": 35,
+          "droppedFrames": 118
+        },
+        "latency": {
+          "drag": {
+            "count": 3,
+            "meanMs": 64.86666668454806,
+            "p50Ms": 65.60000002384186,
+            "p95Ms": 66.2000000178814,
+            "minMs": 62.80000001192093,
+            "maxMs": 66.2000000178814
+          },
+          "zoom": {
+            "count": 3,
+            "meanMs": 208.0333333313465,
+            "p50Ms": 204.19999998807907,
+            "p95Ms": 220,
+            "minMs": 199.90000000596046,
+            "maxMs": 220
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 3,
+            "mean": 0.10000002384185791,
+            "max": 0.10000002384185791
+          },
+          "zoom": {
+            "count": 3,
+            "mean": 0.06666667262713115,
+            "max": 0.20000001788139343
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 26,
+            "sumMs": 963.0000001490116,
+            "maxMs": 120.19999998807907
+          },
+          "zoom": {
+            "count": 26,
+            "sumMs": 962.7000000476837,
+            "maxMs": 120.10000002384186
+          }
+        },
+        "cameraChangeFrames": 6,
+        "verdict": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "drag: recovered P95 <= baseline P95 + delay/2",
+              "expected": 127.90000000596046,
+              "actual": 66.2000000178814,
+              "pass": true
+            },
+            {
+              "name": "zoom: recovered P95 <= baseline P95 + delay/2",
+              "expected": 286.40000000596046,
+              "actual": 220,
+              "pass": true
+            }
+          ]
+        }
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "touch": true,
+      "gestures": {
+        "drag": "one-finger touch drag (CDP)",
+        "zoom": "two-finger pinch (CDP)"
+      },
+      "screenshots": [
+        {
+          "file": "phone-baseline.png",
+          "nonBlank": {
+            "width": 780,
+            "height": 1688,
+            "distinctColors": 1305,
+            "meanLuma": 99.39808948479937
+          }
+        },
+        {
+          "file": "phone-negative.png",
+          "nonBlank": {
+            "width": 780,
+            "height": 1688,
+            "distinctColors": 1182,
+            "meanLuma": 96.25954029762782
+          }
+        }
+      ],
+      "provenance": {
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/159.0.8154.6 Safari/537.36",
+        "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+        "vendor": "Google Inc. (Google)",
+        "swiftshader": true,
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "dpr": 2,
+        "drawingBuffer": [
+          780,
+          1688
+        ],
+        "webglContexts": 1
+      },
+      "contact": {
+        "point": {
+          "x": 195,
+          "y": 200
+        },
+        "candidates": [
+          {
+            "x": 195,
+            "y": 200,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 195,
+            "y": 300,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 195,
+            "y": 422,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 100,
+            "y": 150,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          },
+          {
+            "x": 290,
+            "y": 250,
+            "isCanvas": true,
+            "tag": "CANVAS.world-canvas"
+          }
+        ]
+      },
+      "baseline": {
+        "label": "baseline-60s",
+        "commands": 30,
+        "durationMs": 59195.80000001192,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 45,
+          "move": 45,
+          "up": 45,
+          "cancel": 0,
+          "out": 45,
+          "lost": 45
+        },
+        "frames": {
+          "frames": 761,
+          "durationMs": 59195.80000001192,
+          "fps": 12.855641785394347,
+          "meanMs": 77.76741130091985,
+          "p50Ms": 83.29999999999927,
+          "p95Ms": 116.70000000000073,
+          "maxMs": 183.29999999999563,
+          "jankFrames": 677,
+          "droppedFrames": 2790
+        },
+        "latency": {
+          "drag": {
+            "count": 15,
+            "meanMs": 231.11333333253862,
+            "p50Ms": 236.30000001192093,
+            "p95Ms": 270.19999998807907,
+            "minMs": 179.80000001192093,
+            "maxMs": 270.19999998807907
+          },
+          "zoom": {
+            "count": 15,
+            "meanMs": 236.7666666686535,
+            "p50Ms": 235.90000000596046,
+            "p95Ms": 310.2000000178814,
+            "minMs": 176.59999999403954,
+            "maxMs": 310.2000000178814
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 15,
+            "mean": 0.21333333253860473,
+            "max": 0.9000000059604645
+          },
+          "zoom": {
+            "count": 15,
+            "mean": 0.020000000794728596,
+            "max": 0.10000002384185791
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 15,
+            "sumMs": 3.199999988079071,
+            "maxMs": 0.9000000059604645
+          },
+          "pinch": {
+            "count": 30,
+            "sumMs": 2.699999988079071,
+            "maxMs": 0.5999999940395355
+          }
+        },
+        "cameraChangeFrames": 30
+      },
+      "negative": {
+        "label": "negative-injected-120ms",
+        "commands": 16,
+        "durationMs": 9043.300000011921,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 69,
+          "move": 69,
+          "up": 69,
+          "cancel": 0,
+          "out": 69,
+          "lost": 69
+        },
+        "frames": {
+          "frames": 271,
+          "durationMs": 9043.300000011921,
+          "fps": 29.96693684823491,
+          "meanMs": 33.39335793357936,
+          "p50Ms": 0,
+          "p95Ms": 116.69999999999709,
+          "maxMs": 250,
+          "jankFrames": 68,
+          "droppedFrames": 408
+        },
+        "latency": {
+          "drag": {
+            "count": 8,
+            "meanMs": 298.76249999925494,
+            "p50Ms": 289.59999999403954,
+            "p95Ms": 345.80000001192093,
+            "minMs": 261,
+            "maxMs": 345.80000001192093
+          },
+          "zoom": {
+            "count": 8,
+            "meanMs": 409.48750000074506,
+            "p50Ms": 401.69999998807907,
+            "p95Ms": 456.40000000596046,
+            "minMs": 368.59999999403954,
+            "maxMs": 456.40000000596046
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 8,
+            "mean": 120.06249999627471,
+            "max": 120.09999999403954
+          },
+          "zoom": {
+            "count": 8,
+            "mean": 120.05000000074506,
+            "max": 120.10000002384186
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 23,
+            "sumMs": 963.6999999582767,
+            "maxMs": 120.09999999403954
+          },
+          "pinch": {
+            "count": 46,
+            "sumMs": 1923.4999999701977,
+            "maxMs": 120.19999998807907
+          }
+        },
+        "cameraChangeFrames": 16,
+        "delayMs": 120,
+        "injectedCommands": 16,
+        "verdict": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "drag: every degraded sample >= injected stall",
+              "expected": "min >= 120",
+              "actual": 261,
+              "pass": true
+            },
+            {
+              "name": "drag: degraded P95 >= baseline P95 + delay/2",
+              "expected": 330.19999998807907,
+              "actual": 345.80000001192093,
+              "pass": true
+            },
+            {
+              "name": "zoom: every degraded sample >= injected stall",
+              "expected": "min >= 120",
+              "actual": 368.59999999403954,
+              "pass": true
+            },
+            {
+              "name": "zoom: degraded P95 >= baseline P95 + delay/2",
+              "expected": 370.2000000178814,
+              "actual": 456.40000000596046,
+              "pass": true
+            },
+            {
+              "name": "degraded jank frames >= injected commands",
+              "expected": ">= 16",
+              "actual": 68,
+              "pass": true
+            }
+          ]
+        }
+      },
+      "recovery": {
+        "label": "recovery-flag-cleared",
+        "commands": 6,
+        "durationMs": 2548.800000011921,
+        "midFrameCorrections": 0,
+        "contactRefinds": 0,
+        "delivery": {
+          "down": 78,
+          "move": 78,
+          "up": 78,
+          "cancel": 0,
+          "out": 78,
+          "lost": 78
+        },
+        "frames": {
+          "frames": 158,
+          "durationMs": 2548.800000011921,
+          "fps": 61.989956057462734,
+          "meanMs": 15.822151898734232,
+          "p50Ms": 0,
+          "p95Ms": 50.10000000000582,
+          "maxMs": 100,
+          "jankFrames": 9,
+          "droppedFrames": 98
+        },
+        "latency": {
+          "drag": {
+            "count": 3,
+            "meanMs": 125.2333333392938,
+            "p50Ms": 119.60000002384186,
+            "p95Ms": 152.09999999403954,
+            "minMs": 104,
+            "maxMs": 152.09999999403954
+          },
+          "zoom": {
+            "count": 3,
+            "meanMs": 141.56666666269302,
+            "p50Ms": 147.09999999403954,
+            "p95Ms": 147.5,
+            "minMs": 130.09999999403954,
+            "maxMs": 147.5
+          }
+        },
+        "handlerMs": {
+          "drag": {
+            "count": 3,
+            "mean": 0.10000000397364299,
+            "max": 0.10000002384185791
+          },
+          "zoom": {
+            "count": 3,
+            "mean": 0.03333333134651184,
+            "max": 0.09999999403953552
+          }
+        },
+        "probeKinds": {
+          "drag": {
+            "count": 26,
+            "sumMs": 963.9999999701977,
+            "maxMs": 120.09999999403954
+          },
+          "pinch": {
+            "count": 52,
+            "sumMs": 1924.299999922514,
+            "maxMs": 120.19999998807907
+          }
+        },
+        "cameraChangeFrames": 6,
+        "verdict": {
+          "pass": true,
+          "checks": [
+            {
+              "name": "drag: recovered P95 <= baseline P95 + delay/2",
+              "expected": 330.19999998807907,
+              "actual": 152.09999999403954,
+              "pass": true
+            },
+            {
+              "name": "zoom: recovered P95 <= baseline P95 + delay/2",
+              "expected": 370.2000000178814,
+              "actual": 147.5,
+              "pass": true
+            }
+          ]
+        }
+      },
+      "pageErrors": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run per view; phone is EMULATED (390x844 dpr2 touch), not a physical handset (#268/#275 real-device validation still owed)",
+    "Input-to-photon is an event-to-next-rendered-frame proxy (no physical display in headless); GPU presentation/compositor latency is not included",
+    "Local production preview only — the hosted-browser receipt at the deployed SHA is produced at release by the release engineer",
+    "Verdict ceiling PASS_NUMERIC_ONLY; sponsor G1 visual acceptance (#276) is reserved and NOT granted by this capture",
+    "Optimization half of #346 (world.js raycast/render paths) NOT delivered here — scoped follow-up issue linked from #346",
+    "Runner load: shared host — other agents run browser captures concurrently and idle dev servers remain from earlier sessions, so latency/frame numbers INCLUDE that contention and are not quiet-host guarantees. An earlier in-flight run at the pre-fix-touch head failed the desktop recovery gate by 8.5 ms under heavier load (drag recovered P95 171 vs 162.5 envelope); the committed run passed every gate. No CPU-heavy work (tests, rollback control) was run by this harness during the capture."
+  ],
+  "finished": "2026-11-17T20:22:45.301Z"
+}

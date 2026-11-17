@@ -1,0 +1,52 @@
+{
+  "control": "CAM-10 rollback + break-the-guard proof — proves tests/cameraInputProbe.test.mjs and tests/cam10Stats.test.mjs are load-bearing, not tautological",
+  "code_head_sha": "ee34fef55c363582b1d614f590e66b8a63823bda",
+  "main_base_sha": "0f54b2cf3f72e4c89158dc601e5dd1e6e0ef1a7f",
+  "method": "Re-run at the train-turn rebase (dev-556). In the dev-556 worktree at rebased code head ee34fef55c363582b1d614f590e66b8a63823bda: (A) src/cameraInput.js was temporarily replaced with the clean main 0f54b2cf blob (git show 0f54b2cf3f72e4c89158dc601e5dd1e6e0ef1a7f:src/cameraInput.js), node --test tests/cameraInputProbe.test.mjs was run, then the exact original working-tree bytes were restored. (B) the load-bearing jank guard in scripts/cam10-stats.mjs was mutated (export const JANK_MS = 50 -> 5000), node --test tests/cam10Stats.test.mjs was run, then the exact original bytes restored. No stash/reset/checkout used. Restoration verified: git diff HEAD for both files prints 0 bytes and working-tree sha256 (LF-normalized) equals git show HEAD:<path> blob sha256 for both files. Post-restore re-run: 21/21 pass. Main has not touched src/cameraInput.js since the old base b56fded0, so the mutation-A blob is identical to the prior control's.",
+  "mutationA_cameraInput_rollback_to_main": {
+    "file": "src/cameraInput.js",
+    "replaced_with": "main 0f54b2cf3f72e4c89158dc601e5dd1e6e0ef1a7f blob (no CAM-10 probe exists on main)",
+    "tests": 11,
+    "pass": 2,
+    "fail": 9,
+    "failed": [
+      "CAM-10 probe: mouse drag records kind=drag with exact event-time pairing and seq",
+      "CAM-10 probe: wheel zoom records kind=zoom; UI zoomBy without event falls back to handler start",
+      "CAM-10 probe: right-drag orbit records kind=orbit",
+      "CAM-10 probe: two-finger pinch records kind=pinch (phone zoom path)",
+      "CAM-10 probe: keyboardPan records kind=key",
+      "CAM-10 probe: injected delayMs stall degrades handler time deterministically without corrupting the camera",
+      "CAM-10 probe: aggregates only — no pointer coordinates or raw event fields are stored",
+      "CAM-10 probe: repeated gestures accumulate count/sum/max and monotonic seq",
+      "CAM-10 probe: adds no listeners and dispose leaves no probe timers"
+    ],
+    "passed_as_expected": [
+      "CAM-10 probe: absent __RW_PROBES__ -> inert, camera behaviour unchanged, nothing recorded",
+      "CAM-10 probe: enabled:false -> inert, no stats object created"
+    ],
+    "note": "The two survivors are deliberate continuity invariants: gameplay WITHOUT the probe flag must behave exactly as main does. They must hold on main too. The nine failures prove the assertions detect the absence of the probe implementation."
+  },
+  "mutationB_jank_guard_break": {
+    "file": "scripts/cam10-stats.mjs",
+    "mutation": "export const JANK_MS = 50; -> export const JANK_MS = 5000; (the declared 50ms jank threshold is load-bearing for frameStats and the negative-control jank gate)",
+    "tests": 10,
+    "pass": 8,
+    "fail": 2,
+    "failed": [
+      "CAM-10 stats: declared constants (60 Hz budget, 50 ms jank)",
+      "CAM-10 stats: frameStats exact jank/dropped/FPS on a known delta trace"
+    ],
+    "note": "The negativeVerdict jank-count tests construct synthetic frameStats-shaped inputs directly, so they do not read JANK_MS and survive this specific mutation by design; the two failures above pin the constant and its exact use in frameStats."
+  },
+  "restoration_proof": {
+    "git_diff_HEAD_bytes": 0,
+    "sha256_cameraInput_js": "265b8ded178e9d1108e9d6a360791153e26f44ae5ab8f6d5396b242bde51f2e4",
+    "sha256_cam10_stats_mjs": "8eb27b9e076b8589fbf9b8e015341c917138b47f20b1e09aadf3392a7827cfe1",
+    "sha256_note": "working-tree hashes (LF-normalized) equal git show HEAD:<path> blob hashes; exact original working-tree bytes restored",
+    "post_restore_rerun": {
+      "tests": 21,
+      "pass": 21,
+      "fail": 0
+    }
+  }
+}
