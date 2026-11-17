@@ -3,6 +3,44 @@
 ## Trust boundaries
 Developer work runs in isolated rw/ branch/worktree. GitHub-hosted CI runs untrusted repository build/test code; its artifact must be immutable and refer to the exact source SHA. Trusted self-hosted Databrick runner downloads static artifact and invokes its root-owned deploy adapter. Do not checkout arbitrary PRs or execute repository scripts on the privileged runner. Do not change existing ingress, secrets, release mount or runner permissions as an optimization.
 
+## OPS-12 (#336) supply-chain hardening audit — 2026-11-17, base main b56fded0f0bbe6d038c353399d6f353419ceded4
+
+In-repo hardening + READ-ONLY settings audit. No GitHub repository setting was mutated; host-side recommendations are tracked in #561 (sponsor authorization required). Evidence receipts: `docs/evidence/336-ops-12/` (settings-audit.json, pin-provenance.json, mutation-results.json, dist-identity.json, report.json).
+
+### Token scopes actually in use
+- Repository default workflow token (`GET actions/permissions/workflow`): **read**, `can_approve_pull_request_reviews: false`. ci.yml formerly had NO `permissions:` block and inherited this default — a LATENT least-privilege gap (a future default flip to write would have granted PR jobs write). Now explicit: ci.yml top-level `permissions: contents: read` (checkout is the only GITHUB_TOKEN consumer; npm cache and artifact upload use the runtime token).
+- delivery.yml top-level `contents: read, actions: read` — audited, kept unchanged. `actions: read` is retained because the deploy step passes `github.token` to the host-owned adapter (`RUSTWAKE_GITHUB_TOKEN`) whose full scope consumption cannot be audited from the repository; narrowing it risks a silent non-deploy. Host-side scoping of that token is a #561 recommendation.
+- delivery-alert.yml: workflow `contents: read`; only the `alert` job escalates to `issues: write` (gh issue list/create/comment) + `actions: read` (gh run list lookup) — exactly what `scripts/delivery-alert.mjs` uses. No other job-level permissions exist anywhere.
+- Secrets: the only `secrets.*` reference in any workflow is `GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}` passed as `env:` to the alert step. Guard-enforced: secrets never appear in `run:` interpolation, no `set -x`/`printenv`/bare `env`/credential echo anywhere.
+
+### Branch protection state (measured, not changed)
+`GET branches/main/protection` → **404 Branch not protected**. "Never direct-push main" is currently convention-only. Required reviews MUST NOT be enabled as a reflex: the release token is the same account as the PR author, so GitHub rejects self-approval and the release train would deadlock. Options (ruleset with required checks but no required reviews; independent approver identity; `sha_pinning_required: true`; `allowed_actions: selected` allowlist) are recorded in #561 for sponsor decision. Also measured: `allowed_actions: "all"`, `sha_pinning_required: false`, public repo with forking allowed.
+
+### Hosted PR jobs vs trusted runner separation (guard-enforced)
+- ci.yml triggers are exactly `push` + `pull_request` (NEVER `pull_request_target`): PR code runs only on unprivileged `ubuntu-latest` with a read-only token.
+- delivery.yml triggers are exactly `workflow_run` (ci, completed, main) + `workflow_dispatch`. The `package` gate requires ALL of: CD variable enabled, upstream conclusion `success`, upstream event `push`, upstream head branch `main`, and `head_repository.full_name == github.repository` (fork exclusion), OR dispatch on `refs/heads/main`. The exact expression is test-pinned; a 1485-case mirror truth table proves every fork/PR/non-main/disabled/unknown-conclusion shape fails closed.
+- The ONLY self-hosted job is `deploy` (`[self-hosted, Linux, X64, rustwake-deploy]`, environment `rustwake-databrick`), `needs: package`, no checkout, no npm — it only downloads the static artifact and invokes the host-owned adapter. `verify-live` and `hosted-browser` need the full upstream chain and run on hosted runners; no job-level `if: always()` can bypass a skipped `package`.
+- `workflow_run` checkout provenance: delivery checkouts bind to the immutable source SHA validated `^[a-f0-9]{40}$` by the identity step (a `workflow_run` payload can predate the fix, but delivery MUST build the exact concluded SHA, so SHA-pinning is correct there). delivery-alert reads the run PAYLOAD, not the checkout, so it pins `ref: main` — the #549 house precedent. Both rationales are now test-asserted; all delivery/alert checkouts use `persist-credentials: false`.
+- The only `rm -rf` is `rm -rf -- "$CANDIDATE"` with `CANDIDATE` always `${{ runner.temp }}/rustwake-<run_id>-<run_attempt>` — quoted, `--`-terminated, non-empty literal prefix, scoped inside runner.temp. Test-pinned.
+
+### Action pinning table (provenance in pin-provenance.json)
+Every `uses:` (16 total) is pinned to the full commit SHA of the SAME major version in use; the moving `v4` tag was verified via `gh api repos/actions/<a>/git/ref/tags/v4` + `tags?per_page=100` to point at exactly the newest v4.x tag commit, so the pins are behaviour-identical to floating `@v4` at base main.
+
+| Action | Pin | Version comment |
+|---|---|---|
+| actions/checkout | 11d5960a326750d5838078e36cf38b85af677262 | v4.4.0 |
+| actions/setup-node | 49933ea5288caeca8642d1e84afbd3f7d6820020 | v4.4.0 |
+| actions/upload-artifact | ea165f8d65b6e75b540449e92b4886f43607fa02 | v4.6.2 |
+| actions/download-artifact | d3f86a106a0bac45b974a628896c90dbdf5c8093 | v4.3.0 |
+
+Upgrades require re-resolving via the API and updating `PINS` in `tests/workflowSupplyChain.test.mjs` in the same PR; a floating tag, unknown action, SHA drift or missing version comment fails CI.
+
+### #549 freeze supersession (deliberate, documented)
+#549 froze delivery.yml/ci.yml byte-identical to base main 680c0156 (review condition, hash-guarded). #336 explicitly requires changing those files (permissions + pinning), so the freeze is superseded: `tests/deliveryAlert.test.mjs` test 7 is re-baselined to sha256 pins of the hardened content (ci 4212ae96…, delivery 675320f9…) — the drift-guard substance is kept, the retired git-diff-vs-680c0156 proof served only the old freeze. Gate semantics, needs chain, runner labels, concurrency and job order are unchanged; dist byte-identity (18/18 files) proves no game change.
+
+### Negative proof (mutation-results.json)
+Seven insecure mutations each ran the FULL suite and broke their named guards, then were restored with sha256 identity verified: fork-exclusion removal, action un-pinning, `pull_request_target` introduction, `write-all` permissions, secret echo, deploy `needs` removal, unquoted `rm -rf`. Every mutation also trips the re-baselined drift guard. Local suite: 370 = 359 main + 11 new, 369 pass; the single failure is main's OWN Windows-only deliveryAlert :253 CRLF regex defect, reproduced identically on clean main (358/359); Linux CI unaffected.
+
 ## Pipeline — mandatory for every accepted PR
 1. Developer publishes draft PR. Independent QA and product-owner role comments approve exact current PR head; a changed head invalidates previous verdicts. No author self-acceptance.
 2. Release engineer checks GitHub branch/PR identity, conflict status, approvals, CI, active leases and exact expected-head SHA, then merges via PR to main (never direct pushes). Record previous main SHA as rollback.

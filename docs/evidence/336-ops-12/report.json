@@ -1,0 +1,39 @@
+{
+  "issue": 336,
+  "pr": 560,
+  "follow_up_issue": 561,
+  "branch": "rw/336-ops-12-supply-chain",
+  "base_main": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+  "hardening_commit": "5c02a1a30809390bf6c6f7954c201674087b062f",
+  "measured_at": "2026-11-17T14:56:33.727Z",
+  "test_reconciliation": {
+    "command": "pnpm test (= node --test tests/*.test.mjs)",
+    "clean_main_scratch_worktree": {
+      "sha": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+      "tests": 359,
+      "pass": 358,
+      "fail": 1
+    },
+    "branch": {
+      "tests": 370,
+      "pass": 369,
+      "fail": 1,
+      "new_tests": 11
+    },
+    "single_failure_both": "tests/deliveryAlert.test.mjs test \"delivery-alert.yml text contract...\" — pre-existing Windows-only LF-only permissions regex at :253 under autocrlf; identical on clean main; NOT fixed here (out of bounded scope); Linux CI green",
+    "new_test_file": "tests/workflowSupplyChain.test.mjs (11 tests, CRLF-normalized reads)"
+  },
+  "mutations": {
+    "count": 7,
+    "all_load_bearing": true,
+    "all_restored_sha256_identical": true,
+    "detail": "mutation-results.json"
+  },
+  "dist_identity": {
+    "files": 18,
+    "diffs": 0,
+    "detail": "dist-identity.json"
+  },
+  "settings_mutated": false,
+  "honesty": "Text-level YAML contract + JS mirror bound by exact-expression assertion, not GitHub runtime execution of the delivery path. Branch CI success is not a production release. No visual acceptance claimed; G1 #276 still owed. dist byte-identity is the no-game-change evidence."
+}

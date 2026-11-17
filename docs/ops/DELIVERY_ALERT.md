@@ -2,7 +2,7 @@
 
 ## What fires
 
-`.github/workflows/delivery-alert.yml` is an ADDITIVE workflow. `delivery.yml` and `ci.yml` are byte-identical to base main `680c01561331c535c1ad46b477ac09fbdf699397` and must stay that way (hash-guarded in `tests/deliveryAlert.test.mjs`).
+`.github/workflows/delivery-alert.yml` was introduced as an ADDITIVE workflow under #549, which froze `delivery.yml` and `ci.yml` byte-identical to base main `680c01561331c535c1ad46b477ac09fbdf699397`. **OPS-12 (#336) deliberately supersedes that freeze**: all three workflows are now SHA-pinned with explicit least-privilege permissions, gate semantics unchanged. The drift guard in `tests/deliveryAlert.test.mjs` is re-baselined to sha256 pins of the hardened content — unaudited drift still fails CI. See the OPS-12 section of `docs/engineering/RELEASE.md`.
 
 Triggers:
 
