@@ -55,7 +55,10 @@ function clearingSave(){
  g.buildings.push({...gen,remaining:0.6}); // assembling turbine: brownout PROCESSING, then real clear
  return g;
 }
-const seedScript=(json)=>`(()=>{try{window.__RW_PROBES__=true;const g=JSON.parse(${JSON.stringify(json)});g.lastSavedAt=Date.now();localStorage.setItem(${JSON.stringify(SAVE_KEY)},JSON.stringify(g));}catch(e){}})()`;
+// Double stringify: the inner one embeds the save as a QUOTED JSON string
+// literal (JSON.parse of a bare object literal would throw and silently seed
+// nothing — the fresh-yard fallback then masquerades as the fixture).
+const seedScript=(json)=>`(()=>{try{window.__RW_PROBES__=true;const g=JSON.parse(${JSON.stringify(JSON.stringify(json))});g.lastSavedAt=Date.now();localStorage.setItem(${JSON.stringify(SAVE_KEY)},JSON.stringify(g));}catch(e){window.__SEED_ERR__=String(e);}})()`;
 
 try{
  child=spawn(process.execPath,["node_modules/vite/bin/vite.js","preview","--port",String(PORT),"--strictPort","--host","127.0.0.1"],{stdio:["ignore","pipe","pipe"]});
@@ -83,6 +86,8 @@ try{
    await page.locator(".world-canvas").waitFor({state:"visible",timeout:30000});
    await page.waitForFunction(()=>document.querySelector(".world-canvas")?.dataset.world3d==="ready",null,{timeout:20000});
    await page.waitForFunction(()=>{try{return JSON.parse(document.body.dataset.alarmProbe||"null")?.kind==="ready";}catch{return false;}},null,{timeout:15000,polling:100});
+   const seedErr=await page.evaluate(()=>window.__SEED_ERR__||null);
+   if(seedErr)throw Error("init-script seed failed (fresh-yard fallback would fake the fixture): "+seedErr);
    return {ctx,page};
   };
   const pose=page=>page.locator(".world-canvas").evaluate(c=>({yaw:Number(c.dataset.cameraYaw),elevation:Number(c.dataset.cameraElevation),zoom:Number(c.dataset.cameraZoom),x:Number(c.dataset.cameraX),z:Number(c.dataset.cameraZ)}));
