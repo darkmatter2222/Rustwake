@@ -77,7 +77,7 @@ const report={version:1,issue:558,task:"cancel->dismantle window winnable via pe
   "Local production preview only — the live hosted receipt is produced at release by the release engineer; this is NOT a release",
   "NO DECOY SEEDS: normal createGame yard, all starters/generator intact, all three trucks at normal speed, no hand-stocked inventory. The single player furnace is built through the public buildAt API (normal cost deducted) at a legal road-adjacent site near yard center and assembled with 8s of normal simulation; live production and freight run throughout",
   "Captured race variant is input-supply (depot->player furnace): the same #558 next-tick same-pair re-reservation, measured 495/513 on clean base vs 0/32 with the fix. The output-haul variant is proven deterministically in tests/dispatchCooldown.test.mjs c1-c4; a real-UI OUTPUT-side capture is blocked by a SEPARATE pre-existing dispatch-starvation defect (stable building-order sort always prefers starter output candidates; 0 player output jobs in 120s on BOTH base and fix) — filed as a follow-up with evidence on #567, NOT fixed here",
-  "Because the yard stays live, exact bank-delta assertions are made only for credits and stone (no other flow produces them). Grand-totals deltas are bounded by the strict live-production envelope (at most one salvager cycle and one cycle per furnace inside the ~0.5s probe straddle) — hauls cancel out of totals. Bank deltas additionally satisfy the exact four-ledger manifest identity (bank + inventories + reserved + onboard === totals at both stamps) and a haul-term envelope: the bank moves by whole truck hauls (<=15 units accumulated over many cycles), so the bank delta minus the exact toast refund is bounded by cargo already headed to the depot in the before stamp plus one haul cap per truck. The toast carries the sim's exact transaction refund (including 100% cargo return) and is cross-checked against the straddling probes",
+  "Because the yard stays live, exact bank-delta assertions are made only for credits and stone (no other flow produces them). Grand-totals deltas minus the durable refund plus the cargo-return transfer (net creation) are bounded by the strict live-production envelope (at most one salvager cycle and one cycle per furnace inside the ~0.5s probe straddle) — hauls and the inventory->bank cargo return cancel out of totals. Bank deltas additionally satisfy the exact four-ledger manifest identity (bank + inventories + reserved + onboard === totals at both stamps) and a haul-term envelope: the bank moves by whole truck hauls (<=15 units accumulated over many cycles), so the bank delta minus the exact toast refund is bounded by cargo already headed to the depot in the before stamp plus one haul cap per truck. The toast carries the sim's exact transaction refund (including 100% cargo return) and is cross-checked against the straddling probes",
   "Reload durability is proven here through the app's real pagehide persist + conditional seed (no re-seed over the live save) and deterministically in tests/dispatchCooldown.test.mjs (persist/readGame round-trip, hostile-expiry clamp, expiry boundary)",
   "The 15s sim-time window, pair granularity, output+input coverage and exactly-once conservation under suppression are proven in tests/dispatchCooldown.test.mjs (7 tests); this capture proves the window is winnable through the real UI at normal fleet speed"]};
 let child,browser;
@@ -364,15 +364,19 @@ try{
     if(bankD[r]!==RECOVERY[r])throw Error("bank delta not exact for "+r+": "+JSON.stringify({bankD,RECOVERY}));
     if(totalsD[r]!==RECOVERY[r])throw Error("grand totals delta not exact for "+r+": "+JSON.stringify({totalsD,RECOVERY}));
    }
-   // NET-CREATION envelope (grand totals): <=1 salvager cycle (scrap+9/iron+3/
-   // copper+1) and <=1 cycle per furnace (iron-5/fuel-2/steel+4, starter AND
-   // player) inside the ~0.5s probe straddle. Totals count bank + inventories +
-   // reserved + onboard, so truck hauls cancel out and only production/consumption
-   // moves them — this is the strict conservation assertion, unchanged.
-   const env={scrap:[refund.scrap||0,(refund.scrap||0)+9],iron:[(refund.iron||0)-10,(refund.iron||0)+3],
-    copper:[0,1],steel:[refund.steel||0,(refund.steel||0)+8],fuel:[(refund.fuel||0)-4,refund.fuel||0]};
+   // NET-CREATION envelope (grand totals). The toast refund contains the durable
+   // floor(40%) PLUS 100% cargo return (b0); the cargo return is an inventory->bank
+   // TRANSFER that cancels out of totals, so net creation = totalsD - refund + b0.
+   // Cooldown suppression + the RESERVED block guarantee NO truck job references
+   // the player machine across the straddle, so b0 changes only by the furnace's
+   // own cycles and the transfer cancels exactly. The pure production envelope is
+   // then <=1 salvager cycle (scrap+9/iron+3/copper+1) and <=1 cycle per furnace
+   // (iron-5/fuel-2/steel+4, starter AND player) inside the ~0.5s probe straddle.
+   // This is the strict conservation assertion — net creation stays cycle-bounded.
+   const netProd={};for(const r of BANK_KEYS)netProd[r]=totalsD[r]-(refund[r]||0)+(b0[r]||0);
+   const env={scrap:[0,9],iron:[-10,3],copper:[0,1],steel:[0,8],fuel:[-4,0]};
    for(const [r,[lo,hi]] of Object.entries(env))
-    if(!inEnvelope(totalsD[r],lo,hi))throw Error("totals delta outside production envelope for "+r+": "+JSON.stringify({totalsD,env}));
+    if(!inEnvelope(netProd[r],lo,hi))throw Error("net production outside envelope for "+r+": "+JSON.stringify({netProd,env,totalsD,refund,b0}));
    // BANK accounting: the bank does NOT move by production cycles — it moves by
    // WHOLE TRUCK HAULS (deliveryCandidates caps a load at 15 units accumulated
    // over many cycles) plus the exact dismantle refund. The earlier cycle-granular
@@ -410,7 +414,7 @@ try{
    await shot(page,"after-dismantle");
    view.proof.dismantle={toast,refund,bankBefore:before.bank,bankAfter:after.bank,bankDelta:bankD,totalsDelta:totalsD,
     bagBefore:b0,buildingsBefore:before.buildings.length,buildingsAfter:after.buildings.length,
-    haulDelta:haulD,beforeVehicles:before.vehicles,afterVehicles:after.vehicles};
+    haulDelta:haulD,netProduction:netProd,beforeVehicles:before.vehicles,afterVehicles:after.vehicles};
    view.proof.probeWaitMs={count:probeWaits.length,max:Math.max(...probeWaits),avg:Math.round(probeWaits.reduce((a,b)=>a+b,0)/probeWaits.length)};
    view.status=errs.length||failed.length?"FAIL":"PASS_NUMERIC_ONLY";
   }catch(e){
