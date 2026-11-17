@@ -3,8 +3,8 @@
   "issue": 373,
   "task": "BLD-04 atomic idempotent construction commit",
   "build": "production-preview",
-  "source_sha": "ee0c20ff37a59dd4f884de85f0e4ba6ecfda7228",
-  "started": "2026-11-17T11:26:45.266Z",
+  "source_sha": "b6da1bdd7554794ecde57c6095e1ce2bebaa0983",
+  "started": "2026-11-17T12:25:06.917Z",
   "views": [
     {
       "name": "desktop",
@@ -82,7 +82,7 @@
                 "scrap": 28,
                 "stone": 12
               },
-              "remaining": 4.433299999999999
+              "remaining": 4.496599999999997
             },
             "registryPersisted": true,
             "strip": {
@@ -184,25 +184,25 @@
         "timeoutMs": 15000,
         "pollingMs": 25,
         "count": 16,
-        "maxMs": 496,
-        "meanMs": 248,
+        "maxMs": 481,
+        "meanMs": 272,
         "samplesMs": [
-          28,
-          56,
-          192,
-          496,
-          292,
-          337,
-          261,
-          62,
-          388,
-          282,
-          162,
-          333,
+          235,
+          340,
+          132,
+          481,
           286,
-          76,
-          273,
-          443
+          264,
+          285,
+          73,
+          351,
+          288,
+          154,
+          338,
+          283,
+          113,
+          310,
+          422
         ]
       }
     },
@@ -378,24 +378,24 @@
         "timeoutMs": 15000,
         "pollingMs": 25,
         "count": 15,
-        "maxMs": 340,
-        "meanMs": 234,
+        "maxMs": 342,
+        "meanMs": 216,
         "samplesMs": [
-          240,
-          55,
-          147,
-          218,
-          337,
-          237,
-          313,
-          282,
-          137,
-          340,
-          153,
-          156,
-          310,
+          288,
+          29,
+          209,
+          134,
+          342,
+          315,
+          262,
+          131,
+          265,
+          285,
+          160,
+          159,
           294,
-          289
+          290,
+          75
         ]
       }
     }
@@ -411,5 +411,5 @@
     "Save/reload durability of paid provenance and the command registry is proven by tests/constructionAtomic.test.mjs (fixture replay + registry reload); the browser seed script re-seeds on reload, so reload is not re-proven here",
     "Assembly completion sinks the paid cost into machine capital and salvage returns floor(40%) — exact audited numbers, not a leak (unit-tested conservation chain)"
   ],
-  "completed": "2026-11-17T11:27:10.860Z"
+  "completed": "2026-11-17T12:25:32.361Z"
 }
