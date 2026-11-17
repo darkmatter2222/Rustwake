@@ -1,0 +1,613 @@
+{
+  "version": 1,
+  "issue": 365,
+  "task": "UX-07 phone-safe bottom dock + collapsible contextual sheet",
+  "build": "production-preview",
+  "source_sha": "a721eae15cceddfecd859f640bac2af8a9075dbd",
+  "started": "2026-11-17T06:09:20.439Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "safeAreaEmulation": null,
+      "screenshots": [
+        "desktop-build-open.png",
+        "desktop-build-collapsed.png",
+        "desktop-inspect-open.png",
+        "desktop-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 33.109375,
+            "y": 200,
+            "width": 356,
+            "height": 567
+          },
+          "dock": {
+            "x": 462.5,
+            "y": 771,
+            "width": 515,
+            "height": 88
+          },
+          "worldBand": {
+            "kind": "horizontal-free-width",
+            "px": 1038.890625
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 510,
+            "clientHeight": 510,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 1147.125,
+              "y": 685,
+              "width": 268.875,
+              "height": 70
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 24,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1.15,
+          "afterZoom": 1.7825,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "safeAreaEmulation": null,
+      "screenshots": [
+        "phone-build-open.png",
+        "phone-build-collapsed.png",
+        "phone-inspect-open.png",
+        "phone-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 6,
+            "y": 359.765625,
+            "width": 378,
+            "height": 388.234375
+          },
+          "dock": {
+            "x": 6,
+            "y": 754,
+            "width": 378,
+            "height": 66
+          },
+          "worldBand": {
+            "kind": "vertical-band-below-hud-rail",
+            "px": 154.765625
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 331,
+            "clientHeight": 331,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 171.125,
+              "y": 293.765625,
+              "width": 208.875,
+              "height": 58
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 23,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "safeAreaEmulation": null,
+      "screenshots": [
+        "landscape-build-open.png",
+        "landscape-build-collapsed.png",
+        "landscape-inspect-open.png",
+        "landscape-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 19.40625,
+            "y": 68,
+            "width": 356,
+            "height": 230
+          },
+          "dock": {
+            "x": 211.5,
+            "y": 302,
+            "width": 421,
+            "height": 64
+          },
+          "worldBand": {
+            "kind": "horizontal-free-width",
+            "px": 456.59375
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 355,
+            "clientHeight": 173,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 563.125,
+              "y": 220,
+              "width": 268.875,
+              "height": 70
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 24,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "text200",
+      "viewport": {
+        "width": 195,
+        "height": 422
+      },
+      "deviceScaleFactor": 4,
+      "isMobile": true,
+      "hasTouch": true,
+      "safeAreaEmulation": null,
+      "screenshots": [
+        "text200-build-open.png",
+        "text200-build-collapsed.png",
+        "text200-inspect-open.png",
+        "text200-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 6,
+            "y": 192,
+            "width": 183,
+            "height": 134
+          },
+          "dock": {
+            "x": 6,
+            "y": 334,
+            "width": 183,
+            "height": 64
+          },
+          "worldBand": {
+            "kind": "vertical-band-below-hud-rail",
+            "px": 60
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 461,
+            "clientHeight": 77,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 8,
+              "y": 132,
+              "width": 179,
+              "height": 58
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 23,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone-safearea",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "safeAreaEmulation": {
+        "sat": 47,
+        "sab": 34
+      },
+      "screenshots": [
+        "phone-safearea-build-open.png",
+        "phone-safearea-build-collapsed.png",
+        "phone-safearea-inspect-open.png",
+        "phone-safearea-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "safeArea": {
+          "sat": 47,
+          "sab": 34,
+          "dockClearance": 58,
+          "sheetBottomReserve": 130,
+          "footlineHeight": 57,
+          "hudContentTop": 54
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 6,
+            "y": 325.765625,
+            "width": 378,
+            "height": 388.234375
+          },
+          "dock": {
+            "x": 6,
+            "y": 720,
+            "width": 378,
+            "height": 66
+          },
+          "worldBand": {
+            "kind": "vertical-band-below-hud-rail",
+            "px": 73.765625
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 331,
+            "clientHeight": 331,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 171.125,
+              "y": 259.765625,
+              "width": 208.875,
+              "height": 58
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 23,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "small-landscape",
+      "viewport": {
+        "width": 667,
+        "height": 375
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "safeAreaEmulation": null,
+      "screenshots": [
+        "small-landscape-build-open.png",
+        "small-landscape-build-collapsed.png",
+        "small-landscape-inspect-open.png",
+        "small-landscape-inspect-collapsed.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "documentScroll": false,
+        "buildSheet": {
+          "title": "BUILD CATALOG",
+          "panel": {
+            "x": 6,
+            "y": 149,
+            "width": 655,
+            "height": 150
+          },
+          "dock": {
+            "x": 6,
+            "y": 311,
+            "width": 655,
+            "height": 56
+          },
+          "worldBand": {
+            "kind": "vertical-band-below-hud-rail",
+            "px": 21
+          },
+          "tapTargets": {
+            "label": "build-open",
+            "count": 33,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "internalScroll": {
+            "scrollHeight": 307,
+            "clientHeight": 93,
+            "overflowY": "auto"
+          }
+        },
+        "collapse": {
+          "poseUnchanged": true,
+          "bodyHidden": true,
+          "panelMounted": true,
+          "ariaExpanded": false,
+          "barHeight": 48,
+          "documentScroll": false,
+          "persistedAfterReload": true
+        },
+        "inspect": {
+          "toast": {
+            "visible": true,
+            "nonOverlapping": true,
+            "rect": {
+              "x": 448.125,
+              "y": 128,
+              "width": 208.875,
+              "height": 58
+            }
+          },
+          "obscured": false,
+          "tapTargets": {
+            "label": "inspect-open",
+            "count": 23,
+            "minWidth": 44,
+            "minHeight": 44
+          },
+          "documentScroll": false
+        },
+        "motion": {
+          "framesDiffer": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "webglContextCount": 1,
+          "world3d": "ready"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone/landscape views are emulated, not physical devices",
+    "200%-text is emulated as the halved CSS layout viewport (195x422 at dpr4), which is what 200% page zoom produces on a 390x844 dpr2 phone",
+    "Safe-area insets are emulated by overriding the --sat/--sab CSS vars (47px/34px, iPhone-class) that every chrome band consumes; headless Chromium reports env()=0",
+    "Numeric layout proofs do not certify visual beauty — sponsor review required at G1 (#276)",
+    "Local preview only — the live hosted receipt is produced at release by the release engineer"
+  ],
+  "completed": "2026-11-17T06:10:35.555Z"
+}
