@@ -7,6 +7,13 @@
 - Functional current currencies: credits, scrap, ferrous, copper, aggregate, diesel, water, steel, and data. Additional registered categories: alloys, gears, circuits, relics, influence, echo shards, charters, renown. Future tiers have explicitly incomplete sources/sinks.
 - Research choices and tech tiers are scaffolding; improve balance and implement actual long-tail decisions.
 
+## Construction and site validation (#370, implemented)
+- Every blueprint has an explicit cell footprint (crane is 2×3; most machines 1×1). The anchor (x,z) is the footprint's min-corner cell. R (or the Rotate footprint button) quarter-turns the placement: odd rotations swap width/depth and turn the loading bay SOUTH→EAST→NORTH→WEST. The 3D group pivot is the exact footprint center at ground level (`worldFootprint`), rotated rot×90° about Y.
+- Validation is deterministic and ordered, each rejection with an exact machine code and player reason: UNKNOWN blueprint, LOCKED rank, BOUNDS outside the 24×24 land, UNSURVEYED outer ring (cells 1..22 only), PARCEL unclaimed deed, TERRAIN solid rock, SLOPE mixed heights under one footprint, COLLISION any occupied footprint cell, ROAD on a road cell, BAY blocked loading-bay approach (symmetric: you also may not pave into another machine's bay), FRONTAGE no road within 3 cells of the bay, FUNDS insufficient materials.
+- Land deeds expand with real industrial rank, never a placeholder currency: tier 0 owns the north half (Cinder Yard, East Bench), tier 1 adds South Flats, tier 2 claims Far Works. Terrain is per-seed deterministic; initial road corridors and starter pads are always graded flat so every seed has legal buildable frontage.
+- Hover/preview and free selection run the pure validator and NEVER deduct bank stock. A confirmed build spends the blueprint cost exactly once. Canceling an in-flight assembly (remaining > 0) refunds the full cost; starter buildings are protected; completed machines dismantle at 40% floor cost plus recovered inventory. Every build/reject/cancel/salvage is recorded in the construction ledger (see engineering/ECONOMY.md).
+- Roads may cross a loading bay (that is frontage) but may never pave through any machine footprint cell.
+
 ## Desired progression
 Tier 0: scrapyard, roads, trucks, active salvage and steel.
 Tier 1: refined fuels, copper, foundry, player trade contracts, warehouse capacity, modular attachments.

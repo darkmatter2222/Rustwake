@@ -25,6 +25,14 @@ The foundation's registry contains **17 categories**; most advanced source/sink 
 ## Ledger model
 Keep depot inventory, building input/output stores, reserved resources, each vehicle cargo, overflow and spendable currencies as **distinct** categories. A delivery of 10 iron from depot to furnace should move depot available -10 and reserved +10 at allocation; at actual pickup reserved -10 and vehicle cargo +10; on arrival vehicle cargo -10 and furnace input +10. Never duplicate goods by recording both reserved AND vehicle cargo as spendable. Recipe processing consumes stated inputs and creates only stated outputs; mass conversion is recipe-defined rather than simple same-item equality. Save/reload and interrupted routes must preserve these totals.
 
+## Construction ledger (#370, implemented)
+`game.ledger` (capped at the last 64 entries, persisted in the v2 save) records every construction transaction with exact deltas:
+- `build`: `cost` = full blueprint cost, spent exactly once after `checkSite` returns OK; `refund` = {}.
+- `reject`: failed confirmation (collision, unsurveyed, parcel, terrain, slope, bay, frontage, funds, …) carries the exact `code`/`reason` with `cost` = {} and `refund` = {} — a rejected attempt never moves stock.
+- `cancel`: mid-assembly cancellation refunds the FULL blueprint cost (`refund` equals the originating `build.cost`); the bank returns to its exact pre-build state.
+- `salvage`: completed-machine dismantling refunds floor(40% of each cost) plus the machine's actual inventory; `refund` matches the deposited amounts.
+Conservation acceptance: free hover/selection is pure (whole-grid `checkSite` leaves a deep snapshot unchanged); duplicate placement is refused without a second charge; build→cancel is bank-neutral; ledger build.cost == cancel.refund. Tests: tests/gridOccupancy.test.mjs (same-seed determinism, exact reasons, fixture replay) and tests/fixtures/save-v2-occupancy.json (generated through the real public API, replay-conserved). The live-preview capture (scripts/capture-v2.mjs) proves reject-with-zero-spend, single-charge build and full-refund cancel on desktop with screenshots.
+
 ## Source/sink acceptance per currency
 A complete implementation needs: at least one reachable source, one meaningful sink, pricing/capacity, anti-inflation constraint, save-replay/duplicate-command safety, a player-facing explanation and a real unit/integration test. If a currency is a placeholder, mark its UI as locked/roadmap, not an active feature. No unlimited NPC conversion profit, repeated sell/refund exploit or async raid double payout.
 

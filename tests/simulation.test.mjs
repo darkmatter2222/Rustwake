@@ -31,9 +31,12 @@ test("construction never spends on invalid or duplicate placement",()=>{
  const g=createGame(),bank={...g.bank};
  assert.equal(buildAt(g,"salvager",7,9).ok,false);
  assert.deepEqual(g.bank,bank);
- const r=buildAt(g,"salvager",3,3);
+ // #370 added road-frontage validation: (3,3) has no road within bay reach,
+ // so the legal free site moved to (6,7), graded pad beside the z=8 road.
+ // Assertions are unchanged: exact single charge, duplicate refused.
+ const r=buildAt(g,"salvager",6,7);
  assert.equal(r.ok,true);assert.equal(g.bank.credits,bank.credits-180);
- assert.equal(buildAt(g,"salvager",3,3).ok,false);
+ assert.equal(buildAt(g,"salvager",6,7).ok,false);
 });
 test("research and selling are explicit resource transactions",()=>{
  const g=createGame(),credits=g.bank.credits;

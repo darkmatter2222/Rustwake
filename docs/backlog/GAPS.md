@@ -8,8 +8,8 @@ This is an **evidence inventory**, not a parallel status board. GitHub master #2
 | Camera orbit/drag/zoom | Basic; cursor grip incorrect | #267, camera PR #307 browser check failing at last review |
 | Phone and desktop game HUD | Foundation | Full UX/physical handset #268, #275, #276 |
 | Voxel machine and animated crane | Partial procedural kit | Functional animation pivots, real production status #274 |
-| Placeable buildings | Partial | Rotate/move/dismantle and staged reload #269, #273 |
-| Roads and pathfinding | Basic | Real frontage/bays, intersections and recoverability #271 |
+| Placeable buildings | Explicit occupancy shipped: deterministic footprints/rotation, survey ring, tier parcels, terrain/slope, bay clearance, exact reasons, cancel full refund, conserved ledger (#370; tests/gridOccupancy.test.mjs + save fixture + desktop capture construction proof) | Move/dismantle UX and staged reload remain #269, #273 |
+| Roads and pathfinding | Frontage rule enforced (bay within 3 road cells); roads refuse every machine footprint cell (#370) | Intersections and recoverability remain #271 |
 | Freight/cargo | Early transport | Multi-carrier conservation, bay contention/reload #272 |
 | Research/currencies | 17 registry entries, some scaffolding | Sources/sinks, pricing and long-game #277, #281 |
 | Power/fuel/water | Partly defined | Real priorities/brownout/consumption #278 |

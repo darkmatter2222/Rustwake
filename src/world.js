@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {CAMERA_LIMITS,normalizeCamera} from "./camera.js";
 import {CELL,WORLD_SIZE,BLUEPRINTS} from "./content.js";
 import {cellOf,key} from "./simulation.js";
+import {worldFootprint} from "./gridOccupancy.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -39,7 +40,12 @@ function beam(parent,x,y,z,length,axis="x",material="steel"){
 }
 function makeBuilding(b,time){
  const group=new THREE.Group();
- group.position.set(origin(b.x),0,origin(b.z));
+ // Exact footprint pivot (#370): anchor cell is the min corner; the group sits
+ // at the footprint center, scaled to base w×d cells, rotated rot*90° about Y.
+ const wf=worldFootprint(b.type,b.x,b.z,b.rot||0);
+ group.position.set(wf.pivot.x,0,wf.pivot.z);
+ group.rotation.y=wf.rotationY;
+ group.scale.set(wf.base.w,1,wf.base.d);
  group.userData.buildingId=b.id;
  const d=BLUEPRINTS[b.type],kind=b.type;
  const has=(b.remaining||0)>0;
@@ -276,7 +282,7 @@ export class LivingWorld{
   const x=Math.floor(hit.x/CELL+WORLD_SIZE/2),z=Math.floor(hit.z/CELL+WORLD_SIZE/2);
   return {x,z,wx:hit.x,wz:hit.z};
  }
- setState(g){this.state=g;const signature=g.roads.join("|")+"//"+g.buildings.map(b=>b.id+":"+b.type+":"+b.x+":"+b.z+":"+Math.floor(b.remaining)).join("|");
+ setState(g){this.state=g;const signature=g.roads.join("|")+"//"+g.buildings.map(b=>b.id+":"+b.type+":"+b.x+":"+b.z+":"+(b.rot||0)+":"+Math.floor(b.remaining)).join("|");
   if(signature!==this.sig){this.sig=signature;this.rebuild(g);}
  }
  rebuild(g){
@@ -287,11 +293,25 @@ export class LivingWorld{
   }
   for(const b of g.buildings){const built=makeBuilding(b,g.elapsed);this.built.set(b.id,built);this.buildingGroup.add(built.group);}
  }
- drawGhost(mode,cell,valid,start){
+ drawGhost(mode,cell,valid,start,footprint){
   this.ghost.clear();if(!cell||cell.x<0||cell.z<0||cell.x>=WORLD_SIZE||cell.z>=WORLD_SIZE)return;
   const m=new THREE.MeshBasicMaterial({color:valid?"#7ed4b3":"#ee8263",transparent:true,opacity:.4,depthWrite:false});
   const mesh=new THREE.Mesh(new THREE.BoxGeometry(CELL*.94,.12,CELL*.94),m);
   mesh.position.set(origin(cell.x),.2,origin(cell.z));this.ghost.add(mesh);
+  // Full rotated footprint + loading-bay approach, so the player sees exactly
+  // which cells the validator judged (#370). Out-of-bounds cells are skipped.
+  if(mode==="build"&&footprint){
+   const bayMat=new THREE.MeshBasicMaterial({color:valid?"#e5ac60":"#ee8263",transparent:true,opacity:.22,depthWrite:false});
+   for(const c of footprint.cells||[]){
+    if(c.x<0||c.z<0||c.x>=WORLD_SIZE||c.z>=WORLD_SIZE||(c.x===cell.x&&c.z===cell.z))continue;
+    const q=mesh.clone();q.position.set(origin(c.x),.2,origin(c.z));this.ghost.add(q);
+   }
+   for(const c of footprint.bay||[]){
+    if(c.x<0||c.z<0||c.x>=WORLD_SIZE||c.z>=WORLD_SIZE)continue;
+    const q=new THREE.Mesh(new THREE.BoxGeometry(CELL*.94,.06,CELL*.94),bayMat);
+    q.position.set(origin(c.x),.16,origin(c.z));this.ghost.add(q);
+   }
+  }
   if(mode==="road"&&start){
    const x0=start.x,z0=start.z,x1=cell.x,z1=cell.z;
    const add=(x,z)=>{const q=mesh.clone();q.position.set(origin(x),.22,origin(z));this.ghost.add(q);};
