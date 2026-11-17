@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "check": "rustwake-hosted-browser-smoke",
+  "issue": 333,
+  "build": "hosted-live",
+  "live_url": "https://home.darkmatter2222.com/rustwake/",
+  "expected_source_sha": "b363fd077400f61fbbce6b397b3a1c6e46e6dda1",
+  "source_sha": "b363fd077400f61fbbce6b397b3a1c6e46e6dda1",
+  "started": "2026-11-17T02:53:37.245Z",
+  "completed": "2026-11-17T02:53:43.569Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "world3d": "ready",
+      "yaw": 45,
+      "elevation": 35.264,
+      "canvasCssWidth": 1440,
+      "canvasCssHeight": 900,
+      "documentScroll": false,
+      "buttons": [
+        "CR\n1,800",
+        "SC\n220",
+        "FE\n75",
+        "ST\n20",
+        "FU\n110",
+        "DT\n15",
+        "+ 11",
+        "⌖\nRecenter",
+        "⤾\nOrbit",
+        "Zoom in",
+        "Zoom out",
+        "?\nControls",
+        "Inspect",
+        "Construct",
+        "Roads",
+        "Fleet",
+        "Research",
+        "Exchange"
+      ],
+      "shell": "v2",
+      "webglContextCount": 1,
+      "rafTicks": 13,
+      "firstFrameRendered": true,
+      "framesAdvancing": true,
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "desktop-live.png",
+      "stampMatchesApplied": true,
+      "zoomProof": {
+        "before": 1.15,
+        "after": 1.7825,
+        "applied": 1.7825
+      },
+      "failures": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "world3d": "ready",
+      "yaw": 45,
+      "elevation": 35.264,
+      "canvasCssWidth": 390,
+      "canvasCssHeight": 844,
+      "documentScroll": false,
+      "buttons": [
+        "CR\n1,800",
+        "SC\n220",
+        "FE\n75",
+        "ST20",
+        "FU110",
+        "DT15",
+        "+ 11",
+        "⌖",
+        "⤾",
+        "Zoom in",
+        "Zoom out",
+        "?",
+        "Inspect",
+        "Construct",
+        "Roads",
+        "Fleet",
+        "Research",
+        "Exchange"
+      ],
+      "shell": "v2",
+      "webglContextCount": 1,
+      "rafTicks": 13,
+      "firstFrameRendered": true,
+      "framesAdvancing": true,
+      "pageErrors": [],
+      "failedRequests": [],
+      "screenshot": "phone-live.png",
+      "stampMatchesApplied": true,
+      "zoomProof": {
+        "before": 1,
+        "after": 1.55,
+        "applied": 1.55
+      },
+      "failures": []
+    }
+  ],
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run against the live site; phone view is emulated, not a physical handset",
+    "Cannot certify README/approved-yard art parity, genuine touch latency or player enjoyment; sponsor visual G1 review of these screenshots is still owed",
+    "PASS retires the PASS_NUMERIC_ONLY local-preview caveat ONLY when this hosted-browser report is cited in the release receipt at the exact deployed SHA"
+  ],
+  "status": "PASS"
+}
