@@ -8,12 +8,15 @@ import {spawn} from "node:child_process";
 import {mkdir,writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
 const OUT=resolve(process.env.RUSTWAKE_CAPTURE_OUT||"artifacts/v2-preview");
-const HOST="http://127.0.0.1:4173/rustwake/";
+// CI default 4173; local runs may override to avoid another session's preview on the same port.
+const PORT=Number(process.env.RUSTWAKE_PREVIEW_PORT||4173);
+const ORIGIN=`http://127.0.0.1:${PORT}`;
+const HOST=`${ORIGIN}/rustwake/`;
 const report={version:2,build:"production-preview",source_sha:process.env.GITHUB_SHA||"local",started:new Date().toISOString(),views:[],status:"UNKNOWN",errors:[],limitations:["One headless Chromium/SwiftShader run; phone view is emulated","Cannot certify README art parity, genuine touch latency or player enjoyment","CAM-01 gesture matrix runs on the desktop viewport; phone/landscape keep zoom-button + stamp checks"]};
 let child,browser;
 await mkdir(OUT,{recursive:true});
 try{
- child=spawn(process.execPath,["node_modules/vite/bin/vite.js","preview","--port","4173","--strictPort","--host","127.0.0.1"],{stdio:["ignore","pipe","pipe"]});
+ child=spawn(process.execPath,["node_modules/vite/bin/vite.js","preview","--port",String(PORT),"--strictPort","--host","127.0.0.1"],{stdio:["ignore","pipe","pipe"]});
  child.stdout.on("data",()=>{});child.stderr.on("data",d=>report.errors.push("preview: "+d.toString().slice(0,400)));
  let open=false;
  for(let i=0;i<70;i++){
@@ -30,7 +33,7 @@ try{
   const ctx=await browser.newContext({viewport:v.viewport,deviceScaleFactor:v.dpr,isMobile:v.isMobile,hasTouch:v.touch,reducedMotion:"reduce"});
   const page=await ctx.newPage(),errs=[],failed=[];
   page.on("pageerror",e=>errs.push(String(e)));
-  page.on("requestfailed",r=>{try{if(new URL(r.url()).origin==="http://127.0.0.1:4173")failed.push(r.url())}catch{}});
+  page.on("requestfailed",r=>{try{if(new URL(r.url()).origin===ORIGIN)failed.push(r.url())}catch{}});
   await page.goto(HOST,{waitUntil:"domcontentloaded",timeout:30000});
   await page.locator(".world-canvas").waitFor({state:"visible",timeout:30000});
   await page.waitForFunction(()=>document.querySelector(".world-canvas")?.dataset.world3d==="ready",null,{timeout:20000});

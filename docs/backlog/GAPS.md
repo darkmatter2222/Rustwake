@@ -5,7 +5,7 @@ This is an **evidence inventory**, not a parallel status board. GitHub master #2
 | Capability | V2 foundation 258fce59 | Gap and issue |
 |---|---|---|
 | Real 3D isometric industrial terrain | Foundation shipped | Art parity/LOD/scale #262, #270, G1 #276 |
-| Camera orbit/drag/zoom | Basic; cursor grip incorrect | #267, camera PR #307 browser check failing at last review |
+| Camera orbit/drag/zoom | Cursor grip fixed and merged via #307 (main 006b5e8); CAM-01 #337 regression matrix: 6480-case math pan matrix + 1008 wheel ticks + golden snapshots ≤1.32e-13 px, production browser gestures (6 quadrant poses, 13 drags, 6 wheels) max 1.005e-13 px, raycast cross-check SITE 13.9 at yaw225, exact negative controls 25.003235/380.160000 px; docs/qa/CAMERA_MATRIX.md | Remaining: height-aware mesh picking, world-edge (±90 clamp) communication, physical-handset touch verification #268/#275, G1 visual #276 |
 | Phone and desktop game HUD | Foundation | Full UX/physical handset #268, #275, #276 |
 | Voxel machine and animated crane | Partial procedural kit | Functional animation pivots, real production status #274 |
 | Placeable buildings | Explicit occupancy shipped: deterministic footprints/rotation, survey ring, tier parcels, terrain/slope, bay clearance, exact reasons, cancel full refund, conserved ledger (#370; tests/gridOccupancy.test.mjs + save fixture + desktop capture construction proof) | Move/dismantle UX and staged reload remain #269, #273 |
