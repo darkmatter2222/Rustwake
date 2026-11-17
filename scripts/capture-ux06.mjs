@@ -137,8 +137,16 @@ try{
    await page.locator('[data-testid="alarm-detail"]').waitFor({state:"visible",timeout:5000});
    const detailBox=await box(page,'[data-testid="alarm-detail"]');
    view.proof.detailBox=detailBox;
-   if(detailBox.y+detailBox.height>v.viewport.height+0.5)throw Error("detail bottom outside viewport: "+JSON.stringify(detailBox));
-   if(v.name==="phone"&&detailBox.y<=v.centre.y)throw Error("phone detail sheet covers the canvas centre: "+JSON.stringify(detailBox));
+   if(v.name==="phone"){
+    // Phone: the detail is a FIXED bottom sheet — it must sit fully inside the
+    // viewport with its top strictly below the canvas centre (the blocker).
+    if(detailBox.y+detailBox.height>v.viewport.height+0.5)throw Error("phone detail bottom outside viewport: "+JSON.stringify(detailBox));
+    if(detailBox.y<=v.centre.y)throw Error("phone detail sheet covers the canvas centre: "+JSON.stringify(detailBox));
+   }else{
+    // Desktop: the detail scrolls inside the rail; the RAIL must fit the
+    // viewport and the sticky remedy action must be reachable (checked below).
+    if(railBox.y+railBox.height>v.viewport.height)throw Error("desktop rail overflows viewport: "+JSON.stringify(railBox));
+   }
    const anim=await page.evaluate(()=>getComputedStyle(document.querySelector('[data-testid="alarm-detail"]')).animationName);
    view.proof.reducedMotion_animation=anim;
    if(anim!=="none")throw Error("reduced-motion context must disable the detail animation, got "+anim);
