@@ -4,10 +4,10 @@ import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
 import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals} from "./simulation.js";
-import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
+import {inspectorState,machineScreenRect,panelPlacement,transitionCamera,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
 import {fleetState,truckAt,followTarget,readFleetSettings,writeFleetSettings} from "./fleet.js";
-import {classifyViewport,dockBottomOffset,sheetMaxHeight,readDockSettings,writeDockSettings} from "./dock.js";
+import {classifyViewport,dockBottomOffset,sheetMaxHeight,nextToolMode,readDockSettings,writeDockSettings} from "./dock.js";
 import "./styles.css";
 
 const cap=(n)=>Math.max(0,Math.floor(n||0));
@@ -372,7 +372,15 @@ export default function App(){
  const notify=useCallback((text)=>{setToast(text);},[]);
  // Leaving fleet mode stops the follow camera (bounded UX-05 judgment call:
  // follow is a fleet-panel affordance; the truck focus itself is preserved).
- const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);if(id!=="fleet")setFollowId(null);},[]);
+ // CAM-05 (#341): toolbar transitions NEVER drop the selected machine and
+ // never move the camera. Inspect re-shows the retained selection; explicit
+ // deselect remains a distinct gesture (empty-ground tap / Escape / dismantle).
+ const choose=useCallback(id=>{
+  const next=nextToolMode(id,selectedRef.current);
+  setMode(next);setPreview(null);setRoadStart(null);setConfirmId(null);
+  if(id!=="fleet")setFollowId(null);
+  document.body.dataset.panelProbe=JSON.stringify({trigger:"tool:"+id,mode:next,selectedId:selectedRef.current});
+ },[]);
  const openLedger=useCallback((id=null)=>{choose("inventory");setLedgerFocus(id);},[choose]);
  const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
  const onDockPrefs=useCallback(patch=>{setDockPrefs(writeDockSettings(window.localStorage,patch));},[]);
@@ -405,8 +413,14 @@ export default function App(){
    if(body&&body.contains(document.activeElement))sheetToggleRef.current?.focus();
   }
   onDockPrefs({sheetCollapsed:!sheetCollapsed});
+  document.body.dataset.panelProbe=JSON.stringify({trigger:"sheet-toggle",mode:modeRef.current.mode,selectedId:selectedRef.current,collapsed:!sheetCollapsed});
  },[sheetCollapsed,onDockPrefs]);
- const closeSheet=useCallback(()=>{setSelectedId(null);choose("select");},[choose]);
+ // CAM-05 (#341): closing the sheet hides the panel but KEEPS the selection
+ // and the camera pose; the Inspect tool re-opens it for the same machine.
+ const closeSheet=useCallback(()=>{
+  setMode("select");setPreview(null);setRoadStart(null);setConfirmId(null);setFollowId(null);
+  document.body.dataset.panelProbe=JSON.stringify({trigger:"sheet-close",mode:"select",selectedId:selectedRef.current});
+ },[]);
  /* Non-obscuring placement: pure geometry from src/inspector.js decides which
     half hosts the sheet; the camera is only ever moved through the existing
     setView/applyCamera public API (camera invariants #307 untouched). */
@@ -431,15 +445,29 @@ export default function App(){
    isPhone,preference:uxRef.current.panelSide,bottomOffset});
   if(!isPhone)setPanelSide(s=>s===place.side?s:place.side);
   setObscured(o=>o===place.obscured?o:place.obscured);
-  if(frame&&place.obscured&&(force||uxRef.current.autoFrame)){
-   camera.current=frameSelection(camera.current,b,viewport,place.focusPixel);
-   world.setView(camera.current);world.applyCamera();
+  // CAM-05 (#341): the pure transitionCamera policy is the SINGLE decision
+  // point. frame=false (panel open/close, resize, periodic placement) is
+  // camera-neutral even when obscured; only a new selection (UX-04 autoFrame)
+  // or the explicit Focus button (force) may reframe, via setView/applyCamera.
+  const next=transitionCamera({trigger:frame?(force?"focus":"selection"):"panel",
+   camera:camera.current,building:b,viewport,focusPixel:place.focusPixel,
+   obscured:place.obscured,autoFrame:uxRef.current.autoFrame});
+  if(next!==camera.current){
+   camera.current=next;
+   world.setView(next);world.applyCamera();
    setObscured(false);
   }
  },[]);
+ // CAM-05 (#341): auto-framing belongs to a NEW selection only. Re-entering
+ // the inspector for a retained selection (panel close/reopen) must NOT move
+ // the camera; framedRef remembers the last framed machine across modes.
+ const framedRef=useRef(null);
  useEffect(()=>{
-  if(mode!=="inspect"||selectedId==null)return;
-  const t=requestAnimationFrame(()=>updatePlacement(true));
+  if(selectedId==null){framedRef.current=null;return;}
+  if(mode!=="inspect")return;
+  const isNewSelection=framedRef.current!==selectedId;
+  framedRef.current=selectedId;
+  const t=requestAnimationFrame(()=>updatePlacement(isNewSelection));
   return ()=>cancelAnimationFrame(t);
  },[selectedId,mode,ux.autoFrame,updatePlacement]);
  const onUx=useCallback(patch=>{
@@ -483,7 +511,17 @@ export default function App(){
   refresh();
  },[notify,refresh]);
  const onCancel=useCallback((id)=>{const r=cancelConstruction(gameRef.current,id);notify(r.ok?"Construction canceled — materials refunded":r.reason);if(r.ok){setSelectedId(null);setMode("select");}refresh();},[notify,refresh]);
- const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
+ // CAM-05 (#341): Home/Recenter is the ONLY refit. It restores the approved
+ // isometric overview through the same pure policy and stamps synchronously
+ // via the public setView/applyCamera path (#307 hashes untouched).
+ const resetCam=useCallback(()=>{
+  camera.current=transitionCamera({trigger:"reset",camera:camera.current,
+   home:{yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0}});
+  const world=worldRef.current;
+  if(world){world.setView(camera.current);world.applyCamera();}
+  document.body.dataset.panelProbe=JSON.stringify({trigger:"reset",mode:modeRef.current.mode,selectedId:selectedRef.current});
+  setToast("Camera reset to isometric overview");
+ },[]);
  const zoomControl=useCallback((factor)=>{
   const world=worldRef.current,cv=world?.renderer.domElement;
   document.body.dataset.lastZoomRequested=String(factor);
@@ -589,7 +627,10 @@ export default function App(){
    if(e.key==="Escape"){
     // Topmost layer first: an open dismantle confirmation closes before selection.
     if(confirmRef.current!=null){setConfirmId(null);requestAnimationFrame(()=>openBtnRef.current?.focus?.());return;}
-    choose("select");setSelectedId(null);
+    // Explicit deselect (CAM-05 keeps this distinct from panel transitions):
+    // clear the selection AND hide the sheet without touching the camera.
+    setSelectedId(null);setMode("select");setPreview(null);setRoadStart(null);setFollowId(null);
+    document.body.dataset.panelProbe=JSON.stringify({trigger:"escape",mode:"select",selectedId:null});
    }
    if(["1","2","3","4","5","6"].includes(e.key))choose(TOOLBAR[Number(e.key)-1].id);
    if(e.key==="g"||e.key==="G")setGridVisible(v=>!v);
@@ -600,7 +641,11 @@ export default function App(){
    }
   };
   window.addEventListener("keydown",onKey);
-  const observer=new ResizeObserver(()=>{viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};world.resize();updatePlacement(true);});observer.observe(sceneHost.current);
+  // CAM-05 (#341): responsive transitions are camera-neutral. world.resize()
+  // never refits; placement is recomputed WITHOUT moving the camera. If the
+  // sheet now obscures the machine, the explicit Focus button is offered.
+  const observer=new ResizeObserver(()=>{viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};world.resize();updatePlacement(false);
+   document.body.dataset.panelProbe=JSON.stringify({trigger:"resize",mode:modeRef.current.mode,selectedId:selectedRef.current});});observer.observe(sceneHost.current);
   return ()=>{alive=false;cancelAnimationFrame(raf);observer.disconnect();persist(gameRef.current);
    controller.dispose();
    window.removeEventListener("keydown",onKey);window.removeEventListener("pagehide",save);world.dispose();worldRef.current=null;
@@ -650,7 +695,7 @@ export default function App(){
    <div className="coordinate-chip"><span className="eyebrow">OPERATING SECTOR</span><strong>CINDER BASIN</strong><small>{TIERS[data.tier]?.name||"INDUSTRIAL AGE"} · {WORLD_SIZE}×{WORLD_SIZE} LAND</small></div>
    <div className="rail-controls">
     <button onClick={resetCam} title="Fit isometric world (Home)">⌖ <span>Recenter</span></button>
-    <button onClick={()=>{camera.current.yaw=(camera.current.yaw+45)%360}} title="Orbit camera right">⤾ <span>Orbit</span></button>
+    <button onClick={()=>{camera.current={...camera.current,yaw:(camera.current.yaw+45)%360};const w=worldRef.current;if(w){w.setView(camera.current);w.applyCamera();}}} title="Orbit camera right">⤾ <span>Orbit</span></button>
     <button aria-label="Zoom in" onClick={()=>zoomControl(1.55)} title="Zoom in (up to 12×)">＋ <span>Zoom in</span></button>
     <button aria-label="Zoom out" onClick={()=>zoomControl(1/1.55)} title="Zoom out (down to 0.20×)">− <span>Zoom out</span></button>
     <button onClick={()=>setShowLegend(v=>!v)} title="Controls and help">? <span>Controls</span></button>
@@ -697,15 +742,15 @@ export default function App(){
       ?<InspectorPanel g={data} selectedId={selectedId} ux={ux} onUx={onUx}
         confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
         obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
-        onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
+        onRemove={onRemove} onCancel={onCancel} onClose={closeSheet}/>
       :mode==="fleet"
       ?<FleetPanel g={data} focusId={fleetFocus} setFocusId={setFleetFocus}
         followId={followId} onFollow={onFollow} onStopFollow={onStopFollow}
         prefs={fleetPrefs} onPrefs={onFleetPrefs} onCancelFreight={onCancelFreight}
-        close={()=>choose("select")}/>
+        close={closeSheet}/>
       :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
         buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
-        notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}
+        notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={closeSheet}
         strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus}/>}
     </div>
    </div>}

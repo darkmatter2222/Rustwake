@@ -190,6 +190,30 @@ export function frameSelection(camera,b,viewport,focusPixel){
  return pinGroundToPixel(camera,{x:fp.pivot.x,z:fp.pivot.z},focusPixel,viewport);
 }
 
+/* ---- CAM-05 (#341): camera retention across panel/sheet transitions ----
+   Single pure decision point for EVERY App.jsx camera move. Panel open/close
+   ("panel") and viewport/sheet resize ("resize") are camera-NEUTRAL: the
+   intentional pan/orbit/zoom pose is returned by reference, untouched, even
+   when the sheet obscures the machine and autoFrame is on. Only a NEW
+   selection ("selection", UX-04 autoFrame), the explicit Focus button
+   ("focus"), an explicit settings change ("settings") or Home/Recenter
+   ("reset") may move the camera. "reset" is the ONLY refit: it restores the
+   approved isometric overview (yaw 45 / elevation 35.264). The guard is real,
+   not a no-op: the same obscured inputs DO reframe under "selection"/"focus"
+   (tests/cam05Retention.test.mjs pins the exact legacy delta as a negative
+   control). Camera math stays in src/camera.js; world.js applyCamera /
+   stampCamera (#307 hashes) are never rewritten. */
+export const CAMERA_TRIGGERS=Object.freeze(["selection","panel","resize","focus","reset","settings"]);
+export const HOME_CAMERA=Object.freeze({yaw:45,elevation:35.264,zoom:1,x:0,z:0});
+export function transitionCamera({trigger,camera,building=null,viewport=null,focusPixel=null,obscured=false,autoFrame=false,home=null}){
+ if(trigger==="reset")return normalizeCamera(home||HOME_CAMERA);
+ if(trigger==="focus")return frameSelection(camera,building,viewport,focusPixel);
+ if((trigger==="selection"||trigger==="settings")&&obscured&&autoFrame&&building)
+  return frameSelection(camera,building,viewport,focusPixel);
+ // "panel" | "resize" | unobscured selection: retain the exact pose.
+ return camera;
+}
+
 /* ---- Persisted inspector settings (player preference, never economy) ---- */
 export const UX_SETTINGS_KEY="rustwake:v2:ux-settings";
 export const UX_DEFAULTS=Object.freeze({autoFrame:true,panelSide:"auto"});
