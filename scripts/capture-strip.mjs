@@ -288,6 +288,18 @@ try{
    view.proof.transit={ironJobs,fuelJobs,reservedBadge:reservedTxt,depot:ironDepot,chipState:ironState,
     ledger:{depot:depotDetail,machines:machinesDetail,reserved:reservedDetail,total:totalDetail},conservation:true};
    await shot(page,"transit");
+   // #384 pickup transition: once the truck actually loads (freightOnboard
+   // stamp > 0), the SAME units move reserved->onboard. The strip must count
+   // them exactly once — badge and ledger reserved are unchanged by pickup.
+   await page.waitForFunction(()=>Number(document.querySelector(".world-canvas")?.dataset.freightOnboard||0)>0,null,{timeout:30000,polling:100});
+   const onboardStamp=await page.locator(".world-canvas").evaluate(c=>Number(c.dataset.freightOnboard));
+   const badgeAfter=Number((await page.locator('.resources-strip button[data-resource="iron"] .resource__reserved').innerText()).replace(/[^0-9.-]/g,""));
+   const reservedAfter=await detailNum(page,"ledger-reserved");
+   const totalAfter=await detailNum(page,"ledger-total");
+   if(badgeAfter!==ironJobs)throw Error(`Pickup double-counted or lost iron: badge ${badgeAfter} vs ${ironJobs}`);
+   if(reservedAfter!==ironJobs)throw Error(`Ledger reserved changed at pickup: ${reservedAfter} vs ${ironJobs}`);
+   if(totalAfter!==totalDetail)throw Error(`Yard total changed at pickup: ${totalAfter} vs ${totalDetail}`);
+   view.proof.transitPickup={freightOnboardStamp:onboardStamp,badgeAfter,reservedAfter,totalAfter,conservedThroughPickup:true};
    await ctx.close();
   }
 

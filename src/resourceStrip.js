@@ -8,18 +8,21 @@
  *
  *  - depot     = g.bank[id]                       (the shared material bank)
  *  - machines  = sum of building inventory stock  (local cargo, not yet banked)
- *  - transit   = sum of vehicles[].job amounts    (assignJob take()s material
- *                from the source bag at dispatch, so job cargo is RESERVED
- *                physical freight — never counted twice)
+ *  - transit   = per truck: onboard v.cargo if picked up, else the reserved
+ *                v.job amount (#384 LOG-04 reserve→pickup→arrive ledgers).
+ *                assignJob take()s material from the source bag at dispatch,
+ *                so both are physical freight — counted ONCE per truck,
+ *                never job+cargo together (they are the same units)
  *  - committed = blueprint cost of assembling buildings (buildAt already
  *                spent it; cancelConstruction refunds it in full — shown as a
  *                commitment, NEVER added to the physical total)
  *  - total     = depot + machines + transit       (physical conservation)
  *
- * Capacity: the current simulation exposes NO storage cap (g.bank is
- * uncapped). The read model reports capacity:null / capacityExposed:false and
- * the UI says so honestly instead of fabricating a limit (GAPS.md UX-01 row;
- * freight-ledger refactor #384 is in flight under a separate lease).
+ * Capacity: the simulation exposes NO storage cap (g.bank is uncapped), even
+ * after the #384 LOG-04 freight ledgers merged (reserve/pickup/arrive/return
+ * are auditable in g.freightLedger, but no capacity ledger exists). The read
+ * model reports capacity:null / capacityExposed:false and the UI says so
+ * honestly instead of fabricating a limit (GAPS.md UX-01 row).
  *
  * Shortages mirror inspector.structureStatus precedence exactly: assembling,
  * powerless and no-frontage machines are NOT counted as starved; only
@@ -84,10 +87,13 @@ export function resourceStripState(g){
   let transit=0,inbound=0;
   for(const v of vehicles){
    const j=v.job;
-   if(j&&j.resource===id){
-    const n=Math.max(0,Number(j.amount)||0);
+   // #384: onboard cargo is authoritative once picked up; before pickup the
+   // reservation lives on the job. Both hold the SAME units — never sum both.
+   const load=v.cargo&&v.cargo.amount>0?v.cargo:(j&&j.amount>0?{resource:j.resource,amount:j.amount}:null);
+   if(load&&load.resource===id){
+    const n=Math.max(0,Number(load.amount)||0);
     transit+=n;
-    if(starvedIds.has(j.destId))inbound+=n;
+    if(j&&starvedIds.has(j.destId))inbound+=n;
    }
   }
   const need=starvedFor.reduce((a,s)=>a+(s.missing.find(m=>m.id===id)?.need||0),0);

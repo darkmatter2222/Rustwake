@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {createGame,buildAt,removeBuilding,cancelConstruction,advanceGame,sell,snapshot,powerStatus,checkSite} from "../src/simulation.js";
+import {createGame,buildAt,removeBuilding,cancelConstruction,advanceGame,sell,snapshot,powerStatus,checkSite,cancelFreight} from "../src/simulation.js";
 import {BLUEPRINTS,RESOURCES,INITIAL_BANK} from "../src/content.js";
 import {resourceStripState,LOCKED_RESOURCES,STRIP_SETTINGS_KEY,STRIP_DEFAULTS,readStripSettings,writeStripSettings} from "../src/resourceStrip.js";
 import {readUxSettings,writeUxSettings,UX_SETTINGS_KEY} from "../src/inspector.js";
@@ -22,7 +22,11 @@ const row=(s,id)=>{const r=s.rows.find(r=>r.id===id);assert.ok(r,"missing row "+
 const authority=(g,id)=>{
  const depot=Math.max(0,Number(g.bank[id]||0));
  const machines=g.buildings.reduce((a,b)=>a+Math.max(0,Number(b.inventory?.[id]||0)),0);
- const transit=g.vehicles.reduce((a,v)=>a+(v.job&&v.job.resource===id?Math.max(0,Number(v.job.amount)||0):0),0);
+ // #384: onboard cargo is authoritative once picked up; else the reservation.
+ const transit=g.vehicles.reduce((a,v)=>{
+  const load=v.cargo&&v.cargo.amount>0?v.cargo:(v.job&&v.job.amount>0?{resource:v.job.resource,amount:v.job.amount}:null);
+  return a+(load&&load.resource===id?Math.max(0,Number(load.amount)||0):0);
+ },0);
  return {depot,machines,transit,total:depot+machines+transit};
 };
 const mirror=(s,g)=>{for(const id of RESOURCES.map(r=>r.id)){
@@ -101,6 +105,47 @@ test("reserved equals live truck jobs after real dispatch; depot take is exact",
  assert.equal(r.reserved,g.vehicles.reduce((a,v)=>a+(v.job?.resource==="iron"?v.job.amount:0),0));
  assert.equal(r.depot,ironBefore-r.reserved); // take() at assignment, no ghost stock
  assert.equal(r.total,ironBefore+r.machines); // conservation: depot+transit constant
+});
+test("onboard cargo (#384 pickup) is counted once, never job+cargo together",()=>{
+ const g=freshWith(g=>{const f=g.buildings.find(b=>b.type==="furnace");f.inventory={};});
+ let onboard=false;
+ for(let i=0;i<600&&!onboard;i++){advanceGame(g,0.25);onboard=g.vehicles.some(v=>v.cargo&&v.cargo.amount>0);}
+ assert.ok(onboard,"sim never picked up cargo");
+ const v=g.vehicles.find(v=>v.cargo&&v.cargo.amount>0);
+ assert.equal(v.job.phase,"toDest");
+ assert.equal(v.cargo.amount,v.job.amount); // same units in both ledgers
+ const s=resourceStripState(g);
+ mirror(s,g);
+ const r=row(s,v.cargo.resource);
+ const solo=g.vehicles.reduce((a,t)=>{
+  const load=t.cargo&&t.cargo.amount>0?t.cargo:(t.job&&t.job.amount>0?{resource:t.job.resource,amount:t.job.amount}:null);
+  return a+(load&&load.resource===v.cargo.resource?load.amount:0);
+ },0);
+ assert.equal(r.reserved,solo);
+ assert.ok(r.reserved>=v.cargo.amount);
+ // Double counting job+cargo would inflate the yard total by the cargo amount.
+ assert.equal(r.total,r.depot+r.machines+r.reserved);
+});
+test("cancelFreight (#384) returns reserved/onboard units to source exactly once",()=>{
+ const g=freshWith(g=>{const f=g.buildings.find(b=>b.type==="furnace");f.inventory={};});
+ for(let i=0;i<240&&!g.vehicles.some(v=>v.job);i++)advanceGame(g,0.5);
+ const v=g.vehicles.find(v=>v.job);
+ assert.ok(v,"sim never dispatched");
+ const id=v.job.resource,amt=v.job.amount,sourceId=v.job.sourceId;
+ const bag=()=>{const b=g.buildings.find(b=>b.id===sourceId);return b&&b.type!=="depot"?(b.inventory?.[id]||0):(g.bank[id]||0);};
+ const sourceBefore=bag();
+ const before=resourceStripState(g);
+ const r=cancelFreight(g,v.id);
+ assert.equal(r.ok,true);
+ assert.equal(r.amount,amt);
+ assert.equal(bag(),sourceBefore+amt); // exact single refund to the source bag
+ const after=resourceStripState(g);
+ mirror(after,g);
+ assert.equal(row(after,id).reserved,row(before,id).reserved-amt);
+ assert.equal(cancelFreight(g,v.id).code,"IDLE"); // second cancel is a no-op
+ const again=resourceStripState(g);
+ assert.equal(row(again,id).reserved,row(after,id).reserved); // no double refund
+ assert.equal(bag(),sourceBefore+amt);
 });
 test("committed assembly cost mirrors buildAt spend and cancelConstruction full refund",()=>{
  const g=createGame();
