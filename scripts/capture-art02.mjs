@@ -129,7 +129,7 @@ const canvasRect = page => page.locator(".world-canvas").evaluate(c => {
 const shot = (page, name, clip) => page.screenshot({path: resolve(OUT, name), fullPage: false, animations: "disabled", ...(clip ? {clip} : {})});
 // Real-clock wait inside the browser (NOT a Node setTimeout sleep).
 const waitForClock = (page, ms) => page.evaluate(() => performance.now())
-  .then(t0 => page.waitForFunction(t => performance.now() - t > ms, t0, {timeout: ms + 15000, polling: 50}));
+  .then(t0 => page.waitForFunction(a => performance.now() - a.t0 > a.ms, {t0, ms}, {timeout: ms + 15000, polling: 50}));
 const angDiff = (a, b) => Math.abs(((a - b + 540) % 360) - 180);
 
 async function orbitTo(page, targetYaw) {
@@ -354,17 +354,20 @@ try {
     const landing = await pose(page);
     await shot(page, v.name + "-landing.png");
 
-    // Reduced-motion negative: every ART-02 channel parked at 0.000, constant
-    // over 2s of the browser's real clock; crane stays parked too (ART-06).
+    // Reduced-motion negative: every ART-02 channel parked at 0.000 (or "none"
+    // = that machine not yet in the yard), constant over 2s of the browser's
+    // real clock; crane stays parked too (ART-06). Re-asserted with ALL three
+    // channels live ("0.000") after the crusher is really placed below.
     const parkedA = await pose(page);
     await waitForClock(page, 2000);
     const parkedB = await pose(page);
     const parkedConstant = ["art02Arm", "art02Roller", "art02Screen", "art02Reduced", "cranePhase"]
       .every(k => parkedA[k] === parkedB[k]);
-    if (parkedA.art02Reduced !== "1" || parkedA.art02Arm !== "0.000" || parkedA.art02Roller !== "0.000" ||
-      parkedA.art02Screen !== "0.000" || !parkedConstant)
+    const parkedOrAbsent = v => v === "0.000" || v === "none";
+    if (parkedA.art02Reduced !== "1" || parkedA.art02Arm !== "0.000" || !parkedOrAbsent(parkedA.art02Roller) ||
+      !parkedOrAbsent(parkedA.art02Screen) || !parkedConstant)
       throw Error("REDUCED_MOTION_NOT_PARKED at " + v.name + ": " + JSON.stringify({parkedA, parkedB}));
-    report.negatives.reducedMotion.push({label: v.name, parkedA, parkedB, parkedConstant});
+    report.negatives.reducedMotion.push({label: v.name, stage: "landing", parkedA, parkedB, parkedConstant});
 
     // Synchronous stamp==applied zoom via the visible Zoom in control (#307).
     const beforeButton = await pose(page);
@@ -379,6 +382,15 @@ try {
     // Real UI placement of the crusher + full assembly observation.
     const placed = await placeCrusher(page, v.touch, v.name);
     await shot(page, v.name + "-crusher-built.png");
+    // With the crusher live, all three channels must stamp exact parked 0.000
+    // and stay constant over another 2s of real browser clock.
+    const parkedC = await pose(page);
+    await waitForClock(page, 2000);
+    const parkedD = await pose(page);
+    const allParkedConstant = ["art02Arm", "art02Roller", "art02Screen"].every(k => parkedC[k] === parkedD[k]);
+    if (parkedC.art02Arm !== "0.000" || parkedC.art02Roller !== "0.000" || parkedC.art02Screen !== "0.000" || !allParkedConstant)
+      throw Error("REDUCED_MOTION_NOT_PARKED_WITH_CRUSHER at " + v.name + ": " + JSON.stringify({parkedC, parkedD}));
+    report.negatives.reducedMotion.push({label: v.name, stage: "crusher-live", parkedC, parkedD, allParkedConstant});
 
     // Invalid-site negative: hover the occupied depot cell (red ghost), then tap.
     await page.locator('[data-tool="build"]').click();
