@@ -1,0 +1,281 @@
+{
+  "version": 2,
+  "seed": 4073,
+  "createdAt": 0,
+  "lastSavedAt": 0,
+  "elapsed": 17,
+  "nextId": 16,
+  "bank": {
+    "credits": 844,
+    "scrap": 172,
+    "iron": 18,
+    "copper": 0,
+    "stone": 189,
+    "fuel": 0,
+    "water": 0,
+    "steel": 0,
+    "alloy": 0,
+    "gears": 0,
+    "circuits": 0,
+    "data": 0,
+    "relics": 0,
+    "influence": 0,
+    "shards": 0,
+    "charters": 0,
+    "renown": 0
+  },
+  "buildings": [
+    {
+      "id": 1,
+      "type": "salvager",
+      "x": 7,
+      "z": 9,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {
+        "scrap": 36,
+        "iron": 12,
+        "copper": 4
+      },
+      "timer": 2.5999999999999996
+    },
+    {
+      "id": 2,
+      "type": "depot",
+      "x": 13,
+      "z": 9,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 3,
+      "type": "generator",
+      "x": 7,
+      "z": 16,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 4,
+      "type": "furnace",
+      "x": 16,
+      "z": 13,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {
+        "iron": 0,
+        "fuel": 3,
+        "steel": 8
+      },
+      "timer": 0.5
+    },
+    {
+      "id": 5,
+      "type": "crane",
+      "x": 15,
+      "z": 5,
+      "rot": 0,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 6,
+      "type": "market",
+      "x": 15,
+      "z": 18,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    }
+  ],
+  "roads": [
+    "5,8",
+    "6,8",
+    "7,8",
+    "8,8",
+    "9,8",
+    "10,8",
+    "11,8",
+    "12,8",
+    "13,8",
+    "14,8",
+    "15,8",
+    "16,8",
+    "17,8",
+    "18,8",
+    "19,8",
+    "5,12",
+    "6,12",
+    "7,12",
+    "8,12",
+    "9,12",
+    "10,12",
+    "11,12",
+    "12,12",
+    "13,12",
+    "14,12",
+    "15,12",
+    "16,12",
+    "17,12",
+    "18,12",
+    "19,12",
+    "5,17",
+    "6,17",
+    "7,17",
+    "8,17",
+    "9,17",
+    "10,17",
+    "11,17",
+    "12,17",
+    "13,17",
+    "14,17",
+    "15,17",
+    "16,17",
+    "17,17",
+    "18,17",
+    "19,17",
+    "11,4",
+    "11,5",
+    "11,6",
+    "11,7",
+    "11,9",
+    "11,10",
+    "11,11",
+    "11,13",
+    "11,14",
+    "11,15",
+    "11,16",
+    "11,18",
+    "11,19",
+    "11,20",
+    "5,9",
+    "5,10",
+    "5,11",
+    "5,13",
+    "5,14",
+    "5,15",
+    "5,16",
+    "19,9",
+    "19,10",
+    "19,11",
+    "19,13",
+    "19,14",
+    "19,15",
+    "19,16"
+  ],
+  "vehicles": [],
+  "research": [],
+  "discovered": [
+    "cinders"
+  ],
+  "tier": 1,
+  "world": "Cinder Basin",
+  "sector": 1,
+  "ledger": [
+    {
+      "id": 11,
+      "time": 0,
+      "kind": "build",
+      "type": "crusher",
+      "buildingId": 10,
+      "x": 11,
+      "z": 1,
+      "rot": 0,
+      "cost": {
+        "credits": 260,
+        "scrap": 46,
+        "stone": 28
+      },
+      "refund": {},
+      "commandId": "fixture-crusher-build"
+    },
+    {
+      "id": 14,
+      "time": 17,
+      "kind": "salvage",
+      "type": "crusher",
+      "buildingId": 10,
+      "x": 11,
+      "z": 1,
+      "rot": 0,
+      "cost": {},
+      "refund": {
+        "credits": 104,
+        "scrap": 18,
+        "stone": 17,
+        "iron": 18
+      },
+      "commandId": "fixture-dismantle-1"
+    }
+  ],
+  "freightLedger": [],
+  "commands": [
+    {
+      "time": 0,
+      "id": "fixture-crusher-build",
+      "ok": true,
+      "code": "OK",
+      "buildingId": 10,
+      "type": "crusher",
+      "x": 11,
+      "z": 1,
+      "rot": 0
+    },
+    {
+      "time": 17,
+      "id": "fixture-dismantle-1",
+      "kind": "dismantle",
+      "ok": true,
+      "code": "OK",
+      "buildingId": 10,
+      "refund": {
+        "credits": 104,
+        "scrap": 18,
+        "stone": 17,
+        "iron": 18
+      }
+    }
+  ],
+  "view": {
+    "yaw": 45,
+    "elevation": 35.264,
+    "zoom": 1
+  },
+  "stats": {
+    "produced": 84,
+    "delivered": 0,
+    "shipments": 0,
+    "sold": 0,
+    "builds": 1
+  },
+  "log": [
+    {
+      "id": 15,
+      "time": 17,
+      "message": "Crusher salvaged. Recoverable inventory returned."
+    },
+    {
+      "id": 13,
+      "time": 13,
+      "message": "Industrial milestone: INDUSTRIAL AGE — new blueprints unlocked."
+    },
+    {
+      "id": 12,
+      "time": 0,
+      "message": "Crusher deployed at 11,1 — assembling."
+    },
+    {
+      "id": 0,
+      "time": 0,
+      "message": "Cinder Yard established. Roads and freight trucks are operational."
+    }
+  ],
+  "notices": []
+}

@@ -1,0 +1,98 @@
+{
+  "label": "cleanmain",
+  "worktree": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-377c-main",
+  "port": 4187,
+  "checkedAt": "2026-11-17T15:12:20.160Z",
+  "starter": {
+    "id": 1,
+    "type": "salvager",
+    "x": 7,
+    "z": 9
+  },
+  "camera": {
+    "yaw": 45,
+    "elevation": 35.264,
+    "zoom": 1,
+    "x": 0,
+    "z": 0
+  },
+  "candidates": [
+    {
+      "h": 1.2,
+      "px": 143,
+      "py": 306,
+      "top": "DIV.rail-controls",
+      "canvas": false
+    },
+    {
+      "h": 0,
+      "px": 143,
+      "py": 316,
+      "top": "DIV.rail-controls",
+      "canvas": false
+    },
+    {
+      "h": 3,
+      "px": 143,
+      "py": 291,
+      "top": "DIV.rail-controls",
+      "canvas": false
+    },
+    {
+      "h": 5,
+      "px": 143,
+      "py": 273,
+      "top": "BUTTON.",
+      "canvas": false
+    },
+    {
+      "h": 7,
+      "px": 143,
+      "py": 256,
+      "top": "BUTTON.",
+      "canvas": false
+    }
+  ],
+  "leftRailChildren": [
+    {
+      "cls": "coordinate-chip",
+      "top": 165,
+      "bottom": 235,
+      "left": 10,
+      "right": 152
+    },
+    {
+      "cls": "rail-controls",
+      "top": 244,
+      "bottom": 337,
+      "left": 10,
+      "right": 230
+    },
+    {
+      "cls": "alarm-rail",
+      "top": 112,
+      "bottom": 156,
+      "left": 10,
+      "right": 307.296875
+    }
+  ],
+  "pan": {
+    "from": {
+      "x": 0,
+      "z": 0
+    },
+    "to": {
+      "x": -17.330174964311567,
+      "z": -1.2443334965607296
+    },
+    "moved": true
+  },
+  "afterPan": {
+    "px": 263,
+    "py": 386,
+    "top": "CANVAS.world-canvas",
+    "canvas": true,
+    "selected": true,
+    "dismantleBlocked": true
+  }
+}
