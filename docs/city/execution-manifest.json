@@ -1077,8 +1077,10 @@
       "phase": "P1",
       "priority": "P0",
       "role": "developer",
-      "hard_blockers": [],
-      "external_hold": null,
+      "hard_blockers": [
+        370
+      ],
+      "external_hold": "Exclusive src/simulation.js writer lease; start after #370 occupancy result is reviewed and merged",
       "dispatchable": true,
       "title": "[V2 NEXT][LOG-04] Separate freight reservation, pickup, onboard cargo and arrival state"
     },
@@ -3146,5 +3148,27 @@
       "title": "[V2 CITY][SIM-14] Build test-only replay/debug bridge without leaking private state"
     }
   ],
-  "phase_unlock_policy": "G1 first-playable (including real camera, build/road/freight, visual phone evidence) remains the gating sponsor milestone before P2/P3 city systems, unless sponsor explicitly changes sequence."
+  "phase_unlock_policy": "G1 first-playable (including real camera, build/road/freight, visual phone evidence) remains the gating sponsor milestone before P2/P3 city systems, unless sponsor explicitly changes sequence.",
+  "dispatch_first_wave": [
+    {
+      "issue": 370,
+      "role": "developer",
+      "reason": "Foundation occupancy/collision correctness, distinct from active camera/design worktrees"
+    },
+    {
+      "issue": 325,
+      "role": "coordinator",
+      "reason": "Native Project migration after project-scoped gh authentication"
+    },
+    {
+      "issue": 328,
+      "role": "coordinator",
+      "reason": "Host/agent session reconciliation"
+    },
+    {
+      "issue": 332,
+      "role": "release-engineer",
+      "reason": "External served-SHA validation, requires authorized access"
+    }
+  ]
 }
