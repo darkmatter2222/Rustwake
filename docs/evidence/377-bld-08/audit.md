@@ -1,0 +1,34 @@
+# BLD-08 (#377) — clause audit at main c5ad8dec972cc63bf59378294f7f50c133adc373
+
+Audit-first per the brief: most of #377 already shipped. This table is the
+authoritative clause → status → evidence map; only the genuine gaps are
+implemented on this branch. File:line references are against unmodified main
+`c5ad8dec` unless noted.
+
+| # | Issue clause | Status | Evidence at main c5ad8dec |
+|---|---|---|---|
+| 1 | Protected starter machines | ALREADY SATISFIED | `src/simulation.js:197` (`cancelConstruction`) and `:211` (`removeBuilding`) return PROTECTED for `b.id<=6`; mirrored by `src/inspector.js:53` `dismantleGate`. Covered by `tests/inspector.test.mjs:173-189` (gate mirror) and `:190-203` (cancel PROTECTED/COMPLETE). |
+| 2 | Salvage value = floor(40%) of build materials | ALREADY SATISFIED | `src/simulation.js:216` floors 40% of durable `b.paid` provenance (`paidOf`, #373); preview `src/inspector.js:38` `dismantleRefund`. Covered by `tests/inspector.test.mjs:146-172` (preview == authority for every blueprint/cargo mix) and `tests/constructionAtomic.test.mjs:221-256` (paid provenance durable across ledger eviction + reload; salvager loss 108/17/8 audited at `:290-341`). |
+| 3 | Stored cargo returned at 100% | ALREADY SATISFIED (complete machines) | `src/simulation.js:217` deposits every `b.inventory` entry; `tests/inspector.test.mjs:146-161` asserts per-resource bank conservation. GAP: amounts are not sanitized (negative/NaN/null inventory mints, destroys or throws mid-refund — see gap A) and `cancelConstruction` silently destroys any inventory on an assembling machine (gap C). |
+| 4 | User sees exact refunded units before confirmation | ALREADY SATISFIED | `src/App.jsx:223-238` two-step `role="alertdialog"` `dismantle-confirm-dialog` (UX-04 #362) lists exact refunded units from `inspectorState(...).dismantle.entries` plus recovery note and blocked-reason line; `tests/inspector.test.mjs:146-161` proves the preview equals the authoritative refund. No UI change needed or made (App.jsx is outside this lease). |
+| 5 | Active job cancellation semantics | GENUINE GAP (B) | `src/simulation.js:212` hard-blocks dismantle while any `v.job.sourceId/destId` references the building (RESERVED mirror `src/inspector.js:51`), but the semantics are undocumented and unproven, and `cancelConstruction` has NO reservation gate at all. Decision (normative text lands in `docs/engineering/ECONOMY.md` in this PR): keep the hard block (option a) — real cancellation already exists per-truck via `cancelFreight` (#384, `src/simulation.js:345`) which returns reserved/onboard units to source exactly once. Invariant: while a live job references B, B is immutable to dismantle/cancel; the player cancels freight first (cargo returns once), then dismantles (remaining stock returns once). Grand totals conserved minus the audited 60% build-material salvage loss. |
+| 6 | No double refund or lost cargo on repeated dismantle/reload | GENUINE GAP (A) | `removeBuilding`/`cancelConstruction` take no command id, have no replay registry entry and no atomic rollback (contrast `buildAt`, #373 `src/simulation.js:140-189`). Concrete defects reachable at main: (i) `b.inventory===null` (legacy/tampered v2 save — `readGame` does not normalize inventory) throws at `Object.entries(b.inventory)` AFTER the 40% build-cost refund was deposited and BEFORE the splice → refund paid, building still present → retry pays again; (ii) negative inventory amounts subtract from the bank, NaN poisons it; (iii) a mid-refund throw leaves a half-applied salvage. Fix: optional `commandId` on both functions, shared 128-entry `g.commands` registry with `kind:"dismantle"/"cancel"` tags, exact-refund replay (zero further deposit, no ledger/log row), full snapshot rollback via the existing `__setConstructionFault` seam, sanitized inventory on load and at refund time. |
+| 7 | Local stock recovery for processed outputs / partial assembly | GENUINE GAP (C) | No test proves the refund split for a machine whose inventory holds PROCESSED OUTPUTS rather than cost materials, nor for a partially-assembled machine. `cancelConstruction` (`src/simulation.js:193-206`) refunds only `paid` and silently destroys `b.inventory` (normally empty while assembling — `deliveryCandidates` skips `remaining>0` — but legacy/tampered saves can carry cargo). Fix: cancel returns paid + 100% sanitized cargo (conservation: no unit destroyed); exact-unit tests for crusher 3-cycle processed outputs and partial-assembly cargo. |
+| 8 | Failed/canceled transaction case | GENUINE GAP (D) | `tests/constructionAtomic.test.mjs` covers build faults and a build→cancel case, but there is no failed DISMANTLE transaction (injected fault rollback) and no dismantle-specific canceled-command replay. Added. |
+| 9 | Conserved source/stock/refund ledger | GENUINE GAP (D) | `freightTotals`/`committedTotals` exist (#384/#373) but no dismantle-sequence grand-ledger assertion (build→process→dismantle→rebuild→cancel with exact audited loss and ledger-row == bank-delta equality). Added. |
+| 10 | Exact 3D footprint/pivot | GENUINE GAP (D) | `tests/constructionAtomic.test.mjs:343-378` pins crane footprint/pivot at COMMIT; nothing asserts dismantle FREES exactly those cells (occupancy release, road reuse, rebuild at same site/rot). Added for all four rotations of the 2×3 crane. |
+| 11 | Saved-state fixture | GENUINE GAP (D) | `tests/fixtures/save-v2-atomic.json` covers construction only. Added `tests/fixtures/save-v2-dismantle.json` (post-dismantle state with recorded dismantle command + salvage ledger row), generated through the public API by `scripts/make-dismantle-fixture.mjs`, replayed in tests. |
+| 12 | Real in-game capture, docs + tests in same PR | IN PROGRESS ON THIS BRANCH | Planned: `scripts/capture-dismantle.mjs` production-build desktop+phone capture; ECONOMY.md / INTERACTION_PATTERNS.md / QUALITY_GATES.md / GAPS.md updated in this PR. Local captures are PASS_NUMERIC_ONLY; G1 visual acceptance is sponsor-reserved (#276). |
+
+## Cross-lease follow-ups (NOT edited here)
+
+- `src/inspector.js` `cancelPreview` (line 59-64) previews cancel refund from
+  blueprint `def.cost` and omits cargo. Numerically identical to the authority
+  for every legitimate save today (assembling machines hold empty inventory and
+  `paidOf` falls back to `def.cost`), but it must adopt `b.paid` + cargo when
+  prices/upgrades vary. This extends the mirror-drift debt already registered
+  in the GAPS.md BLD-04 row; owned by the active App.jsx/UI lease (PR #550).
+- `src/App.jsx` `onRemove`/`onCancel` (lines 501-513) do not issue command ids,
+  so UI taps are not idempotent end-to-end (plain repeat dismantle is
+  MISSING-safe with zero payout). Wiring follow-up owned by the App.jsx/UI
+  lease, same pattern as the BLD-04 command-id wiring debt.
