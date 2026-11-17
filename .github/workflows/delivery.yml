@@ -146,3 +146,52 @@ jobs:
           SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
         run: |
           printf '### Rustwake live release proof (OPS-08)\nSource: `%s`\n\nPublic manifest + served JS/CSS checksum verification: **%s**. See the rustwake-live-verification artifact for the full receipt (rollback target, main CI run, delivery run).\n' "$SOURCE_SHA" "$RESULT" >> "$GITHUB_STEP_SUMMARY"
+  # OPS-09 (#333): exactly ONE hosted-browser smoke per deployed SHA. Runs on an
+  # UNPRIVILEGED GitHub-hosted runner (repository code never executes on the
+  # privileged deploy runner), serialized AFTER the trusted deploy and the
+  # OPS-08 numeric live proof. One Chromium instance, sequential fresh desktop
+  # (1440x900) and phone-sized (390x844) contexts against the LIVE public site.
+  # The workflow-level concurrency group (cancel-in-progress: false) plus the
+  # per-SHA job group below guarantee one browser instance per SHA. A FAILED
+  # smoke fails this job and the whole delivery run (no continue-on-error):
+  # the release stays UNVERIFIED even when the deployment receipt succeeded.
+  # The release receipt must cite hosted-browser PASS (artifact
+  # rustwake-hosted-browser-<sha>) to retire the PASS_NUMERIC_ONLY caveat.
+  hosted-browser:
+    needs: [package, deploy, verify-live]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: rustwake-hosted-browser-${{ needs.package.outputs.source_sha }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.package.outputs.source_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install one Chromium binary for the hosted live smoke
+        run: npx playwright-core install --with-deps chromium
+      - name: One serialized hosted Chromium smoke against the live deployed site
+        env:
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+        run: node scripts/capture-live.mjs "$SOURCE_SHA"
+      - name: Publish hosted-browser screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rustwake-hosted-browser-${{ needs.package.outputs.source_sha }}
+          path: artifacts/live-smoke/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Explain hosted-browser outcome
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+        run: |
+          printf '### Rustwake hosted-browser smoke (OPS-09)\nSource: `%s`\n\nOne GitHub-hosted Chromium, sequential desktop + emulated phone contexts against the live site: **%s**. A failed smoke leaves this release UNVERIFIED even if the deploy receipt succeeded; the release comment must cite hosted-browser PASS from the rustwake-hosted-browser artifact.\n' "$SOURCE_SHA" "$RESULT" >> "$GITHUB_STEP_SUMMARY"
