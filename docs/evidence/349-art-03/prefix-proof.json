@@ -1,0 +1,51 @@
+{
+  "issue": 349,
+  "method": "pre-fix RAW-blob injection: git show <mainSha>:src/world.js and :src/voxelSchema.js written byte-exact (LF as stored); src/art03.js removed (absent on main); branch test files kept; branch src files restored byte-exact afterwards",
+  "mainSha": "c5ad8dec972cc63bf59378294f7f50c133adc373",
+  "branchHeadAtProof": "baa065af229e7036e9057784ba1e495b17a05199",
+  "supersedes": "prior prefix-proof.json at pre-rebase head be11351105741e8cf5e0d680154a38308ee57921 whose preFixSha256 block erroneously equalled restoredSha256 (post-fix worktree hashes); its fail results were genuine but the pre-fix state was not cryptographically pinned",
+  "preFixSha256": {
+    "src/world.js": "faa519d7a8736a3f3f32608a5759b4d93ffcb5e1c9f3eb87ad450a20bdb7f530",
+    "src/voxelSchema.js": "f75fac21f7f925f8ee97f45aebb8ebd355362a959b0c4f9bd0e13553b01be107",
+    "src/art03.js": null
+  },
+  "preFixGitBlob": {
+    "src/world.js": "122c76dbf54ea7c3ebe6bce30fb131e2b4a1da6f",
+    "src/voxelSchema.js": "91fc91f69cd3b76b08af068acef14b2e445194c2",
+    "src/art03.js": null
+  },
+  "results": [
+    {
+      "file": "tests/art03Models.test.mjs",
+      "tests": 1,
+      "pass": 0,
+      "fail": 1,
+      "exit": 1,
+      "firstError": "# Error [ERR_MODULE_NOT_FOUND]: Cannot find module 'C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-349\\\\src\\\\art03.js' imported from C:\\\\Users\\\\ryans\\\\AppData\\\\Local\\\\Temp\\\\rw-qwen\\\\dev-349\\\\tests\\\\art03Models.test.mjs"
+    },
+    {
+      "file": "tests/voxelSchema.test.mjs",
+      "tests": 14,
+      "pass": 13,
+      "fail": 1,
+      "exit": 1,
+      "firstError": "not ok 8 - named pivots match schema offsets, axes and motion; animated reach is bounded"
+    },
+    {
+      "file": "tests/salvageModels.test.mjs",
+      "tests": 11,
+      "pass": 10,
+      "fail": 1,
+      "exit": 1,
+      "firstError": "not ok 8 - ART-03: refinery is a distinct distillation plant (columns/tanks/flare), not the old shared box"
+    }
+  ],
+  "restoredSha256": {
+    "src/world.js": "7eb1846b111cd21086b4519a142b989eae16fd6727af7cce6a826970a93f0238",
+    "src/voxelSchema.js": "41e5f5eee1de4a15b613e16163ff81d7ccef01948643d929a33cd51783e07d9e",
+    "src/art03.js": "e5151b33e295966f9bd4427b7159f8ae3f43a6a2d5be8197c28ce3832c3541a9"
+  },
+  "restoredSha256Verified": true,
+  "worktreeMatchesHeadAfterRestore": true,
+  "completed": "2026-11-17T13:36:01.533Z"
+}
