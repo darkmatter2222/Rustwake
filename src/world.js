@@ -1,9 +1,9 @@
 import * as THREE from "three";
 import {CAMERA_LIMITS,normalizeCamera} from "./camera.js";
-import {CELL,WORLD_SIZE,BLUEPRINTS,RESOURCE_BY_ID,STARTER_BUILDINGS} from "./content.js";
+import {CELL,WORLD_SIZE,BLUEPRINTS,RESOURCE_BY_ID,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
 import {cellOf,key} from "./simulation.js";
-import {worldFootprint} from "./gridOccupancy.js";
-import {SCHEMA_ID,machineDescriptor,cellCenter,rigLodTier,RIGS} from "./voxelSchema.js";
+import {worldFootprint,terrainFor,surveyed,inside,footprintCells,bayCells} from "./gridOccupancy.js";
+import {SCHEMA_ID,machineDescriptor,cellCenter,rigLodTier,RIGS,SCENERY,SCENERY_AUTHORITY,MATERIALS} from "./voxelSchema.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -445,7 +445,7 @@ export function applyForkliftPose(g,lift){
 // production timer ACTUALLY advanced (real active cycle); hover bob/rotor spin
 // are decorative flight on the sim clock — explicitly NOT work, production or
 // freight. Parked (rotors still) when no cycle is active or reduced motion.
-export const DRONE_PAD=Object.freeze({x:-30,y:5.9,z:-23}); // service-building roof park spot
+export const DRONE_PAD=Object.freeze({x:-47.5,y:5.9,z:-23}); // exterior service-shed roof park spot (ART-07: sheds moved off buildable ground)
 export function createDrone(){
  const {g,detail,greeble}=rigShell("crew:drone",[1,.3,1],[0,.15,0],mats.body);
  box(detail,0,.12,0,.34,.16,.34,"body");
@@ -510,6 +510,316 @@ export function createWorker(){
  return g;
 }
 function seeded(seed){let s=seed>>>0;return ()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
+// ---------------------------------------------------------------------------
+// ART-07 (#353): inhabited salvage-yard terrain. Pure deterministic plan +
+// THREE builder + occupancy-safe visibility. Authority contract (voxelSchema
+// SCENERY): decorative ONLY — no pick volumes, no build-site occupancy, no
+// route blocking. Placement rules proven in tests/yardScenery.test.mjs:
+//  - volumetric interior props stand only on TERRAIN-rejected rock cells;
+//  - exterior landmarks sit beyond the parcel (machines BOUNDS, roads refuse);
+//  - flush decals (top <= 0.06, below road top 0.185) tint non-road ground;
+//  - roadLine can pave rock/ring cells, so sceneryConflicts() hides any prop
+//    or rubble chunk whose covered cells become road/footprint/bay.
+// ---------------------------------------------------------------------------
+export const DEFAULT_YARD_SEED=4073; // matches simulation.js createGame() default
+const cellMin=(i)=>(i-WORLD_SIZE/2)*CELL;
+function coveredCells(minX,maxX,minZ,maxZ){
+ const x0=Math.floor(minX/CELL+WORLD_SIZE/2),x1=Math.floor((maxX-1e-9)/CELL+WORLD_SIZE/2);
+ const z0=Math.floor(minZ/CELL+WORLD_SIZE/2),z1=Math.floor((maxZ-1e-9)/CELL+WORLD_SIZE/2);
+ const out=[];for(let x=x0;x<=x1;x++)for(let z=z0;z<=z1;z++)out.push(key(x,z));
+ return out;
+}
+// Quarter-turn rotY swaps width/length exactly; arbitrary angles use the
+// conservative circumscribed radius so rotated chunks can never leak cells.
+function aabbFor(x,z,w,d,rotY,height){
+ const k=Math.round(rotY/(Math.PI/2));
+ let hw=w/2,hd=d/2;
+ if(Math.abs(rotY-k*Math.PI/2)<1e-9){if(((k%2)+2)%2===1){hw=d/2;hd=w/2;}}
+ else{const r=Math.hypot(w,d)/2;hw=r;hd=r;}
+ return {minX:x-hw,maxX:x+hw,minZ:z-hd,maxZ:z+hd,height};
+}
+function starterCellSet(){
+ const s=new Set();
+ for(const b of STARTER_BUILDINGS){
+  for(const c of footprintCells(b.type,b.x,b.z,b.rot||0))s.add(key(c.x,c.z));
+  for(const c of bayCells(b.type,b.x,b.z,b.rot||0))s.add(key(c.x,c.z));
+ }
+ return s;
+}
+const planCache=new Map();
+export function yardSceneryPlan(seed){
+ const s=Number(seed)>>>0;
+ if(planCache.has(s))return planCache.get(s);
+ const rand=seeded(s^0x5eed);
+ const terrain=terrainFor(s);
+ const roadSet=new Set(INITIAL_ROADS);
+ const starter=starterCellSet();
+ const props=[],rubble=[],decals=[];
+ const zoneOf=(cells)=>cells.every(k=>{const [x,z]=cellOf(k);return !inside(x,z)||!surveyed(x,z);})?"exterior":"rock";
+ const addProp=(kind,x,z,rotY=0,material=null)=>{
+  const sc=SCENERY.kinds[kind].scale;
+  const aabb=aabbFor(x,z,sc.width,sc.length,rotY,sc.height);
+  const cells=coveredCells(aabb.minX,aabb.maxX,aabb.minZ,aabb.maxZ);
+  props.push({kind,x,z,rotY,material,aabb,cells,zone:zoneOf(cells)});
+ };
+ const addRubble=(kind,x,y,z,w,h,d,rotY,color)=>{
+  const aabb=aabbFor(x,z,w,d,rotY,h);
+  const cells=coveredCells(aabb.minX,aabb.maxX,aabb.minZ,aabb.maxZ);
+  rubble.push({kind,x,y,z,w,h,d,rotY,color,aabb,cells,zone:zoneOf(cells)});
+ };
+ const addDecal=(x,z,w,d,h,color,rotY=0)=>{
+  const aabb=aabbFor(x,z,w,d,rotY,h);
+  decals.push({kind:"decal",x,z,w,d,h,rotY,color,cells:coveredCells(aabb.minX,aabb.maxX,aabb.minZ,aabb.maxZ),zone:"any-nonroad"});
+ };
+ // --- interior: wrecks / barrels / scrap / outcrops on rock cells only ------
+ const roadList=INITIAL_ROADS.map(t=>{const [x,z]=cellOf(t);return {x,z};});
+ const roadDist=(x,z)=>{let m=Infinity;for(const r of roadList)m=Math.min(m,Math.max(Math.abs(r.x-x),Math.abs(r.z-z)));return m;};
+ const rocks=[];
+ for(const [k,t] of terrain){
+  if(t.kind!=="rock")continue;
+  const [x,z]=cellOf(k);
+  if(!surveyed(x,z)||starter.has(k))continue;
+  rocks.push({x,z,k,d:roadDist(x,z),used:false});
+ }
+ rocks.sort((a,b)=>a.d-b.d||a.z-b.z||a.x-b.x);
+ const taken=[];
+ const pick=(max,minSpacing)=>{const out=[];for(const r of rocks){if(out.length>=max)break;if(r.used)continue;
+  if(taken.every(t=>Math.max(Math.abs(t.x-r.x),Math.abs(t.z-r.z))>=minSpacing)){r.used=true;taken.push(r);out.push(r);}}return out;};
+ for(const r of pick(4,3))addProp("wreck",origin(r.x),origin(r.z),Math.floor(rand()*4)*Math.PI/2);
+ for(const r of pick(3,2))addProp("barrel",origin(r.x),origin(r.z),0);
+ const rust=MATERIALS.rust.color,dark=MATERIALS.dark.color,steel=MATERIALS.steel.color,
+       rockC=MATERIALS.rock.color,sandC=MATERIALS.sand.color,orangeC=MATERIALS.orange.color;
+ for(const r of pick(6,2))for(let i=0;i<6;i++){
+  const w=.5+rand()*.7,d=.5+rand()*.7,h=.3+rand()*.8;
+  addRubble("scrapPile",origin(r.x)+(rand()-.5)*1.6,h/2+rand()*.25-.04,origin(r.z)+(rand()-.5)*1.6,w,h,d,rand()*Math.PI,[rust,dark,steel][i%3]);
+ }
+ for(const r of rocks)if(!r.used)for(let i=0;i<3;i++){
+  const w=.6+rand()*.6,d=.6+rand()*.6,h=.4+rand()*.9;
+  addRubble("outcrop",origin(r.x)+(rand()-.5)*1.6,h/2-.04,origin(r.z)+(rand()-.5)*1.6,w,h,d,rand()*Math.PI,rand()>.7?sandC:rockC);
+ }
+ // --- exterior belt: landmarks beyond the parcel edge -----------------------
+ for(const [x,z,ry,m] of [[-45.6,-33,0,"rust"],[-45.6,-29.6,0,"body"],[45.6,30,0,"rust"],[45.6,33.4,0,"dark"],[-30,-45.6,Math.PI/2,"body"],[27,45.6,Math.PI/2,"rust"]])
+  addProp("container",x,z,ry,m);
+ for(const [x,z] of [[-47.5,-23],[47.5,23]])addProp("shed",x,z);
+ for(const [x,z] of [[-47.5,17],[47.5,-20]])addProp("silo",x,z);
+ for(const [x,z] of [[-19,-46.5],[19,46.5]])addProp("pipeRack",x,z);
+ for(const [x,z] of [[-43.5,-43.5],[43.5,-43.5],[-43.5,43.5],[43.5,43.5]])addProp("floodlight",x,z);
+ for(const [x,z] of [[-7.6,-43],[7.6,-43],[-7.6,43],[7.6,43]])addProp("gatePost",x,z);
+ // Perimeter fence with a gate gap |x|<=7 on both south/north sides.
+ const fenceLine=EDGE/2+1;
+ for(const z of [-fenceLine,fenceLine]){
+  const xs=[];for(let i=0;i<=WORLD_SIZE;i+=2){const x=(i-WORLD_SIZE/2)*CELL;if(Math.abs(x)>7)xs.push(x);}
+  for(const x of xs)addRubble("fence",x,1.15,z,.24,2.3,.23,0,rust);
+  for(let i=0;i<xs.length-1;i++){const a=xs[i],b=xs[i+1];if(b-a>CELL*2+1e-9)continue;
+   addRubble("fence",(a+b)/2,1.55,z,b-a-.2,.23,.21,0,dark);}
+ }
+ for(const x of [-fenceLine,fenceLine]){
+  const zs=[];for(let z=-EDGE/2;z<=EDGE/2;z+=CELL*2)zs.push(z);
+  for(const z of zs)addRubble("fence",x,1.15,z,.24,2.3,.23,0,rust);
+  for(let i=0;i<zs.length-1;i++){const a=zs[i],b=zs[i+1];
+   addRubble("fence",x,1.55,(a+b)/2,b-a-.2,.23,.21,Math.PI/2,dark);}
+ }
+ // Boulders ring the parcel on a SQUARE belt (a circular ring would cut inside
+ // the parcel at the diagonals): perpendicular offset >= 43.5 keeps even the
+ // conservative rotated AABB beyond the edge, so roads/machines can never reach.
+ for(let i=0;i<52;i++){
+  const side=Math.floor(rand()*4),t=(rand()-.5)*(EDGE+30),off=EDGE/2+1.5+rand()*14,size=.4+rand()*1.2;
+  const x=side===0?off:side===1?-off:t,z=side===2?off:side===3?-off:t;
+  addRubble("boulder",x,size*.4,z,size,size*.8,size*1.2,rand()*6,rand()>.5?rockC:sandC);
+ }
+ // --- flush decals: bench tints, dust, alleys, chevrons, stains -------------
+ for(const [k,t] of terrain){
+  if(t.kind!=="bench")continue;
+  const [x,z]=cellOf(k);
+  addDecal(origin(x),origin(z),3.3,3.3,.05,sandC);
+ }
+ for(let i=0;i<90;i++){
+  const x=Math.floor(rand()*WORLD_SIZE),z=Math.floor(rand()*WORLD_SIZE),k=key(x,z);
+  if(roadSet.has(k)||starter.has(k)||terrain.get(k)?.kind!=="pad")continue;
+  const w=.8+rand()*1.8,d=.6+rand()*1.6;
+  const jx=(CELL-w)/2-.05,jz=(CELL-d)/2-.05;
+  addDecal(origin(x)+(rand()-.5)*2*jx,origin(z)+(rand()-.5)*2*jz,w,d,.035,rand()>.75?sandC:rockC);
+ }
+ // Maintenance alleys between the starter road corridors: gravel + tire tracks.
+ const alley=(cx,cz,vertical)=>{
+  const w=vertical?1:3.3,d=vertical?3.3:1;
+  addDecal(cx,cz,w,d,.045,rockC);
+  for(const s of [-.4,.4])addDecal(cx+(vertical?s:0),cz+(vertical?0:s),vertical?.16:3.3,vertical?3.3:.16,.04,dark);
+ };
+ for(const z of [10,14])for(let x=6;x<=18;x++){if(x===11)continue;alley(origin(x),origin(z),false);}
+ for(let z=9;z<=16;z++){if(z===12)continue;alley(origin(8),origin(z),true);}
+ // Hazard chevrons on starter loading bays (never on road cells).
+ for(const b of STARTER_BUILDINGS)for(const c of bayCells(b.type,b.x,b.z,b.rot||0)){
+  const k=key(c.x,c.z);if(roadSet.has(k))continue;
+  for(let i=0;i<3;i++)addDecal(origin(c.x)+(i-1)*.9,origin(c.z),.8,.26,.05,orangeC,(i%2?1:-1)*Math.PI/4);
+ }
+ for(const [x,z] of [[15,13],[17,14],[6,15],[8,15]])addDecal(origin(x),origin(z),1.2,.9,.03,dark);
+ for(const p of props)if(p.kind==="wreck")for(let i=0;i<2;i++)
+  addDecal(p.x+(rand()-.5)*1.6,p.z+(rand()-.5)*1.6,.7,.6,.035,i?rust:rockC);
+ for(const z of [-43,43])for(let i=0;i<4;i++)addDecal((i-1.5)*1.4,z,1.2,.4,.04,i%2?dark:orangeC);
+ const plan={seed:s,props,rubble,decals};
+ planCache.set(s,plan);
+ return plan;
+}
+// Pure placement audit against the occupancy authority. Volumetric entries may
+// only cover exterior/unsurveyed/rock cells (never starter footprint/bay), and
+// must clear the truck sweep (road-cell centers +/- truckHalfWidth) on every
+// INITIAL_ROADS cell. Decals must stay flush and off road cells.
+export function validateSceneryPlan(plan,seed){
+ const errors=[];
+ const terrain=terrainFor(Number(seed)>>>0);
+ const roadSet=new Set(INITIAL_ROADS);
+ const starter=starterCellSet();
+ const m=SCENERY.truckHalfWidth;
+ const truckRects=INITIAL_ROADS.map(t=>{const [x,z]=cellOf(t),cx=origin(x),cz=origin(z);
+  return {minX:cx-m,maxX:cx+m,minZ:cz-m,maxZ:cz+m};});
+ const checkVol=(e,label)=>{
+  for(const k of e.cells){
+   const [x,z]=cellOf(k);
+   if(!inside(x,z)||!surveyed(x,z))continue;
+   if(terrain.get(k)?.kind!=="rock")errors.push(label+" occupies buildable cell "+k);
+   if(starter.has(k))errors.push(label+" occupies starter footprint/bay "+k);
+  }
+  const a=e.aabb;
+  for(const r of truckRects)
+   if(a.minX<r.maxX&&a.maxX>r.minX&&a.minZ<r.maxZ&&a.maxZ>r.minZ)errors.push(label+" blocks the truck route");
+ };
+ plan.props.forEach((p,i)=>checkVol(p,"prop["+i+"]:"+p.kind));
+ plan.rubble.forEach((r,i)=>checkVol(r,"rubble["+i+"]:"+r.kind));
+ plan.decals.forEach((d,i)=>{
+  if(d.h/2+.002>SCENERY.decalMaxHeight+1e-9)errors.push("decal["+i+"] above flush height limit");
+  if(d.cells.some(c=>roadSet.has(c)))errors.push("decal["+i+"] on a road cell");
+ });
+ return {ok:errors.length===0,errors};
+}
+// Dynamic occupancy conflicts: roadLine may pave rock/ring cells and machines
+// may claim any surveyed pad, so hide scenery whose cells are now occupied.
+export function sceneryConflicts(plan,g){
+ const blocked=new Set(g.roads);
+ for(const b of g.buildings){
+  for(const c of footprintCells(b.type,b.x,b.z,b.rot||0))blocked.add(key(c.x,c.z));
+  for(const c of bayCells(b.type,b.x,b.z,b.rot||0))blocked.add(key(c.x,c.z));
+ }
+ const hit=(e)=>e.cells.some(c=>blocked.has(c));
+ const props=[],rubble=[];
+ plan.props.forEach((p,i)=>{if(hit(p))props.push(i);});
+ plan.rubble.forEach((r,i)=>{if(hit(r))rubble.push(i);});
+ return {props,rubble};
+}
+let sceneryDecalMat=null,sceneryRubbleMat=null;
+const sceneryDummy=new THREE.Object3D();
+const sceneryColor=new THREE.Color();
+function buildSceneryProp(g,p){
+ switch(p.kind){
+  case "wreck":{
+   box(g,0,.42,.15,1.7,.5,2.5,"rust").rotation.z=.05;
+   box(g,0,.78,-.95,1.5,.62,.85,"dark").rotation.z=-.08;
+   box(g,0,.62,-.35,1.42,.16,.7,"steel").rotation.x=.1;
+   box(g,-.7,.18,.9,.3,.3,.3,"dark");box(g,.7,.18,.9,.3,.3,.3,"dark");
+   cylinder(g,-.78,.3,-.55,.3,.22,"black",true);cylinder(g,.78,.3,-.55,.3,.22,"black",true);
+   box(g,0,.68,1.32,1.5,.34,.1,"rust");
+   box(g,-.86,.55,.2,.06,.18,1.6,"orange");
+   box(g,.3,.95,-.9,.5,.1,.4,"steel").rotation.z=.3;
+   break;}
+  case "barrel":{
+   box(g,0,.03,0,1.6,.06,1.6,"dark");
+   for(const [dx,dz,m] of [[-.45,-.3,"rust"],[.4,-.35,"orange"],[0,.45,"dark"]]){
+    cylinder(g,dx,.48,dz,.32,.95,m);
+    box(g,dx,.74,dz,.68,.08,.68,"steel");
+   }
+   break;}
+  case "container":{
+   box(g,0,1,0,5,2,2.6,p.material||"rust");
+   for(let i=-2;i<2;i+=.85)box(g,i,1.9,0,.06,.1,2.4,"steel");
+   box(g,2.51,1,0,.06,1.7,2.2,"dark");
+   break;}
+  case "shed":{
+   box(g,0,2,0,9,3.9,5.7,"body");
+   box(g,0,4.2,0,9.6,.58,6.15,"roof");
+   for(let j=-1;j<=1;j++)box(g,j*2.5,2.5,2.92,1.6,1.35,.09,"dark");
+   for(let j=-1;j<=1;j++)box(g,j*2.5,4.52,0,.4,.12,3.8,"steel");
+   cylinder(g,-3.4,6.4,-1.8,.22,4.5,"rust");
+   box(g,0,1.1,2.93,1.8,2.2,.08,"black");
+   break;}
+  case "silo":{
+   for(let i=-1;i<=1;i++){
+    cylinder(g,i*2.8,2.6,0,1.15,5.2,i===0?"rust":"steel");
+    cylinder(g,i*2.8,5.55,0,.88,.6,"roof");
+    box(g,i*2.8,1.1,1.2,.22,1.8,.35,"orange");
+   }
+   break;}
+  case "pipeRack":{
+   box(g,0,1.05,0,6,1.6,2.3,"rust");
+   box(g,0,2.05,0,6.1,.25,2.45,"roof");
+   for(let j=-2;j<=2;j++)box(g,j,1.25,1.2,.12,.55,.1,"steel");
+   box(g,3.2,2.45,0,.28,4.8,.28,"orange");
+   break;}
+  case "floodlight":{
+   cylinder(g,0,4,0,.16,8,"dark");
+   box(g,0,8.1,0,.85,.28,.75,"orange");
+   const light=new THREE.PointLight("#f4b77b",16,20,2);light.position.set(0,7.6,0);g.add(light);
+   break;}
+  case "gatePost":{
+   box(g,0,1.3,0,.3,2.6,.3,"orange");
+   box(g,0,2.45,0,.34,.18,.34,"dark");
+   box(g,0,.9,0,.32,.5,.32,"black");
+   break;}
+ }
+}
+// THREE builder: shared unit geometry + material pool; decals and rubble are
+// one InstancedMesh each (2 draw calls for ~430 instances). Node-testable with
+// a document stub (no canvas text panels in scenery).
+export function buildScenery(parent,plan){
+ const stats={propMeshes:0,propTriangles:0,pointLights:0,rubbleInstances:plan.rubble.length,decalInstances:plan.decals.length};
+ box(parent,0,-.26,0,EDGE+5,.45,EDGE+5,"earth").castShadow=false;
+ if(!sceneryDecalMat)sceneryDecalMat=new THREE.MeshStandardMaterial({color:"#ffffff",metalness:.07,roughness:.85,flatShading:true});
+ if(!sceneryRubbleMat)sceneryRubbleMat=new THREE.MeshStandardMaterial({color:"#ffffff",metalness:.2,roughness:.8,flatShading:true});
+ const decalMesh=new THREE.InstancedMesh(geo,sceneryDecalMat,Math.max(1,plan.decals.length));
+ decalMesh.name="scenery:decals";decalMesh.castShadow=false;decalMesh.receiveShadow=true;decalMesh.frustumCulled=false;
+ decalMesh.userData.decorative=true;decalMesh.userData.authority=SCENERY_AUTHORITY;
+ plan.decals.forEach((d,i)=>{
+  sceneryDummy.position.set(d.x,d.h/2+.002,d.z);sceneryDummy.rotation.set(0,d.rotY||0,0);sceneryDummy.scale.set(d.w,d.h,d.d);
+  sceneryDummy.updateMatrix();decalMesh.setMatrixAt(i,sceneryDummy.matrix);decalMesh.setColorAt(i,sceneryColor.set(d.color));
+ });
+ if(!plan.decals.length){sceneryDummy.scale.set(0,0,0);sceneryDummy.updateMatrix();decalMesh.setMatrixAt(0,sceneryDummy.matrix);}
+ decalMesh.instanceMatrix.needsUpdate=true;if(decalMesh.instanceColor)decalMesh.instanceColor.needsUpdate=true;
+ parent.add(decalMesh);
+ const rubbleMesh=new THREE.InstancedMesh(geo,sceneryRubbleMat,Math.max(1,plan.rubble.length));
+ rubbleMesh.name="scenery:rubble";rubbleMesh.castShadow=true;rubbleMesh.receiveShadow=true;rubbleMesh.frustumCulled=false;
+ rubbleMesh.userData.decorative=true;rubbleMesh.userData.authority=SCENERY_AUTHORITY;
+ plan.rubble.forEach((r,i)=>{
+  sceneryDummy.position.set(r.x,r.y,r.z);sceneryDummy.rotation.set(0,r.rotY||0,0);sceneryDummy.scale.set(r.w,r.h,r.d);
+  sceneryDummy.updateMatrix();rubbleMesh.setMatrixAt(i,sceneryDummy.matrix);rubbleMesh.setColorAt(i,sceneryColor.set(r.color));
+ });
+ if(!plan.rubble.length){sceneryDummy.scale.set(0,0,0);sceneryDummy.updateMatrix();rubbleMesh.setMatrixAt(0,sceneryDummy.matrix);}
+ rubbleMesh.instanceMatrix.needsUpdate=true;if(rubbleMesh.instanceColor)rubbleMesh.instanceColor.needsUpdate=true;
+ parent.add(rubbleMesh);
+ const propNodes=plan.props.map(p=>{
+  const g=new THREE.Group();g.name="scenery:"+p.kind;
+  g.position.set(p.x,0,p.z);g.rotation.y=p.rotY||0;
+  g.userData.decorative=true;g.userData.authority=SCENERY_AUTHORITY;g.userData.sceneryKind=p.kind;
+  buildSceneryProp(g,p);parent.add(g);
+  g.traverse(o=>{
+   if(o.isMesh){stats.propMeshes++;const idx=o.geometry.index;stats.propTriangles+=idx?idx.count/3:o.geometry.attributes.position.count/3;}
+   if(o.isPointLight)stats.pointLights++;
+  });
+  return g;
+ });
+ return {propNodes,rubbleMesh,decalMesh,rubbleBase:rubbleMesh.instanceMatrix.array.slice(),stats};
+}
+// Rebuild-only visibility pass (never per-frame): hidden props toggle .visible,
+// hidden rubble instances collapse to zero-scale matrices; base matrices are
+// restored verbatim when the conflict clears.
+export function applySceneryVisibility(build,conflicts){
+ const hp=new Set(conflicts.props),hr=new Set(conflicts.rubble);
+ build.propNodes.forEach((n,i)=>{n.visible=!hp.has(i);});
+ const arr=build.rubbleMesh.instanceMatrix.array,base=build.rubbleBase;
+ for(let i=0;i<build.rubbleMesh.count;i++){
+  if(hr.has(i)){arr.fill(0,i*16,i*16+16);arr[i*16+15]=1;}
+  else arr.set(base.subarray(i*16,i*16+16),i*16);
+ }
+ build.rubbleMesh.instanceMatrix.needsUpdate=true;
+}
 export class LivingWorld{
  constructor(host){
   this.host=host;this.scene=new THREE.Scene();
@@ -531,6 +841,7 @@ export class LivingWorld{
   ground.rotation.x=-Math.PI/2;ground.position.y=-.42;ground.receiveShadow=true;this.scene.add(ground);
   // ART-05 (#351): decorative yard crew state (no freight authority, #274).
   this.crewWorkers=[];this.forklift=null;this.drone=null;this.crewTimers=new Map();this.droneAnchorId="none";
+  this.terrainSeed=DEFAULT_YARD_SEED;this.sceneryPlan=null;this.sceneryBuild=null;
   this.scenery=new THREE.Group();this.scene.add(this.scenery);this.makeTerrain();
   this.roadGroup=new THREE.Group();this.buildingGroup=new THREE.Group();this.vehicleGroup=new THREE.Group();
   this.scene.add(this.roadGroup,this.buildingGroup,this.vehicleGroup);
@@ -545,76 +856,38 @@ export class LivingWorld{
   if(mq&&mq.addEventListener)mq.addEventListener("change",e=>{this.reducedMotion=!!e.matches;});
   this.resize();
  }
- makeTerrain(){
-  const rand=seeded(48891);
-  box(this.scenery,0,-.26,0,EDGE+5,.45,EDGE+5,"earth");
-  for(let i=0;i<130;i++){
-   const x=(rand()-.5)*EDGE,z=(rand()-.5)*EDGE;
-   box(this.scenery,x,.015,z,.7+rand()*2,.03,.5+rand()*2,rand()>.8?"sand":"rock").castShadow=false;
-  }
-  // Rusted perimeter with gaps: the player is on an explorable industrial parcel.
-  for(let i=0;i<=WORLD_SIZE;i+=2){
-   const x=(i-WORLD_SIZE/2)*CELL;
-   if(Math.abs(x)>7){box(this.scenery,x,1.15,-EDGE/2-1,.24,2.3,.23,"rust");box(this.scenery,x,1.15,EDGE/2+1,.24,2.3,.23,"rust");}
-  }
-  for(const x of [-EDGE/2-1,EDGE/2+1]){
-   for(let z=-EDGE/2;z<=EDGE/2;z+=CELL*2){
-    box(this.scenery,x,.95,z,.24,1.9,.24,"rust");
-    if(Math.abs(z)>10)beam(this.scenery,x,1.55,z,CELL*1.9,"z","dark");
-   }
-  }
-  // Container stacks, crane staging, scrap piles: never a blank flat world at first frame.
-  const containers=[[-30,-28],[-26,-28],[27,26],[30,26],[-30,26],[30,-27]];
-  for(const [x,z] of containers){
-   box(this.scenery,x,1,z,5,2,2.6,"rust");
-   for(let p=-2;p<2;p+=.85)box(this.scenery,x+p,1.9,z, .06,.1,2.4,"steel");
-  }
-
-  // Frontier infrastructure landmarks: heavy industry creates visual depth
-  // from the first frame, without pretending decorative structures produce.
-  const service=new THREE.Group();this.scenery.add(service);
-  for(const [x,z] of [[-30,-23],[29,23]]){
-   box(service,x,2.0,z,9,3.9,5.7,"body");
-   box(service,x,4.2,z,9.6,.58,6.15,"roof");
-   for(let j=-1;j<=1;j++)box(service,x+j*2.5,2.5,z+2.92,1.6,1.35,.09,"dark");
-   for(let j=-1;j<=1;j++)box(service,x+j*2.5,4.52,z,.4,.12,3.8,"steel");
-   cylinder(service,x-3.4,6.4,z-1.8,.22,4.5,"rust");
-  }
-  for(const [x,z] of [[-28,17],[27,-20]]){
-   for(let i=0;i<3;i++){
-    const sx=x+(i-1)*2.8;
-    cylinder(service,sx,2.6,z,1.15,5.2,i===1?"rust":"steel");
-    cylinder(service,sx,5.55,z,.88,.6,"roof");
-    box(service,sx,1.1,z+1.2,.22,1.8,.35,"orange");
-   }
-  }
-  for(const [x,z] of [[-19,-32],[19,32]]){
-   box(service,x,1.05,z,6,1.6,2.3,"rust");
-   box(service,x,2.05,z,6.1,.25,2.45,"roof");
-   for(let j=-2;j<=2;j++)box(service,x+j*1.0,1.25,z+1.2,.12,.55,.1,"steel");
-   box(service,x+3.2,2.45,z,.28,4.8,.28,"orange");
-  }
-  for(let i=0;i<52;i++){
-   const a=rand()*Math.PI*2,r=EDGE*.50+rand()*17;
-   const x=Math.cos(a)*r,z=Math.sin(a)*r;
-   const size=.4+rand()*1.2;
-   box(this.scenery,x,size/2,z,size,size*.8,size*1.2,rand()>.5?"rock":"sand").rotation.y=rand()*6;
-  }
-  for(let i=0;i<15;i++){
-   const x=(rand()-.5)*EDGE*.85,z=(rand()-.5)*EDGE*.85;
-   if(x*x+z*z<450)continue;
-   const p=box(this.scenery,x,.48,z,1.5,.8,1.4,i%2?"rust":"dark");p.rotation.y=rand()*Math.PI;
-  }
+ // ART-07 (#353): terrain is a deterministic, occupancy-audited scenery plan
+ // (yardSceneryPlan) rendered by buildScenery — original 3D geometry, never an
+ // image. Interior landmarks stand on permanently TERRAIN-rejected rock cells;
+ // the exterior belt sits beyond the parcel; decals stay flush and off roads.
+ makeTerrain(seed=this.terrainSeed){
+  this.terrainSeed=Number(seed)>>>0;
+  this.sceneryPlan=yardSceneryPlan(this.terrainSeed);
+  this.sceneryBuild=buildScenery(this.scenery,this.sceneryPlan);
   // Human scale references beside starter loading bays (1.7 units tall vs 3.5-unit cells).
   for(const [cx,cz,dx,dz,ry] of [[13,9,-1.0,2.1,.4],[15,18,1.05,2.0,-.7],[7,9,1.2,1.9,2.2]]){
    const w=createWorker();w.position.set(cellCenter(cx)+dx,0,cellCenter(cz)+dz);w.rotation.y=ry;this.scenery.add(w);this.crewWorkers.push(w);
   }
-  // Warm floodlights define the site; no bloom or photoreal assets.
-  for(const [x,z] of [[-EDGE/2+5,-EDGE/2+5],[EDGE/2-5,-EDGE/2+5],[-EDGE/2+5,EDGE/2-5],[EDGE/2-5,EDGE/2-5]]){
-   cylinder(this.scenery,x,4,z,.16,8,"dark");
-   box(this.scenery,x,8.1,z,.85,.28,.75,"orange");
-   const light=new THREE.PointLight("#f4b77b",16,20,2);light.position.set(x,7.6,z);this.scenery.add(light);
-  }
+  this.stampScenery();
+ }
+ // Seed changes (new save / imported save) rebuild the whole dressing; crew
+ // rigs owned by update() are re-attached, and the state signature is cleared
+ // so rebuild(g) re-applies occupancy visibility against the new plan.
+ rebuildScenery(seed){
+  if(this.sceneryBuild){this.sceneryBuild.rubbleMesh.dispose();this.sceneryBuild.decalMesh.dispose();}
+  this.scenery.clear();
+  this.crewWorkers=[];
+  this.makeTerrain(seed);
+  if(this.forklift)this.scenery.add(this.forklift);
+  if(this.drone)this.scenery.add(this.drone);
+  this.sig="";
+ }
+ stampScenery(){
+  const d=this.renderer.domElement.dataset;
+  d.scenerySeed=String(this.terrainSeed);
+  d.sceneryProps=String(this.sceneryPlan.props.length);
+  d.sceneryRubble=String(this.sceneryPlan.rubble.length);
+  d.sceneryDecals=String(this.sceneryPlan.decals.length);
  }
  setView(view){
   Object.assign(this.view,view);
@@ -657,7 +930,11 @@ export class LivingWorld{
   const x=Math.floor(hit.x/CELL+WORLD_SIZE/2),z=Math.floor(hit.z/CELL+WORLD_SIZE/2);
   return {x,z,wx:hit.x,wz:hit.z};
  }
- setState(g){this.state=g;const signature=g.roads.join("|")+"//"+g.buildings.map(b=>b.id+":"+b.type+":"+b.x+":"+b.z+":"+(b.rot||0)+":"+Math.floor(b.remaining)).join("|");
+ setState(g){this.state=g;
+  // ART-07 (#353): a different save seed rebuilds the yard dressing itself.
+  const seed=Number.isFinite(g.seed)?g.seed>>>0:DEFAULT_YARD_SEED;
+  if(seed!==this.terrainSeed)this.rebuildScenery(seed);
+  const signature=g.roads.join("|")+"//"+g.buildings.map(b=>b.id+":"+b.type+":"+b.x+":"+b.z+":"+(b.rot||0)+":"+Math.floor(b.remaining)).join("|");
   if(signature!==this.sig){this.sig=signature;this.rebuild(g);}
  }
  rebuild(g){
@@ -667,9 +944,14 @@ export class LivingWorld{
    if((x+z)%2===0)box(this.roadGroup,wx,.205,wz,.11,.012,.7,"line").castShadow=false;
   }
   for(const b of g.buildings){const built=makeBuilding(b,g.elapsed);this.built.set(b.id,built);this.buildingGroup.add(built.group);}
+  // ART-07 (#353): decorations never occupy build sites or block routes — any
+  // prop/rubble whose cells became road/footprint/bay is hidden (rebuild-only).
+  const conflicts=sceneryConflicts(this.sceneryPlan,g);
+  applySceneryVisibility(this.sceneryBuild,conflicts);
   // ART-01 observability: schema identity + machine count, separate from camera stamps.
   const d=this.renderer.domElement.dataset;
   d.voxelSchema=SCHEMA_ID;d.machineCount=String(g.buildings.length);
+  d.sceneryHidden=String(conflicts.props.length+conflicts.rubble.length);
  }
  drawGhost(mode,cell,valid,start,footprint){
   this.ghost.clear();if(!cell||cell.x<0||cell.z<0||cell.x>=WORLD_SIZE||cell.z>=WORLD_SIZE)return;
@@ -799,5 +1081,5 @@ export class LivingWorld{
   cd.forkliftLift=this.forklift.userData.lift.toFixed(3);
   cd.droneAnchor=this.droneAnchorId;
  }
- dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
+ dispose(){if(this.sceneryBuild){this.sceneryBuild.rubbleMesh.dispose();this.sceneryBuild.decalMesh.dispose();}this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }
