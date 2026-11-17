@@ -34,8 +34,14 @@ export const ART04_MOTION=Object.freeze({
  gearSpeed:1.6,         // fabricator drive gear (axis z, working only)
  pinionSpeed:3.2,       // fabricator pinion, counter-rotating at the 2:1 radius ratio
  hammerAmp:.45,hammerSpeed:1.1, // fabricator trip hammer (axis x, oscillate)
- scaleAmp:.3,scaleSpeed:.5,     // market balance beam (axis z, AMBIENT)
- awningAmp:.12,awningSpeed:.8   // market awning flutter (axis x, AMBIENT)
+ // Market ambient pair runs at a 2:1 speed ratio (same vocabulary as the
+ // fabricator gear train) so the two channels can NEVER sit at their sinusoid
+ // extrema simultaneously: at any beam aliasing phase the awning displacement
+ // is 2*awningAmp*|sin(speed*window)|, bounding the combined motion away from
+ // zero over every sim window (the old 0.5/0.8 pair both parked near extrema
+ // at clock 20.35->21.58, id 6, and rendered a 0.552 mean-abs pair diff).
+ scaleAmp:.45,scaleSpeed:1.3,   // market balance beam (axis z, AMBIENT)
+ awningAmp:.25,awningSpeed:2.6  // market awning flutter (axis x, AMBIENT, 2:1)
 });
 
 // Dock shutter travel contract (depot). Distance is world units from the truck
@@ -105,7 +111,9 @@ export function art04Pose(clock,reducedMotion=false,id=0){
   pinion:-clock*M.pinionSpeed,
   hammer:Math.sin(clock*M.hammerSpeed+id)*M.hammerAmp,
   scale:Math.sin(clock*M.scaleSpeed+id)*M.scaleAmp,
-  awning:Math.sin(clock*M.awningSpeed+id)*M.awningAmp
+  // 2*id keeps the awning EXACTLY the second harmonic of the beam phase for
+  // every building id, so the combined displacement bound is id-independent.
+  awning:Math.sin(clock*M.awningSpeed+2*id)*M.awningAmp
  };
 }
 

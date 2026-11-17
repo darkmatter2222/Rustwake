@@ -204,7 +204,9 @@ test("art04Pose: exact channels, 2:1 counter-rotating gear train, bounded oscill
   near(Math.abs(p.pinion / p.gear), 2, "2:1 radius/speed ratio");
   near(p.hammer, Math.sin(t * M.hammerSpeed + id) * M.hammerAmp, "trip hammer");
   near(p.scale, Math.sin(t * M.scaleSpeed + id) * M.scaleAmp, "balance beam");
-  near(p.awning, Math.sin(t * M.awningSpeed + id) * M.awningAmp, "awning");
+  // awning is the beam's exact second harmonic (2*id) so the pair can never
+  // alias at both extrema simultaneously for ANY building id.
+  near(p.awning, Math.sin(t * M.awningSpeed + 2 * id) * M.awningAmp, "awning");
   for (const [k, amp] of [["feed", M.feedAmp], ["hammer", M.hammerAmp], ["scale", M.scaleAmp], ["awning", M.awningAmp]])
     assert.ok(Math.abs(p[k]) <= amp + TOL, k + " amplitude bound");
   for (const [k, speed] of [["feed", M.feedSpeed], ["hammer", M.hammerSpeed], ["scale", M.scaleSpeed], ["awning", M.awningSpeed]]) {
@@ -214,6 +216,25 @@ test("art04Pose: exact channels, 2:1 counter-rotating gear train, bounded oscill
   const parked = art04Pose(9.9, true, id);
   for (const v of Object.values(parked)) assert.equal(v, 0, "reduced motion parks every channel");
   for (const v of Object.values(art04Pose(0, false, 0))) assert.ok(v === 0, "t=0 rest pose zero");
+});
+
+test("market ambient pair never aliases: combined beam+awning displacement bounded away from zero over any 1.2-1.35 sim window for every id", () => {
+  // Regression for the rendered-motion capture FAIL at clock 20.35->21.58:
+  // the old 0.5/0.8 independent sinusoids both sat near extrema (combined
+  // 0.152 rad, pair meanAbsDiff 0.552 < 1). The 2:1 second-harmonic pair has
+  // an id-independent lower bound; sample it densely across phases and ids.
+  const M = ART04_MOTION;
+  assert.equal(M.awningSpeed, 2 * M.scaleSpeed, "awning is the beam's second harmonic");
+  let worst = Infinity;
+  for (let id = 0; id <= 24; id++)
+    for (let i = 0; i < 400; i++) {
+      const c = i / 400 * 25;
+      for (const d of [1.2, 1.35]) {
+        const a = art04Pose(c, false, id), b = art04Pose(c + d, false, id);
+        worst = Math.min(worst, Math.hypot(b.scale - a.scale, b.awning - a.awning));
+      }
+    }
+  assert.ok(worst >= 0.3, "combined ambient displacement lower bound, got " + worst);
 });
 
 test("depotDoorLift: monotone distance-driven travel, bounded, closed when far/reduced/no trucks", () => {
