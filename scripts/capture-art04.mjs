@@ -652,14 +652,38 @@ try {
   if (min3d < 0.15)
     throw Error("DISTINCTNESS_3D_TOO_LOW: min " + min3d + " at " + min3dPair);
   child = spawn(process.execPath, ["node_modules/vite/bin/vite.js", "preview", "--port", String(PORT), "--strictPort", "--host", "127.0.0.1"], {stdio: ["ignore", "pipe", "pipe"]});
-  child.stdout.on("data", () => {});
-  child.stderr.on("data", d => report.errors.push("preview: " + d.toString().slice(0, 400)));
+  // Port-collision hardening: a peer preview on the same port once satisfied the
+  // readiness poll while OUR --strictPort child had already exited (its error went
+  // to stdout), so the run captured against a foreign server. Track our child's
+  // liveness, log BOTH streams, and refuse to proceed unless it is still alive.
+  let previewLog = "";
+  let childExited = false;
+  child.stdout.on("data", d => {previewLog += d.toString();});
+  child.stderr.on("data", d => {previewLog += d.toString(); report.errors.push("preview: " + d.toString().slice(0, 400));});
+  child.on("exit", (code, sig) => {childExited = true; previewLog += `\n[preview exited code=${code} sig=${sig}]`;});
   let open = false;
   for (let i = 0; i < 70; i++) {
+    if (childExited) throw Error("PREVIEW_CHILD_EXITED (port collision or build error?): " + previewLog.slice(-800));
     try {const r = await fetch(HOST, {signal: AbortSignal.timeout(2000)}); if (r.ok) {open = true; break;}} catch {}
     await new Promise(r => setTimeout(r, 200)); // preview-server readiness poll only
   }
-  if (!open) throw Error("Production preview did not become available");
+  if (!open) throw Error("Production preview did not become available: " + previewLog.slice(-800));
+  if (childExited) throw Error("PREVIEW_CHILD_EXITED after readiness (foreign server on port?): " + previewLog.slice(-800));
+  // Build-integrity guard: the served entry bundle must be byte-identical to OUR
+  // dist build, so a stale/foreign preview can never masquerade as this capture.
+  {
+    const localHtml = await readFile(resolve("dist/index.html"), "utf8");
+    const m = localHtml.match(/src="(\/rustwake\/assets\/[^"]+\.js)"/);
+    if (!m) throw Error("PREVIEW_INTEGRITY: no entry bundle in dist/index.html");
+    const servedHtml = await (await fetch(HOST, {signal: AbortSignal.timeout(5000)})).text();
+    if (!servedHtml.includes(m[1])) throw Error("PREVIEW_SERVES_FOREIGN_BUILD: served index lacks our entry " + m[1]);
+    const localJs = await readFile(resolve("dist" + m[1].replace("/rustwake", "")));
+    const servedJs = Buffer.from(await (await fetch(`http://127.0.0.1:${PORT}${m[1]}`, {signal: AbortSignal.timeout(10000)})).arrayBuffer());
+    const a = crypto.createHash("sha256").update(localJs).digest("hex");
+    const b = crypto.createHash("sha256").update(servedJs).digest("hex");
+    if (a !== b) throw Error("PREVIEW_SERVES_FOREIGN_BUILD: entry sha256 local " + a + " served " + b);
+    report.previewIntegrity = {entry: m[1], sha256: a, ok: true};
+  }
   browser = await chromium.launch({headless: true, args: ["--enable-webgl", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]});
 
   for (const v of [
