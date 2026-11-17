@@ -87,6 +87,7 @@
     }
   ],
   "peak_children": 6,
-  "peak_sessions": 8
+  "peak_sessions": 8,
+  "census_cross_check": "off"
 }
 EXIT=1

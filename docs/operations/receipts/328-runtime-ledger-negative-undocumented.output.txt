@@ -17,3 +17,4 @@
   "peak_sessions": 4,
   "census_cross_check": "on"
 }
+EXIT=1

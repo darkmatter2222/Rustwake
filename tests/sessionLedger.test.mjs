@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
+import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateLedger, scanArtifacts, groupBursts } from "../scripts/verify-session-ledger.mjs";
@@ -311,12 +312,43 @@ test("artifacts dispatched outside the ledger window are not claimed as children
   assert.ok(census.artifact_count > ledger.sessions.length, "the census really is broader than this window");
 });
 
+function miniCensus(bursts) {
+  const ids = bursts.flatMap((b) => b.ids);
+  return {
+    artifact_count: ids.length,
+    zero_byte_count: ids.length,
+    first_at: bursts[0].first_at,
+    last_at: bursts[bursts.length - 1].at,
+    max_burst: Math.max(...bursts.map((b) => b.ids.length)),
+    bursts,
+    primary_id: PRIMARY,
+  };
+}
+
+function miniSummary(c) {
+  const hist = {};
+  for (const b of c.bursts) hist[String(b.ids.length)] = (hist[String(b.ids.length)] ?? 0) + 1;
+  return {
+    source: "scratch-census.json",
+    artifact_count: c.artifact_count,
+    zero_byte_count: c.zero_byte_count,
+    first_at: c.first_at,
+    last_at: c.last_at,
+    max_burst: c.max_burst,
+    bursts: c.bursts.length,
+    burst_size_histogram: hist,
+    primary_id: c.primary_id,
+  };
+}
+
 test("a burst straddling the window start is still cross-checked", () => {
   const l = base();
   l.window = { from: T(10), to: T(20) };
-  const census = { bursts: [{ first_at: T(8), at: T(12), ids: ["eeeeeeeeeeeeeeeee"] }] };
+  const census = miniCensus([{ first_at: T(8), at: T(12), ids: ["eeeeeeeeeeeeeeeee"] }]);
+  l.dispatch_census = miniSummary(census);
   assert.ok(codes(validateLedger(l, roles, census)).includes("E_UNDOCUMENTED_CHILD"));
-  const outside = { bursts: [{ first_at: T(1), at: T(2), ids: ["eeeeeeeeeeeeeeeee"] }] };
+  const outside = miniCensus([{ first_at: T(1), at: T(2), ids: ["eeeeeeeeeeeeeeeee"] }]);
+  l.dispatch_census = miniSummary(outside);
   assert.deepEqual(validateLedger(l, roles, outside).violations, []);
 });
 
@@ -330,4 +362,147 @@ test("the committed undocumented-child negative receipt fires both cross-check c
   assert.ok(captured.includes("E_UNDOCUMENTED_CHILD"));
   assert.ok(captured.includes("E_NO_DISPATCH_ARTIFACT"));
   assert.ok(captured.includes('"ok": false'));
+});
+
+const burstIndexOf = (census, id) => census.bursts.findIndex((b) => b.ids.includes(id));
+
+test("H1: shifting window.from past an omitted child no longer hides it, even with the genuine census", () => {
+  const { census, ledger } = realPair();
+  const dropped = "a69124e830650b810";
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== dropped);
+  ledger.window.from = "2026-11-17T19:12:00.000Z";
+  const r = validateLedger(ledger, roles, census);
+  assert.equal(r.ok, false);
+  assert.ok(!codes(r).includes("E_UNDOCUMENTED_CHILD"), "the shifted window really does evade the burst cross-check");
+  assert.ok(codes(r).includes("E_CHILD_OUTSIDE_WINDOW"));
+  assert.ok(r.violations.some((v) => v.code === "E_CHILD_OUTSIDE_WINDOW" && v.detail.includes("aaceb00b9092592a2")));
+});
+
+test("a child that finishes after window.to is rejected", () => {
+  const { census, ledger } = realPair();
+  ledger.window.to = "2026-11-17T19:30:00.000Z";
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_CHILD_OUTSIDE_WINDOW"));
+  assert.ok(r.violations.some((v) => v.detail.includes("exceeds window.to")));
+});
+
+test("the pass receipt window exactly brackets its children, and equality is inside the window", () => {
+  const { census, ledger } = realPair();
+  const kids = ledger.sessions.filter((s) => s.kind === "child");
+  assert.equal(ledger.window.from, kids.map((s) => s.started_at).sort()[0]);
+  assert.equal(ledger.window.to, kids.map((s) => s.finished_at).sort().slice(-1)[0]);
+  assert.ok(!codes(validateLedger(ledger, roles, census)).includes("E_CHILD_OUTSIDE_WINDOW"));
+});
+
+test("H2: a truncated census pointed at by dispatch_census.source is rejected against the untouched summary", () => {
+  const { census, ledger } = realPair();
+  const i = burstIndexOf(census, "a69124e830650b810");
+  assert.ok(i >= 0);
+  census.bursts.splice(i, 1);
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r = validateLedger(ledger, roles, census);
+  assert.equal(r.ok, false);
+  assert.ok(codes(r).includes("E_CENSUS_MISMATCH"));
+  const keys = r.violations.filter((v) => v.code === "E_CENSUS_MISMATCH").map((v) => v.detail);
+  assert.ok(keys.some((d) => d.includes("dispatch_census.bursts ")));
+  assert.ok(keys.some((d) => d.includes("dispatch_census.burst_size_histogram")));
+});
+
+test("the burst-size histogram is compared, not just the burst count", () => {
+  const { census, ledger } = realPair();
+  ledger.dispatch_census.burst_size_histogram["1"] -= 1;
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(r.violations.some((v) => v.code === "E_CENSUS_MISMATCH" && v.detail.includes("burst_size_histogram")));
+});
+
+test("every declared census summary field is compared", () => {
+  for (const key of ["artifact_count", "zero_byte_count", "first_at", "last_at", "max_burst", "primary_id"]) {
+    const { census, ledger } = realPair();
+    ledger.dispatch_census[key] = key === "primary_id" ? "someone-else" : key.endsWith("_at") ? "2020-01-01T00:00:00.000Z" : -1;
+    const r = validateLedger(ledger, roles, census);
+    assert.ok(r.violations.some((v) => v.code === "E_CENSUS_MISMATCH" && v.detail.includes(`dispatch_census.${key} `)), key);
+  }
+});
+
+test("H3: first_at later than at is a violation, not a silently skipped burst", () => {
+  const { census, ledger } = realPair();
+  const i = burstIndexOf(census, "a69124e830650b810");
+  census.bursts[i].first_at = "2026-11-18T00:00:00.000Z";
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r = validateLedger(ledger, roles, census);
+  assert.equal(r.ok, false);
+  assert.ok(codes(r).includes("E_CENSUS_CLOCK"));
+});
+
+test("an unparseable burst clock is a violation", () => {
+  const { census, ledger } = realPair();
+  census.bursts[0].at = "not-a-clock";
+  assert.ok(codes(validateLedger(ledger, roles, census)).includes("E_CENSUS_CLOCK"));
+});
+
+test("a missing first_at still falls back to at and is cross-checked", () => {
+  const { census, ledger } = realPair();
+  const i = burstIndexOf(census, "a69124e830650b810");
+  delete census.bursts[i].first_at;
+  ledger.sessions = ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r = validateLedger(ledger, roles, census);
+  assert.ok(codes(r).includes("E_UNDOCUMENTED_CHILD"));
+  assert.ok(!codes(r).includes("E_CENSUS_CLOCK"));
+});
+
+test("a census with no declared summary has no trust anchor and is rejected", () => {
+  const { census, ledger } = realPair();
+  delete ledger.dispatch_census;
+  assert.ok(codes(validateLedger(ledger, roles, census)).includes("E_CENSUS_UNDECLARED"));
+});
+
+function runCli(ledger, census) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "rw-ledger-cli-"));
+  const lp = path.join(dir, "ledger.json");
+  const cp = path.join(dir, "census.json");
+  fs.writeFileSync(lp, JSON.stringify(ledger));
+  fs.writeFileSync(cp, JSON.stringify(census));
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const r = spawnSync(process.execPath, [path.join(root, "scripts/verify-session-ledger.mjs"), "--ledger", lp, "--census", cp], { cwd: root, encoding: "utf8" });
+  fs.rmSync(dir, { recursive: true, force: true });
+  return { status: r.status, stdout: r.stdout, stderr: r.stderr };
+}
+
+test("the committed pass receipt exits 0 through the CLI", () => {
+  const { census, ledger } = realPair();
+  const r = runCli(ledger, census);
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(r.stdout.includes('"ok": true'));
+});
+
+test("the committed window-shift negative captures exit 1 with the cross-check on", () => {
+  const captured = fs.readFileSync(fileURLToPath(new URL("../docs/operations/receipts/328-runtime-ledger-negative-window-shift.output.txt", import.meta.url)), "utf8");
+  assert.ok(captured.includes("E_CHILD_OUTSIDE_WINDOW"));
+  assert.ok(captured.includes('"ok": false'));
+  assert.ok(captured.includes('"census_cross_check": "on"'));
+  assert.ok(captured.includes("EXIT=1"));
+  assert.ok(!captured.includes("E_UNDOCUMENTED_CHILD"));
+});
+
+test("H1/H2/H3 each exit 1 through the CLI, not just in-process", () => {
+  const h1 = realPair();
+  h1.ledger.sessions = h1.ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  h1.ledger.window.from = "2026-11-17T19:12:00.000Z";
+  const r1 = runCli(h1.ledger, h1.census);
+  assert.equal(r1.status, 1);
+  assert.ok(r1.stdout.includes("E_CHILD_OUTSIDE_WINDOW"));
+
+  const h2 = realPair();
+  h2.census.bursts.splice(burstIndexOf(h2.census, "a69124e830650b810"), 1);
+  h2.ledger.sessions = h2.ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r2 = runCli(h2.ledger, h2.census);
+  assert.equal(r2.status, 1);
+  assert.ok(r2.stdout.includes("E_CENSUS_MISMATCH"));
+
+  const h3 = realPair();
+  h3.census.bursts[burstIndexOf(h3.census, "a69124e830650b810")].first_at = "2026-11-18T00:00:00.000Z";
+  h3.ledger.sessions = h3.ledger.sessions.filter((s) => s.id !== "a69124e830650b810");
+  const r3 = runCli(h3.ledger, h3.census);
+  assert.equal(r3.status, 1);
+  assert.ok(r3.stdout.includes("E_CENSUS_CLOCK"));
 });

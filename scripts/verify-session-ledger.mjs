@@ -12,6 +12,8 @@ export function validateLedger(ledger, roles, census = null) {
   const maxChildren = roles.max_children;
   const maxSessions = roles.max_model_sessions;
   const knownRoles = new Set(roles.roles.map((r) => r.id));
+  const windowFrom = Date.parse(ledger.window.from);
+  const windowTo = Date.parse(ledger.window.to);
 
   const primaries = sessions.filter((s) => s.kind === "primary");
   if (primaries.length !== 1) add("E_PRIMARY_COUNT", `expected exactly 1 primary, found ${primaries.length}`);
@@ -24,6 +26,8 @@ export function validateLedger(ledger, roles, census = null) {
     if (s.kind === "child") {
       if (!primary || s.spawned_by !== primary.id) add("E_RECURSIVE_SPAWN", `${s.id} spawned_by ${s.spawned_by} is not the primary`);
       if (s.status === "finished" && (!s.finished_at || !s.outcome)) add("E_NO_FINISH", `${s.id} finished without finished_at/outcome`);
+      if (Date.parse(s.started_at) < windowFrom) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} started_at ${s.started_at} precedes window.from ${ledger.window.from}`);
+      if (Date.parse(s.finished_at) > windowTo) add("E_CHILD_OUTSIDE_WINDOW", `${s.id} finished_at ${s.finished_at} exceeds window.to ${ledger.window.to}`);
     }
     if (s.status === "running" && s.finished_at) add("E_STATUS_CONTRADICTION", `${s.id} running but has finished_at`);
     if (s.finished_at && s.started_at && Date.parse(s.finished_at) < Date.parse(s.started_at)) {
@@ -61,15 +65,44 @@ export function validateLedger(ledger, roles, census = null) {
   }
 
   if (census) {
+    const declared = ledger.dispatch_census;
+    if (!declared) {
+      add("E_CENSUS_UNDECLARED", "a census was supplied but the ledger declares no dispatch_census summary to anchor it");
+    } else {
+      const bursts = census.bursts ?? [];
+      const histogram = {};
+      for (const b of bursts) {
+        const size = String(b.ids.length);
+        histogram[size] = (histogram[size] ?? 0) + 1;
+      }
+      const actual = {
+        artifact_count: census.artifact_count,
+        zero_byte_count: census.zero_byte_count,
+        first_at: census.first_at,
+        last_at: census.last_at,
+        max_burst: census.max_burst,
+        bursts: bursts.length,
+        burst_size_histogram: histogram,
+        primary_id: census.primary_id,
+      };
+      for (const [key, value] of Object.entries(actual)) {
+        // Burst sizes are integer-like keys, so both histograms enumerate in ascending order.
+        if (JSON.stringify(declared[key]) !== JSON.stringify(value)) {
+          add("E_CENSUS_MISMATCH", `dispatch_census.${key} declares ${JSON.stringify(declared[key])} but the loaded census has ${JSON.stringify(value)}`);
+        }
+      }
+    }
     const documented = new Set(sessions.map((s) => s.id));
-    const from = Date.parse(ledger.window.from);
-    const to = Date.parse(ledger.window.to);
     const dispatched = new Set();
     for (const b of census.bursts ?? []) {
       const first = Date.parse(b.first_at ?? b.at);
       const last = Date.parse(b.at);
+      if (!Number.isFinite(first) || !Number.isFinite(last) || first > last) {
+        add("E_CENSUS_CLOCK", `burst at ${b.at} declares first_at ${b.first_at}: both clocks must parse and first_at <= at`);
+        continue;
+      }
       for (const id of b.ids) dispatched.add(id);
-      if (first > to || last < from) continue;
+      if (first > windowTo || last < windowFrom) continue;
       for (const id of b.ids) {
         if (!documented.has(id)) add("E_UNDOCUMENTED_CHILD", `${id} dispatched at ${b.at} inside the ledger window but absent from sessions[]`);
       }

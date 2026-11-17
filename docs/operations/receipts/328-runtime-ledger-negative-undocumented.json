@@ -201,6 +201,7 @@
       "3": 6,
       "4": 1
     },
+    "primary_id": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
     "verdict": "No burst in this coordinator session's artifact store ever exceeded max_children=4.",
     "cross_check": "scripts/verify-session-ledger.mjs --ledger <this file> auto-loads dispatch_census.source and rejects E_UNDOCUMENTED_CHILD (a census artifact dispatched inside window but absent from sessions[]) and E_NO_DISPATCH_ARTIFACT (a documented child with no census artifact).",
     "host_artifact_dir": "C:/Users/ryans/AppData/Local/Temp/qwen-code/C--Users-ryans-source-repos-Rustwake/440610df-1273-4137-b6e2-ea5bd9bd70c8/tasks",
