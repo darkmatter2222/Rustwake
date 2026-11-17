@@ -1,0 +1,334 @@
+{
+  "version": 1,
+  "issue": 362,
+  "task": "UX-04 building inspector",
+  "build": "production-preview",
+  "source_sha": "20ff7db691e6ef1a9198e626de102132f0307da1",
+  "started": "2026-11-17T02:55:51.367Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-selected.png",
+        "desktop-dismantle-confirm.png",
+        "desktop-empty.png",
+        "desktop-processing.png",
+        "desktop-blocked.png",
+        "desktop-unaffordable.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15
+        },
+        "selected": {
+          "status": "OPERATING",
+          "recipeOutput": "4 ST",
+          "upgradePreview": "LEVEL 1 NOW 4 ST LEVEL 2 NEXT 8 ST",
+          "upgradeDisabled": true
+        },
+        "motion": {
+          "framesDiffer": true,
+          "note": "rAF simulation advances even with prefers-reduced-motion CSS"
+        },
+        "orbitOcclusion": [
+          {
+            "key": "q",
+            "yaw": 55.079999999999984,
+            "obscured": false
+          },
+          {
+            "key": "q",
+            "yaw": 65.15999999999997,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 55.079999999999984,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 45,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 34.920000000000016,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 24.840000000000032,
+            "obscured": false
+          }
+        ],
+        "resizeOcclusion": [
+          {
+            "viewport": {
+              "width": 1180,
+              "height": 820
+            },
+            "obscured": false
+          },
+          {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "obscured": false
+          }
+        ],
+        "dismantleConfirm": {
+          "role": "alertdialog",
+          "initialFocus": "dismantle-confirm",
+          "refundRows": [
+            "Credits\n40% RECOVERY\n+144 CR",
+            "Ferrous ore\n40% RECOVERY\n+19 FE",
+            "Scrap\n40% RECOVERY\n+20 SC",
+            "Aggregate\n40% RECOVERY\n+8 AG",
+            "Diesel\nCARGO RETURN\n+7 FU",
+            "Steel\nCARGO RETURN\n+18 ST"
+          ],
+          "previewTxt": "Recovery preview: +144 CR, +19 FE, +20 SC, +8 AG, +7 FU, +18 ST.",
+          "touchTargets": [
+            {
+              "testid": "dismantle-confirm",
+              "width": 141,
+              "height": 44
+            },
+            {
+              "testid": "dismantle-keep",
+              "width": 141,
+              "height": 44
+            }
+          ],
+          "bankBefore": 900
+        },
+        "keep": {
+          "focusReturnedTo": "dismantle-open",
+          "bankUnchanged": true
+        },
+        "escapeClosesConfirmOnly": true,
+        "dismantleTransaction": {
+          "bankBefore": 900,
+          "bankAfter": 1044,
+          "creditRefund": 144,
+          "focusReturnedTo": "select-tool"
+        },
+        "empty": {
+          "testid": "inspector-empty",
+          "shownAfterDismantle": true
+        },
+        "processing": {
+          "status": "ASSEMBLING",
+          "cancelVisible": true,
+          "cancelTransaction": {
+            "bankBefore": 1620,
+            "bankAfter": 1800,
+            "creditsReturned": 180
+          }
+        },
+        "blocked": {
+          "reason": "Starter buildings are protected; construct your own district.",
+          "disabled": true
+        },
+        "settingsPersistence": {
+          "key": "rustwake:v2:ux-settings",
+          "autoFrameAfterReload": false,
+          "restored": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1.15,
+          "afterZoom": 1.7825,
+          "stampMatchesApplied": true,
+          "world3d": "ready"
+        },
+        "documentScroll": false,
+        "unaffordable": {
+          "bankCredits": 3,
+          "unaffordableCount": 12,
+          "lockedCount": 6,
+          "note": "costs flagged --short; locked cards disabled with LOCKED badge"
+        },
+        "unaffordableNoSpend": true
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-selected.png",
+        "phone-dismantle-confirm.png",
+        "phone-empty.png",
+        "phone-processing.png",
+        "phone-blocked.png",
+        "phone-unaffordable.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "selected": {
+          "status": "OPERATING",
+          "recipeOutput": "4 ST",
+          "upgradePreview": "LEVEL 1 NOW 4 ST LEVEL 2 NEXT 8 ST",
+          "upgradeDisabled": true
+        },
+        "motion": {
+          "framesDiffer": true,
+          "note": "rAF simulation advances even with prefers-reduced-motion CSS"
+        },
+        "orbitOcclusion": [
+          {
+            "key": "q",
+            "yaw": 55.079999999999984,
+            "obscured": false
+          },
+          {
+            "key": "q",
+            "yaw": 65.15999999999997,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 55.079999999999984,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 45,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 34.920000000000016,
+            "obscured": false
+          },
+          {
+            "key": "e",
+            "yaw": 24.840000000000032,
+            "obscured": false
+          }
+        ],
+        "phoneSheet": {
+          "obscured": false,
+          "machine": {
+            "x": 273.4566405418574,
+            "y": 245.5820185790522,
+            "width": 31.62614703083011,
+            "height": 51.60401605687474
+          },
+          "panel": {
+            "x": 6,
+            "y": 360.765625,
+            "width": 378,
+            "height": 388.234375
+          }
+        },
+        "dismantleConfirm": {
+          "role": "alertdialog",
+          "initialFocus": "dismantle-confirm",
+          "refundRows": [
+            "Credits\n40% RECOVERY\n+144 CR",
+            "Ferrous ore\n40% RECOVERY\n+19 FE",
+            "Scrap\n40% RECOVERY\n+20 SC",
+            "Aggregate\n40% RECOVERY\n+8 AG",
+            "Diesel\nCARGO RETURN\n+7 FU",
+            "Steel\nCARGO RETURN\n+18 ST"
+          ],
+          "previewTxt": "Recovery preview: +144 CR, +19 FE, +20 SC, +8 AG, +7 FU, +18 ST.",
+          "touchTargets": [
+            {
+              "testid": "dismantle-confirm",
+              "width": 156,
+              "height": 44
+            },
+            {
+              "testid": "dismantle-keep",
+              "width": 156,
+              "height": 44
+            }
+          ],
+          "bankBefore": 900
+        },
+        "keep": {
+          "focusReturnedTo": "dismantle-open",
+          "bankUnchanged": true
+        },
+        "escapeClosesConfirmOnly": true,
+        "dismantleTransaction": {
+          "bankBefore": 900,
+          "bankAfter": 1044,
+          "creditRefund": 144,
+          "focusReturnedTo": "select-tool"
+        },
+        "empty": {
+          "testid": "inspector-empty",
+          "shownAfterDismantle": true
+        },
+        "processing": {
+          "status": "ASSEMBLING",
+          "cancelVisible": true,
+          "cancelTransaction": {
+            "bankBefore": 1620,
+            "bankAfter": 1800,
+            "creditsReturned": 180
+          }
+        },
+        "blocked": {
+          "reason": "Starter buildings are protected; construct your own district.",
+          "disabled": true
+        },
+        "settingsPersistence": {
+          "key": "rustwake:v2:ux-settings",
+          "autoFrameAfterReload": false,
+          "restored": true
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "world3d": "ready"
+        },
+        "documentScroll": false,
+        "unaffordable": {
+          "bankCredits": 3,
+          "unaffordableCount": 12,
+          "lockedCount": 6,
+          "note": "costs flagged --short; locked cards disabled with LOCKED badge"
+        },
+        "unaffordableNoSpend": true
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
+    "Numeric occlusion/refund proofs do not certify visual beauty — sponsor review required at G1"
+  ],
+  "completed": "2026-11-17T02:57:01.916Z"
+}
