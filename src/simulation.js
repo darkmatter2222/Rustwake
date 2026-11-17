@@ -29,6 +29,48 @@ const recordFreight=(g,entry)=>{
 };
 const bagOfBuilding=(g,b)=>{if(!b)return null;if(b.type==="depot")return g.bank;if(!b.inventory||typeof b.inventory!=="object")b.inventory={};return b.inventory;};
 const sourceBagOf=(g,j)=>bagOfBuilding(g,g.buildings.find(b=>b.id===j?.sourceId));
+// ---- Construction transaction authority (#373 BLD-04) ----
+// Durable refund provenance: every committed building carries the EXACT cost it
+// paid (b.paid), independent of the 64-row ledger cap and of later blueprint
+// rebalances. Legacy/tampered saves fall back to the current blueprint cost, so
+// a refund can never mint negative or fabricated stock.
+const paidOf=(b)=>{
+ const def=BLUEPRINTS[b?.type];
+ const fallback={...(def?.cost||{})};
+ const p=b?.paid;
+ if(!p||typeof p!=="object"||Array.isArray(p))return fallback;
+ const keys=Object.keys(p);
+ if(keys.length!==Object.keys(fallback).length||!keys.every(k=>k in fallback))return fallback;
+ const clean={};
+ for(const [id,n] of Object.entries(p)){if(!Number.isFinite(n)||n<0)return fallback;clean[id]=n;}
+ return clean;
+};
+// Bounded idempotency registry: a confirmed command id (build OR reject) records
+// its exact outcome so a duplicate delivery — even at different coordinates or
+// after a save/reload — replays the original result and spends nothing further.
+const COMMAND_CAP=128;
+const recordCommand=(g,entry)=>{
+ if(!Array.isArray(g.commands))g.commands=[];
+ g.commands.push({time:g.elapsed,...entry});
+ if(g.commands.length>COMMAND_CAP)g.commands.splice(0,g.commands.length-COMMAND_CAP);
+};
+// Test-only fault seam (#373): forces a throw at exact points INSIDE the commit
+// so tests can prove all-or-nothing rollback. Never set by gameplay code.
+let constructionFault=null;
+export function __setConstructionFault(fn){constructionFault=typeof fn==="function"?fn:null;}
+const fault=(phase,ctx)=>{if(constructionFault)constructionFault(phase,ctx);};
+// Committed-construction measurement (#373): units already spent on assembling
+// buildings (remaining>0), read from durable paid provenance. Distinct from
+// physical stock and from the #384 freight ledgers: these units left the bank
+// at commit and return in full on cancel. Never added to freightTotals.
+export function committedTotals(g){
+ const totals={};
+ for(const b of g?.buildings||[]){
+  if(!(b.remaining>0))continue;
+  for(const [id,n] of Object.entries(paidOf(b)))if(n>0)totals[id]=(totals[id]||0)+n;
+ }
+ return totals;
+}
 export function createGame(){
  const buildings=clone(STARTER_BUILDINGS);
  const vehicles=[
@@ -38,7 +80,7 @@ export function createGame(){
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
-  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],
+  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],commands:[],
   view:{yaw:45,elevation:35.264,zoom:1},stats:{produced:0,delivered:0,shipments:0,sold:0,builds:0},
   log:[{id:0,time:0,message:"Cinder Yard established. Roads and freight trucks are operational."}],
   notices:[]
@@ -56,9 +98,11 @@ export function readGame(){
   g.lastSavedAt=Number(g.lastSavedAt)||Date.now();
   g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z));
   g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400)
-   .map(b=>({...b,rot:normalizeRot(b.rot)}));
+   .map(b=>({...b,rot:normalizeRot(b.rot),paid:paidOf(b)}));
  g.ledger=Array.isArray(g.ledger)?g.ledger.filter(e=>e&&typeof e==="object").slice(-64):[];
  g.freightLedger=Array.isArray(g.freightLedger)?g.freightLedger.filter(e=>e&&typeof e==="object").slice(-128):[];
+ // #373: replay protection survives reload; malformed registry entries drop.
+ g.commands=Array.isArray(g.commands)?g.commands.filter(c=>c&&typeof c==="object"&&typeof c.id==="string"&&c.id).slice(-COMMAND_CAP):[];
   g.roads=[...new Set(g.roads.filter(k=>typeof k==="string"&&inside(...cellOf(k))))];
   // #384: reconcile reserved/onboard ledgers BEFORE offline catch-up so a reload
   // can never count the same units twice; cap the fleet without losing freight.
@@ -84,22 +128,68 @@ export function powerStatus(g){
  return {supply,demand,available:supply>=demand,percent:supply===0?0:Math.round(demand/supply*100)};
 }
 // Free selection/hover uses checkSite (pure, never deducts). A confirmed build
-// spends exactly once, after full footprint/terrain/parcel/bay/frontage validation.
-export function buildAt(g,type,x,z,rot=0){
+// is a ONE-SHOT validated transaction (#373 BLD-04): the pure preview is
+// re-run against the CURRENT state at commit (a stale preview can never cause
+// an overspend), then spend + building + stats + ledger + log land as one unit.
+// Any throw mid-commit rolls every touched field back exactly — no half-applied
+// construction can destroy materials. An optional command id (6th argument;
+// existing 4/5-argument calls are unchanged) makes the commit idempotent: a
+// repeated id replays the original outcome with zero further spend, even at
+// different coordinates. UI click wiring of command ids is a registered
+// follow-up (GAPS.md #373 row) — App.jsx is outside this issue's lease.
+export function buildAt(g,type,x,z,rot=0,commandId=null){
+ const cmd=typeof commandId==="string"&&commandId.trim()?commandId.trim():null;
+ if(cmd){
+  const prior=(Array.isArray(g.commands)?g.commands:[]).find(c=>c.id===cmd);
+  if(prior){
+   // Idempotent replay: no revalidation, no spend, no ledger row, no stats.
+   return prior.ok
+    ?{ok:true,code:"OK",duplicate:true,commandId:cmd,building:g.buildings.find(b=>b.id===prior.buildingId)||null}
+    :{ok:false,code:prior.code,reason:prior.reason,duplicate:true,commandId:cmd};
+  }
+ }
  const site=checkSite(g,type,x,z,rot);
  if(!site.ok){
-  recordLedger(g,{kind:"reject",type,x,z,rot:normalizeRot(rot),code:site.code,reason:site.reason,cost:{},refund:{}});
+  recordLedger(g,{kind:"reject",type,x,z,rot:normalizeRot(rot),code:site.code,reason:site.reason,cost:{},refund:{},...(cmd?{commandId:cmd}:{})});
+  if(cmd)recordCommand(g,{id:cmd,ok:false,code:site.code,reason:site.reason,type,x,z,rot:normalizeRot(rot)});
   return {ok:false,reason:site.reason,code:site.code};
  }
  const def=BLUEPRINTS[type];
- spend(g.bank,def.cost);
- const b={id:g.nextId++,type,x,z,rot:site.rot,level:1,remaining:5,inventory:{},timer:0};
- g.buildings.push(b);g.stats.builds++;
- recordLedger(g,{kind:"build",type,buildingId:b.id,x,z,rot:b.rot,cost:{...def.cost},refund:{}});
- pushLog(g,def.name+" deployed at "+x+","+z+" — assembling.");
- return {ok:true,building:b,code:"OK"};
+ // Snapshot every field the commit touches. ledger/log/commands are capped
+ // rings, so a push can evict their head — restore full contents, not lengths.
+ const snap={bank:{...g.bank},buildings:g.buildings.length,builds:g.stats.builds,
+  ledger:[...(Array.isArray(g.ledger)?g.ledger:[])],log:[...g.log],
+  commands:[...(Array.isArray(g.commands)?g.commands:[])],nextId:g.nextId};
+ try{
+  spend(g.bank,def.cost);
+  fault("afterSpend",{type,x,z,rot:site.rot});
+  const b={id:g.nextId++,type,x,z,rot:site.rot,level:1,remaining:5,inventory:{},timer:0,paid:{...def.cost}};
+  fault("beforePush",{type,x,z,rot:site.rot});
+  g.buildings.push(b);
+  fault("afterPush",{type,x,z,rot:site.rot});
+  g.stats.builds++;
+  recordLedger(g,{kind:"build",type,buildingId:b.id,x,z,rot:b.rot,cost:{...def.cost},refund:{},...(cmd?{commandId:cmd}:{})});
+  fault("afterLedger",{type,x,z,rot:site.rot});
+  pushLog(g,def.name+" deployed at "+x+","+z+" — assembling.");
+  if(cmd)recordCommand(g,{id:cmd,ok:true,code:"OK",buildingId:b.id,type,x,z,rot:b.rot});
+  return {ok:true,building:b,code:"OK",...(cmd?{commandId:cmd}:{})};
+ }catch(err){
+  // All-or-nothing rollback: bank keys restored exactly (added keys removed),
+  // append-only rings restored to their pre-commit contents, counters reset.
+  for(const k of Object.keys(g.bank))if(!(k in snap.bank))delete g.bank[k];
+  Object.assign(g.bank,snap.bank);
+  g.buildings.length=snap.buildings;
+  g.stats.builds=snap.builds;
+  g.ledger=snap.ledger;
+  g.log=snap.log;
+  g.commands=snap.commands;
+  g.nextId=snap.nextId;
+  throw err;
+ }
 }
-// Cancel an in-flight assembly: full refund, conserved ledger, no ghost stock.
+// Cancel an in-flight assembly: refunds EXACTLY what this building paid
+// (b.paid provenance, durable across ledger eviction and save/reload), never
+// the current blueprint price. Conserved ledger, no ghost stock.
 export function cancelConstruction(g,id){
  const i=g.buildings.findIndex(b=>b.id===id);
  if(i<0)return {ok:false,code:"MISSING",reason:"No building selected"};
@@ -107,11 +197,12 @@ export function cancelConstruction(g,id){
  if(b.id<=6)return {ok:false,code:"PROTECTED",reason:"Starter buildings are protected; construct your own district."};
  if(b.remaining<=0)return {ok:false,code:"COMPLETE",reason:"Assembly is complete — dismantle the machine instead"};
  const def=BLUEPRINTS[b.type];
- for(const [r,n] of Object.entries(def.cost))deposit(g.bank,r,n);
+ const paid=paidOf(b);
+ for(const [r,n] of Object.entries(paid))deposit(g.bank,r,n);
  g.buildings.splice(i,1);
- recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...def.cost}});
+ recordLedger(g,{kind:"cancel",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund:{...paid}});
  pushLog(g,def.name+" construction canceled — full material refund.");
- return {ok:true,code:"OK",refund:{...def.cost}};
+ return {ok:true,code:"OK",refund:{...paid}};
 }
 export function removeBuilding(g,id){
  const i=g.buildings.findIndex(b=>b.id===id);
@@ -120,8 +211,9 @@ export function removeBuilding(g,id){
  if(b.id<=6)return {ok:false,reason:"Starter buildings are protected; construct your own district."};
  for(const v of g.vehicles)if(v.job&&(v.job.sourceId===id||v.job.destId===id))return {ok:false,reason:"A truck has reserved material at this building"};
  const d=BLUEPRINTS[b.type];
+ const paid=paidOf(b);
  const refund={};
- for(const [r,amount] of Object.entries(d.cost)){const n=Math.floor(amount*.4);refund[r]=(refund[r]||0)+n;deposit(g.bank,r,n);}
+ for(const [r,amount] of Object.entries(paid)){const n=Math.floor(amount*.4);refund[r]=(refund[r]||0)+n;deposit(g.bank,r,n);}
  for(const [r,amount] of Object.entries(b.inventory)){refund[r]=(refund[r]||0)+amount;deposit(g.bank,r,amount);}
  g.buildings.splice(i,1);
  recordLedger(g,{kind:"salvage",type:b.type,buildingId:b.id,x:b.x,z:b.z,rot:b.rot||0,cost:{},refund});

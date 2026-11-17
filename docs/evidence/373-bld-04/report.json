@@ -1,0 +1,415 @@
+{
+  "version": 1,
+  "issue": 373,
+  "task": "BLD-04 atomic idempotent construction commit",
+  "build": "production-preview",
+  "source_sha": "b6da1bdd7554794ecde57c6095e1ce2bebaa0983",
+  "started": "2026-11-17T12:25:06.917Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-idempotent-one-building.png",
+        "desktop-ui-build-ok.png",
+        "desktop-ui-cancel-refund.png",
+        "desktop-ui-duplicate-collision.png",
+        "desktop-ui-dblclick-one-building.png"
+      ],
+      "proof": {
+        "idempotent": {
+          "inNode": {
+            "first": {
+              "ok": true,
+              "code": "OK",
+              "buildingId": 10,
+              "x": 6,
+              "z": 7
+            },
+            "replay": {
+              "ok": true,
+              "duplicate": true,
+              "code": "OK",
+              "buildingId": 10,
+              "requestedSite": {
+                "x": 10,
+                "z": 1
+              }
+            },
+            "plainCollision": {
+              "ok": false,
+              "code": "COLLISION",
+              "reason": "A machine occupies this site"
+            }
+          },
+          "legacyCounterfactual": {
+            "buildings": 8,
+            "spend": {
+              "credits": 360,
+              "scrap": 56,
+              "stone": 24
+            }
+          },
+          "fixed": {
+            "buildings": 7,
+            "spend": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            },
+            "committed": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            }
+          },
+          "browser": {
+            "buildingsLive": 7,
+            "buildingsSave": 7,
+            "salvagersLive": 2,
+            "committedBuilding": {
+              "id": 10,
+              "x": 6,
+              "z": 7,
+              "paid": {
+                "credits": 180,
+                "scrap": 28,
+                "stone": 12
+              },
+              "remaining": 4.496599999999997
+            },
+            "registryPersisted": true,
+            "strip": {
+              "credits": 1620,
+              "scrap": 192,
+              "scrapMonotonic": true
+            },
+            "ledgerStone": {
+              "depot": 208,
+              "committed": 12
+            },
+            "probeCredits": 1620
+          }
+        },
+        "doubleClick": {
+          "method": "real page.mouse.dblclick at the same point",
+          "attempts": [
+            {
+              "x": 0.42,
+              "y": 0.32,
+              "ok": false,
+              "code": "ROAD"
+            },
+            {
+              "x": 0.58,
+              "y": 0.32,
+              "ok": true,
+              "code": "OK"
+            }
+          ],
+          "spend": {
+            "credits": -180,
+            "scrap": -28,
+            "stone": -12
+          },
+          "buildingsBefore": 6,
+          "buildingsAfter": 7,
+          "note": "exactly one building / one spend from a real double activation; the second activation lands after build success auto-exits build mode, so it selects rather than builds"
+        },
+        "uiTransactions": {
+          "powerFrozen": "starter generator removed in seed -> supply 0, no production; credits/scrap/stone never produced or dispatched",
+          "attempts": [
+            {
+              "x": 0.5,
+              "y": 0.28,
+              "ok": true,
+              "code": "OK"
+            }
+          ],
+          "buildDelta": {
+            "credits": -180,
+            "scrap": -28,
+            "stone": -12
+          },
+          "buildingsAfterBuild": 6,
+          "cancel": {
+            "button": "Cancel construction — full refund (180 CR · 28 SC · 12 AG)",
+            "refund": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            },
+            "buildingsAfter": 5,
+            "bankRestoredToSeed": true
+          },
+          "rebuild": {
+            "stamp": {
+              "ok": "true",
+              "code": "OK",
+              "reason": ""
+            },
+            "spend": {
+              "credits": -180,
+              "scrap": -28,
+              "stone": -12
+            },
+            "buildings": 6
+          },
+          "duplicateClick": {
+            "stamp": {
+              "ok": "false",
+              "code": "COLLISION",
+              "reason": "A machine occupies this site"
+            },
+            "spend": {
+              "credits": 0,
+              "scrap": 0,
+              "stone": 0
+            },
+            "buildings": 6
+          },
+          "note": "build/rebuild/duplicate driven through real dock clicks + physical canvas taps on the production build; cancel activated via in-page DOM click on the real button (same onCancel transaction, zero actionability delay to stay inside the 5s assembly window); validator verdicts read from the app's own lastSite* stamps, banks from its fleetProbe snapshot"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "probeWait": {
+        "condition": "MutationObserver count of data-fleet-probe attribute writes > baseline captured at probe start (a fresh post-action stamp write), replacing the fixed 320ms sleep",
+        "timeoutMs": 15000,
+        "pollingMs": 25,
+        "count": 16,
+        "maxMs": 481,
+        "meanMs": 272,
+        "samplesMs": [
+          235,
+          340,
+          132,
+          481,
+          286,
+          264,
+          285,
+          73,
+          351,
+          288,
+          154,
+          338,
+          283,
+          113,
+          310,
+          422
+        ]
+      }
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-idempotent-one-building.png",
+        "phone-ui-build-ok.png",
+        "phone-ui-cancel-refund.png",
+        "phone-ui-duplicate-collision.png",
+        "phone-ui-dblclick-one-building.png"
+      ],
+      "proof": {
+        "idempotent": {
+          "inNode": {
+            "first": {
+              "ok": true,
+              "code": "OK",
+              "buildingId": 10,
+              "x": 6,
+              "z": 7
+            },
+            "replay": {
+              "ok": true,
+              "duplicate": true,
+              "code": "OK",
+              "buildingId": 10,
+              "requestedSite": {
+                "x": 10,
+                "z": 1
+              }
+            },
+            "plainCollision": {
+              "ok": false,
+              "code": "COLLISION",
+              "reason": "A machine occupies this site"
+            }
+          },
+          "legacyCounterfactual": {
+            "buildings": 8,
+            "spend": {
+              "credits": 360,
+              "scrap": 56,
+              "stone": 24
+            }
+          },
+          "fixed": {
+            "buildings": 7,
+            "spend": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            },
+            "committed": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            }
+          },
+          "browser": {
+            "buildingsLive": 7,
+            "buildingsSave": 7,
+            "salvagersLive": 2,
+            "committedBuilding": {
+              "id": 10,
+              "x": 6,
+              "z": 7,
+              "paid": {
+                "credits": 180,
+                "scrap": 28,
+                "stone": 12
+              },
+              "remaining": 5
+            },
+            "registryPersisted": true,
+            "strip": {
+              "credits": 1620,
+              "scrap": 192,
+              "scrapMonotonic": true
+            },
+            "ledgerStone": {
+              "depot": 208,
+              "committed": 12
+            },
+            "probeCredits": 1620
+          }
+        },
+        "doubleClick": {
+          "method": "two sequential real touchscreen taps at the same point (synthetic double tap)",
+          "attempts": [
+            {
+              "x": 0.42,
+              "y": 0.32,
+              "ok": true,
+              "code": "OK"
+            }
+          ],
+          "spend": {
+            "credits": -180,
+            "scrap": -28,
+            "stone": -12
+          },
+          "buildingsBefore": 6,
+          "buildingsAfter": 7,
+          "note": "exactly one building / one spend from a real double activation; the second activation lands after build success auto-exits build mode, so it selects rather than builds"
+        },
+        "uiTransactions": {
+          "powerFrozen": "starter generator removed in seed -> supply 0, no production; credits/scrap/stone never produced or dispatched",
+          "attempts": [
+            {
+              "x": 0.5,
+              "y": 0.28,
+              "ok": true,
+              "code": "OK"
+            }
+          ],
+          "buildDelta": {
+            "credits": -180,
+            "scrap": -28,
+            "stone": -12
+          },
+          "buildingsAfterBuild": 6,
+          "cancel": {
+            "button": "Cancel construction — full refund (180 CR · 28 SC · 12 AG)",
+            "refund": {
+              "credits": 180,
+              "scrap": 28,
+              "stone": 12
+            },
+            "buildingsAfter": 5,
+            "bankRestoredToSeed": true
+          },
+          "rebuild": {
+            "stamp": {
+              "ok": "true",
+              "code": "OK",
+              "reason": ""
+            },
+            "spend": {
+              "credits": -180,
+              "scrap": -28,
+              "stone": -12
+            },
+            "buildings": 6
+          },
+          "duplicateClick": {
+            "stamp": {
+              "ok": "false",
+              "code": "COLLISION",
+              "reason": "A machine occupies this site"
+            },
+            "spend": {
+              "credits": 0,
+              "scrap": 0,
+              "stone": 0
+            },
+            "buildings": 6
+          },
+          "note": "build/rebuild/duplicate driven through real dock clicks + physical canvas taps on the production build; cancel activated via in-page DOM click on the real button (same onCancel transaction, zero actionability delay to stay inside the 5s assembly window); validator verdicts read from the app's own lastSite* stamps, banks from its fleetProbe snapshot"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "probeWait": {
+        "condition": "MutationObserver count of data-fleet-probe attribute writes > baseline captured at probe start (a fresh post-action stamp write), replacing the fixed 320ms sleep",
+        "timeoutMs": 15000,
+        "pollingMs": 25,
+        "count": 15,
+        "maxMs": 342,
+        "meanMs": 216,
+        "samplesMs": [
+          288,
+          29,
+          209,
+          134,
+          342,
+          315,
+          262,
+          131,
+          265,
+          285,
+          160,
+          159,
+          294,
+          290,
+          75
+        ]
+      }
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
+    "Numeric proofs do not certify visual fidelity — sponsor screenshot+motion review required at G1 (#276)",
+    "Local production preview only — the live hosted receipt is produced at release by the release engineer",
+    "UI is not idempotent end-to-end yet: App.jsx still calls the 4-arg buildAt (command-id wiring is a registered GAPS follow-up, serialized after #541). Command-id replay is proven via authoritative in-node public-API transactions + the persisted registry; the idempotent-one-building headline PNG is therefore API-SEEDED, not UI-click proof. Real UI duplicate safety is proven separately: plain duplicate tap COLLISION plus a real double-click/double-tap yielding exactly one building / one spend (ui-dblclick-one-building shots)",
+    "Command registry eviction bound (reviewer-quantified, disclosed): game.commands persists only the LAST 128 command ids. After 128 further commands an id is evicted, and a cross-site replay of that evicted id RE-SPENDS (it is treated as a fresh command). Bounded, disclosed behaviour — not a blocking defect; see docs/backlog/GAPS.md and docs/engineering/ECONOMY.md",
+    "Save/reload durability of paid provenance and the command registry is proven by tests/constructionAtomic.test.mjs (fixture replay + registry reload); the browser seed script re-seeds on reload, so reload is not re-proven here",
+    "Assembly completion sinks the paid cost into machine capital and salvage returns floor(40%) — exact audited numbers, not a leak (unit-tested conservation chain)"
+  ],
+  "completed": "2026-11-17T12:25:32.361Z"
+}

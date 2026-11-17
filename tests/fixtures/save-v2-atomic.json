@@ -1,0 +1,306 @@
+{
+  "version": 2,
+  "seed": 4073,
+  "createdAt": 1794906113644,
+  "lastSavedAt": 1794906113644,
+  "elapsed": 0,
+  "nextId": 14,
+  "bank": {
+    "credits": 1620,
+    "scrap": 192,
+    "iron": 90,
+    "copper": 45,
+    "stone": 208,
+    "fuel": 110,
+    "water": 90,
+    "steel": 20,
+    "alloy": 0,
+    "gears": 0,
+    "circuits": 0,
+    "data": 15,
+    "relics": 0,
+    "influence": 0,
+    "shards": 0,
+    "charters": 0,
+    "renown": 0
+  },
+  "buildings": [
+    {
+      "id": 1,
+      "type": "salvager",
+      "x": 7,
+      "z": 9,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 2,
+      "type": "depot",
+      "x": 13,
+      "z": 9,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 3,
+      "type": "generator",
+      "x": 7,
+      "z": 16,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 4,
+      "type": "furnace",
+      "x": 16,
+      "z": 13,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {
+        "iron": 10,
+        "fuel": 7
+      },
+      "timer": 0
+    },
+    {
+      "id": 5,
+      "type": "crane",
+      "x": 15,
+      "z": 5,
+      "rot": 0,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 6,
+      "type": "market",
+      "x": 15,
+      "z": 18,
+      "level": 1,
+      "remaining": 0,
+      "inventory": {},
+      "timer": 0
+    },
+    {
+      "id": 10,
+      "type": "salvager",
+      "x": 6,
+      "z": 7,
+      "rot": 0,
+      "level": 1,
+      "remaining": 5,
+      "inventory": {},
+      "timer": 0,
+      "paid": {
+        "credits": 180,
+        "scrap": 28,
+        "stone": 12
+      }
+    }
+  ],
+  "roads": [
+    "5,8",
+    "6,8",
+    "7,8",
+    "8,8",
+    "9,8",
+    "10,8",
+    "11,8",
+    "12,8",
+    "13,8",
+    "14,8",
+    "15,8",
+    "16,8",
+    "17,8",
+    "18,8",
+    "19,8",
+    "5,12",
+    "6,12",
+    "7,12",
+    "8,12",
+    "9,12",
+    "10,12",
+    "11,12",
+    "12,12",
+    "13,12",
+    "14,12",
+    "15,12",
+    "16,12",
+    "17,12",
+    "18,12",
+    "19,12",
+    "5,17",
+    "6,17",
+    "7,17",
+    "8,17",
+    "9,17",
+    "10,17",
+    "11,17",
+    "12,17",
+    "13,17",
+    "14,17",
+    "15,17",
+    "16,17",
+    "17,17",
+    "18,17",
+    "19,17",
+    "11,4",
+    "11,5",
+    "11,6",
+    "11,7",
+    "11,9",
+    "11,10",
+    "11,11",
+    "11,13",
+    "11,14",
+    "11,15",
+    "11,16",
+    "11,18",
+    "11,19",
+    "11,20",
+    "5,9",
+    "5,10",
+    "5,11",
+    "5,13",
+    "5,14",
+    "5,15",
+    "5,16",
+    "19,9",
+    "19,10",
+    "19,11",
+    "19,13",
+    "19,14",
+    "19,15",
+    "19,16"
+  ],
+  "vehicles": [
+    {
+      "id": 1,
+      "name": "HAULER-01",
+      "x": 11,
+      "z": 10,
+      "speed": 2.25,
+      "job": null,
+      "cargo": null,
+      "anim": 0
+    },
+    {
+      "id": 2,
+      "name": "HAULER-02",
+      "x": 11,
+      "z": 11,
+      "speed": 2.6,
+      "job": null,
+      "cargo": null,
+      "anim": 0
+    },
+    {
+      "id": 3,
+      "name": "HAULER-03",
+      "x": 11,
+      "z": 12,
+      "speed": 2,
+      "job": null,
+      "cargo": null,
+      "anim": 0
+    }
+  ],
+  "research": [],
+  "discovered": [
+    "cinders"
+  ],
+  "tier": 0,
+  "world": "Cinder Basin",
+  "sector": 1,
+  "ledger": [
+    {
+      "id": 11,
+      "time": 0,
+      "kind": "build",
+      "type": "salvager",
+      "buildingId": 10,
+      "x": 6,
+      "z": 7,
+      "rot": 0,
+      "cost": {
+        "credits": 180,
+        "scrap": 28,
+        "stone": 12
+      },
+      "refund": {},
+      "commandId": "fixture-build-1"
+    },
+    {
+      "id": 13,
+      "time": 0,
+      "kind": "reject",
+      "type": "salvager",
+      "x": 6,
+      "z": 7,
+      "rot": 0,
+      "code": "COLLISION",
+      "reason": "A machine occupies this site",
+      "cost": {},
+      "refund": {},
+      "commandId": "fixture-reject-1"
+    }
+  ],
+  "freightLedger": [],
+  "commands": [
+    {
+      "time": 0,
+      "id": "fixture-build-1",
+      "ok": true,
+      "code": "OK",
+      "buildingId": 10,
+      "type": "salvager",
+      "x": 6,
+      "z": 7,
+      "rot": 0
+    },
+    {
+      "time": 0,
+      "id": "fixture-reject-1",
+      "ok": false,
+      "code": "COLLISION",
+      "reason": "A machine occupies this site",
+      "type": "salvager",
+      "x": 6,
+      "z": 7,
+      "rot": 0
+    }
+  ],
+  "view": {
+    "yaw": 45,
+    "elevation": 35.264,
+    "zoom": 1
+  },
+  "stats": {
+    "produced": 0,
+    "delivered": 0,
+    "shipments": 0,
+    "sold": 0,
+    "builds": 1
+  },
+  "log": [
+    {
+      "id": 12,
+      "time": 0,
+      "message": "Scrap Extractor deployed at 6,7 — assembling."
+    },
+    {
+      "id": 0,
+      "time": 0,
+      "message": "Cinder Yard established. Roads and freight trucks are operational."
+    }
+  ],
+  "notices": []
+}
