@@ -198,15 +198,57 @@ test("fuel shortage at tier 0 is LOCKED behind the refinery tier, with an honest
  assert.ok(a.remedy.includes(tier.needs+" production"),"remedy names the real requirement");
  assert.deepEqual(a.action,{tool:"market",label:"Open the Exchange"});
 });
-test("warning starvation is delivery-pending: remedy watches the freight ledger",()=>{
+// #566 DISCRIMINATION (covered side): a delivery-pending shortage whose depot +
+// inbound already covers the deficit is NOT a rail alarm — its own text would say
+// "already covered / automatic", which cries wolf on a healthy yard. The signal
+// survives on the UX-01 strip chip flag (◔) and the ledger, never on the rail.
+test("#566 covered (delivery-pending) shortage raises NO rail alarm; strip still flags it",()=>{
  const g=starvedWarning();
- const s=alarmsState(g);
+ const s=alarmsState(g),strip=resourceStripState(g);
+ // The strip read model is UNCHANGED: both rows are still delivery-pending warnings.
+ const ironRow=strip.shortages.find(r=>r.id==="iron");
+ const fuelRow=strip.shortages.find(r=>r.id==="fuel");
+ assert.equal(ironRow.state,"warning","strip still classifies the covered deficit");
+ assert.equal(fuelRow.state,"warning");
+ assert.match(ironRow.detail,/covers it/,"strip detail still says the depot covers it");
+ // But the rail carries NO starvation alarm for a covered deficit (no wolf chip).
+ assert.ok(!s.alarms.some(a=>a.kind==="starvation"),"covered deficit must not raise a rail alarm");
+ assert.ok(!s.alarms.some(a=>a.id==="starve-iron"));
+ assert.ok(!s.alarms.some(a=>a.id==="starve-fuel"));
+ assert.equal(s.counts.warning,0,"no WARNING chip on a covered shortage");
+});
+// #566 DISCRIMINATION (uncovered side — the decisive anti-suppression clause):
+// a genuinely uncovered deficit MUST STILL raise a visible alarm chip with the
+// authoritative problem text and a STATE-CHANGING action. Same commit as the
+// covered case so the discrimination is never absent from the record.
+test("#566 uncovered deficit STILL raises a visible alarm with a state-changing action",()=>{
+ const g=starvedCritical();
+ const s=alarmsState(g),strip=resourceStripState(g);
+ const ironRow=strip.shortages.find(r=>r.id==="iron");
+ assert.equal(ironRow.state,"critical","depot + inbound cannot cover the deficit");
  const a=byId(s,"starve-iron");
- assert.equal(a.severity,"warning");
- assert.equal(a.state,"ready");
- assert.match(a.remedy,/automatic/);
- assert.deepEqual(a.action,{tool:"inventory",resource:"iron",label:"Watch the freight ledger"});
- assert.equal(byId(s,"starve-fuel").severity,"warning");
+ // CRITICAL is the rail's highest severity (>= WARNING): the deficit is visible,
+// not silenced. Severity mirrors the strip's critical flag (no cross-surface drift).
+ assert.equal(a.severity,"critical");
+ assert.equal(a.severityLabel,"CRITICAL");
+ assert.equal(a.problem,ironRow.detail,"problem text is the authoritative uncovered detail");
+ assert.match(a.problem,/cannot cover it/);
+ // The action changes state (arms a real producer build), not "open a panel and watch".
+ assert.equal(a.action.tool,"build");
+ assert.ok(a.action.blueprint,"names a real producer blueprint to construct");
+ assert.notEqual(a.action.label,"Watch the freight ledger");
+ assert.ok(s.counts.critical>=1,"the uncovered deficit is counted, not suppressed");
+});
+// #566: a covered deficit that BECOMES uncovered (player sells out the depot)
+// crosses the boundary from no-rail-alarm to a visible alarm — proving the rail
+// discriminates on real coverage, not on a hardcoded silence.
+test("#566 rail re-arms when a covered deficit becomes uncovered",()=>{
+ const g=starvedWarning();
+ assert.ok(!alarmsState(g).alarms.some(a=>a.id==="starve-iron"),"covered: silent on rail");
+ g.bank.iron=0;g.vehicles.forEach(v=>v.job=null); // depot can no longer cover it
+ const a=byId(alarmsState(g),"starve-iron");
+ assert.equal(a.severity,"critical");
+ assert.match(a.problem,/cannot cover it/);
 });
 test("unaffordable producer remedy offers the Exchange fallback",()=>{
  const g=freshWith(g=>{g.bank.iron=0;g.bank.fuel=0;g.bank.credits=0;g.bank.scrap=0;g.bank.stone=0;
@@ -240,13 +282,17 @@ test("locked producer becomes buildable once the tier is REALLY reached",()=>{
  assert.equal(a.state,"ready");
  assert.deepEqual(a.action,{tool:"build",blueprint:"refinery",label:"Construct "+BLUEPRINTS.refinery.name});
 });
-test("starvation clears after REAL truck resupply — no hardcoded alarm",()=>{
+test("covered shortage clears after REAL truck resupply on the strip read model — no hardcoded flag",()=>{
  const g=freshWith(g=>{g.bank.iron=50;g.bank.fuel=20;
   const f=g.buildings.find(b=>b.type==="furnace");f.inventory={};});
- assert.ok(alarmsState(g).alarms.some(a=>a.kind==="starvation"));
+ // #566: a covered (delivery-pending) deficit raises NO rail alarm; the live
+ // signal is the strip shortage, which real truck delivery must still clear.
+ assert.ok(!alarmsState(g).alarms.some(a=>a.kind==="starvation"),"covered deficit is not a rail alarm");
+ assert.ok(resourceStripState(g).shortages.length>0,"strip still flags the delivery-pending deficit");
  let cleared=false;
- for(let i=0;i<240&&!cleared;i++){advanceGame(g,0.5);cleared=!alarmsState(g).alarms.some(a=>a.kind==="starvation");}
- assert.ok(cleared,"real sim delivery never cleared the starvation alarms");
+ for(let i=0;i<240&&!cleared;i++){advanceGame(g,0.5);cleared=resourceStripState(g).shortages.length===0;}
+ assert.ok(cleared,"real sim delivery never cleared the strip shortage");
+ assert.ok(!alarmsState(g).alarms.some(a=>a.kind==="starvation"),"rail stays nominal after resupply");
 });
 test("brownout takes precedence: powerless machines are not material-starved",()=>{
  const g=freshWith(g=>{g.buildings=g.buildings.filter(b=>b.type!=="generator");
@@ -269,9 +315,28 @@ test("a connected bay holding a full truck load with no pickup raises a storage 
  assert.equal(a.icon,ALARM_ICONS.storage);
  assert.equal(a.target.held,TRUCK_LOAD);
  assert.ok(a.problem.includes(TRUCK_LOAD+" units"));
- assert.match(a.remedy,/automatic/);
- assert.deepEqual(a.action,{tool:"fleet",label:"Check fleet dispatch"});
+ // #566 (product ruling 6956802594): when routeOk is TRUE the remedy must NOT
+ // diagnose blocked routes — it describes queue/saturation, true under both the
+ // pre- and post-#573 economies. Remedy TEXT ONLY: state/severity/firing unchanged.
+ assert.equal(a.state,"ready","routeOk true → ready state unchanged");
+ assert.equal(a.severity,"warning","severity unchanged by the copy fix");
+ assert.match(a.remedy,/queued|waiting its turn|waiting for a free truck/i,"queue/saturation wording");
+ assert.doesNotMatch(a.remedy,/blocked route/i,"must not diagnose a blocked route when routeOk is true");
+ assert.doesNotMatch(a.remedy,/dispatch is automatic/i,"must not cry 'already automatic'");
+ assert.deepEqual(a.action,{tool:"fleet",label:"Check fleet dispatch"},"action unchanged (Fleet has real cancel/reassign controls)");
  assert.equal(s.depotUncapped,true,"depot cap is never fabricated");
+});
+// #566: the blocked-route remedy (routeOk FALSE) is untouched — it correctly
+// diagnoses the missing route. The copy fix only changes the routeOk-TRUE branch.
+test("#566 storage remedy still diagnoses a blocked route when routeOk is FALSE",()=>{
+ const g=freshWith(g=>{const f=g.buildings.find(b=>b.type==="furnace");
+  f.inventory={iron:10,fuel:7,steel:TRUCK_LOAD};g.vehicles.forEach(v=>v.job=null);
+  g.roads=["16,12"];});
+ const f=g.buildings.find(b=>b.type==="furnace");
+ const a=byId(alarmsState(g),"storage-"+f.id);
+ assert.equal(a.state,"blocked");
+ assert.match(a.remedy,/reconnect/i);
+ assert.deepEqual(a.action,{tool:"road",label:"Reconnect the route"});
 });
 test("storage threshold is the sim's own truck load, not an invented cap",()=>{
  const under=freshWith(g=>{const f=g.buildings.find(b=>b.type==="furnace");
