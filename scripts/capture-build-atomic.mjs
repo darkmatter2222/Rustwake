@@ -18,7 +18,21 @@
 // the screenshots at G1 (#276). The UI does not yet issue command ids (App.jsx
 // wiring is a registered follow-up); idempotent replay is proven through the
 // authoritative public API + persisted registry, duplicate plain clicks through
-// real UI taps.
+// real UI taps. The "idempotent-one-building" headline PNG is API-SEEDED (a
+// command-id replay cannot be UI-driven until the App.jsx wiring lands); a
+// REAL double-click / double-tap one-building proof is captured separately
+// (ui-dblclick-one-building shots).
+// HARNESS TIMING FIX (reviewer root cause at c9e69aa4): probe() previously slept
+// a FIXED 320ms before reading body.dataset.fleetProbe, but the app stamps
+// fleetProbe inside its rAF loop only when now-uiLast>270 (App.jsx), and on a
+// loaded host the frame gap stretched to a measured 576ms — the fixed sleep read
+// a STALE pre-action stamp and false-FAILed. probe() now waits on the REAL
+// condition: a MutationObserver counts data-fleet-probe attribute WRITES, and
+// probe() blocks until at least one write lands AFTER the probe began (i.e. a
+// fresh post-action snapshot), with a generous 15s timeout. No assertion or gate
+// was weakened; every numeric check is unchanged. Per-probe wait latencies are
+// recorded in report.json (views[].probeWait). Fixed mode-activation sleeps were
+// likewise replaced by waiting on the dock button's real aria-pressed="true".
 import {chromium} from "playwright-core";
 import {createGame,checkSite,buildAt,committedTotals} from "../src/simulation.js";
 import {BLUEPRINTS,INITIAL_BANK,WORLD_SIZE,SAVE_KEY} from "../src/content.js";
@@ -34,7 +48,8 @@ const report={version:1,issue:373,task:"BLD-04 atomic idempotent construction co
   "One headless Chromium/SwiftShader run; phone view is emulated, not a physical device",
   "Numeric proofs do not certify visual fidelity — sponsor screenshot+motion review required at G1 (#276)",
   "Local production preview only — the live hosted receipt is produced at release by the release engineer",
-  "UI is not idempotent end-to-end yet: App.jsx still calls the 4-arg buildAt (command-id wiring is a registered GAPS follow-up). Command-id replay is proven via authoritative in-node public-API transactions + the persisted registry; duplicate PLAIN clicks are proven through real UI taps",
+  "UI is not idempotent end-to-end yet: App.jsx still calls the 4-arg buildAt (command-id wiring is a registered GAPS follow-up, serialized after #541). Command-id replay is proven via authoritative in-node public-API transactions + the persisted registry; the idempotent-one-building headline PNG is therefore API-SEEDED, not UI-click proof. Real UI duplicate safety is proven separately: plain duplicate tap COLLISION plus a real double-click/double-tap yielding exactly one building / one spend (ui-dblclick-one-building shots)",
+  "Command registry eviction bound (reviewer-quantified, disclosed): game.commands persists only the LAST 128 command ids. After 128 further commands an id is evicted, and a cross-site replay of that evicted id RE-SPENDS (it is treated as a fresh command). Bounded, disclosed behaviour — not a blocking defect; see docs/backlog/GAPS.md and docs/engineering/ECONOMY.md",
   "Save/reload durability of paid provenance and the command registry is proven by tests/constructionAtomic.test.mjs (fixture replay + registry reload); the browser seed script re-seeds on reload, so reload is not re-proven here",
   "Assembly completion sinks the paid cost into machine capital and salvage returns floor(40%) — exact audited numbers, not a leak (unit-tested conservation chain)"]};
 let child,browser;
@@ -116,13 +131,37 @@ try{
    await page.goto(HOST,{waitUntil:"domcontentloaded",timeout:30000});
    await page.locator(".world-canvas").waitFor({state:"visible",timeout:30000});
    await page.waitForFunction(()=>document.querySelector(".world-canvas")?.dataset.world3d==="ready",null,{timeout:20000});
+   // Fresh-stamp condition source: count every data-fleet-probe attribute WRITE
+   // (the app rewrites it each UI refresh inside its rAF loop). probe() below
+   // waits for a write AFTER it began, so it can never read a stale pre-action
+   // snapshot regardless of host load / frame pacing.
+   await page.evaluate(()=>{
+    window.__fleetProbeWrites=0;
+    new MutationObserver(ms=>{for(const m of ms)if(m.attributeName==="data-fleet-probe")window.__fleetProbeWrites++;})
+     .observe(document.body,{attributes:true,attributeFilter:["data-fleet-probe"]});
+   });
    await page.waitForTimeout(900);
    return {ctx,page};
   };
   const chipValue=async(page,id)=>Number((await page.locator(`.resources-strip button[data-resource="${id}"] strong`).innerText()).replace(/[^0-9.-]/g,""));
   const saveNow=page=>page.evaluate(k=>{try{return JSON.parse(localStorage.getItem(k));}catch{return null;}},SAVE_KEY);
   // The app's OWN observability stamp: the same snapshot the panels render.
-  const probe=async(page)=>{await page.waitForTimeout(320);return page.evaluate(()=>{try{return JSON.parse(document.body.dataset.fleetProbe||"null");}catch{return null;}});};
+  // CONDITION-BASED wait (replaces the fixed 320ms sleep that false-FAILed at a
+  // measured 576ms stamp latency on a loaded host): block until the app WRITES a
+  // fresh fleetProbe stamp AFTER this probe began, then read it. The write is
+  // the real condition — a post-action snapshot — not a guessed duration.
+  const probeWaits=[];
+  const probe=async(page)=>{
+   const t0=Date.now();
+   const baseline=await page.evaluate(()=>window.__fleetProbeWrites??0);
+   await page.waitForFunction(b=>(window.__fleetProbeWrites??0)>b,baseline,{timeout:15000,polling:25});
+   probeWaits.push(Date.now()-t0);
+   return page.evaluate(()=>{try{return JSON.parse(document.body.dataset.fleetProbe||"null");}catch{return null;}});
+  };
+  const armBuildMode=async(page)=>{
+   await page.locator('[data-tool="build"]').click();
+   await page.locator('[data-tool="build"][aria-pressed="true"]').waitFor({state:"attached",timeout:5000});
+  };
   const tap=async(page,x,y)=>{if(v.touch)await page.touchscreen.tap(x,y);else await page.mouse.click(x,y);};
   const clearSiteStamp=page=>page.evaluate(()=>{delete document.body.dataset.lastSiteOk;delete document.body.dataset.lastSiteCode;delete document.body.dataset.lastSiteReason;});
   const siteStamp=page=>page.evaluate(()=>({ok:document.body.dataset.lastSiteOk,code:document.body.dataset.lastSiteCode||"",reason:document.body.dataset.lastSiteReason||""}));
@@ -158,7 +197,12 @@ try{
    await page.locator(".resource-more").click();
    await page.locator(".panel-host .ledger-panel").waitFor({state:"visible",timeout:5000});
    await page.locator('.ledger-row[data-resource="stone"]').click();
-   await page.waitForTimeout(300);
+   // Condition, not duration: the focused row's aria-pressed and the detail
+   // numbers commit in the SAME React render, so wait for the real focus state
+   // plus the rendered detail nodes instead of sleeping.
+   await page.locator('.ledger-row[data-resource="stone"][aria-pressed="true"]').waitFor({state:"attached",timeout:5000});
+   await page.locator('[data-testid="ledger-depot"]').waitFor({state:"visible",timeout:5000});
+   await page.locator('[data-testid="ledger-committed"]').waitFor({state:"visible",timeout:5000});
    const num=async(testid)=>Number((await page.locator(`[data-testid="${testid}"]`).innerText()).replace(/[^0-9.-]/g,""));
    const stoneDepot=await num("ledger-depot"),stoneCommitted=await num("ledger-committed");
    if(stoneDepot!==save.bank.stone)throw Error(`stone ledger depot ${stoneDepot} != save ${save.bank.stone}`);
@@ -180,8 +224,7 @@ try{
   {
    const {ctx,page}=await newPage(JSON.stringify(uiSave()));
    const seedBank=(await probe(page)).bank;
-   await page.locator('[data-tool="build"]').click();
-   await page.waitForTimeout(250);
+   await armBuildMode(page);
    const box=await page.locator(".world-canvas").boundingBox();
    if(!box)throw Error("world canvas has no box");
    // Bounded candidate taps (upper canvas, clear of the dock/sheet). Every
@@ -227,8 +270,7 @@ try{
    if(JSON.stringify(delta(bankCancelAfter,seedBank,KEYS))!==JSON.stringify({credits:0,scrap:0,stone:0}))throw Error("build->cancel must restore the starting bank exactly: "+JSON.stringify(delta(bankCancelAfter,seedBank,KEYS)));
    await shot(page,"ui-cancel-refund");
    // REBUILD: same screen point, now empty again -> a second REAL UI build.
-   await page.locator('[data-tool="build"]').click();
-   await page.waitForTimeout(200);
+   await armBuildMode(page);
    const bankRebuildBefore=(await probe(page)).bank;
    await clearSiteStamp(page);
    await tap(page,built.x,built.y);
@@ -242,8 +284,7 @@ try{
    if(pRebuild.buildings.length!==6)throw Error("rebuild must add exactly one building: "+pRebuild.buildings.length);
    // DUPLICATE PLAIN CLICK: re-enter build mode, tap the SAME screen point.
    // The cell is now occupied -> COLLISION, zero spend, still one building.
-   await page.locator('[data-tool="build"]').click();
-   await page.waitForTimeout(200);
+   await armBuildMode(page);
    const bankDupBefore=(await probe(page)).bank;
    await clearSiteStamp(page);
    await tap(page,built.x,built.y);
@@ -255,6 +296,38 @@ try{
    const pDup=await probe(page);
    if(pDup.buildings.length!==6)throw Error("duplicate click added a building: "+pDup.buildings.length);
    await shot(page,"ui-duplicate-collision");
+   // REAL DOUBLE-CLICK / DOUBLE-TAP at a FRESH legal site: two rapid activations
+   // at the SAME point must yield exactly ONE building and ONE spend. Build
+   // success auto-exits build mode (App.jsx setMode("inspect")), so the second
+   // activation selects instead of building. This mirrors the reviewer/product
+   // real-pointer probes inside the capture itself. (The command-id REPLAY
+   // headline remains API-seeded — the UI issues no command ids yet.)
+   await armBuildMode(page);
+   const dblBefore=await probe(page);
+   const dblAttempts=[];let dblSite=null;
+   for(const [fx,fy] of fractions){
+    const x=Math.round(box.x+box.width*fx),y=Math.round(box.y+box.height*fy);
+    if(built&&x===built.x&&y===built.y)continue; // occupied by the rebuild
+    await clearSiteStamp(page);
+    if(v.touch){await page.touchscreen.tap(x,y);await page.touchscreen.tap(x,y);}
+    else await page.mouse.dblclick(x,y);
+    await waitSiteStamp(page);
+    const s=await siteStamp(page);
+    dblAttempts.push({x:Math.round(fx*100)/100,y:Math.round(fy*100)/100,ok:s.ok==="true",code:s.code});
+    if(s.ok==="true"){dblSite={x,y};break;}
+    const rej=await probe(page);
+    if(JSON.stringify(delta(rej.bank,dblBefore.bank,KEYS))!==JSON.stringify({credits:0,scrap:0,stone:0}))throw Error("rejected double-click spent materials: "+JSON.stringify({s,x:fx,y:fy}));
+   }
+   if(!dblSite)throw Error("no candidate double-click produced a legal build: "+JSON.stringify(dblAttempts));
+   const dblAfter=await probe(page);
+   const dblDelta=delta(dblAfter.bank,dblBefore.bank,KEYS);
+   if(JSON.stringify(dblDelta)!==JSON.stringify({credits:-COST.credits,scrap:-COST.scrap,stone:-COST.stone}))throw Error("double-click must spend exactly the cost ONCE: "+JSON.stringify(dblDelta));
+   if(dblAfter.buildings.length!==dblBefore.buildings.length+1)throw Error("double-click must add exactly ONE building: "+dblBefore.buildings.length+" -> "+dblAfter.buildings.length);
+   await shot(page,"ui-dblclick-one-building");
+   view.proof.doubleClick={
+    method:v.touch?"two sequential real touchscreen taps at the same point (synthetic double tap)":"real page.mouse.dblclick at the same point",
+    attempts:dblAttempts,spend:dblDelta,buildingsBefore:dblBefore.buildings.length,buildingsAfter:dblAfter.buildings.length,
+    note:"exactly one building / one spend from a real double activation; the second activation lands after build success auto-exits build mode, so it selects rather than builds"};
    view.proof.uiTransactions={
     powerFrozen:"starter generator removed in seed -> supply 0, no production; credits/scrap/stone never produced or dispatched",
     attempts,buildDelta,buildingsAfterBuild:pAfter.buildings.length,
@@ -266,6 +339,11 @@ try{
   }
 
   view.pageErrors=errs;view.failedRequests=failed;
+  view.probeWait={condition:"MutationObserver count of data-fleet-probe attribute writes > baseline captured at probe start (a fresh post-action stamp write), replacing the fixed 320ms sleep",
+   timeoutMs:15000,pollingMs:25,count:probeWaits.length,
+   maxMs:probeWaits.length?Math.max(...probeWaits):null,
+   meanMs:probeWaits.length?Math.round(probeWaits.reduce((a,b)=>a+b,0)/probeWaits.length):null,
+   samplesMs:probeWaits};
   if(errs.length||failed.length)throw Error(v.name+" console/page errors: "+JSON.stringify({errs,failed}));
   report.views.push(view);
  }
