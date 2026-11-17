@@ -346,6 +346,13 @@ export default function App(){
  // + compact-mode detection for the center hint. Collapsing NEVER touches the
  // camera ref or selection — it only hides the sheet body in place.
  const [dockPrefs,setDockPrefs]=useState(()=>readDockSettings(typeof window!=="undefined"?window.localStorage:null));
+ // UX-05 (#363): fleet focus (selected truck) + follow-camera selection, and
+ // persisted fleet prefs under their OWN storage key (fleet.js sanitizer).
+ const [fleetFocus,setFleetFocus]=useState(null);
+ const [followId,setFollowId]=useState(null);
+ const [fleetPrefs,setFleetPrefs]=useState(()=>readFleetSettings(typeof window!=="undefined"?window.localStorage:null));
+ const fleetRef=useRef({followId:null,followCam:fleetPrefs.followCam});
+ useEffect(()=>{fleetRef.current={followId,followCam:fleetPrefs.followCam};},[followId,fleetPrefs.followCam]);
  const [compact,setCompact]=useState(()=>typeof window!=="undefined"&&window.matchMedia("(max-width:770px),(max-height:600px)").matches);
  const sheetCollapsed=dockPrefs.sheetCollapsed;
  const [confirmId,setConfirmId]=useState(null);
@@ -363,10 +370,27 @@ export default function App(){
  useEffect(()=>{setConfirmId(null);},[selectedId]);
  useEffect(()=>{if(confirmId!=null)confirmBtnRef.current?.focus();},[confirmId]);
  const notify=useCallback((text)=>{setToast(text);},[]);
- const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);},[]);
+ // Leaving fleet mode stops the follow camera (bounded UX-05 judgment call:
+ // follow is a fleet-panel affordance; the truck focus itself is preserved).
+ const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);if(id!=="fleet")setFollowId(null);},[]);
  const openLedger=useCallback((id=null)=>{choose("inventory");setLedgerFocus(id);},[choose]);
  const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
  const onDockPrefs=useCallback(patch=>{setDockPrefs(writeDockSettings(window.localStorage,patch));},[]);
+ const onFleetPrefs=useCallback(patch=>{setFleetPrefs(writeFleetSettings(window.localStorage,patch));},[]);
+ /* Follow camera reframes ONLY through the public world.setView/applyCamera
+    path (#307): followTarget is a pure pinGroundToPixel target move — yaw,
+    elevation and zoom are preserved; world.js/camera.js are never edited. */
+ const reframeFollow=useCallback(id=>{
+  const world=worldRef.current,cv=world?.renderer.domElement;
+  const v=gameRef.current?.vehicles.find(x=>x.id===id);
+  if(!world||!cv||!v)return;
+  const rect=cv.getBoundingClientRect(),viewport={width:rect.width,height:rect.height};
+  if(viewport.width<=0||viewport.height<=0)return;
+  camera.current=followTarget(camera.current,v,viewport);
+  world.setView(camera.current);world.applyCamera();
+ },[]);
+ const onFollow=useCallback(id=>{setFollowId(id);reframeFollow(id);},[reframeFollow]);
+ const onStopFollow=useCallback(()=>setFollowId(null),[]);
  useEffect(()=>{
   const mq=window.matchMedia("(max-width:770px),(max-height:600px)");
   const onChange=e=>setCompact(e.matches);
@@ -424,6 +448,14 @@ export default function App(){
   requestAnimationFrame(()=>updatePlacement(true));
  },[updatePlacement]);
  const refresh=useCallback(()=>setData(snapshot(gameRef.current)),[]);
+ /* UX-05 (#363): the ONLY fleet mutation is the player's explicit cancel —
+    simulation.cancelFreight returns reserved OR onboard units to their source
+    exactly once (returnFreight). No UI-side ledger or refund math here. */
+ const onCancelFreight=useCallback(id=>{
+  const r=cancelFreight(gameRef.current,id);
+  notify(r.ok?"Freight canceled — "+r.amount+" "+(RESOURCE_BY_ID[r.resource]?.unit||r.resource)+" returned to its source":r.reason);
+  refresh();
+ },[notify,refresh]);
  const onSell=useCallback((id)=>{const r=sell(gameRef.current,id,10);notify(r.ok?"Sold materials for "+r.earnings+" CR":r.reason);refresh();},[notify,refresh]);
  const onResearch=useCallback((id)=>{const r=researchAt(gameRef.current,id);notify(r.ok?"Research completed":r.reason);refresh();},[notify,refresh]);
  const onRemove=useCallback((id)=>{
@@ -454,10 +486,21 @@ export default function App(){
   if(!sceneHost.current)return;
   const world=new LivingWorld(sceneHost.current);worldRef.current=world;world.setView(camera.current);
   let raf=0,last=performance.now(),uiLast=0,saveLast=0,alive=true;
+  // Cached canvas size (refreshed by the ResizeObserver) so the follow camera
+  // never forces a per-frame layout read.
+  let viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};
   const loop=(now)=>{
    if(!alive)return;
    const dt=Math.min(.07,Math.max(0,(now-last)/1000));last=now;
    advanceGame(gameRef.current,dt);
+   // UX-05 (#363): follow camera pins the truck's ACTUAL sim position to the
+   // clear-zone focus pixel via the pure fleet.followTarget; the camera only
+   // moves through the existing public setView/applyCamera path below.
+   const fr=fleetRef.current;
+   if(fr.followId!=null&&fr.followCam&&viewSize.width>0&&viewSize.height>0){
+    const v=gameRef.current.vehicles.find(x=>x.id===fr.followId);
+    if(v)camera.current=followTarget(camera.current,v,viewSize);
+   }
    world.setView(camera.current);world.update(gameRef.current,dt,now/1000);
    if(now-uiLast>270){setData(snapshot(gameRef.current));updatePlacement(false);uiLast=now;}
    if(now-saveLast>4200){persist(gameRef.current);saveLast=now;}
@@ -488,11 +531,18 @@ export default function App(){
      if(r.ok){setSelectedId(r.building.id);setMode("inspect");}
     }else if(tool==="road"){
      const first=modeRef.current.roadStart;
-     if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
+     // UX-05 (#363): a fresh road-mode tap ON a truck inspects it instead of
+     // arming a road origin — choose("fleet") clears roadStart, so inspecting
+     // never mis-triggers road construction. A destination tap still builds.
+     const truck=!first?truckAt(g,c.x,c.z):null;
+     if(truck!=null){choose("fleet");setFleetFocus(truck);notify((g.vehicles.find(v=>v.id===truck)?.name||"Truck")+" — fleet logistics");}
+     else if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
      else {const r=roadLine(g,first,{x:c.x,z:c.z});notify(r.ok?r.cells+" road segments connected":r.reason);setRoadStart(null);}
     }else{
-     const hit=buildingAt(g,c.x,c.z);
-     if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
+     const truck=tool!=="build"?truckAt(g,c.x,c.z):null;
+     const hit=truck==null?buildingAt(g,c.x,c.z):null;
+     if(truck!=null){choose("fleet");setFleetFocus(truck);notify((g.vehicles.find(v=>v.id===truck)?.name||"Truck")+" — fleet logistics");}
+     else if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
      else {setSelectedId(null);if(tool==="inspect")setMode("select");}
     }
     refresh();
@@ -518,7 +568,7 @@ export default function App(){
    }
   };
   window.addEventListener("keydown",onKey);
-  const observer=new ResizeObserver(()=>{world.resize();updatePlacement(true);});observer.observe(sceneHost.current);
+  const observer=new ResizeObserver(()=>{viewSize={width:sceneHost.current.clientWidth,height:sceneHost.current.clientHeight};world.resize();updatePlacement(true);});observer.observe(sceneHost.current);
   return ()=>{alive=false;cancelAnimationFrame(raf);observer.disconnect();persist(gameRef.current);
    controller.dispose();
    window.removeEventListener("keydown",onKey);window.removeEventListener("pagehide",save);world.dispose();worldRef.current=null;
@@ -528,7 +578,7 @@ export default function App(){
  const stripState=resourceStripState(data);
  const sheetTitle=mode==="inspect"
   ?(selectedId!=null?(BLUEPRINTS[data.buildings.find(b=>b.id===selectedId)?.type]?.name||"Inspector"):"Inspector")
-  :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Active fleet"
+  :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Fleet logistics"
   :mode==="research"?"Research & industry":mode==="market"?"Trade exchange":"Freight ledger";
  const criticalCount=stripState.kind==="ready"?stripState.shortages.filter(s=>s.state==="critical").length:0;
  useEffect(()=>{
@@ -616,6 +666,11 @@ export default function App(){
         confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
         obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
         onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
+      :mode==="fleet"
+      ?<FleetPanel g={data} focusId={fleetFocus} setFocusId={setFleetFocus}
+        followId={followId} onFollow={onFollow} onStopFollow={onStopFollow}
+        prefs={fleetPrefs} onPrefs={onFleetPrefs} onCancelFreight={onCancelFreight}
+        close={()=>choose("select")}/>
       :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
         buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
         notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}
