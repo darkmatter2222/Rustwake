@@ -239,18 +239,29 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
   background: linear-gradient(180deg, rgba(7,16,18,.36), transparent 18%, transparent 76%, rgba(6,13,17,.30));
 }
 @media(max-width:770px) {
+  /* #568: the phone top band is compacted to a single ~84px readout zone so it
+     never sits over the playable world. CAM-05 auto-frames a selected machine
+     to the clear-zone focus pixel (pivot y~151 at 390x844); the old 38+48px
+     brand+strip rows pushed the interactive resources-strip down to y~121 and
+     the alarm rail to y~156, burying every aim height (y91..151) of a player
+     machine at (10,10). The brand row shrinks to 30px and the resource strip to
+     one 44px row (bottom ~84), keeping all six chips + the ledger button live
+     and readable ABOVE the framed-machine band. The interactive camera/alarm
+     rail moves below that band (left-rail top 156) — see below. */
   .hud-top {
     display:grid;
     grid-template-columns:minmax(0,1fr);
-    grid-template-rows:38px 48px;
+    grid-template-rows:30px 44px;
     align-content:start;
     justify-content:stretch;
-    gap:6px;
-    padding:7px 10px 0;
+    gap:4px;
+    padding:6px 10px 0;
     background:linear-gradient(180deg,rgba(9,23,29,.78),rgba(9,23,29,.08));
   }
-  .brand {grid-row:1;max-width:calc(100vw - 20px);margin:0}
-  .brand-type strong {font-size:19px}
+  .brand {grid-row:1;max-width:calc(100vw - 20px);margin:0;align-items:center}
+  .brand-mark {width:26px;height:26px}
+  .brand-mark span {font-size:17px}
+  .brand-type strong {font-size:16px}
   .brand-type small {font-size:6.8px}
   .brand-badge {font-size:8px}
   .resources-strip {
@@ -268,8 +279,23 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
   .resource__reserved {position:static;font-size:7.5px;padding:0;background:none;border:0}
   .resource__flag {position:absolute;top:2px;right:3px;font-size:8px}
   .resource-more {justify-content:center;min-width:0;padding:4px 3px}
-  .strip-alert {display:none}
-  .left-rail {top:112px;gap:9px}
+  /* #568: the base .strip-alert{display:flex} rule lands AFTER this media block
+     at equal specificity and was silently winning, so the brownout/shortage
+     alert became an 8th grid item, wrapped the strip to TWO rows (y16..108)
+     and re-occluded the framed-machine aim band. Scope the hide to the strip
+     so it wins the cascade. The shortage signal is NOT suppressed: every chip
+     keeps its ⚠/◔ flag and the alarm rail below still raises the same WARNING
+     (#566 owns alarm existence; this is the pre-existing compact-width design,
+     line 182: "chip flags carry the shortage signal at compact widths"). */
+  .resources-strip .strip-alert {display:none}
+  /* #568: the interactive camera/alarm rail sits BELOW the compact top readout
+     and BELOW the CAM-05 framed-machine band (pivot y~151 at 390x844, aim
+     heights y91..151), in the clear gap above the starter machine band
+     (y~256..316). top:156 puts the 44px alarm rail at y156..200 and the 44px
+     camera controls at y~206..250 — both fully clear of the framed machine.
+     The non-interactive coordinate chip (order:1, pointer-events:none, #564)
+     rides below and may overlap the starter band transparently. */
+  .left-rail {top:156px;gap:6px}
   .coordinate-chip {border-left-width:2px;padding:3px 0 3px 9px;max-width:142px}
   .coordinate-chip .eyebrow {font-size:7px}
   .coordinate-chip strong {font-size:15px}
@@ -472,8 +498,10 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
 /* Phone portrait: dock hugs the safe bottom; sheet reserves the dock band and
    keeps a world band below the two-row HUD + camera rail (dock.js mirror). */
 @media(max-width:770px){
- .hud-top{padding:calc(7px + var(--sat)) calc(10px + var(--sar)) 0 calc(10px + var(--sal))}
- .left-rail{top:calc(112px + var(--sat));left:calc(10px + var(--sal))}
+ .hud-top{padding:calc(6px + var(--sat)) calc(10px + var(--sar)) 0 calc(10px + var(--sal))}
+ /* #568: phone-portrait left-rail clears the CAM-05 framed-machine band; see
+    the layout rationale in the max-width:770px block above (top:156). */
+ .left-rail{top:calc(156px + var(--sat));left:calc(10px + var(--sal))}
  .tool-dock{bottom:calc(24px + var(--sab));left:calc(6px + var(--sal));right:calc(6px + var(--sar));width:auto;max-width:none;transform:none}
  .panel-host{bottom:calc(96px + var(--sab));left:calc(6px + var(--sal));right:calc(6px + var(--sar));width:auto;
   max-height:max(120px,min(46dvh,calc(100dvh - 210px - var(--sat) - var(--sab))))}
