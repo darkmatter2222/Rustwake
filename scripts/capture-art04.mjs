@@ -141,6 +141,15 @@ const unlockSeed = () => baseSeed();
 // stocked so research/fabricator genuinely work on sim timer deltas.
 function workingSeed() {
   const g = baseSeed();
+  // Orient the depot bay onto the road so a REAL freight truck genuinely docks.
+  // The shipped starter depot (content.js STARTER_BUILDINGS, outside the ART-04
+  // lease) sits at (13,9) rot 0: its bay approach cell is (13,10), which is NOT a
+  // road, while trucks route to nearestRoad(depot)=(13,8) on the opposite side —
+  // so the nearest truck never gets closer than ART04_DOCK.far (7.0) and the
+  // shutter never opens in the default yard (cross-lease finding, reported not
+  // fixed). rot 2 puts the bay cell at (13,8) == the road trucks route to, so
+  // bayApproachDistance reaches 0 and depotDoorLift opens on real truck distance.
+  g.buildings.find(b => b.type === "depot").rot = 2;
   addRig(g, "generator", SITE_GEN2);
   addRig(g, "crusher", SITE_CRUSHER, {scrap: 80});
   addRig(g, "research", SITE_RESEARCH, {circuits: 40});
