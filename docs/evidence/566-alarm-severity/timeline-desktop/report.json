@@ -3,8 +3,8 @@
   "issue": 566,
   "view": "desktop",
   "build": "production-preview",
-  "source_sha": "1bd00ebd64f939fcc1eb80b6217d09f948757d85",
-  "started": "2026-11-17T18:49:52.299Z",
+  "source_sha": "b3fd2aacd0942adce92d81d65aa163814068cf8e",
+  "started": "2026-11-17T19:22:17.319Z",
   "timeline": [
     {
       "t": 0,
@@ -86,6 +86,13 @@
       "elapsed": 45,
       "chips": [
         {
+          "testid": "alarm-chip-storage-1",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · SCRAP EXTRACTOR. Scrap Extractor at 7,9 is holding 21 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        },
+        {
           "testid": "alarm-chip-storage-4",
           "severity": "warning",
           "state": "ready",
@@ -97,23 +104,25 @@
       "summary": false,
       "probe": {
         "ids": [
+          "storage-1",
           "storage-4"
         ],
         "counts": {
           "critical": 0,
-          "warning": 1,
-          "total": 1
+          "warning": 2,
+          "total": 2
         }
       },
       "stripIron": {
         "state": "warning",
         "flag": "◔"
       },
-      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
-      "warningsCount": 1,
+      "live": "2 yard alarms: WARNING BAY BACKUP · SCRAP EXTRACTOR; WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 2,
       "cryWolfWarnings": [],
       "starveWarnings": [],
       "storageRemedy": [
+        "WARNING: BAY BACKUP · SCRAP EXTRACTOR. Scrap Extractor at 7,9 is holding 21 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck.",
         "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 16 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
       ],
       "screenshot": "desktop-t045.png"
@@ -267,11 +276,420 @@
       "screenshot": "desktop-t240.png"
     }
   ],
-  "discrimination": null,
-  "status": "FAIL",
-  "errors": [
-    "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"alarm-action\"]')\u001b[22m\n\n    at C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\dev-566\\scripts\\capture-566-alarm-severity.mjs:175:55"
-  ],
+  "discrimination": {
+    "sellClicks": 12,
+    "sellElapsed": 29.4,
+    "reached": true,
+    "before": {
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "railStarveIron": false,
+      "chips": [],
+      "screenshot": "desktop-disc-before-covered.png"
+    },
+    "after": {
+      "chipSeverity": "critical",
+      "chipAria": "CRITICAL: FE SHORTAGE. 1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less. Remedy: Build a Scrap Extractor (180 CR + 28 SC + 12 AG) to add Ferrous ore supply.",
+      "problem": "1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less.",
+      "remedy": "REMEDYBuild a Scrap Extractor (180 CR + 28 SC + 12 AG) to add Ferrous ore supply.",
+      "actionLabel": "Construct Scrap Extractor",
+      "actionMeasurement": {
+        "count": 1,
+        "present": true,
+        "rect": {
+          "x": 47.109375,
+          "y": 717.765625,
+          "w": 246,
+          "h": 44
+        },
+        "center": {
+          "cx": 170.109375,
+          "cy": 739.765625
+        },
+        "inViewport": true,
+        "button": {
+          "display": "block",
+          "visibility": "visible",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "disabled": false
+        },
+        "ancestors": [
+          {
+            "tag": "BUTTON",
+            "cls": "focus-button",
+            "testid": "alarm-action",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 47.1,
+              "y": 717.8,
+              "w": 246,
+              "h": 44
+            },
+            "scrollTop": 0,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail__actions",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "sticky",
+            "zIndex": "auto",
+            "rect": {
+              "x": 47.1,
+              "y": 709.8,
+              "w": 246,
+              "h": 54
+            },
+            "scrollTop": 0,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail",
+            "testid": "alarm-detail",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 33.1,
+              "y": 508,
+              "w": 272,
+              "h": 267.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 266,
+            "clientHeight": 266
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-rail",
+            "testid": "alarm-rail",
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "auto",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 33.1,
+              "y": 458,
+              "w": 272,
+              "h": 367.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 368,
+            "clientHeight": 368
+          },
+          {
+            "tag": "ASIDE",
+            "cls": "left-rail",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "none",
+            "overflowY": "visible",
+            "position": "absolute",
+            "zIndex": "9",
+            "rect": {
+              "x": 33.1,
+              "y": 104,
+              "w": 272,
+              "h": 721.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 722,
+            "clientHeight": 722
+          },
+          {
+            "tag": "DIV",
+            "cls": "app-shell",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "fixed",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "scrollTop": 0,
+            "scrollHeight": 900,
+            "clientHeight": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "scrollTop": 0,
+            "scrollHeight": 900,
+            "clientHeight": 900
+          }
+        ],
+        "elementFromPoint": {
+          "tag": "BUTTON",
+          "cls": "focus-button",
+          "testid": "alarm-action",
+          "isSelfOrChild": true
+        },
+        "railClip": {
+          "x": 33.109375,
+          "y": 458,
+          "w": 272,
+          "h": 367.765625,
+          "buttonInsideRailRect": true
+        }
+      },
+      "actionMeasurement2": {
+        "count": 1,
+        "present": true,
+        "rect": {
+          "x": 47.109375,
+          "y": 717.765625,
+          "w": 246,
+          "h": 44
+        },
+        "center": {
+          "cx": 170.109375,
+          "cy": 739.765625
+        },
+        "inViewport": true,
+        "button": {
+          "display": "block",
+          "visibility": "visible",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "disabled": false
+        },
+        "ancestors": [
+          {
+            "tag": "BUTTON",
+            "cls": "focus-button",
+            "testid": "alarm-action",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 47.1,
+              "y": 717.8,
+              "w": 246,
+              "h": 44
+            },
+            "scrollTop": 0,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail__actions",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "sticky",
+            "zIndex": "auto",
+            "rect": {
+              "x": 47.1,
+              "y": 709.8,
+              "w": 246,
+              "h": 54
+            },
+            "scrollTop": 0,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail",
+            "testid": "alarm-detail",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 33.1,
+              "y": 508,
+              "w": 272,
+              "h": 267.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 266,
+            "clientHeight": 266
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-rail",
+            "testid": "alarm-rail",
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "auto",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 33.1,
+              "y": 458,
+              "w": 272,
+              "h": 367.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 368,
+            "clientHeight": 368
+          },
+          {
+            "tag": "ASIDE",
+            "cls": "left-rail",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "none",
+            "overflowY": "visible",
+            "position": "absolute",
+            "zIndex": "9",
+            "rect": {
+              "x": 33.1,
+              "y": 104,
+              "w": 272,
+              "h": 721.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 722,
+            "clientHeight": 722
+          },
+          {
+            "tag": "DIV",
+            "cls": "app-shell",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "fixed",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "scrollTop": 0,
+            "scrollHeight": 900,
+            "clientHeight": 900
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 1440,
+              "h": 900
+            },
+            "scrollTop": 0,
+            "scrollHeight": 900,
+            "clientHeight": 900
+          }
+        ],
+        "elementFromPoint": {
+          "tag": "BUTTON",
+          "cls": "focus-button",
+          "testid": "alarm-action",
+          "isSelfOrChild": true
+        },
+        "railClip": {
+          "x": 33.109375,
+          "y": 458,
+          "w": 272,
+          "h": 367.765625,
+          "buttonInsideRailRect": true
+        }
+      },
+      "healedBeforeClick": {
+        "attempt": 1,
+        "probeIds": [],
+        "stripIron": {
+          "state": "warning",
+          "flag": "◔"
+        },
+        "detailPresent": false
+      },
+      "detailShotMs": 5947,
+      "clickAttempts": 2,
+      "panelProbe": {
+        "trigger": "tool:build",
+        "mode": "build",
+        "selectedId": null
+      },
+      "collapsedAfterAction": "true",
+      "centerHint": "TAP THE GROUND TO CONSTRUCT · R ROTATES THE FOOTPRINT",
+      "sheetExpandedByHarness": true,
+      "selectedBlueprint": "Select Scrap Extractor",
+      "toast": "Construct a Scrap Extractor — tap a free pad to place it",
+      "screenshot": "desktop-disc-after-uncovered-detail.png",
+      "actionScreenshot": "desktop-disc-after-action-build.png"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
   "limitations": [
     "One headless Chromium/SwiftShader run; phone 390x844 is EMULATED (isMobile+hasTouch+dpr2), not a physical handset (#268/#275 owed)",
     "PASS_NUMERIC_ONLY: rendered chip/aria-label/box proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
@@ -279,5 +697,5 @@
     "Clause 1 uses a normal fresh yard with NO seed and ZERO input; clause 3 reaches the uncovered deficit through the real Trade Exchange Sell-10 UI, not a fixture"
   ],
   "servedCss": "/rustwake/assets/index-BUPhjJyc.css",
-  "completed": "2026-11-17T18:55:02.565Z"
+  "completed": "2026-11-17T19:27:09.187Z"
 }

@@ -1,0 +1,501 @@
+{
+  "version": 1,
+  "issue": 566,
+  "view": "phone",
+  "build": "production-preview",
+  "source_sha": "b3fd2aacd0942adce92d81d65aa163814068cf8e",
+  "started": "2026-11-17T19:27:09.479Z",
+  "timeline": [
+    {
+      "t": 0,
+      "elapsed": 0,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "phone-t000.png"
+    },
+    {
+      "t": 15,
+      "elapsed": 15,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "phone-t015.png"
+    },
+    {
+      "t": 30,
+      "elapsed": 30,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "phone-t030.png"
+    },
+    {
+      "t": 45,
+      "elapsed": 45,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 16 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 16 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "phone-t045.png"
+    },
+    {
+      "t": 60,
+      "elapsed": 60,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 28 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 28 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "phone-t060.png"
+    },
+    {
+      "t": 120,
+      "elapsed": 120,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 56 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 56 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "phone-t120.png"
+    },
+    {
+      "t": 180,
+      "elapsed": 180,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 92 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 92 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "phone-t180.png"
+    },
+    {
+      "t": 240,
+      "elapsed": 240,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 132 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 132 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "phone-t240.png"
+    }
+  ],
+  "discrimination": {
+    "sellClicks": 12,
+    "sellElapsed": 29.3,
+    "reached": true,
+    "before": {
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "railStarveIron": false,
+      "chips": [],
+      "screenshot": "phone-disc-before-covered.png"
+    },
+    "after": {
+      "chipSeverity": "critical",
+      "chipAria": "CRITICAL: FE SHORTAGE. 1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less. Remedy: Build a Scrap Extractor (180 CR + 28 SC + 12 AG) to add Ferrous ore supply.",
+      "problem": "1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less.",
+      "remedy": "REMEDYBuild a Scrap Extractor (180 CR + 28 SC + 12 AG) to add Ferrous ore supply.",
+      "actionLabel": "Construct Scrap Extractor",
+      "actionMeasurement": {
+        "count": 1,
+        "present": true,
+        "rect": {
+          "x": 22,
+          "y": 690,
+          "w": 348,
+          "h": 44
+        },
+        "center": {
+          "cx": 196,
+          "cy": 712
+        },
+        "inViewport": true,
+        "button": {
+          "display": "block",
+          "visibility": "visible",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "disabled": false
+        },
+        "ancestors": [
+          {
+            "tag": "BUTTON",
+            "cls": "focus-button",
+            "testid": "alarm-action",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 22,
+              "y": 690,
+              "w": 348,
+              "h": 44
+            },
+            "scrollTop": 0,
+            "scrollHeight": 42,
+            "clientHeight": 42
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail__actions",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "visible",
+            "position": "sticky",
+            "zIndex": "auto",
+            "rect": {
+              "x": 22,
+              "y": 682,
+              "w": 348,
+              "h": 54
+            },
+            "scrollTop": 0,
+            "scrollHeight": 54,
+            "clientHeight": 54
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-detail",
+            "testid": "alarm-detail",
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "auto",
+            "position": "fixed",
+            "zIndex": "auto",
+            "rect": {
+              "x": 8,
+              "y": 480.2,
+              "w": 374,
+              "h": 267.8
+            },
+            "scrollTop": 0,
+            "scrollHeight": 266,
+            "clientHeight": 266
+          },
+          {
+            "tag": "DIV",
+            "cls": "alarm-rail",
+            "testid": "alarm-rail",
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 10,
+              "y": 156,
+              "w": 283.3,
+              "h": 44
+            },
+            "scrollTop": 0,
+            "scrollHeight": 44,
+            "clientHeight": 44
+          },
+          {
+            "tag": "ASIDE",
+            "cls": "left-rail",
+            "testid": null,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "none",
+            "overflowY": "visible",
+            "position": "absolute",
+            "zIndex": "12",
+            "rect": {
+              "x": 10,
+              "y": 156,
+              "w": 283.3,
+              "h": 170
+            },
+            "scrollTop": 0,
+            "scrollHeight": 170,
+            "clientHeight": 170
+          },
+          {
+            "tag": "DIV",
+            "cls": "app-shell",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "fixed",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 844
+            },
+            "scrollTop": 0,
+            "scrollHeight": 844,
+            "clientHeight": 844
+          },
+          {
+            "tag": "DIV",
+            "cls": "",
+            "testid": null,
+            "display": "block",
+            "visibility": "visible",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "overflowY": "hidden",
+            "position": "static",
+            "zIndex": "auto",
+            "rect": {
+              "x": 0,
+              "y": 0,
+              "w": 390,
+              "h": 844
+            },
+            "scrollTop": 0,
+            "scrollHeight": 844,
+            "clientHeight": 844
+          }
+        ],
+        "elementFromPoint": {
+          "tag": "BUTTON",
+          "cls": "focus-button",
+          "testid": "alarm-action",
+          "isSelfOrChild": true
+        },
+        "railClip": {
+          "x": 10,
+          "y": 156,
+          "w": 283.296875,
+          "h": 44,
+          "buttonInsideRailRect": false
+        }
+      },
+      "actionMeasurement2": null,
+      "healedBeforeClick": null,
+      "detailShotMs": 653,
+      "clickAttempts": 1,
+      "panelProbe": {
+        "trigger": "tool:build",
+        "mode": "build",
+        "selectedId": null
+      },
+      "collapsedAfterAction": "true",
+      "centerHint": "TAP THE GROUND TO CONSTRUCT · R ROTATES THE FOOTPRINT",
+      "sheetExpandedByHarness": true,
+      "selectedBlueprint": "Select Scrap Extractor",
+      "toast": "Construct a Scrap Extractor — tap a free pad to place it",
+      "screenshot": "phone-disc-after-uncovered-detail.png",
+      "actionScreenshot": "phone-disc-after-action-build.png"
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone 390x844 is EMULATED (isMobile+hasTouch+dpr2), not a physical handset (#268/#275 owed)",
+    "PASS_NUMERIC_ONLY: rendered chip/aria-label/box proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+    "Local production preview only — no hosted-deployment receipt; branch CI green is not a production release",
+    "Clause 1 uses a normal fresh yard with NO seed and ZERO input; clause 3 reaches the uncovered deficit through the real Trade Exchange Sell-10 UI, not a fixture"
+  ],
+  "servedCss": "/rustwake/assets/index-BUPhjJyc.css",
+  "completed": "2026-11-17T19:31:45.287Z"
+}
