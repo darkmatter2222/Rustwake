@@ -1,0 +1,122 @@
+{
+  "method": "independent full-frame zlib inflate + PNG filter reconstruction (None/Sub/Up/Average/Paeth); luminance = .2126R+.7152G+.0722B; distinct colors over full frame",
+  "threshold": {
+    "distinctColors": 200,
+    "lumSD": 8
+  },
+  "files": {
+    "desktop-build-ghost-terrain-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 23193,
+      "lumMean": 104.65,
+      "lumSD": 45.31
+    },
+    "desktop-build-ghost-valid-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 22673,
+      "lumMean": 103.42,
+      "lumSD": 45.73
+    },
+    "desktop-build-placed-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 23616,
+      "lumMean": 101.38,
+      "lumSD": 45.97
+    },
+    "desktop-exterior-landmarks-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 24110,
+      "lumMean": 106.55,
+      "lumSD": 43.42
+    },
+    "desktop-landing-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 26429,
+      "lumMean": 106.88,
+      "lumSD": 42.02
+    },
+    "desktop-wreck-detail-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 21861,
+      "lumMean": 115.67,
+      "lumSD": 41.09
+    },
+    "desktop-wreck-orbit135-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 22010,
+      "lumMean": 116.9,
+      "lumSD": 43.12
+    },
+    "desktop-yard-wide-cccd502b.png": {
+      "w": 1440,
+      "h": 900,
+      "distinctColors": 15541,
+      "lumMean": 86.31,
+      "lumSD": 30.24
+    },
+    "phone-build-ghost-terrain-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 16980,
+      "lumMean": 108.1,
+      "lumSD": 49.15
+    },
+    "phone-build-ghost-valid-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 17494,
+      "lumMean": 104.1,
+      "lumSD": 49.73
+    },
+    "phone-build-placed-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 17545,
+      "lumMean": 103.99,
+      "lumSD": 49.05
+    },
+    "phone-exterior-landmarks-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 18103,
+      "lumMean": 102.61,
+      "lumSD": 48.21
+    },
+    "phone-landing-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 25960,
+      "lumMean": 111.83,
+      "lumSD": 48
+    },
+    "phone-wreck-detail-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 15894,
+      "lumMean": 115.8,
+      "lumSD": 45.79
+    },
+    "phone-wreck-orbit135-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 16789,
+      "lumMean": 111.07,
+      "lumSD": 48.82
+    },
+    "phone-yard-wide-cccd502b.png": {
+      "w": 780,
+      "h": 1688,
+      "distinctColors": 16598,
+      "lumMean": 87.78,
+      "lumSD": 38.93
+    }
+  },
+  "failures": 0
+}
