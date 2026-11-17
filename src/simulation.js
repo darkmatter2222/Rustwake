@@ -17,6 +17,18 @@ const recordLedger=(g,entry)=>{
  g.ledger.push({id:g.nextId++,time:g.elapsed,...entry});
  if(g.ledger.length>64)g.ledger.splice(0,g.ledger.length-64);
 };
+// Freight ledger (#384 LOG-04): source stock, reserved load, onboard truck cargo
+// and destination stock are DISTINCT ledgers. Every reserve/pickup/arrive/return
+// is a validated transition recorded with its exact amount, so total units are
+// conserved and auditable across cancel, route blockage and save/reload.
+// This ledger never touches finance (sales/credits) or occupancy (#370).
+const recordFreight=(g,entry)=>{
+ if(!Array.isArray(g.freightLedger))g.freightLedger=[];
+ g.freightLedger.push({id:g.nextId++,time:g.elapsed,...entry});
+ if(g.freightLedger.length>128)g.freightLedger.splice(0,g.freightLedger.length-128);
+};
+const bagOfBuilding=(g,b)=>{if(!b)return null;if(b.type==="depot")return g.bank;if(!b.inventory||typeof b.inventory!=="object")b.inventory={};return b.inventory;};
+const sourceBagOf=(g,j)=>bagOfBuilding(g,g.buildings.find(b=>b.id===j?.sourceId));
 export function createGame(){
  const buildings=clone(STARTER_BUILDINGS);
  const vehicles=[
@@ -26,7 +38,7 @@ export function createGame(){
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
-  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],
+  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],
   view:{yaw:45,elevation:35.264,zoom:1},stats:{produced:0,delivered:0,shipments:0,sold:0,builds:0},
   log:[{id:0,time:0,message:"Cinder Yard established. Roads and freight trucks are operational."}],
   notices:[]
@@ -42,11 +54,16 @@ export function readGame(){
     view:{...fresh.view,...data.view},version:2};
   g.elapsed=Math.max(0,Math.min(1e9,Number(g.elapsed)||0));
   g.lastSavedAt=Number(g.lastSavedAt)||Date.now();
-  g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z)&&!v.job?.path?.some(p=>!inside(p.x,p.z))).slice(0,12);
+  g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z));
   g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400)
    .map(b=>({...b,rot:normalizeRot(b.rot)}));
  g.ledger=Array.isArray(g.ledger)?g.ledger.filter(e=>e&&typeof e==="object").slice(-64):[];
+ g.freightLedger=Array.isArray(g.freightLedger)?g.freightLedger.filter(e=>e&&typeof e==="object").slice(-128):[];
   g.roads=[...new Set(g.roads.filter(k=>typeof k==="string"&&inside(...cellOf(k))))];
+  // #384: reconcile reserved/onboard ledgers BEFORE offline catch-up so a reload
+  // can never count the same units twice; cap the fleet without losing freight.
+  reconcileFreight(g);
+  if(g.vehicles.length>12){for(const v of g.vehicles.slice(12))returnFreight(g,v,"FLEET_CAP");g.vehicles=g.vehicles.slice(0,12);}
   const away=Math.max(0,(Date.now()-g.lastSavedAt)/1000);
   if(away>6){const simulated=Math.min(300,away);advanceGame(g,simulated);g.notices=[{type:"offline",message:"Your yard kept running for "+Math.floor(simulated)+"s while you were away."}];}
   return g;
@@ -173,6 +190,8 @@ function deliveryCandidates(g){
  }
  return candidates.sort((a,b)=>b.priority-a.priority);
 }
+// RESERVE transition (#384): source stock -> reserved load. The units leave the
+// source bag exactly once and are held against the job, NOT yet onboard.
 function assignJob(g,v){
  const start=nearestRoad(g,Math.round(v.x),Math.round(v.z));
  const candidates=deliveryCandidates(g);
@@ -184,22 +203,131 @@ function assignJob(g,v){
   const sourceBag=fromBank?g.bank:c.source.inventory;
   const amount=take(sourceBag,c.resource,c.amount);
   if(amount<=0)continue;
+  v.cargo=null;
   v.job={sourceId:c.source.id,destId:c.dest.id,resource:c.resource,amount,
     phase:"toSource",toSource,toDest,route:toSource,segment:0,progress:0};
+  recordFreight(g,{kind:"reserve",vehicleId:v.id,sourceId:c.source.id,destId:c.dest.id,resource:c.resource,amount});
   return;
  }
 }
+// PICKUP transition (#384): reserved load -> onboard truck cargo, validated.
+// Refuses to load a truck that already carries cargo (no duplication).
+function pickupCargo(g,v){
+ const j=v.job;
+ if(!j||j.phase!=="toSource")return {ok:false,code:"PHASE"};
+ if(v.cargo)return {ok:false,code:"ALREADY_LOADED"};
+ if(!(j.amount>0))return {ok:false,code:"EMPTY"};
+ v.cargo={resource:j.resource,amount:j.amount};
+ j.phase="toDest";j.route=j.toDest;j.segment=0;j.progress=0;
+ recordFreight(g,{kind:"pickup",vehicleId:v.id,sourceId:j.sourceId,destId:j.destId,resource:j.resource,amount:j.amount});
+ return {ok:true};
+}
+// ARRIVAL transition (#384): onboard cargo -> destination stock, validated.
+// Cargo must exactly match the reserved job; a vanished destination returns the
+// load to its source instead of teleporting goods into the bank.
+function arriveCargo(g,v){
+ const j=v.job,c=v.cargo;
+ if(!j||j.phase!=="toDest"||!c||c.resource!==j.resource||c.amount!==j.amount){returnFreight(g,v,"ARRIVAL_INVALID");return;}
+ const dest=g.buildings.find(b=>b.id===j.destId);
+ if(!dest){returnFreight(g,v,"DEST_MISSING");return;}
+ deposit(bagOfBuilding(g,dest),c.resource,c.amount);
+ recordFreight(g,{kind:"arrive",vehicleId:v.id,sourceId:j.sourceId,destId:j.destId,resource:c.resource,amount:c.amount});
+ g.stats.delivered+=c.amount;g.stats.shipments++;
+ v.job=null;v.cargo=null;
+}
+// RETURN transition (#384): cancel/blockage/reload repair. Returns whichever
+// single ledger holds the units — onboard cargo if picked up, otherwise the
+// reservation — to the source bag (bank if the source is gone). Never both.
+function returnFreight(g,v,reason){
+ const j=v.job;
+ const load=v.cargo&&v.cargo.amount>0?v.cargo:(j&&j.amount>0?{resource:j.resource,amount:j.amount}:null);
+ if(!load){v.job=null;v.cargo=null;return {ok:false,code:"EMPTY",reason:"No freight to return"};}
+ deposit(sourceBagOf(g,j)||g.bank,load.resource,load.amount);
+ recordFreight(g,{kind:"return",vehicleId:v.id,sourceId:j?.sourceId??null,destId:j?.destId??null,resource:load.resource,amount:load.amount,reason});
+ pushLog(g,v.name+" returned "+load.amount+" "+load.resource+" to stock — "+reason.toLowerCase().replace(/_/g," ")+".");
+ v.job=null;v.cargo=null;
+ return {ok:true,resource:load.resource,amount:load.amount};
+}
+// Player command: cancel a truck's freight job. Reserved or onboard units go
+// back to the source exactly once; a second cancel is a no-op (IDLE).
+export function cancelFreight(g,vehicleId){
+ const v=g.vehicles.find(v=>v.id===vehicleId);
+ if(!v)return {ok:false,code:"MISSING",reason:"No truck selected"};
+ if(!v.job&&!v.cargo)return {ok:false,code:"IDLE",reason:"Truck has no freight to cancel"};
+ const r=returnFreight(g,v,"CANCELLED");
+ return r.ok?{ok:true,code:"OK",resource:r.resource,amount:r.amount}:r;
+}
+// Save/reload reconciliation (#384): a v2 save must never count the same units
+// as both reserved AND onboard. Onboard cargo is authoritative once picked up;
+// any inconsistent pair is returned to source (or bank) exactly once.
+export function reconcileFreight(g){
+ const routeOk=r=>Array.isArray(r)&&r.length>0&&r.every(p=>p&&inside(p.x,p.z));
+ for(const v of g.vehicles){
+  const j=v.job;
+  let c=v.cargo;
+  if(c&&!(typeof c.resource==="string"&&Number.isFinite(c.amount)&&c.amount>0))c=v.cargo=null;
+  const validJob=j&&typeof j.resource==="string"&&Number.isFinite(j.amount)&&j.amount>0
+   &&(j.phase==="toSource"||j.phase==="toDest")&&routeOk(j.route)&&routeOk(j.toSource)&&routeOk(j.toDest);
+  if(c){
+   if(validJob&&j.phase==="toDest"&&c.resource===j.resource&&c.amount===j.amount)continue;
+   const bag=validJob?sourceBagOf(g,j):null;
+   deposit(bag||g.bank,c.resource,c.amount);
+   recordFreight(g,{kind:"reconcile",vehicleId:v.id,sourceId:j?.sourceId??null,destId:j?.destId??null,
+    resource:c.resource,amount:c.amount,reason:!validJob?"JOB_MISSING":j.phase==="toSource"?"PHASE_STALE":"CARGO_MISMATCH"});
+   v.job=null;v.cargo=null;continue;
+  }
+  if(!validJob){v.job=null;v.cargo=null;continue;}
+  if(j.phase==="toDest"){
+   deposit(sourceBagOf(g,j)||g.bank,j.resource,j.amount);
+   recordFreight(g,{kind:"reconcile",vehicleId:v.id,sourceId:j.sourceId,destId:j.destId,resource:j.resource,amount:j.amount,reason:"CARGO_MISSING"});
+   v.job=null;v.cargo=null;
+  }
+ }
+}
+// Exact measurement of the four distinct freight ledgers (#384 acceptance):
+// source/destination stock (bank + building inventories), reserved load and
+// actual onboard cargo, summed per resource without double counting.
+export function freightTotals(g){
+ const totals={};
+ const add=b=>{for(const id of Object.keys(b||{})){const n=stock(b,id);if(n>0)totals[id]=(totals[id]||0)+n;}};
+ add(g.bank);
+ for(const b of g.buildings)add(b.inventory);
+ let reserved=0,onboard=0;
+ for(const v of g.vehicles){
+  if(v.job?.phase==="toSource"&&v.job.amount>0){totals[v.job.resource]=(totals[v.job.resource]||0)+v.job.amount;reserved+=v.job.amount;}
+  if(v.cargo?.amount>0){totals[v.cargo.resource]=(totals[v.cargo.resource]||0)+v.cargo.amount;onboard+=v.cargo.amount;}
+ }
+ return {totals,reserved,onboard};
+}
+export function freightManifest(g){
+ return {
+  bank:{...g.bank},
+  buildings:g.buildings.map(b=>({id:b.id,type:b.type,inventory:{...(b.inventory||{})}})),
+  vehicles:g.vehicles.map(v=>({id:v.id,name:v.name,phase:v.job?.phase||"idle",
+   sourceId:v.job?.sourceId??null,destId:v.job?.destId??null,
+   reserved:v.job?.phase==="toSource"?{resource:v.job.resource,amount:v.job.amount}:null,
+   cargo:v.cargo?{resource:v.cargo.resource,amount:v.cargo.amount}:null})),
+  totals:freightTotals(g)
+ };
+}
 function moveVehicle(g,v,seconds){
  const j=v.job;if(!j)return;
+ // #384 disconnect guard: a severed route or vanished source returns the freight
+ // (reserved OR onboard, never both) to its source exactly once, with a log line.
+ const roadSet=new Set(g.roads);
+ const severed=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z)));
+ if(severed(j.route)||severed(j.toSource)||severed(j.toDest)){returnFreight(g,v,"ROUTE_BLOCKED");return;}
+ if(!g.buildings.some(b=>b.id===j.sourceId)){returnFreight(g,v,"SOURCE_MISSING");return;}
  let remaining=seconds*(v.speed||2.1)*(g.research.includes("fleet")?1.18:1);
  while(remaining>0&&v.job){
   const route=j.route;
   if(j.segment>=route.length-1){
-   if(j.phase==="toSource"){j.phase="toDest";j.route=j.toDest;j.segment=0;j.progress=0;v.cargo={resource:j.resource,amount:j.amount};continue;}
-   const dest=g.buildings.find(b=>b.id===j.destId);
-   if(dest){const bag=dest.type==="depot"?g.bank:dest.inventory;deposit(bag,j.resource,j.amount);}
-   else deposit(g.bank,j.resource,j.amount);
-   g.stats.delivered+=j.amount;g.stats.shipments++;v.job=null;v.cargo=null;return;
+   if(j.phase==="toSource"){
+    const p=pickupCargo(g,v);
+    if(!p.ok){returnFreight(g,v,"PICKUP_INVALID");return;}
+    continue;
+   }
+   arriveCargo(g,v);return;
   }
   const from=route[j.segment],to=route[j.segment+1];
   const capacity=1-j.progress,delta=Math.min(remaining,capacity);
@@ -225,7 +353,12 @@ export function advanceGame(g,seconds){
     }
    }
   }
-  for(const v of g.vehicles){if(!v.job)assignJob(g,v);if(v.job)moveVehicle(g,v,dt);v.anim+=dt;}
+  for(const v of g.vehicles){
+   if(!v.job&&v.cargo)returnFreight(g,v,"JOB_MISSING");
+   if(!v.job)assignJob(g,v);
+   if(v.job)moveVehicle(g,v,dt);
+   v.anim+=dt;
+  }
   const rank=TIERS.findLast(t=>g.stats.produced>=t.needs);
   if(rank&&rank.id>g.tier){g.tier=rank.id;pushLog(g,"Industrial milestone: "+rank.name+" — new blueprints unlocked.");}
  }
