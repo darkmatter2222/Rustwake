@@ -795,6 +795,7 @@ export class LivingWorld{
   const lead=this.trucks.get(1)||[...this.trucks.values()][0];
   cd.truck1Dist=lead?lead.userData.distance.toFixed(3):"0.000";
   cd.truck1Wheel=lead?lead.userData.wheelAngle.toFixed(3):"0.000";
+  cd.truck1Cargo=lead?(lead.userData.cargoSig||"none"):"none";
   cd.forkliftLift=this.forklift.userData.lift.toFixed(3);
   cd.droneAnchor=this.droneAnchorId;
  }
