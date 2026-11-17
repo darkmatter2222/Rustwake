@@ -896,7 +896,11 @@ try {
       await waitForClock(page, 90);
       await sample();
     }
-    await sample();
+    // No extra sample here: the loop already ends on a fresh sample at >=12 s
+    // wall and >=100 samples. A duplicate taken ~10 ms later pairs a sub-frame
+    // wall gap with one legitimate clamped sim frame (the app clamps frame dt
+    // to 0.07 s), which false-positives the d > dt*2+.01 runaway-clock guard.
+    // Every kept sample is >=90 ms apart, so the guard stays load-bearing.
 
     // Rendered-domain motion proof: fixed camera per rig, two clips at two
     // distinct sim times, compared with the SAME independent pairMetrics used

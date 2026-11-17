@@ -1194,12 +1194,47 @@ export function applySceneryVisibility(build,conflicts){
  }
  build.rubbleMesh.instanceMatrix.needsUpdate=true;
 }
+// ART-04 (#350) WebGL-failure negative: a player whose browser cannot create a
+// WebGL context must get a LOUD, READABLE failure — never a blank near-black
+// page and never a fake 2D world. main.jsx mounts <App/> with no error boundary
+// (UI lease #564), so the constructor's rethrow below unmounts the whole React
+// tree; the notice therefore lives on document.body OUTSIDE #root and survives
+// that unmount. Inline styles only (styles.css is under the UI lease). The
+// original error is rethrown verbatim by the caller so the failure stays loud
+// (pageerror / console / telemetry). Idempotent: at most one notice.
+export function webglFailureNotice(err){
+ if(typeof document==="undefined"||!document.body)return null;
+ const old=document.querySelector&&document.querySelector(".webgl-failure-notice");
+ if(old&&old.parentNode)old.parentNode.removeChild(old);
+ const el=document.createElement("div");
+ el.setAttribute("role","alert");el.className="webgl-failure-notice";
+ el.style.cssText="position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#141b20;padding:24px;font:16px/1.55 system-ui,sans-serif";
+ const card=document.createElement("div");
+ card.style.cssText="max-width:560px;background:#1d2c33;border:2px solid #f0a03c;border-radius:10px;padding:28px 32px;color:#e8f0ee";
+ const h=document.createElement("h1");
+ h.style.cssText="margin:0 0 12px;font-size:26px;line-height:1.2;color:#f0a03c";
+ h.textContent="3D renderer unavailable";
+ const p=document.createElement("p");
+ p.style.cssText="margin:0 0 10px";
+ p.textContent="Rustwake's salvage yard needs WebGL, and this browser could not create a WebGL context. Enable hardware acceleration or open the game in a current browser, then reload.";
+ const d=document.createElement("p");
+ d.style.cssText="margin:0;font-size:13px;color:#9fb0aa";
+ d.textContent="Technical detail: "+(err&&err.message?err.message:String(err));
+ card.appendChild(h);card.appendChild(p);card.appendChild(d);
+ el.appendChild(card);document.body.appendChild(el);
+ return el;
+}
 export class LivingWorld{
  constructor(host){
   this.host=host;this.scene=new THREE.Scene();
   this.scene.background=new THREE.Color("#1a2930");this.scene.fog=new THREE.FogExp2("#3e4240",.0038);
   this.camera=new THREE.OrthographicCamera(-25,25,15,-15,.1,600);
-  this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+  try{
+   this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+  }catch(err){
+   webglFailureNotice(err);
+   throw err;
+  }
   this.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
   this.renderer.outputColorSpace=THREE.SRGBColorSpace;
   this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.9;
